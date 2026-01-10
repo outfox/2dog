@@ -1,0 +1,73 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <IsTrimmable>true</IsTrimmable>
+        <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
+    </PropertyGroup>
+
+    <!-- Programming & LinkageCharacteristics -->
+    <PropertyGroup>
+        <RootNamespace>DriverCS</RootNamespace>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- Reference the Godot C# API assemblies -->
+        <Reference Include="GodotSharp">
+            <HintPath>../godot/bin/GodotSharp/Api/$(Configuration)/GodotSharp.dll</HintPath>
+            <Private>true</Private>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\project\project.csproj"/>
+        <ProjectReference Include="..\game\game.csproj"/>
+    </ItemGroup>
+
+
+      <Target Name="CopyGodotSharpToOutput" AfterTargets="Build">
+    <!-- Copy the entire GodotSharp directory to the output directory -->
+    <ItemGroup>
+      <GodotSharpFiles Include="../godot/bin/GodotSharp/**/*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(GodotSharpFiles)" DestinationFiles="@(GodotSharpFiles->'$(OutputPath)GodotSharp/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+
+
+    <Target Name="CopyGodotSharpToOutput" AfterTargets="Build">
+        <Message Importance="High" Text="OutputPath: $(OutputPath)" />
+        <Message Importance="High" Text="RuntimeIdentifier: $(RuntimeIdentifier)" />
+
+        <ItemGroup>
+            <GodotSharpFiles Include="../godot/bin/GodotSharp/**/*.*"/>
+        </ItemGroup>
+
+        <Message Importance="High" Text="Found @(GodotSharpFiles->Count()) GodotSharp files" />
+
+        <Copy
+                SourceFiles="@(GodotSharpFiles)"
+                DestinationFolder="$(OutputPath)GodotSharp/%(RecursiveDir)"
+                SkipUnchangedFiles="true"/>
+
+    </Target>
+    
+
+    <ItemGroup Condition="'$(RuntimeIdentifier)' != ''">
+        <!-- Debug: use editor templates (these don't require a PCK) -->
+        <Content Include="../godot/bin/libgodot.linuxbsd.editor.dev.x86_64.shared_library.so"
+                 Link="libgodot.so"
+                 CopyToOutputDirectory="PreserveNewest"
+                 Condition="$(RuntimeIdentifier.StartsWith('linux'))"/>
+        <Content Include="../godot/bin/libgodot.windows.editor.dev.x86_64.shared_library.dll"
+                 Link="libgodot.dll"
+                 CopyToOutputDirectory="PreserveNewest"
+                 Condition="$(RuntimeIdentifier.StartsWith('win'))"/>
+        <Content Include="../godot/bin/libgodot.macos.editor.dev.x86_64.shared_library.dylib"
+                 Link="libgodot.dylib"
+                 CopyToOutputDirectory="PreserveNewest"
+                 Condition="$(RuntimeIdentifier.StartsWith('osx'))"/>
+    </ItemGroup>
+</Project>
