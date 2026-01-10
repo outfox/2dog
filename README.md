@@ -1,16 +1,18 @@
-# 2dog
-
-## What's 2dog?
+# What's 2dog?
 Godot, but backwards!
 
 > *To dog, or not to dog. Is it even a question?*
 
+## Summary
+2dog is a .NET/C# front-end for [Godot](https://github.com/godotengine/godot) (front-end meaning, it can interact with the engine, but isn't bound by its limitations; imagine it like a dog that follows you everywhere)
 
-C# front-end for [Godot](https://github.com/godotengine/godot)
+Everything that Godot and GodotSharp can do, this does, but this dog can also do more, on top.
 
-(massively WIP!)
+## (massively WIP!)
+Planned features are TRS transforms using the [**fenn**ecs](https://fennecs.net) entity-component system, and a new approach to scene and material definitions.
 
-Based on Ben Rog-Wilhelm's [zorbathut/libgodot_example](https://github.com/zorbathut/libgodot_example/tree/csharp)
+## Acknowledgements
+Based on Ben Rog-Wilhelm's [zorbathut/libgodot_example](https://github.com/zorbathut/libgodot_example/tree/csharp). *You truly are the GOAT, even if looking more like a Diesel Horse of sorts in my mind !*
 
 
 ### Legacy Docs
