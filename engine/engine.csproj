@@ -69,15 +69,4 @@
                  CopyToOutputDirectory="PreserveNewest"
                  Condition="$(RuntimeIdentifier.StartsWith('osx'))"/>
     </ItemGroup>
-
-    <!-- GodotSharp assemblies - these are platform-agnostic -->
-    <Target Name="CopyGodotSharpToOutput" AfterTargets="Build">
-        <ItemGroup>
-            <GodotSharpFiles Include="../godot/bin/GodotSharp/**/*.*"/>
-        </ItemGroup>
-        <Copy
-                SourceFiles="@(GodotSharpFiles)"
-                DestinationFolder="$(OutputPath)GodotSharp/%(RecursiveDir)"
-                SkipUnchangedFiles="true"/>
-    </Target>
 </Project>
