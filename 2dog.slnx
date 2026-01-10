@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="engine\engine.csproj" />
+  <Project Path="game/game.csproj" />
+  <Project Path="project/project.csproj">
+    <BuildType Project="Debug" />
+  </Project>
+</Solution>

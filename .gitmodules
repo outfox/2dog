@@ -1,0 +1,6 @@
+[submodule "godot"]
+	path = godot
+	url = git@github.com:zorbathut/godot.git
+[submodule "godot-cpp"]
+	path = godot-cpp
+	url = https://github.com/godotengine/godot-cpp

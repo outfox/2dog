@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgiqsv3ntvl3t"]
+
+[ext_resource type="Script" uid="uid://dngqpdiughpbm" path="res://Ticker.cs" id="1_ig7tw"]
+
+[node name="Control" type="CenterContainer" unique_id=1087203752]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TargetLabel" type="Label" parent="." unique_id=1589393793]
+layout_mode = 2
+text = "No Text Yet"
+
+[node name="Ticker" type="Node" parent="." unique_id=488473608]
+script = ExtResource("1_ig7tw")
