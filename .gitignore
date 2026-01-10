@@ -1,6 +1,10 @@
 /.idea
 /*.user
 
+*.old
+*.old.*
+
+
 # Build Artifacts
 /.pack
 dist
