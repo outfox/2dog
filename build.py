@@ -89,10 +89,7 @@ print("Restoring .NET packages...")
 subprocess.run(["dotnet", "restore"], cwd="game", check=True)
 subprocess.run(["dotnet", "restore"], cwd="project", check=True)
 
-print("Running engine...")
-env = os.environ.copy()
-lib_path = os.path.abspath("godot/bin")
-env[lib_path_var] = lib_path + path_separator + env.get(lib_path_var, "")
-subprocess.run([engine_exe], env=env, check=True)
-
 print("Done!")
+
+print ("Run the project using:")
+print ("  dotnet run --project engine -r linux-x64 ")
