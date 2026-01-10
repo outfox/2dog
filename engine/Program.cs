@@ -96,7 +96,8 @@ internal static class Program
         Stopwatch stopwatch = Stopwatch.StartNew();
         int frameCount = 0;
 
-        var outside = new Class1("external");
+        var device = RenderingServer.GetRenderingDevice();
+        Console.WriteLine("device: " + device.GetInstanceId());
         while (!godotInstance.Iteration() && stopwatch.Elapsed.TotalSeconds < 200)
         {
             frameCount++;
@@ -111,14 +112,6 @@ internal static class Program
                 match = "(does not match! something is broken)";
             }
             targetLabel.Text = $"Frame: {frameCount} - Ticker values {ticker.localAccumulator} and {Ticker.staticAccumulator} {match}";
-
-            var device = RenderingServer.GetRenderingDevice();
-            Console.WriteLine("device: " + device.GetInstanceId());
-            
-            var inside = new Game.Class1("intrern");
-            outside.DoSomething();
-            inside.DoSomething();
-            
         }
 
         Console.WriteLine("Godot running complete.");

@@ -1,6 +1,7 @@
 <Solution>
   <Project Path="engine\engine.csproj" />
   <Project Path="game/game.csproj" />
+  <Project Path="godot/modules/mono/glue/GodotSharp/GodotSharp/GodotSharp.csproj" />
   <Project Path="project/project.csproj">
     <BuildType Project="Debug" />
   </Project>
