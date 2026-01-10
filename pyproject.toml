@@ -1,9 +1,9 @@
 [project]
-name = "libgodot-example"
+name = "2dog"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Ben Rog-Wilhelm",email = "zorba-github@pavlovian.net"}
+    {name = "Moritz Voss",email = "mail@moritzvoss.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.12"
@@ -11,10 +11,6 @@ dependencies = [
     "scons (>=4.9.1,<5.0.0)"
 ]
 
-
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 package-mode = false
