@@ -1,6 +1,10 @@
 # 2dog
-> What's 2dog?
-> 2dog for you!
+
+## What's 2dog?
+Godot, but backwards!
+
+> *To dog, or not to dog. Is it even a question?*
+
 
 C# front-end for [Godot](https://github.com/godotengine/godot)
 
