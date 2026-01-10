@@ -12,7 +12,7 @@ Everything that Godot and GodotSharp can do, **2dog** does, but this dog knows a
 Planned features are TRS transforms using the [**fenn**ecs](https://fennecs.net) entity-component system, and a new approach to scene and material definitions.
 
 ## Acknowledgements
-Based on Ben Rog-Wilhelm's [zorbathut/libgodot_example](https://github.com/zorbathut/libgodot_example/tree/csharp). *You truly are the GOAT, even leaning more [DIESEL HORSE](https://diesel.horse) of sorts in my blown mind!*
+Based on Ben Rog-Wilhelm's [zorbathut/libgodot_example](https://github.com/zorbathut/libgodot_example/tree/csharp). *You truly are the GOAT, even if leaning a bit more [DIESEL HORSE](https://diesel.horse) of sorts in my blown mind!*
 
 
 # How To Build & Run C#
