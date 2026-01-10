@@ -17,7 +17,7 @@ Based on Ben Rog-Wilhelm's [zorbathut/libgodot_example](https://github.com/zorba
 
 # How To Build & Run C#
 
-Run `uv run build.py`, and on success, `dotnet run --project engine -r linux-x64`. Only tested on linux so far, the -r RID requirement will be lifted soon, it's really just about copying some files right. :)
+Run `uv run build.py`, and on success, `dotnet run --project engine`. Only tested on linux so far.)
 
 ### Legacy Docs
 <details>

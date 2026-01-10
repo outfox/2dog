@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net10.0</TargetFramework>
@@ -12,6 +11,17 @@
         <RootNamespace>DriverCS</RootNamespace>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <GodotProjectDir>$(MSBuildProjectDirectory)/../project/</GodotProjectDir>
+    </PropertyGroup>
+    
+    <!-- Detect current OS for development builds -->
+    <PropertyGroup>
+        <IsLinux Condition="'$(IsLinux)' == '' and $([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))">true</IsLinux>
+        <IsWindows Condition="'$(IsWindows)' == '' and $([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))">true</IsWindows>
+        <IsOSX Condition="'$(IsOSX)' == '' and $([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))">true</IsOSX>
     </PropertyGroup>
 
     <ItemGroup>
@@ -28,35 +38,24 @@
     </ItemGroup>
 
 
-      <Target Name="CopyGodotSharpToOutput" AfterTargets="Build">
-    <!-- Copy the entire GodotSharp directory to the output directory -->
-    <ItemGroup>
-      <GodotSharpFiles Include="../godot/bin/GodotSharp/**/*.*" />
+    <!-- For Build: Copy current platform's lib -->
+    <ItemGroup Condition="'$(RuntimeIdentifier)' == ''">
+        <Content Include="../godot/bin/libgodot.linuxbsd.editor.dev.x86_64.shared_library.so"
+                 Link="libgodot.so"
+                 CopyToOutputDirectory="PreserveNewest"
+                 Condition="'$(IsLinux)' == 'true'"/>
+        <Content Include="../godot/bin/libgodot.windows.editor.dev.x86_64.shared_library.dll"
+                 Link="libgodot.dll"
+                 CopyToOutputDirectory="PreserveNewest"
+                 Condition="'$(IsWindows)' == 'true'"/>
+        <Content Include="../godot/bin/libgodot.macos.editor.dev.x86_64.shared_library.dylib"
+                 Link="libgodot.dylib"
+                 CopyToOutputDirectory="PreserveNewest"
+                 Condition="'$(IsOSX)' == 'true'"/>
     </ItemGroup>
-    <Copy SourceFiles="@(GodotSharpFiles)" DestinationFiles="@(GodotSharpFiles->'$(OutputPath)GodotSharp/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-  </Target>
 
-
-    <Target Name="CopyGodotSharpToOutput" AfterTargets="Build">
-        <Message Importance="High" Text="OutputPath: $(OutputPath)" />
-        <Message Importance="High" Text="RuntimeIdentifier: $(RuntimeIdentifier)" />
-
-        <ItemGroup>
-            <GodotSharpFiles Include="../godot/bin/GodotSharp/**/*.*"/>
-        </ItemGroup>
-
-        <Message Importance="High" Text="Found @(GodotSharpFiles->Count()) GodotSharp files" />
-
-        <Copy
-                SourceFiles="@(GodotSharpFiles)"
-                DestinationFolder="$(OutputPath)GodotSharp/%(RecursiveDir)"
-                SkipUnchangedFiles="true"/>
-
-    </Target>
-    
-
+    <!-- For Publish: Copy only the target RID's lib -->
     <ItemGroup Condition="'$(RuntimeIdentifier)' != ''">
-        <!-- Debug: use editor templates (these don't require a PCK) -->
         <Content Include="../godot/bin/libgodot.linuxbsd.editor.dev.x86_64.shared_library.so"
                  Link="libgodot.so"
                  CopyToOutputDirectory="PreserveNewest"
@@ -70,4 +69,15 @@
                  CopyToOutputDirectory="PreserveNewest"
                  Condition="$(RuntimeIdentifier.StartsWith('osx'))"/>
     </ItemGroup>
+
+    <!-- GodotSharp assemblies - these are platform-agnostic -->
+    <Target Name="CopyGodotSharpToOutput" AfterTargets="Build">
+        <ItemGroup>
+            <GodotSharpFiles Include="../godot/bin/GodotSharp/**/*.*"/>
+        </ItemGroup>
+        <Copy
+                SourceFiles="@(GodotSharpFiles)"
+                DestinationFolder="$(OutputPath)GodotSharp/%(RecursiveDir)"
+                SkipUnchangedFiles="true"/>
+    </Target>
 </Project>
