@@ -15,15 +15,15 @@ Planned features are TRS transforms using the [**fenn**ecs](https://fennecs.net)
 Based on Ben Rog-Wilhelm's [zorbathut/libgodot_example](https://github.com/zorbathut/libgodot_example/tree/csharp). *You truly are the GOAT, even if looking more like a Diesel Horse of sorts in my mind !*
 
 
+# How To Build & Run C#
+
+Run `./build.py`, and on success, `dotnet run --project engine -r linux-x64`. Only tested on linux so far, the -r RID requirement will be lifted soon. :)
+
 ### Legacy Docs
 <details>
 ** What This Is
 
 Once Godot 4.6 is released, most of this won't be necessary.
-
-** How To Build & Run C#
-
-Run `./runit-cs.py`.
 
 It will take a while; it has to build the entire Godot engine twice, plus some more stuff.
 
