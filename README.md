@@ -1,33 +1,86 @@
+# 2dog 🦴
 
-# What's 2dog?
-It's Godot, but backwards. Godot doesn't start and drive your .NET stuff, your .NET stuff starts and drives Godot. 🦴
+**Godot, but backwards.** You start and drive Godot—not the other way around.
 
 ![2dog logotype, a white stylized dog with the negative space around its leg forming the number 2, and a playful font spelling the word dog](logo.svg)
 
-> *Godot, or to dog... is it even a question?*
+> *"To Godot, or to dog... is it even a question?"*
 
+---
 
-## Summary
-**2dog** is a .NET/C# front-end for [Godot](https://github.com/godotengine/godot), meaning it can interact with the engine, but isn't bound by its limitations; imagine it like a dog that follows you everywhere, is perfectly loyal, yet that dog can learn new tricks, runs happy circles around you, jumps into your bed, and chases squirrels while you're away.
+## What is 2dog?
 
-Everything that Godot and GodotSharp can do, **2dog** does, but this dog knows a lot more tricks, on top.
+**2dog** is a .NET/C# front-end for [Godot Engine](https://github.com/godotengine/godot) that inverts the traditional architecture. Instead of working inside Godot's editor and letting it control your code, **you** control Godot as a library.
 
-## Discord
-Questions? Slide into our ~~dog park~~ server... and bark! [![Discord Invite](https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white)](https://discord.gg/GAXdbZCNGT)
+Think of it like this: Godot is your loyal companion that follows your lead, learns new tricks, and does exactly what you tell it to—while still having all the capabilities of the full engine.
 
+### What does this mean?
 
-## (massively WIP!)
-Planned features are TRS transforms using the [**fenn**ecs](https://fennecs.net) entity-component system, and a new approach to scene and material definitions. When Godot 4.6 is released, the local build portion of this will likely not be necessary.
+- ✨ **Everything Godot can do**, 2dog can do
+- 🎯 **Plus** direct control over engine initialization, lifecycle, and integration
+- 🔧 **Plus** freedom to structure your project however you want
+- 🚀 **Plus** first-class .NET tooling and workflows
+
+---
+
+## Features
+
+### Current
+- Godot as an embedded library (libgodot)
+- Full GodotSharp API access
+- Custom .NET-first project structure
+- File-centric architecture
+
+### Planned
+- **TRS transforms** using the [**fenn**ecs](https://fennecs.net) entity-component system
+- Novel approach to scene and material definitions
+- *and more tricks to teach this dog...*
+
+> **Note:** Massively WIP! Once Godot 4.6 releases, the local build requirements should be simplified.
+
+---
+
+## Quick Start
+
+### Prerequisites
+- .NET SDK
+- Python (with uv)
+- Git
+
+### Build & Run
+
+1. **Clone and initialize submodules**
+```bash
+   git submodule update --init --recursive
+```
+
+2. **Build Godot**
+```bash
+   uv run build.py
+```
+
+3. **Run the demo**
+```bash
+   dotnet run --project game
+```
+
+> Currently tested on Linux only. Windows/macOS support coming soon™
+
+---
+
+## Join the Pack
+
+Questions? Ideas? Want to teach this dog new tricks?
+
+[![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white)](https://discord.gg/GAXdbZCNGT)
+
+---
 
 ## Acknowledgements
-Based on Ben Rog-Wilhelm's [zorbathut/libgodot_example](https://github.com/zorbathut/libgodot_example/tree/csharp). *You truly are the GOAT, or a [DIESEL HORSE](https://diesel.horse), same difference!*
 
+Inspired by and built upon Ben Rog-Wilhelm's [libgodot_example](https://github.com/zorbathut/libgodot_example/tree/csharp).  
+*You're the GOAT. Or a [DIESEL HORSE](https://diesel.horse). Same difference!*
 
-# How To Build & Run C#
-Init sumodules via `git submodule init` and `git submodule update` as needed. This checks out a lightly modified fork of https://github.com/godotengine/godot .
-
-Run `uv run build.py`, and on success, `dotnet run --project game`. Only tested on linux so far.)
-
-
+---
 
 #### *No squirrels were harmed in the making of this README.*
