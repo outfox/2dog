@@ -12,7 +12,7 @@ Your code starts and pumps Godot's MainLoop - not the other way around.
 
 **2dog** is a .NET/C# front-end for [Godot Engine](https://github.com/godotengine/godot) that inverts the traditional architecture. Instead of having Godot's process and scene tree drive your application, **you** now control Godot as a library.
 
-Think of it like this: Godot is your loyal companion that follows your lead, learns new tricks, and does exactly what you tell it to—while still having all the capabilities of the full engine.
+Think of it like this: Godot is your loyal companion that follows your lead, learns new tricks, and does exactly what you tell it to. All this while still having all the capabilities of the full engine.
 
 ```cs
 // Program.cs
