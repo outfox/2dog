@@ -4,7 +4,7 @@ Godot, but backwards!
 
 ![2dog logotype, a white stylized dog with the negative space around its leg forming the number 2, and a playful font spelling the word dog](logo.svg)
 
-> *To dog, or not to dog. Is that even a question?*
+> *Godot, or to dog... is it even a question?*
 
 ## Summary
 **2dog** is a .NET/C# front-end for [Godot](https://github.com/godotengine/godot), meaning it can interact with the engine, but isn't bound by its limitations; imagine it like a dog that follows you everywhere, is perfectly loyal, yet that dog can learn new tricks, runs happy circles around you, jumps into your bed, and chases squirrels while you're away.
