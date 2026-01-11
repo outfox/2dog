@@ -25,7 +25,6 @@
     <Target Name="CopyGodotAssemblies" AfterTargets="Build">
         <PropertyGroup>
             <GodotApiPath>$(OutputPath)GodotSharp\Api\$(Configuration)\</GodotApiPath>
-            <GodotPackagePath>$(NuGetPackageRoot)\godotsharp\$(GodotSharpVersion)\lib\net8.0\</GodotPackagePath>
         </PropertyGroup>
 
         <ItemGroup>
