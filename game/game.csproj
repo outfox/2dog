@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <OutputType>Exe</OutputType>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -12,5 +12,26 @@
         <ProjectReference Include="..\engine\engine.csproj" />
         <ProjectReference Include="..\project\project.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Version="4.6.0-beta" Include="GodotSharp" />
+        <PackageReference Version="4.6.0-beta" Include="GodotSharpEditor" />
+    </ItemGroup>
+
+    <!-- workaround: manual assembly copying, no idea why -->
+    <PropertyGroup>
+        <GodotSharpVersion>4.6.0-beta</GodotSharpVersion>
+    </PropertyGroup>
+
+    <Target Name="CopyGodotAssemblies" AfterTargets="Build">
+        <PropertyGroup>
+            <GodotApiPath>$(OutputPath)GodotSharp\Api\$(Configuration)\</GodotApiPath>
+            <GodotPackagePath>$(NuGetPackageRoot)\godotsharp\$(GodotSharpVersion)\lib\net8.0\</GodotPackagePath>
+        </PropertyGroup>
+
+        <MakeDir Directories="$(GodotApiPath)" />
+        <Copy SourceFiles="$(GodotPackagePath)GodotSharp.dll"
+              DestinationFolder="$(GodotApiPath)" />
+    </Target>
 </Project>
 
