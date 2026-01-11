@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Godot;
+using Environment = System.Environment;
 
 namespace twodog;
 
@@ -18,6 +20,7 @@ public class Engine(string project, string? path = null, string[]? args = null) 
                 $"{nameof(Engine)} Godot instance was previously created. This can be done only once per process (this is a Godot limitation).");
 
         Console.WriteLine("Starting Godot instance...");
+        
 
         // Prepare arguments for Godot (editor mode!)
         List<string> godotArgs = [ project ];
@@ -79,7 +82,8 @@ public class Engine(string project, string? path = null, string[]? args = null) 
 
     public void Dispose()
     {
-        if (_godotInstancePtr != IntPtr.Zero || _godotInstancePtr != IntPtr.MinValue) Stop();
+        if (_godotInstancePtr == IntPtr.Zero && _godotInstancePtr == IntPtr.MinValue) return;
+        Stop();
+        _godotInstancePtr = IntPtr.MinValue;
     }
-
 }
