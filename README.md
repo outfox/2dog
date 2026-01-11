@@ -1,6 +1,6 @@
-# 2dog 🦴
+# *Godot, but backwards.* 🦴
 
-**Godot, but backwards.** You start and drive Godot—not the other way around.
+You start and pump Godot's MainLoop - not the other way around.
 
 ![2dog logotype, a white stylized dog with the negative space around its leg forming the number 2, and a playful font spelling the word dog](logo.svg)
 
