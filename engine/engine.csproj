@@ -26,7 +26,7 @@
 
     <ItemGroup>
         <PackageReference Version="4.6.0-beta" Include="GodotSharp" />
-        <PackageReference Version="4.6.0-beta" Include="GodotSharpEditor" />
+        <!-- optional maybe? <PackageReference Version="4.6.0-beta" Include="GodotSharpEditor" /> -->
     </ItemGroup>
 
     <!-- For Build: Copy current platform's lib -->
