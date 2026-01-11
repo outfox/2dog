@@ -30,7 +30,6 @@ class PlatformConfig:
     """Platform-specific build configuration."""
     godot_platform: str
     godot_exe: str
-    engine_exe: str
     lib_path_var: str
     path_separator: str
 
@@ -43,7 +42,6 @@ def get_platform_config() -> PlatformConfig:
         return PlatformConfig(
             godot_platform=Platform.WINDOWS.value,
             godot_exe=os.path.abspath("godot/bin/godot.windows.editor.dev.x86_64.executable.mono.exe"),
-            engine_exe="engine/bin/Debug/net10.0/engine.exe",
             lib_path_var="PATH",
             path_separator=";"
         )
@@ -51,7 +49,6 @@ def get_platform_config() -> PlatformConfig:
         return PlatformConfig(
             godot_platform=Platform.LINUX.value,
             godot_exe="./bin/godot.linuxbsd.editor.dev.x86_64.executable.mono",
-            engine_exe="./engine/bin/Debug/net10.0/engine",
             lib_path_var="LD_LIBRARY_PATH",
             path_separator=":"
         )
@@ -59,7 +56,6 @@ def get_platform_config() -> PlatformConfig:
         return PlatformConfig(
             godot_platform=Platform.MACOS.value,
             godot_exe="./bin/godot.macos.editor.dev.x86_64.executable.mono",
-            engine_exe="./engine/bin/Debug/net10.0/engine",
             lib_path_var="DYLD_LIBRARY_PATH",
             path_separator=":"
         )
@@ -187,7 +183,6 @@ def show_build_config(args, platform_config):
     table.add_row("Debug Symbols", args.debug_symbols)
     table.add_row("SCU Build", args.scu_build)
     table.add_row("Godot Executable", platform_config.godot_exe)
-    table.add_row("Engine Executable", platform_config.engine_exe)
 
     # Build steps
     table.add_row("─" * 30, "─" * 30)
@@ -234,13 +229,6 @@ def generate_glue(platform_config):
     os.makedirs("godot/bin/GodotSharp/Tools/nupkgs", exist_ok=True)
     console.print(f"[bold green]✓[/bold green] {task_desc}")
 
-    task_desc = "Generating game UID cache"
-    run_with_live_output(
-        [platform_config.godot_exe, "--path", "../project", "--import", "--headless"],
-        cwd="godot",
-        description=task_desc
-    )
-
     task_desc = "Generating Mono glue files"
     run_with_live_output(
         [platform_config.godot_exe, "--headless", "--generate-mono-glue", "./modules/mono/glue"],
@@ -257,6 +245,12 @@ def generate_glue(platform_config):
         description=task_desc
     )
 
+    task_desc = "Generating game UID cache"
+    run_with_live_output(
+        [platform_config.godot_exe, "--path", "../project", "--import", "--headless"],
+        cwd="godot",
+        description=task_desc
+    )
 
 def build_engine():
     """Build the engine project."""
@@ -333,7 +327,7 @@ def main():
     console.print(Panel.fit(
         "[bold green]✓ Build Complete![/bold green]\n\n"
         "Run the project using:\n"
-        "[cyan]  dotnet run --project engine[/cyan]",
+        "[cyan]  dotnet run --project game[/cyan]",
         border_style="green"
     ))
 
