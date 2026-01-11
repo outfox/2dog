@@ -106,9 +106,9 @@ def parse_arguments():
         help="Skip generating Mono glue"
     )
     parser.add_argument(
-        "--no-run",
+        "--no-restore",
         action="store_true",
-        help="Skip running the driver after build"
+        help="Skip dotnet clean & restore"
     )
 
     return parser.parse_args()
@@ -188,10 +188,21 @@ def show_build_config(args, platform_config):
     table.add_row("─" * 30, "─" * 30)
     table.add_row("Skip Library Build", "Yes" if args.no_library else "No")
     table.add_row("Skip Glue Generation", "Yes" if args.no_glue else "No")
-    table.add_row("Skip Driver Run", "Yes" if args.no_run else "No")
+    table.add_row("Skip dotnet clean & restore", "Yes" if args.no_restore else "No")
 
     console.print(table)
     console.print()
+
+def build_editor(args, _):
+    # Build Godot executable
+    task_desc = "Building Godot executable"
+    run_with_live_output(
+        ["scons", "target=editor", "module_mono_enabled=yes", "extra_suffix=executable",
+         f"dev_build={args.dev_build}", f"scu_build={args.scu_build}",
+         "debug_symbols=true", "separate_debug_symbols=true"],
+        cwd="godot",
+        description=task_desc
+    )
 
 
 def build_libgodot(args, _):
@@ -209,16 +220,6 @@ def build_libgodot(args, _):
             cwd="godot",
             description=task_desc
         )
-
-    # Build Godot executable
-    task_desc = "Building Godot executable"
-    run_with_live_output(
-        ["scons", "target=editor", "module_mono_enabled=yes", "extra_suffix=executable",
-         f"dev_build={args.dev_build}", f"scu_build={args.scu_build}",
-         "debug_symbols=true", "separate_debug_symbols=true"],
-        cwd="godot",
-        description=task_desc
-    )
 
 
 def generate_glue(platform_config):
@@ -240,8 +241,25 @@ def generate_glue(platform_config):
     run_with_live_output(
         ["python", "./modules/mono/build_scripts/build_assemblies.py",
          "--godot-platform", platform_config.godot_platform, "--godot-output-dir", "./bin",
-         "--no-deprecated"],
+         "--no-deprecated", "--push-nupkgs-local", "true"],
         cwd="godot",
+        description=task_desc
+    )
+
+
+def restore_dependencies(platform_config):
+    """Generate Mono glue files."""
+    console.print("\n[bold yellow]┌── Restoring .NET Dependencies──┐[/bold yellow]")
+
+    task_desc = "dotnet clean"
+    run_with_live_output(
+        ["dotnet", "clean", "-v", "detailed"],
+        description=task_desc
+    )
+
+    task_desc = "dotnet restore"
+    run_with_live_output(
+        ["dotnet", "restore", "-v", "detailed"],
         description=task_desc
     )
 
@@ -249,43 +267,6 @@ def generate_glue(platform_config):
     run_with_live_output(
         [platform_config.godot_exe, "--path", "../project", "--import", "--headless"],
         cwd="godot",
-        description=task_desc
-    )
-
-def build_engine():
-    """Build the engine project."""
-    console.print("\n[bold yellow]┌── Building Engine ──┐[/bold yellow]")
-
-    task_desc = "Restoring engine dependencies"
-    run_with_live_output(
-        ["dotnet", "restore"],
-        cwd="engine",
-        description=task_desc
-    )
-
-    task_desc = "Building engine project"
-    run_with_live_output(
-        ["dotnet", "build"],
-        cwd="engine",
-        description=task_desc
-    )
-
-
-def restore_packages():
-    """Restore .NET packages for game and project."""
-    console.print("\n[bold yellow]┌── Restoring .NET Packages ──┐[/bold yellow]")
-
-    task_desc = "Restoring game dependencies"
-    run_with_live_output(
-        ["dotnet", "restore"],
-        cwd="game",
-        description=task_desc
-    )
-
-    task_desc = "Restoring project dependencies"
-    run_with_live_output(
-        ["dotnet", "restore"],
-        cwd="project",
         description=task_desc
     )
 
@@ -303,24 +284,18 @@ def main():
 
     show_build_config(args, platform_config)
 
+    # Generate glue
+    if not args.no_glue:
+        build_editor(args, platform_config)
+        generate_glue(platform_config)
+
     # Build libgodot
     if not args.no_library:
         build_libgodot(args, platform_config)
 
-    # Generate glue
-    if not args.no_glue:
-        generate_glue(platform_config)
-
-    # Build engine
-    build_engine()
-
-    # Check early exit
-    if args.no_run:
-        console.print("\n[bold green]✓ Build complete (skipping driver run)![/bold green]")
-        return
-
-    # Restore packages
-    restore_packages()
+    # Restore dependencies
+    if not args.no_restore:
+        restore_dependencies(platform_config)
 
     # Final success message
     console.print()
