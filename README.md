@@ -1,4 +1,4 @@
-<img src="logo.svg" alt="2dog logotyoe" width="480">
+<img src="logo.svg" alt="2dog logotyoe" width="320">
 
 # What's 2dog?
 Godot, but backwards!
