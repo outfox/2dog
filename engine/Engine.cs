@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Godot;
-using Environment = System.Environment;
 
 namespace twodog;
 
@@ -10,7 +8,7 @@ public class Engine(string project, string? path = null, string[]? args = null) 
 {
     private static IntPtr _godotInstancePtr = IntPtr.Zero;
 
-    public SceneTree SceneTree => Godot.Engine.Singleton.GetMainLoop() as SceneTree ??
+    public SceneTree Tree => Godot.Engine.Singleton.GetMainLoop() as SceneTree ??
                                         throw new NullReferenceException($"{nameof(Engine)}: Failed to get SceneTree.");
 
     public GodotInstance Start()
@@ -21,7 +19,6 @@ public class Engine(string project, string? path = null, string[]? args = null) 
 
         Console.WriteLine("Starting Godot instance...");
         
-
         // Prepare arguments for Godot (editor mode!)
         List<string> godotArgs = [ project ];
         if (!string.IsNullOrEmpty(path))
@@ -63,8 +60,10 @@ public class Engine(string project, string? path = null, string[]? args = null) 
         return godotInstance;
     }
 
-    private static void Stop()
-    {
+    private static void Destroy() {
+        var godotInstance = LibGodot.GetGodotInstanceFromPtr(_godotInstancePtr);
+        godotInstance.Iteration();
+        
         LibGodot.libgodot_destroy_godot_instance(_godotInstancePtr);
         Console.WriteLine($"{nameof(Engine)}: Godot instance destroyed.");
         _godotInstancePtr = IntPtr.MinValue;
@@ -82,8 +81,7 @@ public class Engine(string project, string? path = null, string[]? args = null) 
 
     public void Dispose()
     {
-        if (_godotInstancePtr == IntPtr.Zero && _godotInstancePtr == IntPtr.MinValue) return;
-        Stop();
-        _godotInstancePtr = IntPtr.MinValue;
+        if (_godotInstancePtr == IntPtr.Zero || _godotInstancePtr == IntPtr.MinValue) return;
+        Destroy();
     }
 }

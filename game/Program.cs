@@ -1,4 +1,4 @@
-using twodog;
+using Engine = twodog.Engine;
 
 var engine = new Engine("game", ".");
 using var godotInstance = engine.Start();
