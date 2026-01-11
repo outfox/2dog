@@ -17,6 +17,9 @@
         <PackageReference Version="4.6.0-beta" Include="GodotSharp">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Version="4.6.0-beta" Include="GodotPlugins">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
     <!-- workaround: manual assembly copying, no idea why -->
