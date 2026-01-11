@@ -14,7 +14,7 @@ Everything that Godot and GodotSharp can do, **2dog** does, but this dog knows a
 Planned features are TRS transforms using the [**fenn**ecs](https://fennecs.net) entity-component system, and a new approach to scene and material definitions. When Godot 4.6 is released, the local build portion of this will likely not be necessary.
 
 ## Acknowledgements
-Based on Ben Rog-Wilhelm's [zorbathut/libgodot_example](https://github.com/zorbathut/libgodot_example/tree/csharp). *You truly are the GOAT, or maybe [DIESEL HORSE](https://diesel.horse)!*
+Based on Ben Rog-Wilhelm's [zorbathut/libgodot_example](https://github.com/zorbathut/libgodot_example/tree/csharp). *You truly are the GOAT, or a [DIESEL HORSE](https://diesel.horse), same difference!*
 
 
 # How To Build & Run C#
