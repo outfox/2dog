@@ -4,7 +4,7 @@ Your code starts and pumps Godot's MainLoop - not the other way around.
 
 ![2dog logotype, a white stylized dog with the negative space around its leg forming the number 2, and a playful font spelling the word dog](logo.svg)
 
-> *"To Godot, or to dog... is it even a question?"*
+> *"Godot, or to dog... is it even a question?"*
 
 ---
 
