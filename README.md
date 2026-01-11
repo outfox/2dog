@@ -1,3 +1,5 @@
+![2dog logo](logo.svg)
+
 # What's 2dog?
 Godot, but backwards!
 
