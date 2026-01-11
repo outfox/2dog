@@ -2,7 +2,7 @@
 # What's 2dog?
 Godot, but backwards!
 
-[!2dog logotype](logo.svg)
+![2dog logotype, a white stylized dog with the negative space around its leg forming the number 2, and a playful font spelling the word dog](logo.svg)
 
 > *To dog, or not to dog. Is that even a question?*
 
