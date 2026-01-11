@@ -66,4 +66,9 @@
                  CopyToOutputDirectory="PreserveNewest"
                  Condition="$(RuntimeIdentifier.StartsWith('osx'))"/>
     </ItemGroup>
+
+    <Target Name="DeepClean" AfterTargets="Clean">
+        <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
+        <RemoveDir Directories="$(BaseOutputPath)" />
+    </Target>
 </Project>
