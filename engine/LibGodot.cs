@@ -3,10 +3,11 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // ReSharper disable InconsistentNaming
+// ReSharper disable once IdentifierTypo
 
-namespace DriverCS;
+namespace twodog;
 
-public enum GDExtensionInitializationLevel
+internal enum GDExtensionInitializationLevel
 {
     GDEXTENSION_INITIALIZATION_CORE,
     GDEXTENSION_INITIALIZATION_SERVERS,
@@ -16,7 +17,7 @@ public enum GDExtensionInitializationLevel
 }
 
 [StructLayout(LayoutKind.Sequential)]
-public struct GDExtensionInitialization
+internal struct GDExtensionInitialization
 {
     public GDExtensionInitializationLevel minimum_initialization_level;
     public nint userdata;
@@ -24,7 +25,7 @@ public struct GDExtensionInitialization
     public nint deinitialize;
 }
 
-public static unsafe partial class LibGodot
+internal static unsafe partial class LibGodot
 {
     private const string LIBGODOT_LIBRARY_NAME = "libgodot";
 
