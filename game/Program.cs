@@ -3,13 +3,12 @@ using Engine = twodog.Engine;
 using var engine = new Engine("game", "project");
 using var godotInstance = engine.Start();
 
-// Run until quit or finished
-var finished = godotInstance.Iteration();
+// You can access the SceneTree via engine.Tree
+
 Console.WriteLine("Godot is running, close window or press 'Q' to quit.");
-while (!finished && (!Console.KeyAvailable || Console.ReadKey(true).Key != ConsoleKey.Q))
+while (!godotInstance.Iteration())
 {
-    finished = godotInstance.Iteration();
+    if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Q) break;
 }
 
-Console.WriteLine("Godot is shutting down.");
-
+Console.WriteLine("Godot is shutting down. Thank you for using 2dog. 🦴");

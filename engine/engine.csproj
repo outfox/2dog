@@ -8,7 +8,7 @@
 
     <!-- Programming & LinkageCharacteristics -->
     <PropertyGroup>
-        <RootNamespace>DriverCS</RootNamespace>
+        <RootNamespace>twodog</RootNamespace>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
