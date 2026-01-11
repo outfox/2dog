@@ -1,7 +1,8 @@
-<img src="logo.svg" alt="2dog logotyoe" width="320">
 
 # What's 2dog?
 Godot, but backwards!
+
+<img src="logo.svg" alt="2dog logotyoe" width="320">
 
 > *To dog, or not to dog. Is that even a question?*
 
