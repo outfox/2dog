@@ -19,9 +19,9 @@ Think of it like this: Godot is your loyal companion that follows your lead, lea
 using Engine = twodog.Engine;
 
 using var engine = new Engine("game", "project");
-using var godotInstance = engine.Start();
+using var godot = engine.Start();
 
-while (!godotInstance.Iteration())
+while (!godot.Iteration())
 {
    // .... and we're off the leash!
    // you can access the SceneTree via engine.Tree
