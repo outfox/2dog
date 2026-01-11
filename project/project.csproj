@@ -5,4 +5,10 @@
     <IsTrimmable>true</IsTrimmable>
     <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
   </PropertyGroup>
+
+  <Target Name="DeepClean" AfterTargets="Clean">
+      <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
+      <RemoveDir Directories="$(BaseOutputPath)" />
+  </Target>
+
 </Project>
