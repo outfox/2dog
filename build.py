@@ -252,7 +252,7 @@ def generate_glue(platform_config):
         cwd="godot",
         description=task_desc
     )
-    console.print(f"[bold green]✓[/bold green] {task_desc}"
+    console.print(f"[bold green]✓[/bold green] {task_desc}")
 
     task_desc = "Building C# assemblies and NuGet packages"
     run_with_live_output(
