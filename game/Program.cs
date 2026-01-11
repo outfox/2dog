@@ -1,8 +1,14 @@
 using Engine = twodog.Engine;
 
-var engine = new Engine("game", ".");
+using var engine = new Engine("game", ".");
 using var godotInstance = engine.Start();
 
-Console.WriteLine("Godot is running. Press Enter to quit.");
-Console.ReadLine(); 
+// Run until quit or finished
+var finished = godotInstance.Iteration();
+while (!finished && !Console.KeyAvailable)
+{
+    finished = godotInstance.Iteration();
+}
+
+Console.WriteLine("Godot is shutting down.");
 
