@@ -57,9 +57,8 @@ while (!godot.Iteration())
 ## Quick Start
 
 ### Prerequisites
-- .NET SDK
+- .NET SDK 8.0 or later
 - Python (with uv)
-- Git
 
 ### Build & Run
 
