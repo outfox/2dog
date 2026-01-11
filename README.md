@@ -6,7 +6,6 @@ It's Godot, but backwards. Godot doesn't start and drive your .NET stuff, your .
 
 > *Godot, or to dog... is it even a question?*
 
-[![Discord Invite](https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white)](https://discord.gg/GAXdbZCNGT)
 
 ## Summary
 **2dog** is a .NET/C# front-end for [Godot](https://github.com/godotengine/godot), meaning it can interact with the engine, but isn't bound by its limitations; imagine it like a dog that follows you everywhere, is perfectly loyal, yet that dog can learn new tricks, runs happy circles around you, jumps into your bed, and chases squirrels while you're away.
@@ -14,6 +13,8 @@ It's Godot, but backwards. Godot doesn't start and drive your .NET stuff, your .
 Everything that Godot and GodotSharp can do, **2dog** does, but this dog knows a lot more tricks, on top.
 
 ## Discord
+Questions? Slide into our ~~dog park~~ server... and bark! [![Discord Invite](https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white)](https://discord.gg/GAXdbZCNGT)
+
 
 ## (massively WIP!)
 Planned features are TRS transforms using the [**fenn**ecs](https://fennecs.net) entity-component system, and a new approach to scene and material definitions. When Godot 4.6 is released, the local build portion of this will likely not be necessary.
