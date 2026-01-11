@@ -29,9 +29,14 @@
             <GodotPackagePath>$(NuGetPackageRoot)\godotsharp\$(GodotSharpVersion)\lib\net8.0\</GodotPackagePath>
         </PropertyGroup>
 
+        <ItemGroup>
+            <!-- temporary workaround until we find out how to properly install this via nupkg / sdk? -->
+            <GodotSharpFiles Include="$(GodotPackagePath)**\*.*"/>
+        </ItemGroup>
+        
         <MakeDir Directories="$(GodotApiPath)" />
-        <Copy SourceFiles="$(GodotPackagePath)GodotSharp.dll"
-              DestinationFolder="$(GodotApiPath)" />
+        <Copy SourceFiles="@(GodotSharpFiles)"
+              DestinationFolder="$(GodotApiPath)\%(RecursiveDir)"/>
     </Target>
 </Project>
 
