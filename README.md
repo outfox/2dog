@@ -1,6 +1,6 @@
 
 # What's 2dog?
-Godot, but backwards!
+It's Godot, but backwards. Godot doesn't start and drive your .NET stuff, your .NET stuff starts and drives Godot. 🦴
 
 ![2dog logotype, a white stylized dog with the negative space around its leg forming the number 2, and a playful font spelling the word dog](logo.svg)
 
