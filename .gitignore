@@ -4,7 +4,6 @@
 *.old
 *.old.*
 
-
 # Build Artifacts
 /.pack
 dist
