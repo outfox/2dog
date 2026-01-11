@@ -96,14 +96,19 @@ def parse_arguments():
 
     # Build steps control
     parser.add_argument(
-        "--no-library",
+        "--no-editor",
         action="store_true",
-        help="Skip building libgodot library"
+        help="Skip compiling the Editor"
     )
     parser.add_argument(
         "--no-glue",
         action="store_true",
         help="Skip generating Mono glue"
+    )
+    parser.add_argument(
+        "--no-library",
+        action="store_true",
+        help="Skip building libgodot library"
     )
     parser.add_argument(
         "--no-restore",
@@ -186,16 +191,19 @@ def show_build_config(args, platform_config):
 
     # Build steps
     table.add_row("─" * 30, "─" * 30)
-    table.add_row("Skip Library Build", "Yes" if args.no_library else "No")
+    table.add_row("Skip Editor Build", "Yes" if args.no_editor else "No")
     table.add_row("Skip Glue Generation", "Yes" if args.no_glue else "No")
+    table.add_row("Skip Library Build", "Yes" if args.no_library else "No")
     table.add_row("Skip dotnet clean & restore", "Yes" if args.no_restore else "No")
 
     console.print(table)
     console.print()
 
+
 def build_editor(args, _):
-    # Build Godot executable
-    task_desc = "Building Godot executable"
+    """Build Godot executable."""
+    console.print("\n[bold yellow]┌── Building Godot Editor ──┐[/bold yellow]")
+    task_desc = "Building Godot Editor (with mono)"
     run_with_live_output(
         ["scons", "target=editor", "module_mono_enabled=yes", "extra_suffix=executable",
          f"dev_build={args.dev_build}", f"scu_build={args.scu_build}",
@@ -203,11 +211,12 @@ def build_editor(args, _):
         cwd="godot",
         description=task_desc
     )
+    console.print(f"[bold green]✓[/bold green] {task_desc}")
 
 
 def build_libgodot(args, _):
     """Build the libgodot library."""
-    console.print("[bold yellow]┌── Building libgodot ──┐[/bold yellow]")
+    console.print("\n[bold yellow]┌── Building libgodot ──┐[/bold yellow]")
 
     for target in ["template_release", "editor"]:
         task_desc = f"Building libgodot (target={target})"
@@ -220,6 +229,7 @@ def build_libgodot(args, _):
             cwd="godot",
             description=task_desc
         )
+    console.print(f"[bold green]✓[/bold green] {task_desc}")
 
 
 def generate_glue(platform_config):
@@ -230,12 +240,19 @@ def generate_glue(platform_config):
     os.makedirs("godot/bin/GodotSharp/Tools/nupkgs", exist_ok=True)
     console.print(f"[bold green]✓[/bold green] {task_desc}")
 
+    task_desc = "nuget locals"
+    run_with_live_output(
+        ["dotnet", "nuget", "locals", "all", "--clear"],
+        description=task_desc
+    )
+
     task_desc = "Generating Mono glue files"
     run_with_live_output(
         [platform_config.godot_exe, "--headless", "--generate-mono-glue", "./modules/mono/glue"],
         cwd="godot",
         description=task_desc
     )
+    console.print(f"[bold green]✓[/bold green] {task_desc}")
 
     task_desc = "Building C# assemblies and NuGet packages"
     run_with_live_output(
@@ -245,23 +262,26 @@ def generate_glue(platform_config):
         cwd="godot",
         description=task_desc
     )
+    console.print(f"[bold green]✓[/bold green] {task_desc}")
 
 
 def restore_dependencies(platform_config):
-    """Generate Mono glue files."""
+    """Restore .NET Dependencies."""
     console.print("\n[bold yellow]┌── Restoring .NET Dependencies──┐[/bold yellow]")
-
-    task_desc = "dotnet clean"
-    run_with_live_output(
-        ["dotnet", "clean", "-v", "detailed"],
-        description=task_desc
-    )
 
     task_desc = "dotnet restore"
     run_with_live_output(
         ["dotnet", "restore", "-v", "detailed"],
         description=task_desc
     )
+    console.print(f"[bold green]✓[/bold green] {task_desc}")
+
+    task_desc = "dotnet clean"
+    run_with_live_output(
+        ["dotnet", "clean", "-v", "detailed"],
+        description=task_desc
+    )
+    console.print(f"[bold green]✓[/bold green] {task_desc}")
 
     task_desc = "Generating game UID cache"
     run_with_live_output(
@@ -269,6 +289,7 @@ def restore_dependencies(platform_config):
         cwd="godot",
         description=task_desc
     )
+    console.print(f"[bold green]✓[/bold green] {task_desc}")
 
 
 def main():
@@ -284,16 +305,15 @@ def main():
 
     show_build_config(args, platform_config)
 
-    # Generate glue
-    if not args.no_glue:
+    if not args.no_editor:
         build_editor(args, platform_config)
+
+    if not args.no_glue:
         generate_glue(platform_config)
 
-    # Build libgodot
     if not args.no_library:
         build_libgodot(args, platform_config)
 
-    # Restore dependencies
     if not args.no_restore:
         restore_dependencies(platform_config)
 

@@ -15,7 +15,6 @@
 
     <ItemGroup>
         <PackageReference Version="4.6.0-beta" Include="GodotSharp" />
-        <PackageReference Version="4.6.0-beta" Include="GodotSharpEditor" />
     </ItemGroup>
 
     <!-- workaround: manual assembly copying, no idea why -->
