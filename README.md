@@ -14,6 +14,20 @@
 
 Think of it like this: Godot is your loyal companion that follows your lead, learns new tricks, and does exactly what you tell it to—while still having all the capabilities of the full engine.
 
+```cs
+// Program.cs
+using Engine = twodog.Engine;
+
+using var engine = new Engine("game", "project");
+using var godotInstance = engine.Start();
+
+while (!godotInstance.Iteration())
+{
+   // .... and we're off the leash!
+   // you can access the SceneTree via engine.Tree
+}
+```
+
 ### What does this mean?
 
 - ✨ **Everything Godot can do**, 2dog can do
