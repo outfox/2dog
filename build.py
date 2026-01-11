@@ -96,20 +96,23 @@ def parse_arguments():
 
     # Build steps control
     parser.add_argument(
+        "--no-library",
+        action="store_true",
+        help="Skip building libgodot library"
+    )
+
+    parser.add_argument(
         "--no-editor",
         action="store_true",
         help="Skip compiling the Editor"
     )
+
     parser.add_argument(
         "--no-glue",
         action="store_true",
         help="Skip generating Mono glue"
     )
-    parser.add_argument(
-        "--no-library",
-        action="store_true",
-        help="Skip building libgodot library"
-    )
+
     parser.add_argument(
         "--no-restore",
         action="store_true",
@@ -258,7 +261,7 @@ def generate_glue(platform_config):
     run_with_live_output(
         ["python", "./modules/mono/build_scripts/build_assemblies.py",
          "--godot-platform", platform_config.godot_platform, "--godot-output-dir", "./bin",
-         "--no-deprecated", "--push-nupkgs-local", "true"],
+         "--push-nupkgs-local", "./bin/packages"],
         cwd="godot",
         description=task_desc
     )
