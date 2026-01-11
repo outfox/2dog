@@ -17,9 +17,6 @@
         <PackageReference Version="4.6.0-beta" Include="GodotSharp">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Version="4.6.0-beta" Include="GodotPlugins">
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
     </ItemGroup>
 
     <!-- workaround: manual assembly copying, no idea why -->
@@ -30,7 +27,8 @@
     <Target Name="CopyGodotAssemblies" AfterTargets="Build">
         <PropertyGroup>
             <GodotApiPath>$(OutputPath)GodotSharp\Api\$(Configuration)\</GodotApiPath>
-            <GodotPackagePath>$(NuGetPackageRoot)\godotsharp\$(GodotSharpVersion)\lib\net8.0\</GodotPackagePath>
+            <!--<GodotPackagePath>$(NuGetPackageRoot)\godotsharp\$(GodotSharpVersion)\lib\net8.0\</GodotPackagePath>-->
+            <GodotPackagePath>..\godot\bin\GodotSharp\Api\$(Configuration)\</GodotPackagePath>
         </PropertyGroup>
 
         <ItemGroup>
