@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net10.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <IsTrimmable>true</IsTrimmable>
         <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
     </PropertyGroup>
@@ -25,17 +25,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Version="4.6.0-beta" Include="GodotSharp" />
+        <PackageReference Version="4.6.0-beta" Include="GodotSharpEditor" />
+        
         <!-- Reference the Godot C# API assemblies -->
         <Reference Include="GodotSharp">
             <HintPath>../godot/bin/GodotSharp/Api/$(Configuration)/GodotSharp.dll</HintPath>
-            <Private>true</Private>
+            <Private>false</Private>
         </Reference>
     </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\project\project.csproj"/>
-    </ItemGroup>
-
 
     <!-- For Build: Copy current platform's lib -->
     <ItemGroup Condition="'$(RuntimeIdentifier)' == ''">
