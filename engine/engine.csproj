@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
+        <OutputType>Library</OutputType>
         <TargetFramework>net10.0</TargetFramework>
         <IsTrimmable>true</IsTrimmable>
         <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
@@ -34,7 +34,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\project\project.csproj"/>
-        <ProjectReference Include="..\game\game.csproj"/>
     </ItemGroup>
 
 
