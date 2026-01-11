@@ -26,7 +26,7 @@ Based on Ben Rog-Wilhelm's [zorbathut/libgodot_example](https://github.com/zorba
 # How To Build & Run C#
 Init sumodules via `git submodule init` and `git submodule update` as needed. This checks out a lightly modified fork of https://github.com/godotengine/godot .
 
-Run `uv run build.py`, and on success, `dotnet run --project engine`. Only tested on linux so far.)
+Run `uv run build.py`, and on success, `dotnet run --project game`. Only tested on linux so far.)
 
 
 
