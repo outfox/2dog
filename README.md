@@ -1,4 +1,4 @@
-# *Godot, but backwards.* 🦴
+# *Godot, a little backwards.* 🦴
 
 Your code starts and pumps Godot's MainLoop - not the other way around.
 
