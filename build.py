@@ -208,7 +208,7 @@ def build_editor(args, _):
     console.print("\n[bold yellow]┌── Building Godot Editor ──┐[/bold yellow]")
     task_desc = "Building Godot Editor (with mono)"
     run_with_live_output(
-        ["scons", "target=editor", "module_mono_enabled=yes", "extra_suffix=executable",
+        ["scons", "target=editor", "module_mono_enabled=yes", "extra_suffix=executable", "d3d12=no",
          f"dev_build={args.dev_build}", f"scu_build={args.scu_build}",
          "debug_symbols=true", "separate_debug_symbols=true"],
         cwd="godot",
@@ -225,7 +225,7 @@ def build_libgodot(args, _):
         task_desc = f"Building libgodot (target={target})"
 
         run_with_live_output(
-            ["scons", f"target={target}", "module_mono_enabled=yes",
+            ["scons", f"target={target}", "module_mono_enabled=yes", "d3d12=no",
              "library_type=shared_library", "extra_suffix=shared_library",
              f"dev_build={args.dev_build}", f"scu_build={args.scu_build}",
              f"debug_symbols={args.debug_symbols}", f"separate_debug_symbols={args.debug_symbols}"],
