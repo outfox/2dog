@@ -35,7 +35,7 @@
                  Link="libgodot.so"
                  CopyToOutputDirectory="PreserveNewest"
                  Condition="'$(IsLinux)' == 'true'"/>
-        <Content Include="../godot/bin/libgodot.windows.editor.dev.x86_64.shared_library.dll"
+        <Content Include="../godot/bin/godot.windows.editor.dev.x86_64.shared_library.dll"
                  Link="libgodot.dll"
                  CopyToOutputDirectory="PreserveNewest"
                  Condition="'$(IsWindows)' == 'true'"/>
@@ -51,7 +51,7 @@
                  Link="libgodot.so"
                  CopyToOutputDirectory="PreserveNewest"
                  Condition="$(RuntimeIdentifier.StartsWith('linux'))"/>
-        <Content Include="../godot/bin/libgodot.windows.editor.dev.x86_64.shared_library.dll"
+        <Content Include="../godot/bin/godot.windows.editor.dev.x86_64.shared_library.dll"
                  Link="libgodot.dll"
                  CopyToOutputDirectory="PreserveNewest"
                  Condition="$(RuntimeIdentifier.StartsWith('win'))"/>
