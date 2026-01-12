@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Godot;
 
 namespace twodog;
@@ -32,7 +31,7 @@ public class Engine(string project, string? path = null, string[]? args = null) 
             godotArgs.AddRange(args);
         }   
 
-        // Create Godot instance via P/Invoke (without starting)
+        // Create a Godot instance via P/Invoke (without starting)
         _godotInstancePtr = CreateGodotInstance(godotArgs.ToArray());
 
         if (_godotInstancePtr == IntPtr.Zero)
