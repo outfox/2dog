@@ -1,4 +1,3 @@
-/.idea
 /*.user
 
 *.old
@@ -54,7 +53,6 @@ coverage.xml
 .pytest_cache/
 
 # IDE specific files
-.idea/
 .vscode/
 *.swp
 *.swo

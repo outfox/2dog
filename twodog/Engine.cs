@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Godot;
 
 namespace twodog;
@@ -61,9 +62,6 @@ public class Engine(string project, string? path = null, string[]? args = null) 
     }
 
     private static void Destroy() {
-        var godotInstance = LibGodot.GetGodotInstanceFromPtr(_godotInstancePtr);
-        godotInstance.Iteration();
-        
         LibGodot.libgodot_destroy_godot_instance(_godotInstancePtr);
         Console.WriteLine($"{nameof(Engine)}: Godot instance destroyed.");
         _godotInstancePtr = IntPtr.MinValue;
