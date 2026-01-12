@@ -1,10 +1,10 @@
-# *Godot... backwards?* 🦴
-
-Your code starts and pumps Godot's MainLoop - not the other way around.
+# *What's »*Godot*« backwards?* 🦴
 
 ![2dog logotype, a white stylized dog with the negative space around its leg forming the number 2, and a playful font spelling the word dog](logo.svg)
 
 > *"Godot, or to dog... is it even a question?"*
+
+This libary lets your C# application code start and pump Godot's MainLoop - not the other way around.
 
 ---
 
