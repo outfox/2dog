@@ -74,7 +74,7 @@ while (!godot.Iteration())
 
 3. **Run the demo**
 ```bash
-   dotnet run --project game
+   dotnet run --project demo
 ```
 
 > Currently tested on Linux only. Windows/macOS support coming soon™
