@@ -1,4 +1,4 @@
-# _Let's run_ »`Godot`« _... backwards!_ 🦴
+# How do you pronounce `Godot` ... _backwards!_ 🦴
 
 ![2dog logotype, a white stylized dog with the negative space around its leg forming the number 2, and a playful font spelling the word dog](logo.svg)
 
