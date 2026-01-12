@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\engine\engine.csproj" />
+        <ProjectReference Include="..\twodog\twodog.csproj" />
         <ProjectReference Include="..\project\project.csproj" />
     </ItemGroup>
 
