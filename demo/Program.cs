@@ -1,6 +1,6 @@
 using Engine = twodog.Engine;
 
-using var engine = new Engine("game", "project");
+using var engine = new Engine("demo", "project");
 using var godotInstance = engine.Start();
 
 // You can access the SceneTree via engine.Tree

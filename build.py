@@ -325,7 +325,7 @@ def main():
     console.print(Panel.fit(
         "[bold green]✓ Build Complete![/bold green]\n\n"
         "Run the project using:\n"
-        "[cyan]  dotnet run --project game[/cyan]",
+        "[cyan]  dotnet run --project demo[/cyan]",
         border_style="green"
     ))
 
