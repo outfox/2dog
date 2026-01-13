@@ -1,5 +1,24 @@
 ---
 layout: home
+title: 2dog
+titleTemplate: :title – Godot in .NET
+
+head:
+  - - meta
+    - name: title
+      content: 2dog – Godot in .NET
+  - - meta
+    - name: description
+      content: Embed Godot Engine in your .NET applications. Full engine control, xUnit testing, and CI/CD support.
+  - - meta
+    - property: og:type
+      content: website
+  - - meta
+    - property: og:url
+      content: https://2dog.dev
+  - - meta
+    - property: og:title
+      content: 2dog – Godot in .NET
 
 hero:
   name: "What if Godot..."
