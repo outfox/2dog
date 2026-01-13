@@ -1,0 +1,4 @@
+<Project>
+  <!-- Import the main twodog targets for transitive package references -->
+  <Import Project="$(MSBuildThisFileDirectory)..\build\twodog.targets" />
+</Project>

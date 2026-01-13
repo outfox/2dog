@@ -1,45 +1,23 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <OutputType>Exe</OutputType>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <IsTrimmable>true</IsTrimmable>
-        <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
-    </PropertyGroup>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsTrimmable>true</IsTrimmable>
+    <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\twodog\twodog.csproj" />
-        <ProjectReference Include="..\project\project.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\twodog\twodog.csproj" />
+    <ProjectReference Include="..\project\project.csproj" />
+  </ItemGroup>
 
-    <!-- workaround: manual assembly copying, no idea why -->
-    <PropertyGroup>
-        <GodotSharpVersion>4.6.0-beta</GodotSharpVersion>
-    </PropertyGroup>
+  <!-- Import twodog targets for GodotSharp API assembly copying -->
+  <Import Project="..\twodog\build\twodog.targets" />
 
-    <ItemGroup>
-        <PackageReference Include="GodotSharp" Version="$(GodotSharpVersion)"/>
-    </ItemGroup>
-
-    <Target Name="CopyGodotAssemblies" AfterTargets="Build">
-        <PropertyGroup>
-            <GodotApiPath>$(OutputPath)GodotSharp\Api\$(Configuration)\</GodotApiPath>
-        </PropertyGroup>
-
-        <ItemGroup>
-            <!-- temporary workaround until we find out how to properly install this via nupkg / sdk? -->
-            <GodotSharpFiles Include="..\godot\bin\GodotSharp\Api\$(Configuration)\**\*.*"/>
-        </ItemGroup>
-        
-        <MakeDir Directories="$(GodotApiPath)" />
-        <Copy SourceFiles="@(GodotSharpFiles)"
-              DestinationFolder="$(GodotApiPath)\%(RecursiveDir)"/>
-    </Target>
-
-    <Target Name="DeepClean" AfterTargets="Clean">
-        <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
-        <RemoveDir Directories="$(BaseOutputPath)" />
-    </Target>
+  <Target Name="DeepClean" AfterTargets="Clean">
+    <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
+    <RemoveDir Directories="$(BaseOutputPath)" />
+  </Target>
 </Project>
-
