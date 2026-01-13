@@ -18,12 +18,12 @@
     <PackageId>twodog</PackageId>
     <Version>0.1.0-pre</Version>
     <Authors>2dog contributors</Authors>
-    <Description>Embed Godot engine in your .NET applications. Bundles GodotSharp API assemblies and native libgodot libraries.</Description>
+    <Description>Embed Godot engine in your .NET applications. Native libgodot libraries are downloaded automatically on first build.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <!-- Suppress NU5100: GodotSharp API DLLs and native libs are intentionally in contentFiles/runtimes, not lib -->
+    <!-- Suppress NU5100: GodotSharp API DLLs are intentionally in contentFiles, not lib -->
     <NoWarn>$(NoWarn);NU5100</NoWarn>
   </PropertyGroup>
 
@@ -62,66 +62,40 @@
              CopyToOutputDirectory="Never" />
   </ItemGroup>
 
-  <!-- Include native libraries in runtimes folder for NuGet automatic RID-based resolution -->
+  <!--
+    Native libraries are NOT included in the package.
+    They are downloaded automatically by MSBuild targets on first build.
+    For local development of the twodog library itself, we use TwoDogNativesLocalPath.
+  -->
+  
+  <!-- For local development of twodog: Set the local native library path -->
+  <PropertyGroup>
+    <!-- Skip the download mechanism for twodog library development -->
+    <TwoDogSkipNativeDownload>true</TwoDogSkipNativeDownload>
+    
+    <!-- Point to local Godot build for development -->
+    <TwoDogLocalNativeLib_Windows>$(GodotBinDir)godot.windows.editor.dev.x86_64.shared_library.dll</TwoDogLocalNativeLib_Windows>
+    <TwoDogLocalNativeLib_Linux>$(GodotBinDir)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so</TwoDogLocalNativeLib_Linux>
+    <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
+  </PropertyGroup>
+  
+  <!-- Copy local native lib to output for twodog library development -->
   <ItemGroup>
-    <!-- Windows x64 -->
-    <Content Include="$(GodotBinDir)godot.windows.editor.dev.x86_64.shared_library.dll"
-             Pack="true"
-             PackagePath="runtimes\win-x64\native\libgodot.dll"
-             Link="runtimes\win-x64\native\libgodot.dll"
-             CopyToOutputDirectory="Never" />
-    <!-- Linux x64 (if exists) -->
-    <Content Include="$(GodotBinDir)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so"
-             Pack="true"
-             PackagePath="runtimes\linux-x64\native\libgodot.so"
-             Link="runtimes\linux-x64\native\libgodot.so"
-             CopyToOutputDirectory="Never"
-             Condition="Exists('$(GodotBinDir)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so')" />
-    <!-- macOS x64 (if exists) -->
-    <Content Include="$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib"
-             Pack="true"
-             PackagePath="runtimes\osx-x64\native\libgodot.dylib"
-             Link="runtimes\osx-x64\native\libgodot.dylib"
-             CopyToOutputDirectory="Never"
-             Condition="Exists('$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib')" />
-  </ItemGroup>
-
-  <!-- For local development: Copy current platform's native lib to output (not included in package) -->
-  <ItemGroup Condition="'$(RuntimeIdentifier)' == ''">
-    <Content Include="$(GodotBinDir)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so"
-             Pack="false"
-             Link="libgodot.so"
-             CopyToOutputDirectory="PreserveNewest"
-             Condition="'$(IsLinux)' == 'true' And Exists('$(GodotBinDir)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so')" />
-    <Content Include="$(GodotBinDir)godot.windows.editor.dev.x86_64.shared_library.dll"
+    <Content Include="$(TwoDogLocalNativeLib_Windows)"
              Pack="false"
              Link="libgodot.dll"
              CopyToOutputDirectory="PreserveNewest"
-             Condition="'$(IsWindows)' == 'true'" />
-    <Content Include="$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib"
-             Pack="false"
-             Link="libgodot.dylib"
-             CopyToOutputDirectory="PreserveNewest"
-             Condition="'$(IsOSX)' == 'true' And Exists('$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib')" />
-  </ItemGroup>
-
-  <!-- For Publish: Copy only the target RID's lib (not included in package) -->
-  <ItemGroup Condition="'$(RuntimeIdentifier)' != ''">
-    <Content Include="$(GodotBinDir)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so"
+             Condition="'$(IsWindows)' == 'true' And Exists('$(TwoDogLocalNativeLib_Windows)')" />
+    <Content Include="$(TwoDogLocalNativeLib_Linux)"
              Pack="false"
              Link="libgodot.so"
              CopyToOutputDirectory="PreserveNewest"
-             Condition="$(RuntimeIdentifier.StartsWith('linux')) And Exists('$(GodotBinDir)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so')" />
-    <Content Include="$(GodotBinDir)godot.windows.editor.dev.x86_64.shared_library.dll"
-             Pack="false"
-             Link="libgodot.dll"
-             CopyToOutputDirectory="PreserveNewest"
-             Condition="$(RuntimeIdentifier.StartsWith('win'))" />
-    <Content Include="$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib"
+             Condition="'$(IsLinux)' == 'true' And Exists('$(TwoDogLocalNativeLib_Linux)')" />
+    <Content Include="$(TwoDogLocalNativeLib_OSX)"
              Pack="false"
              Link="libgodot.dylib"
              CopyToOutputDirectory="PreserveNewest"
-             Condition="$(RuntimeIdentifier.StartsWith('osx')) And Exists('$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib')" />
+             Condition="'$(IsOSX)' == 'true' And Exists('$(TwoDogLocalNativeLib_OSX)')" />
   </ItemGroup>
 
   <!-- For local development: Copy GodotSharp API assemblies to output -->

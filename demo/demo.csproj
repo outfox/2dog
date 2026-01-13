@@ -13,6 +13,11 @@
     <ProjectReference Include="..\project\project.csproj" />
   </ItemGroup>
 
+  <!-- For local development: skip native download and use local Godot build -->
+  <PropertyGroup>
+    <TwoDogSkipNativeDownload>true</TwoDogSkipNativeDownload>
+  </PropertyGroup>
+
   <!-- Import twodog targets for GodotSharp API assembly copying -->
   <Import Project="..\twodog\build\twodog.targets" />
 
