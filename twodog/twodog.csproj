@@ -53,11 +53,12 @@
 
   <!--
     Include GodotSharp API assemblies in the package.
-    These must be copied to GodotSharp/Api/<Config>/ at runtime because Godot's native
-    code checks for directory existence before .NET is loaded (gd_mono.cpp).
+    Package includes both structures:
+    - GodotSharp/Api/Debug/ for editor builds (TOOLS_ENABLED)
+    - Flat structure for template_release builds (LIBGODOT_HOSTFXR only)
   -->
   <ItemGroup>
-    <!-- Debug configuration -->
+    <!-- GodotSharp API assemblies - nested structure for editor builds -->
     <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.dll"
              Pack="true"
              PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\"
@@ -101,32 +102,6 @@
              PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\"
              CopyToOutputDirectory="Never"
              Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.runtimeconfig.json')" />
-    <!-- Release configuration (if different from Debug) -->
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Release\GodotSharp.dll"
-             Pack="true"
-             PackagePath="contentFiles\any\any\GodotSharp\Api\Release\"
-             CopyToOutputDirectory="Never"
-             Condition="Exists('$(GodotBinDir)GodotSharp\Api\Release\GodotSharp.dll')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Release\GodotSharp.pdb"
-             Pack="true"
-             PackagePath="contentFiles\any\any\GodotSharp\Api\Release\"
-             CopyToOutputDirectory="Never"
-             Condition="Exists('$(GodotBinDir)GodotSharp\Api\Release\GodotSharp.pdb')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Release\GodotPlugins.dll"
-             Pack="true"
-             PackagePath="contentFiles\any\any\GodotSharp\Api\Release\"
-             CopyToOutputDirectory="Never"
-             Condition="Exists('$(GodotBinDir)GodotSharp\Api\Release\GodotPlugins.dll')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Release\GodotPlugins.pdb"
-             Pack="true"
-             PackagePath="contentFiles\any\any\GodotSharp\Api\Release\"
-             CopyToOutputDirectory="Never"
-             Condition="Exists('$(GodotBinDir)GodotSharp\Api\Release\GodotPlugins.pdb')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Release\GodotPlugins.runtimeconfig.json"
-             Pack="true"
-             PackagePath="contentFiles\any\any\GodotSharp\Api\Release\"
-             CopyToOutputDirectory="Never"
-             Condition="Exists('$(GodotBinDir)GodotSharp\Api\Release\GodotPlugins.runtimeconfig.json')" />
   </ItemGroup>
 
   <!--
@@ -179,15 +154,15 @@
 
   <!--
     For local development: Copy all GodotSharp API assemblies to output.
-    This is required because Godot's native code checks for directory existence
-    at the filesystem level before .NET is loaded.
+    - Editor builds (Debug): Use nested GodotSharp/Api/Debug/ structure (required by TOOLS_ENABLED)
+    - Template release builds (Release): Use flat structure (LIBGODOT_HOSTFXR only)
   -->
   <Target Name="CopyGodotApiForLocalDev" AfterTargets="Build" Condition="'$(DesignTimeBuild)' != 'true'">
     <PropertyGroup>
-      <TwoDogGodotApiConfiguration Condition="'$(Configuration)' == 'Release'">Release</TwoDogGodotApiConfiguration>
-      <TwoDogGodotApiConfiguration Condition="'$(TwoDogGodotApiConfiguration)' == ''">Debug</TwoDogGodotApiConfiguration>
-      <GodotApiDestPath>$(OutputPath)GodotSharp\Api\$(TwoDogGodotApiConfiguration)\</GodotApiDestPath>
-      <GodotApiSrcPath>$(GodotBinDir)GodotSharp\Api\$(TwoDogGodotApiConfiguration)\</GodotApiSrcPath>
+      <GodotApiSrcPath>$(GodotBinDir)GodotSharp\Api\Debug\</GodotApiSrcPath>
+      <!-- Debug/editor builds need nested structure; Release/template builds use flat structure -->
+      <GodotApiDestPath Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">$(OutputPath)GodotSharp\Api\Debug\</GodotApiDestPath>
+      <GodotApiDestPath Condition="'$(Configuration)' == 'Release'">$(OutputPath)</GodotApiDestPath>
     </PropertyGroup>
 
     <ItemGroup>
@@ -197,7 +172,7 @@
       <GodotApiFiles Include="$(GodotApiSrcPath)*.runtimeconfig.json" />
     </ItemGroup>
 
-    <MakeDir Directories="$(GodotApiDestPath)" />
+    <MakeDir Directories="$(GodotApiDestPath)" Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''" />
     <Copy SourceFiles="@(GodotApiFiles)"
           DestinationFolder="$(GodotApiDestPath)"
           SkipUnchangedFiles="true" />

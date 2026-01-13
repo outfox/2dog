@@ -37,7 +37,7 @@ hero:
 
 features:
   - title: 🎮 Full Godot Power
-    details: Access the complete GodotSharp API — scenes, physics, rendering, audio, input — everything Godot can do.
+    details: Access the complete GodotSharp API  –  scenes, physics, rendering, audio, input  –  everything Godot can do.
   - title: 🔄 Inverted Control
     details: Your .NET process controls Godot, not the other way around. Start, iterate, and stop the engine when you decide.
   - title: 🧪 First-Class Testing
@@ -63,7 +63,7 @@ engine.Tree.Root.AddChild(scene.Instantiate());
 // Run the main loop
 while (!godot.Iteration())
 {
-    // Your code here — every frame
+    // Your code here  –  every frame
 }
 ```
 
