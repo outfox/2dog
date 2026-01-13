@@ -137,3 +137,78 @@ The GodotSharp API assemblies are automatically copied to your output directory.
 ::: info
 All libgodot shared library builds use Debug GodotSharp assemblies due to the `LIBGODOT_HOSTFXR` code path.
 :::
+
+## Directory Structure Requirements
+
+Godot's native code has specific expectations for where the GodotSharp API assemblies must be located. This depends on how the native library was compiled.
+
+### Editor Builds vs Template Builds
+
+| Build Type | Compile Flag | Expected Directory Structure |
+|------------|--------------|------------------------------|
+| `editor` | `TOOLS_ENABLED` | `GodotSharp/Api/Debug/` subdirectory |
+| `template_release` | `LIBGODOT_HOSTFXR` only | Flat (same directory as libgodot) |
+
+### Why This Matters
+
+When Godot initializes its .NET runtime, it checks for the GodotSharp assemblies in a specific location determined at compile time:
+
+**Editor builds** (`TOOLS_ENABLED`):
+```
+your-app/
+├── your-app.exe
+├── libgodot.dll
+└── GodotSharp/
+    └── Api/
+        └── Debug/
+            ├── GodotSharp.dll
+            ├── GodotPlugins.dll
+            └── GodotPlugins.runtimeconfig.json
+```
+
+**Template release builds** (`LIBGODOT_HOSTFXR` without `TOOLS_ENABLED`):
+```
+your-app/
+├── your-app.exe
+├── libgodot.dll
+├── GodotSharp.dll
+├── GodotPlugins.dll
+└── GodotPlugins.runtimeconfig.json
+```
+
+::: warning Directory Must Exist
+If the assemblies are in the wrong location, Godot will fail with:
+```
+Unable to find the .NET assemblies directory.
+Make sure the '...GodotSharp/Api/Debug' directory exists and contains the .NET assemblies.
+```
+:::
+
+### How 2dog Handles This
+
+2dog automatically copies the GodotSharp API assemblies to the correct location based on your `TwoDogBuildType`:
+
+- **`TwoDogBuildType=editor`**: Copies to `$(OutputPath)GodotSharp/Api/Debug/`
+- **`TwoDogBuildType=template_release`**: Copies directly to `$(OutputPath)`
+
+This happens automatically via the `TwoDogCopyGodotApi` MSBuild target.
+
+### Troubleshooting
+
+If you encounter the "Unable to find .NET assemblies directory" error:
+
+1. **Check your build type matches your native library**:
+   - Using `godot.*.editor.*.dll`? Set `TwoDogBuildType=editor`
+   - Using `godot.*.template_release.*.dll`? Set `TwoDogBuildType=template_release`
+
+2. **Verify the directory structure** in your output folder matches the expected pattern above.
+
+3. **Clean and rebuild**:
+   ```bash
+   dotnet clean
+   dotnet build
+   ```
+
+4. **Check that the source assemblies exist**:
+   - For local development: `godot/bin/GodotSharp/Api/Debug/`
+   - For NuGet package: The package's `contentFiles/any/any/GodotSharp/Api/Debug/`
