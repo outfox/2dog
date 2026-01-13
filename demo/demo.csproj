@@ -16,6 +16,34 @@
   <!-- For local development: skip native download and use local Godot build -->
   <PropertyGroup>
     <TwoDogSkipNativeDownload>true</TwoDogSkipNativeDownload>
+    <GodotBinDir>$(MSBuildProjectDirectory)/../godot/bin/</GodotBinDir>
+  </PropertyGroup>
+
+  <!--
+    Configuration-based native library selection:
+    - Debug: Use editor dev build (expects Debug assemblies, includes debug features)
+    - Release: Use template_release non-dev build (expects Release assemblies, optimized)
+  -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
+    <TwoDogBuildType>editor</TwoDogBuildType>
+    <TwoDogDevBuild>true</TwoDogDevBuild>
+    <!-- Windows -->
+    <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(GodotBinDir)godot.windows.editor.dev.x86_64.shared_library.dll</TwoDogNativesLocalPath>
+    <!-- Linux -->
+    <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(GodotBinDir)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so</TwoDogNativesLocalPath>
+    <!-- macOS -->
+    <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib</TwoDogNativesLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TwoDogBuildType>template_release</TwoDogBuildType>
+    <TwoDogDevBuild>false</TwoDogDevBuild>
+    <!-- Windows -->
+    <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(GodotBinDir)godot.windows.template_release.x86_64.shared_library.dll</TwoDogNativesLocalPath>
+    <!-- Linux -->
+    <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(GodotBinDir)libgodot.linuxbsd.template_release.x86_64.shared_library.so</TwoDogNativesLocalPath>
+    <!-- macOS -->
+    <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(GodotBinDir)libgodot.macos.template_release.x86_64.shared_library.dylib</TwoDogNativesLocalPath>
   </PropertyGroup>
 
   <!-- Import twodog targets for GodotSharp API assembly copying -->

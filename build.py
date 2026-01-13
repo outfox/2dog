@@ -340,10 +340,14 @@ def build_libgodot(args, platform_config: PlatformConfig):
         targets = [args.target]
 
     for target in targets:
+        # template_release should never be a dev build (for optimized release binaries)
+        # editor target uses the configurable dev_build setting
+        use_dev_build = "no" if target == "template_release" else args.dev_build
+
         task_desc = (
             "Building libgodot ("  # noqa: W503
             f"target={target}, platform={platform_config.godot_platform}, "
-            f"arch={platform_config.godot_arch})"
+            f"arch={platform_config.godot_arch}, dev_build={use_dev_build})"
         )
 
         run_with_live_output(
@@ -356,10 +360,12 @@ def build_libgodot(args, platform_config: PlatformConfig):
                 "d3d12=no",
                 "library_type=shared_library",
                 "extra_suffix=shared_library",
-                f"dev_build={args.dev_build}",
+                f"dev_build={use_dev_build}",
                 f"scu_build={args.scu_build}",
                 f"debug_symbols={args.debug_symbols}",
                 f"separate_debug_symbols={args.debug_symbols}",
+                # Allow --path override at runtime (needed for libgodot to load projects)
+                "disable_path_overrides=no",
             ],
             cwd="godot",
             description=task_desc,
