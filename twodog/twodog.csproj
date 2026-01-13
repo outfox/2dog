@@ -16,13 +16,15 @@
   <!-- NuGet Package Metadata -->
   <PropertyGroup>
     <PackageId>twodog</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.1.0-pre</Version>
     <Authors>2dog contributors</Authors>
     <Description>Embed Godot engine in your .NET applications. Bundles GodotSharp API assemblies and native libgodot libraries.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!-- Suppress NU5100: GodotSharp API DLLs and native libs are intentionally in contentFiles/runtimes, not lib -->
+    <NoWarn>$(NoWarn);NU5100</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -84,33 +86,39 @@
              Condition="Exists('$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib')" />
   </ItemGroup>
 
-  <!-- For local development: Copy current platform's native lib to output -->
+  <!-- For local development: Copy current platform's native lib to output (not included in package) -->
   <ItemGroup Condition="'$(RuntimeIdentifier)' == ''">
     <Content Include="$(GodotBinDir)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so"
+             Pack="false"
              Link="libgodot.so"
              CopyToOutputDirectory="PreserveNewest"
              Condition="'$(IsLinux)' == 'true' And Exists('$(GodotBinDir)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so')" />
     <Content Include="$(GodotBinDir)godot.windows.editor.dev.x86_64.shared_library.dll"
+             Pack="false"
              Link="libgodot.dll"
              CopyToOutputDirectory="PreserveNewest"
              Condition="'$(IsWindows)' == 'true'" />
     <Content Include="$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib"
+             Pack="false"
              Link="libgodot.dylib"
              CopyToOutputDirectory="PreserveNewest"
              Condition="'$(IsOSX)' == 'true' And Exists('$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib')" />
   </ItemGroup>
 
-  <!-- For Publish: Copy only the target RID's lib -->
+  <!-- For Publish: Copy only the target RID's lib (not included in package) -->
   <ItemGroup Condition="'$(RuntimeIdentifier)' != ''">
     <Content Include="$(GodotBinDir)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so"
+             Pack="false"
              Link="libgodot.so"
              CopyToOutputDirectory="PreserveNewest"
              Condition="$(RuntimeIdentifier.StartsWith('linux')) And Exists('$(GodotBinDir)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so')" />
     <Content Include="$(GodotBinDir)godot.windows.editor.dev.x86_64.shared_library.dll"
+             Pack="false"
              Link="libgodot.dll"
              CopyToOutputDirectory="PreserveNewest"
              Condition="$(RuntimeIdentifier.StartsWith('win'))" />
     <Content Include="$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib"
+             Pack="false"
              Link="libgodot.dylib"
              CopyToOutputDirectory="PreserveNewest"
              Condition="$(RuntimeIdentifier.StartsWith('osx')) And Exists('$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib')" />
