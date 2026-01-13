@@ -20,16 +20,17 @@
   </PropertyGroup>
 
   <!--
-    Local development: Use editor dev build for BOTH Debug and Release.
+    Local development: Configuration-aware native library selection.
     
-    Why? template_release builds require a bundled .NET runtime (coreclr/monosgen),
-    which is designed for exported games. For local development, we use the editor
-    build which leverages the system's .NET SDK via hostfxr.
+    - Debug: Uses editor dev build (debug features, expects Debug assemblies)
+    - Release: Uses template_release build with LIBGODOT_HOSTFXR (optimized, uses system .NET SDK)
     
-    For actual production releases, you would use dotnet publish with the appropriate
-    runtime bundling configuration.
+    The template_release build now uses hostfxr for .NET initialization (via LIBGODOT_HOSTFXR),
+    which allows it to work with an existing .NET host application.
   -->
-  <PropertyGroup>
+  
+  <!-- Debug configuration: Use editor dev build -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
     <TwoDogBuildType>editor</TwoDogBuildType>
     <TwoDogDevBuild>true</TwoDogDevBuild>
     <!-- Windows -->
@@ -38,6 +39,18 @@
     <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(GodotBinDir)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so</TwoDogNativesLocalPath>
     <!-- macOS -->
     <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib</TwoDogNativesLocalPath>
+  </PropertyGroup>
+  
+  <!-- Release configuration: Use template_release build (with LIBGODOT_HOSTFXR) -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TwoDogBuildType>template_release</TwoDogBuildType>
+    <TwoDogDevBuild>false</TwoDogDevBuild>
+    <!-- Windows -->
+    <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(GodotBinDir)godot.windows.template_release.x86_64.shared_library.dll</TwoDogNativesLocalPath>
+    <!-- Linux -->
+    <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(GodotBinDir)libgodot.linuxbsd.template_release.x86_64.shared_library.so</TwoDogNativesLocalPath>
+    <!-- macOS -->
+    <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(GodotBinDir)libgodot.macos.template_release.x86_64.shared_library.dylib</TwoDogNativesLocalPath>
   </PropertyGroup>
 
   <!-- Import twodog targets for GodotSharp API assembly copying -->
