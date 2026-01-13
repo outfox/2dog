@@ -1,6 +1,7 @@
 using System.Reflection;
 using Godot;
 using JetBrains.Annotations;
+using Environment = System.Environment;
 
 namespace twodog.tests;
 
@@ -16,6 +17,7 @@ public class GodotHeadlessFixture : IDisposable
     public GodotHeadlessFixture()
     {
         Console.WriteLine("Initializing Godot...");
+        Console.WriteLine("cwd: " + Environment.CurrentDirectory);
         
         // Resolve the project path relative to the assembly location
         var assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
-    "preview": "vitepress preview"
+    "preview": "vitepress preview",
+    "deploy": "aws s3 sync .vitepress/dist s3://2dog.dev --delete ; aws cloudfront create-invalidation --distribution-id  E3NHR0MT9YIVFF --paths \"/*\""
   }
 }

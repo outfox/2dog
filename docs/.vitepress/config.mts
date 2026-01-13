@@ -1,30 +1,40 @@
 import { defineConfig } from 'vitepress'
 
-// https://vitepress.dev/reference/site-config
 export default defineConfig({
   srcDir: "content",
   
-  title: "2dog  – Godot, backwards",
-  description: "Documentation for the 2dog C# framework",
+  title: "2dog - old robot, new tricks",
+  description: "Embed Godot Engine in your .NET applications",
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
+    siteTitle: false,
+    logo: '/icon.svg',
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
+      { text: 'Guide', link: '/getting-started' },
+      { text: 'API', link: '/api-reference' }
     ],
 
     sidebar: [
       {
-        text: 'Examples',
+        text: 'Guide',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
+          { text: 'Getting Started', link: '/getting-started' },
+          { text: 'Core Concepts', link: '/concepts' },
+          { text: 'Configuration', link: '/configuration' }
+        ]
+      },
+      {
+        text: 'Reference',
+        items: [
+          { text: 'API Reference', link: '/api-reference' },
+          { text: 'Testing with xUnit', link: '/testing' }
         ]
       }
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      { icon: 'github', link: 'https://github.com/outfox/2dog' },
+      { icon: 'discord', link: 'https://discord.gg/GAXdbZCNGT' }
     ]
   }
 })

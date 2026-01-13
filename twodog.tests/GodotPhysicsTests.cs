@@ -1,7 +1,7 @@
 ﻿namespace twodog.tests;
 
 [Collection("Godot")]
-public class GodotPhysicsTests(GodotFixture godot)
+public class GodotPhysicsTests(GodotHeadlessFixture godot)
 {
     [Fact]
     public void Physics_StepSimulation_Works()
