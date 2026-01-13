@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\twodog\twodog.csproj" />
+    <ProjectReference Include="..\twodog.xunit\twodog.xunit.csproj" />
     <ProjectReference Include="..\project\project.csproj" />
   </ItemGroup>
 
@@ -48,7 +49,7 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <!-- Import twodog targets for GodotSharp API assembly copying -->
+  <!-- Import twodog targets for native library and GodotPlugins copying (needed for ProjectReference builds) -->
   <Import Project="..\twodog\build\twodog.targets" />
 
   <Target Name="DeepClean" AfterTargets="Clean">

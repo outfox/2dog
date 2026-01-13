@@ -1,0 +1,66 @@
+/* Hero section customization */
+
+/* Reverse the hero layout - image on left, text on right */
+.VPHero .container {
+  flex-direction: row-reverse !important;
+}
+
+/* Make the hero image larger */
+.VPHero .image-container {
+  max-width: 420px !important;
+  width: 420px !important;
+}
+
+.VPHero .image-container .image-bg {
+  max-width: 420px !important;
+}
+
+.VPHero .VPImage.image-src {
+  max-width: 380px !important;
+  max-height: 380px !important;
+}
+
+/* Smooth floating animation - simple sine wave */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(-0.5deg) scale(0.99);
+  }
+  45% {
+    transform: translateY(-3px) rotate(0.5deg) scale(1.0);
+  }
+}
+
+.VPHero .image-container {
+  animation: float 0.4s ease-in-out infinite;
+  /* Permanent glow effect */
+  filter: drop-shadow(0 0 20px rgba(100, 108, 255, 0.4));
+}
+
+/* Responsive adjustments */
+@media (max-width: 959px) {
+  .VPHero .container {
+    flex-direction: column !important;
+  }
+  
+  .VPHero .image-container {
+    max-width: 320px !important;
+    width: 320px !important;
+  }
+  
+  .VPHero .VPImage.image-src {
+    max-width: 280px !important;
+    max-height: 280px !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .VPHero .image-container {
+    max-width: 260px !important;
+    width: 260px !important;
+  }
+  
+  .VPHero .VPImage.image-src {
+    max-width: 220px !important;
+    max-height: 220px !important;
+  }
+}

@@ -1,25 +1,66 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
 hero:
-  name: "2dog  – Godot, backwards"
-  text: "Documentation for the 2dog C# framework"
-  tagline: My great project tagline
+  name: "What if Godot..."
+  text: "...but backward?"
+  tagline: "Start &amp; control Godot from .NET code."
+  image:
+    src: /logo.svg
+    alt: a happy white dog smiling over the soft logotype text '2dog'
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Get Started
+      link: /getting-started
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: View on GitHub
+      link: https://github.com/outfox/2dog
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: 🎮 Full Godot Power
+    details: Access the complete GodotSharp API — scenes, physics, rendering, audio, input — everything Godot can do.
+  - title: 🔄 Inverted Control
+    details: Your .NET process controls Godot, not the other way around. Start, iterate, and stop the engine when you decide.
+  - title: 🧪 First-Class Testing
+    details: Built-in xUnit fixtures for testing Godot code. Run headless in CI/CD pipelines.
+  - title: 📦 Simple Integration
+    details: Install via NuGet. Native libraries download automatically. Works with standard .NET tooling.
+
 ---
 
+::: code-group
+```csharp [🎮 Quick Example]
+using twodog;
+
+using var engine = new Engine("myapp", "./project");
+using var godot = engine.Start();
+
+// Load a scene
+var scene = GD.Load<PackedScene>("res://main.tscn");
+engine.Tree.Root.AddChild(scene.Instantiate());
+
+// Run the main loop
+while (!godot.Iteration())
+{
+    // Your code here — every frame
+}
+```
+```csharp [🧪 Unit Test]
+using twodog.tests;
+
+[Collection("Godot")]
+public class GodotSceneTests(GodotHeadlessFixture godot)
+{
+    [Fact]
+    public void LoadScene_ValidPath_Succeeds()
+    {
+        var scene = GD.Load<PackedScene>("res://main.tscn");
+        var instance = scene.Instantiate();
+        
+        godot.Tree.Root.AddChild(instance);
+        
+        Assert.NotNull(instance);
+    }
+}
+```
+:::
