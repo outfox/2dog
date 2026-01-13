@@ -1,3 +1,4 @@
+using System.Reflection;
 using Godot;
 using JetBrains.Annotations;
 
@@ -15,7 +16,12 @@ public class GodotFixture : IDisposable
     public GodotFixture()
     {
         Console.WriteLine("Initializing Godot...");
-        _engine = new Engine("twodog.tests", @"P:\2dog\project");
+        
+        // Resolve the project path relative to the assembly location
+        var assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+        var projectPath = Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "..", "project"));
+        
+        _engine = new Engine("twodog.tests", projectPath);
         _godotInstance = _engine.Start();
         Console.WriteLine("Godot initialized successfully.");
     }
