@@ -1,4 +1,10 @@
 <Project>
-  <!-- Import the main twodog targets for transitive package references -->
-  <Import Project="$(MSBuildThisFileDirectory)..\build\twodog.targets" />
+  <!--
+    TwoDog Transitive Targets
+    
+    This file is imported by projects that transitively reference twodog.
+    It imports the main targets to ensure native libraries and GodotSharp APIs
+    are properly downloaded and copied for all consuming projects.
+  -->
+  <Import Project="$(MSBuildThisFileDirectory)../build/twodog.targets" />
 </Project>
