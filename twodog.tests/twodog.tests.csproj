@@ -19,11 +19,13 @@
   </PropertyGroup>
 
   <!--
-    Configuration-based native library selection:
-    - Debug: Use editor dev build (expects Debug assemblies, includes debug features)
-    - Release: Use template_release non-dev build (expects Release assemblies, optimized)
+    Local development: Use editor dev build for BOTH Debug and Release.
+    
+    Why? template_release builds require a bundled .NET runtime (coreclr/monosgen),
+    which is designed for exported games. For local development, we use the editor
+    build which leverages the system's .NET SDK via hostfxr.
   -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
+  <PropertyGroup>
     <TwoDogBuildType>editor</TwoDogBuildType>
     <TwoDogDevBuild>true</TwoDogDevBuild>
     <!-- Windows -->
@@ -32,17 +34,6 @@
     <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(GodotBinDir)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so</TwoDogNativesLocalPath>
     <!-- macOS -->
     <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib</TwoDogNativesLocalPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TwoDogBuildType>template_release</TwoDogBuildType>
-    <TwoDogDevBuild>false</TwoDogDevBuild>
-    <!-- Windows -->
-    <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(GodotBinDir)godot.windows.template_release.x86_64.shared_library.dll</TwoDogNativesLocalPath>
-    <!-- Linux -->
-    <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(GodotBinDir)libgodot.linuxbsd.template_release.x86_64.shared_library.so</TwoDogNativesLocalPath>
-    <!-- macOS -->
-    <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(GodotBinDir)libgodot.macos.template_release.x86_64.shared_library.dylib</TwoDogNativesLocalPath>
   </PropertyGroup>
 
   <ItemGroup>
