@@ -1,15 +1,8 @@
 namespace twodog.tests;
 
 [Collection("Godot")]
-public class GodotSceneTests
+public class GodotSceneTests(GodotFixture godot)
 {
-    private readonly GodotFixture _godot;
-
-    public GodotSceneTests(GodotFixture godot)
-    {
-        _godot = godot; // Injected by xUnit
-    }
-
     [Fact]
     public void LoadScene_ValidPath_Succeeds()
     {

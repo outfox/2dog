@@ -1,21 +1,94 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\twodog\twodog.csproj" />
+    <ProjectReference Include="..\project\project.csproj" />
+  </ItemGroup>
+
+  <!-- workaround: manual assembly copying, same as demo project -->
+  <PropertyGroup>
+    <GodotSharpVersion>4.6.0-beta</GodotSharpVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.2" />
+    <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <PackageReference Include="GodotSharp" Version="$(GodotSharpVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <Target Name="CopyGodotAssemblies" AfterTargets="Build">
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <IsPackable>false</IsPackable>
+      <GodotApiPath>$(OutputPath)GodotSharp\Api\$(Configuration)\</GodotApiPath>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="coverlet.collector" Version="6.0.2"/>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>
-        <PackageReference Include="xunit" Version="2.9.2"/>
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2"/>
+      <!-- temporary workaround until we find out how to properly install this via nupkg / sdk? -->
+      <GodotSharpFiles Include="..\godot\bin\GodotSharp\Api\$(Configuration)\**\*.*" />
     </ItemGroup>
 
+    <MakeDir Directories="$(GodotApiPath)" />
+    <Copy SourceFiles="@(GodotSharpFiles)"
+          DestinationFolder="$(GodotApiPath)\%(RecursiveDir)"/>
+
     <ItemGroup>
-        <Using Include="Xunit"/>
+      <PackageReference Version="4.6.0-beta" Include="GodotSharp" />
+      <!-- optional maybe? <PackageReference Version="4.6.0-beta" Include="GodotSharpEditor" /> -->
     </ItemGroup>
+
+    <!-- For Build: Copy current platform's lib -->
+    <ItemGroup Condition="'$(RuntimeIdentifier)' == ''">
+      <Content Include="../godot/bin/libgodot.linuxbsd.editor.dev.x86_64.shared_library.so"
+               Link="libgodot.so"
+               CopyToOutputDirectory="PreserveNewest"
+               Condition="'$(IsLinux)' == 'true'"/>
+      <Content Include="../godot/bin/godot.windows.editor.dev.x86_64.shared_library.dll"
+               Link="libgodot.dll"
+               CopyToOutputDirectory="PreserveNewest"
+               Condition="'$(IsWindows)' == 'true'"/>
+      <Content Include="../godot/bin/libgodot.macos.editor.dev.x86_64.shared_library.dylib"
+               Link="libgodot.dylib"
+               CopyToOutputDirectory="PreserveNewest"
+               Condition="'$(IsOSX)' == 'true'"/>
+    </ItemGroup>
+
+    <!-- For Publish: Copy only the target RID's lib -->
+    <ItemGroup Condition="'$(RuntimeIdentifier)' != ''">
+      <Content Include="../godot/bin/libgodot.linuxbsd.editor.dev.x86_64.shared_library.so"
+               Link="libgodot.so"
+               CopyToOutputDirectory="PreserveNewest"
+               Condition="$(RuntimeIdentifier.StartsWith('linux'))"/>
+      <Content Include="../godot/bin/godot.windows.editor.dev.x86_64.shared_library.dll"
+               Link="libgodot.dll"
+               CopyToOutputDirectory="PreserveNewest"
+               Condition="$(RuntimeIdentifier.StartsWith('win'))"/>
+      <Content Include="../godot/bin/libgodot.macos.editor.dev.x86_64.shared_library.dylib"
+               Link="libgodot.dylib"
+               CopyToOutputDirectory="PreserveNewest"
+               Condition="$(RuntimeIdentifier.StartsWith('osx'))"/>
+    </ItemGroup>
+    
+    <MakeDir Directories="$(GodotApiPath)" />
+    <Copy SourceFiles="@(GodotSharpFiles)"
+          DestinationFolder="$(GodotApiPath)\%(RecursiveDir)" />
+  </Target>
+
+  <Target Name="DeepClean" AfterTargets="Clean">
+    <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
+    <RemoveDir Directories="$(BaseOutputPath)" />
+  </Target>
 
 </Project>

@@ -1,15 +1,8 @@
 ﻿namespace twodog.tests;
 
 [Collection("Godot")]
-public class GodotPhysicsTests
+public class GodotPhysicsTests(GodotFixture godot)
 {
-    private readonly GodotFixture _godot;
-
-    public GodotPhysicsTests(GodotFixture godot)
-    {
-        _godot = godot;
-    }
-
     [Fact]
     public void Physics_StepSimulation_Works()
     {
