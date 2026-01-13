@@ -4,7 +4,7 @@ using Godot;
 
 namespace twodog;
 
-public class Engine(string project, string? path = null, string[]? args = null) : IDisposable
+public class Engine(string project, string? path = null, params string[] args) : IDisposable
 {
     private static IntPtr _godotInstancePtr = IntPtr.Zero;
 
@@ -26,10 +26,8 @@ public class Engine(string project, string? path = null, string[]? args = null) 
             godotArgs.Add("--path");
             godotArgs.Add(path);
         }
-        if (args != null)
-        {
-            godotArgs.AddRange(args);
-        }   
+
+        godotArgs.AddRange(args);
 
         // Create a Godot instance via P/Invoke (without starting)
         _godotInstancePtr = CreateGodotInstance(godotArgs.ToArray());
