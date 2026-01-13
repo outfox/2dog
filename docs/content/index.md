@@ -42,8 +42,6 @@ features:
     details: Your .NET process controls Godot, not the other way around. Start, iterate, and stop the engine when you decide.
   - title: 🧪 First-Class Testing
     details: Built-in xUnit fixtures for testing Godot code. Run headless in CI/CD pipelines.
-  - title: 📦 Simple Integration
-    details: Install via NuGet. Native libraries download automatically. Works with standard .NET tooling.
 
 ---
 
