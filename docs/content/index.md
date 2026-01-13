@@ -28,15 +28,17 @@ features:
 
 ---
 
+
 ::: code-group
-```csharp [🎮 Quick Example]
+
+```csharp [🎮 Game Example]
 using twodog;
 
 using var engine = new Engine("myapp", "./project");
 using var godot = engine.Start();
 
 // Load a scene
-var scene = GD.Load<PackedScene>("res://main.tscn");
+var scene = GD.Load<PackedScene>("res://game.tscn");
 engine.Tree.Root.AddChild(scene.Instantiate());
 
 // Run the main loop
@@ -45,22 +47,24 @@ while (!godot.Iteration())
     // Your code here — every frame
 }
 ```
-```csharp [🧪 Unit Test]
-using twodog.tests;
 
-[Collection("Godot")]
+```csharp [🧪 Unit Test Example]
+using twodog.xunit;
+
+[Collection("GodotHeadless")]
 public class GodotSceneTests(GodotHeadlessFixture godot)
 {
     [Fact]
     public void LoadScene_ValidPath_Succeeds()
     {
-        var scene = GD.Load<PackedScene>("res://main.tscn");
+        var scene = GD.Load<PackedScene>("res://game.tscn");
         var instance = scene.Instantiate();
         
         godot.Tree.Root.AddChild(instance);
         
-        Assert.NotNull(instance);
+        Assert.NotNull(instance.Parent);
     }
 }
 ```
+
 :::
