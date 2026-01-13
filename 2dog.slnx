@@ -4,5 +4,6 @@
   <Project Path="project/project.csproj">
     <BuildType Project="Debug" />
   </Project>
+  <Project Path="twodog.tests/twodog.tests.csproj" />
   <Project Path="twodog/twodog.csproj" />
 </Solution>

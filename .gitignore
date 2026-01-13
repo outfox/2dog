@@ -10,6 +10,13 @@ dist
 obj
 bin
 
+# IDE & agent litter
+.codebuffignore
+knowledge.md
+AGENTS.md
+.agents/
+.codebuff/
+.devcontainer/
 
 # uv Python
 # Byte-compiled / optimized / DLL files
