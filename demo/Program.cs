@@ -1,6 +1,11 @@
+using System.Reflection;
 using Engine = twodog.Engine;
 
-using var engine = new Engine("demo", "project");
+// Resolve the project path relative to the assembly location, not the current working directory
+var assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+var projectPath = Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "..", "project"));
+
+using var engine = new Engine("demo", projectPath);
 using var godotInstance = engine.Start();
 
 // You can access the SceneTree via engine.Tree
