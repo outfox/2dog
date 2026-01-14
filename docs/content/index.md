@@ -45,6 +45,15 @@ features:
 
 ::: code-group
 
+```bash [Existing godot project]
+dotnet add package twodog
+dotnet run 
+```
+
+```bash [Fresh project]
+dotnet new twodog -n LetsCook
+```
+
 ```csharp [🎮 Game Example]
 using twodog;
 
@@ -79,6 +88,11 @@ public class GodotSceneTests(GodotHeadlessFixture godot)
         Assert.NotNull(instance.Parent);
     }
 }
+```
+
+```csharp [🤖 Tool Example]
+using twodog;
+  //TODO: simple example of a tool that uses Godot's editor tooling, e.g. calling "import" or other tool functions
 ```
 
 :::
