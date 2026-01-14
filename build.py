@@ -430,7 +430,7 @@ def main():
         Panel.fit(
             f" [bold white]2dog[/bold white] [bold cyan]libgodot and GodotSharp Build System[/bold cyan]\n"
             "[dim]Building custom Godot engine with C# support[/dim]\n"
-            "[dim](ETA circa [underline]30 min[/underline] per platform the 1st time)[/dim]",
+            "[dim]ETA about [underline] 30 min [/underline] per platform the 1st time[/dim]",
             border_style="cyan",
         )
     )
