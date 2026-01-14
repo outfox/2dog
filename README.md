@@ -1,6 +1,8 @@
 # How *do you* pronounce `Godot` ? 🦴
 
-![2dog logotype, a white stylized dog with the negative space around its leg forming the number 2, and a playful font spelling the word dog](logo.svg)
+<p align="center">
+  <img src="docs/content/public/logo-animated.svg" alt="2dog logotype, a white stylized dog with the negative space around its leg forming the number 2, and a playful font spelling the word dog" width="70%">
+</p>
 
 > *"Godot, or to dog... is it even a question?"*
 

@@ -1,6 +1,6 @@
 # Let's take `Godot` for walkies 🦴
 
-![a white dog smiling over the soft logotype text '2dog'](/img/logo.svg)
+![a white dog smiling over the soft logotype text '2dog'](/logo-animated.svg)
 
 ## Prerequisites
 
