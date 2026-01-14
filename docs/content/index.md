@@ -21,9 +21,6 @@ head:
       content: 2dog – Godot in .NET
 
 hero:
-  name: "What if Godot..."
-  text: "...but backward?"
-  tagline: "Start &amp; control Godot from .NET code."
   image:
     src: /logo-animated.svg
     alt: a happy white dog smiling over the soft logotype text '2dog'
