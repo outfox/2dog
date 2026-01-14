@@ -7,13 +7,18 @@
 ;   param=value ; assign values to parameters
 
 config_version=5
+
 custom_features="dotnet"
+
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
 config/name="project"
 run/main_scene="uid://dgiqsv3ntvl3t"
-config/features=PackedStringArray("4.5", "C#")
+config/features=PackedStringArray("4.6", "C#")
 boot_splash/image="uid://ddqqkap6en6iq"
 config/icon="res://icon.svg"
 
