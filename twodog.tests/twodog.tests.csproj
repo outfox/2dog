@@ -13,29 +13,16 @@
     <ProjectReference Include="..\project\project.csproj" />
   </ItemGroup>
 
-  <!-- For local development: skip native download and use local Godot build -->
-  <PropertyGroup>
-    <TwoDogSkipNativeDownload>true</TwoDogSkipNativeDownload>
-    <GodotBinDir>$(MSBuildProjectDirectory)/../godot/bin/</GodotBinDir>
-  </PropertyGroup>
-
-  <!--
-    Local development: Use editor dev build for BOTH Debug and Release.
-    
-    Why? template_release builds require a bundled .NET runtime (coreclr/monosgen),
-    which is designed for exported games. For local development, we use the editor
-    build which leverages the system's .NET SDK via hostfxr.
-  -->
-  <PropertyGroup>
-    <TwoDogBuildType>editor</TwoDogBuildType>
-    <TwoDogDevBuild>true</TwoDogDevBuild>
-    <!-- Windows -->
-    <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(GodotBinDir)godot.windows.editor.dev.x86_64.shared_library.dll</TwoDogNativesLocalPath>
-    <!-- Linux -->
-    <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(GodotBinDir)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so</TwoDogNativesLocalPath>
-    <!-- macOS -->
-    <TwoDogNativesLocalPath Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(GodotBinDir)libgodot.macos.editor.dev.x86_64.shared_library.dylib</TwoDogNativesLocalPath>
-  </PropertyGroup>
+  <!-- Platform-specific native library references (conditional on OS) -->
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <ProjectReference Include="..\platforms\twodog.win-x64\twodog.win-x64.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+    <ProjectReference Include="..\platforms\twodog.linux-x64\twodog.linux-x64.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <ProjectReference Include="..\platforms\twodog.osx-x64\twodog.osx-x64.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.2" />
@@ -49,7 +36,15 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <!-- Import twodog targets for native library and GodotPlugins copying (needed for ProjectReference builds) -->
+  <!-- Configuration-based build type for GodotSharp API placement -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
+    <TwoDogBuildType>editor</TwoDogBuildType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TwoDogBuildType>template_release</TwoDogBuildType>
+  </PropertyGroup>
+
+  <!-- Import twodog targets for GodotSharp API copying (needed for ProjectReference builds) -->
   <Import Project="..\twodog\build\twodog.targets" />
 
   <Target Name="DeepClean" AfterTargets="Clean">

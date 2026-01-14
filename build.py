@@ -247,7 +247,7 @@ def run_with_live_output(cmd, cwd=None, description="Running command..."):
 
                     # Update display
                     display = Text()
-                    display.append("⚙ ", style="bold cyan")
+                    display.append("+  ", style="bold cyan")
                     display.append(f"{description}", style="bold cyan")
                     display.append(f" [{mins:02d}:{secs:02d}]", style="dim cyan")
                     display.append("\n  ")
