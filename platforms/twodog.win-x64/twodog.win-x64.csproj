@@ -13,6 +13,7 @@
     <Description>Windows x64 native libgodot library for twodog. Reference this package alongside twodog for Windows support.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>$(MSBuildProjectDirectory)/../../packages/</PackageOutputPath>
     <IsPackable>true</IsPackable>
     <!-- Suppress NU5128: native libraries don't need lib/ folder -->
     <NoWarn>$(NoWarn);NU5128</NoWarn>
