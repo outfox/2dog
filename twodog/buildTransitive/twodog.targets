@@ -3,8 +3,13 @@
     TwoDog Transitive Targets
     
     This file is imported by projects that transitively reference twodog.
-    It imports the main targets to ensure native libraries and GodotSharp APIs
-    are properly downloaded and copied for all consuming projects.
+    It imports the main targets to ensure GodotSharp API assemblies
+    are properly copied for all consuming projects.
+    
+    Native libraries are provided by separate platform-specific packages:
+    - twodog.win-x64
+    - twodog.linux-x64
+    - twodog.osx-x64
   -->
   <Import Project="$(MSBuildThisFileDirectory)../build/twodog.targets" />
 </Project>
