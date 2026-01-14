@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="demo/demo.csproj" />
+  <Project Path="platforms/twodog.win-x64/twodog.win-x64.csproj" />
   <!--<Project Path="godot/modules/mono/glue/GodotSharp/GodotSharp/GodotSharp.csproj" />-->
   <Project Path="project/project.csproj">
     <BuildType Project="Debug" />

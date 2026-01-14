@@ -18,7 +18,7 @@
     <PackageId>twodog</PackageId>
     <Version>0.1.0-pre</Version>
     <Authors>2dog contributors</Authors>
-    <Description>Embed Godot engine in your .NET applications. Native libgodot libraries are downloaded automatically on first build.</Description>
+    <Description>Embed Godot engine in your .NET applications. Reference a platform-specific package (twodog.win-x64, twodog.linux-x64, or twodog.osx-x64) for native library support.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
@@ -49,6 +49,8 @@
   <ItemGroup>
     <None Include="build\twodog.targets" Pack="true" PackagePath="build\" />
     <None Include="buildTransitive\twodog.targets" Pack="true" PackagePath="buildTransitive\" />
+    <None Remove="twodog.osx-x64\**" />
+    <None Remove="twodog.win-x64\**" />
   </ItemGroup>
 
   <!--
@@ -59,65 +61,28 @@
   -->
   <ItemGroup>
     <!-- GodotSharp API assemblies - nested structure for editor builds -->
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.dll"
-             Pack="true"
-             PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\"
-             CopyToOutputDirectory="Never" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.pdb"
-             Pack="true"
-             PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\"
-             CopyToOutputDirectory="Never"
-             Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.pdb')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.xml"
-             Pack="true"
-             PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\"
-             CopyToOutputDirectory="Never"
-             Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.xml')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.dll"
-             Pack="true"
-             PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\"
-             CopyToOutputDirectory="Never"
-             Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.dll')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.pdb"
-             Pack="true"
-             PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\"
-             CopyToOutputDirectory="Never"
-             Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.pdb')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.xml"
-             Pack="true"
-             PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\"
-             CopyToOutputDirectory="Never"
-             Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.xml')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.dll"
-             Pack="true"
-             PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\"
-             CopyToOutputDirectory="Never" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.pdb"
-             Pack="true"
-             PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\"
-             CopyToOutputDirectory="Never"
-             Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.pdb')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.runtimeconfig.json"
-             Pack="true"
-             PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\"
-             CopyToOutputDirectory="Never"
-             Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.runtimeconfig.json')" />
+    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.dll" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" />
+    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.pdb" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.pdb')" />
+    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.xml" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.xml')" />
+    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.dll" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.dll')" />
+    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.pdb" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.pdb')" />
+    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.xml" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.xml')" />
+    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.dll" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" />
+    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.pdb" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.pdb')" />
+    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.runtimeconfig.json" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.runtimeconfig.json')" />
   </ItemGroup>
 
   <!--
-    Native libraries are NOT included in the package.
-    They are downloaded automatically by MSBuild targets on first build.
+    Native libraries are NOT included in this package.
+    They are provided by separate platform-specific packages:
+    - twodog.win-x64: Windows x64
+    - twodog.linux-x64: Linux x64
+    - twodog.osx-x64: macOS x64
     
     For local development of the twodog library itself:
     - Debug: Use editor dev build (expects Debug assemblies, includes debug features)
     - Release: Use template_release non-dev build (expects Release assemblies, optimized)
-    - Package consumers will download the appropriate build via twodog.targets
   -->
-  
-  <!-- For local development of twodog: Skip native download -->
-  <PropertyGroup>
-    <TwoDogSkipNativeDownload>true</TwoDogSkipNativeDownload>
-  </PropertyGroup>
   
   <!-- Debug configuration: Use editor dev build (expects Debug assemblies) -->
   <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
@@ -135,21 +100,17 @@
   
   <!-- Copy local native lib to output for twodog library development -->
   <ItemGroup>
-    <Content Include="$(TwoDogLocalNativeLib_Windows)"
-             Pack="false"
-             Link="libgodot.dll"
-             CopyToOutputDirectory="PreserveNewest"
-             Condition="'$(IsWindows)' == 'true' And Exists('$(TwoDogLocalNativeLib_Windows)')" />
-    <Content Include="$(TwoDogLocalNativeLib_Linux)"
-             Pack="false"
-             Link="libgodot.so"
-             CopyToOutputDirectory="PreserveNewest"
-             Condition="'$(IsLinux)' == 'true' And Exists('$(TwoDogLocalNativeLib_Linux)')" />
-    <Content Include="$(TwoDogLocalNativeLib_OSX)"
-             Pack="false"
-             Link="libgodot.dylib"
-             CopyToOutputDirectory="PreserveNewest"
-             Condition="'$(IsOSX)' == 'true' And Exists('$(TwoDogLocalNativeLib_OSX)')" />
+    <Content Include="$(TwoDogLocalNativeLib_Windows)" Pack="false" Link="libgodot.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(IsWindows)' == 'true' And Exists('$(TwoDogLocalNativeLib_Windows)')" />
+    <Content Include="$(TwoDogLocalNativeLib_Linux)" Pack="false" Link="libgodot.so" CopyToOutputDirectory="PreserveNewest" Condition="'$(IsLinux)' == 'true' And Exists('$(TwoDogLocalNativeLib_Linux)')" />
+    <Content Include="$(TwoDogLocalNativeLib_OSX)" Pack="false" Link="libgodot.dylib" CopyToOutputDirectory="PreserveNewest" Condition="'$(IsOSX)' == 'true' And Exists('$(TwoDogLocalNativeLib_OSX)')" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="twodog.osx-x64\**" />
+    <Compile Remove="twodog.win-x64\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="twodog.osx-x64\**" />
+    <EmbeddedResource Remove="twodog.win-x64\**" />
   </ItemGroup>
 
   <!--

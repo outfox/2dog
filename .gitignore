@@ -4,7 +4,7 @@
 *.old.*
 
 # Build Artifacts
-/.pack
+/packages
 dist
 
 obj
