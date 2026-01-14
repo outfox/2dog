@@ -185,12 +185,6 @@ def parse_arguments():
         help="Skip generating Mono glue",
     )
 
-    parser.add_argument(
-        "--no-restore",
-        action="store_true",
-        help="Skip dotnet clean & restore",
-    )
-
     # Platform/architecture overrides for CI
     parser.add_argument(
         "--platform",
@@ -247,7 +241,7 @@ def run_with_live_output(cmd, cwd=None, description="Running command..."):
 
                     # Update display
                     display = Text()
-                    display.append("+  ", style="bold cyan")
+                    display.append("+ ", style="bold cyan")
                     display.append(f"{description}", style="bold cyan")
                     display.append(f" [{mins:02d}:{secs:02d}]", style="dim cyan")
                     display.append("\n  ")
@@ -256,6 +250,16 @@ def run_with_live_output(cmd, cwd=None, description="Running command..."):
                     live.update(display)
 
         process.wait()
+
+        # Final display update
+        display = Text()
+        display.append("  ", style="bold cyan")
+        display.append(f"{description}", style="bold cyan")
+        display.append("\n  ")
+        display.append(last_line[:120], style="dim")  # Limit line length
+
+        live.update(display)
+        live.stop()
 
         elapsed = time.time() - start_time
         mins, secs = divmod(int(elapsed), 60)
@@ -273,7 +277,7 @@ def run_with_live_output(cmd, cwd=None, description="Running command..."):
                     border_style="red",
                 )
             )
-            sys.exit(1)
+            sys.exit(process.returncode)
 
         console.print(
             f"[bold green]✓[/bold green] {description} "
@@ -299,7 +303,6 @@ def show_build_config(args, platform_config: PlatformConfig):
     table.add_row("Skip Editor Build", "Yes" if args.no_editor else "No")
     table.add_row("Skip Glue Generation", "Yes" if args.no_glue else "No")
     table.add_row("Skip Library Build", "Yes" if args.no_library else "No")
-    table.add_row("Skip dotnet clean & restore", "Yes" if args.no_restore else "No")
 
     console.print(table)
     console.print()
@@ -326,7 +329,6 @@ def build_editor(args, platform_config: PlatformConfig):
         cwd="godot",
         description=task_desc,
     )
-    console.print(f"[bold green]✓[/bold green] {task_desc}")
 
 
 def build_libgodot(args, platform_config: PlatformConfig):
@@ -335,7 +337,7 @@ def build_libgodot(args, platform_config: PlatformConfig):
 
     # Determine which targets to build
     if args.target == "all":
-        targets = ["template_release", "editor"]
+        targets = ["template_release", "template_debug", "editor"]
     else:
         targets = [args.target]
 
@@ -370,7 +372,6 @@ def build_libgodot(args, platform_config: PlatformConfig):
             cwd="godot",
             description=task_desc,
         )
-        console.print(f"[bold green]✓[/bold green] {task_desc}")
 
 
 def generate_glue(platform_config: PlatformConfig):
@@ -379,9 +380,8 @@ def generate_glue(platform_config: PlatformConfig):
 
     task_desc = "Creating NuGet packages directory"
     os.makedirs("godot/bin/GodotSharp/Tools/nupkgs", exist_ok=True)
-    console.print(f"[bold green]✓[/bold green] {task_desc}")
 
-    task_desc = "nuget locals"
+    task_desc = "Clear NuGet locals"
     run_with_live_output(
         ["dotnet", "nuget", "locals", "all", "--clear"],
         description=task_desc,
@@ -398,7 +398,6 @@ def generate_glue(platform_config: PlatformConfig):
         cwd="godot",
         description=task_desc,
     )
-    console.print(f"[bold green]✓[/bold green] {task_desc}")
 
     task_desc = "Building C# assemblies and NuGet packages"
     run_with_live_output(
@@ -415,40 +414,6 @@ def generate_glue(platform_config: PlatformConfig):
         cwd="godot",
         description=task_desc,
     )
-    console.print(f"[bold green]✓[/bold green] {task_desc}")
-
-
-def restore_dependencies(platform_config: PlatformConfig):
-    """Restore .NET Dependencies."""
-    console.print("\n[bold yellow]┌── Restoring .NET Dependencies──┐[/bold yellow]")
-
-    task_desc = "dotnet restore"
-    run_with_live_output(
-        ["dotnet", "restore", "-v", "detailed"],
-        description=task_desc,
-    )
-    console.print(f"[bold green]✓[/bold green] {task_desc}")
-
-    task_desc = "dotnet clean"
-    run_with_live_output(
-        ["dotnet", "clean", "-v", "detailed"],
-        description=task_desc,
-    )
-    console.print(f"[bold green]✓[/bold green] {task_desc}")
-
-    task_desc = "Generating game UID cache"
-    run_with_live_output(
-        [
-            platform_config.godot_exe,
-            "--path",
-            "../project",
-            "--import",
-            "--headless",
-        ],
-        cwd="godot",
-        description=task_desc,
-    )
-    console.print(f"[bold green]✓[/bold green] {task_desc}")
 
 
 def main():
@@ -477,9 +442,6 @@ def main():
 
     if not args.no_library:
         build_libgodot(args, platform_config)
-
-    if not args.no_restore:
-        restore_dependencies(platform_config)
 
     # Final success message
     console.print()

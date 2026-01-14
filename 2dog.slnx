@@ -1,6 +1,8 @@
 <Solution>
 
   <Project Path="twodog/twodog.csproj" />
+  <Project Path="platforms/twodog.win-x64.debug/twodog.win-x64.debug.csproj" />
+  <Project Path="platforms/twodog.win-x64.editor/twodog.win-x64.editor.csproj" />
   <Project Path="platforms/twodog.win-x64/twodog.win-x64.csproj" />
   <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.csproj" />
   <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.csproj" />
