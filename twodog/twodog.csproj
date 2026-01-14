@@ -21,6 +21,7 @@
     <Description>Embed Godot engine in your .NET applications. Reference a platform-specific package (twodog.win-x64, twodog.linux-x64, or twodog.osx-x64) for native library support.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
     <IncludeSymbols>true</IncludeSymbols>
     <IsPackable>true</IsPackable>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
