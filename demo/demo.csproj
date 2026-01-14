@@ -4,8 +4,15 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <IsTrimmable>true</IsTrimmable>
     <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
+    <!-- Disable auto-generated assembly info to avoid conflicts with Godot's .godot/mono/temp/obj/ -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="2dog" Version="0.1.0-pre" />
+  </ItemGroup>
+  
   <!-- Exclude Program.cs - it's only for 2dog standalone mode -->
   <ItemGroup>
     <Compile Remove="Program.cs" />

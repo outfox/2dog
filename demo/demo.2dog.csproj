@@ -6,14 +6,12 @@
     <Nullable>enable</Nullable>
     <IsTrimmable>true</IsTrimmable>
     <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
-    <!-- Use separate output directories to avoid conflicts with demo.csproj -->
-    <BaseIntermediateOutputPath>obj.2dog\</BaseIntermediateOutputPath>
-    <BaseOutputPath>bin.2dog\</BaseOutputPath>
   </PropertyGroup>
 
   <!-- Package references for twodog -->
   <ItemGroup>
     <PackageReference Include="2dog" Version="0.1.0-pre" />
+    <PackageReference Include="GodotSharp" Version="4.6.0-beta.3" />
   </ItemGroup>
 
   <!-- Platform-specific native library packages (conditional on OS) -->
