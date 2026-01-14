@@ -10,7 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\twodog\twodog.csproj" />
     <ProjectReference Include="..\twodog.xunit\twodog.xunit.csproj" />
-    <ProjectReference Include="..\project\project.csproj" />
+    <ProjectReference Include="..\demo\demo.csproj" />
   </ItemGroup>
 
   <!-- Platform-specific native library references (conditional on OS) -->

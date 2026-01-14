@@ -17,16 +17,9 @@
   <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.debug.csproj" />
   <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.editor.csproj" />
 
-  <!--<Project Path="godot/modules/mono/glue/GodotSharp/GodotSharp/GodotSharp.csproj" />-->
-
   <Project Path="twodog.xunit/twodog.xunit.csproj" />
 
   <Project Path="twodog.tests/twodog.tests.csproj" />
   <Project Path="demo/demo.csproj" />
-
-  <!-- dummy godot project -->
-  <Project Path="project/project.csproj">
-    <BuildType Project="Debug" />
-  </Project>
 
 </Solution>
