@@ -9,7 +9,7 @@ interface Slogan {
 const slogans: Slogan[] = [
   { name: "What if Godot...", text: "...but backward?" },
   { name: "Let's take Godot...", text: "...for walkies!" },
-  { name: "Who's a good engine?", text: "Godot is!" },
+  { name: "Who's a good engine?", text: "Godot is! Godot is!" },
   { name: "Sit, Godot!", text: "Good engine. Now render." },
   { name: "Teaching old Godot...", text: "...new .NET tricks" },
   { name: "Godot? More like...", text: "Go-do-whatever-you-want!" },
@@ -20,7 +20,7 @@ const slogans: Slogan[] = [
   { name: "Godot heel!", text: "Now we're in charge." },
   { name: "Roll over, Godot!", text: "Time to run .NET side up" },
   { name: "Unit tests?", text: "A walk in the park!" },
-  { name: "Adopt, don't export!", text: "Take Godot home today" },
+  { name: "Adopt, don't @export!", text: "Take Godot home today" },
   { name: "We put the 'woof'...", text: "...in workflow!" },
 ]
 
