@@ -3,9 +3,9 @@
   <PropertyGroup>
     <PlatformRID>linux-x64</PlatformRID>
     <PlatformOS>linuxbsd</PlatformOS>
-    <BuildVariant>template_release</BuildVariant>
+    <BuildVariant>template_debug</BuildVariant>
     <NativeLibExt>so</NativeLibExt>
-    <PackageSuffix></PackageSuffix>
-    <Description>Linux x64 native libgodot library for twodog. Reference this package alongside twodog for Linux support.</Description>
+    <PackageSuffix>.debug</PackageSuffix>
+    <Description>Linux x64 debug native libgodot library for twodog. Reference this package alongside twodog for Linux debug support.</Description>
   </PropertyGroup>
 </Project>

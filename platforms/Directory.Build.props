@@ -1,0 +1,87 @@
+<Project>
+  <!--
+    Shared properties for all twodog platform packages.
+    Each platform project only needs to define:
+    - PlatformRID: Runtime identifier (win-x64, linux-x64, osx-x64)
+    - PlatformOS: OS name in Godot binaries (windows, linuxbsd, macos)
+    - BuildVariant: Build type (template_release, template_debug, editor)
+    - NativeLibExt: Native library extension (dll, so, dylib)
+    - PackageSuffix: Optional suffix for package ID (.debug, .editor, or empty)
+  -->
+
+  <!-- Common SDK settings -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <!-- Suppress NU5128: native libraries don't need lib/ folder -->
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
+  <!-- Common paths -->
+  <PropertyGroup>
+    <GodotDir>$(MSBuildProjectDirectory)/../../godot/</GodotDir>
+    <GodotBinDir>$(GodotDir)bin/</GodotBinDir>
+    <DocsDir>$(MSBuildProjectDirectory)/../../docs/content/public/</DocsDir>
+  </PropertyGroup>
+
+  <!-- Common NuGet package metadata -->
+  <PropertyGroup>
+    <Version>0.1.0-pre</Version>
+    <Authors>Moritz Voss</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>$(MSBuildProjectDirectory)/../../packages/</PackageOutputPath>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <!-- Computed properties based on platform-specific inputs -->
+  <PropertyGroup>
+    <!-- Package ID: 2dog.<rid>[.suffix] -->
+    <PackageId>2dog.$(PlatformRID)$(PackageSuffix)</PackageId>
+
+    <!-- Native library source path -->
+    <NativeLibPrefix Condition="'$(PlatformOS)' == 'windows'">godot</NativeLibPrefix>
+    <NativeLibPrefix Condition="'$(PlatformOS)' != 'windows'">libgodot</NativeLibPrefix>
+    <NativeLibPath>$(GodotBinDir)$(NativeLibPrefix).$(PlatformOS).$(BuildVariant).x86_64.shared_library.$(NativeLibExt)</NativeLibPath>
+
+    <!-- Output library name (always libgodot.<ext>) -->
+    <OutputLibName Condition="'$(NativeLibExt)' == 'dll'">libgodot.dll</OutputLibName>
+    <OutputLibName Condition="'$(NativeLibExt)' == 'so'">libgodot.so</OutputLibName>
+    <OutputLibName Condition="'$(NativeLibExt)' == 'dylib'">libgodot.dylib</OutputLibName>
+
+    <!-- Skip packaging if native library doesn't exist -->
+    <IsPackable Condition="!Exists('$(NativeLibPath)')">false</IsPackable>
+  </PropertyGroup>
+
+  <!-- Include native library in the package using NuGet runtimes convention -->
+  <ItemGroup>
+    <None Include="$(NativeLibPath)"
+          Condition="Exists('$(NativeLibPath)')"
+          Pack="true"
+          PackagePath="runtimes/$(PlatformRID)/native/$(OutputLibName)"
+          Visible="false" />
+  </ItemGroup>
+
+  <!-- Include MSBuild targets in the package -->
+  <ItemGroup>
+    <None Include="build/$(PackageId).targets" Pack="true" PackagePath="build/" Condition="Exists('build/$(PackageId).targets')" />
+    <None Include="buildTransitive/$(PackageId).targets" Pack="true" PackagePath="buildTransitive/" Condition="Exists('buildTransitive/$(PackageId).targets')" />
+  </ItemGroup>
+
+  <!-- Include package icon, readme, and Godot license/authors -->
+  <ItemGroup>
+    <None Include="$(DocsDir)favicon-96x96.png" Pack="true" PackagePath="icon.png" Visible="false" />
+    <None Include="README.md" Pack="true" PackagePath="README.md" />
+    <None Include="$(GodotDir)LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" Visible="false" />
+    <None Include="$(GodotDir)AUTHORS.md" Pack="true" PackagePath="AUTHORS.md" Visible="false" />
+  </ItemGroup>
+
+  <Target Name="DeepClean" AfterTargets="Clean">
+    <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
+    <RemoveDir Directories="$(BaseOutputPath)" />
+  </Target>
+</Project>

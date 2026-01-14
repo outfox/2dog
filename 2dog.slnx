@@ -1,11 +1,22 @@
 <Solution>
 
   <Project Path="twodog/twodog.csproj" />
-  <Project Path="platforms/twodog.win-x64.debug/twodog.win-x64.debug.csproj" />
-  <Project Path="platforms/twodog.win-x64.editor/twodog.win-x64.editor.csproj" />
+
+  <!-- Platform packages: Windows -->
   <Project Path="platforms/twodog.win-x64/twodog.win-x64.csproj" />
+  <Project Path="platforms/twodog.win-x64/twodog.win-x64.debug.csproj" />
+  <Project Path="platforms/twodog.win-x64/twodog.win-x64.editor.csproj" />
+
+  <!-- Platform packages: Linux -->
   <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.csproj" />
+  <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.debug.csproj" />
+  <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.editor.csproj" />
+
+  <!-- Platform packages: macOS -->
   <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.csproj" />
+  <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.debug.csproj" />
+  <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.editor.csproj" />
+
   <!--<Project Path="godot/modules/mono/glue/GodotSharp/GodotSharp/GodotSharp.csproj" />-->
 
   <Project Path="twodog.xunit/twodog.xunit.csproj" />
