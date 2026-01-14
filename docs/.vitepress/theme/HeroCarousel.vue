@@ -13,7 +13,7 @@ const slogans: Slogan[] = [
   { name: "Sit, Godot!", text: "Good engine. Now render." },
   { name: "Teaching old Godot...", text: "...new .NET tricks" },
   { name: "Godot? More like...", text: "Go-do-whatever-you-want!" },
-  { name: "Every Robot...", text: "...deserves a good .NET home" },
+  { name: "Every Robot deserves...", text: "...a good .NET home" },
   { name: "Fetch the scene tree!", text: "Good Godot!" },
   { name: "No more waiting...", text: "...for Godot" },
   { name: "Your Godot...", text: "...your rules" },
