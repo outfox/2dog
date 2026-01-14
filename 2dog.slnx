@@ -1,11 +1,17 @@
 <Solution>
-  <Project Path="demo/demo.csproj" />
+
+  <Project Path="twodog/twodog.csproj" />
   <Project Path="platforms/twodog.win-x64/twodog.win-x64.csproj" />
   <!--<Project Path="godot/modules/mono/glue/GodotSharp/GodotSharp/GodotSharp.csproj" />-->
+
+  <Project Path="twodog.xunit/twodog.xunit.csproj" />
+
+  <Project Path="twodog.tests/twodog.tests.csproj" />
+  <Project Path="demo/demo.csproj" />
+
+  <!-- dummy godot project -->
   <Project Path="project/project.csproj">
     <BuildType Project="Debug" />
   </Project>
-  <Project Path="twodog.tests/twodog.tests.csproj" />
-  <Project Path="twodog.xunit/twodog.xunit.csproj" />
-  <Project Path="twodog/twodog.csproj" />
+
 </Solution>
