@@ -3,9 +3,9 @@
   <PropertyGroup>
     <PlatformRID>osx-x64</PlatformRID>
     <PlatformOS>macos</PlatformOS>
-    <BuildVariant>template_release</BuildVariant>
+    <BuildVariant>editor</BuildVariant>
     <NativeLibExt>dylib</NativeLibExt>
-    <PackageSuffix></PackageSuffix>
-    <Description>macOS x64 native libgodot library for twodog. Reference this package alongside twodog for macOS support.</Description>
+    <PackageSuffix>.editor</PackageSuffix>
+    <Description>macOS x64 editor native libgodot library for twodog. Reference this package alongside twodog for macOS editor support.</Description>
   </PropertyGroup>
 </Project>

@@ -17,7 +17,7 @@ from rich.table import Table
 from rich.text import Text
 
 console = Console()
-
+global_start_time = time.time()
 
 class Platform(Enum):
     WINDOWS = "windows"
@@ -255,6 +255,7 @@ def run_with_live_output(cmd, cwd=None, description="Running command..."):
         display = Text()
         display.append("  ", style="bold cyan")
         display.append(f"{description}", style="bold cyan")
+        display.append(f" [{mins:02d}:{secs:02d}]", style="dim cyan")
         display.append("\n  ")
         display.append(last_line[:120], style="dim")  # Limit line length
 
@@ -279,6 +280,8 @@ def run_with_live_output(cmd, cwd=None, description="Running command..."):
             )
             sys.exit(process.returncode)
 
+        total_elapsed = time.time() - global_start_time
+        mins, secs = divmod(int(total_elapsed), 60)
         console.print(
             f"[bold green]✓[/bold green] {description} "
             f"[dim cyan]({mins:02d}:{secs:02d})[/dim cyan]"
@@ -295,11 +298,10 @@ def show_build_config(args, platform_config: PlatformConfig):
     table.add_row("Architecture", platform_config.godot_arch)
     table.add_row("Debug Symbols (separate)", args.debug_symbols)
     table.add_row("SCU Build", args.scu_build)
-    table.add_row("Godot Executable", platform_config.godot_exe)
     table.add_row("Dev Build", args.dev_build)
 
     # Build steps
-    table.add_row("─" * 30, "─" * 30)
+    table.add_row("─" * 30, "─" * 11)
     table.add_row("Skip Editor Build", "Yes" if args.no_editor else "No")
     table.add_row("Skip Glue Generation", "Yes" if args.no_glue else "No")
     table.add_row("Skip Library Build", "Yes" if args.no_library else "No")
@@ -415,7 +417,6 @@ def generate_glue(platform_config: PlatformConfig):
         description=task_desc,
     )
 
-
 def main():
     args = parse_arguments()
     platform_config = get_platform_config(
@@ -427,9 +428,9 @@ def main():
 
     console.print(
         Panel.fit(
-            "[bold white]2dog[/bold white] [bold cyan]libgodot + GodotSharp Build System[/bold cyan]\n"
+            f" [bold white]2dog[/bold white] [bold cyan]libgodot and GodotSharp Build System[/bold cyan]\n"
             "[dim]Building custom Godot engine with C# support[/dim]\n"
-            "[dim]ETA: circa 30 minutes when building 1st time[/dim]",
+            "[dim](ETA circa [underline]30 min[/underline] per platform the 1st time)[/dim]",
             border_style="cyan",
         )
     )
@@ -445,9 +446,16 @@ def main():
 
     # Final success message
     console.print()
+
+    total_elapsed = time.time() - global_start_time
+    mins, secs = divmod(int(total_elapsed), 60)
+    console.print(
+        f""
+    )
+
     console.print(
         Panel.fit(
-            "[bold green]✓ Build Complete![/bold green]\n\n"
+            f"[bold green]✓ Build Complete after {mins:02d}min, {secs:02d}sec\n\n"
             "Run the project using:\n"
             "[cyan]  dotnet run --project demo[/cyan]",
             border_style="green",

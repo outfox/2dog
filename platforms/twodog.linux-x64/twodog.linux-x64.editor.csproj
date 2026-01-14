@@ -3,9 +3,9 @@
   <PropertyGroup>
     <PlatformRID>linux-x64</PlatformRID>
     <PlatformOS>linuxbsd</PlatformOS>
-    <BuildVariant>template_release</BuildVariant>
+    <BuildVariant>editor</BuildVariant>
     <NativeLibExt>so</NativeLibExt>
-    <PackageSuffix></PackageSuffix>
-    <Description>Linux x64 native libgodot library for twodog. Reference this package alongside twodog for Linux support.</Description>
+    <PackageSuffix>.editor</PackageSuffix>
+    <Description>Linux x64 editor native libgodot library for twodog. Reference this package alongside twodog for Linux editor support.</Description>
   </PropertyGroup>
 </Project>

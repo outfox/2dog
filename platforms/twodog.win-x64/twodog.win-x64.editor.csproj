@@ -3,9 +3,9 @@
   <PropertyGroup>
     <PlatformRID>win-x64</PlatformRID>
     <PlatformOS>windows</PlatformOS>
-    <BuildVariant>template_release</BuildVariant>
+    <BuildVariant>editor</BuildVariant>
     <NativeLibExt>dll</NativeLibExt>
-    <PackageSuffix></PackageSuffix>
-    <Description>Windows x64 native libgodot library for twodog. Reference this package alongside twodog for Windows support.</Description>
+    <PackageSuffix>.editor</PackageSuffix>
+    <Description>Windows x64 editor native libgodot library for twodog. Reference this package alongside twodog for Windows editor support.</Description>
   </PropertyGroup>
 </Project>

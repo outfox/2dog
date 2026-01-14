@@ -2,10 +2,17 @@
   "solution": {
     "path": "..\\2dog.slnx",
     "projects": [
-      "twodog\\twodog.csproj",
-      "platforms\\twodog.win-x64\\twodog.win-x64.csproj",
       "platforms\\twodog.linux-x64\\twodog.linux-x64.csproj",
-      "platforms\\twodog.osx-x64\\twodog.osx-x64.csproj"
+      "platforms\\twodog.linux-x64\\twodog.linux-x64.editor.csproj",
+      "platforms\\twodog.linux-x64\\twodog.linux-x64.debug.csproj",
+
+      "platforms\\twodog.osx-x64\\twodog.osx-x64.csproj",
+      "platforms\\twodog.osx-x64\\twodog.osx-x64.debug.csproj",
+      "platforms\\twodog.osx-x64\\twodog.osx-x64.editor.csproj",
+
+      "platforms\\twodog.win-x64\\twodog.win-x64.csproj",
+      "platforms\\twodog.win-x64\\twodog.win-x64.debug.csproj",
+      "platforms\\twodog.win-x64\\twodog.win-x64.editor.csproj"
     ]
   }
 }

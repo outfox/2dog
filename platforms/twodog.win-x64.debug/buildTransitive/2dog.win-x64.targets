@@ -1,8 +1,0 @@
-<Project>
-  <!--
-    TwoDog Windows x64 Transitive Targets
-    
-    This file is imported by projects that transitively reference twodog.win-x64.
-  -->
-  <Import Project="$(MSBuildThisFileDirectory)../build/2dog.win-x64.targets" />
-</Project>
