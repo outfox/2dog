@@ -9,9 +9,12 @@
   <PropertyGroup>
     <PackageId>twodog.osx-x64</PackageId>
     <Version>0.1.0-pre</Version>
-    <Authors>2dog contributors</Authors>
+    <Authors>Moritz Voss</Authors>
     <Description>macOS x64 native libgodot library for twodog. Reference this package alongside twodog for macOS support.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageOutputPath>$(MSBuildProjectDirectory)/../../packages/</PackageOutputPath>
     <IsPackable>true</IsPackable>
@@ -20,12 +23,19 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <GodotBinDir>$(MSBuildProjectDirectory)/../../godot/bin/</GodotBinDir>
+    <GodotDir>$(MSBuildProjectDirectory)/../../godot/</GodotDir>
+    <GodotBinDir>$(GodotDir)bin/</GodotBinDir>
+    <DocsDir>$(MSBuildProjectDirectory)/../../docs/content/public/</DocsDir>
+    <NativeLibPath>$(GodotBinDir)libgodot.macos.template_release.x86_64.shared_library.dylib</NativeLibPath>
+    <!-- Skip packaging if native library doesn't exist -->
+    <IsPackable Condition="!Exists('$(NativeLibPath)')">false</IsPackable>
   </PropertyGroup>
 
   <!-- Include native library in the package using NuGet runtimes convention -->
+  <!-- Condition prevents build errors when the native library doesn't exist (e.g., building on Windows/Linux) -->
   <ItemGroup>
-    <None Include="$(GodotBinDir)libgodot.macos.template_release.x86_64.shared_library.dylib"
+    <None Include="$(NativeLibPath)"
+          Condition="Exists('$(NativeLibPath)')"
           Pack="true"
           PackagePath="runtimes/osx-x64/native/libgodot.dylib"
           Visible="false" />
@@ -35,6 +45,14 @@
   <ItemGroup>
     <None Include="build/twodog.osx-x64.targets" Pack="true" PackagePath="build/" />
     <None Include="buildTransitive/twodog.osx-x64.targets" Pack="true" PackagePath="buildTransitive/" />
+  </ItemGroup>
+
+  <!-- Include package icon, readme, and Godot license/authors -->
+  <ItemGroup>
+    <None Include="$(DocsDir)favicon-96x96.png" Pack="true" PackagePath="icon.png" Visible="false" />
+    <None Include="README.md" Pack="true" PackagePath="README.md" />
+    <None Include="$(GodotDir)LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" Visible="false" />
+    <None Include="$(GodotDir)AUTHORS.md" Pack="true" PackagePath="AUTHORS.md" Visible="false" />
   </ItemGroup>
 
   <Target Name="DeepClean" AfterTargets="Clean">
