@@ -1,9 +1,9 @@
 using System.Reflection;
 using Engine = twodog.Engine;
 
-// Resolve the project path relative to the assembly location, not the current working directory
+// Resolve the project path relative to the assembly location
 var assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-var projectPath = Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "..", "project"));
+var projectPath = Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "..", "demo"));
 
 using var engine = new Engine("demo", projectPath);
 using var godotInstance = engine.Start();

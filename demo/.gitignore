@@ -1,0 +1,8 @@
+# Godot 4+ specific ignores
+.godot/
+
+# Build outputs
+bin/
+obj/
+obj.2dog/ 
+bin.2dog/ 
