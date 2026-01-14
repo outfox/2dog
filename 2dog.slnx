@@ -2,6 +2,8 @@
 
   <Project Path="twodog/twodog.csproj" />
   <Project Path="platforms/twodog.win-x64/twodog.win-x64.csproj" />
+  <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.csproj" />
+  <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.csproj" />
   <!--<Project Path="godot/modules/mono/glue/GodotSharp/GodotSharp/GodotSharp.csproj" />-->
 
   <Project Path="twodog.xunit/twodog.xunit.csproj" />

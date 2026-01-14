@@ -74,18 +74,28 @@ while (!godot.Iteration())
    uv run build.py
 ```
 
-3. **Run the demo**
+3. **Build NuGet packages** (required on fresh checkout)
+```bash
+   dotnet build packages
+```
+::: info
+You'll see a few errors for other platforms than your build platform.
+:::
+
+4. **Run the demo**
 ```bash
    dotnet run --project demo
 ```
 
-> Currently tested on Linux only. Windows/macOS support coming soon™
+> **Note:** The project uses solution filters to manage build order. `packages/packages.slnf` builds the core `twodog` library and platform packages first. After actual nuget packages exist in `./packages/`, you can build the full solution with `dotnet build`.
+
+> Currently tested on Linux and Windows only. OSX support is WIP™
 
 ---
 
 ## Join the Pack
 
-Questions? Ideas? Want to teach this dog new tricks?
+Questions? Ideas? Want to teach 2dog new tricks?
 
 [![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white)](https://discord.gg/GAXdbZCNGT)
 
