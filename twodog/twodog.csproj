@@ -53,8 +53,11 @@
     
     For debug/editor variants, reference the corresponding platform package explicitly
     (e.g., 2dog.win-x64.debug or 2dog.win-x64.editor) in your application project.
+    
+    NOTE: These PackageReferences are only included when packing (GeneratePackageOnBuild).
+    For local development, native libraries are handled by the Content items below.
   -->
-  <ItemGroup>
+  <ItemGroup Condition="'$(GenerateNuspecDependency)' == 'true' Or '$(NuspecFile)' != ''">
     <PackageReference Include="2dog.win-x64" Version="$(Version)" PrivateAssets="none" />
     <PackageReference Include="2dog.linux-x64" Version="$(Version)" PrivateAssets="none" />
     <PackageReference Include="2dog.osx-x64" Version="$(Version)" PrivateAssets="none" />
