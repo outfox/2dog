@@ -23,15 +23,15 @@
 /* Smooth floating animation - simple sine wave */
 @keyframes float {
   0%, 100% {
-    transform: translateY(0px) rotate(-0.5deg) scale(0.99);
+    transform: translateY(0px);
   }
   45% {
-    transform: translateY(-3px) rotate(0.5deg) scale(1.0);
+    transform: translateY(-7px);
   }
 }
 
 .VPHero .image-container {
-  animation: float 0.4s ease-in-out infinite;
+  animation: float 4s ease-in-out infinite;
   /* Permanent glow effect */
   filter: drop-shadow(0 0 20px rgba(100, 108, 255, 0.4));
 }

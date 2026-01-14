@@ -2,15 +2,18 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 0 1149 591" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <style>
-        @keyframes panting {
-            0%, 100% { transform: rotate(0deg) translateY(0px); }
-            25% { transform: rotate(0.5deg) translateY(-1px); }
-            50% { transform: rotate(0deg) translateY(0px); }
-            75% { transform: rotate(-0.5deg) translateY(1px); }
+        /* Smooth floating animation - simple sine wave */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(-0.5deg) scale(0.99);
+            }
+            45% {
+                transform: translateY(-3px) rotate(0.5deg) scale(1.0);
+            }
         }
         #doggy {
-            transform-origin: 300px 350px;
-            animation: panting 0.8s ease-in-out infinite;
+            transform-origin: 280px 570px;
+            animation: float 0.5s ease-in-out infinite;
         }
     </style>
     <g id="g17">
