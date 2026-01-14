@@ -101,7 +101,7 @@ def get_platform_config(platform_override: str | None = None, arch_override: str
         return PlatformConfig(
             godot_platform=Platform.WINDOWS.value,
             godot_arch=arch_str,
-            godot_exe=os.path.abspath(f"godot/bin/godot.windows.editor.dev.{arch_str}.executable.mono.exe"),
+            godot_exe=os.path.abspath(f"godot/bin/godot.windows.editor.{arch_str}.executable.mono.exe"),
             lib_path_var="PATH",
             path_separator=";",
             lib_extension=".dll",
@@ -113,7 +113,7 @@ def get_platform_config(platform_override: str | None = None, arch_override: str
         return PlatformConfig(
             godot_platform=Platform.LINUX.value,
             godot_arch=arch_str,
-            godot_exe=f"./bin/godot.linuxbsd.editor.dev.{arch_str}.executable.mono",
+            godot_exe=f"./bin/godot.linuxbsd.editor.{arch_str}.executable.mono",
             lib_path_var="LD_LIBRARY_PATH",
             path_separator=":",
             lib_extension=".so",
@@ -125,7 +125,7 @@ def get_platform_config(platform_override: str | None = None, arch_override: str
         return PlatformConfig(
             godot_platform=Platform.MACOS.value,
             godot_arch=arch_str,
-            godot_exe=f"./bin/godot.macos.editor.dev.{arch_str}.executable.mono",
+            godot_exe=f"./bin/godot.macos.editor.{arch_str}.executable.mono",
             lib_path_var="DYLD_LIBRARY_PATH",
             path_separator=":",
             lib_extension=".dylib",
@@ -148,7 +148,7 @@ def parse_arguments():
         "--dev-build",
         type=str,
         choices=["yes", "no"],
-        default="yes",
+        default="no",
         help="Enable development build features",
     )
     parser.add_argument(
@@ -293,10 +293,10 @@ def show_build_config(args, platform_config: PlatformConfig):
 
     table.add_row("Platform", platform_config.godot_platform)
     table.add_row("Architecture", platform_config.godot_arch)
-    table.add_row("Dev Build", args.dev_build)
-    table.add_row("Debug Symbols", args.debug_symbols)
+    table.add_row("Debug Symbols (separate)", args.debug_symbols)
     table.add_row("SCU Build", args.scu_build)
     table.add_row("Godot Executable", platform_config.godot_exe)
+    table.add_row("Dev Build", args.dev_build)
 
     # Build steps
     table.add_row("─" * 30, "─" * 30)
@@ -423,16 +423,16 @@ def main():
         arch_override=args.arch,
     )
 
+    show_build_config(args, platform_config)
+
     console.print(
         Panel.fit(
             "[bold white]2dog[/bold white] [bold cyan]libgodot + GodotSharp Build System[/bold cyan]\n"
-            "[dim]Building custom Godot engine with C# support[/dim]",
+            "[dim]Building custom Godot engine with C# support[/dim]\n"
+            "[dim]ETA: circa 30 minutes when building 1st time[/dim]",
             border_style="cyan",
         )
     )
-    console.print()
-
-    show_build_config(args, platform_config)
 
     if not args.no_editor:
         build_editor(args, platform_config)
