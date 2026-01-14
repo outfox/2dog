@@ -1,0 +1,7 @@
+<Project>
+  <!-- Set output paths for demo.2dog.csproj before SDK loads to avoid MSB3539 warning -->
+  <PropertyGroup Condition="'$(MSBuildProjectFile)' == 'demo.2dog.csproj'">
+    <BaseIntermediateOutputPath>obj.2dog\</BaseIntermediateOutputPath>
+    <BaseOutputPath>bin.2dog\</BaseOutputPath>
+  </PropertyGroup>
+</Project>
