@@ -15,7 +15,13 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <!-- Suppress NU5128: native libraries don't need lib/ folder -->
-    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <!-- Suppress CS2008: No source files specified (these are packaging-only projects) -->
+    <NoWarn>$(NoWarn);NU5128;CS2008</NoWarn>
+    <!-- Use unique obj/bin folders per project to avoid conflicts when multiple csproj files share a folder -->
+    <BaseIntermediateOutputPath>obj/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
+    <BaseOutputPath>bin/$(MSBuildProjectName)/</BaseOutputPath>
+    <!-- Disable auto-generated assembly info since these are packaging-only projects -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <!-- Common paths -->
