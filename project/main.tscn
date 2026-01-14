@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://dgiqsv3ntvl3t"]
+[gd_scene format=3 uid="uid://dgiqsv3ntvl3t"]
 
 [ext_resource type="Script" uid="uid://dngqpdiughpbm" path="res://Ticker.cs" id="1_ig7tw"]
 
@@ -11,7 +11,7 @@ grow_vertical = 2
 
 [node name="TargetLabel" type="Label" parent="." unique_id=1589393793]
 layout_mode = 2
-text = "No Text Yet"
+text = "Close this window, or press Q in your console."
 
 [node name="Ticker" type="Node" parent="." unique_id=488473608]
 script = ExtResource("1_ig7tw")
