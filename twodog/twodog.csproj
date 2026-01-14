@@ -15,10 +15,10 @@
 
   <!-- NuGet Package Metadata -->
   <PropertyGroup>
-    <PackageId>twodog</PackageId>
+    <PackageId>2dog</PackageId>
     <Version>0.1.0-pre</Version>
     <Authors>2dog contributors</Authors>
-    <Description>Embed Godot engine in your .NET applications. Reference a platform-specific package (twodog.win-x64, twodog.linux-x64, or twodog.osx-x64) for native library support.</Description>
+    <Description>Embed Godot engine in your .NET applications. Reference a platform-specific package (2dog.win-x64, twodog.linux-x64, or twodog.osx-x64) for native library support.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
@@ -48,8 +48,8 @@
 
   <!-- Include MSBuild targets in the package -->
   <ItemGroup>
-    <None Include="build\twodog.targets" Pack="true" PackagePath="build\" />
-    <None Include="buildTransitive\twodog.targets" Pack="true" PackagePath="buildTransitive\" />
+    <None Include="build\2dog.targets" Pack="true" PackagePath="build\" />
+    <None Include="buildTransitive\2dog.targets" Pack="true" PackagePath="buildTransitive\" />
     <None Remove="twodog.osx-x64\**" />
     <None Remove="twodog.win-x64\**" />
   </ItemGroup>

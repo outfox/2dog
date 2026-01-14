@@ -10,18 +10,18 @@
 
   <!-- Package references for twodog -->
   <ItemGroup>
-    <PackageReference Include="twodog" Version="0.1.0-pre" />
+    <PackageReference Include="2dog" Version="0.1.0-pre" />
   </ItemGroup>
 
   <!-- Platform-specific native library packages (conditional on OS) -->
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-    <PackageReference Include="twodog.win-x64" Version="0.1.0-pre" />
+    <PackageReference Include="2dog.win-x64" Version="0.1.0-pre" />
   </ItemGroup>
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-    <PackageReference Include="twodog.linux-x64" Version="0.1.0-pre" />
+    <PackageReference Include="2dog.linux-x64" Version="0.1.0-pre" />
   </ItemGroup>
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-    <PackageReference Include="twodog.osx-x64" Version="0.1.0-pre" />
+    <PackageReference Include="2dog.osx-x64" Version="0.1.0-pre" />
   </ItemGroup>
 
   <!-- Game project reference (not a package) -->

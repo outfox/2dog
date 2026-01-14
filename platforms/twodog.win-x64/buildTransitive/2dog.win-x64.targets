@@ -4,5 +4,5 @@
     
     This file is imported by projects that transitively reference twodog.win-x64.
   -->
-  <Import Project="$(MSBuildThisFileDirectory)../build/twodog.win-x64.targets" />
+  <Import Project="$(MSBuildThisFileDirectory)../build/2dog.win-x64.targets" />
 </Project>

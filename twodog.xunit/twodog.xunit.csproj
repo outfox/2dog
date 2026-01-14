@@ -9,7 +9,7 @@
 
   <!-- NuGet Package Metadata -->
   <PropertyGroup>
-    <PackageId>twodog.xunit</PackageId>
+    <PackageId>2dog.xunit</PackageId>
     <Version>0.1.0-pre</Version>
     <Authors>2dog contributors</Authors>
     <Description>xUnit test fixtures for testing Godot applications with twodog.</Description>

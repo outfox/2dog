@@ -7,7 +7,7 @@
 
   <!-- NuGet Package Metadata -->
   <PropertyGroup>
-    <PackageId>twodog.win-x64</PackageId>
+    <PackageId>2dog.win-x64</PackageId>
     <Version>0.1.0-pre</Version>
     <Authors>Moritz Voss</Authors>
     <Description>Windows x64 native libgodot library for twodog. Reference this package alongside twodog for Windows support.</Description>
@@ -43,8 +43,8 @@
 
   <!-- Include MSBuild targets in the package -->
   <ItemGroup>
-    <None Include="build/twodog.win-x64.targets" Pack="true" PackagePath="build/" />
-    <None Include="buildTransitive/twodog.win-x64.targets" Pack="true" PackagePath="buildTransitive/" />
+    <None Include="build/2dog.win-x64.targets" Pack="true" PackagePath="build/" />
+    <None Include="buildTransitive/2dog.win-x64.targets" Pack="true" PackagePath="buildTransitive/" />
   </ItemGroup>
 
   <!-- Include package icon, readme, and Godot license/authors -->
