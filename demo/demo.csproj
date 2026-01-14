@@ -28,6 +28,11 @@
   <ItemGroup>
     <ProjectReference Include="..\project\project.csproj" />
   </ItemGroup>
+  <PropertyGroup>
+    <GodotProjectDir>
+      ..\project
+    </GodotProjectDir>
+  </PropertyGroup>
 
   <!--
     Note: When using packages, only Release mode works since packages
