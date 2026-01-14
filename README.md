@@ -78,9 +78,6 @@ while (!godot.Iteration())
 ```bash
    dotnet build packages
 ```
-::: info
-You'll see a few errors for other platforms than your build platform.
-:::
 
 4. **Run the demo**
 ```bash
