@@ -11,5 +11,5 @@
     - twodog.linux-x64
     - twodog.osx-x64
   -->
-  <Import Project="$(MSBuildThisFileDirectory)../build/twodog.targets" />
+  <Import Project="$(MSBuildThisFileDirectory)../build/2dog.targets" />
 </Project>

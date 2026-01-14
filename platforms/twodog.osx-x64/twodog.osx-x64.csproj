@@ -7,7 +7,7 @@
 
   <!-- NuGet Package Metadata -->
   <PropertyGroup>
-    <PackageId>twodog.osx-x64</PackageId>
+    <PackageId>2dog.osx-x64</PackageId>
     <Version>0.1.0-pre</Version>
     <Authors>Moritz Voss</Authors>
     <Description>macOS x64 native libgodot library for twodog. Reference this package alongside twodog for macOS support.</Description>
@@ -43,8 +43,8 @@
 
   <!-- Include MSBuild targets in the package -->
   <ItemGroup>
-    <None Include="build/twodog.osx-x64.targets" Pack="true" PackagePath="build/" />
-    <None Include="buildTransitive/twodog.osx-x64.targets" Pack="true" PackagePath="buildTransitive/" />
+    <None Include="build/2dog.osx-x64.targets" Pack="true" PackagePath="build/" />
+    <None Include="buildTransitive/2dog.osx-x64.targets" Pack="true" PackagePath="buildTransitive/" />
   </ItemGroup>
 
   <!-- Include package icon, readme, and Godot license/authors -->
