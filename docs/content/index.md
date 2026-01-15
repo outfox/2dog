@@ -91,8 +91,18 @@ public class GodotSceneTests(GodotHeadlessFixture godot)
 ```
 
 ```csharp [🤖 Tool Example]
+// Build with: dotnet build -c Editor
+// Enables TOOLS_ENABLED for import and editor features
+
 using twodog;
-  //TODO: simple example of a tool that uses Godot's editor tooling, e.g. calling "import" or other tool functions
+
+using var engine = new Engine("importer", "./project");
+using var godot = engine.Start();
+
+// Import a texture with custom settings
+var importer = ResourceImporterTexture.Singleton;
+// Use Godot's full import pipeline
+// Access editor-only APIs like ImportPlugin, EditorInterface, etc.
 ```
 
 :::

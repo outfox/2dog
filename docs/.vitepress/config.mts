@@ -48,6 +48,7 @@ export default defineConfig({
         items: [
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'Core Concepts', link: '/concepts' },
+          { text: 'Build Configurations', link: '/build-configurations' },
           { text: 'Configuration', link: '/configuration' }
         ]
       },

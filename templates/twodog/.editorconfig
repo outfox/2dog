@@ -1,0 +1,45 @@
+root = true
+
+# All files
+[*]
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Code files
+[*.{cs,csx,vb,vbx}]
+indent_size = 4
+indent_style = space
+
+# C# files
+[*.cs]
+# Nullable reference types
+csharp_nullable_reference_types = enable
+
+# Naming conventions
+dotnet_naming_rule.async_methods_end_in_async.severity = suggestion
+dotnet_naming_rule.async_methods_end_in_async.symbols = async_methods
+dotnet_naming_rule.async_methods_end_in_async.style = end_in_async
+
+dotnet_naming_symbols.async_methods.applicable_kinds = method
+dotnet_naming_symbols.async_methods.required_modifiers = async
+
+dotnet_naming_style.end_in_async.required_suffix = Async
+dotnet_naming_style.end_in_async.capitalization = pascal_case
+
+# Formatting
+csharp_new_line_before_open_brace = all
+csharp_indent_case_contents = true
+csharp_space_after_cast = false
+
+# Project files
+[*.{csproj,props,targets}]
+indent_size = 4
+
+# JSON files
+[*.json]
+indent_size = 2
+
+# Godot files
+[*.{tscn,tres,godot}]
+indent_size = 2

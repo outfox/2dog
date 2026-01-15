@@ -94,14 +94,47 @@ public class SceneTests
 ## Running Tests
 
 ```bash
-# Run all tests
+# Run all tests (default: Debug configuration)
 dotnet test
+
+# Run with specific configuration
+dotnet test -c Debug      # template_debug build
+dotnet test -c Release    # template_release build
+dotnet test -c Editor     # editor build with TOOLS_ENABLED
 
 # Run with output
 dotnet test --logger "console;verbosity=detailed"
 
 # Run specific test
 dotnet test --filter "FullyQualifiedName~SceneTests"
+```
+
+### Test Configurations
+
+Different build configurations are useful for different test scenarios:
+
+| Configuration | Use Case |
+|--------------|----------|
+| **Debug** | General unit tests, debugging |
+| **Release** | Performance tests, final validation |
+| **Editor** | Tests that need import pipeline or editor APIs |
+
+Example: Testing asset import functionality:
+```csharp
+[Collection("Godot")]
+public class ImportTests(GodotHeadlessFixture godot)
+{
+    [Fact]
+    public void ImportTexture_ValidFile_Succeeds()
+    {
+        // This test requires Editor configuration
+        // Build with: dotnet test -c Editor
+        var importer = ResourceImporterTexture.Singleton;
+        Assert.NotNull(importer);
+        
+        // Test import pipeline functionality
+    }
+}
 ```
 
 ## CI/CD Configuration
@@ -118,7 +151,7 @@ Example GitHub Actions workflow:
 
 ## Project Configuration
 
-For test projects using `ProjectReference` to twodog (not the NuGet package), import the build targets:
+For test projects using `ProjectReference` to twodog (not the NuGet package), configure build types:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -132,7 +165,39 @@ For test projects using `ProjectReference` to twodog (not the NuGet package), im
     <ProjectReference Include="..\twodog.xunit\twodog.xunit.csproj" />
   </ItemGroup>
 
+  <!-- Configuration-specific build types -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TwoDogBuildType>template_debug</TwoDogBuildType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TwoDogBuildType>template_release</TwoDogBuildType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
+    <TwoDogBuildType>editor</TwoDogBuildType>
+  </PropertyGroup>
+
   <!-- Required for ProjectReference builds -->
-  <Import Project="..\twodog\build\twodog.targets" />
+  <Import Project="..\twodog\build\2dog.targets" />
 </Project>
+```
+
+### Platform-Specific Native Libraries
+
+When building from source, test projects need the appropriate platform variant:
+
+```xml
+<!-- Debug configuration: use debug variant -->
+<ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows')) And '$(Configuration)' == 'Debug'">
+  <ProjectReference Include="..\platforms\twodog.win-x64\twodog.win-x64.debug.csproj"/>
+</ItemGroup>
+
+<!-- Release configuration: use release variant -->
+<ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows')) And '$(Configuration)' == 'Release'">
+  <ProjectReference Include="..\platforms\twodog.win-x64\twodog.win-x64.release.csproj"/>
+</ItemGroup>
+
+<!-- Editor configuration: use editor variant -->
+<ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows')) And '$(Configuration)' == 'Editor'">
+  <ProjectReference Include="..\platforms\twodog.win-x64\twodog.win-x64.editor.csproj"/>
+</ItemGroup>
 ```
