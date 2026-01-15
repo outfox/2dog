@@ -15,7 +15,7 @@ public class GodotHeadlessFixture : IDisposable
 
         // Resolve the project path relative to the assembly location
         var assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-        var projectPath = Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "..", "project"));
+        var projectPath = Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "..", "game"));
 
         Engine = new Engine("twodog.tests", projectPath, "--headless");
         GodotInstance = Engine.Start();

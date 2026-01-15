@@ -15,3 +15,7 @@ dependencies = [
 
 [tool.poetry]
 package-mode = false
+
+[tool.poe.tasks]
+build = "dotnet build"
+version = "version:echo"
