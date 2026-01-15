@@ -149,30 +149,6 @@
     Shows a clear error message if the required native library is missing.
   -->
  
-  <!--  
-    Automatically build platform packages before building twodog.  
-    This ensures the NuGet packages in the packages/ folder are up-to-date.  
-    Skip during design-time builds and when explicitly disabled.  
-  -->  
-  <Target Name="BuildPlatformPackages" BeforeTargets="Build" Condition="'$(DesignTimeBuild)' != 'true' And '$(SkipBuildPlatformPackages)' != 'true'">  
-    <Message Importance="high" Text="[2dog] Building platform packages..." />  
-    <Exec Command="dotnet build ^&quot;$(MSBuildProjectDirectory)/../packages/packages.slnf^&quot; --configuration $(Configuration)" />  
-  </Target>  
-
-  <Target Name="ValidateNativeLibrary" BeforeTargets="Build" Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogCurrentNativeLib)' != ''">
-    <Error Condition="!Exists('$(TwoDogCurrentNativeLib)')"
-           Text="[2dog] Native library not found for $(TwoDogCurrentPlatform) $(Configuration) configuration.%0A       Expected: $(TwoDogCurrentNativeLib)%0A       Build the appropriate Godot library or reference a platform-specific NuGet package (e.g., 2dog.win-x64, 2dog.linux-x64, 2dog.osx-x64)." />
-    <Message Importance="normal" Condition="Exists('$(TwoDogCurrentNativeLib)')" Text="[2dog] Using native library: $(TwoDogCurrentNativeLib)" />
-  </Target>
-  <ItemGroup>
-    <Compile Remove="twodog.osx-x64\**" />
-    <Compile Remove="twodog.win-x64\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Remove="twodog.osx-x64\**" />
-    <EmbeddedResource Remove="twodog.win-x64\**" />
-  </ItemGroup>
-
   <!--
     For local development: Copy all GodotSharp API assemblies to output.
     - Editor builds: Use nested GodotSharp/Api/Debug/ structure (required by TOOLS_ENABLED)
