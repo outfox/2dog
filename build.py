@@ -457,8 +457,8 @@ def main():
         Panel.fit(
             f"[bold green]✓ Build Complete after {mins:02d}min, {secs:02d}sec\n\n"
             "Run the project using:\n"
-            "[cyan]  dotnet build packages[/cyan]",
-            "[cyan]  cd demo[/cyan]",
+            "[cyan]  dotnet build packages[/cyan]\n"
+            "[cyan]  cd demo[/cyan]\n"
             "[cyan]  dotnet run[/cyan]",
             border_style="green",
         )
