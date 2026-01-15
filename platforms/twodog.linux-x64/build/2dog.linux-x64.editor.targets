@@ -1,10 +1,10 @@
 <Project>
-  <!--
-    TwoDog Linux x64 Editor Native Library Targets
-    
-    This package contains the editor build of libgodot.so (TOOLS_ENABLED).
-    Imports the base linux-x64 targets for native library handling.
-  -->
-  <Import Project="$(MSBuildThisFileDirectory)2dog.linux-x64.targets"
-          Condition="Exists('$(MSBuildThisFileDirectory)2dog.linux-x64.targets')" />
+    <!--
+      TwoDog Linux x64 Editor Native Library Targets
+      
+      This package contains the editor build of libgodot.so (TOOLS_ENABLED).
+      Imports the base linux-x64 targets for native library handling.
+    -->
+    <Import Project="$(MSBuildThisFileDirectory)2dog.linux-x64.targets"
+            Condition="Exists('$(MSBuildThisFileDirectory)2dog.linux-x64.targets')"/>
 </Project>

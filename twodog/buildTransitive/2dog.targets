@@ -1,26 +1,26 @@
 <Project>
-  <!--
-    TwoDog Transitive Targets
-    
-    This file is imported by projects that transitively reference 2dog.
-    It imports the main targets to ensure GodotSharp API assemblies
-    are properly copied for all consuming projects.
-    
-    Native libraries are provided by separate platform-specific packages
-    (2dog.win-x64, 2dog.linux-x64, 2dog.osx-x64 and their .debug/.editor variants).
-    The 2dog NuGet package automatically depends on the release-variant packages;
-    for debug/editor variants, reference the corresponding platform package
-    explicitly in your application project.
-
-    Set TwoDogVariant to control GodotSharp API assembly layout:
-      - 'release' (default): Flat structure for template builds
-      - 'debug': Flat structure for template_debug builds  
-      - 'editor': Nested GodotSharp/Api/Debug/ structure for TOOLS_ENABLED
-    
-    Example:
-      <PropertyGroup>
-        <TwoDogVariant>editor</TwoDogVariant>
-      </PropertyGroup>
-  -->
-  <Import Project="$(MSBuildThisFileDirectory)../build/2dog.targets" />
+    <!--
+      TwoDog Transitive Targets
+      
+      This file is imported by projects that transitively reference 2dog.
+      It imports the main targets to ensure GodotSharp API assemblies
+      are properly copied for all consuming projects.
+      
+      Native libraries are provided by separate platform-specific packages
+      (2dog.win-x64, 2dog.linux-x64, 2dog.osx-x64 and their .debug/.editor variants).
+      The 2dog NuGet package automatically depends on the release-variant packages;
+      for debug/editor variants, reference the corresponding platform package
+      explicitly in your application project.
+  
+      Set TwoDogVariant to control GodotSharp API assembly layout:
+        - 'release' (default): Flat structure for template builds
+        - 'debug': Flat structure for template_debug builds  
+        - 'editor': Nested GodotSharp/Api/Debug/ structure for TOOLS_ENABLED
+      
+      Example:
+        <PropertyGroup>
+          <TwoDogVariant>editor</TwoDogVariant>
+        </PropertyGroup>
+    -->
+    <Import Project="$(MSBuildThisFileDirectory)../build/2dog.targets"/>
 </Project>

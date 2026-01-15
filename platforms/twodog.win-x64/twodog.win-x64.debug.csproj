@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- Platform-specific configuration -->
-  <PropertyGroup>
-    <PlatformRID>win-x64</PlatformRID>
-    <PlatformOS>windows</PlatformOS>
-    <BuildVariant>template_debug</BuildVariant>
-    <NativeLibExt>dll</NativeLibExt>
-    <PackageSuffix>.debug</PackageSuffix>
-    <Description>Windows x64 debug native libgodot library for twodog. Reference this package alongside twodog for Windows debug support.</Description>
-  </PropertyGroup>
+    <!-- Platform-specific configuration -->
+    <PropertyGroup>
+        <PlatformRID>win-x64</PlatformRID>
+        <PlatformOS>windows</PlatformOS>
+        <BuildVariant>template_debug</BuildVariant>
+        <NativeLibExt>dll</NativeLibExt>
+        <PackageSuffix>.debug</PackageSuffix>
+        <Description>Windows x64 debug native libgodot library for twodog. Reference this package alongside twodog for Windows debug support.</Description>
+    </PropertyGroup>
 </Project>

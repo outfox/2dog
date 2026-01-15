@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- Platform-specific configuration -->
-  <PropertyGroup>
-    <PlatformRID>win-x64</PlatformRID>
-    <PlatformOS>windows</PlatformOS>
-    <BuildVariant>editor</BuildVariant>
-    <NativeLibExt>dll</NativeLibExt>
-    <PackageSuffix>.editor</PackageSuffix>
-    <Description>Windows x64 editor native libgodot library for twodog. Reference this package alongside twodog for Windows editor support.</Description>
-  </PropertyGroup>
+    <!-- Platform-specific configuration -->
+    <PropertyGroup>
+        <PlatformRID>win-x64</PlatformRID>
+        <PlatformOS>windows</PlatformOS>
+        <BuildVariant>editor</BuildVariant>
+        <NativeLibExt>dll</NativeLibExt>
+        <PackageSuffix>.editor</PackageSuffix>
+        <Description>Windows x64 editor native libgodot library for twodog. Reference this package alongside twodog for Windows editor support.</Description>
+    </PropertyGroup>
 </Project>

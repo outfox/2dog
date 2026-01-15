@@ -1,10 +1,10 @@
 <Project>
-  <!--
-    TwoDog Windows x64 Editor Native Library Targets
-    
-    This package contains the editor build of libgodot.dll (TOOLS_ENABLED).
-    Imports the base win-x64 targets for native library handling.
-  -->
-  <Import Project="$(MSBuildThisFileDirectory)2dog.win-x64.targets"
-          Condition="Exists('$(MSBuildThisFileDirectory)2dog.win-x64.targets')" />
+    <!--
+      TwoDog Windows x64 Editor Native Library Targets
+      
+      This package contains the editor build of libgodot.dll (TOOLS_ENABLED).
+      Imports the base win-x64 targets for native library handling.
+    -->
+    <Import Project="$(MSBuildThisFileDirectory)2dog.win-x64.targets"
+            Condition="Exists('$(MSBuildThisFileDirectory)2dog.win-x64.targets')"/>
 </Project>

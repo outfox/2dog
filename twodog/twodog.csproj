@@ -1,182 +1,182 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <IsTrimmable>true</IsTrimmable>
-    <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
-  </PropertyGroup>
-
-  <!-- Programming & Linkage Characteristics -->
-  <PropertyGroup>
-    <RootNamespace>twodog</RootNamespace>
-    <Nullable>enable</Nullable>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-
-  <!-- NuGet Package Metadata -->
-  <PropertyGroup>
-    <PackageId>2dog</PackageId>
-    <Version>0.1.0-pre</Version>
-    <Authors>2dog contributors</Authors>
-    <Description>Embed the Godot engine in your .NET applications. Reference the 2dog package and it will pull in the appropriate platform-specific package (2dog.win-x64, 2dog.linux-x64, or 2dog.osx-x64) for native library support.</Description>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
-    <IncludeSymbols>true</IncludeSymbols>
-    <IsPackable>true</IsPackable>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <!-- Suppress NU5100: GodotSharp API DLLs are intentionally in contentFiles, not lib -->
-    <NoWarn>$(NoWarn);NU5100</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <GodotProjectDir>$(MSBuildProjectDirectory)/../project/</GodotProjectDir>
-    <GodotBinDir>$(MSBuildProjectDirectory)/../godot/bin/</GodotBinDir>
-  </PropertyGroup>
-  
-  <!-- Detect current OS for development builds -->
-  <PropertyGroup>
-    <IsLinux Condition="'$(IsLinux)' == '' and $([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))">true</IsLinux>
-    <IsWindows Condition="'$(IsWindows)' == '' and $([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))">true</IsWindows>
-    <IsOSX Condition="'$(IsOSX)' == '' and $([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))">true</IsOSX>
-  </PropertyGroup>
-
-  <!-- Package reference for compile-time API -->
-  <ItemGroup>
-    <PackageReference Version="4.6.0-beta" Include="GodotSharp" />
-  </ItemGroup>
-
-  <!--
-    Platform-specific native library packages (release variant).
-    These are dependencies of the 2dog package, so consumers get them automatically.
-    NuGet automatically selects the correct native library at runtime based on the RID.
-    
-    For debug/editor variants, reference the corresponding platform package explicitly
-    (e.g., 2dog.win-x64.debug or 2dog.win-x64.editor) in your application project.
-    
-    NOTE: These PackageReferences are only included when packing (GeneratePackageOnBuild).
-    For local development, native libraries are handled by the Content items below.
-  -->
-  <ItemGroup Condition="'$(GenerateNuspecDependency)' == 'true' Or '$(NuspecFile)' != ''">
-    <PackageReference Include="2dog.win-x64" Version="$(Version)" PrivateAssets="none" />
-    <PackageReference Include="2dog.linux-x64" Version="$(Version)" PrivateAssets="none" />
-    <PackageReference Include="2dog.osx-x64" Version="$(Version)" PrivateAssets="none" />
-  </ItemGroup>
-
-  <!-- Include MSBuild targets in the package -->
-  <ItemGroup>
-    <None Include="build\2dog.targets" Pack="true" PackagePath="build\" />
-    <None Include="buildTransitive\2dog.targets" Pack="true" PackagePath="buildTransitive\" />
-    <None Remove="twodog.osx-x64\**" />
-    <None Remove="twodog.win-x64\**" />
-  </ItemGroup>
-
-  <!--
-    Include GodotSharp API assemblies in the package.
-    Package includes both structures:
-    - GodotSharp/Api/Debug/ for editor builds (TOOLS_ENABLED)
-    - Flat structure for template builds (LIBGODOT_HOSTFXR only)
-  -->
-  <ItemGroup>
-    <!-- GodotSharp API assemblies - nested structure for editor builds -->
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.dll" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.pdb" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.pdb')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.xml" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.xml')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.dll" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.dll')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.pdb" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.pdb')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.xml" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.xml')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.dll" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.pdb" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.pdb')" />
-    <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.runtimeconfig.json" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.runtimeconfig.json')" />
-  </ItemGroup>
-
-  <!--
-    Native libraries are NOT embedded in this package.
-    They are provided by separate platform-specific packages:
-      - 2dog.win-x64 / 2dog.linux-x64 / 2dog.osx-x64: template_release builds
-      - 2dog.win-x64.debug / 2dog.linux-x64.debug / 2dog.osx-x64.debug: template_debug builds
-      - 2dog.win-x64.editor / 2dog.linux-x64.editor / 2dog.osx-x64.editor: editor builds
-
-    When you install the 2dog NuGet package, the release variant platform packages
-    are added as normal dependencies, so you usually only need to reference 2dog.
-
-    For local development of the twodog library itself:
-      - Debug: Use template_debug build (debugging enabled)
-      - Editor: Use editor build (full editor features, TOOLS_ENABLED)
-      - Release: Use template_release build (optimized)
-  -->
-  
-  <!-- Debug configuration: Use template_debug build -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
-    <TwoDogLocalNativeLib_Windows>$(GodotBinDir)godot.windows.template_debug.x86_64.shared_library.dll</TwoDogLocalNativeLib_Windows>
-    <TwoDogLocalNativeLib_Linux>$(GodotBinDir)libgodot.linuxbsd.template_debug.x86_64.shared_library.so</TwoDogLocalNativeLib_Linux>
-    <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.template_debug.x86_64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
-  </PropertyGroup>
-  
-  <!-- Editor configuration: Use editor build (TOOLS_ENABLED) -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
-    <TwoDogLocalNativeLib_Windows>$(GodotBinDir)godot.windows.editor.x86_64.shared_library.dll</TwoDogLocalNativeLib_Windows>
-    <TwoDogLocalNativeLib_Linux>$(GodotBinDir)libgodot.linuxbsd.editor.x86_64.shared_library.so</TwoDogLocalNativeLib_Linux>
-    <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.editor.x86_64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
-  </PropertyGroup>
-  
-  <!-- Release configuration: Use template_release build (optimized) -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TwoDogLocalNativeLib_Windows>$(GodotBinDir)godot.windows.template_release.x86_64.shared_library.dll</TwoDogLocalNativeLib_Windows>
-    <TwoDogLocalNativeLib_Linux>$(GodotBinDir)libgodot.linuxbsd.template_release.x86_64.shared_library.so</TwoDogLocalNativeLib_Linux>
-    <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.template_release.x86_64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
-  </PropertyGroup>
-  
-  <!-- Determine which native library to use based on current OS -->
-  <PropertyGroup>
-    <TwoDogCurrentNativeLib Condition="'$(IsWindows)' == 'true'">$(TwoDogLocalNativeLib_Windows)</TwoDogCurrentNativeLib>
-    <TwoDogCurrentNativeLib Condition="'$(IsLinux)' == 'true'">$(TwoDogLocalNativeLib_Linux)</TwoDogCurrentNativeLib>
-    <TwoDogCurrentNativeLib Condition="'$(IsOSX)' == 'true'">$(TwoDogLocalNativeLib_OSX)</TwoDogCurrentNativeLib>
-    <TwoDogCurrentPlatform Condition="'$(IsWindows)' == 'true'">Windows</TwoDogCurrentPlatform>
-    <TwoDogCurrentPlatform Condition="'$(IsLinux)' == 'true'">Linux</TwoDogCurrentPlatform>
-    <TwoDogCurrentPlatform Condition="'$(IsOSX)' == 'true'">macOS</TwoDogCurrentPlatform>
-  </PropertyGroup>
-
-  <!-- Copy local native lib to output for twodog library development -->
-  <ItemGroup>
-    <Content Include="$(TwoDogLocalNativeLib_Windows)" Pack="false" Link="libgodot.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(IsWindows)' == 'true' And Exists('$(TwoDogLocalNativeLib_Windows)')" />
-    <Content Include="$(TwoDogLocalNativeLib_Linux)" Pack="false" Link="libgodot.so" CopyToOutputDirectory="PreserveNewest" Condition="'$(IsLinux)' == 'true' And Exists('$(TwoDogLocalNativeLib_Linux)')" />
-    <Content Include="$(TwoDogLocalNativeLib_OSX)" Pack="false" Link="libgodot.dylib" CopyToOutputDirectory="PreserveNewest" Condition="'$(IsOSX)' == 'true' And Exists('$(TwoDogLocalNativeLib_OSX)')" />
-  </ItemGroup>
-
-  <!--
-    Validate that native library exists for the current platform and configuration.
-    Shows a clear error message if the required native library is missing.
-  -->
- 
-  <!--
-    For local development: Copy all GodotSharp API assemblies to output.
-    - Editor builds: Use nested GodotSharp/Api/Debug/ structure (required by TOOLS_ENABLED)
-    - Debug/Release builds: Use flat structure (template builds)
-  -->
-  <Target Name="CopyGodotApiForLocalDev" AfterTargets="Build" Condition="'$(DesignTimeBuild)' != 'true'">
     <PropertyGroup>
-      <GodotApiSrcPath>$(GodotBinDir)GodotSharp\Api\Debug\</GodotApiSrcPath>
-      <!-- Editor builds need nested structure; Debug/Release template builds use flat structure -->
-      <GodotApiDestPath Condition="'$(Configuration)' == 'Editor'">$(OutputPath)GodotSharp\Api\Debug\</GodotApiDestPath>
-      <GodotApiDestPath Condition="'$(Configuration)' != 'Editor'">$(OutputPath)</GodotApiDestPath>
+        <OutputType>Library</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <IsTrimmable>true</IsTrimmable>
+        <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
     </PropertyGroup>
 
+    <!-- Programming & Linkage Characteristics -->
+    <PropertyGroup>
+        <RootNamespace>twodog</RootNamespace>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <!-- NuGet Package Metadata -->
+    <PropertyGroup>
+        <PackageId>2dog</PackageId>
+        <Version>0.1.0-pre</Version>
+        <Authors>2dog contributors</Authors>
+        <Description>Embed the Godot engine in your .NET applications. Reference the 2dog package and it will pull in the appropriate platform-specific package (2dog.win-x64, 2dog.linux-x64, or 2dog.osx-x64) for native library support.</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
+        <IncludeSymbols>true</IncludeSymbols>
+        <IsPackable>true</IsPackable>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <!-- Suppress NU5100: GodotSharp API DLLs are intentionally in contentFiles, not lib -->
+        <NoWarn>$(NoWarn);NU5100</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <GodotProjectDir>$(MSBuildProjectDirectory)/../project/</GodotProjectDir>
+        <GodotBinDir>$(MSBuildProjectDirectory)/../godot/bin/</GodotBinDir>
+    </PropertyGroup>
+
+    <!-- Detect current OS for development builds -->
+    <PropertyGroup>
+        <IsLinux Condition="'$(IsLinux)' == '' and $([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))">true</IsLinux>
+        <IsWindows Condition="'$(IsWindows)' == '' and $([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))">true</IsWindows>
+        <IsOSX Condition="'$(IsOSX)' == '' and $([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))">true</IsOSX>
+    </PropertyGroup>
+
+    <!-- Package reference for compile-time API -->
     <ItemGroup>
-      <GodotApiFiles Include="$(GodotApiSrcPath)*.dll" />
-      <GodotApiFiles Include="$(GodotApiSrcPath)*.pdb" />
-      <GodotApiFiles Include="$(GodotApiSrcPath)*.xml" />
-      <GodotApiFiles Include="$(GodotApiSrcPath)*.runtimeconfig.json" />
+        <PackageReference Version="4.6.0-beta" Include="GodotSharp"/>
     </ItemGroup>
 
-    <MakeDir Directories="$(GodotApiDestPath)" Condition="'$(Configuration)' == 'Editor'" />
-    <Copy SourceFiles="@(GodotApiFiles)"
-          DestinationFolder="$(GodotApiDestPath)"
-          SkipUnchangedFiles="true" />
-  </Target>
+    <!--
+      Platform-specific native library packages (release variant).
+      These are dependencies of the 2dog package, so consumers get them automatically.
+      NuGet automatically selects the correct native library at runtime based on the RID.
+      
+      For debug/editor variants, reference the corresponding platform package explicitly
+      (e.g., 2dog.win-x64.debug or 2dog.win-x64.editor) in your application project.
+      
+      NOTE: These PackageReferences are only included when packing (GeneratePackageOnBuild).
+      For local development, native libraries are handled by the Content items below.
+    -->
+    <ItemGroup Condition="'$(GenerateNuspecDependency)' == 'true' Or '$(NuspecFile)' != ''">
+        <PackageReference Include="2dog.win-x64" Version="$(Version)" PrivateAssets="none"/>
+        <PackageReference Include="2dog.linux-x64" Version="$(Version)" PrivateAssets="none"/>
+        <PackageReference Include="2dog.osx-x64" Version="$(Version)" PrivateAssets="none"/>
+    </ItemGroup>
 
-  <Target Name="DeepClean" AfterTargets="Clean">
-    <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
-    <RemoveDir Directories="$(BaseOutputPath)" />
-  </Target>
+    <!-- Include MSBuild targets in the package -->
+    <ItemGroup>
+        <None Include="build\2dog.targets" Pack="true" PackagePath="build\"/>
+        <None Include="buildTransitive\2dog.targets" Pack="true" PackagePath="buildTransitive\"/>
+        <None Remove="twodog.osx-x64\**"/>
+        <None Remove="twodog.win-x64\**"/>
+    </ItemGroup>
+
+    <!--
+      Include GodotSharp API assemblies in the package.
+      Package includes both structures:
+      - GodotSharp/Api/Debug/ for editor builds (TOOLS_ENABLED)
+      - Flat structure for template builds (LIBGODOT_HOSTFXR only)
+    -->
+    <ItemGroup>
+        <!-- GodotSharp API assemblies - nested structure for editor builds -->
+        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.dll" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never"/>
+        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.pdb" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.pdb')"/>
+        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.xml" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.xml')"/>
+        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.dll" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.dll')"/>
+        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.pdb" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.pdb')"/>
+        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.xml" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.xml')"/>
+        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.dll" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never"/>
+        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.pdb" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.pdb')"/>
+        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.runtimeconfig.json" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.runtimeconfig.json')"/>
+    </ItemGroup>
+
+    <!--
+      Native libraries are NOT embedded in this package.
+      They are provided by separate platform-specific packages:
+        - 2dog.win-x64 / 2dog.linux-x64 / 2dog.osx-x64: template_release builds
+        - 2dog.win-x64.debug / 2dog.linux-x64.debug / 2dog.osx-x64.debug: template_debug builds
+        - 2dog.win-x64.editor / 2dog.linux-x64.editor / 2dog.osx-x64.editor: editor builds
+  
+      When you install the 2dog NuGet package, the release variant platform packages
+      are added as normal dependencies, so you usually only need to reference 2dog.
+  
+      For local development of the twodog library itself:
+        - Debug: Use template_debug build (debugging enabled)
+        - Editor: Use editor build (full editor features, TOOLS_ENABLED)
+        - Release: Use template_release build (optimized)
+    -->
+
+    <!-- Debug configuration: Use template_debug build -->
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
+        <TwoDogLocalNativeLib_Windows>$(GodotBinDir)godot.windows.template_debug.x86_64.shared_library.dll</TwoDogLocalNativeLib_Windows>
+        <TwoDogLocalNativeLib_Linux>$(GodotBinDir)libgodot.linuxbsd.template_debug.x86_64.shared_library.so</TwoDogLocalNativeLib_Linux>
+        <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.template_debug.x86_64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
+    </PropertyGroup>
+
+    <!-- Editor configuration: Use editor build (TOOLS_ENABLED) -->
+    <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
+        <TwoDogLocalNativeLib_Windows>$(GodotBinDir)godot.windows.editor.x86_64.shared_library.dll</TwoDogLocalNativeLib_Windows>
+        <TwoDogLocalNativeLib_Linux>$(GodotBinDir)libgodot.linuxbsd.editor.x86_64.shared_library.so</TwoDogLocalNativeLib_Linux>
+        <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.editor.x86_64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
+    </PropertyGroup>
+
+    <!-- Release configuration: Use template_release build (optimized) -->
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <TwoDogLocalNativeLib_Windows>$(GodotBinDir)godot.windows.template_release.x86_64.shared_library.dll</TwoDogLocalNativeLib_Windows>
+        <TwoDogLocalNativeLib_Linux>$(GodotBinDir)libgodot.linuxbsd.template_release.x86_64.shared_library.so</TwoDogLocalNativeLib_Linux>
+        <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.template_release.x86_64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
+    </PropertyGroup>
+
+    <!-- Determine which native library to use based on current OS -->
+    <PropertyGroup>
+        <TwoDogCurrentNativeLib Condition="'$(IsWindows)' == 'true'">$(TwoDogLocalNativeLib_Windows)</TwoDogCurrentNativeLib>
+        <TwoDogCurrentNativeLib Condition="'$(IsLinux)' == 'true'">$(TwoDogLocalNativeLib_Linux)</TwoDogCurrentNativeLib>
+        <TwoDogCurrentNativeLib Condition="'$(IsOSX)' == 'true'">$(TwoDogLocalNativeLib_OSX)</TwoDogCurrentNativeLib>
+        <TwoDogCurrentPlatform Condition="'$(IsWindows)' == 'true'">Windows</TwoDogCurrentPlatform>
+        <TwoDogCurrentPlatform Condition="'$(IsLinux)' == 'true'">Linux</TwoDogCurrentPlatform>
+        <TwoDogCurrentPlatform Condition="'$(IsOSX)' == 'true'">macOS</TwoDogCurrentPlatform>
+    </PropertyGroup>
+
+    <!-- Copy local native lib to output for twodog library development -->
+    <ItemGroup>
+        <Content Include="$(TwoDogLocalNativeLib_Windows)" Pack="false" Link="libgodot.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(IsWindows)' == 'true' And Exists('$(TwoDogLocalNativeLib_Windows)')"/>
+        <Content Include="$(TwoDogLocalNativeLib_Linux)" Pack="false" Link="libgodot.so" CopyToOutputDirectory="PreserveNewest" Condition="'$(IsLinux)' == 'true' And Exists('$(TwoDogLocalNativeLib_Linux)')"/>
+        <Content Include="$(TwoDogLocalNativeLib_OSX)" Pack="false" Link="libgodot.dylib" CopyToOutputDirectory="PreserveNewest" Condition="'$(IsOSX)' == 'true' And Exists('$(TwoDogLocalNativeLib_OSX)')"/>
+    </ItemGroup>
+
+    <!--
+      Validate that native library exists for the current platform and configuration.
+      Shows a clear error message if the required native library is missing.
+    -->
+
+    <!--
+      For local development: Copy all GodotSharp API assemblies to output.
+      - Editor builds: Use nested GodotSharp/Api/Debug/ structure (required by TOOLS_ENABLED)
+      - Debug/Release builds: Use flat structure (template builds)
+    -->
+    <Target Name="CopyGodotApiForLocalDev" AfterTargets="Build" Condition="'$(DesignTimeBuild)' != 'true'">
+        <PropertyGroup>
+            <GodotApiSrcPath>$(GodotBinDir)GodotSharp\Api\Debug\</GodotApiSrcPath>
+            <!-- Editor builds need nested structure; Debug/Release template builds use flat structure -->
+            <GodotApiDestPath Condition="'$(Configuration)' == 'Editor'">$(OutputPath)GodotSharp\Api\Debug\</GodotApiDestPath>
+            <GodotApiDestPath Condition="'$(Configuration)' != 'Editor'">$(OutputPath)</GodotApiDestPath>
+        </PropertyGroup>
+
+        <ItemGroup>
+            <GodotApiFiles Include="$(GodotApiSrcPath)*.dll"/>
+            <GodotApiFiles Include="$(GodotApiSrcPath)*.pdb"/>
+            <GodotApiFiles Include="$(GodotApiSrcPath)*.xml"/>
+            <GodotApiFiles Include="$(GodotApiSrcPath)*.runtimeconfig.json"/>
+        </ItemGroup>
+
+        <MakeDir Directories="$(GodotApiDestPath)" Condition="'$(Configuration)' == 'Editor'"/>
+        <Copy SourceFiles="@(GodotApiFiles)"
+              DestinationFolder="$(GodotApiDestPath)"
+              SkipUnchangedFiles="true"/>
+    </Target>
+
+    <Target Name="DeepClean" AfterTargets="Clean">
+        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
+        <RemoveDir Directories="$(BaseOutputPath)"/>
+    </Target>
 </Project>

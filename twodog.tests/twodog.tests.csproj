@@ -1,55 +1,55 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\twodog\twodog.csproj" />
-    <ProjectReference Include="..\twodog.xunit\twodog.xunit.csproj" />
-    <ProjectReference Include="..\demo\demo.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\twodog\twodog.csproj"/>
+        <ProjectReference Include="..\twodog.xunit\twodog.xunit.csproj"/>
+        <ProjectReference Include="..\demo\demo.csproj"/>
+    </ItemGroup>
 
-  <!-- Platform-specific native library references (conditional on OS) -->
-  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-    <ProjectReference Include="..\platforms\twodog.win-x64\twodog.win-x64.csproj" />
-  </ItemGroup>
-  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-    <ProjectReference Include="..\platforms\twodog.linux-x64\twodog.linux-x64.csproj" />
-  </ItemGroup>
-  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-    <ProjectReference Include="..\platforms\twodog.osx-x64\twodog.osx-x64.csproj" />
-  </ItemGroup>
+    <!-- Platform-specific native library references (conditional on OS) -->
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+        <ProjectReference Include="..\platforms\twodog.win-x64\twodog.win-x64.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+        <ProjectReference Include="..\platforms\twodog.linux-x64\twodog.linux-x64.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+        <ProjectReference Include="..\platforms\twodog.osx-x64\twodog.osx-x64.csproj"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.2" />
-    <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-    <PackageReference Include="xunit" Version="2.9.2" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector" Version="6.0.2"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2025.2.4"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>
+        <PackageReference Include="xunit" Version="2.9.2"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Using Include="Xunit" />
-  </ItemGroup>
+    <ItemGroup>
+        <Using Include="Xunit"/>
+    </ItemGroup>
 
-  <!-- Configuration-based build type for GodotSharp API placement -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
-    <TwoDogBuildType>editor</TwoDogBuildType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TwoDogBuildType>template_release</TwoDogBuildType>
-  </PropertyGroup>
+    <!-- Configuration-based build type for GodotSharp API placement -->
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
+        <TwoDogBuildType>editor</TwoDogBuildType>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <TwoDogBuildType>template_release</TwoDogBuildType>
+    </PropertyGroup>
 
-  <!-- Import twodog targets for GodotSharp API copying (needed for ProjectReference builds) -->
-  <Import Project="..\twodog\build\2dog.targets" />
+    <!-- Import twodog targets for GodotSharp API copying (needed for ProjectReference builds) -->
+    <Import Project="..\twodog\build\2dog.targets"/>
 
-  <Target Name="DeepClean" AfterTargets="Clean">
-    <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
-    <RemoveDir Directories="$(BaseOutputPath)" />
-  </Target>
+    <Target Name="DeepClean" AfterTargets="Clean">
+        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
+        <RemoveDir Directories="$(BaseOutputPath)"/>
+    </Target>
 
 </Project>

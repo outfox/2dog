@@ -1,27 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- Meta package that combines all macOS x64 variants -->
-  <!-- Only builds/packs on macOS -->
-  <PropertyGroup Condition="!$([MSBuild]::IsOSPlatform('OSX'))">
-    <IsPackable>false</IsPackable>
-    <ExcludeFromBuild>true</ExcludeFromBuild>
-  </PropertyGroup>
+    <!-- Meta package that combines all macOS x64 variants -->
+    <!-- Only builds/packs on macOS -->
+    <PropertyGroup Condition="!$([MSBuild]::IsOSPlatform('OSX'))">
+        <IsPackable>false</IsPackable>
+        <ExcludeFromBuild>true</ExcludeFromBuild>
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>2dog.osx-x64</PackageId>
-    <Description>macOS x64 meta package for twodog. Includes release, debug, and editor native libraries. Reference this package alongside twodog for complete macOS support.</Description>
-    <IsPackable>true</IsPackable>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <!-- Use custom nuspec for explicit dependency control -->
-    <NuspecFile>twodog.osx-x64.nuspec</NuspecFile>
-    <NuspecProperties>version=$(Version);authors=$(Authors);description=$(Description)</NuspecProperties>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <PackageId>2dog.osx-x64</PackageId>
+        <Description>macOS x64 meta package for twodog. Includes release, debug, and editor native libraries. Reference this package alongside twodog for complete macOS support.</Description>
+        <IsPackable>true</IsPackable>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <!-- Use custom nuspec for explicit dependency control -->
+        <NuspecFile>twodog.osx-x64.nuspec</NuspecFile>
+        <NuspecProperties>version=$(Version);authors=$(Authors);description=$(Description)</NuspecProperties>
+    </PropertyGroup>
 
-  <!-- Project references for local development builds -->
-  <ItemGroup Condition="'$(ExcludeFromBuild)' != 'true'">
-    <ProjectReference Include="twodog.osx-x64.release.csproj" PrivateAssets="all" />
-    <ProjectReference Include="twodog.osx-x64.debug.csproj" PrivateAssets="all" />
-    <ProjectReference Include="twodog.osx-x64.editor.csproj" PrivateAssets="all" />
-  </ItemGroup>
+    <!-- Project references for local development builds -->
+    <ItemGroup Condition="'$(ExcludeFromBuild)' != 'true'">
+        <ProjectReference Include="twodog.osx-x64.release.csproj" PrivateAssets="all"/>
+        <ProjectReference Include="twodog.osx-x64.debug.csproj" PrivateAssets="all"/>
+        <ProjectReference Include="twodog.osx-x64.editor.csproj" PrivateAssets="all"/>
+    </ItemGroup>
 </Project>

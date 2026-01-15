@@ -1,9 +1,9 @@
 <Project>
-  <!--
-    TwoDog macOS x64 Editor Transitive Targets
-    
-    This file is imported by projects that transitively reference 2dog.osx-x64.editor.
-  -->
-  <Import Project="$(MSBuildThisFileDirectory)../build/2dog.osx-x64.editor.targets"
-          Condition="Exists('$(MSBuildThisFileDirectory)../build/2dog.osx-x64.editor.targets')" />
+    <!--
+      TwoDog macOS x64 Editor Transitive Targets
+      
+      This file is imported by projects that transitively reference 2dog.osx-x64.editor.
+    -->
+    <Import Project="$(MSBuildThisFileDirectory)../build/2dog.osx-x64.editor.targets"
+            Condition="Exists('$(MSBuildThisFileDirectory)../build/2dog.osx-x64.editor.targets')"/>
 </Project>

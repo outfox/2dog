@@ -3,12 +3,12 @@ using Godot;
 [GlobalClass]
 public partial class Ticker : Node
 {
-	public int localAccumulator = 0;
-	public static int staticAccumulator = 0;
-	
-	public override void _Process(double delta)
-	{
-		++localAccumulator;
-		++staticAccumulator;
-	}
+    public static int staticAccumulator;
+    public int localAccumulator;
+
+    public override void _Process(double delta)
+    {
+        ++localAccumulator;
+        ++staticAccumulator;
+    }
 }

@@ -1,10 +1,10 @@
 <Project>
-  <!--
-    TwoDog Windows x64 Debug Native Library Targets
-    
-    This package contains the template_debug build of libgodot.dll.
-    Imports the base win-x64 targets for native library handling.
-  -->
-  <Import Project="$(MSBuildThisFileDirectory)2dog.win-x64.targets"
-          Condition="Exists('$(MSBuildThisFileDirectory)2dog.win-x64.targets')" />
+    <!--
+      TwoDog Windows x64 Debug Native Library Targets
+      
+      This package contains the template_debug build of libgodot.dll.
+      Imports the base win-x64 targets for native library handling.
+    -->
+    <Import Project="$(MSBuildThisFileDirectory)2dog.win-x64.targets"
+            Condition="Exists('$(MSBuildThisFileDirectory)2dog.win-x64.targets')"/>
 </Project>

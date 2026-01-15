@@ -9,7 +9,14 @@ public class Engine(string project, string? path = null, params string[] args) :
     private static IntPtr _godotInstancePtr = IntPtr.Zero;
 
     public SceneTree Tree => Godot.Engine.Singleton.GetMainLoop() as SceneTree ??
-                                        throw new NullReferenceException($"{nameof(Engine)}: Failed to get SceneTree.");
+                             throw new NullReferenceException($"{nameof(Engine)}: Failed to get SceneTree.");
+
+
+    public void Dispose()
+    {
+        if (_godotInstancePtr == IntPtr.Zero || _godotInstancePtr == IntPtr.MinValue) return;
+        Destroy();
+    }
 
     public GodotInstance Start()
     {
@@ -18,9 +25,9 @@ public class Engine(string project, string? path = null, params string[] args) :
                 $"{nameof(Engine)} Godot instance was previously created. This can be done only once per process (this is a Godot limitation).");
 
         Console.WriteLine("Starting Godot instance...");
-        
+
         // Prepare arguments for Godot (editor mode!)
-        List<string> godotArgs = [ project ];
+        List<string> godotArgs = [project];
         if (!string.IsNullOrEmpty(path))
         {
             godotArgs.Add("--path");
@@ -58,7 +65,8 @@ public class Engine(string project, string? path = null, params string[] args) :
         return godotInstance;
     }
 
-    private static void Destroy() {
+    private static void Destroy()
+    {
         LibGodot.libgodot_destroy_godot_instance(_godotInstancePtr);
         Console.WriteLine($"{nameof(Engine)}: Godot instance destroyed.");
         _godotInstancePtr = IntPtr.MinValue;
@@ -71,12 +79,5 @@ public class Engine(string project, string? path = null, params string[] args) :
             args,
             &LibGodot.InitCallback
         );
-    }
-
-
-    public void Dispose()
-    {
-        if (_godotInstancePtr == IntPtr.Zero || _godotInstancePtr == IntPtr.MinValue) return;
-        Destroy();
     }
 }

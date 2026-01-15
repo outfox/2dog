@@ -1,32 +1,32 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <IsTestProject>false</IsTestProject>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsTestProject>false</IsTestProject>
+    </PropertyGroup>
 
-  <!-- NuGet Package Metadata -->
-  <PropertyGroup>
-    <PackageId>2dog.xunit</PackageId>
-    <Version>0.1.0-pre</Version>
-    <Authors>2dog contributors</Authors>
-    <Description>xUnit test fixtures for testing Godot applications with twodog.</Description>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <IncludeSymbols>true</IncludeSymbols>
-    <IsPackable>true</IsPackable>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-  </PropertyGroup>
+    <!-- NuGet Package Metadata -->
+    <PropertyGroup>
+        <PackageId>2dog.xunit</PackageId>
+        <Version>0.1.0-pre</Version>
+        <Authors>2dog contributors</Authors>
+        <Description>xUnit test fixtures for testing Godot applications with twodog.</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IncludeSymbols>true</IncludeSymbols>
+        <IsPackable>true</IsPackable>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\twodog\twodog.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\twodog\twodog.csproj"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
-    <PackageReference Include="xunit" Version="2.9.2" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" Version="2025.2.4"/>
+        <PackageReference Include="xunit" Version="2.9.2"/>
+    </ItemGroup>
 
 </Project>

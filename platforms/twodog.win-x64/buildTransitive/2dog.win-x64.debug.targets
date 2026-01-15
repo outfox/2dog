@@ -1,9 +1,9 @@
 <Project>
-  <!--
-    TwoDog Windows x64 Debug Transitive Targets
-    
-    This file is imported by projects that transitively reference 2dog.win-x64.debug.
-  -->
-  <Import Project="$(MSBuildThisFileDirectory)../build/2dog.win-x64.debug.targets"
-          Condition="Exists('$(MSBuildThisFileDirectory)../build/2dog.win-x64.debug.targets')" />
+    <!--
+      TwoDog Windows x64 Debug Transitive Targets
+      
+      This file is imported by projects that transitively reference 2dog.win-x64.debug.
+    -->
+    <Import Project="$(MSBuildThisFileDirectory)../build/2dog.win-x64.debug.targets"
+            Condition="Exists('$(MSBuildThisFileDirectory)../build/2dog.win-x64.debug.targets')"/>
 </Project>
