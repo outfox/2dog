@@ -13,15 +13,38 @@
         <ProjectReference Include="..\demo\demo.csproj"/>
     </ItemGroup>
 
-    <!-- Platform-specific native library references (conditional on OS) -->
-    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-        <ProjectReference Include="..\platforms\twodog.win-x64\twodog.win-x64.csproj"/>
+    <!-- Platform-specific native library references (conditional on OS and Configuration) -->
+    <!-- Debug configuration: use debug variant -->
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows')) And ('$(Configuration)' == 'Debug' Or '$(Configuration)' == '')">
+        <ProjectReference Include="..\platforms\twodog.win-x64\twodog.win-x64.debug.csproj"/>
     </ItemGroup>
-    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-        <ProjectReference Include="..\platforms\twodog.linux-x64\twodog.linux-x64.csproj"/>
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux')) And ('$(Configuration)' == 'Debug' Or '$(Configuration)' == '')">
+        <ProjectReference Include="..\platforms\twodog.linux-x64\twodog.linux-x64.debug.csproj"/>
     </ItemGroup>
-    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-        <ProjectReference Include="..\platforms\twodog.osx-x64\twodog.osx-x64.csproj"/>
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX')) And ('$(Configuration)' == 'Debug' Or '$(Configuration)' == '')">
+        <ProjectReference Include="..\platforms\twodog.osx-x64\twodog.osx-x64.debug.csproj"/>
+    </ItemGroup>
+    
+    <!-- Release configuration: use release variant -->
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows')) And '$(Configuration)' == 'Release'">
+        <ProjectReference Include="..\platforms\twodog.win-x64\twodog.win-x64.release.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux')) And '$(Configuration)' == 'Release'">
+        <ProjectReference Include="..\platforms\twodog.linux-x64\twodog.linux-x64.release.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(Configuration)' == 'Release'">
+        <ProjectReference Include="..\platforms\twodog.osx-x64\twodog.osx-x64.release.csproj"/>
+    </ItemGroup>
+    
+    <!-- Editor configuration: use editor variant -->
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows')) And '$(Configuration)' == 'Editor'">
+        <ProjectReference Include="..\platforms\twodog.win-x64\twodog.win-x64.editor.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux')) And '$(Configuration)' == 'Editor'">
+        <ProjectReference Include="..\platforms\twodog.linux-x64\twodog.linux-x64.editor.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX')) And '$(Configuration)' == 'Editor'">
+        <ProjectReference Include="..\platforms\twodog.osx-x64\twodog.osx-x64.editor.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -38,10 +61,13 @@
 
     <!-- Configuration-based build type for GodotSharp API placement -->
     <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
-        <TwoDogBuildType>editor</TwoDogBuildType>
+        <TwoDogBuildType>template_debug</TwoDogBuildType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
         <TwoDogBuildType>template_release</TwoDogBuildType>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
+        <TwoDogBuildType>editor</TwoDogBuildType>
     </PropertyGroup>
 
     <!-- Import twodog targets for GodotSharp API copying (needed for ProjectReference builds) -->
