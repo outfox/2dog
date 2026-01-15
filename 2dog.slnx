@@ -18,8 +18,8 @@
   <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.editor.csproj" />
 
   <Project Path="twodog.xunit/twodog.xunit.csproj" />
-
   <Project Path="twodog.tests/twodog.tests.csproj" />
   <Project Path="demo/demo.csproj" />
+  <Project Path="game/game.csproj" />
 
 </Solution>

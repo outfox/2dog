@@ -1,6 +1,6 @@
 using Godot;
-using System;
 
+[GlobalClass]
 public partial class Ticker : Node
 {
 	public int localAccumulator = 0;

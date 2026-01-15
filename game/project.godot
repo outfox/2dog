@@ -16,7 +16,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="demo"
+config/name="game"
 run/main_scene="uid://dgiqsv3ntvl3t"
 config/features=PackedStringArray("4.6", "C#")
 boot_splash/image="uid://ddqqkap6en6iq"
@@ -24,4 +24,4 @@ config/icon="res://icon.svg"
 
 [dotnet]
 
-project/assembly_name="demo"
+project/assembly_name="game"
