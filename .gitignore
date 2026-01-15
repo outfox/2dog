@@ -31,7 +31,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/
@@ -355,3 +354,4 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+!/build/
