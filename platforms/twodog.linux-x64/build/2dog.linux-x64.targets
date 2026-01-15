@@ -1,55 +1,55 @@
 <Project>
-  <!--
-    TwoDog Linux x64 Native Library Targets
-    
-    Copies the native libgodot.so to output directory for build and publish.
-    
-    Supports both:
-    - NuGet package consumption (uses runtimes/linux-x64/native/libgodot.so)
-    - Local ProjectReference builds (falls back to godot/bin/ template_release binary)
-  -->
+    <!--
+      TwoDog Linux x64 Native Library Targets
+      
+      Copies the native libgodot.so to output directory for build and publish.
+      
+      Supports both:
+      - NuGet package consumption (uses runtimes/linux-x64/native/libgodot.so)
+      - Local ProjectReference builds (falls back to godot/bin/ template_release binary)
+    -->
 
-  <PropertyGroup>
-    <TwoDogLinuxX64PackageRoot>$(MSBuildThisFileDirectory)../</TwoDogLinuxX64PackageRoot>
-    
-    <!-- NuGet package path (primary - always template_release) -->
-    <TwoDogLinuxX64NativeLib_Package>$(TwoDogLinuxX64PackageRoot)runtimes/linux-x64/native/libgodot.so</TwoDogLinuxX64NativeLib_Package>
-    
-    <!-- Local development path (fallback for ProjectReference builds) -->
-    <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
-  </PropertyGroup>
-  
-  <!-- Configuration-based native library selection for local development -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
-    <TwoDogLinuxX64NativeLib_Local>$(TwoDogLocalGodotBin)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so</TwoDogLinuxX64NativeLib_Local>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TwoDogLinuxX64NativeLib_Local>$(TwoDogLocalGodotBin)libgodot.linuxbsd.template_release.x86_64.shared_library.so</TwoDogLinuxX64NativeLib_Local>
-  </PropertyGroup>
-  
-  <PropertyGroup>
-    <!-- Use package path if it exists, otherwise fall back to local -->
-    <TwoDogLinuxX64NativeLib Condition="Exists('$(TwoDogLinuxX64NativeLib_Package)')">$(TwoDogLinuxX64NativeLib_Package)</TwoDogLinuxX64NativeLib>
-    <TwoDogLinuxX64NativeLib Condition="'$(TwoDogLinuxX64NativeLib)' == '' And Exists('$(TwoDogLinuxX64NativeLib_Local)')">$(TwoDogLinuxX64NativeLib_Local)</TwoDogLinuxX64NativeLib>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TwoDogLinuxX64PackageRoot>$(MSBuildThisFileDirectory)../</TwoDogLinuxX64PackageRoot>
 
-  <!-- Copy native library to output on build (Linux only) -->
-  <Target Name="TwoDogLinuxX64CopyNatives"
-          AfterTargets="Build"
-          Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('Linux')) And '$(TwoDogLinuxX64NativeLib)' != '' And Exists('$(TwoDogLinuxX64NativeLib)')">
-    <Copy SourceFiles="$(TwoDogLinuxX64NativeLib)"
-          DestinationFiles="$(OutputPath)libgodot.so"
-          SkipUnchangedFiles="true" />
-    <Message Importance="normal" Text="TwoDog: Copied Linux x64 native library to $(OutputPath)" />
-  </Target>
+        <!-- NuGet package path (primary - always template_release) -->
+        <TwoDogLinuxX64NativeLib_Package>$(TwoDogLinuxX64PackageRoot)runtimes/linux-x64/native/libgodot.so</TwoDogLinuxX64NativeLib_Package>
 
-  <!-- Copy native library on publish (when targeting Linux) -->
-  <Target Name="TwoDogLinuxX64PublishNatives"
-          AfterTargets="Publish"
-          Condition="'$(DesignTimeBuild)' != 'true' And '$(RuntimeIdentifier)' != '' And $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('linux')) And '$(TwoDogLinuxX64NativeLib)' != '' And Exists('$(TwoDogLinuxX64NativeLib)')">
-    <Copy SourceFiles="$(TwoDogLinuxX64NativeLib)"
-          DestinationFiles="$(PublishDir)libgodot.so"
-          SkipUnchangedFiles="true" />
-    <Message Importance="high" Text="TwoDog: Published Linux x64 native library to $(PublishDir)" />
-  </Target>
+        <!-- Local development path (fallback for ProjectReference builds) -->
+        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
+    </PropertyGroup>
+
+    <!-- Configuration-based native library selection for local development -->
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
+        <TwoDogLinuxX64NativeLib_Local>$(TwoDogLocalGodotBin)libgodot.linuxbsd.editor.dev.x86_64.shared_library.so</TwoDogLinuxX64NativeLib_Local>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <TwoDogLinuxX64NativeLib_Local>$(TwoDogLocalGodotBin)libgodot.linuxbsd.template_release.x86_64.shared_library.so</TwoDogLinuxX64NativeLib_Local>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <!-- Use package path if it exists, otherwise fall back to local -->
+        <TwoDogLinuxX64NativeLib Condition="Exists('$(TwoDogLinuxX64NativeLib_Package)')">$(TwoDogLinuxX64NativeLib_Package)</TwoDogLinuxX64NativeLib>
+        <TwoDogLinuxX64NativeLib Condition="'$(TwoDogLinuxX64NativeLib)' == '' And Exists('$(TwoDogLinuxX64NativeLib_Local)')">$(TwoDogLinuxX64NativeLib_Local)</TwoDogLinuxX64NativeLib>
+    </PropertyGroup>
+
+    <!-- Copy native library to output on build (Linux only) -->
+    <Target Name="TwoDogLinuxX64CopyNatives"
+            AfterTargets="Build"
+            Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('Linux')) And '$(TwoDogLinuxX64NativeLib)' != '' And Exists('$(TwoDogLinuxX64NativeLib)')">
+        <Copy SourceFiles="$(TwoDogLinuxX64NativeLib)"
+              DestinationFiles="$(OutputPath)libgodot.so"
+              SkipUnchangedFiles="true"/>
+        <Message Importance="normal" Text="TwoDog: Copied Linux x64 native library to $(OutputPath)"/>
+    </Target>
+
+    <!-- Copy native library on publish (when targeting Linux) -->
+    <Target Name="TwoDogLinuxX64PublishNatives"
+            AfterTargets="Publish"
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(RuntimeIdentifier)' != '' And $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('linux')) And '$(TwoDogLinuxX64NativeLib)' != '' And Exists('$(TwoDogLinuxX64NativeLib)')">
+        <Copy SourceFiles="$(TwoDogLinuxX64NativeLib)"
+              DestinationFiles="$(PublishDir)libgodot.so"
+              SkipUnchangedFiles="true"/>
+        <Message Importance="high" Text="TwoDog: Published Linux x64 native library to $(PublishDir)"/>
+    </Target>
 </Project>

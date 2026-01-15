@@ -1,41 +1,41 @@
 <Project>
-  <!-- Computed properties that depend on platform-specific inputs from individual csproj files -->
-  <!-- Skip for meta packages that already define their own PackageId -->
-  <PropertyGroup Condition="'$(PlatformRID)' != ''">
-    <!-- Package ID: 2dog.<rid>[.suffix] -->
-    <PackageId>2dog.$(PlatformRID)$(PackageSuffix)</PackageId>
+    <!-- Computed properties that depend on platform-specific inputs from individual csproj files -->
+    <!-- Skip for meta packages that already define their own PackageId -->
+    <PropertyGroup Condition="'$(PlatformRID)' != ''">
+        <!-- Package ID: 2dog.<rid>[.suffix] -->
+        <PackageId>2dog.$(PlatformRID)$(PackageSuffix)</PackageId>
 
-    <!-- Native library source path -->
-    <NativeLibPrefix Condition="'$(PlatformOS)' == 'windows'">godot</NativeLibPrefix>
-    <NativeLibPrefix Condition="'$(PlatformOS)' != 'windows'">libgodot</NativeLibPrefix>
-    <NativeLibPath>$(GodotBinDir)$(NativeLibPrefix).$(PlatformOS).$(BuildVariant).x86_64.shared_library.$(NativeLibExt)</NativeLibPath>
+        <!-- Native library source path -->
+        <NativeLibPrefix Condition="'$(PlatformOS)' == 'windows'">godot</NativeLibPrefix>
+        <NativeLibPrefix Condition="'$(PlatformOS)' != 'windows'">libgodot</NativeLibPrefix>
+        <NativeLibPath>$(GodotBinDir)$(NativeLibPrefix).$(PlatformOS).$(BuildVariant).x86_64.shared_library.$(NativeLibExt)</NativeLibPath>
 
-    <!-- Output library name (always libgodot.<ext>) -->
-    <OutputLibName Condition="'$(NativeLibExt)' == 'dll'">libgodot.dll</OutputLibName>
-    <OutputLibName Condition="'$(NativeLibExt)' == 'so'">libgodot.so</OutputLibName>
-    <OutputLibName Condition="'$(NativeLibExt)' == 'dylib'">libgodot.dylib</OutputLibName>
+        <!-- Output library name (always libgodot.<ext>) -->
+        <OutputLibName Condition="'$(NativeLibExt)' == 'dll'">libgodot.dll</OutputLibName>
+        <OutputLibName Condition="'$(NativeLibExt)' == 'so'">libgodot.so</OutputLibName>
+        <OutputLibName Condition="'$(NativeLibExt)' == 'dylib'">libgodot.dylib</OutputLibName>
 
-    <!-- Skip packaging if native library doesn't exist -->
-    <IsPackable Condition="!Exists('$(NativeLibPath)')">false</IsPackable>
-  </PropertyGroup>
+        <!-- Skip packaging if native library doesn't exist -->
+        <IsPackable Condition="!Exists('$(NativeLibPath)')">false</IsPackable>
+    </PropertyGroup>
 
-  <!-- Meta packages don't have native libraries, so close the conditional PropertyGroup above -->
-  <PropertyGroup Condition="'$(PlatformRID)' == ''">
-    <!-- Meta packages define their own PackageId and IsPackable -->
-  </PropertyGroup>
+    <!-- Meta packages don't have native libraries, so close the conditional PropertyGroup above -->
+    <PropertyGroup Condition="'$(PlatformRID)' == ''">
+        <!-- Meta packages define their own PackageId and IsPackable -->
+    </PropertyGroup>
 
-  <!-- Include native library in the package using NuGet runtimes convention -->
-  <ItemGroup>
-    <None Include="$(NativeLibPath)"
-          Condition="Exists('$(NativeLibPath)')"
-          Pack="true"
-          PackagePath="runtimes/$(PlatformRID)/native/$(OutputLibName)"
-          Visible="false" />
-  </ItemGroup>
+    <!-- Include native library in the package using NuGet runtimes convention -->
+    <ItemGroup>
+        <None Include="$(NativeLibPath)"
+              Condition="Exists('$(NativeLibPath)')"
+              Pack="true"
+              PackagePath="runtimes/$(PlatformRID)/native/$(OutputLibName)"
+              Visible="false"/>
+    </ItemGroup>
 
-  <!-- Include MSBuild targets in the package -->
-  <ItemGroup>
-    <None Include="build/$(PackageId).targets" Pack="true" PackagePath="build/" Condition="Exists('build/$(PackageId).targets')" />
-    <None Include="buildTransitive/$(PackageId).targets" Pack="true" PackagePath="buildTransitive/" Condition="Exists('buildTransitive/$(PackageId).targets')" />
-  </ItemGroup>
+    <!-- Include MSBuild targets in the package -->
+    <ItemGroup>
+        <None Include="build/$(PackageId).targets" Pack="true" PackagePath="build/" Condition="Exists('build/$(PackageId).targets')"/>
+        <None Include="buildTransitive/$(PackageId).targets" Pack="true" PackagePath="buildTransitive/" Condition="Exists('buildTransitive/$(PackageId).targets')"/>
+    </ItemGroup>
 </Project>

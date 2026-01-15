@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- Platform-specific configuration -->
-  <PropertyGroup>
-    <PlatformRID>linux-x64</PlatformRID>
-    <PlatformOS>linuxbsd</PlatformOS>
-    <BuildVariant>template_release</BuildVariant>
-    <NativeLibExt>so</NativeLibExt>
-    <PackageSuffix>.release</PackageSuffix>
-    <Description>Linux x64 release native libgodot library for twodog. Reference this package alongside twodog for Linux release support.</Description>
-  </PropertyGroup>
+    <!-- Platform-specific configuration -->
+    <PropertyGroup>
+        <PlatformRID>linux-x64</PlatformRID>
+        <PlatformOS>linuxbsd</PlatformOS>
+        <BuildVariant>template_release</BuildVariant>
+        <NativeLibExt>so</NativeLibExt>
+        <PackageSuffix>.release</PackageSuffix>
+        <Description>Linux x64 release native libgodot library for twodog. Reference this package alongside twodog for Linux release support.</Description>
+    </PropertyGroup>
 </Project>

@@ -1,55 +1,55 @@
 <Project>
-  <!--
-    TwoDog Windows x64 Native Library Targets
-    
-    Copies the native libgodot.dll to output directory for build and publish.
-    
-    Supports both:
-    - NuGet package consumption (uses runtimes/win-x64/native/libgodot.dll)
-    - Local ProjectReference builds (falls back to godot/bin/ template_release binary)
-  -->
+    <!--
+      TwoDog Windows x64 Native Library Targets
+      
+      Copies the native libgodot.dll to output directory for build and publish.
+      
+      Supports both:
+      - NuGet package consumption (uses runtimes/win-x64/native/libgodot.dll)
+      - Local ProjectReference builds (falls back to godot/bin/ template_release binary)
+    -->
 
-  <PropertyGroup>
-    <TwoDogWinX64PackageRoot>$(MSBuildThisFileDirectory)../</TwoDogWinX64PackageRoot>
-    
-    <!-- NuGet package path (primary - always template_release) -->
-    <TwoDogWinX64NativeLib_Package>$(TwoDogWinX64PackageRoot)runtimes/win-x64/native/libgodot.dll</TwoDogWinX64NativeLib_Package>
-    
-    <!-- Local development path (fallback for ProjectReference builds) -->
-    <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
-  </PropertyGroup>
-  
-  <!-- Configuration-based native library selection for local development -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
-    <TwoDogWinX64NativeLib_Local>$(TwoDogLocalGodotBin)godot.windows.editor.dev.x86_64.shared_library.dll</TwoDogWinX64NativeLib_Local>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TwoDogWinX64NativeLib_Local>$(TwoDogLocalGodotBin)godot.windows.template_release.x86_64.shared_library.dll</TwoDogWinX64NativeLib_Local>
-  </PropertyGroup>
-  
-  <PropertyGroup>
-    <!-- Use package path if it exists, otherwise fall back to local -->
-    <TwoDogWinX64NativeLib Condition="Exists('$(TwoDogWinX64NativeLib_Package)')">$(TwoDogWinX64NativeLib_Package)</TwoDogWinX64NativeLib>
-    <TwoDogWinX64NativeLib Condition="'$(TwoDogWinX64NativeLib)' == '' And Exists('$(TwoDogWinX64NativeLib_Local)')">$(TwoDogWinX64NativeLib_Local)</TwoDogWinX64NativeLib>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TwoDogWinX64PackageRoot>$(MSBuildThisFileDirectory)../</TwoDogWinX64PackageRoot>
 
-  <!-- Copy native library to output on build (Windows only) -->
-  <Target Name="TwoDogWinX64CopyNatives"
-          AfterTargets="Build"
-          Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('Windows')) And '$(TwoDogWinX64NativeLib)' != '' And Exists('$(TwoDogWinX64NativeLib)')">
-    <Copy SourceFiles="$(TwoDogWinX64NativeLib)"
-          DestinationFiles="$(OutputPath)libgodot.dll"
-          SkipUnchangedFiles="true" />
-    <Message Importance="normal" Text="TwoDog: Copied Windows x64 native library to $(OutputPath)" />
-  </Target>
+        <!-- NuGet package path (primary - always template_release) -->
+        <TwoDogWinX64NativeLib_Package>$(TwoDogWinX64PackageRoot)runtimes/win-x64/native/libgodot.dll</TwoDogWinX64NativeLib_Package>
 
-  <!-- Copy native library on publish (when targeting Windows) -->
-  <Target Name="TwoDogWinX64PublishNatives"
-          AfterTargets="Publish"
-          Condition="'$(DesignTimeBuild)' != 'true' And '$(RuntimeIdentifier)' != '' And $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('win')) And '$(TwoDogWinX64NativeLib)' != '' And Exists('$(TwoDogWinX64NativeLib)')">
-    <Copy SourceFiles="$(TwoDogWinX64NativeLib)"
-          DestinationFiles="$(PublishDir)libgodot.dll"
-          SkipUnchangedFiles="true" />
-    <Message Importance="high" Text="TwoDog: Published Windows x64 native library to $(PublishDir)" />
-  </Target>
+        <!-- Local development path (fallback for ProjectReference builds) -->
+        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
+    </PropertyGroup>
+
+    <!-- Configuration-based native library selection for local development -->
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
+        <TwoDogWinX64NativeLib_Local>$(TwoDogLocalGodotBin)godot.windows.editor.dev.x86_64.shared_library.dll</TwoDogWinX64NativeLib_Local>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <TwoDogWinX64NativeLib_Local>$(TwoDogLocalGodotBin)godot.windows.template_release.x86_64.shared_library.dll</TwoDogWinX64NativeLib_Local>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <!-- Use package path if it exists, otherwise fall back to local -->
+        <TwoDogWinX64NativeLib Condition="Exists('$(TwoDogWinX64NativeLib_Package)')">$(TwoDogWinX64NativeLib_Package)</TwoDogWinX64NativeLib>
+        <TwoDogWinX64NativeLib Condition="'$(TwoDogWinX64NativeLib)' == '' And Exists('$(TwoDogWinX64NativeLib_Local)')">$(TwoDogWinX64NativeLib_Local)</TwoDogWinX64NativeLib>
+    </PropertyGroup>
+
+    <!-- Copy native library to output on build (Windows only) -->
+    <Target Name="TwoDogWinX64CopyNatives"
+            AfterTargets="Build"
+            Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('Windows')) And '$(TwoDogWinX64NativeLib)' != '' And Exists('$(TwoDogWinX64NativeLib)')">
+        <Copy SourceFiles="$(TwoDogWinX64NativeLib)"
+              DestinationFiles="$(OutputPath)libgodot.dll"
+              SkipUnchangedFiles="true"/>
+        <Message Importance="normal" Text="TwoDog: Copied Windows x64 native library to $(OutputPath)"/>
+    </Target>
+
+    <!-- Copy native library on publish (when targeting Windows) -->
+    <Target Name="TwoDogWinX64PublishNatives"
+            AfterTargets="Publish"
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(RuntimeIdentifier)' != '' And $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('win')) And '$(TwoDogWinX64NativeLib)' != '' And Exists('$(TwoDogWinX64NativeLib)')">
+        <Copy SourceFiles="$(TwoDogWinX64NativeLib)"
+              DestinationFiles="$(PublishDir)libgodot.dll"
+              SkipUnchangedFiles="true"/>
+        <Message Importance="high" Text="TwoDog: Published Windows x64 native library to $(PublishDir)"/>
+    </Target>
 </Project>

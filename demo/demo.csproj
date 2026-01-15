@@ -1,34 +1,34 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <OutputType>Exe</OutputType>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <IsPackable>false</IsPackable>
-    <IsTrimmable>true</IsTrimmable>
-    <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="2dog" Version="0.1.0-pre" />
-    <PackageReference Include="GodotSharp" Version="4.6.0-beta.3" />
-  </ItemGroup>
-  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-    <PackageReference Include="2dog.win-x64" Version="0.1.0-pre" />
-  </ItemGroup>
-  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-    <PackageReference Include="2dog.linux-x64" Version="0.1.0-pre" />
-  </ItemGroup>
-  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-    <PackageReference Include="2dog.osx-x64" Version="0.1.0-pre" />
-  </ItemGroup>
-  <PropertyGroup>
-    <GodotProjectDir>../game</GodotProjectDir>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="../game/game.csproj" />
-  </ItemGroup>
-  <Target Name="DeepClean" AfterTargets="Clean">
-    <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
-    <RemoveDir Directories="$(BaseOutputPath)" />
-  </Target>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <IsTrimmable>true</IsTrimmable>
+        <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog" Version="0.1.0-pre"/>
+        <PackageReference Include="GodotSharp" Version="4.6.0-beta.3"/>
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+        <PackageReference Include="2dog.win-x64" Version="0.1.0-pre"/>
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+        <PackageReference Include="2dog.linux-x64" Version="0.1.0-pre"/>
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+        <PackageReference Include="2dog.osx-x64" Version="0.1.0-pre"/>
+    </ItemGroup>
+    <PropertyGroup>
+        <GodotProjectDir>../game</GodotProjectDir>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="../game/game.csproj"/>
+    </ItemGroup>
+    <Target Name="DeepClean" AfterTargets="Clean">
+        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
+        <RemoveDir Directories="$(BaseOutputPath)"/>
+    </Target>
 </Project>

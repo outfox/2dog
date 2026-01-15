@@ -1,31 +1,34 @@
 <Solution>
 
-  <Project Path="twodog/twodog.csproj" />
+    <Project Path="twodog/twodog.csproj"/>
 
-  <!-- Platform packages: Windows -->
-  <Project Path="platforms/twodog.win-x64/twodog.win-x64.csproj" />
-  <Project Path="platforms/twodog.win-x64/twodog.win-x64.release.csproj" />
-  <Project Path="platforms/twodog.win-x64/twodog.win-x64.debug.csproj" />
-  <Project Path="platforms/twodog.win-x64/twodog.win-x64.editor.csproj" />
+    <!-- Platform packages: Windows -->
+    <Folder Name="/win-x64/">
+    <Project Path="platforms/twodog.win-x64/twodog.win-x64.csproj"/>
+    <Project Path="platforms/twodog.win-x64/twodog.win-x64.release.csproj"/>
+    <Project Path="platforms/twodog.win-x64/twodog.win-x64.debug.csproj"/>
+    <Project Path="platforms/twodog.win-x64/twodog.win-x64.editor.csproj"/>
+    </Folder>
 
-  <!-- Platform packages: Linux -->
-  <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.csproj" />
-  <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.release.csproj" />
-  <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.debug.csproj" />
-  <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.editor.csproj" />
+    <!-- Platform packages: Linux -->
+    <Folder Name="/linux-x64/">
+    <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.csproj"/>
+    <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.release.csproj"/>
+    <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.debug.csproj"/>
+    <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.editor.csproj"/>
+    </Folder>
 
-  <!-- Platform packages: macOS -->
-  <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.csproj" />
-  <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.release.csproj" />
-  <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.debug.csproj" />
-  <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.editor.csproj" />
+    <!-- Platform packages: macOS -->
+    <Folder Name="/osx-x64/">
+    <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.csproj"/>
+    <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.release.csproj"/>
+    <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.debug.csproj"/>
+    <Project Path="platforms/twodog.osx-x64/twodog.osx-x64.editor.csproj"/>
+    </Folder>
 
-  <Project Path="twodog.xunit/twodog.xunit.csproj" />
-  <Project Path="twodog.tests/twodog.tests.csproj" />
-  <Folder Name="/build/">
-    <Project Path="build/_build.csproj" />
-  </Folder>
-  <Project Path="demo/demo.csproj" />
-  <Project Path="game/game.csproj" />
+    <Project Path="twodog.xunit/twodog.xunit.csproj"/>
+    <Project Path="twodog.tests/twodog.tests.csproj"/>
+    <Project Path="demo/demo.csproj"/>
+    <Project Path="game/game.csproj"/>
 
 </Solution>

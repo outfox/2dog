@@ -1,55 +1,55 @@
 <Project>
-  <!--
-    TwoDog macOS x64 Native Library Targets
-    
-    Copies the native libgodot.dylib to output directory for build and publish.
-    
-    Supports both:
-    - NuGet package consumption (uses runtimes/osx-x64/native/libgodot.dylib)
-    - Local ProjectReference builds (falls back to godot/bin/ template_release binary)
-  -->
+    <!--
+      TwoDog macOS x64 Native Library Targets
+      
+      Copies the native libgodot.dylib to output directory for build and publish.
+      
+      Supports both:
+      - NuGet package consumption (uses runtimes/osx-x64/native/libgodot.dylib)
+      - Local ProjectReference builds (falls back to godot/bin/ template_release binary)
+    -->
 
-  <PropertyGroup>
-    <TwoDogOsxX64PackageRoot>$(MSBuildThisFileDirectory)../</TwoDogOsxX64PackageRoot>
-    
-    <!-- NuGet package path (primary - always template_release) -->
-    <TwoDogOsxX64NativeLib_Package>$(TwoDogOsxX64PackageRoot)runtimes/osx-x64/native/libgodot.dylib</TwoDogOsxX64NativeLib_Package>
-    
-    <!-- Local development path (fallback for ProjectReference builds) -->
-    <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
-  </PropertyGroup>
-  
-  <!-- Configuration-based native library selection for local development -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
-    <TwoDogOsxX64NativeLib_Local>$(TwoDogLocalGodotBin)libgodot.macos.editor.dev.x86_64.shared_library.dylib</TwoDogOsxX64NativeLib_Local>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TwoDogOsxX64NativeLib_Local>$(TwoDogLocalGodotBin)libgodot.macos.template_release.x86_64.shared_library.dylib</TwoDogOsxX64NativeLib_Local>
-  </PropertyGroup>
-  
-  <PropertyGroup>
-    <!-- Use package path if it exists, otherwise fall back to local -->
-    <TwoDogOsxX64NativeLib Condition="Exists('$(TwoDogOsxX64NativeLib_Package)')">$(TwoDogOsxX64NativeLib_Package)</TwoDogOsxX64NativeLib>
-    <TwoDogOsxX64NativeLib Condition="'$(TwoDogOsxX64NativeLib)' == '' And Exists('$(TwoDogOsxX64NativeLib_Local)')">$(TwoDogOsxX64NativeLib_Local)</TwoDogOsxX64NativeLib>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TwoDogOsxX64PackageRoot>$(MSBuildThisFileDirectory)../</TwoDogOsxX64PackageRoot>
 
-  <!-- Copy native library to output on build (macOS only) -->
-  <Target Name="TwoDogOsxX64CopyNatives"
-          AfterTargets="Build"
-          Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('OSX')) And '$(TwoDogOsxX64NativeLib)' != '' And Exists('$(TwoDogOsxX64NativeLib)')">
-    <Copy SourceFiles="$(TwoDogOsxX64NativeLib)"
-          DestinationFiles="$(OutputPath)libgodot.dylib"
-          SkipUnchangedFiles="true" />
-    <Message Importance="normal" Text="TwoDog: Copied macOS x64 native library to $(OutputPath)" />
-  </Target>
+        <!-- NuGet package path (primary - always template_release) -->
+        <TwoDogOsxX64NativeLib_Package>$(TwoDogOsxX64PackageRoot)runtimes/osx-x64/native/libgodot.dylib</TwoDogOsxX64NativeLib_Package>
 
-  <!-- Copy native library on publish (when targeting macOS) -->
-  <Target Name="TwoDogOsxX64PublishNatives"
-          AfterTargets="Publish"
-          Condition="'$(DesignTimeBuild)' != 'true' And '$(RuntimeIdentifier)' != '' And $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('osx')) And '$(TwoDogOsxX64NativeLib)' != '' And Exists('$(TwoDogOsxX64NativeLib)')">
-    <Copy SourceFiles="$(TwoDogOsxX64NativeLib)"
-          DestinationFiles="$(PublishDir)libgodot.dylib"
-          SkipUnchangedFiles="true" />
-    <Message Importance="high" Text="TwoDog: Published macOS x64 native library to $(PublishDir)" />
-  </Target>
+        <!-- Local development path (fallback for ProjectReference builds) -->
+        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
+    </PropertyGroup>
+
+    <!-- Configuration-based native library selection for local development -->
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
+        <TwoDogOsxX64NativeLib_Local>$(TwoDogLocalGodotBin)libgodot.macos.editor.dev.x86_64.shared_library.dylib</TwoDogOsxX64NativeLib_Local>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <TwoDogOsxX64NativeLib_Local>$(TwoDogLocalGodotBin)libgodot.macos.template_release.x86_64.shared_library.dylib</TwoDogOsxX64NativeLib_Local>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <!-- Use package path if it exists, otherwise fall back to local -->
+        <TwoDogOsxX64NativeLib Condition="Exists('$(TwoDogOsxX64NativeLib_Package)')">$(TwoDogOsxX64NativeLib_Package)</TwoDogOsxX64NativeLib>
+        <TwoDogOsxX64NativeLib Condition="'$(TwoDogOsxX64NativeLib)' == '' And Exists('$(TwoDogOsxX64NativeLib_Local)')">$(TwoDogOsxX64NativeLib_Local)</TwoDogOsxX64NativeLib>
+    </PropertyGroup>
+
+    <!-- Copy native library to output on build (macOS only) -->
+    <Target Name="TwoDogOsxX64CopyNatives"
+            AfterTargets="Build"
+            Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('OSX')) And '$(TwoDogOsxX64NativeLib)' != '' And Exists('$(TwoDogOsxX64NativeLib)')">
+        <Copy SourceFiles="$(TwoDogOsxX64NativeLib)"
+              DestinationFiles="$(OutputPath)libgodot.dylib"
+              SkipUnchangedFiles="true"/>
+        <Message Importance="normal" Text="TwoDog: Copied macOS x64 native library to $(OutputPath)"/>
+    </Target>
+
+    <!-- Copy native library on publish (when targeting macOS) -->
+    <Target Name="TwoDogOsxX64PublishNatives"
+            AfterTargets="Publish"
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(RuntimeIdentifier)' != '' And $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('osx')) And '$(TwoDogOsxX64NativeLib)' != '' And Exists('$(TwoDogOsxX64NativeLib)')">
+        <Copy SourceFiles="$(TwoDogOsxX64NativeLib)"
+              DestinationFiles="$(PublishDir)libgodot.dylib"
+              SkipUnchangedFiles="true"/>
+        <Message Importance="high" Text="TwoDog: Published macOS x64 native library to $(PublishDir)"/>
+    </Target>
 </Project>

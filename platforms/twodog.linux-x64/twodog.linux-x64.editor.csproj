@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- Platform-specific configuration -->
-  <PropertyGroup>
-    <PlatformRID>linux-x64</PlatformRID>
-    <PlatformOS>linuxbsd</PlatformOS>
-    <BuildVariant>editor</BuildVariant>
-    <NativeLibExt>so</NativeLibExt>
-    <PackageSuffix>.editor</PackageSuffix>
-    <Description>Linux x64 editor native libgodot library for twodog. Reference this package alongside twodog for Linux editor support.</Description>
-  </PropertyGroup>
+    <!-- Platform-specific configuration -->
+    <PropertyGroup>
+        <PlatformRID>linux-x64</PlatformRID>
+        <PlatformOS>linuxbsd</PlatformOS>
+        <BuildVariant>editor</BuildVariant>
+        <NativeLibExt>so</NativeLibExt>
+        <PackageSuffix>.editor</PackageSuffix>
+        <Description>Linux x64 editor native libgodot library for twodog. Reference this package alongside twodog for Linux editor support.</Description>
+    </PropertyGroup>
 </Project>

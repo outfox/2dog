@@ -1,9 +1,9 @@
 <Project>
-  <!--
-    TwoDog Windows x64 Release Transitive Targets
-    
-    This file is imported by projects that transitively reference 2dog.win-x64.release.
-  -->
-  <Import Project="$(MSBuildThisFileDirectory)../build/2dog.win-x64.release.targets"
-          Condition="Exists('$(MSBuildThisFileDirectory)../build/2dog.win-x64.release.targets')" />
+    <!--
+      TwoDog Windows x64 Release Transitive Targets
+      
+      This file is imported by projects that transitively reference 2dog.win-x64.release.
+    -->
+    <Import Project="$(MSBuildThisFileDirectory)../build/2dog.win-x64.release.targets"
+            Condition="Exists('$(MSBuildThisFileDirectory)../build/2dog.win-x64.release.targets')"/>
 </Project>

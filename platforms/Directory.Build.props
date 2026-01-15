@@ -1,59 +1,59 @@
 <Project>
-  <!--
-    Shared properties for all twodog platform packages.
-    Each platform project only needs to define:
-    - PlatformRID: Runtime identifier (win-x64, linux-x64, osx-x64)
-    - PlatformOS: OS name in Godot binaries (windows, linuxbsd, macos)
-    - BuildVariant: Build type (template_release, template_debug, editor)
-    - NativeLibExt: Native library extension (dll, so, dylib)
-    - PackageSuffix: Optional suffix for package ID (.debug, .editor, or empty)
-  -->
+    <!--
+      Shared properties for all twodog platform packages.
+      Each platform project only needs to define:
+      - PlatformRID: Runtime identifier (win-x64, linux-x64, osx-x64)
+      - PlatformOS: OS name in Godot binaries (windows, linuxbsd, macos)
+      - BuildVariant: Build type (template_release, template_debug, editor)
+      - NativeLibExt: Native library extension (dll, so, dylib)
+      - PackageSuffix: Optional suffix for package ID (.debug, .editor, or empty)
+    -->
 
-  <!-- Common SDK settings -->
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-    <!-- Suppress NU5128: native libraries don't need lib/ folder -->
-    <!-- Suppress CS2008: No source files specified (these are packaging-only projects) -->
-    <NoWarn>$(NoWarn);NU5128;CS2008</NoWarn>
-    <!-- Use unique obj/bin folders per project to avoid conflicts when multiple csproj files share a folder -->
-    <BaseIntermediateOutputPath>obj/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
-    <BaseOutputPath>bin/$(MSBuildProjectName)/</BaseOutputPath>
-    <!-- Disable auto-generated assembly info since these are packaging-only projects -->
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
+    <!-- Common SDK settings -->
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+        <!-- Suppress NU5128: native libraries don't need lib/ folder -->
+        <!-- Suppress CS2008: No source files specified (these are packaging-only projects) -->
+        <NoWarn>$(NoWarn);NU5128;CS2008</NoWarn>
+        <!-- Use unique obj/bin folders per project to avoid conflicts when multiple csproj files share a folder -->
+        <BaseIntermediateOutputPath>obj/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
+        <BaseOutputPath>bin/$(MSBuildProjectName)/</BaseOutputPath>
+        <!-- Disable auto-generated assembly info since these are packaging-only projects -->
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    </PropertyGroup>
 
-  <!-- Common paths -->
-  <PropertyGroup>
-    <GodotDir>$(MSBuildProjectDirectory)/../../godot/</GodotDir>
-    <GodotBinDir>$(GodotDir)bin/</GodotBinDir>
-    <DocsDir>$(MSBuildProjectDirectory)/../../docs/content/public/</DocsDir>
-  </PropertyGroup>
+    <!-- Common paths -->
+    <PropertyGroup>
+        <GodotDir>$(MSBuildProjectDirectory)/../../godot/</GodotDir>
+        <GodotBinDir>$(GodotDir)bin/</GodotBinDir>
+        <DocsDir>$(MSBuildProjectDirectory)/../../docs/content/public/</DocsDir>
+    </PropertyGroup>
 
-  <!-- Common NuGet package metadata -->
-  <PropertyGroup>
-    <Version>0.1.0-pre</Version>
-    <Authors>Moritz Voss</Authors>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
-    <PackageIcon>icon.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageOutputPath>$(MSBuildProjectDirectory)/../../packages/</PackageOutputPath>
-    <IsPackable>true</IsPackable>
-  </PropertyGroup>
+    <!-- Common NuGet package metadata -->
+    <PropertyGroup>
+        <Version>0.1.0-pre</Version>
+        <Authors>Moritz Voss</Authors>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageOutputPath>$(MSBuildProjectDirectory)/../../packages/</PackageOutputPath>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
 
-  <!-- Include package icon, readme, and Godot license/authors -->
-  <ItemGroup>
-    <None Include="$(DocsDir)favicon-96x96.png" Pack="true" PackagePath="icon.png" Visible="false" />
-    <None Include="README.md" Pack="true" PackagePath="README.md" />
-    <None Include="$(GodotDir)LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" Visible="false" />
-    <None Include="$(GodotDir)AUTHORS.md" Pack="true" PackagePath="AUTHORS.md" Visible="false" />
-  </ItemGroup>
+    <!-- Include package icon, readme, and Godot license/authors -->
+    <ItemGroup>
+        <None Include="$(DocsDir)favicon-96x96.png" Pack="true" PackagePath="icon.png" Visible="false"/>
+        <None Include="README.md" Pack="true" PackagePath="README.md"/>
+        <None Include="$(GodotDir)LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" Visible="false"/>
+        <None Include="$(GodotDir)AUTHORS.md" Pack="true" PackagePath="AUTHORS.md" Visible="false"/>
+    </ItemGroup>
 
-  <Target Name="DeepClean" AfterTargets="Clean">
-    <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
-    <RemoveDir Directories="$(BaseOutputPath)" />
-  </Target>
+    <Target Name="DeepClean" AfterTargets="Clean">
+        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
+        <RemoveDir Directories="$(BaseOutputPath)"/>
+    </Target>
 </Project>

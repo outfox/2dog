@@ -7,6 +7,8 @@
 # Build Artifacts
 /packages
 dist
+build
+builds
 
 obj
 bin

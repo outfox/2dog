@@ -1,10 +1,10 @@
 <Project>
-  <!--
-    TwoDog macOS x64 Editor Native Library Targets
-    
-    This package contains the editor build of libgodot.dylib (TOOLS_ENABLED).
-    Imports the base osx-x64 targets for native library handling.
-  -->
-  <Import Project="$(MSBuildThisFileDirectory)2dog.osx-x64.targets"
-          Condition="Exists('$(MSBuildThisFileDirectory)2dog.osx-x64.targets')" />
+    <!--
+      TwoDog macOS x64 Editor Native Library Targets
+      
+      This package contains the editor build of libgodot.dylib (TOOLS_ENABLED).
+      Imports the base osx-x64 targets for native library handling.
+    -->
+    <Import Project="$(MSBuildThisFileDirectory)2dog.osx-x64.targets"
+            Condition="Exists('$(MSBuildThisFileDirectory)2dog.osx-x64.targets')"/>
 </Project>
