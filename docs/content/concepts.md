@@ -26,6 +26,47 @@ You control when Godot starts, when frames iterate, and when it shuts down. Godo
 
 The native library (`libgodot.dll`, `libgodot.so`, or `libgodot.dylib`) is automatically downloaded and cached on first build.
 
+### Build Variants
+
+2dog supports three Godot build variants, each optimized for different use cases:
+
+#### Template Builds (Runtime-Only)
+
+**Template Debug** (`template_debug`):
+- Debug symbols enabled for troubleshooting
+- Assertions and error checking enabled
+- No editor features
+- Suitable for: Development, debugging game logic
+
+**Template Release** (`template_release`):
+- Fully optimized for performance
+- Minimal binary size
+- No debug symbols or editor features
+- Suitable for: Production games and applications
+
+#### Editor Build (Development Tools)
+
+**Editor** (`editor`):
+- Full editor toolchain enabled (`TOOLS_ENABLED`)
+- Resource import pipeline available
+- Editor APIs: `EditorInterface`, `EditorPlugin`, `ImportPlugin`
+- Larger binary size, slower than templates
+- Suitable for: Asset import tools, editor extensions, build pipelines
+
+::: tip Choosing a Build Variant
+- **Building a game?** Use Debug during development, Release for production
+- **Need to import assets?** Use Editor configuration
+- **Creating build tools?** Use Editor configuration
+- **Running in CI/CD?** Use Debug for tests, Release for final builds
+:::
+
+Build with different variants:
+```bash
+dotnet build -c Debug    # template_debug
+dotnet build -c Release  # template_release
+dotnet build -c Editor   # editor with TOOLS_ENABLED
+```
+
 ## GodotSharp API Access
 
 Once the engine starts, you have full access to the GodotSharp API:
