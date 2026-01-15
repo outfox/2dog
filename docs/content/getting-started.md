@@ -81,8 +81,27 @@ config_version=5
 config/name="MyGodotApp"
 ```
 
+## Build Configurations
+
+2dog supports three build configurations for different use cases:
+
+```bash
+dotnet build -c Debug    # Development with debug symbols
+dotnet build -c Release  # Optimized production build
+dotnet build -c Editor   # Editor tools with TOOLS_ENABLED
+```
+
+The **Editor** configuration enables Godot's full editor toolchain, including:
+- Resource import pipeline
+- Editor APIs (`EditorInterface`, `EditorPlugin`)
+- Import plugins for textures, models, audio
+- Scene validation and manipulation tools
+
+See [Build Configurations](./build-configurations) for detailed information.
+
 ## Next Steps
 
 - Learn about [Core Concepts](./concepts) to understand the architecture
+- Explore [Build Configurations](./build-configurations) for Debug, Release, and Editor modes
 - Check the [API Reference](./api-reference) for detailed documentation
 - Set up [Testing with xUnit](./testing) for your project

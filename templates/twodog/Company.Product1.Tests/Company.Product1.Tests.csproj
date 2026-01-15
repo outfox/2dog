@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <!-- 2dog packages -->
+    <ItemGroup>
+        <PackageReference Include="2dog" Version="0.1.0-pre"/>
+        <PackageReference Include="2dog.xunit" Version="0.1.0-pre"/>
+        <PackageReference Include="GodotSharp" Version="4.6.0-beta.3"/>
+    </ItemGroup>
+
+    <!-- Platform-specific native library packages -->
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+        <PackageReference Include="2dog.win-x64" Version="0.1.0-pre"/>
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+        <PackageReference Include="2dog.linux-x64" Version="0.1.0-pre"/>
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+        <PackageReference Include="2dog.osx-x64" Version="0.1.0-pre"/>
+    </ItemGroup>
+
+    <!-- Test framework packages -->
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector" Version="6.0.2"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>
+        <PackageReference Include="xunit" Version="2.9.2"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit"/>
+    </ItemGroup>
+
+    <!-- Godot project location -->
+    <PropertyGroup>
+        <GodotProjectDir>../project</GodotProjectDir>
+    </PropertyGroup>
+</Project>
