@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dngqpdiughpbm" path="res://Ticker.cs" id="1_ig7tw"]
 
-[node name="Control" type="CenterContainer" unique_id=1087203752]
+[node name="CenterContainer" type="CenterContainer" unique_id=1087203752]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -13,5 +13,6 @@ grow_vertical = 2
 layout_mode = 2
 text = "Close this window, or press Q in your console."
 
-[node name="Ticker" type="Node" parent="." unique_id=488473608]
+[node name="Ticker" type="Node" parent="." unique_id=1695868695]
 script = ExtResource("1_ig7tw")
+metadata/_custom_type_script = "uid://dngqpdiughpbm"
