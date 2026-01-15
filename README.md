@@ -69,14 +69,17 @@ while (!godot.Iteration())
    git submodule update --init --recursive
 ```
 
-2. **Build Godot**
+2. **Build Godot** (required on fresh checkout)
 ```bash
    uv run build.py
 ```
 
 3. **Build NuGet packages** (required on fresh checkout)
 ```bash
-   dotnet build packages
+   dotnet build platforms
+   dotnet build twodog -c Debug
+   dotnet build twodog -c Release
+   dotnet pack
 ```
 
 4. **Run the demo**

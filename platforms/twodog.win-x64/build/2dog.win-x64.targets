@@ -1,36 +1,71 @@
 <Project>
     <!--
-      TwoDog Windows x64 Native Library Targets
-      
-      Copies the native libgodot.dll to output directory for build and publish.
-      
-      Supports both:
-      - NuGet package consumption (uses runtimes/win-x64/native/libgodot.dll)
-      - Local ProjectReference builds (falls back to godot/bin/ template_release binary)
+      TwoDog Windows x64 Meta Package Targets
+
+      This meta package owns all native libgodot.dll copy logic.
+
+      Behaviour:
+      - When consumed as a NuGet package, it locates the appropriate libgodot.dll
+        from the variant dependency packages (release, debug, editor) in the
+        global NuGet package cache and copies it to the output/publish directory.
+      - When used via ProjectReference in this repository, it falls back to the
+        locally built Godot binaries in godot/bin.
+
+      Configuration mapping:
+      - Debug (or unspecified): prefer editor build (TOOLS_ENABLED)
+      - Release: prefer template_release build
     -->
 
+    <!-- Discover package version from this .targets location -->
+    <!-- MSBuildThisFileDirectory = .../packages/2dog.win-x64/0.1.0-pre/build/ (with trailing slash) -->
+    <!-- We need to go up two levels: build/ -> 0.1.0-pre/ -> 2dog.win-x64/ -->
+    <!-- TrimEnd the trailing slash, then get parent directory name -->
     <PropertyGroup>
-        <TwoDogWinX64PackageRoot>$(MSBuildThisFileDirectory)../</TwoDogWinX64PackageRoot>
-
-        <!-- NuGet package path (primary - always template_release) -->
-        <TwoDogWinX64NativeLib_Package>$(TwoDogWinX64PackageRoot)runtimes/win-x64/native/libgodot.dll</TwoDogWinX64NativeLib_Package>
-
-        <!-- Local development path (fallback for ProjectReference builds) -->
-        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
+        <_TwoDogWinX64TargetsDir>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</_TwoDogWinX64TargetsDir>
+        <TwoDogWinX64PackageVersion Condition="'$(TwoDogWinX64PackageVersion)' == ''">$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogWinX64TargetsDir)'))))</TwoDogWinX64PackageVersion>
     </PropertyGroup>
 
-    <!-- Configuration-based native library selection for local development -->
+    <!-- Variant package and local library locations -->
+    <PropertyGroup>
+        <!-- Variant package paths in the NuGet global packages folder -->
+        <!-- $(NuGetPackageRoot) is set by NuGet restore and points to the packages cache -->
+        <TwoDogWinX64ReleasePackage>$(NuGetPackageRoot)\2dog.win-x64.release\$(TwoDogWinX64PackageVersion)\runtimes\win-x64\native\libgodot.dll</TwoDogWinX64ReleasePackage>
+        <TwoDogWinX64DebugPackage>$(NuGetPackageRoot)\2dog.win-x64.debug\$(TwoDogWinX64PackageVersion)\runtimes\win-x64\native\libgodot.dll</TwoDogWinX64DebugPackage>
+        <TwoDogWinX64EditorPackage>$(NuGetPackageRoot)\2dog.win-x64.editor\$(TwoDogWinX64PackageVersion)\runtimes\win-x64\native\libgodot.dll</TwoDogWinX64EditorPackage>
+
+        <!-- Local development paths (fallback for ProjectReference builds) -->
+        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
+        <TwoDogWinX64ReleaseLocal>$(TwoDogLocalGodotBin)godot.windows.template_release.x86_64.shared_library.dll</TwoDogWinX64ReleaseLocal>
+        <TwoDogWinX64DebugLocal>$(TwoDogLocalGodotBin)godot.windows.template_debug.dev.x86_64.shared_library.dll</TwoDogWinX64DebugLocal>
+        <TwoDogWinX64EditorLocal>$(TwoDogLocalGodotBin)godot.windows.editor.dev.x86_64.shared_library.dll</TwoDogWinX64EditorLocal>
+    </PropertyGroup>
+
+    <!-- Choose preferred variant based on Configuration -->
     <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
-        <TwoDogWinX64NativeLib_Local>$(TwoDogLocalGodotBin)godot.windows.editor.dev.x86_64.shared_library.dll</TwoDogWinX64NativeLib_Local>
+        <TwoDogWinX64PreferredVariant Condition="'$(TwoDogWinX64PreferredVariant)' == ''">editor</TwoDogWinX64PreferredVariant>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-        <TwoDogWinX64NativeLib_Local>$(TwoDogLocalGodotBin)godot.windows.template_release.x86_64.shared_library.dll</TwoDogWinX64NativeLib_Local>
+        <TwoDogWinX64PreferredVariant Condition="'$(TwoDogWinX64PreferredVariant)' == ''">release</TwoDogWinX64PreferredVariant>
+    </PropertyGroup>
+    <PropertyGroup>
+        <TwoDogWinX64PreferredVariant Condition="'$(TwoDogWinX64PreferredVariant)' == ''">release</TwoDogWinX64PreferredVariant>
     </PropertyGroup>
 
+    <!-- Map variant name to concrete package/local library paths -->
     <PropertyGroup>
-        <!-- Use package path if it exists, otherwise fall back to local -->
-        <TwoDogWinX64NativeLib Condition="Exists('$(TwoDogWinX64NativeLib_Package)')">$(TwoDogWinX64NativeLib_Package)</TwoDogWinX64NativeLib>
-        <TwoDogWinX64NativeLib Condition="'$(TwoDogWinX64NativeLib)' == '' And Exists('$(TwoDogWinX64NativeLib_Local)')">$(TwoDogWinX64NativeLib_Local)</TwoDogWinX64NativeLib>
+        <TwoDogWinX64VariantPackagePath Condition="'$(TwoDogWinX64PreferredVariant)' == 'editor'">$(TwoDogWinX64EditorPackage)</TwoDogWinX64VariantPackagePath>
+        <TwoDogWinX64VariantPackagePath Condition="'$(TwoDogWinX64PreferredVariant)' == 'debug'">$(TwoDogWinX64DebugPackage)</TwoDogWinX64VariantPackagePath>
+        <TwoDogWinX64VariantPackagePath Condition="'$(TwoDogWinX64PreferredVariant)' == 'release'">$(TwoDogWinX64ReleasePackage)</TwoDogWinX64VariantPackagePath>
+
+        <TwoDogWinX64VariantLocalPath Condition="'$(TwoDogWinX64PreferredVariant)' == 'editor'">$(TwoDogWinX64EditorLocal)</TwoDogWinX64VariantLocalPath>
+        <TwoDogWinX64VariantLocalPath Condition="'$(TwoDogWinX64PreferredVariant)' == 'debug'">$(TwoDogWinX64DebugLocal)</TwoDogWinX64VariantLocalPath>
+        <TwoDogWinX64VariantLocalPath Condition="'$(TwoDogWinX64PreferredVariant)' == 'release'">$(TwoDogWinX64ReleaseLocal)</TwoDogWinX64VariantLocalPath>
+    </PropertyGroup>
+
+    <!-- Resolve final native library path: prefer NuGet package, fall back to local -->
+    <PropertyGroup>
+        <TwoDogWinX64NativeLib Condition="'$(TwoDogWinX64VariantPackagePath)' != '' And Exists('$(TwoDogWinX64VariantPackagePath)')">$(TwoDogWinX64VariantPackagePath)</TwoDogWinX64NativeLib>
+        <TwoDogWinX64NativeLib Condition="'$(TwoDogWinX64NativeLib)' == '' And '$(TwoDogWinX64VariantLocalPath)' != '' And Exists('$(TwoDogWinX64VariantLocalPath)')">$(TwoDogWinX64VariantLocalPath)</TwoDogWinX64NativeLib>
     </PropertyGroup>
 
     <!-- Copy native library to output on build (Windows only) -->
@@ -40,7 +75,7 @@
         <Copy SourceFiles="$(TwoDogWinX64NativeLib)"
               DestinationFiles="$(OutputPath)libgodot.dll"
               SkipUnchangedFiles="true"/>
-        <Message Importance="normal" Text="TwoDog: Copied Windows x64 native library to $(OutputPath)"/>
+        <Message Importance="normal" Text="TwoDog: Copied Windows x64 $(TwoDogWinX64PreferredVariant) native library to $(OutputPath)"/>
     </Target>
 
     <!-- Copy native library on publish (when targeting Windows) -->
@@ -50,6 +85,6 @@
         <Copy SourceFiles="$(TwoDogWinX64NativeLib)"
               DestinationFiles="$(PublishDir)libgodot.dll"
               SkipUnchangedFiles="true"/>
-        <Message Importance="high" Text="TwoDog: Published Windows x64 native library to $(PublishDir)"/>
+        <Message Importance="high" Text="TwoDog: Published Windows x64 $(TwoDogWinX64PreferredVariant) native library to $(PublishDir)"/>
     </Target>
 </Project>

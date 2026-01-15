@@ -1,36 +1,66 @@
 <Project>
     <!--
-      TwoDog macOS x64 Native Library Targets
-      
-      Copies the native libgodot.dylib to output directory for build and publish.
-      
-      Supports both:
-      - NuGet package consumption (uses runtimes/osx-x64/native/libgodot.dylib)
-      - Local ProjectReference builds (falls back to godot/bin/ template_release binary)
+      TwoDog macOS x64 Meta Package Targets
+
+      This meta package owns all native libgodot.dylib copy logic.
+
+      Behaviour:
+      - When consumed as a NuGet package, it locates the appropriate libgodot.dylib
+        from the variant dependency packages (release, debug, editor) in the
+        global NuGet package cache and copies it to the output/publish directory.
+      - When used via ProjectReference in this repository, it falls back to the
+        locally built Godot binaries in godot/bin.
+
+      Configuration mapping:
+      - Debug (or unspecified): prefer editor build (TOOLS_ENABLED)
+      - Release: prefer template_release build
     -->
 
+    <!-- Discover package version from this .targets location -->
+    <!-- MSBuildThisFileDirectory = .../packages/2dog.osx-x64/0.1.0-pre/build/ (with trailing slash) -->
+    <!-- TrimEnd the trailing slash, then get parent directory name -->
     <PropertyGroup>
-        <TwoDogOsxX64PackageRoot>$(MSBuildThisFileDirectory)../</TwoDogOsxX64PackageRoot>
-
-        <!-- NuGet package path (primary - always template_release) -->
-        <TwoDogOsxX64NativeLib_Package>$(TwoDogOsxX64PackageRoot)runtimes/osx-x64/native/libgodot.dylib</TwoDogOsxX64NativeLib_Package>
-
-        <!-- Local development path (fallback for ProjectReference builds) -->
-        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
+        <_TwoDogOsxX64TargetsDir>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</_TwoDogOsxX64TargetsDir>
+        <TwoDogOsxX64PackageVersion Condition="'$(TwoDogOsxX64PackageVersion)' == ''">$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogOsxX64TargetsDir)'))))</TwoDogOsxX64PackageVersion>
     </PropertyGroup>
 
-    <!-- Configuration-based native library selection for local development -->
+    <PropertyGroup>
+        <!-- Variant package paths in the NuGet global packages folder -->
+        <!-- $(NuGetPackageRoot) is set by NuGet restore and points to the packages cache -->
+        <TwoDogOsxX64ReleasePackage>$(NuGetPackageRoot)/2dog.osx-x64.release/$(TwoDogOsxX64PackageVersion)/runtimes/osx-x64/native/libgodot.dylib</TwoDogOsxX64ReleasePackage>
+        <TwoDogOsxX64DebugPackage>$(NuGetPackageRoot)/2dog.osx-x64.debug/$(TwoDogOsxX64PackageVersion)/runtimes/osx-x64/native/libgodot.dylib</TwoDogOsxX64DebugPackage>
+        <TwoDogOsxX64EditorPackage>$(NuGetPackageRoot)/2dog.osx-x64.editor/$(TwoDogOsxX64PackageVersion)/runtimes/osx-x64/native/libgodot.dylib</TwoDogOsxX64EditorPackage>
+
+        <!-- Local development paths (fallback for ProjectReference builds) -->
+        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
+        <TwoDogOsxX64ReleaseLocal>$(TwoDogLocalGodotBin)libgodot.macos.template_release.x86_64.shared_library.dylib</TwoDogOsxX64ReleaseLocal>
+        <TwoDogOsxX64DebugLocal>$(TwoDogLocalGodotBin)libgodot.macos.template_debug.dev.x86_64.shared_library.dylib</TwoDogOsxX64DebugLocal>
+        <TwoDogOsxX64EditorLocal>$(TwoDogLocalGodotBin)libgodot.macos.editor.dev.x86_64.shared_library.dylib</TwoDogOsxX64EditorLocal>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
-        <TwoDogOsxX64NativeLib_Local>$(TwoDogLocalGodotBin)libgodot.macos.editor.dev.x86_64.shared_library.dylib</TwoDogOsxX64NativeLib_Local>
+        <TwoDogOsxX64PreferredVariant Condition="'$(TwoDogOsxX64PreferredVariant)' == ''">editor</TwoDogOsxX64PreferredVariant>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-        <TwoDogOsxX64NativeLib_Local>$(TwoDogLocalGodotBin)libgodot.macos.template_release.x86_64.shared_library.dylib</TwoDogOsxX64NativeLib_Local>
+        <TwoDogOsxX64PreferredVariant Condition="'$(TwoDogOsxX64PreferredVariant)' == ''">release</TwoDogOsxX64PreferredVariant>
+    </PropertyGroup>
+    <PropertyGroup>
+        <TwoDogOsxX64PreferredVariant Condition="'$(TwoDogOsxX64PreferredVariant)' == ''">release</TwoDogOsxX64PreferredVariant>
     </PropertyGroup>
 
     <PropertyGroup>
-        <!-- Use package path if it exists, otherwise fall back to local -->
-        <TwoDogOsxX64NativeLib Condition="Exists('$(TwoDogOsxX64NativeLib_Package)')">$(TwoDogOsxX64NativeLib_Package)</TwoDogOsxX64NativeLib>
-        <TwoDogOsxX64NativeLib Condition="'$(TwoDogOsxX64NativeLib)' == '' And Exists('$(TwoDogOsxX64NativeLib_Local)')">$(TwoDogOsxX64NativeLib_Local)</TwoDogOsxX64NativeLib>
+        <TwoDogOsxX64VariantPackagePath Condition="'$(TwoDogOsxX64PreferredVariant)' == 'editor'">$(TwoDogOsxX64EditorPackage)</TwoDogOsxX64VariantPackagePath>
+        <TwoDogOsxX64VariantPackagePath Condition="'$(TwoDogOsxX64PreferredVariant)' == 'debug'">$(TwoDogOsxX64DebugPackage)</TwoDogOsxX64VariantPackagePath>
+        <TwoDogOsxX64VariantPackagePath Condition="'$(TwoDogOsxX64PreferredVariant)' == 'release'">$(TwoDogOsxX64ReleasePackage)</TwoDogOsxX64VariantPackagePath>
+
+        <TwoDogOsxX64VariantLocalPath Condition="'$(TwoDogOsxX64PreferredVariant)' == 'editor'">$(TwoDogOsxX64EditorLocal)</TwoDogOsxX64VariantLocalPath>
+        <TwoDogOsxX64VariantLocalPath Condition="'$(TwoDogOsxX64PreferredVariant)' == 'debug'">$(TwoDogOsxX64DebugLocal)</TwoDogOsxX64VariantLocalPath>
+        <TwoDogOsxX64VariantLocalPath Condition="'$(TwoDogOsxX64PreferredVariant)' == 'release'">$(TwoDogOsxX64ReleaseLocal)</TwoDogOsxX64VariantLocalPath>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TwoDogOsxX64NativeLib Condition="'$(TwoDogOsxX64VariantPackagePath)' != '' And Exists('$(TwoDogOsxX64VariantPackagePath)')">$(TwoDogOsxX64VariantPackagePath)</TwoDogOsxX64NativeLib>
+        <TwoDogOsxX64NativeLib Condition="'$(TwoDogOsxX64NativeLib)' == '' And '$(TwoDogOsxX64VariantLocalPath)' != '' And Exists('$(TwoDogOsxX64VariantLocalPath)')">$(TwoDogOsxX64VariantLocalPath)</TwoDogOsxX64NativeLib>
     </PropertyGroup>
 
     <!-- Copy native library to output on build (macOS only) -->
@@ -40,7 +70,7 @@
         <Copy SourceFiles="$(TwoDogOsxX64NativeLib)"
               DestinationFiles="$(OutputPath)libgodot.dylib"
               SkipUnchangedFiles="true"/>
-        <Message Importance="normal" Text="TwoDog: Copied macOS x64 native library to $(OutputPath)"/>
+        <Message Importance="normal" Text="TwoDog: Copied macOS x64 $(TwoDogOsxX64PreferredVariant) native library to $(OutputPath)"/>
     </Target>
 
     <!-- Copy native library on publish (when targeting macOS) -->
@@ -50,6 +80,6 @@
         <Copy SourceFiles="$(TwoDogOsxX64NativeLib)"
               DestinationFiles="$(PublishDir)libgodot.dylib"
               SkipUnchangedFiles="true"/>
-        <Message Importance="high" Text="TwoDog: Published macOS x64 native library to $(PublishDir)"/>
+        <Message Importance="high" Text="TwoDog: Published macOS x64 $(TwoDogOsxX64PreferredVariant) native library to $(PublishDir)"/>
     </Target>
 </Project>

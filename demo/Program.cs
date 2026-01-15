@@ -16,7 +16,6 @@ GD.Print("Ticker: ", engine.Tree.CurrentScene.GetNode<Ticker>("Ticker"));
 
 
 Console.WriteLine("Godot is running, close window or press 'Q' to quit.");
-Console.WriteLine("Godot is will iterate twice...");
 
 while (!godotInstance.Iteration())
     if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Q)

@@ -34,7 +34,9 @@
     </ItemGroup>
 
     <!-- Include MSBuild targets in the package -->
-    <ItemGroup>
+    <!-- Only meta packages (no PackageSuffix) should include targets.
+         Variant packages (.release, .debug, .editor) are DLL-only; meta packages own copy logic. -->
+    <ItemGroup Condition="'$(PackageSuffix)' == ''">
         <None Include="build/$(PackageId).targets" Pack="true" PackagePath="build/" Condition="Exists('build/$(PackageId).targets')"/>
         <None Include="buildTransitive/$(PackageId).targets" Pack="true" PackagePath="buildTransitive/" Condition="Exists('buildTransitive/$(PackageId).targets')"/>
     </ItemGroup>
