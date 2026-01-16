@@ -95,7 +95,7 @@ using var godot = engine.Start();
 // Import a texture with custom settings
 var importer = ResourceImporterTexture.Singleton;
 // Use Godot's full import pipeline
-// Access editor-only APIs like ImportPlugin, EditorInterface, etc.
+// Access editor-only APIs like EditorImportPlugin, EditorInterface, etc.
 ```
 
 :::
