@@ -51,7 +51,9 @@ dotnet run
 ```
 
 ```bash [Fresh project]
-dotnet new twodog -n LetsCook
+# Template pending NuGet release
+# For now: dotnet new install ./templates/twodog
+dotnet new 2dog -n LetsCook
 ```
 
 ```csharp [🎮 Game Example]

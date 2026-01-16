@@ -32,7 +32,24 @@ dotnet build
 
 ## Your First 2dog Application
 
-Create a new console application:
+::: tip Using Templates (Recommended)
+The fastest way to get started is using the 2dog project template:
+
+```bash
+dotnet new install 2dog.Templates  # Install template (pending NuGet release)
+dotnet new 2dog -n MyGodotApp      # Create project
+cd MyGodotApp
+dotnet run                          # Run the app
+```
+
+This creates a complete project with sample Godot content and everything configured. See [Project Templates](./templates) for details.
+
+**Note:** Templates are pending NuGet release. For now, [install locally from source](./templates#local-installation-development).
+:::
+
+### Manual Setup
+
+Alternatively, create a new console application manually:
 
 ```bash
 dotnet new console -n MyGodotApp
@@ -101,6 +118,7 @@ See [Build Configurations](./build-configurations) for detailed information.
 
 ## Next Steps
 
+- Use [Project Templates](./templates) to quickly scaffold new projects
 - Learn about [Core Concepts](./concepts) to understand the architecture
 - Explore [Build Configurations](./build-configurations) for Debug, Release, and Editor modes
 - Check the [API Reference](./api-reference) for detailed documentation

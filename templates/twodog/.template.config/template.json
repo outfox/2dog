@@ -1,10 +1,10 @@
 {
   "$schema": "http://json.schemastore.org/template",
-  "author": "OutFox",
+  "author": "outfox",
   "classifications": ["Game", "Godot", "2dog"],
-  "identity": "OutFox.2dog.Template",
+  "identity": "outfox.2dog.Template",
   "name": "2dog Application",
-  "shortName": "twodog",
+  "shortName": "2dog",
   "tags": {
     "language": "C#",
     "type": "project"

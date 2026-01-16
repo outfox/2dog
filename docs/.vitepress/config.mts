@@ -47,6 +47,7 @@ export default defineConfig({
         text: 'Guide',
         items: [
           { text: 'Getting Started', link: '/getting-started' },
+          { text: 'Project Templates', link: '/templates' },
           { text: 'Core Concepts', link: '/concepts' },
           { text: 'Build Configurations', link: '/build-configurations' },
           { text: 'Configuration', link: '/configuration' }

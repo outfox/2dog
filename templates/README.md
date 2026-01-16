@@ -25,10 +25,10 @@ dotnet new install ./templates/twodog
 
 ```bash
 # Basic project
-dotnet new twodog -n MyGame
+dotnet new 2dog -n MyGame
 
 # With tests (requires 2dog.xunit package)
-dotnet new twodog -n MyGame --tests
+dotnet new 2dog -n MyGame --tests
 ```
 
 ### Uninstalling the Template
@@ -117,9 +117,9 @@ The template is defined in `.template.config/template.json`:
 
 ```json
 {
-  "identity": "OutFox.2dog.Template",
+  "identity": "outfox.2dog.Template",
   "name": "2dog Application",
-  "shortName": "twodog",
+  "shortName": "2dog",
   "sourceName": "Company.Product1",
   "symbols": {
     "tests": {
@@ -150,7 +150,7 @@ After modifying the template:
    ```bash
    mkdir test_project
    cd test_project
-   dotnet new twodog -n TestApp
+   dotnet new 2dog -n TestApp
    dotnet build
    dotnet run --project TestApp
    ```
