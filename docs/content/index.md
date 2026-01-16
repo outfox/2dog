@@ -93,7 +93,7 @@ public class GodotSceneTests(GodotHeadlessFixture godot)
 }
 ```
 
-```csharp [🤖 Tool Example]
+```csharp [🔨 Tool Example]
 // Build with: dotnet build -c Editor
 // Enables TOOLS_ENABLED for import and editor features
 
