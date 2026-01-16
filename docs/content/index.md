@@ -43,7 +43,7 @@ features:
 ---
 
 
-## Examples
+## All right, let's cook! 
 
 ::: code-group
 
