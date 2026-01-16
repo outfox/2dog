@@ -4,7 +4,7 @@
 
 ## Overview
 
-| Configuration | Godot Build | TOOLS_ENABLED | Debug Symbols | Use Case |
+| Configuration | Godot Build | TOOLS_ENABLED | GD Debugger | Use Case |
 |--------------|-------------|---------------|---------------|----------|
 | **Debug** | `template_debug` | ❌ No | ✅ Yes | Development, debugging |
 | **Release** | `template_release` | ❌ No | ❌ No | Production, optimized runtime |
