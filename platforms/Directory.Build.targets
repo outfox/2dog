@@ -30,7 +30,9 @@
               Condition="Exists('$(NativeLibPath)')"
               Pack="true"
               PackagePath="runtimes/$(PlatformRID)/native/$(OutputLibName)"
-              Visible="false"/>
+              Visible="false"
+              Link="runtimes/$(PlatformRID)/native/$(OutputLibName)"
+              CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
 
     <!-- Include MSBuild targets in the package -->

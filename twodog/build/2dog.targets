@@ -69,6 +69,43 @@
     </PropertyGroup>
 
     <!-- ============================================ -->
+    <!-- Add Compile-Time Reference to GodotSharpEditor -->
+    <!-- ============================================ -->
+    <!--
+      For editor builds, add GodotSharpEditor.dll as a compile-time reference
+      so that editor-only types (EditorInterface, ResourceImporterTexture, etc.) are available.
+    -->
+    <ItemGroup Condition="'$(TwoDogBuildType)' == 'editor' And '$(TwoDogGodotApiSourcePath)' != '' And Exists('$(TwoDogGodotApiSourcePath)GodotSharpEditor.dll')">
+        <Reference Include="GodotSharpEditor">
+            <HintPath>$(TwoDogGodotApiSourcePath)GodotSharpEditor.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+    </ItemGroup>
+
+    <!-- ============================================ -->
+    <!-- Remove NuGet GodotSharp Assemblies (Template Builds Only) -->
+    <!-- ============================================ -->
+    <!--
+      For template builds (template_debug/template_release), remove NuGet GodotSharp assemblies
+      since we provide our own locally-built versions in flat structure.
+      
+      For editor builds, we keep both:
+      - Flat NuGet assemblies for .NET to load
+      - Nested local assemblies in GodotSharp/Api/Debug/ for Godot editor runtime
+    -->
+    <Target Name="TwoDogRemoveNuGetGodotAssemblies"
+            BeforeTargets="TwoDogCopyGodotApi"
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogBuildType)' != 'editor'">
+        <ItemGroup>
+            <_TwoDogNuGetGodotAssembliesToRemove Include="$(OutputPath)GodotSharp.dll"/>
+            <_TwoDogNuGetGodotAssembliesToRemove Include="$(OutputPath)GodotSharp.xml"/>
+            <_TwoDogNuGetGodotAssembliesToRemove Include="$(OutputPath)GodotSharpEditor.dll"/>
+            <_TwoDogNuGetGodotAssembliesToRemove Include="$(OutputPath)GodotSharpEditor.xml"/>
+        </ItemGroup>
+        <Delete Files="@(_TwoDogNuGetGodotAssembliesToRemove)" ContinueOnError="true"/>
+    </Target>
+
+    <!-- ============================================ -->
     <!-- Target: Copy GodotSharp API to Output        -->
     <!-- ============================================ -->
     <!--
