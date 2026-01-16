@@ -3,7 +3,7 @@
         <PackageType>Template</PackageType>
         <PackageId>2dog.Templates</PackageId>
         <Title>2dog Project Templates</Title>
-        <Authors>OutFox</Authors>
+        <Authors>outfox</Authors>
         <Description>Templates for creating 2dog applications that embed Godot Engine in .NET</Description>
         <PackageTags>dotnet-new;templates;godot;2dog;game-engine</PackageTags>
         <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
@@ -11,18 +11,28 @@
         <RepositoryUrl>https://github.com/outfox/2dog</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageVersion>0.1.0-pre</PackageVersion>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
         <TargetFramework>net8.0</TargetFramework>
         <IncludeContentInPack>true</IncludeContentInPack>
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <ContentTargetFolders>content</ContentTargetFolders>
+        <NoDefaultExcludes>true</NoDefaultExcludes>
         <NoWarn>$(NoWarn);NU5128</NoWarn>
         <IsPackable>true</IsPackable>
         <PackageOutputPath>../packages</PackageOutputPath>
+        
+        <!-- Disable compilation of template content -->
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+        <EnableDefaultItems>false</EnableDefaultItems>
     </PropertyGroup>
 
     <ItemGroup>
         <Content Include="twodog/**/*" Exclude="twodog/**/bin/**;twodog/**/obj/**">
             <PackagePath>content/twodog/</PackagePath>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="/" />
     </ItemGroup>
 </Project>
