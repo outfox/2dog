@@ -46,7 +46,7 @@ features:
 ::: code-group
 
 ```bash [🤖 Existing Godot Project]
-# Template pending NuGet release
+# Package pending NuGet release
 # You can build from source for now: git clone
 dotnet add package 2dog
 ```
