@@ -43,21 +43,11 @@ features:
 ---
 
 
+## Examples
+
 ::: code-group
 
-```bash [🤖 Existing Godot Project]
-# Package pending NuGet release
-# You can build from source for now: git clone
-dotnet add package 2dog
-```
-
-```bash [🌱 Fresh Project]
-# Template pending NuGet release
-# For now: dotnet new install ./templates/twodog
-dotnet new 2dog -n LetsCook
-```
-
-```csharp [🎮 Game Example]
+```csharp [🎮 Basic Example]
 using twodog;
 
 using var engine = new Engine("myapp", "./project");
@@ -106,6 +96,24 @@ using var godot = engine.Start();
 var importer = ResourceImporterTexture.Singleton;
 // Use Godot's full import pipeline
 // Access editor-only APIs like ImportPlugin, EditorInterface, etc.
+```
+
+:::
+
+## Installation
+
+::: code-group
+
+```bash [🤖 Existing Project]
+# Package pending NuGet release
+# You can build from source for now: git clone
+dotnet add package 2dog
+```
+
+```bash [🌱 Fresh Project]
+# Template pending NuGet release
+# For now: dotnet new install ./templates/twodog
+dotnet new 2dog -n LetsCook
 ```
 
 :::
