@@ -68,6 +68,7 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
         <TwoDogBuildType>editor</TwoDogBuildType>
+        <DefineConstants>$(DefineConstants);EDITOR</DefineConstants>
     </PropertyGroup>
 
     <!-- Import twodog targets for GodotSharp API copying (needed for ProjectReference builds) -->
