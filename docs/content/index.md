@@ -45,12 +45,12 @@ features:
 
 ::: code-group
 
-```bash [Existing godot project]
+```bash [🤖 Existing godot project]
 dotnet add package twodog
 dotnet run 
 ```
 
-```bash [Fresh project]
+```bash [🌱 Fresh project]
 # Template pending NuGet release
 # For now: dotnet new install ./templates/twodog
 dotnet new 2dog -n LetsCook
