@@ -36,16 +36,19 @@
         <!-- Local development paths (fallback for ProjectReference builds) -->
         <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
         <TwoDogWinX64ReleaseLocal>$(TwoDogLocalGodotBin)godot.windows.template_release.x86_64.shared_library.dll</TwoDogWinX64ReleaseLocal>
-        <TwoDogWinX64DebugLocal>$(TwoDogLocalGodotBin)godot.windows.template_debug.dev.x86_64.shared_library.dll</TwoDogWinX64DebugLocal>
-        <TwoDogWinX64EditorLocal>$(TwoDogLocalGodotBin)godot.windows.editor.dev.x86_64.shared_library.dll</TwoDogWinX64EditorLocal>
+        <TwoDogWinX64DebugLocal>$(TwoDogLocalGodotBin)godot.windows.template_debug.x86_64.shared_library.dll</TwoDogWinX64DebugLocal>
+        <TwoDogWinX64EditorLocal>$(TwoDogLocalGodotBin)godot.windows.editor.x86_64.shared_library.dll</TwoDogWinX64EditorLocal>
     </PropertyGroup>
 
     <!-- Choose preferred variant based on Configuration -->
     <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
-        <TwoDogWinX64PreferredVariant Condition="'$(TwoDogWinX64PreferredVariant)' == ''">editor</TwoDogWinX64PreferredVariant>
+        <TwoDogWinX64PreferredVariant Condition="'$(TwoDogWinX64PreferredVariant)' == ''">debug</TwoDogWinX64PreferredVariant>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
         <TwoDogWinX64PreferredVariant Condition="'$(TwoDogWinX64PreferredVariant)' == ''">release</TwoDogWinX64PreferredVariant>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
+        <TwoDogWinX64PreferredVariant Condition="'$(TwoDogWinX64PreferredVariant)' == ''">editor</TwoDogWinX64PreferredVariant>
     </PropertyGroup>
     <PropertyGroup>
         <TwoDogWinX64PreferredVariant Condition="'$(TwoDogWinX64PreferredVariant)' == ''">release</TwoDogWinX64PreferredVariant>
