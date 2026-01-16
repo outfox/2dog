@@ -3,6 +3,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <IsTrimmable>true</IsTrimmable>
+        <IsPackable>false</IsPackable>
         <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
