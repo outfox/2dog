@@ -60,11 +60,12 @@
         <!--
           Destination path depends on build type:
           - Editor builds: GodotSharp/Api/Debug/ subdirectory (required by TOOLS_ENABLED native code)
-          - Template builds (release/debug): Flat in output directory (LIBGODOT_HOSTFXR only)
+          - template_debug: GodotSharp/Api/Debug/ subdirectory (same as editor)
+          - template_release: Flat in output directory (LIBGODOT_HOSTFXR only)
         -->
         <TwoDogGodotApiDestSubdir Condition="'$(TwoDogBuildType)' == 'editor'">GodotSharp/Api/Debug/</TwoDogGodotApiDestSubdir>
+        <TwoDogGodotApiDestSubdir Condition="'$(TwoDogBuildType)' == 'template_debug'">GodotSharp/Api/Debug/</TwoDogGodotApiDestSubdir>
         <TwoDogGodotApiDestSubdir Condition="'$(TwoDogBuildType)' == 'template_release'"></TwoDogGodotApiDestSubdir>
-        <TwoDogGodotApiDestSubdir Condition="'$(TwoDogBuildType)' == 'template_debug'"></TwoDogGodotApiDestSubdir>
         <TwoDogGodotApiDestSubdir Condition="'$(TwoDogGodotApiDestSubdir)' == ''"></TwoDogGodotApiDestSubdir>
     </PropertyGroup>
 
@@ -83,19 +84,19 @@
     </ItemGroup>
 
     <!-- ============================================ -->
-    <!-- Remove NuGet GodotSharp Assemblies (Template Builds Only) -->
+    <!-- Remove NuGet GodotSharp Assemblies (Template Release Only) -->
     <!-- ============================================ -->
     <!--
-      For template builds (template_debug/template_release), remove NuGet GodotSharp assemblies
+      For template_release builds, remove NuGet GodotSharp assemblies
       since we provide our own locally-built versions in flat structure.
       
-      For editor builds, we keep both:
+      For editor and template_debug builds, we keep both:
       - Flat NuGet assemblies for .NET to load
-      - Nested local assemblies in GodotSharp/Api/Debug/ for Godot editor runtime
+      - Nested local assemblies in GodotSharp/Api/Debug/ for Godot runtime
     -->
     <Target Name="TwoDogRemoveNuGetGodotAssemblies"
             BeforeTargets="TwoDogCopyGodotApi"
-            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogBuildType)' != 'editor'">
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogBuildType)' == 'template_release'">
         <ItemGroup>
             <_TwoDogNuGetGodotAssembliesToRemove Include="$(OutputPath)GodotSharp.dll"/>
             <_TwoDogNuGetGodotAssembliesToRemove Include="$(OutputPath)GodotSharp.xml"/>

@@ -61,6 +61,7 @@
 
     <!-- Configuration-based build type for GodotSharp API placement -->
     <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
+        <!-- Debug uses template_debug build (without TOOLS_ENABLED) -->
         <TwoDogBuildType>template_debug</TwoDogBuildType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
