@@ -1,6 +1,6 @@
 {
   "solution": {
-    "path": "../2dog.slnx",
+    "path": "../2dog.sln",
     "projects": [    
       "platforms\\twodog.win-x64\\twodog.win-x64.release.csproj",
       "platforms\\twodog.win-x64\\twodog.win-x64.debug.csproj",
