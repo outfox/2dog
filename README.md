@@ -71,16 +71,15 @@ while (!godot.Iteration())
 
 2. **Build Godot** (required on fresh checkout)
 ```bash
-   uv run build.py
+   uv run poe build-godot
 ```
 
-3. **Build NuGet packages** (required on fresh checkout)
+3. **Build .NET packages** (required on fresh checkout)
 ```bash
-   dotnet build platforms
-   dotnet build twodog -c Debug
-   dotnet build twodog -c Release
-   dotnet pack
+   uv run poe build
 ```
+
+> You can also run `uv run poe build-all` to do steps 2 and 3 in one go.
 
 4. **Run the demo**
 ```bash
