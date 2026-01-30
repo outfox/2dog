@@ -6,7 +6,7 @@
 
 > *"Godot, or to dog... is it even a question?"*
 
-This libary lets your C# application code start and pump Godot's MainLoop - not the other way around.
+This library lets your C# application code start and pump Godot's MainLoop - not the other way around.
 
 ---
 
@@ -17,40 +17,39 @@ This libary lets your C# application code start and pump Godot's MainLoop - not 
 Think of it like this: Godot is your loyal companion that follows your lead, learns new tricks, and does exactly what you tell it to. All this while still having all the capabilities of the full engine.
 
 ```cs
-// Program.cs
-using Engine = twodog.Engine;
+using twodog;
 
-using var engine = new Engine("game", "project");
+using var engine = new Engine("myapp", "./project");
 using var godot = engine.Start();
 
+// Load a scene
+var scene = GD.Load<PackedScene>("res://game.tscn");
+engine.Tree.Root.AddChild(scene.Instantiate());
+
+// Run the main loop
 while (!godot.Iteration())
 {
-   // .... and we're off the leash!
-   // you can access the SceneTree via engine.Tree
+    // Your code here – every frame
 }
 ```
 
 ### What does this mean?
 
-- ✨ **Everything Godot can do**, 2dog can do
-- 🎯 **Plus** direct control over engine initialization, lifecycle, and integration
-- 🔧 **Plus** freedom to structure your project however you want
-- 🚀 **Plus** first-class .NET tooling and workflows
+- 🎮 **Full Godot Power** – access the complete GodotSharp API: scenes, physics, rendering, audio, input – everything Godot can do
+- 🔄 **Inverted Control** – your .NET process controls Godot, not the other way around
+- 🧪 **First-Class Testing** – built-in xUnit fixtures for testing Godot code, run headless in CI/CD pipelines
 
 ---
 
 ## Features
 
-### Current
 - Godot as an embedded library (libgodot)
 - Full GodotSharp API access
 - Custom .NET-first project structure
-- File-centric architecture
-
-### Planned
-- **TRS transforms** using the [**fenn**ecs](https://fennecs.net) entity-component system
-- Novel approach to scene and material definitions
-- *and more tricks to teach this dog...*
+- Three build configurations: Debug, Release, and Editor (with `TOOLS_ENABLED`)
+- xUnit test fixtures (`GodotFixture`, `GodotHeadlessFixture`)
+- `dotnet new` project templates
+- Headless mode for servers and CI/CD
 
 > **Note:** Massively WIP! Once Godot 4.6 releases, the local build requirements should be simplified.
 
@@ -60,35 +59,66 @@ while (!godot.Iteration())
 
 ### Prerequisites
 - .NET SDK 8.0 or later
-- Python (with uv)
+- Python (with uv) – for building from source
 
-### Build & Run
+### Using Templates (Recommended)
+
+```bash
+dotnet new install 2dog.Templates   # Install template (pending NuGet release)
+dotnet new 2dog -n MyGame           # Create project
+cd MyGame
+dotnet run                          # Run the app
+```
+
+> **Note:** Templates are pending NuGet release. For now, install locally: `dotnet new install ./templates/twodog`
+
+### Building from Source
 
 1. **Clone and initialize submodules**
 ```bash
-   git submodule update --init --recursive
+git clone --recursive https://github.com/outfox/2dog
+cd twodog
 ```
 
 2. **Build Godot** (required on fresh checkout)
 ```bash
-   uv run poe build-godot
+uv run poe build-godot
 ```
 
 3. **Build .NET packages** (required on fresh checkout)
 ```bash
-   uv run poe build
+uv run poe build
 ```
 
 > You can also run `uv run poe build-all` to do steps 2 and 3 in one go.
 
 4. **Run the demo**
 ```bash
-   dotnet run --project demo
+dotnet run --project demo
 ```
 
-> **Note:** The project uses solution filters to manage build order. `packages/packages.slnf` builds the core `twodog` library and platform packages first. After actual nuget packages exist in `./packages/`, you can build the full solution with `dotnet build`.
+### Build Configurations
 
-> Currently tested on Linux and Windows only. OSX support is WIP™
+```bash
+dotnet build -c Debug    # Development with debug symbols
+dotnet build -c Release  # Optimized production build
+dotnet build -c Editor   # Editor tools with TOOLS_ENABLED
+```
+
+> Currently tested on Linux and Windows only. macOS support is WIP.
+
+---
+
+## Documentation
+
+Full documentation at **[2dog.dev](https://2dog.dev)**
+
+- [Getting Started](https://2dog.dev/getting-started) – installation and first project
+- [Core Concepts](https://2dog.dev/concepts) – architecture and design
+- [Build Configurations](https://2dog.dev/build-configurations) – Debug, Release, and Editor modes
+- [API Reference](https://2dog.dev/api-reference) – Engine, GodotInstance, and more
+- [Testing with xUnit](https://2dog.dev/testing) – test fixtures and CI/CD setup
+- [Project Templates](https://2dog.dev/templates) – scaffolding new projects
 
 ---
 
@@ -102,7 +132,7 @@ Questions? Ideas? Want to teach 2dog new tricks?
 
 ## Acknowledgements
 
-Inspired by and built upon Ben Rog-Wilhelm's [libgodot_example](https://github.com/zorbathut/libgodot_example/tree/csharp).  
+Inspired by and built upon Ben Rog-Wilhelm's [libgodot_example](https://github.com/zorbathut/libgodot_example/tree/csharp).
 *You're the GOAT. Or a [DIESEL HORSE](https://diesel.horse). Same difference!*
 
 ---
