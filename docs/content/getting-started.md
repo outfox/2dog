@@ -21,14 +21,16 @@ cd twodog
 2. Build Godot (requires Python with uv):
 
 ```bash
-uv run build.py
+uv run poe build-godot
 ```
 
-3. Build the project:
+3. Build platform packages, twodog library, and NuGet packages:
 
 ```bash
-dotnet build
+uv run poe build
 ```
+
+> You can also run `uv run poe build-all` to do steps 2 and 3 in one go.
 
 ## Your First 2dog Application
 
