@@ -24,6 +24,7 @@ version = "version:echo"
 help = "Godot build: build libgodot and glue code"
 sequence = [
     { cmd = "uv run build-godot.py" },
+]
 
 [tool.poe.tasks.build]
 help = "dotnet build: Platform packages, twodog library, and NuGet packages"
