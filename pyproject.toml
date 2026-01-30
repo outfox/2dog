@@ -1,13 +1,14 @@
 [project]
 name = "2dog"
 version = "0.1.0"
-description = ""
+description = "2dog is Godot, but backwards! Embed libgodot in C# to run games, apps, tools, CI, unit tests, and more."
 authors = [
     {name = "Moritz Voss",email = "mail@moritzvoss.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "poethepoet>=0.40.0",
     "rich>=14.2.0",
     "scons (>=4.9.1,<5.0.0)",
 ]
@@ -17,5 +18,27 @@ dependencies = [
 package-mode = false
 
 [tool.poe.tasks]
-build = "dotnet build"
 version = "version:echo"
+
+[tool.poe.tasks.build-godot]
+help = "Godot build: build libgodot and glue code"
+sequence = [
+    { cmd = "uv run build-godot.py" },
+
+[tool.poe.tasks.build]
+help = "dotnet build: Platform packages, twodog library, and NuGet packages"
+sequence = [
+    { cmd = "dotnet build platforms" },
+    { cmd = "dotnet build twodog -c Debug" },
+    { cmd = "dotnet build twodog -c Release" },
+    { cmd = "dotnet build twodog -c Editor" },
+    { cmd = "dotnet pack" },
+    { cmd = "dotnet restore" },
+]
+
+[tool.poe.tasks.build-all]
+help = "Complete build: Godot engine, platform packages, twodog library, and NuGet packages"
+sequence = [
+    { ref = "build-godot" },
+    { ref = "build" },
+]
