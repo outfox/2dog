@@ -10,7 +10,7 @@
     <!-- 2dog package reference -->
     <ItemGroup>
         <PackageReference Include="2dog" Version="0.1.0-pre"/>
-        <PackageReference Include="GodotSharp" Version="4.6.0-beta.3"/>
+        <PackageReference Include="GodotSharp" Version="4.6.0"/>
     </ItemGroup>
 
     <!-- Platform-specific native library packages -->
