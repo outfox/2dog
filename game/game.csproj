@@ -8,9 +8,6 @@
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     </PropertyGroup>
-    <ItemGroup>
-        <PackageReference Include="2dog" Version="0.1.0-pre"/>
-    </ItemGroup>
     <Target Name="DeepClean" AfterTargets="Clean">
         <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
         <RemoveDir Directories="$(BaseOutputPath)"/>
