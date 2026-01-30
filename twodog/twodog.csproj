@@ -25,7 +25,7 @@
         <IncludeSymbols>true</IncludeSymbols>
         <IsPackable>true</IsPackable>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <!-- Suppress NU5100: GodotSharp API DLLs are intentionally in contentFiles, not lib -->
+        <!-- Suppress NU5100: GodotPlugins DLLs are intentionally in contentFiles, not lib -->
         <NoWarn>$(NoWarn);NU5100</NoWarn>
     </PropertyGroup>
 
@@ -72,22 +72,19 @@
     </ItemGroup>
 
     <!--
-      Include GodotSharp API assemblies in the package.
-      Package includes both structures:
-      - GodotSharp/Api/Debug/ for editor builds (TOOLS_ENABLED)
-      - Flat structure for template builds (LIBGODOT_HOSTFXR only)
+      Include GodotPlugins assemblies in the package.
+      GodotSharp assemblies come from the official GodotSharp NuGet package.
+      GodotPlugins is the only managed assembly we build from source (embedding patches).
     -->
+    <PropertyGroup>
+        <!-- GODOTSHARP_DIR env var (highest priority) for locating GodotPlugins -->
+        <GodotPluginsSrcDir Condition="'$(GODOTSHARP_DIR)' != '' And Exists('$(GODOTSHARP_DIR)/GodotPlugins.dll')">$(GODOTSHARP_DIR)/</GodotPluginsSrcDir>
+        <GodotPluginsSrcDir Condition="'$(GodotPluginsSrcDir)' == ''">$(GodotBinDir)GodotSharp/Api/Debug/</GodotPluginsSrcDir>
+    </PropertyGroup>
     <ItemGroup>
-        <!-- GodotSharp API assemblies - nested structure for editor builds -->
-        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.dll" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never"/>
-        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.pdb" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.pdb')"/>
-        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.xml" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharp.xml')"/>
-        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.dll" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.dll')"/>
-        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.pdb" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.pdb')"/>
-        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.xml" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotSharpEditor.xml')"/>
-        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.dll" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never"/>
-        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.pdb" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.pdb')"/>
-        <Content Include="$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.runtimeconfig.json" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotBinDir)GodotSharp\Api\Debug\GodotPlugins.runtimeconfig.json')"/>
+        <Content Include="$(GodotPluginsSrcDir)GodotPlugins.dll" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never"/>
+        <Content Include="$(GodotPluginsSrcDir)GodotPlugins.pdb" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotPluginsSrcDir)GodotPlugins.pdb')"/>
+        <Content Include="$(GodotPluginsSrcDir)GodotPlugins.runtimeconfig.json" Pack="true" PackagePath="contentFiles\any\any\GodotSharp\Api\Debug\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotPluginsSrcDir)GodotPlugins.runtimeconfig.json')"/>
     </ItemGroup>
 
     <!--
@@ -150,27 +147,25 @@
     -->
 
     <!--
-      For local development: Copy all GodotSharp API assemblies to output.
+      For local development: Copy GodotPlugins to output.
       - Editor builds: Use nested GodotSharp/Api/Debug/ structure (required by TOOLS_ENABLED)
       - Debug/Release builds: Use flat structure (template builds)
     -->
     <Target Name="CopyGodotApiForLocalDev" AfterTargets="Build" Condition="'$(DesignTimeBuild)' != 'true'">
         <PropertyGroup>
-            <GodotApiSrcPath>$(GodotBinDir)GodotSharp\Api\Debug\</GodotApiSrcPath>
             <!-- Editor builds need nested structure; Debug/Release template builds use flat structure -->
-            <GodotApiDestPath Condition="'$(Configuration)' == 'Editor'">$(OutputPath)GodotSharp\Api\Debug\</GodotApiDestPath>
+            <GodotApiDestPath Condition="'$(Configuration)' == 'Editor'">$(OutputPath)GodotSharp/Api/Debug/</GodotApiDestPath>
             <GodotApiDestPath Condition="'$(Configuration)' != 'Editor'">$(OutputPath)</GodotApiDestPath>
         </PropertyGroup>
 
         <ItemGroup>
-            <GodotApiFiles Include="$(GodotApiSrcPath)*.dll"/>
-            <GodotApiFiles Include="$(GodotApiSrcPath)*.pdb"/>
-            <GodotApiFiles Include="$(GodotApiSrcPath)*.xml"/>
-            <GodotApiFiles Include="$(GodotApiSrcPath)*.runtimeconfig.json"/>
+            <GodotPluginsFiles Include="$(GodotPluginsSrcDir)GodotPlugins.dll"/>
+            <GodotPluginsFiles Include="$(GodotPluginsSrcDir)GodotPlugins.pdb" Condition="Exists('$(GodotPluginsSrcDir)GodotPlugins.pdb')"/>
+            <GodotPluginsFiles Include="$(GodotPluginsSrcDir)GodotPlugins.runtimeconfig.json" Condition="Exists('$(GodotPluginsSrcDir)GodotPlugins.runtimeconfig.json')"/>
         </ItemGroup>
 
         <MakeDir Directories="$(GodotApiDestPath)" Condition="'$(Configuration)' == 'Editor'"/>
-        <Copy SourceFiles="@(GodotApiFiles)"
+        <Copy SourceFiles="@(GodotPluginsFiles)"
               DestinationFolder="$(GodotApiDestPath)"
               SkipUnchangedFiles="true"/>
     </Target>

@@ -6,6 +6,7 @@
 
 # Build Artifacts
 /packages
+/.packages
 dist
 build
 builds
