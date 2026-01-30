@@ -1,21 +1,22 @@
 <Project>
     <!--
       TwoDog MSBuild Targets
-  
-      Handles copying GodotSharp API assemblies to output directory.
-      
+
+      Handles copying GodotPlugins assemblies to output directory.
+      GodotSharp assemblies come from the NuGet GodotSharp package reference.
+
       Native libraries are provided by separate platform-specific packages:
         - 2dog.win-x64 / 2dog.linux-x64 / 2dog.osx-x64: template_release builds
         - 2dog.win-x64.debug / 2dog.linux-x64.debug / 2dog.osx-x64.debug: template_debug builds
         - 2dog.win-x64.editor / 2dog.linux-x64.editor / 2dog.osx-x64.editor: editor builds
-  
+
       When you install the 2dog package from NuGet, the release variant platform
       packages above are referenced automatically. For debug/editor variants you
       can reference the corresponding platform packages explicitly.
-  
+
       Configurable Properties (in consuming project):
         - TwoDogVariant: 'release' (default), 'debug', or 'editor'
-          Controls how GodotSharp API assemblies are laid out (editor vs template).
+          Controls how GodotPlugins assemblies are laid out.
         - TwoDogBuildType: 'template_release', 'template_debug', or 'editor'
           Advanced: override the build type used for API placement.
     -->
@@ -38,23 +39,24 @@
     </PropertyGroup>
 
     <!-- ============================================ -->
-    <!-- GodotSharp API Configuration                 -->
+    <!-- GodotPlugins Configuration                   -->
     <!-- ============================================ -->
     <PropertyGroup>
         <!--
-          GodotSharp API assemblies placement depends on build type:
+          GodotPlugins placement depends on build type:
           - Editor builds (TOOLS_ENABLED): Nested GodotSharp/Api/Debug/ structure
-          - Template release builds (LIBGODOT_HOSTFXR only): Flat structure in output dir
+          - Template builds (LIBGODOT_HOSTFXR): Flat structure in output dir
         -->
 
-        <!-- Path to GodotSharp API within the package (for package consumers) - nested structure -->
+        <!-- 1. GODOTSHARP_DIR env var (highest priority) -->
+        <TwoDogGodotApiSourcePath Condition="'$(GODOTSHARP_DIR)' != '' And Exists('$(GODOTSHARP_DIR)/GodotPlugins.dll')">$(GODOTSHARP_DIR)</TwoDogGodotApiSourcePath>
+
+        <!-- 2. Path within the NuGet package (for package consumers) -->
         <TwoDogGodotApiSourcePath_Package>$(TwoDogPackageRoot)contentFiles/any/any/GodotSharp/Api/Debug/</TwoDogGodotApiSourcePath_Package>
+        <TwoDogGodotApiSourcePath Condition="'$(TwoDogGodotApiSourcePath)' == '' And Exists('$(TwoDogGodotApiSourcePath_Package)GodotPlugins.dll')">$(TwoDogGodotApiSourcePath_Package)</TwoDogGodotApiSourcePath>
 
-        <!-- Path to GodotSharp API for project reference consumers (source checkout) -->
+        <!-- 3. Path for project reference consumers (source checkout) -->
         <TwoDogGodotApiSourcePath_ProjectRef>$(MSBuildThisFileDirectory)../../godot/bin/GodotSharp/Api/Debug/</TwoDogGodotApiSourcePath_ProjectRef>
-
-        <!-- Use package path if it exists (check for GodotPlugins.dll), otherwise use project reference path -->
-        <TwoDogGodotApiSourcePath Condition="Exists('$(TwoDogGodotApiSourcePath_Package)GodotPlugins.dll')">$(TwoDogGodotApiSourcePath_Package)</TwoDogGodotApiSourcePath>
         <TwoDogGodotApiSourcePath Condition="'$(TwoDogGodotApiSourcePath)' == '' And Exists('$(TwoDogGodotApiSourcePath_ProjectRef)')">$(TwoDogGodotApiSourcePath_ProjectRef)</TwoDogGodotApiSourcePath>
 
         <!--
@@ -70,50 +72,8 @@
     </PropertyGroup>
 
     <!-- ============================================ -->
-    <!-- Add Compile-Time Reference to GodotSharpEditor -->
+    <!-- Target: Copy GodotPlugins to Output          -->
     <!-- ============================================ -->
-    <!--
-      For editor builds, add GodotSharpEditor.dll as a compile-time reference
-      so that editor-only types (EditorInterface, ResourceImporterTexture, etc.) are available.
-    -->
-    <ItemGroup Condition="'$(TwoDogBuildType)' == 'editor' And '$(TwoDogGodotApiSourcePath)' != '' And Exists('$(TwoDogGodotApiSourcePath)GodotSharpEditor.dll')">
-        <Reference Include="GodotSharpEditor">
-            <HintPath>$(TwoDogGodotApiSourcePath)GodotSharpEditor.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
-    </ItemGroup>
-
-    <!-- ============================================ -->
-    <!-- Remove NuGet GodotSharp Assemblies (Template Release Only) -->
-    <!-- ============================================ -->
-    <!--
-      For template_release builds, remove NuGet GodotSharp assemblies
-      since we provide our own locally-built versions in flat structure.
-      
-      For editor and template_debug builds, we keep both:
-      - Flat NuGet assemblies for .NET to load
-      - Nested local assemblies in GodotSharp/Api/Debug/ for Godot runtime
-    -->
-    <Target Name="TwoDogRemoveNuGetGodotAssemblies"
-            BeforeTargets="TwoDogCopyGodotApi"
-            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogBuildType)' == 'template_release'">
-        <ItemGroup>
-            <_TwoDogNuGetGodotAssembliesToRemove Include="$(OutputPath)GodotSharp.dll"/>
-            <_TwoDogNuGetGodotAssembliesToRemove Include="$(OutputPath)GodotSharp.xml"/>
-            <_TwoDogNuGetGodotAssembliesToRemove Include="$(OutputPath)GodotSharpEditor.dll"/>
-            <_TwoDogNuGetGodotAssembliesToRemove Include="$(OutputPath)GodotSharpEditor.xml"/>
-        </ItemGroup>
-        <Delete Files="@(_TwoDogNuGetGodotAssembliesToRemove)" ContinueOnError="true"/>
-    </Target>
-
-    <!-- ============================================ -->
-    <!-- Target: Copy GodotSharp API to Output        -->
-    <!-- ============================================ -->
-    <!--
-      Copies all GodotSharp API assemblies to the output directory.
-      - Editor builds: GodotSharp/Api/Debug/ subdirectory (required by TOOLS_ENABLED)
-      - Template release builds: Flat in output directory (LIBGODOT_HOSTFXR only)
-    -->
     <Target Name="TwoDogCopyGodotApi"
             AfterTargets="Build"
             Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogGodotApiSourcePath)' != '' And Exists('$(TwoDogGodotApiSourcePath)')">
@@ -123,13 +83,6 @@
         </PropertyGroup>
 
         <ItemGroup>
-            <!-- Copy all API assemblies: GodotSharp, GodotSharpEditor, GodotPlugins -->
-            <TwoDogGodotApiFiles Include="$(TwoDogGodotApiSourcePath)GodotSharp.dll"/>
-            <TwoDogGodotApiFiles Include="$(TwoDogGodotApiSourcePath)GodotSharp.pdb" Condition="Exists('$(TwoDogGodotApiSourcePath)GodotSharp.pdb')"/>
-            <TwoDogGodotApiFiles Include="$(TwoDogGodotApiSourcePath)GodotSharp.xml" Condition="Exists('$(TwoDogGodotApiSourcePath)GodotSharp.xml')"/>
-            <TwoDogGodotApiFiles Include="$(TwoDogGodotApiSourcePath)GodotSharpEditor.dll" Condition="Exists('$(TwoDogGodotApiSourcePath)GodotSharpEditor.dll')"/>
-            <TwoDogGodotApiFiles Include="$(TwoDogGodotApiSourcePath)GodotSharpEditor.pdb" Condition="Exists('$(TwoDogGodotApiSourcePath)GodotSharpEditor.pdb')"/>
-            <TwoDogGodotApiFiles Include="$(TwoDogGodotApiSourcePath)GodotSharpEditor.xml" Condition="Exists('$(TwoDogGodotApiSourcePath)GodotSharpEditor.xml')"/>
             <TwoDogGodotApiFiles Include="$(TwoDogGodotApiSourcePath)GodotPlugins.dll"/>
             <TwoDogGodotApiFiles Include="$(TwoDogGodotApiSourcePath)GodotPlugins.pdb" Condition="Exists('$(TwoDogGodotApiSourcePath)GodotPlugins.pdb')"/>
             <TwoDogGodotApiFiles Include="$(TwoDogGodotApiSourcePath)GodotPlugins.runtimeconfig.json" Condition="Exists('$(TwoDogGodotApiSourcePath)GodotPlugins.runtimeconfig.json')"/>
@@ -140,11 +93,11 @@
               DestinationFolder="$(TwoDogGodotApiDestPath)"
               SkipUnchangedFiles="true"/>
 
-        <Message Importance="normal" Text="TwoDog: Copied GodotSharp API to $(TwoDogGodotApiDestPath)"/>
+        <Message Importance="normal" Text="TwoDog: Copied GodotPlugins to $(TwoDogGodotApiDestPath)"/>
     </Target>
 
     <!-- ============================================ -->
-    <!-- Target: Publish GodotSharp API               -->
+    <!-- Target: Publish GodotPlugins                 -->
     <!-- ============================================ -->
     <Target Name="TwoDogPublishGodotApi"
             AfterTargets="Publish"
@@ -155,13 +108,6 @@
         </PropertyGroup>
 
         <ItemGroup>
-            <!-- Copy all API assemblies: GodotSharp, GodotSharpEditor, GodotPlugins -->
-            <TwoDogGodotApiFilesForPublish Include="$(TwoDogGodotApiSourcePath)GodotSharp.dll"/>
-            <TwoDogGodotApiFilesForPublish Include="$(TwoDogGodotApiSourcePath)GodotSharp.pdb" Condition="Exists('$(TwoDogGodotApiSourcePath)GodotSharp.pdb')"/>
-            <TwoDogGodotApiFilesForPublish Include="$(TwoDogGodotApiSourcePath)GodotSharp.xml" Condition="Exists('$(TwoDogGodotApiSourcePath)GodotSharp.xml')"/>
-            <TwoDogGodotApiFilesForPublish Include="$(TwoDogGodotApiSourcePath)GodotSharpEditor.dll" Condition="Exists('$(TwoDogGodotApiSourcePath)GodotSharpEditor.dll')"/>
-            <TwoDogGodotApiFilesForPublish Include="$(TwoDogGodotApiSourcePath)GodotSharpEditor.pdb" Condition="Exists('$(TwoDogGodotApiSourcePath)GodotSharpEditor.pdb')"/>
-            <TwoDogGodotApiFilesForPublish Include="$(TwoDogGodotApiSourcePath)GodotSharpEditor.xml" Condition="Exists('$(TwoDogGodotApiSourcePath)GodotSharpEditor.xml')"/>
             <TwoDogGodotApiFilesForPublish Include="$(TwoDogGodotApiSourcePath)GodotPlugins.dll"/>
             <TwoDogGodotApiFilesForPublish Include="$(TwoDogGodotApiSourcePath)GodotPlugins.pdb" Condition="Exists('$(TwoDogGodotApiSourcePath)GodotPlugins.pdb')"/>
             <TwoDogGodotApiFilesForPublish Include="$(TwoDogGodotApiSourcePath)GodotPlugins.runtimeconfig.json" Condition="Exists('$(TwoDogGodotApiSourcePath)GodotPlugins.runtimeconfig.json')"/>
@@ -172,7 +118,7 @@
               DestinationFolder="$(TwoDogGodotApiPublishDestPath)"
               SkipUnchangedFiles="true"/>
 
-        <Message Importance="high" Text="TwoDog: Published GodotSharp API to $(TwoDogGodotApiPublishDestPath)"/>
+        <Message Importance="high" Text="TwoDog: Published GodotPlugins to $(TwoDogGodotApiPublishDestPath)"/>
     </Target>
 
 </Project>
