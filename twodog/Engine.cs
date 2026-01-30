@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
 using Godot;
 
 namespace twodog;
@@ -7,6 +9,11 @@ namespace twodog;
 public class Engine(string project, string? path = null, params string[] args) : IDisposable
 {
     private static IntPtr _godotInstancePtr = IntPtr.Zero;
+
+    // .NET's Environment.SetEnvironmentVariable does not propagate to native getenv()
+    // on Linux/.NET 8+. We must call setenv directly for Godot's native code to see it.
+    [DllImport("libc", SetLastError = true)]
+    private static extern int setenv(string name, string value, int overwrite);
 
     public SceneTree Tree => Godot.Engine.Singleton.GetMainLoop() as SceneTree ??
                              throw new NullReferenceException($"{nameof(Engine)}: Failed to get SceneTree.");
@@ -24,9 +31,26 @@ public class Engine(string project, string? path = null, params string[] args) :
             throw new InvalidOperationException(
                 $"{nameof(Engine)} Godot instance was previously created. This can be done only once per process (this is a Godot limitation).");
 
+        // Ensure GODOTSHARP_DIR points to the directory containing GodotPlugins.dll.
+        // When the host process is not in the output directory (e.g. dotnet test
+        // uses /usr/share/dotnet/dotnet), Godot's exe_dir fallback won't work.
+        // Must use native setenv on Unix because .NET's SetEnvironmentVariable
+        // doesn't propagate to native getenv() on Linux/.NET 8+.
+        {
+            var assemblyDir = Path.GetDirectoryName(typeof(Engine).Assembly.Location);
+            if (assemblyDir != null && File.Exists(Path.Combine(assemblyDir, "GodotPlugins.dll")))
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
+                    RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    setenv("GODOTSHARP_DIR", assemblyDir, 1);
+                else
+                    System.Environment.SetEnvironmentVariable("GODOTSHARP_DIR", assemblyDir);
+            }
+        }
+
         Console.WriteLine("Starting Godot instance...");
 
-        // Prepare arguments for Godot (editor mode!)
+        // Prepare arguments for Godot
         List<string> godotArgs = [project];
         if (!string.IsNullOrEmpty(path))
         {
