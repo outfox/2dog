@@ -15,7 +15,7 @@
 
 ```bash
 git clone --recursive https://github.com/outfox/2dog
-cd twodog
+cd 2dog
 ```
 
 2. Build Godot (requires Python with uv):
@@ -24,7 +24,7 @@ cd twodog
 uv run poe build-godot
 ```
 
-3. Build platform packages, twodog library, and NuGet packages:
+3. Build 2dog platform packages, and the main library and NuGet packages:
 
 ```bash
 uv run poe build
@@ -56,7 +56,7 @@ Alternatively, create a new console application manually:
 ```bash
 dotnet new console -n MyGodotApp
 cd MyGodotApp
-dotnet add package twodog
+dotnet add package 2dog
 ```
 
 Replace `Program.cs`:
