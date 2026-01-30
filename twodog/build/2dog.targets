@@ -22,6 +22,22 @@
     -->
 
     <!-- ============================================ -->
+    <!-- Source Generator Support                     -->
+    <!-- ============================================ -->
+    <!--
+      GodotSharp source generators (ScriptPathAttributeGenerator) need GodotProjectDir
+      to be visible via AnalyzerConfigOptions. The Godot.NET.Sdk provides this via
+      Godot.SourceGenerators.props, but projects using Microsoft.NET.Sdk need it here.
+    -->
+    <PropertyGroup>
+        <GodotProjectDir Condition="'$(GodotProjectDir)' == ''">$(MSBuildProjectDirectory)</GodotProjectDir>
+        <GodotProjectDir>$([MSBuild]::EnsureTrailingSlash('$(GodotProjectDir)'))</GodotProjectDir>
+    </PropertyGroup>
+    <ItemGroup>
+        <CompilerVisibleProperty Include="GodotProjectDir"/>
+    </ItemGroup>
+
+    <!-- ============================================ -->
     <!-- Variant & Build Type Configuration           -->
     <!-- ============================================ -->
     <PropertyGroup>
@@ -52,7 +68,7 @@
         <TwoDogGodotApiSourcePath Condition="'$(GODOTSHARP_DIR)' != '' And Exists('$(GODOTSHARP_DIR)/GodotPlugins.dll')">$(GODOTSHARP_DIR)</TwoDogGodotApiSourcePath>
 
         <!-- 2. Path within the NuGet package (for package consumers) -->
-        <TwoDogGodotApiSourcePath_Package>$(TwoDogPackageRoot)contentFiles/any/any/GodotSharp/Api/Debug/</TwoDogGodotApiSourcePath_Package>
+        <TwoDogGodotApiSourcePath_Package>$(TwoDogPackageRoot)build/api/</TwoDogGodotApiSourcePath_Package>
         <TwoDogGodotApiSourcePath Condition="'$(TwoDogGodotApiSourcePath)' == '' And Exists('$(TwoDogGodotApiSourcePath_Package)GodotPlugins.dll')">$(TwoDogGodotApiSourcePath_Package)</TwoDogGodotApiSourcePath>
 
         <!-- 3. Path for project reference consumers (source checkout) -->

@@ -6,6 +6,9 @@
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
+    <PropertyGroup>
+        <GodotProjectDir>../game</GodotProjectDir>
+    </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="2dog" Version="0.1.0-pre"/>
     </ItemGroup>
