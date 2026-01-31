@@ -51,7 +51,7 @@ while (!godot.Iteration())
 - `dotnet new` project templates
 - Headless mode for servers and CI/CD
 
-> **Note:** Massively WIP! Once Godot 4.6 releases, the local build requirements should be simplified.
+> **Note:** Massively WIP! With the Godot 4.6 release, we're now working in shipping a slightly customized libgodot in bespoke nuget packages. This will eliminate the local build requirement, and you can just use 2dog as a package.
 
 ---
 
