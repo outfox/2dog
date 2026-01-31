@@ -77,7 +77,7 @@ dotnet run                          # Run the app
 1. **Clone and initialize submodules**
 ```bash
 git clone --recursive https://github.com/outfox/2dog
-cd twodog
+cd 2dog
 ```
 
 2. **Build Godot** (required on fresh checkout)
