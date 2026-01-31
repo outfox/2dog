@@ -40,3 +40,18 @@ macOS support is marked WIP. If there's access to a Mac (or a CI runner), even a
 ## 8. Upstream PR tracking
 
 There are 5 Godot PRs documented in `UPSTREAM-CHANGES.md`. A lightweight tracking mechanism (even just updating that file with PR status/merge dates) would help determine when patches can be dropped from the fork.
+
+## 9. Editor subsystem initialization in libgodot
+
+Editor runtime singletons (`EditorInterface`, `EditorFileSystem`, etc.) are not available when running through libgodot, even with the editor build (`TOOLS_ENABLED`). Accessing `EditorInterface.Singleton` throws `NativeMethodBindNotFoundException` — the native method binds are never registered because the editor subsystem startup path (`EditorNode::_init()` or equivalent) is not invoked by `libgodot_create_godot_instance`.
+
+This means the Editor configuration currently provides compile-time type access and `[Tool]` script execution, but not runtime access to editor APIs. The `--import` flag also doesn't work through libgodot for the same reason (the import pipeline is part of the editor subsystem).
+
+### Investigation areas
+- **libgodot entry point**: Does `libgodot_create_godot_instance` intentionally skip editor init, or is it an oversight? Check the startup path in `main/main.cpp` vs the libgodot equivalent.
+- **Initialization level**: Our `InitCallback` sets `minimum_initialization_level` to `GDEXTENSION_INITIALIZATION_CORE`. Would `GDEXTENSION_INITIALIZATION_EDITOR` change anything, or is that unrelated to the editor subsystem startup?
+- **Godot fork patch**: If the skip is intentional, could a targeted patch to the fork's libgodot entry point optionally run editor subsystem init (e.g. behind a flag or arg)?
+- **build-godot.py**: Are we missing a scons flag that would include editor ClassDB registrations in the shared library build?
+
+### Current workaround
+The `twodog.import` tool and `poe import` task invoke the standalone editor binary as a subprocess for operations that require the editor subsystem.
