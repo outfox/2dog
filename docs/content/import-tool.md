@@ -12,7 +12,23 @@ Godot's editor assigns unique identifiers (`.uid` files) to resources including 
 This tool invokes the Godot editor binary as a subprocess rather than using the embedded libgodot engine. The `--import` flag requires Godot's full editor initialization path, which is not available through the libgodot embedding API.
 :::
 
-## Usage
+## Quick Start
+
+If you've built Godot from source (via `uv run poe build-godot`), the editor binary is auto-detected:
+
+```bash
+uv run poe import
+```
+
+This imports the `./game` project by default. To import a different project:
+
+```bash
+uv run import-project.py ./path/to/project
+```
+
+## Usage with dotnet
+
+The `twodog.import` .NET project provides the same functionality for use without Python:
 
 ```bash
 dotnet run --project twodog.import -- [--editor <godot-binary>] <project-path>
@@ -47,14 +63,14 @@ dotnet run --project twodog.import -- ./game
 
 ## CI/CD Integration
 
-Set `GODOT_EDITOR` in your pipeline environment, then call the import tool before building or testing:
+Both `import-project.py` and `twodog.import` respect the `GODOT_EDITOR` environment variable. Set it in your pipeline to point to a pre-installed Godot editor:
 
 ```yaml
 # GitHub Actions example
 - name: Import Godot resources
   env:
     GODOT_EDITOR: /usr/local/bin/godot-mono
-  run: dotnet run --project twodog.import -- ./game
+  run: uv run import-project.py ./game
 
 - name: Run tests
   run: dotnet test
