@@ -50,6 +50,7 @@ export default defineConfig({
           { text: 'Project Templates', link: '/templates' },
           { text: 'Core Concepts', link: '/concepts' },
           { text: 'Build Configurations', link: '/build-configurations' },
+          { text: 'Import Tool', link: '/import-tool' },
           { text: 'Configuration', link: '/configuration' }
         ]
       },
