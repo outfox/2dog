@@ -33,7 +33,8 @@ sequence = [
     { cmd = "dotnet build twodog -c Debug" },
     { cmd = "dotnet build twodog -c Release" },
     { cmd = "dotnet build twodog -c Editor" },
-    { cmd = "dotnet pack" },
+    { cmd = "dotnet build twodog.xunit -c Release" },
+    { cmd = "dotnet pack templates/2dog.Templates.csproj" },
     { cmd = "dotnet restore" },
 ]
 
