@@ -29,7 +29,7 @@ sequence = [
 [tool.poe.tasks.build]
 help = "dotnet build: Platform packages, twodog library, and NuGet packages"
 sequence = [
-    { cmd = "dotnet build platforms" },
+    { cmd = "dotnet pack platforms" },
     { cmd = "dotnet build twodog -c Debug" },
     { cmd = "dotnet build twodog -c Release" },
     { cmd = "dotnet build twodog -c Editor" },
