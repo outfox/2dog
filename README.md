@@ -113,12 +113,12 @@ dotnet build -c Editor   # Editor tools with TOOLS_ENABLED
 
 Full documentation at **[2dog.dev](https://2dog.dev)**
 
-- [Getting Started](https://2dog.dev/getting-started) – installation and first project
-- [Core Concepts](https://2dog.dev/concepts) – architecture and design
-- [Build Configurations](https://2dog.dev/build-configurations) – Debug, Release, and Editor modes
-- [API Reference](https://2dog.dev/api-reference) – Engine, GodotInstance, and more
-- [Testing with xUnit](https://2dog.dev/testing) – test fixtures and CI/CD setup
-- [Project Templates](https://2dog.dev/templates) – scaffolding new projects
+- [Getting Started](https://2dog.dev/getting-started.html) – installation and first project
+- [Core Concepts](https://2dog.dev/concepts.html) – architecture and design
+- [Build Configurations](https://2dog.dev/build-configurations.html) – Debug, Release, and Editor modes
+- [API Reference](https://2dog.dev/api-reference.html) – Engine, GodotInstance, and more
+- [Testing with xUnit](https://2dog.dev/testing.html) – test fixtures and CI/CD setup
+- [Project Templates](https://2dog.dev/templates.html) – scaffolding new projects
 
 ---
 
