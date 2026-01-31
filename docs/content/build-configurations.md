@@ -91,56 +91,31 @@ dotnet test -c Editor
 
 ### Editor API Examples
 
-#### Asset Import Tool
+#### Tool Script
 ```csharp
-using twodog;
 using Godot;
 
+// [Tool] scripts run their _Ready and _Process in the editor.
 // Build with: dotnet build -c Editor
-using var engine = new Engine("importer", "./project");
-using var godot = engine.Start();
-
-// Access the import pipeline
-var texImporter = ResourceImporterTexture.Singleton;
-if (texImporter != null)
-{
-    // Configure import settings
-    // Process textures with Godot's import system
-}
-```
-
-#### Editor Plugin
-```csharp
-using Godot;
-
 [Tool]
-public partial class MyEditorPlugin : EditorPlugin
+public partial class MyToolNode : Node
 {
-    public override void _EnterTree()
+    [Export] public bool ReadyCalled { get; set; }
+
+    public override void _Ready()
     {
-        // Plugin loaded - Editor configuration required
-        var editorInterface = GetEditorInterface();
-        // Add custom tools, panels, or menu items
+        ReadyCalled = true;
     }
 }
 ```
 
-#### Scene Validation Tool
-```csharp
-using twodog;
-using Godot;
+#### Resource Import
 
-// Build with: dotnet build -c Editor
-using var engine = new Engine("validator", "./project");
-using var godot = engine.Start();
+For triggering Godot's import pipeline (generating `.uid` files, processing assets), use the [Import Tool](./import-tool) which invokes the Godot editor binary directly. Editor runtime singletons like `EditorInterface` are not available through the libgodot embedding API.
 
-var scene = GD.Load<PackedScene>("res://levels/level1.tscn");
-var instance = scene.Instantiate();
-
-// Use editor APIs to validate scene structure
-var editorSelection = EditorInterface.Singleton?.GetSelection();
-// Perform validation logic
-```
+::: warning Editor Runtime Limitations
+The Editor configuration provides **compile-time access** to editor types (`EditorInterface`, `EditorPlugin`, etc.) and enables `[Tool]` script execution. However, editor **runtime singletons** and the import pipeline are not initialized in embedded libgodot mode — they require the full standalone editor binary.
+:::
 
 ## Configuration Comparison
 
