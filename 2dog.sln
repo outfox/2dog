@@ -47,6 +47,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2dog.Templates", "templates\2dog.Templates.csproj", "{7E299139-2BBA-457F-9885-EF3AE864D890}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.import", "twodog.import\twodog.import.csproj", "{5275B514-9862-406B-B670-4F6956542713}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -384,6 +386,24 @@ Global
 		{7E299139-2BBA-457F-9885-EF3AE864D890}.Editor|x64.Build.0 = Debug|Any CPU
 		{7E299139-2BBA-457F-9885-EF3AE864D890}.Editor|x86.ActiveCfg = Debug|Any CPU
 		{7E299139-2BBA-457F-9885-EF3AE864D890}.Editor|x86.Build.0 = Debug|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Debug|x64.Build.0 = Debug|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Debug|x86.Build.0 = Debug|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Release|x64.ActiveCfg = Release|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Release|x64.Build.0 = Release|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Release|x86.ActiveCfg = Release|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Release|x86.Build.0 = Release|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Editor|Any CPU.ActiveCfg = Editor|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Editor|Any CPU.Build.0 = Editor|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Editor|x64.ActiveCfg = Editor|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Editor|x64.Build.0 = Editor|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Editor|x86.ActiveCfg = Editor|Any CPU
+		{5275B514-9862-406B-B670-4F6956542713}.Editor|x86.Build.0 = Editor|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
