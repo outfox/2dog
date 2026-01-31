@@ -18,6 +18,7 @@ bin
 .codebuffignore
 knowledge.md
 AGENTS.md
+CLAUDE.md
 .agents/
 .codebuff/
 .devcontainer/
