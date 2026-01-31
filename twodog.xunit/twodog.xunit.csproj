@@ -15,6 +15,7 @@
         <Description>xUnit test fixtures for testing Godot applications with twodog.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
         <IncludeSymbols>true</IncludeSymbols>
         <IsPackable>true</IsPackable>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
