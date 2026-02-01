@@ -119,7 +119,7 @@ Console.WriteLine("Shutting down...");
 
 ### Project File
 
-The generated `.csproj` includes all necessary package references:
+The generated `.csproj` only needs a single `2dog` package reference. GodotSharp, source generators, and platform-specific native libraries are all included transitively:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -130,21 +130,8 @@ The generated `.csproj` includes all necessary package references:
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <!-- 2dog package reference -->
     <ItemGroup>
         <PackageReference Include="2dog" Version="0.1.0-pre"/>
-        <PackageReference Include="GodotSharp" Version="4.6.0-beta.3"/>
-    </ItemGroup>
-
-    <!-- Platform-specific native library packages -->
-    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-        <PackageReference Include="2dog.win-x64" Version="0.1.0-pre"/>
-    </ItemGroup>
-    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-        <PackageReference Include="2dog.linux-x64" Version="0.1.0-pre"/>
-    </ItemGroup>
-    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-        <PackageReference Include="2dog.osx-x64" Version="0.1.0-pre"/>
     </ItemGroup>
 
     <!-- Godot project location -->
@@ -306,12 +293,10 @@ The `2dog.xunit` package must be available on NuGet or a local feed. Until it's 
 **Problem:** Generated project references outdated package versions
 
 **Solution:**
-Update package references in the `.csproj` file:
+Update the package reference in the `.csproj` file:
 
 ```bash
-# Update all 2dog packages
 dotnet add package 2dog
-dotnet add package 2dog.win-x64  # or linux-x64/osx-x64
 ```
 
 Or edit the `.csproj` manually to use the latest version.
