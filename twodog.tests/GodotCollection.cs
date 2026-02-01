@@ -1,3 +1,5 @@
+using twodog.xunit;
+
 namespace twodog.tests;
 
 [CollectionDefinition("Godot", DisableParallelization = true)]

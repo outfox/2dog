@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using Godot;
 
@@ -94,6 +95,38 @@ public class Engine(string project, string? path = null, params string[] args) :
         LibGodot.libgodot_destroy_godot_instance(_godotInstancePtr);
         Console.WriteLine($"{nameof(Engine)}: Godot instance destroyed.");
         _godotInstancePtr = IntPtr.MinValue;
+    }
+
+    /// <summary>
+    /// Resolves the Godot project directory from <c>[AssemblyMetadata("GodotProjectDir", "...")]</c>
+    /// on loaded assemblies. This attribute is emitted automatically at build time when the
+    /// consuming project sets the <c>&lt;GodotProjectDir&gt;</c> MSBuild property and references
+    /// the 2dog NuGet package.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when no loaded assembly has the <c>GodotProjectDir</c> metadata attribute.
+    /// </exception>
+    public static string ResolveProjectDir()
+    {
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            try
+            {
+                foreach (var attr in assembly.GetCustomAttributes<AssemblyMetadataAttribute>())
+                {
+                    if (attr.Key == "GodotProjectDir" && !string.IsNullOrEmpty(attr.Value))
+                        return attr.Value;
+                }
+            }
+            catch
+            {
+                // Some dynamic/reflection-emit assemblies may throw
+            }
+        }
+
+        throw new InvalidOperationException(
+            "GodotProjectDir not found. Set <GodotProjectDir> in your .csproj to the " +
+            "path of the directory containing project.godot (relative to the .csproj).");
     }
 
     private static unsafe IntPtr CreateGodotInstance(string[] args)

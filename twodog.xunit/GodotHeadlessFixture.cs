@@ -4,7 +4,7 @@ using Godot;
 using JetBrains.Annotations;
 using Environment = System.Environment;
 
-namespace twodog.tests;
+namespace twodog.xunit;
 
 [UsedImplicitly]
 public class GodotHeadlessFixture : IDisposable
@@ -19,9 +19,8 @@ public class GodotHeadlessFixture : IDisposable
         Console.WriteLine("Initializing Godot...");
         Console.WriteLine("cwd: " + Environment.CurrentDirectory);
 
-        // Resolve the project path relative to the assembly location
         var assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-        var projectPath = Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "..", "game"));
+        var projectPath = Engine.ResolveProjectDir();
 
         // Set GODOTSHARP_DIR so Godot finds GodotPlugins.dll in the output directory.
         // When running via dotnet test, the host process is /usr/share/dotnet/dotnet,
@@ -31,6 +30,7 @@ public class GodotHeadlessFixture : IDisposable
         if (File.Exists(Path.Combine(assemblyDir, "GodotPlugins.dll")))
             setenv("GODOTSHARP_DIR", assemblyDir, 1);
 
+        Console.WriteLine("Godot project: " + projectPath);
         Engine = new Engine("twodog.tests", projectPath, "--headless");
         GodotInstance = Engine.Start();
         Console.WriteLine("Godot initialized successfully.");
@@ -51,4 +51,5 @@ public class GodotHeadlessFixture : IDisposable
         Engine.Dispose();
         Console.WriteLine("Godot shut down successfully.");
     }
+
 }

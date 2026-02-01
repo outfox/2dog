@@ -1,12 +1,7 @@
-using System.Reflection;
 using Godot;
 using Engine = twodog.Engine;
 
-// Resolve the project path relative to the assembly location
-var assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-var projectPath = Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "..", "game"));
-
-using var engine = new Engine("demo", projectPath);
+using var engine = new Engine("demo", Engine.ResolveProjectDir());
 using var godotInstance = engine.Start();
 GD.Print("Hello from GodotSharp.");
 GD.Print("Scene Root: ", engine.Tree.CurrentScene.Name);
