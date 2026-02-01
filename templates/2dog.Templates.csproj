@@ -11,7 +11,7 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/outfox/2dog</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageVersion>0.1.0-pre</PackageVersion>
+        <PackageVersion>$(TwoDogVersion)</PackageVersion>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <TargetFramework>net8.0</TargetFramework>
         <IncludeContentInPack>true</IncludeContentInPack>

@@ -10,7 +10,7 @@
         <GodotProjectDir>../game</GodotProjectDir>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="2dog" Version="0.1.0-pre"/>
+        <PackageReference Include="2dog" Version="$(TwoDogVersion)"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="../game/game.csproj"/>
