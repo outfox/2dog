@@ -17,16 +17,20 @@
     <PropertyGroup>
         <PackageId>2dog</PackageId>
         <Version>0.1.0-pre</Version>
-        <Authors>2dog contributors</Authors>
+        <Authors>Moritz Voss</Authors>
         <Description>Embed the Godot engine in your .NET applications. Reference the 2dog package and it will pull in the appropriate platform-specific package (2dog.win-x64, 2dog.linux-x64, or 2dog.osx-x64) for native library support.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
         <IncludeSymbols>true</IncludeSymbols>
         <IsPackable>true</IsPackable>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <!-- Suppress NU5100: GodotPlugins DLLs are in build/api, not lib -->
-        <NoWarn>$(NoWarn);NU5100</NoWarn>
+        <!-- Suppress NU5131: Analyzers dir contains source generators, not standard analyzers -->
+        <NoWarn>$(NoWarn);NU5100;NU5131</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -41,9 +45,11 @@
         <IsOSX Condition="'$(IsOSX)' == '' and $([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))">true</IsOSX>
     </PropertyGroup>
 
-    <!-- Package reference for compile-time API -->
+    <!-- GodotSharp from fork build (embedded in 2dog package, no external dependency) -->
     <ItemGroup>
-        <PackageReference Version="4.6.0" Include="GodotSharp"/>
+        <Reference Include="GodotSharp">
+            <HintPath>$(GodotBinDir)GodotSharp/Api/Release/GodotSharp.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
     <!--
@@ -73,18 +79,44 @@
         <PackageReference Include="2dog.osx-x64" Version="$(Version)" PrivateAssets="none"/>
     </ItemGroup>
 
-    <!-- Include MSBuild targets in the package -->
+    <!-- Include MSBuild props/targets in the package -->
     <ItemGroup>
+        <None Include="build\2dog.props" Pack="true" PackagePath="build\"/>
         <None Include="build\2dog.targets" Pack="true" PackagePath="build\"/>
+        <None Include="buildTransitive\2dog.props" Pack="true" PackagePath="buildTransitive\"/>
         <None Include="buildTransitive\2dog.targets" Pack="true" PackagePath="buildTransitive\"/>
         <None Remove="twodog.osx-x64\**"/>
         <None Remove="twodog.win-x64\**"/>
     </ItemGroup>
 
     <!--
+      Embed GodotSharp assemblies and source generators in the package.
+      GodotSharp.dll goes in lib/net8.0/ alongside twodog.dll so consumers
+      get it as a transitive compile reference without needing a separate
+      GodotSharp NuGet dependency.
+      Godot.SourceGenerators.dll goes in analyzers/dotnet/cs/ so it runs
+      as a Roslyn source generator for consuming projects.
+    -->
+    <PropertyGroup>
+        <GodotSharpApiDir>$(GodotBinDir)GodotSharp/Api/Release/</GodotSharpApiDir>
+        <GodotSourceGenDir>$(MSBuildProjectDirectory)/../godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/</GodotSourceGenDir>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Include="$(GodotSharpApiDir)GodotSharp.dll" Pack="true" PackagePath="lib/net8.0/" Visible="false"/>
+        <None Include="$(GodotSharpApiDir)GodotSharp.xml" Pack="true" PackagePath="lib/net8.0/" Visible="false" Condition="Exists('$(GodotSharpApiDir)GodotSharp.xml')"/>
+        <None Include="$(GodotSourceGenDir)Godot.SourceGenerators.dll" Pack="true" PackagePath="analyzers/dotnet/cs/" Visible="false"/>
+    </ItemGroup>
+
+    <!-- Package icon and readme -->
+    <ItemGroup>
+        <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
+        <None Include="README.md" Pack="true" PackagePath="README.md"/>
+    </ItemGroup>
+
+    <!--
       Include GodotPlugins assemblies in the package.
-      GodotSharp assemblies come from the official GodotSharp NuGet package.
-      GodotPlugins is the only managed assembly we build from source (embedding patches).
+      GodotPlugins needs to be copied to the output directory at runtime,
+      so it goes in build/api/ rather than lib/net8.0/.
     -->
     <PropertyGroup>
         <!-- GODOTSHARP_DIR env var (highest priority) for locating GodotPlugins -->

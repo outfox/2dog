@@ -11,9 +11,12 @@
     <PropertyGroup>
         <PackageId>2dog.xunit</PackageId>
         <Version>0.1.0-pre</Version>
-        <Authors>2dog contributors</Authors>
+        <Authors>Moritz Voss</Authors>
         <Description>xUnit test fixtures for testing Godot applications with twodog.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
         <IncludeSymbols>true</IncludeSymbols>
@@ -21,13 +24,30 @@
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <GodotBinDir>$(MSBuildProjectDirectory)/../godot/bin/</GodotBinDir>
+    </PropertyGroup>
+
     <ItemGroup>
         <ProjectReference Include="..\twodog\twodog.csproj"/>
+    </ItemGroup>
+
+    <!-- GodotSharp from fork build (for local development; NuGet consumers get it from the 2dog package) -->
+    <ItemGroup>
+        <Reference Include="GodotSharp">
+            <HintPath>$(GodotBinDir)GodotSharp/Api/Release/GodotSharp.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.4"/>
         <PackageReference Include="xunit" Version="2.9.2"/>
+    </ItemGroup>
+
+    <!-- Package icon and readme -->
+    <ItemGroup>
+        <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
+        <None Include="README.md" Pack="true" PackagePath="README.md"/>
     </ItemGroup>
 
 </Project>

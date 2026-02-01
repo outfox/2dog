@@ -46,6 +46,10 @@ sequence = [
     { ref = "build" },
 ]
 
+[tool.poe.tasks.deploy]
+help = "Push NuGet packages to nuget.org (set NUGET_API_KEY env var)"
+cmd = "uv run deploy.py"
+
 [tool.poe.tasks.import]
 help = "Import Godot resources (generates .uid files for C# scripts)"
 cmd = "uv run import-project.py"
