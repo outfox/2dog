@@ -3,7 +3,8 @@
       TwoDog MSBuild Targets
 
       Handles copying GodotPlugins assemblies to output directory.
-      GodotSharp assemblies come from the NuGet GodotSharp package reference.
+      GodotSharp and Godot.SourceGenerators are bundled in the 2dog package
+      (lib/net8.0/ and analyzers/dotnet/cs/ respectively).
 
       Native libraries are provided by separate platform-specific packages:
         - 2dog.win-x64 / 2dog.linux-x64 / 2dog.osx-x64: template_release builds
@@ -20,22 +21,6 @@
         - TwoDogBuildType: 'template_release', 'template_debug', or 'editor'
           Advanced: override the build type used for API placement.
     -->
-
-    <!-- ============================================ -->
-    <!-- Source Generator Support                     -->
-    <!-- ============================================ -->
-    <!--
-      GodotSharp source generators (ScriptPathAttributeGenerator) need GodotProjectDir
-      to be visible via AnalyzerConfigOptions. The Godot.NET.Sdk provides this via
-      Godot.SourceGenerators.props, but projects using Microsoft.NET.Sdk need it here.
-    -->
-    <PropertyGroup>
-        <GodotProjectDir Condition="'$(GodotProjectDir)' == ''">$(MSBuildProjectDirectory)</GodotProjectDir>
-        <GodotProjectDir>$([MSBuild]::EnsureTrailingSlash('$(GodotProjectDir)'))</GodotProjectDir>
-    </PropertyGroup>
-    <ItemGroup>
-        <CompilerVisibleProperty Include="GodotProjectDir"/>
-    </ItemGroup>
 
     <!-- ============================================ -->
     <!-- Variant & Build Type Configuration           -->
