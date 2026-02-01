@@ -3,7 +3,8 @@
         <PackageType>Template</PackageType>
         <PackageId>2dog.Templates</PackageId>
         <Title>2dog Project Templates</Title>
-        <Authors>outfox</Authors>
+        <Authors>Moritz Voss</Authors>
+        <PackageIcon>icon.png</PackageIcon>
         <Description>Templates for creating 2dog applications that embed Godot Engine in .NET</Description>
         <PackageTags>dotnet-new;templates;godot;2dog;game-engine</PackageTags>
         <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
@@ -33,6 +34,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
         <None Include="README.md" Pack="true" PackagePath="/" />
     </ItemGroup>
 </Project>
