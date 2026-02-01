@@ -23,6 +23,19 @@
     -->
 
     <!-- ============================================ -->
+    <!-- GodotProjectDir Assembly Metadata             -->
+    <!-- ============================================ -->
+    <!-- Embed GodotProjectDir as assembly metadata so twodog can resolve the
+         Godot project directory at runtime (via Engine.ResolveProjectDir()).
+         Consumers just need <GodotProjectDir> in their .csproj. -->
+    <ItemGroup Condition="'$(GodotProjectDir)' != ''">
+        <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+            <_Parameter1>GodotProjectDir</_Parameter1>
+            <_Parameter2>$([System.IO.Path]::GetFullPath('$(GodotProjectDir)', '$(MSBuildProjectDirectory)'))</_Parameter2>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+    <!-- ============================================ -->
     <!-- Variant & Build Type Configuration           -->
     <!-- ============================================ -->
     <PropertyGroup>

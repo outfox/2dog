@@ -2,27 +2,26 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Godot;
 using JetBrains.Annotations;
-using Environment = System.Environment;
 
-namespace twodog.tests;
+namespace twodog.xunit;
 
 [UsedImplicitly]
 public class GodotFixture : IDisposable
 {
-    [DllImport("libc", SetLastError = true)]
+    [DllImport("libc", SetLastError = true, CharSet = CharSet.Unicode)]
     private static extern int setenv(string name, string value, int overwrite);
 
     public GodotFixture()
     {
         Console.WriteLine("Initializing Godot...");
 
-        // Resolve the project path relative to the assembly location
         var assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-        var projectPath = Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", "..", "..", "project"));
+        var projectPath = Engine.ResolveProjectDir();
 
         if (File.Exists(Path.Combine(assemblyDir, "GodotPlugins.dll")))
             setenv("GODOTSHARP_DIR", assemblyDir, 1);
 
+        Console.WriteLine("Godot project: " + projectPath);
         Engine = new Engine("twodog.tests", projectPath);
         GodotInstance = Engine.Start();
         Console.WriteLine("Godot initialized successfully.");

@@ -44,7 +44,7 @@
         <PackageReference Include="xunit" Version="2.9.2"/>
     </ItemGroup>
 
-    <!-- Package icon and readme -->
+    <!-- Package icon, readme, and build targets -->
     <ItemGroup>
         <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
         <None Include="README.md" Pack="true" PackagePath="README.md"/>

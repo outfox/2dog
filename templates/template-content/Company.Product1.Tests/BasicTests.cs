@@ -18,15 +18,15 @@ public class BasicTests(GodotHeadlessFixture godot)
         
         // Assert
         Assert.NotNull(instance);
-        Assert.NotNull(instance.GetParent());
+        Assert.NotNull(instance.Parent);
     }
     
     [Fact]
     public void PhysicsIteration_Succeeds()
     {
         // Arrange & Act
-        godot.Tree.Root.PhysicsInterpolationMode = Node.PhysicsInterpolationModeEnum.Off;
-        godot.GodotInstance.Iteration();
+        godot.Tree.Root.PhysicsInterpolation = false;
+        godot.Instance.Iteration();
 
         // Assert - if we get here without crashing, test passes
         Assert.True(true);
