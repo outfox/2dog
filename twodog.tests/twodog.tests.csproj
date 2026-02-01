@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="2dog" Version="0.1.0-pre"/>
+        <PackageReference Include="2dog" Version="$(TwoDogVersion)"/>
         <PackageReference Include="coverlet.collector" Version="6.0.2"/>
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.4"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>

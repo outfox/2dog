@@ -1,4 +1,6 @@
 <Project>
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
     <!--
       Shared properties for all twodog platform packages.
       Each platform project only needs to define:
@@ -33,7 +35,7 @@
 
     <!-- Common NuGet package metadata -->
     <PropertyGroup>
-        <Version>0.1.0-pre</Version>
+        <Version>$(TwoDogVersion)</Version>
         <Authors>Moritz Voss</Authors>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
