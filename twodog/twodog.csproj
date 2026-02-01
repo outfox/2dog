@@ -16,7 +16,7 @@
     <!-- NuGet Package Metadata -->
     <PropertyGroup>
         <PackageId>2dog</PackageId>
-        <Version>0.1.0-pre</Version>
+        <Version>$(TwoDogVersion)</Version>
         <Authors>Moritz Voss</Authors>
         <Description>Embed the Godot engine in your .NET applications. Reference the 2dog package and it will pull in the appropriate platform-specific package (2dog.win-x64, 2dog.linux-x64, or 2dog.osx-x64) for native library support.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>

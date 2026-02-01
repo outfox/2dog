@@ -10,7 +10,7 @@
     <!-- NuGet Package Metadata -->
     <PropertyGroup>
         <PackageId>2dog.xunit</PackageId>
-        <Version>0.1.0-pre</Version>
+        <Version>$(TwoDogVersion)</Version>
         <Authors>Moritz Voss</Authors>
         <Description>xUnit test fixtures for testing Godot applications with twodog.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
