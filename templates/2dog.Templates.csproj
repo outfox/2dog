@@ -21,7 +21,7 @@
         <NoWarn>$(NoWarn);NU5128</NoWarn>
         <IsPackable>true</IsPackable>
         <PackageOutputPath>../packages</PackageOutputPath>
-        
+
         <!-- Disable compilation of template content -->
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
         <EnableDefaultItems>false</EnableDefaultItems>
@@ -37,4 +37,34 @@
         <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
         <None Include="README.md" Pack="true" PackagePath="/" />
     </ItemGroup>
+
+    <!-- Substitute 2dog package version into template.json at pack time -->
+    <UsingTask TaskName="SubstituteInFile" TaskFactory="RoslynCodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <FilePath ParameterType="System.String" Required="true" />
+            <Find ParameterType="System.String" Required="true" />
+            <ReplaceWith ParameterType="System.String" Required="true" />
+        </ParameterGroup>
+        <Task>
+            <Code Type="Fragment" Language="cs">
+                var text = File.ReadAllText(FilePath);
+                File.WriteAllText(FilePath, text.Replace(Find, ReplaceWith));
+            </Code>
+        </Task>
+    </UsingTask>
+
+    <Target Name="SubstituteTemplateVersion" BeforeTargets="GenerateNuspec">
+        <SubstituteInFile
+            FilePath="twodog/.template.config/template.json"
+            Find="0.0.0-tpl"
+            ReplaceWith="$(TwoDogVersion)" />
+    </Target>
+
+    <Target Name="RestoreTemplateVersion" AfterTargets="Pack">
+        <SubstituteInFile
+            FilePath="twodog/.template.config/template.json"
+            Find="$(TwoDogVersion)"
+            ReplaceWith="0.0.0-tpl" />
+    </Target>
 </Project>

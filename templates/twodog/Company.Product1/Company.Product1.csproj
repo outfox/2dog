@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="2dog" Version="TWODOG_PKG_VERSION"/>
+    </ItemGroup>
+
+    <!-- Godot project location -->
+    <PropertyGroup>
+        <GodotProjectDir>./project</GodotProjectDir>
+    </PropertyGroup>
+</Project>

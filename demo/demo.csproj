@@ -9,6 +9,15 @@
     <PropertyGroup>
         <GodotProjectDir>../game</GodotProjectDir>
     </PropertyGroup>
+
+    <!-- Embed GodotProjectDir as assembly metadata for Engine.ResolveProjectDir().
+         (NuGet consumers get this automatically via 2dog.targets; ProjectReference needs it explicit.) -->
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+            <_Parameter1>GodotProjectDir</_Parameter1>
+            <_Parameter2>$([System.IO.Path]::GetFullPath('$(GodotProjectDir)', '$(MSBuildProjectDirectory)'))</_Parameter2>
+        </AssemblyAttribute>
+    </ItemGroup>
     <ItemGroup>
         <PackageReference Include="2dog" Version="$(TwoDogVersion)"/>
     </ItemGroup>
