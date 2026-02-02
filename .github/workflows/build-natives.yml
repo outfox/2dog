@@ -25,7 +25,7 @@ jobs:
   # GodotSharp assemblies are platform-independent — only need to build once on Linux.
   # This job also produces the Linux editor binary needed for project import in CI.
   build-godotsharp:
-    name: Build GodotSharp
+    name: Build libgodot and GodotSharp
     runs-on: ubuntu-22.04
     outputs:
       submodule-hash: ${{ steps.hash.outputs.hash }}
