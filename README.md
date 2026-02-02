@@ -4,6 +4,10 @@
   <img src="docs/content/public/logo-animated.svg" alt="2dog logotype, a white stylized dog with the negative space around its leg forming the number 2, and a playful font spelling the word dog" width="70%">
 </p>
 
+[![Discord Invite](https://img.shields.io/badge/discord-_%E2%A4%9Coutfox%E2%A4%8F-blue?logo=discord&logoColor=f5f5f5)](https://discord.gg/GAXdbZCNGT)
+[![NuGet](https://img.shields.io/nuget/v/2dog?color=blue)](https://www.nuget.org/packages/2dog/)
+[![Build Status](https://github.com/outfox/2dog/actions/workflows/build-natives.yml/badge.svg)](https://github.com/outfox/2dog/actions/workflows/build-natives.yml)
+
 > *"Godot, or to dog... is it even a question?"*
 
 This library lets your C# application code start and pump Godot's MainLoop - not the other way around.
