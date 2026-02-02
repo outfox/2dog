@@ -71,18 +71,18 @@
     -->
     <!-- CI: include all platform packages regardless of host OS -->
     <ItemGroup Condition="'$(ForcePackAllPlatforms)' == 'true'">
-        <PackageReference Include="2dog.win-x64" Version="$(Version)" PrivateAssets="none"/>
-        <PackageReference Include="2dog.linux-x64" Version="$(Version)" PrivateAssets="none"/>
-        <PackageReference Include="2dog.osx-arm64" Version="$(Version)" PrivateAssets="none"/>
+        <PackageReference Include="2dog.win-x64" Version="$(NativesVersion)" PrivateAssets="none"/>
+        <PackageReference Include="2dog.linux-x64" Version="$(NativesVersion)" PrivateAssets="none"/>
+        <PackageReference Include="2dog.osx-arm64" Version="$(NativesVersion)" PrivateAssets="none"/>
     </ItemGroup>
     <ItemGroup Condition="'$(ForcePackAllPlatforms)' != 'true' And $([MSBuild]::IsOSPlatform('Windows'))">
-        <PackageReference Include="2dog.win-x64" Version="$(Version)" PrivateAssets="none"/>
+        <PackageReference Include="2dog.win-x64" Version="$(NativesVersion)" PrivateAssets="none"/>
     </ItemGroup>
     <ItemGroup Condition="'$(ForcePackAllPlatforms)' != 'true' And $([MSBuild]::IsOSPlatform('Linux'))">
-        <PackageReference Include="2dog.linux-x64" Version="$(Version)" PrivateAssets="none"/>
+        <PackageReference Include="2dog.linux-x64" Version="$(NativesVersion)" PrivateAssets="none"/>
     </ItemGroup>
     <ItemGroup Condition="'$(ForcePackAllPlatforms)' != 'true' And $([MSBuild]::IsOSPlatform('OSX'))">
-        <PackageReference Include="2dog.osx-arm64" Version="$(Version)" PrivateAssets="none"/>
+        <PackageReference Include="2dog.osx-arm64" Version="$(NativesVersion)" PrivateAssets="none"/>
     </ItemGroup>
 
     <!-- Include MSBuild props/targets in the package -->

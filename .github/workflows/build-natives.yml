@@ -3,10 +3,6 @@ name: Build Native Libraries
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version tag (e.g., 0.1.0-pre)'
-        required: true
-        default: '0.1.0-pre'
       create_release:
         description: 'Create GitHub release'
         type: boolean
