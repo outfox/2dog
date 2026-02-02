@@ -40,4 +40,12 @@
     <PropertyGroup>
         <GodotProjectDir>../TPLRAWNAME/project</GodotProjectDir>
     </PropertyGroup>
+
+    <!-- Remove duplicate Godot.SourceGenerators that come from GodotSharp package
+         (2dog package already embeds them) -->
+    <Target Name="RemoveDuplicateGodotAnalyzers" BeforeTargets="CoreCompile">
+        <ItemGroup>
+            <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Identity)').Contains('Godot.SourceGenerators'))" />
+        </ItemGroup>
+    </Target>
 </Project>

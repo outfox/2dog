@@ -4,6 +4,8 @@
 *.old
 *.old.*
 
+temp
+
 # Build Artifacts
 /packages
 /.packages
