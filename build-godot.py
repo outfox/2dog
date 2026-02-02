@@ -9,6 +9,11 @@ import time
 from dataclasses import dataclass
 from enum import Enum
 
+if sys.platform == "win32":
+    os.system("chcp 65001 > NUL")
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
 import rich.markup
 from rich.console import Console
 from rich.live import Live
