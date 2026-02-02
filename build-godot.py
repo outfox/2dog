@@ -155,7 +155,7 @@ def parse_arguments():
         "--debug-symbols",
         type=str,
         choices=["yes", "no"],
-        default="yes",
+        default="no",
         help="Include debug symbols in build",
     )
     parser.add_argument(

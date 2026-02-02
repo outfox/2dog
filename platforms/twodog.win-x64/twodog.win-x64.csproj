@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <!-- Meta package that combines all Windows x64 variants -->
     <!-- Only builds/packs on Windows -->
-    <PropertyGroup Condition="!$([MSBuild]::IsOSPlatform('Windows'))">
+    <PropertyGroup Condition="'$(ForcePackAllPlatforms)' != 'true' And !$([MSBuild]::IsOSPlatform('Windows'))">
         <IsPackable>false</IsPackable>
         <ExcludeFromBuild>true</ExcludeFromBuild>
     </PropertyGroup>
