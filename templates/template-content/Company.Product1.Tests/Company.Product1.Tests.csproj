@@ -38,6 +38,6 @@
 
     <!-- Godot project location -->
     <PropertyGroup>
-        <GodotProjectDir>../TPLRAWNAME/project</GodotProjectDir>
+        <GodotProjectDir>../TPLRAWNAME.Godot</GodotProjectDir>
     </PropertyGroup>
 </Project>

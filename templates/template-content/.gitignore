@@ -14,9 +14,9 @@ obj/
 .idea/
 
 # Godot-specific ignores
-project/.godot/
-project/.import/
-project/export_presets.cfg
+.godot/
+.import/
+export_presets.cfg
 
 # OS-specific
 .DS_Store
