@@ -13,6 +13,6 @@
 
     <!-- Godot project location -->
     <PropertyGroup>
-        <GodotProjectDir>./project</GodotProjectDir>
+        <GodotProjectDir>../Company.Product1.Godot</GodotProjectDir>
     </PropertyGroup>
 </Project>
