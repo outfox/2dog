@@ -1,6 +1,6 @@
-# 2dog.osx-x64
+# 2dog.osx-arm64
 
-Platform binary package for macOS x64.
+Platform binary package for macOS arm64.
 
 This package contains the native Godot library for macOS. Reference this package alongside the main `2dog` package for
 macOS support.

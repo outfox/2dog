@@ -105,15 +105,15 @@ var importer = ResourceImporterTexture.Singleton;
 ::: code-group
 
 ```bash [🤖 Existing Project]
-# Package pending NuGet release
-# You can build from source for now: git clone
-dotnet add package 2dog
+dotnet add package 2dog --version 0.1.9-pre
 ```
 
 ```bash [🌱 Fresh Project]
-# Template pending NuGet release
-# For now: dotnet new install ./templates/twodog
-dotnet new 2dog -n LetsCook
+dotnet new install 2dog.Templates::0.1.9-pre
+dotnet new 2dog --tests True -n LetsCook
+cd LetsCook
+godot-mono --path LetsCook/project --import
+dotnet run --project LetsCook
 ```
 
 :::

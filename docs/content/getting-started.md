@@ -5,32 +5,11 @@
 ## Prerequisites
 
 - .NET SDK 8.0 or later
-- A Godot project directory (with `project.godot`)
+- [Godot Mono](https://godotengine.org/) (for importing project assets)
 
 ## Installation
 
-### Building from Source
-
-1. Clone with submodules:
-
-```bash
-git clone --recursive https://github.com/outfox/2dog
-cd 2dog
-```
-
-2. Build Godot (requires Python with uv):
-
-```bash
-uv run poe build-godot
-```
-
-3. Build 2dog platform packages, and the main library and NuGet packages:
-
-```bash
-uv run poe build
-```
-
-> You can also run `uv run poe build-all` to do steps 2 and 3 in one go.
+Prerelease packages are available on [NuGet](https://www.nuget.org/packages?q=2dog&includeComputedFrameworks=true&prerel=true&sortby=created-desc). Linux and Windows are supported; macOS is WIP.
 
 ## Your First 2dog Application
 
@@ -38,15 +17,29 @@ uv run poe build
 The fastest way to get started is using the 2dog project template:
 
 ```bash
-dotnet new install 2dog.Templates  # Install template (pending NuGet release)
-dotnet new 2dog -n MyGodotApp      # Create project
+# Install the template
+dotnet new install 2dog.Templates::0.1.9-pre
+
+# Create a new project (optionally with xUnit tests)
+dotnet new 2dog --tests True -n MyGodotApp
+
+# Navigate into the project
 cd MyGodotApp
-dotnet run                          # Run the app
+
+# Import assets with Godot
+godot-mono --path MyGodotApp/project --import
+
+# Run tests
+dotnet test
+
+# Run the game
+dotnet run --project MyGodotApp
+
+# Edit in Godot
+godot-mono -e --path MyGodotApp/project
 ```
 
 This creates a complete project with sample Godot content and everything configured. See [Project Templates](./templates) for details.
-
-**Note:** Templates are pending NuGet release. For now, [install locally from source](./templates#local-installation-development).
 :::
 
 ### Manual Setup
@@ -56,7 +49,7 @@ Alternatively, create a new console application manually:
 ```bash
 dotnet new console -n MyGodotApp
 cd MyGodotApp
-dotnet add package 2dog
+dotnet add package 2dog --version 0.1.9-pre
 ```
 
 Replace `Program.cs`:
@@ -99,6 +92,31 @@ config_version=5
 [application]
 config/name="MyGodotApp"
 ```
+
+## Building from Source
+
+If you prefer to build everything locally instead of using the NuGet packages:
+
+1. Clone with submodules:
+
+```bash
+git clone --recursive https://github.com/outfox/2dog
+cd 2dog
+```
+
+2. Build Godot (requires Python with uv):
+
+```bash
+uv run poe build-godot
+```
+
+3. Build 2dog platform packages, and the main library and NuGet packages:
+
+```bash
+uv run poe build
+```
+
+> You can also run `uv run poe build-all` to do steps 2 and 3 in one go.
 
 ## Build Configurations
 

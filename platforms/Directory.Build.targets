@@ -8,7 +8,8 @@
         <!-- Native library source path -->
         <NativeLibPrefix Condition="'$(PlatformOS)' == 'windows'">godot</NativeLibPrefix>
         <NativeLibPrefix Condition="'$(PlatformOS)' != 'windows'">libgodot</NativeLibPrefix>
-        <NativeLibPath>$(GodotBinDir)$(NativeLibPrefix).$(PlatformOS).$(BuildVariant).x86_64.shared_library.$(NativeLibExt)</NativeLibPath>
+        <PlatformArch Condition="'$(PlatformArch)' == ''">x86_64</PlatformArch>
+        <NativeLibPath>$(GodotBinDir)$(NativeLibPrefix).$(PlatformOS).$(BuildVariant).$(PlatformArch).shared_library.$(NativeLibExt)</NativeLibPath>
 
         <!-- Output library name (always libgodot.<ext>) -->
         <OutputLibName Condition="'$(NativeLibExt)' == 'dll'">libgodot.dll</OutputLibName>

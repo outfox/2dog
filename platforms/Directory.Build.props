@@ -4,7 +4,7 @@
     <!--
       Shared properties for all twodog platform packages.
       Each platform project only needs to define:
-      - PlatformRID: Runtime identifier (win-x64, linux-x64, osx-x64)
+      - PlatformRID: Runtime identifier (win-x64, linux-x64, osx-arm64)
       - PlatformOS: OS name in Godot binaries (windows, linuxbsd, macos)
       - BuildVariant: Build type (template_release, template_debug, editor)
       - NativeLibExt: Native library extension (dll, so, dylib)

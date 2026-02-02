@@ -18,7 +18,7 @@
         <PackageId>2dog</PackageId>
         <Version>$(TwoDogVersion)</Version>
         <Authors>Moritz Voss</Authors>
-        <Description>Embed the Godot engine in your .NET applications. Reference the 2dog package and it will pull in the appropriate platform-specific package (2dog.win-x64, 2dog.linux-x64, or 2dog.osx-x64) for native library support.</Description>
+        <Description>Embed the Godot engine in your .NET applications. Reference the 2dog package and it will pull in the appropriate platform-specific package (2dog.win-x64, 2dog.linux-x64, or 2dog.osx-arm64) for native library support.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
         <PackageIcon>icon.png</PackageIcon>
@@ -73,7 +73,7 @@
     <ItemGroup Condition="'$(ForcePackAllPlatforms)' == 'true'">
         <PackageReference Include="2dog.win-x64" Version="$(Version)" PrivateAssets="none"/>
         <PackageReference Include="2dog.linux-x64" Version="$(Version)" PrivateAssets="none"/>
-        <PackageReference Include="2dog.osx-x64" Version="$(Version)" PrivateAssets="none"/>
+        <PackageReference Include="2dog.osx-arm64" Version="$(Version)" PrivateAssets="none"/>
     </ItemGroup>
     <ItemGroup Condition="'$(ForcePackAllPlatforms)' != 'true' And $([MSBuild]::IsOSPlatform('Windows'))">
         <PackageReference Include="2dog.win-x64" Version="$(Version)" PrivateAssets="none"/>
@@ -82,7 +82,7 @@
         <PackageReference Include="2dog.linux-x64" Version="$(Version)" PrivateAssets="none"/>
     </ItemGroup>
     <ItemGroup Condition="'$(ForcePackAllPlatforms)' != 'true' And $([MSBuild]::IsOSPlatform('OSX'))">
-        <PackageReference Include="2dog.osx-x64" Version="$(Version)" PrivateAssets="none"/>
+        <PackageReference Include="2dog.osx-arm64" Version="$(Version)" PrivateAssets="none"/>
     </ItemGroup>
 
     <!-- Include MSBuild props/targets in the package -->
@@ -91,7 +91,7 @@
         <None Include="build\2dog.targets" Pack="true" PackagePath="build\"/>
         <None Include="buildTransitive\2dog.props" Pack="true" PackagePath="buildTransitive\"/>
         <None Include="buildTransitive\2dog.targets" Pack="true" PackagePath="buildTransitive\"/>
-        <None Remove="twodog.osx-x64\**"/>
+        <None Remove="twodog.osx-arm64\**"/>
         <None Remove="twodog.win-x64\**"/>
     </ItemGroup>
 
@@ -138,9 +138,9 @@
     <!--
       Native libraries are NOT embedded in this package.
       They are provided by separate platform-specific packages:
-        - 2dog.win-x64 / 2dog.linux-x64 / 2dog.osx-x64: template_release builds
-        - 2dog.win-x64.debug / 2dog.linux-x64.debug / 2dog.osx-x64.debug: template_debug builds
-        - 2dog.win-x64.editor / 2dog.linux-x64.editor / 2dog.osx-x64.editor: editor builds
+        - 2dog.win-x64 / 2dog.linux-x64 / 2dog.osx-arm64: template_release builds
+        - 2dog.win-x64.debug / 2dog.linux-x64.debug / 2dog.osx-arm64.debug: template_debug builds
+        - 2dog.win-x64.editor / 2dog.linux-x64.editor / 2dog.osx-arm64.editor: editor builds
   
       When you install the 2dog NuGet package, the release variant platform packages
       are added as normal dependencies, so you usually only need to reference 2dog.
@@ -155,21 +155,21 @@
     <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
         <TwoDogLocalNativeLib_Windows>$(GodotBinDir)godot.windows.template_debug.x86_64.shared_library.dll</TwoDogLocalNativeLib_Windows>
         <TwoDogLocalNativeLib_Linux>$(GodotBinDir)libgodot.linuxbsd.template_debug.x86_64.shared_library.so</TwoDogLocalNativeLib_Linux>
-        <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.template_debug.x86_64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
+        <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.template_debug.arm64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
     </PropertyGroup>
 
     <!-- Editor configuration: Use editor build (TOOLS_ENABLED) -->
     <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
         <TwoDogLocalNativeLib_Windows>$(GodotBinDir)godot.windows.editor.x86_64.shared_library.dll</TwoDogLocalNativeLib_Windows>
         <TwoDogLocalNativeLib_Linux>$(GodotBinDir)libgodot.linuxbsd.editor.x86_64.shared_library.so</TwoDogLocalNativeLib_Linux>
-        <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.editor.x86_64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
+        <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.editor.arm64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
     </PropertyGroup>
 
     <!-- Release configuration: Use template_release build (optimized) -->
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
         <TwoDogLocalNativeLib_Windows>$(GodotBinDir)godot.windows.template_release.x86_64.shared_library.dll</TwoDogLocalNativeLib_Windows>
         <TwoDogLocalNativeLib_Linux>$(GodotBinDir)libgodot.linuxbsd.template_release.x86_64.shared_library.so</TwoDogLocalNativeLib_Linux>
-        <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.template_release.x86_64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
+        <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.template_release.arm64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
     </PropertyGroup>
 
     <!-- Determine which native library to use based on current OS -->

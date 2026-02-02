@@ -7,9 +7,9 @@
       (lib/net8.0/ and analyzers/dotnet/cs/ respectively).
 
       Native libraries are provided by separate platform-specific packages:
-        - 2dog.win-x64 / 2dog.linux-x64 / 2dog.osx-x64: template_release builds
-        - 2dog.win-x64.debug / 2dog.linux-x64.debug / 2dog.osx-x64.debug: template_debug builds
-        - 2dog.win-x64.editor / 2dog.linux-x64.editor / 2dog.osx-x64.editor: editor builds
+        - 2dog.win-x64 / 2dog.linux-x64 / 2dog.osx-arm64: template_release builds
+        - 2dog.win-x64.debug / 2dog.linux-x64.debug / 2dog.osx-arm64.debug: template_debug builds
+        - 2dog.win-x64.editor / 2dog.linux-x64.editor / 2dog.osx-arm64.editor: editor builds
 
       When you install the 2dog package from NuGet, the release variant platform
       packages above are referenced automatically. For debug/editor variants you
