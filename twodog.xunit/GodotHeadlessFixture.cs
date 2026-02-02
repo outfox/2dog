@@ -11,6 +11,7 @@ public class GodotHeadlessFixture : IDisposable
 {
     // .NET's Environment.SetEnvironmentVariable does not propagate to native getenv()
     // on Linux/.NET 8+. We must call setenv directly for Godot's native code to see it.
+    // On Windows, Environment.SetEnvironmentVariable works fine.
     [DllImport("libc", SetLastError = true)]
     private static extern int setenv(string name, string value, int overwrite);
 
@@ -25,10 +26,15 @@ public class GodotHeadlessFixture : IDisposable
         // Set GODOTSHARP_DIR so Godot finds GodotPlugins.dll in the output directory.
         // When running via dotnet test, the host process is /usr/share/dotnet/dotnet,
         // so Godot's exe_dir fallback resolves to the wrong directory.
-        // Must use native setenv because .NET's SetEnvironmentVariable doesn't propagate
-        // to native getenv() on Linux/.NET 8+.
+        // On Linux/.NET 8+, must use native setenv() because .NET's SetEnvironmentVariable
+        // doesn't propagate to native getenv(). On Windows, the .NET API works fine.
         if (File.Exists(Path.Combine(assemblyDir, "GodotPlugins.dll")))
-            setenv("GODOTSHARP_DIR", assemblyDir, 1);
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                Environment.SetEnvironmentVariable("GODOTSHARP_DIR", assemblyDir);
+            else
+                setenv("GODOTSHARP_DIR", assemblyDir, 1);
+        }
 
         Console.WriteLine("Godot project: " + projectPath);
         Engine = new Engine("twodog.tests", projectPath, "--headless");
