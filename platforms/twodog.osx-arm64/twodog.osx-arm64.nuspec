@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
-        <id>2dog.osx-x64</id>
+        <id>2dog.osx-arm64</id>
         <version>$version$</version>
         <authors>$authors$</authors>
         <license type="expression">MIT</license>
@@ -11,9 +11,9 @@
         <description>$description$</description>
         <dependencies>
             <group targetFramework=".NETStandard2.0">
-                <dependency id="2dog.osx-x64.release" version="$version$"/>
-                <dependency id="2dog.osx-x64.debug" version="$version$"/>
-                <dependency id="2dog.osx-x64.editor" version="$version$"/>
+                <dependency id="2dog.osx-arm64.release" version="$version$"/>
+                <dependency id="2dog.osx-arm64.debug" version="$version$"/>
+                <dependency id="2dog.osx-arm64.editor" version="$version$"/>
             </group>
         </dependencies>
     </metadata>
@@ -23,7 +23,7 @@
         <file src="..\..\godot\LICENSE.txt" target="LICENSE.txt"/>
         <file src="..\..\godot\AUTHORS.md" target="AUTHORS.md"/>
         <!-- MSBuild targets for native library copying -->
-        <file src="build\2dog.osx-x64.targets" target="build\2dog.osx-x64.targets"/>
-        <file src="buildTransitive\2dog.osx-x64.targets" target="buildTransitive\2dog.osx-x64.targets"/>
+        <file src="build\2dog.osx-arm64.targets" target="build\2dog.osx-arm64.targets"/>
+        <file src="buildTransitive\2dog.osx-arm64.targets" target="buildTransitive\2dog.osx-arm64.targets"/>
     </files>
 </package>

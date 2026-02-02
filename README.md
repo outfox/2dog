@@ -55,7 +55,7 @@ while (!godot.Iteration())
 - `dotnet new` project templates
 - Headless mode for servers and CI/CD
 
-> **Note:** Massively WIP! With the Godot 4.6 release, we're now working in shipping a slightly customized libgodot in bespoke nuget packages. This will eliminate the local build requirement, and you can just use 2dog as a package.
+> **Prerelease packages are now available on NuGet!** Linux and Windows supported. macOS is WIP.
 
 ---
 
@@ -63,20 +63,42 @@ while (!godot.Iteration())
 
 ### Prerequisites
 - .NET SDK 8.0 or later
-- Python (with uv) – for building from source
+- [Godot Mono](https://godotengine.org/) (for importing project assets)
 
 ### Using Templates (Recommended)
 
 ```bash
-dotnet new install 2dog.Templates   # Install template (pending NuGet release)
-dotnet new 2dog -n MyGame           # Create project
+# Install the template
+dotnet new install 2dog.Templates::0.1.9-pre
+
+# Create a new project (optionally with xUnit tests)
+dotnet new 2dog --tests True -n MyGame
+
+# Navigate into the project
 cd MyGame
-dotnet run                          # Run the app
+
+# Import assets with Godot
+godot-mono --path MyGame/project --import
+
+# Run tests
+dotnet test
+
+# Run the game
+dotnet run --project MyGame
+
+# Edit in Godot
+godot-mono -e --path MyGame/project
 ```
 
-> **Note:** Templates are pending NuGet release. For now, install locally: `dotnet new install ./templates/twodog`
+### Adding to an Existing Project
+
+```bash
+dotnet add package 2dog --version 0.1.9-pre
+```
 
 ### Building from Source
+
+If you prefer to build everything locally instead of using NuGet packages:
 
 1. **Clone and initialize submodules**
 ```bash
@@ -84,12 +106,12 @@ git clone --recursive https://github.com/outfox/2dog
 cd 2dog
 ```
 
-2. **Build Godot** (required on fresh checkout)
+2. **Build Godot** (requires Python with uv)
 ```bash
 uv run poe build-godot
 ```
 
-3. **Build .NET packages** (required on fresh checkout)
+3. **Build .NET packages**
 ```bash
 uv run poe build
 ```
@@ -129,8 +151,6 @@ Full documentation at **[2dog.dev](https://2dog.dev)**
 ## Join the Pack
 
 Questions? Ideas? Want to teach 2dog new tricks?
-
-[![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white)](https://discord.gg/GAXdbZCNGT)
 
 ---
 
