@@ -1,0 +1,10 @@
+<Project>
+    <!--
+      TwoDog macOS arm64 Meta Package Transitive Targets
+
+      This file is imported by projects that transitively reference 2dog.osx-arm64.
+      It imports the main targets from the build folder.
+    -->
+    <Import Project="$(MSBuildThisFileDirectory)../build/2dog.osx-arm64.targets"
+            Condition="Exists('$(MSBuildThisFileDirectory)../build/2dog.osx-arm64.targets')"/>
+</Project>

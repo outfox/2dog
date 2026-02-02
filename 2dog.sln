@@ -25,15 +25,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.linux-x64.debug", "p
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.linux-x64.editor", "platforms\twodog.linux-x64\twodog.linux-x64.editor.csproj", "{A0000000-0000-0000-0000-000000000024}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "osx-x64", "osx-x64", "{F0000003-0000-0000-0000-000000000000}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "osx-arm64", "osx-arm64", "{F0000003-0000-0000-0000-000000000000}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.osx-x64", "platforms\twodog.osx-x64\twodog.osx-x64.csproj", "{A0000000-0000-0000-0000-000000000031}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.osx-arm64", "platforms\twodog.osx-arm64\twodog.osx-arm64.csproj", "{A0000000-0000-0000-0000-000000000031}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.osx-x64.release", "platforms\twodog.osx-x64\twodog.osx-x64.release.csproj", "{A0000000-0000-0000-0000-000000000032}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.osx-arm64.release", "platforms\twodog.osx-arm64\twodog.osx-arm64.release.csproj", "{A0000000-0000-0000-0000-000000000032}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.osx-x64.debug", "platforms\twodog.osx-x64\twodog.osx-x64.debug.csproj", "{A0000000-0000-0000-0000-000000000033}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.osx-arm64.debug", "platforms\twodog.osx-arm64\twodog.osx-arm64.debug.csproj", "{A0000000-0000-0000-0000-000000000033}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.osx-x64.editor", "platforms\twodog.osx-x64\twodog.osx-x64.editor.csproj", "{A0000000-0000-0000-0000-000000000034}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.osx-arm64.editor", "platforms\twodog.osx-arm64\twodog.osx-arm64.editor.csproj", "{A0000000-0000-0000-0000-000000000034}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.xunit", "twodog.xunit\twodog.xunit.csproj", "{A0000000-0000-0000-0000-000000000002}"
 EndProject

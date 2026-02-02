@@ -188,26 +188,6 @@ jobs:
             lib_name: godot.windows.editor.x86_64.shared_library.dll
             artifact_name: libgodot-win-x64-editor
 
-          # macOS x64
-          - platform: macos
-            arch: x86_64
-            target: template_release
-            runner: macos-15-intel
-            lib_name: libgodot.macos.template_release.x86_64.shared_library.dylib
-            artifact_name: libgodot-osx-x64-template_release
-          - platform: macos
-            arch: x86_64
-            target: template_debug
-            runner: macos-15-intel
-            lib_name: libgodot.macos.template_debug.x86_64.shared_library.dylib
-            artifact_name: libgodot-osx-x64-template_debug
-          - platform: macos
-            arch: x86_64
-            target: editor
-            runner: macos-15-intel
-            lib_name: libgodot.macos.editor.x86_64.shared_library.dylib
-            artifact_name: libgodot-osx-x64-editor
-
           # macOS arm64
           - platform: macos
             arch: arm64
@@ -227,6 +207,10 @@ jobs:
             runner: macos-14
             lib_name: libgodot.macos.editor.arm64.shared_library.dylib
             artifact_name: libgodot-osx-arm64-editor
+
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: Checkout repository
@@ -275,6 +259,12 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest-stable
+
+      # macOS-specific: Install Vulkan SDK (MoltenVK)
+      - name: Install Vulkan SDK (macOS)
+        if: matrix.platform == 'macos'
+        run: |
+          brew install molten-vk
 
       # Cache SCons build
       - name: Cache SCons
@@ -390,7 +380,6 @@ jobs:
           ### Included platforms
           - Linux x64 (template_release, template_debug, editor)
           - Windows x64 (template_release, template_debug, editor)
-          - macOS x64 (template_release, template_debug, editor)
           - macOS arm64 (template_release, template_debug, editor)
 
           ### Additional assets

@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <!-- Platform-specific configuration -->
     <PropertyGroup>
-        <PlatformRID>osx-x64</PlatformRID>
+        <PlatformRID>osx-arm64</PlatformRID>
         <PlatformOS>macos</PlatformOS>
+        <PlatformArch>arm64</PlatformArch>
         <BuildVariant>editor</BuildVariant>
         <NativeLibExt>dylib</NativeLibExt>
         <PackageSuffix>.editor</PackageSuffix>
-        <Description>macOS x64 editor native libgodot library for twodog. Reference this package alongside twodog for macOS editor support.</Description>
+        <Description>macOS arm64 editor native libgodot library for twodog. Reference this package alongside twodog for macOS editor support.</Description>
     </PropertyGroup>
 </Project>

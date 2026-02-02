@@ -7,7 +7,7 @@
       are properly copied for all consuming projects.
       
       Native libraries are provided by separate platform-specific packages
-      (2dog.win-x64, 2dog.linux-x64, 2dog.osx-x64 and their .debug/.editor variants).
+      (2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64 and their .debug/.editor variants).
       The 2dog NuGet package automatically depends on the release-variant packages;
       for debug/editor variants, reference the corresponding platform package
       explicitly in your application project.

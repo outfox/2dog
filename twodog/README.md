@@ -31,7 +31,7 @@ while (!godot.Iteration())
 - **Godot.SourceGenerators** - Roslyn source generators for Godot node types
 - **GodotPlugins** - Runtime plugin loader
 
-Platform-specific native libraries are provided by transitive dependencies (`2dog.win-x64`, `2dog.linux-x64`, `2dog.osx-x64`).
+Platform-specific native libraries are provided by transitive dependencies (`2dog.win-x64`, `2dog.linux-x64`, `2dog.osx-arm64`).
 
 ## Documentation
 
