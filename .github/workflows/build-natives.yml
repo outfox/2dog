@@ -21,9 +21,6 @@ on:
       - 'godot'
       - 'build-godot.py'
 
-env:
-  SCONS_CACHE_LIMIT: 7168
-
 jobs:
   # GodotSharp assemblies are platform-independent — only need to build once on Linux.
   # This job also produces the Linux editor binary needed for project import in CI.
@@ -106,9 +103,8 @@ jobs:
           python build-godot.py \
             --no-library \
             --debug-symbols no \
-            --dev-build no
-        env:
-          SCONS_CACHE: godot/.scons_cache
+            --dev-build no \
+            --cache-path godot/.scons_cache
 
       - name: Upload GodotSharp assemblies
         if: steps.check-release.outputs.skip != 'true'
@@ -302,9 +298,8 @@ jobs:
             --no-glue \
             --dev-build no \
             --debug-symbols no \
-            --scu-build yes
-        env:
-          SCONS_CACHE: godot/.scons_cache
+            --scu-build yes \
+            --cache-path godot/.scons_cache
 
       # Create artifact zip
       - name: Package native library (Unix)
