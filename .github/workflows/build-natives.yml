@@ -11,62 +11,201 @@ on:
         description: 'Create GitHub release'
         type: boolean
         default: true
+      force:
+        description: 'Force rebuild even if release exists'
+        type: boolean
+        default: false
   push:
-    tags:
-      - 'v*'
-
-env:
-  GODOT_VERSION: '4.4'
-  SCONS_CACHE_LIMIT: 7168
+    branches: [main]
+    paths:
+      - 'godot'
+      - 'build-godot.py'
 
 jobs:
-  build:
-    name: Build ${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.target }}
+  # GodotSharp assemblies are platform-independent — only need to build once on Linux.
+  # This job also produces the Linux editor binary needed for project import in CI.
+  build-godotsharp:
+    name: Build libgodot and GodotSharp
+    runs-on: ubuntu-22.04
+    outputs:
+      submodule-hash: ${{ steps.hash.outputs.hash }}
+      skip: ${{ steps.check-release.outputs.skip }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Compute submodule hash
+        id: hash
+        run: echo "hash=$(git -C godot rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Check if release already exists
+        id: check-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="godot-${{ steps.hash.outputs.hash }}"
+          FORCE="${{ github.event.inputs.force }}"
+          if [ "$FORCE" != "true" ] && gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            echo "Release $TAG already exists — skipping builds"
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup Python
+        if: steps.check-release.outputs.skip != 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        if: steps.check-release.outputs.skip != 'true'
+        run: |
+          python -m pip install --upgrade pip
+          pip install scons rich
+
+      - name: Install Linux dependencies
+        if: steps.check-release.outputs.skip != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            pkg-config \
+            libx11-dev \
+            libxcursor-dev \
+            libxinerama-dev \
+            libgl1-mesa-dev \
+            libglu1-mesa-dev \
+            libasound2-dev \
+            libpulse-dev \
+            libudev-dev \
+            libxi-dev \
+            libxrandr-dev \
+            libwayland-dev
+
+      - name: Cache SCons
+        if: steps.check-release.outputs.skip != 'true'
+        uses: actions/cache@v4
+        with:
+          path: |
+            godot/.scons_cache
+            ~/.cache/scons
+          key: godotsharp-linux-${{ steps.hash.outputs.hash }}
+          restore-keys: |
+            godotsharp-linux-
+
+      - name: Build editor + GodotSharp assemblies
+        if: steps.check-release.outputs.skip != 'true'
+        run: |
+          python build-godot.py \
+            --no-library \
+            --debug-symbols no \
+            --dev-build no \
+            --cache-path godot/.scons_cache
+
+      - name: Upload GodotSharp assemblies
+        if: steps.check-release.outputs.skip != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: godotsharp
+          path: godot/bin/GodotSharp/
+          retention-days: 7
+
+      - name: Upload GodotSharp NuGet packages
+        if: steps.check-release.outputs.skip != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: godotsharp-nupkgs
+          path: godot/bin/GodotSharp/Tools/nupkgs/
+          retention-days: 7
+
+      - name: Upload source generators
+        if: steps.check-release.outputs.skip != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-source-generators
+          path: godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/Godot.SourceGenerators.dll
+          retention-days: 7
+
+      - name: Upload Linux editor binary
+        if: steps.check-release.outputs.skip != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-editor-linux-x64
+          path: godot/bin/godot.linuxbsd.editor.x86_64.executable.mono
+          retention-days: 7
+
+  # Build native libgodot libraries for all platform/variant combinations.
+  build-natives:
+    name: Build ${{ matrix.artifact_name }}
+    needs: build-godotsharp
+    if: needs.build-godotsharp.outputs.skip != 'true'
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          # Windows x64
-          - platform: windows
-            arch: x86_64
-            target: template_release
-            runner: windows-latest
-            lib_name: godot.windows.template_release.dev.x86_64.shared_library.dll
-            artifact_name: libgodot-win-x64-template_release
-          - platform: windows
-            arch: x86_64
-            target: editor
-            runner: windows-latest
-            lib_name: godot.windows.editor.dev.x86_64.shared_library.dll
-            artifact_name: libgodot-win-x64-editor
-
           # Linux x64
           - platform: linuxbsd
             arch: x86_64
             target: template_release
             runner: ubuntu-22.04
-            lib_name: libgodot.linuxbsd.template_release.dev.x86_64.shared_library.so
+            lib_name: libgodot.linuxbsd.template_release.x86_64.shared_library.so
             artifact_name: libgodot-linux-x64-template_release
+          - platform: linuxbsd
+            arch: x86_64
+            target: template_debug
+            runner: ubuntu-22.04
+            lib_name: libgodot.linuxbsd.template_debug.x86_64.shared_library.so
+            artifact_name: libgodot-linux-x64-template_debug
           - platform: linuxbsd
             arch: x86_64
             target: editor
             runner: ubuntu-22.04
-            lib_name: libgodot.linuxbsd.editor.dev.x86_64.shared_library.so
+            lib_name: libgodot.linuxbsd.editor.x86_64.shared_library.so
             artifact_name: libgodot-linux-x64-editor
+
+          # Windows x64
+          - platform: windows
+            arch: x86_64
+            target: template_release
+            runner: windows-latest
+            lib_name: godot.windows.template_release.x86_64.shared_library.dll
+            artifact_name: libgodot-win-x64-template_release
+          - platform: windows
+            arch: x86_64
+            target: template_debug
+            runner: windows-latest
+            lib_name: godot.windows.template_debug.x86_64.shared_library.dll
+            artifact_name: libgodot-win-x64-template_debug
+          - platform: windows
+            arch: x86_64
+            target: editor
+            runner: windows-latest
+            lib_name: godot.windows.editor.x86_64.shared_library.dll
+            artifact_name: libgodot-win-x64-editor
 
           # macOS x64
           - platform: macos
             arch: x86_64
             target: template_release
-            runner: macos-13
-            lib_name: libgodot.macos.template_release.dev.x86_64.shared_library.dylib
+            runner: macos-15-intel
+            lib_name: libgodot.macos.template_release.x86_64.shared_library.dylib
             artifact_name: libgodot-osx-x64-template_release
           - platform: macos
             arch: x86_64
+            target: template_debug
+            runner: macos-15-intel
+            lib_name: libgodot.macos.template_debug.x86_64.shared_library.dylib
+            artifact_name: libgodot-osx-x64-template_debug
+          - platform: macos
+            arch: x86_64
             target: editor
-            runner: macos-13
-            lib_name: libgodot.macos.editor.dev.x86_64.shared_library.dylib
+            runner: macos-15-intel
+            lib_name: libgodot.macos.editor.x86_64.shared_library.dylib
             artifact_name: libgodot-osx-x64-editor
 
           # macOS arm64
@@ -74,13 +213,19 @@ jobs:
             arch: arm64
             target: template_release
             runner: macos-14
-            lib_name: libgodot.macos.template_release.dev.arm64.shared_library.dylib
+            lib_name: libgodot.macos.template_release.arm64.shared_library.dylib
             artifact_name: libgodot-osx-arm64-template_release
+          - platform: macos
+            arch: arm64
+            target: template_debug
+            runner: macos-14
+            lib_name: libgodot.macos.template_debug.arm64.shared_library.dylib
+            artifact_name: libgodot-osx-arm64-template_debug
           - platform: macos
             arch: arm64
             target: editor
             runner: macos-14
-            lib_name: libgodot.macos.editor.dev.arm64.shared_library.dylib
+            lib_name: libgodot.macos.editor.arm64.shared_library.dylib
             artifact_name: libgodot-osx-arm64-editor
 
     steps:
@@ -138,25 +283,23 @@ jobs:
           path: |
             godot/.scons_cache
             ~/.cache/scons
-          key: ${{ matrix.artifact_name }}-${{ env.GODOT_VERSION }}-${{ github.sha }}
+          key: ${{ matrix.artifact_name }}-${{ needs.build-godotsharp.outputs.submodule-hash }}
           restore-keys: |
-            ${{ matrix.artifact_name }}-${{ env.GODOT_VERSION }}-
+            ${{ matrix.artifact_name }}-
 
-      # Build using build.py with platform/arch overrides
+      # Build using build-godot.py with platform/arch overrides
       - name: Build libgodot (${{ matrix.target }})
         run: |
-          python build.py \
+          python build-godot.py \
             --platform ${{ matrix.platform }} \
             --arch ${{ matrix.arch }} \
             --target ${{ matrix.target }} \
             --no-editor \
             --no-glue \
-            --no-restore \
-            --dev-build yes \
-            --debug-symbols yes \
-            --scu-build yes
-        env:
-          SCONS_CACHE: godot/.scons_cache
+            --dev-build no \
+            --debug-symbols no \
+            --scu-build yes \
+            --cache-path godot/.scons_cache
 
       # Create artifact zip
       - name: Package native library (Unix)
@@ -181,60 +324,80 @@ jobs:
         with:
           name: ${{ matrix.artifact_name }}
           path: dist/${{ matrix.artifact_name }}.zip
-          retention-days: 30
+          retention-days: 7
 
-  # Create release with all artifacts
+  # Create a GitHub release tagged godot-{hash} with all native libs + GodotSharp
   release:
     name: Create Release
-    needs: build
+    needs: [build-godotsharp, build-natives]
+    if: needs.build-godotsharp.outputs.skip != 'true' && (github.event_name != 'workflow_dispatch' || github.event.inputs.create_release == 'true')
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.create_release == 'true')
 
     steps:
-      - name: Determine version
-        id: version
-        run: |
-          if [ "${{ github.event_name }}" == "push" ]; then
-            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-            echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          else
-            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-            echo "tag=v${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-          fi
-
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
 
       - name: List artifacts
-        run: find artifacts -type f -name "*.zip"
+        run: find artifacts -type f | head -50
+
+      - name: Prepare GodotSharp archives
+        run: |
+          cd artifacts/godotsharp
+          zip -r ../godotsharp.zip .
+          cd ../godotsharp-nupkgs
+          zip -r ../godotsharp-nupkgs.zip .
+          cd ../godot-source-generators
+          zip -r ../godot-source-generators.zip .
+
+      - name: Prepare editor binary archive
+        run: |
+          cd artifacts/godot-editor-linux-x64
+          chmod +x godot.linuxbsd.editor.x86_64.executable.mono
+          zip -r ../godot-editor-linux-x64.zip .
+
+      - name: Collect all release assets
+        run: |
+          mkdir -p release-assets
+          # Native library zips
+          for dir in artifacts/libgodot-*; do
+            cp "$dir"/*.zip release-assets/
+          done
+          # GodotSharp archives
+          cp artifacts/godotsharp.zip release-assets/
+          cp artifacts/godotsharp-nupkgs.zip release-assets/
+          cp artifacts/godot-source-generators.zip release-assets/
+          cp artifacts/godot-editor-linux-x64.zip release-assets/
+          echo "Release assets:"
+          ls -lh release-assets/
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.version.outputs.tag }}
-          name: twodog ${{ steps.version.outputs.version }}
-          draft: false
-          prerelease: ${{ contains(steps.version.outputs.version, 'pre') || contains(steps.version.outputs.version, 'alpha') || contains(steps.version.outputs.version, 'beta') }}
-          files: |
-            artifacts/**/*.zip
-          body: |
-            ## Native Libraries for twodog ${{ steps.version.outputs.version }}
-
-            These native libgodot libraries are automatically downloaded by the twodog NuGet package.
-
-            ### Included platforms:
-            - Windows x64 (win-x64)
-            - Linux x64 (linux-x64)
-            - macOS x64 (osx-x64)
-            - macOS arm64 (osx-arm64)
-
-            ### Build types:
-            - `template_release` - Optimized for shipping games (default)
-            - `editor` - Full editor build for development
-
-            ### Manual download:
-            Download the appropriate zip for your platform and extract `libgodot.dll` / `libgodot.so` / `libgodot.dylib` to your project output directory.
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="godot-${{ needs.build-godotsharp.outputs.submodule-hash }}"
+          # Delete existing release if present (force rebuild case)
+          gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --yes 2>/dev/null || true
+          gh release create "$TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Godot Native Libraries ($TAG)" \
+            --notes "$(cat <<'EOF'
+          ## Native Libraries for Godot submodule ${{ needs.build-godotsharp.outputs.submodule-hash }}
+
+          Auto-generated native library build. Used by the `ci.yml` workflow to avoid rebuilding Godot from source on every push.
+
+          ### Included platforms
+          - Linux x64 (template_release, template_debug, editor)
+          - Windows x64 (template_release, template_debug, editor)
+          - macOS x64 (template_release, template_debug, editor)
+          - macOS arm64 (template_release, template_debug, editor)
+
+          ### Additional assets
+          - `godotsharp.zip` — GodotSharp assemblies (platform-independent)
+          - `godotsharp-nupkgs.zip` — GodotSharp NuGet packages
+          - `godot-source-generators.zip` — Godot.SourceGenerators.dll
+          - `godot-editor-linux-x64.zip` — Linux editor binary (for project import)
+          EOF
+          )" \
+            release-assets/*
