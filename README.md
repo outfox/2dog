@@ -78,7 +78,7 @@ dotnet new 2dog --tests True -n MyGame
 cd MyGame
 
 # Import assets with Godot
-godot-mono --path MyGame/project --import
+godot-mono --path MyGame.Godot --import
 
 # Run tests
 dotnet test
@@ -87,7 +87,7 @@ dotnet test
 dotnet run --project MyGame
 
 # Edit in Godot
-godot-mono -e --path MyGame/project
+godot-mono -e --path MyGame.Godot
 ```
 
 ### Adding to an Existing Project

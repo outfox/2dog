@@ -27,7 +27,7 @@ dotnet new 2dog --tests True -n MyGodotApp
 cd MyGodotApp
 
 # Import assets with Godot
-godot-mono --path MyGodotApp/project --import
+godot-mono --path MyGodotApp.Godot --import
 
 # Run tests
 dotnet test
@@ -36,7 +36,7 @@ dotnet test
 dotnet run --project MyGodotApp
 
 # Edit in Godot
-godot-mono -e --path MyGodotApp/project
+godot-mono -e --path MyGodotApp.Godot
 ```
 
 This creates a complete project with sample Godot content and everything configured. See [Project Templates](./templates) for details.
