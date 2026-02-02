@@ -29,7 +29,7 @@ jobs:
       - name: Compute godot submodule hash
         id: hash
         run: |
-          HASH=$(git ls-tree HEAD godot | awk '{print $3}' | cut -c1-8)
+          HASH=$(git ls-tree HEAD godot | awk '{print $3}' | cut -c1-7)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           echo "Godot submodule hash: $HASH"
 
