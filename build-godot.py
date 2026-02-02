@@ -155,7 +155,7 @@ def parse_arguments():
         "--debug-symbols",
         type=str,
         choices=["yes", "no"],
-        default="yes",
+        default="no",
         help="Include debug symbols in build",
     )
     parser.add_argument(
@@ -203,9 +203,15 @@ def parse_arguments():
     parser.add_argument(
         "--target",
         type=str,
-        choices=["all", "template_release", "editor"],
+        choices=["all", "template_release", "template_debug", "editor"],
         default="all",
         help="Build specific libgodot target only (for CI)",
+    )
+    parser.add_argument(
+        "--cache-path",
+        type=str,
+        default="",
+        help="SCons cache directory path (passed as cache_path= to scons)",
     )
 
     return parser.parse_args()
@@ -314,23 +320,22 @@ def build_editor(args, platform_config: PlatformConfig):
     """Build Godot executable."""
     console.print("\n[bold yellow]┌── Building Godot Editor ──┐[/bold yellow]")
     task_desc = "Building Godot Editor (with mono)"
-    run_with_live_output(
-        [
-            "scons",
-            f"platform={platform_config.godot_platform}",
-            f"arch={platform_config.godot_arch}",
-            "target=editor",
-            "module_mono_enabled=yes",
-            "extra_suffix=executable",
-            "d3d12=no",
-            f"dev_build={args.dev_build}",
-            f"scu_build={args.scu_build}",
-            "debug_symbols=true",
-            "separate_debug_symbols=true",
-        ],
-        cwd="godot",
-        description=task_desc,
-    )
+    cmd = [
+        "scons",
+        f"platform={platform_config.godot_platform}",
+        f"arch={platform_config.godot_arch}",
+        "target=editor",
+        "module_mono_enabled=yes",
+        "extra_suffix=executable",
+        "d3d12=no",
+        f"dev_build={args.dev_build}",
+        f"scu_build={args.scu_build}",
+        "debug_symbols=true",
+        "separate_debug_symbols=true",
+    ]
+    if args.cache_path:
+        cmd.append(f"cache_path={args.cache_path}")
+    run_with_live_output(cmd, cwd="godot", description=task_desc)
 
 
 def build_libgodot(args, platform_config: PlatformConfig):
@@ -354,26 +359,25 @@ def build_libgodot(args, platform_config: PlatformConfig):
             f"arch={platform_config.godot_arch}, dev_build={use_dev_build})"
         )
 
-        run_with_live_output(
-            [
-                "scons",
-                f"platform={platform_config.godot_platform}",
-                f"arch={platform_config.godot_arch}",
-                f"target={target}",
-                "module_mono_enabled=yes",
-                "d3d12=no",
-                "library_type=shared_library",
-                "extra_suffix=shared_library",
-                f"dev_build={use_dev_build}",
-                f"scu_build={args.scu_build}",
-                f"debug_symbols={args.debug_symbols}",
-                f"separate_debug_symbols={args.debug_symbols}",
-                # Allow --path override at runtime (needed for libgodot to load projects)
-                "disable_path_overrides=no",
-            ],
-            cwd="godot",
-            description=task_desc,
-        )
+        cmd = [
+            "scons",
+            f"platform={platform_config.godot_platform}",
+            f"arch={platform_config.godot_arch}",
+            f"target={target}",
+            "module_mono_enabled=yes",
+            "d3d12=no",
+            "library_type=shared_library",
+            "extra_suffix=shared_library",
+            f"dev_build={use_dev_build}",
+            f"scu_build={args.scu_build}",
+            f"debug_symbols={args.debug_symbols}",
+            f"separate_debug_symbols={args.debug_symbols}",
+            # Allow --path override at runtime (needed for libgodot to load projects)
+            "disable_path_overrides=no",
+        ]
+        if args.cache_path:
+            cmd.append(f"cache_path={args.cache_path}")
+        run_with_live_output(cmd, cwd="godot", description=task_desc)
 
 
 def generate_glue(platform_config: PlatformConfig):
@@ -419,6 +423,9 @@ def generate_glue(platform_config: PlatformConfig):
 
 def main():
     args = parse_arguments()
+    # Resolve cache path to absolute so it works regardless of scons cwd
+    if args.cache_path:
+        args.cache_path = os.path.abspath(args.cache_path)
     platform_config = get_platform_config(
         platform_override=args.platform,
         arch_override=args.arch,

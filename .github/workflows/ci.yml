@@ -1,0 +1,288 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+  workflow_dispatch:
+
+jobs:
+  # Download pre-built native libraries from the GitHub release matching the godot submodule hash.
+  download-natives:
+    name: Download Natives
+    runs-on: ubuntu-latest
+    outputs:
+      submodule-hash: ${{ steps.hash.outputs.hash }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compute godot submodule hash
+        id: hash
+        run: |
+          HASH=$(git ls-tree HEAD godot | awk '{print $3}' | cut -c1-7)
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
+          echo "Godot submodule hash: $HASH"
+
+      - name: Download native libraries from release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="godot-${{ steps.hash.outputs.hash }}"
+          echo "Looking for release: $TAG"
+          if ! gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            echo "::error::No native build for godot submodule ${{ steps.hash.outputs.hash }}. Run the 'Build Native Libraries' workflow first."
+            exit 1
+          fi
+          mkdir -p release-assets
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir release-assets
+          echo "Downloaded assets:"
+          ls -lh release-assets/
+
+      - name: Stage godot/bin directory
+        run: |
+          mkdir -p godot/bin/GodotSharp/Tools/nupkgs
+          mkdir -p godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0
+
+          # Unpack GodotSharp assemblies
+          unzip -o release-assets/godotsharp.zip -d godot/bin/GodotSharp/
+
+          # Unpack GodotSharp NuGet packages
+          unzip -o release-assets/godotsharp-nupkgs.zip -d godot/bin/GodotSharp/Tools/nupkgs/
+
+          # Unpack source generators
+          unzip -o release-assets/godot-source-generators.zip -d godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
+
+          # Unpack Linux editor binary
+          unzip -o release-assets/godot-editor-linux-x64.zip -d godot/bin/
+          chmod +x godot/bin/godot.linuxbsd.editor.x86_64.executable.mono || true
+
+          # Unpack native libraries with their original Godot naming convention
+          # Linux x64
+          unzip -o release-assets/libgodot-linux-x64-template_release.zip -d /tmp/native
+          mv /tmp/native/libgodot.so godot/bin/libgodot.linuxbsd.template_release.x86_64.shared_library.so
+          rm -rf /tmp/native
+
+          unzip -o release-assets/libgodot-linux-x64-template_debug.zip -d /tmp/native
+          mv /tmp/native/libgodot.so godot/bin/libgodot.linuxbsd.template_debug.x86_64.shared_library.so
+          rm -rf /tmp/native
+
+          unzip -o release-assets/libgodot-linux-x64-editor.zip -d /tmp/native
+          mv /tmp/native/libgodot.so godot/bin/libgodot.linuxbsd.editor.x86_64.shared_library.so
+          rm -rf /tmp/native
+
+          # Windows x64
+          unzip -o release-assets/libgodot-win-x64-template_release.zip -d /tmp/native
+          mv /tmp/native/libgodot.dll godot/bin/godot.windows.template_release.x86_64.shared_library.dll
+          rm -rf /tmp/native
+
+          unzip -o release-assets/libgodot-win-x64-template_debug.zip -d /tmp/native
+          mv /tmp/native/libgodot.dll godot/bin/godot.windows.template_debug.x86_64.shared_library.dll
+          rm -rf /tmp/native
+
+          unzip -o release-assets/libgodot-win-x64-editor.zip -d /tmp/native
+          mv /tmp/native/libgodot.dll godot/bin/godot.windows.editor.x86_64.shared_library.dll
+          rm -rf /tmp/native
+
+          # macOS x64
+          unzip -o release-assets/libgodot-osx-x64-template_release.zip -d /tmp/native
+          mv /tmp/native/libgodot.dylib godot/bin/libgodot.macos.template_release.x86_64.shared_library.dylib
+          rm -rf /tmp/native
+
+          unzip -o release-assets/libgodot-osx-x64-template_debug.zip -d /tmp/native
+          mv /tmp/native/libgodot.dylib godot/bin/libgodot.macos.template_debug.x86_64.shared_library.dylib
+          rm -rf /tmp/native
+
+          unzip -o release-assets/libgodot-osx-x64-editor.zip -d /tmp/native
+          mv /tmp/native/libgodot.dylib godot/bin/libgodot.macos.editor.x86_64.shared_library.dylib
+          rm -rf /tmp/native
+
+          # macOS arm64
+          unzip -o release-assets/libgodot-osx-arm64-template_release.zip -d /tmp/native
+          mv /tmp/native/libgodot.dylib godot/bin/libgodot.macos.template_release.arm64.shared_library.dylib
+          rm -rf /tmp/native
+
+          unzip -o release-assets/libgodot-osx-arm64-template_debug.zip -d /tmp/native
+          mv /tmp/native/libgodot.dylib godot/bin/libgodot.macos.template_debug.arm64.shared_library.dylib
+          rm -rf /tmp/native
+
+          unzip -o release-assets/libgodot-osx-arm64-editor.zip -d /tmp/native
+          mv /tmp/native/libgodot.dylib godot/bin/libgodot.macos.editor.arm64.shared_library.dylib
+          rm -rf /tmp/native
+
+          echo "Staged godot/bin contents:"
+          find godot/bin -type f | sort
+          echo ""
+          echo "Source generators:"
+          find godot/modules -type f | sort
+
+      - name: Upload godot-bin artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-bin
+          path: |
+            godot/bin/
+            godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
+          retention-days: 3
+
+  # Build all NuGet packages from a single Linux runner using ForcePackAllPlatforms.
+  pack:
+    name: Pack NuGet Packages
+    needs: download-natives
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Download godot-bin artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: godot-bin
+          path: .
+
+      - name: Verify staged files
+        run: |
+          echo "godot/bin contents:"
+          find godot/bin -type f | sort
+          echo ""
+          echo "Source generators:"
+          find godot/modules -type f 2>/dev/null | sort || true
+
+      - name: Pack platform NuGet packages
+        run: dotnet pack platforms/ -p:ForcePackAllPlatforms=true
+
+      - name: Build twodog library (all configs)
+        run: |
+          dotnet build twodog -c Debug
+          dotnet build twodog -c Release
+          dotnet build twodog -c Editor
+
+      - name: Build twodog.xunit
+        run: dotnet build twodog.xunit -c Release
+
+      - name: Pack templates
+        run: dotnet pack templates/2dog.Templates.csproj
+
+      - name: Pack twodog (main package)
+        run: dotnet pack twodog -p:ForcePackAllPlatforms=true
+
+      - name: List packages
+        run: ls -lh packages/
+
+      - name: Upload NuGet packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages
+          path: packages/
+          retention-days: 7
+
+  # Run tests on each platform.
+  test:
+    name: Test (${{ matrix.name }})
+    needs: [download-natives, pack]
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x64
+            runner: ubuntu-latest
+            run_import: true
+          - name: win-x64
+            runner: windows-latest
+            run_import: false
+          - name: osx-x64
+            runner: macos-15-intel
+            run_import: false
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Setup Python
+        if: matrix.run_import
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Download godot-bin artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: godot-bin
+          path: .
+
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-packages
+          path: packages
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Import Godot project (Linux only)
+        if: matrix.run_import
+        run: |
+          chmod +x godot/bin/godot.linuxbsd.editor.x86_64.executable.mono
+          python import-project.py ./game
+
+      - name: Test (Debug)
+        run: dotnet test -c Debug --no-restore
+
+      - name: Test (Release)
+        run: dotnet test -c Release --no-restore
+
+      - name: Test (Editor)
+        run: dotnet test -c Editor --no-restore
+
+  # Deploy to NuGet on version tag push.
+  deploy:
+    name: Deploy to NuGet
+    needs: [test]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-packages
+          path: packages
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Push to NuGet
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          for pkg in packages/*.nupkg; do
+            [[ "$pkg" == *.snupkg ]] && continue
+            echo "Pushing $pkg..."
+            dotnet nuget push "$pkg" \
+              --source https://api.nuget.org/v3/index.json \
+              --api-key "$NUGET_API_KEY" \
+              --skip-duplicate
+          done
