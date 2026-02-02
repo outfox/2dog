@@ -196,19 +196,19 @@ jobs:
           - platform: macos
             arch: x86_64
             target: template_release
-            runner: macos-13
+            runner: macos-15-intel
             lib_name: libgodot.macos.template_release.x86_64.shared_library.dylib
             artifact_name: libgodot-osx-x64-template_release
           - platform: macos
             arch: x86_64
             target: template_debug
-            runner: macos-13
+            runner: macos-15-intel
             lib_name: libgodot.macos.template_debug.x86_64.shared_library.dylib
             artifact_name: libgodot-osx-x64-template_debug
           - platform: macos
             arch: x86_64
             target: editor
-            runner: macos-13
+            runner: macos-15-intel
             lib_name: libgodot.macos.editor.x86_64.shared_library.dylib
             artifact_name: libgodot-osx-x64-editor
 
@@ -335,7 +335,7 @@ jobs:
   release:
     name: Create Release
     needs: [build-godotsharp, build-natives]
-    if: needs.build-godotsharp.outputs.skip != 'true'
+    if: needs.build-godotsharp.outputs.skip != 'true' && (github.event_name != 'workflow_dispatch' || github.event.inputs.create_release == 'true')
     runs-on: ubuntu-latest
 
     steps:
