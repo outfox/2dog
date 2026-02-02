@@ -35,7 +35,7 @@
 
     <!-- Common NuGet package metadata -->
     <PropertyGroup>
-        <Version>$(TwoDogVersion)</Version>
+        <Version>$(NativesVersion)</Version>
         <Authors>Moritz Voss</Authors>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
