@@ -423,6 +423,9 @@ def generate_glue(platform_config: PlatformConfig):
 
 def main():
     args = parse_arguments()
+    # Resolve cache path to absolute so it works regardless of scons cwd
+    if args.cache_path:
+        args.cache_path = os.path.abspath(args.cache_path)
     platform_config = get_platform_config(
         platform_override=args.platform,
         arch_override=args.arch,
