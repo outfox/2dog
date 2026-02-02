@@ -207,7 +207,7 @@ jobs:
             runner: windows-latest
             run_import: false
           - name: osx-x64
-            runner: macos-13
+            runner: macos-15-intel
             run_import: false
 
     steps:
