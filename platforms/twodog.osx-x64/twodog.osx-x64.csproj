@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <!-- Meta package that combines all macOS x64 variants -->
     <!-- Only builds/packs on macOS -->
-    <PropertyGroup Condition="!$([MSBuild]::IsOSPlatform('OSX'))">
+    <PropertyGroup Condition="'$(ForcePackAllPlatforms)' != 'true' And !$([MSBuild]::IsOSPlatform('OSX'))">
         <IsPackable>false</IsPackable>
         <ExcludeFromBuild>true</ExcludeFromBuild>
     </PropertyGroup>
