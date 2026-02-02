@@ -1,4 +1,4 @@
-<Project Sdk="Godot.NET.Sdk/4.6.0">
+<Project Sdk="Godot.NET.Sdk/4.6.0-rc">
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <EnableDynamicLoading>true</EnableDynamicLoading>
@@ -9,7 +9,7 @@
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     </PropertyGroup>
     <Target Name="DeepClean" AfterTargets="Clean">
-        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
-        <RemoveDir Directories="$(BaseOutputPath)"/>
+        <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
+        <RemoveDir Directories="$(BaseOutputPath)" />
     </Target>
 </Project>

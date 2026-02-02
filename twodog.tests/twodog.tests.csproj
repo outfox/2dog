@@ -6,9 +6,6 @@
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <GodotProjectDir>../game</GodotProjectDir>
-        <!-- game's Godot.NET.Sdk transitively adds Godot.SourceGenerators a second time
-             (the 2dog package already embeds it). Disable the duplicate generator. -->
-        <GodotDisabledSourceGenerators>GodotPluginsInitializer</GodotDisabledSourceGenerators>
     </PropertyGroup>
 
     <ItemGroup>
@@ -47,6 +44,14 @@
     <ItemGroup Condition="'$(Configuration)' == 'Editor'">
         <PackageReference Include="GodotSharpEditor" Version="4.6.0"/>
     </ItemGroup>
+
+    <!-- Remove duplicate Godot.SourceGenerators that come from game's Godot.NET.Sdk
+         (2dog package already embeds them) -->
+    <Target Name="RemoveDuplicateGodotAnalyzers" BeforeTargets="CoreCompile">
+        <ItemGroup>
+            <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Identity)').Contains('Godot.SourceGenerators'))" />
+        </ItemGroup>
+    </Target>
 
     <Target Name="DeepClean" AfterTargets="Clean">
         <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
