@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <!-- Meta package that combines all Linux x64 variants -->
     <!-- Only builds/packs on Linux -->
-    <PropertyGroup Condition="!$([MSBuild]::IsOSPlatform('Linux'))">
+    <PropertyGroup Condition="'$(ForcePackAllPlatforms)' != 'true' And !$([MSBuild]::IsOSPlatform('Linux'))">
         <IsPackable>false</IsPackable>
         <ExcludeFromBuild>true</ExcludeFromBuild>
     </PropertyGroup>
