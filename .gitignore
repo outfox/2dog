@@ -8,8 +8,8 @@
 /packages
 /.packages
 dist
-build
-builds
+/build
+/builds
 
 obj
 bin
@@ -19,6 +19,7 @@ bin
 knowledge.md
 AGENTS.md
 CLAUDE.md
+.claude/
 .agents/
 .codebuff/
 .devcontainer/
