@@ -22,7 +22,7 @@ jobs:
   # This job also produces the Linux editor binary needed for project import in CI.
   build-godotsharp:
     name: Build libgodot and GodotSharp
-    runs-on: ubuntu-22.04
+    runs-on: blacksmith-16vcpu-ubuntu-2204
     outputs:
       submodule-hash: ${{ steps.hash.outputs.hash }}
       skip: ${{ steps.check-release.outputs.skip }}
@@ -317,7 +317,7 @@ jobs:
     name: Create Release
     needs: [build-godotsharp, build-natives]
     if: needs.build-godotsharp.outputs.skip != 'true' && (github.event_name != 'workflow_dispatch' || github.event.inputs.create_release == 'true')
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
 
     steps:
       - name: Download all artifacts
