@@ -158,7 +158,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: godot-bin
-          path: .
+          # upload-artifact strips the LCA (godot/) from multi-path uploads,
+          # so we download into godot/ to restore the original directory structure.
+          path: godot
 
       - name: Verify staged files
         run: |
@@ -167,6 +169,9 @@ jobs:
           echo ""
           echo "Source generators:"
           find godot/modules -type f 2>/dev/null | sort || true
+
+      - name: Ensure local NuGet source directories exist
+        run: mkdir -p packages
 
       - name: Pack platform NuGet packages
         run: dotnet pack platforms/ -p:ForcePackAllPlatforms=true
@@ -234,7 +239,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: godot-bin
-          path: .
+          path: godot
 
       - name: Download NuGet packages
         uses: actions/download-artifact@v4
