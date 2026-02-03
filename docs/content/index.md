@@ -109,7 +109,7 @@ dotnet add package 2dog --version 0.1.9-pre
 ```
 
 ```bash [🌱 Fresh Project]
-dotnet new install 2dog.Templates::0.1.9-pre
+dotnet new install 2dog
 dotnet new 2dog --tests True -n LetsCook
 cd LetsCook
 godot-mono --path LetsCook/project --import

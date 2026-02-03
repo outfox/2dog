@@ -69,8 +69,8 @@ while (!godot.Iteration())
 ### Using Templates (Recommended)
 
 ```bash
-# Install the template
-dotnet new install 2dog.Templates::0.1.9-pre
+# Install the template (bundled in the main 2dog package)
+dotnet new install 2dog
 
 # Create a new project (optionally with xUnit tests)
 dotnet new 2dog --tests True -n MyGame
