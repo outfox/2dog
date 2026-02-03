@@ -104,16 +104,24 @@ var importer = ResourceImporterTexture.Singleton;
 
 ::: code-group
 
-```bash [🤖 Existing Project]
-dotnet add package 2dog --version 0.1.9-pre
+```bash [🌱 Fresh Project]
+# Install template
+dotnet new install 2dog
+
+# Create your Project
+dotnet new 2dog -n LetsCook
+
+cd LetsCook
+
+# Open and edit the project in Godot Editor or just run --import once
+godot-mono --path LetsCook.Godot --import
+
+dotnet run --project LetsCook
 ```
 
-```bash [🌱 Fresh Project]
-dotnet new install 2dog
-dotnet new 2dog --tests True -n LetsCook
-cd LetsCook
-godot-mono --path LetsCook/project --import
-dotnet run --project LetsCook
+```bash [🤖 Existing Project]
+dotnet add package 2dog
+dotnet add package 2dog.xunit
 ```
 
 :::
