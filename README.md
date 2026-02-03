@@ -78,7 +78,7 @@ dotnet new 2dog --tests True -n MyGame
 # Navigate into the project
 cd MyGame
 
-# Import assets with Godot
+# Import assets or just open with Godot Editor of your choide
 godot-mono --path MyGame.Godot --import
 
 # Run tests
@@ -87,14 +87,14 @@ dotnet test
 # Run the game
 dotnet run --project MyGame
 
-# Edit in Godot
+# Edit in Godot at any time
 godot-mono -e --path MyGame.Godot
 ```
 
 ### Adding to an Existing Project
 
 ```bash
-dotnet add package 2dog --version 0.1.9-pre
+dotnet add package 2dog
 ```
 
 ### Building from Source
