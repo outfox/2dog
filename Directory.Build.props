@@ -1,7 +1,7 @@
 <Project>
     <PropertyGroup>
-        <TwoDogVersion>0.1.10-pre</TwoDogVersion>
+        <TwoDogVersion>0.1.11-pre</TwoDogVersion>
         <!-- Native platform package version. Bump only when godot submodule changes. -->
-        <NativesVersion>0.1.10-pre</NativesVersion>
+        <NativesVersion>0.1.11-pre</NativesVersion>
     </PropertyGroup>
 </Project>
