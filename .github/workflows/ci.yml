@@ -135,6 +135,11 @@ jobs:
           echo "Source generators:"
           find godot/modules -type f | sort
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
