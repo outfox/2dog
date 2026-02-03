@@ -18,11 +18,10 @@ on:
       - 'build-godot.py'
 
 jobs:
-  # GodotSharp assemblies are platform-independent — only need to build once on Linux.
-  # This job also produces the Linux editor binary needed for project import in CI.
-  build-godotsharp:
-    name: Build libgodot and GodotSharp
-    runs-on: blacksmith-16vcpu-ubuntu-2204
+  # Quick check: compute submodule hash and see if a release already exists.
+  preflight:
+    name: Preflight
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     outputs:
       submodule-hash: ${{ steps.hash.outputs.hash }}
       skip: ${{ steps.check-release.outputs.skip }}
@@ -30,12 +29,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Compute submodule hash
         id: hash
-        run: echo "hash=$(git -C godot rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        run: |
+          HASH=$(git ls-tree HEAD godot | awk '{print $3}' | cut -c1-7)
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
+          echo "Godot submodule hash: $HASH"
 
       - name: Check if release already exists
         id: check-release
@@ -51,20 +51,31 @@ jobs:
             echo "skip=false" >> $GITHUB_OUTPUT
           fi
 
+  # GodotSharp assemblies are platform-independent — only need to build once on Linux.
+  # This job also produces the Linux editor binary needed for project import in CI.
+  build-godotsharp:
+    name: Build GodotSharp
+    needs: preflight
+    if: needs.preflight.outputs.skip != 'true'
+    runs-on: blacksmith-16vcpu-ubuntu-2204
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
       - name: Setup Python
-        if: steps.check-release.outputs.skip != 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
       - name: Install Python dependencies
-        if: steps.check-release.outputs.skip != 'true'
         run: |
           python -m pip install --upgrade pip
           pip install scons rich
 
       - name: Install Linux dependencies
-        if: steps.check-release.outputs.skip != 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -83,18 +94,16 @@ jobs:
             libwayland-dev
 
       - name: Cache SCons
-        if: steps.check-release.outputs.skip != 'true'
         uses: actions/cache@v4
         with:
           path: |
             godot/.scons_cache
             ~/.cache/scons
-          key: godotsharp-linux-${{ steps.hash.outputs.hash }}
+          key: godotsharp-linux-${{ needs.preflight.outputs.submodule-hash }}
           restore-keys: |
             godotsharp-linux-
 
       - name: Build editor + GodotSharp assemblies
-        if: steps.check-release.outputs.skip != 'true'
         run: |
           python build-godot.py \
             --no-library \
@@ -103,7 +112,6 @@ jobs:
             --cache-path godot/.scons_cache
 
       - name: Upload GodotSharp assemblies
-        if: steps.check-release.outputs.skip != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: godotsharp
@@ -111,7 +119,6 @@ jobs:
           retention-days: 7
 
       - name: Upload GodotSharp NuGet packages
-        if: steps.check-release.outputs.skip != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: godotsharp-nupkgs
@@ -119,7 +126,6 @@ jobs:
           retention-days: 7
 
       - name: Upload source generators
-        if: steps.check-release.outputs.skip != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: godot-source-generators
@@ -127,7 +133,6 @@ jobs:
           retention-days: 7
 
       - name: Upload Linux editor binary
-        if: steps.check-release.outputs.skip != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: godot-editor-linux-x64
@@ -137,8 +142,8 @@ jobs:
   # Build native libgodot libraries for all platform/variant combinations.
   build-natives:
     name: Build ${{ matrix.artifact_name }}
-    needs: build-godotsharp
-    if: needs.build-godotsharp.outputs.skip != 'true'
+    needs: preflight
+    if: needs.preflight.outputs.skip != 'true'
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -269,7 +274,7 @@ jobs:
           path: |
             godot/.scons_cache
             ~/.cache/scons
-          key: ${{ matrix.artifact_name }}-${{ needs.build-godotsharp.outputs.submodule-hash }}
+          key: ${{ matrix.artifact_name }}-${{ needs.preflight.outputs.submodule-hash }}
           restore-keys: |
             ${{ matrix.artifact_name }}-
 
@@ -315,8 +320,8 @@ jobs:
   # Create a GitHub release tagged godot-{hash} with all native libs + GodotSharp
   release:
     name: Create Release
-    needs: [build-godotsharp, build-natives]
-    if: needs.build-godotsharp.outputs.skip != 'true' && (github.event_name != 'workflow_dispatch' || github.event.inputs.create_release == 'true')
+    needs: [preflight, build-godotsharp, build-natives]
+    if: needs.preflight.outputs.skip != 'true' && (github.event_name != 'workflow_dispatch' || github.event.inputs.create_release == 'true')
     runs-on: blacksmith-4vcpu-ubuntu-2404
 
     steps:
@@ -362,14 +367,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="godot-${{ needs.build-godotsharp.outputs.submodule-hash }}"
+          TAG="godot-${{ needs.preflight.outputs.submodule-hash }}"
           # Delete existing release if present (force rebuild case)
           gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --yes 2>/dev/null || true
           gh release create "$TAG" \
             --repo "$GITHUB_REPOSITORY" \
             --title "Godot Native Libraries ($TAG)" \
             --notes "$(cat <<'EOF'
-          ## Native Libraries for Godot submodule ${{ needs.build-godotsharp.outputs.submodule-hash }}
+          ## Native Libraries for Godot submodule ${{ needs.preflight.outputs.submodule-hash }}
 
           Auto-generated native library build. Used by the `ci.yml` workflow to avoid rebuilding Godot from source on every push.
 
