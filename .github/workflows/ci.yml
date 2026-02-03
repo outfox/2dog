@@ -148,9 +148,6 @@ jobs:
       - name: Build twodog.xunit
         run: dotnet build twodog.xunit -c Release
 
-      - name: Pack templates
-        run: dotnet pack templates/2dog.Templates.csproj
-
       - name: Pack twodog (main package)
         run: dotnet pack twodog -p:ForcePackAllPlatforms=true
 

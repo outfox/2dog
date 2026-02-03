@@ -30,7 +30,11 @@
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <!-- Suppress NU5100: GodotPlugins DLLs are in build/api, not lib -->
         <!-- Suppress NU5131: Analyzers dir contains source generators, not standard analyzers -->
-        <NoWarn>$(NoWarn);NU5100;NU5131</NoWarn>
+        <!-- Suppress NU5128: Template content folder doesn't need contentFiles metadata -->
+        <NoWarn>$(NoWarn);NU5100;NU5131;NU5128</NoWarn>
+        <!-- Include dotfiles (.editorconfig, .gitignore, .template.config) in the package -->
+        <NoDefaultExcludes>true</NoDefaultExcludes>
+        <PackageTags>dotnet-new;templates;godot;2dog;game-engine</PackageTags>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -221,5 +225,41 @@
     <Target Name="DeepClean" AfterTargets="Clean">
         <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
         <RemoveDir Directories="$(BaseOutputPath)"/>
+    </Target>
+
+    <!-- dotnet new template content bundled in this package -->
+    <ItemGroup>
+        <Content Include="../templates/twodog/**/*" Exclude="../templates/twodog/**/bin/**;../templates/twodog/**/obj/**"
+                 Pack="true" PackagePath="content/twodog/" CopyToOutputDirectory="Never"/>
+    </ItemGroup>
+
+    <!-- Substitute 2dog package version into template.json at pack time -->
+    <UsingTask TaskName="SubstituteInFile" TaskFactory="RoslynCodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <FilePath ParameterType="System.String" Required="true" />
+            <Find ParameterType="System.String" Required="true" />
+            <ReplaceWith ParameterType="System.String" Required="true" />
+        </ParameterGroup>
+        <Task>
+            <Code Type="Fragment" Language="cs">
+                var text = File.ReadAllText(FilePath);
+                File.WriteAllText(FilePath, text.Replace(Find, ReplaceWith));
+            </Code>
+        </Task>
+    </UsingTask>
+
+    <Target Name="SubstituteTemplateVersion" BeforeTargets="GenerateNuspec">
+        <SubstituteInFile
+            FilePath="../templates/twodog/.template.config/template.json"
+            Find="0.0.0-tpl"
+            ReplaceWith="$(TwoDogVersion)" />
+    </Target>
+
+    <Target Name="RestoreTemplateVersion" AfterTargets="Pack">
+        <SubstituteInFile
+            FilePath="../templates/twodog/.template.config/template.json"
+            Find="$(TwoDogVersion)"
+            ReplaceWith="0.0.0-tpl" />
     </Target>
 </Project>
