@@ -375,6 +375,7 @@ jobs:
           gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --yes 2>/dev/null || true
           gh release create "$TAG" \
             --repo "$GITHUB_REPOSITORY" \
+            --latest=false \
             --title "Godot Native Libraries ($TAG)" \
             --notes "$(cat <<'EOF'
           ## Native Libraries for Godot submodule ${{ needs.preflight.outputs.submodule-hash }}
