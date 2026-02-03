@@ -41,20 +41,22 @@ dotnet new uninstall ./templates/twodog
 
 ```
 templates/
-├── 2dog.Templates.csproj    # Packaging project for NuGet distribution
-└── twodog/                   # Template content
+├── 2dog.Templates.csproj         # Packaging project for NuGet distribution
+└── twodog/                        # Template content
     ├── .template.config/
-    │   └── template.json     # Template configuration
-    ├── Company.Product1.csproj
-    ├── Program.cs
-    ├── .editorconfig
-    ├── .gitignore
-    ├── project/              # Sample Godot project
+    │   └── template.json          # Template configuration
+    ├── Company.Product1.sln
+    ├── Company.Product1/          # Application project
+    │   ├── Company.Product1.csproj
+    │   └── Program.cs
+    ├── Company.Product1.Godot/    # Sample Godot project
     │   ├── project.godot
     │   └── main.tscn
-    └── Company.Product1.Tests/  # Optional test project
-        ├── Company.Product1.Tests.csproj
-        └── BasicTests.cs
+    ├── Company.Product1.Tests/    # Optional test project
+    │   ├── Company.Product1.Tests.csproj
+    │   └── BasicTests.cs
+    ├── .editorconfig
+    └── .gitignore
 ```
 
 ## Template Parameters
