@@ -43,9 +43,9 @@ dotnet run
 ```
 
 This creates:
-- `MyGame.csproj` - Project file with 2dog package references
-- `Program.cs` - Minimal working application
-- `project/` - Sample Godot project with a simple scene
+- `MyGame/MyGame.csproj` - Project file with 2dog package references
+- `MyGame/Program.cs` - Minimal working application
+- `MyGame.Godot/` - Sample Godot project with a simple scene
 - `.editorconfig` - .NET coding conventions
 - `.gitignore` - Standard ignores for .NET and Godot
 
@@ -74,16 +74,18 @@ The template creates a project structure like this:
 
 ```
 MyGame/
-├── MyGame.csproj           # Project file
-├── Program.cs              # Entry point
-├── .editorconfig           # Code style settings
-├── .gitignore              # Git ignores
-├── project/                # Godot project
+├── MyGame.sln              # Solution file
+├── MyGame/                 # Application project
+│   ├── MyGame.csproj       # Project file
+│   └── Program.cs          # Entry point
+├── MyGame.Godot/           # Godot project
 │   ├── project.godot       # Godot project file
 │   └── main.tscn           # Main scene
-└── MyGame.Tests/           # Optional test project
-    ├── MyGame.Tests.csproj
-    └── BasicTests.cs
+├── MyGame.Tests/           # Optional test project
+│   ├── MyGame.Tests.csproj
+│   └── BasicTests.cs
+├── .editorconfig           # Code style settings
+└── .gitignore              # Git ignores
 ```
 
 ### Program.cs
@@ -95,7 +97,7 @@ using Godot;
 using Engine = twodog.Engine;
 
 // Create and start the Godot engine with your project
-using var engine = new Engine("MyGame", "./project");
+using var engine = new Engine("MyGame", Engine.ResolveProjectDir());
 using var godot = engine.Start();
 
 // Load your main scene
@@ -136,7 +138,7 @@ The generated `.csproj` only needs a single `2dog` package reference. GodotSharp
 
     <!-- Godot project location -->
     <PropertyGroup>
-        <GodotProjectDir>./project</GodotProjectDir>
+        <GodotProjectDir>../MyGame.Godot</GodotProjectDir>
     </PropertyGroup>
 </Project>
 ```
@@ -204,27 +206,26 @@ dotnet test -c Editor
 
 ### Customizing the Godot Project
 
-The generated `project/` directory contains a minimal Godot project. You can:
+The generated `MyGame.Godot/` directory contains a minimal Godot project. You can:
 
 1. **Edit in Godot Editor:**
    ```bash
    # Open the project in Godot Editor (if you have TOOLS_ENABLED build)
-   cd project
-   godot --editor
+   godot --editor --path MyGame.Godot
    ```
 
 2. **Replace with existing project:**
    ```bash
    # Remove the sample project
-   rm -rf project
-   
+   rm -rf MyGame.Godot
+
    # Copy your existing Godot project
-   cp -r /path/to/your/godot/project ./project
+   cp -r /path/to/your/godot/project ./MyGame.Godot
    ```
 
 3. **Add C# scripts:**
-   - Create `.cs` files in the `project/` directory
-   - Set the `GodotProjectDir` property in your `.csproj`
+   - Create `.cs` files in the `MyGame.Godot/` directory
+   - The `GodotProjectDir` property in your `.csproj` already points there
    - Reference the Godot project in your main project
 
 ## Uninstalling Templates
