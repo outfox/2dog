@@ -2,28 +2,17 @@
 
 2dog provides `dotnet new` templates to quickly scaffold new projects with everything configured correctly.
 
-::: warning Pending NuGet Release
-The templates described on this page are currently in development and **not yet published to NuGet**. They will be available once 2dog packages are published to NuGet.
-
-For now, you can install templates locally from the repository:
-```bash
-dotnet new install ./templates/twodog
-```
-:::
-
 ## Installation
 
-### From NuGet (After Release)
-
-Once published, install the templates globally:
+The `dotnet new` template is bundled in the main `2dog` NuGet package. Installing the package also registers the template:
 
 ```bash
-dotnet new install 2dog.Templates
+dotnet new install 2dog
 ```
 
 ### Local Installation (Development)
 
-To use the templates during development:
+To use the templates during development from a local clone:
 
 ```bash
 # From the 2dog repository root
@@ -230,39 +219,24 @@ The generated `MyGame.Godot/` directory contains a minimal Godot project. You ca
 
 ## Uninstalling Templates
 
-### From NuGet (After Release)
-
 ```bash
-dotnet new uninstall 2dog.Templates
+dotnet new uninstall 2dog
 ```
 
-### Local Installation
+For local installations:
 
 ```bash
 dotnet new uninstall ./templates/twodog
 ```
 
-Or find the installed template path:
-
-```bash
-dotnet new uninstall
-# Look for the 2dog template in the list
-# Copy the install path
-dotnet new uninstall <install-path>
-```
-
 ## Updating Templates
-
-### From NuGet (After Release)
 
 ```bash
 # Update to latest version
 dotnet new update
 ```
 
-### Local Installation
-
-Uninstall and reinstall:
+For local installations, uninstall and reinstall:
 
 ```bash
 dotnet new uninstall ./templates/twodog
@@ -277,7 +251,7 @@ dotnet new install ./templates/twodog
 
 **Solution:**
 1. Ensure the template is installed: `dotnet new list | grep 2dog`
-2. If not listed, install it: `dotnet new install 2dog.Templates` (or local path)
+2. If not listed, install it: `dotnet new install 2dog` (or local path)
 
 ### Package Restore Failed (--tests)
 

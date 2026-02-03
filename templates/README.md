@@ -41,7 +41,6 @@ dotnet new uninstall ./templates/twodog
 
 ```
 templates/
-├── 2dog.Templates.csproj         # Packaging project for NuGet distribution
 └── twodog/                        # Template content
     ├── .template.config/
     │   └── template.json          # Template configuration
@@ -73,27 +72,16 @@ The template uses `Company.Product1` as the source name, which gets replaced wit
 - `Company.Product1` → Your project name (e.g., `LetsCook`)
 - Applied to: `.csproj` files, `Program.cs`, `project.godot`, namespaces
 
-## Packaging the Template
+## Packaging
 
-### Build the Template Package
+The template content is bundled directly into the main `2dog` NuGet package (from `twodog/twodog.csproj`). There is no separate template package.
 
-```bash
-# From the repository root
-dotnet pack templates/2dog.Templates.csproj
-```
+When the `2dog` package is packed, the template files are included under `content/twodog/` in the `.nupkg`, and the version placeholder in `template.json` is substituted automatically.
 
-This creates `packages/2dog.Templates.0.1.0-pre.nupkg`.
-
-### Installing from Package
+### Installing from NuGet
 
 ```bash
-dotnet new install 2dog.Templates
-```
-
-### Publishing to NuGet
-
-```bash
-dotnet nuget push packages/2dog.Templates.0.1.0-pre.nupkg --source https://api.nuget.org/v3/index.json --api-key YOUR_KEY
+dotnet new install 2dog
 ```
 
 ## Known Limitations

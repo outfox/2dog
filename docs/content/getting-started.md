@@ -17,8 +17,8 @@ Prerelease packages are available on [NuGet](https://www.nuget.org/packages?q=2d
 The fastest way to get started is using the 2dog project template:
 
 ```bash
-# Install the template
-dotnet new install 2dog.Templates::0.1.9-pre
+# Install the template (bundled in the main 2dog package)
+dotnet new install 2dog
 
 # Create a new project (optionally with xUnit tests)
 dotnet new 2dog --tests True -n MyGodotApp
