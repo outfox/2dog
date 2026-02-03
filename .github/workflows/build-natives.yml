@@ -149,7 +149,7 @@ jobs:
             arch: x86_64
             target: template_release
             runner: ubuntu-22.04
-            lib_name: blacksmith-16vcpu-ubuntu-2404
+            lib_name: libgodot.linuxbsd.template_release.x86_64.shared_library.so
             artifact_name: libgodot-linux-x64-template_release
           - platform: linuxbsd
             arch: x86_64
