@@ -23,17 +23,20 @@ permissions:
   actions: write
 
 jobs:
-  # Download pre-built native libraries from the GitHub release matching the godot submodule hash.
-  download-natives:
-    name: Download Natives
+  # Download pre-built native libraries, stage godot/bin, and pack all NuGet packages.
+  pack:
+    name: Pack NuGet Packages
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: blacksmith-4vcpu-ubuntu-2404
-    outputs:
-      submodule-hash: ${{ steps.hash.outputs.hash }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
       - name: Compute godot submodule hash
         id: hash
@@ -124,16 +127,35 @@ jobs:
           mv /tmp/native/libgodot.dylib godot/bin/libgodot.macos.editor.arm64.shared_library.dylib
           rm -rf /tmp/native
 
-          # Fetch Godot LICENSE and AUTHORS for NuGet package metadata
-          FULL_HASH=$(git ls-tree HEAD godot | awk '{print $3}')
-          curl -sfL "https://raw.githubusercontent.com/thygrrr/godot/$FULL_HASH/LICENSE.txt" -o godot/LICENSE.txt
-          curl -sfL "https://raw.githubusercontent.com/thygrrr/godot/$FULL_HASH/AUTHORS.md" -o godot/AUTHORS.md
-
           echo "Staged godot/bin contents:"
           find godot/bin -type f | sort
           echo ""
           echo "Source generators:"
           find godot/modules -type f | sort
+
+      - name: Ensure local NuGet source directories exist
+        run: mkdir -p packages
+
+      - name: Pack platform NuGet packages
+        run: dotnet pack platforms/ -p:ForcePackAllPlatforms=true
+
+      - name: Build twodog library (all configs)
+        run: |
+          dotnet build twodog -c Debug
+          dotnet build twodog -c Release
+          dotnet build twodog -c Editor
+
+      - name: Build twodog.xunit
+        run: dotnet build twodog.xunit -c Release
+
+      - name: Pack templates
+        run: dotnet pack templates/2dog.Templates.csproj
+
+      - name: Pack twodog (main package)
+        run: dotnet pack twodog -p:ForcePackAllPlatforms=true
+
+      - name: List packages
+        run: ls -lh packages/
 
       - name: Upload godot-bin artifact
         uses: actions/upload-artifact@v4
@@ -141,16 +163,21 @@ jobs:
           name: godot-bin
           path: |
             godot/bin/
-            godot/LICENSE.txt
-            godot/AUTHORS.md
             godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
           retention-days: 3
+
+      - name: Upload NuGet packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages
+          path: packages/
+          retention-days: 7
 
   # Import Godot project resources using the Linux editor binary.
   # Runs on ubuntu-latest which has the system libraries Godot needs (X11, OpenGL, etc.).
   import-game:
     name: Import Game Project
-    needs: download-natives
+    needs: [pack]
     runs-on: ubuntu-latest
 
     steps:
@@ -181,72 +208,10 @@ jobs:
           include-hidden-files: true
           retention-days: 3
 
-  # Build all NuGet packages from a single Linux runner using ForcePackAllPlatforms.
-  pack:
-    name: Pack NuGet Packages
-    needs: download-natives
-    runs-on: blacksmith-4vcpu-ubuntu-2404
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-
-      - name: Download godot-bin artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: godot-bin
-          # upload-artifact strips the LCA (godot/) from multi-path uploads,
-          # so we download into godot/ to restore the original directory structure.
-          path: godot
-
-      - name: Verify staged files
-        run: |
-          echo "godot/bin contents:"
-          find godot/bin -type f | sort
-          echo ""
-          echo "Source generators:"
-          find godot/modules -type f 2>/dev/null | sort || true
-
-      - name: Ensure local NuGet source directories exist
-        run: mkdir -p packages
-
-      - name: Pack platform NuGet packages
-        run: dotnet pack platforms/ -p:ForcePackAllPlatforms=true
-
-      - name: Build twodog library (all configs)
-        run: |
-          dotnet build twodog -c Debug
-          dotnet build twodog -c Release
-          dotnet build twodog -c Editor
-
-      - name: Build twodog.xunit
-        run: dotnet build twodog.xunit -c Release
-
-      - name: Pack templates
-        run: dotnet pack templates/2dog.Templates.csproj
-
-      - name: Pack twodog (main package)
-        run: dotnet pack twodog -p:ForcePackAllPlatforms=true
-
-      - name: List packages
-        run: ls -lh packages/
-
-      - name: Upload NuGet packages
-        uses: actions/upload-artifact@v4
-        with:
-          name: nuget-packages
-          path: packages/
-          retention-days: 7
-
   # Run tests on each platform.
   test:
     name: Test (${{ matrix.name }})
-    needs: [download-natives, pack, import-game]
+    needs: [pack, import-game]
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
