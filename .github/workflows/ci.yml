@@ -239,6 +239,8 @@ jobs:
           - name: osx-arm64
             runner: macos-15
 
+    timeout-minutes: 10
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
