@@ -15,13 +15,13 @@
 
     <!-- Platform-specific native library packages -->
     <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-        <PackageReference Include="2dog.win-x64" Version="TWODOG_PKG_VERSION"/>
+        <PackageReference Include="2dog.win-x64" Version="NATIVES_PKG_VERSION"/>
     </ItemGroup>
     <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-        <PackageReference Include="2dog.linux-x64" Version="TWODOG_PKG_VERSION"/>
+        <PackageReference Include="2dog.linux-x64" Version="NATIVES_PKG_VERSION"/>
     </ItemGroup>
     <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-        <PackageReference Include="2dog.osx-arm64" Version="TWODOG_PKG_VERSION"/>
+        <PackageReference Include="2dog.osx-arm64" Version="NATIVES_PKG_VERSION"/>
     </ItemGroup>
 
     <!-- Test framework packages -->
