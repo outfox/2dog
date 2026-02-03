@@ -178,6 +178,7 @@ jobs:
         with:
           name: game-imported
           path: game/.godot/
+          include-hidden-files: true
           retention-days: 3
 
   # Build all NuGet packages from a single Linux runner using ForcePackAllPlatforms.
