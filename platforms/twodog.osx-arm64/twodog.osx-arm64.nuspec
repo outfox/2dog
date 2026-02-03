@@ -20,8 +20,8 @@
     <files>
         <file src="..\..\nuget\icon.png" target="icon.png"/>
         <file src="README.md" target="README.md"/>
-        <file src="..\..\godot\LICENSE.txt" target="LICENSE.txt"/>
-        <file src="..\..\godot\AUTHORS.md" target="AUTHORS.md"/>
+        <file src="..\..\nuget\GODOT_LICENSE.txt" target="LICENSE.txt"/>
+        <file src="..\..\nuget\GODOT_AUTHORS.md" target="AUTHORS.md"/>
         <!-- MSBuild targets for native library copying -->
         <file src="build\2dog.osx-arm64.targets" target="build\2dog.osx-arm64.targets"/>
         <file src="buildTransitive\2dog.osx-arm64.targets" target="buildTransitive\2dog.osx-arm64.targets"/>
