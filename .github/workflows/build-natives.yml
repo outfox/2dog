@@ -17,6 +17,9 @@ on:
       - 'godot'
       - 'build-godot.py'
 
+permissions:
+  contents: write
+
 jobs:
   # Quick check: compute submodule hash and see if a release already exists.
   preflight:
