@@ -50,8 +50,8 @@
     <ItemGroup>
         <None Include="$(MSBuildProjectDirectory)/../../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
         <None Include="README.md" Pack="true" PackagePath="README.md"/>
-        <None Include="$(GodotDir)LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" Visible="false"/>
-        <None Include="$(GodotDir)AUTHORS.md" Pack="true" PackagePath="AUTHORS.md" Visible="false"/>
+        <None Include="$(MSBuildProjectDirectory)/../../nuget/GODOT_LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" Visible="false"/>
+        <None Include="$(MSBuildProjectDirectory)/../../nuget/GODOT_AUTHORS.md" Pack="true" PackagePath="AUTHORS.md" Visible="false"/>
     </ItemGroup>
 
     <Target Name="DeepClean" AfterTargets="Clean">
