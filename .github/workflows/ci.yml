@@ -135,6 +135,14 @@ jobs:
           echo "Source generators:"
           find godot/modules -type f | sort
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Import game project
+        run: python import-project.py ./game
+
       - name: Upload godot-bin artifact
         uses: actions/upload-artifact@v4
         with:
@@ -144,6 +152,13 @@ jobs:
             godot/LICENSE.txt
             godot/AUTHORS.md
             godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
+          retention-days: 3
+
+      - name: Upload imported game data
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-imported
+          path: game/.godot/
           retention-days: 3
 
   # Build all NuGet packages from a single Linux runner using ForcePackAllPlatforms.
@@ -219,13 +234,10 @@ jobs:
         include:
           - name: linux-x64
             runner: ubuntu-latest
-            run_import: true
           - name: win-x64
             runner: blacksmith-4vcpu-windows-2025
-            run_import: false
-          - name: osx-x64
-            runner: macos-15-intel
-            run_import: false
+          - name: osx-arm64
+            runner: macos-15
 
     steps:
       - name: Checkout repository
@@ -236,17 +248,17 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Setup Python
-        if: matrix.run_import
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
       - name: Download godot-bin artifact
         uses: actions/download-artifact@v4
         with:
           name: godot-bin
           path: godot
+
+      - name: Download imported game data
+        uses: actions/download-artifact@v4
+        with:
+          name: game-imported
+          path: game/.godot
 
       - name: Download NuGet packages
         uses: actions/download-artifact@v4
@@ -256,12 +268,6 @@ jobs:
 
       - name: Restore
         run: dotnet restore
-
-      - name: Import Godot project (Linux only)
-        if: matrix.run_import
-        run: |
-          chmod +x godot/bin/godot.linuxbsd.editor.x86_64.executable.mono
-          python import-project.py ./game
 
       - name: Test (Debug)
         run: dotnet test -c Debug --no-restore
