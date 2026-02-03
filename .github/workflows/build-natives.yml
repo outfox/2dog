@@ -1,4 +1,4 @@
-name: Build Native Libraries
+name: libgodot
 
 on:
   workflow_dispatch:
