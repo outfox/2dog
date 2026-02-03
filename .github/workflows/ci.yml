@@ -12,12 +12,21 @@ on:
     paths-ignore:
       - 'docs/**'
       - '*.md'
+  workflow_run:
+    workflows: ["Build Native Libraries"]
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
 
 jobs:
   # Download pre-built native libraries from the GitHub release matching the godot submodule hash.
   download-natives:
     name: Download Natives
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: blacksmith-4vcpu-ubuntu-2404
     outputs:
       submodule-hash: ${{ steps.hash.outputs.hash }}
@@ -40,6 +49,15 @@ jobs:
           TAG="godot-${{ steps.hash.outputs.hash }}"
           echo "Looking for release: $TAG"
           if ! gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            # Check if a native build is currently running — if so, cancel this run
+            # and let the workflow_run trigger re-run CI when the build completes.
+            BUILDING=$(gh run list -w build-natives.yml --branch main \
+              --json status -q '[.[] | select(.status == "in_progress" or .status == "queued")] | length')
+            if [ "$BUILDING" -gt 0 ]; then
+              echo "::notice::Native build in progress — cancelling this run. CI will re-trigger when the build completes."
+              gh run cancel "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY"
+              sleep 60
+            fi
             echo "::error::No native build for godot submodule ${{ steps.hash.outputs.hash }}. Run the 'Build Native Libraries' workflow first."
             exit 1
           fi
@@ -91,19 +109,6 @@ jobs:
 
           unzip -o release-assets/libgodot-win-x64-editor.zip -d /tmp/native
           mv /tmp/native/libgodot.dll godot/bin/godot.windows.editor.x86_64.shared_library.dll
-          rm -rf /tmp/native
-
-          # macOS x64
-          unzip -o release-assets/libgodot-osx-x64-template_release.zip -d /tmp/native
-          mv /tmp/native/libgodot.dylib godot/bin/libgodot.macos.template_release.x86_64.shared_library.dylib
-          rm -rf /tmp/native
-
-          unzip -o release-assets/libgodot-osx-x64-template_debug.zip -d /tmp/native
-          mv /tmp/native/libgodot.dylib godot/bin/libgodot.macos.template_debug.x86_64.shared_library.dylib
-          rm -rf /tmp/native
-
-          unzip -o release-assets/libgodot-osx-x64-editor.zip -d /tmp/native
-          mv /tmp/native/libgodot.dylib godot/bin/libgodot.macos.editor.x86_64.shared_library.dylib
           rm -rf /tmp/native
 
           # macOS arm64
