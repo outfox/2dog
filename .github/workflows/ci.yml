@@ -124,6 +124,11 @@ jobs:
           mv /tmp/native/libgodot.dylib godot/bin/libgodot.macos.editor.arm64.shared_library.dylib
           rm -rf /tmp/native
 
+          # Fetch Godot LICENSE and AUTHORS for NuGet package metadata
+          FULL_HASH=$(git ls-tree HEAD godot | awk '{print $3}')
+          curl -sfL "https://raw.githubusercontent.com/thygrrr/godot/$FULL_HASH/LICENSE.txt" -o godot/LICENSE.txt
+          curl -sfL "https://raw.githubusercontent.com/thygrrr/godot/$FULL_HASH/AUTHORS.md" -o godot/AUTHORS.md
+
           echo "Staged godot/bin contents:"
           find godot/bin -type f | sort
           echo ""
@@ -136,6 +141,8 @@ jobs:
           name: godot-bin
           path: |
             godot/bin/
+            godot/LICENSE.txt
+            godot/AUTHORS.md
             godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
           retention-days: 3
 
