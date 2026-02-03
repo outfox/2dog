@@ -254,9 +254,17 @@
             FilePath="../templates/twodog/.template.config/template.json"
             Find="0.0.0-tpl"
             ReplaceWith="$(TwoDogVersion)" />
+        <SubstituteInFile
+            FilePath="../templates/twodog/.template.config/template.json"
+            Find="0.0.0-ntpl"
+            ReplaceWith="$(NativesVersion)" />
     </Target>
 
     <Target Name="RestoreTemplateVersion" AfterTargets="Pack">
+        <SubstituteInFile
+            FilePath="../templates/twodog/.template.config/template.json"
+            Find="$(NativesVersion)"
+            ReplaceWith="0.0.0-ntpl" />
         <SubstituteInFile
             FilePath="../templates/twodog/.template.config/template.json"
             Find="$(TwoDogVersion)"
