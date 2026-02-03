@@ -148,19 +148,19 @@ jobs:
           - platform: linuxbsd
             arch: x86_64
             target: template_release
-            runner: ubuntu-22.04
+            runner: blacksmith-16vcpu-ubuntu-2204
             lib_name: libgodot.linuxbsd.template_release.x86_64.shared_library.so
             artifact_name: libgodot-linux-x64-template_release
           - platform: linuxbsd
             arch: x86_64
             target: template_debug
-            runner: ubuntu-22.04
+            runner: blacksmith-16vcpu-ubuntu-2204
             lib_name: libgodot.linuxbsd.template_debug.x86_64.shared_library.so
             artifact_name: libgodot-linux-x64-template_debug
           - platform: linuxbsd
             arch: x86_64
             target: editor
-            runner: ubuntu-22.04
+            runner: blacksmith-16vcpu-ubuntu-2204
             lib_name: libgodot.linuxbsd.editor.x86_64.shared_library.so
             artifact_name: libgodot-linux-x64-editor
 
@@ -168,19 +168,19 @@ jobs:
           - platform: windows
             arch: x86_64
             target: template_release
-            runner: windows-latest
+            runner: blacksmith-16vcpu-windows-2025
             lib_name: godot.windows.template_release.x86_64.shared_library.dll
             artifact_name: libgodot-win-x64-template_release
           - platform: windows
             arch: x86_64
             target: template_debug
-            runner: windows-latest
+            runner: blacksmith-16vcpu-windows-2025
             lib_name: godot.windows.template_debug.x86_64.shared_library.dll
             artifact_name: libgodot-win-x64-template_debug
           - platform: windows
             arch: x86_64
             target: editor
-            runner: windows-latest
+            runner: blacksmith-16vcpu-windows-2025
             lib_name: godot.windows.editor.x86_64.shared_library.dll
             artifact_name: libgodot-win-x64-editor
 
