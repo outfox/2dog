@@ -135,19 +135,6 @@ jobs:
           echo "Source generators:"
           find godot/modules -type f | sort
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Import game project
-        run: python import-project.py ./game
-
       - name: Upload godot-bin artifact
         uses: actions/upload-artifact@v4
         with:
@@ -158,6 +145,33 @@ jobs:
             godot/AUTHORS.md
             godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
           retention-days: 3
+
+  # Import Godot project resources using the Linux editor binary.
+  # Runs on ubuntu-latest which has the system libraries Godot needs (X11, OpenGL, etc.).
+  import-game:
+    name: Import Game Project
+    needs: download-natives
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Download godot-bin artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: godot-bin
+          path: godot
+
+      - name: Import game project
+        run: |
+          chmod +x godot/bin/godot.linuxbsd.editor.x86_64.executable.mono
+          python3 import-project.py ./game
 
       - name: Upload imported game data
         uses: actions/upload-artifact@v4
@@ -231,7 +245,7 @@ jobs:
   # Run tests on each platform.
   test:
     name: Test (${{ matrix.name }})
-    needs: [download-natives, pack]
+    needs: [download-natives, pack, import-game]
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
