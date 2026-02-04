@@ -31,7 +31,9 @@
     <ItemGroup Condition="'$(GodotProjectDir)' != ''">
         <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
             <_Parameter1>GodotProjectDir</_Parameter1>
-            <_Parameter2>$([System.IO.Path]::GetFullPath('$(GodotProjectDir)', '$(MSBuildProjectDirectory)'))</_Parameter2>
+            <!-- We use the single-parameter overload of GetFullPath with Combine to be .NET Framework-compatible -->
+            <!-- This is important for VS users, where processes are still hosted in .NET Fx -->
+            <_Parameter2>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(GodotProjectDir)'))))</_Parameter2>
         </AssemblyAttribute>
     </ItemGroup>
 
