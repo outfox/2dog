@@ -87,6 +87,66 @@ public void CanLog_NodePath(string pathStr)
 
 This approach keeps test cases visible in the test explorer while avoiding the discovery crash.
 
+### Advanced: ModuleInitializer Approach
+
+If you need Godot types directly in `MemberData` without `DisableDiscoveryEnumeration`, you can initialize Godot before test discovery using a module initializer. This ensures the engine is running before xUnit enumerates your test data.
+
+::: danger Warning
+ModuleInitializers run automatically when an assembly loads, which has hidden side effects and can cause subtle issues. The `DisableDiscoveryEnumeration` workaround above is simpler and recommended for most cases.
+:::
+
+Create a file in your test project (e.g., `TestInitializer.cs`):
+
+```csharp
+using System.Runtime.CompilerServices;
+using twodog;
+
+namespace MyGame.Tests;
+
+internal static class TestInitializer
+{
+    private static Engine? _engine;
+    private static GodotInstance? _godot;
+
+    [ModuleInitializer]
+    internal static void Initialize()
+    {
+        // Prevent double-initialization
+        if (_engine != null) return;
+
+        _engine = new Engine("tests", "../game", "--headless");
+        _godot = _engine.Start();
+
+        // Clean up when the process exits
+        AppDomain.CurrentDomain.ProcessExit += (_, _) =>
+        {
+            _godot?.Dispose();
+            _engine?.Dispose();
+        };
+    }
+}
+```
+
+With this in place, Godot types can be used directly in `MemberData`:
+
+```csharp
+public static IEnumerable<object[]> paths = [[new NodePath("/root")]];
+
+[Theory]
+[MemberData(nameof(paths))]  // No DisableDiscoveryEnumeration needed
+public void CanLog_NodePath(NodePath path)
+{
+    GD.Print(path);
+}
+```
+
+::: warning Caveats
+- **Slower discovery**: The engine starts during test discovery, slowing down IDE test explorers
+- **Cleanup via ProcessExit**: Less elegant than proper `IDisposable` patterns used by fixtures
+- **Must be in your test project**: Cannot be placed in `twodog.xunit` since module initializers only run for the assembly they're defined in
+- **Conflicts with fixtures**: If you use both this approach and `GodotFixture`/`GodotHeadlessFixture`, you'll get an `InvalidOperationException` (only one Godot instance per process)
+:::
+
 ### Affected Types
 
 Any GodotSharp type that makes native calls in its constructor is affected. Common examples:
@@ -100,3 +160,63 @@ Any GodotSharp type that makes native calls in its constructor is affected. Comm
 - Any `GodotObject` subclass
 
 Primitive C# types (`string`, `int`, `float`, `bool`, arrays of primitives) are safe to use directly.
+
+## GD.Print Output Not Visible in Tests
+
+When using `GD.Print` in your tests, the output may appear to be missing or invisible.
+
+### Why This Happens
+
+`GD.Print` writes to **stdout** via Godot's native `OS::print()` function. By default, `dotnet test` suppresses stdout output from the test host process. The output is there, but hidden.
+
+Additionally, `GD.Print` output is global—it gets interleaved with Godot engine messages, fixture initialization logs, and other console output. There's no way to associate it with a specific test.
+
+### Making GD.Print Visible
+
+To see `GD.Print` output, run tests with verbose logging:
+
+```bash
+dotnet test --logger "console;verbosity=detailed"
+```
+
+You'll see output like this, with your `GD.Print` calls mixed into the stream:
+
+```
+Initializing Godot...
+Godot project: /path/to/project
+Starting Godot instance...
+Engine: Godot instance created successfully!
+Godot Engine v4.6.stable.mono.custom_build...
+Engine: Godot started successfully!
+Godot initialized successfully.
+/root                              <-- Your GD.Print output
+Shutting down Godot...
+```
+
+### Recommendation: Use ITestOutputHelper
+
+For test logging, prefer xUnit's `ITestOutputHelper` over `GD.Print`:
+
+```csharp
+[Collection("GodotHeadless")]
+public class MyTests(GodotHeadlessFixture godot, ITestOutputHelper output)
+{
+    [Fact]
+    public void MyTest()
+    {
+        var node = godot.Tree.Root;
+
+        // Instead of: GD.Print(node.GetPath());
+        output.WriteLine(node.GetPath());
+    }
+}
+```
+
+Benefits of `ITestOutputHelper`:
+
+- **Per-test capture**: Output is associated with each specific test
+- **Visible on failure**: Output appears in test results when a test fails
+- **IDE integration**: Works with test explorers that display test output
+- **No noise**: Not interleaved with engine initialization messages
+
+`GD.Print` is still useful for debugging game logic at runtime, but in tests it adds noise to stdout that gets mixed with everything else.
