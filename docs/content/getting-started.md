@@ -9,7 +9,7 @@
 
 ## Installation
 
-Prerelease packages are available on [NuGet](https://www.nuget.org/packages?q=2dog&includeComputedFrameworks=true&prerel=true&sortby=created-desc). Linux and Windows are supported; macOS is WIP.
+Prerelease packages are available on [NuGet](https://www.nuget.org/packages?q=2dog&includeComputedFrameworks=true&prerel=true&sortby=created-desc). Supported platforms: `win-x64`, `linux-x64`, and `osx-arm64`.
 
 ## Your First 2dog Application
 
