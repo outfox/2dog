@@ -56,7 +56,7 @@ while (!godot.Iteration())
 - `dotnet new` project templates
 - Headless mode for servers and CI/CD
 
-> **Prerelease packages are now available on NuGet!** Linux and Windows supported. macOS is WIP.
+> **Prerelease packages are now available on NuGet!** Supported platforms: `win-x64`, `linux-x64`, `osx-arm64`.
 
 ---
 
@@ -173,7 +173,7 @@ dotnet build -c Release  # Optimized production build
 dotnet build -c Editor   # Editor tools with TOOLS_ENABLED
 ```
 
-> Currently tested on Linux and Windows only. macOS support is WIP.
+> Tested on `win-x64`, `linux-x64`, and `osx-arm64`.
 
 ---
 
