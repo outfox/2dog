@@ -97,6 +97,47 @@ godot-mono -e --path MyGame.Godot
 dotnet add package 2dog
 ```
 
+---
+
+## Known Issues
+
+### Single Godot Instance Per Process
+
+Only one Godot instance can exist per process. Attempting to start a second instance will throw an `InvalidOperationException`. This is a fundamental constraint of the Godot engine.
+
+### xUnit Test Discovery Crash with Godot Types
+
+Using Godot types (like `NodePath`, `StringName`, `Vector2`, etc.) in xUnit `[MemberData]` will crash the test runner during discovery. This happens because xUnit enumerates test data before tests run, instantiating Godot types before the engine is initialized.
+
+**Crashes during discovery:**
+```csharp
+public static IEnumerable<object[]> paths = [[new NodePath("/root")]];
+
+[Theory]
+[MemberData(nameof(paths))]
+public void MyTest(NodePath path) { }
+```
+
+**Workaround:** Add `DisableDiscoveryEnumeration = true`:
+```csharp
+[MemberData(nameof(paths), DisableDiscoveryEnumeration = true)]
+```
+
+Or use primitive types and construct Godot objects inside the test:
+```csharp
+public static IEnumerable<object[]> paths = [["/root"]];
+
+[Theory]
+[MemberData(nameof(paths))]
+public void MyTest(string pathStr)
+{
+    var path = new NodePath(pathStr);
+    // ...
+}
+```
+
+---
+
 ### Building from Source
 
 If you prefer to build everything locally instead of using NuGet packages:
