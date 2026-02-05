@@ -5,7 +5,7 @@
 ## Prerequisites
 
 - .NET SDK 8.0 or later
-- [Godot Mono](https://godotengine.org/) (for importing project assets)
+- [Godot (.NET)](https://godotengine.org/) (for importing project assets)
 
 ## Installation
 
