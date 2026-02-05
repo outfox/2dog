@@ -51,7 +51,8 @@ export default defineConfig({
           { text: 'Core Concepts', link: '/concepts' },
           { text: 'Build Configurations', link: '/build-configurations' },
           { text: 'Import Tool', link: '/import-tool' },
-          { text: 'Configuration', link: '/configuration' }
+          { text: 'Configuration', link: '/configuration' },
+          { text: 'Known Issues', link: '/known-issues' }
         ]
       },
       {
