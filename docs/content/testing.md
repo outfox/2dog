@@ -58,7 +58,7 @@ public class GodotCollection : ICollectionFixture<GodotHeadlessFixture>
 ## Writing Tests
 
 ::: warning Godot Types in MemberData
-Using Godot types like `NodePath` or `StringName` in `[MemberData]` will crash the test runner during discovery. Use `DisableDiscoveryEnumeration = true` or pass primitive types instead. See [Known Issues](/known-issues#xunit-test-discovery-crash-with-godot-types) for details.
+Using Godot types like `NodePath` or `StringName` in `[MemberData]` will crash the test runner during discovery. Use `DisableDiscoveryEnumeration = true` or pass primitive types instead. See [Known Issues](/known-issues/xunit-discovery) for details.
 :::
 
 ```csharp
