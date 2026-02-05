@@ -21,6 +21,11 @@ public class GodotFixture : IDisposable
         var assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
         var projectPath = Engine.ResolveProjectDir();
 
+        // Pre-load game assemblies into Default context BEFORE starting Godot.
+        // This prevents type identity issues where Godot loads assemblies into
+        // PluginLoadContext while test code expects them in Default context.
+        AssemblyPreloader.PreloadGameAssemblies(projectPath);
+
         // Set GODOTSHARP_DIR so Godot finds GodotPlugins.dll in the output directory.
         // On Linux/.NET 8+, must use native setenv() because .NET's SetEnvironmentVariable
         // doesn't propagate to native getenv(). On Windows, the .NET API works fine.
