@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "2dog.import": {
+      "version": "0.1.9-pre",
+      "commands": [
+        "2dog-import"
+      ]
+    }
+  }
+}

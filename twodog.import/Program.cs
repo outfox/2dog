@@ -1,46 +1,56 @@
-using System.Diagnostics;
+using twodog;
 
-string? editorPath = null;
+// Parse arguments
 string? projectPath = null;
 
 for (var i = 0; i < args.Length; i++)
 {
-    if (args[i] == "--editor" && i + 1 < args.Length)
-        editorPath = args[++i];
-    else if (projectPath == null)
+    if (args[i] == "--path" && i + 1 < args.Length)
+        projectPath = args[++i];
+    else if (projectPath == null && !args[i].StartsWith("--"))
         projectPath = args[i];
 }
 
-editorPath ??= Environment.GetEnvironmentVariable("GODOT_EDITOR");
-projectPath = projectPath != null ? Path.GetFullPath(projectPath) : null;
+// Default to current directory if no path specified
+projectPath ??= Directory.GetCurrentDirectory();
+projectPath = Path.GetFullPath(projectPath);
 
-if (editorPath == null || projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot")))
+// Validate project directory
+if (!File.Exists(Path.Combine(projectPath, "project.godot")))
 {
-    Console.Error.WriteLine("Usage: twodog.import [--editor <godot-binary>] <path-to-godot-project>");
+    Console.Error.WriteLine("Usage: 2dog-import [--path] <path-to-godot-project>");
     Console.Error.WriteLine();
-    Console.Error.WriteLine("  --editor <path>   Path to Godot editor binary");
-    Console.Error.WriteLine("                     Falls back to GODOT_EDITOR environment variable");
+    Console.Error.WriteLine("  <path-to-godot-project>  Path to directory containing project.godot");
+    Console.Error.WriteLine("                           Defaults to current directory if not specified");
     Console.Error.WriteLine();
-    Console.Error.WriteLine("  The project path must contain a project.godot file.");
+    Console.Error.WriteLine($"Error: No project.godot found in: {projectPath}");
     return 1;
 }
 
-if (!File.Exists(editorPath))
-{
-    Console.Error.WriteLine($"Editor binary not found: {editorPath}");
-    return 1;
-}
+Console.WriteLine($"Importing Godot project: {projectPath}");
+Console.WriteLine("This may take a moment...");
+Console.WriteLine();
 
-var process = new Process
+try
 {
-    StartInfo = new ProcessStartInfo
+    // Create and start Godot engine in editor mode with import flag
+    // The first argument is the application name, followed by --path and the project directory
+    using var engine = new Engine("2dog-import", projectPath, "--headless", "--import", "--quit");
+    using var godot = engine.Start();
+
+    // Run until Godot quits (import completes)
+    while (!godot.Iteration())
     {
-        FileName = editorPath,
-        ArgumentList = { "--headless", "--import", "--path", projectPath },
-        UseShellExecute = false,
+        // Let Godot run its import process
     }
-};
 
-process.Start();
-process.WaitForExit();
-return process.ExitCode;
+    Console.WriteLine();
+    Console.WriteLine("Import completed successfully!");
+    return 0;
+}
+catch (Exception ex)
+{
+    Console.Error.WriteLine();
+    Console.Error.WriteLine($"Import failed: {ex.Message}");
+    return 1;
+}

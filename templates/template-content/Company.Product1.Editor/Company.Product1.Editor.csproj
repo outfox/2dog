@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <RollForward>Major</RollForward>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="2dog" Version="TWODOG_PKG_VERSION" />
+        <!-- Explicitly reference the editor variant -->
+        <PackageReference Include="2dog.win-x64.editor" Version="NATIVES_PKG_VERSION" Condition="$([MSBuild]::IsOsPlatform('Windows'))" />
+        <PackageReference Include="2dog.linux-x64.editor" Version="NATIVES_PKG_VERSION" Condition="$([MSBuild]::IsOsPlatform('Linux'))" />
+        <PackageReference Include="2dog.osx-arm64.editor" Version="NATIVES_PKG_VERSION" Condition="$([MSBuild]::IsOsPlatform('OSX'))" />
+    </ItemGroup>
+
+    <!-- Godot project location -->
+    <PropertyGroup>
+        <GodotProjectDir>../Company.Product1.Godot</GodotProjectDir>
+    </PropertyGroup>
+</Project>

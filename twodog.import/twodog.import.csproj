@@ -4,8 +4,24 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <IsPackable>false</IsPackable>
+        <RollForward>Major</RollForward>
+
+        <!-- Package this as a dotnet tool -->
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>2dog-import</ToolCommandName>
+        <PackageId>2dog.Import</PackageId>
+        <Description>Godot resource importer using libgodot. Generates .uid files for C# scripts in Godot projects.</Description>
+        <PackageTags>godot;2dog;import;tool</PackageTags>
     </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="2dog" Version="$(TwoDogVersion)" />
+        <!-- Explicitly reference the editor variant for all configurations -->
+        <PackageReference Include="2dog.win-x64.editor" Version="$(TwoDogVersion)" Condition="$([MSBuild]::IsOsPlatform('Windows'))" />
+        <PackageReference Include="2dog.linux-x64.editor" Version="$(TwoDogVersion)" Condition="$([MSBuild]::IsOsPlatform('Linux'))" />
+        <PackageReference Include="2dog.osx-arm64.editor" Version="$(TwoDogVersion)" Condition="$([MSBuild]::IsOsPlatform('OSX'))" />
+    </ItemGroup>
+
     <Target Name="DeepClean" AfterTargets="Clean">
         <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
         <RemoveDir Directories="$(BaseOutputPath)" />

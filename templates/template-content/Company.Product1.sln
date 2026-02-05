@@ -8,6 +8,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TPLRAWNAME.Tests", "TPLRAWNAME.Tests\TPLRAWNAME.Tests.csproj", "{D5E6F7A8-B9C0-4D1E-2F3A-4B5C6D7E8F9A}"
 EndProject
 #endif
+#if (editor)
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TPLRAWNAME.Editor", "TPLRAWNAME.Editor\TPLRAWNAME.Editor.csproj", "{C6D7E8F9-A0B1-4C2D-3E4F-5A6B7C8D9E0F}"
+EndProject
+#endif
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +27,12 @@ Global
 		{D5E6F7A8-B9C0-4D1E-2F3A-4B5C6D7E8F9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5E6F7A8-B9C0-4D1E-2F3A-4B5C6D7E8F9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5E6F7A8-B9C0-4D1E-2F3A-4B5C6D7E8F9A}.Release|Any CPU.Build.0 = Release|Any CPU
+#endif
+#if (editor)
+		{C6D7E8F9-A0B1-4C2D-3E4F-5A6B7C8D9E0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6D7E8F9-A0B1-4C2D-3E4F-5A6B7C8D9E0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6D7E8F9-A0B1-4C2D-3E4F-5A6B7C8D9E0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6D7E8F9-A0B1-4C2D-3E4F-5A6B7C8D9E0F}.Release|Any CPU.Build.0 = Release|Any CPU
 #endif
 	EndGlobalSection
 EndGlobal
