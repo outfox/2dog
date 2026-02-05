@@ -52,7 +52,16 @@ export default defineConfig({
           { text: 'Build Configurations', link: '/build-configurations' },
           { text: 'Import Tool', link: '/import-tool' },
           { text: 'Configuration', link: '/configuration' },
-          { text: 'Known Issues', link: '/known-issues' }
+          {
+            text: 'Known Issues',
+            link: '/known-issues/',
+            collapsed: true,
+            items: [
+              { text: 'Single Godot Instance', link: '/known-issues/single-instance' },
+              { text: 'xUnit Test Discovery', link: '/known-issues/xunit-discovery' },
+              { text: 'GD.Print in Tests', link: '/known-issues/gd-print-output' }
+            ]
+          }
         ]
       },
       {
