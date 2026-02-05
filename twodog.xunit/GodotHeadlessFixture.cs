@@ -23,6 +23,11 @@ public class GodotHeadlessFixture : IDisposable
         var assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
         var projectPath = Engine.ResolveProjectDir();
 
+        // Pre-load game assemblies into Default context BEFORE starting Godot.
+        // This prevents type identity issues where Godot loads assemblies into
+        // PluginLoadContext while test code expects them in Default context.
+        AssemblyPreloader.PreloadGameAssemblies(projectPath);
+
         // Set GODOTSHARP_DIR so Godot finds GodotPlugins.dll in the output directory.
         // When running via dotnet test, the host process is /usr/share/dotnet/dotnet,
         // so Godot's exe_dir fallback resolves to the wrong directory.
