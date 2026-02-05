@@ -26,6 +26,10 @@
         <Using Include="Xunit"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest"/>
+    </ItemGroup>
+
     <!-- Embed GodotProjectDir as assembly metadata for fixture discovery at runtime.
          (NuGet consumers get this automatically via 2dog.xunit.targets; ProjectReference needs it explicit.) -->
     <ItemGroup>
