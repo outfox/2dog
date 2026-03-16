@@ -18,7 +18,7 @@ config/features=PackedStringArray("4.6", "C#")
 
 [dotnet]
 
-project/assembly_name="Company.Product1"
+project/assembly_name="Company.Product1.Godot"
 
 [display]
 
