@@ -12,7 +12,6 @@
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
-
     <!-- NuGet Package Metadata -->
     <PropertyGroup>
         <PackageId>2dog</PackageId>

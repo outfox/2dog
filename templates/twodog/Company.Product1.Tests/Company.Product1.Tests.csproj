@@ -40,6 +40,10 @@
         <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="../TPLRAWNAME.Godot/TPLRAWNAME.Godot.csproj"/>
+    </ItemGroup>
+
     <!-- Godot project location -->
     <PropertyGroup>
         <GodotProjectDir>../TPLRAWNAME.Godot</GodotProjectDir>
