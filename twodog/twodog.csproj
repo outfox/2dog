@@ -22,7 +22,6 @@
         <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
         <IncludeSymbols>true</IncludeSymbols>
         <IsPackable>true</IsPackable>

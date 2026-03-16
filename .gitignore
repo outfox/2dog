@@ -13,6 +13,7 @@ todo
 dist
 /build
 /builds
+*.binlog
 
 obj
 bin
