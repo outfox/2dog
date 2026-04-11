@@ -10,7 +10,7 @@
     <ItemGroup>
         <PackageReference Include="2dog" Version="TWODOG_PKG_VERSION"/>
         <PackageReference Include="2dog.xunit" Version="TWODOG_PKG_VERSION"/>
-        <PackageReference Include="GodotSharp" Version="4.6.0"/>
+        <PackageReference Include="GodotSharp" Version="GODOT_SDK_VERSION"/>
     </ItemGroup>
 
     <!-- Platform-specific native library packages -->
