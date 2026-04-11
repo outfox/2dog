@@ -1,8 +1,10 @@
 <Project>
     <PropertyGroup>
-        <TwoDogVersion>0.1.21-pre</TwoDogVersion>
+        <TwoDogVersion>0.1.22-pre</TwoDogVersion>
+        <!-- Godot engine version. Must match the godot submodule. -->
+        <GodotVersion>4.6.2</GodotVersion>
         <!-- Native platform package version. Bump only when godot submodule changes. -->
-        <NativesVersion>4.6.2.0</NativesVersion>
+        <NativesVersion>$(GodotVersion).0</NativesVersion>
         <!-- Allow running on any .NET 8+ runtime (8, 9, 10, ...) -->
         <RollForward>LatestMajor</RollForward>
     </PropertyGroup>

@@ -20,13 +20,51 @@ on:
 
 permissions:
   contents: write
-  actions: write
 
 jobs:
+  # Check if native libraries are available before running the full pipeline.
+  # When a native build is in progress, this job outputs ready=false so downstream
+  # jobs are skipped (green badge) instead of cancelled (red badge).
+  check-natives:
+    name: Check Native Libraries
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.check.outputs.ready }}
+      hash: ${{ steps.check.outputs.hash }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Check native library availability
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          HASH=$(git ls-tree HEAD godot | awk '{print $3}' | cut -c1-7)
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
+          echo "Godot submodule hash: $HASH"
+
+          TAG="godot-$HASH"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            echo "ready=true" >> $GITHUB_OUTPUT
+          else
+            BUILDING=$(gh run list -w build-natives.yml --branch main \
+              --json status -q '[.[] | select(.status == "in_progress" or .status == "queued")] | length')
+            if [ "$BUILDING" -gt 0 ]; then
+              echo "::notice::Native build in progress — skipping CI. It will re-trigger when the build completes."
+              echo "ready=false" >> $GITHUB_OUTPUT
+            else
+              echo "::error::No native build for godot submodule $HASH. Run the 'Build Native Libraries' workflow first."
+              exit 1
+            fi
+          fi
+
   # Download pre-built native libraries, stage godot/bin, and pack all NuGet packages.
   pack:
     name: Pack NuGet Packages
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    needs: [check-natives]
+    if: needs.check-natives.outputs.ready == 'true'
     runs-on: blacksmith-4vcpu-ubuntu-2404
 
     steps:
@@ -38,32 +76,12 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Compute godot submodule hash
-        id: hash
-        run: |
-          HASH=$(git ls-tree HEAD godot | awk '{print $3}' | cut -c1-7)
-          echo "hash=$HASH" >> $GITHUB_OUTPUT
-          echo "Godot submodule hash: $HASH"
-
       - name: Download native libraries from release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="godot-${{ steps.hash.outputs.hash }}"
+          TAG="godot-${{ needs.check-natives.outputs.hash }}"
           echo "Looking for release: $TAG"
-          if ! gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
-            # Check if a native build is currently running — if so, cancel this run
-            # and let the workflow_run trigger re-run CI when the build completes.
-            BUILDING=$(gh run list -w build-natives.yml --branch main \
-              --json status -q '[.[] | select(.status == "in_progress" or .status == "queued")] | length')
-            if [ "$BUILDING" -gt 0 ]; then
-              echo "::notice::Native build in progress — cancelling this run. CI will re-trigger when the build completes."
-              gh run cancel "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY"
-              sleep 60
-            fi
-            echo "::error::No native build for godot submodule ${{ steps.hash.outputs.hash }}. Run the 'Build Native Libraries' workflow first."
-            exit 1
-          fi
           mkdir -p release-assets
           gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir release-assets
           echo "Downloaded assets:"
@@ -150,6 +168,9 @@ jobs:
 
       - name: Pack twodog.xunit
         run: dotnet pack twodog.xunit
+
+      - name: Pack templates
+        run: dotnet pack templates
 
       - name: List packages
         run: ls -lh packages/

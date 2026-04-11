@@ -32,7 +32,7 @@
     "twodogVersion": {
       "type": "parameter",
       "datatype": "string",
-      "defaultValue": "0.1.6-pre",
+      "defaultValue": "0.0.0-tpl",
       "replaces": "TWODOG_PKG_VERSION",
       "description": "Version of 2dog packages to reference."
     },
@@ -42,6 +42,13 @@
       "defaultValue": "0.0.0-ntpl",
       "replaces": "NATIVES_PKG_VERSION",
       "description": "Version of native platform packages to reference."
+    },
+    "godotVersion": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "0.0.0-gtpl",
+      "replaces": "GODOT_SDK_VERSION",
+      "description": "Version of Godot.NET.Sdk and GodotSharp to reference."
     },
     "tests": {
       "type": "parameter",

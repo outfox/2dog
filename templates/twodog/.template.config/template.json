@@ -43,6 +43,13 @@
       "replaces": "NATIVES_PKG_VERSION",
       "description": "Version of native platform packages to reference."
     },
+    "godotVersion": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "0.0.0-gtpl",
+      "replaces": "GODOT_SDK_VERSION",
+      "description": "Version of Godot.NET.Sdk and GodotSharp to reference."
+    },
     "tests": {
       "type": "parameter",
       "datatype": "bool",
