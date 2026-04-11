@@ -29,9 +29,9 @@
     <PropertyGroup>
         <!-- Variant package paths in the NuGet global packages folder -->
         <!-- $(NuGetPackageRoot) is set by NuGet restore and points to the packages cache -->
-        <TwoDogWinX64ReleasePackage>$(NuGetPackageRoot)\2dog.win-x64.release\$(TwoDogWinX64PackageVersion)\runtimes\win-x64\native\libgodot.dll</TwoDogWinX64ReleasePackage>
-        <TwoDogWinX64DebugPackage>$(NuGetPackageRoot)\2dog.win-x64.debug\$(TwoDogWinX64PackageVersion)\runtimes\win-x64\native\libgodot.dll</TwoDogWinX64DebugPackage>
-        <TwoDogWinX64EditorPackage>$(NuGetPackageRoot)\2dog.win-x64.editor\$(TwoDogWinX64PackageVersion)\runtimes\win-x64\native\libgodot.dll</TwoDogWinX64EditorPackage>
+        <TwoDogWinX64ReleasePackage>$(NuGetPackageRoot)/2dog.win-x64.release/$(TwoDogWinX64PackageVersion)/runtimes/win-x64/native/libgodot.dll</TwoDogWinX64ReleasePackage>
+        <TwoDogWinX64DebugPackage>$(NuGetPackageRoot)/2dog.win-x64.debug/$(TwoDogWinX64PackageVersion)/runtimes/win-x64/native/libgodot.dll</TwoDogWinX64DebugPackage>
+        <TwoDogWinX64EditorPackage>$(NuGetPackageRoot)/2dog.win-x64.editor/$(TwoDogWinX64PackageVersion)/runtimes/win-x64/native/libgodot.dll</TwoDogWinX64EditorPackage>
 
         <!-- Local development paths (fallback for ProjectReference builds) -->
         <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
@@ -70,6 +70,13 @@
         <TwoDogWinX64NativeLib Condition="'$(TwoDogWinX64VariantPackagePath)' != '' And Exists('$(TwoDogWinX64VariantPackagePath)')">$(TwoDogWinX64VariantPackagePath)</TwoDogWinX64NativeLib>
         <TwoDogWinX64NativeLib Condition="'$(TwoDogWinX64NativeLib)' == '' And '$(TwoDogWinX64VariantLocalPath)' != '' And Exists('$(TwoDogWinX64VariantLocalPath)')">$(TwoDogWinX64VariantLocalPath)</TwoDogWinX64NativeLib>
     </PropertyGroup>
+
+    <!-- Warn if native library cannot be resolved on the matching platform -->
+    <Target Name="TwoDogWinX64DiagnosticCheck"
+            BeforeTargets="Build"
+            Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('Windows')) And '$(TwoDogWinX64NativeLib)' == ''">
+        <Warning Text="TwoDog: Could not locate libgodot.dll for win-x64. Searched NuGet: $(TwoDogWinX64VariantPackagePath) — Local: $(TwoDogWinX64VariantLocalPath). The application will fail at runtime with DllNotFoundException." />
+    </Target>
 
     <!-- Copy native library to output on build (Windows only) -->
     <Target Name="TwoDogWinX64CopyNatives"

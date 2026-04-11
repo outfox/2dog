@@ -10,7 +10,6 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <PackageId>2dog.osx-arm64</PackageId>
         <Description>macOS arm64 meta package for twodog. Includes release, debug, and editor native libraries. Reference this package alongside twodog for complete macOS support.</Description>
-        <IsPackable>true</IsPackable>
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <!-- Use custom nuspec for explicit dependency control -->

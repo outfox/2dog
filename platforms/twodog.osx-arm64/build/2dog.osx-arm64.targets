@@ -66,6 +66,13 @@
         <TwoDogOsxArm64NativeLib Condition="'$(TwoDogOsxArm64NativeLib)' == '' And '$(TwoDogOsxArm64VariantLocalPath)' != '' And Exists('$(TwoDogOsxArm64VariantLocalPath)')">$(TwoDogOsxArm64VariantLocalPath)</TwoDogOsxArm64NativeLib>
     </PropertyGroup>
 
+    <!-- Warn if native library cannot be resolved on the matching platform -->
+    <Target Name="TwoDogOsxArm64DiagnosticCheck"
+            BeforeTargets="Build"
+            Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('OSX')) And '$(TwoDogOsxArm64NativeLib)' == ''">
+        <Warning Text="TwoDog: Could not locate libgodot.dylib for osx-arm64. Searched NuGet: $(TwoDogOsxArm64VariantPackagePath) — Local: $(TwoDogOsxArm64VariantLocalPath). The application will fail at runtime with DllNotFoundException." />
+    </Target>
+
     <!-- Copy native library to output on build (macOS only) -->
     <Target Name="TwoDogOsxArm64CopyNatives"
             AfterTargets="Build"

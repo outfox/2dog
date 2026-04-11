@@ -55,35 +55,22 @@
     </ItemGroup>
 
     <!--
-      Platform-specific native library packages (release variant).
+      Platform-specific native library packages.
       These are dependencies of the 2dog package, so consumers get them automatically.
-      NuGet automatically selects the correct native library at runtime based on the RID.
-      
+      At build time, only the matching platform's MSBuild targets copy the native library.
+
       For debug/editor variants, reference the corresponding platform package explicitly
       (e.g., 2dog.win-x64.debug or 2dog.win-x64.editor) in your application project.
-      
-      NOTE: These PackageReferences are only included when packing (GeneratePackageOnBuild).
-      For local development, native libraries are handled by the Content items below.
     -->
     <!--
-      Platform-specific native library package dependencies.
-      These are conditional on OS so that restore works on single-platform dev machines.
-      When the 2dog NuGet package is published, all three platform packages will exist on
-      the NuGet feed, so consumers get the correct one resolved automatically.
+      All platform packages are always declared as dependencies so that the packed
+      2dog.nupkg includes them regardless of which OS the pack runs on.
+      NuGet consumers get all three; at build time only the matching platform's
+      targets actually copy a native library.
     -->
-    <!-- CI: include all platform packages regardless of host OS -->
-    <ItemGroup Condition="'$(ForcePackAllPlatforms)' == 'true'">
+    <ItemGroup>
         <PackageReference Include="2dog.win-x64" Version="$(NativesVersion)" PrivateAssets="none"/>
         <PackageReference Include="2dog.linux-x64" Version="$(NativesVersion)" PrivateAssets="none"/>
-        <PackageReference Include="2dog.osx-arm64" Version="$(NativesVersion)" PrivateAssets="none"/>
-    </ItemGroup>
-    <ItemGroup Condition="'$(ForcePackAllPlatforms)' != 'true' And $([MSBuild]::IsOSPlatform('Windows'))">
-        <PackageReference Include="2dog.win-x64" Version="$(NativesVersion)" PrivateAssets="none"/>
-    </ItemGroup>
-    <ItemGroup Condition="'$(ForcePackAllPlatforms)' != 'true' And $([MSBuild]::IsOSPlatform('Linux'))">
-        <PackageReference Include="2dog.linux-x64" Version="$(NativesVersion)" PrivateAssets="none"/>
-    </ItemGroup>
-    <ItemGroup Condition="'$(ForcePackAllPlatforms)' != 'true' And $([MSBuild]::IsOSPlatform('OSX'))">
         <PackageReference Include="2dog.osx-arm64" Version="$(NativesVersion)" PrivateAssets="none"/>
     </ItemGroup>
 

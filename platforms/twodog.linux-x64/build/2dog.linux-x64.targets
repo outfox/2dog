@@ -66,6 +66,13 @@
         <TwoDogLinuxX64NativeLib Condition="'$(TwoDogLinuxX64NativeLib)' == '' And '$(TwoDogLinuxX64VariantLocalPath)' != '' And Exists('$(TwoDogLinuxX64VariantLocalPath)')">$(TwoDogLinuxX64VariantLocalPath)</TwoDogLinuxX64NativeLib>
     </PropertyGroup>
 
+    <!-- Warn if native library cannot be resolved on the matching platform -->
+    <Target Name="TwoDogLinuxX64DiagnosticCheck"
+            BeforeTargets="Build"
+            Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('Linux')) And '$(TwoDogLinuxX64NativeLib)' == ''">
+        <Warning Text="TwoDog: Could not locate libgodot.so for linux-x64. Searched NuGet: $(TwoDogLinuxX64VariantPackagePath) — Local: $(TwoDogLinuxX64VariantLocalPath). The application will fail at runtime with DllNotFoundException." />
+    </Target>
+
     <!-- Copy native library to output on build (Linux only) -->
     <Target Name="TwoDogLinuxX64CopyNatives"
             AfterTargets="Build"
