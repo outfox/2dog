@@ -16,8 +16,8 @@
         <OutputLibName Condition="'$(NativeLibExt)' == 'so'">libgodot.so</OutputLibName>
         <OutputLibName Condition="'$(NativeLibExt)' == 'dylib'">libgodot.dylib</OutputLibName>
 
-        <!-- Skip packaging if native library doesn't exist -->
-        <IsPackable Condition="!Exists('$(NativeLibPath)')">false</IsPackable>
+        <!-- Skip packaging if native library doesn't exist (unless forcing all platforms) -->
+        <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(NativeLibPath)')">false</IsPackable>
     </PropertyGroup>
 
     <!-- Meta packages don't have native libraries, so close the conditional PropertyGroup above -->
