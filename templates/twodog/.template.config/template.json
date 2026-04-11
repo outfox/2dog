@@ -32,7 +32,7 @@
     "twodogVersion": {
       "type": "parameter",
       "datatype": "string",
-      "defaultValue": "0.1.22-pre",
+      "defaultValue": "0.1.23-pre",
       "replaces": "TWODOG_PKG_VERSION",
       "description": "Version of 2dog packages to reference."
     },
