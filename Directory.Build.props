@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <TwoDogVersion>0.1.22-pre</TwoDogVersion>
+        <TwoDogVersion>0.1.23-pre</TwoDogVersion>
         <!-- Godot engine version. Must match the godot submodule. -->
         <GodotVersion>4.6.2</GodotVersion>
         <!-- Native platform package version. Bump only when godot submodule changes. -->
