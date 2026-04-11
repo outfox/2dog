@@ -149,7 +149,7 @@ jobs:
         run: dotnet build twodog.xunit -c Release
 
       - name: Pack twodog (main package)
-        run: dotnet pack twodog -p:ForcePackAllPlatforms=true
+        run: dotnet pack twodog
 
       - name: List packages
         run: ls -lh packages/

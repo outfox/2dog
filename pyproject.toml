@@ -29,7 +29,7 @@ sequence = [
 [tool.poe.tasks.build]
 help = "dotnet build: Platform packages, twodog library, and NuGet packages, and import Godot game project"
 sequence = [
-    { cmd = "dotnet pack platforms" },
+    { cmd = "dotnet pack platforms -p:ForcePackAllPlatforms=true" },
     { cmd = "dotnet pack twodog" },
     { cmd = "dotnet pack twodog.xunit" },
     { cmd = "dotnet restore" },
