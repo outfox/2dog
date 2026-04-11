@@ -145,11 +145,11 @@ jobs:
           dotnet build twodog -c Release
           dotnet build twodog -c Editor
 
-      - name: Build twodog.xunit
-        run: dotnet build twodog.xunit -c Release
-
       - name: Pack twodog (main package)
         run: dotnet pack twodog
+
+      - name: Pack twodog.xunit
+        run: dotnet pack twodog.xunit
 
       - name: List packages
         run: ls -lh packages/
