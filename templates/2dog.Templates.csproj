@@ -38,37 +38,41 @@
         <None Include="README.md" Pack="true" PackagePath="/" />
     </ItemGroup>
 
-    <!-- Substitute version placeholders into template.json at pack time -->
-    <UsingTask TaskName="SubstituteInFile" TaskFactory="RoslynCodeTaskFactory"
+    <!-- Write version defaults from Directory.Build.props into template.json.
+         This modifies the source file so both `dotnet pack` and local
+         `dotnet new install templates/twodog/` always use correct versions. -->
+    <UsingTask TaskName="SetTemplateDefaults" TaskFactory="RoslynCodeTaskFactory"
                AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
         <ParameterGroup>
             <FilePath ParameterType="System.String" Required="true" />
-            <Find ParameterType="System.String" Required="true" />
-            <ReplaceWith ParameterType="System.String" Required="true" />
+            <TwoDogVer ParameterType="System.String" Required="true" />
+            <NativesVer ParameterType="System.String" Required="true" />
+            <GodotVer ParameterType="System.String" Required="true" />
         </ParameterGroup>
         <Task>
-            <Code Type="Fragment" Language="cs">
+            <Using Namespace="System.Text.RegularExpressions" />
+            <Code Type="Fragment" Language="cs"><![CDATA[
                 var text = File.ReadAllText(FilePath);
-                File.WriteAllText(FilePath, text.Replace(Find, ReplaceWith));
-            </Code>
+                // Replace the defaultValue for each known symbol by matching the JSON key.
+                text = System.Text.RegularExpressions.Regex.Replace(text,
+                    @"(""twodogVersion""[^}]*""defaultValue"":\s*)""[^""]*""",
+                    "${1}\"" + TwoDogVer + "\"");
+                text = System.Text.RegularExpressions.Regex.Replace(text,
+                    @"(""nativesVersion""[^}]*""defaultValue"":\s*)""[^""]*""",
+                    "${1}\"" + NativesVer + "\"");
+                text = System.Text.RegularExpressions.Regex.Replace(text,
+                    @"(""godotVersion""[^}]*""defaultValue"":\s*)""[^""]*""",
+                    "${1}\"" + GodotVer + "\"");
+                File.WriteAllText(FilePath, text);
+            ]]></Code>
         </Task>
     </UsingTask>
 
-    <Target Name="SubstituteTemplateVersions" BeforeTargets="GenerateNuspec">
-        <SubstituteInFile FilePath="twodog/.template.config/template.json"
-                          Find="0.0.0-tpl" ReplaceWith="$(TwoDogVersion)" />
-        <SubstituteInFile FilePath="twodog/.template.config/template.json"
-                          Find="0.0.0-ntpl" ReplaceWith="$(NativesVersion)" />
-        <SubstituteInFile FilePath="twodog/.template.config/template.json"
-                          Find="0.0.0-gtpl" ReplaceWith="$(GodotVersion)" />
-    </Target>
-
-    <Target Name="RestoreTemplateVersions" AfterTargets="Pack">
-        <SubstituteInFile FilePath="twodog/.template.config/template.json"
-                          Find="$(TwoDogVersion)" ReplaceWith="0.0.0-tpl" />
-        <SubstituteInFile FilePath="twodog/.template.config/template.json"
-                          Find="$(NativesVersion)" ReplaceWith="0.0.0-ntpl" />
-        <SubstituteInFile FilePath="twodog/.template.config/template.json"
-                          Find="$(GodotVersion)" ReplaceWith="0.0.0-gtpl" />
+    <Target Name="SyncTemplateVersions" BeforeTargets="GenerateNuspec">
+        <SetTemplateDefaults
+            FilePath="twodog/.template.config/template.json"
+            TwoDogVer="$(TwoDogVersion)"
+            NativesVer="$(NativesVersion)"
+            GodotVer="$(GodotVersion)" />
     </Target>
 </Project>
