@@ -69,7 +69,7 @@ jobs:
           submodules: recursive
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
 
@@ -97,7 +97,7 @@ jobs:
             libwayland-dev
 
       - name: Cache SCons
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             godot/.scons_cache
@@ -115,28 +115,28 @@ jobs:
             --cache-path godot/.scons_cache
 
       - name: Upload GodotSharp assemblies
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: godotsharp
           path: godot/bin/GodotSharp/
           retention-days: 7
 
       - name: Upload GodotSharp NuGet packages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: godotsharp-nupkgs
           path: godot/bin/GodotSharp/Tools/nupkgs/
           retention-days: 7
 
       - name: Upload source generators
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: godot-source-generators
           path: godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/Godot.SourceGenerators.dll
           retention-days: 7
 
       - name: Upload Linux editor binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: godot-editor-linux-x64
           path: godot/bin/godot.linuxbsd.editor.x86_64.executable.mono
@@ -223,7 +223,7 @@ jobs:
           submodules: recursive
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
 
@@ -272,7 +272,7 @@ jobs:
 
       # Cache SCons build
       - name: Cache SCons
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             godot/.scons_cache
@@ -314,7 +314,7 @@ jobs:
 
       # Upload artifact
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.artifact_name }}
           path: dist/${{ matrix.artifact_name }}.zip
@@ -329,7 +329,7 @@ jobs:
 
     steps:
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: artifacts
 

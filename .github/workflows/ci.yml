@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   actions: write
 
 jobs:
@@ -155,7 +155,7 @@ jobs:
         run: ls -lh packages/
 
       - name: Upload godot-bin artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: godot-bin
           path: |
@@ -164,7 +164,7 @@ jobs:
           retention-days: 3
 
       - name: Upload NuGet packages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: nuget-packages
           path: packages/
@@ -187,7 +187,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Download godot-bin artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: godot-bin
           path: godot
@@ -198,7 +198,7 @@ jobs:
           python3 import-project.py ./game
 
       - name: Upload imported game data
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: game-imported
           path: game/.godot/
@@ -233,19 +233,19 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Download godot-bin artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: godot-bin
           path: godot
 
       - name: Download imported game data
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: game-imported
           path: game/.godot
 
       - name: Download NuGet packages
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: nuget-packages
           path: packages
@@ -262,7 +262,7 @@ jobs:
       - name: Test (Editor)
         run: dotnet test -c Editor --no-restore
 
-  # Deploy to NuGet on version tag push.
+  # Deploy to NuGet and create GitHub release on version tag push.
   deploy:
     name: Deploy to NuGet
     needs: [test]
@@ -271,7 +271,7 @@ jobs:
 
     steps:
       - name: Download NuGet packages
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: nuget-packages
           path: packages
@@ -293,3 +293,14 @@ jobs:
               --api-key "$NUGET_API_KEY" \
               --skip-duplicate
           done
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          gh release create "$TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$TAG" \
+            --generate-notes \
+            packages/*.nupkg packages/*.snupkg
