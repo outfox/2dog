@@ -34,15 +34,15 @@ engine.Tree.Root.AddChild(scene.Instantiate());
 // Run the main loop
 while (!godot.Iteration())
 {
-    // Your code here – every frame
+    // Your code here - every frame
 }
 ```
 
 ### What does this mean?
 
-- 🎮 **Full Godot Power** – access the complete GodotSharp API: scenes, physics, rendering, audio, input – everything Godot can do
-- 🔄 **Inverted Control** – your .NET process controls Godot, not the other way around
-- 🧪 **First-Class Testing** – built-in xUnit fixtures for testing Godot code, run headless in CI/CD pipelines
+- 🎮 **Full Godot Power** - access the complete GodotSharp API: scenes, physics, rendering, audio, input - everything Godot can do
+- 🔄 **Inverted Control** - your .NET process controls Godot, not the other way around
+- 🧪 **First-Class Testing** - built-in xUnit fixtures for testing Godot code, run headless in CI/CD pipelines
 
 ---
 
@@ -181,12 +181,12 @@ dotnet build -c Editor   # Editor tools with TOOLS_ENABLED
 
 Full documentation at **[2dog.dev](https://2dog.dev)**
 
-- [Getting Started](https://2dog.dev/getting-started.html) – installation and first project
-- [Core Concepts](https://2dog.dev/concepts.html) – architecture and design
-- [Build Configurations](https://2dog.dev/build-configurations.html) – Debug, Release, and Editor modes
-- [API Reference](https://2dog.dev/api-reference.html) – Engine, GodotInstance, and more
-- [Testing with xUnit](https://2dog.dev/testing.html) – test fixtures and CI/CD setup
-- [Project Templates](https://2dog.dev/templates.html) – scaffolding new projects
+- [Getting Started](https://2dog.dev/getting-started.html) - installation and first project
+- [Core Concepts](https://2dog.dev/concepts.html) - architecture and design
+- [Build Configurations](https://2dog.dev/build-configurations.html) - Debug, Release, and Editor modes
+- [API Reference](https://2dog.dev/api-reference.html) - Engine, GodotInstance, and more
+- [Testing with xUnit](https://2dog.dev/testing.html) - test fixtures and CI/CD setup
+- [Project Templates](https://2dog.dev/templates.html) - scaffolding new projects
 
 ---
 

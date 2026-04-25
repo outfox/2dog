@@ -1,12 +1,12 @@
 ---
 layout: home
 title: 2dog
-titleTemplate: :title – Godot in .NET
+titleTemplate: :title - Godot in .NET
 
 head:
   - - meta
     - name: title
-      content: 2dog – Godot in .NET
+      content: 2dog - Godot in .NET
   - - meta
     - name: description
       content: Embed Godot Engine in your .NET applications. Full engine control, xUnit testing, and CI/CD support.
@@ -18,7 +18,7 @@ head:
       content: https://2dog.dev
   - - meta
     - property: og:title
-      content: 2dog – Godot in .NET
+      content: 2dog - Godot in .NET
 
 hero:
   image:
@@ -34,7 +34,7 @@ hero:
 
 features:
   - title: 🎮 Full Godot Power
-    details: Access the complete GodotSharp API  –  scenes, physics, rendering, audio, input  –  everything Godot can do.
+    details: Access the complete GodotSharp API  -  scenes, physics, rendering, audio, input  -  everything Godot can do.
   - title: 🔄 Inverted Control
     details: Your .NET process controls Godot, not the other way around. Start, iterate, and stop the engine when you decide.
   - title: 🧪 First-Class Testing
@@ -60,7 +60,7 @@ engine.Tree.Root.AddChild(scene.Instantiate());
 // Run the main loop
 while (!godot.Iteration())
 {
-    // Your code here  –  every frame
+    // Your code here  -  every frame
 }
 ```
 
