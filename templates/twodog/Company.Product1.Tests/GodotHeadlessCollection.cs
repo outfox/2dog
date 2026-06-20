@@ -1,5 +1,4 @@
-using twodog.xunit;
-using Xunit;
+using twodog.fixture;
 
 namespace Company.Product1.Tests;
 
