@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -9,10 +9,10 @@
 
     <!-- NuGet Package Metadata -->
     <PropertyGroup>
-        <PackageId>2dog.xunit</PackageId>
+        <PackageId>2dog.fixture</PackageId>
         <Version>$(TwoDogVersion)</Version>
         <Authors>Moritz Voss</Authors>
-        <Description>xUnit test fixtures for testing Godot applications with twodog.</Description>
+        <Description>Unit test fixtures for testing Godot applications with twodog.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
         <PackageIcon>icon.png</PackageIcon>
@@ -40,7 +40,6 @@
 
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.4"/>
-        <PackageReference Include="xunit" Version="2.9.2"/>
     </ItemGroup>
 
     <!-- Package icon, readme, and build targets -->

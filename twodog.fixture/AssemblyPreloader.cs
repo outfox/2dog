@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace twodog.xunit;
+namespace twodog.fixture;
 
 /// <summary>
 /// Handles pre-loading game assemblies into the Default AssemblyLoadContext before Godot starts.
