@@ -53,7 +53,7 @@
     "tests": {
       "type": "parameter",
       "datatype": "bool",
-      "description": "If specified, includes a test project with xUnit and twodog.xunit fixtures.",
+      "description": "If specified, includes a test project with xUnit and twodog.fixture fixtures.",
       "defaultValue": "false"
     }
   },

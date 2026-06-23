@@ -65,7 +65,7 @@ while (!godot.Iteration())
 ```
 
 ```csharp [🧪 Unit Test Example]
-using twodog.xunit;
+using twodog.fixture;
 
 [Collection("GodotHeadless")]
 public class GodotSceneTests(GodotHeadlessFixture godot)
