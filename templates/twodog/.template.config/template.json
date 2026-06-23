@@ -32,14 +32,14 @@
     "twodogVersion": {
       "type": "parameter",
       "datatype": "string",
-      "defaultValue": "0.1.23-pre",
+      "defaultValue": "0.0.0-tpl",
       "replaces": "TWODOG_PKG_VERSION",
       "description": "Version of 2dog packages to reference."
     },
     "nativesVersion": {
       "type": "parameter",
       "datatype": "string",
-      "defaultValue": "4.6.2.0",
+      "defaultValue": "0.0.0-ntpl",
       "replaces": "NATIVES_PKG_VERSION",
       "description": "Version of native platform packages to reference."
     },
@@ -53,7 +53,7 @@
     "tests": {
       "type": "parameter",
       "datatype": "bool",
-      "description": "If specified, includes a test project with xUnit and twodog.xunit fixtures.",
+      "description": "If specified, includes a test project with xUnit (v3) and the 2dog.xunit collection fixtures.",
       "defaultValue": "false"
     }
   },

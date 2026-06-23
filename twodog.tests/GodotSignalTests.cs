@@ -1,9 +1,10 @@
 using Godot;
+using twodog.fixture;
 using twodog.xunit;
 
 namespace twodog.tests;
 
-[Collection("Godot")]
+[Collection<GodotHeadlessCollection>]
 public class GodotSignalTests(GodotHeadlessFixture godot)
 {
     [Fact]

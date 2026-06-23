@@ -1,7 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace twodog.xunit;
+namespace twodog.fixture;
 
 /// <summary>
 /// Handles pre-loading game assemblies into the Default AssemblyLoadContext before Godot starts.
@@ -15,6 +20,9 @@ internal static class AssemblyPreloader
     /// rather than Godot's PluginLoadContext.
     /// </summary>
     /// <param name="projectPath">Path to the Godot project directory</param>
+    [UnconditionalSuppressMessage("Trimming", "IL2026",
+        Justification = "Test fixtures dynamically load game assemblies discovered at runtime; " +
+                        "fixtures are test-time only and never part of a trimmed/published app.")]
     public static void PreloadGameAssemblies(string projectPath)
     {
         try

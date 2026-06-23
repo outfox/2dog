@@ -7,7 +7,7 @@ Using Godot types in xUnit `[MemberData]` will crash the test runner during disc
 When you use Godot types like `NodePath`, `StringName`, `Vector2`, `Color`, etc. in `[MemberData]`, the test runner crashes:
 
 ```csharp
-[Collection("GodotHeadless")]
+[Collection<GodotHeadlessCollection>]
 public class BasicTests(GodotHeadlessFixture godot)
 {
     public static IEnumerable<object[]> paths = [[new NodePath("/root")]];
@@ -125,7 +125,7 @@ public void CanLog_NodePath(NodePath path)
 ::: warning Caveats
 - **Slower discovery**: The engine starts during test discovery, slowing down IDE test explorers
 - **Cleanup via ProcessExit**: Less elegant than proper `IDisposable` patterns used by fixtures
-- **Must be in your test project**: Cannot be placed in `twodog.xunit` since module initializers only run for the assembly they're defined in
+- **Must be in your test project**: Cannot be placed in the `2dog` package since module initializers only run for the assembly they're defined in
 - **Conflicts with fixtures**: If you use both this approach and `GodotFixture`/`GodotHeadlessFixture`, you'll get an `InvalidOperationException` (only one Godot instance per process)
 :::
 
