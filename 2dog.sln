@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.osx-arm64.debug", "p
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.osx-arm64.editor", "platforms\twodog.osx-arm64\twodog.osx-arm64.editor.csproj", "{A0000000-0000-0000-0000-000000000034}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.fixture", "twodog.fixture\twodog.fixture.csproj", "{A0000000-0000-0000-0000-000000000002}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.xunit", "twodog.xunit\twodog.xunit.csproj", "{A0000000-0000-0000-0000-000000000002}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.tests", "twodog.tests\twodog.tests.csproj", "{A0000000-0000-0000-0000-000000000003}"
 EndProject

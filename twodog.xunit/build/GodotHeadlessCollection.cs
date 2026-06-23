@@ -1,7 +1,7 @@
 using twodog.fixture;
 using Xunit;
 
-namespace Company.Product1.Tests;
+namespace twodog.xunit;
 
-[CollectionDefinition("GodotHeadless", DisableParallelization = true)]
+[CollectionDefinition(nameof(GodotHeadlessCollection), DisableParallelization = true)]
 public class GodotHeadlessCollection : ICollectionFixture<GodotHeadlessFixture>;

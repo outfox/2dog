@@ -1,11 +1,11 @@
 using Godot;
-using JetBrains.Annotations;
+using System;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace twodog.fixture;
 
-[UsedImplicitly]
 public abstract class GodotFixtureBase : IDisposable
 {
     // .NET's Environment.SetEnvironmentVariable does not propagate to native getenv()

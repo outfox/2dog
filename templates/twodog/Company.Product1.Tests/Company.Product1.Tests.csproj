@@ -6,9 +6,10 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
-    <!-- 2dog packages -->
+    <!-- 2dog packages (2dog.xunit pulls in 2dog for the fixtures and ships the xUnit
+         collection definitions as compile-in source) -->
     <ItemGroup>
-        <PackageReference Include="2dog.fixture" Version="TWODOG_PKG_VERSION"/>
+        <PackageReference Include="2dog.xunit" Version="TWODOG_PKG_VERSION"/>
     </ItemGroup>
 
     <!-- Platform-specific native library packages -->
