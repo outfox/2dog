@@ -10,7 +10,7 @@ The `twodog` template creates a complete 2dog application with:
 - **Sample Godot project** - Basic project.godot with a simple scene
 - **.editorconfig** - Standard .NET coding conventions
 - **.gitignore** - Ignores for .NET and Godot artifacts
-- **Optional test project** - xUnit tests with twodog.xunit fixtures (use `--tests` flag)
+- **Optional test project** - xUnit tests with twodog.fixture fixtures (use `--tests` flag)
 
 ## Local Development
 
@@ -62,7 +62,7 @@ templates/
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `--tests` | bool | false | Include a test project with xUnit and twodog.xunit fixtures |
+| `--tests` | bool | false | Include a test project with xUnit and twodog.fixture fixtures |
 | `--skip-restore` | bool | false | Skip automatic NuGet restore after creation |
 
 ## Symbol Replacements
@@ -92,7 +92,7 @@ The `--tests` option creates a test project that references `2dog.xunit`, which 
 
 **To enable the test option:**
 
-1. Package `twodog.xunit` as a NuGet package
+1. Package `twodog.fixture` as a NuGet package
 2. Publish it to NuGet or a local feed
 3. Ensure it's available when creating projects with `--tests`
 

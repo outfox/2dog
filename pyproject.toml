@@ -31,7 +31,7 @@ help = "dotnet build: Platform packages, twodog library, and NuGet packages, and
 sequence = [
     { cmd = "dotnet pack platforms -p:ForcePackAllPlatforms=true" },
     { cmd = "dotnet pack twodog" },
-    { cmd = "dotnet pack twodog.xunit" },
+    { cmd = "dotnet pack twodog.fixture" },
     { cmd = "dotnet restore" },
     { ref = "import "}
 ]

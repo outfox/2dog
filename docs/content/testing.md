@@ -1,11 +1,11 @@
 # Testing with xUnit
 
-The `twodog.xunit` package provides test fixtures for writing xUnit tests against Godot.
+The `twodog.fixture` package provides test fixtures for writing xUnit tests against Godot.
 
 ## Installation
 
 ```bash
-dotnet add package twodog.xunit
+dotnet add package twodog.fixture
 dotnet add package xunit
 dotnet add package Microsoft.NET.Test.Sdk
 dotnet add package xunit.runner.visualstudio
@@ -166,7 +166,7 @@ For test projects using `ProjectReference` to twodog (not the NuGet package), co
 
   <ItemGroup>
     <ProjectReference Include="..\twodog\twodog.csproj" />
-    <ProjectReference Include="..\twodog.xunit\twodog.xunit.csproj" />
+    <ProjectReference Include="..\twodog.fixture\twodog.fixture.csproj" />
   </ItemGroup>
 
   <!-- Configuration-specific build types -->

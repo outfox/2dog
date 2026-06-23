@@ -166,8 +166,8 @@ jobs:
       - name: Pack twodog (main package)
         run: dotnet pack twodog
 
-      - name: Pack twodog.xunit
-        run: dotnet pack twodog.xunit
+      - name: Pack twodog.fixture
+        run: dotnet pack twodog.fixture
 
       - name: Pack templates
         run: dotnet pack templates

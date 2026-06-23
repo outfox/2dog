@@ -1,4 +1,4 @@
-using twodog.xunit;
+using twodog.fixture;
 
 namespace twodog.tests;
 
