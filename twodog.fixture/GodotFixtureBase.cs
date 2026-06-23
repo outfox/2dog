@@ -17,7 +17,7 @@ public abstract class GodotFixtureBase : IDisposable
     protected GodotFixtureBase(params string[] cmdLineArgs)
     {
         Console.WriteLine("Initializing Godot...");
-        Console.WriteLine("cwd: " + Environment.CurrentDirectory);
+        Console.WriteLine("cwd: " + System.Environment.CurrentDirectory);
 
         var assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
         var projectPath = Engine.ResolveProjectDir();
@@ -36,7 +36,7 @@ public abstract class GodotFixtureBase : IDisposable
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                Environment.SetEnvironmentVariable("GODOTSHARP_DIR", assemblyDir);
+                System.Environment.SetEnvironmentVariable("GODOTSHARP_DIR", assemblyDir);
             }
             else
             {
