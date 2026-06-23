@@ -65,9 +65,10 @@ while (!godot.Iteration())
 ```
 
 ```csharp [🧪 Unit Test Example]
+using twodog.fixture;
 using twodog.xunit;
 
-[Collection("GodotHeadless")]
+[Collection<GodotHeadlessCollection>]
 public class GodotSceneTests(GodotHeadlessFixture godot)
 {
     [Fact]

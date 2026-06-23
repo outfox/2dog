@@ -6,11 +6,10 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
-    <!-- 2dog packages -->
+    <!-- 2dog packages (2dog.xunit pulls in 2dog for the fixtures and ships the xUnit
+         collection definitions as compile-in source) -->
     <ItemGroup>
-        <PackageReference Include="2dog" Version="TWODOG_PKG_VERSION"/>
         <PackageReference Include="2dog.xunit" Version="TWODOG_PKG_VERSION"/>
-        <PackageReference Include="GodotSharp" Version="GODOT_SDK_VERSION"/>
     </ItemGroup>
 
     <!-- Platform-specific native library packages -->
@@ -26,10 +25,10 @@
 
     <!-- Test framework packages -->
     <ItemGroup>
-        <PackageReference Include="coverlet.collector" Version="6.0.2"/>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>
-        <PackageReference Include="xunit" Version="2.9.2"/>
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2"/>
+        <PackageReference Include="coverlet.collector" Version="10.*"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.*"/>
+        <PackageReference Include="xunit.v3" Version="3.*"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="3.*"/>
     </ItemGroup>
 
     <ItemGroup>

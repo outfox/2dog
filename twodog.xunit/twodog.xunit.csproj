@@ -2,9 +2,16 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsTestProject>false</IsTestProject>
+        <!--
+          This package ships its collection definitions as compile-in source
+          (build/2dog.xunit.targets) instead of as a referenced assembly, because xUnit only
+          discovers [CollectionDefinition] classes that live in the *test* assembly. Disable
+          default items so that source is NOT also baked into 2dog.xunit.dll, which would create
+          duplicate type definitions in consuming projects.
+        -->
+        <EnableDefaultItems>false</EnableDefaultItems>
     </PropertyGroup>
 
     <!-- NuGet Package Metadata -->
@@ -12,38 +19,49 @@
         <PackageId>2dog.xunit</PackageId>
         <Version>$(TwoDogVersion)</Version>
         <Authors>Moritz Voss</Authors>
-        <Description>xUnit test fixtures for testing Godot applications with twodog.</Description>
+        <Description>xUnit collection definitions for testing Godot applications with twodog. The collections are compiled into your test assembly so xUnit discovers them correctly; the GodotFixture/GodotHeadlessFixture they bind come from the 2dog package.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
-        <IncludeSymbols>true</IncludeSymbols>
         <IsPackable>true</IsPackable>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <!--
+          Build-only package: the collection definitions ship as compile-in source (see below), so
+          there is no meaningful assembly to distribute. Omit the (empty) build output and silence
+          NU5128 (the package declares dependencies but has no lib/ assembly). Matches the build-only
+          pattern used by 2dog.Templates.
+        -->
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <NoWarn>$(NoWarn);NU5128</NoWarn>
     </PropertyGroup>
 
-    <PropertyGroup>
-        <GodotBinDir>$(MSBuildProjectDirectory)/../godot/bin/</GodotBinDir>
-    </PropertyGroup>
-
+    <!--
+      Dependencies flow to consumers as package dependencies:
+        - 2dog                      provides the fixtures (twodog.fixture namespace)
+        - xunit.v3.extensibility.core  provides ICollectionFixture<>/CollectionDefinition for the
+                                    compiled-in source. We reference the extensibility core (not the
+                                    full xunit.v3 metapackage) because this is a library, not a
+                                    runnable test project — the metapackage requires OutputType=Exe.
+    -->
     <ItemGroup>
         <ProjectReference Include="..\twodog\twodog.csproj"/>
+        <PackageReference Include="xunit.v3.extensibility.core" Version="3.*"/>
     </ItemGroup>
 
-    <!-- GodotSharp from fork build (for local development; NuGet consumers get it from the 2dog package) -->
+    <!--
+      Ship the collection definitions as compile-in source plus the targets that injects them.
+      All three live under build/ so the package layout matches the repo layout and the targets
+      can locate the .cs files via $(MSBuildThisFileDirectory). They are intentionally excluded
+      from this project's own compilation (see EnableDefaultItems above).
+    -->
     <ItemGroup>
-        <Reference Include="GodotSharp">
-            <HintPath>$(GodotBinDir)GodotSharp/Api/Release/GodotSharp.dll</HintPath>
-        </Reference>
+        <None Include="build\GodotCollection.cs"         Pack="true" PackagePath="build\"/>
+        <None Include="build\GodotHeadlessCollection.cs" Pack="true" PackagePath="build\"/>
+        <None Include="build\2dog.xunit.targets"         Pack="true" PackagePath="build\"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="JetBrains.Annotations" Version="2025.2.4"/>
-        <PackageReference Include="xunit" Version="2.9.2"/>
-    </ItemGroup>
-
-    <!-- Package icon, readme, and build targets -->
+    <!-- Package icon and readme -->
     <ItemGroup>
         <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
         <None Include="README.md" Pack="true" PackagePath="README.md"/>

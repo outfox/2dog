@@ -1,12 +1,14 @@
 # Testing with xUnit
 
-The `twodog.xunit` package provides test fixtures for writing xUnit tests against Godot.
+The test fixtures (`GodotFixture`, `GodotHeadlessFixture`, `GodotFixtureBase`) ship in the **`2dog`**
+package, in the `twodog.fixture` namespace. The **`2dog.xunit`** package adds ready-made xUnit
+collection definitions on top of them.
 
 ## Installation
 
 ```bash
-dotnet add package twodog.xunit
-dotnet add package xunit
+dotnet add package 2dog.xunit          # pulls in 2dog (the fixtures) automatically
+dotnet add package xunit.v3
 dotnet add package Microsoft.NET.Test.Sdk
 dotnet add package xunit.runner.visualstudio
 ```
@@ -39,21 +41,43 @@ public class GodotHeadlessFixture : IDisposable
 }
 ```
 
-## Collection Setup
+## Collections
 
-Due to the single-instance limitation, all Godot tests must share one fixture. Use xUnit's collection fixtures:
+Because Godot allows only one instance per process, all Godot tests must share a single fixture
+through an xUnit collection with `DisableParallelization = true`.
+
+`2dog.xunit` ships those collections for you  –  `GodotCollection` (full rendering) and
+`GodotHeadlessCollection` (headless, recommended for CI). They are compiled directly into your test
+assembly  –  xUnit only discovers `[CollectionDefinition]` classes that live in the test assembly
+itself, so a definition shipped as a plain referenced DLL would be silently ignored. You therefore
+just reference the package and use them:
 
 ```csharp
-// Define the collection (once per test project)
-[CollectionDefinition("Godot", DisableParallelization = true)]
-public class GodotCollection : ICollectionFixture<GodotHeadlessFixture>
-{
-}
+using twodog.xunit;
+
+[Collection<GodotHeadlessCollection>]
+public class MyTests(GodotHeadlessFixture godot) { /* ... */ }
 ```
 
 ::: warning
-`DisableParallelization = true` is required. Godot is not thread-safe, and parallel tests will crash.
+`DisableParallelization = true` is required (it is already set on the shipped collections). Godot is
+not thread-safe, and parallel tests will crash.
 :::
+
+### Custom collections
+
+Need different Godot arguments? Subclass `GodotFixtureBase` and write a one-line collection in your
+own test project:
+
+```csharp
+using twodog.fixture;
+using Xunit;
+
+public class GodotOpenGl3Fixture() : GodotFixtureBase("--display-driver", "opengl3");
+
+[CollectionDefinition(nameof(GodotOpenGl3Collection), DisableParallelization = true)]
+public class GodotOpenGl3Collection : ICollectionFixture<GodotOpenGl3Fixture>;
+```
 
 ## Writing Tests
 
@@ -62,7 +86,7 @@ Using Godot types like `NodePath` or `StringName` in `[MemberData]` will crash t
 :::
 
 ```csharp
-[Collection("Godot")]
+[Collection<GodotHeadlessCollection>]
 public class SceneTests
 {
     private readonly GodotHeadlessFixture _godot;
@@ -125,7 +149,7 @@ Different build configurations are useful for different test scenarios:
 
 Example: Testing asset import functionality:
 ```csharp
-[Collection("Godot")]
+[Collection<GodotHeadlessCollection>]
 public class ImportTests(GodotHeadlessFixture godot)
 {
     [Fact]
@@ -166,8 +190,10 @@ For test projects using `ProjectReference` to twodog (not the NuGet package), co
 
   <ItemGroup>
     <ProjectReference Include="..\twodog\twodog.csproj" />
-    <ProjectReference Include="..\twodog.xunit\twodog.xunit.csproj" />
   </ItemGroup>
+  <!-- Fixtures come from the twodog project above. Note: with a ProjectReference the 2dog.xunit
+       compile-in collections are NOT imported automatically  –  reference the 2dog.xunit NuGet
+       package instead, or define a collection locally (see "Custom collections"). -->
 
   <!-- Configuration-specific build types -->
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

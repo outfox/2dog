@@ -6,7 +6,7 @@ When using `GD.Print` in your tests, the output may appear to be missing or invi
 
 `GD.Print` writes to **stdout** via Godot's native `OS::print()` function. By default, `dotnet test` suppresses stdout output from the test host process. The output is there, but hidden.
 
-Additionally, `GD.Print` output is global—it gets interleaved with Godot engine messages, fixture initialization logs, and other console output. There's no way to associate it with a specific test.
+Additionally, `GD.Print` output is global – it gets interleaved with Godot engine messages, fixture initialization logs, and other console output. There's no way to associate it with a specific test.
 
 ## Making GD.Print Visible
 
@@ -35,7 +35,7 @@ Shutting down Godot...
 For test logging, prefer xUnit's `ITestOutputHelper` over `GD.Print`:
 
 ```csharp
-[Collection("GodotHeadless")]
+[Collection<GodotHeadlessCollection>]
 public class MyTests(GodotHeadlessFixture godot, ITestOutputHelper output)
 {
     [Fact]

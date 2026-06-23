@@ -1,9 +1,10 @@
 using Godot;
+using twodog.fixture;
 using twodog.xunit;
 
 namespace Company.Product1.Tests;
 
-[Collection("GodotHeadless")]
+[Collection<GodotHeadlessCollection>]
 public class BasicTests(GodotHeadlessFixture godot)
 {
     [Fact]

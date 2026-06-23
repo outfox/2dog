@@ -1,0 +1,20 @@
+<Project>
+    <!--
+      Inject the twodog xUnit collection definitions directly into the consuming test project's
+      compilation.
+
+      xUnit (v2 and v3) only discovers [CollectionDefinition] classes that live in the *test*
+      assembly. A definition shipped in a referenced DLL is silently ignored: DisableParallelization
+      is not applied and the ICollectionFixture<T> is not injected. Because Godot allows only one
+      instance per process, a silently-ignored DisableParallelization would let tests run in
+      parallel and crash. Compiling the source into the consumer guarantees the collections work.
+
+      Placed in build/ (not buildTransitive/) so the definitions are added only to projects that
+      reference 2dog.xunit directly (test projects), never to projects that reference such a
+      project transitively.
+    -->
+    <ItemGroup>
+        <Compile Include="$(MSBuildThisFileDirectory)GodotCollection.cs"/>
+        <Compile Include="$(MSBuildThisFileDirectory)GodotHeadlessCollection.cs"/>
+    </ItemGroup>
+</Project>
