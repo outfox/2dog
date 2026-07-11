@@ -34,7 +34,7 @@ jobs:
       hash: ${{ steps.check.outputs.hash }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Check native library availability
         id: check
@@ -69,7 +69,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -176,7 +176,7 @@ jobs:
         run: ls -lh packages/
 
       - name: Upload godot-bin artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: godot-bin
           path: |
@@ -185,7 +185,7 @@ jobs:
           retention-days: 3
 
       - name: Upload NuGet packages
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: nuget-packages
           path: packages/
@@ -200,7 +200,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -208,7 +208,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Download godot-bin artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: godot-bin
           path: godot
@@ -219,7 +219,7 @@ jobs:
           python3 import-project.py ./game
 
       - name: Upload imported game data
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: game-imported
           path: game/.godot/
@@ -246,7 +246,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -254,19 +254,19 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Download godot-bin artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: godot-bin
           path: godot
 
       - name: Download imported game data
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: game-imported
           path: game/.godot
 
       - name: Download NuGet packages
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: nuget-packages
           path: packages
@@ -292,7 +292,7 @@ jobs:
 
     steps:
       - name: Download NuGet packages
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: nuget-packages
           path: packages
