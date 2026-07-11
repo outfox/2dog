@@ -245,10 +245,10 @@ This happens automatically via the `TwoDogCopyGodotApi` MSBuild target (and
 
 If you encounter the "Unable to find .NET assemblies directory" error:
 
-1. **Check your build type matches your native library**:
-   - Using `godot.*.editor.*.dll`? Set `TwoDogBuildType=editor` or build with `-c Editor`
-   - Using `godot.*.template_debug.*.dll`? Set `TwoDogBuildType=template_debug` or build with `-c Debug`
-   - Using `godot.*.template_release.*.dll`? Set `TwoDogBuildType=template_release` or build with `-c Release`
+1. **Check your variant matches your native library**:
+   - Using `godot.*.editor.*.dll`? Set `TwoDogVariant=editor`
+   - Using `godot.*.template_debug.*.dll`? Set `TwoDogVariant=debug`
+   - Using `godot.*.template_release.*.dll`? Use the default (`TwoDogVariant=release`)
 
 2. **Verify the directory structure** in your output folder matches the expected pattern above.
 
