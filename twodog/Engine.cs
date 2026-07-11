@@ -22,7 +22,7 @@ public class Engine(string project, string? path = null, params string[] args) :
 
     public void Dispose()
     {
-        if (_godotInstancePtr == IntPtr.Zero || _godotInstancePtr == IntPtr.MinValue) return;
+        if (_godotInstancePtr == IntPtr.Zero) return;
         Destroy();
     }
 
@@ -30,7 +30,8 @@ public class Engine(string project, string? path = null, params string[] args) :
     {
         if (_godotInstancePtr != IntPtr.Zero)
             throw new InvalidOperationException(
-                $"{nameof(Engine)} Godot instance was previously created. This can be done only once per process (this is a Godot limitation).");
+                $"{nameof(Engine)}: A Godot instance is already running. Only one instance may exist at a time " +
+                "(a Godot limitation) - dispose the previous Engine before starting a new one.");
 
         // Ensure GODOTSHARP_DIR points to the directory containing GodotPlugins.dll.
         // When the host process is not in the output directory (e.g. dotnet test
@@ -94,7 +95,7 @@ public class Engine(string project, string? path = null, params string[] args) :
     {
         LibGodot.libgodot_destroy_godot_instance(_godotInstancePtr);
         Console.WriteLine($"{nameof(Engine)}: Godot instance destroyed.");
-        _godotInstancePtr = IntPtr.MinValue;
+        _godotInstancePtr = IntPtr.Zero;
     }
 
     /// <summary>

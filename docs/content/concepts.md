@@ -109,7 +109,7 @@ while (!godot.Iteration())
 ## Single Instance Limitation
 
 ::: warning
-Only one Godot instance can exist per process. This is a Godot limitation, not a 2dog limitation.
+Only one Godot instance can exist per process **at a time**. This is a Godot limitation, not a 2dog limitation. Sequential restart  –  disposing the current instance and starting a new one  –  is supported.
 :::
 
 ```csharp
@@ -117,12 +117,23 @@ Only one Godot instance can exist per process. This is a Godot limitation, not a
 using var engine = new Engine("app", "./project");
 using var godot = engine.Start();
 
-// This throws InvalidOperationException
+// This throws InvalidOperationException while the first instance is running
 using var engine2 = new Engine("app2", "./project2");
 var godot2 = engine2.Start(); // ❌ Error!
 ```
 
-For testing scenarios, use xUnit's collection fixtures to share a single instance. See [Testing](./testing).
+```csharp
+// Sequential restart works
+var engine = new Engine("app", "./project");
+var godot = engine.Start();
+godot.Dispose();
+engine.Dispose();
+
+using var engine2 = new Engine("app2", "./project2");
+using var godot2 = engine2.Start(); // ✅ New engine instance
+```
+
+For testing scenarios, use xUnit's collection fixtures  –  one shared instance per collection. See [Testing](./testing).
 
 ## Resource Paths
 

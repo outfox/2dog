@@ -1,6 +1,8 @@
-# Single Godot Instance Per Process
+# Single Godot Instance At A Time
 
-Only one Godot instance can exist per process. Attempting to start a second instance will throw an `InvalidOperationException`.
+Only one Godot instance can exist per process **at a time**. Attempting to
+start a second instance while one is running throws an
+`InvalidOperationException`:
 
 ```csharp
 using var engine1 = new Engine("app1", "./project");
@@ -10,7 +12,8 @@ using var engine2 = new Engine("app2", "./project");
 using var godot2 = engine2.Start(); // Throws InvalidOperationException
 ```
 
-Additionally, once an instance is disposed, it cannot be restarted or re-initialized within the same process:
+**Sequential restart is supported** (since the Godot 4.7 based packages):
+once an instance is disposed, a new one can be created in the same process:
 
 ```csharp
 var engine = new Engine("app", "./project");
@@ -19,9 +22,15 @@ var godot = engine.Start();
 godot.Dispose();
 engine.Dispose();
 
-// Cannot create a new instance - the process is "tainted"
-var engine2 = new Engine("app", "./project");
-var godot2 = engine2.Start(); // Throws InvalidOperationException
+// Works: the previous instance was destroyed first.
+using var engine2 = new Engine("app", "./project");
+using var godot2 = engine2.Start();
 ```
 
-These are fundamental constraints of the Godot engine architecture. If you need multiple isolated Godot environments or need to restart the engine, you must use separate processes.
+This is what allows multiple xUnit test collections  –  each with its own
+fixture  –  to run sequentially in one test process. See
+[Testing](../testing).
+
+If you need multiple Godot environments running **concurrently**, you must
+still use separate processes  –  that remains a fundamental constraint of the
+Godot engine architecture (global singletons).
