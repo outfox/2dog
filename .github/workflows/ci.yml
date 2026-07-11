@@ -284,11 +284,15 @@ jobs:
         run: dotnet test -c Editor --no-restore
 
   # Deploy to NuGet and create GitHub release on version tag push.
+  # Uses NuGet Trusted Publishing (OIDC) — no long-lived API key is stored.
   deploy:
     name: Deploy to NuGet
     needs: [test]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write # required to create the GitHub Release for the tag
+      id-token: write # required to request the GitHub OIDC token for Trusted Publishing
 
     steps:
       - name: Download NuGet packages
@@ -302,9 +306,18 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      # Exchange the GitHub OIDC token for a short-lived NuGet API key via the
+      # Trusted Publishing policy configured on nuget.org. `NUGET_USER` is a repo
+      # secret holding the nuget.org account that owns the policy.
+      - name: NuGet login (Trusted Publishing)
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
       - name: Push to NuGet
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
         run: |
           for pkg in packages/*.nupkg; do
             [[ "$pkg" == *.snupkg ]] && continue
