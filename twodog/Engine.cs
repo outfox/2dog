@@ -11,6 +11,12 @@ public class Engine(string project, string? path = null, params string[] args) :
 {
     private static IntPtr _godotInstancePtr = IntPtr.Zero;
 
+    // Only the Engine that successfully started the (process-wide) Godot
+    // instance may destroy it. This keeps `using var engine = ...; engine.Start()`
+    // patterns safe: disposing an Engine whose Start() failed or was never
+    // called must not tear down an instance started by another Engine.
+    private bool _ownsInstance;
+
     // .NET's Environment.SetEnvironmentVariable does not propagate to native getenv()
     // on Linux/.NET 8+. We must call setenv directly for Godot's native code to see it.
     [DllImport("libc", SetLastError = true)]
@@ -22,7 +28,8 @@ public class Engine(string project, string? path = null, params string[] args) :
 
     public void Dispose()
     {
-        if (_godotInstancePtr == IntPtr.Zero) return;
+        if (!_ownsInstance || _godotInstancePtr == IntPtr.Zero) return;
+        _ownsInstance = false;
         Destroy();
     }
 
@@ -74,7 +81,7 @@ public class Engine(string project, string? path = null, params string[] args) :
         if (!LibGodot.CallGodotInstanceStart(_godotInstancePtr))
         {
             Console.Error.WriteLine("Error starting Godot instance");
-            LibGodot.libgodot_destroy_godot_instance(_godotInstancePtr);
+            Destroy();
             throw new Exception($"{nameof(Engine)}: Error starting Godot instance");
         }
 
@@ -83,11 +90,12 @@ public class Engine(string project, string? path = null, params string[] args) :
         if (godotInstance == null)
         {
             Console.Error.WriteLine($"{nameof(Engine)}: Failed to get GodotInstance from pointer");
-            LibGodot.libgodot_destroy_godot_instance(_godotInstancePtr);
+            Destroy();
             throw new NullReferenceException($"{nameof(Engine)}: Failed to get GodotInstance from pointer.");
         }
 
         Console.WriteLine($"{nameof(Engine)}: Godot started successfully!");
+        _ownsInstance = true;
         return godotInstance;
     }
 
