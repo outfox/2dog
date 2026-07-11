@@ -1,4 +1,5 @@
 using twodog;
+using twodog.fixture;
 
 namespace twodog.tests;
 
@@ -15,6 +16,14 @@ public class EngineRestartTests
     public void Start_WhileRunningThrows_AndSequentialRestartWorks()
     {
         var projectDir = Engine.ResolveProjectDir();
+
+        // Same guard the fixtures apply: pre-load game assemblies into the
+        // Default load context before the first engine start. The game's main
+        // scene instantiates a C# script, and if this collection happens to
+        // run before the fixture-based ones, skipping this would let Godot
+        // load the game assembly into its PluginLoadContext, causing type
+        // identity mismatches for later collections.
+        AssemblyPreloader.PreloadGameAssemblies(projectDir);
 
         var engine = new Engine("restart-direct", projectDir, "--headless");
         var godot = engine.Start();
