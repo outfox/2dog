@@ -123,7 +123,7 @@ scripts:
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="2dog" Version="4.7.0.24"/>
+        <PackageReference Include="2dog" Version=":2dog-version:"/>
     </ItemGroup>
 
     <ItemGroup>

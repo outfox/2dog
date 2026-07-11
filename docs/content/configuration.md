@@ -47,10 +47,10 @@ natives, reference the corresponding variant package explicitly:
 
 ```xml
 <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-  <PackageReference Include="2dog.win-x64.debug" Version="4.7.0"/>
+  <PackageReference Include="2dog.win-x64.debug" Version=":natives-version:"/>
 </ItemGroup>
 <ItemGroup Condition="'$(Configuration)' == 'Editor'">
-  <PackageReference Include="2dog.win-x64.editor" Version="4.7.0"/>
+  <PackageReference Include="2dog.win-x64.editor" Version=":natives-version:"/>
 </ItemGroup>
 ```
 
@@ -129,8 +129,8 @@ editor binary):
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="2dog" Version="4.7.0.24"/>
-    <PackageReference Include="2dog.win-x64.editor" Version="4.7.0"/>
+    <PackageReference Include="2dog" Version=":2dog-version:"/>
+    <PackageReference Include="2dog.win-x64.editor" Version=":natives-version:"/>
   </ItemGroup>
 </Project>
 ```
