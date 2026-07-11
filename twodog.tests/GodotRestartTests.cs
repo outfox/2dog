@@ -48,10 +48,15 @@ public abstract class GodotRestartSmokeTests(GodotHeadlessFixture godot)
 
         var instance = scene.Instantiate();
         godot.Tree.Root.AddChild(instance);
-        Assert.True(GodotObject.IsInstanceValid(instance));
-
-        godot.Tree.Root.RemoveChild(instance);
-        instance.Free();
+        try
+        {
+            Assert.True(GodotObject.IsInstanceValid(instance));
+        }
+        finally
+        {
+            godot.Tree.Root.RemoveChild(instance);
+            instance.Free();
+        }
     }
 
     [Fact]
@@ -59,12 +64,16 @@ public abstract class GodotRestartSmokeTests(GodotHeadlessFixture godot)
     {
         var node = new Node { Name = "RestartProbe" };
         godot.Tree.Root.AddChild(node);
-
-        Assert.Equal("RestartProbe", (string)node.Name);
-        Assert.NotNull(godot.Tree.Root.GetNodeOrNull("RestartProbe"));
-
-        godot.Tree.Root.RemoveChild(node);
-        node.Free();
+        try
+        {
+            Assert.Equal("RestartProbe", (string)node.Name);
+            Assert.NotNull(godot.Tree.Root.GetNodeOrNull("RestartProbe"));
+        }
+        finally
+        {
+            godot.Tree.Root.RemoveChild(node);
+            node.Free();
+        }
     }
 
     [Fact]

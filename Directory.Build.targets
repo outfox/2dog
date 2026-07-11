@@ -22,16 +22,24 @@
             <Using Namespace="System.Text.RegularExpressions" />
             <Code Type="Fragment" Language="cs"><![CDATA[
                 var text = File.ReadAllText(FilePath);
-                // Replace the defaultValue for each known symbol by matching the JSON key.
-                text = System.Text.RegularExpressions.Regex.Replace(text,
-                    @"(""twodogVersion""[^}]*""defaultValue"":\s*)""[^""]*""",
-                    "${1}\"" + TwoDogVer + "\"");
-                text = System.Text.RegularExpressions.Regex.Replace(text,
-                    @"(""nativesVersion""[^}]*""defaultValue"":\s*)""[^""]*""",
-                    "${1}\"" + NativesVer + "\"");
-                text = System.Text.RegularExpressions.Regex.Replace(text,
-                    @"(""godotVersion""[^}]*""defaultValue"":\s*)""[^""]*""",
-                    "${1}\"" + GodotVer + "\"");
+                // Replace the defaultValue for each known symbol by matching the
+                // JSON key. Fail the build if a symbol is not found: a silent
+                // no-op would ship packages with placeholder versions.
+                var substitutions = new (string Symbol, string Value)[] {
+                    ("twodogVersion", TwoDogVer),
+                    ("nativesVersion", NativesVer),
+                    ("godotVersion", GodotVer),
+                };
+                foreach (var (symbol, value) in substitutions)
+                {
+                    var regex = new System.Text.RegularExpressions.Regex(
+                        "(\"" + symbol + "\"[^}]*\"defaultValue\":\\s*)\"[^\"]*\"");
+                    if (!regex.IsMatch(text))
+                        throw new System.Exception(
+                            $"SetTemplateDefaults: no defaultValue found for symbol '{symbol}' in '{FilePath}'. " +
+                            "The template.json layout may have changed; update the regex in Directory.Build.targets.");
+                    text = regex.Replace(text, "${1}\"" + value + "\"");
+                }
                 File.WriteAllText(FilePath, text);
             ]]></Code>
         </Task>
