@@ -110,39 +110,9 @@ priority over the assemblies bundled in the NuGet package.
 
 ### Multi-Configuration Project
 
-Support all three native variants in one project by mapping your .NET
-configurations to variants explicitly:
-
-```xml
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="2dog" Version="4.7.0.24"/>
-  </ItemGroup>
-
-  <!-- Debug: debug natives -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TwoDogVariant>debug</TwoDogVariant>
-  </PropertyGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <PackageReference Include="2dog.win-x64.debug" Version="4.7.0"/>
-  </ItemGroup>
-
-  <!-- Editor: editor natives with TOOLS_ENABLED -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
-    <TwoDogVariant>editor</TwoDogVariant>
-  </PropertyGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Editor'">
-    <PackageReference Include="2dog.win-x64.editor" Version="4.7.0"/>
-  </ItemGroup>
-</Project>
-```
-
-(Release needs no extra wiring  –  the `release` variant is the default.)
+To support all three native variants in one project, map your .NET
+configurations to variants explicitly  –  see the complete example in
+[Build Configurations: Selecting a Variant](./build-configurations#selecting-a-variant).
 
 ### Editor Tooling Project
 
