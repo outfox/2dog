@@ -15,17 +15,26 @@ dotnet add package xunit.runner.visualstudio
 
 ## Fixtures
 
+Both fixtures are thin subclasses of `GodotFixtureBase`, which starts the engine
+in its constructor and exposes the members you use in tests:
+
+```csharp
+public abstract class GodotFixtureBase : IDisposable
+{
+    protected GodotFixtureBase(params string[] cmdLineArgs);
+
+    public Engine Engine { get; }
+    public GodotInstance GodotInstance { get; }
+    public SceneTree Tree { get; }
+}
+```
+
 ### GodotFixture
 
 Starts Godot with rendering enabled. Use for tests that need visual output.
 
 ```csharp
-public class GodotFixture : IDisposable
-{
-    public Engine Engine { get; }
-    public GodotInstance GodotInstance { get; }
-    public SceneTree Tree { get; }
-}
+public class GodotFixture : GodotFixtureBase;
 ```
 
 ### GodotHeadlessFixture
@@ -33,20 +42,16 @@ public class GodotFixture : IDisposable
 Starts Godot in headless mode (`--headless`). Use for CI/CD and tests that don't need rendering.
 
 ```csharp
-public class GodotHeadlessFixture : IDisposable
-{
-    public Engine Engine { get; }
-    public GodotInstance GodotInstance { get; }
-    public SceneTree Tree { get; }
-}
+public class GodotHeadlessFixture() : GodotFixtureBase("--headless");
 ```
 
 ## Collections
 
-Because Godot allows only one instance per process, all Godot tests must share a single fixture
-through an xUnit collection with `DisableParallelization = true`.
+Because Godot allows only one instance at a time, Godot tests must run through
+xUnit collections with `DisableParallelization = true`. Tests within a
+collection share that collection's fixture (one engine instance).
 
-`2dog.xunit` ships those collections for you  –  `GodotCollection` (full rendering) and
+`2dog.xunit` ships ready-made collections for you  –  `GodotCollection` (full rendering) and
 `GodotHeadlessCollection` (headless, recommended for CI). They are compiled directly into your test
 assembly  –  xUnit only discovers `[CollectionDefinition]` classes that live in the test assembly
 itself, so a definition shipped as a plain referenced DLL would be silently ignored. You therefore
@@ -57,6 +62,27 @@ using twodog.xunit;
 
 [Collection<GodotHeadlessCollection>]
 public class MyTests(GodotHeadlessFixture godot) { /* ... */ }
+```
+
+### Multiple collections
+
+Since the engine can be restarted in the same process (Godot 4.7), you can
+also define **several** Godot collections. xUnit runs them sequentially and
+disposes one collection's fixture before creating the next, so each
+collection gets its own fresh engine instance:
+
+```csharp
+[CollectionDefinition(nameof(MyGodotCollectionA), DisableParallelization = true)]
+public class MyGodotCollectionA : ICollectionFixture<GodotHeadlessFixture>;
+
+[CollectionDefinition(nameof(MyGodotCollectionB), DisableParallelization = true)]
+public class MyGodotCollectionB : ICollectionFixture<GodotHeadlessFixture>;
+
+[Collection(nameof(MyGodotCollectionA))]
+public class TestsAgainstEngineA(GodotHeadlessFixture godot) { /* ... */ }
+
+[Collection(nameof(MyGodotCollectionB))]
+public class TestsAgainstEngineB(GodotHeadlessFixture godot) { /* ... */ }
 ```
 
 ::: warning

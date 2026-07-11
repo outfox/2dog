@@ -46,7 +46,7 @@
     "godotVersion": {
       "type": "parameter",
       "datatype": "string",
-      "defaultValue": "4.6.2",
+      "defaultValue": "4.7.0",
       "replaces": "GODOT_SDK_VERSION",
       "description": "Version of Godot.NET.Sdk and GodotSharp to reference."
     },

@@ -1,8 +1,23 @@
 import { defineConfig } from 'vitepress'
+import {
+  twodogVersionPlugin,
+  godotVersionPlugin,
+  nativesVersionPlugin
+} from './plugins/version-markers'
 
 export default defineConfig({
   srcDir: "content",
-  
+
+  markdown: {
+    config(md) {
+      // Replace :2dog-version:, :godot-version: and :natives-version:
+      // markers with the versions from the repo-root Directory.Build.props.
+      md.use(twodogVersionPlugin)
+      md.use(godotVersionPlugin)
+      md.use(nativesVersionPlugin)
+    }
+  },
+
   title: "2dog",
   titleTemplate: ":title – Godot in .NET",
   description: "Embed Godot Engine in your .NET applications",
