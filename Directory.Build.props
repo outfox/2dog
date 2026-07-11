@@ -1,10 +1,17 @@
 <Project>
     <PropertyGroup>
-        <TwoDogVersion>0.1.23-pre</TwoDogVersion>
-        <!-- Godot engine version. Must match the godot submodule. -->
-        <GodotVersion>4.6.2</GodotVersion>
-        <!-- Native platform package version. Bump only when godot submodule changes. -->
-        <NativesVersion>$(GodotVersion).0</NativesVersion>
+        <!-- Godot engine version. Must match the godot submodule (godot/version.py). -->
+        <GodotVersion>4.7.0</GodotVersion>
+        <!-- Global 2dog iteration, shared across ALL supported Godot lines.
+             Bump every 2dog release; never reset when GodotVersion changes:
+             e.g. 4.6.2.31 and 4.7.0.31 are the same 2dog iteration. -->
+        <TwoDogRevision>24</TwoDogRevision>
+        <!-- Native package revision. Bump ONLY when the godot submodule changes;
+             reset to 0 when GodotVersion changes. NuGet normalizes a trailing .0
+             (4.7.0.0 publishes as 4.7.0). -->
+        <NativesRevision>0</NativesRevision>
+        <TwoDogVersion>$(GodotVersion).$(TwoDogRevision)</TwoDogVersion>
+        <NativesVersion>$(GodotVersion).$(NativesRevision)</NativesVersion>
         <!-- Allow running on any .NET 8+ runtime (8, 9, 10, ...) -->
         <RollForward>LatestMajor</RollForward>
     </PropertyGroup>

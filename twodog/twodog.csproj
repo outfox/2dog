@@ -218,41 +218,22 @@
                  Pack="true" PackagePath="content/twodog/" CopyToOutputDirectory="Never"/>
     </ItemGroup>
 
-    <!-- Substitute 2dog package version into template.json at pack time -->
-    <UsingTask TaskName="SubstituteInFile" TaskFactory="RoslynCodeTaskFactory"
-               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
-        <ParameterGroup>
-            <FilePath ParameterType="System.String" Required="true" />
-            <Find ParameterType="System.String" Required="true" />
-            <ReplaceWith ParameterType="System.String" Required="true" />
-        </ParameterGroup>
-        <Task>
-            <Code Type="Fragment" Language="cs">
-                var text = File.ReadAllText(FilePath);
-                File.WriteAllText(FilePath, text.Replace(Find, ReplaceWith));
-            </Code>
-        </Task>
-    </UsingTask>
-
+    <!-- Substitute 2dog package versions into the bundled template.json at pack
+         time, then restore the committed placeholder tokens afterwards.
+         (godotVersion has no placeholder; its committed default is the real
+         version, so the restore just keeps it at $(GodotVersion).)
+         SetTemplateDefaults is defined in the repo-root Directory.Build.targets. -->
     <Target Name="SubstituteTemplateVersion" BeforeTargets="GenerateNuspec">
-        <SubstituteInFile
-            FilePath="../templates/twodog/.template.config/template.json"
-            Find="0.0.0-tpl"
-            ReplaceWith="$(TwoDogVersion)" />
-        <SubstituteInFile
-            FilePath="../templates/twodog/.template.config/template.json"
-            Find="0.0.0-ntpl"
-            ReplaceWith="$(NativesVersion)" />
+        <SetTemplateDefaults FilePath="../templates/twodog/.template.config/template.json"
+                             TwoDogVer="$(TwoDogVersion)"
+                             NativesVer="$(NativesVersion)"
+                             GodotVer="$(GodotVersion)" />
     </Target>
 
     <Target Name="RestoreTemplateVersion" AfterTargets="Pack">
-        <SubstituteInFile
-            FilePath="../templates/twodog/.template.config/template.json"
-            Find="$(NativesVersion)"
-            ReplaceWith="0.0.0-ntpl" />
-        <SubstituteInFile
-            FilePath="../templates/twodog/.template.config/template.json"
-            Find="$(TwoDogVersion)"
-            ReplaceWith="0.0.0-tpl" />
+        <SetTemplateDefaults FilePath="../templates/twodog/.template.config/template.json"
+                             TwoDogVer="0.0.0-tpl"
+                             NativesVer="0.0.0-ntpl"
+                             GodotVer="$(GodotVersion)" />
     </Target>
 </Project>

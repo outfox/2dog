@@ -11,8 +11,10 @@ namespace twodog.fixture;
 /// <summary>
 /// Handles pre-loading game assemblies into the Default AssemblyLoadContext before Godot starts.
 /// This prevents type identity issues where the same type exists in multiple load contexts.
+/// Public so that hosts that construct <see cref="Engine"/> directly (without the test
+/// fixtures) and also reference game types can apply the same guard.
 /// </summary>
-internal static class AssemblyPreloader
+public static class AssemblyPreloader
 {
     /// <summary>
     /// Discovers and pre-loads game assemblies referenced by the test project.

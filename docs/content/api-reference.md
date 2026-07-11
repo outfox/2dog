@@ -33,7 +33,10 @@ public GodotInstance Start()
 Initializes and starts the Godot engine. Returns a `GodotInstance` for controlling the main loop.
 
 ::: danger
-Can only be called once per process. Subsequent calls throw `InvalidOperationException`.
+Only one Godot instance may run at a time. Calling `Start()` while another
+instance is running throws `InvalidOperationException`. Dispose the previous
+`Engine` (and its `GodotInstance`) first  –  sequential restart in the same
+process is supported.
 :::
 
 ### Example

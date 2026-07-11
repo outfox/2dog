@@ -46,7 +46,7 @@
 
     <!-- Editor-only assembly for EditorInterface, EditorPlugin, etc. -->
     <ItemGroup Condition="'$(Configuration)' == 'Editor'">
-        <PackageReference Include="GodotSharpEditor" Version="4.6.0"/>
+        <PackageReference Include="GodotSharpEditor" Version="$(GodotVersion)"/>
     </ItemGroup>
 
     <!-- Remove duplicate Godot.SourceGenerators that come from game's Godot.NET.Sdk

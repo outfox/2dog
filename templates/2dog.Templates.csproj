@@ -40,34 +40,8 @@
 
     <!-- Write version defaults from Directory.Build.props into template.json.
          This modifies the source file so both `dotnet pack` and local
-         `dotnet new install templates/twodog/` always use correct versions. -->
-    <UsingTask TaskName="SetTemplateDefaults" TaskFactory="RoslynCodeTaskFactory"
-               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
-        <ParameterGroup>
-            <FilePath ParameterType="System.String" Required="true" />
-            <TwoDogVer ParameterType="System.String" Required="true" />
-            <NativesVer ParameterType="System.String" Required="true" />
-            <GodotVer ParameterType="System.String" Required="true" />
-        </ParameterGroup>
-        <Task>
-            <Using Namespace="System.Text.RegularExpressions" />
-            <Code Type="Fragment" Language="cs"><![CDATA[
-                var text = File.ReadAllText(FilePath);
-                // Replace the defaultValue for each known symbol by matching the JSON key.
-                text = System.Text.RegularExpressions.Regex.Replace(text,
-                    @"(""twodogVersion""[^}]*""defaultValue"":\s*)""[^""]*""",
-                    "${1}\"" + TwoDogVer + "\"");
-                text = System.Text.RegularExpressions.Regex.Replace(text,
-                    @"(""nativesVersion""[^}]*""defaultValue"":\s*)""[^""]*""",
-                    "${1}\"" + NativesVer + "\"");
-                text = System.Text.RegularExpressions.Regex.Replace(text,
-                    @"(""godotVersion""[^}]*""defaultValue"":\s*)""[^""]*""",
-                    "${1}\"" + GodotVer + "\"");
-                File.WriteAllText(FilePath, text);
-            ]]></Code>
-        </Task>
-    </UsingTask>
-
+         `dotnet new install templates/twodog/` always use correct versions.
+         SetTemplateDefaults is defined in the repo-root Directory.Build.targets. -->
     <Target Name="SyncTemplateVersions" BeforeTargets="GenerateNuspec">
         <SetTemplateDefaults
             FilePath="twodog/.template.config/template.json"
