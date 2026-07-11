@@ -81,6 +81,7 @@ Create a file in your test project (e.g., `TestInitializer.cs`):
 
 ```csharp
 using System.Runtime.CompilerServices;
+using Godot;
 using twodog;
 
 namespace MyGame.Tests;

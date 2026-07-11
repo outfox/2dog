@@ -15,17 +15,26 @@ dotnet add package xunit.runner.visualstudio
 
 ## Fixtures
 
+Both fixtures are thin subclasses of `GodotFixtureBase`, which starts the engine
+in its constructor and exposes the members you use in tests:
+
+```csharp
+public abstract class GodotFixtureBase : IDisposable
+{
+    protected GodotFixtureBase(params string[] cmdLineArgs);
+
+    public Engine Engine { get; }
+    public GodotInstance GodotInstance { get; }
+    public SceneTree Tree { get; }
+}
+```
+
 ### GodotFixture
 
 Starts Godot with rendering enabled. Use for tests that need visual output.
 
 ```csharp
-public class GodotFixture : IDisposable
-{
-    public Engine Engine { get; }
-    public GodotInstance GodotInstance { get; }
-    public SceneTree Tree { get; }
-}
+public class GodotFixture : GodotFixtureBase;
 ```
 
 ### GodotHeadlessFixture
@@ -33,12 +42,7 @@ public class GodotFixture : IDisposable
 Starts Godot in headless mode (`--headless`). Use for CI/CD and tests that don't need rendering.
 
 ```csharp
-public class GodotHeadlessFixture : IDisposable
-{
-    public Engine Engine { get; }
-    public GodotInstance GodotInstance { get; }
-    public SceneTree Tree { get; }
-}
+public class GodotHeadlessFixture() : GodotFixtureBase("--headless");
 ```
 
 ## Collections

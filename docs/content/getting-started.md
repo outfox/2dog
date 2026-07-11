@@ -9,7 +9,7 @@
 
 ## Installation
 
-Prerelease packages are available on [NuGet](https://www.nuget.org/packages?q=2dog&includeComputedFrameworks=true&prerel=true&sortby=created-desc). Supported platforms: `win-x64`, `linux-x64`, and `osx-arm64`.
+Packages are available on [NuGet](https://www.nuget.org/packages?q=2dog&includeComputedFrameworks=true&sortby=created-desc). Package versions follow the embedded Godot version plus a 2dog iteration number (e.g. `4.7.0.24` embeds Godot 4.7.0). Supported platforms: `win-x64`, `linux-x64`, and `osx-arm64`.
 
 ## Your First 2dog Application
 
@@ -49,7 +49,7 @@ Alternatively, create a new console application manually:
 ```bash
 dotnet new console -n MyGodotApp
 cd MyGodotApp
-dotnet add package 2dog --version 0.1.9-pre
+dotnet add package 2dog
 ```
 
 Replace `Program.cs`:
@@ -118,21 +118,21 @@ uv run poe build
 
 > You can also run `uv run poe build-all` to do steps 2 and 3 in one go.
 
-## Build Configurations
+## Native Variants
 
-2dog supports three build configurations for different use cases:
+2dog ships three native library variants for different use cases:
 
-```bash
-dotnet build -c Debug    # Development with debug symbols
-dotnet build -c Release  # Optimized production build
-dotnet build -c Editor   # Editor tools with TOOLS_ENABLED
-```
+- `release` (default)  –  optimized production build
+- `debug`  –  development build with debug symbols and assertions
+- `editor`  –  editor build with `TOOLS_ENABLED` compiled in
 
-The **Editor** configuration enables Godot's full editor toolchain, including:
-- Resource import pipeline
-- Editor APIs (`EditorInterface`, `EditorPlugin`)
-- Import plugins for textures, models, audio
-- Scene validation and manipulation tools
+Referencing the `2dog` package gives you the `release` variant automatically.
+For `debug` or `editor`, reference the matching platform variant package
+(e.g. `2dog.win-x64.debug`) and set `<TwoDogVariant>` in your project.
+
+Note that the editor variant enables editor code paths at compile time, but a
+working import pipeline still requires the external Godot editor binary  –  see
+the [Import Tool](./import-tool).
 
 See [Build Configurations](./build-configurations) for detailed information.
 
