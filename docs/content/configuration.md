@@ -2,30 +2,20 @@
 
 2dog uses MSBuild properties for configuration. Set these in your `.csproj` file.
 
-## Build Configurations
+## Native Variants
 
-2dog supports three build configurations that map to different Godot native library builds:
+2dog ships three native library variants:
 
-| Configuration | Godot Build Type | TOOLS_ENABLED | Use Case |
-|--------------|------------------|---------------|----------|
-| **Debug** | `template_debug` | ❌ No | Development with debug symbols |
-| **Release** | `template_release` | ❌ No | Optimized runtime (games, apps) |
-| **Editor** | `editor` | ✅ Yes | Import pipeline, editor APIs, tools |
+| Variant | Godot Build Type | TOOLS_ENABLED | Use Case |
+|---------|------------------|---------------|----------|
+| **release** | `template_release` | ❌ No | Optimized runtime (games, apps) |
+| **debug** | `template_debug` | ❌ No | Development with debug symbols |
+| **editor** | `editor` | ✅ Yes | Editor APIs, [Tool] scripts |
 
-### Build Configuration Usage
-
-```bash
-# Development with debug symbols
-dotnet build -c Debug
-dotnet test -c Debug
-
-# Optimized release build
-dotnet build -c Release
-
-# Editor build with TOOLS_ENABLED
-dotnet build -c Editor
-dotnet run -c Editor
-```
+The variant is selected with `TwoDogVariant` plus the matching platform
+variant package  –  it is not derived from your .NET configuration
+automatically. See [Build Configurations](./build-configurations#selecting-a-variant)
+for the full wiring.
 
 ### What is TOOLS_ENABLED?
 
@@ -41,12 +31,11 @@ dotnet run -c Editor
 Editor builds are larger and slower than template builds. Use them only when you need editor-specific features.
 :::
 
-::: tip When to Use Editor Configuration
-- Building asset import/conversion tools
-- Creating custom Godot editor plugins
-- Processing game assets in CI/CD pipelines
-- Validating scene files programmatically
-- Extending Godot's editor functionality
+::: warning Editor Runtime Limitations
+`TOOLS_ENABLED` provides compile-time access to editor types and enables
+`[Tool]` script execution, but editor runtime singletons and the import
+pipeline are not initialized in embedded libgodot mode  –  importing assets
+requires the external editor binary (see the [Import Tool](./import-tool)).
 :::
 
 ## Native Library Options
@@ -94,12 +83,6 @@ Derived from `TwoDogVariant` by default, so most projects never set it directly.
 </PropertyGroup>
 ```
 
-::: info Automatic Configuration
-When building from the solution, `TwoDogBuildType` is automatically set:
-- Debug configuration → `template_debug`
-- Release configuration → `template_release`
-- Editor configuration → `editor`
-:::
 
 ## Project Setup
 
@@ -127,7 +110,8 @@ priority over the assemblies bundled in the NuGet package.
 
 ### Multi-Configuration Project
 
-Support all three build types in one project:
+Support all three native variants in one project by mapping your .NET
+configurations to variants explicitly:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -136,49 +120,49 @@ Support all three build types in one project:
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 
-  <!-- Debug: template_debug build -->
+  <ItemGroup>
+    <PackageReference Include="2dog" Version="4.7.0.24"/>
+  </ItemGroup>
+
+  <!-- Debug: debug natives -->
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TwoDogBuildType>template_debug</TwoDogBuildType>
+    <TwoDogVariant>debug</TwoDogVariant>
   </PropertyGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <PackageReference Include="2dog.win-x64.debug" Version="4.7.0"/>
+  </ItemGroup>
 
-  <!-- Release: template_release build (optimized) -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TwoDogBuildType>template_release</TwoDogBuildType>
-  </PropertyGroup>
-
-  <!-- Editor: editor build with TOOLS_ENABLED -->
+  <!-- Editor: editor natives with TOOLS_ENABLED -->
   <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
-    <TwoDogBuildType>editor</TwoDogBuildType>
+    <TwoDogVariant>editor</TwoDogVariant>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="2dog" Version="4.7.0.24"/>
+  <ItemGroup Condition="'$(Configuration)' == 'Editor'">
+    <PackageReference Include="2dog.win-x64.editor" Version="4.7.0"/>
   </ItemGroup>
 </Project>
 ```
 
-### Asset Import Tool
+(Release needs no extra wiring  –  the `release` variant is the default.)
 
-Build a tool that uses Godot's import pipeline:
+### Editor Tooling Project
+
+Build a tool that uses editor types and `[Tool]` scripts (for asset
+importing itself, use the [Import Tool](./import-tool) with the external
+editor binary):
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <!-- Always use editor build for import tools -->
-    <TwoDogBuildType>editor</TwoDogBuildType>
+    <TwoDogVariant>editor</TwoDogVariant>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="2dog" Version="4.7.0.24"/>
+    <PackageReference Include="2dog.win-x64.editor" Version="4.7.0"/>
   </ItemGroup>
 </Project>
-```
-
-```bash
-# Run your import tool
-dotnet run -c Editor -- --import-all
 ```
 
 ### Local Godot Development
