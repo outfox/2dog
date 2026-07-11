@@ -24,7 +24,7 @@ You control when Godot starts, when frames iterate, and when it shuts down. Godo
 - Direct P/Invoke calls to Godot's native APIs
 - Full access to GodotSharp managed bindings
 
-The native library (`libgodot.dll`, `libgodot.so`, or `libgodot.dylib`) is automatically downloaded and cached on first build.
+The native library (`libgodot.dll`, `libgodot.so`, or `libgodot.dylib`) ships in the platform NuGet packages (`2dog.win-x64`, `2dog.linux-x64`, `2dog.osx-arm64`) that the `2dog` package references automatically.
 
 ### Build Variants
 
