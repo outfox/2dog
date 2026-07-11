@@ -114,7 +114,7 @@ public partial class MyToolNode : Node
 For triggering Godot's import pipeline (generating `.uid` files, processing assets), use the [Import Tool](./import-tool) which invokes the Godot editor binary directly. Editor runtime singletons like `EditorInterface` are not available through the libgodot embedding API.
 
 ::: warning Editor Runtime Limitations
-The Editor configuration provides **compile-time access** to editor types (`EditorInterface`, `EditorPlugin`, etc.) and enables `[Tool]` script execution. However, editor **runtime singletons** and the import pipeline are not initialized in embedded libgodot mode — they require the full standalone editor binary.
+The Editor configuration provides **compile-time access** to editor types (`EditorInterface`, `EditorPlugin`, etc.) and enables `[Tool]` script execution. However, editor **runtime singletons** and the import pipeline are not initialized in embedded libgodot mode  –  they require the full standalone editor binary.
 :::
 
 ## Configuration Comparison
@@ -145,9 +145,12 @@ Editor builds are significantly larger and slower due to the additional tooling.
 
 ## Setting Up Multi-Configuration Projects
 
-### Automatic Configuration
+### Selecting a Variant
 
-The 2dog solution automatically maps .NET configurations to Godot build types:
+Referencing `2dog` gives you the `release` natives. The variant is **not**
+derived from your .NET configuration automatically  –  to use `debug` or
+`editor` natives, set `TwoDogVariant` and reference the matching platform
+variant package, typically conditioned on your configuration:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -157,27 +160,30 @@ The 2dog solution automatically maps .NET configurations to Godot build types:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="2dog" Version="0.1.0-pre"/>
+    <PackageReference Include="2dog" Version="4.7.0.24"/>
+  </ItemGroup>
+
+  <!-- Debug natives (opt-in) -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TwoDogVariant>debug</TwoDogVariant>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <PackageReference Include="2dog.win-x64.debug" Version="4.7.0"/>
+  </ItemGroup>
+
+  <!-- Editor natives (opt-in, custom 'Editor' configuration) -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
+    <TwoDogVariant>editor</TwoDogVariant>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Editor'">
+    <PackageReference Include="2dog.win-x64.editor" Version="4.7.0"/>
   </ItemGroup>
 </Project>
 ```
 
-Build with any configuration:
-```bash
-dotnet build -c Debug    # Uses template_debug
-dotnet build -c Release  # Uses template_release
-dotnet build -c Editor   # Uses editor with TOOLS_ENABLED
-```
-
-### Custom Configuration Mapping
-
-Override the default mapping if needed:
-
-```xml
-<PropertyGroup Condition="'$(Configuration)' == 'MyCustomConfig'">
-  <TwoDogBuildType>editor</TwoDogBuildType>
-</PropertyGroup>
-```
+The `TwoDogBuildType` property (`template_release`, `template_debug`,
+`editor`) is derived from `TwoDogVariant` and only needs to be set directly
+for advanced overrides.
 
 ## CI/CD Integration
 
@@ -236,25 +242,20 @@ Unable to find the .NET assemblies directory.
 Make sure the 'GodotSharp/Api/Debug' directory exists...
 ```
 
-**Solution**: Ensure your configuration matches the native library:
-```bash
-# Check which configuration you're using
-dotnet build -c Debug   # Should use template_debug
-dotnet build -c Release # Should use template_release
-dotnet build -c Editor  # Should use editor
-```
+**Solution**: Ensure `TwoDogVariant` matches the native library variant you
+reference  –  `debug` for `2dog.<rid>.debug`, `editor` for `2dog.<rid>.editor`,
+`release` (the default) for the packages that come with `2dog` itself. See
+[Selecting a Variant](#selecting-a-variant).
 
 ### Editor APIs Not Available
 
-If editor APIs return `null` or throw exceptions:
+If editor types are missing at compile time:
 
-**Solution**: Build with Editor configuration:
-```bash
-dotnet build -c Editor
-dotnet run -c Editor
-```
-
-Only the Editor configuration includes `TOOLS_ENABLED` features.
+**Solution**: Use the `editor` native variant (`TwoDogVariant=editor` plus the
+`2dog.<rid>.editor` platform package). Only editor builds include
+`TOOLS_ENABLED` features  –  and remember that editor runtime singletons and the
+import pipeline still require the external editor binary (see the warning
+above).
 
 ### Performance Issues
 
@@ -283,4 +284,3 @@ dotnet publish -c Release
 
 - See [Configuration](./configuration) for detailed MSBuild property reference
 - Learn about [Testing](./testing) with different configurations
-- Explore [API Examples](./api-examples) for editor tooling examples

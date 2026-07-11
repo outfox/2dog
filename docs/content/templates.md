@@ -40,10 +40,6 @@ This creates:
 
 ### Project with Tests
 
-::: warning Requires 2dog.xunit Package
-The `--tests` option creates a test project that references `2dog.xunit`. This package must be available on NuGet or a local feed for restore to succeed.
-:::
-
 Create a project with an xUnit test project:
 
 ```bash
@@ -68,6 +64,7 @@ MyGame/
 │   ├── MyGame.csproj       # Project file
 │   └── Program.cs          # Entry point
 ├── MyGame.Godot/           # Godot project
+│   ├── MyGame.Godot.csproj # Godot.NET.Sdk project file
 │   ├── project.godot       # Godot project file
 │   └── main.tscn           # Main scene
 ├── MyGame.Tests/           # Optional test project
@@ -110,7 +107,10 @@ Console.WriteLine("Shutting down...");
 
 ### Project File
 
-The generated `.csproj` only needs a single `2dog` package reference. GodotSharp, source generators, and platform-specific native libraries are all included transitively:
+The generated `.csproj` needs a single `2dog` package reference  –  GodotSharp,
+source generators, and platform-specific native libraries are all included
+transitively  –  plus a project reference to the Godot project for your C#
+scripts:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -119,16 +119,29 @@ The generated `.csproj` only needs a single `2dog` package reference. GodotSharp
         <OutputType>Exe</OutputType>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="2dog" Version="0.1.0-pre"/>
+        <PackageReference Include="2dog" Version="4.7.0.24"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../MyGame.Godot/MyGame.Godot.csproj"/>
     </ItemGroup>
 
     <!-- Godot project location -->
     <PropertyGroup>
         <GodotProjectDir>../MyGame.Godot</GodotProjectDir>
     </PropertyGroup>
+
+    <!-- Remove duplicate Godot.SourceGenerators that come from the Godot project
+         (2dog package already embeds them) -->
+    <Target Name="RemoveDuplicateGodotAnalyzers" BeforeTargets="CoreCompile">
+        <ItemGroup>
+            <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Identity)').Contains('Godot.SourceGenerators'))" />
+        </ItemGroup>
+    </Target>
 </Project>
 ```
 
@@ -148,6 +161,9 @@ You can replace these with your own Godot project files or edit them in the Godo
 | `-n, --name` | string | (required) | Name of the project to create |
 | `--tests` | bool | `false` | Include a test project with xUnit and 2dog.xunit |
 | `--skip-restore` | bool | `false` | Skip automatic NuGet package restore |
+| `--twodogVersion` | string | (current release) | Version of 2dog packages to reference |
+| `--nativesVersion` | string | (current release) | Version of native platform packages to reference |
+| `--godotVersion` | string | (current release) | Version of Godot.NET.Sdk to reference |
 
 ### Examples
 
@@ -180,9 +196,7 @@ dotnet run -c Release
 
 ### Running Tests (if --tests was used)
 
-::: warning
-Tests require `2dog.xunit` package to be available. See the [Testing](/testing) guide for details on test fixtures and setup.
-:::
+See the [Testing](/testing) guide for details on test fixtures and setup.
 
 ```bash
 # Run all tests
@@ -190,7 +204,6 @@ dotnet test
 
 # Run with specific configuration
 dotnet test -c Debug
-dotnet test -c Editor
 ```
 
 ### Customizing the Godot Project
@@ -199,7 +212,7 @@ The generated `MyGame.Godot/` directory contains a minimal Godot project. You ca
 
 1. **Edit in Godot Editor:**
    ```bash
-   # Open the project in Godot Editor (if you have TOOLS_ENABLED build)
+   # Open the project in the (external) Godot editor
    godot --editor --path MyGame.Godot
    ```
 
@@ -253,16 +266,6 @@ dotnet new install ./templates/twodog
 1. Ensure the template is installed: `dotnet new list | grep 2dog`
 2. If not listed, install it: `dotnet new install 2dog` (or local path)
 
-### Package Restore Failed (--tests)
-
-**Problem:** Test project fails to restore with "Unable to find package 2dog.xunit"
-
-**Solution:**
-The `2dog.xunit` package must be available on NuGet or a local feed. Until it's published:
-1. Create the project without `--tests`
-2. Manually add a test project later using project references
-3. See [Testing](/testing) guide for manual setup
-
 ### Wrong Package Versions
 
 **Problem:** Generated project references outdated package versions
@@ -293,6 +296,6 @@ After creating a project from the template:
 2. **Replace the Godot project** - Swap in your own Godot assets and scenes
 3. **Add game logic** - Implement your game loop in `Program.cs`
 4. **Write tests** - Add test coverage using the xUnit fixtures
-5. **Configure builds** - Set up Debug/Release/Editor configurations
+5. **Configure builds** - See [Build Configurations](/build-configurations) for native variants
 
 See the [Getting Started](/getting-started) guide for a deeper walkthrough of 2dog development.

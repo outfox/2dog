@@ -85,18 +85,18 @@ public class GodotSceneTests(GodotHeadlessFixture godot)
 ```
 
 ```csharp [🔨 Tool Example]
-// Build with: dotnet build -c Editor
-// Enables TOOLS_ENABLED for import and editor features
+// With the editor native variant (TwoDogVariant=editor),
+// TOOLS_ENABLED code paths and [Tool] scripts are active.
 
 using twodog;
 
-using var engine = new Engine("importer", "./project");
+using var engine = new Engine("tool", "./project", "--headless");
 using var godot = engine.Start();
 
-// Import a texture with custom settings
-var importer = ResourceImporterTexture.Singleton;
-// Use Godot's full import pipeline
-// Access editor-only APIs like EditorImportPlugin, EditorInterface, etc.
+// Drive the scene tree from your own code:
+// batch processing, validation, custom tooling.
+var scene = GD.Load<PackedScene>("res://main.tscn");
+godot.Tree.Root.AddChild(scene.Instantiate());
 ```
 
 :::

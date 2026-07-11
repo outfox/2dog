@@ -51,9 +51,36 @@ Editor builds are larger and slower than template builds. Use them only when you
 
 ## Native Library Options
 
+Native libraries are delivered as NuGet platform packages. Referencing `2dog`
+automatically pulls in the `template_release` package for your OS
+(`2dog.win-x64`, `2dog.linux-x64`, or `2dog.osx-arm64`). For debug or editor
+natives, reference the corresponding variant package explicitly:
+
+```xml
+<ItemGroup Condition="'$(Configuration)' == 'Debug'">
+  <PackageReference Include="2dog.win-x64.debug" Version="4.7.0"/>
+</ItemGroup>
+<ItemGroup Condition="'$(Configuration)' == 'Editor'">
+  <PackageReference Include="2dog.win-x64.editor" Version="4.7.0"/>
+</ItemGroup>
+```
+
+### TwoDogVariant
+
+Selects which native variant your project targets: `release` (default),
+`debug`, or `editor`. This controls how the GodotPlugins assemblies are laid
+out in your output directory (see [Directory Structure Requirements](#directory-structure-requirements)).
+
+```xml
+<PropertyGroup>
+  <TwoDogVariant>editor</TwoDogVariant>
+</PropertyGroup>
+```
+
 ### TwoDogBuildType
 
-Selects the Godot build variant. This is automatically set based on your build configuration, but can be overridden.
+Advanced: overrides the Godot build type used for API assembly placement.
+Derived from `TwoDogVariant` by default, so most projects never set it directly.
 
 | Value | Description | TOOLS_ENABLED |
 |-------|-------------|---------------|
@@ -74,83 +101,27 @@ When building from the solution, `TwoDogBuildType` is automatically set:
 - Editor configuration → `editor`
 :::
 
-### TwoDogDevBuild
+## Project Setup
 
-Controls whether to use dev builds (with additional debugging features).
+### GodotProjectDir
 
-| Value | Description |
-|-------|-------------|
-| `true` | Use dev build (default for `editor`) |
-| `false` | Use non-dev build (default for `template_release`) |
-
-```xml
-<PropertyGroup>
-  <TwoDogDevBuild>true</TwoDogDevBuild>
-</PropertyGroup>
-```
-
-### TwoDogNativesLocalPath
-
-Use a local native library instead of downloading.
+Points 2dog at the directory containing your `project.godot`. The path is
+embedded as assembly metadata at build time and resolved at runtime via
+`Engine.ResolveProjectDir()`.
 
 ```xml
 <PropertyGroup>
-  <TwoDogNativesLocalPath>C:\godot\bin\libgodot.dll</TwoDogNativesLocalPath>
+  <GodotProjectDir>../MyGame.Godot/</GodotProjectDir>
 </PropertyGroup>
 ```
 
-### TwoDogSkipNativeDownload
+### GODOTSHARP_DIR (environment variable)
 
-Skip automatic native library download. Useful for CI with pre-cached files.
-
-```xml
-<PropertyGroup>
-  <TwoDogSkipNativeDownload>true</TwoDogSkipNativeDownload>
-</PropertyGroup>
-```
-
-### TwoDogNativesCacheDir
-
-Override the native library cache location. Defaults to `~/.twodog/natives/{version}/`.
-
-```xml
-<PropertyGroup>
-  <TwoDogNativesCacheDir>$(MSBuildProjectDirectory)/.natives/</TwoDogNativesCacheDir>
-</PropertyGroup>
-```
-
-## Download Options
-
-### TwoDogGitHubRepo
-
-GitHub repository for downloading releases.
-
-```xml
-<PropertyGroup>
-  <TwoDogGitHubRepo>outfox/2dog</TwoDogGitHubRepo>
-</PropertyGroup>
-```
-
-### TwoDogPackageVersion
-
-Package version for download URLs and cache paths.
-
-```xml
-<PropertyGroup>
-  <TwoDogPackageVersion>0.1.0-pre</TwoDogPackageVersion>
-</PropertyGroup>
-```
-
-## Platform Detection
-
-These are automatically detected but can be overridden:
-
-| Property | Description |
-|----------|-------------|
-| `TwoDogIsWindows` | `true` on Windows |
-| `TwoDogIsLinux` | `true` on Linux |
-| `TwoDogIsOSX` | `true` on macOS |
-| `TwoDogArch` | Architecture: `X64` or `Arm64` |
+At startup, 2dog points `GODOTSHARP_DIR` at the directory containing
+`GodotPlugins.dll` so Godot's native code can find it  –  important for
+non-standard host processes such as `dotnet test`. You can also set it
+yourself to override where GodotPlugins is loaded from; when set, it takes
+priority over the assemblies bundled in the NuGet package.
 
 ## Example Configurations
 
@@ -181,7 +152,7 @@ Support all three build types in one project:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="2dog" Version="0.1.0-pre"/>
+    <PackageReference Include="2dog" Version="4.7.0.24"/>
   </ItemGroup>
 </Project>
 ```
@@ -200,7 +171,7 @@ Build a tool that uses Godot's import pipeline:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="2dog" Version="0.1.0-pre"/>
+    <PackageReference Include="2dog" Version="4.7.0.24"/>
   </ItemGroup>
 </Project>
 ```
@@ -210,32 +181,13 @@ Build a tool that uses Godot's import pipeline:
 dotnet run -c Editor -- --import-all
 ```
 
-### CI/CD Build
-
-```xml
-<PropertyGroup>
-  <TwoDogSkipNativeDownload>true</TwoDogSkipNativeDownload>
-  <TwoDogNativesLocalPath>$(CI_CACHE)/libgodot.dll</TwoDogNativesLocalPath>
-</PropertyGroup>
-```
-
 ### Local Godot Development
 
-When building Godot from source alongside 2dog:
-
-```xml
-<PropertyGroup Condition="'$(Configuration)' == 'Editor'">
-  <TwoDogSkipNativeDownload>true</TwoDogSkipNativeDownload>
-  <TwoDogBuildType>editor</TwoDogBuildType>
-  <TwoDogNativesLocalPath>../godot/bin/godot.windows.editor.x86_64.shared_library.dll</TwoDogNativesLocalPath>
-</PropertyGroup>
-
-<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-  <TwoDogSkipNativeDownload>true</TwoDogSkipNativeDownload>
-  <TwoDogBuildType>template_debug</TwoDogBuildType>
-  <TwoDogNativesLocalPath>../godot/bin/godot.windows.template_debug.x86_64.shared_library.dll</TwoDogNativesLocalPath>
-</PropertyGroup>
-```
+When working from a source checkout of the 2dog repository (referencing
+`twodog` as a `ProjectReference` instead of the NuGet package), the
+GodotPlugins assemblies are found automatically in
+`godot/bin/GodotSharp/Api/Debug/`. Setting the `GODOTSHARP_DIR` environment
+variable overrides this lookup.
 
 ## GodotSharp API Assemblies
 
@@ -254,7 +206,7 @@ Godot's native code has specific expectations for where the GodotSharp API assem
 | Build Type | Compile Flags | Expected Directory Structure |
 |------------|---------------|------------------------------|
 | `editor` | `TOOLS_ENABLED` + `LIBGODOT_HOSTFXR` | `GodotSharp/Api/Debug/` subdirectory |
-| `template_debug` | `LIBGODOT_HOSTFXR` only | Flat (same directory as libgodot) |
+| `template_debug` | `LIBGODOT_HOSTFXR` only | `GodotSharp/Api/Debug/` subdirectory |
 | `template_release` | `LIBGODOT_HOSTFXR` only | Flat (same directory as libgodot) |
 
 ### Why This Matters
@@ -294,13 +246,16 @@ Make sure the '...GodotSharp/Api/Debug' directory exists and contains the .NET a
 
 ### How 2dog Handles This
 
-2dog automatically copies the GodotSharp API assemblies to the correct location based on your `TwoDogBuildType`:
+2dog automatically copies the GodotPlugins assemblies (`GodotPlugins.dll`,
+`.pdb`, and `.runtimeconfig.json`) to the correct location based on your
+`TwoDogBuildType`:
 
 - **`TwoDogBuildType=editor`**: Copies to `$(OutputPath)GodotSharp/Api/Debug/`
-- **`TwoDogBuildType=template_debug`**: Copies directly to `$(OutputPath)`
+- **`TwoDogBuildType=template_debug`**: Copies to `$(OutputPath)GodotSharp/Api/Debug/`
 - **`TwoDogBuildType=template_release`**: Copies directly to `$(OutputPath)`
 
-This happens automatically via the `TwoDogCopyGodotApi` MSBuild target.
+This happens automatically via the `TwoDogCopyGodotApi` MSBuild target (and
+`TwoDogPublishGodotApi` on publish).
 
 ### Troubleshooting
 
@@ -321,4 +276,4 @@ If you encounter the "Unable to find .NET assemblies directory" error:
 
 4. **Check that the source assemblies exist**:
    - For local development: `godot/bin/GodotSharp/Api/Debug/`
-   - For NuGet package: The package's `contentFiles/any/any/GodotSharp/Api/Debug/`
+   - For NuGet package: the package's `build/api/` directory
