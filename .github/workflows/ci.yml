@@ -13,7 +13,7 @@ on:
       - 'docs/**'
       - '*.md'
   workflow_run:
-    workflows: ["Build Native Libraries"]
+    workflows: ["libgodot"]
     types: [completed]
     branches: [main]
   workflow_dispatch:
@@ -55,7 +55,7 @@ jobs:
               echo "::notice::Native build in progress — skipping CI. It will re-trigger when the build completes."
               echo "ready=false" >> $GITHUB_OUTPUT
             else
-              echo "::error::No native build for godot submodule $HASH. Run the 'Build Native Libraries' workflow first."
+              echo "::error::No native build for godot submodule $HASH. Run the 'libgodot' workflow first."
               exit 1
             fi
           fi
