@@ -218,44 +218,22 @@
                  Pack="true" PackagePath="content/twodog/" CopyToOutputDirectory="Never"/>
     </ItemGroup>
 
-    <!-- Substitute 2dog package versions into template.json at pack time.
-         Replacement is keyed on the template symbol name (not the version value),
-         so it stays correct even when TwoDogVersion and NativesVersion collide or
-         prefix-overlap, and is idempotent regardless of the file's current state. -->
-    <UsingTask TaskName="SetTemplateSymbolDefault" TaskFactory="RoslynCodeTaskFactory"
-               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
-        <ParameterGroup>
-            <FilePath ParameterType="System.String" Required="true" />
-            <Symbol ParameterType="System.String" Required="true" />
-            <Value ParameterType="System.String" Required="true" />
-        </ParameterGroup>
-        <Task>
-            <Using Namespace="System.Text.RegularExpressions" />
-            <Code Type="Fragment" Language="cs"><![CDATA[
-                var text = File.ReadAllText(FilePath);
-                text = System.Text.RegularExpressions.Regex.Replace(text,
-                    "(\"" + Symbol + "\"[^}]*\"defaultValue\":\\s*)\"[^\"]*\"",
-                    "${1}\"" + Value + "\"");
-                File.WriteAllText(FilePath, text);
-            ]]></Code>
-        </Task>
-    </UsingTask>
-
+    <!-- Substitute 2dog package versions into the bundled template.json at pack
+         time, then restore the committed placeholder tokens afterwards.
+         (godotVersion has no placeholder; its committed default is the real
+         version, so the restore just keeps it at $(GodotVersion).)
+         SetTemplateDefaults is defined in the repo-root Directory.Build.targets. -->
     <Target Name="SubstituteTemplateVersion" BeforeTargets="GenerateNuspec">
-        <SetTemplateSymbolDefault FilePath="../templates/twodog/.template.config/template.json"
-                                  Symbol="twodogVersion" Value="$(TwoDogVersion)" />
-        <SetTemplateSymbolDefault FilePath="../templates/twodog/.template.config/template.json"
-                                  Symbol="nativesVersion" Value="$(NativesVersion)" />
-        <SetTemplateSymbolDefault FilePath="../templates/twodog/.template.config/template.json"
-                                  Symbol="godotVersion" Value="$(GodotVersion)" />
+        <SetTemplateDefaults FilePath="../templates/twodog/.template.config/template.json"
+                             TwoDogVer="$(TwoDogVersion)"
+                             NativesVer="$(NativesVersion)"
+                             GodotVer="$(GodotVersion)" />
     </Target>
 
     <Target Name="RestoreTemplateVersion" AfterTargets="Pack">
-        <SetTemplateSymbolDefault FilePath="../templates/twodog/.template.config/template.json"
-                                  Symbol="twodogVersion" Value="0.0.0-tpl" />
-        <SetTemplateSymbolDefault FilePath="../templates/twodog/.template.config/template.json"
-                                  Symbol="nativesVersion" Value="0.0.0-ntpl" />
-        <SetTemplateSymbolDefault FilePath="../templates/twodog/.template.config/template.json"
-                                  Symbol="godotVersion" Value="$(GodotVersion)" />
+        <SetTemplateDefaults FilePath="../templates/twodog/.template.config/template.json"
+                             TwoDogVer="0.0.0-tpl"
+                             NativesVer="0.0.0-ntpl"
+                             GodotVer="$(GodotVersion)" />
     </Target>
 </Project>
