@@ -160,7 +160,7 @@ variant package, typically conditioned on your configuration:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="2dog" Version="4.7.0.24"/>
+    <PackageReference Include="2dog" Version=":2dog-version:"/>
   </ItemGroup>
 
   <!-- Debug natives (opt-in) -->
@@ -168,7 +168,7 @@ variant package, typically conditioned on your configuration:
     <TwoDogVariant>debug</TwoDogVariant>
   </PropertyGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <PackageReference Include="2dog.win-x64.debug" Version="4.7.0"/>
+    <PackageReference Include="2dog.win-x64.debug" Version=":natives-version:"/>
   </ItemGroup>
 
   <!-- Editor natives (opt-in, custom 'Editor' configuration) -->
@@ -176,7 +176,7 @@ variant package, typically conditioned on your configuration:
     <TwoDogVariant>editor</TwoDogVariant>
   </PropertyGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Editor'">
-    <PackageReference Include="2dog.win-x64.editor" Version="4.7.0"/>
+    <PackageReference Include="2dog.win-x64.editor" Version=":natives-version:"/>
   </ItemGroup>
 </Project>
 ```

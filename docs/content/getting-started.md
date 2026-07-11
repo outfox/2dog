@@ -9,7 +9,7 @@
 
 ## Installation
 
-Packages are available on [NuGet](https://www.nuget.org/packages?q=2dog&includeComputedFrameworks=true&sortby=created-desc). Package versions follow the embedded Godot version plus a 2dog iteration number (e.g. `4.7.0.24` embeds Godot 4.7.0). Supported platforms: `win-x64`, `linux-x64`, and `osx-arm64`.
+Packages are available on [NuGet](https://www.nuget.org/packages?q=2dog&includeComputedFrameworks=true&sortby=created-desc). Package versions follow the embedded Godot version plus a 2dog iteration number (the current release is `:2dog-version:`, embedding Godot :godot-version:). Supported platforms: `win-x64`, `linux-x64`, and `osx-arm64`.
 
 ## Your First 2dog Application
 
