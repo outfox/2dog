@@ -170,7 +170,7 @@ jobs:
             rid: win-x64
             lib_ext: dll
           - platform: macos
-            runner: macos-14
+            runner: macos-26
             arch: arm64
             rid: osx-arm64
             lib_ext: dylib
@@ -227,8 +227,9 @@ jobs:
       # exactly as Godot upstream CI does (godot/.github/workflows/windows_builds.yml).
       # SCONS_CACHE_MSVC_CONFIG (job env below) caches that detection.
 
-      # macOS: no Xcode setup step needed — build with the runner image's
-      # default Xcode, matching Godot upstream CI (macos_builds.yml).
+      # macOS: no Xcode setup step needed — the macos-26 runner's default
+      # Xcode satisfies the engine's Apple Clang 16+ requirement, matching
+      # Godot upstream CI (macos_builds.yml).
 
       # macOS-specific: Install the official LunarG Vulkan SDK (MoltenVK) with
       # the engine's own script, as upstream CI does. Deliberately a hard
