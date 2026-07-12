@@ -167,6 +167,11 @@ jobs:
 
       - name: Stage godot/bin directory
         run: |
+          # The godot submodule is not checked out here, so the target tree
+          # must exist before unzip (-d only creates the last path component).
+          mkdir -p godot/bin/GodotSharp/Tools/nupkgs \
+                   godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0
+
           unzip -o release-assets/godotsharp.zip -d godot/bin/GodotSharp/
           unzip -o release-assets/godotsharp-nupkgs.zip -d godot/bin/GodotSharp/Tools/nupkgs/
           unzip -o release-assets/godot-source-generators.zip -d godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
