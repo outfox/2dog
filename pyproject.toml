@@ -44,5 +44,5 @@ sequence = [
 ]
 
 [tool.poe.tasks.import]
-help = "Import Godot resources (generates .uid files for C# scripts)"
+help = "Import Godot resources with the local editor build (normal builds import automatically via MSBuild)"
 cmd = "uv run import-project.py"

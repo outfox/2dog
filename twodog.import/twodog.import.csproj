@@ -5,7 +5,24 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <RollForward>LatestMajor</RollForward>
+        <AssemblyName>2dog.import</AssemblyName>
     </PropertyGroup>
+
+    <!-- Copy-local so the default AssemblyLoadContext can satisfy
+         GodotPlugins' Assembly.Load("GodotSharp") / Assembly.Load("GodotSharpEditor")
+         when running the in-process import (Api Debug config, matching
+         GDMono::get_expected_api_build_config() for editor builds). -->
+    <ItemGroup>
+        <Reference Include="GodotSharp">
+            <HintPath>../godot/bin/GodotSharp/Api/Debug/GodotSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="GodotSharpEditor">
+            <HintPath>../godot/bin/GodotSharp/Api/Debug/GodotSharpEditor.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
     <Target Name="DeepClean" AfterTargets="Clean">
         <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
         <RemoveDir Directories="$(BaseOutputPath)" />

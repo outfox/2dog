@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!-- GodotSharp editor tooling assemblies (GodotTools and dependencies).
+         Platform-agnostic managed assemblies, but built from the godot
+         submodule and therefore versioned with the natives packages.
+         Required by the 2dog import helper: the editor's C# initialization
+         hard-aborts if GodotTools.dll cannot be loaded. -->
+    <PropertyGroup>
+        <PackageId>2dog.tools</PackageId>
+        <Description>Godot editor tooling assemblies (GodotTools) for twodog. Required for the automatic resource import that runs against the editor-variant libgodot.</Description>
+
+        <GodotToolsDir>$(GodotBinDir)GodotSharp/Tools/</GodotToolsDir>
+        <!-- Skip packaging if the tools assemblies don't exist (unless forcing) -->
+        <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(GodotToolsDir)GodotTools.dll')">false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="$(GodotToolsDir)**/*"
+              Exclude="$(GodotToolsDir)nupkgs/**;$(GodotToolsDir)**/*.pdb"
+              Pack="true"
+              PackagePath="tools/GodotSharp/Tools/"
+              Visible="false"/>
+    </ItemGroup>
+</Project>

@@ -1,37 +1,55 @@
-# Import Tool
+# Resource Import
 
-The `twodog.import` tool runs Godot's resource import pipeline against a project directory. This generates `.uid` files for C# scripts and processes other resources that Godot tracks.
+Godot projects need the editor's resource import pass before they can run: it
+generates `.uid` files for C# scripts, imports textures and meshes, and builds
+the `.godot/` cache (including the script UID cache). Without it the engine
+logs a startup error about missing UIDs.
 
-## Why
+2dog runs this import **automatically during build**.
 
-Godot's editor assigns unique identifiers (`.uid` files) to resources including C# scripts. These are normally generated when opening a project in the Godot editor, but in a .NET-first workflow you may need to trigger imports without launching the editor UI.
+## Automatic import (MSBuild)
 
-`twodog.import` wraps the Godot editor binary's `--headless --import` command, providing a simple interface for build scripts and CI/CD pipelines.
+Any project that sets `<GodotProjectDir>` and references the `2dog` package
+gets an incremental import step after `Build`:
 
-::: info
-This tool invokes the Godot editor binary as a subprocess rather than using the embedded libgodot engine. The `--import` flag requires Godot's full editor initialization path, which is not available through the libgodot embedding API.
-:::
+- When source files under the Godot project change, the import runs; otherwise
+  the target is skipped as up-to-date (tracked via a stamp file in the
+  project's `.godot/` directory, shared by all consuming projects).
+- No Godot editor installation is required. The import runs in a helper
+  process against the **editor-variant libgodot** already shipped in the
+  `2dog.<rid>.editor` packages, using the new `libgodot_import_project`
+  entry point.
 
-## Quick Start
+### Properties
 
-If you've built Godot from source (via `uv run poe build-godot`), the editor binary is auto-detected:
+| Property | Default | Description |
+|----------|---------|-------------|
+| `TwoDogAutoImport` | `true` | Set `false` to disable the automatic import. |
+| `TwoDogRequireImport` | `false` | Set `true` to fail the build when no import capability is available (instead of a warning). |
+| `TwoDogForceImport` | `false` | Set `true` to force the import to run even when up-to-date. Also covers staleness the file tracking cannot see (deleted assets). |
+| `TwoDogImportStampFile` | `<project>/.godot/2dog.import.stamp` | Override the stamp file location. |
+| `GodotEditor` |  –  | Path to an external Godot editor binary. When set (or the `GODOT_EDITOR` environment variable is set), it is used instead of the in-process helper. |
+
+When neither the helper payload nor an external editor can be resolved, the
+build emits a warning and skips the import  –  mirroring the nonfatal runtime
+behavior. Deleting the Godot project's `.godot/` directory forces a full
+reimport on the next build.
+
+## The import helper (`twodog.import`)
+
+The `2dog` package ships a small helper (`tools/net8.0/2dog.import.dll`) that
+the MSBuild target invokes. It can also be run manually:
 
 ```bash
-uv run poe import
-```
+# In-process import via an editor-variant libgodot (no editor install needed)
+dotnet run --project twodog.import -- \
+    --libgodot godot/bin/godot.windows.editor.x86_64.shared_library.dll \
+    --api-dir godot/bin/GodotSharp/Api/Debug \
+    --tools-dir godot/bin/GodotSharp/Tools \
+    ./game
 
-This imports the `./game` project by default. To import a different project:
-
-```bash
-uv run import-project.py ./path/to/project
-```
-
-## Usage with dotnet
-
-The `twodog.import` .NET project provides the same functionality for use without Python:
-
-```bash
-dotnet run --project twodog.import -- [--editor <godot-binary>] <project-path>
+# Subprocess mode with an external Godot editor binary
+dotnet run --project twodog.import -- --editor <godot-binary> ./game
 ```
 
 ### Arguments
@@ -39,61 +57,73 @@ dotnet run --project twodog.import -- [--editor <godot-binary>] <project-path>
 | Argument | Description |
 |----------|-------------|
 | `<project-path>` | Path to a directory containing `project.godot` |
-| `--editor <path>` | Path to the Godot editor binary |
+| `--libgodot <path>` | Editor-variant libgodot shared library; runs the import in-process via `libgodot_import_project` |
+| `--api-dir <dir>` | Directory containing `GodotPlugins.dll` (sets `GODOTSHARP_DIR`); defaults to the helper's own directory |
+| `--tools-dir <dir>` | Directory containing `GodotTools.dll` (sets `GODOT_TOOLS_DIR`); required in `--libgodot` mode |
+| `--editor <path>` | External Godot editor binary (subprocess mode); falls back to the `GODOT_EDITOR` environment variable and takes precedence over `--libgodot` |
+| `--verbose` | Pass `--verbose` to the engine |
 
-### Editor Binary Resolution
+The helper serializes concurrent imports of the same project with a lock file
+(`.godot/2dog.import.lock`), so parallel builds of multiple consumers (e.g.
+demo and tests) do not race.
 
-The tool locates the Godot editor binary using this priority order:
+::: info
+Template builds (`template_debug`, `template_release`) cannot import; the
+import pipeline requires the editor variant (`TOOLS_ENABLED`). The helper
+reports this explicitly if pointed at a template libgodot.
+:::
 
-1. **`--editor` argument** -- explicit path passed on the command line
-2. **`GODOT_EDITOR` environment variable** -- convenient for repeated use or CI/CD
+## `libgodot_import_project`
 
-If neither is set, the tool prints usage instructions and exits.
+The Godot fork exposes a dedicated C entry point in editor builds of libgodot:
 
-### Examples
-
-```bash
-# Explicit editor path
-dotnet run --project twodog.import -- --editor /usr/bin/godot-mono ./game
-
-# Using environment variable
-export GODOT_EDITOR=/usr/bin/godot-mono
-dotnet run --project twodog.import -- ./game
+```c
+LIBGODOT_API int libgodot_import_project(const char *p_project_path,
+        int p_extra_argc, const char *p_extra_argv[]);
 ```
 
-## CI/CD Integration
+It runs the complete `godot --headless --import --path <project>` lifecycle
+(setup → start → iterate until the first filesystem scan completes → cleanup)
+in the calling process and returns a process-style exit code (`-1` when the
+build has no editor). It must not be called while an embedded Godot instance
+exists in the process; 2dog always calls it from a fresh helper process.
 
-Both `import-project.py` and `twodog.import` respect the `GODOT_EDITOR` environment variable. Set it in your pipeline to point to a pre-installed Godot editor:
+## Source builds and CI
+
+`uv run poe import` (which wraps `import-project.py`) still runs the import
+with a locally built editor executable from `godot/bin/`  –  useful for
+bootstrap before the NuGet packages exist. Both it and the `GODOT_EDITOR`
+environment variable remain supported.
 
 ```yaml
-# GitHub Actions example
+# GitHub Actions example (external editor)
 - name: Import Godot resources
   env:
     GODOT_EDITOR: /usr/local/bin/godot-mono
   run: uv run import-project.py ./game
-
-- name: Run tests
-  run: dotnet test
 ```
+
+With the automatic MSBuild import, a plain `dotnet build` of a consuming
+project performs the import as part of the build, so most CI pipelines no
+longer need a dedicated import step.
 
 ## Troubleshooting
 
-### Editor binary not found
+### Warning: no import capability was found
 
-```
-Editor binary not found: /path/to/godot
-```
+The `2dog.<rid>.editor` package (editor libgodot), the helper payload, or the
+`2dog.tools` package (GodotTools assemblies) could not be resolved. Restore
+the `2dog` package normally (all of these are dependencies of it), or set
+`<GodotEditor>` to an external editor binary.
 
-Verify the path points to a valid Godot editor binary with Mono/.NET support. Template builds (`template_debug`, `template_release`) do not support `--import`.
+### GodotTools.dll not found
+
+The in-process import requires the GodotTools assemblies (the editor's C#
+integration hard-requires them). They ship in the `2dog.tools` package; pass
+`--tools-dir` when invoking the helper manually.
 
 ### No .uid files generated
 
-Ensure you are using an editor build of Godot, not a template build. The import pipeline is only available in editor builds with `TOOLS_ENABLED`.
-
-### project.godot not found
-
-```
-The project path must contain a project.godot file.
-```
-
-The path argument must point to the directory containing `project.godot`, not to the file itself.
+Ensure the import actually ran (check for the `TwoDog: Imported Godot project`
+build message) and that an *editor* build of libgodot or the editor binary was
+used. Template builds do not support importing.

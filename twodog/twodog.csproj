@@ -72,6 +72,8 @@
         <PackageReference Include="2dog.win-x64" Version="$(NativesVersion)" PrivateAssets="none"/>
         <PackageReference Include="2dog.linux-x64" Version="$(NativesVersion)" PrivateAssets="none"/>
         <PackageReference Include="2dog.osx-arm64" Version="$(NativesVersion)" PrivateAssets="none"/>
+        <!-- GodotTools assemblies for the automatic import (editor C# init requires them) -->
+        <PackageReference Include="2dog.tools" Version="$(NativesVersion)" PrivateAssets="none"/>
     </ItemGroup>
 
     <!-- Include MSBuild props/targets in the package -->
@@ -123,6 +125,24 @@
         <None Include="$(GodotPluginsSrcDir)GodotPlugins.pdb" Pack="true" PackagePath="build\api\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotPluginsSrcDir)GodotPlugins.pdb')"/>
         <None Include="$(GodotPluginsSrcDir)GodotPlugins.runtimeconfig.json" Pack="true" PackagePath="build\api\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotPluginsSrcDir)GodotPlugins.runtimeconfig.json')"/>
     </ItemGroup>
+
+    <!--
+      Import helper: published into tools/net8.0/ and invoked by the
+      TwoDogImportGodotProject target (see build/2dog.targets) as
+      `dotnet exec tools/net8.0/2dog.import.dll`. Carries GodotSharp and
+      GodotSharpEditor copy-local so GodotPlugins' Assembly.Load calls
+      resolve in the helper process.
+    -->
+    <Target Name="TwoDogPublishImportHelperForPack" BeforeTargets="_GetPackageFiles;GenerateNuspec">
+        <MSBuild Projects="../twodog.import/twodog.import.csproj"
+                 Targets="Publish"
+                 Properties="Configuration=Release;PublishDir=bin/tools-publish/"/>
+        <ItemGroup>
+            <None Include="../twodog.import/bin/tools-publish/**/*"
+                  Exclude="../twodog.import/bin/tools-publish/**/*.pdb;../twodog.import/bin/tools-publish/**/*.xml;../twodog.import/bin/tools-publish/**/*.exe"
+                  Pack="true" PackagePath="tools\net8.0\" Visible="false"/>
+        </ItemGroup>
+    </Target>
 
     <!--
       Native libraries are NOT embedded in this package.

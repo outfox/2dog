@@ -38,6 +38,15 @@
         <TwoDogOsxArm64EditorLocal>$(TwoDogLocalGodotBin)libgodot.macos.editor.arm64.shared_library.dylib</TwoDogOsxArm64EditorLocal>
     </PropertyGroup>
 
+    <!-- Export the editor libgodot location for the build machine. Consumed by
+         the 2dog package's automatic import target (TwoDogImportGodotProject),
+         which runs the import helper against it. Host-OS guarded (not RID):
+         the import runs on the machine doing the build. -->
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogOsxArm64EditorPackage)')">$(TwoDogOsxArm64EditorPackage)</TwoDogEditorLibGodotPath>
+        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogOsxArm64EditorLocal)')">$(TwoDogOsxArm64EditorLocal)</TwoDogEditorLibGodotPath>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
         <TwoDogOsxArm64PreferredVariant Condition="'$(TwoDogOsxArm64PreferredVariant)' == ''">debug</TwoDogOsxArm64PreferredVariant>
     </PropertyGroup>
