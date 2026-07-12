@@ -5,7 +5,7 @@
         <!-- Global 2dog iteration, shared across ALL supported Godot lines.
              Bump every 2dog release; never reset when GodotVersion changes:
              e.g. 4.6.2.31 and 4.7.0.31 are the same 2dog iteration. -->
-        <TwoDogRevision>30</TwoDogRevision>
+        <TwoDogRevision>31</TwoDogRevision>
         <!-- Native package revision. Bump ONLY when the godot submodule changes;
              reset to 0 when GodotVersion changes. NuGet normalizes a trailing .0
              (4.7.0.0 publishes as 4.7.0). -->
