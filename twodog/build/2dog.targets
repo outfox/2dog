@@ -216,14 +216,21 @@
             <_TwoDogApiDirArg>$(TwoDogGodotApiSourcePath.TrimEnd('\').TrimEnd('/'))</_TwoDogApiDirArg>
         </PropertyGroup>
 
+        <!-- IgnoreStandardErrorWarningFormat: Godot prints non-fatal
+             "ERROR:"/"WARNING:"-formatted lines during imports, which Exec
+             would otherwise promote to build errors even on exit code 0.
+             Success is judged by the exit code alone. -->
+
         <!-- (1) explicitly configured external editor -->
         <Exec Condition="'$(_TwoDogImportEditor)' != ''"
-              Command="&quot;$(_TwoDogImportEditor)&quot; --headless --import --path &quot;$(TwoDogGodotProjectFullPath)&quot;"/>
+              Command="&quot;$(_TwoDogImportEditor)&quot; --headless --import --path &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              IgnoreStandardErrorWarningFormat="true"/>
 
         <!-- (2) in-process import helper against the packaged editor libgodot -->
         <Exec Condition="'$(_TwoDogImportEditor)' == '' And '$(_TwoDogCanUseHelper)' == 'true'"
               Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; &quot;$(TwoDogGodotProjectFullPath)&quot;"
-              EnvironmentVariables="GODOTSHARP_DIR=$(_TwoDogApiDirArg);GODOT_TOOLS_DIR=$(_TwoDogToolsDirArg)"/>
+              EnvironmentVariables="GODOTSHARP_DIR=$(_TwoDogApiDirArg);GODOT_TOOLS_DIR=$(_TwoDogToolsDirArg)"
+              IgnoreStandardErrorWarningFormat="true"/>
 
         <!-- (3) nothing available: warn and skip (or error when required) -->
         <Warning Condition="'$(_TwoDogImportEditor)' == '' And '$(_TwoDogCanUseHelper)' != 'true' And '$(TwoDogRequireImport)' != 'true'"
