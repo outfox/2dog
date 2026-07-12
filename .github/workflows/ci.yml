@@ -13,17 +13,18 @@ on:
       - 'docs/**'
       - '*.md'
   workflow_run:
-    workflows: ["libgodot"]
+    # Must match build-natives.yml's display name exactly.
+    workflows: ["2dog Build Natives"]
     types: [completed]
     branches: [main]
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read # jobs that need more (check-natives, deploy) declare their own
 
 jobs:
   # Check if native libraries are available before running the full pipeline.
-  # When they are missing, this job dispatches the libgodot workflow itself
+  # When they are missing, this job dispatches build-natives.yml itself
   # (workflow_dispatch is exempt from GitHub's anti-recursion rule for
   # GITHUB_TOKEN, same mechanism release.yml uses) and outputs ready=false so
   # downstream jobs are skipped (green badge) instead of cancelled (red badge).
@@ -73,14 +74,15 @@ jobs:
           fi
 
           if gh workflow run build-natives.yml --repo "$GITHUB_REPOSITORY" --ref "$REF"; then
-            echo "::notice::No native build for godot submodule $HASH — dispatched the libgodot workflow on '$REF'. On main, CI re-triggers automatically when it completes; re-run this workflow manually for PR/tag runs."
+            echo "::notice::No native build for godot submodule $HASH — dispatched the '2dog Build Natives' workflow on '$REF'. On main, CI re-triggers automatically when it completes; re-run this workflow manually for PR/tag runs."
             echo "ready=false" >> $GITHUB_OUTPUT
           else
-            echo "::error::No native build for godot submodule $HASH and dispatching the libgodot workflow failed (fork PR?). Run the 'libgodot' workflow manually."
+            echo "::error::No native build for godot submodule $HASH and dispatching the native build failed (fork PR?). Run the '2dog Build Natives' workflow manually."
             exit 1
           fi
 
-  # Download pre-built native libraries, stage godot/bin, and pack all NuGet packages.
+  # Download pre-built native libraries, stage godot/bin, pack all NuGet
+  # packages, and import the game project for the test jobs.
   pack:
     name: Pack NuGet Packages
     needs: [check-natives]
@@ -165,61 +167,27 @@ jobs:
 
       - name: Stage godot/bin directory
         run: |
-          mkdir -p godot/bin/GodotSharp/Tools/nupkgs
-          mkdir -p godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0
-
-          # Unpack GodotSharp assemblies
           unzip -o release-assets/godotsharp.zip -d godot/bin/GodotSharp/
-
-          # Unpack GodotSharp NuGet packages
           unzip -o release-assets/godotsharp-nupkgs.zip -d godot/bin/GodotSharp/Tools/nupkgs/
-
-          # Unpack source generators
           unzip -o release-assets/godot-source-generators.zip -d godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
-
-          # Unpack Linux editor binary
           unzip -o release-assets/godot-editor-linux-x64.zip -d godot/bin/
-          chmod +x godot/bin/godot.linuxbsd.editor.x86_64.executable.mono || true
+          chmod +x godot/bin/godot.linuxbsd.editor.x86_64.executable.mono
 
-          # Unpack native libraries with their original Godot naming convention
-          # Linux x64
-          unzip -o release-assets/libgodot-linux-x64-template_release.zip -d /tmp/native
-          mv /tmp/native/libgodot.so godot/bin/libgodot.linuxbsd.template_release.x86_64.shared_library.so
-          rm -rf /tmp/native
+          # Native library zips contain the libraries under their original
+          # Godot file names (e.g. godot.windows.editor.x86_64.shared_library.dll).
+          for z in release-assets/libgodot-*.zip; do
+            unzip -o "$z" -d godot/bin/
+          done
 
-          unzip -o release-assets/libgodot-linux-x64-template_debug.zip -d /tmp/native
-          mv /tmp/native/libgodot.so godot/bin/libgodot.linuxbsd.template_debug.x86_64.shared_library.so
-          rm -rf /tmp/native
-
-          unzip -o release-assets/libgodot-linux-x64-editor.zip -d /tmp/native
-          mv /tmp/native/libgodot.so godot/bin/libgodot.linuxbsd.editor.x86_64.shared_library.so
-          rm -rf /tmp/native
-
-          # Windows x64
-          unzip -o release-assets/libgodot-win-x64-template_release.zip -d /tmp/native
-          mv /tmp/native/libgodot.dll godot/bin/godot.windows.template_release.x86_64.shared_library.dll
-          rm -rf /tmp/native
-
-          unzip -o release-assets/libgodot-win-x64-template_debug.zip -d /tmp/native
-          mv /tmp/native/libgodot.dll godot/bin/godot.windows.template_debug.x86_64.shared_library.dll
-          rm -rf /tmp/native
-
-          unzip -o release-assets/libgodot-win-x64-editor.zip -d /tmp/native
-          mv /tmp/native/libgodot.dll godot/bin/godot.windows.editor.x86_64.shared_library.dll
-          rm -rf /tmp/native
-
-          # macOS arm64
-          unzip -o release-assets/libgodot-osx-arm64-template_release.zip -d /tmp/native
-          mv /tmp/native/libgodot.dylib godot/bin/libgodot.macos.template_release.arm64.shared_library.dylib
-          rm -rf /tmp/native
-
-          unzip -o release-assets/libgodot-osx-arm64-template_debug.zip -d /tmp/native
-          mv /tmp/native/libgodot.dylib godot/bin/libgodot.macos.template_debug.arm64.shared_library.dylib
-          rm -rf /tmp/native
-
-          unzip -o release-assets/libgodot-osx-arm64-editor.zip -d /tmp/native
-          mv /tmp/native/libgodot.dylib godot/bin/libgodot.macos.editor.arm64.shared_library.dylib
-          rm -rf /tmp/native
+          # Releases created before the zips carried the Godot file names hold a
+          # single generically named library each — fail early with a pointer
+          # instead of letting the platform pack fail cryptically.
+          for f in godot/bin/libgodot.so godot/bin/libgodot.dll godot/bin/libgodot.dylib; do
+            if [ -e "$f" ]; then
+              echo "::error::Release godot-${{ needs.check-natives.outputs.hash }} uses the old asset layout (generic ${f##*/} inside the native zips). Re-run the '2dog Build Natives' workflow with force=true to regenerate it."
+              exit 1
+            fi
+          done
 
           echo "Staged godot/bin contents:"
           find godot/bin -type f | sort
@@ -227,11 +195,10 @@ jobs:
           echo "Source generators:"
           find godot/modules -type f | sort
 
-      - name: Ensure local NuGet source directories exist
-        run: mkdir -p packages
-
       - name: Pack platform NuGet packages
-        run: dotnet pack platforms/ -p:ForcePackAllPlatforms=true
+        run: |
+          mkdir -p packages
+          dotnet pack platforms/ -p:ForcePackAllPlatforms=true
 
       - name: Build twodog library (all configs)
         run: |
@@ -239,17 +206,17 @@ jobs:
           dotnet build twodog -c Release
           dotnet build twodog -c Editor
 
-      - name: Pack twodog (main package)
-        run: dotnet pack twodog
+      - name: Pack twodog packages
+        run: |
+          dotnet pack twodog
+          dotnet pack twodog.xunit
+          dotnet pack templates
+          ls -lh packages/
 
-      - name: Pack twodog.xunit
-        run: dotnet pack twodog.xunit
-
-      - name: Pack templates
-        run: dotnet pack templates
-
-      - name: List packages
-        run: ls -lh packages/
+      # Import Godot project resources with the staged Linux editor binary so
+      # the test jobs get a ready-to-use game/.godot directory.
+      - name: Import game project
+        run: python3 import-project.py ./game
 
       - name: Upload godot-bin artifact
         uses: actions/upload-artifact@v7
@@ -260,40 +227,6 @@ jobs:
             godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
           retention-days: 3
 
-      - name: Upload NuGet packages
-        uses: actions/upload-artifact@v7
-        with:
-          name: nuget-packages
-          path: packages/
-          retention-days: 7
-
-  # Import Godot project resources using the Linux editor binary.
-  # Runs on ubuntu-latest which has the system libraries Godot needs (X11, OpenGL, etc.).
-  import-game:
-    name: Import Game Project
-    needs: [pack]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: '8.0.x'
-
-      - name: Download godot-bin artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: godot-bin
-          path: godot
-
-      - name: Import game project
-        run: |
-          chmod +x godot/bin/godot.linuxbsd.editor.x86_64.executable.mono
-          python3 import-project.py ./game
-
       - name: Upload imported game data
         uses: actions/upload-artifact@v7
         with:
@@ -302,10 +235,17 @@ jobs:
           include-hidden-files: true
           retention-days: 3
 
+      - name: Upload NuGet packages
+        uses: actions/upload-artifact@v7
+        with:
+          name: nuget-packages
+          path: packages/
+          retention-days: 7
+
   # Run tests on each platform.
   test:
     name: Test (${{ matrix.name }})
-    needs: [pack, import-game]
+    needs: [pack]
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
