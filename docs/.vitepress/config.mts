@@ -67,6 +67,7 @@ export default defineConfig({
           { text: 'Build Configurations', link: '/build-configurations' },
           { text: 'Import Tool', link: '/import-tool' },
           { text: 'Configuration', link: '/configuration' },
+          { text: 'FAQ', link: '/faq' },
           {
             text: 'Known Issues',
             link: '/known-issues/',
