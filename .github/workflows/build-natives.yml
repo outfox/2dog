@@ -170,7 +170,7 @@ jobs:
             rid: win-x64
             lib_ext: dll
           - platform: macos
-            runner: macos-26
+            runner: blacksmith-12vcpu-macos-latest
             arch: arm64
             rid: osx-arm64
             lib_ext: dylib
@@ -222,19 +222,6 @@ jobs:
             libxrandr-dev \
             libwayland-dev
 
-      # Windows: no MSVC setup step needed — SCons's MSVC tool locates Visual
-      # Studio itself (vswhere/registry) and injects the developer environment,
-      # exactly as Godot upstream CI does (godot/.github/workflows/windows_builds.yml).
-      # SCONS_CACHE_MSVC_CONFIG (job env below) caches that detection.
-
-      # macOS: no Xcode setup step needed — the macos-26 runner's default
-      # Xcode satisfies the engine's Apple Clang 16+ requirement, matching
-      # Godot upstream CI (macos_builds.yml).
-
-      # macOS-specific: Install the official LunarG Vulkan SDK (MoltenVK) with
-      # the engine's own script, as upstream CI does. Deliberately a hard
-      # failure (upstream falls back to vulkan=no): these natives are shipped,
-      # and a Vulkan-less macOS libgodot must never be published silently.
       - name: Install Vulkan SDK (macOS)
         if: matrix.platform == 'macos'
         run: sh godot/misc/scripts/install_vulkan_sdk_macos.sh
