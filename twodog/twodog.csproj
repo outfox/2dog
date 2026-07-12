@@ -134,6 +134,12 @@
       resolve in the helper process.
     -->
     <Target Name="TwoDogPublishImportHelperForPack" BeforeTargets="_GetPackageFiles;GenerateNuspec">
+        <!-- Restore must run as a separate MSBuild invocation: the assets file
+             it writes is read during project evaluation, and the differing
+             global properties below force a fresh evaluation for Publish. -->
+        <MSBuild Projects="../twodog.import/twodog.import.csproj"
+                 Targets="Restore"
+                 Properties="Configuration=Release"/>
         <MSBuild Projects="../twodog.import/twodog.import.csproj"
                  Targets="Publish"
                  Properties="Configuration=Release;PublishDir=bin/tools-publish/"/>
