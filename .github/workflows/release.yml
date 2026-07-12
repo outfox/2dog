@@ -7,7 +7,7 @@
 # explicitly dispatches ci.yml on the new tag — workflow_dispatch is exempt from
 # that rule. ci.yml gates its tag guard and deploy job on the ref alone, so a
 # dispatched tag run deploys exactly like a pushed tag.
-name: Release
+name: 2dog Release
 
 on:
   workflow_dispatch:

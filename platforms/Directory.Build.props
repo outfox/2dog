@@ -54,6 +54,26 @@
         <None Include="$(MSBuildProjectDirectory)/../../nuget/GODOT_AUTHORS.md" Pack="true" PackagePath="AUTHORS.md" Visible="false"/>
     </ItemGroup>
 
+    <!-- Record the godot submodule commit these natives were built from in the
+         package's repository metadata. The CI pack job reads it back from
+         nuget.org to refuse republishing a NativesVersion whose binaries came
+         from a different submodule commit (the deploy job's skip-duplicate push
+         would otherwise silently keep the stale natives). Uses the committed pointer
+         (HEAD:godot), matching how CI keys its native build cache. -->
+    <Target Name="StampGodotSubmoduleCommit" BeforeTargets="GenerateNuspec">
+        <Exec Command="git rev-parse HEAD:godot"
+              WorkingDirectory="$(MSBuildThisFileDirectory)../"
+              ConsoleToMSBuild="true"
+              StandardOutputImportance="low">
+            <Output TaskParameter="ConsoleOutput" PropertyName="GodotSubmoduleCommit"/>
+        </Exec>
+        <PropertyGroup>
+            <RepositoryType>git</RepositoryType>
+            <RepositoryUrl>https://github.com/thygrrr/godot</RepositoryUrl>
+            <RepositoryCommit>$(GodotSubmoduleCommit.Trim())</RepositoryCommit>
+        </PropertyGroup>
+    </Target>
+
     <Target Name="DeepClean" AfterTargets="Clean">
         <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
         <RemoveDir Directories="$(BaseOutputPath)"/>
