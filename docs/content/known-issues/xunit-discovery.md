@@ -1,6 +1,7 @@
 # xUnit Test Discovery Crash with Godot Types
 
-Using Godot types in xUnit `[MemberData]` will crash the test runner during discovery.
+Using Godot types in xUnit `[MemberData]` will crash the test runner during discovery
+(tracked as [issue #16](https://github.com/outfox/2dog/issues/16)).
 
 ## The Problem
 
