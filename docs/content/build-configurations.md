@@ -111,10 +111,10 @@ public partial class MyToolNode : Node
 
 #### Resource Import
 
-For triggering Godot's import pipeline (generating `.uid` files, processing assets), use the [Import Tool](./import-tool) which invokes the Godot editor binary directly. Editor runtime singletons like `EditorInterface` are not available through the libgodot embedding API.
+Godot's import pipeline (generating `.uid` files, processing assets) runs automatically as an incremental MSBuild step in any project that sets `<GodotProjectDir>`  –  see [Resource Import](./import-tool). It executes in a separate helper process against the editor-variant libgodot via the `libgodot_import_project` entry point. Editor runtime singletons like `EditorInterface` remain unavailable through the libgodot embedding API.
 
 ::: warning Editor Runtime Limitations
-The Editor configuration provides **compile-time access** to editor types (`EditorInterface`, `EditorPlugin`, etc.) and enables `[Tool]` script execution. However, editor **runtime singletons** and the import pipeline are not initialized in embedded libgodot mode  –  they require the full standalone editor binary.
+The Editor configuration provides **compile-time access** to editor types (`EditorInterface`, `EditorPlugin`, etc.) and enables `[Tool]` script execution. However, editor **runtime singletons** are not initialized in embedded libgodot mode. The import pipeline runs automatically at build time in a separate helper process (see [Resource Import](./import-tool)).
 :::
 
 ## Configuration Comparison
@@ -253,9 +253,8 @@ If editor types are missing at compile time:
 
 **Solution**: Use the `editor` native variant (`TwoDogVariant=editor` plus the
 `2dog.<rid>.editor` platform package). Only editor builds include
-`TOOLS_ENABLED` features  –  and remember that editor runtime singletons and the
-import pipeline still require the external editor binary (see the warning
-above).
+`TOOLS_ENABLED` features  –  and remember that editor runtime singletons are not
+initialized in embedded libgodot mode (see the warning above).
 
 ### Performance Issues
 

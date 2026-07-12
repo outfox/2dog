@@ -27,13 +27,12 @@ sequence = [
 ]
 
 [tool.poe.tasks.build]
-help = "dotnet build: Platform packages, twodog library, and NuGet packages, and import Godot game project"
+help = "dotnet build: Platform packages, twodog library, and NuGet packages"
 sequence = [
     { cmd = "dotnet pack platforms -p:ForcePackAllPlatforms=true" },
     { cmd = "dotnet pack twodog" },
     { cmd = "dotnet pack twodog.xunit" },
     { cmd = "dotnet restore" },
-    { ref = "import "}
 ]
 
 [tool.poe.tasks.build-all]
@@ -43,6 +42,3 @@ sequence = [
     { ref = "build" },
 ]
 
-[tool.poe.tasks.import]
-help = "Import Godot resources with the local editor build (normal builds import automatically via MSBuild)"
-cmd = "uv run import-project.py"

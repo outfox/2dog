@@ -90,22 +90,17 @@ exists in the process; 2dog always calls it from a fresh helper process.
 
 ## Source builds and CI
 
-`uv run poe import` (which wraps `import-project.py`) still runs the import
-with a locally built editor executable from `godot/bin/`  –  useful for
-bootstrap before the NuGet packages exist. Both it and the `GODOT_EDITOR`
-environment variable remain supported.
-
-```yaml
-# GitHub Actions example (external editor)
-- name: Import Godot resources
-  env:
-    GODOT_EDITOR: /usr/local/bin/godot-mono
-  run: uv run import-project.py ./game
-```
-
 With the automatic MSBuild import, a plain `dotnet build` of a consuming
-project performs the import as part of the build, so most CI pipelines no
-longer need a dedicated import step.
+project performs the import as part of the build, so CI pipelines do not
+need a dedicated import step. In this repository, a source build
+(`uv run poe build-godot` + `uv run poe build`) is enough: the first
+`dotnet build` of demo or the tests imports the game project against the
+locally built editor libgodot from `godot/bin/`.
+
+To use an external Godot editor binary instead (for example one already
+installed on a CI runner), set the `GodotEditor` MSBuild property or the
+`GODOT_EDITOR` environment variable  –  the import target then shells out to
+it rather than using the in-process helper.
 
 ## Troubleshooting
 

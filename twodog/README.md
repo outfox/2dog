@@ -38,9 +38,10 @@ while (!godot.Iteration())
 - **GodotSharp.dll** - Full Godot C# API bindings
 - **Godot.SourceGenerators** - Roslyn source generators for Godot node types
 - **GodotPlugins** - Runtime plugin loader
+- **Automatic asset import** - an incremental MSBuild step imports your Godot project (`.uid` files, textures, script UID cache) during build; no Godot editor installation needed
 - **`dotnet new` template** - Scaffold new 2dog projects with `dotnet new 2dog`
 
-Platform-specific native libraries are provided by transitive dependencies (`2dog.win-x64`, `2dog.linux-x64`, `2dog.osx-arm64`).
+Platform-specific native libraries are provided by transitive dependencies (`2dog.win-x64`, `2dog.linux-x64`, `2dog.osx-arm64`); the GodotTools assemblies used by the automatic import come from `2dog.tools`.
 
 ## Documentation
 

@@ -51,6 +51,7 @@ while (!godot.Iteration())
 - Godot as an embedded library (libgodot)
 - Full GodotSharp API access
 - Custom .NET-first project structure
+- Automatic asset import during `dotnet build` - no Godot editor installation needed
 - Three build configurations: Debug, Release, and Editor (with `TOOLS_ENABLED`)
 - xUnit test fixtures (`GodotFixture`, `GodotHeadlessFixture`)
 - `dotnet new` project templates
@@ -64,7 +65,7 @@ while (!godot.Iteration())
 
 ### Prerequisites
 - .NET SDK 8.0 or later
-- [Godot (.NET)](https://godotengine.org/) (for importing project assets)
+- [Godot (.NET)](https://godotengine.org/) (optional - only for editing scenes in the editor UI)
 
 ### Using Templates (Recommended)
 
@@ -78,18 +79,19 @@ dotnet new 2dog --tests True -n MyGame
 # Navigate into the project
 cd MyGame
 
-# Import assets or just open with Godot Editor of your choide
-godot-mono --path MyGame.Godot --import
-
-# Run tests
+# Run tests (assets are imported automatically during build)
 dotnet test
 
 # Run the game
 dotnet run --project MyGame
 
-# Edit in Godot at any time
+# Edit in Godot at any time (optional)
 godot-mono -e --path MyGame.Godot
 ```
+
+> Asset import (`.uid` files, textures, the script UID cache) happens
+> automatically as an incremental build step - no Godot editor required.
+> See the [Resource Import](https://2dog.dev/import-tool.html) docs.
 
 ### Adding to an Existing Project
 
