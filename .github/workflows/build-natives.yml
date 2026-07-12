@@ -175,6 +175,13 @@ jobs:
             rid: osx-arm64
             lib_ext: dylib
 
+    # From Godot upstream CI (windows_builds.yml): cache SCons's MSVC
+    # environment detection, and keep Python console output UTF-8 clean on
+    # the Windows runners (build-godot.py uses rich).
+    env:
+      SCONS_CACHE_MSVC_CONFIG: true
+      PYTHONIOENCODING: utf8
+
     defaults:
       run:
         shell: bash
@@ -215,23 +222,21 @@ jobs:
             libxrandr-dev \
             libwayland-dev
 
-      # Windows-specific: Setup MSVC
-      - name: Setup MSVC (Windows)
-        if: matrix.platform == 'windows'
-        uses: ilammy/msvc-dev-cmd@v1
+      # Windows: no MSVC setup step needed — SCons's MSVC tool locates Visual
+      # Studio itself (vswhere/registry) and injects the developer environment,
+      # exactly as Godot upstream CI does (godot/.github/workflows/windows_builds.yml).
+      # SCONS_CACHE_MSVC_CONFIG (job env below) caches that detection.
 
-      # macOS-specific: Setup Xcode
-      - name: Setup Xcode (macOS)
-        if: matrix.platform == 'macos'
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
+      # macOS: no Xcode setup step needed — build with the runner image's
+      # default Xcode, matching Godot upstream CI (macos_builds.yml).
 
-      # macOS-specific: Install Vulkan SDK (MoltenVK)
+      # macOS-specific: Install the official LunarG Vulkan SDK (MoltenVK) with
+      # the engine's own script, as upstream CI does. Deliberately a hard
+      # failure (upstream falls back to vulkan=no): these natives are shipped,
+      # and a Vulkan-less macOS libgodot must never be published silently.
       - name: Install Vulkan SDK (macOS)
         if: matrix.platform == 'macos'
-        run: |
-          brew install molten-vk
+        run: sh godot/misc/scripts/install_vulkan_sdk_macos.sh
 
       # Cache SCons build
       - name: Cache SCons
