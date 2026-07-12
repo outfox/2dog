@@ -22,6 +22,40 @@ public class Engine(string project, string? path = null, params string[] args) :
     [DllImport("libc", SetLastError = true)]
     private static extern int setenv(string name, string value, int overwrite);
 
+    [DllImport("kernel32", SetLastError = true)]
+    private static extern IntPtr GetModuleHandleW([MarshalAs(UnmanagedType.LPWStr)] string name);
+
+    [DllImport("kernel32", SetLastError = true)]
+    private static extern bool FreeLibrary(IntPtr module);
+
+    static Engine()
+    {
+        // On Windows, unload libgodot before the OS starts process teardown.
+        // If libgodot is still loaded when the process exits, its static
+        // destructors run inside LdrShutdownProcess (DLL_PROCESS_DETACH, under
+        // loader lock) and the Windows input stack fail-fasts in
+        // CoreMessaging.dll (exit code 0xE0464645). godot.exe never hits this
+        // because an executable's static destructors run during normal CRT
+        // exit, before loader shutdown - unloading here restores that timing.
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            AppDomain.CurrentDomain.ProcessExit += (_, _) => UnloadLibGodot();
+    }
+
+    private static void UnloadLibGodot()
+    {
+        // A running instance still needs the library; its teardown at process
+        // exit is safe because the display server was never destroyed.
+        if (_godotInstancePtr != IntPtr.Zero) return;
+
+        // No Godot call may be made after this point (we are in ProcessExit).
+        var module = GetModuleHandleW("libgodot.dll");
+        var attempts = 0;
+        while (module != IntPtr.Zero && FreeLibrary(module) && ++attempts < 32)
+        {
+            module = GetModuleHandleW("libgodot.dll");
+        }
+    }
+
     public SceneTree Tree => Godot.Engine.Singleton.GetMainLoop() as SceneTree ??
                              throw new NullReferenceException($"{nameof(Engine)}: Failed to get SceneTree.");
 
