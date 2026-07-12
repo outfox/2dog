@@ -26,7 +26,7 @@ jobs:
   # Quick check: compute submodule hash and see if a release already exists.
   preflight:
     name: Preflight
-    runs-on: blacksmith-16vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     outputs:
       submodule-hash: ${{ steps.hash.outputs.hash }}
       skip: ${{ steps.check-release.outputs.skip }}
@@ -145,74 +145,35 @@ jobs:
           retention-days: 7
 
   # Build native libgodot libraries for all platform/variant combinations.
+  # The artifact name libgodot-{rid}-{target} is the contract with ci.yml's
+  # staging step; the zip attached to the release contains the library under
+  # its original Godot file name (e.g. godot.windows.editor.x86_64.shared_library.dll).
   build-natives:
-    name: Build ${{ matrix.artifact_name }}
+    name: Build libgodot-${{ matrix.rid }}-${{ matrix.target }}
     needs: preflight
     if: needs.preflight.outputs.skip != 'true'
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
+        target: [template_release, template_debug, editor]
+        platform: [linuxbsd, windows, macos]
         include:
-          # Linux x64
           - platform: linuxbsd
-            arch: x86_64
-            target: template_release
             runner: blacksmith-16vcpu-ubuntu-2404
-            lib_name: libgodot.linuxbsd.template_release.x86_64.shared_library.so
-            artifact_name: libgodot-linux-x64-template_release
-          - platform: linuxbsd
             arch: x86_64
-            target: template_debug
-            runner: blacksmith-16vcpu-ubuntu-2404
-            lib_name: libgodot.linuxbsd.template_debug.x86_64.shared_library.so
-            artifact_name: libgodot-linux-x64-template_debug
-          - platform: linuxbsd
-            arch: x86_64
-            target: editor
-            runner: blacksmith-16vcpu-ubuntu-2404
-            lib_name: libgodot.linuxbsd.editor.x86_64.shared_library.so
-            artifact_name: libgodot-linux-x64-editor
-
-          # Windows x64
+            rid: linux-x64
+            lib_ext: so
           - platform: windows
-            arch: x86_64
-            target: template_release
             runner: blacksmith-16vcpu-windows-2025
-            lib_name: godot.windows.template_release.x86_64.shared_library.dll
-            artifact_name: libgodot-win-x64-template_release
-          - platform: windows
             arch: x86_64
-            target: template_debug
-            runner: blacksmith-16vcpu-windows-2025
-            lib_name: godot.windows.template_debug.x86_64.shared_library.dll
-            artifact_name: libgodot-win-x64-template_debug
-          - platform: windows
-            arch: x86_64
-            target: editor
-            runner: blacksmith-16vcpu-windows-2025
-            lib_name: godot.windows.editor.x86_64.shared_library.dll
-            artifact_name: libgodot-win-x64-editor
-
-          # macOS arm64
+            rid: win-x64
+            lib_ext: dll
           - platform: macos
-            arch: arm64
-            target: template_release
             runner: macos-14
-            lib_name: libgodot.macos.template_release.arm64.shared_library.dylib
-            artifact_name: libgodot-osx-arm64-template_release
-          - platform: macos
             arch: arm64
-            target: template_debug
-            runner: macos-14
-            lib_name: libgodot.macos.template_debug.arm64.shared_library.dylib
-            artifact_name: libgodot-osx-arm64-template_debug
-          - platform: macos
-            arch: arm64
-            target: editor
-            runner: macos-14
-            lib_name: libgodot.macos.editor.arm64.shared_library.dylib
-            artifact_name: libgodot-osx-arm64-editor
+            rid: osx-arm64
+            lib_ext: dylib
 
     defaults:
       run:
@@ -279,9 +240,9 @@ jobs:
           path: |
             godot/.scons_cache
             ~/.cache/scons
-          key: ${{ matrix.artifact_name }}-${{ needs.preflight.outputs.submodule-hash }}
+          key: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ needs.preflight.outputs.submodule-hash }}
           restore-keys: |
-            ${{ matrix.artifact_name }}-
+            libgodot-${{ matrix.rid }}-${{ matrix.target }}-
 
       # Build using build-godot.py with platform/arch overrides
       - name: Build libgodot (${{ matrix.target }})
@@ -297,29 +258,13 @@ jobs:
             --scu-build yes \
             --cache-path godot/.scons_cache
 
-      # Create artifact zip
-      - name: Package native library (Unix)
-        if: matrix.platform != 'windows'
-        run: |
-          mkdir -p dist
-          cp godot/bin/${{ matrix.lib_name }} dist/libgodot${{ matrix.platform == 'linuxbsd' && '.so' || '.dylib' }}
-          cd dist
-          zip -9 ${{ matrix.artifact_name }}.zip libgodot*
-
-      - name: Package native library (Windows)
-        if: matrix.platform == 'windows'
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path dist | Out-Null
-          Copy-Item "godot/bin/${{ matrix.lib_name }}" "dist/libgodot.dll"
-          Compress-Archive -Path "dist/libgodot.dll" -DestinationPath "dist/${{ matrix.artifact_name }}.zip" -CompressionLevel Optimal
-
-      # Upload artifact
+      # Upload the library under its original Godot file name; the release job
+      # zips each artifact directory as-is.
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ matrix.artifact_name }}
-          path: dist/${{ matrix.artifact_name }}.zip
+          name: libgodot-${{ matrix.rid }}-${{ matrix.target }}
+          path: godot/bin/*godot.${{ matrix.platform }}.${{ matrix.target }}.${{ matrix.arch }}.shared_library.${{ matrix.lib_ext }}
           retention-days: 7
 
   # Create a GitHub release tagged godot-{hash} with all native libs + GodotSharp
@@ -335,36 +280,16 @@ jobs:
         with:
           path: artifacts
 
-      - name: List artifacts
-        run: find artifacts -type f | head -50
-
-      - name: Prepare GodotSharp archives
+      - name: Prepare release assets
         run: |
-          cd artifacts/godotsharp
-          zip -r ../godotsharp.zip .
-          cd ../godotsharp-nupkgs
-          zip -r ../godotsharp-nupkgs.zip .
-          cd ../godot-source-generators
-          zip -r ../godot-source-generators.zip .
-
-      - name: Prepare editor binary archive
-        run: |
-          cd artifacts/godot-editor-linux-x64
-          chmod +x godot.linuxbsd.editor.x86_64.executable.mono
-          zip -r ../godot-editor-linux-x64.zip .
-
-      - name: Collect all release assets
-        run: |
+          chmod +x artifacts/godot-editor-linux-x64/godot.linuxbsd.editor.x86_64.executable.mono
           mkdir -p release-assets
-          # Native library zips
-          for dir in artifacts/libgodot-*; do
-            cp "$dir"/*.zip release-assets/
+          # One zip per artifact, named after the artifact, with the artifact's
+          # files at the zip root under their original names.
+          for dir in artifacts/*/; do
+            name=$(basename "$dir")
+            (cd "$dir" && zip -9 -r "$GITHUB_WORKSPACE/release-assets/$name.zip" .)
           done
-          # GodotSharp archives
-          cp artifacts/godotsharp.zip release-assets/
-          cp artifacts/godotsharp-nupkgs.zip release-assets/
-          cp artifacts/godot-source-generators.zip release-assets/
-          cp artifacts/godot-editor-linux-x64.zip release-assets/
           echo "Release assets:"
           ls -lh release-assets/
 
