@@ -245,11 +245,11 @@ jobs:
       matrix:
         include:
           - name: linux-x64
-            runner: ubuntu-latest
+            runner: blacksmith-4vcpu-ubuntu-2404
           - name: win-x64
             runner: blacksmith-4vcpu-windows-2025
           - name: osx-arm64
-            runner: macos-15
+            runner: blacksmith-6vcpu-macos-latest
 
     timeout-minutes: 10
 
