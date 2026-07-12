@@ -26,7 +26,7 @@ jobs:
   # Quick check: compute submodule hash and see if a release already exists.
   preflight:
     name: Preflight
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: blacksmith-16vcpu-ubuntu-2404
     outputs:
       submodule-hash: ${{ steps.hash.outputs.hash }}
       skip: ${{ steps.check-release.outputs.skip }}
@@ -62,7 +62,7 @@ jobs:
     name: Build GodotSharp
     needs: preflight
     if: needs.preflight.outputs.skip != 'true'
-    runs-on: blacksmith-16vcpu-ubuntu-2204
+    runs-on: blacksmith-16vcpu-ubuntu-2404
 
     steps:
       - name: Checkout repository
@@ -158,19 +158,19 @@ jobs:
           - platform: linuxbsd
             arch: x86_64
             target: template_release
-            runner: blacksmith-16vcpu-ubuntu-2204
+            runner: blacksmith-16vcpu-ubuntu-2404
             lib_name: libgodot.linuxbsd.template_release.x86_64.shared_library.so
             artifact_name: libgodot-linux-x64-template_release
           - platform: linuxbsd
             arch: x86_64
             target: template_debug
-            runner: blacksmith-16vcpu-ubuntu-2204
+            runner: blacksmith-16vcpu-ubuntu-2404
             lib_name: libgodot.linuxbsd.template_debug.x86_64.shared_library.so
             artifact_name: libgodot-linux-x64-template_debug
           - platform: linuxbsd
             arch: x86_64
             target: editor
-            runner: blacksmith-16vcpu-ubuntu-2204
+            runner: blacksmith-16vcpu-ubuntu-2404
             lib_name: libgodot.linuxbsd.editor.x86_64.shared_library.so
             artifact_name: libgodot-linux-x64-editor
 
