@@ -26,7 +26,7 @@ jobs:
   # Quick check: compute submodule hash and see if a release already exists.
   preflight:
     name: Preflight
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     outputs:
       submodule-hash: ${{ steps.hash.outputs.hash }}
       skip: ${{ steps.check-release.outputs.skip }}

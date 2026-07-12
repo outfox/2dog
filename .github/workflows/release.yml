@@ -29,7 +29,7 @@ permissions:
 jobs:
   release:
     name: Bump, Tag, and Push
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
 
     steps:
       - name: Verify dispatched from main
