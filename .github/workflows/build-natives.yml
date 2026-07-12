@@ -1,6 +1,6 @@
 # ci.yml's workflow_run trigger references this workflow by its display name.
 # If you rename it, update ci.yml or the CI re-trigger silently stops firing.
-name: libgodot
+name: Build Natives
 
 on:
   workflow_dispatch:

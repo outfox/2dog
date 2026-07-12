@@ -23,12 +23,19 @@ permissions:
 
 jobs:
   # Check if native libraries are available before running the full pipeline.
-  # When a native build is in progress, this job outputs ready=false so downstream
-  # jobs are skipped (green badge) instead of cancelled (red badge).
+  # When they are missing, this job dispatches the libgodot workflow itself
+  # (workflow_dispatch is exempt from GitHub's anti-recursion rule for
+  # GITHUB_TOKEN, same mechanism release.yml uses) and outputs ready=false so
+  # downstream jobs are skipped (green badge) instead of cancelled (red badge).
+  # On main, the workflow_run trigger above re-runs CI when the build finishes;
+  # PR and tag runs must be re-run manually once natives exist.
   check-natives:
     name: Check Native Libraries
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write # dispatch build-natives.yml when natives are missing
     outputs:
       ready: ${{ steps.check.outputs.ready }}
       hash: ${{ steps.check.outputs.hash }}
@@ -48,16 +55,29 @@ jobs:
           TAG="godot-$HASH"
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
             echo "ready=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # The ref the natives should be built from: PR head branch for
+          # pull_request events, otherwise the pushed branch or tag.
+          REF="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+
+          # A build may already be running: push-triggered on main (submodule
+          # bump) or dispatched on this ref by an earlier run of this job.
+          BUILDING=$(gh run list -w build-natives.yml --json status,headBranch \
+            -q "[.[] | select((.status == \"in_progress\" or .status == \"queued\") and (.headBranch == \"main\" or .headBranch == \"$REF\"))] | length")
+          if [ "$BUILDING" -gt 0 ]; then
+            echo "::notice::Native build in progress — skipping CI. On main it re-triggers automatically when the build completes; re-run this workflow manually for PR/tag runs."
+            echo "ready=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          if gh workflow run build-natives.yml --repo "$GITHUB_REPOSITORY" --ref "$REF"; then
+            echo "::notice::No native build for godot submodule $HASH — dispatched the libgodot workflow on '$REF'. On main, CI re-triggers automatically when it completes; re-run this workflow manually for PR/tag runs."
+            echo "ready=false" >> $GITHUB_OUTPUT
           else
-            BUILDING=$(gh run list -w build-natives.yml --branch main \
-              --json status -q '[.[] | select(.status == "in_progress" or .status == "queued")] | length')
-            if [ "$BUILDING" -gt 0 ]; then
-              echo "::notice::Native build in progress — skipping CI. It will re-trigger when the build completes."
-              echo "ready=false" >> $GITHUB_OUTPUT
-            else
-              echo "::error::No native build for godot submodule $HASH. Run the 'libgodot' workflow first."
-              exit 1
-            fi
+            echo "::error::No native build for godot submodule $HASH and dispatching the libgodot workflow failed (fork PR?). Run the 'libgodot' workflow manually."
+            exit 1
           fi
 
   # Download pre-built native libraries, stage godot/bin, and pack all NuGet packages.
