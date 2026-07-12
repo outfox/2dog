@@ -1,0 +1,114 @@
+# One-button release: bumps <TwoDogRevision> in Directory.Build.props, commits,
+# tags the bump commit, and pushes both — so the tag can never point at a commit
+# with a stale version (the failure mode behind the mislabeled v4.7.0.26 release).
+#
+# Requires the RELEASE_TOKEN secret: a fine-grained PAT with contents:write on
+# this repo. Pushes made with the default GITHUB_TOKEN do not trigger other
+# workflows, so the tag would never fire the CI deploy job.
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      revision:
+        description: 'New TwoDogRevision (default: current + 1)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Compute, commit, and tag locally without pushing'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Bump, Tag, and Push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Verify dispatched from main
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Release must be dispatched from main (got ${{ github.ref }})."
+          exit 1
+
+      - name: Verify RELEASE_TOKEN is configured
+        if: ${{ !inputs.dry_run }}
+        env:
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          if [[ -z "$RELEASE_TOKEN" ]]; then
+            echo "::error::RELEASE_TOKEN secret is not set. A fine-grained PAT with contents:write" \
+                 "is required because pushes made with the default GITHUB_TOKEN do not trigger the CI deploy."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.RELEASE_TOKEN || github.token }}
+
+      - name: Compute new version
+        id: version
+        env:
+          INPUT_REVISION: ${{ inputs.revision }}
+        run: |
+          GODOT_VERSION=$(sed -n 's:.*<GodotVersion>\(.*\)</GodotVersion>.*:\1:p' Directory.Build.props)
+          CURRENT_REV=$(sed -n 's:.*<TwoDogRevision>\(.*\)</TwoDogRevision>.*:\1:p' Directory.Build.props)
+          if [[ ! "$GODOT_VERSION" =~ ^[0-9.]+$ || ! "$CURRENT_REV" =~ ^[0-9]+$ ]]; then
+            echo "::error::Failed to parse GodotVersion/TwoDogRevision from Directory.Build.props."
+            exit 1
+          fi
+
+          NEW_REV="${INPUT_REVISION:-$((CURRENT_REV + 1))}"
+          if [[ ! "$NEW_REV" =~ ^[0-9]+$ ]]; then
+            echo "::error::revision input must be a number (got '$NEW_REV')."
+            exit 1
+          fi
+          if (( NEW_REV <= CURRENT_REV )); then
+            echo "::error::New revision $NEW_REV must be greater than current revision $CURRENT_REV."
+            exit 1
+          fi
+
+          TAG="v${GODOT_VERSION}.${NEW_REV}"
+          if git ls-remote --exit-code origin "refs/tags/$TAG" > /dev/null; then
+            echo "::error::Tag $TAG already exists on origin."
+            exit 1
+          fi
+
+          echo "Releasing $TAG (revision $CURRENT_REV -> $NEW_REV)"
+          {
+            echo "current_rev=$CURRENT_REV"
+            echo "new_rev=$NEW_REV"
+            echo "tag=$TAG"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Bump TwoDogRevision
+        run: |
+          sed -i 's:<TwoDogRevision>${{ steps.version.outputs.current_rev }}</TwoDogRevision>:<TwoDogRevision>${{ steps.version.outputs.new_rev }}</TwoDogRevision>:' Directory.Build.props
+          if ! grep -q '<TwoDogRevision>${{ steps.version.outputs.new_rev }}</TwoDogRevision>' Directory.Build.props; then
+            echo "::error::Failed to update <TwoDogRevision> in Directory.Build.props."
+            exit 1
+          fi
+          git diff Directory.Build.props
+
+      - name: Commit and tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore: bump <TwoDogRevision> to ${{ steps.version.outputs.new_rev }}"
+          git tag "${{ steps.version.outputs.tag }}"
+
+      - name: Push commit and tag
+        if: ${{ !inputs.dry_run }}
+        run: git push origin main "${{ steps.version.outputs.tag }}"
+
+      - name: Dry run summary
+        if: ${{ inputs.dry_run }}
+        run: |
+          echo "Dry run — nothing pushed. Would have pushed:"
+          git log -1 --oneline
+          echo "Tag: ${{ steps.version.outputs.tag }}"

@@ -76,6 +76,22 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      # Release tags must point at a commit whose Directory.Build.props composes the
+      # same version, otherwise the packed binaries would be labeled with a stale
+      # version (see v4.7.0.26, which shipped 4.7.0.25 binaries).
+      - name: Verify tag matches TwoDogVersion
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+        run: |
+          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
+          PROPS_VERSION="$(dotnet msbuild twodog/twodog.csproj -getProperty:TwoDogVersion | tr -d '[:space:]')"
+          echo "Tag version: $TAG_VERSION"
+          echo "Props version: $PROPS_VERSION"
+          if [[ "$TAG_VERSION" != "$PROPS_VERSION" ]]; then
+            echo "::error::Tag v$TAG_VERSION does not match TwoDogVersion $PROPS_VERSION from Directory.Build.props." \
+                 "Tag the commit that bumps <TwoDogRevision>, or use the Release workflow."
+            exit 1
+          fi
+
       - name: Download native libraries from release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -300,6 +316,19 @@ jobs:
         with:
           name: nuget-packages
           path: packages
+
+      # Defense in depth: the pack job already verified the tag against the props
+      # file, but refuse to publish unless the artifact really contains packages
+      # at the tag's version.
+      - name: Verify packages match tag
+        run: |
+          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
+          if [[ ! -f "packages/2dog.${TAG_VERSION}.nupkg" ]]; then
+            echo "::error::packages/ does not contain 2dog.${TAG_VERSION}.nupkg — refusing to publish."
+            echo "Artifact contents:"
+            ls -lh packages/
+            exit 1
+          fi
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
