@@ -1,0 +1,3 @@
+<Project>
+    <Import Project="../build/2dog.tools.targets"/>
+</Project>

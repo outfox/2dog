@@ -137,4 +137,104 @@
         <Message Importance="high" Text="TwoDog: Published GodotPlugins to $(TwoDogGodotApiPublishDestPath)"/>
     </Target>
 
+    <!-- ============================================ -->
+    <!-- Automatic Godot Project Import               -->
+    <!-- ============================================ -->
+    <!--
+      Runs the Godot editor's headless import pipeline against
+      $(GodotProjectDir) when its source files changed. Generates .uid files
+      for C# scripts, imports textures/meshes, and builds the .godot/ cache
+      (script UID cache); without it the engine logs a startup error.
+
+      Uses the 2dog import helper (tools/net8.0/2dog.import.dll) against the
+      editor-variant libgodot from the 2dog.<rid>.editor package; no external
+      Godot editor installation required. An explicitly configured external
+      editor ($(GodotEditor) property or GODOT_EDITOR env var) takes precedence.
+
+      Properties:
+        TwoDogAutoImport:      'true' (default) / 'false' to disable
+        TwoDogRequireImport:   'true' turns the missing-capability warning into an error
+        TwoDogForceImport:     'true' forces the import to run even if up-to-date
+        TwoDogImportStampFile: override the stamp file location
+        GodotEditor:           path to an external Godot editor binary
+    -->
+    <PropertyGroup>
+        <TwoDogAutoImport Condition="'$(TwoDogAutoImport)' == ''">true</TwoDogAutoImport>
+        <TwoDogGodotProjectFullPath Condition="'$(GodotProjectDir)' != ''">$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(GodotProjectDir)'))))</TwoDogGodotProjectFullPath>
+        <!-- Stamp lives inside the game project's .godot/ dir: it is shared by
+             all consuming projects (one import per game project, not one per
+             consumer), and deleting .godot/ - the standard "force reimport"
+             gesture - invalidates it. -->
+        <TwoDogImportStampFile Condition="'$(TwoDogImportStampFile)' == '' And '$(TwoDogGodotProjectFullPath)' != ''">$(TwoDogGodotProjectFullPath)/.godot/2dog.import.stamp</TwoDogImportStampFile>
+        <!-- Import helper: package layout first, then source-checkout build output -->
+        <TwoDogImportHelperPath Condition="'$(TwoDogImportHelperPath)' == '' And Exists('$(MSBuildThisFileDirectory)../tools/net8.0/2dog.import.dll')">$(MSBuildThisFileDirectory)../tools/net8.0/2dog.import.dll</TwoDogImportHelperPath>
+        <TwoDogImportHelperPath Condition="'$(TwoDogImportHelperPath)' == '' And Exists('$(MSBuildThisFileDirectory)../../twodog.import/bin/Release/net8.0/2dog.import.dll')">$(MSBuildThisFileDirectory)../../twodog.import/bin/Release/net8.0/2dog.import.dll</TwoDogImportHelperPath>
+        <TwoDogImportHelperPath Condition="'$(TwoDogImportHelperPath)' == '' And Exists('$(MSBuildThisFileDirectory)../../twodog.import/bin/Debug/net8.0/2dog.import.dll')">$(MSBuildThisFileDirectory)../../twodog.import/bin/Debug/net8.0/2dog.import.dll</TwoDogImportHelperPath>
+        <_TwoDogDotNetHost>$(DOTNET_HOST_PATH)</_TwoDogDotNetHost>
+        <_TwoDogDotNetHost Condition="'$(_TwoDogDotNetHost)' == ''">dotnet</_TwoDogDotNetHost>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(TwoDogGodotProjectFullPath)' != '' And '$(TwoDogAutoImport)' == 'true'">
+        <!-- .uid files are excluded (purely generated). *.import files are
+             intentionally INCLUDED: they are user-editable import settings
+             whose changes must retrigger the import. Safe because the stamp
+             is touched after the import completes, so files (re)generated
+             during the run are always older than the stamp. -->
+        <TwoDogImportInputs Include="$(TwoDogGodotProjectFullPath)/**/*"
+                            Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;$(TwoDogGodotProjectFullPath)/bin/**;$(TwoDogGodotProjectFullPath)/obj/**;$(TwoDogGodotProjectFullPath)/**/*.uid;$(TwoDogGodotProjectFullPath)/**/*.tmp;$(TwoDogGodotProjectFullPath)/**/.DS_Store"/>
+    </ItemGroup>
+
+    <!-- Deleting the stamp before the incremental check forces the import.
+         Also covers staleness that Inputs/Outputs cannot see (deleted assets). -->
+    <Target Name="TwoDogForceImport"
+            BeforeTargets="TwoDogImportGodotProject"
+            Condition="'$(TwoDogForceImport)' == 'true' And '$(TwoDogImportStampFile)' != ''">
+        <Delete Files="$(TwoDogImportStampFile)"/>
+    </Target>
+
+    <Target Name="TwoDogImportGodotProject"
+            AfterTargets="Build"
+            Inputs="@(TwoDogImportInputs)"
+            Outputs="$(TwoDogImportStampFile)"
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogAutoImport)' == 'true' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
+
+        <!-- Capability resolution happens inside the target body: the platform
+             and tools package targets that provide these properties may be
+             imported after this file, so evaluation-time references here would
+             be import-order dependent; execution time is not. -->
+        <PropertyGroup>
+            <_TwoDogImportEditor>$(GodotEditor)</_TwoDogImportEditor>
+            <_TwoDogImportEditor Condition="'$(_TwoDogImportEditor)' == ''">$(GODOT_EDITOR)</_TwoDogImportEditor>
+            <!-- GodotTools: 2dog.tools package, or the source checkout -->
+            <_TwoDogToolsDir>$(TwoDogGodotToolsDir)</_TwoDogToolsDir>
+            <_TwoDogToolsDir Condition="'$(_TwoDogToolsDir)' == '' And Exists('$(MSBuildThisFileDirectory)../../godot/bin/GodotSharp/Tools/GodotTools.dll')">$(MSBuildThisFileDirectory)../../godot/bin/GodotSharp/Tools/</_TwoDogToolsDir>
+            <_TwoDogCanUseHelper>false</_TwoDogCanUseHelper>
+            <_TwoDogCanUseHelper Condition="'$(TwoDogImportHelperPath)' != '' And '$(TwoDogEditorLibGodotPath)' != '' And Exists('$(TwoDogEditorLibGodotPath)') And '$(_TwoDogToolsDir)' != '' And '$(TwoDogGodotApiSourcePath)' != ''">true</_TwoDogCanUseHelper>
+            <!-- Directory args must not end in a backslash: a trailing '\'
+                 before the closing quote escapes it on Windows command lines. -->
+            <_TwoDogToolsDirArg>$(_TwoDogToolsDir.TrimEnd('\').TrimEnd('/'))</_TwoDogToolsDirArg>
+            <_TwoDogApiDirArg>$(TwoDogGodotApiSourcePath.TrimEnd('\').TrimEnd('/'))</_TwoDogApiDirArg>
+        </PropertyGroup>
+
+        <!-- (1) explicitly configured external editor -->
+        <Exec Condition="'$(_TwoDogImportEditor)' != ''"
+              Command="&quot;$(_TwoDogImportEditor)&quot; --headless --import --path &quot;$(TwoDogGodotProjectFullPath)&quot;"/>
+
+        <!-- (2) in-process import helper against the packaged editor libgodot -->
+        <Exec Condition="'$(_TwoDogImportEditor)' == '' And '$(_TwoDogCanUseHelper)' == 'true'"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              EnvironmentVariables="GODOTSHARP_DIR=$(_TwoDogApiDirArg);GODOT_TOOLS_DIR=$(_TwoDogToolsDirArg)"/>
+
+        <!-- (3) nothing available: warn and skip (or error when required) -->
+        <Warning Condition="'$(_TwoDogImportEditor)' == '' And '$(_TwoDogCanUseHelper)' != 'true' And '$(TwoDogRequireImport)' != 'true'"
+                 Text="TwoDog: Godot project '$(TwoDogGodotProjectFullPath)' needs a resource import, but no import capability was found (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)'). The application may log a startup error about missing .uid files. Set &lt;GodotEditor&gt; to a Godot editor binary, or restore the 2dog.&lt;rid&gt;.editor and 2dog.tools packages. Set &lt;TwoDogAutoImport&gt;false&lt;/TwoDogAutoImport&gt; to silence this warning."/>
+        <Error Condition="'$(_TwoDogImportEditor)' == '' And '$(_TwoDogCanUseHelper)' != 'true' And '$(TwoDogRequireImport)' == 'true'"
+               Text="TwoDog: import required (TwoDogRequireImport=true) but no import capability is available (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)')."/>
+
+        <!-- Stamp only when an import actually ran, so a skipped import retries next build -->
+        <MakeDir Directories="$(TwoDogGodotProjectFullPath)/.godot" Condition="'$(_TwoDogImportEditor)' != '' Or '$(_TwoDogCanUseHelper)' == 'true'"/>
+        <Touch Files="$(TwoDogImportStampFile)" AlwaysCreate="true" Condition="'$(_TwoDogImportEditor)' != '' Or '$(_TwoDogCanUseHelper)' == 'true'"/>
+        <Message Importance="high" Text="TwoDog: Imported Godot project $(TwoDogGodotProjectFullPath)" Condition="'$(_TwoDogImportEditor)' != '' Or '$(_TwoDogCanUseHelper)' == 'true'"/>
+    </Target>
+
 </Project>

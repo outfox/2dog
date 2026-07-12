@@ -40,6 +40,15 @@
         <TwoDogWinX64EditorLocal>$(TwoDogLocalGodotBin)godot.windows.editor.x86_64.shared_library.dll</TwoDogWinX64EditorLocal>
     </PropertyGroup>
 
+    <!-- Export the editor libgodot location for the build machine. Consumed by
+         the 2dog package's automatic import target (TwoDogImportGodotProject),
+         which runs the import helper against it. Host-OS guarded (not RID):
+         the import runs on the machine doing the build. -->
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogWinX64EditorPackage)')">$(TwoDogWinX64EditorPackage)</TwoDogEditorLibGodotPath>
+        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogWinX64EditorLocal)')">$(TwoDogWinX64EditorLocal)</TwoDogEditorLibGodotPath>
+    </PropertyGroup>
+
     <!-- Choose preferred variant based on Configuration -->
     <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
         <TwoDogWinX64PreferredVariant Condition="'$(TwoDogWinX64PreferredVariant)' == ''">debug</TwoDogWinX64PreferredVariant>

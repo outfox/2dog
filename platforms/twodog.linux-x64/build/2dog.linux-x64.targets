@@ -38,6 +38,15 @@
         <TwoDogLinuxX64EditorLocal>$(TwoDogLocalGodotBin)libgodot.linuxbsd.editor.x86_64.shared_library.so</TwoDogLinuxX64EditorLocal>
     </PropertyGroup>
 
+    <!-- Export the editor libgodot location for the build machine. Consumed by
+         the 2dog package's automatic import target (TwoDogImportGodotProject),
+         which runs the import helper against it. Host-OS guarded (not RID):
+         the import runs on the machine doing the build. -->
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogLinuxX64EditorPackage)')">$(TwoDogLinuxX64EditorPackage)</TwoDogEditorLibGodotPath>
+        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogLinuxX64EditorLocal)')">$(TwoDogLinuxX64EditorLocal)</TwoDogEditorLibGodotPath>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
         <TwoDogLinuxX64PreferredVariant Condition="'$(TwoDogLinuxX64PreferredVariant)' == ''">debug</TwoDogLinuxX64PreferredVariant>
     </PropertyGroup>
