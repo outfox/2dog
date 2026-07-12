@@ -5,7 +5,7 @@
 ## Prerequisites
 
 - .NET SDK 8.0 or later
-- [Godot (.NET)](https://godotengine.org/) (for importing project assets)
+- [Godot (.NET)](https://godotengine.org/) (optional  –  only for editing scenes in the editor UI; asset import happens automatically during build)
 
 ## Installation
 
@@ -43,16 +43,13 @@ dotnet new 2dog --tests True -n MyGodotApp
 # Navigate into the project
 cd MyGodotApp
 
-# Import assets with Godot
-godot-mono --path MyGodotApp.Godot --import
-
-# Run tests
+# Run tests (assets are imported automatically during build)
 dotnet test
 
 # Run the game
 dotnet run --project MyGodotApp
 
-# Edit in Godot
+# Edit in Godot (optional)
 godot-mono -e --path MyGodotApp.Godot
 ```
 
@@ -147,9 +144,9 @@ Referencing the `2dog` package gives you the `release` variant automatically.
 For `debug` or `editor`, reference the matching platform variant package
 (e.g. `2dog.win-x64.debug`) and set `<TwoDogVariant>` in your project.
 
-Note that the editor variant enables editor code paths at compile time, but a
-working import pipeline still requires the external Godot editor binary  –  see
-the [Import Tool](./import-tool).
+Note that the editor variant enables editor code paths at compile time. Asset
+import runs automatically at build time in a separate helper process against
+the editor-variant libgodot  –  see [Resource Import](./import-tool).
 
 See [Build Configurations](./build-configurations) for detailed information.
 

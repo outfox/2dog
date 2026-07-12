@@ -55,7 +55,8 @@ The native library (`libgodot.dll`, `libgodot.so`, or `libgodot.dylib`) ships in
 
 ::: tip Choosing a Build Variant
 - **Building a game?** Use Debug during development, Release for production
-- **Need to import assets?** Use Editor configuration
+- **Need to import assets?** Nothing to choose  –  import runs automatically at
+  build time against the editor variant (see [Resource Import](./import-tool))
 - **Creating build tools?** Use Editor configuration
 - **Running in CI/CD?** Use Debug for tests, Release for final builds
 :::

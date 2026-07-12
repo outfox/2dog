@@ -114,10 +114,11 @@ dotnet new 2dog -n LetsCook
 
 cd LetsCook
 
-# Open and edit the project in Godot Editor or just run --import once
-godot-mono --path LetsCook.Godot --import
-
+# Assets are imported automatically during build
 dotnet run --project LetsCook
+
+# Optionally, open and edit the project in the Godot Editor
+godot-mono -e --path LetsCook.Godot
 ```
 
 ```bash [🤖 Existing Project]

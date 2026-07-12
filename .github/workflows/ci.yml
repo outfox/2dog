@@ -81,8 +81,9 @@ jobs:
             exit 1
           fi
 
-  # Download pre-built native libraries, stage godot/bin, pack all NuGet
-  # packages, and import the game project for the test jobs.
+  # Download pre-built native libraries, stage godot/bin, and pack all
+  # NuGet packages for the test jobs. The game project is imported by the
+  # test jobs themselves via the automatic MSBuild import step.
   pack:
     name: Pack NuGet Packages
     needs: [check-natives]
@@ -218,11 +219,6 @@ jobs:
           dotnet pack templates
           ls -lh packages/
 
-      # Import Godot project resources with the staged Linux editor binary so
-      # the test jobs get a ready-to-use game/.godot directory.
-      - name: Import game project
-        run: python3 import-project.py ./game
-
       - name: Upload godot-bin artifact
         uses: actions/upload-artifact@v7
         with:
@@ -230,14 +226,6 @@ jobs:
           path: |
             godot/bin/
             godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
-          retention-days: 3
-
-      - name: Upload imported game data
-        uses: actions/upload-artifact@v7
-        with:
-          name: game-imported
-          path: game/.godot/
-          include-hidden-files: true
           retention-days: 3
 
       - name: Upload NuGet packages
@@ -279,12 +267,6 @@ jobs:
         with:
           name: godot-bin
           path: godot
-
-      - name: Download imported game data
-        uses: actions/download-artifact@v8
-        with:
-          name: game-imported
-          path: game/.godot
 
       - name: Download NuGet packages
         uses: actions/download-artifact@v8

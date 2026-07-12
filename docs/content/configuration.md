@@ -34,8 +34,9 @@ Editor builds are larger and slower than template builds. Use them only when you
 ::: warning Editor Runtime Limitations
 `TOOLS_ENABLED` provides compile-time access to editor types and enables
 `[Tool]` script execution, but editor runtime singletons and the import
-pipeline are not initialized in embedded libgodot mode  –  importing assets
-requires the external editor binary (see the [Import Tool](./import-tool)).
+pipeline are not initialized in embedded libgodot mode. Asset import instead
+runs automatically at build time in a separate helper process via the
+`libgodot_import_project` entry point (see [Resource Import](./import-tool)).
 :::
 
 ## Native Library Options
@@ -116,9 +117,9 @@ configurations to variants explicitly  –  see the complete example in
 
 ### Editor Tooling Project
 
-Build a tool that uses editor types and `[Tool]` scripts (for asset
-importing itself, use the [Import Tool](./import-tool) with the external
-editor binary):
+Build a tool that uses editor types and `[Tool]` scripts (asset importing
+itself happens automatically at build time  –  see
+[Resource Import](./import-tool)):
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">

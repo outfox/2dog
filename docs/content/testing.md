@@ -171,22 +171,24 @@ Different build configurations are useful for different test scenarios:
 |--------------|----------|
 | **Debug** | General unit tests, debugging |
 | **Release** | Performance tests, final validation |
-| **Editor** | Tests that need import pipeline or editor APIs |
+| **Editor** | Tests that need editor APIs (`[Tool]` scripts, `EditorInterface`, importer types) |
 
-Example: Testing asset import functionality:
+Asset import itself does not need a special configuration  –  it runs
+automatically when the test project builds (see
+[Resource Import](./import-tool)).
+
+Example: Testing editor API functionality:
 ```csharp
 [Collection<GodotHeadlessCollection>]
-public class ImportTests(GodotHeadlessFixture godot)
+public class EditorApiTests(GodotHeadlessFixture godot)
 {
     [Fact]
-    public void ImportTexture_ValidFile_Succeeds()
+    public void ImporterSingleton_IsAvailable()
     {
         // This test requires Editor configuration
         // Build with: dotnet test -c Editor
         var importer = ResourceImporterTexture.Singleton;
         Assert.NotNull(importer);
-        
-        // Test import pipeline functionality
     }
 }
 ```
