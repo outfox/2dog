@@ -1,4 +1,4 @@
-name: CI
+name: 2dog CI
 
 on:
   push:
@@ -112,6 +112,44 @@ jobs:
             echo "::error::Tag v$TAG_VERSION does not match TwoDogVersion $PROPS_VERSION from Directory.Build.props." \
                  "Tag the commit that bumps <TwoDogRevision>, or use the Release workflow."
             exit 1
+          fi
+
+      # The platform packages are versioned by <NativesRevision>, which must be
+      # bumped whenever the godot submodule changes. If it isn't, deploy's
+      # skip-duplicate push silently keeps the previously published natives.
+      # Each platform package records the submodule commit it was built from in
+      # its repository metadata (see platforms/Directory.Build.props) — compare
+      # the published package's commit with ours and fail on a mismatch.
+      - name: Verify NativesVersion is not already published from different natives
+        run: |
+          NATIVES_VERSION="$(dotnet msbuild twodog/twodog.csproj -getProperty:NativesVersion | tr -d '[:space:]')"
+          # NuGet normalizes away a trailing .0 fourth segment (4.7.0.0 -> 4.7.0).
+          NORMALIZED="$(echo "$NATIVES_VERSION" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+)\.0$/\1/')"
+          CURRENT_COMMIT="$(git rev-parse HEAD:godot)"
+          echo "NativesVersion: $NORMALIZED, godot submodule: $CURRENT_COMMIT"
+
+          # Probe one representative platform package; all of them are packed
+          # and pushed together. Must be a variant package (.debug/.release/
+          # .editor) — the meta packages use a custom NuspecFile and carry no
+          # repository stamp.
+          URL="https://api.nuget.org/v3-flatcontainer/2dog.win-x64.debug/$NORMALIZED/2dog.win-x64.debug.$NORMALIZED.nupkg"
+          if ! curl -fsSL -o /tmp/published-natives.nupkg "$URL"; then
+            echo "Natives $NORMALIZED not on nuget.org yet — nothing to collide with."
+            exit 0
+          fi
+
+          # Note: packages published before the stamping target existed carry
+          # the SDK's automatic SourceLink stamp (the 2dog repo commit, not the
+          # submodule) — those hit the mismatch path below, which is the right
+          # verdict: they cannot be confirmed to contain the current natives.
+          PUBLISHED_COMMIT="$(unzip -p /tmp/published-natives.nupkg '*.nuspec' | sed -n 's/.*commit="\([0-9a-f]*\)".*/\1/p' | head -1)"
+          if [ -z "$PUBLISHED_COMMIT" ]; then
+            echo "::warning::Natives $NORMALIZED is on nuget.org without any recorded commit. Cannot verify — if the submodule changed since that release, bump <NativesRevision>."
+          elif [ "$PUBLISHED_COMMIT" != "$CURRENT_COMMIT" ]; then
+            echo "::error::Natives $NORMALIZED is already on nuget.org and its recorded source commit ${PUBLISHED_COMMIT:0:7} does not match the current godot submodule ${CURRENT_COMMIT:0:7}. Deploy would skip-duplicate and keep the stale natives. Bump <NativesRevision> in Directory.Build.props."
+            exit 1
+          else
+            echo "Natives $NORMALIZED already published from the same godot commit — repack is identical, skip-duplicate is harmless."
           fi
 
       - name: Download native libraries from release
