@@ -368,7 +368,9 @@ jobs:
   # Uses NuGet Trusted Publishing (OIDC) — no long-lived API key is stored.
   deploy:
     name: Deploy to NuGet
-    needs: [test]
+    # web-smoke gates deploy because the 2dog.browser-wasm packages it
+    # exercises are among the packages being published.
+    needs: [test, web-smoke]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:
