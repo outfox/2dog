@@ -9,7 +9,7 @@
         <!-- Native package revision. Bump ONLY when the godot submodule changes;
              reset to 0 when GodotVersion changes. NuGet normalizes a trailing .0
              (4.7.0.0 publishes as 4.7.0). -->
-        <NativesRevision>12</NativesRevision>
+        <NativesRevision>13</NativesRevision>
         <TwoDogVersion>$(GodotVersion).$(TwoDogRevision)</TwoDogVersion>
         <NativesVersion>$(GodotVersion).$(NativesRevision)</NativesVersion>
         <!-- Emscripten version for browser-wasm natives. Must match the emscripten
