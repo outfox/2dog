@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!--
+      Browser (wasm) host: your C# code hosts the Godot engine in the browser.
+
+      Publish:  dotnet publish -c Release        (run from this directory)
+      Output:   AppBundle/ - serve with any static file server.
+
+      Requires the wasm-tools workload:  dotnet workload install wasm-tools
+      The 2dog.browser-wasm package statically links the Godot engine into
+      dotnet.native.wasm during publish and exports the Godot project's
+      content as godot.pck (using the desktop editor packages on this machine).
+    -->
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <PropertyGroup>
+        <GodotProjectDir>../TPLRAWNAME.Godot</GodotProjectDir>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="2dog" Version="TWODOG_PKG_VERSION"/>
+        <PackageReference Include="2dog.browser-wasm" Version="NATIVES_PKG_VERSION"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="../TPLRAWNAME.Godot/TPLRAWNAME.Godot.csproj"/>
+    </ItemGroup>
+
+    <!-- Root the game assembly: scripts are resolved by reflection. Add a
+         TrimmerRootAssembly for any NuGet package your game code reaches via
+         reflection (e.g. an ECS or serializer library). -->
+    <ItemGroup>
+        <TrimmerRootAssembly Include="TPLRAWNAME.Godot"/>
+        <TrimmerRootAssembly Include="$(TargetName)"/>
+    </ItemGroup>
+
+    <!-- Remove duplicate Godot.SourceGenerators that come from the Godot
+         project's Godot.NET.Sdk (2dog package already embeds them). The host
+         must not compile a second GodotPlugins.Game initializer - the Godot
+         project's assembly owns it. -->
+    <Target Name="RemoveDuplicateGodotAnalyzers" BeforeTargets="CoreCompile">
+        <ItemGroup>
+            <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Identity)').Contains('Godot.SourceGenerators'))"/>
+        </ItemGroup>
+    </Target>
+
+    <Target Name="DeepClean" AfterTargets="Clean">
+        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
+        <RemoveDir Directories="$(BaseOutputPath)"/>
+        <RemoveDir Directories="AppBundle"/>
+    </Target>
+</Project>

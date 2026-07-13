@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Platform-specific configuration -->
+    <PropertyGroup>
+        <PlatformRID>browser-wasm</PlatformRID>
+        <PlatformOS>web</PlatformOS>
+        <BuildVariant>template_debug</BuildVariant>
+        <PackageSuffix>.debug</PackageSuffix>
+        <Description>Browser (wasm) debug payload for twodog (engine assertions enabled). Opt-in: reference explicitly alongside 2dog.browser-wasm; selected for Debug-configuration publishes.</Description>
+    </PropertyGroup>
+</Project>

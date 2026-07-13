@@ -90,9 +90,13 @@
     <!-- ============================================ -->
     <!-- Target: Copy GodotPlugins to Output          -->
     <!-- ============================================ -->
+    <!-- TwoDogSkipGodotApiCopy: set 'true' to suppress the GodotPlugins file
+         copies entirely (browser-wasm publishes set this - on web there is no
+         GodotPlugins.dll on disk; plugin init flows through a registered
+         function pointer instead). -->
     <Target Name="TwoDogCopyGodotApi"
             AfterTargets="Build"
-            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogGodotApiSourcePath)' != '' And Exists('$(TwoDogGodotApiSourcePath)')">
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogSkipGodotApiCopy)' != 'true' And '$(TwoDogGodotApiSourcePath)' != '' And Exists('$(TwoDogGodotApiSourcePath)')">
 
         <PropertyGroup>
             <TwoDogGodotApiDestPath>$(OutputPath)$(TwoDogGodotApiDestSubdir)</TwoDogGodotApiDestPath>
@@ -117,7 +121,7 @@
     <!-- ============================================ -->
     <Target Name="TwoDogPublishGodotApi"
             AfterTargets="Publish"
-            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogGodotApiSourcePath)' != '' And Exists('$(TwoDogGodotApiSourcePath)')">
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogSkipGodotApiCopy)' != 'true' And '$(TwoDogGodotApiSourcePath)' != '' And Exists('$(TwoDogGodotApiSourcePath)')">
 
         <PropertyGroup>
             <TwoDogGodotApiPublishDestPath>$(PublishDir)$(TwoDogGodotApiDestSubdir)</TwoDogGodotApiPublishDestPath>

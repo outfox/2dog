@@ -2,5 +2,10 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <EnableDynamicLoading>true</EnableDynamicLoading>
+        <!-- Exposes the source-generated GodotPlugins.Game.Main.GetInitializePointer()
+             used by web (browser-wasm) hosts; harmless on desktop. The generated
+             method takes a function pointer, hence unsafe. -->
+        <DefineConstants>$(DefineConstants);LIBGODOT_ENABLED</DefineConstants>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 </Project>

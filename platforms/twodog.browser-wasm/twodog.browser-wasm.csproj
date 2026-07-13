@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Meta package for the browser-wasm (web) target. Ships the release
+         payload dependency plus the MSBuild targets that wire the static
+         libgodot into a consumer's `dotnet publish -r browser-wasm`.
+         The .debug variant is opt-in by explicit reference.
+         Not gated on a host OS: the payload is built with emscripten and can
+         be packed from any machine that has it staged in godot/bin/web/. -->
+    <PropertyGroup Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(GodotBinDir)web/template_release/libgodot/libgodot.a')">
+        <IsPackable>false</IsPackable>
+        <ExcludeFromBuild>true</ExcludeFromBuild>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <PackageId>2dog.browser-wasm</PackageId>
+        <Description>Browser (wasm) meta package for twodog. Statically links the Godot engine into your .NET browser-wasm publish and ships the Godot web boot shell. Reference this package alongside twodog (2dog) in a net10.0+ browser-wasm host project. Requires the wasm-tools workload.</Description>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <!-- Use custom nuspec for explicit dependency control -->
+        <NuspecFile>twodog.browser-wasm.nuspec</NuspecFile>
+        <NuspecProperties>version=$(Version);authors=$(Authors);description=$(Description)</NuspecProperties>
+    </PropertyGroup>
+
+    <!-- Project references for local development builds -->
+    <ItemGroup Condition="'$(ExcludeFromBuild)' != 'true'">
+        <ProjectReference Include="twodog.browser-wasm.release.csproj" PrivateAssets="all"/>
+        <ProjectReference Include="twodog.browser-wasm.debug.csproj" PrivateAssets="all"/>
+    </ItemGroup>
+</Project>

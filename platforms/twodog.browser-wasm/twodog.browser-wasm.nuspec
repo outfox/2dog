@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>2dog.browser-wasm</id>
+        <version>$version$</version>
+        <authors>$authors$</authors>
+        <license type="expression">MIT</license>
+        <icon>icon.png</icon>
+        <readme>README.md</readme>
+        <projectUrl>https://github.com/outfox/2dog</projectUrl>
+        <description>$description$</description>
+        <dependencies>
+            <group targetFramework=".NETStandard2.0">
+                <dependency id="2dog.browser-wasm.release" version="$version$"/>
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="../../nuget/icon.png" target="icon.png"/>
+        <file src="README.md" target="README.md"/>
+        <file src="../../nuget/GODOT_LICENSE.txt" target="LICENSE.txt"/>
+        <file src="../../nuget/GODOT_AUTHORS.md" target="AUTHORS.md"/>
+        <!-- MSBuild targets wiring the static link + content pipeline -->
+        <file src="build/2dog.browser-wasm.targets" target="build/2dog.browser-wasm.targets"/>
+        <file src="buildTransitive/2dog.browser-wasm.targets" target="buildTransitive/2dog.browser-wasm.targets"/>
+    </files>
+</package>
