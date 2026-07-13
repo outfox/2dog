@@ -244,6 +244,20 @@
                  Pack="true" PackagePath="content/twodog/" CopyToOutputDirectory="Never"/>
     </ItemGroup>
 
+    <!-- Template files matched by a .gitignore never reach a CI checkout, so
+         they silently vanish from the packed template even though local packs
+         (and local template installs) still see them. Shipped 4.7.0.36 without
+         export_presets.cfg that way, breaking every generated web publish. -->
+    <Target Name="VerifyTemplateContentTracked" BeforeTargets="GenerateNuspec">
+        <Exec Command="git -C &quot;$(MSBuildProjectDirectory)/../&quot; ls-files --others templates/twodog/"
+              ConsoleToMSBuild="true" IgnoreExitCode="true" StandardOutputImportance="low">
+            <Output TaskParameter="ConsoleOutput" PropertyName="_TwoDogTemplateUntracked"/>
+            <Output TaskParameter="ExitCode" PropertyName="_TwoDogTemplateGitExit"/>
+        </Exec>
+        <Error Condition="'$(_TwoDogTemplateGitExit)' == '0' And '$(_TwoDogTemplateUntracked.Trim())' != ''"
+               Text="2dog template content contains files git does not track (gitignored or never added) - they would be missing from a CI-packed template: $(_TwoDogTemplateUntracked)"/>
+    </Target>
+
     <!-- Substitute 2dog package versions into the bundled template.json at pack
          time, then restore the committed placeholder tokens afterwards.
          (godotVersion has no placeholder; its committed default is the real
