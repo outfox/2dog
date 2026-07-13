@@ -30,7 +30,9 @@
         <ProjectReference Include="../TPLRAWNAME.Godot/TPLRAWNAME.Godot.csproj"/>
     </ItemGroup>
 
-    <!-- Root the game assembly: scripts are resolved by reflection. -->
+    <!-- Root the game assembly: scripts are resolved by reflection. Add a
+         TrimmerRootAssembly for any NuGet package your game code reaches via
+         reflection (e.g. an ECS or serializer library). -->
     <ItemGroup>
         <TrimmerRootAssembly Include="TPLRAWNAME.Godot"/>
         <TrimmerRootAssembly Include="$(TargetName)"/>
