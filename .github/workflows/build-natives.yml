@@ -174,6 +174,21 @@ jobs:
             arch: arm64
             rid: osx-arm64
             lib_ext: dylib
+          # Web (browser-wasm) static libraries: no editor target, built with
+          # the emscripten version pinned in Directory.Build.props (must match
+          # the .NET browser-wasm runtime pack the consumers publish with).
+          - platform: web
+            target: template_release
+            runner: blacksmith-16vcpu-ubuntu-2404
+            arch: wasm32
+            rid: browser-wasm
+            lib_ext: a
+          - platform: web
+            target: template_debug
+            runner: blacksmith-16vcpu-ubuntu-2404
+            arch: wasm32
+            rid: browser-wasm
+            lib_ext: a
 
     # From Godot upstream CI (windows_builds.yml): cache SCons's MSVC
     # environment detection, and keep Python console output UTF-8 clean on
@@ -226,6 +241,24 @@ jobs:
         if: matrix.platform == 'macos'
         run: sh godot/misc/scripts/install_vulkan_sdk_macos.sh
 
+      # Web: emscripten pinned to the version the .NET browser-wasm runtime
+      # pack was built with (the static libgodot.a is linked into
+      # dotnet.native.wasm at consumer publish time, so they must match).
+      - name: Read pinned emscripten version
+        if: matrix.platform == 'web'
+        id: emsdk-version
+        run: |
+          VERSION=$(sed -n 's/.*<EmscriptenVersion>\(.*\)<\/EmscriptenVersion>.*/\1/p' Directory.Build.props)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Pinned emscripten: $VERSION"
+
+      - name: Setup emsdk
+        if: matrix.platform == 'web'
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: ${{ steps.emsdk-version.outputs.version }}
+          actions-cache-folder: emsdk-cache
+
       # Cache SCons build
       - name: Cache SCons
         uses: actions/cache@v6
@@ -254,10 +287,22 @@ jobs:
       # Upload the library under its original Godot file name; the release job
       # zips each artifact directory as-is.
       - name: Upload artifact
+        if: matrix.platform != 'web'
         uses: actions/upload-artifact@v7
         with:
           name: libgodot-${{ matrix.rid }}-${{ matrix.target }}
           path: godot/bin/*godot.${{ matrix.platform }}.${{ matrix.target }}.${{ matrix.arch }}.shared_library.${{ matrix.lib_ext }}
+          retention-days: 7
+
+      # Web uploads the whole payload directory (libgodot/ archive + JS glue,
+      # shell/ boot files) - the contract with ci.yml's staging step and the
+      # 2dog.browser-wasm packages.
+      - name: Upload artifact (web payload)
+        if: matrix.platform == 'web'
+        uses: actions/upload-artifact@v7
+        with:
+          name: libgodot-${{ matrix.rid }}-${{ matrix.target }}
+          path: godot/bin/web/${{ matrix.target }}/
           retention-days: 7
 
   # Create a GitHub release tagged godot-{hash} with all native libs + GodotSharp
@@ -306,6 +351,7 @@ jobs:
           - Linux x64 (template_release, template_debug, editor)
           - Windows x64 (template_release, template_debug, editor)
           - macOS arm64 (template_release, template_debug, editor)
+          - Browser wasm32 (template_release, template_debug — static library payloads)
 
           ### Additional assets
           - `godotsharp.zip` — GodotSharp assemblies (platform-independent)

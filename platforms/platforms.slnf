@@ -17,6 +17,10 @@
       "platforms\\twodog.osx-arm64\\twodog.osx-arm64.editor.csproj",
       "platforms\\twodog.osx-arm64\\twodog.osx-arm64.csproj",
 
+      "platforms\\twodog.browser-wasm\\twodog.browser-wasm.release.csproj",
+      "platforms\\twodog.browser-wasm\\twodog.browser-wasm.debug.csproj",
+      "platforms\\twodog.browser-wasm\\twodog.browser-wasm.csproj",
+
       "platforms\\twodog.tools\\twodog.tools.csproj",
     ]
   }
