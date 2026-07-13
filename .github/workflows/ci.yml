@@ -97,7 +97,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
 
       # Release tags must point at a commit whose Directory.Build.props composes the
       # same version, otherwise the packed binaries would be labeled with a stale
@@ -273,7 +273,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
 
       - name: Download godot-bin artifact
         uses: actions/download-artifact@v8
@@ -319,9 +319,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: |
-            8.0.x
-            10.0.x
+          dotnet-version: '10.0.x'
 
       - name: Install wasm-tools workload
         working-directory: demo.web
@@ -410,7 +408,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
 
       # Exchange the GitHub OIDC token for a short-lived NuGet API key via the
       # Trusted Publishing policy configured on nuget.org. `NUGET_USER` is a repo

@@ -9,7 +9,7 @@
         <!-- Native package revision. Bump ONLY when the godot submodule changes;
              reset to 0 when GodotVersion changes. NuGet normalizes a trailing .0
              (4.7.0.0 publishes as 4.7.0). -->
-        <NativesRevision>11</NativesRevision>
+        <NativesRevision>12</NativesRevision>
         <TwoDogVersion>$(GodotVersion).$(TwoDogRevision)</TwoDogVersion>
         <NativesVersion>$(GodotVersion).$(NativesRevision)</NativesVersion>
         <!-- Emscripten version for browser-wasm natives. Must match the emscripten
@@ -18,7 +18,7 @@
              Source of truth: microsoft.net.workload.emscripten.current manifest of the
              SDK band used by web hosts (net10.0). -->
         <EmscriptenVersion>3.1.56</EmscriptenVersion>
-        <!-- Allow running on any .NET 8+ runtime (8, 9, 10, ...) -->
+        <!-- Allow running on any .NET 10+ runtime (10, 11, ...) -->
         <RollForward>LatestMajor</RollForward>
     </PropertyGroup>
 </Project>

@@ -65,7 +65,7 @@ while (!godot.Iteration())
 ## Quick Start
 
 ### Prerequisites
-- .NET SDK 8.0 or later
+- .NET SDK 10.0 or later
 - [Godot (.NET)](https://godotengine.org/) (optional - only for editing scenes in the editor UI)
 
 ### Using Templates (Recommended)

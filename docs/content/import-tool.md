@@ -37,7 +37,7 @@ reimport on the next build.
 
 ## The import helper (`twodog.import`)
 
-The `2dog` package ships a small helper (`tools/net8.0/2dog.import.dll`) that
+The `2dog` package ships a small helper (`tools/net10.0/2dog.import.dll`) that
 the MSBuild target invokes. It can also be run manually:
 
 ```bash

@@ -28,7 +28,7 @@ internal static class HelperToolTestBed
         get
         {
             var candidates = new[] { "Release", "Debug", "Editor" }
-                .Select(c => Path.Combine(RepoRoot, "twodog.import", "bin", c, "net8.0", "2dog.import.dll"))
+                .Select(c => Path.Combine(RepoRoot, "twodog.import", "bin", c, "net10.0", "2dog.import.dll"))
                 .ToList();
 
             // Fall back to the helper packaged inside the restored 2dog package
@@ -38,7 +38,7 @@ internal static class HelperToolTestBed
             {
                 candidates.AddRange(Directory.EnumerateDirectories(packageDir)
                     .OrderDescending()
-                    .Select(v => Path.Combine(v, "tools", "net8.0", "2dog.import.dll")));
+                    .Select(v => Path.Combine(v, "tools", "net10.0", "2dog.import.dll")));
             }
 
             var helper = candidates.FirstOrDefault(File.Exists);

@@ -4,7 +4,7 @@
 
       Handles copying GodotPlugins assemblies to output directory.
       GodotSharp and Godot.SourceGenerators are bundled in the 2dog package
-      (lib/net8.0/ and analyzers/dotnet/cs/ respectively).
+      (lib/net10.0/ and analyzers/dotnet/cs/ respectively).
 
       Native libraries are provided by separate platform-specific packages:
         - 2dog.win-x64 / 2dog.linux-x64 / 2dog.osx-arm64: template_release builds
@@ -150,7 +150,7 @@
       for C# scripts, imports textures/meshes, and builds the .godot/ cache
       (script UID cache); without it the engine logs a startup error.
 
-      Uses the 2dog import helper (tools/net8.0/2dog.import.dll) against the
+      Uses the 2dog import helper (tools/net10.0/2dog.import.dll) against the
       editor-variant libgodot from the 2dog.<rid>.editor package; no external
       Godot editor installation required. An explicitly configured external
       editor ($(GodotEditor) property or GODOT_EDITOR env var) takes precedence.
@@ -171,9 +171,9 @@
              gesture - invalidates it. -->
         <TwoDogImportStampFile Condition="'$(TwoDogImportStampFile)' == '' And '$(TwoDogGodotProjectFullPath)' != ''">$(TwoDogGodotProjectFullPath)/.godot/2dog.import.stamp</TwoDogImportStampFile>
         <!-- Import helper: package layout first, then source-checkout build output -->
-        <TwoDogImportHelperPath Condition="'$(TwoDogImportHelperPath)' == '' And Exists('$(MSBuildThisFileDirectory)../tools/net8.0/2dog.import.dll')">$(MSBuildThisFileDirectory)../tools/net8.0/2dog.import.dll</TwoDogImportHelperPath>
-        <TwoDogImportHelperPath Condition="'$(TwoDogImportHelperPath)' == '' And Exists('$(MSBuildThisFileDirectory)../../twodog.import/bin/Release/net8.0/2dog.import.dll')">$(MSBuildThisFileDirectory)../../twodog.import/bin/Release/net8.0/2dog.import.dll</TwoDogImportHelperPath>
-        <TwoDogImportHelperPath Condition="'$(TwoDogImportHelperPath)' == '' And Exists('$(MSBuildThisFileDirectory)../../twodog.import/bin/Debug/net8.0/2dog.import.dll')">$(MSBuildThisFileDirectory)../../twodog.import/bin/Debug/net8.0/2dog.import.dll</TwoDogImportHelperPath>
+        <TwoDogImportHelperPath Condition="'$(TwoDogImportHelperPath)' == '' And Exists('$(MSBuildThisFileDirectory)../tools/net10.0/2dog.import.dll')">$(MSBuildThisFileDirectory)../tools/net10.0/2dog.import.dll</TwoDogImportHelperPath>
+        <TwoDogImportHelperPath Condition="'$(TwoDogImportHelperPath)' == '' And Exists('$(MSBuildThisFileDirectory)../../twodog.import/bin/Release/net10.0/2dog.import.dll')">$(MSBuildThisFileDirectory)../../twodog.import/bin/Release/net10.0/2dog.import.dll</TwoDogImportHelperPath>
+        <TwoDogImportHelperPath Condition="'$(TwoDogImportHelperPath)' == '' And Exists('$(MSBuildThisFileDirectory)../../twodog.import/bin/Debug/net10.0/2dog.import.dll')">$(MSBuildThisFileDirectory)../../twodog.import/bin/Debug/net10.0/2dog.import.dll</TwoDogImportHelperPath>
         <_TwoDogDotNetHost>$(DOTNET_HOST_PATH)</_TwoDogDotNetHost>
         <_TwoDogDotNetHost Condition="'$(_TwoDogDotNetHost)' == ''">dotnet</_TwoDogDotNetHost>
     </PropertyGroup>

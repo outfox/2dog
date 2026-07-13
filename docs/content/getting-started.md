@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-- .NET SDK 8.0 or later
+- .NET SDK 10.0 or later
 - [Godot (.NET)](https://godotengine.org/) (optional  –  only for editing scenes in the editor UI; asset import happens automatically during build)
 
 ## Installation
