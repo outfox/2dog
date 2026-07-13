@@ -64,7 +64,17 @@
         <EmccStackSize Condition="'$(EmccStackSize)' == ''">5120KB</EmccStackSize>
 
         <PublishTrimmed Condition="'$(PublishTrimmed)' == ''">true</PublishTrimmed>
-        <TrimmerSingleWarn Condition="'$(TrimmerSingleWarn)' == ''">false</TrimmerSingleWarn>
+        <!-- partial: only assemblies that declare trim-compatibility
+             (<IsTrimmable>true</IsTrimmable> - the BCL, twodog, the game
+             project) are member-trimmed; GodotSharp is not trim-annotated
+             upstream (see its csproj) and is preserved whole.
+             TrimmerSingleWarn stays at the SDK default (true): GodotSharp's
+             unannotated reflection internals produce trim-analysis warnings
+             that roll up into a single IL2104 line per publish - that one
+             line is the truthful status until GodotSharp is annotated
+             upstream. Set TrimmerSingleWarn=false to see the full detail
+             (useful when diagnosing trimming of your own assemblies). -->
+        <TrimMode Condition="'$(TrimMode)' == ''">partial</TrimMode>
 
         <!-- No GodotPlugins.dll on web: plugin init flows through the game's
              registered function pointer (see twodog.Engine.RegisterWebPluginsInitializer). -->
