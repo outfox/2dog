@@ -55,9 +55,10 @@ internal static unsafe partial class WebHost
     private static nint LoadFromExecutable() => _pluginsInitializer;
 
     /// <summary>
-    /// Stores the game's godot_plugins_initialize function pointer (from the
-    /// source-generated <c>GodotPlugins.Game.Main.GetInitializePointer()</c>)
-    /// and registers it with libgodot. Must happen before the engine starts.
+    /// Stores the game's godot_plugins_initialize function pointer (the
+    /// source-generated <c>GodotPlugins.Game.Main.InitializeFromGameProject</c>,
+    /// exposed by the template's <c>TwoDogWebBoot.cs</c>) and registers it
+    /// with libgodot. Must happen before the engine starts.
     /// </summary>
     internal static void RegisterPluginsInitializer(nint initializer)
     {

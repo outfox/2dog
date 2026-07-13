@@ -7,9 +7,9 @@
         <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-        <!-- Exposes the source-generated GodotPlugins.Game.Main.GetInitializePointer()
-             used by web (browser-wasm) hosts; harmless on desktop. The generated
-             method takes a function pointer, hence unsafe. -->
+        <!-- Compiles the TwoDogWebBoot.cs bootstrap used by web (browser-wasm)
+             hosts; harmless on desktop. It takes a function pointer to the
+             source-generated plugins initializer, hence unsafe. -->
         <DefineConstants>$(DefineConstants);LIBGODOT_ENABLED</DefineConstants>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>

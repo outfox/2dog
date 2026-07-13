@@ -15,8 +15,8 @@ with a single `dotnet publish`.
 # One-time: the .NET wasm build tools (ships its own Emscripten)
 dotnet workload install wasm-tools
 
-# Create a project with the web host included
-dotnet new 2dog -n LetsCook --web
+# Create a project - the web host is included by default
+dotnet new 2dog -n LetsCook
 
 # Publish the browser app (imports assets and exports the game
 # content automatically)
@@ -63,17 +63,16 @@ The template does this for you; for an existing setup you need:
    - `<DefineConstants>$(DefineConstants);LIBGODOT_ENABLED</DefineConstants>`
      and `<AllowUnsafeBlocks>true</AllowUnsafeBlocks>` in the csproj (exposes
      the source-generated plugins initializer),
-   - a `TwoDogWebBoot.cs` exposing
-     `GodotPlugins.Game.Main.GetInitializePointer()` (copy it from the
-     template  –  it must live in the Godot project's assembly, where scripts
-     are looked up),
+   - a `TwoDogWebBoot.cs` exposing a pointer to the source-generated plugins
+     initializer (copy it from the template  –  it must live in the Godot
+     project's assembly, where scripts are looked up),
    - an `export_presets.cfg` with a `Web` preset,
    - a solution file next to `project.godot` (GodotTools requires one during
      export).
 2. **A web host project** (net10.0+, `RuntimeIdentifier=browser-wasm`)
    referencing the `2dog` and `2dog.browser-wasm` packages, with
    `<GodotProjectDir>` pointing at the Godot project  –  again, easiest copied
-   from a `dotnet new 2dog --web` output.
+   from a `dotnet new 2dog` output.
 
 ::: warning Godot project at the repository root?
 If `project.godot` lives at your repo root (common for jam projects), two

@@ -74,8 +74,8 @@ while (!godot.Iteration())
 # Install the template (bundled in the main 2dog package)
 dotnet new install 2dog
 
-# Create a new project (optionally with xUnit tests)
-dotnet new 2dog --tests True -n MyGame
+# Create a new project (includes xUnit tests and a web host by default)
+dotnet new 2dog -n MyGame
 
 # Navigate into the project
 cd MyGame

@@ -54,14 +54,14 @@
     "tests": {
       "type": "parameter",
       "datatype": "bool",
-      "description": "If specified, includes a test project with xUnit (v3) and the 2dog.xunit collection fixtures.",
-      "defaultValue": "false"
+      "description": "Include a test project with xUnit (v3) and the 2dog.xunit collection fixtures. Included by default; pass '--tests false' to omit.",
+      "defaultValue": "true"
     },
     "web": {
       "type": "parameter",
       "datatype": "bool",
-      "description": "If specified, includes a browser (WebAssembly) host project. Requires a .NET 10+ SDK with the wasm-tools workload.",
-      "defaultValue": "false"
+      "description": "Include a browser (WebAssembly) host project. Requires a .NET 10+ SDK with the wasm-tools workload to build. Included by default; pass '--web false' to omit.",
+      "defaultValue": "true"
     }
   },
   "sources": [
