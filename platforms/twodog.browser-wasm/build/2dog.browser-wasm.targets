@@ -178,10 +178,19 @@
         <_TwoDogWebPackPath>$(BaseIntermediateOutputPath)twodog-web/$(TwoDogWebPackName)</_TwoDogWebPackPath>
     </PropertyGroup>
 
-    <Target Name="TwoDogExportPack"
+    <!-- Export incrementality inputs: the export must NOT borrow
+         @(TwoDogImportInputs) - that item is only populated when
+         TwoDogAutoImport is enabled, and an incremental target with empty
+         Inputs is silently skipped, shipping a bundle without the pck. -->
+    <ItemGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != ''">
+        <TwoDogWebExportInputs Include="$(TwoDogGodotProjectFullPath)/**/*"
+                               Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;$(TwoDogGodotProjectFullPath)/bin/**;$(TwoDogGodotProjectFullPath)/obj/**;$(TwoDogGodotProjectFullPath)/**/*.tmp;$(TwoDogGodotProjectFullPath)/**/.DS_Store"/>
+    </ItemGroup>
+
+    <Target Name="TwoDogExportGamePack"
             BeforeTargets="Publish"
             AfterTargets="Build"
-            Inputs="@(TwoDogImportInputs)"
+            Inputs="@(TwoDogWebExportInputs)"
             Outputs="$(_TwoDogWebPackPath)"
             Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 
