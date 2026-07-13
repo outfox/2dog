@@ -51,7 +51,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.tools", "platforms\t
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo.web", "demo.web\demo.web.csproj", "{94ADBCD0-644C-4F2A-A07D-A8BABF689A3D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "twodog.browser-wasm", "twodog.browser-wasm", "{E707D8D4-4EAD-8EA5-F406-1B7388F46BA5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "browser-wasm", "browser-wasm", "{E707D8D4-4EAD-8EA5-F406-1B7388F46BA5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.browser-wasm.release", "platforms\twodog.browser-wasm\twodog.browser-wasm.release.csproj", "{FDE5BF15-698A-48AF-B904-A62BE032F8FD}"
 EndProject
