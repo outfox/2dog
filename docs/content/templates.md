@@ -21,35 +21,43 @@ dotnet new install ./templates/twodog
 
 ## Creating Projects
 
-### Basic Project
+### Full Project (Default)
 
-Create a minimal 2dog application with a sample Godot project:
+Create a 2dog application with the full capability spectrum  –  desktop host,
+sample Godot project, xUnit tests, and a browser (WebAssembly) host:
 
 ```bash
 dotnet new 2dog -n MyGame
 cd MyGame
-dotnet run
+dotnet run --project MyGame
 ```
 
 This creates:
-- `MyGame/MyGame.csproj` - Project file with 2dog package references
+- `MyGame/MyGame.csproj` - Desktop host with 2dog package references
 - `MyGame/Program.cs` - Minimal working application
 - `MyGame.Godot/` - Sample Godot project with a simple scene
+- `MyGame.Tests/` - xUnit test project with 2dog.xunit fixtures and sample tests
+- `MyGame.Web/` - Browser (wasm) host that publishes the game as a static site
 - `.editorconfig` - .NET coding conventions
 - `.gitignore` - Standard ignores for .NET and Godot
 
-### Project with Tests
+::: tip Web host prerequisites
+Building `MyGame.Web` requires a .NET 10+ SDK with the wasm-tools workload
+(`dotnet workload install wasm-tools`)  –  see [Web / Browser](/web). The rest
+of the solution builds without it.
+:::
 
-Create a project with an xUnit test project:
+### Opting Out
+
+Each optional project can be excluded:
 
 ```bash
-dotnet new 2dog -n MyGame --tests
-```
+# Without the test project
+dotnet new 2dog -n MyGame --tests false
 
-This creates everything from the basic template plus:
-- `MyGame.Tests/` - xUnit test project
-  - `MyGame.Tests.csproj` - Test project with 2dog.xunit reference
-  - `BasicTests.cs` - Sample tests with GodotHeadlessFixture
+# Without the web host
+dotnet new 2dog -n MyGame --web false
+```
 
 ## Template Structure
 
@@ -67,9 +75,14 @@ MyGame/
 │   ├── MyGame.Godot.csproj # Godot.NET.Sdk project file
 │   ├── project.godot       # Godot project file
 │   └── main.tscn           # Main scene
-├── MyGame.Tests/           # Optional test project
+├── MyGame.Tests/           # Test project (--tests false to omit)
 │   ├── MyGame.Tests.csproj
 │   └── BasicTests.cs
+├── MyGame.Web/             # Browser (wasm) host (--web false to omit)
+│   ├── MyGame.Web.csproj
+│   ├── Program.cs
+│   ├── global.json         # Pins a .NET 10+ SDK for this directory
+│   └── wwwroot/index.html
 ├── .editorconfig           # Code style settings
 └── .gitignore              # Git ignores
 ```
@@ -159,8 +172,9 @@ You can replace these with your own Godot project files or edit them in the Godo
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `-n, --name` | string | (required) | Name of the project to create |
-| `--tests` | bool | `false` | Include a test project with xUnit and 2dog.xunit |
-| `--skip-restore` | bool | `false` | Skip automatic NuGet package restore |
+| `--tests` | bool | `true` | Include a test project with xUnit and 2dog.xunit |
+| `--web` | bool | `true` | Include a browser (WebAssembly) host project |
+| `--skipRestore` | bool | `false` | Skip automatic NuGet package restore |
 | `--twodogVersion` | string | (current release) | Version of 2dog packages to reference |
 | `--nativesVersion` | string | (current release) | Version of native platform packages to reference |
 | `--godotVersion` | string | (current release) | Version of Godot.NET.Sdk to reference |
@@ -168,14 +182,14 @@ You can replace these with your own Godot project files or edit them in the Godo
 ### Examples
 
 ```bash
-# Basic project
+# Full project (app + Godot project + tests + web host)
 dotnet new 2dog -n CoolGame
 
-# With tests
-dotnet new 2dog -n CoolGame --tests
+# Without tests or web host
+dotnet new 2dog -n CoolGame --tests false --web false
 
 # Skip automatic restore (useful for CI)
-dotnet new 2dog -n CoolGame --skip-restore
+dotnet new 2dog -n CoolGame --skipRestore
 ```
 
 ## Working with Generated Projects
@@ -194,7 +208,7 @@ dotnet build -c Release
 dotnet run -c Release
 ```
 
-### Running Tests (if --tests was used)
+### Running Tests
 
 See the [Testing](/testing) guide for details on test fixtures and setup.
 

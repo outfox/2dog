@@ -10,7 +10,8 @@ The `twodog` template creates a complete 2dog application with:
 - **Sample Godot project** - Basic project.godot with a simple scene
 - **.editorconfig** - Standard .NET coding conventions
 - **.gitignore** - Ignores for .NET and Godot artifacts
-- **Optional test project** - xUnit (v3) tests with 2dog.xunit collection fixtures (use `--tests` flag)
+- **Test project** - xUnit (v3) tests with 2dog.xunit collection fixtures (included by default; `--tests false` to omit)
+- **Web host project** - Browser (WebAssembly) host that publishes the game as a static site (included by default; `--web false` to omit)
 
 ## Local Development
 
@@ -24,11 +25,14 @@ dotnet new install ./templates/twodog
 ### Creating Projects
 
 ```bash
-# Basic project
+# Full project (app + Godot project + tests + web host)
 dotnet new 2dog -n MyGame
 
-# With tests (requires 2dog.xunit package)
-dotnet new 2dog -n MyGame --tests
+# Without the test project
+dotnet new 2dog -n MyGame --tests false
+
+# Without the web host (e.g. no .NET 10 SDK / wasm-tools on this machine)
+dotnet new 2dog -n MyGame --web false
 ```
 
 ### Uninstalling the Template
@@ -51,9 +55,14 @@ templates/
     ├── Company.Product1.Godot/    # Sample Godot project
     │   ├── project.godot
     │   └── main.tscn
-    ├── Company.Product1.Tests/    # Optional test project
+    ├── Company.Product1.Tests/    # Test project (default; --tests false to omit)
     │   ├── Company.Product1.Tests.csproj
     │   └── BasicTests.cs
+    ├── Company.Product1.Web/      # Browser (wasm) host (default; --web false to omit)
+    │   ├── Company.Product1.Web.csproj
+    │   ├── Program.cs
+    │   ├── global.json
+    │   └── wwwroot/index.html
     ├── .editorconfig
     └── .gitignore
 ```
@@ -62,8 +71,9 @@ templates/
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `--tests` | bool | false | Include a test project with xUnit (v3) and 2dog.xunit collection fixtures |
-| `--skip-restore` | bool | false | Skip automatic NuGet restore after creation |
+| `--tests` | bool | true | Include a test project with xUnit (v3) and 2dog.xunit collection fixtures |
+| `--web` | bool | true | Include a browser (WebAssembly) host project (building it requires a .NET 10+ SDK with the wasm-tools workload) |
+| `--skipRestore` | bool | false | Skip automatic NuGet restore after creation |
 
 ## Symbol Replacements
 
@@ -86,20 +96,28 @@ dotnet new install 2dog
 
 ## Known Limitations
 
-### `--tests` Requires 2dog.xunit Package
+### Test Project Requires 2dog.xunit Package
 
-The `--tests` option creates a test project that references `2dog.xunit`, which needs to be packaged and published separately.
+The test project (included by default) references `2dog.xunit`, which needs to be packaged and published separately.
 
-**To enable the test option:**
+**To make it resolve:**
 
 1. Package `2dog.xunit` as a NuGet package (it depends on `2dog`, which carries the fixtures)
 2. Publish it to NuGet or a local feed
-3. Ensure it's available when creating projects with `--tests`
+3. Ensure it's available when creating projects
 
 **Alternatively**, for local development:
 
-- Create the project without `--tests`
+- Create the project with `--tests false`
 - Manually add a test project with project references to local 2dog projects
+
+### Web Host Requires .NET 10+ and wasm-tools
+
+The web host project (included by default) targets `net10.0` with
+`RuntimeIdentifier=browser-wasm`. Building/publishing it requires a .NET 10+
+SDK with the wasm-tools workload (`dotnet workload install wasm-tools`). The
+rest of the solution builds fine without it; create with `--web false` to omit
+the project entirely.
 
 ## Template Configuration
 
@@ -116,7 +134,13 @@ The template is defined in `.template.config/template.json`:
       "type": "parameter",
       "datatype": "bool",
       "description": "Include a test project",
-      "defaultValue": "false"
+      "defaultValue": "true"
+    },
+    "web": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Include a browser (WebAssembly) host project",
+      "defaultValue": "true"
     }
   }
 }

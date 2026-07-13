@@ -88,8 +88,8 @@ public class Engine(string project, string? path = null, params string[] args) :
             if (!WebHost.HasPluginsInitializer)
                 throw new InvalidOperationException(
                     $"{nameof(Engine)}: On browser, call {nameof(RegisterWebPluginsInitializer)}() with " +
-                    "GodotPlugins.Game.Main.GetInitializePointer() (source-generated into the game " +
-                    "assembly; requires the LIBGODOT_ENABLED define) before Start().");
+                    "the game assembly's plugins-initializer pointer (see TwoDogWebBoot.cs in the " +
+                    "2dog template; requires the LIBGODOT_ENABLED define) before Start().");
         }
         else
         {
@@ -154,9 +154,11 @@ public class Engine(string project, string? path = null, params string[] args) :
 
     /// <summary>
     /// Registers the game's GodotPlugins initializer for browser (wasm) hosts.
-    /// Pass the value of <c>GodotPlugins.Game.Main.GetInitializePointer()</c>,
-    /// which is source-generated into the game assembly when it is compiled
-    /// with the <c>LIBGODOT_ENABLED</c> define. Must be called before
+    /// Pass a pointer to the source-generated
+    /// <c>GodotPlugins.Game.Main.InitializeFromGameProject</c> in the game
+    /// assembly, exposed by the template's <c>TwoDogWebBoot.cs</c> when the
+    /// game project is compiled with the <c>LIBGODOT_ENABLED</c> define.
+    /// Must be called before
     /// <see cref="Start"/>. No-op requirement on desktop (throws there to
     /// catch misuse early).
     /// </summary>
