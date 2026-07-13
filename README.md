@@ -49,7 +49,7 @@ while (!godot.Iteration())
 ## Features
 
 - 🆕 WASM support! 🔥 (deploy and play your C# Godot game in the browser!)
-- Custom .NET-first project structure
+- Custom .NET-first project structure (parallel to Godot project - no code changes needed)
 - Familiar GodotSharp API (fully compatible with official Godot)
 - Automatic asset import during `dotnet build` - no Godot editor installation needed
 - Three build configurations: Debug, Release, and Editor (with `TOOLS_ENABLED`)
