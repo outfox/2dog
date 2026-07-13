@@ -87,16 +87,29 @@ internal static unsafe partial class WebHost
 
         // Run the first frame immediately (mirrors the reference host in
         // Godot's LibGodotMain.cs); the engine may already request quit here.
-        if (libgodot_web_iteration() != 0)
-        {
-            SetupExit();
-        }
+        RunFrame();
     }
 
     [UnmanagedCallersOnly]
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static void MainLoopCallback()
     {
+        RunFrame();
+    }
+
+    /// <summary>
+    /// One frame with the same semantics as the desktop Run() loop: iterate
+    /// the engine first, then invoke the per-frame callback - and skip the
+    /// callback on the final iteration that requests quit.
+    /// </summary>
+    private static void RunFrame()
+    {
+        if (libgodot_web_iteration() != 0)
+        {
+            SetupExit();
+            return;
+        }
+
         var perFrame = _perFrame;
         if (perFrame != null)
         {
@@ -109,11 +122,6 @@ internal static unsafe partial class WebHost
                 // Exceptions must not escape into the emscripten loop.
                 Console.Error.WriteLine(e);
             }
-        }
-
-        if (libgodot_web_iteration() != 0)
-        {
-            SetupExit();
         }
     }
 

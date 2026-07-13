@@ -46,7 +46,7 @@ internal static class WebTrampolines
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
     public delegate Godot.Error godotsharp_stack_info_vector_resize_sig(IntPtr _0, int _1);
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
-    public delegate Godot.Error godotsharp_internal_signal_awaiter_connect_sig(IntPtr _0, IntPtr _1, IntPtr _3, IntPtr _4);
+    public delegate Godot.Error godotsharp_internal_signal_awaiter_connect_sig(IntPtr _0, IntPtr _1, IntPtr _2, IntPtr _3);
 
     // twodog-specific: signatures used via GDExtension interface calli.
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
