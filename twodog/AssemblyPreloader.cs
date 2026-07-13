@@ -27,6 +27,11 @@ public static class AssemblyPreloader
                         "fixtures are test-time only and never part of a trimmed/published app.")]
     public static void PreloadGameAssemblies(string projectPath)
     {
+        // On browser (wasm) all assemblies are part of the published bundle
+        // and live in the single default AssemblyLoadContext already; there
+        // is no .godot/mono/temp/bin on disk to probe.
+        if (OperatingSystem.IsBrowser()) return;
+
         try
         {
             var gameAssemblyPaths = FindGameAssemblies(projectPath);
