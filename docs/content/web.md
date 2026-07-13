@@ -121,5 +121,5 @@ publish**. That cost is inherent to static linking, so iterate the fast way:
 - **One `IL2104` trim warning** per publish is expected: GodotSharp is not
   trim-annotated upstream and is deliberately preserved whole. Your own
   assemblies are still trimmed and fully analyzed.
-- The .NET SDK for the web host must be **10.0+** with the `wasm-tools`
-  workload; the game project itself stays on net8.0.
+- The .NET SDK must be **10.0+** with the `wasm-tools` workload for the web
+  host; the game project targets net10.0 like every other project.

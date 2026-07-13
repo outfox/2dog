@@ -38,11 +38,11 @@ export default defineConfig({
     ['meta', { name: "twitter:title", content: "2dog – Run your Godot projects from .NET!" }],
     ['meta', { name: "twitter:image", content: "https://2dog.dev/og-image.png" }],
     ['meta', { name: "twitter:image:alt", content: "2dog logo - a happy white dog" }],
-    ['meta', { name: "twitter:description", content: "Godot... backwards? Embed Godot Engine in your .NET applications. Full engine control, xUnit testing, and CI/CD support." }],
+    ['meta', { name: "twitter:description", content: "Godot... backwards? Embed Godot Engine in your .NET applications. Full engine control, CI/CD testing, and WASM support." }],
     ['meta', { property: "og:type", content: "website" }],
     ['meta', { property: "og:url", content: "https://2dog.dev" }],
     ['meta', { property: "og:title", content: "2dog – Run your Godot projects from .NET!" }],
-    ['meta', { property: "og:description", content: "Godot... backwards? Embed Godot Engine in your .NET applications. Full engine control, xUnit testing, and CI/CD support." }],
+    ['meta', { property: "og:description", content: "Godot... backwards? Embed Godot Engine in your .NET applications. Full engine control, CI/CD testing, and WASM support." }],
     ['meta', { property: "og:image", content: "https://2dog.dev/og-image.png" }],
   ],
 

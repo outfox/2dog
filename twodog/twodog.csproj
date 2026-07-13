@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <IsTrimmable>true</IsTrimmable>
         <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
     </PropertyGroup>
@@ -88,7 +88,7 @@
 
     <!--
       Embed GodotSharp assemblies and source generators in the package.
-      GodotSharp.dll goes in lib/net8.0/ alongside twodog.dll so consumers
+      GodotSharp.dll goes in lib/net10.0/ alongside twodog.dll so consumers
       get it as a transitive compile reference without needing a separate
       GodotSharp NuGet dependency.
       Godot.SourceGenerators.dll goes in analyzers/dotnet/cs/ so it runs
@@ -99,8 +99,8 @@
         <GodotSourceGenDir>$(MSBuildProjectDirectory)/../godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/</GodotSourceGenDir>
     </PropertyGroup>
     <ItemGroup>
-        <None Include="$(GodotSharpApiDir)GodotSharp.dll" Pack="true" PackagePath="lib/net8.0/" Visible="false"/>
-        <None Include="$(GodotSharpApiDir)GodotSharp.xml" Pack="true" PackagePath="lib/net8.0/" Visible="false" Condition="Exists('$(GodotSharpApiDir)GodotSharp.xml')"/>
+        <None Include="$(GodotSharpApiDir)GodotSharp.dll" Pack="true" PackagePath="lib/net10.0/" Visible="false"/>
+        <None Include="$(GodotSharpApiDir)GodotSharp.xml" Pack="true" PackagePath="lib/net10.0/" Visible="false" Condition="Exists('$(GodotSharpApiDir)GodotSharp.xml')"/>
         <None Include="$(GodotSourceGenDir)Godot.SourceGenerators.dll" Pack="true" PackagePath="analyzers/dotnet/cs/" Visible="false"/>
     </ItemGroup>
 
@@ -113,7 +113,7 @@
     <!--
       Include GodotPlugins assemblies in the package.
       GodotPlugins needs to be copied to the output directory at runtime,
-      so it goes in build/api/ rather than lib/net8.0/.
+      so it goes in build/api/ rather than lib/net10.0/.
     -->
     <PropertyGroup>
         <!-- GODOTSHARP_DIR env var (highest priority) for locating GodotPlugins -->
@@ -127,9 +127,9 @@
     </ItemGroup>
 
     <!--
-      Import helper: published into tools/net8.0/ and invoked by the
+      Import helper: published into tools/net10.0/ and invoked by the
       TwoDogImportGodotProject target (see build/2dog.targets) as
-      `dotnet exec tools/net8.0/2dog.import.dll`. Carries GodotSharp and
+      `dotnet exec tools/net10.0/2dog.import.dll`. Carries GodotSharp and
       GodotSharpEditor copy-local so GodotPlugins' Assembly.Load calls
       resolve in the helper process.
     -->
@@ -146,7 +146,7 @@
         <ItemGroup>
             <None Include="../twodog.import/bin/tools-publish/**/*"
                   Exclude="../twodog.import/bin/tools-publish/**/*.pdb;../twodog.import/bin/tools-publish/**/*.xml;../twodog.import/bin/tools-publish/**/*.exe"
-                  Pack="true" PackagePath="tools\net8.0\" Visible="false"/>
+                  Pack="true" PackagePath="tools\net10.0\" Visible="false"/>
         </ItemGroup>
     </Target>
 
