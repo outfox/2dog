@@ -287,17 +287,20 @@ jobs:
           name: nuget-packages
           path: packages
 
+      # 2dog.tests.slnf excludes demo.web: its browser-wasm RuntimeIdentifier
+      # makes restore demand the (hefty) wasm-tools workload, which only the
+      # web-smoke job needs — and installs.
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore 2dog.tests.slnf
 
       - name: Test (Debug)
-        run: dotnet test -c Debug --no-restore
+        run: dotnet test 2dog.tests.slnf -c Debug --no-restore
 
       - name: Test (Release)
-        run: dotnet test -c Release --no-restore
+        run: dotnet test 2dog.tests.slnf -c Release --no-restore
 
       - name: Test (Editor)
-        run: dotnet test -c Editor --no-restore
+        run: dotnet test 2dog.tests.slnf -c Editor --no-restore
 
   # Publish the web demo end-to-end: statically links the web libgodot.a into
   # dotnet.native.wasm via the wasm-tools workload and asserts the app bundle
@@ -338,6 +341,13 @@ jobs:
 
       - name: Make Linux editor executable
         run: chmod +x godot/bin/godot.linuxbsd.editor.x86_64.executable.mono || true
+
+      # The publish exports game/ as godot.pck via the in-process import
+      # helper, discovered at twodog.import/bin/Release in source checkouts
+      # (twodog/build/2dog.targets). Must come after the godot-bin download:
+      # the helper references GodotSharp assemblies from godot/bin.
+      - name: Build import helper
+        run: dotnet build twodog.import -c Release
 
       - name: Publish demo.web
         working-directory: demo.web
