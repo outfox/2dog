@@ -181,8 +181,21 @@ jobs:
 
           # Native library zips contain the libraries under their original
           # Godot file names (e.g. godot.windows.editor.x86_64.shared_library.dll).
+          # Web (browser-wasm) zips contain the whole payload directory and are
+          # staged under godot/bin/web/<target>/ (the 2dog.browser-wasm pack
+          # location and the local-fallback path of its consumer targets).
           for z in release-assets/libgodot-*.zip; do
-            unzip -o "$z" -d godot/bin/
+            base=$(basename "$z" .zip)
+            case "$base" in
+              libgodot-browser-wasm-*)
+                target="${base#libgodot-browser-wasm-}"
+                mkdir -p "godot/bin/web/$target"
+                unzip -o "$z" -d "godot/bin/web/$target/"
+                ;;
+              *)
+                unzip -o "$z" -d godot/bin/
+                ;;
+            esac
           done
 
           # Releases created before the zips carried the Godot file names hold a
@@ -286,13 +299,78 @@ jobs:
       - name: Test (Editor)
         run: dotnet test -c Editor --no-restore
 
+  # Publish the web demo end-to-end: statically links the web libgodot.a into
+  # dotnet.native.wasm via the wasm-tools workload and asserts the app bundle
+  # is complete. Consumers never install emsdk — the workload ships the
+  # matching emscripten (see <EmscriptenVersion> in Directory.Build.props).
+  web-smoke:
+    name: Web Smoke (browser-wasm publish)
+    needs: [pack]
+    runs-on: blacksmith-8vcpu-ubuntu-2404
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Install wasm-tools workload
+        working-directory: demo.web
+        run: dotnet workload install wasm-tools
+
+      - name: Download godot-bin artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: godot-bin
+          path: godot
+
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages
+          path: packages
+
+      - name: Make Linux editor executable
+        run: chmod +x godot/bin/godot.linuxbsd.editor.x86_64.executable.mono || true
+
+      - name: Publish demo.web
+        working-directory: demo.web
+        run: dotnet publish -c Release
+
+      - name: Verify app bundle
+        run: |
+          BUNDLE=demo.web/AppBundle
+          for f in "$BUNDLE/godot.wasm" "$BUNDLE/godot.pck" "$BUNDLE/godot.js" "$BUNDLE/index.html" "$BUNDLE/_framework/dotnet.js"; do
+            if [ ! -f "$f" ]; then
+              echo "::error::Missing $f in the published app bundle"
+              ls -R "$BUNDLE" || true
+              exit 1
+            fi
+          done
+          # godot.wasm contains the statically linked engine — sanity floor.
+          SIZE=$(stat -c%s "$BUNDLE/godot.wasm")
+          echo "godot.wasm size: $SIZE bytes"
+          if [ "$SIZE" -lt 20000000 ]; then
+            echo "::error::godot.wasm is suspiciously small ($SIZE bytes) — engine may be missing from the link"
+            exit 1
+          fi
+          echo "Web app bundle OK"
+
   # Deploy to NuGet and create GitHub release when running on a version tag —
   # either pushed directly or dispatched on the tag by release.yml (tags pushed
   # with GITHUB_TOKEN don't fire push events, so release.yml dispatches instead).
   # Uses NuGet Trusted Publishing (OIDC) — no long-lived API key is stored.
   deploy:
     name: Deploy to NuGet
-    needs: [test]
+    # web-smoke gates deploy because the 2dog.browser-wasm packages it
+    # exercises are among the packages being published.
+    needs: [test, web-smoke]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:

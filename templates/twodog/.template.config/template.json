@@ -13,7 +13,8 @@
   "guids": [
     "B1A2C3D4-E5F6-4A7B-8C9D-0E1F2A3B4C5D",
     "A1B2C3D4-E5F6-7A8B-9C0D-1E2F3A4B5C6D",
-    "D5E6F7A8-B9C0-4D1E-2F3A-4B5C6D7E8F9A"
+    "D5E6F7A8-B9C0-4D1E-2F3A-4B5C6D7E8F9A",
+    "C7D8E9F0-A1B2-4C3D-8E9F-0A1B2C3D4E5F"
   ],
   "preferNameDirectory": true,
   "symbols": {
@@ -55,6 +56,12 @@
       "datatype": "bool",
       "description": "If specified, includes a test project with xUnit (v3) and the 2dog.xunit collection fixtures.",
       "defaultValue": "false"
+    },
+    "web": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "If specified, includes a browser (WebAssembly) host project. Requires a .NET 10+ SDK with the wasm-tools workload.",
+      "defaultValue": "false"
     }
   },
   "sources": [
@@ -64,6 +71,17 @@
           "condition": "(!tests)",
           "exclude": [
             "Company.Product1.Tests/**/*"
+          ]
+        },
+        {
+          "condition": "(!web)",
+          "exclude": [
+            "Company.Product1.Web/**/*"
+          ]
+        },
+        {
+          "copyOnly": [
+            "Company.Product1.Godot/TwoDogWebBoot.cs"
           ]
         }
       ]
@@ -79,6 +97,10 @@
     {
       "condition": "(tests)",
       "path": "Company.Product1.Tests/Company.Product1.Tests.csproj"
+    },
+    {
+      "condition": "(web)",
+      "path": "Company.Product1.Web/Company.Product1.Web.csproj"
     }
   ],
   "postActions": [

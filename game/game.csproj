@@ -7,6 +7,11 @@
         <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+        <!-- Exposes the source-generated GodotPlugins.Game.Main.GetInitializePointer()
+             used by web (browser-wasm) hosts; harmless on desktop. The generated
+             method takes a function pointer, hence unsafe. -->
+        <DefineConstants>$(DefineConstants);LIBGODOT_ENABLED</DefineConstants>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <Target Name="DeepClean" AfterTargets="Clean">
         <RemoveDir Directories="$(BaseIntermediateOutputPath)" />

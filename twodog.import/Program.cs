@@ -7,6 +7,8 @@ string? libgodotPath = null;
 string? apiDir = null;
 string? toolsDir = null;
 string? projectPath = null;
+string? exportPreset = null;
+string? exportOutput = null;
 var verbose = false;
 
 for (var i = 0; i < args.Length; i++)
@@ -25,6 +27,12 @@ for (var i = 0; i < args.Length; i++)
         case "--tools-dir" when i + 1 < args.Length:
             toolsDir = args[++i];
             break;
+        case "--export-pack" when i + 1 < args.Length:
+            exportPreset = args[++i];
+            break;
+        case "--output" when i + 1 < args.Length:
+            exportOutput = args[++i];
+            break;
         case "--verbose":
             verbose = true;
             break;
@@ -36,20 +44,27 @@ for (var i = 0; i < args.Length; i++)
 
 editorPath ??= Environment.GetEnvironmentVariable("GODOT_EDITOR");
 projectPath = projectPath != null ? Path.GetFullPath(projectPath) : null;
+exportOutput = exportOutput != null ? Path.GetFullPath(exportOutput) : null;
 
 if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot")) ||
-    (editorPath == null && libgodotPath == null))
+    (editorPath == null && libgodotPath == null) ||
+    (exportPreset != null && exportOutput == null))
 {
-    Console.Error.WriteLine("Usage: twodog.import [--libgodot <libgodot-library>] [--editor <godot-binary>] <path-to-godot-project>");
+    Console.Error.WriteLine("Usage: twodog.import [--libgodot <libgodot-library>] [--editor <godot-binary>]");
+    Console.Error.WriteLine("                     [--export-pack <preset> --output <pck-path>] <path-to-godot-project>");
     Console.Error.WriteLine();
     Console.Error.WriteLine("  --libgodot <path>  Path to an editor-variant libgodot shared library.");
     Console.Error.WriteLine("                     Runs the import in-process via libgodot_import_project.");
     Console.Error.WriteLine("  --api-dir <dir>    Directory containing GodotPlugins.dll (GODOTSHARP_DIR).");
     Console.Error.WriteLine("                     Defaults to the helper's own directory.");
     Console.Error.WriteLine("  --tools-dir <dir>  Directory containing GodotTools.dll (GODOT_TOOLS_DIR).");
-    Console.Error.WriteLine("  --editor <path>    Path to a Godot editor binary; runs the import as a");
-    Console.Error.WriteLine("                     subprocess. Falls back to the GODOT_EDITOR environment");
-    Console.Error.WriteLine("                     variable. Takes precedence over --libgodot.");
+    Console.Error.WriteLine("  --editor <path>    Path to a Godot editor binary; runs as a subprocess.");
+    Console.Error.WriteLine("                     Falls back to the GODOT_EDITOR environment variable.");
+    Console.Error.WriteLine("                     Takes precedence over --libgodot.");
+    Console.Error.WriteLine("  --export-pack <preset>  Instead of importing, export the project's");
+    Console.Error.WriteLine("                     content as a .pck using the named export preset");
+    Console.Error.WriteLine("                     (from export_presets.cfg). Requires --output.");
+    Console.Error.WriteLine("  --output <path>    Output .pck path for --export-pack.");
     Console.Error.WriteLine("  --verbose          Pass --verbose to the engine.");
     Console.Error.WriteLine();
     Console.Error.WriteLine("  The project path must contain a project.godot file.");
@@ -82,10 +97,20 @@ if (editorPath != null)
         StartInfo = new ProcessStartInfo
         {
             FileName = editorPath,
-            ArgumentList = { "--headless", "--import", "--path", projectPath },
             UseShellExecute = false,
         }
     };
+    if (exportPreset != null)
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(exportOutput!)!);
+        foreach (var a in new[] { "--headless", "--export-pack", exportPreset, exportOutput!, "--path", projectPath })
+            process.StartInfo.ArgumentList.Add(a);
+    }
+    else
+    {
+        foreach (var a in new[] { "--headless", "--import", "--path", projectPath })
+            process.StartInfo.ArgumentList.Add(a);
+    }
     if (verbose) process.StartInfo.ArgumentList.Add("--verbose");
 
     process.Start();
@@ -122,28 +147,44 @@ SetEnv("GODOTSHARP_DIR", apiDir);
 SetEnv("GODOT_TOOLS_DIR", toolsDir);
 
 var lib = NativeLibrary.Load(Path.GetFullPath(libgodotPath!));
-if (!NativeLibrary.TryGetExport(lib, "libgodot_import_project", out var export))
+var exportName = exportPreset != null ? "libgodot_export_pack" : "libgodot_import_project";
+if (!NativeLibrary.TryGetExport(lib, exportName, out var export))
 {
-    Console.Error.WriteLine($"libgodot_import_project export not found in {libgodotPath} - is this libgodot too old?");
+    Console.Error.WriteLine($"{exportName} export not found in {libgodotPath} - is this libgodot too old?");
     return 1;
 }
 
 int rc;
 unsafe
 {
-    var import = (delegate* unmanaged[Cdecl]<byte*, int, byte**, int>)export;
     var projectUtf8 = Encoding.UTF8.GetBytes(projectPath + "\0");
     var verboseUtf8 = "--verbose\0"u8.ToArray();
     fixed (byte* pProject = projectUtf8)
     fixed (byte* pVerbose = verboseUtf8)
     {
         var extra = stackalloc byte*[1] { pVerbose };
-        rc = import(pProject, verbose ? 1 : 0, verbose ? extra : null);
+        if (exportPreset != null)
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(exportOutput!)!);
+            var exportPack = (delegate* unmanaged[Cdecl]<byte*, byte*, byte*, int, byte**, int>)export;
+            var presetUtf8 = Encoding.UTF8.GetBytes(exportPreset + "\0");
+            var outputUtf8 = Encoding.UTF8.GetBytes(exportOutput + "\0");
+            fixed (byte* pPreset = presetUtf8)
+            fixed (byte* pOutput = outputUtf8)
+            {
+                rc = exportPack(pProject, pPreset, pOutput, verbose ? 1 : 0, verbose ? extra : null);
+            }
+        }
+        else
+        {
+            var import = (delegate* unmanaged[Cdecl]<byte*, int, byte**, int>)export;
+            rc = import(pProject, verbose ? 1 : 0, verbose ? extra : null);
+        }
     }
 }
 
 if (rc == -1)
-    Console.Error.WriteLine($"{libgodotPath} is not an editor build of libgodot; import requires the editor variant.");
+    Console.Error.WriteLine($"{libgodotPath} is not an editor build of libgodot; {(exportPreset != null ? "export" : "import")} requires the editor variant.");
 
 // Engine cleanup can leave non-background threads; exit hard so the helper
 // process reliably terminates.

@@ -48,13 +48,14 @@ while (!godot.Iteration())
 
 ## Features
 
-- Godot as an embedded library (libgodot)
-- Full GodotSharp API access
+- 🆕 WASM support! 🔥 (deploy and play your C# Godot game in the browser!)
 - Custom .NET-first project structure
+- Familiar GodotSharp API (fully compatible with official Godot)
 - Automatic asset import during `dotnet build` - no Godot editor installation needed
 - Three build configurations: Debug, Release, and Editor (with `TOOLS_ENABLED`)
+- Easy `dotnet new` project templates to get started!
+- Godot as an embedded library (libgodot), precompiled and on nuget!
 - xUnit test fixtures (`GodotFixture`, `GodotHeadlessFixture`)
-- `dotnet new` project templates
 - Headless mode for servers and CI/CD
 
 > **Prerelease packages are now available on NuGet!** Supported platforms: `win-x64`, `linux-x64`, `osx-arm64`.

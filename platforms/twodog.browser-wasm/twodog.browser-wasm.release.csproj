@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Platform-specific configuration -->
+    <PropertyGroup>
+        <PlatformRID>browser-wasm</PlatformRID>
+        <PlatformOS>web</PlatformOS>
+        <BuildVariant>template_release</BuildVariant>
+        <PackageSuffix>.release</PackageSuffix>
+        <Description>Browser (wasm) release payload for twodog: static libgodot archive, emscripten JS glue and the Godot web boot shell, statically linked into your dotnet publish. Reference 2dog.browser-wasm instead of this package directly.</Description>
+    </PropertyGroup>
+</Project>

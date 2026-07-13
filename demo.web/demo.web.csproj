@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!--
+      Browser-wasm host demo.
+
+      All web wiring (static link of libgodot.a, emcc flags, boot shell
+      deployment, automatic .pck export) comes from the 2dog.browser-wasm
+      package targets. This project consumes them via source-checkout imports
+      below; package consumers get the same thing automatically from
+      PackageReference 2dog + 2dog.browser-wasm (see the 2dog web template).
+
+      Publish:  dotnet publish -c Release        (run from this directory)
+      Output:   AppBundle/ - serve with any static file server.
+    -->
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <PropertyGroup>
+        <GodotProjectDir>../game</GodotProjectDir>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../twodog/twodog.csproj"/>
+        <ProjectReference Include="../game/game.csproj"/>
+    </ItemGroup>
+
+    <!-- Root the game assembly: scripts are resolved by reflection.
+         (GodotSharp and twodog are rooted by the browser-wasm targets.) -->
+    <ItemGroup>
+        <TrimmerRootAssembly Include="game"/>
+        <TrimmerRootAssembly Include="$(TargetName)"/>
+    </ItemGroup>
+
+    <!-- Source-checkout equivalents of the NuGet package targets:
+         2dog.targets (GodotProjectDir plumbing, import helper discovery),
+         the host-OS desktop meta targets (TwoDogEditorLibGodotPath for the
+         build-time .pck export), and the browser-wasm targets (all web
+         wiring). Package consumers get these transitively. -->
+    <Import Project="../twodog/build/2dog.targets"/>
+    <Import Project="../platforms/twodog.win-x64/build/2dog.win-x64.targets" Condition="$([MSBuild]::IsOSPlatform('Windows'))"/>
+    <Import Project="../platforms/twodog.linux-x64/build/2dog.linux-x64.targets" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
+    <Import Project="../platforms/twodog.osx-arm64/build/2dog.osx-arm64.targets" Condition="$([MSBuild]::IsOSPlatform('OSX'))"/>
+    <Import Project="../platforms/twodog.browser-wasm/build/2dog.browser-wasm.targets"/>
+
+    <!-- Remove duplicate Godot.SourceGenerators that flow from game's
+         Godot.NET.Sdk. The host must not compile a second GodotPlugins.Game
+         initializer - the game assembly owns it (script lookup happens in
+         that assembly). -->
+    <Target Name="RemoveDuplicateGodotAnalyzers" BeforeTargets="CoreCompile">
+        <ItemGroup>
+            <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Identity)').Contains('Godot.SourceGenerators'))"/>
+        </ItemGroup>
+    </Target>
+
+    <Target Name="DeepClean" AfterTargets="Clean">
+        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
+        <RemoveDir Directories="$(BaseOutputPath)"/>
+        <RemoveDir Directories="AppBundle"/>
+    </Target>
+</Project>

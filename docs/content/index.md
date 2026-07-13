@@ -39,6 +39,10 @@ features:
     details: Your .NET process controls Godot, not the other way around. Start, iterate, and stop the engine when you decide.
   - title: 🧪 First-Class Testing
     details: Built-in xUnit fixtures for testing Godot code. Run headless in CI/CD pipelines.
+  - title: 🌐 C# Games on the Web
+    details: Publish your C# game as a static site with one dotnet publish  -  something stock Godot + C# can't do today.
+    link: /web
+    linkText: Run in the browser
 
 ---
 

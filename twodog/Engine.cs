@@ -17,6 +17,8 @@ public class Engine(string project, string? path = null, params string[] args) :
     // called must not tear down an instance started by another Engine.
     private bool _ownsInstance;
 
+    private GodotInstance? _godotInstance;
+
     // .NET's Environment.SetEnvironmentVariable does not propagate to native getenv()
     // on Linux/.NET 8+. We must call setenv directly for Godot's native code to see it.
     [DllImport("libc", SetLastError = true)]
@@ -63,6 +65,10 @@ public class Engine(string project, string? path = null, params string[] args) :
     public void Dispose()
     {
         if (!_ownsInstance || _godotInstancePtr == IntPtr.Zero) return;
+        // On web, emscripten owns the main loop after Run(); the instance is
+        // destroyed by the engine's own quit flow (WebHost.ExitCallback), not
+        // by the host disposing on the way out of Main().
+        if (OperatingSystem.IsBrowser() && WebHost.MainLoopActive) return;
         _ownsInstance = false;
         Destroy();
     }
@@ -74,12 +80,24 @@ public class Engine(string project, string? path = null, params string[] args) :
                 $"{nameof(Engine)}: A Godot instance is already running. Only one instance may exist at a time " +
                 "(a Godot limitation) - dispose the previous Engine before starting a new one.");
 
-        // Ensure GODOTSHARP_DIR points to the directory containing GodotPlugins.dll.
-        // When the host process is not in the output directory (e.g. dotnet test
-        // uses /usr/share/dotnet/dotnet), Godot's exe_dir fallback won't work.
-        // Must use native setenv on Unix because .NET's SetEnvironmentVariable
-        // doesn't propagate to native getenv() on Linux/.NET 8+.
+        if (OperatingSystem.IsBrowser())
         {
+            // No filesystem hosting on web: the game's plugins initializer
+            // function pointer must have been registered up front (there is
+            // no GodotPlugins.dll to load).
+            if (!WebHost.HasPluginsInitializer)
+                throw new InvalidOperationException(
+                    $"{nameof(Engine)}: On browser, call {nameof(RegisterWebPluginsInitializer)}() with " +
+                    "GodotPlugins.Game.Main.GetInitializePointer() (source-generated into the game " +
+                    "assembly; requires the LIBGODOT_ENABLED define) before Start().");
+        }
+        else
+        {
+            // Ensure GODOTSHARP_DIR points to the directory containing GodotPlugins.dll.
+            // When the host process is not in the output directory (e.g. dotnet test
+            // uses /usr/share/dotnet/dotnet), Godot's exe_dir fallback won't work.
+            // Must use native setenv on Unix because .NET's SetEnvironmentVariable
+            // doesn't propagate to native getenv() on Linux/.NET 8+.
             var assemblyDir = Path.GetDirectoryName(typeof(Engine).Assembly.Location);
             if (assemblyDir != null && File.Exists(Path.Combine(assemblyDir, "GodotPlugins.dll")))
             {
@@ -130,7 +148,55 @@ public class Engine(string project, string? path = null, params string[] args) :
 
         Console.WriteLine($"{nameof(Engine)}: Godot started successfully!");
         _ownsInstance = true;
+        _godotInstance = godotInstance;
         return godotInstance;
+    }
+
+    /// <summary>
+    /// Registers the game's GodotPlugins initializer for browser (wasm) hosts.
+    /// Pass the value of <c>GodotPlugins.Game.Main.GetInitializePointer()</c>,
+    /// which is source-generated into the game assembly when it is compiled
+    /// with the <c>LIBGODOT_ENABLED</c> define. Must be called before
+    /// <see cref="Start"/>. No-op requirement on desktop (throws there to
+    /// catch misuse early).
+    /// </summary>
+    public static void RegisterWebPluginsInitializer(IntPtr initializer)
+    {
+        if (!OperatingSystem.IsBrowser())
+            throw new PlatformNotSupportedException(
+                $"{nameof(RegisterWebPluginsInitializer)} is only meaningful on browser (wasm) hosts.");
+        WebHost.RegisterPluginsInitializer(initializer);
+    }
+
+    /// <summary>
+    /// Runs the engine main loop.
+    /// Desktop: blocks, iterating the engine until it requests quit, then
+    /// returns (the caller still owns disposal).
+    /// Browser: hands the loop to emscripten and returns immediately; the
+    /// engine keeps running via per-frame callbacks and destroys itself on
+    /// quit. Do not Dispose() after Run() on the browser.
+    /// </summary>
+    /// <param name="perFrame">Optional callback invoked once per frame before
+    /// the engine iteration.</param>
+    public void Run(Action? perFrame = null)
+    {
+        if (_godotInstance == null || _godotInstancePtr == IntPtr.Zero)
+            throw new InvalidOperationException($"{nameof(Engine)}: Start() must succeed before Run().");
+
+        if (OperatingSystem.IsBrowser())
+        {
+            WebHost.RunMainLoop(perFrame, () =>
+            {
+                _ownsInstance = false;
+                Destroy();
+            });
+            return;
+        }
+
+        while (!_godotInstance.Iteration())
+        {
+            perFrame?.Invoke();
+        }
     }
 
     private static void Destroy()
@@ -174,10 +240,27 @@ public class Engine(string project, string? path = null, params string[] args) :
 
     private static unsafe IntPtr CreateGodotInstance(string[] args)
     {
-        return LibGodot.libgodot_create_godot_instance(
-            args.Length,
-            args,
-            &LibGodot.InitCallback
-        );
+        // Manual UTF-8 argv marshalling: the P/Invoke must stay fully
+        // blittable for browser-wasm (see note in LibGodot.cs).
+        var argv = new nint[args.Length];
+        try
+        {
+            for (var i = 0; i < args.Length; i++)
+                argv[i] = Marshal.StringToCoTaskMemUTF8(args[i]);
+
+            fixed (nint* argvPtr = argv)
+            {
+                return LibGodot.libgodot_create_godot_instance(
+                    args.Length,
+                    argvPtr,
+                    (nint)(delegate* unmanaged<nint, nint, GDExtensionInitialization*, byte>)&LibGodot.InitCallback
+                );
+            }
+        }
+        finally
+        {
+            foreach (var ptr in argv)
+                Marshal.FreeCoTaskMem(ptr);
+        }
     }
 }

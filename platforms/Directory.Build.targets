@@ -1,7 +1,7 @@
 <Project>
     <!-- Computed properties that depend on platform-specific inputs from individual csproj files -->
     <!-- Skip for meta packages that already define their own PackageId -->
-    <PropertyGroup Condition="'$(PlatformRID)' != ''">
+    <PropertyGroup Condition="'$(PlatformRID)' != '' And '$(PlatformOS)' != 'web'">
         <!-- Package ID: 2dog.<rid>[.suffix] -->
         <PackageId>2dog.$(PlatformRID)$(PackageSuffix)</PackageId>
 
@@ -19,6 +19,25 @@
         <!-- Skip packaging if native library doesn't exist (unless forcing all platforms) -->
         <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(NativeLibPath)')">false</IsPackable>
     </PropertyGroup>
+
+    <!-- Web (browser-wasm) variants pack a whole payload directory instead of a
+         single shared library: the emscripten static archive plus the JS glue
+         and boot shell it must be linked/served with. The runtimes/<rid>/native
+         convention buys nothing here (the .a is consumed by an explicit
+         NativeLibrary item at publish time, never by the runtime host), so the
+         payload lives under a dedicated godot-web/ folder. -->
+    <PropertyGroup Condition="'$(PlatformRID)' != '' And '$(PlatformOS)' == 'web'">
+        <PackageId>2dog.$(PlatformRID)$(PackageSuffix)</PackageId>
+        <WebPayloadDir>$(GodotBinDir)web/$(BuildVariant)/</WebPayloadDir>
+        <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(WebPayloadDir)libgodot/libgodot.a')">false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(PlatformRID)' != '' And '$(PlatformOS)' == 'web'">
+        <None Include="$(WebPayloadDir)**"
+              Pack="true"
+              PackagePath="godot-web/"
+              Visible="false"/>
+    </ItemGroup>
 
     <!-- Meta packages don't have native libraries, so close the conditional PropertyGroup above -->
     <PropertyGroup Condition="'$(PlatformRID)' == ''">
