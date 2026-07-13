@@ -33,14 +33,14 @@
     "twodogVersion": {
       "type": "parameter",
       "datatype": "string",
-      "defaultValue": "4.7.0.31",
+      "defaultValue": "0.0.0-tpl",
       "replaces": "TWODOG_PKG_VERSION",
       "description": "Version of 2dog packages to reference."
     },
     "nativesVersion": {
       "type": "parameter",
       "datatype": "string",
-      "defaultValue": "4.7.0.9",
+      "defaultValue": "0.0.0-ntpl",
       "replaces": "NATIVES_PKG_VERSION",
       "description": "Version of native platform packages to reference."
     },
