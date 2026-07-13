@@ -28,11 +28,13 @@ class Platform(Enum):
     WINDOWS = "windows"
     LINUX = "linuxbsd"
     MACOS = "macos"
+    WEB = "web"
 
 
 class Arch(Enum):
     X86_64 = "x86_64"
     ARM64 = "arm64"
+    WASM32 = "wasm32"
 
 
 @dataclass
@@ -137,6 +139,20 @@ def get_platform_config(platform_override: str | None = None, arch_override: str
             lib_prefix="libgodot",
         )
 
+    if plat == Platform.WEB:
+        # Emscripten static library (linked into the consumer's
+        # dotnet.native.wasm at publish time); there is no web editor and the
+        # arch is always wasm32.
+        return PlatformConfig(
+            godot_platform=Platform.WEB.value,
+            godot_arch=Arch.WASM32.value,
+            godot_exe="",  # No editor build on web.
+            lib_path_var="PATH",
+            path_separator=";" if platform.system() == "Windows" else ":",
+            lib_extension=".a",
+            lib_prefix="libgodot",
+        )
+
     console.print(f"[bold red]Unsupported platform: {plat}[/bold red]")
     sys.exit(1)
 
@@ -194,14 +210,14 @@ def parse_arguments():
     parser.add_argument(
         "--platform",
         type=str,
-        choices=["auto", "windows", "linuxbsd", "macos"],
+        choices=["auto", "windows", "linuxbsd", "macos", "web"],
         default="auto",
         help="Override target platform (for CI/cross-compilation)",
     )
     parser.add_argument(
         "--arch",
         type=str,
-        choices=["auto", "x86_64", "arm64"],
+        choices=["auto", "x86_64", "arm64", "wasm32"],
         default="auto",
         help="Override target architecture (for CI/cross-compilation)",
     )
@@ -343,8 +359,105 @@ def build_editor(args, platform_config: PlatformConfig):
     run_with_live_output(cmd, cwd="godot", description=task_desc)
 
 
+def read_pinned_emscripten_version() -> str:
+    """Read <EmscriptenVersion> from Directory.Build.props (the version the
+    .NET browser-wasm runtime pack was built with)."""
+    import re
+
+    props = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Directory.Build.props")
+    with open(props, encoding="utf-8") as f:
+        m = re.search(r"<EmscriptenVersion>([^<]+)</EmscriptenVersion>", f.read())
+    return m.group(1) if m else ""
+
+
+def check_emscripten_version():
+    """Warn if the local emcc does not match the pinned version. The web
+    libgodot.a is statically linked into dotnet.native.wasm, so the
+    toolchains must agree."""
+    pinned = read_pinned_emscripten_version()
+    if not pinned:
+        console.print("[bold yellow]No <EmscriptenVersion> pin found in Directory.Build.props[/bold yellow]")
+        return
+    try:
+        out = subprocess.run(["emcc", "--version"], capture_output=True, text=True, shell=(sys.platform == "win32"))
+        first_line = out.stdout.splitlines()[0] if out.stdout else ""
+    except FileNotFoundError:
+        console.print("[bold red]emcc not found on PATH - install/activate emsdk " f"{pinned}[/bold red]")
+        sys.exit(1)
+    if pinned not in first_line:
+        console.print(
+            f"[bold yellow]WARNING: emcc version mismatch - pinned {pinned}, found: {first_line}\n"
+            "The web libgodot.a must be built with the same emscripten as the .NET runtime pack.[/bold yellow]"
+        )
+
+
+def build_libgodot_web(args):
+    """Build the web (emscripten) static library and assemble the packaging
+    payload under godot/bin/web/<target>/."""
+    console.print("\n[bold yellow]┌── Building libgodot (web static library) ──┐[/bold yellow]")
+
+    check_emscripten_version()
+
+    if args.target == "all":
+        targets = ["template_release", "template_debug"]
+    elif args.target == "editor":
+        console.print("[bold red]The web platform has no editor target.[/bold red]")
+        sys.exit(1)
+    else:
+        targets = [args.target]
+
+    for target in targets:
+        task_desc = f"Building libgodot (target={target}, platform=web, arch=wasm32)"
+        cmd = [
+            "scons",
+            "platform=web",
+            "arch=wasm32",
+            f"target={target}",
+            "module_mono_enabled=yes",
+            "library_type=static_library",
+            "extra_suffix=static_library",
+            "threads=no",
+            "lto=none",
+            "disable_crash_handler=yes",
+            "dev_build=no",
+            f"scu_build={args.scu_build}",
+            # Allow --path override at runtime (needed for libgodot to load projects)
+            "disable_path_overrides=no",
+        ]
+        if args.cache_path:
+            cmd.append(f"cache_path={args.cache_path}")
+        run_with_live_output(cmd, cwd="godot", description=task_desc)
+
+        # Assemble the per-target packaging payload:
+        #   web/<target>/libgodot/  - static lib + emcc config + js glue
+        #                             (from the scons-staged template zip dir)
+        #   web/<target>/shell/     - the Godot engine boot shell the page
+        #                             loads (godot.js wraps mono_bridge +
+        #                             engine.js; plus audio worklets)
+        import shutil
+
+        zip_dir = os.path.join("godot", "bin", ".web_zip")
+        src = os.path.join(zip_dir, "libgodot")
+        dst = os.path.join("godot", "bin", "web", target)
+        if not os.path.isfile(os.path.join(src, "libgodot.a")):
+            console.print(f"[bold red]Expected web payload not found at {src}[/bold red]")
+            sys.exit(1)
+        if os.path.isdir(dst):
+            shutil.rmtree(dst)
+        shutil.copytree(src, os.path.join(dst, "libgodot"))
+        shell_dst = os.path.join(dst, "shell")
+        os.makedirs(shell_dst)
+        for shell_file in ["godot.js", "godot.audio.worklet.js", "godot.audio.position.worklet.js"]:
+            shutil.copy2(os.path.join(zip_dir, shell_file), shell_dst)
+        console.print(f"[green]Web payload staged: {dst}[/green]")
+
+
 def build_libgodot(args, platform_config: PlatformConfig):
     """Build the libgodot library."""
+    if platform_config.godot_platform == Platform.WEB.value:
+        build_libgodot_web(args)
+        return
+
     console.print("\n[bold yellow]┌── Building libgodot ──┐[/bold yellow]")
 
     # Determine which targets to build
@@ -446,6 +559,11 @@ def main():
             border_style="cyan",
         )
     )
+
+    if platform_config.godot_platform == Platform.WEB.value:
+        # No editor or glue on web; both come from desktop builds.
+        args.no_editor = True
+        args.no_glue = True
 
     if not args.no_editor:
         build_editor(args, platform_config)
