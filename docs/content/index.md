@@ -48,6 +48,8 @@ features:
 
 ## Installation
 
+It's very easy to get the basics up and running, or to quickly enable Web / WASM exports if that's the core feature you're looking for!
+
 ::: code-group
 
 ```bash [🤖 Existing Project]
