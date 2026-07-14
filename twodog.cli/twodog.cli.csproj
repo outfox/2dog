@@ -40,12 +40,24 @@
          verbatim (rename/version tokens intact; substituted at runtime).
          The template sln is NOT embedded - it contains dotnet-new #if blocks;
          solution handling shells out to `dotnet sln` instead. -->
+    <PropertyGroup>
+        <!-- Build artifacts appear in the template host folders when someone
+             builds/publishes them locally; embedding those would scaffold the
+             junk into user projects (VerifyEmbeddedTemplateTracked only fails
+             the pack, not a plain build). -->
+        <_TwoDogCliTplExcludes>../templates/twodog/**/bin/**;../templates/twodog/**/obj/**;../templates/twodog/**/TestResults/**</_TwoDogCliTplExcludes>
+    </PropertyGroup>
     <ItemGroup>
-        <EmbeddedResource Include="../templates/twodog/Company.Product1.2dog/**/*" LogicalName="tpl/Company.Product1.2dog/%(RecursiveDir)%(Filename)%(Extension)"/>
-        <EmbeddedResource Include="../templates/twodog/Company.Product1.web/**/*" LogicalName="tpl/Company.Product1.web/%(RecursiveDir)%(Filename)%(Extension)"/>
-        <EmbeddedResource Include="../templates/twodog/Company.Product1.tests/**/*" LogicalName="tpl/Company.Product1.tests/%(RecursiveDir)%(Filename)%(Extension)"/>
+        <EmbeddedResource Include="../templates/twodog/Company.Product1.2dog/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.2dog/%(RecursiveDir)%(Filename)%(Extension)"/>
+        <EmbeddedResource Include="../templates/twodog/Company.Product1.web/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.web/%(RecursiveDir)%(Filename)%(Extension)"/>
+        <EmbeddedResource Include="../templates/twodog/Company.Product1.tests/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.tests/%(RecursiveDir)%(Filename)%(Extension)"/>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.csproj" LogicalName="tpl/Company.Product1.csproj"/>
         <EmbeddedResource Include="../templates/twodog/TwoDogWebBoot.cs" LogicalName="tpl/TwoDogWebBoot.cs"/>
+    </ItemGroup>
+
+    <!-- Unit tests in twodog.tests exercise the internal conversion pipeline -->
+    <ItemGroup>
+        <InternalsVisibleTo Include="twodog.tests"/>
     </ItemGroup>
 
     <!-- Package icon and readme -->

@@ -65,7 +65,8 @@ internal static class ConvertCommand
         return 0;
     }
 
-    private static string DeriveBaseName(ConvertOptions options, string projectDir, GodotProjectFile godotProject)
+    // internal for unit tests
+    internal static string DeriveBaseName(ConvertOptions options, string projectDir, GodotProjectFile godotProject)
     {
         var rootCsprojs = Directory.EnumerateFiles(projectDir, "*.csproj")
             .Select(Path.GetFileNameWithoutExtension)
@@ -219,7 +220,8 @@ internal static class ConvertCommand
 
         if (options.IncludeWeb)
         {
-            var webRelative = $"{baseName}.web\\{baseName}.web.csproj";
+            // Separator-agnostic: SolutionOps matches either / or \ in the sln.
+            var webRelative = $"{baseName}.web/{baseName}.web.csproj";
             var webIsNew = missing.Any(p => p.EndsWith($"{baseName}.web.csproj", StringComparison.OrdinalIgnoreCase));
             if (webIsNew || SolutionOps.HasSolutionBuildEntries(solutionPath, webRelative))
                 plan.Add(new PlannedAction(

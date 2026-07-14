@@ -25,6 +25,10 @@ internal static class CsprojPatcher
         else if (SdkVersion(sdk) is { } version && CompareVersions(version, ToolVersions.GodotSdkVersion) < 0)
             warnings.Add($"{Path.GetFileName(csprojPath)} uses Godot.NET.Sdk/{version}, older than the {ToolVersions.GodotSdkVersion} this tool targets; not changed - consider upgrading.");
 
+        // Deliberately includes conditioned PropertyGroups: a property the
+        // project sets anywhere (even per-configuration) is treated as "the
+        // author made a choice" and left alone rather than overridden with an
+        // unconditional duplicate.
         var properties = root.Descendants(ns + "PropertyGroup").Elements().ToList();
 
         string? Existing(string name) =>
@@ -80,7 +84,12 @@ internal static class CsprojPatcher
             patch,
             new XText("\n"));
 
-        return new Result(doc.ToString(SaveOptions.DisableFormatting), added, warnings);
+        // XDocument.ToString drops the XML declaration; put it back if the
+        // file had one.
+        var text = doc.ToString(SaveOptions.DisableFormatting);
+        if (doc.Declaration != null)
+            text = doc.Declaration + Environment.NewLine + text;
+        return new Result(text, added, warnings);
     }
 
     private static XElement Element(XNamespace ns, string name, string value) => new(ns + name, value);

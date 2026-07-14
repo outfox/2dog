@@ -21,9 +21,13 @@ internal static class Program
 
         Console.WriteLine("Godot is running, close window or press 'Q' to quit.");
 
+        // Key polling requires a real console; skip it when input is redirected
+        // (piped, CI) - Console.KeyAvailable throws there.
+        var interactive = !Console.IsInputRedirected;
+
         while (!godotInstance.Iteration())
         {
-            if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Q)
+            if (interactive && Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Q)
                 break;
         }
 

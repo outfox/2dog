@@ -101,7 +101,11 @@ internal static class SolutionOps
         updated = null;
 
         // Project("{type-guid}") = "name", "rel\path.csproj", "{project-guid}"
-        var escaped = Regex.Escape(projectRelativePath.Replace('/', '\\'));
+        // The classic sln format specifies backslash separators, but tolerate
+        // either in the file: `dotnet sln add` implementations have differed
+        // across SDK versions and platforms.
+        var escaped = string.Join(@"[\\/]",
+            projectRelativePath.Split('/', '\\').Select(Regex.Escape));
         var match = Regex.Match(text,
             $@"Project\(""\{{[^}}]+\}}""\)\s*=\s*""[^""]*"",\s*""{escaped}"",\s*""\{{(?<guid>[^}}]+)\}}""",
             RegexOptions.IgnoreCase);
