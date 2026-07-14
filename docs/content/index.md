@@ -35,15 +35,15 @@ hero:
 features:
   - title: 🎮 Full Godot Power
     details: Access the complete GodotSharp API  -  scenes, physics, rendering, audio, input  -  everything Godot can do.
-  - title: 🔄 Inverted Control
-    details: Your .NET process controls Godot, not the other way around. Start, iterate, and stop the engine when you decide.
-  - title: 🧪 First-Class Testing
-    details: Built-in xUnit fixtures for testing Godot code. Run headless in CI/CD pipelines.
   - title: 🌐 C# Games on the Web
     details: Publish your C# game as a static site with one dotnet publish  -  something stock Godot + C# can't do today.
     link: /web
     linkText: Run in the browser
-
+  - title: 🔄 Inverted Control
+    details: Your .NET process controls Godot, not the other way around. Start, iterate, and stop the engine when you decide.
+  - title: 🧪 First-Class Testing
+    details: Built-in xUnit fixtures for testing Godot code. Run headless in CI/CD pipelines.
+  
 ---
 
 ## Installation
