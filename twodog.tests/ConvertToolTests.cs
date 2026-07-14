@@ -526,7 +526,7 @@ public class ConvertEndToEndTests
         // behind .gdignore.
         foreach (var expected in new[]
                  {
-                     "SpaceMiner.csproj", "SpaceMiner.sln", "TwoDogWebBoot.cs", "export_presets.cfg",
+                     "SpaceMiner.csproj", "SpaceMiner.sln", "TwoDogWebBoot.cs", "export_presets.cfg", "global.json",
                      "SpaceMiner.2dog/SpaceMiner.2dog.csproj", "SpaceMiner.2dog/.gdignore",
                      "SpaceMiner.web/SpaceMiner.web.csproj", "SpaceMiner.web/.gdignore",
                      "SpaceMiner.tests/SpaceMiner.tests.csproj", "SpaceMiner.tests/.gdignore",
@@ -597,6 +597,23 @@ public class ConvertEndToEndTests
     }
 
     [Fact]
+    public void Convert_ExistingGlobalJson_IsNeverTouched()
+    {
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", GdScriptProject);
+        const string existing = """{ "sdk": { "version": "10.0.100" } }""";
+        tmp.Write("global.json", existing);
+
+        // The root global.json is the user's SDK policy: --force overwrites
+        // scaffolded files, but never this one.
+        var options = Options(tmp.Dir);
+        options.Force = true;
+        Assert.Equal(0, ConvertCommand.Run(options));
+
+        Assert.Equal(existing, File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "global.json")));
+    }
+
+    [Fact]
     public void Convert_NoWebNoTests_PrunesScaffoldingAndExcludes()
     {
         using var tmp = new TempProjectDir();
@@ -607,6 +624,8 @@ public class ConvertEndToEndTests
         Assert.True(Directory.Exists(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.2dog")));
         Assert.False(Directory.Exists(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.web")));
         Assert.False(Directory.Exists(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.tests")));
+        // The root global.json (wasm SDK pin) only comes with the web host.
+        Assert.False(File.Exists(System.IO.Path.Combine(tmp.Dir, "global.json")));
 
         var csproj = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.csproj"));
         Assert.Contains("SpaceMiner.2dog/**", csproj);

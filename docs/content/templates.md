@@ -90,6 +90,7 @@ MyGame/                     # Godot project root = solution root
 ├── MyGame.sln              # Solution file
 ├── main.tscn               # Main scene
 ├── export_presets.cfg      # Export presets (Web preset for the wasm host)
+├── global.json             # Pins a wasm-capable SDK (--web false to omit)
 ├── TwoDogWebBoot.cs        # Web bootstrap (compiled into the game assembly)
 ├── MyGame.2dog/            # Desktop host
 │   ├── .gdignore           # Hides the folder from the Godot editor
@@ -103,7 +104,7 @@ MyGame/                     # Godot project root = solution root
 │   ├── .gdignore
 │   ├── MyGame.web.csproj
 │   ├── Program.cs
-│   ├── global.json         # Pins a .NET 10+ SDK for this directory
+│   ├── global.json         # Same pin, for dotnet runs started in here
 │   └── wwwroot/index.html
 ├── .editorconfig           # Code style settings
 └── .gitignore              # Git ignores

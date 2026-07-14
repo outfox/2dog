@@ -76,7 +76,8 @@
         {
           "condition": "(!web)",
           "exclude": [
-            "Company.Product1.web/**/*"
+            "Company.Product1.web/**/*",
+            "global.json"
           ]
         },
         {

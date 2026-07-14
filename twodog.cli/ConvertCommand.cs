@@ -34,6 +34,7 @@ internal static class ConvertCommand
         var skipped = new List<string>();
 
         PlanGodotCsproj(plan, warnings, options, godotProject, godotCsproj, baseName, hostFolders);
+        PlanRootGlobalJson(plan, warnings, options, projectDir);
         PlanWebBoot(plan, skipped, options, projectDir);
         PlanExportPresets(plan, options, projectDir);
         PlanHosts(plan, skipped, options, projectDir, baseName, hostSuffixes);
@@ -161,6 +162,28 @@ internal static class ConvertCommand
         return csproj;
     }
 
+    private static void PlanRootGlobalJson(List<PlannedAction> plan, List<string> warnings, ConvertOptions options, string projectDir)
+    {
+        if (!options.IncludeWeb) return;
+
+        // global.json applies at or below its own directory, so a pin at the
+        // project root is what lets the web host publish from there (the pin
+        // inside the .web folder only covers dotnet runs started inside it).
+        // An existing global.json is the user's own SDK policy - never touch
+        // it, not even with --force.
+        var path = Path.Combine(projectDir, "global.json");
+        if (File.Exists(path))
+        {
+            warnings.Add("global.json already exists - left untouched. Publishing the web host from the " +
+                         "project root needs it to pin a .NET 10 SDK with the wasm-tools workload " +
+                         "(publishing from inside the web host folder works regardless: its own global.json wins there).");
+            return;
+        }
+
+        plan.Add(new PlannedAction("create global.json (pins a wasm-capable SDK for the whole project)",
+            () => File.WriteAllText(path, TemplateAssets.RootGlobalJson())));
+    }
+
     private static void PlanWebBoot(List<PlannedAction> plan, List<string> skipped, ConvertOptions options, string projectDir)
     {
         // Written even with --no-web: it is #if LIBGODOT_ENABLED-guarded and
@@ -279,9 +302,7 @@ internal static class ConvertCommand
         if (options.IncludeTests)
             Console.WriteLine($"  dotnet test {baseName}.tests             # xUnit tests (headless Godot)");
         if (options.IncludeWeb)
-            // From inside the folder: the web host's global.json (SDK pin)
-            // only applies when the working directory is at or below it.
-            Console.WriteLine($"  cd {baseName}.web; dotnet publish -c Release # browser bundle (needs wasm-tools workload)");
+            Console.WriteLine($"  dotnet publish {baseName}.web -c Release # browser bundle (needs wasm-tools workload)");
         Console.WriteLine("\nDocs: https://2dog.dev");
     }
 }

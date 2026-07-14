@@ -55,8 +55,7 @@ dotnet run --project MyGodotApp.2dog
 
 # Publish for the browser as a static site
 # (one-time: dotnet workload install wasm-tools)
-cd MyGodotApp.web
-dotnet publish -c Release
+dotnet publish MyGodotApp.web -c Release
 ```
 
 See [Converting a Godot Project](./convert) and [Web / Browser](./web) for

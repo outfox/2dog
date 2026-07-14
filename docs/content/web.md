@@ -23,11 +23,11 @@ dnx 2dog.cli convert path/to/LetsCook
 
 # Publish the browser app (imports assets and exports the game
 # content automatically)
-cd path/to/LetsCook/LetsCook.web
-dotnet publish -c Release
+cd path/to/LetsCook
+dotnet publish LetsCook.web -c Release
 
 # Serve the result - any static file server works
-dotnet serve --directory AppBundle
+dotnet serve --directory LetsCook.web/AppBundle
 ```
 
 ```bash [🌱 Fresh Project]
@@ -40,11 +40,11 @@ dotnet new 2dog -n LetsCook
 
 # Publish the browser app (imports assets and exports the game
 # content automatically)
-cd LetsCook/LetsCook.web
-dotnet publish -c Release
+cd LetsCook
+dotnet publish LetsCook.web -c Release
 
 # Serve the result - any static file server works
-dotnet serve --directory AppBundle
+dotnet serve --directory LetsCook.web/AppBundle
 ```
 
 :::
@@ -91,7 +91,10 @@ onto an existing Godot project; to wire it up manually you need:
      project's assembly, where scripts are looked up),
    - an `export_presets.cfg` with a `Web` preset,
    - a solution file next to `project.godot` (GodotTools requires one during
-     export).
+     export),
+   - a root `global.json` pinning a .NET 10 SDK with the wasm-tools workload
+     (`global.json` applies at or below its own directory, so this is what
+     makes the publish work from the project root).
 2. **A web host project** (net10.0+, `RuntimeIdentifier=browser-wasm`)
    referencing the `2dog` and `2dog.browser-wasm` packages, with
    `<GodotProjectDir>` pointing at the Godot project. In the standard layout
@@ -132,8 +135,9 @@ publish**. That cost is inherent to static linking, so iterate the fast way:
 - **Gameplay and assets**: run the desktop host
   (`dotnet run --project LetsCook.2dog`)  –  it's the same engine and the same
   code.
-- **Web verification**: `dotnet publish -c Release` in the web host folder
-  (`LetsCook.web/`), then serve `AppBundle/`.
+- **Web verification**: `dotnet publish LetsCook.web -c Release` from the
+  project root (or `dotnet publish -c Release` inside `LetsCook.web/`), then
+  serve `LetsCook.web/AppBundle/`.
 - Browsers cache the large wasm aggressively  –  hard-refresh
   (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>) after each publish.
 - Stop your static server before republishing: the publish replaces the

@@ -58,6 +58,7 @@ templates/
     ├── project.godot
     ├── main.tscn
     ├── export_presets.cfg         # Web preset for the wasm host
+    ├── global.json                # Wasm-capable SDK pin (--web false to omit)
     ├── TwoDogWebBoot.cs           # Web bootstrap (compiled into the game assembly)
     ├── Company.Product1.2dog/     # Desktop host
     │   ├── .gdignore
@@ -73,7 +74,7 @@ templates/
     │   ├── .gdignore
     │   ├── Company.Product1.web.csproj
     │   ├── Program.cs
-    │   ├── global.json
+    │   ├── global.json            # Same SDK pin as the root, for runs started in here
     │   └── wwwroot/index.html
     ├── .editorconfig
     └── .gitignore
