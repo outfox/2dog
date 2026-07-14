@@ -2,7 +2,7 @@ name: 2dog CI
 
 on:
   push:
-    branches: [main]
+    branches: ['**']
     tags: ['v*']
     paths-ignore:
       - 'docs/**'
