@@ -121,7 +121,7 @@ dotnet run --project LetsCook.2dog
 
 # Publish for the browser as a static site
 # (one-time: dotnet workload install wasm-tools)
-cd LetsCook.web && dotnet publish -c Release
+dotnet publish LetsCook.web -c Release
 ```
 
 ```bash [🌱 Fresh Project]

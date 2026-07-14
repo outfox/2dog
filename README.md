@@ -91,9 +91,8 @@ dotnet run --project MyGame.2dog
 
 # Publish for the browser as a static site
 # (one-time: dotnet workload install wasm-tools)
-cd MyGame.web
-dotnet publish -c Release
-dotnet serve --directory AppBundle
+dotnet publish MyGame.web -c Release
+dotnet serve --directory MyGame.web/AppBundle
 ```
 
 See the [conversion docs](https://2dog.dev/convert.html) and the

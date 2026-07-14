@@ -8,7 +8,8 @@
       below; package consumers get the same thing automatically from
       PackageReference 2dog + 2dog.browser-wasm (see the 2dog web template).
 
-      Publish:  dotnet publish -c Release        (run from this directory)
+      Publish:  dotnet publish demo/demo.web -c Release   (from the repo root;
+                the root global.json pins the wasm-capable SDK band)
       Output:   AppBundle/ - serve with any static file server.
     -->
     <PropertyGroup>

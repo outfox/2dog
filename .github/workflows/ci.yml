@@ -320,7 +320,6 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Install wasm-tools workload
-        working-directory: demo/demo.web
         run: dotnet workload install wasm-tools
 
       - name: Download godot-bin artifact
@@ -346,9 +345,11 @@ jobs:
       - name: Build import helper
         run: dotnet build twodog.import -c Release
 
+      # Runs from the repo root on purpose: the root global.json pins the
+      # wasm-capable SDK band, so the from-root publish flow the docs promise
+      # stays covered.
       - name: Publish demo.web
-        working-directory: demo/demo.web
-        run: dotnet publish -c Release
+        run: dotnet publish demo/demo.web -c Release
 
       - name: Verify app bundle
         run: |

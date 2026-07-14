@@ -35,8 +35,8 @@ of an existing Godot project:
 
 ```bash
 dnx 2dog.cli convert path/to/MyGame
-cd path/to/MyGame/MyGame.web
-dotnet publish -c Release   # static site in AppBundle/ - host it anywhere
+cd path/to/MyGame
+dotnet publish MyGame.web -c Release   # static site in MyGame.web/AppBundle/
 ```
 
 One-time prerequisite: `dotnet workload install wasm-tools`. See
@@ -64,6 +64,7 @@ MyGame/                      <- your existing Godot project (unchanged)
   MyGame.sln                 <- created, or your existing sln is reused
   TwoDogWebBoot.cs           <- added (web bootstrap, guarded by LIBGODOT_ENABLED)
   export_presets.cfg         <- created, or a 'Web' export preset is appended
+  global.json                <- added (pins a wasm-capable SDK; skipped if you have one)
   MyGame.2dog/   (.gdignore) <- desktop host (your Main entry point)
   MyGame.web/    (.gdignore) <- browser (WebAssembly) host
   MyGame.tests/  (.gdignore) <- xUnit test project
@@ -72,14 +73,16 @@ MyGame/                      <- your existing Godot project (unchanged)
 Afterwards:
 
 ```bash
-dotnet run --project MyGame.2dog          # desktop host
-dotnet test MyGame.tests                  # xUnit tests (headless Godot)
-cd MyGame.web && dotnet publish -c Release # browser bundle (needs wasm-tools)
+dotnet run --project MyGame.2dog           # desktop host
+dotnet test MyGame.tests                   # xUnit tests (headless Godot)
+dotnet publish MyGame.web -c Release       # browser bundle (needs wasm-tools)
 ```
 
-Publish the web host from inside its folder: the `global.json` there pins a
-wasm-compatible SDK, and `global.json` only applies at or below its own
-directory.
+The root `global.json` pins a .NET 10 SDK with the wasm-tools workload, which
+is what lets the web host publish from the project root (`global.json` applies
+at or below its own directory). If your project already has a `global.json`,
+convert leaves it untouched  –  make sure it pins a wasm-capable SDK, or publish
+from inside `MyGame.web/`, whose own `global.json` wins there.
 
 ## What it does
 
@@ -91,6 +94,10 @@ directory.
 - **Adds `TwoDogWebBoot.cs`** to the Godot project (even with `--no-web`: it is
   `#if LIBGODOT_ENABLED`-guarded and inert until a web host uses it, so adding
   web later just works).
+- **Adds a root `global.json`** (unless `--no-web`) pinning a .NET 10 SDK with
+  the wasm-tools workload, so the web host publishes from the project root. An
+  existing `global.json` is never touched, not even with `--force`  –  it is
+  your SDK policy, and a warning explains what it needs to pin.
 - **Ensures a `Web` export preset exists**: the web host's publish exports
   your project as a `.pck` via that preset, and the engine refuses to export
   without an `export_presets.cfg`. A missing file is created from the

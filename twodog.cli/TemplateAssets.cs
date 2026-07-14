@@ -43,6 +43,9 @@ internal static class TemplateAssets
     /// <summary>The template's export_presets.cfg (Web preset), verbatim - no tokens.</summary>
     public static string ExportPresets() => ReadRaw("tpl/export_presets.cfg");
 
+    /// <summary>The template's root global.json (wasm-capable SDK pin), verbatim - no tokens.</summary>
+    public static string RootGlobalJson() => ReadRaw("tpl/global.json");
+
     /// <summary>
     /// Relative target path -> content for every file of a host subtree
     /// ("2dog", "web" or "tests"), tokens substituted in paths and contents.

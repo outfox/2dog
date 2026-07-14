@@ -54,6 +54,7 @@
         <EmbeddedResource Include="../templates/twodog/Company.Product1.csproj" LogicalName="tpl/Company.Product1.csproj"/>
         <EmbeddedResource Include="../templates/twodog/TwoDogWebBoot.cs" LogicalName="tpl/TwoDogWebBoot.cs"/>
         <EmbeddedResource Include="../templates/twodog/export_presets.cfg" LogicalName="tpl/export_presets.cfg"/>
+        <EmbeddedResource Include="../templates/twodog/global.json" LogicalName="tpl/global.json"/>
     </ItemGroup>
 
     <!-- Unit tests in twodog.tests exercise the internal conversion pipeline -->

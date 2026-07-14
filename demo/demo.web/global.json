@@ -1,5 +1,5 @@
 {
-  "$comment": "Pins the SDK band that has the wasm-tools workload installed (and thereby the Emscripten version matching <EmscriptenVersion> in Directory.Build.props). Run dotnet from within this directory so this file wins over the repo root global.json.",
+  "$comment": "Same pin as the repo root global.json (nearest wins, so this keeps a publish started inside this directory working even if the root pin changes): the SDK band whose wasm-tools workload matches <EmscriptenVersion> in Directory.Build.props.",
   "sdk": {
     "version": "10.0.100",
     "rollForward": "latestFeature"
