@@ -70,6 +70,7 @@ godot-mono --editor .
 # Publish for the browser as a static site
 # (one-time: dotnet workload install wasm-tools)
 dotnet publish MyGame.web -c Release
+# ...and serve (e.g. with dotnet tool install --global dotnet-serve)
 dotnet serve --directory MyGame.web/AppBundle
 ```
 
