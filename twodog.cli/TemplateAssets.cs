@@ -40,6 +40,9 @@ internal static class TemplateAssets
     /// <summary>The web bootstrap source, copied verbatim (template copyOnly).</summary>
     public static string WebBootSource() => ReadRaw("tpl/TwoDogWebBoot.cs");
 
+    /// <summary>The template's export_presets.cfg (Web preset), verbatim - no tokens.</summary>
+    public static string ExportPresets() => ReadRaw("tpl/export_presets.cfg");
+
     /// <summary>
     /// Relative target path -> content for every file of a host subtree
     /// ("2dog", "web" or "tests"), tokens substituted in paths and contents.

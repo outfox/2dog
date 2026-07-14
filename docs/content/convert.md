@@ -49,6 +49,7 @@ MyGame/                      <- your existing Godot project (unchanged)
   MyGame.csproj              <- created or minimally patched
   MyGame.sln                 <- created, or your existing sln is reused
   TwoDogWebBoot.cs           <- added (web bootstrap, guarded by LIBGODOT_ENABLED)
+  export_presets.cfg         <- created, or a 'Web' export preset is appended
   MyGame.2dog/   (.gdignore) <- desktop host (your Main entry point)
   MyGame.web/    (.gdignore) <- browser (WebAssembly) host
   MyGame.tests/  (.gdignore) <- xUnit test project
@@ -59,8 +60,12 @@ Afterwards:
 ```bash
 dotnet run --project MyGame.2dog          # desktop host
 dotnet test MyGame.tests                  # xUnit tests (headless Godot)
-dotnet publish MyGame.web -c Release      # browser bundle (needs wasm-tools)
+cd MyGame.web && dotnet publish -c Release # browser bundle (needs wasm-tools)
 ```
+
+Publish the web host from inside its folder: the `global.json` there pins a
+wasm-compatible SDK, and `global.json` only applies at or below its own
+directory.
 
 ## What it does
 
@@ -72,6 +77,11 @@ dotnet publish MyGame.web -c Release      # browser bundle (needs wasm-tools)
 - **Adds `TwoDogWebBoot.cs`** to the Godot project (even with `--no-web`: it is
   `#if LIBGODOT_ENABLED`-guarded and inert until a web host uses it, so adding
   web later just works).
+- **Ensures a `Web` export preset exists**: the web host's publish exports
+  your project as a `.pck` via that preset, and the engine refuses to export
+  without an `export_presets.cfg`. A missing file is created from the
+  template; an existing file gets the `Web` preset appended under the next
+  free preset index  –  your presets are never touched.
 - **Scaffolds the nested host projects**, each with a `.gdignore` file so the
   Godot editor, importer, and exporter skip them.
 - **Reuses your solution**: an existing `.sln`/`.slnx` at the project root is
