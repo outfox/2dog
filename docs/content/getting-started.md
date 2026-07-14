@@ -9,6 +9,15 @@
 
 ## Installation
 
+There is nothing to install up front  –  pick your entry point:
+
+- **Existing Godot project?** Run `dnx 2dog.cli convert` on it  –  `dnx`
+  executes the tool straight from NuGet, and the converted project references
+  the 2dog packages itself.
+- **New project?** Installing 2dog *is* installing its project template:
+  `dotnet new install 2dog` registers the `2dog` template, and every project
+  created from it references the packages it needs.
+
 Packages are available on [NuGet](https://www.nuget.org/packages?q=2dog&includeComputedFrameworks=true&sortby=created-desc). Package versions follow the embedded Godot version plus a 2dog iteration number (the current release is `:2dog-version:`, embedding Godot `:godot-version:`). Supported platforms: `win-x64`, `linux-x64`, and `osx-arm64`.
 
 ::: warning Pin 2dog to your Godot line
@@ -30,11 +39,36 @@ the pin together with your `Godot.NET.Sdk` version when you upgrade.
 
 ## Your First 2dog Application
 
-::: tip Using Templates (Recommended)
-The fastest way to get started is using the 2dog project template:
+::: tip Upgrading an Existing Godot Project (Recommended)
+One `dnx` command converts an existing Godot project into a 2dog project  –  in
+place, without moving or renaming anything  –  and sets it up for a browser
+(WebAssembly) release:
 
 ```bash
-# Install the template (bundled in the main 2dog package)
+# Convert in place - scaffolds the desktop, web, and test hosts
+dnx 2dog.cli convert path/to/MyGodotApp
+
+cd path/to/MyGodotApp
+
+# Run on desktop
+dotnet run --project MyGodotApp.2dog
+
+# Publish for the browser as a static site
+# (one-time: dotnet workload install wasm-tools)
+cd MyGodotApp.web
+dotnet publish -c Release
+```
+
+See [Converting a Godot Project](./convert) and [Web / Browser](./web) for
+details.
+:::
+
+::: tip Creating a New Project
+For a fresh start, install the 2dog project template  –  that *is* the
+installation  –  and create a project from it:
+
+```bash
+# "Install" 2dog: register the project template
 dotnet new install 2dog
 
 # Create a new project (includes xUnit tests and a web host by default)
@@ -54,15 +88,6 @@ godot-mono -e --path .
 ```
 
 This creates a complete project with sample Godot content and everything configured: the Godot project is the solution root, with the desktop host, tests, and web host nested inside it (hidden from the Godot editor by `.gdignore` files). See [Project Templates](./templates) for details.
-:::
-
-::: tip Existing Godot project?
-`2dog convert` sets up the same layout around an existing Godot project, in
-place  –  see [Converting a Godot Project](./convert):
-
-```bash
-dnx 2dog.cli convert path/to/your/godot/project
-```
 :::
 
 ### Manual Setup

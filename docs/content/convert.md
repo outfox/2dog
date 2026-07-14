@@ -29,6 +29,20 @@ The path defaults to the current directory and must contain a
 `project.godot`. Use `--dry-run` first to see the planned actions without
 changing anything.
 
+::: tip From stock Godot to the browser
+Convert-then-publish is the fastest route to a browser (WebAssembly) release
+of an existing Godot project:
+
+```bash
+dnx 2dog.cli convert path/to/MyGame
+cd path/to/MyGame/MyGame.web
+dotnet publish -c Release   # static site in AppBundle/ - host it anywhere
+```
+
+One-time prerequisite: `dotnet workload install wasm-tools`. See
+[Web / Browser](/web) for the full story.
+:::
+
 ## Options
 
 | Option | Effect |

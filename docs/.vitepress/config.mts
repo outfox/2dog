@@ -62,9 +62,9 @@ export default defineConfig({
         text: 'Guide',
         items: [
           { text: 'Getting Started', link: '/getting-started' },
-          { text: 'Project Templates', link: '/templates' },
           { text: 'Converting a Godot Project', link: '/convert' },
           { text: 'Web / Browser (WASM)', link: '/web' },
+          { text: 'Project Templates', link: '/templates' },
           { text: 'Core Concepts', link: '/concepts' },
           { text: 'Build Configurations', link: '/build-configurations' },
           { text: 'Resource Import', link: '/import-tool' },
