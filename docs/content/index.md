@@ -112,16 +112,16 @@ godot.Tree.Root.AddChild(scene.Instantiate());
 ```bash [🤖 Upgrade Existing Project]
 # Convert in place - scaffolds the 2dog hosts around your Godot project
 # (no install: dnx runs the tool straight from NuGet)
-dnx 2dog.cli convert path/to/LetsCook
+dnx 2dog.cli convert path/to/MyGame
 
-cd path/to/LetsCook
+cd path/to/MyGame
 
 # Run on desktop
-dotnet run --project LetsCook.2dog
+dotnet run --project MyGame.2dog
 
 # Publish for the browser as a static site
 # (one-time: dotnet workload install wasm-tools)
-dotnet publish LetsCook.web -c Release
+dotnet publish MyGame.web -c Release
 ```
 
 ```bash [🌱 Fresh Project]
@@ -129,12 +129,12 @@ dotnet publish LetsCook.web -c Release
 dotnet new install 2dog
 
 # Create your Project
-dotnet new 2dog -n LetsCook
+dotnet new 2dog -n MyGame
 
-cd LetsCook
+cd MyGame
 
 # Assets are imported automatically during build
-dotnet run --project LetsCook.2dog
+dotnet run --project MyGame.2dog
 
 # Optionally, open and edit the project in the Godot Editor
 # (the project root IS the Godot project)

@@ -98,7 +98,7 @@ wasm-tools workload  –  the web host is built explicitly with `dotnet publish`
 
 The template uses `Company.Product1` as the source name, which gets replaced with your project name:
 
-- `Company.Product1` → Your project name (e.g., `LetsCook`)
+- `Company.Product1` → Your project name (e.g., `MyGame`)
 - Applied to: `.csproj` files, `Program.cs`, `project.godot`, namespaces
 
 ## Packaging

@@ -19,15 +19,15 @@ dotnet workload install wasm-tools
 
 # Convert in place - scaffolds the web host (and more) around
 # your existing Godot project
-dnx 2dog.cli convert path/to/LetsCook
+dnx 2dog.cli convert path/to/MyGame
 
 # Publish the browser app (imports assets and exports the game
 # content automatically)
-cd path/to/LetsCook
-dotnet publish LetsCook.web -c Release
+cd path/to/MyGame
+dotnet publish MyGame.web -c Release
 
 # Serve the result - any static file server works
-dotnet serve --directory LetsCook.web/AppBundle
+dotnet serve --directory MyGame.web/AppBundle
 ```
 
 ```bash [🌱 Fresh Project]
@@ -36,15 +36,15 @@ dotnet workload install wasm-tools
 
 # Create a project - the web host is included by default
 dotnet new install 2dog
-dotnet new 2dog -n LetsCook
+dotnet new 2dog -n MyGame
 
 # Publish the browser app (imports assets and exports the game
 # content automatically)
-cd LetsCook
-dotnet publish LetsCook.web -c Release
+cd MyGame
+dotnet publish MyGame.web -c Release
 
 # Serve the result - any static file server works
-dotnet serve --directory LetsCook.web/AppBundle
+dotnet serve --directory MyGame.web/AppBundle
 ```
 
 :::
@@ -53,7 +53,7 @@ Open the served page: your game is running in the browser, and everything your
 `Main()` prints lands in the DevTools console.
 
 ::: tip The web host is still your code
-`LetsCook.web/Program.cs` is a normal 2dog host  –  it registers the game's
+`MyGame.web/Program.cs` is a normal 2dog host  –  it registers the game's
 plugin initializer, starts the engine, and calls `engine.Run()`, which hands
 the frame loop to the browser and returns immediately.
 :::
@@ -98,7 +98,7 @@ onto an existing Godot project; to wire it up manually you need:
 2. **A web host project** (net10.0+, `RuntimeIdentifier=browser-wasm`)
    referencing the `2dog` and `2dog.browser-wasm` packages, with
    `<GodotProjectDir>` pointing at the Godot project. In the standard layout
-   the host is nested inside the Godot project (e.g. `LetsCook/LetsCook.web/`)
+   the host is nested inside the Godot project (e.g. `MyGame/MyGame.web/`)
    with `<GodotProjectDir>..</GodotProjectDir>`  –  again, easiest copied from a
    `dotnet new 2dog` output.
 
@@ -106,7 +106,7 @@ onto an existing Godot project; to wire it up manually you need:
 Because the host directory lives under `project.godot`, two extras keep the
 layers apart: a `.gdignore` file in the host directory so the Godot
 importer/exporter skips it, and the host folder in the Godot project csproj's
-`<DefaultItemExcludes>` (e.g. `LetsCook.web/**`) so the .NET SDK's source glob
+`<DefaultItemExcludes>` (e.g. `MyGame.web/**`) so the .NET SDK's source glob
 doesn't swallow the host's sources. The template and `2dog convert` set up
 both.
 :::
@@ -124,7 +124,7 @@ Properties for the web host project (all optional):
 
 Add a `<TrimmerRootAssembly>` for any NuGet package your game reaches via
 reflection (serializers, ECS libraries, ...). The generated host csproj
-already roots the game assembly (`LetsCook`  –  scripts are resolved by
+already roots the game assembly (`MyGame`  –  scripts are resolved by
 reflection), and the package targets root `GodotSharp` and `twodog`.
 
 ## The development loop
@@ -133,11 +133,11 @@ A web publish relinks the entire wasm with Emscripten  –  expect **minutes, ev
 publish**. That cost is inherent to static linking, so iterate the fast way:
 
 - **Gameplay and assets**: run the desktop host
-  (`dotnet run --project LetsCook.2dog`)  –  it's the same engine and the same
+  (`dotnet run --project MyGame.2dog`)  –  it's the same engine and the same
   code.
-- **Web verification**: `dotnet publish LetsCook.web -c Release` from the
-  project root (or `dotnet publish -c Release` inside `LetsCook.web/`), then
-  serve `LetsCook.web/AppBundle/`.
+- **Web verification**: `dotnet publish MyGame.web -c Release` from the
+  project root (or `dotnet publish -c Release` inside `MyGame.web/`), then
+  serve `MyGame.web/AppBundle/`.
 - Browsers cache the large wasm aggressively  –  hard-refresh
   (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>) after each publish.
 - Stop your static server before republishing: the publish replaces the
