@@ -101,7 +101,7 @@ dotnet add package 2dog.xunit
 
 ## All right, let's cook! 
 
-If you want to do more, like control the engine, build a whole separate app or server around it, **2dog** throws you many bones! 🦴 Here are a few starters!
+Hungry for more already? Let's control the engine, or build a whole separate app or server around it - **2dog** throws you many bones! 🦴 Here are a few starters!
 
 ::: code-group
 
