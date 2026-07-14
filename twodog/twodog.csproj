@@ -241,9 +241,12 @@
         <RemoveDir Directories="$(BaseOutputPath)"/>
     </Target>
 
-    <!-- dotnet new template content bundled in this package -->
+    <!-- dotnet new template content bundled in this package. template.json is
+         excluded: a versioned copy is staged into obj/ and packed instead
+         (StageVersionedTemplateJson below), so the committed file keeps its
+         placeholder versions untouched. -->
     <ItemGroup>
-        <Content Include="../templates/twodog/**/*" Exclude="../templates/twodog/**/bin/**;../templates/twodog/**/obj/**"
+        <Content Include="../templates/twodog/**/*" Exclude="../templates/twodog/**/bin/**;../templates/twodog/**/obj/**;../templates/twodog/.template.config/template.json"
                  Pack="true" PackagePath="content/twodog/" CopyToOutputDirectory="Never"/>
     </ItemGroup>
 
@@ -261,22 +264,22 @@
                Text="2dog template content contains files git does not track (gitignored or never added) - they would be missing from a CI-packed template: $(_TwoDogTemplateUntracked)"/>
     </Target>
 
-    <!-- Substitute 2dog package versions into the bundled template.json at pack
-         time, then restore the committed placeholder tokens afterwards.
-         (godotVersion has no placeholder; its committed default is the real
-         version, so the restore just keeps it at $(GodotVersion).)
+    <!-- Stage a copy of the bundled template.json with the real versions from
+         Directory.Build.props substituted in, and pack that copy in place of
+         the committed file - which always holds the 0.0.0-tpl / 0.0.0-ntpl
+         placeholders and is never written to. (godotVersion has no
+         placeholder; its committed default is the real version.)
          SetTemplateDefaults is defined in the repo-root Directory.Build.targets. -->
-    <Target Name="SubstituteTemplateVersion" BeforeTargets="GenerateNuspec">
-        <SetTemplateDefaults FilePath="../templates/twodog/.template.config/template.json"
+    <Target Name="StageVersionedTemplateJson" BeforeTargets="_GetPackageFiles;GenerateNuspec">
+        <Copy SourceFiles="../templates/twodog/.template.config/template.json"
+              DestinationFiles="$(IntermediateOutputPath)template.json"/>
+        <SetTemplateDefaults FilePath="$(IntermediateOutputPath)template.json"
                              TwoDogVer="$(TwoDogVersion)"
                              NativesVer="$(NativesVersion)"
                              GodotVer="$(GodotVersion)" />
-    </Target>
-
-    <Target Name="RestoreTemplateVersion" AfterTargets="Pack">
-        <SetTemplateDefaults FilePath="../templates/twodog/.template.config/template.json"
-                             TwoDogVer="0.0.0-tpl"
-                             NativesVer="0.0.0-ntpl"
-                             GodotVer="$(GodotVersion)" />
+        <ItemGroup>
+            <None Include="$(IntermediateOutputPath)template.json" Pack="true"
+                  PackagePath="content/twodog/.template.config/template.json"/>
+        </ItemGroup>
     </Target>
 </Project>
