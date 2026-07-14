@@ -4,11 +4,18 @@
 
 ## Installation
 
-The `dotnet new` template is bundled in the main `2dog` NuGet package. Installing the package also registers the template:
+For a new project, installing the template *is* installing 2dog: there is no
+SDK or tool to set up beyond it  –  projects created from the template reference
+the 2dog NuGet packages themselves. The template is bundled in the main `2dog`
+NuGet package, so installing the package registers it:
 
 ```bash
 dotnet new install 2dog
 ```
+
+(For an *existing* Godot project, there is nothing to install at all  – 
+[`dnx 2dog.cli convert`](/convert) produces the same layout around it, in
+place.)
 
 ### Local Installation (Development)
 

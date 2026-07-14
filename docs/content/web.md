@@ -11,11 +11,31 @@ with a single `dotnet publish`.
 
 ## Quickstart
 
-```bash
+::: code-group
+
+```bash [🤖 Existing Godot Project]
+# One-time: the .NET wasm build tools (ships its own Emscripten)
+dotnet workload install wasm-tools
+
+# Convert in place - scaffolds the web host (and more) around
+# your existing Godot project
+dnx 2dog.cli convert path/to/LetsCook
+
+# Publish the browser app (imports assets and exports the game
+# content automatically)
+cd path/to/LetsCook/LetsCook.web
+dotnet publish -c Release
+
+# Serve the result - any static file server works
+dotnet serve --directory AppBundle
+```
+
+```bash [🌱 Fresh Project]
 # One-time: the .NET wasm build tools (ships its own Emscripten)
 dotnet workload install wasm-tools
 
 # Create a project - the web host is included by default
+dotnet new install 2dog
 dotnet new 2dog -n LetsCook
 
 # Publish the browser app (imports assets and exports the game
@@ -26,6 +46,8 @@ dotnet publish -c Release
 # Serve the result - any static file server works
 dotnet serve --directory AppBundle
 ```
+
+:::
 
 Open the served page: your game is running in the browser, and everything your
 `Main()` prints lands in the DevTools console.

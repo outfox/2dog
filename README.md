@@ -50,7 +50,7 @@ while (!godot.Iteration())
 
 - 🆕 WASM support! 🔥 (deploy and play your C# Godot game in the browser!)
 - .NET-first project structure: your Godot project is the solution root, with the host projects nested inside it (hidden from the Godot editor by `.gdignore` - no code changes needed)
-- `2dog convert` turns an existing Godot project into a 2dog project, in place
+- `dnx 2dog.cli convert` turns an existing Godot project into a 2dog project, in place - one command from stock Godot to a browser-publishable .NET solution
 - Familiar GodotSharp API (fully compatible with official Godot)
 - Automatic asset import during `dotnet build` - no Godot editor installation needed
 - Three build configurations: Debug, Release, and Editor (with `TOOLS_ENABLED`)
@@ -69,10 +69,43 @@ while (!godot.Iteration())
 - .NET SDK 10.0 or later
 - [Godot (.NET)](https://godotengine.org/) (optional - only for editing scenes in the editor UI)
 
-### Using Templates (Recommended)
+### Upgrade an Existing Godot Project
+
+One command turns any existing Godot project into a 2dog project - **in
+place**, without moving or renaming anything - and gets it ready for a
+browser (WebAssembly) release. No install needed, `dnx` runs the tool
+straight from NuGet:
 
 ```bash
-# Install the template (bundled in the main 2dog package)
+dnx 2dog.cli convert path/to/your/godot/project
+```
+
+Your project is now a .NET solution with nested desktop, web, and test hosts
+(hidden from the Godot editor by `.gdignore`):
+
+```bash
+cd path/to/your/godot/project
+
+# Run on desktop
+dotnet run --project MyGame.2dog
+
+# Publish for the browser as a static site
+# (one-time: dotnet workload install wasm-tools)
+cd MyGame.web
+dotnet publish -c Release
+dotnet serve --directory AppBundle
+```
+
+See the [conversion docs](https://2dog.dev/convert.html) and the
+[web docs](https://2dog.dev/web.html) for details.
+
+### Start a New Project
+
+Installing 2dog *is* installing its project template - register it once, and
+every project you create from it references the packages it needs from NuGet:
+
+```bash
+# "Install" 2dog: register the project template
 dotnet new install 2dog
 
 # Create a new project (includes xUnit tests and a web host by default)
@@ -95,17 +128,7 @@ godot-mono -e --path .
 > automatically as an incremental build step - no Godot editor required.
 > See the [Resource Import](https://2dog.dev/import-tool.html) docs.
 
-### Converting an Existing Godot Project
-
-The `2dog convert` tool sets up the same layout around an existing Godot
-project - in place, without moving or renaming anything:
-
-```bash
-dnx 2dog.cli convert path/to/your/godot/project
-```
-
-See the [conversion docs](https://2dog.dev/convert.html) for details. To just
-add the packages to an existing .NET project instead:
+To just add the packages to an existing .NET project instead:
 
 ```bash
 dotnet add package 2dog
@@ -196,12 +219,13 @@ dotnet build -c Editor   # Editor tools with TOOLS_ENABLED
 Full documentation at **[2dog.dev](https://2dog.dev)**
 
 - [Getting Started](https://2dog.dev/getting-started.html) - installation and first project
+- [Converting a Godot Project](https://2dog.dev/convert.html) - `dnx 2dog.cli convert` for existing projects
+- [Web / Browser (WASM)](https://2dog.dev/web.html) - publish your C# game as a static site
+- [Project Templates](https://2dog.dev/templates.html) - scaffolding new projects
 - [Core Concepts](https://2dog.dev/concepts.html) - architecture and design
 - [Build Configurations](https://2dog.dev/build-configurations.html) - Debug, Release, and Editor modes
 - [API Reference](https://2dog.dev/api-reference.html) - Engine, GodotInstance, and more
 - [Testing with xUnit](https://2dog.dev/testing.html) - test fixtures and CI/CD setup
-- [Project Templates](https://2dog.dev/templates.html) - scaffolding new projects
-- [Converting a Godot Project](https://2dog.dev/convert.html) - `2dog convert` for existing projects
 
 ---
 
