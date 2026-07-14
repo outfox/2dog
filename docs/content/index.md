@@ -109,7 +109,7 @@ godot.Tree.Root.AddChild(scene.Instantiate());
 
 ::: code-group
 
-```bash [🤖 Upgrade Existing Project]
+```bash [🤖 Existing Project]
 # Convert in place - scaffolds the 2dog hosts around your Godot project
 # (no install: dnx runs the tool straight from NuGet)
 dnx 2dog.cli convert path/to/MyGame
