@@ -50,11 +50,19 @@ public class Engine(string project, string? path = null, params string[] args) :
         if (_godotInstancePtr != IntPtr.Zero) return;
 
         // No Godot call may be made after this point (we are in ProcessExit).
-        var module = GetModuleHandleW("libgodot.dll");
-        var attempts = 0;
-        while (module != IntPtr.Zero && FreeLibrary(module) && ++attempts < 32)
+        // The loaded module name is variant-specific (libgodot-editor.dll etc.);
+        // when the resolver never ran, sweep all known names.
+        string[] names = LibGodotLoader.LoadedLibraryFileName is { } loaded
+            ? [loaded]
+            : ["libgodot.dll", "libgodot-release.dll", "libgodot-debug.dll", "libgodot-editor.dll"];
+        foreach (var name in names)
         {
-            module = GetModuleHandleW("libgodot.dll");
+            var module = GetModuleHandleW(name);
+            var attempts = 0;
+            while (module != IntPtr.Zero && FreeLibrary(module) && ++attempts < 32)
+            {
+                module = GetModuleHandleW(name);
+            }
         }
     }
 
@@ -93,20 +101,7 @@ public class Engine(string project, string? path = null, params string[] args) :
         }
         else
         {
-            // Ensure GODOTSHARP_DIR points to the directory containing GodotPlugins.dll.
-            // When the host process is not in the output directory (e.g. dotnet test
-            // uses /usr/share/dotnet/dotnet), Godot's exe_dir fallback won't work.
-            // Must use native setenv on Unix because .NET's SetEnvironmentVariable
-            // doesn't propagate to native getenv() on Linux/.NET 8+.
-            var assemblyDir = Path.GetDirectoryName(typeof(Engine).Assembly.Location);
-            if (assemblyDir != null && File.Exists(Path.Combine(assemblyDir, "GodotPlugins.dll")))
-            {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
-                    RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                    setenv("GODOTSHARP_DIR", assemblyDir, 1);
-                else
-                    System.Environment.SetEnvironmentVariable("GODOTSHARP_DIR", assemblyDir);
-            }
+            ConfigureGodotSharpDir();
         }
 
         Console.WriteLine("Starting Godot instance...");
@@ -150,6 +145,34 @@ public class Engine(string project, string? path = null, params string[] args) :
         _ownsInstance = true;
         _godotInstance = godotInstance;
         return godotInstance;
+    }
+
+    /// <summary>
+    /// Points GODOTSHARP_DIR at the directory containing GodotPlugins.dll.
+    /// When the host process is not in the output directory (e.g. dotnet test
+    /// uses /usr/share/dotnet/dotnet), Godot's exe_dir fallback won't work.
+    /// Checks the flat layout (template variants) first, then the nested
+    /// GodotSharp/Api/Debug/ layout (editor variant). Must use native setenv
+    /// on Unix because .NET's SetEnvironmentVariable doesn't propagate to
+    /// native getenv() on Linux/.NET 8+.
+    /// </summary>
+    internal static void ConfigureGodotSharpDir()
+    {
+        var assemblyDir = Path.GetDirectoryName(typeof(Engine).Assembly.Location);
+        if (string.IsNullOrEmpty(assemblyDir)) return;
+
+        var dir = assemblyDir;
+        if (!File.Exists(Path.Combine(dir, "GodotPlugins.dll")))
+        {
+            dir = Path.Combine(assemblyDir, "GodotSharp", "Api", "Debug");
+            if (!File.Exists(Path.Combine(dir, "GodotPlugins.dll"))) return;
+        }
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
+            RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            setenv("GODOTSHARP_DIR", dir, 1);
+        else
+            System.Environment.SetEnvironmentVariable("GODOTSHARP_DIR", dir);
     }
 
     /// <summary>

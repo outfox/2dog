@@ -68,12 +68,15 @@
       NuGet consumers get all three; at build time only the matching platform's
       targets actually copy a native library.
     -->
+    <!-- Exact-pinned ([x]) so the natives version is decided in ONE place: a given
+         2dog version always resolves the natives it was built against, and consumers
+         (including the templates) never reference natives packages directly. -->
     <ItemGroup>
-        <PackageReference Include="2dog.win-x64" Version="$(NativesVersion)" PrivateAssets="none"/>
-        <PackageReference Include="2dog.linux-x64" Version="$(NativesVersion)" PrivateAssets="none"/>
-        <PackageReference Include="2dog.osx-arm64" Version="$(NativesVersion)" PrivateAssets="none"/>
+        <PackageReference Include="2dog.win-x64" Version="[$(NativesVersion)]" PrivateAssets="none"/>
+        <PackageReference Include="2dog.linux-x64" Version="[$(NativesVersion)]" PrivateAssets="none"/>
+        <PackageReference Include="2dog.osx-arm64" Version="[$(NativesVersion)]" PrivateAssets="none"/>
         <!-- GodotTools assemblies for the automatic import (editor C# init requires them) -->
-        <PackageReference Include="2dog.tools" Version="$(NativesVersion)" PrivateAssets="none"/>
+        <PackageReference Include="2dog.tools" Version="[$(NativesVersion)]" PrivateAssets="none"/>
     </ItemGroup>
 
     <!-- Include MSBuild props/targets in the package -->

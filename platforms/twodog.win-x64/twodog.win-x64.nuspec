@@ -11,9 +11,13 @@
         <description>$description$</description>
         <dependencies>
             <group targetFramework=".NETStandard2.0">
-                <dependency id="2dog.win-x64.release" version="$version$"/>
-                <dependency id="2dog.win-x64.debug" version="$version$"/>
-                <dependency id="2dog.win-x64.editor" version="$version$"/>
+                <!-- exclude="native": the runtimes/<rid>/native assets must not
+                     flow to consumers (all three variants would be copied into
+                     every output dir); the meta targets copy the one selected
+                     by $(TwoDogVariant) from the package cache instead. -->
+                <dependency id="2dog.win-x64.release" version="[$version$]" exclude="native"/>
+                <dependency id="2dog.win-x64.debug" version="[$version$]" exclude="native"/>
+                <dependency id="2dog.win-x64.editor" version="[$version$]" exclude="native"/>
             </group>
         </dependencies>
     </metadata>

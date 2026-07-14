@@ -39,7 +39,13 @@
         </AssemblyAttribute>
     </ItemGroup>
 
-    <!-- Configuration → variant mapping for API placement -->
+    <!-- In this repo the native variant follows the build configuration
+         (consumers set TwoDogVariant explicitly; default is release) -->
+    <PropertyGroup>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
         <DefineConstants>$(DefineConstants);EDITOR</DefineConstants>
     </PropertyGroup>

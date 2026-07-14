@@ -11,10 +11,14 @@
         <PlatformArch Condition="'$(PlatformArch)' == ''">x86_64</PlatformArch>
         <NativeLibPath>$(GodotBinDir)$(NativeLibPrefix).$(PlatformOS).$(BuildVariant).$(PlatformArch).shared_library.$(NativeLibExt)</NativeLibPath>
 
-        <!-- Output library name (always libgodot.<ext>) -->
-        <OutputLibName Condition="'$(NativeLibExt)' == 'dll'">libgodot.dll</OutputLibName>
-        <OutputLibName Condition="'$(NativeLibExt)' == 'so'">libgodot.so</OutputLibName>
-        <OutputLibName Condition="'$(NativeLibExt)' == 'dylib'">libgodot.dylib</OutputLibName>
+        <!-- Output library name: libgodot-<variant>.<ext>. The variant suffix
+             makes each native uniquely named so all three variants can coexist
+             in one project and a variant mismatch fails loudly at load time
+             (twodog's DllImportResolver picks the file by TwoDogVariant). -->
+        <VariantShortName Condition="'$(BuildVariant)' == 'template_release'">release</VariantShortName>
+        <VariantShortName Condition="'$(BuildVariant)' == 'template_debug'">debug</VariantShortName>
+        <VariantShortName Condition="'$(BuildVariant)' == 'editor'">editor</VariantShortName>
+        <OutputLibName>libgodot-$(VariantShortName).$(NativeLibExt)</OutputLibName>
 
         <!-- Skip packaging if native library doesn't exist (unless forcing all platforms) -->
         <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(NativeLibPath)')">false</IsPackable>

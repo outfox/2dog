@@ -141,8 +141,9 @@ uv run poe build
 - `editor`  –  editor build with `TOOLS_ENABLED` compiled in
 
 Referencing the `2dog` package gives you the `release` variant automatically.
-For `debug` or `editor`, reference the matching platform variant package
-(e.g. `2dog.win-x64.debug`) and set `<TwoDogVariant>` in your project.
+For `debug` or `editor`, set `<TwoDogVariant>` in your project  –  all three
+variants ship with the platform packages, and the one you select is copied
+and loaded as `libgodot-<variant>`.
 
 Note that the editor variant enables editor code paths at compile time. Asset
 import runs automatically at build time in a separate helper process against

@@ -11,9 +11,10 @@
       - When used via ProjectReference in this repository, it falls back to the
         locally built Godot binaries in godot/bin.
 
-      Configuration mapping:
-      - Debug (or unspecified): prefer editor build (TOOLS_ENABLED)
-      - Release: prefer template_release build
+      Variant selection: $(TwoDogVariant) ('release' default, 'debug', 'editor').
+      The native is copied as libgodot-<variant>.so; twodog's DllImportResolver
+      loads it by the variant declared in the consuming assembly's metadata, so
+      a mismatched or stale native fails loudly instead of half-working.
     -->
 
     <!-- Discover package version from this .targets location -->
@@ -27,9 +28,9 @@
     <PropertyGroup>
         <!-- Variant package paths in the NuGet global packages folder -->
         <!-- $(NuGetPackageRoot) is set by NuGet restore and points to the packages cache -->
-        <TwoDogLinuxX64ReleasePackage>$(NuGetPackageRoot)/2dog.linux-x64.release/$(TwoDogLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot.so</TwoDogLinuxX64ReleasePackage>
-        <TwoDogLinuxX64DebugPackage>$(NuGetPackageRoot)/2dog.linux-x64.debug/$(TwoDogLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot.so</TwoDogLinuxX64DebugPackage>
-        <TwoDogLinuxX64EditorPackage>$(NuGetPackageRoot)/2dog.linux-x64.editor/$(TwoDogLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot.so</TwoDogLinuxX64EditorPackage>
+        <TwoDogLinuxX64ReleasePackage>$(NuGetPackageRoot)/2dog.linux-x64.release/$(TwoDogLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot-release.so</TwoDogLinuxX64ReleasePackage>
+        <TwoDogLinuxX64DebugPackage>$(NuGetPackageRoot)/2dog.linux-x64.debug/$(TwoDogLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot-debug.so</TwoDogLinuxX64DebugPackage>
+        <TwoDogLinuxX64EditorPackage>$(NuGetPackageRoot)/2dog.linux-x64.editor/$(TwoDogLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot-editor.so</TwoDogLinuxX64EditorPackage>
 
         <!-- Local development paths (fallback for ProjectReference builds) -->
         <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
@@ -47,16 +48,12 @@
         <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogLinuxX64EditorLocal)')">$(TwoDogLinuxX64EditorLocal)</TwoDogEditorLibGodotPath>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
-        <TwoDogLinuxX64PreferredVariant Condition="'$(TwoDogLinuxX64PreferredVariant)' == ''">debug</TwoDogLinuxX64PreferredVariant>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-        <TwoDogLinuxX64PreferredVariant Condition="'$(TwoDogLinuxX64PreferredVariant)' == ''">release</TwoDogLinuxX64PreferredVariant>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
-        <TwoDogLinuxX64PreferredVariant Condition="'$(TwoDogLinuxX64PreferredVariant)' == ''">editor</TwoDogLinuxX64PreferredVariant>
-    </PropertyGroup>
+    <!-- Preferred variant follows $(TwoDogVariant); 'release' when unset.
+         Deliberately NOT derived from $(Configuration): a single property
+         selects both the native and the GodotPlugins layout (2dog.targets),
+         so the two can never disagree. -->
     <PropertyGroup>
+        <TwoDogLinuxX64PreferredVariant Condition="'$(TwoDogLinuxX64PreferredVariant)' == ''">$(TwoDogVariant)</TwoDogLinuxX64PreferredVariant>
         <TwoDogLinuxX64PreferredVariant Condition="'$(TwoDogLinuxX64PreferredVariant)' == ''">release</TwoDogLinuxX64PreferredVariant>
     </PropertyGroup>
 
@@ -87,7 +84,7 @@
             AfterTargets="Build"
             Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('Linux')) And '$(TwoDogLinuxX64NativeLib)' != '' And Exists('$(TwoDogLinuxX64NativeLib)')">
         <Copy SourceFiles="$(TwoDogLinuxX64NativeLib)"
-              DestinationFiles="$(OutputPath)libgodot.so"
+              DestinationFiles="$(OutputPath)libgodot-$(TwoDogLinuxX64PreferredVariant).so"
               SkipUnchangedFiles="true"/>
         <Message Importance="normal" Text="TwoDog: Copied Linux x64 $(TwoDogLinuxX64PreferredVariant) native library to $(OutputPath)"/>
     </Target>
@@ -97,7 +94,7 @@
             AfterTargets="Publish"
             Condition="'$(DesignTimeBuild)' != 'true' And '$(RuntimeIdentifier)' != '' And $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('linux')) And '$(TwoDogLinuxX64NativeLib)' != '' And Exists('$(TwoDogLinuxX64NativeLib)')">
         <Copy SourceFiles="$(TwoDogLinuxX64NativeLib)"
-              DestinationFiles="$(PublishDir)libgodot.so"
+              DestinationFiles="$(PublishDir)libgodot-$(TwoDogLinuxX64PreferredVariant).so"
               SkipUnchangedFiles="true"/>
         <Message Importance="high" Text="TwoDog: Published Linux x64 $(TwoDogLinuxX64PreferredVariant) native library to $(PublishDir)"/>
     </Target>

@@ -17,7 +17,10 @@
 
       Configurable Properties (in consuming project):
         - TwoDogVariant: 'release' (default), 'debug', or 'editor'
-          Controls how GodotPlugins assemblies are laid out.
+          Selects the native libgodot variant (via the platform meta package
+          targets) AND the GodotPlugins layout. Also embedded as assembly
+          metadata so twodog's DllImportResolver loads the matching
+          libgodot-<variant> library at runtime.
         - TwoDogBuildType: 'template_release', 'template_debug', or 'editor'
           Advanced: override the build type used for API placement.
     -->
@@ -54,6 +57,17 @@
         <TwoDogPackageRoot Condition="'$(TwoDogPackageRoot)' == ''">$(MSBuildThisFileDirectory)../</TwoDogPackageRoot>
     </PropertyGroup>
 
+    <!-- Embed the variant as assembly metadata: twodog's DllImportResolver
+         reads it at runtime to load the matching libgodot-<variant> native.
+         A stale or mismatched native then fails loudly at load instead of
+         producing an opaque hostfxr initialization error. -->
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+            <_Parameter1>TwoDogVariant</_Parameter1>
+            <_Parameter2>$(TwoDogVariant)</_Parameter2>
+        </AssemblyAttribute>
+    </ItemGroup>
+
     <!-- ============================================ -->
     <!-- GodotPlugins Configuration                   -->
     <!-- ============================================ -->
@@ -77,13 +91,12 @@
 
         <!--
           Destination path depends on build type:
-          - Editor builds: GodotSharp/Api/Debug/ subdirectory (required by TOOLS_ENABLED native code)
-          - template_debug: GodotSharp/Api/Debug/ subdirectory (same as editor)
-          - template_release: Flat in output directory (LIBGODOT_HOSTFXR only)
+          - Editor builds (TOOLS_ENABLED): GodotSharp/Api/Debug/ subdirectory
+          - Template builds (LIBGODOT_HOSTFXR without TOOLS_ENABLED, i.e. both
+            template_debug and template_release): flat in the output directory
+            (the native resolves the API assemblies dir as exe_dir)
         -->
         <TwoDogGodotApiDestSubdir Condition="'$(TwoDogBuildType)' == 'editor'">GodotSharp/Api/Debug/</TwoDogGodotApiDestSubdir>
-        <TwoDogGodotApiDestSubdir Condition="'$(TwoDogBuildType)' == 'template_debug'">GodotSharp/Api/Debug/</TwoDogGodotApiDestSubdir>
-        <TwoDogGodotApiDestSubdir Condition="'$(TwoDogBuildType)' == 'template_release'"></TwoDogGodotApiDestSubdir>
         <TwoDogGodotApiDestSubdir Condition="'$(TwoDogGodotApiDestSubdir)' == ''"></TwoDogGodotApiDestSubdir>
     </PropertyGroup>
 

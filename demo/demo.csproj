@@ -12,6 +12,13 @@
         <GodotProjectDir>../game</GodotProjectDir>
     </PropertyGroup>
 
+    <!-- In this repo the native variant follows the build configuration
+         (consumers set TwoDogVariant explicitly; default is release) -->
+    <PropertyGroup>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+    </PropertyGroup>
+
     <!-- Embed GodotProjectDir as assembly metadata for Engine.ResolveProjectDir().
          (NuGet consumers get this automatically via 2dog.targets; ProjectReference needs it explicit.) -->
     <ItemGroup>
