@@ -46,8 +46,59 @@ features:
 
 ---
 
+## Installation
+
+::: code-group
+
+```bash [🤖 Existing Project]
+# Convert in place - scaffolds the 2dog hosts around your Godot project
+# (no install: dnx runs the tool straight from NuGet)
+dnx 2dog.cli convert path/to/MyGame
+
+cd path/to/MyGame
+
+# Run on desktop/in Console as .NET application
+dotnet run --project MyGame.2dog
+
+# You can still just run or edit with Godot
+# (the project root IS still the Godot project)
+godot-mono --editor .
+
+# Publish for the browser as a static site
+# (one-time: dotnet workload install wasm-tools)
+dotnet publish MyGame.web -c Release
+dotnet serve --directory MyGame.web/AppBundle
+```
+
+```bash [🌱 Fresh Project]
+# "Install" 2dog: register the project template
+dotnet new install 2dog
+
+# Create your Project
+dotnet new 2dog -n MyGame
+
+cd MyGame
+
+# Assets are imported automatically during build
+dotnet run --project MyGame.2dog
+
+# Optionally, open and edit the project in the Godot Editor
+# (the project root IS still the Godot project)
+godot-mono --editor .
+```
+
+```bash [📦 Just the Packages]
+dotnet add package 2dog
+dotnet add package 2dog.xunit
+```
+
+:::
+
+
 
 ## All right, let's cook! 
+
+If you want to do more, like control the engine, build a whole separate app or server around it, **2dog** throws you many bones! 🦴 Here are a few starters!
 
 ::: code-group
 
@@ -101,53 +152,6 @@ using var godot = engine.Start();
 // batch processing, validation, custom tooling.
 var scene = GD.Load<PackedScene>("res://main.tscn");
 godot.Tree.Root.AddChild(scene.Instantiate());
-```
-
-:::
-
-## Installation
-
-::: code-group
-
-```bash [🤖 Existing Project]
-# Convert in place - scaffolds the 2dog hosts around your Godot project
-# (no install: dnx runs the tool straight from NuGet)
-dnx 2dog.cli convert path/to/MyGame
-
-cd path/to/MyGame
-
-# Run on desktop/in Console as .NET application
-dotnet run --project MyGame.2dog
-
-# You can still just run or edit with Godot
-godot-mono --editor .
-
-# Publish for the browser as a static site
-# (one-time: dotnet workload install wasm-tools)
-dotnet publish MyGame.web -c Release
-dotnet serve --directory MyGame.web/AppBundle
-```
-
-```bash [🌱 Fresh Project]
-# "Install" 2dog: register the project template
-dotnet new install 2dog
-
-# Create your Project
-dotnet new 2dog -n MyGame
-
-cd MyGame
-
-# Assets are imported automatically during build
-dotnet run --project MyGame.2dog
-
-# Optionally, open and edit the project in the Godot Editor
-# (the project root IS the Godot project)
-godot-mono --e --path .
-```
-
-```bash [📦 Just the Packages]
-dotnet add package 2dog
-dotnet add package 2dog.xunit
 ```
 
 :::
