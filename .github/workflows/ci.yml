@@ -7,11 +7,8 @@ on:
     paths-ignore:
       - 'docs/**'
       - '*.md'
-  pull_request:
-    branches: [main]
-    paths-ignore:
-      - 'docs/**'
-      - '*.md'
+  # No pull_request trigger: push already runs on every branch, so a PR
+  # would run CI twice. Caveat: PRs from forks get no CI without it.
   workflow_run:
     # Must match build-natives.yml's display name exactly.
     workflows: ["2dog Build Natives"]
