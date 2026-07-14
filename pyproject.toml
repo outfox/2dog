@@ -37,6 +37,10 @@ sequence = [
     { cmd = "dotnet restore" },
 ]
 
+[tool.poe.tasks.nuget-retire]
+help = "Retire old package versions on nuget.org: plan (default) / unlist / deprecate. Args are passed through, see scripts/nuget_retire.py --help"
+cmd = "uv run scripts/nuget_retire.py"
+
 [tool.poe.tasks.build-all]
 help = "Complete build: Godot engine, platform packages, twodog library, and NuGet packages"
 sequence = [
