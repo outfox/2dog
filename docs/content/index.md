@@ -63,7 +63,7 @@ cd path/to/MyGame
 # Run on desktop/in Console as .NET application
 dotnet run --project MyGame.2dog
 
-# You can still just run or edit with Godot
+# You can still just run or edit with Godot (official version)
 # (the project root IS still the Godot project)
 godot-mono --editor .
 
