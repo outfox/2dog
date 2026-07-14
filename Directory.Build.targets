@@ -1,9 +1,11 @@
 <Project>
     <!--
       Shared task for writing version defaults into the dotnet-new template's
-      template.json. Used by twodog/twodog.csproj (temporary substitution
-      around pack, restored to placeholder tokens after) and
-      templates/2dog.Templates.csproj (permanent sync before pack).
+      template.json. Used by twodog/twodog.csproj and
+      templates/2dog.Templates.csproj: both stage a copy of template.json
+      into obj/ at pack time and substitute the real versions into that copy;
+      the committed file always keeps its placeholder tokens and is never
+      written to.
 
       Replacement is keyed on the template symbol name (not the version
       value), so it stays correct even when versions collide or

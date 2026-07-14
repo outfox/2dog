@@ -10,17 +10,18 @@ config_version=5
 
 custom_features="dotnet"
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
-config/name="Company.Product1"
-run/main_scene="res://main.tscn"
+config/name="demo"
+run/main_scene="uid://dgiqsv3ntvl3t"
 config/features=PackedStringArray("4.7", "C#")
+boot_splash/image="uid://ddqqkap6en6iq"
+config/icon="res://icon.svg"
 
 [dotnet]
 
-project/assembly_name="Company.Product1.Godot"
-
-[display]
-
-window/size/viewport_width=1280
-window/size/viewport_height=720
+project/assembly_name="demo"

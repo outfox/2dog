@@ -47,13 +47,22 @@ cd MyGodotApp
 dotnet test
 
 # Run the game
-dotnet run --project MyGodotApp
+dotnet run --project MyGodotApp.2dog
 
-# Edit in Godot (optional)
-godot-mono -e --path MyGodotApp.Godot
+# Edit in Godot (optional) - the project root IS the Godot project
+godot-mono -e --path .
 ```
 
-This creates a complete project with sample Godot content and everything configured. See [Project Templates](./templates) for details.
+This creates a complete project with sample Godot content and everything configured: the Godot project is the solution root, with the desktop host, tests, and web host nested inside it (hidden from the Godot editor by `.gdignore` files). See [Project Templates](./templates) for details.
+:::
+
+::: tip Existing Godot project?
+`2dog convert` sets up the same layout around an existing Godot project, in
+place  –  see [Converting a Godot Project](./convert):
+
+```bash
+dnx 2dog.cli convert path/to/your/godot/project
+```
 :::
 
 ### Manual Setup

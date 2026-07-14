@@ -1,6 +1,7 @@
 # .NET build outputs
 bin/
 obj/
+AppBundle/
 *.dll
 *.exe
 *.pdb

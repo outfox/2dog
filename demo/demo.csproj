@@ -1,47 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Godot.NET.Sdk/4.7.0">
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
-        <OutputType>Exe</OutputType>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <IsTrimmable>true</IsTrimmable>
         <IsPackable>false</IsPackable>
-        <!-- comctl32 v6 + long paths for Godot's Windows display server -->
-        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+        <!-- Compiles the TwoDogWebBoot.cs bootstrap used by web (browser-wasm)
+             hosts; harmless on desktop. It takes a function pointer to the
+             source-generated plugins initializer, hence unsafe. -->
+        <DefineConstants>$(DefineConstants);LIBGODOT_ENABLED</DefineConstants>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <!-- Nested 2dog host projects: keep them out of this project's default
+             compile/content globs (each also carries a .gdignore so the Godot
+             editor skips them). -->
+        <DefaultItemExcludes>$(DefaultItemExcludes);demo.2dog/**;demo.web/**</DefaultItemExcludes>
     </PropertyGroup>
-    <PropertyGroup>
-        <GodotProjectDir>../game</GodotProjectDir>
-    </PropertyGroup>
-
-    <!-- In this repo the native variant follows the build configuration
-         (consumers set TwoDogVariant explicitly; default is release) -->
-    <PropertyGroup>
-        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
-        <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
-    </PropertyGroup>
-
-    <!-- Embed GodotProjectDir as assembly metadata for Engine.ResolveProjectDir().
-         (NuGet consumers get this automatically via 2dog.targets; ProjectReference needs it explicit.) -->
-    <ItemGroup>
-        <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
-            <_Parameter1>GodotProjectDir</_Parameter1>
-            <_Parameter2>$([System.IO.Path]::GetFullPath('$(GodotProjectDir)', '$(MSBuildProjectDirectory)'))</_Parameter2>
-        </AssemblyAttribute>
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="2dog" Version="$(TwoDogVersion)"/>
-    </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="../game/game.csproj"/>
-    </ItemGroup>
-    <!-- Remove duplicate Godot.SourceGenerators that come from game's Godot.NET.Sdk
-         (2dog package already embeds them) -->
-    <Target Name="RemoveDuplicateGodotAnalyzers" BeforeTargets="CoreCompile">
-        <ItemGroup>
-            <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Identity)').Contains('Godot.SourceGenerators'))" />
-        </ItemGroup>
-    </Target>
     <Target Name="DeepClean" AfterTargets="Clean">
-        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
-        <RemoveDir Directories="$(BaseOutputPath)"/>
+        <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
+        <RemoveDir Directories="$(BaseOutputPath)" />
     </Target>
 </Project>

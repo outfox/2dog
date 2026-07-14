@@ -25,7 +25,7 @@ public class BasicTests(GodotHeadlessFixture godot)
 Running `dotnet test` produces:
 
 ```
-[xUnit.net 00:00:00.04]   Discovering: MyGame.Tests
+[xUnit.net 00:00:00.04]   Discovering: MyGame.tests
 The active test run was aborted. Reason: Test host process crashed
 ```
 
@@ -98,7 +98,8 @@ internal static class TestInitializer
         // Prevent double-initialization
         if (_engine != null) return;
 
-        _engine = new Engine("tests", "../game", "--headless");
+        // Resolves the <GodotProjectDir> baked into the test assembly
+        _engine = new Engine("tests", Engine.ResolveProjectDir(), "--headless");
         _godot = _engine.Start();
 
         // Clean up when the process exits

@@ -7,5 +7,9 @@
              source-generated plugins initializer, hence unsafe. -->
         <DefineConstants>$(DefineConstants);LIBGODOT_ENABLED</DefineConstants>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <!-- Nested 2dog host projects: keep them out of this project's default
+             compile/content globs (each also carries a .gdignore so the Godot
+             editor skips them). -->
+        <DefaultItemExcludes>$(DefaultItemExcludes);Company.Product1.2dog/**;Company.Product1.web/**;Company.Product1.tests/**</DefaultItemExcludes>
     </PropertyGroup>
 </Project>

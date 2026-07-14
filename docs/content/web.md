@@ -20,7 +20,7 @@ dotnet new 2dog -n LetsCook
 
 # Publish the browser app (imports assets and exports the game
 # content automatically)
-cd LetsCook/LetsCook.Web
+cd LetsCook/LetsCook.web
 dotnet publish -c Release
 
 # Serve the result - any static file server works
@@ -31,7 +31,7 @@ Open the served page: your game is running in the browser, and everything your
 `Main()` prints lands in the DevTools console.
 
 ::: tip The web host is still your code
-`LetsCook.Web/Program.cs` is a normal 2dog host  –  it registers the game's
+`LetsCook.web/Program.cs` is a normal 2dog host  –  it registers the game's
 plugin initializer, starts the engine, and calls `engine.Run()`, which hands
 the frame loop to the browser and returns immediately.
 :::
@@ -57,7 +57,8 @@ configured for Forward+ fall back automatically via Godot's standard
 
 ## Adding web to an existing 2dog project
 
-The template does this for you; for an existing setup you need:
+The template does this for you, and [`2dog convert`](/convert) retrofits it
+onto an existing Godot project; to wire it up manually you need:
 
 1. **In the Godot project:**
    - `<DefineConstants>$(DefineConstants);LIBGODOT_ENABLED</DefineConstants>`
@@ -71,14 +72,18 @@ The template does this for you; for an existing setup you need:
      export).
 2. **A web host project** (net10.0+, `RuntimeIdentifier=browser-wasm`)
    referencing the `2dog` and `2dog.browser-wasm` packages, with
-   `<GodotProjectDir>` pointing at the Godot project  –  again, easiest copied
-   from a `dotnet new 2dog` output.
+   `<GodotProjectDir>` pointing at the Godot project. In the standard layout
+   the host is nested inside the Godot project (e.g. `LetsCook/LetsCook.web/`)
+   with `<GodotProjectDir>..</GodotProjectDir>`  –  again, easiest copied from a
+   `dotnet new 2dog` output.
 
-::: warning Godot project at the repository root?
-If `project.godot` lives at your repo root (common for jam projects), two
-extras: put a `.gdignore` file in the web host directory so the Godot importer
-skips it, and add `<Compile Remove="YourGame.Web/**"/>` to the Godot project's
-csproj so the .NET SDK's source glob doesn't swallow the host's sources.
+::: warning Host nested inside the Godot project
+Because the host directory lives under `project.godot`, two extras keep the
+layers apart: a `.gdignore` file in the host directory so the Godot
+importer/exporter skips it, and the host folder in the Godot project csproj's
+`<DefaultItemExcludes>` (e.g. `LetsCook.web/**`) so the .NET SDK's source glob
+doesn't swallow the host's sources. The template and `2dog convert` set up
+both.
 :::
 
 ## Configuration
@@ -93,18 +98,20 @@ Properties for the web host project (all optional):
 | `TwoDogWebPackName` | `godot.pck` | Deployed pack file name |
 
 Add a `<TrimmerRootAssembly>` for any NuGet package your game reaches via
-reflection (serializers, ECS libraries, ...). The game assembly, `GodotSharp`,
-and `twodog` are rooted for you.
+reflection (serializers, ECS libraries, ...). The generated host csproj
+already roots the game assembly (`LetsCook`  –  scripts are resolved by
+reflection), and the package targets root `GodotSharp` and `twodog`.
 
 ## The development loop
 
 A web publish relinks the entire wasm with Emscripten  –  expect **minutes, every
 publish**. That cost is inherent to static linking, so iterate the fast way:
 
-- **Gameplay and assets**: run the desktop host (`dotnet run`)  –  it's the same
-  engine and the same code.
-- **Web verification**: `dotnet publish -c Release` in the web host, then
-  serve `AppBundle/`.
+- **Gameplay and assets**: run the desktop host
+  (`dotnet run --project LetsCook.2dog`)  –  it's the same engine and the same
+  code.
+- **Web verification**: `dotnet publish -c Release` in the web host folder
+  (`LetsCook.web/`), then serve `AppBundle/`.
 - Browsers cache the large wasm aggressively  –  hard-refresh
   (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>) after each publish.
 - Stop your static server before republishing: the publish replaces the

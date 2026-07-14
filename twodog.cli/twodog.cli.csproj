@@ -1,0 +1,86 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RollForward>LatestMajor</RollForward>
+        <AssemblyName>2dog.cli</AssemblyName>
+        <RootNamespace>twodog.cli</RootNamespace>
+    </PropertyGroup>
+
+    <!-- dotnet tool: `dnx 2dog.cli convert` (one-shot) or
+         `dotnet tool install -g 2dog.cli` -> the `2dog` command.
+         (The tool cannot live inside the 2dog package: the DotnetTool package
+         type makes a package un-referenceable as a PackageReference, and tool
+         execution does not restore package dependencies.) -->
+    <PropertyGroup>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>2dog</ToolCommandName>
+        <PackageId>2dog.cli</PackageId>
+        <Version>$(TwoDogVersion)</Version>
+        <Authors>Moritz Voss</Authors>
+        <Description>Command-line tool for 2dog: converts an existing Godot project to the 2dog layout (nested host projects for desktop, browser-wasm and xUnit testing). Run one-shot with `dnx 2dog.cli convert` or install with `dotnet tool install -g 2dog.cli`.</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+
+    <!-- The versions the tool scaffolds with, baked in at build time -->
+    <ItemGroup>
+        <AssemblyMetadata Include="TwoDogVersion" Value="$(TwoDogVersion)"/>
+        <AssemblyMetadata Include="NativesVersion" Value="$(NativesVersion)"/>
+        <AssemblyMetadata Include="GodotSdkVersion" Value="$(GodotVersion)"/>
+    </ItemGroup>
+
+    <!-- Single source of truth: embed the dotnet-new template's host subtrees
+         verbatim (rename/version tokens intact; substituted at runtime).
+         The template sln is NOT embedded - it contains dotnet-new #if blocks;
+         solution handling shells out to `dotnet sln` instead. -->
+    <PropertyGroup>
+        <!-- Build artifacts appear in the template host folders when someone
+             builds/publishes them locally; embedding those would scaffold the
+             junk into user projects (VerifyEmbeddedTemplateTracked only fails
+             the pack, not a plain build). -->
+        <_TwoDogCliTplExcludes>../templates/twodog/**/bin/**;../templates/twodog/**/obj/**;../templates/twodog/**/TestResults/**</_TwoDogCliTplExcludes>
+    </PropertyGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="../templates/twodog/Company.Product1.2dog/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.2dog/%(RecursiveDir)%(Filename)%(Extension)"/>
+        <EmbeddedResource Include="../templates/twodog/Company.Product1.web/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.web/%(RecursiveDir)%(Filename)%(Extension)"/>
+        <EmbeddedResource Include="../templates/twodog/Company.Product1.tests/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.tests/%(RecursiveDir)%(Filename)%(Extension)"/>
+        <EmbeddedResource Include="../templates/twodog/Company.Product1.csproj" LogicalName="tpl/Company.Product1.csproj"/>
+        <EmbeddedResource Include="../templates/twodog/TwoDogWebBoot.cs" LogicalName="tpl/TwoDogWebBoot.cs"/>
+    </ItemGroup>
+
+    <!-- Unit tests in twodog.tests exercise the internal conversion pipeline -->
+    <ItemGroup>
+        <InternalsVisibleTo Include="twodog.tests"/>
+    </ItemGroup>
+
+    <!-- Package icon and readme -->
+    <ItemGroup>
+        <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
+        <None Include="README.md" Pack="true" PackagePath="README.md"/>
+    </ItemGroup>
+
+    <!-- Template files matched by a .gitignore never reach a CI checkout, so
+         they would silently vanish from the embedded resources even though
+         local builds still see them (same guard as twodog.csproj). -->
+    <Target Name="VerifyEmbeddedTemplateTracked" BeforeTargets="GenerateNuspec">
+        <Exec Command="git -C &quot;$(MSBuildProjectDirectory)/../&quot; ls-files --others templates/twodog/"
+              ConsoleToMSBuild="true" IgnoreExitCode="true" StandardOutputImportance="low">
+            <Output TaskParameter="ConsoleOutput" PropertyName="_TwoDogCliTemplateUntracked"/>
+            <Output TaskParameter="ExitCode" PropertyName="_TwoDogCliTemplateGitExit"/>
+        </Exec>
+        <Error Condition="'$(_TwoDogCliTemplateGitExit)' == '0' And '$(_TwoDogCliTemplateUntracked.Trim())' != ''"
+               Text="2dog template content contains files git does not track (gitignored or never added) - they would be missing from a CI-built 2dog.cli: $(_TwoDogCliTemplateUntracked)"/>
+    </Target>
+
+    <Target Name="DeepClean" AfterTargets="Clean">
+        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
+        <RemoveDir Directories="$(BaseOutputPath)"/>
+    </Target>
+</Project>

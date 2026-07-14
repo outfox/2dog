@@ -70,18 +70,18 @@
         {
           "condition": "(!tests)",
           "exclude": [
-            "Company.Product1.Tests/**/*"
+            "Company.Product1.tests/**/*"
           ]
         },
         {
           "condition": "(!web)",
           "exclude": [
-            "Company.Product1.Web/**/*"
+            "Company.Product1.web/**/*"
           ]
         },
         {
           "copyOnly": [
-            "Company.Product1.Godot/TwoDogWebBoot.cs"
+            "TwoDogWebBoot.cs"
           ]
         }
       ]
@@ -92,15 +92,18 @@
       "path": "Company.Product1.sln"
     },
     {
-      "path": "Company.Product1/Company.Product1.csproj"
+      "path": "Company.Product1.csproj"
+    },
+    {
+      "path": "Company.Product1.2dog/Company.Product1.2dog.csproj"
     },
     {
       "condition": "(tests)",
-      "path": "Company.Product1.Tests/Company.Product1.Tests.csproj"
+      "path": "Company.Product1.tests/Company.Product1.tests.csproj"
     },
     {
       "condition": "(web)",
-      "path": "Company.Product1.Web/Company.Product1.Web.csproj"
+      "path": "Company.Product1.web/Company.Product1.web.csproj"
     }
   ],
   "postActions": [

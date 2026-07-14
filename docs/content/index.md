@@ -119,13 +119,19 @@ dotnet new 2dog -n LetsCook
 cd LetsCook
 
 # Assets are imported automatically during build
-dotnet run --project LetsCook
+dotnet run --project LetsCook.2dog
 
 # Optionally, open and edit the project in the Godot Editor
-godot-mono -e --path LetsCook.Godot
+# (the project root IS the Godot project)
+godot-mono -e --path .
 ```
 
-```bash [🤖 Existing Project]
+```bash [🤖 Existing Godot Project]
+# Convert in place - scaffolds the 2dog hosts around your project
+dnx 2dog.cli convert path/to/your/godot/project
+```
+
+```bash [📦 Just the Packages]
 dotnet add package 2dog
 dotnet add package 2dog.xunit
 ```
