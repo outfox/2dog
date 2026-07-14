@@ -28,7 +28,11 @@ internal struct GDExtensionInitialization
 
 internal static unsafe partial class LibGodot
 {
-    private const string LIBGODOT_LIBRARY_NAME = "libgodot";
+    // Logical name only: LibGodotLoader's DllImportResolver maps it to the
+    // variant-specific file (libgodot-release / libgodot-debug / libgodot-editor).
+    internal const string LIBGODOT_LIBRARY_NAME = "libgodot";
+
+    static LibGodot() => LibGodotLoader.Register();
 
     // StringName size (from godot-cpp)
     private const int STRING_NAME_SIZE = 8;

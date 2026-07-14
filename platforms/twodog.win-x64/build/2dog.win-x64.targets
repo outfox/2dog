@@ -11,9 +11,10 @@
       - When used via ProjectReference in this repository, it falls back to the
         locally built Godot binaries in godot/bin.
 
-      Configuration mapping:
-      - Debug (or unspecified): prefer editor build (TOOLS_ENABLED)
-      - Release: prefer template_release build
+      Variant selection: $(TwoDogVariant) ('release' default, 'debug', 'editor').
+      The native is copied as libgodot-<variant>.dll; twodog's DllImportResolver
+      loads it by the variant declared in the consuming assembly's metadata, so
+      a mismatched or stale native fails loudly instead of half-working.
     -->
 
     <!-- Discover package version from this .targets location -->
@@ -29,9 +30,9 @@
     <PropertyGroup>
         <!-- Variant package paths in the NuGet global packages folder -->
         <!-- $(NuGetPackageRoot) is set by NuGet restore and points to the packages cache -->
-        <TwoDogWinX64ReleasePackage>$(NuGetPackageRoot)/2dog.win-x64.release/$(TwoDogWinX64PackageVersion)/runtimes/win-x64/native/libgodot.dll</TwoDogWinX64ReleasePackage>
-        <TwoDogWinX64DebugPackage>$(NuGetPackageRoot)/2dog.win-x64.debug/$(TwoDogWinX64PackageVersion)/runtimes/win-x64/native/libgodot.dll</TwoDogWinX64DebugPackage>
-        <TwoDogWinX64EditorPackage>$(NuGetPackageRoot)/2dog.win-x64.editor/$(TwoDogWinX64PackageVersion)/runtimes/win-x64/native/libgodot.dll</TwoDogWinX64EditorPackage>
+        <TwoDogWinX64ReleasePackage>$(NuGetPackageRoot)/2dog.win-x64.release/$(TwoDogWinX64PackageVersion)/runtimes/win-x64/native/libgodot-release.dll</TwoDogWinX64ReleasePackage>
+        <TwoDogWinX64DebugPackage>$(NuGetPackageRoot)/2dog.win-x64.debug/$(TwoDogWinX64PackageVersion)/runtimes/win-x64/native/libgodot-debug.dll</TwoDogWinX64DebugPackage>
+        <TwoDogWinX64EditorPackage>$(NuGetPackageRoot)/2dog.win-x64.editor/$(TwoDogWinX64PackageVersion)/runtimes/win-x64/native/libgodot-editor.dll</TwoDogWinX64EditorPackage>
 
         <!-- Local development paths (fallback for ProjectReference builds) -->
         <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
@@ -49,17 +50,12 @@
         <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogWinX64EditorLocal)')">$(TwoDogWinX64EditorLocal)</TwoDogEditorLibGodotPath>
     </PropertyGroup>
 
-    <!-- Choose preferred variant based on Configuration -->
-    <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
-        <TwoDogWinX64PreferredVariant Condition="'$(TwoDogWinX64PreferredVariant)' == ''">debug</TwoDogWinX64PreferredVariant>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-        <TwoDogWinX64PreferredVariant Condition="'$(TwoDogWinX64PreferredVariant)' == ''">release</TwoDogWinX64PreferredVariant>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
-        <TwoDogWinX64PreferredVariant Condition="'$(TwoDogWinX64PreferredVariant)' == ''">editor</TwoDogWinX64PreferredVariant>
-    </PropertyGroup>
+    <!-- Preferred variant follows $(TwoDogVariant); 'release' when unset.
+         Deliberately NOT derived from $(Configuration): a single property
+         selects both the native and the GodotPlugins layout (2dog.targets),
+         so the two can never disagree. -->
     <PropertyGroup>
+        <TwoDogWinX64PreferredVariant Condition="'$(TwoDogWinX64PreferredVariant)' == ''">$(TwoDogVariant)</TwoDogWinX64PreferredVariant>
         <TwoDogWinX64PreferredVariant Condition="'$(TwoDogWinX64PreferredVariant)' == ''">release</TwoDogWinX64PreferredVariant>
     </PropertyGroup>
 
@@ -92,7 +88,7 @@
             AfterTargets="Build"
             Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('Windows')) And '$(TwoDogWinX64NativeLib)' != '' And Exists('$(TwoDogWinX64NativeLib)')">
         <Copy SourceFiles="$(TwoDogWinX64NativeLib)"
-              DestinationFiles="$(OutputPath)libgodot.dll"
+              DestinationFiles="$(OutputPath)libgodot-$(TwoDogWinX64PreferredVariant).dll"
               SkipUnchangedFiles="true"/>
         <Message Importance="normal" Text="TwoDog: Copied Windows x64 $(TwoDogWinX64PreferredVariant) native library to $(OutputPath)"/>
     </Target>
@@ -102,7 +98,7 @@
             AfterTargets="Publish"
             Condition="'$(DesignTimeBuild)' != 'true' And '$(RuntimeIdentifier)' != '' And $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('win')) And '$(TwoDogWinX64NativeLib)' != '' And Exists('$(TwoDogWinX64NativeLib)')">
         <Copy SourceFiles="$(TwoDogWinX64NativeLib)"
-              DestinationFiles="$(PublishDir)libgodot.dll"
+              DestinationFiles="$(PublishDir)libgodot-$(TwoDogWinX64PreferredVariant).dll"
               SkipUnchangedFiles="true"/>
         <Message Importance="high" Text="TwoDog: Published Windows x64 $(TwoDogWinX64PreferredVariant) native library to $(PublishDir)"/>
     </Target>

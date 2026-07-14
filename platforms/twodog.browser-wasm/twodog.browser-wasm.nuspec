@@ -11,7 +11,7 @@
         <description>$description$</description>
         <dependencies>
             <group targetFramework=".NETStandard2.0">
-                <dependency id="2dog.browser-wasm.release" version="$version$"/>
+                <dependency id="2dog.browser-wasm.release" version="[$version$]"/>
             </group>
         </dependencies>
     </metadata>

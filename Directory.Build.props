@@ -6,10 +6,12 @@
              Bump every 2dog release; never reset when GodotVersion changes:
              e.g. 4.6.2.31 and 4.7.0.31 are the same 2dog iteration. -->
         <TwoDogRevision>37</TwoDogRevision>
-        <!-- Native package revision. Bump ONLY when the godot submodule changes;
+        <!-- Native package revision. Bump when the godot submodule changes OR
+             when the natives package layout/metadata changes (the deploy job's
+             skip-duplicate push would otherwise keep the old package);
              reset to 0 when GodotVersion changes. NuGet normalizes a trailing .0
              (4.7.0.0 publishes as 4.7.0). -->
-        <NativesRevision>13</NativesRevision>
+        <NativesRevision>14</NativesRevision>
         <TwoDogVersion>$(GodotVersion).$(TwoDogRevision)</TwoDogVersion>
         <NativesVersion>$(GodotVersion).$(NativesRevision)</NativesVersion>
         <!-- Emscripten version for browser-wasm natives. Must match the emscripten

@@ -12,10 +12,11 @@
 | **debug** | `template_debug` | ❌ No | Development with debug symbols |
 | **editor** | `editor` | ✅ Yes | Editor APIs, [Tool] scripts |
 
-The variant is selected with `TwoDogVariant` plus the matching platform
-variant package  –  it is not derived from your .NET configuration
-automatically. See [Build Configurations](./build-configurations#selecting-a-variant)
-for the full wiring.
+The variant is selected with the `TwoDogVariant` property alone  –  it is not
+derived from your .NET configuration automatically. All three variants ship
+with the platform meta package, so no extra package references are needed.
+See [Build Configurations](./build-configurations#selecting-a-variant) for
+mapping variants to your .NET configurations.
 
 ### What is TOOLS_ENABLED?
 
@@ -42,24 +43,24 @@ runs automatically at build time in a separate helper process via the
 ## Native Library Options
 
 Native libraries are delivered as NuGet platform packages. Referencing `2dog`
-automatically pulls in the `template_release` package for your OS
-(`2dog.win-x64`, `2dog.linux-x64`, or `2dog.osx-arm64`). For debug or editor
-natives, reference the corresponding variant package explicitly:
-
-```xml
-<ItemGroup Condition="'$(Configuration)' == 'Debug'">
-  <PackageReference Include="2dog.win-x64.debug" Version=":natives-version:"/>
-</ItemGroup>
-<ItemGroup Condition="'$(Configuration)' == 'Editor'">
-  <PackageReference Include="2dog.win-x64.editor" Version=":natives-version:"/>
-</ItemGroup>
-```
+pulls in the platform meta package for your OS (`2dog.win-x64`,
+`2dog.linux-x64`, or `2dog.osx-arm64`), which pins all three variant packages
+(`.release`, `.debug`, `.editor`). The build copies the variant selected by
+`TwoDogVariant` into your output directory as `libgodot-<variant>.dll`
+(`.so`/`.dylib`), and 2dog loads it by that name at runtime  –  a missing or
+mismatched variant fails with an actionable error instead of an opaque
+hostfxr failure.
 
 ### TwoDogVariant
 
 Selects which native variant your project targets: `release` (default),
-`debug`, or `editor`. This controls how the GodotPlugins assemblies are laid
-out in your output directory (see [Directory Structure Requirements](#directory-structure-requirements)).
+`debug`, or `editor`. This single property controls which `libgodot-<variant>`
+native library is copied and loaded AND how the GodotPlugins assemblies are
+laid out in your output directory (see
+[Directory Structure Requirements](#directory-structure-requirements)).
+It is also embedded as assembly metadata
+(`[AssemblyMetadata("TwoDogVariant", ...)]`) so the runtime loads the
+matching native.
 
 ```xml
 <PropertyGroup>
@@ -131,7 +132,6 @@ itself happens automatically at build time  –  see
 
   <ItemGroup>
     <PackageReference Include="2dog" Version=":2dog-version:"/>
-    <PackageReference Include="2dog.win-x64.editor" Version=":natives-version:"/>
   </ItemGroup>
 </Project>
 ```
@@ -161,7 +161,7 @@ Godot's native code has specific expectations for where the GodotSharp API assem
 | Build Type | Compile Flags | Expected Directory Structure |
 |------------|---------------|------------------------------|
 | `editor` | `TOOLS_ENABLED` + `LIBGODOT_HOSTFXR` | `GodotSharp/Api/Debug/` subdirectory |
-| `template_debug` | `LIBGODOT_HOSTFXR` only | `GodotSharp/Api/Debug/` subdirectory |
+| `template_debug` | `LIBGODOT_HOSTFXR` only | Flat (same directory as libgodot) |
 | `template_release` | `LIBGODOT_HOSTFXR` only | Flat (same directory as libgodot) |
 
 ### Why This Matters
@@ -172,7 +172,7 @@ When Godot initializes its .NET runtime, it checks for the GodotSharp assemblies
 ```
 your-app/
 ├── your-app.exe
-├── libgodot.dll
+├── libgodot-editor.dll
 └── GodotSharp/
     └── Api/
         └── Debug/
@@ -181,11 +181,11 @@ your-app/
             └── GodotPlugins.runtimeconfig.json
 ```
 
-**Template release builds** (`LIBGODOT_HOSTFXR` without `TOOLS_ENABLED`):
+**Template builds** (`LIBGODOT_HOSTFXR` without `TOOLS_ENABLED`):
 ```
 your-app/
 ├── your-app.exe
-├── libgodot.dll
+├── libgodot-release.dll   (or libgodot-debug.dll)
 ├── GodotSharp.dll
 ├── GodotPlugins.dll
 └── GodotPlugins.runtimeconfig.json
@@ -206,20 +206,21 @@ Make sure the '...GodotSharp/Api/Debug' directory exists and contains the .NET a
 `TwoDogBuildType`:
 
 - **`TwoDogBuildType=editor`**: Copies to `$(OutputPath)GodotSharp/Api/Debug/`
-- **`TwoDogBuildType=template_debug`**: Copies to `$(OutputPath)GodotSharp/Api/Debug/`
-- **`TwoDogBuildType=template_release`**: Copies directly to `$(OutputPath)`
+- **`TwoDogBuildType=template_debug` / `template_release`**: Copies directly to `$(OutputPath)`
 
 This happens automatically via the `TwoDogCopyGodotApi` MSBuild target (and
-`TwoDogPublishGodotApi` on publish).
+`TwoDogPublishGodotApi` on publish). At startup, 2dog also points
+`GODOTSHARP_DIR` at whichever of the two layouts is present, so non-standard
+host processes (like `dotnet test`) resolve GodotPlugins correctly.
 
 ### Troubleshooting
 
 If you encounter the "Unable to find .NET assemblies directory" error:
 
-1. **Check your variant matches your native library**:
-   - Using `godot.*.editor.*.dll`? Set `TwoDogVariant=editor`
-   - Using `godot.*.template_debug.*.dll`? Set `TwoDogVariant=debug`
-   - Using `godot.*.template_release.*.dll`? Use the default (`TwoDogVariant=release`)
+1. **Check `TwoDogVariant` and the copied native agree**: the output directory
+   should contain a `libgodot-<variant>` library matching your
+   `TwoDogVariant`. A mismatch is reported at load time with the expected
+   file name and the directories that were probed.
 
 2. **Verify the directory structure** in your output folder matches the expected pattern above.
 

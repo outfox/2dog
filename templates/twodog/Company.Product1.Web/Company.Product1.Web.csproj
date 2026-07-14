@@ -24,7 +24,7 @@
 
     <ItemGroup>
         <PackageReference Include="2dog" Version="TWODOG_PKG_VERSION"/>
-        <PackageReference Include="2dog.browser-wasm" Version="NATIVES_PKG_VERSION"/>
+        <PackageReference Include="2dog.browser-wasm" Version="[NATIVES_PKG_VERSION]"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="../TPLRAWNAME.Godot/TPLRAWNAME.Godot.csproj"/>

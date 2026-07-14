@@ -149,8 +149,9 @@ Editor builds are significantly larger and slower due to the additional tooling.
 
 Referencing `2dog` gives you the `release` natives. The variant is **not**
 derived from your .NET configuration automatically  –  to use `debug` or
-`editor` natives, set `TwoDogVariant` and reference the matching platform
-variant package, typically conditioned on your configuration:
+`editor` natives, set `TwoDogVariant`, typically conditioned on your
+configuration. All three variants ship with the platform meta package, so no
+extra package references are needed:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -163,23 +164,18 @@ variant package, typically conditioned on your configuration:
     <PackageReference Include="2dog" Version=":2dog-version:"/>
   </ItemGroup>
 
-  <!-- Debug natives (opt-in) -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TwoDogVariant>debug</TwoDogVariant>
+  <!-- Debug natives (opt-in); Editor natives via a custom 'Editor' configuration -->
+  <PropertyGroup>
+    <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+    <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
   </PropertyGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <PackageReference Include="2dog.win-x64.debug" Version=":natives-version:"/>
-  </ItemGroup>
-
-  <!-- Editor natives (opt-in, custom 'Editor' configuration) -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
-    <TwoDogVariant>editor</TwoDogVariant>
-  </PropertyGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Editor'">
-    <PackageReference Include="2dog.win-x64.editor" Version=":natives-version:"/>
-  </ItemGroup>
 </Project>
 ```
+
+The build copies the selected variant into your output directory as
+`libgodot-<variant>.dll` (`.so`/`.dylib`) and the runtime loads it by that
+name, so switching variants can never silently run a stale native from a
+previous build.
 
 The `TwoDogBuildType` property (`template_release`, `template_debug`,
 `editor`) is derived from `TwoDogVariant` and only needs to be set directly
@@ -251,8 +247,8 @@ reference  –  `debug` for `2dog.<rid>.debug`, `editor` for `2dog.<rid>.editor`
 
 If editor types are missing at compile time:
 
-**Solution**: Use the `editor` native variant (`TwoDogVariant=editor` plus the
-`2dog.<rid>.editor` platform package). Only editor builds include
+**Solution**: Use the `editor` native variant (`TwoDogVariant=editor`).
+Only editor builds include
 `TOOLS_ENABLED` features  –  and remember that editor runtime singletons are not
 initialized in embedded libgodot mode (see the warning above).
 
