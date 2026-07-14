@@ -116,12 +116,16 @@ dnx 2dog.cli convert path/to/MyGame
 
 cd path/to/MyGame
 
-# Run on desktop
+# Run on desktop/in Console as .NET application
 dotnet run --project MyGame.2dog
+
+# You can still just run or edit with Godot
+godot-mono --editor .
 
 # Publish for the browser as a static site
 # (one-time: dotnet workload install wasm-tools)
 dotnet publish MyGame.web -c Release
+dotnet serve --directory MyGame.web/AppBundle
 ```
 
 ```bash [🌱 Fresh Project]
@@ -138,7 +142,7 @@ dotnet run --project MyGame.2dog
 
 # Optionally, open and edit the project in the Godot Editor
 # (the project root IS the Godot project)
-godot-mono -e --path .
+godot-mono --e --path .
 ```
 
 ```bash [📦 Just the Packages]
