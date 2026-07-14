@@ -2,8 +2,8 @@
   "solution": {
     "path": "2dog.sln",
     "projects": [
+      "demo\\demo.2dog\\demo.2dog.csproj",
       "demo\\demo.csproj",
-      "game\\game.csproj",
       "platforms\\twodog.browser-wasm\\twodog.browser-wasm.csproj",
       "platforms\\twodog.browser-wasm\\twodog.browser-wasm.debug.csproj",
       "platforms\\twodog.browser-wasm\\twodog.browser-wasm.release.csproj",

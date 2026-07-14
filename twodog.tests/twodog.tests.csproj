@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <GodotProjectDir>../game</GodotProjectDir>
+        <GodotProjectDir>../demo</GodotProjectDir>
     </PropertyGroup>
 
     <ItemGroup>

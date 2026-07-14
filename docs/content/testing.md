@@ -13,6 +13,12 @@ dotnet add package Microsoft.NET.Test.Sdk
 dotnet add package xunit.runner.visualstudio
 ```
 
+Projects created by `dotnet new 2dog` (or [`2dog convert`](/convert)) already
+include a ready-made test project: `MyGame.tests/`, nested inside the Godot
+project (with a `.gdignore` so the Godot editor skips it) and pointing
+`<GodotProjectDir>` at the parent directory (`..`). Run it with
+`dotnet test MyGame.tests`.
+
 ## Fixtures
 
 Both fixtures are thin subclasses of `GodotFixtureBase`, which starts the engine

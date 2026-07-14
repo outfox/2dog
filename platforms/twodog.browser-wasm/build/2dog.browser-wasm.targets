@@ -181,10 +181,16 @@
     <!-- Export incrementality inputs: the export must NOT borrow
          @(TwoDogImportInputs) - that item is only populated when
          TwoDogAutoImport is enabled, and an incremental target with empty
-         Inputs is silently skipped, shipping a bundle without the pck. -->
+         Inputs is silently skipped, shipping a bundle without the pck.
+
+         Directories carrying a .gdignore are skipped by the Godot export
+         (and hold this very host's own build outputs when the web host is
+         nested inside the Godot project - including the exported pck itself,
+         which must never count as an input). -->
     <ItemGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != ''">
+        <_TwoDogWebGdIgnoredDirs Include="$(TwoDogGodotProjectFullPath)/**/.gdignore"/>
         <TwoDogWebExportInputs Include="$(TwoDogGodotProjectFullPath)/**/*"
-                               Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;$(TwoDogGodotProjectFullPath)/bin/**;$(TwoDogGodotProjectFullPath)/obj/**;$(TwoDogGodotProjectFullPath)/**/*.tmp;$(TwoDogGodotProjectFullPath)/**/.DS_Store"/>
+                               Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;$(TwoDogGodotProjectFullPath)/bin/**;$(TwoDogGodotProjectFullPath)/obj/**;$(TwoDogGodotProjectFullPath)/**/*.tmp;$(TwoDogGodotProjectFullPath)/**/.DS_Store;@(_TwoDogWebGdIgnoredDirs->'%(RootDir)%(Directory)**');$(TwoDogImportExcludes)"/>
     </ItemGroup>
 
     <Target Name="TwoDogExportGamePack"

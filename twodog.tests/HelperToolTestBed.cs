@@ -101,7 +101,7 @@ internal static class HelperToolTestBed
 
     public static string CreateScratchProject()
     {
-        var source = Path.Combine(RepoRoot, "game");
+        var source = Path.Combine(RepoRoot, "demo");
         var scratch = Path.Combine(Path.GetTempPath(), "2dog-import-test-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(scratch);
         foreach (var file in Directory.EnumerateFiles(source))

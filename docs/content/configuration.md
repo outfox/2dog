@@ -96,7 +96,9 @@ embedded as assembly metadata at build time and resolved at runtime via
 
 ```xml
 <PropertyGroup>
-  <GodotProjectDir>../MyGame.Godot/</GodotProjectDir>
+  <!-- In the standard layout the host project is nested inside the Godot
+       project, so the Godot project is the parent directory -->
+  <GodotProjectDir>..</GodotProjectDir>
 </PropertyGroup>
 ```
 

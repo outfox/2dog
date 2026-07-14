@@ -173,6 +173,9 @@
         TwoDogRequireImport:   'true' turns the missing-capability warning into an error
         TwoDogForceImport:     'true' forces the import to run even if up-to-date
         TwoDogImportStampFile: override the stamp file location
+        TwoDogImportExcludes:  extra semicolon-separated glob excludes for the
+                               import inputs (dirs with a .gdignore are always
+                               excluded, mirroring the Godot importer)
         GodotEditor:           path to an external Godot editor binary
     -->
     <PropertyGroup>
@@ -196,9 +199,15 @@
              intentionally INCLUDED: they are user-editable import settings
              whose changes must retrigger the import. Safe because the stamp
              is touched after the import completes, so files (re)generated
-             during the run are always older than the stamp. -->
+             during the run are always older than the stamp.
+
+             Directories carrying a .gdignore (e.g. nested 2dog host projects)
+             are invisible to the Godot editor/importer, so their churn must
+             not invalidate the import stamp either. TwoDogImportExcludes:
+             extra semicolon-separated glob excludes supplied by the user. -->
+        <_TwoDogGdIgnoredDirs Include="$(TwoDogGodotProjectFullPath)/**/.gdignore"/>
         <TwoDogImportInputs Include="$(TwoDogGodotProjectFullPath)/**/*"
-                            Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;$(TwoDogGodotProjectFullPath)/bin/**;$(TwoDogGodotProjectFullPath)/obj/**;$(TwoDogGodotProjectFullPath)/**/*.uid;$(TwoDogGodotProjectFullPath)/**/*.tmp;$(TwoDogGodotProjectFullPath)/**/.DS_Store"/>
+                            Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;$(TwoDogGodotProjectFullPath)/bin/**;$(TwoDogGodotProjectFullPath)/obj/**;$(TwoDogGodotProjectFullPath)/**/*.uid;$(TwoDogGodotProjectFullPath)/**/*.tmp;$(TwoDogGodotProjectFullPath)/**/.DS_Store;@(_TwoDogGdIgnoredDirs->'%(RootDir)%(Directory)**');$(TwoDogImportExcludes)"/>
     </ItemGroup>
 
     <!-- Deleting the stamp before the incremental check forces the import.

@@ -48,6 +48,10 @@ Likely yes, once that integration is finished. As of mid-2026, godot-dotnet is s
 
 No. 2dog embeds GodotSharp (and Godot's C# source generators) and builds on top of it. Everything you know from Godot C# scripting  –  `GD`, `Node`, `[Export]`, signals  –  works the same; 2dog only inverts who is in charge of the process.
 
+## Why is the CLI a separate package (`2dog.cli`) instead of part of `2dog`?
+
+NuGet forces the split. A package marked as a dotnet tool (`DotnetTool` package type) cannot also be consumed as a `PackageReference`  –  referencing it fails with error `NU1213`  –  so the `2dog` library package can't double as the tool. The `PackAsTool` layout also conflicts with the library payload (`build/` targets, embedded API assemblies, import helper), and dotnet tool execution doesn't restore package dependencies, so the tool has to be self-contained. Hence one library package (`2dog`) and one tool package (`2dog.cli`), released in lockstep. The tool embeds the project template content, so both scaffold identical output  –  see [Converting a Godot Project](/convert).
+
 ---
 
 Have a question that isn't answered here? Ask on [Discord](https://discord.gg/GAXdbZCNGT) or [open an issue on GitHub](https://github.com/outfox/2dog/issues).

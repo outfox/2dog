@@ -49,7 +49,8 @@ while (!godot.Iteration())
 ## Features
 
 - 🆕 WASM support! 🔥 (deploy and play your C# Godot game in the browser!)
-- Custom .NET-first project structure (parallel to Godot project - no code changes needed)
+- .NET-first project structure: your Godot project is the solution root, with the host projects nested inside it (hidden from the Godot editor by `.gdignore` - no code changes needed)
+- `2dog convert` turns an existing Godot project into a 2dog project, in place
 - Familiar GodotSharp API (fully compatible with official Godot)
 - Automatic asset import during `dotnet build` - no Godot editor installation needed
 - Three build configurations: Debug, Release, and Editor (with `TOOLS_ENABLED`)
@@ -77,24 +78,34 @@ dotnet new install 2dog
 # Create a new project (includes xUnit tests and a web host by default)
 dotnet new 2dog -n MyGame
 
-# Navigate into the project
+# Navigate into the project (it IS the Godot project - hosts are nested inside)
 cd MyGame
 
 # Run tests (assets are imported automatically during build)
 dotnet test
 
 # Run the game
-dotnet run --project MyGame
+dotnet run --project MyGame.2dog
 
 # Edit in Godot at any time (optional)
-godot-mono -e --path MyGame.Godot
+godot-mono -e --path .
 ```
 
 > Asset import (`.uid` files, textures, the script UID cache) happens
 > automatically as an incremental build step - no Godot editor required.
 > See the [Resource Import](https://2dog.dev/import-tool.html) docs.
 
-### Adding to an Existing Project
+### Converting an Existing Godot Project
+
+The `2dog convert` tool sets up the same layout around an existing Godot
+project - in place, without moving or renaming anything:
+
+```bash
+dnx 2dog.cli convert path/to/your/godot/project
+```
+
+See the [conversion docs](https://2dog.dev/convert.html) for details. To just
+add the packages to an existing .NET project instead:
 
 ```bash
 dotnet add package 2dog
@@ -165,7 +176,7 @@ uv run poe build
 
 4. **Run the demo**
 ```bash
-dotnet run --project demo
+dotnet run --project demo/demo.2dog
 ```
 
 ### Build Configurations
@@ -190,6 +201,7 @@ Full documentation at **[2dog.dev](https://2dog.dev)**
 - [API Reference](https://2dog.dev/api-reference.html) - Engine, GodotInstance, and more
 - [Testing with xUnit](https://2dog.dev/testing.html) - test fixtures and CI/CD setup
 - [Project Templates](https://2dog.dev/templates.html) - scaffolding new projects
+- [Converting a Godot Project](https://2dog.dev/convert.html) - `2dog convert` for existing projects
 
 ---
 
