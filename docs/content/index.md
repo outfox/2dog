@@ -48,7 +48,7 @@ features:
 
 ## Installation
 
-It's very easy to get the basics up and running, or to quickly enable Web / WASM exports if that's the core feature you're looking for!
+It's very easy to get the basics up and running, or to quickly enable Web / WASM exports if that's the primary feature you're looking for! (but there's much more, see below and in the docs!)
 
 ::: code-group
 
