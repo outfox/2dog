@@ -2,16 +2,13 @@ name: 2dog CI
 
 on:
   push:
-    branches: [main]
+    branches: ['**']
     tags: ['v*']
     paths-ignore:
       - 'docs/**'
       - '*.md'
-  pull_request:
-    branches: [main]
-    paths-ignore:
-      - 'docs/**'
-      - '*.md'
+  # No pull_request trigger: push already runs on every branch, so a PR
+  # would run CI twice. Caveat: PRs from forks get no CI without it.
   workflow_run:
     # Must match build-natives.yml's display name exactly.
     workflows: ["2dog Build Natives"]
@@ -229,6 +226,7 @@ jobs:
         run: |
           dotnet pack twodog
           dotnet pack twodog.xunit
+          dotnet pack twodog.cli
           dotnet pack templates
           ls -lh packages/
 
@@ -322,7 +320,7 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Install wasm-tools workload
-        working-directory: demo.web
+        working-directory: demo/demo.web
         run: dotnet workload install wasm-tools
 
       - name: Download godot-bin artifact
@@ -340,20 +338,21 @@ jobs:
       - name: Make Linux editor executable
         run: chmod +x godot/bin/godot.linuxbsd.editor.x86_64.executable.mono || true
 
-      # The publish exports game/ as godot.pck via the in-process import
-      # helper, discovered at twodog.import/bin/Release in source checkouts
-      # (twodog/build/2dog.targets). Must come after the godot-bin download:
-      # the helper references GodotSharp assemblies from godot/bin.
+      # The publish exports the demo Godot project as godot.pck via the
+      # in-process import helper, discovered at twodog.import/bin/Release in
+      # source checkouts (twodog/build/2dog.targets). Must come after the
+      # godot-bin download: the helper references GodotSharp assemblies from
+      # godot/bin.
       - name: Build import helper
         run: dotnet build twodog.import -c Release
 
       - name: Publish demo.web
-        working-directory: demo.web
+        working-directory: demo/demo.web
         run: dotnet publish -c Release
 
       - name: Verify app bundle
         run: |
-          BUNDLE=demo.web/AppBundle
+          BUNDLE=demo/demo.web/AppBundle
           for f in "$BUNDLE/godot.wasm" "$BUNDLE/godot.pck" "$BUNDLE/godot.js" "$BUNDLE/index.html" "$BUNDLE/_framework/dotnet.js"; do
             if [ ! -f "$f" ]; then
               echo "::error::Missing $f in the published app bundle"

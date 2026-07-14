@@ -15,6 +15,10 @@ gets an incremental import step after `Build`:
 - When source files under the Godot project change, the import runs; otherwise
   the target is skipped as up-to-date (tracked via a stamp file in the
   project's `.godot/` directory, shared by all consuming projects).
+- Directories containing a `.gdignore` file (such as the nested 2dog host
+  projects) are excluded from the change tracking, mirroring the Godot
+  importer's own `.gdignore` semantics  –  editing host code never retriggers
+  the import. Extra excludes can be added via `TwoDogImportExcludes`.
 - No Godot editor installation is required. The import runs in a helper
   process against the **editor-variant libgodot** already shipped in the
   `2dog.<rid>.editor` packages, using the new `libgodot_import_project`
@@ -28,6 +32,7 @@ gets an incremental import step after `Build`:
 | `TwoDogRequireImport` | `false` | Set `true` to fail the build when no import capability is available (instead of a warning). |
 | `TwoDogForceImport` | `false` | Set `true` to force the import to run even when up-to-date. Also covers staleness the file tracking cannot see (deleted assets). |
 | `TwoDogImportStampFile` | `<project>/.godot/2dog.import.stamp` | Override the stamp file location. |
+| `TwoDogImportExcludes` |  –  | Extra semicolon-separated glob excludes for the import inputs (directories with a `.gdignore` are always excluded). |
 | `GodotEditor` |  –  | Path to an external Godot editor binary. When set (or the `GODOT_EDITOR` environment variable is set), it is used instead of the in-process helper. |
 
 When neither the helper payload nor an external editor can be resolved, the
@@ -46,10 +51,10 @@ dotnet run --project twodog.import -- \
     --libgodot godot/bin/godot.windows.editor.x86_64.shared_library.dll \
     --api-dir godot/bin/GodotSharp/Api/Debug \
     --tools-dir godot/bin/GodotSharp/Tools \
-    ./game
+    ./demo
 
 # Subprocess mode with an external Godot editor binary
-dotnet run --project twodog.import -- --editor <godot-binary> ./game
+dotnet run --project twodog.import -- --editor <godot-binary> ./demo
 ```
 
 ### Arguments
@@ -94,8 +99,8 @@ With the automatic MSBuild import, a plain `dotnet build` of a consuming
 project performs the import as part of the build, so CI pipelines do not
 need a dedicated import step. In this repository, a source build
 (`uv run poe build-godot` + `uv run poe build`) is enough: the first
-`dotnet build` of demo or the tests imports the game project against the
-locally built editor libgodot from `godot/bin/`.
+`dotnet build` of the demo hosts or the tests imports the demo Godot project
+against the locally built editor libgodot from `godot/bin/`.
 
 To use an external Godot editor binary instead (for example one already
 installed on a CI runner), set the `GodotEditor` MSBuild property or the

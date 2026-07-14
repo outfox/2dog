@@ -2,8 +2,8 @@
   "solution": {
     "path": "2dog.sln",
     "projects": [
+      "demo\\demo.2dog\\demo.2dog.csproj",
       "demo\\demo.csproj",
-      "game\\game.csproj",
       "platforms\\twodog.browser-wasm\\twodog.browser-wasm.csproj",
       "platforms\\twodog.browser-wasm\\twodog.browser-wasm.debug.csproj",
       "platforms\\twodog.browser-wasm\\twodog.browser-wasm.release.csproj",
@@ -21,6 +21,7 @@
       "platforms\\twodog.win-x64\\twodog.win-x64.editor.csproj",
       "platforms\\twodog.win-x64\\twodog.win-x64.release.csproj",
       "twodog\\twodog.csproj",
+      "twodog.cli\\twodog.cli.csproj",
       "twodog.import\\twodog.import.csproj",
       "twodog.tests\\twodog.tests.csproj",
       "twodog.xunit\\twodog.xunit.csproj"

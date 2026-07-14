@@ -4,7 +4,4 @@
 # Build outputs
 bin/
 obj/
-obj.2dog/ 
-bin.2dog/ 
-obj.godot/ 
-bin.godot/ 
+AppBundle/

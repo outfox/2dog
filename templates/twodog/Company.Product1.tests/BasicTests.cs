@@ -10,13 +10,15 @@ public class BasicTests(GodotHeadlessFixture godot)
     [Fact]
     public void LoadMainScene_Succeeds()
     {
-        // Arrange
-        var scene = GD.Load<PackedScene>("res://main.tscn");
-        
+        // Arrange - load whatever main scene project.godot configures
+        var mainScene = (string)ProjectSettings.GetSetting("application/run/main_scene", "");
+        Assert.SkipWhen(mainScene == "", "No run/main_scene configured in project.godot");
+        var scene = GD.Load<PackedScene>(mainScene);
+
         // Act
         var instance = scene.Instantiate();
         godot.Tree.Root.AddChild(instance);
-        
+
         // Assert
         Assert.NotNull(instance);
         Assert.NotNull(instance.GetParent());

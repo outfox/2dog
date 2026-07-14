@@ -5,6 +5,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <!-- The assembly keeps the folder name, but 'Company.Product1.2dog' is
+             not a valid C# namespace (digit-leading segment). -->
+        <RootNamespace>Company.Product1</RootNamespace>
         <!-- comctl32 v6 + long paths for Godot's Windows display server -->
         <ApplicationManifest>app.manifest</ApplicationManifest>
     </PropertyGroup>
@@ -14,12 +17,14 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../Company.Product1.Godot/Company.Product1.Godot.csproj"/>
+        <ProjectReference Include="../TPLRAWNAME.csproj"/>
     </ItemGroup>
 
-    <!-- Godot project location -->
+    <!-- Godot project location: the parent directory (the Godot project is the
+         solution root; hosts are nested inside it, hidden from the Godot
+         editor by their .gdignore) -->
     <PropertyGroup>
-        <GodotProjectDir>../Company.Product1.Godot</GodotProjectDir>
+        <GodotProjectDir>..</GodotProjectDir>
     </PropertyGroup>
 
     <!-- Remove duplicate Godot.SourceGenerators that come from the Godot project

@@ -28,7 +28,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="twodog/**/*" Exclude="twodog/**/bin/**;twodog/**/obj/**">
+        <!-- template.json is excluded: a versioned copy is staged into obj/
+             and packed instead (StageVersionedTemplateJson below), so the
+             committed file keeps its placeholder versions untouched. -->
+        <Content Include="twodog/**/*" Exclude="twodog/**/bin/**;twodog/**/obj/**;twodog/.template.config/template.json">
             <PackagePath>content/twodog/</PackagePath>
         </Content>
     </ItemGroup>
@@ -38,15 +41,25 @@
         <None Include="README.md" Pack="true" PackagePath="/" />
     </ItemGroup>
 
-    <!-- Write version defaults from Directory.Build.props into template.json.
-         This modifies the source file so both `dotnet pack` and local
-         `dotnet new install templates/twodog/` always use correct versions.
-         SetTemplateDefaults is defined in the repo-root Directory.Build.targets. -->
-    <Target Name="SyncTemplateVersions" BeforeTargets="GenerateNuspec">
+    <!-- Stage a copy of template.json with the real versions from
+         Directory.Build.props substituted in, and pack that copy in place of
+         the committed file. The committed file always holds the 0.0.0-tpl /
+         0.0.0-ntpl placeholders and is never written to; a local folder
+         install (`dotnet new install templates/twodog`) therefore needs the
+         twodogVersion/nativesVersion arguments passed explicitly to produce
+         restorable output. SetTemplateDefaults is defined in the repo-root
+         Directory.Build.targets. -->
+    <Target Name="StageVersionedTemplateJson" BeforeTargets="_GetPackageFiles;GenerateNuspec">
+        <Copy SourceFiles="twodog/.template.config/template.json"
+              DestinationFiles="$(IntermediateOutputPath)template.json"/>
         <SetTemplateDefaults
-            FilePath="twodog/.template.config/template.json"
+            FilePath="$(IntermediateOutputPath)template.json"
             TwoDogVer="$(TwoDogVersion)"
             NativesVer="$(NativesVersion)"
             GodotVer="$(GodotVersion)" />
+        <ItemGroup>
+            <None Include="$(IntermediateOutputPath)template.json" Pack="true"
+                  PackagePath="content/twodog/.template.config/template.json"/>
+        </ItemGroup>
     </Target>
 </Project>

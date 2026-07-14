@@ -17,9 +17,14 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <!-- Keep host namespaces uniform with the desktop host (whose
+             '.2dog' assembly name is not a valid namespace). -->
+        <RootNamespace>Company.Product1.Web</RootNamespace>
     </PropertyGroup>
+    <!-- Godot project location: the parent directory (hosts are nested inside
+         the Godot project, hidden from the Godot editor by their .gdignore) -->
     <PropertyGroup>
-        <GodotProjectDir>../TPLRAWNAME.Godot</GodotProjectDir>
+        <GodotProjectDir>..</GodotProjectDir>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,14 +32,14 @@
         <PackageReference Include="2dog.browser-wasm" Version="[NATIVES_PKG_VERSION]"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="../TPLRAWNAME.Godot/TPLRAWNAME.Godot.csproj"/>
+        <ProjectReference Include="../TPLRAWNAME.csproj"/>
     </ItemGroup>
 
     <!-- Root the game assembly: scripts are resolved by reflection. Add a
          TrimmerRootAssembly for any NuGet package your game code reaches via
          reflection (e.g. an ECS or serializer library). -->
     <ItemGroup>
-        <TrimmerRootAssembly Include="TPLRAWNAME.Godot"/>
+        <TrimmerRootAssembly Include="TPLRAWNAME"/>
         <TrimmerRootAssembly Include="$(TargetName)"/>
     </ItemGroup>
 

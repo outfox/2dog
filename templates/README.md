@@ -4,14 +4,18 @@ This directory contains the `dotnet new` templates for creating 2dog projects.
 
 ## Template Overview
 
-The `twodog` template creates a complete 2dog application with:
+The `twodog` template creates a complete 2dog application. The output
+directory **is** the Godot project (and the solution root); the host projects
+are nested inside it, each carrying a `.gdignore` so the Godot editor,
+importer, and exporter skip them:
 
-- **Program.cs** - Minimal working 2dog application
-- **Sample Godot project** - Basic project.godot with a simple scene
+- **Sample Godot project** - project.godot, the `Godot.NET.Sdk` csproj, and a simple scene at the root
+- **Desktop host** (`<Name>.2dog/`) - Minimal working 2dog application (Program.cs with Main)
+- **Test project** (`<Name>.tests/`) - xUnit (v3) tests with 2dog.xunit collection fixtures (included by default; `--tests false` to omit)
+- **Web host project** (`<Name>.web/`) - Browser (WebAssembly) host that publishes the game as a static site (included by default; `--web false` to omit)
+- **TwoDogWebBoot.cs** - Web bootstrap compiled into the game assembly (`LIBGODOT_ENABLED`-guarded)
 - **.editorconfig** - Standard .NET coding conventions
 - **.gitignore** - Ignores for .NET and Godot artifacts
-- **Test project** - xUnit (v3) tests with 2dog.xunit collection fixtures (included by default; `--tests false` to omit)
-- **Web host project** - Browser (WebAssembly) host that publishes the game as a static site (included by default; `--web false` to omit)
 
 ## Local Development
 
@@ -45,27 +49,41 @@ dotnet new uninstall ./templates/twodog
 
 ```
 templates/
-└── twodog/                        # Template content
+├── 2dog.Templates.csproj          # Standalone template package (2dog.Templates)
+└── twodog/                        # Template content = the Godot project root
     ├── .template.config/
     │   └── template.json          # Template configuration
-    ├── Company.Product1.sln
-    ├── Company.Product1/          # Application project
-    │   ├── Company.Product1.csproj
-    │   └── Program.cs
-    ├── Company.Product1.Godot/    # Sample Godot project
-    │   ├── project.godot
-    │   └── main.tscn
-    ├── Company.Product1.Tests/    # Test project (default; --tests false to omit)
-    │   ├── Company.Product1.Tests.csproj
-    │   └── BasicTests.cs
-    ├── Company.Product1.Web/      # Browser (wasm) host (default; --web false to omit)
-    │   ├── Company.Product1.Web.csproj
+    ├── Company.Product1.sln       # The single solution, next to project.godot
+    ├── Company.Product1.csproj    # Godot project (Godot.NET.Sdk)
+    ├── project.godot
+    ├── main.tscn
+    ├── export_presets.cfg         # Web preset for the wasm host
+    ├── TwoDogWebBoot.cs           # Web bootstrap (compiled into the game assembly)
+    ├── Company.Product1.2dog/     # Desktop host
+    │   ├── .gdignore
+    │   ├── Company.Product1.2dog.csproj
+    │   ├── Program.cs
+    │   └── app.manifest
+    ├── Company.Product1.tests/    # Test project (default; --tests false to omit)
+    │   ├── .gdignore
+    │   ├── Company.Product1.tests.csproj
+    │   ├── BasicTests.cs
+    │   └── xunit.runner.json
+    ├── Company.Product1.web/      # Browser (wasm) host (default; --web false to omit)
+    │   ├── .gdignore
+    │   ├── Company.Product1.web.csproj
     │   ├── Program.cs
     │   ├── global.json
     │   └── wwwroot/index.html
     ├── .editorconfig
     └── .gitignore
 ```
+
+The host csprojs point `<GodotProjectDir>` at the parent directory (`..`) and
+reference `../Company.Product1.csproj`; the Godot csproj excludes the nested
+host folders via `DefaultItemExcludes`. The solution gives the web host
+ActiveCfg-only entries (no `.Build.0`) so "Build Solution" works without the
+wasm-tools workload  –  the web host is built explicitly with `dotnet publish`.
 
 ## Template Parameters
 
@@ -84,9 +102,13 @@ The template uses `Company.Product1` as the source name, which gets replaced wit
 
 ## Packaging
 
-The template content is bundled directly into the main `2dog` NuGet package (from `twodog/twodog.csproj`). There is no separate template package.
+The template content in `twodog/` is the single source of truth and is packed three ways:
 
-When the `2dog` package is packed, the template files are included under `content/twodog/` in the `.nupkg`, and the version placeholder in `template.json` is substituted automatically.
+- Bundled into the main `2dog` NuGet package (from `twodog/twodog.csproj`), so `dotnet new install 2dog` registers the template.
+- Packed standalone as the `2dog.Templates` package (from `templates/2dog.Templates.csproj`).
+- Embedded into the `2dog.cli` tool, which scaffolds the same content via `2dog convert`.
+
+When packing, the template files are included under `content/twodog/` in the `.nupkg`, and the version placeholders in `template.json` are substituted automatically.
 
 ### Installing from NuGet
 
@@ -165,8 +187,9 @@ After modifying the template:
    mkdir test_project
    cd test_project
    dotnet new 2dog -n TestApp
+   cd TestApp
    dotnet build
-   dotnet run --project TestApp
+   dotnet run --project TestApp.2dog
    ```
 
 ## Future Enhancements

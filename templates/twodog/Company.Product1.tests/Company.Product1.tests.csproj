@@ -4,6 +4,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <!-- Keep host namespaces uniform with the desktop host (whose
+             '.2dog' assembly name is not a valid namespace). -->
+        <RootNamespace>Company.Product1.Tests</RootNamespace>
     </PropertyGroup>
 
     <!-- 2dog packages (2dog.xunit pulls in 2dog for the fixtures and ships the xUnit
@@ -33,12 +36,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../TPLRAWNAME.Godot/TPLRAWNAME.Godot.csproj"/>
+        <ProjectReference Include="../TPLRAWNAME.csproj"/>
     </ItemGroup>
 
-    <!-- Godot project location -->
+    <!-- Godot project location: the parent directory (hosts are nested inside
+         the Godot project, hidden from the Godot editor by their .gdignore) -->
     <PropertyGroup>
-        <GodotProjectDir>../TPLRAWNAME.Godot</GodotProjectDir>
+        <GodotProjectDir>..</GodotProjectDir>
     </PropertyGroup>
 
     <!-- Remove duplicate Godot.SourceGenerators that come from GodotSharp package

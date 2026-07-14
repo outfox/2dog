@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <!-- The assembly keeps the folder name, but 'demo.2dog' is not a
+             valid C# namespace (digit-leading segment). -->
+        <RootNamespace>demo</RootNamespace>
+        <!-- comctl32 v6 + long paths for Godot's Windows display server -->
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+    </PropertyGroup>
+    <!-- Godot project location: the parent directory (the Godot project is
+         the solution root; hosts are nested inside it, hidden from the Godot
+         editor by their .gdignore) -->
+    <PropertyGroup>
+        <GodotProjectDir>..</GodotProjectDir>
+    </PropertyGroup>
+
+    <!-- In this repo the native variant follows the build configuration
+         (consumers set TwoDogVariant explicitly; default is release) -->
+    <PropertyGroup>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="2dog" Version="$(TwoDogVersion)"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="../demo.csproj"/>
+    </ItemGroup>
+    <!-- Remove duplicate Godot.SourceGenerators that come from game's Godot.NET.Sdk
+         (2dog package already embeds them) -->
+    <Target Name="RemoveDuplicateGodotAnalyzers" BeforeTargets="CoreCompile">
+        <ItemGroup>
+            <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Identity)').Contains('Godot.SourceGenerators'))" />
+        </ItemGroup>
+    </Target>
+    <Target Name="DeepClean" AfterTargets="Clean">
+        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
+        <RemoveDir Directories="$(BaseOutputPath)"/>
+    </Target>
+</Project>
