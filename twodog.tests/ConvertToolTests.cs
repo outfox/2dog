@@ -435,6 +435,47 @@ public class TemplateAssetsTests
     }
 }
 
+public class ExportPresetOpsTests
+{
+    private const string DesktopPreset =
+        """
+        [preset.0]
+
+        name="Windows Desktop"
+        platform="Windows Desktop"
+
+        [preset.0.options]
+
+        binary_format/architecture="x86_64"
+        """;
+
+    [Fact]
+    public void HasPreset_MatchesExactName()
+    {
+        Assert.True(ExportPresetOps.HasPreset(DesktopPreset, "Windows Desktop"));
+        Assert.False(ExportPresetOps.HasPreset(DesktopPreset, "Web"));
+        Assert.False(ExportPresetOps.HasPreset(DesktopPreset, "Windows"));
+    }
+
+    [Fact]
+    public void AppendText_RenumbersPastExistingPresets()
+    {
+        var text = ExportPresetOps.AppendText(DesktopPreset);
+        Assert.Contains("[preset.1]", text);
+        Assert.Contains("[preset.1.options]", text);
+        Assert.DoesNotContain("[preset.0]", text);
+        Assert.Contains("name=\"Web\"", text);
+    }
+
+    [Fact]
+    public void AppendText_OnEmptyFile_StartsAtZero()
+    {
+        var text = ExportPresetOps.AppendText("");
+        Assert.Contains("[preset.0]", text);
+        Assert.Contains("[preset.0.options]", text);
+    }
+}
+
 // Full conversions on a scratch GDScript-only project, including the
 // `dotnet sln` subprocess steps (restore is skipped). These prove the two
 // contractual behaviors: a fresh convert scaffolds the complete nested
@@ -485,7 +526,7 @@ public class ConvertEndToEndTests
         // behind .gdignore.
         foreach (var expected in new[]
                  {
-                     "SpaceMiner.csproj", "SpaceMiner.sln", "TwoDogWebBoot.cs",
+                     "SpaceMiner.csproj", "SpaceMiner.sln", "TwoDogWebBoot.cs", "export_presets.cfg",
                      "SpaceMiner.2dog/SpaceMiner.2dog.csproj", "SpaceMiner.2dog/.gdignore",
                      "SpaceMiner.web/SpaceMiner.web.csproj", "SpaceMiner.web/.gdignore",
                      "SpaceMiner.tests/SpaceMiner.tests.csproj", "SpaceMiner.tests/.gdignore",
@@ -519,6 +560,37 @@ public class ConvertEndToEndTests
             "web host must not build with the solution");
 
         // Re-run: byte-identical no-op.
+        var snapshot = Snapshot(tmp.Dir);
+        Assert.Equal(0, ConvertCommand.Run(Options(tmp.Dir)));
+        Assert.Equal(snapshot, Snapshot(tmp.Dir));
+    }
+
+    [Fact]
+    public void Convert_ExistingExportPresets_AppendsWebPreset_WithoutRewriting()
+    {
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", GdScriptProject);
+        const string existing =
+            """
+            [preset.0]
+
+            name="Windows Desktop"
+            platform="Windows Desktop"
+
+            [preset.0.options]
+
+            binary_format/architecture="x86_64"
+            """;
+        tmp.Write("export_presets.cfg", existing);
+
+        Assert.Equal(0, ConvertCommand.Run(Options(tmp.Dir)));
+
+        var text = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "export_presets.cfg"));
+        Assert.StartsWith(existing, text);
+        Assert.Contains("[preset.1]", text);
+        Assert.Contains("name=\"Web\"", text);
+
+        // Re-run: the Web preset is detected, nothing appended twice.
         var snapshot = Snapshot(tmp.Dir);
         Assert.Equal(0, ConvertCommand.Run(Options(tmp.Dir)));
         Assert.Equal(snapshot, Snapshot(tmp.Dir));

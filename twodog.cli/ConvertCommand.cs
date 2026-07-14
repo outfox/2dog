@@ -35,6 +35,7 @@ internal static class ConvertCommand
 
         PlanGodotCsproj(plan, warnings, options, godotProject, godotCsproj, baseName, hostFolders);
         PlanWebBoot(plan, skipped, options, projectDir);
+        PlanExportPresets(plan, options, projectDir);
         PlanHosts(plan, skipped, options, projectDir, baseName, hostSuffixes);
         PlanSolution(plan, warnings, options, projectDir, baseName, godotCsproj, hostFolders);
 
@@ -175,6 +176,28 @@ internal static class ConvertCommand
             () => File.WriteAllText(path, TemplateAssets.WebBootSource())));
     }
 
+    private static void PlanExportPresets(List<PlannedAction> plan, ConvertOptions options, string projectDir)
+    {
+        // The engine refuses `--export-pack` (which the web host's publish
+        // runs) without an export_presets.cfg at the project root.
+        var path = Path.Combine(projectDir, ExportPresetOps.FileName);
+        if (!File.Exists(path))
+        {
+            // Even with --no-web, matching dotnet-new output: the template
+            // always ships the Web preset, so adding a web host later just
+            // works.
+            plan.Add(new PlannedAction($"create {ExportPresetOps.FileName} ('{ExportPresetOps.WebPresetName}' export preset)",
+                () => File.WriteAllText(path, TemplateAssets.ExportPresets())));
+            return;
+        }
+
+        if (!options.IncludeWeb) return;
+        var text = File.ReadAllText(path);
+        if (ExportPresetOps.HasPreset(text, ExportPresetOps.WebPresetName)) return;
+        plan.Add(new PlannedAction($"append '{ExportPresetOps.WebPresetName}' export preset to {ExportPresetOps.FileName}",
+            () => File.AppendAllText(path, ExportPresetOps.AppendText(text))));
+    }
+
     private static void PlanHosts(
         List<PlannedAction> plan, List<string> skipped, ConvertOptions options,
         string projectDir, string baseName, List<string> hostSuffixes)
@@ -256,7 +279,9 @@ internal static class ConvertCommand
         if (options.IncludeTests)
             Console.WriteLine($"  dotnet test {baseName}.tests             # xUnit tests (headless Godot)");
         if (options.IncludeWeb)
-            Console.WriteLine($"  dotnet publish {baseName}.web -c Release # browser bundle (needs wasm-tools workload)");
+            // From inside the folder: the web host's global.json (SDK pin)
+            // only applies when the working directory is at or below it.
+            Console.WriteLine($"  cd {baseName}.web; dotnet publish -c Release # browser bundle (needs wasm-tools workload)");
         Console.WriteLine("\nDocs: https://2dog.dev");
     }
 }

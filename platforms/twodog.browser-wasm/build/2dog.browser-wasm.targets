@@ -210,7 +210,15 @@
             <_TwoDogToolsDirArg>$(_TwoDogToolsDir.TrimEnd('\').TrimEnd('/'))</_TwoDogToolsDirArg>
             <_TwoDogApiDirArg>$(TwoDogGodotApiSourcePath.TrimEnd('\').TrimEnd('/'))</_TwoDogApiDirArg>
             <_TwoDogWebPackFullPath>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(_TwoDogWebPackPath)'))))</_TwoDogWebPackFullPath>
+            <_TwoDogExportPresetsPath>$(TwoDogGodotProjectFullPath)/export_presets.cfg</_TwoDogExportPresetsPath>
+            <_TwoDogHasWebPreset>false</_TwoDogHasWebPreset>
+            <_TwoDogHasWebPreset Condition="Exists('$(_TwoDogExportPresetsPath)') And $([System.IO.File]::ReadAllText('$(_TwoDogExportPresetsPath)').Contains('name=&quot;$(TwoDogWebExportPreset)&quot;'))">true</_TwoDogHasWebPreset>
         </PropertyGroup>
+
+        <!-- Fail with an actionable message instead of the engine's exit-1
+             (whose stderr an IDE build may swallow entirely). -->
+        <Error Condition="'$(_TwoDogHasWebPreset)' != 'true'"
+               Text="TwoDog: web publish exports the game pck via the '$(TwoDogWebExportPreset)' export preset, which '$(_TwoDogExportPresetsPath)' does not define (or the file is missing). Add it in the Godot editor (Project &gt; Export &gt; Add &gt; Web), re-run `2dog convert` (it scaffolds one), or point &lt;TwoDogWebExportPreset&gt; at an existing preset."/>
 
         <MakeDir Directories="$([System.IO.Path]::GetDirectoryName('$(_TwoDogWebPackFullPath)'))"/>
 
