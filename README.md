@@ -230,9 +230,7 @@ Full documentation at **[2dog.dev](https://2dog.dev)**
 
 ## Join the Pack
 
-Questions? Ideas? Want to teach 2dog new tricks?
-
-Join our Discord!
+Questions? Ideas? Want to teach 2dog new tricks? Come to our Dog Park!
 
 [![Discord Invite](https://img.shields.io/badge/discord-_%E2%A4%9Coutfox%E2%A4%8F-blue?logo=discord&logoColor=f5f5f5)](https://discord.gg/GAXdbZCNGT)
 
