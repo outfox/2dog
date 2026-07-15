@@ -49,7 +49,6 @@ dotnet new uninstall ./templates/twodog
 
 ```
 templates/
-├── 2dog.Templates.csproj          # Standalone template package (2dog.Templates)
 └── twodog/                        # Template content = the Godot project root
     ├── .template.config/
     │   └── template.json          # Template configuration
@@ -103,13 +102,12 @@ The template uses `Company.Product1` as the source name, which gets replaced wit
 
 ## Packaging
 
-The template content in `twodog/` is the single source of truth and is packed three ways:
+The template content in `twodog/` is the single source of truth and ships two ways, both inside the `2dog` tool+template package (`<PackageType>DotnetTool;Template</PackageType>`, packed from `twodog/twodog.csproj`):
 
-- Bundled into the main `2dog` NuGet package (from `twodog/twodog.csproj`), so `dotnet new install 2dog` registers the template.
-- Packed standalone as the `2dog.Templates` package (from `templates/2dog.Templates.csproj`).
-- Embedded into the `2dog.cli` tool, which scaffolds the same content via `2dog convert`.
+- Bundled as `dotnet new` template content under `content/twodog/`, so `dotnet new install 2dog` registers the template.
+- Embedded as resources into the `2dog` tool assembly, which scaffolds the same content via `2dog convert`.
 
-When packing, the template files are included under `content/twodog/` in the `.nupkg`, and the version placeholders in `template.json` are substituted automatically.
+When packing, the version placeholders in `template.json` are substituted automatically.
 
 ### Installing from NuGet
 
@@ -125,7 +123,7 @@ The test project (included by default) references `2dog.xunit`, which needs to b
 
 **To make it resolve:**
 
-1. Package `2dog.xunit` as a NuGet package (it depends on `2dog`, which carries the fixtures)
+1. Package `2dog.xunit` as a NuGet package (it depends on `2dog.engine`, which carries the fixtures)
 2. Publish it to NuGet or a local feed
 3. Ensure it's available when creating projects
 

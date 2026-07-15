@@ -30,10 +30,9 @@ sequence = [
 help = "dotnet build: Platform packages, twodog library, and NuGet packages"
 sequence = [
     { cmd = "dotnet pack platforms -p:ForcePackAllPlatforms=true" },
-    { cmd = "dotnet pack twodog" },
+    { cmd = "dotnet pack twodog.engine" },
     { cmd = "dotnet pack twodog.xunit" },
-    { cmd = "dotnet pack twodog.cli" },
-    { cmd = "dotnet pack templates" },
+    { cmd = "dotnet pack twodog" },
     { cmd = "dotnet restore" },
 ]
 

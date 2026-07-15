@@ -105,7 +105,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
           TAG_VERSION="${GITHUB_REF#refs/tags/v}"
-          PROPS_VERSION="$(dotnet msbuild twodog/twodog.csproj -getProperty:TwoDogVersion | tr -d '[:space:]')"
+          PROPS_VERSION="$(dotnet msbuild twodog.engine/twodog.engine.csproj -getProperty:TwoDogVersion | tr -d '[:space:]')"
           echo "Tag version: $TAG_VERSION"
           echo "Props version: $PROPS_VERSION"
           if [[ "$TAG_VERSION" != "$PROPS_VERSION" ]]; then
@@ -122,7 +122,7 @@ jobs:
       # the published package's commit with ours and fail on a mismatch.
       - name: Verify NativesVersion is not already published from different natives
         run: |
-          NATIVES_VERSION="$(dotnet msbuild twodog/twodog.csproj -getProperty:NativesVersion | tr -d '[:space:]')"
+          NATIVES_VERSION="$(dotnet msbuild twodog.engine/twodog.engine.csproj -getProperty:NativesVersion | tr -d '[:space:]')"
           # NuGet normalizes away a trailing .0 fourth segment (4.7.0.0 -> 4.7.0).
           NORMALIZED="$(echo "$NATIVES_VERSION" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+)\.0$/\1/')"
           CURRENT_COMMIT="$(git rev-parse HEAD:godot)"
@@ -218,16 +218,15 @@ jobs:
 
       - name: Build twodog library (all configs)
         run: |
-          dotnet build twodog -c Debug
-          dotnet build twodog -c Release
-          dotnet build twodog -c Editor
+          dotnet build twodog.engine -c Debug
+          dotnet build twodog.engine -c Release
+          dotnet build twodog.engine -c Editor
 
       - name: Pack twodog packages
         run: |
-          dotnet pack twodog
+          dotnet pack twodog.engine
           dotnet pack twodog.xunit
-          dotnet pack twodog.cli
-          dotnet pack templates
+          dotnet pack twodog
           ls -lh packages/
 
       - name: Upload godot-bin artifact
@@ -339,7 +338,7 @@ jobs:
 
       # The publish exports the demo Godot project as godot.pck via the
       # in-process import helper, discovered at twodog.import/bin/Release in
-      # source checkouts (twodog/build/2dog.targets). Must come after the
+      # source checkouts (twodog.engine/build/2dog.engine.targets). Must come after the
       # godot-bin download: the helper references GodotSharp assemblies from
       # godot/bin.
       - name: Build import helper
@@ -398,12 +397,14 @@ jobs:
       - name: Verify packages match tag
         run: |
           TAG_VERSION="${GITHUB_REF#refs/tags/v}"
-          if [[ ! -f "packages/2dog.${TAG_VERSION}.nupkg" ]]; then
-            echo "::error::packages/ does not contain 2dog.${TAG_VERSION}.nupkg — refusing to publish."
-            echo "Artifact contents:"
-            ls -lh packages/
-            exit 1
-          fi
+          for pkg in "2dog" "2dog.engine"; do
+            if [[ ! -f "packages/${pkg}.${TAG_VERSION}.nupkg" ]]; then
+              echo "::error::packages/ does not contain ${pkg}.${TAG_VERSION}.nupkg — refusing to publish."
+              echo "Artifact contents:"
+              ls -lh packages/
+              exit 1
+            fi
+          done
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5

@@ -26,13 +26,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="2dog" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="../demo.csproj"/>
     </ItemGroup>
     <!-- Remove duplicate Godot.SourceGenerators that come from game's Godot.NET.Sdk
-         (2dog package already embeds them) -->
+         (2dog.engine package already embeds them) -->
     <Target Name="RemoveDuplicateGodotAnalyzers" BeforeTargets="CoreCompile">
         <ItemGroup>
             <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Identity)').Contains('Godot.SourceGenerators'))" />

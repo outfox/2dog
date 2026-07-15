@@ -56,7 +56,7 @@ It's very easy to get the basics up and running, for example to try out Web / WA
 ```bash [🤖 Existing Project]
 # Convert in place - scaffolds the 2dog hosts around your Godot project
 # (no install: dnx runs the tool straight from NuGet)
-dnx 2dog.cli convert path/to/MyGame
+dnx 2dog convert path/to/MyGame
 
 cd path/to/MyGame
 
@@ -92,7 +92,7 @@ godot-mono --editor .
 ```
 
 ```bash [📦 Just the Packages]
-dotnet add package 2dog
+dotnet add package 2dog.engine
 dotnet add package 2dog.xunit
 ```
 

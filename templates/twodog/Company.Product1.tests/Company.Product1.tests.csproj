@@ -9,7 +9,7 @@
         <RootNamespace>Company.Product1.Tests</RootNamespace>
     </PropertyGroup>
 
-    <!-- 2dog packages (2dog.xunit pulls in 2dog for the fixtures and ships the xUnit
+    <!-- 2dog packages (2dog.xunit pulls in 2dog.engine for the fixtures and ships the xUnit
          collection definitions as compile-in source) -->
     <ItemGroup>
         <PackageReference Include="2dog.xunit" Version="TWODOG_PKG_VERSION"/>
@@ -46,7 +46,7 @@
     </PropertyGroup>
 
     <!-- Remove duplicate Godot.SourceGenerators that come from GodotSharp package
-         (2dog package already embeds them) -->
+         (2dog.engine package already embeds them) -->
     <Target Name="RemoveDuplicateGodotAnalyzers" BeforeTargets="CoreCompile">
         <ItemGroup>
             <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Identity)').Contains('Godot.SourceGenerators'))" />

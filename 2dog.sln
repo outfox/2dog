@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog", "twodog\twodog.csproj", "{A0000000-0000-0000-0000-000000000001}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.engine", "twodog.engine\twodog.engine.csproj", "{A0000000-0000-0000-0000-000000000001}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "win-x64", "win-x64", "{F0000001-0000-0000-0000-000000000000}"
 EndProject
@@ -45,7 +45,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo", "demo\demo.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.import", "twodog.import\twodog.import.csproj", "{5275B514-9862-406B-B670-4F6956542713}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.cli", "twodog.cli\twodog.cli.csproj", "{6386C21F-40B5-4C39-A9DF-2A9BCE2F1BC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog", "twodog\twodog.csproj", "{6386C21F-40B5-4C39-A9DF-2A9BCE2F1BC4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platforms", "platforms", "{324791A1-5798-203D-0CA6-A8E0DAEC81C8}"
 EndProject

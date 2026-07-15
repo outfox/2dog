@@ -42,7 +42,7 @@ runs automatically at build time in a separate helper process via the
 
 ## Native Library Options
 
-Native libraries are delivered as NuGet platform packages. Referencing `2dog`
+Native libraries are delivered as NuGet platform packages. Referencing `2dog.engine`
 pulls in the platform meta package for your OS (`2dog.win-x64`,
 `2dog.linux-x64`, or `2dog.osx-arm64`), which pins all three variant packages
 (`.release`, `.debug`, `.editor`). The build copies the variant selected by
@@ -133,7 +133,7 @@ itself happens automatically at build time  –  see
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="2dog" Version=":2dog-version:"/>
+    <PackageReference Include="2dog.engine" Version=":2dog-version:"/>
   </ItemGroup>
 </Project>
 ```
@@ -141,7 +141,7 @@ itself happens automatically at build time  –  see
 ### Local Godot Development
 
 When working from a source checkout of the 2dog repository (referencing
-`twodog` as a `ProjectReference` instead of the NuGet package), the
+`twodog.engine` as a `ProjectReference` instead of the NuGet package), the
 GodotPlugins assemblies are found automatically in
 `godot/bin/GodotSharp/Api/Debug/`. Setting the `GODOTSHARP_DIR` environment
 variable overrides this lookup.

@@ -2,7 +2,7 @@
     <!--
       TwoDog Transitive Targets
       
-      This file is imported by projects that transitively reference 2dog.
+      This file is imported by projects that transitively reference 2dog.engine.
       It imports the main targets to ensure GodotSharp API assemblies
       are properly copied for all consuming projects.
       
@@ -21,5 +21,5 @@
           <TwoDogVariant>editor</TwoDogVariant>
         </PropertyGroup>
     -->
-    <Import Project="$(MSBuildThisFileDirectory)../build/2dog.targets"/>
+    <Import Project="$(MSBuildThisFileDirectory)../build/2dog.engine.targets"/>
 </Project>
