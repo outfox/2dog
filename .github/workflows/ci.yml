@@ -397,7 +397,9 @@ jobs:
           timeout 120s "$CHROME" \
             --headless=new \
             --no-sandbox \
-            --disable-gpu \
+            --use-gl=angle \
+            --use-angle=swiftshader-webgl \
+            --enable-unsafe-swiftshader \
             --disable-dev-shm-usage \
             --enable-logging=stderr \
             --virtual-time-budget=45000 \
