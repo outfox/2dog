@@ -1,49 +1,71 @@
 # 2dog
 
-Embed the Godot engine in your .NET applications.
+Command-line tool and project templates for [2dog](https://2dog.dev)  –  run
+Godot as a library from your own .NET entry point. The engine library itself
+is the [`2dog.engine`](https://www.nuget.org/packages/2dog.engine) package.
 
-2dog inverts the traditional Godot architecture: instead of Godot driving your application, **you** control Godot as an embedded library. This gives you full access to the GodotSharp API from a standard .NET project with familiar tooling.
+This one package is both a dotnet tool and a `dotnet new` template package.
 
-## Quick Start
-
-This package includes a `dotnet new` project template. Install the package and scaffold a new project:
+## New project
 
 ```bash
 dotnet new install 2dog
-dotnet new 2dog -n MyGodotApp
-cd MyGodotApp
+dotnet new 2dog -n MyGame
+cd MyGame
 ```
 
-Or add 2dog to an existing project:
+## Convert an existing Godot project
+
+One-shot (no install, .NET 10+):
 
 ```bash
-dotnet add package 2dog
+dnx 2dog convert path/to/your/godot/project
 ```
 
-```csharp
-using twodog;
+Or install the `2dog` command globally:
 
-using var engine = new Engine("MyGodotApp", "./project");
-using var godot = engine.Start();
-
-while (!godot.Iteration())
-{
-    // Your code runs here every frame
-}
+```bash
+dotnet tool install -g 2dog
+2dog convert path/to/your/godot/project
 ```
 
-## What's Included
+## `2dog convert`
 
-- **twodog.dll** - Engine API for embedding Godot
-- **GodotSharp.dll** - Full Godot C# API bindings
-- **Godot.SourceGenerators** - Roslyn source generators for Godot node types
-- **GodotPlugins** - Runtime plugin loader
-- **Automatic asset import** - an incremental MSBuild step imports your Godot project (`.uid` files, textures, script UID cache) during build; no Godot editor installation needed
-- **`dotnet new` template** - Scaffold new 2dog projects with `dotnet new 2dog`
+Converts an existing Godot project to 2dog **in place**  –  no files are ever
+moved, renamed or deleted. The Godot project directory becomes the solution
+root, and host projects are scaffolded as nested subfolders that the Godot
+editor ignores (each carries a `.gdignore`):
 
-Platform-specific native libraries are provided by transitive dependencies (`2dog.win-x64`, `2dog.linux-x64`, `2dog.osx-arm64`); the GodotTools assemblies used by the automatic import come from `2dog.tools`.
+```
+MyGame/                      <- your existing Godot project (unchanged)
+  project.godot
+  MyGame.csproj              <- created or minimally patched
+  MyGame.sln                 <- created, or your existing sln is reused
+  TwoDogWebBoot.cs           <- added (web bootstrap, guarded by LIBGODOT_ENABLED)
+  MyGame.2dog/   (.gdignore) <- desktop host (your Main entry point)
+  MyGame.web/    (.gdignore) <- browser (WebAssembly) host
+  MyGame.tests/  (.gdignore) <- xUnit test project
+```
 
-## Documentation
+`dotnet new 2dog` produces the same layout from scratch.
 
-- [Getting Started](https://github.com/outfox/2dog)
-- [API Reference](https://github.com/outfox/2dog)
+Options:
+
+| Option | Effect |
+| --- | --- |
+| `--name <BaseName>` | Override the derived project base name |
+| `--no-web` | Skip the browser (wasm) host |
+| `--no-tests` | Skip the xUnit test project |
+| `--dry-run` | Print planned actions without changing anything |
+| `--force` | Overwrite files that already exist (never deletes/moves) |
+| `--no-restore` | Skip the final `dotnet restore` |
+| `--verbose` | Extra output |
+
+## Using the library directly
+
+This package cannot be referenced from a project (it is a tool package);
+reference the engine instead:
+
+```bash
+dotnet add package 2dog.engine
+```

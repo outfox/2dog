@@ -1,110 +1,74 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <OutputType>Library</OutputType>
         <TargetFramework>net10.0</TargetFramework>
-        <IsTrimmable>true</IsTrimmable>
-        <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RollForward>LatestMajor</RollForward>
+        <AssemblyName>2dog</AssemblyName>
+        <RootNamespace>twodog.cli</RootNamespace>
     </PropertyGroup>
 
-    <!-- Programming & Linkage Characteristics -->
+    <!-- dotnet tool AND dotnet-new template package in one: `dnx 2dog convert`
+         (one-shot), `dotnet tool install -g 2dog` -> the `2dog` command, and
+         `dotnet new install 2dog` -> the `2dog` template.
+         The combined DotnetTool;Template package type requires the .NET 10 SDK
+         to pack (older SDKs stomp PackageType to plain DotnetTool when
+         PackAsTool is set; see dotnet/sdk#48039).
+         A DotnetTool-typed package can never be a PackageReference (NU1213),
+         which is why the engine library ships separately as 2dog.engine. -->
     <PropertyGroup>
-        <RootNamespace>twodog</RootNamespace>
-        <Nullable>enable</Nullable>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
-    <!-- NuGet Package Metadata -->
-    <PropertyGroup>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>2dog</ToolCommandName>
         <PackageId>2dog</PackageId>
+        <PackageType>DotnetTool;Template</PackageType>
         <Version>$(TwoDogVersion)</Version>
         <Authors>Moritz Voss</Authors>
-        <Description>Embed the Godot engine in your .NET applications. Reference the 2dog package and it will pull in the appropriate platform-specific package (2dog.win-x64, 2dog.linux-x64, or 2dog.osx-arm64) for native library support.</Description>
+        <Description>2dog command-line tool and project templates. `dnx 2dog convert` converts an existing Godot project to the 2dog layout (nested host projects for desktop, browser-wasm and xUnit testing); `dotnet new install 2dog` provides the `dotnet new 2dog` project template. The engine library itself is the 2dog.engine package.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
-        <IncludeSymbols>true</IncludeSymbols>
         <IsPackable>true</IsPackable>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <!-- Suppress NU5100: GodotPlugins DLLs are in build/api, not lib -->
-        <!-- Suppress NU5131: Analyzers dir contains source generators, not standard analyzers -->
-        <!-- Suppress NU5128: Template content folder doesn't need contentFiles metadata -->
-        <NoWarn>$(NoWarn);NU5100;NU5131;NU5128</NoWarn>
-        <!-- Include dotfiles (.editorconfig, .gitignore, .template.config) in the package -->
+        <!-- Suppress NU5128: template content folder doesn't need contentFiles metadata -->
+        <NoWarn>$(NoWarn);NU5128</NoWarn>
+        <!-- Include dotfiles (.gdignore, .editorconfig, .gitignore, .template.config) in the package -->
         <NoDefaultExcludes>true</NoDefaultExcludes>
-        <PackageTags>dotnet-new;templates;godot;2dog;game-engine</PackageTags>
+        <PackageTags>dotnet-tool;dotnet-new;templates;godot;2dog;game-engine</PackageTags>
     </PropertyGroup>
 
-    <PropertyGroup>
-        <GodotProjectDir>$(MSBuildProjectDirectory)/../project/</GodotProjectDir>
-        <GodotBinDir>$(MSBuildProjectDirectory)/../godot/bin/</GodotBinDir>
-    </PropertyGroup>
-
-    <!-- Detect current OS for development builds -->
-    <PropertyGroup>
-        <IsLinux Condition="'$(IsLinux)' == '' and $([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))">true</IsLinux>
-        <IsWindows Condition="'$(IsWindows)' == '' and $([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))">true</IsWindows>
-        <IsOSX Condition="'$(IsOSX)' == '' and $([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))">true</IsOSX>
-    </PropertyGroup>
-
-    <!-- GodotSharp from fork build (embedded in 2dog package, no external dependency) -->
+    <!-- The versions the tool scaffolds with, baked in at build time -->
     <ItemGroup>
-        <Reference Include="GodotSharp">
-            <HintPath>$(GodotBinDir)GodotSharp/Api/Release/GodotSharp.dll</HintPath>
-        </Reference>
+        <AssemblyMetadata Include="TwoDogVersion" Value="$(TwoDogVersion)"/>
+        <AssemblyMetadata Include="NativesVersion" Value="$(NativesVersion)"/>
+        <AssemblyMetadata Include="GodotSdkVersion" Value="$(GodotVersion)"/>
     </ItemGroup>
 
-    <!--
-      Platform-specific native library packages.
-      These are dependencies of the 2dog package, so consumers get them automatically.
-      At build time, only the matching platform's MSBuild targets copy the native library.
-
-      For debug/editor variants, reference the corresponding platform package explicitly
-      (e.g., 2dog.win-x64.debug or 2dog.win-x64.editor) in your application project.
-    -->
-    <!--
-      All platform packages are always declared as dependencies so that the packed
-      2dog.nupkg includes them regardless of which OS the pack runs on.
-      NuGet consumers get all three; at build time only the matching platform's
-      targets actually copy a native library.
-    -->
-    <!-- Exact-pinned ([x]) so the natives version is decided in ONE place: a given
-         2dog version always resolves the natives it was built against, and consumers
-         (including the templates) never reference natives packages directly. -->
-    <ItemGroup>
-        <PackageReference Include="2dog.win-x64" Version="[$(NativesVersion)]" PrivateAssets="none"/>
-        <PackageReference Include="2dog.linux-x64" Version="[$(NativesVersion)]" PrivateAssets="none"/>
-        <PackageReference Include="2dog.osx-arm64" Version="[$(NativesVersion)]" PrivateAssets="none"/>
-        <!-- GodotTools assemblies for the automatic import (editor C# init requires them) -->
-        <PackageReference Include="2dog.tools" Version="[$(NativesVersion)]" PrivateAssets="none"/>
-    </ItemGroup>
-
-    <!-- Include MSBuild props/targets in the package -->
-    <ItemGroup>
-        <None Include="build\2dog.props" Pack="true" PackagePath="build\"/>
-        <None Include="build\2dog.targets" Pack="true" PackagePath="build\"/>
-        <None Include="buildTransitive\2dog.props" Pack="true" PackagePath="buildTransitive\"/>
-        <None Include="buildTransitive\2dog.targets" Pack="true" PackagePath="buildTransitive\"/>
-        <None Remove="twodog.osx-arm64\**"/>
-        <None Remove="twodog.win-x64\**"/>
-    </ItemGroup>
-
-    <!--
-      Embed GodotSharp assemblies and source generators in the package.
-      GodotSharp.dll goes in lib/net10.0/ alongside twodog.dll so consumers
-      get it as a transitive compile reference without needing a separate
-      GodotSharp NuGet dependency.
-      Godot.SourceGenerators.dll goes in analyzers/dotnet/cs/ so it runs
-      as a Roslyn source generator for consuming projects.
-    -->
+    <!-- Single source of truth: embed the dotnet-new template's host subtrees
+         verbatim (rename/version tokens intact; substituted at runtime).
+         The template sln is NOT embedded - it contains dotnet-new #if blocks;
+         solution handling shells out to `dotnet sln` instead. -->
     <PropertyGroup>
-        <GodotSharpApiDir>$(GodotBinDir)GodotSharp/Api/Release/</GodotSharpApiDir>
-        <GodotSourceGenDir>$(MSBuildProjectDirectory)/../godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/</GodotSourceGenDir>
+        <!-- Build artifacts appear in the template host folders when someone
+             builds/publishes them locally; embedding those would scaffold the
+             junk into user projects (VerifyEmbeddedTemplateTracked only fails
+             the pack, not a plain build). -->
+        <_TwoDogCliTplExcludes>../templates/twodog/**/bin/**;../templates/twodog/**/obj/**;../templates/twodog/**/TestResults/**</_TwoDogCliTplExcludes>
     </PropertyGroup>
     <ItemGroup>
-        <None Include="$(GodotSharpApiDir)GodotSharp.dll" Pack="true" PackagePath="lib/net10.0/" Visible="false"/>
-        <None Include="$(GodotSharpApiDir)GodotSharp.xml" Pack="true" PackagePath="lib/net10.0/" Visible="false" Condition="Exists('$(GodotSharpApiDir)GodotSharp.xml')"/>
-        <None Include="$(GodotSourceGenDir)Godot.SourceGenerators.dll" Pack="true" PackagePath="analyzers/dotnet/cs/" Visible="false"/>
+        <EmbeddedResource Include="../templates/twodog/Company.Product1.2dog/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.2dog/%(RecursiveDir)%(Filename)%(Extension)"/>
+        <EmbeddedResource Include="../templates/twodog/Company.Product1.web/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.web/%(RecursiveDir)%(Filename)%(Extension)"/>
+        <EmbeddedResource Include="../templates/twodog/Company.Product1.tests/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.tests/%(RecursiveDir)%(Filename)%(Extension)"/>
+        <EmbeddedResource Include="../templates/twodog/Company.Product1.csproj" LogicalName="tpl/Company.Product1.csproj"/>
+        <EmbeddedResource Include="../templates/twodog/TwoDogWebBoot.cs" LogicalName="tpl/TwoDogWebBoot.cs"/>
+        <EmbeddedResource Include="../templates/twodog/export_presets.cfg" LogicalName="tpl/export_presets.cfg"/>
+        <EmbeddedResource Include="../templates/twodog/global.json" LogicalName="tpl/global.json"/>
+    </ItemGroup>
+
+    <!-- Unit tests in twodog.tests exercise the internal conversion pipeline -->
+    <ItemGroup>
+        <InternalsVisibleTo Include="twodog.tests"/>
     </ItemGroup>
 
     <!-- Package icon and readme -->
@@ -113,155 +77,31 @@
         <None Include="README.md" Pack="true" PackagePath="README.md"/>
     </ItemGroup>
 
-    <!--
-      Include GodotPlugins assemblies in the package.
-      GodotPlugins needs to be copied to the output directory at runtime,
-      so it goes in build/api/ rather than lib/net10.0/.
-    -->
-    <PropertyGroup>
-        <!-- GODOTSHARP_DIR env var (highest priority) for locating GodotPlugins -->
-        <GodotPluginsSrcDir Condition="'$(GODOTSHARP_DIR)' != '' And Exists('$(GODOTSHARP_DIR)/GodotPlugins.dll')">$(GODOTSHARP_DIR)/</GodotPluginsSrcDir>
-        <GodotPluginsSrcDir Condition="'$(GodotPluginsSrcDir)' == ''">$(GodotBinDir)GodotSharp/Api/Debug/</GodotPluginsSrcDir>
-    </PropertyGroup>
-    <ItemGroup>
-        <None Include="$(GodotPluginsSrcDir)GodotPlugins.dll" Pack="true" PackagePath="build\api\" CopyToOutputDirectory="Never"/>
-        <None Include="$(GodotPluginsSrcDir)GodotPlugins.pdb" Pack="true" PackagePath="build\api\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotPluginsSrcDir)GodotPlugins.pdb')"/>
-        <None Include="$(GodotPluginsSrcDir)GodotPlugins.runtimeconfig.json" Pack="true" PackagePath="build\api\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotPluginsSrcDir)GodotPlugins.runtimeconfig.json')"/>
-    </ItemGroup>
-
-    <!--
-      Import helper: published into tools/net10.0/ and invoked by the
-      TwoDogImportGodotProject target (see build/2dog.targets) as
-      `dotnet exec tools/net10.0/2dog.import.dll`. Carries GodotSharp and
-      GodotSharpEditor copy-local so GodotPlugins' Assembly.Load calls
-      resolve in the helper process.
-    -->
-    <Target Name="TwoDogPublishImportHelperForPack" BeforeTargets="_GetPackageFiles;GenerateNuspec">
-        <!-- Restore must run as a separate MSBuild invocation: the assets file
-             it writes is read during project evaluation, and the differing
-             global properties below force a fresh evaluation for Publish. -->
-        <MSBuild Projects="../twodog.import/twodog.import.csproj"
-                 Targets="Restore"
-                 Properties="Configuration=Release"/>
-        <MSBuild Projects="../twodog.import/twodog.import.csproj"
-                 Targets="Publish"
-                 Properties="Configuration=Release;PublishDir=bin/tools-publish/"/>
-        <ItemGroup>
-            <None Include="../twodog.import/bin/tools-publish/**/*"
-                  Exclude="../twodog.import/bin/tools-publish/**/*.pdb;../twodog.import/bin/tools-publish/**/*.xml;../twodog.import/bin/tools-publish/**/*.exe"
-                  Pack="true" PackagePath="tools\net10.0\" Visible="false"/>
-        </ItemGroup>
-    </Target>
-
-    <!--
-      Native libraries are NOT embedded in this package.
-      They are provided by separate platform-specific packages:
-        - 2dog.win-x64 / 2dog.linux-x64 / 2dog.osx-arm64: template_release builds
-        - 2dog.win-x64.debug / 2dog.linux-x64.debug / 2dog.osx-arm64.debug: template_debug builds
-        - 2dog.win-x64.editor / 2dog.linux-x64.editor / 2dog.osx-arm64.editor: editor builds
-  
-      When you install the 2dog NuGet package, the release variant platform packages
-      are added as normal dependencies, so you usually only need to reference 2dog.
-  
-      For local development of the twodog library itself:
-        - Debug: Use template_debug build (debugging enabled)
-        - Editor: Use editor build (full editor features, TOOLS_ENABLED)
-        - Release: Use template_release build (optimized)
-    -->
-
-    <!-- Debug configuration: Use template_debug build -->
-    <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == ''">
-        <TwoDogLocalNativeLib_Windows>$(GodotBinDir)godot.windows.template_debug.x86_64.shared_library.dll</TwoDogLocalNativeLib_Windows>
-        <TwoDogLocalNativeLib_Linux>$(GodotBinDir)libgodot.linuxbsd.template_debug.x86_64.shared_library.so</TwoDogLocalNativeLib_Linux>
-        <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.template_debug.arm64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
-    </PropertyGroup>
-
-    <!-- Editor configuration: Use editor build (TOOLS_ENABLED) -->
-    <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
-        <TwoDogLocalNativeLib_Windows>$(GodotBinDir)godot.windows.editor.x86_64.shared_library.dll</TwoDogLocalNativeLib_Windows>
-        <TwoDogLocalNativeLib_Linux>$(GodotBinDir)libgodot.linuxbsd.editor.x86_64.shared_library.so</TwoDogLocalNativeLib_Linux>
-        <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.editor.arm64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
-    </PropertyGroup>
-
-    <!-- Release configuration: Use template_release build (optimized) -->
-    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-        <TwoDogLocalNativeLib_Windows>$(GodotBinDir)godot.windows.template_release.x86_64.shared_library.dll</TwoDogLocalNativeLib_Windows>
-        <TwoDogLocalNativeLib_Linux>$(GodotBinDir)libgodot.linuxbsd.template_release.x86_64.shared_library.so</TwoDogLocalNativeLib_Linux>
-        <TwoDogLocalNativeLib_OSX>$(GodotBinDir)libgodot.macos.template_release.arm64.shared_library.dylib</TwoDogLocalNativeLib_OSX>
-    </PropertyGroup>
-
-    <!-- Determine which native library to use based on current OS -->
-    <PropertyGroup>
-        <TwoDogCurrentNativeLib Condition="'$(IsWindows)' == 'true'">$(TwoDogLocalNativeLib_Windows)</TwoDogCurrentNativeLib>
-        <TwoDogCurrentNativeLib Condition="'$(IsLinux)' == 'true'">$(TwoDogLocalNativeLib_Linux)</TwoDogCurrentNativeLib>
-        <TwoDogCurrentNativeLib Condition="'$(IsOSX)' == 'true'">$(TwoDogLocalNativeLib_OSX)</TwoDogCurrentNativeLib>
-        <TwoDogCurrentPlatform Condition="'$(IsWindows)' == 'true'">Windows</TwoDogCurrentPlatform>
-        <TwoDogCurrentPlatform Condition="'$(IsLinux)' == 'true'">Linux</TwoDogCurrentPlatform>
-        <TwoDogCurrentPlatform Condition="'$(IsOSX)' == 'true'">macOS</TwoDogCurrentPlatform>
-    </PropertyGroup>
-
-    <!-- Copy local native lib to output for twodog library development -->
-    <ItemGroup>
-        <Content Include="$(TwoDogLocalNativeLib_Windows)" Pack="false" Link="libgodot.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(IsWindows)' == 'true' And Exists('$(TwoDogLocalNativeLib_Windows)')"/>
-        <Content Include="$(TwoDogLocalNativeLib_Linux)" Pack="false" Link="libgodot.so" CopyToOutputDirectory="PreserveNewest" Condition="'$(IsLinux)' == 'true' And Exists('$(TwoDogLocalNativeLib_Linux)')"/>
-        <Content Include="$(TwoDogLocalNativeLib_OSX)" Pack="false" Link="libgodot.dylib" CopyToOutputDirectory="PreserveNewest" Condition="'$(IsOSX)' == 'true' And Exists('$(TwoDogLocalNativeLib_OSX)')"/>
-    </ItemGroup>
-
-    <!--
-      Validate that native library exists for the current platform and configuration.
-      Shows a clear error message if the required native library is missing.
-    -->
-
-    <!--
-      For local development: Copy GodotPlugins to output.
-      - Editor builds: Use nested GodotSharp/Api/Debug/ structure (required by TOOLS_ENABLED)
-      - Debug/Release builds: Use flat structure (template builds)
-    -->
-    <Target Name="CopyGodotApiForLocalDev" AfterTargets="Build" Condition="'$(DesignTimeBuild)' != 'true'">
-        <PropertyGroup>
-            <!-- Editor builds need nested structure; Debug/Release template builds use flat structure -->
-            <GodotApiDestPath Condition="'$(Configuration)' == 'Editor'">$(OutputPath)GodotSharp/Api/Debug/</GodotApiDestPath>
-            <GodotApiDestPath Condition="'$(Configuration)' != 'Editor'">$(OutputPath)</GodotApiDestPath>
-        </PropertyGroup>
-
-        <ItemGroup>
-            <GodotPluginsFiles Include="$(GodotPluginsSrcDir)GodotPlugins.dll"/>
-            <GodotPluginsFiles Include="$(GodotPluginsSrcDir)GodotPlugins.pdb" Condition="Exists('$(GodotPluginsSrcDir)GodotPlugins.pdb')"/>
-            <GodotPluginsFiles Include="$(GodotPluginsSrcDir)GodotPlugins.runtimeconfig.json" Condition="Exists('$(GodotPluginsSrcDir)GodotPlugins.runtimeconfig.json')"/>
-        </ItemGroup>
-
-        <MakeDir Directories="$(GodotApiDestPath)" Condition="'$(Configuration)' == 'Editor'"/>
-        <Copy SourceFiles="@(GodotPluginsFiles)"
-              DestinationFolder="$(GodotApiDestPath)"
-              SkipUnchangedFiles="true"/>
-    </Target>
-
-    <Target Name="DeepClean" AfterTargets="Clean">
-        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
-        <RemoveDir Directories="$(BaseOutputPath)"/>
-    </Target>
-
-    <!-- dotnet new template content bundled in this package. template.json is
-         excluded: a versioned copy is staged into obj/ and packed instead
-         (StageVersionedTemplateJson below), so the committed file keeps its
-         placeholder versions untouched. -->
+    <!-- dotnet new template content bundled in this package (the Template half
+         of the package type). template.json is excluded: a versioned copy is
+         staged into obj/ and packed instead (StageVersionedTemplateJson below),
+         so the committed file keeps its placeholder versions untouched.
+         Note: the packed content includes the template sln (dotnet-new #if
+         blocks) while the EmbeddedResource list above deliberately omits it -
+         `2dog convert` shells out to `dotnet sln` instead. -->
     <ItemGroup>
         <Content Include="../templates/twodog/**/*" Exclude="../templates/twodog/**/bin/**;../templates/twodog/**/obj/**;../templates/twodog/.template.config/template.json"
                  Pack="true" PackagePath="content/twodog/" CopyToOutputDirectory="Never"/>
     </ItemGroup>
 
     <!-- Template files matched by a .gitignore never reach a CI checkout, so
-         they silently vanish from the packed template even though local packs
-         (and local template installs) still see them. Shipped 4.7.0.36 without
-         export_presets.cfg that way, breaking every generated web publish. -->
-    <Target Name="VerifyTemplateContentTracked" BeforeTargets="GenerateNuspec">
+         they silently vanish from the packed template content and the embedded
+         resources even though local packs still see them. Shipped 4.7.0.36
+         without export_presets.cfg that way, breaking every generated web
+         publish. -->
+    <Target Name="VerifyEmbeddedTemplateTracked" BeforeTargets="GenerateNuspec">
         <Exec Command="git -C &quot;$(MSBuildProjectDirectory)/../&quot; ls-files --others templates/twodog/"
               ConsoleToMSBuild="true" IgnoreExitCode="true" StandardOutputImportance="low">
-            <Output TaskParameter="ConsoleOutput" PropertyName="_TwoDogTemplateUntracked"/>
-            <Output TaskParameter="ExitCode" PropertyName="_TwoDogTemplateGitExit"/>
+            <Output TaskParameter="ConsoleOutput" PropertyName="_TwoDogCliTemplateUntracked"/>
+            <Output TaskParameter="ExitCode" PropertyName="_TwoDogCliTemplateGitExit"/>
         </Exec>
-        <Error Condition="'$(_TwoDogTemplateGitExit)' == '0' And '$(_TwoDogTemplateUntracked.Trim())' != ''"
-               Text="2dog template content contains files git does not track (gitignored or never added) - they would be missing from a CI-packed template: $(_TwoDogTemplateUntracked)"/>
+        <Error Condition="'$(_TwoDogCliTemplateGitExit)' == '0' And '$(_TwoDogCliTemplateUntracked.Trim())' != ''"
+               Text="2dog template content contains files git does not track (gitignored or never added) - they would be missing from a CI-packed 2dog package: $(_TwoDogCliTemplateUntracked)"/>
     </Target>
 
     <!-- Stage a copy of the bundled template.json with the real versions from
@@ -281,5 +121,10 @@
             <None Include="$(IntermediateOutputPath)template.json" Pack="true"
                   PackagePath="content/twodog/.template.config/template.json"/>
         </ItemGroup>
+    </Target>
+
+    <Target Name="DeepClean" AfterTargets="Clean">
+        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
+        <RemoveDir Directories="$(BaseOutputPath)"/>
     </Target>
 </Project>

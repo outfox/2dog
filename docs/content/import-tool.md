@@ -9,7 +9,7 @@ logs a startup error about missing UIDs.
 
 ## Automatic import (MSBuild)
 
-Any project that sets `<GodotProjectDir>` and references the `2dog` package
+Any project that sets `<GodotProjectDir>` and references the `2dog.engine` package
 gets an incremental import step after `Build`:
 
 - When source files under the Godot project change, the import runs; otherwise
@@ -42,7 +42,7 @@ reimport on the next build.
 
 ## The import helper (`twodog.import`)
 
-The `2dog` package ships a small helper (`tools/net10.0/2dog.import.dll`) that
+The `2dog.engine` package ships a small helper (`tools/net10.0/2dog.import.dll`) that
 the MSBuild target invokes. It can also be run manually:
 
 ```bash
@@ -113,7 +113,7 @@ it rather than using the in-process helper.
 
 The `2dog.<rid>.editor` package (editor libgodot), the helper payload, or the
 `2dog.tools` package (GodotTools assemblies) could not be resolved. Restore
-the `2dog` package normally (all of these are dependencies of it), or set
+the `2dog.engine` package normally (all of these are dependencies of it), or set
 `<GodotEditor>` to an external editor binary.
 
 ### GodotTools.dll not found

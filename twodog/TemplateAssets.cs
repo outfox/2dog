@@ -5,8 +5,9 @@ namespace twodog.cli;
 /// <summary>
 /// Access to the dotnet-new template content embedded in this assembly
 /// (LogicalName "tpl/..."), with the template's literal rename/version tokens
-/// substituted at read time. The embedded files are the single source of
-/// truth shared with the 2dog.Templates package.
+/// substituted at read time. The embedded files come from templates/twodog,
+/// the same single source of truth that is packed as this package's
+/// dotnet-new template content.
 /// </summary>
 internal static class TemplateAssets
 {

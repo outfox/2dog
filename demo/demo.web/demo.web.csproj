@@ -6,7 +6,7 @@
       deployment, automatic .pck export) comes from the 2dog.browser-wasm
       package targets. This project consumes them via source-checkout imports
       below; package consumers get the same thing automatically from
-      PackageReference 2dog + 2dog.browser-wasm (see the 2dog web template).
+      PackageReference 2dog.engine + 2dog.browser-wasm (see the 2dog web template).
 
       Publish:  dotnet publish demo/demo.web -c Release   (from the repo root;
                 the root global.json pins the wasm-capable SDK band)
@@ -27,7 +27,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../../twodog/twodog.csproj"/>
+        <ProjectReference Include="../../twodog.engine/twodog.engine.csproj"/>
         <ProjectReference Include="../demo.csproj"/>
     </ItemGroup>
 
@@ -39,11 +39,11 @@
     </ItemGroup>
 
     <!-- Source-checkout equivalents of the NuGet package targets:
-         2dog.targets (GodotProjectDir plumbing, import helper discovery),
+         2dog.engine.targets (GodotProjectDir plumbing, import helper discovery),
          the host-OS desktop meta targets (TwoDogEditorLibGodotPath for the
          build-time .pck export), and the browser-wasm targets (all web
          wiring). Package consumers get these transitively. -->
-    <Import Project="../../twodog/build/2dog.targets"/>
+    <Import Project="../../twodog.engine/build/2dog.engine.targets"/>
     <Import Project="../../platforms/twodog.win-x64/build/2dog.win-x64.targets" Condition="$([MSBuild]::IsOSPlatform('Windows'))"/>
     <Import Project="../../platforms/twodog.linux-x64/build/2dog.linux-x64.targets" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
     <Import Project="../../platforms/twodog.osx-arm64/build/2dog.osx-arm64.targets" Condition="$([MSBuild]::IsOSPlatform('OSX'))"/>

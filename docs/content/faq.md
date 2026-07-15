@@ -48,9 +48,9 @@ Likely yes, once that integration is finished. As of mid-2026, godot-dotnet is s
 
 No. 2dog embeds GodotSharp (and Godot's C# source generators) and builds on top of it. Everything you know from Godot C# scripting  –  `GD`, `Node`, `[Export]`, signals  –  works the same; 2dog only inverts who is in charge of the process.
 
-## Why is the CLI a separate package (`2dog.cli`) instead of part of `2dog`?
+## Why is the library a separate package (`2dog.engine`) instead of part of `2dog`?
 
-NuGet forces the split. A package marked as a dotnet tool (`DotnetTool` package type) cannot also be consumed as a `PackageReference`  –  referencing it fails with error `NU1213`  –  so the `2dog` library package can't double as the tool. The `PackAsTool` layout also conflicts with the library payload (`build/` targets, embedded API assemblies, import helper), and dotnet tool execution doesn't restore package dependencies, so the tool has to be self-contained. Hence one library package (`2dog`) and one tool package (`2dog.cli`), released in lockstep. The tool embeds the project template content, so both scaffold identical output  –  see [Converting a Godot Project](/convert).
+NuGet forces the split. The `2dog` package is the dotnet tool and the `dotnet new` template in one (`DotnetTool` and `Template` package types), and a package marked as a dotnet tool cannot also be consumed as a `PackageReference`  –  referencing it fails with error `NU1213`  –  so it can't double as the library. The `PackAsTool` layout also conflicts with the library payload (`build/` targets, embedded API assemblies, import helper), and dotnet tool execution doesn't restore package dependencies, so the tool has to be self-contained. Hence one library package (`2dog.engine`) and one tool + template package (`2dog`), released in lockstep. The `2dog` package carries the template content both as `dotnet new` content and embedded in the tool, so `dotnet new 2dog` and `2dog convert` scaffold identical output  –  see [Converting a Godot Project](/convert).
 
 ---
 

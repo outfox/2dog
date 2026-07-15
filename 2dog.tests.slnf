@@ -21,7 +21,7 @@
       "platforms\\twodog.win-x64\\twodog.win-x64.editor.csproj",
       "platforms\\twodog.win-x64\\twodog.win-x64.release.csproj",
       "twodog\\twodog.csproj",
-      "twodog.cli\\twodog.cli.csproj",
+      "twodog.engine\\twodog.engine.csproj",
       "twodog.import\\twodog.import.csproj",
       "twodog.tests\\twodog.tests.csproj",
       "twodog.xunit\\twodog.xunit.csproj"

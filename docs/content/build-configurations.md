@@ -147,7 +147,7 @@ Editor builds are significantly larger and slower due to the additional tooling.
 
 ### Selecting a Variant
 
-Referencing `2dog` gives you the `release` natives. The variant is **not**
+Referencing `2dog.engine` gives you the `release` natives. The variant is **not**
 derived from your .NET configuration automatically  –  to use `debug` or
 `editor` natives, set `TwoDogVariant`, typically conditioned on your
 configuration. All three variants ship with the platform meta package, so no
@@ -161,7 +161,7 @@ extra package references are needed:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="2dog" Version=":2dog-version:"/>
+    <PackageReference Include="2dog.engine" Version=":2dog-version:"/>
   </ItemGroup>
 
   <!-- Debug natives (opt-in); Editor natives via a custom 'Editor' configuration -->
@@ -240,7 +240,7 @@ Make sure the 'GodotSharp/Api/Debug' directory exists...
 
 **Solution**: Ensure `TwoDogVariant` matches the native library variant you
 reference  –  `debug` for `2dog.<rid>.debug`, `editor` for `2dog.<rid>.editor`,
-`release` (the default) for the packages that come with `2dog` itself. See
+`release` (the default) for the packages that come with `2dog.engine` itself. See
 [Selecting a Variant](#selecting-a-variant).
 
 ### Editor APIs Not Available

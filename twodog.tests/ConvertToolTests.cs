@@ -2,7 +2,7 @@ using twodog.cli;
 
 namespace twodog.tests;
 
-// Coverage for the `2dog convert` tool (twodog.cli), which mutates users'
+// Coverage for the `2dog convert` tool (twodog/), which mutates users'
 // Godot projects in place. Pure filesystem tests on temp directories - no
 // Godot instance involved, so none of these join the "Godot" collection.
 // The end-to-end tests additionally shell out to `dotnet sln`, exactly like
@@ -180,9 +180,11 @@ public class CsprojPatcherTests
 {
     private static readonly string[] HostFolders = ["MyGame.2dog", "MyGame.web", "MyGame.tests"];
 
-    private const string Bare =
-        """
-        <Project Sdk="Godot.NET.Sdk/4.7.0">
+    // Pinned to the SDK version the tool targets so the "older than" warning
+    // doesn't fire (the fixture would go stale on every Godot version bump).
+    private static readonly string Bare =
+        $"""
+        <Project Sdk="Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}">
             <PropertyGroup>
                 <TargetFramework>net10.0</TargetFramework>
             </PropertyGroup>

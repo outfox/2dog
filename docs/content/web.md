@@ -19,7 +19,7 @@ dotnet workload install wasm-tools
 
 # Convert in place - scaffolds the web host (and more) around
 # your existing Godot project
-dnx 2dog.cli convert path/to/MyGame
+dnx 2dog convert path/to/MyGame
 
 # Publish the browser app (imports assets and exports the game
 # content automatically)
@@ -96,7 +96,7 @@ onto an existing Godot project; to wire it up manually you need:
      (`global.json` applies at or below its own directory, so this is what
      makes the publish work from the project root).
 2. **A web host project** (net10.0+, `RuntimeIdentifier=browser-wasm`)
-   referencing the `2dog` and `2dog.browser-wasm` packages, with
+   referencing the `2dog.engine` and `2dog.browser-wasm` packages, with
    `<GodotProjectDir>` pointing at the Godot project. In the standard layout
    the host is nested inside the Godot project (e.g. `MyGame/MyGame.web/`)
    with `<GodotProjectDir>..</GodotProjectDir>`  –  again, easiest copied from a

@@ -31,9 +31,9 @@ internal static class HelperToolTestBed
                 .Select(c => Path.Combine(RepoRoot, "twodog.import", "bin", c, "net10.0", "2dog.import.dll"))
                 .ToList();
 
-            // Fall back to the helper packaged inside the restored 2dog package
+            // Fall back to the helper packaged inside the restored 2dog.engine package
             // (CI test jobs restore from the local feed without building twodog.import).
-            var packageDir = Path.Combine(RepoRoot, ".packages", "2dog");
+            var packageDir = Path.Combine(RepoRoot, ".packages", "2dog.engine");
             if (Directory.Exists(packageDir))
             {
                 candidates.AddRange(Directory.EnumerateDirectories(packageDir)

@@ -6,15 +6,16 @@
 
 For a new project, installing the template *is* installing 2dog: there is no
 SDK or tool to set up beyond it  –  projects created from the template reference
-the 2dog NuGet packages themselves. The template is bundled in the main `2dog`
-NuGet package, so installing the package registers it:
+the 2dog NuGet packages themselves. The template is bundled in the `2dog`
+NuGet package (which also carries the `2dog convert` dotnet tool), so
+installing the package registers it:
 
 ```bash
 dotnet new install 2dog
 ```
 
 (For an *existing* Godot project, there is nothing to install at all  – 
-[`dnx 2dog.cli convert`](/convert) produces the same layout around it, in
+[`dnx 2dog convert`](/convert) produces the same layout around it, in
 place.)
 
 ### Local Installation (Development)
@@ -164,7 +165,7 @@ internal static class Program
 
 ### Project File
 
-The generated host `.csproj` needs a single `2dog` package reference  –  GodotSharp,
+The generated host `.csproj` needs a single `2dog.engine` package reference  –  GodotSharp,
 source generators, and platform-specific native libraries are all included
 transitively  –  plus a project reference to the Godot project for your C#
 scripts:
@@ -185,7 +186,7 @@ scripts:
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="2dog" Version=":2dog-version:"/>
+        <PackageReference Include="2dog.engine" Version=":2dog-version:"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -200,7 +201,7 @@ scripts:
     </PropertyGroup>
 
     <!-- Remove duplicate Godot.SourceGenerators that come from the Godot project
-         (2dog package already embeds them) -->
+         (2dog.engine package already embeds them) -->
     <Target Name="RemoveDuplicateGodotAnalyzers" BeforeTargets="CoreCompile">
         <ItemGroup>
             <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Identity)').Contains('Godot.SourceGenerators'))" />
@@ -340,7 +341,7 @@ dotnet new install ./templates/twodog
 Update the package reference in the `.csproj` file:
 
 ```bash
-dotnet add package 2dog
+dotnet add package 2dog.engine
 ```
 
 Or edit the `.csproj` manually to use the latest version.

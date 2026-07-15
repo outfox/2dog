@@ -11,7 +11,7 @@
 
 There is nothing to install up front  –  pick your entry point:
 
-- **Existing Godot project?** Run `dnx 2dog.cli convert` on it  –  `dnx`
+- **Existing Godot project?** Run `dnx 2dog convert` on it  –  `dnx`
   executes the tool straight from NuGet, and the converted project references
   the 2dog packages itself.
 - **New project?** Installing 2dog *is* installing its project template:
@@ -27,7 +27,7 @@ jump to a newer Godot line when one is released. Pin the package to your
 project's Godot line with a floating version:
 
 ```xml
-<PackageReference Include="2dog" Version=":godot-version:.*"/>
+<PackageReference Include="2dog.engine" Version=":godot-version:.*"/>
 ```
 
 This picks up new 2dog iterations for your Godot line but never a different
@@ -46,7 +46,7 @@ place, without moving or renaming anything  –  and sets it up for a browser
 
 ```bash
 # Convert in place - scaffolds the desktop, web, and test hosts
-dnx 2dog.cli convert path/to/MyGodotApp
+dnx 2dog convert path/to/MyGodotApp
 
 cd path/to/MyGodotApp
 
@@ -96,7 +96,7 @@ Alternatively, create a new console application manually:
 ```bash
 dotnet new console -n MyGodotApp
 cd MyGodotApp
-dotnet add package 2dog
+dotnet add package 2dog.engine
 ```
 
 Replace `Program.cs`:
@@ -173,7 +173,7 @@ uv run poe build
 - `debug`  –  development build with debug symbols and assertions
 - `editor`  –  editor build with `TOOLS_ENABLED` compiled in
 
-Referencing the `2dog` package gives you the `release` variant automatically.
+Referencing the `2dog.engine` package gives you the `release` variant automatically.
 For `debug` or `editor`, set `<TwoDogVariant>` in your project  –  all three
 variants ship with the platform packages, and the one you select is copied
 and loaded as `libgodot-<variant>`.

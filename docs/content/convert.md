@@ -5,9 +5,10 @@ place**. Your project directory becomes the solution root, and the 2dog host
 projects (desktop, web, tests) are scaffolded as nested subfolders that the
 Godot editor ignores. Nothing is ever moved, renamed, or deleted.
 
-The command ships as the `2dog.cli` dotnet tool (a separate package from the
-`2dog` library  –  see [the FAQ](/faq#why-is-the-cli-a-separate-package-2dog-cli-instead-of-part-of-2dog)
-for why). It embeds the same template content as `dotnet new 2dog`, so a
+The command ships in the `2dog` package  –  the dotnet tool and the `dotnet new`
+template in one, separate from the `2dog.engine` library  –  see
+[the FAQ](/faq#why-is-the-library-a-separate-package-2dog-engine-instead-of-part-of-2dog)
+for why. It embeds the same template content as `dotnet new 2dog`, so a
 converted project and a fresh one have identical layouts.
 
 ## Usage
@@ -15,13 +16,13 @@ converted project and a fresh one have identical layouts.
 One-shot, no install (.NET 10+ SDK):
 
 ```bash
-dnx 2dog.cli convert path/to/your/godot/project
+dnx 2dog convert path/to/your/godot/project
 ```
 
 Or install the `2dog` command globally:
 
 ```bash
-dotnet tool install -g 2dog.cli
+dotnet tool install -g 2dog
 2dog convert path/to/your/godot/project
 ```
 
@@ -34,7 +35,7 @@ Convert-then-publish is the fastest route to a browser (WebAssembly) release
 of an existing Godot project:
 
 ```bash
-dnx 2dog.cli convert path/to/MyGame
+dnx 2dog convert path/to/MyGame
 cd path/to/MyGame
 dotnet publish MyGame.web -c Release   # static site in MyGame.web/AppBundle/
 ```

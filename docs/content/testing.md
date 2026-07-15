@@ -1,13 +1,13 @@
 # Testing with xUnit
 
-The test fixtures (`GodotFixture`, `GodotHeadlessFixture`, `GodotFixtureBase`) ship in the **`2dog`**
+The test fixtures (`GodotFixture`, `GodotHeadlessFixture`, `GodotFixtureBase`) ship in the **`2dog.engine`**
 package, in the `twodog.fixture` namespace. The **`2dog.xunit`** package adds ready-made xUnit
 collection definitions on top of them.
 
 ## Installation
 
 ```bash
-dotnet add package 2dog.xunit          # pulls in 2dog (the fixtures) automatically
+dotnet add package 2dog.xunit          # pulls in 2dog.engine (the fixtures) automatically
 dotnet add package xunit.v3
 dotnet add package Microsoft.NET.Test.Sdk
 dotnet add package xunit.runner.visualstudio
@@ -213,7 +213,7 @@ Example GitHub Actions workflow:
 
 ## Project Configuration
 
-For test projects using `ProjectReference` to twodog (not the NuGet package), configure build types:
+For test projects using `ProjectReference` to twodog.engine (not the NuGet package), configure build types:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -223,9 +223,9 @@ For test projects using `ProjectReference` to twodog (not the NuGet package), co
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\twodog\twodog.csproj" />
+    <ProjectReference Include="..\twodog.engine\twodog.engine.csproj" />
   </ItemGroup>
-  <!-- Fixtures come from the twodog project above. Note: with a ProjectReference the 2dog.xunit
+  <!-- Fixtures come from the twodog.engine project above. Note: with a ProjectReference the 2dog.xunit
        compile-in collections are NOT imported automatically  –  reference the 2dog.xunit NuGet
        package instead, or define a collection locally (see "Custom collections"). -->
 
@@ -241,7 +241,7 @@ For test projects using `ProjectReference` to twodog (not the NuGet package), co
   </PropertyGroup>
 
   <!-- Required for ProjectReference builds -->
-  <Import Project="..\twodog\build\2dog.targets" />
+  <Import Project="..\twodog.engine\build\2dog.engine.targets" />
 </Project>
 ```
 

@@ -5,6 +5,6 @@
       This file is imported early in the build process to define properties
       that consuming projects may need before targets are evaluated.
 
-      Currently empty as all build logic is in 2dog.targets.
+      Currently empty as all build logic is in 2dog.engine.targets.
     -->
 </Project>
