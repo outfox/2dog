@@ -369,6 +369,61 @@ jobs:
           fi
           echo "Web app bundle OK"
 
+      # Execute the linked app in a real browser. The game assembly runs the
+      # shared GodotApiSmoke probe and marks the DOM only after native API,
+      # resource, codec, server, scene, generated C# script, and GDScript-only
+      # engine-module calls succeed.
+      - name: Run browser API smoke
+        run: |
+          BUNDLE=demo/demo.web/AppBundle
+          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)
+          if [ -z "$CHROME" ]; then
+            echo "::error::No Chrome/Chromium executable is available on the runner"
+            exit 1
+          fi
+
+          python3 -m http.server 8000 --bind 127.0.0.1 --directory "$BUNDLE" > /tmp/2dog-web-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8000/index.html > /dev/null; then
+              break
+            fi
+            sleep 1
+          done
+
+          set +e
+          timeout 120s "$CHROME" \
+            --headless=new \
+            --no-sandbox \
+            --disable-gpu \
+            --disable-dev-shm-usage \
+            --enable-logging=stderr \
+            --virtual-time-budget=45000 \
+            --dump-dom \
+            http://127.0.0.1:8000/index.html \
+            > /tmp/2dog-web-dom.html \
+            2> /tmp/2dog-browser.log
+          BROWSER_STATUS=$?
+          set -e
+
+          cat /tmp/2dog-web-server.log
+          cat /tmp/2dog-browser.log
+
+          if [ "$BROWSER_STATUS" -ne 0 ]; then
+            echo "::error::Headless Chrome exited with status $BROWSER_STATUS"
+            exit "$BROWSER_STATUS"
+          fi
+
+          if ! grep -q 'data-twodog-smoke="passed"' /tmp/2dog-web-dom.html; then
+            echo "::error::The browser app did not complete the Godot API smoke probe"
+            cat /tmp/2dog-web-dom.html
+            exit 1
+          fi
+
+          echo "Web runtime API smoke OK"
+
   # Deploy to NuGet and create GitHub release when running on a version tag —
   # either pushed directly or dispatched on the tag by release.yml (tags pushed
   # with GITHUB_TOKEN don't fire push events, so release.yml dispatches instead).

@@ -16,11 +16,24 @@ internal static class Program
         var engine = new Engine("demo.web", null, args);
         engine.Start();
 
-        GD.Print("Hello from GodotSharp (browser).");
-        GD.Print("Scene Root: ", engine.Tree.CurrentScene.Name);
+        try
+        {
+            GD.Print("Hello from GodotSharp (browser).");
+            GD.Print("Scene Root: ", engine.Tree.CurrentScene.Name);
 
-        var ticker = engine.Tree.CurrentScene.GetNode<Ticker>("Ticker");
-        GD.Print("Ticker: ", ticker);
+            var ticker = engine.Tree.CurrentScene.GetNode<Ticker>("Ticker");
+            GD.Print("Ticker: ", ticker);
+
+            GodotApiSmoke.RunAll(engine.Tree);
+            JavaScriptBridge.Eval("document.documentElement.setAttribute('data-twodog-smoke', 'passed')");
+            Console.WriteLine("2DOG_WASM_SMOKE_PASSED");
+        }
+        catch (Exception exception)
+        {
+            Console.Error.WriteLine($"2DOG_WASM_SMOKE_FAILED: {exception}");
+            JavaScriptBridge.Eval("document.documentElement.setAttribute('data-twodog-smoke', 'failed')");
+            throw;
+        }
 
         // Hands the loop to emscripten and returns immediately; the engine
         // destroys itself when Godot requests quit. Do not dispose here.
