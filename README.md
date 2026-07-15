@@ -232,13 +232,10 @@ Full documentation at **[2dog.dev](https://2dog.dev)**
 
 Questions? Ideas? Want to teach 2dog new tricks?
 
----
+Join our Discord!
 
-## Acknowledgements
-
-Inspired by and built upon Ben Rog-Wilhelm's [libgodot_example](https://github.com/zorbathut/libgodot_example/tree/csharp).
-*You're the GOAT. Or a [DIESEL HORSE](https://diesel.horse). Same difference!*
+[![Discord Invite](https://img.shields.io/badge/discord-_%E2%A4%9Coutfox%E2%A4%8F-blue?logo=discord&logoColor=f5f5f5)](https://discord.gg/GAXdbZCNGT)
 
 ---
 
-#### *No squirrels were harmed in the making of this README.*
+### *No squirrels were harmed in the making of this README.*
