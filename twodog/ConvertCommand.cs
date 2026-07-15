@@ -265,6 +265,19 @@ internal static class ConvertCommand
         string projectDir, string baseName, string godotCsproj, List<string> hostFolders)
     {
         var (solutionPath, exists) = SolutionOps.Locate(projectDir, baseName);
+        if (!exists)
+        {
+            // `Locate` uses the historic .sln extension for its hypothetical
+            // path. New 2dog solutions are .slnx.
+            solutionPath = Path.ChangeExtension(solutionPath, ".slnx");
+        }
+        else if (solutionPath.EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
+        {
+            var classicSolutionPath = solutionPath;
+            solutionPath = Path.ChangeExtension(classicSolutionPath, ".slnx");
+            plan.Add(new PlannedAction($"migrate {Path.GetFileName(classicSolutionPath)} to {Path.GetFileName(solutionPath)}",
+                () => SolutionOps.MigrateToSlnx(classicSolutionPath)));
+        }
         var solutionName = Path.GetFileName(solutionPath);
 
         if (!exists)
@@ -283,7 +296,7 @@ internal static class ConvertCommand
 
         if (options.IncludeWeb)
         {
-            // Separator-agnostic: SolutionOps matches either / or \ in the sln.
+            // Separator-agnostic: SolutionOps matches either / or \\ in the solution.
             var webRelative = $"{baseName}.web/{baseName}.web.csproj";
             var webIsNew = missing.Any(p => p.EndsWith($"{baseName}.web.csproj", StringComparison.OrdinalIgnoreCase));
             if (webIsNew || SolutionOps.HasSolutionBuildEntries(solutionPath, webRelative))
@@ -296,17 +309,6 @@ internal static class ConvertCommand
                                               "solution-wide builds will include it (requires the wasm-tools workload).");
                     }));
         }
-
-        var solutionProjects = allProjects
-            .Select(p => Path.GetRelativePath(Path.GetDirectoryName(solutionPath)!, p))
-            .ToList();
-        var webProject = options.IncludeWeb
-            ? Path.GetRelativePath(Path.GetDirectoryName(solutionPath)!, Path.Combine(projectDir, $"{baseName}.web", $"{baseName}.web.csproj"))
-            : null;
-        if (!exists || SolutionOps.NeedsEditorConfiguration(solutionPath, solutionProjects, webProject))
-            plan.Add(new PlannedAction(
-                $"add Editor solution configuration to {solutionName}",
-                () => SolutionOps.EnsureEditorConfiguration(solutionPath, solutionProjects, webProject)));
 
         // Only restore when the run actually changes something.
         if (options.Restore && plan.Count > 0)

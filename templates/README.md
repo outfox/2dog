@@ -52,7 +52,7 @@ templates/
 └── twodog/                        # Template content = the Godot project root
     ├── .template.config/
     │   └── template.json          # Template configuration
-    ├── Company.Product1.sln       # The single solution, next to project.godot
+    ├── Company.Product1.slnx      # The single solution, next to project.godot
     ├── Company.Product1.csproj    # Godot project (Godot.NET.Sdk)
     ├── project.godot
     ├── main.tscn

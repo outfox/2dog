@@ -50,7 +50,7 @@ while (!godot.Iteration())
 
 - 🆕 WASM support! 🔥 (deploy and play your C# Godot game in the browser!)
 - .NET-first project structure: your Godot project is the solution root, with the host projects nested inside it (hidden from the Godot editor by `.gdignore` - no code changes needed)
-- `dnx 2dog convert` turns an existing Godot project into a 2dog project, in place - one command from stock Godot to a browser-publishable .NET solution
+- `dnx 2dog convert` (same as `dotnet tool exec 2dog convert`)turns an existing Godot project into a 2dog project, in place - one command from stock Godot to a browser-publishable .NET solution
 - Familiar GodotSharp API (fully compatible with official Godot)
 - Automatic asset import during `dotnet build` - no Godot editor installation needed
 - Three build configurations: Debug, Release, and Editor (with `TOOLS_ENABLED`)
