@@ -1,0 +1,18 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Editor" />
+    <BuildType Name="Release" />
+  </Configurations>
+  <Project Path="TPLRAWNAME.csproj" />
+  <Project Path="TPLRAWNAME.2dog/TPLRAWNAME.2dog.csproj" />
+#if (tests)
+  <Project Path="TPLRAWNAME.tests/TPLRAWNAME.tests.csproj" />
+#endif
+#if (web)
+  <Project Path="TPLRAWNAME.web/TPLRAWNAME.web.csproj">
+    <BuildType Solution="Editor|*" Project="Debug" />
+    <Build Project="false" />
+  </Project>
+#endif
+</Solution>

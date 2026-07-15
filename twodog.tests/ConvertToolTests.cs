@@ -301,8 +301,8 @@ public class CsprojPatcherTests
 public class SolutionOpsTests
 {
     // Classic sln skeleton with one project entry; the separator in the
-    // project path is parameterized because `dotnet sln add` implementations
-    // have differed across SDK versions and platforms.
+    // project path is parameterized because solution tooling has differed
+    // across SDK versions and platforms.
     private static string WebSln(string sep) =>
         $$"""
         Microsoft Visual Studio Solution File, Format Version 12.00
@@ -348,6 +348,45 @@ public class SolutionOpsTests
         var sln = tmp.Write("MyGame.sln", WebSln("\\"));
         Assert.False(SolutionOps.ExcludeFromSolutionBuild(sln, "Other.web/Other.web.csproj"));
         Assert.Contains(".Build.0", File.ReadAllText(sln));
+    }
+
+    [Fact]
+    public void ExcludeFromSolutionBuild_Slnx_AddsBuildFalseWithoutOtherChanges()
+    {
+        using var tmp = new TempProjectDir();
+        var slnx = tmp.Write("MyGame.slnx",
+            """
+            <Solution>
+              <Project Path="MyGame.web/MyGame.web.csproj" />
+            </Solution>
+            """);
+
+        Assert.True(SolutionOps.ExcludeFromSolutionBuild(slnx, "MyGame.web/MyGame.web.csproj"));
+
+        Assert.Equal(
+            """
+            <Solution>
+              <Project Path="MyGame.web/MyGame.web.csproj">
+                <Build Project="false" />
+              </Project>
+            </Solution>
+            """,
+            File.ReadAllText(slnx));
+    }
+
+    [Fact]
+    public void MigrateToSlnx_ReplacesClassicSolution()
+    {
+        using var tmp = new TempProjectDir();
+        var sln = tmp.Write("MyGame.sln", WebSln("\\"));
+
+        SolutionOps.MigrateToSlnx(sln);
+
+        var slnx = System.IO.Path.ChangeExtension(sln, ".slnx");
+        Assert.False(File.Exists(sln));
+        Assert.True(File.Exists(slnx));
+        Assert.Contains("<Solution>", File.ReadAllText(slnx));
+        Assert.True(SolutionOps.ContainsProject(slnx, "MyGame.web.csproj"));
     }
 
     [Fact]
@@ -528,7 +567,7 @@ public class ConvertEndToEndTests
         // behind .gdignore.
         foreach (var expected in new[]
                  {
-                    "SpaceMiner.csproj", "SpaceMiner.sln", "Directory.Build.targets", "TwoDogWebBoot.cs", "export_presets.cfg", "global.json",
+                    "SpaceMiner.csproj", "SpaceMiner.slnx", "Directory.Build.targets", "TwoDogWebBoot.cs", "export_presets.cfg", "global.json",
                      "SpaceMiner.2dog/SpaceMiner.2dog.csproj", "SpaceMiner.2dog/.gdignore",
                      "SpaceMiner.web/SpaceMiner.web.csproj", "SpaceMiner.web/.gdignore",
                      "SpaceMiner.tests/SpaceMiner.tests.csproj", "SpaceMiner.tests/.gdignore",
@@ -550,18 +589,14 @@ public class ConvertEndToEndTests
 
         // The sln contains all four projects; the web host keeps ActiveCfg
         // entries but is excluded from plain solution builds (wasm-tools).
-        var sln = System.IO.Path.Combine(tmp.Dir, "SpaceMiner.sln");
+        var sln = System.IO.Path.Combine(tmp.Dir, "SpaceMiner.slnx");
         foreach (var project in new[]
                  {
                      "SpaceMiner.csproj", "SpaceMiner.2dog.csproj",
                      "SpaceMiner.web.csproj", "SpaceMiner.tests.csproj",
                  })
             Assert.True(SolutionOps.ContainsProject(sln, project), $"{project} missing from sln");
-        Assert.Contains(".Build.0", File.ReadAllText(sln));
-        Assert.Contains("Editor|Any CPU = Editor|Any CPU", File.ReadAllText(sln));
-        Assert.Contains(".Editor|Any CPU.Build.0 = Editor|Any CPU", File.ReadAllText(sln));
-        Assert.False(SolutionOps.HasSolutionBuildEntries(sln, "SpaceMiner.web/SpaceMiner.web.csproj"),
-            "web host must not build with the solution");
+        Assert.Contains("<Build Project=\"false\" />", File.ReadAllText(sln));
 
         // Re-run: byte-identical no-op.
         var snapshot = Snapshot(tmp.Dir);

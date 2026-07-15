@@ -5,9 +5,8 @@ namespace twodog.cli;
 
 /// <summary>
 /// Solution handling: reuse the single solution at the Godot project root
-/// (Godot itself errors when more than one sln at res:// contains the game
-/// project, so a converter must never add a second), or create one; project
-/// membership goes through `dotnet sln` rather than hand-written sln text.
+/// (Godot itself errors when more than one solution at res:// contains the
+/// game project, so a converter must never add a second), or create one.
 /// </summary>
 internal static class SolutionOps
 {
@@ -44,25 +43,31 @@ internal static class SolutionOps
 
     public static void CreateSolution(string solutionPath)
     {
-        // A classic-format skeleton rather than `dotnet new sln`: newer SDKs
-        // default that template to .slnx, and the Godot editor and this tool's
-        // build-config adjustment both expect the classic format. Seed every
-        // supported configuration so `dotnet sln add` creates matching project
-        // entries, including the editor variant.
+        if (!solutionPath.EndsWith(".slnx", StringComparison.OrdinalIgnoreCase))
+            throw new ArgumentException("New 2dog solutions must use the .slnx format.", nameof(solutionPath));
+
         File.WriteAllText(solutionPath,
             """
-            Microsoft Visual Studio Solution File, Format Version 12.00
-            # Visual Studio Version 17
-            VisualStudioVersion = 17.0.31903.59
-            MinimumVisualStudioVersion = 10.0.40219.1
-            Global
-                GlobalSection(SolutionConfigurationPlatforms) = preSolution
-                    Debug|Any CPU = Debug|Any CPU
-                    Release|Any CPU = Release|Any CPU
-                    Editor|Any CPU = Editor|Any CPU
-                EndGlobalSection
-            EndGlobal
+            <Solution>
+            </Solution>
             """ + Environment.NewLine);
+    }
+
+    /// <summary>Converts a classic solution to .slnx, then removes the old file.</summary>
+    public static void MigrateToSlnx(string classicSolutionPath)
+    {
+        if (!classicSolutionPath.EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
+            throw new ArgumentException("Only classic .sln files can be migrated.", nameof(classicSolutionPath));
+
+        var slnxPath = Path.ChangeExtension(classicSolutionPath, ".slnx");
+        if (File.Exists(slnxPath))
+            throw new ConvertException($"Cannot migrate {Path.GetFileName(classicSolutionPath)} because {Path.GetFileName(slnxPath)} already exists.");
+
+        Run(Path.GetDirectoryName(classicSolutionPath)!, "sln", classicSolutionPath, "migrate");
+        if (!File.Exists(slnxPath))
+            throw new ConvertException($"Migration did not create {Path.GetFileName(slnxPath)}.");
+
+        File.Delete(classicSolutionPath);
     }
 
     public static void AddProjects(string solutionPath, IEnumerable<string> projectPaths)
@@ -93,6 +98,8 @@ internal static class SolutionOps
     /// </summary>
     public static bool ExcludeFromSolutionBuild(string solutionPath, string projectRelativePath)
     {
+        if (solutionPath.EndsWith(".slnx", StringComparison.OrdinalIgnoreCase))
+            return ExcludeSlnxProjectFromBuild(solutionPath, projectRelativePath);
         if (!solutionPath.EndsWith(".sln", StringComparison.OrdinalIgnoreCase)) return false;
         var text = File.ReadAllText(solutionPath);
         if (FindBuildLines(text, projectRelativePath, out var updated) == 0) return false;
@@ -100,103 +107,23 @@ internal static class SolutionOps
         return true;
     }
 
-    /// <summary>
-    /// Whether a classic solution is missing the Editor configuration or one
-    /// of the supplied project's Editor mappings. The web host deliberately
-    /// maps Editor to Debug and is excluded from solution builds.
-    /// </summary>
-    public static bool NeedsEditorConfiguration(
-        string solutionPath, IEnumerable<string> projectRelativePaths, string? webProjectRelativePath)
+    private static bool ExcludeSlnxProjectFromBuild(string solutionPath, string projectRelativePath)
     {
-        if (!solutionPath.EndsWith(".sln", StringComparison.OrdinalIgnoreCase) || !File.Exists(solutionPath))
-            return false;
+        if (!File.Exists(solutionPath)) return false;
 
         var text = File.ReadAllText(solutionPath);
-        if (!text.Contains("Editor|Any CPU = Editor|Any CPU", StringComparison.Ordinal))
-            return true;
+        var requestedPath = Regex.Escape(projectRelativePath.Replace('\\', '/'));
+        var pattern = $"(?m)^(?<indent>\\s*)<Project Path=\"{requestedPath}\"\\s*/>";
+        var match = Regex.Match(text, pattern, RegexOptions.IgnoreCase);
+        if (!match.Success) return false;
 
-        var editorConfigurations = GetEditorSolutionConfigurations(text);
-        foreach (var project in projectRelativePaths)
-        {
-            if (!TryFindProjectGuid(text, project, out var guid)) return true;
-            var isWeb = string.Equals(project, webProjectRelativePath, StringComparison.OrdinalIgnoreCase);
-            var activeConfig = isWeb ? "Debug" : "Editor";
-            foreach (var solutionConfiguration in editorConfigurations)
-            {
-                if (!text.Contains($"{{{guid}}}.{solutionConfiguration}.ActiveCfg = {activeConfig}|Any CPU", StringComparison.Ordinal)) return true;
-                if (!isWeb && !text.Contains($"{{{guid}}}.{solutionConfiguration}.Build.0 = Editor|Any CPU", StringComparison.Ordinal)) return true;
-            }
-        }
-
-        return false;
-    }
-
-    /// <summary>Add the Editor configuration and mappings to a classic solution.</summary>
-    public static void EnsureEditorConfiguration(
-        string solutionPath, IEnumerable<string> projectRelativePaths, string? webProjectRelativePath)
-    {
-        if (!solutionPath.EndsWith(".sln", StringComparison.OrdinalIgnoreCase) || !File.Exists(solutionPath))
-            return;
-
-        var text = File.ReadAllText(solutionPath);
-        const string editorConfiguration = "\t\tEditor|Any CPU = Editor|Any CPU";
-        if (!text.Contains(editorConfiguration, StringComparison.Ordinal))
-        {
-            const string configurationMarker = "GlobalSection(SolutionConfigurationPlatforms) = preSolution";
-            var configurationStart = text.IndexOf(configurationMarker, StringComparison.Ordinal);
-            if (configurationStart < 0) return;
-            var insertAt = text.IndexOf('\n', configurationStart) + 1;
-            if (insertAt == 0) return;
-            text = text.Insert(insertAt, editorConfiguration + Environment.NewLine);
-        }
-
-        var entries = new List<string>();
-        var editorConfigurations = GetEditorSolutionConfigurations(text);
-        foreach (var project in projectRelativePaths)
-        {
-            if (!TryFindProjectGuid(text, project, out var guid)) continue;
-            var isWeb = string.Equals(project, webProjectRelativePath, StringComparison.OrdinalIgnoreCase);
-            var activeConfig = isWeb ? "Debug" : "Editor";
-            foreach (var solutionConfiguration in editorConfigurations)
-            {
-                text = SetEditorProjectConfiguration(
-                    text, entries, guid, solutionConfiguration, "ActiveCfg", $"{activeConfig}|Any CPU");
-                if (!isWeb)
-                    text = SetEditorProjectConfiguration(
-                        text, entries, guid, solutionConfiguration, "Build.0", "Editor|Any CPU");
-            }
-        }
-
-        if (entries.Count > 0)
-        {
-            const string projectConfigurationMarker = "GlobalSection(ProjectConfigurationPlatforms) = postSolution";
-            var projectConfigurationStart = text.IndexOf(projectConfigurationMarker, StringComparison.Ordinal);
-            if (projectConfigurationStart < 0) return;
-            var insertAt = text.IndexOf("EndGlobalSection", projectConfigurationStart, StringComparison.Ordinal);
-            if (insertAt < 0) return;
-            text = text.Insert(insertAt, string.Join(Environment.NewLine, entries) + Environment.NewLine);
-        }
-
-        File.WriteAllText(solutionPath, text);
-    }
-
-    private static string SetEditorProjectConfiguration(
-        string text, ICollection<string> missingEntries, string guid, string solutionConfiguration, string entryName, string value)
-    {
-        var pattern = $@"(?m)^(?<prefix>\s*\{{{Regex.Escape(guid)}\}}\.{Regex.Escape(solutionConfiguration)}\.{Regex.Escape(entryName)}\s*=\s*)[^\r\n]*";
-        if (Regex.IsMatch(text, pattern))
-            return Regex.Replace(text, pattern, "${prefix}" + value);
-
-        missingEntries.Add($"\t\t{{{guid}}}.{solutionConfiguration}.{entryName} = {value}");
-        return text;
-    }
-
-    private static IReadOnlyList<string> GetEditorSolutionConfigurations(string text)
-    {
-        var configurations = new List<string> { "Editor|Any CPU" };
-        if (text.Contains("Editor|x64 = Editor|x64", StringComparison.Ordinal)) configurations.Add("Editor|x64");
-        if (text.Contains("Editor|x86 = Editor|x86", StringComparison.Ordinal)) configurations.Add("Editor|x86");
-        return configurations;
+        var indent = match.Groups["indent"].Value;
+        var newLine = text.Contains("\r\n", StringComparison.Ordinal) ? "\r\n" : "\n";
+        var replacement = $"{indent}<Project Path=\"{projectRelativePath.Replace('\\', '/')}\">{newLine}" +
+                          $"{indent}  <Build Project=\"false\" />{newLine}" +
+                          $"{indent}</Project>";
+        File.WriteAllText(solutionPath, Regex.Replace(text, pattern, replacement, RegexOptions.IgnoreCase));
+        return true;
     }
 
     /// <summary>

@@ -40,7 +40,7 @@ editor ignores (each carries a `.gdignore`):
 MyGame/                      <- your existing Godot project (unchanged)
   project.godot
   MyGame.csproj              <- created or minimally patched
-  MyGame.sln                 <- created, or your existing sln is reused
+  MyGame.slnx                <- created, or an existing .sln is migrated
   TwoDogWebBoot.cs           <- added (web bootstrap, guarded by LIBGODOT_ENABLED)
   MyGame.2dog/   (.gdignore) <- desktop host (your Main entry point)
   MyGame.web/    (.gdignore) <- browser (WebAssembly) host
