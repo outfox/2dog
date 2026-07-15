@@ -23,8 +23,4 @@
         </Reference>
     </ItemGroup>
 
-    <Target Name="DeepClean" AfterTargets="Clean">
-        <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
-        <RemoveDir Directories="$(BaseOutputPath)" />
-    </Target>
 </Project>

@@ -34,6 +34,7 @@ internal static class ConvertCommand
         var skipped = new List<string>();
 
         PlanGodotCsproj(plan, warnings, options, godotProject, godotCsproj, baseName, hostFolders);
+        PlanRootBuildTargets(plan, warnings, projectDir);
         PlanRootGlobalJson(plan, warnings, options, projectDir);
         PlanWebBoot(plan, skipped, options, projectDir);
         PlanExportPresets(plan, options, projectDir);
@@ -184,6 +185,22 @@ internal static class ConvertCommand
             () => File.WriteAllText(path, TemplateAssets.RootGlobalJson())));
     }
 
+    private static void PlanRootBuildTargets(List<PlannedAction> plan, List<string> warnings, string projectDir)
+    {
+        // Directory.Build.targets is user-owned configuration when it already
+        // exists, so conversion only creates the template's cleanup target for
+        // projects that do not have one yet.
+        var path = Path.Combine(projectDir, "Directory.Build.targets");
+        if (File.Exists(path))
+        {
+            warnings.Add("Directory.Build.targets already exists - left untouched. Add the TwoDogDeepClean target manually if you want clean to remove all configuration outputs.");
+            return;
+        }
+
+        plan.Add(new PlannedAction("create Directory.Build.targets (shared clean target)",
+            () => File.WriteAllText(path, TemplateAssets.RootBuildTargets())));
+    }
+
     private static void PlanWebBoot(List<PlannedAction> plan, List<string> skipped, ConvertOptions options, string projectDir)
     {
         // Written even with --no-web: it is #if LIBGODOT_ENABLED-guarded and
@@ -279,6 +296,17 @@ internal static class ConvertCommand
                                               "solution-wide builds will include it (requires the wasm-tools workload).");
                     }));
         }
+
+        var solutionProjects = allProjects
+            .Select(p => Path.GetRelativePath(Path.GetDirectoryName(solutionPath)!, p))
+            .ToList();
+        var webProject = options.IncludeWeb
+            ? Path.GetRelativePath(Path.GetDirectoryName(solutionPath)!, Path.Combine(projectDir, $"{baseName}.web", $"{baseName}.web.csproj"))
+            : null;
+        if (!exists || SolutionOps.NeedsEditorConfiguration(solutionPath, solutionProjects, webProject))
+            plan.Add(new PlannedAction(
+                $"add Editor solution configuration to {solutionName}",
+                () => SolutionOps.EnsureEditorConfiguration(solutionPath, solutionProjects, webProject)));
 
         // Only restore when the run actually changes something.
         if (options.Restore && plan.Count > 0)

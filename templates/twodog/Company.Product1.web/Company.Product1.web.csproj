@@ -26,6 +26,7 @@
          the Godot project, hidden from the Godot editor by their .gdignore) -->
     <PropertyGroup>
         <GodotProjectDir>..</GodotProjectDir>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
     </PropertyGroup>
 
     <ItemGroup>
@@ -44,19 +45,7 @@
         <TrimmerRootAssembly Include="$(TargetName)"/>
     </ItemGroup>
 
-    <!-- Remove duplicate Godot.SourceGenerators that come from the Godot
-         project's Godot.NET.Sdk (2dog.engine package already embeds them). The host
-         must not compile a second GodotPlugins.Game initializer - the Godot
-         project's assembly owns it. -->
-    <Target Name="RemoveDuplicateGodotAnalyzers" BeforeTargets="CoreCompile">
-        <ItemGroup>
-            <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Identity)').Contains('Godot.SourceGenerators'))"/>
-        </ItemGroup>
-    </Target>
-
     <Target Name="DeepClean" AfterTargets="Clean">
-        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
-        <RemoveDir Directories="$(BaseOutputPath)"/>
         <RemoveDir Directories="AppBundle"/>
     </Target>
 </Project>

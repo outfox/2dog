@@ -47,6 +47,9 @@ internal static class TemplateAssets
     /// <summary>The template's root global.json (wasm-capable SDK pin), verbatim - no tokens.</summary>
     public static string RootGlobalJson() => ReadRaw("tpl/global.json");
 
+    /// <summary>The template's root MSBuild cleanup target, verbatim.</summary>
+    public static string RootBuildTargets() => ReadRaw("tpl/Directory.Build.targets");
+
     /// <summary>
     /// Relative target path -> content for every file of a host subtree
     /// ("2dog", "web" or "tests"), tokens substituted in paths and contents.

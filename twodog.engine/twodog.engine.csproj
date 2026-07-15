@@ -237,8 +237,4 @@
               SkipUnchangedFiles="true"/>
     </Target>
 
-    <Target Name="DeepClean" AfterTargets="Clean">
-        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
-        <RemoveDir Directories="$(BaseOutputPath)"/>
-    </Target>
 </Project>
