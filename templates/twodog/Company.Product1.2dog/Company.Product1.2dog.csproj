@@ -25,13 +25,8 @@
          editor by their .gdignore) -->
     <PropertyGroup>
         <GodotProjectDir>..</GodotProjectDir>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
     </PropertyGroup>
-
-    <!-- Remove duplicate Godot.SourceGenerators that come from the Godot project
-         (2dog.engine package already embeds them) -->
-    <Target Name="RemoveDuplicateGodotAnalyzers" BeforeTargets="CoreCompile">
-        <ItemGroup>
-            <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Identity)').Contains('Godot.SourceGenerators'))" />
-        </ItemGroup>
-    </Target>
 </Project>

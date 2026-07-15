@@ -528,7 +528,7 @@ public class ConvertEndToEndTests
         // behind .gdignore.
         foreach (var expected in new[]
                  {
-                     "SpaceMiner.csproj", "SpaceMiner.sln", "TwoDogWebBoot.cs", "export_presets.cfg", "global.json",
+                    "SpaceMiner.csproj", "SpaceMiner.sln", "Directory.Build.targets", "TwoDogWebBoot.cs", "export_presets.cfg", "global.json",
                      "SpaceMiner.2dog/SpaceMiner.2dog.csproj", "SpaceMiner.2dog/.gdignore",
                      "SpaceMiner.web/SpaceMiner.web.csproj", "SpaceMiner.web/.gdignore",
                      "SpaceMiner.tests/SpaceMiner.tests.csproj", "SpaceMiner.tests/.gdignore",
@@ -558,6 +558,8 @@ public class ConvertEndToEndTests
                  })
             Assert.True(SolutionOps.ContainsProject(sln, project), $"{project} missing from sln");
         Assert.Contains(".Build.0", File.ReadAllText(sln));
+        Assert.Contains("Editor|Any CPU = Editor|Any CPU", File.ReadAllText(sln));
+        Assert.Contains(".Editor|Any CPU.Build.0 = Editor|Any CPU", File.ReadAllText(sln));
         Assert.False(SolutionOps.HasSolutionBuildEntries(sln, "SpaceMiner.web/SpaceMiner.web.csproj"),
             "web host must not build with the solution");
 

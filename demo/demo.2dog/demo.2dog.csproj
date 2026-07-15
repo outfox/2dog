@@ -23,6 +23,7 @@
     <PropertyGroup>
         <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
         <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
     </PropertyGroup>
 
     <ItemGroup>
@@ -31,15 +32,4 @@
     <ItemGroup>
         <ProjectReference Include="../demo.csproj"/>
     </ItemGroup>
-    <!-- Remove duplicate Godot.SourceGenerators that come from game's Godot.NET.Sdk
-         (2dog.engine package already embeds them) -->
-    <Target Name="RemoveDuplicateGodotAnalyzers" BeforeTargets="CoreCompile">
-        <ItemGroup>
-            <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Identity)').Contains('Godot.SourceGenerators'))" />
-        </ItemGroup>
-    </Target>
-    <Target Name="DeepClean" AfterTargets="Clean">
-        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
-        <RemoveDir Directories="$(BaseOutputPath)"/>
-    </Target>
 </Project>

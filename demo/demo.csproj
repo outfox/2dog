@@ -1,4 +1,4 @@
-<Project Sdk="Godot.NET.Sdk/4.7.0">
+<Project Sdk="Godot.NET.Sdk/4.7.1">
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <EnableDynamicLoading>true</EnableDynamicLoading>
@@ -17,8 +17,4 @@
              editor skips them). -->
         <DefaultItemExcludes>$(DefaultItemExcludes);demo.2dog/**;demo.web/**</DefaultItemExcludes>
     </PropertyGroup>
-    <Target Name="DeepClean" AfterTargets="Clean">
-        <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
-        <RemoveDir Directories="$(BaseOutputPath)" />
-    </Target>
 </Project>

@@ -45,4 +45,13 @@
             ]]></Code>
         </Task>
     </UsingTask>
+
+    <!-- Keep the repository clean across configuration changes. The SDK Clean
+         target removes the active configuration's outputs; this also removes
+         the shared bin/obj roots used by these projects. Web hosts add their
+         AppBundle cleanup separately. -->
+    <Target Name="TwoDogDeepClean" AfterTargets="Clean">
+        <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
+        <RemoveDir Directories="$(BaseOutputPath)" />
+    </Target>
 </Project>

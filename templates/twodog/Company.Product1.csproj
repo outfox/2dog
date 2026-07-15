@@ -2,6 +2,8 @@
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <EnableDynamicLoading>true</EnableDynamicLoading>
+        <IsTrimmable>true</IsTrimmable>
+        <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
         <!-- Compiles the TwoDogWebBoot.cs bootstrap used by web (browser-wasm)
              hosts; harmless on desktop. It takes a function pointer to the
              source-generated plugins initializer, hence unsafe. -->

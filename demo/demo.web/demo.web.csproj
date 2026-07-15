@@ -24,6 +24,7 @@
          the Godot project, hidden from the Godot editor by their .gdignore) -->
     <PropertyGroup>
         <GodotProjectDir>..</GodotProjectDir>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
     </PropertyGroup>
 
     <ItemGroup>
@@ -49,19 +50,7 @@
     <Import Project="../../platforms/twodog.osx-arm64/build/2dog.osx-arm64.targets" Condition="$([MSBuild]::IsOSPlatform('OSX'))"/>
     <Import Project="../../platforms/twodog.browser-wasm/build/2dog.browser-wasm.targets"/>
 
-    <!-- Remove duplicate Godot.SourceGenerators that flow from game's
-         Godot.NET.Sdk. The host must not compile a second GodotPlugins.Game
-         initializer - the game assembly owns it (script lookup happens in
-         that assembly). -->
-    <Target Name="RemoveDuplicateGodotAnalyzers" BeforeTargets="CoreCompile">
-        <ItemGroup>
-            <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Identity)').Contains('Godot.SourceGenerators'))"/>
-        </ItemGroup>
-    </Target>
-
     <Target Name="DeepClean" AfterTargets="Clean">
-        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
-        <RemoveDir Directories="$(BaseOutputPath)"/>
         <RemoveDir Directories="AppBundle"/>
     </Target>
 </Project>
