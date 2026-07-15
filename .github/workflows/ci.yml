@@ -318,6 +318,12 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
       - name: Install wasm-tools workload
         run: dotnet workload install wasm-tools
 
@@ -384,7 +390,13 @@ jobs:
 
           python3 -m http.server 8000 --bind 127.0.0.1 --directory "$BUNDLE" > /tmp/2dog-web-server.log 2>&1 &
           SERVER_PID=$!
-          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          cleanup() {
+            if [ -n "${CHROME_PID:-}" ]; then
+              kill "$CHROME_PID" 2>/dev/null || true
+            fi
+            kill "$SERVER_PID" 2>/dev/null || true
+          }
+          trap cleanup EXIT
 
           for attempt in $(seq 1 30); do
             if curl --fail --silent http://127.0.0.1:8000/index.html > /dev/null; then
@@ -393,8 +405,7 @@ jobs:
             sleep 1
           done
 
-          set +e
-          timeout 120s "$CHROME" \
+          "$CHROME" \
             --headless=new \
             --no-sandbox \
             --use-gl=angle \
@@ -402,26 +413,26 @@ jobs:
             --enable-unsafe-swiftshader \
             --disable-dev-shm-usage \
             --enable-logging=stderr \
-            --virtual-time-budget=45000 \
-            --dump-dom \
+            --remote-debugging-address=127.0.0.1 \
+            --remote-debugging-port=9222 \
+            '--remote-allow-origins=*' \
+            "--user-data-dir=${RUNNER_TEMP}/2dog-chrome" \
             http://127.0.0.1:8000/index.html \
-            > /tmp/2dog-web-dom.html \
-            2> /tmp/2dog-browser.log
-          BROWSER_STATUS=$?
+            > /tmp/2dog-browser.log 2>&1 &
+          CHROME_PID=$!
+
+          set +e
+          timeout 130s node .github/scripts/wait-for-browser-smoke.mjs \
+            http://127.0.0.1:8000/index.html 120000 9222
+          SMOKE_STATUS=$?
           set -e
 
           cat /tmp/2dog-web-server.log
           cat /tmp/2dog-browser.log
 
-          if [ "$BROWSER_STATUS" -ne 0 ]; then
-            echo "::error::Headless Chrome exited with status $BROWSER_STATUS"
-            exit "$BROWSER_STATUS"
-          fi
-
-          if ! grep -q 'data-twodog-smoke="passed"' /tmp/2dog-web-dom.html; then
+          if [ "$SMOKE_STATUS" -ne 0 ]; then
             echo "::error::The browser app did not complete the Godot API smoke probe"
-            cat /tmp/2dog-web-dom.html
-            exit 1
+            exit "$SMOKE_STATUS"
           fi
 
           echo "Web runtime API smoke OK"
