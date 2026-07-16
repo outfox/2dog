@@ -1,22 +1,149 @@
 [gd_scene format=3 uid="uid://dgiqsv3ntvl3t"]
 
-[ext_resource type="Script" uid="uid://dngqpdiughpbm" path="res://Ticker.cs" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://c7kfp5sga55qa" path="res://GDScriptLinkerProbe.gd" id="2_gdscript_probe"]
+[ext_resource type="Script" uid="uid://blxvnypm25yon" path="res://SpinningCube.cs" id="3_spin"]
+[ext_resource type="Script" uid="uid://iij6nqf8c83c" path="res://spinning_cube.gd" id="4_spin_gd"]
 
-[node name="CenterContainer" type="CenterContainer" unique_id=1087203752]
+[sub_resource type="BoxMesh" id="BoxMesh_cube"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_blue"]
+albedo_color = Color(0.15, 0.35, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_red"]
+albedo_color = Color(1, 0.15, 0.2, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_white"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_1bvp3"]
+font_size = 20
+outline_size = 6
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Control" type="Control" unique_id=1963222945]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TargetLabel" type="Label" parent="." unique_id=1589393793]
+[node name="Flair" type="Node3D" parent="." unique_id=933565161]
+
+[node name="Camera3D" type="Camera3D" parent="Flair" unique_id=96111472]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7)
+
+[node name="Sun" type="DirectionalLight3D" parent="Flair" unique_id=930966955]
+transform = Transform3D(0.8660248, -0.3535548, 0.3535535, 0, 0.7071055, 0.7071081, -0.5000011, -0.6123731, 0.6123709, 0, 0, 0)
+
+[node name="BlueCubes" type="Node3D" parent="Flair" unique_id=1755341070]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="BlueCube1" type="MeshInstance3D" parent="Flair/BlueCubes" unique_id=378968515]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
+mesh = SubResource("BoxMesh_cube")
+surface_material_override/0 = SubResource("Mat_blue")
+script = ExtResource("3_spin")
+
+[node name="BlueCube2" type="MeshInstance3D" parent="Flair/BlueCubes" unique_id=385102301]
+mesh = SubResource("BoxMesh_cube")
+surface_material_override/0 = SubResource("Mat_blue")
+script = ExtResource("3_spin")
+SpinAxis = Vector3(1, 1, 0)
+SpinSpeed = 2.0
+
+[node name="BlueCube3" type="MeshInstance3D" parent="Flair/BlueCubes" unique_id=2076810367]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 0)
+mesh = SubResource("BoxMesh_cube")
+surface_material_override/0 = SubResource("Mat_blue")
+script = ExtResource("3_spin")
+SpinAxis = Vector3(0, 1, 1)
+SpinSpeed = 1.0
+
+[node name="RedCubes" type="Node3D" parent="Flair" unique_id=95044868]
+
+[node name="RedCube1" type="MeshInstance3D" parent="Flair/RedCubes" unique_id=731609486]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
+mesh = SubResource("BoxMesh_cube")
+surface_material_override/0 = SubResource("Mat_red")
+script = ExtResource("4_spin_gd")
+
+[node name="RedCube2" type="MeshInstance3D" parent="Flair/RedCubes" unique_id=140623354]
+mesh = SubResource("BoxMesh_cube")
+surface_material_override/0 = SubResource("Mat_red")
+script = ExtResource("4_spin_gd")
+spin_axis = Vector3(1, 1, 0)
+spin_speed = 2.0
+
+[node name="RedCube3" type="MeshInstance3D" parent="Flair/RedCubes" unique_id=511929127]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 0)
+mesh = SubResource("BoxMesh_cube")
+surface_material_override/0 = SubResource("Mat_red")
+script = ExtResource("4_spin_gd")
+spin_axis = Vector3(0, 1, 1)
+spin_speed = 1.0
+
+[node name="WhiteCubes" type="Node3D" parent="Flair" unique_id=2137620085]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6, 0)
+
+[node name="WhiteCube1" type="MeshInstance3D" parent="Flair/WhiteCubes" unique_id=1653823542]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
+mesh = SubResource("BoxMesh_cube")
+surface_material_override/0 = SubResource("Mat_white")
+
+[node name="WhiteCube2" type="MeshInstance3D" parent="Flair/WhiteCubes" unique_id=1799091980]
+mesh = SubResource("BoxMesh_cube")
+surface_material_override/0 = SubResource("Mat_white")
+
+[node name="WhiteCube3" type="MeshInstance3D" parent="Flair/WhiteCubes" unique_id=247062645]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 0)
+mesh = SubResource("BoxMesh_cube")
+surface_material_override/0 = SubResource("Mat_white")
+
+[node name="QuitLabel" type="Label" parent="." unique_id=1230139195]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -90.0
+offset_right = 589.0
+grow_vertical = 0
+text = "Quit the App by: 
+- closing this window (Quit via Godot) 
+- pressing Q in the console (Quit via 2dog)"
+label_settings = SubResource("LabelSettings_1bvp3")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1087203752]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -227.5
+offset_top = -14.0
+offset_right = 227.5
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TargetLabel" type="Label" parent="CenterContainer" unique_id=1589393793]
 layout_mode = 2
-text = "Close this window, or press Q in your console."
+text = "These cubes are controlled by Godot (GDScript)"
+label_settings = SubResource("LabelSettings_1bvp3")
 
-[node name="Ticker" type="Node" parent="." unique_id=1695868695]
-script = ExtResource("1_ig7tw")
-metadata/_custom_type_script = "uid://dngqpdiughpbm"
+[node name="TargetLabel2" type="Label" parent="CenterContainer" unique_id=1325166068]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -100)
+text = "These cubes are controlled by Godot (C#)"
+label_settings = SubResource("LabelSettings_1bvp3")
 
-[node name="GDScriptLinkerProbe" type="Node" parent="."]
+[node name="TargetLabel3" type="Label" parent="CenterContainer" unique_id=327575077]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, 100)
+text = "These cubes are controlled by 2dog (C#)"
+label_settings = SubResource("LabelSettings_1bvp3")
+
+[node name="GDScriptLinkerProbe" type="Node" parent="CenterContainer" unique_id=1497267197]
 script = ExtResource("2_gdscript_probe")

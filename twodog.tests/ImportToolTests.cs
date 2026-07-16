@@ -20,7 +20,7 @@ public class ImportToolTests
             var exitCode = RunHelper("--libgodot", EditorLibGodot, "--api-dir", apiDir, "--tools-dir", toolsDir, scratch);
 
             Assert.Equal(0, exitCode);
-            Assert.True(File.Exists(Path.Combine(scratch, "Ticker.cs.uid")), "Ticker.cs.uid not generated");
+            Assert.True(File.Exists(Path.Combine(scratch, "SpinningCube.cs.uid")), "SpinningCube.cs.uid not generated");
             Assert.True(File.Exists(Path.Combine(scratch, "ToolNode.cs.uid")), "ToolNode.cs.uid not generated");
             Assert.True(File.Exists(Path.Combine(scratch, ".godot", "uid_cache.bin")), "uid_cache.bin not generated");
 

@@ -14,10 +14,14 @@ internal static class Program
         GD.Print("Hello from GodotSharp.");
         GD.Print("Scene Root: ", engine.Tree.CurrentScene.Name);
 
-        var ticker = engine.Tree.CurrentScene.GetNode<Ticker>("Ticker");
-        GD.Print("Ticker: ", ticker);
-
         // You can access the SceneTree via engine.Tree
+
+        // The blue cubes spin themselves via SpinningCube._Process (Godot side);
+        // the white ones are plain MeshInstance3Ds we drive from this loop.
+        var whiteCubes = engine.Tree.CurrentScene
+            .GetNode<Node3D>("Flair/WhiteCubes")
+            .GetChildren().OfType<Node3D>().ToArray();
+        var whiteSpinAxis = new Vector3(1, 1, 0).Normalized();
 
         Console.WriteLine("Godot is running, close window or press 'Q' to quit.");
 
@@ -27,11 +31,13 @@ internal static class Program
 
         while (!godotInstance.Iteration())
         {
+            var delta = (float)engine.Tree.Root.GetProcessDeltaTime();
+            foreach (var cube in whiteCubes)
+                cube.Rotate(whiteSpinAxis, 1.8f * delta);
+
             if (interactive && Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Q)
                 break;
         }
-
-        Console.WriteLine($"Engine exited after {ticker.localAccumulator} ticks. (iterations / _process calls)");
 
         Console.WriteLine("Godot is shutting down. Thank you for using 2dog. 🦴");
     }
