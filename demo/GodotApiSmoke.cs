@@ -140,12 +140,12 @@ public static class GodotApiSmoke
         var instance = packedScene.Instantiate();
         try
         {
-            var label = instance.GetNodeOrNull<Label>("TargetLabel");
+            var label = instance.GetNodeOrNull<Label>("CenterContainer/TargetLabel");
             Require(label is not null && !string.IsNullOrWhiteSpace(label.Text), "scene Label was not instantiated");
 
-            var ticker = instance.GetNodeOrNull<Ticker>("Ticker");
-            Require(ticker is not null, "generated C# script type was not attached to the scene");
-            Require(GodotObject.IsInstanceValid(ticker), "generated C# script instance is invalid");
+            var cube = instance.GetNodeOrNull<SpinningCube>("Flair/BlueCubes/BlueCube1");
+            Require(cube is not null, "generated C# script type was not attached to the scene");
+            Require(GodotObject.IsInstanceValid(cube), "generated C# script instance is invalid");
         }
         finally
         {
@@ -155,7 +155,7 @@ public static class GodotApiSmoke
 
     public static void GDScriptOnlyEngineFeatures(SceneTree tree)
     {
-        const string nodePath = "GDScriptLinkerProbe";
+        const string nodePath = "CenterContainer/GDScriptLinkerProbe";
         const string passedMeta = "gdscript_linker_smoke_passed";
         const string failureMeta = "gdscript_linker_smoke_failure";
 

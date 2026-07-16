@@ -21,7 +21,7 @@ public class GodotSceneTests(GodotHeadlessFixture godot)
         var instance = scene.Instantiate();
 
         Assert.NotNull(instance);
-        Assert.IsType<CenterContainer>(instance);
+        Assert.IsType<Control>(instance);
 
         instance.Free();
     }
@@ -44,7 +44,7 @@ public class GodotSceneTests(GodotHeadlessFixture godot)
         var instance = scene.Instantiate();
         godot.Tree.Root.AddChild(instance);
 
-        Assert.NotNull(instance.FindChild("Ticker"));
+        Assert.NotNull(instance.FindChild("BlueCube1"));
 
         var label = instance.FindChild("TargetLabel");
         Assert.NotNull(label);

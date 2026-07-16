@@ -21,9 +21,6 @@ internal static class Program
             GD.Print("Hello from GodotSharp (browser).");
             GD.Print("Scene Root: ", engine.Tree.CurrentScene.Name);
 
-            var ticker = engine.Tree.CurrentScene.GetNode<Ticker>("Ticker");
-            GD.Print("Ticker: ", ticker);
-
             GodotApiSmoke.RunAll(engine.Tree);
             JavaScriptBridge.Eval("document.documentElement.setAttribute('data-twodog-smoke', 'passed')");
             Console.WriteLine("2DOG_WASM_SMOKE_PASSED");
