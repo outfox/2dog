@@ -37,7 +37,7 @@ of an existing Godot project:
 ```bash
 dnx 2dog convert path/to/MyGame
 cd path/to/MyGame
-dotnet publish MyGame.web -c Release   # static site in MyGame.web/AppBundle/
+dotnet publish MyGame.web              # static site in MyGame.web/AppBundle/
 ```
 
 One-time prerequisite: `dotnet workload install wasm-tools`. See
@@ -76,7 +76,7 @@ Afterwards:
 ```bash
 dotnet run --project MyGame.2dog           # desktop host
 dotnet test MyGame.tests                   # xUnit tests (headless Godot)
-dotnet publish MyGame.web -c Release       # browser bundle (needs wasm-tools)
+dotnet publish MyGame.web                  # browser bundle (needs wasm-tools)
 ```
 
 The root `global.json` pins a .NET 10 SDK with the wasm-tools workload, which

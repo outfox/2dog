@@ -24,7 +24,7 @@ dnx 2dog convert path/to/MyGame
 # Publish the browser app (imports assets and exports the game
 # content automatically)
 cd path/to/MyGame
-dotnet publish MyGame.web -c Release
+dotnet publish MyGame.web
 
 # Serve the result - any static file server works
 dotnet serve --directory MyGame.web/AppBundle
@@ -41,7 +41,7 @@ dotnet new 2dog -n MyGame
 # Publish the browser app (imports assets and exports the game
 # content automatically)
 cd MyGame
-dotnet publish MyGame.web -c Release
+dotnet publish MyGame.web
 
 # Serve the result - any static file server works
 dotnet serve --directory MyGame.web/AppBundle
@@ -135,9 +135,10 @@ publish**. That cost is inherent to static linking, so iterate the fast way:
 - **Gameplay and assets**: run the desktop host
   (`dotnet run --project MyGame.2dog`)  –  it's the same engine and the same
   code.
-- **Web verification**: `dotnet publish MyGame.web -c Release` from the
-  project root (or `dotnet publish -c Release` inside `MyGame.web/`), then
-  serve `MyGame.web/AppBundle/`.
+- **Web verification**: `dotnet publish MyGame.web` from the project root
+  (or `dotnet publish` inside `MyGame.web/`), then serve
+  `MyGame.web/AppBundle/`. The web host defaults to Release (via its
+  `Directory.Build.props`); pass `-c Debug` if you need an unoptimized build.
 - Browsers cache the large wasm aggressively  –  hard-refresh
   (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>) after each publish.
 - Stop your static server before republishing: the publish replaces the
