@@ -332,7 +332,7 @@ internal static class ConvertCommand
         if (options.IncludeTests)
             Console.WriteLine($"  dotnet test {baseName}.tests             # xUnit tests (headless Godot)");
         if (options.IncludeWeb)
-            Console.WriteLine($"  dotnet publish {baseName}.web -c Release # browser bundle (needs wasm-tools workload)");
+            Console.WriteLine($"  dotnet publish {baseName}.web            # browser bundle (needs wasm-tools workload)");
         Console.WriteLine("\nDocs: https://2dog.dev");
     }
 }

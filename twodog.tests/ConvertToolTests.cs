@@ -569,7 +569,7 @@ public class ConvertEndToEndTests
                  {
                     "SpaceMiner.csproj", "SpaceMiner.slnx", "Directory.Build.targets", "TwoDogWebBoot.cs", "export_presets.cfg", "global.json",
                      "SpaceMiner.2dog/SpaceMiner.2dog.csproj", "SpaceMiner.2dog/.gdignore",
-                     "SpaceMiner.web/SpaceMiner.web.csproj", "SpaceMiner.web/.gdignore",
+                     "SpaceMiner.web/SpaceMiner.web.csproj", "SpaceMiner.web/.gdignore", "SpaceMiner.web/Directory.Build.props",
                      "SpaceMiner.tests/SpaceMiner.tests.csproj", "SpaceMiner.tests/.gdignore",
                  })
             Assert.True(File.Exists(System.IO.Path.Combine(tmp.Dir, expected)), $"missing {expected}");

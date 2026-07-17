@@ -91,7 +91,7 @@ dotnet run --project MyGame.2dog
 
 # Publish for the browser as a static site
 # (one-time: dotnet workload install wasm-tools)
-dotnet publish MyGame.web -c Release
+dotnet publish MyGame.web
 dotnet serve --directory MyGame.web/AppBundle
 ```
 

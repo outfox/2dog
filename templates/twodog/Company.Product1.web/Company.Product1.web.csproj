@@ -2,8 +2,9 @@
     <!--
       Browser (wasm) host: your C# code hosts the Godot engine in the browser.
 
-      Publish:  dotnet publish Company.Product1.web -c Release   (from the
-                project root; the root global.json pins a wasm-capable SDK)
+      Publish:  dotnet publish Company.Product1.web   (from the project root;
+                the root global.json pins a wasm-capable SDK. Defaults to
+                Release via Directory.Build.props; pass -c Debug to override.)
       Output:   AppBundle/ - serve with any static file server.
 
       Requires the wasm-tools workload:  dotnet workload install wasm-tools

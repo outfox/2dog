@@ -27,8 +27,11 @@ bundle.
 ## Usage
 
 ```
-dotnet publish -c Release
+dotnet publish
 ```
+
+(The 2dog web host template defaults the configuration to Release; pass
+`-c Debug` for an unoptimized build.)
 
 Serve the generated `AppBundle/` directory with any static file server. The
 single-threaded engine build requires no COOP/COEP headers.
