@@ -30,16 +30,6 @@ public class Engine(string project, string? path = null, params string[] args) :
     [DllImport("kernel32", SetLastError = true)]
     private static extern bool FreeLibrary(IntPtr module);
 
-    [DllImport("libSystem")]
-    private static extern IntPtr dlopen(string path, int mode);
-
-    [DllImport("libSystem")]
-    private static extern int dlclose(IntPtr handle);
-
-    // dlopen mode flags (macOS)
-    private const int RTLD_LAZY = 0x1;
-    private const int RTLD_NOLOAD = 0x10;
-
     static Engine()
     {
         // On Windows, unload libgodot before the OS starts process teardown.
@@ -50,14 +40,15 @@ public class Engine(string project, string? path = null, params string[] args) :
         // because an executable's static destructors run during normal CRT
         // exit, before loader shutdown - unloading here restores that timing.
         //
-        // macOS has the same problem with different symptoms: libgodot's
-        // exit-time static destructors interleave with other images' atexit
-        // handlers and abort with "std::__1::system_error: mutex lock failed:
-        // Invalid argument" (SIGABRT) after a perfectly clean shutdown.
-        // dlclose-ing here runs them while the process is still fully alive,
-        // restoring godot-executable-like timing.
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ||
-            RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        // macOS has a similar teardown problem with different symptoms: after
+        // a clean shutdown, libgodot's exit-time static destructors abort with
+        // "std::__1::system_error: mutex lock failed: Invalid argument"
+        // (SIGABRT). The unload trick cannot be ported: libgodot contains
+        // Objective-C classes, and dyld permanently pins such images - dlclose
+        // never unloads them (verified: identical crash with a dlclose sweep).
+        // Needs a fix in the fork's destructor chain instead; the desktop
+        // smoke CI tolerates the known abort on macOS until then.
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             AppDomain.CurrentDomain.ProcessExit += (_, _) => UnloadLibGodot();
     }
 
@@ -68,12 +59,6 @@ public class Engine(string project, string? path = null, params string[] args) :
         if (_godotInstancePtr != IntPtr.Zero) return;
 
         // No Godot call may be made after this point (we are in ProcessExit).
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-        {
-            UnloadLibGodotMacOS();
-            return;
-        }
-
         // The loaded module name is variant-specific (libgodot-editor.dll etc.);
         // when the resolver never ran, sweep all known names.
         string[] names = LibGodotLoader.LoadedLibraryFileName is { } loaded
@@ -87,28 +72,6 @@ public class Engine(string project, string? path = null, params string[] args) :
             {
                 module = GetModuleHandleW(name);
             }
-        }
-    }
-
-    private static void UnloadLibGodotMacOS()
-    {
-        // Drop dlopen references until the image actually unloads (runs its
-        // static destructors). RTLD_NOLOAD probes whether it is still loaded;
-        // a successful probe adds a reference that must be dropped too.
-        if (LibGodotLoader.LoadedLibraryPath is { } path)
-        {
-            var attempts = 0;
-            while (attempts++ < 32)
-            {
-                var probe = dlopen(path, RTLD_LAZY | RTLD_NOLOAD);
-                if (probe == IntPtr.Zero) return; // unloaded
-                dlclose(probe); // drop the probe reference
-                if (dlclose(probe) != 0) return; // drop a real reference
-            }
-        }
-        else if (LibGodotLoader.LoadedLibraryHandle is var handle && handle != IntPtr.Zero)
-        {
-            dlclose(handle);
         }
     }
 
