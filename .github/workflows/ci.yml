@@ -390,6 +390,20 @@ jobs:
           cat ~/Library/Logs/DiagnosticReports/demo.2dog-*.ips 2>/dev/null \
             || echo "no crash report found"
 
+      # Deterministic backtrace: rerun the aborting binary under lldb and dump
+      # all threads at the abort. This is the data source for fixing the
+      # teardown crash in the fork.
+      - name: Rerun under lldb for backtrace (macOS)
+        if: runner.os == 'macOS' && steps.run.outputs.status != '0'
+        shell: bash
+        run: |
+          lldb -b \
+            -o run \
+            -o "bt all" \
+            -o quit \
+            -- demo/demo.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish/${{ matrix.exe }} \
+               --headless --quit-after 120 2>&1 | tail -150 || true
+
       - name: Assert scripts bound
         shell: bash
         run: |
@@ -408,17 +422,8 @@ jobs:
             fail=1
           fi
           if [ "$status" != "0" ]; then
-            # Known macOS-only teardown abort: SIGABRT (134) in libgodot's
-            # exit-time static destructors after a clean shutdown ("mutex lock
-            # failed"). Tolerated until fixed in the fork - the clean-shutdown
-            # marker below keeps this from excusing real runtime crashes.
-            if [ "${{ runner.os }}" = "macOS" ] && [ "$status" = "134" ] \
-               && grep -q "Engine: Godot instance destroyed." smoke.log; then
-              echo "::warning::Tolerating known macOS teardown abort (exit 134 after clean shutdown)"
-            else
-              echo "::error::Host exited with code $status"
-              fail=1
-            fi
+            echo "::error::Host exited with code $status"
+            fail=1
           fi
           exit $fail
 
