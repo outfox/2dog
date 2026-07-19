@@ -26,6 +26,16 @@ internal static class LibGodotLoader
     /// </summary>
     internal static string? LoadedLibraryFileName { get; private set; }
 
+    /// <summary>
+    /// Full path of the loaded libgodot when it was loaded explicitly
+    /// (null for the default-probing fallback). Used to unload it at process
+    /// exit on macOS (dlclose by re-probed handle).
+    /// </summary>
+    internal static string? LoadedLibraryPath { get; private set; }
+
+    /// <summary>Native handle returned by the load. IntPtr.Zero until loaded.</summary>
+    internal static nint LoadedLibraryHandle { get; private set; }
+
     /// <summary>Called from LibGodot's static constructor, so registration is
     /// guaranteed to precede the first libgodot P/Invoke.</summary>
     internal static void Register()
@@ -59,6 +69,8 @@ internal static class LibGodotLoader
                 if (!File.Exists(path)) continue;
                 var handle = NativeLibrary.Load(path);
                 LoadedLibraryFileName = candidate;
+                LoadedLibraryPath = path;
+                LoadedLibraryHandle = handle;
                 return handle;
             }
         }
@@ -75,6 +87,8 @@ internal static class LibGodotLoader
                     $"falling back to {plainName}, which may be a different variant.");
             var handle = NativeLibrary.Load(path);
             LoadedLibraryFileName = plainName;
+            LoadedLibraryPath = path;
+            LoadedLibraryHandle = handle;
             return handle;
         }
 
@@ -82,6 +96,7 @@ internal static class LibGodotLoader
         if (NativeLibrary.TryLoad(libraryName, assembly, searchPath, out var fallback))
         {
             LoadedLibraryFileName = plainName;
+            LoadedLibraryHandle = fallback;
             return fallback;
         }
 
