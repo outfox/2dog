@@ -354,8 +354,14 @@ jobs:
       - name: Build import helper
         run: dotnet build twodog.import -c Release
 
-      - name: Publish demo desktop host (Release)
+      - name: Publish demo desktop host (Release, RID)
         run: dotnet publish demo/demo.2dog -c Release -r ${{ matrix.rid }}
+
+      # RID-less publish is the most natural user command and takes its own
+      # native-copy path in the platform targets (host-OS gated instead of
+      # RID gated) - cover it separately.
+      - name: Publish demo desktop host (Release, no RID)
+        run: dotnet publish demo/demo.2dog -c Release
 
       # The engine must load the game assembly from the publish output itself.
       # Delete the game project's own build outputs so a regression back to
@@ -364,7 +370,7 @@ jobs:
         shell: bash
         run: rm -rf demo/.godot/mono/temp/bin
 
-      - name: Run published host (headless)
+      - name: Run published host (headless, RID)
         id: run
         shell: bash
         run: |
@@ -375,11 +381,22 @@ jobs:
           echo "Host exit code: $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
 
+      - name: Run published host (headless, no RID)
+        id: run_norid
+        shell: bash
+        run: |
+          set +e
+          demo/demo.2dog/bin/Release/net10.0/publish/${{ matrix.exe }} \
+            --headless --quit-after 120 2>&1 | tee smoke-norid.log
+          status=${PIPESTATUS[0]}
+          echo "Host exit code: $status"
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+
       # Surface the .ips crash report for the known macOS teardown abort
       # (libgodot exit-time static destructors; see the twodog.Engine static
       # ctor comment) so it can be root-caused in the fork.
       - name: Dump crash report (macOS)
-        if: runner.os == 'macOS' && steps.run.outputs.status != '0'
+        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0')
         shell: bash
         run: |
           # ReportCrash writes the .ips shortly after the abort
@@ -394,7 +411,7 @@ jobs:
       # all threads at the abort. This is the data source for fixing the
       # teardown crash in the fork.
       - name: Rerun under lldb for backtrace (macOS)
-        if: runner.os == 'macOS' && steps.run.outputs.status != '0'
+        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0')
         shell: bash
         run: |
           lldb -b \
@@ -408,23 +425,27 @@ jobs:
         shell: bash
         run: |
           fail=0
-          status="${{ steps.run.outputs.status }}"
-          if grep -q "Cannot instantiate C# script" smoke.log; then
-            echo "::error::The published host could not bind C# script classes"
-            fail=1
-          fi
-          if ! grep -q "2DOG_CSHARP_SCRIPT_SMOKE_PASSED" smoke.log; then
-            echo "::error::C# script smoke marker missing (SpinningCube did not bind)"
-            fail=1
-          fi
-          if ! grep -q "2DOG_GDSCRIPT_LINKER_SMOKE_PASSED" smoke.log; then
-            echo "::error::GDScript linker smoke marker missing"
-            fail=1
-          fi
-          if [ "$status" != "0" ]; then
-            echo "::error::Host exited with code $status"
-            fail=1
-          fi
+          check() {
+            local log="$1" status="$2" label="$3"
+            if grep -q "Cannot instantiate C# script" "$log"; then
+              echo "::error::[$label] The published host could not bind C# script classes"
+              fail=1
+            fi
+            if ! grep -q "2DOG_CSHARP_SCRIPT_SMOKE_PASSED" "$log"; then
+              echo "::error::[$label] C# script smoke marker missing (SpinningCube did not bind)"
+              fail=1
+            fi
+            if ! grep -q "2DOG_GDSCRIPT_LINKER_SMOKE_PASSED" "$log"; then
+              echo "::error::[$label] GDScript linker smoke marker missing"
+              fail=1
+            fi
+            if [ "$status" != "0" ]; then
+              echo "::error::[$label] Host exited with code $status"
+              fail=1
+            fi
+          }
+          check smoke.log "${{ steps.run.outputs.status }}" "rid"
+          check smoke-norid.log "${{ steps.run_norid.outputs.status }}" "no-rid"
           exit $fail
 
   # Publish the web demo end-to-end: statically links the web libgodot.a into

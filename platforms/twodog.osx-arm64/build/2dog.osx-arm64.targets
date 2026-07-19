@@ -89,10 +89,13 @@
         <Message Importance="normal" Text="TwoDog: Copied macOS arm64 $(TwoDogOsxArm64PreferredVariant) native library to $(OutputPath)"/>
     </Target>
 
-    <!-- Copy native library on publish (when targeting macOS) -->
+    <!-- Copy native library on publish (when targeting macOS). A RID-less
+         publish targets the build host, so an empty RuntimeIdentifier counts
+         when the host is macOS - otherwise the publish folder ships without
+         the native and the app dies with DllNotFoundException. -->
     <Target Name="TwoDogOsxArm64PublishNatives"
             AfterTargets="Publish"
-            Condition="'$(DesignTimeBuild)' != 'true' And '$(RuntimeIdentifier)' != '' And $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('osx')) And '$(TwoDogOsxArm64NativeLib)' != '' And Exists('$(TwoDogOsxArm64NativeLib)')">
+            Condition="'$(DesignTimeBuild)' != 'true' And (('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('OSX'))) Or $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('osx'))) And '$(TwoDogOsxArm64NativeLib)' != '' And Exists('$(TwoDogOsxArm64NativeLib)')">
         <Copy SourceFiles="$(TwoDogOsxArm64NativeLib)"
               DestinationFiles="$(PublishDir)libgodot-$(TwoDogOsxArm64PreferredVariant).dylib"
               SkipUnchangedFiles="true"/>
