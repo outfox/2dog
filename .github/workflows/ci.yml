@@ -299,6 +299,96 @@ jobs:
       - name: Test (Editor)
         run: dotnet test 2dog.tests.slnf -c Editor --no-restore
 
+  # Publish the demo desktop host the way an end user does (Release, RID) and
+  # run the result headless. Regression guard: the engine used to load the
+  # game assembly only from .godot/mono/temp/bin/Debug, so any Release-only
+  # build or publish silently bound no C# script classes (masked in the test
+  # jobs by the Debug run that precedes them in the same workspace).
+  desktop-smoke:
+    name: Desktop Smoke (${{ matrix.name }})
+    needs: [pack]
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x64
+            runner: blacksmith-4vcpu-ubuntu-2404
+            rid: linux-x64
+            exe: demo.2dog
+          - name: win-x64
+            runner: blacksmith-4vcpu-windows-2025
+            rid: win-x64
+            exe: demo.2dog.exe
+          - name: osx-arm64
+            runner: blacksmith-6vcpu-macos-latest
+            rid: osx-arm64
+            exe: demo.2dog
+
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Download godot-bin artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: godot-bin
+          path: godot
+
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages
+          path: packages
+
+      # The publish triggers the automatic Godot import, which runs the
+      # in-process import helper (discovered at twodog.import/bin/Release in
+      # source checkouts).
+      - name: Build import helper
+        run: dotnet build twodog.import -c Release
+
+      - name: Publish demo desktop host (Release)
+        run: dotnet publish demo/demo.2dog -c Release -r ${{ matrix.rid }}
+
+      # The engine must load the game assembly from the publish output itself.
+      # Delete the game project's own build outputs so a regression back to
+      # .godot/mono/temp/bin probing cannot be masked by them.
+      - name: Remove game project build outputs
+        shell: bash
+        run: rm -rf demo/.godot/mono/temp/bin
+
+      - name: Run published host (headless)
+        shell: bash
+        run: |
+          set -o pipefail
+          demo/demo.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish/${{ matrix.exe }} \
+            --headless --quit-after 120 2>&1 | tee smoke.log
+
+      - name: Assert scripts bound
+        shell: bash
+        run: |
+          fail=0
+          if grep -q "Cannot instantiate C# script" smoke.log; then
+            echo "::error::The published host could not bind C# script classes"
+            fail=1
+          fi
+          if ! grep -q "2DOG_CSHARP_SCRIPT_SMOKE_PASSED" smoke.log; then
+            echo "::error::C# script smoke marker missing (SpinningCube did not bind)"
+            fail=1
+          fi
+          if ! grep -q "2DOG_GDSCRIPT_LINKER_SMOKE_PASSED" smoke.log; then
+            echo "::error::GDScript linker smoke marker missing"
+            fail=1
+          fi
+          exit $fail
+
   # Publish the web demo end-to-end: statically links the web libgodot.a into
   # dotnet.native.wasm via the wasm-tools workload and asserts the app bundle
   # is complete. Consumers never install emsdk — the workload ships the
@@ -444,8 +534,9 @@ jobs:
   deploy:
     name: Deploy to NuGet
     # web-smoke gates deploy because the 2dog.browser-wasm packages it
-    # exercises are among the packages being published.
-    needs: [test, web-smoke]
+    # exercises are among the packages being published; desktop-smoke gates it
+    # because it is the only check that runs a Release-only publish.
+    needs: [test, desktop-smoke, web-smoke]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:
