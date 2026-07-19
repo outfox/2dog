@@ -152,12 +152,23 @@ public class Engine(string project, string? path = null, params string[] args) :
     /// When the host process is not in the output directory (e.g. dotnet test
     /// uses /usr/share/dotnet/dotnet), Godot's exe_dir fallback won't work.
     /// Checks the flat layout (template variants) first, then the nested
-    /// GodotSharp/Api/Debug/ layout (editor variant). Must use native setenv
-    /// on Unix because .NET's SetEnvironmentVariable doesn't propagate to
-    /// native getenv() on Linux/.NET 8+.
+    /// GodotSharp/Api/Debug/ layout (editor variant). Also points
+    /// GODOT_PROJECT_ASSEMBLY_DIR at the host's base directory: the host
+    /// references the game project, so its output carries a game assembly
+    /// matching the host's build configuration - libgodot prefers it over
+    /// .godot/mono/temp/bin/&lt;config&gt;, which does not exist for
+    /// configurations the game project was never built with directly
+    /// (e.g. a Release-only publish). Must use native setenv on Unix because
+    /// .NET's SetEnvironmentVariable doesn't propagate to native getenv() on
+    /// Linux/.NET 8+.
     /// </summary>
     internal static void ConfigureGodotSharpDir()
     {
+        var baseDir = AppContext.BaseDirectory
+            .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        if (!string.IsNullOrEmpty(baseDir))
+            SetEnvironmentVariableForNative("GODOT_PROJECT_ASSEMBLY_DIR", baseDir);
+
         var assemblyDir = Path.GetDirectoryName(typeof(Engine).Assembly.Location);
         if (string.IsNullOrEmpty(assemblyDir)) return;
 
@@ -168,11 +179,16 @@ public class Engine(string project, string? path = null, params string[] args) :
             if (!File.Exists(Path.Combine(dir, "GodotPlugins.dll"))) return;
         }
 
+        SetEnvironmentVariableForNative("GODOTSHARP_DIR", dir);
+    }
+
+    private static void SetEnvironmentVariableForNative(string name, string value)
+    {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
             RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            setenv("GODOTSHARP_DIR", dir, 1);
+            setenv(name, value, 1);
         else
-            System.Environment.SetEnvironmentVariable("GODOTSHARP_DIR", dir);
+            System.Environment.SetEnvironmentVariable(name, value);
     }
 
     /// <summary>
