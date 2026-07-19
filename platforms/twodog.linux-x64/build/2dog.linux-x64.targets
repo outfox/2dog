@@ -89,10 +89,13 @@
         <Message Importance="normal" Text="TwoDog: Copied Linux x64 $(TwoDogLinuxX64PreferredVariant) native library to $(OutputPath)"/>
     </Target>
 
-    <!-- Copy native library on publish (when targeting Linux) -->
+    <!-- Copy native library on publish (when targeting Linux). A RID-less
+         publish targets the build host, so an empty RuntimeIdentifier counts
+         when the host is Linux - otherwise the publish folder ships without
+         the native and the app dies with DllNotFoundException. -->
     <Target Name="TwoDogLinuxX64PublishNatives"
             AfterTargets="Publish"
-            Condition="'$(DesignTimeBuild)' != 'true' And '$(RuntimeIdentifier)' != '' And $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('linux')) And '$(TwoDogLinuxX64NativeLib)' != '' And Exists('$(TwoDogLinuxX64NativeLib)')">
+            Condition="'$(DesignTimeBuild)' != 'true' And (('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('Linux'))) Or $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('linux'))) And '$(TwoDogLinuxX64NativeLib)' != '' And Exists('$(TwoDogLinuxX64NativeLib)')">
         <Copy SourceFiles="$(TwoDogLinuxX64NativeLib)"
               DestinationFiles="$(PublishDir)libgodot-$(TwoDogLinuxX64PreferredVariant).so"
               SkipUnchangedFiles="true"/>
