@@ -10796,7 +10796,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_set_instance_shader_parameter;
-    public void SetInstanceShaderParameter(string name, Variant value)
+    public void SetInstanceShaderParameter(StringName name, Variant value)
     {
         var __mb = __mb_set_instance_shader_parameter;
         if (__mb == 0)
@@ -10805,7 +10805,7 @@ public unsafe partial class CanvasItem : Node
             if (__mb == 0) throw new MissingMethodException("CanvasItem.set_instance_shader_parameter is not available in this engine build.");
             __mb_set_instance_shader_parameter = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = value.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -10814,7 +10814,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_get_instance_shader_parameter;
-    public Variant GetInstanceShaderParameter(string name)
+    public Variant GetInstanceShaderParameter(StringName name)
     {
         var __mb = __mb_get_instance_shader_parameter;
         if (__mb == 0)
@@ -10823,7 +10823,7 @@ public unsafe partial class CanvasItem : Node
             if (__mb == 0) throw new MissingMethodException("CanvasItem.get_instance_shader_parameter is not available in this engine build.");
             __mb_get_instance_shader_parameter = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -15226,7 +15226,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_get_inheriters_from_class;
-    public static string[] GetInheritersFromClass(string @class)
+    public static string[] GetInheritersFromClass(StringName @class)
     {
         var __mb = __mb_get_inheriters_from_class;
         if (__mb == 0)
@@ -15235,7 +15235,7 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.get_inheriters_from_class is not available in this engine build.");
             __mb_get_inheriters_from_class = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
+        ulong __a0 = @class.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         Opaque16 __ret = default;
@@ -15244,7 +15244,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_get_parent_class;
-    public static string GetParentClass(string @class)
+    public static StringName GetParentClass(StringName @class)
     {
         var __mb = __mb_get_parent_class;
         if (__mb == 0)
@@ -15253,16 +15253,16 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.get_parent_class is not available in this engine build.");
             __mb_get_parent_class = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
+        ulong __a0 = @class.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_class_exists;
-    public static bool ClassExists(string @class)
+    public static bool ClassExists(StringName @class)
     {
         var __mb = __mb_class_exists;
         if (__mb == 0)
@@ -15271,7 +15271,7 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_exists is not available in this engine build.");
             __mb_class_exists = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
+        ulong __a0 = @class.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -15280,7 +15280,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_is_parent_class;
-    public static bool IsParentClass(string @class, string inherits)
+    public static bool IsParentClass(StringName @class, StringName inherits)
     {
         var __mb = __mb_is_parent_class;
         if (__mb == 0)
@@ -15289,8 +15289,8 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.is_parent_class is not available in this engine build.");
             __mb_is_parent_class = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
-        ulong __a1 = StringNames.Get(inherits).Opaque;
+        ulong __a0 = @class.NativeValue;
+        ulong __a1 = inherits.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -15300,7 +15300,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_can_instantiate;
-    public static bool CanInstantiate(string @class)
+    public static bool CanInstantiate(StringName @class)
     {
         var __mb = __mb_can_instantiate;
         if (__mb == 0)
@@ -15309,7 +15309,7 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.can_instantiate is not available in this engine build.");
             __mb_can_instantiate = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
+        ulong __a0 = @class.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -15318,7 +15318,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_instantiate;
-    public static Variant Instantiate(string @class)
+    public static Variant Instantiate(StringName @class)
     {
         var __mb = __mb_instantiate;
         if (__mb == 0)
@@ -15327,7 +15327,7 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.instantiate is not available in this engine build.");
             __mb_instantiate = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
+        ulong __a0 = @class.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -15336,7 +15336,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_get_api_type;
-    public static ClassDB.APIType ClassGetApiType(string @class)
+    public static ClassDB.APIType ClassGetApiType(StringName @class)
     {
         var __mb = __mb_class_get_api_type;
         if (__mb == 0)
@@ -15345,7 +15345,7 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_api_type is not available in this engine build.");
             __mb_class_get_api_type = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
+        ulong __a0 = @class.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
@@ -15354,7 +15354,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_has_signal;
-    public static bool ClassHasSignal(string @class, string signal)
+    public static bool ClassHasSignal(StringName @class, StringName signal)
     {
         var __mb = __mb_class_has_signal;
         if (__mb == 0)
@@ -15363,8 +15363,8 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_has_signal is not available in this engine build.");
             __mb_class_has_signal = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
-        ulong __a1 = StringNames.Get(signal).Opaque;
+        ulong __a0 = @class.NativeValue;
+        ulong __a1 = signal.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -15374,7 +15374,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_get_signal;
-    public static Godot.Collections.Dictionary ClassGetSignal(string @class, string signal)
+    public static Godot.Collections.Dictionary ClassGetSignal(StringName @class, StringName signal)
     {
         var __mb = __mb_class_get_signal;
         if (__mb == 0)
@@ -15383,8 +15383,8 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_signal is not available in this engine build.");
             __mb_class_get_signal = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
-        ulong __a1 = StringNames.Get(signal).Opaque;
+        ulong __a0 = @class.NativeValue;
+        ulong __a1 = signal.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -15394,7 +15394,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_get_signal_list;
-    public static Godot.Collections.Array ClassGetSignalList(string @class, bool noInheritance = false)
+    public static Godot.Collections.Array ClassGetSignalList(StringName @class, bool noInheritance = false)
     {
         var __mb = __mb_class_get_signal_list;
         if (__mb == 0)
@@ -15403,7 +15403,7 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_signal_list is not available in this engine build.");
             __mb_class_get_signal_list = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
+        ulong __a0 = @class.NativeValue;
         byte __a1 = noInheritance ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -15414,7 +15414,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_get_property_list;
-    public static Godot.Collections.Array ClassGetPropertyList(string @class, bool noInheritance = false)
+    public static Godot.Collections.Array ClassGetPropertyList(StringName @class, bool noInheritance = false)
     {
         var __mb = __mb_class_get_property_list;
         if (__mb == 0)
@@ -15423,7 +15423,7 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_property_list is not available in this engine build.");
             __mb_class_get_property_list = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
+        ulong __a0 = @class.NativeValue;
         byte __a1 = noInheritance ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -15434,7 +15434,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_get_property_getter;
-    public static string ClassGetPropertyGetter(string @class, string property)
+    public static StringName ClassGetPropertyGetter(StringName @class, StringName property)
     {
         var __mb = __mb_class_get_property_getter;
         if (__mb == 0)
@@ -15443,18 +15443,18 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_property_getter is not available in this engine build.");
             __mb_class_get_property_getter = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
-        ulong __a1 = StringNames.Get(property).Opaque;
+        ulong __a0 = @class.NativeValue;
+        ulong __a1 = property.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_class_get_property_setter;
-    public static string ClassGetPropertySetter(string @class, string property)
+    public static StringName ClassGetPropertySetter(StringName @class, StringName property)
     {
         var __mb = __mb_class_get_property_setter;
         if (__mb == 0)
@@ -15463,18 +15463,18 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_property_setter is not available in this engine build.");
             __mb_class_get_property_setter = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
-        ulong __a1 = StringNames.Get(property).Opaque;
+        ulong __a0 = @class.NativeValue;
+        ulong __a1 = property.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_class_get_property;
-    public static Variant ClassGetProperty(GodotObject? @object, string property)
+    public static Variant ClassGetProperty(GodotObject? @object, StringName property)
     {
         var __mb = __mb_class_get_property;
         if (__mb == 0)
@@ -15484,7 +15484,7 @@ public static unsafe partial class ClassDB
             __mb_class_get_property = __mb;
         }
         nint __a0 = @object?.NativePtr ?? 0;
-        ulong __a1 = StringNames.Get(property).Opaque;
+        ulong __a1 = property.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -15494,7 +15494,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_set_property;
-    public static Error ClassSetProperty(GodotObject? @object, string property, Variant value)
+    public static Error ClassSetProperty(GodotObject? @object, StringName property, Variant value)
     {
         var __mb = __mb_class_set_property;
         if (__mb == 0)
@@ -15504,7 +15504,7 @@ public static unsafe partial class ClassDB
             __mb_class_set_property = __mb;
         }
         nint __a0 = @object?.NativePtr ?? 0;
-        ulong __a1 = StringNames.Get(property).Opaque;
+        ulong __a1 = property.NativeValue;
         var __a2 = value.Native;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -15516,7 +15516,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_get_property_default_value;
-    public static Variant ClassGetPropertyDefaultValue(string @class, string property)
+    public static Variant ClassGetPropertyDefaultValue(StringName @class, StringName property)
     {
         var __mb = __mb_class_get_property_default_value;
         if (__mb == 0)
@@ -15525,8 +15525,8 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_property_default_value is not available in this engine build.");
             __mb_class_get_property_default_value = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
-        ulong __a1 = StringNames.Get(property).Opaque;
+        ulong __a0 = @class.NativeValue;
+        ulong __a1 = property.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -15536,7 +15536,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_has_method;
-    public static bool ClassHasMethod(string @class, string method, bool noInheritance = false)
+    public static bool ClassHasMethod(StringName @class, StringName method, bool noInheritance = false)
     {
         var __mb = __mb_class_has_method;
         if (__mb == 0)
@@ -15545,8 +15545,8 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_has_method is not available in this engine build.");
             __mb_class_has_method = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
-        ulong __a1 = StringNames.Get(method).Opaque;
+        ulong __a0 = @class.NativeValue;
+        ulong __a1 = method.NativeValue;
         byte __a2 = noInheritance ? (byte)1 : (byte)0;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -15558,7 +15558,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_get_method_argument_count;
-    public static int ClassGetMethodArgumentCount(string @class, string method, bool noInheritance = false)
+    public static int ClassGetMethodArgumentCount(StringName @class, StringName method, bool noInheritance = false)
     {
         var __mb = __mb_class_get_method_argument_count;
         if (__mb == 0)
@@ -15567,8 +15567,8 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_method_argument_count is not available in this engine build.");
             __mb_class_get_method_argument_count = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
-        ulong __a1 = StringNames.Get(method).Opaque;
+        ulong __a0 = @class.NativeValue;
+        ulong __a1 = method.NativeValue;
         byte __a2 = noInheritance ? (byte)1 : (byte)0;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -15580,7 +15580,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_get_method_list;
-    public static Godot.Collections.Array ClassGetMethodList(string @class, bool noInheritance = false)
+    public static Godot.Collections.Array ClassGetMethodList(StringName @class, bool noInheritance = false)
     {
         var __mb = __mb_class_get_method_list;
         if (__mb == 0)
@@ -15589,7 +15589,7 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_method_list is not available in this engine build.");
             __mb_class_get_method_list = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
+        ulong __a0 = @class.NativeValue;
         byte __a1 = noInheritance ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -15600,7 +15600,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_call_static;
-    public static Variant ClassCallStatic(string @class, string method, params Variant[] args)
+    public static Variant ClassCallStatic(StringName @class, StringName method, params Variant[] args)
     {
         var __mb = __mb_class_call_static;
         if (__mb == 0)
@@ -15612,9 +15612,9 @@ public static unsafe partial class ClassDB
         var __n = 2 + args.Length;
         var __ptrs = stackalloc nint[Math.Max(__n, 1)];
         var __lead = stackalloc NativeVariant[2];
-        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(@class).Opaque);
+        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, @class.NativeValue);
         __ptrs[0] = (nint)(__lead + 0);
-        __lead[1] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __lead[1] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, method.NativeValue);
         __ptrs[1] = (nint)(__lead + 1);
         var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
         for (var __i = 0; __i < args.Length; __i++)
@@ -15635,7 +15635,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_get_integer_constant_list;
-    public static string[] ClassGetIntegerConstantList(string @class, bool noInheritance = false)
+    public static string[] ClassGetIntegerConstantList(StringName @class, bool noInheritance = false)
     {
         var __mb = __mb_class_get_integer_constant_list;
         if (__mb == 0)
@@ -15644,7 +15644,7 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_integer_constant_list is not available in this engine build.");
             __mb_class_get_integer_constant_list = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
+        ulong __a0 = @class.NativeValue;
         byte __a1 = noInheritance ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -15655,7 +15655,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_has_integer_constant;
-    public static bool ClassHasIntegerConstant(string @class, string name)
+    public static bool ClassHasIntegerConstant(StringName @class, StringName name)
     {
         var __mb = __mb_class_has_integer_constant;
         if (__mb == 0)
@@ -15664,8 +15664,8 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_has_integer_constant is not available in this engine build.");
             __mb_class_has_integer_constant = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a0 = @class.NativeValue;
+        ulong __a1 = name.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -15675,7 +15675,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_get_integer_constant;
-    public static long ClassGetIntegerConstant(string @class, string name)
+    public static long ClassGetIntegerConstant(StringName @class, StringName name)
     {
         var __mb = __mb_class_get_integer_constant;
         if (__mb == 0)
@@ -15684,8 +15684,8 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_integer_constant is not available in this engine build.");
             __mb_class_get_integer_constant = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a0 = @class.NativeValue;
+        ulong __a1 = name.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -15695,7 +15695,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_has_enum;
-    public static bool ClassHasEnum(string @class, string name, bool noInheritance = false)
+    public static bool ClassHasEnum(StringName @class, StringName name, bool noInheritance = false)
     {
         var __mb = __mb_class_has_enum;
         if (__mb == 0)
@@ -15704,8 +15704,8 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_has_enum is not available in this engine build.");
             __mb_class_has_enum = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a0 = @class.NativeValue;
+        ulong __a1 = name.NativeValue;
         byte __a2 = noInheritance ? (byte)1 : (byte)0;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -15717,7 +15717,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_get_enum_list;
-    public static string[] ClassGetEnumList(string @class, bool noInheritance = false)
+    public static string[] ClassGetEnumList(StringName @class, bool noInheritance = false)
     {
         var __mb = __mb_class_get_enum_list;
         if (__mb == 0)
@@ -15726,7 +15726,7 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_enum_list is not available in this engine build.");
             __mb_class_get_enum_list = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
+        ulong __a0 = @class.NativeValue;
         byte __a1 = noInheritance ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -15737,7 +15737,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_get_enum_constants;
-    public static string[] ClassGetEnumConstants(string @class, string @enum, bool noInheritance = false)
+    public static string[] ClassGetEnumConstants(StringName @class, StringName @enum, bool noInheritance = false)
     {
         var __mb = __mb_class_get_enum_constants;
         if (__mb == 0)
@@ -15746,8 +15746,8 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_enum_constants is not available in this engine build.");
             __mb_class_get_enum_constants = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
-        ulong __a1 = StringNames.Get(@enum).Opaque;
+        ulong __a0 = @class.NativeValue;
+        ulong __a1 = @enum.NativeValue;
         byte __a2 = noInheritance ? (byte)1 : (byte)0;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -15759,7 +15759,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_class_get_integer_constant_enum;
-    public static string ClassGetIntegerConstantEnum(string @class, string name, bool noInheritance = false)
+    public static StringName ClassGetIntegerConstantEnum(StringName @class, StringName name, bool noInheritance = false)
     {
         var __mb = __mb_class_get_integer_constant_enum;
         if (__mb == 0)
@@ -15768,8 +15768,8 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_integer_constant_enum is not available in this engine build.");
             __mb_class_get_integer_constant_enum = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a0 = @class.NativeValue;
+        ulong __a1 = name.NativeValue;
         byte __a2 = noInheritance ? (byte)1 : (byte)0;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -15777,11 +15777,11 @@ public static unsafe partial class ClassDB
         __args[2] = (nint)(&__a2);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_is_class_enum_bitfield;
-    public static bool IsClassEnumBitfield(string @class, string @enum, bool noInheritance = false)
+    public static bool IsClassEnumBitfield(StringName @class, StringName @enum, bool noInheritance = false)
     {
         var __mb = __mb_is_class_enum_bitfield;
         if (__mb == 0)
@@ -15790,8 +15790,8 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.is_class_enum_bitfield is not available in this engine build.");
             __mb_is_class_enum_bitfield = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
-        ulong __a1 = StringNames.Get(@enum).Opaque;
+        ulong __a0 = @class.NativeValue;
+        ulong __a1 = @enum.NativeValue;
         byte __a2 = noInheritance ? (byte)1 : (byte)0;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -15803,7 +15803,7 @@ public static unsafe partial class ClassDB
     }
 
     private static nint __mb_is_class_enabled;
-    public static bool IsClassEnabled(string @class)
+    public static bool IsClassEnabled(StringName @class)
     {
         var __mb = __mb_is_class_enabled;
         if (__mb == 0)
@@ -15812,7 +15812,7 @@ public static unsafe partial class ClassDB
             if (__mb == 0) throw new MissingMethodException("ClassDB.is_class_enabled is not available in this engine build.");
             __mb_is_class_enabled = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
+        ulong __a0 = @class.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -23122,7 +23122,7 @@ public unsafe partial class Control : CanvasItem
         set => SetLayoutDirection(value);
     }
 
-    public string TranslationContext
+    public StringName TranslationContext
     {
         get => GetTranslationContext();
         set => SetTranslationContext(value);
@@ -23272,7 +23272,7 @@ public unsafe partial class Control : CanvasItem
         set => SetTheme(value);
     }
 
-    public string ThemeTypeVariation
+    public StringName ThemeTypeVariation
     {
         get => GetThemeTypeVariation();
         set => SetThemeTypeVariation(value);
@@ -24644,7 +24644,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_theme_type_variation;
-    internal void SetThemeTypeVariation(string themeType)
+    internal void SetThemeTypeVariation(StringName themeType)
     {
         var __mb = __mb_set_theme_type_variation;
         if (__mb == 0)
@@ -24653,14 +24653,14 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.set_theme_type_variation is not available in this engine build.");
             __mb_set_theme_type_variation = __mb;
         }
-        ulong __a0 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = themeType.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_theme_type_variation;
-    internal string GetThemeTypeVariation()
+    internal StringName GetThemeTypeVariation()
     {
         var __mb = __mb_get_theme_type_variation;
         if (__mb == 0)
@@ -24671,7 +24671,7 @@ public unsafe partial class Control : CanvasItem
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_begin_bulk_theme_override;
@@ -24701,7 +24701,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_add_theme_icon_override;
-    public void AddThemeIconOverride(string name, Texture2D? texture)
+    public void AddThemeIconOverride(StringName name, Texture2D? texture)
     {
         var __mb = __mb_add_theme_icon_override;
         if (__mb == 0)
@@ -24710,7 +24710,7 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.add_theme_icon_override is not available in this engine build.");
             __mb_add_theme_icon_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = texture?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -24719,7 +24719,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_add_theme_stylebox_override;
-    public void AddThemeStyleboxOverride(string name, StyleBox? stylebox)
+    public void AddThemeStyleboxOverride(StringName name, StyleBox? stylebox)
     {
         var __mb = __mb_add_theme_stylebox_override;
         if (__mb == 0)
@@ -24728,7 +24728,7 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.add_theme_stylebox_override is not available in this engine build.");
             __mb_add_theme_stylebox_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = stylebox?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -24737,7 +24737,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_add_theme_font_override;
-    public void AddThemeFontOverride(string name, Font? font)
+    public void AddThemeFontOverride(StringName name, Font? font)
     {
         var __mb = __mb_add_theme_font_override;
         if (__mb == 0)
@@ -24746,7 +24746,7 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.add_theme_font_override is not available in this engine build.");
             __mb_add_theme_font_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = font?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -24755,7 +24755,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_add_theme_font_size_override;
-    public void AddThemeFontSizeOverride(string name, int fontSize)
+    public void AddThemeFontSizeOverride(StringName name, int fontSize)
     {
         var __mb = __mb_add_theme_font_size_override;
         if (__mb == 0)
@@ -24764,7 +24764,7 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.add_theme_font_size_override is not available in this engine build.");
             __mb_add_theme_font_size_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         long __a1 = unchecked((long)fontSize);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -24773,7 +24773,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_add_theme_color_override;
-    public void AddThemeColorOverride(string name, Color color)
+    public void AddThemeColorOverride(StringName name, Color color)
     {
         var __mb = __mb_add_theme_color_override;
         if (__mb == 0)
@@ -24782,7 +24782,7 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.add_theme_color_override is not available in this engine build.");
             __mb_add_theme_color_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = color;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -24791,7 +24791,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_add_theme_constant_override;
-    public void AddThemeConstantOverride(string name, int constant)
+    public void AddThemeConstantOverride(StringName name, int constant)
     {
         var __mb = __mb_add_theme_constant_override;
         if (__mb == 0)
@@ -24800,7 +24800,7 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.add_theme_constant_override is not available in this engine build.");
             __mb_add_theme_constant_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         long __a1 = unchecked((long)constant);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -24809,7 +24809,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_remove_theme_icon_override;
-    public void RemoveThemeIconOverride(string name)
+    public void RemoveThemeIconOverride(StringName name)
     {
         var __mb = __mb_remove_theme_icon_override;
         if (__mb == 0)
@@ -24818,14 +24818,14 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.remove_theme_icon_override is not available in this engine build.");
             __mb_remove_theme_icon_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_stylebox_override;
-    public void RemoveThemeStyleboxOverride(string name)
+    public void RemoveThemeStyleboxOverride(StringName name)
     {
         var __mb = __mb_remove_theme_stylebox_override;
         if (__mb == 0)
@@ -24834,14 +24834,14 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.remove_theme_stylebox_override is not available in this engine build.");
             __mb_remove_theme_stylebox_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_font_override;
-    public void RemoveThemeFontOverride(string name)
+    public void RemoveThemeFontOverride(StringName name)
     {
         var __mb = __mb_remove_theme_font_override;
         if (__mb == 0)
@@ -24850,14 +24850,14 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.remove_theme_font_override is not available in this engine build.");
             __mb_remove_theme_font_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_font_size_override;
-    public void RemoveThemeFontSizeOverride(string name)
+    public void RemoveThemeFontSizeOverride(StringName name)
     {
         var __mb = __mb_remove_theme_font_size_override;
         if (__mb == 0)
@@ -24866,14 +24866,14 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.remove_theme_font_size_override is not available in this engine build.");
             __mb_remove_theme_font_size_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_color_override;
-    public void RemoveThemeColorOverride(string name)
+    public void RemoveThemeColorOverride(StringName name)
     {
         var __mb = __mb_remove_theme_color_override;
         if (__mb == 0)
@@ -24882,14 +24882,14 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.remove_theme_color_override is not available in this engine build.");
             __mb_remove_theme_color_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_constant_override;
-    public void RemoveThemeConstantOverride(string name)
+    public void RemoveThemeConstantOverride(StringName name)
     {
         var __mb = __mb_remove_theme_constant_override;
         if (__mb == 0)
@@ -24898,14 +24898,14 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.remove_theme_constant_override is not available in this engine build.");
             __mb_remove_theme_constant_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_theme_icon;
-    public Texture2D? GetThemeIcon(string name, string themeType = "")
+    public Texture2D? GetThemeIcon(StringName name, StringName themeType)
     {
         var __mb = __mb_get_theme_icon;
         if (__mb == 0)
@@ -24914,8 +24914,8 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.get_theme_icon is not available in this engine build.");
             __mb_get_theme_icon = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -24925,7 +24925,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_theme_stylebox;
-    public StyleBox? GetThemeStylebox(string name, string themeType = "")
+    public StyleBox? GetThemeStylebox(StringName name, StringName themeType)
     {
         var __mb = __mb_get_theme_stylebox;
         if (__mb == 0)
@@ -24934,8 +24934,8 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.get_theme_stylebox is not available in this engine build.");
             __mb_get_theme_stylebox = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -24945,7 +24945,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_theme_font;
-    public Font? GetThemeFont(string name, string themeType = "")
+    public Font? GetThemeFont(StringName name, StringName themeType)
     {
         var __mb = __mb_get_theme_font;
         if (__mb == 0)
@@ -24954,8 +24954,8 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.get_theme_font is not available in this engine build.");
             __mb_get_theme_font = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -24965,7 +24965,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_theme_font_size;
-    public int GetThemeFontSize(string name, string themeType = "")
+    public int GetThemeFontSize(StringName name, StringName themeType)
     {
         var __mb = __mb_get_theme_font_size;
         if (__mb == 0)
@@ -24974,8 +24974,8 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.get_theme_font_size is not available in this engine build.");
             __mb_get_theme_font_size = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -24985,7 +24985,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_theme_color;
-    public Color GetThemeColor(string name, string themeType = "")
+    public Color GetThemeColor(StringName name, StringName themeType)
     {
         var __mb = __mb_get_theme_color;
         if (__mb == 0)
@@ -24994,8 +24994,8 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.get_theme_color is not available in this engine build.");
             __mb_get_theme_color = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -25005,7 +25005,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_theme_constant;
-    public int GetThemeConstant(string name, string themeType = "")
+    public int GetThemeConstant(StringName name, StringName themeType)
     {
         var __mb = __mb_get_theme_constant;
         if (__mb == 0)
@@ -25014,8 +25014,8 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.get_theme_constant is not available in this engine build.");
             __mb_get_theme_constant = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -25025,7 +25025,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_icon_override;
-    public bool HasThemeIconOverride(string name)
+    public bool HasThemeIconOverride(StringName name)
     {
         var __mb = __mb_has_theme_icon_override;
         if (__mb == 0)
@@ -25034,7 +25034,7 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.has_theme_icon_override is not available in this engine build.");
             __mb_has_theme_icon_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -25043,7 +25043,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_stylebox_override;
-    public bool HasThemeStyleboxOverride(string name)
+    public bool HasThemeStyleboxOverride(StringName name)
     {
         var __mb = __mb_has_theme_stylebox_override;
         if (__mb == 0)
@@ -25052,7 +25052,7 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.has_theme_stylebox_override is not available in this engine build.");
             __mb_has_theme_stylebox_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -25061,7 +25061,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_font_override;
-    public bool HasThemeFontOverride(string name)
+    public bool HasThemeFontOverride(StringName name)
     {
         var __mb = __mb_has_theme_font_override;
         if (__mb == 0)
@@ -25070,7 +25070,7 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.has_theme_font_override is not available in this engine build.");
             __mb_has_theme_font_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -25079,7 +25079,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_font_size_override;
-    public bool HasThemeFontSizeOverride(string name)
+    public bool HasThemeFontSizeOverride(StringName name)
     {
         var __mb = __mb_has_theme_font_size_override;
         if (__mb == 0)
@@ -25088,7 +25088,7 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.has_theme_font_size_override is not available in this engine build.");
             __mb_has_theme_font_size_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -25097,7 +25097,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_color_override;
-    public bool HasThemeColorOverride(string name)
+    public bool HasThemeColorOverride(StringName name)
     {
         var __mb = __mb_has_theme_color_override;
         if (__mb == 0)
@@ -25106,7 +25106,7 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.has_theme_color_override is not available in this engine build.");
             __mb_has_theme_color_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -25115,7 +25115,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_constant_override;
-    public bool HasThemeConstantOverride(string name)
+    public bool HasThemeConstantOverride(StringName name)
     {
         var __mb = __mb_has_theme_constant_override;
         if (__mb == 0)
@@ -25124,7 +25124,7 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.has_theme_constant_override is not available in this engine build.");
             __mb_has_theme_constant_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -25133,7 +25133,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_icon;
-    public bool HasThemeIcon(string name, string themeType = "")
+    public bool HasThemeIcon(StringName name, StringName themeType)
     {
         var __mb = __mb_has_theme_icon;
         if (__mb == 0)
@@ -25142,8 +25142,8 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.has_theme_icon is not available in this engine build.");
             __mb_has_theme_icon = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -25153,7 +25153,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_stylebox;
-    public bool HasThemeStylebox(string name, string themeType = "")
+    public bool HasThemeStylebox(StringName name, StringName themeType)
     {
         var __mb = __mb_has_theme_stylebox;
         if (__mb == 0)
@@ -25162,8 +25162,8 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.has_theme_stylebox is not available in this engine build.");
             __mb_has_theme_stylebox = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -25173,7 +25173,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_font;
-    public bool HasThemeFont(string name, string themeType = "")
+    public bool HasThemeFont(StringName name, StringName themeType)
     {
         var __mb = __mb_has_theme_font;
         if (__mb == 0)
@@ -25182,8 +25182,8 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.has_theme_font is not available in this engine build.");
             __mb_has_theme_font = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -25193,7 +25193,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_font_size;
-    public bool HasThemeFontSize(string name, string themeType = "")
+    public bool HasThemeFontSize(StringName name, StringName themeType)
     {
         var __mb = __mb_has_theme_font_size;
         if (__mb == 0)
@@ -25202,8 +25202,8 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.has_theme_font_size is not available in this engine build.");
             __mb_has_theme_font_size = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -25213,7 +25213,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_color;
-    public bool HasThemeColor(string name, string themeType = "")
+    public bool HasThemeColor(StringName name, StringName themeType)
     {
         var __mb = __mb_has_theme_color;
         if (__mb == 0)
@@ -25222,8 +25222,8 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.has_theme_color is not available in this engine build.");
             __mb_has_theme_color = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -25233,7 +25233,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_constant;
-    public bool HasThemeConstant(string name, string themeType = "")
+    public bool HasThemeConstant(StringName name, StringName themeType)
     {
         var __mb = __mb_has_theme_constant;
         if (__mb == 0)
@@ -25242,8 +25242,8 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.has_theme_constant is not available in this engine build.");
             __mb_has_theme_constant = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -25456,7 +25456,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_translation_context;
-    internal void SetTranslationContext(string context)
+    internal void SetTranslationContext(StringName context)
     {
         var __mb = __mb_set_translation_context;
         if (__mb == 0)
@@ -25465,14 +25465,14 @@ public unsafe partial class Control : CanvasItem
             if (__mb == 0) throw new MissingMethodException("Control.set_translation_context is not available in this engine build.");
             __mb_set_translation_context = __mb;
         }
-        ulong __a0 = StringNames.Get(context).Opaque;
+        ulong __a0 = context.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_translation_context;
-    internal string GetTranslationContext()
+    internal StringName GetTranslationContext()
     {
         var __mb = __mb_get_translation_context;
         if (__mb == 0)
@@ -25483,7 +25483,7 @@ public unsafe partial class Control : CanvasItem
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_default_cursor_shape;

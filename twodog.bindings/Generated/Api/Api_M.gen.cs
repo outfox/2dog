@@ -1374,9 +1374,9 @@ public unsafe partial class Mesh : Resource
 
     public virtual int _GetBlendShapeCount() => default!;
 
-    public virtual string _GetBlendShapeName(int index) => default!;
+    public virtual StringName _GetBlendShapeName(int index) => default!;
 
-    public virtual void _SetBlendShapeName(int index, string name) { }
+    public virtual void _SetBlendShapeName(int index, StringName name) { }
 
     public virtual Aabb _GetAabb() => default!;
 
@@ -1445,13 +1445,13 @@ public unsafe partial class Mesh : Resource
         if (__vsn_get_blend_shape_name == 0) __vsn_get_blend_shape_name = StringNames.Get("_get_blend_shape_name").Opaque;
         if (nameSn == __vsn_get_blend_shape_name)
         {
-            *(ulong*)ret = StringNames.CreateOwned(_GetBlendShapeName(unchecked((int)(*(long*)args[0]))) ?? "");
+            *(ulong*)ret = StringNames.CreateOwned(_GetBlendShapeName(unchecked((int)(*(long*)args[0])))?.ToString() ?? "");
             return true;
         }
         if (__vsn_set_blend_shape_name == 0) __vsn_set_blend_shape_name = StringNames.Get("_set_blend_shape_name").Opaque;
         if (nameSn == __vsn_set_blend_shape_name)
         {
-            _SetBlendShapeName(unchecked((int)(*(long*)args[0])), StringNames.Read(*(ulong*)args[1]));
+            _SetBlendShapeName(unchecked((int)(*(long*)args[0])), StringName.Intern(StringNames.Read(*(ulong*)args[1])));
             return true;
         }
         if (__vsn_get_aabb == 0) __vsn_get_aabb = StringNames.Get("_get_aabb").Opaque;
@@ -3004,7 +3004,7 @@ public unsafe partial class MeshInstance3D : GeometryInstance3D
     }
 
     private static nint __mb_find_blend_shape_by_name;
-    public int FindBlendShapeByName(string name)
+    public int FindBlendShapeByName(StringName name)
     {
         var __mb = __mb_find_blend_shape_by_name;
         if (__mb == 0)
@@ -3013,7 +3013,7 @@ public unsafe partial class MeshInstance3D : GeometryInstance3D
             if (__mb == 0) throw new MissingMethodException("MeshInstance3D.find_blend_shape_by_name is not available in this engine build.");
             __mb_find_blend_shape_by_name = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
@@ -5399,7 +5399,7 @@ public unsafe partial class MultiplayerAPI : RefCounted
     }
 
     private static nint __mb_rpc;
-    public Error Rpc(int peer, GodotObject? @object, string method, Godot.Collections.Array arguments)
+    public Error Rpc(int peer, GodotObject? @object, StringName method, Godot.Collections.Array arguments)
     {
         var __mb = __mb_rpc;
         if (__mb == 0)
@@ -5410,7 +5410,7 @@ public unsafe partial class MultiplayerAPI : RefCounted
         }
         long __a0 = unchecked((long)peer);
         nint __a1 = @object?.NativePtr ?? 0;
-        ulong __a2 = StringNames.Get(method).Opaque;
+        ulong __a2 = method.NativeValue;
         ulong __a3 = arguments.Native;
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
@@ -5478,7 +5478,7 @@ public unsafe partial class MultiplayerAPI : RefCounted
     }
 
     private static nint __mb_set_default_interface;
-    public static void SetDefaultInterface(string interfaceName)
+    public static void SetDefaultInterface(StringName interfaceName)
     {
         var __mb = __mb_set_default_interface;
         if (__mb == 0)
@@ -5487,14 +5487,14 @@ public unsafe partial class MultiplayerAPI : RefCounted
             if (__mb == 0) throw new MissingMethodException("MultiplayerAPI.set_default_interface is not available in this engine build.");
             __mb_set_default_interface = __mb;
         }
-        ulong __a0 = StringNames.Get(interfaceName).Opaque;
+        ulong __a0 = interfaceName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, 0);
     }
 
     private static nint __mb_get_default_interface;
-    public static string GetDefaultInterface()
+    public static StringName GetDefaultInterface()
     {
         var __mb = __mb_get_default_interface;
         if (__mb == 0)
@@ -5505,7 +5505,7 @@ public unsafe partial class MultiplayerAPI : RefCounted
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_create_default_interface;

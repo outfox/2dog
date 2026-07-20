@@ -194,7 +194,7 @@ public static unsafe class Variants
     /// Works for any exposed method including fork-only classes; slower than
     /// ptrcall but needs no extension_api hashes.
     /// </summary>
-    public static NativeVariant Call(ref NativeVariant self, StringName method, ReadOnlySpan<NativeVariant> args = default)
+    public static NativeVariant Call(ref NativeVariant self, InternedName method, ReadOnlySpan<NativeVariant> args = default)
     {
         NativeVariant ret;
         GDExtensionCallError err;

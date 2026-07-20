@@ -1008,7 +1008,7 @@ public unsafe partial class UndoRedo : GodotObject
     }
 
     private static nint __mb_add_do_property;
-    public void AddDoProperty(GodotObject? @object, string property, Variant value)
+    public void AddDoProperty(GodotObject? @object, StringName property, Variant value)
     {
         var __mb = __mb_add_do_property;
         if (__mb == 0)
@@ -1018,7 +1018,7 @@ public unsafe partial class UndoRedo : GodotObject
             __mb_add_do_property = __mb;
         }
         nint __a0 = @object?.NativePtr ?? 0;
-        ulong __a1 = StringNames.Get(property).Opaque;
+        ulong __a1 = property.NativeValue;
         var __a2 = value.Native;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -1028,7 +1028,7 @@ public unsafe partial class UndoRedo : GodotObject
     }
 
     private static nint __mb_add_undo_property;
-    public void AddUndoProperty(GodotObject? @object, string property, Variant value)
+    public void AddUndoProperty(GodotObject? @object, StringName property, Variant value)
     {
         var __mb = __mb_add_undo_property;
         if (__mb == 0)
@@ -1038,7 +1038,7 @@ public unsafe partial class UndoRedo : GodotObject
             __mb_add_undo_property = __mb;
         }
         nint __a0 = @object?.NativePtr ?? 0;
-        ulong __a1 = StringNames.Get(property).Opaque;
+        ulong __a1 = property.NativeValue;
         var __a2 = value.Native;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);

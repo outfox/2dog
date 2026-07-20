@@ -16536,20 +16536,20 @@ public static unsafe partial class TextServerManager
 
     public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
-    public delegate void InterfaceAddedEventHandler(string interfaceName);
+    public delegate void InterfaceAddedEventHandler(StringName interfaceName);
 
     public static event InterfaceAddedEventHandler InterfaceAdded
     {
-        add => Singleton.Connect("interface_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Singleton.Disconnect("interface_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Singleton.Connect("interface_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceAddedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Singleton.Disconnect("interface_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceAddedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
-    public delegate void InterfaceRemovedEventHandler(string interfaceName);
+    public delegate void InterfaceRemovedEventHandler(StringName interfaceName);
 
     public static event InterfaceRemovedEventHandler InterfaceRemoved
     {
-        add => Singleton.Connect("interface_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Singleton.Disconnect("interface_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Singleton.Connect("interface_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceRemovedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Singleton.Disconnect("interface_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceRemovedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
     private static nint __mb_add_interface;
@@ -18739,7 +18739,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_set_icon;
-    public void SetIcon(string name, string themeType, Texture2D? texture)
+    public void SetIcon(StringName name, StringName themeType, Texture2D? texture)
     {
         var __mb = __mb_set_icon;
         if (__mb == 0)
@@ -18748,8 +18748,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.set_icon is not available in this engine build.");
             __mb_set_icon = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         nint __a2 = texture?.NativePtr ?? 0;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -18759,7 +18759,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_get_icon;
-    public Texture2D? GetIcon(string name, string themeType)
+    public Texture2D? GetIcon(StringName name, StringName themeType)
     {
         var __mb = __mb_get_icon;
         if (__mb == 0)
@@ -18768,8 +18768,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.get_icon is not available in this engine build.");
             __mb_get_icon = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -18779,7 +18779,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_has_icon;
-    public bool HasIcon(string name, string themeType)
+    public bool HasIcon(StringName name, StringName themeType)
     {
         var __mb = __mb_has_icon;
         if (__mb == 0)
@@ -18788,8 +18788,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.has_icon is not available in this engine build.");
             __mb_has_icon = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -18799,7 +18799,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_rename_icon;
-    public void RenameIcon(string oldName, string name, string themeType)
+    public void RenameIcon(StringName oldName, StringName name, StringName themeType)
     {
         var __mb = __mb_rename_icon;
         if (__mb == 0)
@@ -18808,9 +18808,9 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.rename_icon is not available in this engine build.");
             __mb_rename_icon = __mb;
         }
-        ulong __a0 = StringNames.Get(oldName).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
-        ulong __a2 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = oldName.NativeValue;
+        ulong __a1 = name.NativeValue;
+        ulong __a2 = themeType.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -18819,7 +18819,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_clear_icon;
-    public void ClearIcon(string name, string themeType)
+    public void ClearIcon(StringName name, StringName themeType)
     {
         var __mb = __mb_clear_icon;
         if (__mb == 0)
@@ -18828,8 +18828,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.clear_icon is not available in this engine build.");
             __mb_clear_icon = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -18871,7 +18871,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_set_stylebox;
-    public void SetStylebox(string name, string themeType, StyleBox? texture)
+    public void SetStylebox(StringName name, StringName themeType, StyleBox? texture)
     {
         var __mb = __mb_set_stylebox;
         if (__mb == 0)
@@ -18880,8 +18880,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.set_stylebox is not available in this engine build.");
             __mb_set_stylebox = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         nint __a2 = texture?.NativePtr ?? 0;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -18891,7 +18891,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_get_stylebox;
-    public StyleBox? GetStylebox(string name, string themeType)
+    public StyleBox? GetStylebox(StringName name, StringName themeType)
     {
         var __mb = __mb_get_stylebox;
         if (__mb == 0)
@@ -18900,8 +18900,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.get_stylebox is not available in this engine build.");
             __mb_get_stylebox = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -18911,7 +18911,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_has_stylebox;
-    public bool HasStylebox(string name, string themeType)
+    public bool HasStylebox(StringName name, StringName themeType)
     {
         var __mb = __mb_has_stylebox;
         if (__mb == 0)
@@ -18920,8 +18920,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.has_stylebox is not available in this engine build.");
             __mb_has_stylebox = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -18931,7 +18931,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_rename_stylebox;
-    public void RenameStylebox(string oldName, string name, string themeType)
+    public void RenameStylebox(StringName oldName, StringName name, StringName themeType)
     {
         var __mb = __mb_rename_stylebox;
         if (__mb == 0)
@@ -18940,9 +18940,9 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.rename_stylebox is not available in this engine build.");
             __mb_rename_stylebox = __mb;
         }
-        ulong __a0 = StringNames.Get(oldName).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
-        ulong __a2 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = oldName.NativeValue;
+        ulong __a1 = name.NativeValue;
+        ulong __a2 = themeType.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -18951,7 +18951,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_clear_stylebox;
-    public void ClearStylebox(string name, string themeType)
+    public void ClearStylebox(StringName name, StringName themeType)
     {
         var __mb = __mb_clear_stylebox;
         if (__mb == 0)
@@ -18960,8 +18960,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.clear_stylebox is not available in this engine build.");
             __mb_clear_stylebox = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19003,7 +19003,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_set_font;
-    public void SetFont(string name, string themeType, Font? font)
+    public void SetFont(StringName name, StringName themeType, Font? font)
     {
         var __mb = __mb_set_font;
         if (__mb == 0)
@@ -19012,8 +19012,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.set_font is not available in this engine build.");
             __mb_set_font = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         nint __a2 = font?.NativePtr ?? 0;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -19023,7 +19023,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_get_font;
-    public Font? GetFont(string name, string themeType)
+    public Font? GetFont(StringName name, StringName themeType)
     {
         var __mb = __mb_get_font;
         if (__mb == 0)
@@ -19032,8 +19032,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.get_font is not available in this engine build.");
             __mb_get_font = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19043,7 +19043,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_has_font;
-    public bool HasFont(string name, string themeType)
+    public bool HasFont(StringName name, StringName themeType)
     {
         var __mb = __mb_has_font;
         if (__mb == 0)
@@ -19052,8 +19052,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.has_font is not available in this engine build.");
             __mb_has_font = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19063,7 +19063,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_rename_font;
-    public void RenameFont(string oldName, string name, string themeType)
+    public void RenameFont(StringName oldName, StringName name, StringName themeType)
     {
         var __mb = __mb_rename_font;
         if (__mb == 0)
@@ -19072,9 +19072,9 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.rename_font is not available in this engine build.");
             __mb_rename_font = __mb;
         }
-        ulong __a0 = StringNames.Get(oldName).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
-        ulong __a2 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = oldName.NativeValue;
+        ulong __a1 = name.NativeValue;
+        ulong __a2 = themeType.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19083,7 +19083,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_clear_font;
-    public void ClearFont(string name, string themeType)
+    public void ClearFont(StringName name, StringName themeType)
     {
         var __mb = __mb_clear_font;
         if (__mb == 0)
@@ -19092,8 +19092,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.clear_font is not available in this engine build.");
             __mb_clear_font = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19135,7 +19135,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_set_font_size;
-    public void SetFontSize(string name, string themeType, int fontSize)
+    public void SetFontSize(StringName name, StringName themeType, int fontSize)
     {
         var __mb = __mb_set_font_size;
         if (__mb == 0)
@@ -19144,8 +19144,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.set_font_size is not available in this engine build.");
             __mb_set_font_size = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         long __a2 = unchecked((long)fontSize);
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -19155,7 +19155,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_get_font_size;
-    public int GetFontSize(string name, string themeType)
+    public int GetFontSize(StringName name, StringName themeType)
     {
         var __mb = __mb_get_font_size;
         if (__mb == 0)
@@ -19164,8 +19164,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.get_font_size is not available in this engine build.");
             __mb_get_font_size = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19175,7 +19175,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_has_font_size;
-    public bool HasFontSize(string name, string themeType)
+    public bool HasFontSize(StringName name, StringName themeType)
     {
         var __mb = __mb_has_font_size;
         if (__mb == 0)
@@ -19184,8 +19184,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.has_font_size is not available in this engine build.");
             __mb_has_font_size = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19195,7 +19195,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_rename_font_size;
-    public void RenameFontSize(string oldName, string name, string themeType)
+    public void RenameFontSize(StringName oldName, StringName name, StringName themeType)
     {
         var __mb = __mb_rename_font_size;
         if (__mb == 0)
@@ -19204,9 +19204,9 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.rename_font_size is not available in this engine build.");
             __mb_rename_font_size = __mb;
         }
-        ulong __a0 = StringNames.Get(oldName).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
-        ulong __a2 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = oldName.NativeValue;
+        ulong __a1 = name.NativeValue;
+        ulong __a2 = themeType.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19215,7 +19215,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_clear_font_size;
-    public void ClearFontSize(string name, string themeType)
+    public void ClearFontSize(StringName name, StringName themeType)
     {
         var __mb = __mb_clear_font_size;
         if (__mb == 0)
@@ -19224,8 +19224,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.clear_font_size is not available in this engine build.");
             __mb_clear_font_size = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19267,7 +19267,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_set_color;
-    public void SetColor(string name, string themeType, Color color)
+    public void SetColor(StringName name, StringName themeType, Color color)
     {
         var __mb = __mb_set_color;
         if (__mb == 0)
@@ -19276,8 +19276,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.set_color is not available in this engine build.");
             __mb_set_color = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __a2 = color;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -19287,7 +19287,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_get_color;
-    public Color GetColor(string name, string themeType)
+    public Color GetColor(StringName name, StringName themeType)
     {
         var __mb = __mb_get_color;
         if (__mb == 0)
@@ -19296,8 +19296,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.get_color is not available in this engine build.");
             __mb_get_color = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19307,7 +19307,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_has_color;
-    public bool HasColor(string name, string themeType)
+    public bool HasColor(StringName name, StringName themeType)
     {
         var __mb = __mb_has_color;
         if (__mb == 0)
@@ -19316,8 +19316,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.has_color is not available in this engine build.");
             __mb_has_color = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19327,7 +19327,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_rename_color;
-    public void RenameColor(string oldName, string name, string themeType)
+    public void RenameColor(StringName oldName, StringName name, StringName themeType)
     {
         var __mb = __mb_rename_color;
         if (__mb == 0)
@@ -19336,9 +19336,9 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.rename_color is not available in this engine build.");
             __mb_rename_color = __mb;
         }
-        ulong __a0 = StringNames.Get(oldName).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
-        ulong __a2 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = oldName.NativeValue;
+        ulong __a1 = name.NativeValue;
+        ulong __a2 = themeType.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19347,7 +19347,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_clear_color;
-    public void ClearColor(string name, string themeType)
+    public void ClearColor(StringName name, StringName themeType)
     {
         var __mb = __mb_clear_color;
         if (__mb == 0)
@@ -19356,8 +19356,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.clear_color is not available in this engine build.");
             __mb_clear_color = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19399,7 +19399,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_set_constant;
-    public void SetConstant(string name, string themeType, int constant)
+    public void SetConstant(StringName name, StringName themeType, int constant)
     {
         var __mb = __mb_set_constant;
         if (__mb == 0)
@@ -19408,8 +19408,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.set_constant is not available in this engine build.");
             __mb_set_constant = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         long __a2 = unchecked((long)constant);
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -19419,7 +19419,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_get_constant;
-    public int GetConstant(string name, string themeType)
+    public int GetConstant(StringName name, StringName themeType)
     {
         var __mb = __mb_get_constant;
         if (__mb == 0)
@@ -19428,8 +19428,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.get_constant is not available in this engine build.");
             __mb_get_constant = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19439,7 +19439,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_has_constant;
-    public bool HasConstant(string name, string themeType)
+    public bool HasConstant(StringName name, StringName themeType)
     {
         var __mb = __mb_has_constant;
         if (__mb == 0)
@@ -19448,8 +19448,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.has_constant is not available in this engine build.");
             __mb_has_constant = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19459,7 +19459,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_rename_constant;
-    public void RenameConstant(string oldName, string name, string themeType)
+    public void RenameConstant(StringName oldName, StringName name, StringName themeType)
     {
         var __mb = __mb_rename_constant;
         if (__mb == 0)
@@ -19468,9 +19468,9 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.rename_constant is not available in this engine build.");
             __mb_rename_constant = __mb;
         }
-        ulong __a0 = StringNames.Get(oldName).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
-        ulong __a2 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = oldName.NativeValue;
+        ulong __a1 = name.NativeValue;
+        ulong __a2 = themeType.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19479,7 +19479,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_clear_constant;
-    public void ClearConstant(string name, string themeType)
+    public void ClearConstant(StringName name, StringName themeType)
     {
         var __mb = __mb_clear_constant;
         if (__mb == 0)
@@ -19488,8 +19488,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.clear_constant is not available in this engine build.");
             __mb_clear_constant = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19669,7 +19669,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_set_theme_item;
-    public void SetThemeItem(Theme.DataType dataType, string name, string themeType, Variant value)
+    public void SetThemeItem(Theme.DataType dataType, StringName name, StringName themeType, Variant value)
     {
         var __mb = __mb_set_theme_item;
         if (__mb == 0)
@@ -19679,8 +19679,8 @@ public unsafe partial class Theme : Resource
             __mb_set_theme_item = __mb;
         }
         long __a0 = (long)dataType;
-        ulong __a1 = StringNames.Get(name).Opaque;
-        ulong __a2 = StringNames.Get(themeType).Opaque;
+        ulong __a1 = name.NativeValue;
+        ulong __a2 = themeType.NativeValue;
         var __a3 = value.Native;
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
@@ -19691,7 +19691,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_get_theme_item;
-    public Variant GetThemeItem(Theme.DataType dataType, string name, string themeType)
+    public Variant GetThemeItem(Theme.DataType dataType, StringName name, StringName themeType)
     {
         var __mb = __mb_get_theme_item;
         if (__mb == 0)
@@ -19701,8 +19701,8 @@ public unsafe partial class Theme : Resource
             __mb_get_theme_item = __mb;
         }
         long __a0 = (long)dataType;
-        ulong __a1 = StringNames.Get(name).Opaque;
-        ulong __a2 = StringNames.Get(themeType).Opaque;
+        ulong __a1 = name.NativeValue;
+        ulong __a2 = themeType.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19713,7 +19713,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_has_theme_item;
-    public bool HasThemeItem(Theme.DataType dataType, string name, string themeType)
+    public bool HasThemeItem(Theme.DataType dataType, StringName name, StringName themeType)
     {
         var __mb = __mb_has_theme_item;
         if (__mb == 0)
@@ -19723,8 +19723,8 @@ public unsafe partial class Theme : Resource
             __mb_has_theme_item = __mb;
         }
         long __a0 = (long)dataType;
-        ulong __a1 = StringNames.Get(name).Opaque;
-        ulong __a2 = StringNames.Get(themeType).Opaque;
+        ulong __a1 = name.NativeValue;
+        ulong __a2 = themeType.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19735,7 +19735,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_rename_theme_item;
-    public void RenameThemeItem(Theme.DataType dataType, string oldName, string name, string themeType)
+    public void RenameThemeItem(Theme.DataType dataType, StringName oldName, StringName name, StringName themeType)
     {
         var __mb = __mb_rename_theme_item;
         if (__mb == 0)
@@ -19745,9 +19745,9 @@ public unsafe partial class Theme : Resource
             __mb_rename_theme_item = __mb;
         }
         long __a0 = (long)dataType;
-        ulong __a1 = StringNames.Get(oldName).Opaque;
-        ulong __a2 = StringNames.Get(name).Opaque;
-        ulong __a3 = StringNames.Get(themeType).Opaque;
+        ulong __a1 = oldName.NativeValue;
+        ulong __a2 = name.NativeValue;
+        ulong __a3 = themeType.NativeValue;
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19757,7 +19757,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_clear_theme_item;
-    public void ClearThemeItem(Theme.DataType dataType, string name, string themeType)
+    public void ClearThemeItem(Theme.DataType dataType, StringName name, StringName themeType)
     {
         var __mb = __mb_clear_theme_item;
         if (__mb == 0)
@@ -19767,8 +19767,8 @@ public unsafe partial class Theme : Resource
             __mb_clear_theme_item = __mb;
         }
         long __a0 = (long)dataType;
-        ulong __a1 = StringNames.Get(name).Opaque;
-        ulong __a2 = StringNames.Get(themeType).Opaque;
+        ulong __a1 = name.NativeValue;
+        ulong __a2 = themeType.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19816,7 +19816,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_set_type_variation;
-    public void SetTypeVariation(string themeType, string baseType)
+    public void SetTypeVariation(StringName themeType, StringName baseType)
     {
         var __mb = __mb_set_type_variation;
         if (__mb == 0)
@@ -19825,8 +19825,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.set_type_variation is not available in this engine build.");
             __mb_set_type_variation = __mb;
         }
-        ulong __a0 = StringNames.Get(themeType).Opaque;
-        ulong __a1 = StringNames.Get(baseType).Opaque;
+        ulong __a0 = themeType.NativeValue;
+        ulong __a1 = baseType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19834,7 +19834,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_is_type_variation;
-    public bool IsTypeVariation(string themeType, string baseType)
+    public bool IsTypeVariation(StringName themeType, StringName baseType)
     {
         var __mb = __mb_is_type_variation;
         if (__mb == 0)
@@ -19843,8 +19843,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.is_type_variation is not available in this engine build.");
             __mb_is_type_variation = __mb;
         }
-        ulong __a0 = StringNames.Get(themeType).Opaque;
-        ulong __a1 = StringNames.Get(baseType).Opaque;
+        ulong __a0 = themeType.NativeValue;
+        ulong __a1 = baseType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19854,7 +19854,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_clear_type_variation;
-    public void ClearTypeVariation(string themeType)
+    public void ClearTypeVariation(StringName themeType)
     {
         var __mb = __mb_clear_type_variation;
         if (__mb == 0)
@@ -19863,14 +19863,14 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.clear_type_variation is not available in this engine build.");
             __mb_clear_type_variation = __mb;
         }
-        ulong __a0 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = themeType.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_type_variation_base;
-    public string GetTypeVariationBase(string themeType)
+    public StringName GetTypeVariationBase(StringName themeType)
     {
         var __mb = __mb_get_type_variation_base;
         if (__mb == 0)
@@ -19879,16 +19879,16 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.get_type_variation_base is not available in this engine build.");
             __mb_get_type_variation_base = __mb;
         }
-        ulong __a0 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = themeType.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_type_variation_list;
-    public string[] GetTypeVariationList(string baseType)
+    public string[] GetTypeVariationList(StringName baseType)
     {
         var __mb = __mb_get_type_variation_list;
         if (__mb == 0)
@@ -19897,7 +19897,7 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.get_type_variation_list is not available in this engine build.");
             __mb_get_type_variation_list = __mb;
         }
-        ulong __a0 = StringNames.Get(baseType).Opaque;
+        ulong __a0 = baseType.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         Opaque16 __ret = default;
@@ -19906,7 +19906,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_add_type;
-    public void AddType(string themeType)
+    public void AddType(StringName themeType)
     {
         var __mb = __mb_add_type;
         if (__mb == 0)
@@ -19915,14 +19915,14 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.add_type is not available in this engine build.");
             __mb_add_type = __mb;
         }
-        ulong __a0 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = themeType.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_type;
-    public void RemoveType(string themeType)
+    public void RemoveType(StringName themeType)
     {
         var __mb = __mb_remove_type;
         if (__mb == 0)
@@ -19931,14 +19931,14 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.remove_type is not available in this engine build.");
             __mb_remove_type = __mb;
         }
-        ulong __a0 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = themeType.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_rename_type;
-    public void RenameType(string oldThemeType, string themeType)
+    public void RenameType(StringName oldThemeType, StringName themeType)
     {
         var __mb = __mb_rename_type;
         if (__mb == 0)
@@ -19947,8 +19947,8 @@ public unsafe partial class Theme : Resource
             if (__mb == 0) throw new MissingMethodException("Theme.rename_type is not available in this engine build.");
             __mb_rename_type = __mb;
         }
-        ulong __a0 = StringNames.Get(oldThemeType).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = oldThemeType.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -27886,7 +27886,7 @@ public unsafe partial class Translation : Resource
     }
 
     private static nint __mb_add_message;
-    public void AddMessage(string srcMessage, string xlatedMessage, string context = "")
+    public void AddMessage(StringName srcMessage, StringName xlatedMessage, StringName context)
     {
         var __mb = __mb_add_message;
         if (__mb == 0)
@@ -27895,9 +27895,9 @@ public unsafe partial class Translation : Resource
             if (__mb == 0) throw new MissingMethodException("Translation.add_message is not available in this engine build.");
             __mb_add_message = __mb;
         }
-        ulong __a0 = StringNames.Get(srcMessage).Opaque;
-        ulong __a1 = StringNames.Get(xlatedMessage).Opaque;
-        ulong __a2 = StringNames.Get(context).Opaque;
+        ulong __a0 = srcMessage.NativeValue;
+        ulong __a1 = xlatedMessage.NativeValue;
+        ulong __a2 = context.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -27906,7 +27906,7 @@ public unsafe partial class Translation : Resource
     }
 
     private static nint __mb_add_plural_message;
-    public void AddPluralMessage(string srcMessage, string[] xlatedMessages, string context = "")
+    public void AddPluralMessage(StringName srcMessage, string[] xlatedMessages, StringName context)
     {
         var __mb = __mb_add_plural_message;
         if (__mb == 0)
@@ -27915,9 +27915,9 @@ public unsafe partial class Translation : Resource
             if (__mb == 0) throw new MissingMethodException("Translation.add_plural_message is not available in this engine build.");
             __mb_add_plural_message = __mb;
         }
-        ulong __a0 = StringNames.Get(srcMessage).Opaque;
+        ulong __a0 = srcMessage.NativeValue;
         var __a1 = Packed.CreateStrings(xlatedMessages);
-        ulong __a2 = StringNames.Get(context).Opaque;
+        ulong __a2 = context.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -27927,7 +27927,7 @@ public unsafe partial class Translation : Resource
     }
 
     private static nint __mb_get_message;
-    public string GetMessage(string srcMessage, string context = "")
+    public StringName GetMessage(StringName srcMessage, StringName context)
     {
         var __mb = __mb_get_message;
         if (__mb == 0)
@@ -27936,18 +27936,18 @@ public unsafe partial class Translation : Resource
             if (__mb == 0) throw new MissingMethodException("Translation.get_message is not available in this engine build.");
             __mb_get_message = __mb;
         }
-        ulong __a0 = StringNames.Get(srcMessage).Opaque;
-        ulong __a1 = StringNames.Get(context).Opaque;
+        ulong __a0 = srcMessage.NativeValue;
+        ulong __a1 = context.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_plural_message;
-    public string GetPluralMessage(string srcMessage, string srcPluralMessage, int n, string context = "")
+    public StringName GetPluralMessage(StringName srcMessage, StringName srcPluralMessage, int n, StringName context)
     {
         var __mb = __mb_get_plural_message;
         if (__mb == 0)
@@ -27956,10 +27956,10 @@ public unsafe partial class Translation : Resource
             if (__mb == 0) throw new MissingMethodException("Translation.get_plural_message is not available in this engine build.");
             __mb_get_plural_message = __mb;
         }
-        ulong __a0 = StringNames.Get(srcMessage).Opaque;
-        ulong __a1 = StringNames.Get(srcPluralMessage).Opaque;
+        ulong __a0 = srcMessage.NativeValue;
+        ulong __a1 = srcPluralMessage.NativeValue;
         long __a2 = unchecked((long)n);
-        ulong __a3 = StringNames.Get(context).Opaque;
+        ulong __a3 = context.NativeValue;
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -27967,11 +27967,11 @@ public unsafe partial class Translation : Resource
         __args[3] = (nint)(&__a3);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_erase_message;
-    public void EraseMessage(string srcMessage, string context = "")
+    public void EraseMessage(StringName srcMessage, StringName context)
     {
         var __mb = __mb_erase_message;
         if (__mb == 0)
@@ -27980,8 +27980,8 @@ public unsafe partial class Translation : Resource
             if (__mb == 0) throw new MissingMethodException("Translation.erase_message is not available in this engine build.");
             __mb_erase_message = __mb;
         }
-        ulong __a0 = StringNames.Get(srcMessage).Opaque;
-        ulong __a1 = StringNames.Get(context).Opaque;
+        ulong __a0 = srcMessage.NativeValue;
+        ulong __a1 = context.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -28065,9 +28065,9 @@ public unsafe partial class Translation : Resource
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
-    public virtual string _GetPluralMessage(string srcMessage, string srcPluralMessage, int n, string context) => default!;
+    public virtual StringName _GetPluralMessage(StringName srcMessage, StringName srcPluralMessage, int n, StringName context) => default!;
 
-    public virtual string _GetMessage(string srcMessage, string context) => default!;
+    public virtual StringName _GetMessage(StringName srcMessage, StringName context) => default!;
 
     private static ulong __vsn_get_plural_message;
     private static ulong __vsn_get_message;
@@ -28077,13 +28077,13 @@ public unsafe partial class Translation : Resource
         if (__vsn_get_plural_message == 0) __vsn_get_plural_message = StringNames.Get("_get_plural_message").Opaque;
         if (nameSn == __vsn_get_plural_message)
         {
-            *(ulong*)ret = StringNames.CreateOwned(_GetPluralMessage(StringNames.Read(*(ulong*)args[0]), StringNames.Read(*(ulong*)args[1]), unchecked((int)(*(long*)args[2])), StringNames.Read(*(ulong*)args[3])) ?? "");
+            *(ulong*)ret = StringNames.CreateOwned(_GetPluralMessage(StringName.Intern(StringNames.Read(*(ulong*)args[0])), StringName.Intern(StringNames.Read(*(ulong*)args[1])), unchecked((int)(*(long*)args[2])), StringName.Intern(StringNames.Read(*(ulong*)args[3])))?.ToString() ?? "");
             return true;
         }
         if (__vsn_get_message == 0) __vsn_get_message = StringNames.Get("_get_message").Opaque;
         if (nameSn == __vsn_get_message)
         {
-            *(ulong*)ret = StringNames.CreateOwned(_GetMessage(StringNames.Read(*(ulong*)args[0]), StringNames.Read(*(ulong*)args[1])) ?? "");
+            *(ulong*)ret = StringNames.CreateOwned(_GetMessage(StringName.Intern(StringNames.Read(*(ulong*)args[0])), StringName.Intern(StringNames.Read(*(ulong*)args[1])))?.ToString() ?? "");
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);
@@ -28299,7 +28299,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_translate;
-    public string Translate(string message, string context = "")
+    public StringName Translate(StringName message, StringName context)
     {
         var __mb = __mb_translate;
         if (__mb == 0)
@@ -28308,18 +28308,18 @@ public unsafe partial class TranslationDomain : RefCounted
             if (__mb == 0) throw new MissingMethodException("TranslationDomain.translate is not available in this engine build.");
             __mb_translate = __mb;
         }
-        ulong __a0 = StringNames.Get(message).Opaque;
-        ulong __a1 = StringNames.Get(context).Opaque;
+        ulong __a0 = message.NativeValue;
+        ulong __a1 = context.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_translate_plural;
-    public string TranslatePlural(string message, string messagePlural, int n, string context = "")
+    public StringName TranslatePlural(StringName message, StringName messagePlural, int n, StringName context)
     {
         var __mb = __mb_translate_plural;
         if (__mb == 0)
@@ -28328,10 +28328,10 @@ public unsafe partial class TranslationDomain : RefCounted
             if (__mb == 0) throw new MissingMethodException("TranslationDomain.translate_plural is not available in this engine build.");
             __mb_translate_plural = __mb;
         }
-        ulong __a0 = StringNames.Get(message).Opaque;
-        ulong __a1 = StringNames.Get(messagePlural).Opaque;
+        ulong __a0 = message.NativeValue;
+        ulong __a1 = messagePlural.NativeValue;
         long __a2 = unchecked((long)n);
-        ulong __a3 = StringNames.Get(context).Opaque;
+        ulong __a3 = context.NativeValue;
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -28339,7 +28339,7 @@ public unsafe partial class TranslationDomain : RefCounted
         __args[3] = (nint)(&__a3);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_locale_override;
@@ -28687,7 +28687,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_pseudolocalize;
-    public string Pseudolocalize(string message)
+    public StringName Pseudolocalize(StringName message)
     {
         var __mb = __mb_pseudolocalize;
         if (__mb == 0)
@@ -28696,12 +28696,12 @@ public unsafe partial class TranslationDomain : RefCounted
             if (__mb == 0) throw new MissingMethodException("TranslationDomain.pseudolocalize is not available in this engine build.");
             __mb_pseudolocalize = __mb;
         }
-        ulong __a0 = StringNames.Get(message).Opaque;
+        ulong __a0 = message.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 }
 
@@ -28951,7 +28951,7 @@ public static unsafe partial class TranslationServer
     }
 
     private static nint __mb_translate;
-    public static string Translate(string message, string context = "")
+    public static StringName Translate(StringName message, StringName context)
     {
         var __mb = __mb_translate;
         if (__mb == 0)
@@ -28960,18 +28960,18 @@ public static unsafe partial class TranslationServer
             if (__mb == 0) throw new MissingMethodException("TranslationServer.translate is not available in this engine build.");
             __mb_translate = __mb;
         }
-        ulong __a0 = StringNames.Get(message).Opaque;
-        ulong __a1 = StringNames.Get(context).Opaque;
+        ulong __a0 = message.NativeValue;
+        ulong __a1 = context.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_translate_plural;
-    public static string TranslatePlural(string message, string pluralMessage, int n, string context = "")
+    public static StringName TranslatePlural(StringName message, StringName pluralMessage, int n, StringName context)
     {
         var __mb = __mb_translate_plural;
         if (__mb == 0)
@@ -28980,10 +28980,10 @@ public static unsafe partial class TranslationServer
             if (__mb == 0) throw new MissingMethodException("TranslationServer.translate_plural is not available in this engine build.");
             __mb_translate_plural = __mb;
         }
-        ulong __a0 = StringNames.Get(message).Opaque;
-        ulong __a1 = StringNames.Get(pluralMessage).Opaque;
+        ulong __a0 = message.NativeValue;
+        ulong __a1 = pluralMessage.NativeValue;
         long __a2 = unchecked((long)n);
-        ulong __a3 = StringNames.Get(context).Opaque;
+        ulong __a3 = context.NativeValue;
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -28991,7 +28991,7 @@ public static unsafe partial class TranslationServer
         __args[3] = (nint)(&__a3);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_add_translation;
@@ -29121,7 +29121,7 @@ public static unsafe partial class TranslationServer
     }
 
     private static nint __mb_has_domain;
-    public static bool HasDomain(string domain)
+    public static bool HasDomain(StringName domain)
     {
         var __mb = __mb_has_domain;
         if (__mb == 0)
@@ -29130,7 +29130,7 @@ public static unsafe partial class TranslationServer
             if (__mb == 0) throw new MissingMethodException("TranslationServer.has_domain is not available in this engine build.");
             __mb_has_domain = __mb;
         }
-        ulong __a0 = StringNames.Get(domain).Opaque;
+        ulong __a0 = domain.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -29139,7 +29139,7 @@ public static unsafe partial class TranslationServer
     }
 
     private static nint __mb_get_or_add_domain;
-    public static TranslationDomain? GetOrAddDomain(string domain)
+    public static TranslationDomain? GetOrAddDomain(StringName domain)
     {
         var __mb = __mb_get_or_add_domain;
         if (__mb == 0)
@@ -29148,7 +29148,7 @@ public static unsafe partial class TranslationServer
             if (__mb == 0) throw new MissingMethodException("TranslationServer.get_or_add_domain is not available in this engine build.");
             __mb_get_or_add_domain = __mb;
         }
-        ulong __a0 = StringNames.Get(domain).Opaque;
+        ulong __a0 = domain.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
@@ -29157,7 +29157,7 @@ public static unsafe partial class TranslationServer
     }
 
     private static nint __mb_remove_domain;
-    public static void RemoveDomain(string domain)
+    public static void RemoveDomain(StringName domain)
     {
         var __mb = __mb_remove_domain;
         if (__mb == 0)
@@ -29166,7 +29166,7 @@ public static unsafe partial class TranslationServer
             if (__mb == 0) throw new MissingMethodException("TranslationServer.remove_domain is not available in this engine build.");
             __mb_remove_domain = __mb;
         }
-        ulong __a0 = StringNames.Get(domain).Opaque;
+        ulong __a0 = domain.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
@@ -29308,7 +29308,7 @@ public static unsafe partial class TranslationServer
     }
 
     private static nint __mb_pseudolocalize;
-    public static string Pseudolocalize(string message)
+    public static StringName Pseudolocalize(StringName message)
     {
         var __mb = __mb_pseudolocalize;
         if (__mb == 0)
@@ -29317,12 +29317,12 @@ public static unsafe partial class TranslationServer
             if (__mb == 0) throw new MissingMethodException("TranslationServer.pseudolocalize is not available in this engine build.");
             __mb_pseudolocalize = __mb;
         }
-        ulong __a0 = StringNames.Get(message).Opaque;
+        ulong __a0 = message.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 }
 
@@ -31651,7 +31651,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_set_custom_draw;
-    public void SetCustomDraw(int column, GodotObject? @object, string callback)
+    public void SetCustomDraw(int column, GodotObject? @object, StringName callback)
     {
         var __mb = __mb_set_custom_draw;
         if (__mb == 0)
@@ -31662,7 +31662,7 @@ public unsafe partial class TreeItem : GodotObject
         }
         long __a0 = unchecked((long)column);
         nint __a1 = @object?.NativePtr ?? 0;
-        ulong __a2 = StringNames.Get(callback).Opaque;
+        ulong __a2 = callback.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -32998,7 +32998,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_call_recursive;
-    public void CallRecursive(string method, params Variant[] args)
+    public void CallRecursive(StringName method, params Variant[] args)
     {
         var __mb = __mb_call_recursive;
         if (__mb == 0)
@@ -33010,7 +33010,7 @@ public unsafe partial class TreeItem : GodotObject
         var __n = 1 + args.Length;
         var __ptrs = stackalloc nint[Math.Max(__n, 1)];
         var __lead = stackalloc NativeVariant[1];
-        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, method.NativeValue);
         __ptrs[0] = (nint)(__lead + 0);
         var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
         for (var __i = 0; __i < args.Length; __i++)

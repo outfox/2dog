@@ -46,7 +46,7 @@ public unsafe partial class GodotObject : IDisposable
     /// <c>await ToSignal(GetTree().CreateTimer(1.0), "timeout")</c>.
     /// The result is the emitted signal's arguments.
     /// </summary>
-    public SignalAwaiter ToSignal(GodotObject source, string signal) => new(source, signal);
+    public SignalAwaiter ToSignal(GodotObject source, StringName signal) => new(source, signal);
 
     /// <summary>Explicitly destroys a non-RefCounted object (Node.free() semantics).</summary>
     public void Free()

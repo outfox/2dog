@@ -18,10 +18,10 @@ public sealed unsafe class Callable : IDisposable
 
     internal Callable(Opaque16 adopt) => Native = adopt;
 
-    public Callable(GodotObject target, string method)
+    public Callable(GodotObject target, StringName method)
     {
         var obj = target.NativePtr;
-        var sn = StringNames.Get(method).Opaque;
+        var sn = method.NativeValue;
         Opaque16 native = default;
         var args = stackalloc nint[2];
         args[0] = (nint)(&obj);

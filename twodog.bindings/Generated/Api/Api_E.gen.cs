@@ -1336,7 +1336,7 @@ public unsafe partial class EditorDock : MarginContainer
         set => SetClosable(value);
     }
 
-    public string IconName
+    public StringName IconName
     {
         get => GetIconName();
         set => SetIconName(value);
@@ -1591,7 +1591,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_set_icon_name;
-    internal void SetIconName(string iconName)
+    internal void SetIconName(StringName iconName)
     {
         var __mb = __mb_set_icon_name;
         if (__mb == 0)
@@ -1600,14 +1600,14 @@ public unsafe partial class EditorDock : MarginContainer
             if (__mb == 0) throw new MissingMethodException("EditorDock.set_icon_name is not available in this engine build.");
             __mb_set_icon_name = __mb;
         }
-        ulong __a0 = StringNames.Get(iconName).Opaque;
+        ulong __a0 = iconName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_icon_name;
-    internal string GetIconName()
+    internal StringName GetIconName()
     {
         var __mb = __mb_get_icon_name;
         if (__mb == 0)
@@ -1618,7 +1618,7 @@ public unsafe partial class EditorDock : MarginContainer
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_dock_icon;
@@ -2542,7 +2542,7 @@ public unsafe partial class EditorExportPlatformExtension : EditorExportPlatform
 
     public virtual bool _GetExportOptionVisibility(EditorExportPreset? preset, string option) => default!;
 
-    public virtual string _GetExportOptionWarning(EditorExportPreset? preset, string option) => default!;
+    public virtual string _GetExportOptionWarning(EditorExportPreset? preset, StringName option) => default!;
 
     public virtual string _GetOsName() => default!;
 
@@ -2654,7 +2654,7 @@ public unsafe partial class EditorExportPlatformExtension : EditorExportPlatform
         if (__vsn_get_export_option_warning == 0) __vsn_get_export_option_warning = StringNames.Get("_get_export_option_warning").Opaque;
         if (nameSn == __vsn_get_export_option_warning)
         {
-            *(ulong*)ret = NativeString.Create(_GetExportOptionWarning((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), StringNames.Read(*(ulong*)args[1])) ?? "");
+            *(ulong*)ret = NativeString.Create(_GetExportOptionWarning((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), StringName.Intern(StringNames.Read(*(ulong*)args[1]))) ?? "");
             return true;
         }
         if (__vsn_get_os_name == 0) __vsn_get_os_name = StringNames.Get("_get_os_name").Opaque;
@@ -3199,7 +3199,7 @@ public unsafe partial class EditorExportPlugin : RefCounted
     }
 
     private static nint __mb_get_option;
-    public Variant GetOption(string name)
+    public Variant GetOption(StringName name)
     {
         var __mb = __mb_get_option;
         if (__mb == 0)
@@ -3208,7 +3208,7 @@ public unsafe partial class EditorExportPlugin : RefCounted
             if (__mb == 0) throw new MissingMethodException("EditorExportPlugin.get_option is not available in this engine build.");
             __mb_get_option = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -3498,7 +3498,7 @@ public unsafe partial class EditorExportPreset : RefCounted
     }
 
     private static nint __mb_has;
-    public bool Has(string property)
+    public bool Has(StringName property)
     {
         var __mb = __mb_has;
         if (__mb == 0)
@@ -3507,7 +3507,7 @@ public unsafe partial class EditorExportPreset : RefCounted
             if (__mb == 0) throw new MissingMethodException("EditorExportPreset.has is not available in this engine build.");
             __mb_has = __mb;
         }
-        ulong __a0 = StringNames.Get(property).Opaque;
+        ulong __a0 = property.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -3601,7 +3601,7 @@ public unsafe partial class EditorExportPreset : RefCounted
     }
 
     private static nint __mb_get_project_setting;
-    public Variant GetProjectSetting(string name)
+    public Variant GetProjectSetting(StringName name)
     {
         var __mb = __mb_get_project_setting;
         if (__mb == 0)
@@ -3610,7 +3610,7 @@ public unsafe partial class EditorExportPreset : RefCounted
             if (__mb == 0) throw new MissingMethodException("EditorExportPreset.get_project_setting is not available in this engine build.");
             __mb_get_project_setting = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -3859,7 +3859,7 @@ public unsafe partial class EditorExportPreset : RefCounted
     }
 
     private static nint __mb_get_or_env;
-    public Variant GetOrEnv(string name, string envVar)
+    public Variant GetOrEnv(StringName name, string envVar)
     {
         var __mb = __mb_get_or_env;
         if (__mb == 0)
@@ -3868,7 +3868,7 @@ public unsafe partial class EditorExportPreset : RefCounted
             if (__mb == 0) throw new MissingMethodException("EditorExportPreset.get_or_env is not available in this engine build.");
             __mb_get_or_env = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         ulong __a1 = NativeString.Create(envVar);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3880,7 +3880,7 @@ public unsafe partial class EditorExportPreset : RefCounted
     }
 
     private static nint __mb_get_version;
-    public string GetVersion(string name, bool windowsVersion)
+    public string GetVersion(StringName name, bool windowsVersion)
     {
         var __mb = __mb_get_version;
         if (__mb == 0)
@@ -3889,7 +3889,7 @@ public unsafe partial class EditorExportPreset : RefCounted
             if (__mb == 0) throw new MissingMethodException("EditorExportPreset.get_version is not available in this engine build.");
             __mb_get_version = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         byte __a1 = windowsVersion ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3926,7 +3926,7 @@ public unsafe partial class EditorFeatureProfile : RefCounted
     }
 
     private static nint __mb_set_disable_class;
-    public void SetDisableClass(string className, bool disable)
+    public void SetDisableClass(StringName className, bool disable)
     {
         var __mb = __mb_set_disable_class;
         if (__mb == 0)
@@ -3935,7 +3935,7 @@ public unsafe partial class EditorFeatureProfile : RefCounted
             if (__mb == 0) throw new MissingMethodException("EditorFeatureProfile.set_disable_class is not available in this engine build.");
             __mb_set_disable_class = __mb;
         }
-        ulong __a0 = StringNames.Get(className).Opaque;
+        ulong __a0 = className.NativeValue;
         byte __a1 = disable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3944,7 +3944,7 @@ public unsafe partial class EditorFeatureProfile : RefCounted
     }
 
     private static nint __mb_is_class_disabled;
-    public bool IsClassDisabled(string className)
+    public bool IsClassDisabled(StringName className)
     {
         var __mb = __mb_is_class_disabled;
         if (__mb == 0)
@@ -3953,7 +3953,7 @@ public unsafe partial class EditorFeatureProfile : RefCounted
             if (__mb == 0) throw new MissingMethodException("EditorFeatureProfile.is_class_disabled is not available in this engine build.");
             __mb_is_class_disabled = __mb;
         }
-        ulong __a0 = StringNames.Get(className).Opaque;
+        ulong __a0 = className.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -3962,7 +3962,7 @@ public unsafe partial class EditorFeatureProfile : RefCounted
     }
 
     private static nint __mb_set_disable_class_editor;
-    public void SetDisableClassEditor(string className, bool disable)
+    public void SetDisableClassEditor(StringName className, bool disable)
     {
         var __mb = __mb_set_disable_class_editor;
         if (__mb == 0)
@@ -3971,7 +3971,7 @@ public unsafe partial class EditorFeatureProfile : RefCounted
             if (__mb == 0) throw new MissingMethodException("EditorFeatureProfile.set_disable_class_editor is not available in this engine build.");
             __mb_set_disable_class_editor = __mb;
         }
-        ulong __a0 = StringNames.Get(className).Opaque;
+        ulong __a0 = className.NativeValue;
         byte __a1 = disable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3980,7 +3980,7 @@ public unsafe partial class EditorFeatureProfile : RefCounted
     }
 
     private static nint __mb_is_class_editor_disabled;
-    public bool IsClassEditorDisabled(string className)
+    public bool IsClassEditorDisabled(StringName className)
     {
         var __mb = __mb_is_class_editor_disabled;
         if (__mb == 0)
@@ -3989,7 +3989,7 @@ public unsafe partial class EditorFeatureProfile : RefCounted
             if (__mb == 0) throw new MissingMethodException("EditorFeatureProfile.is_class_editor_disabled is not available in this engine build.");
             __mb_is_class_editor_disabled = __mb;
         }
-        ulong __a0 = StringNames.Get(className).Opaque;
+        ulong __a0 = className.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -3998,7 +3998,7 @@ public unsafe partial class EditorFeatureProfile : RefCounted
     }
 
     private static nint __mb_set_disable_class_property;
-    public void SetDisableClassProperty(string className, string property, bool disable)
+    public void SetDisableClassProperty(StringName className, StringName property, bool disable)
     {
         var __mb = __mb_set_disable_class_property;
         if (__mb == 0)
@@ -4007,8 +4007,8 @@ public unsafe partial class EditorFeatureProfile : RefCounted
             if (__mb == 0) throw new MissingMethodException("EditorFeatureProfile.set_disable_class_property is not available in this engine build.");
             __mb_set_disable_class_property = __mb;
         }
-        ulong __a0 = StringNames.Get(className).Opaque;
-        ulong __a1 = StringNames.Get(property).Opaque;
+        ulong __a0 = className.NativeValue;
+        ulong __a1 = property.NativeValue;
         byte __a2 = disable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -4018,7 +4018,7 @@ public unsafe partial class EditorFeatureProfile : RefCounted
     }
 
     private static nint __mb_is_class_property_disabled;
-    public bool IsClassPropertyDisabled(string className, string property)
+    public bool IsClassPropertyDisabled(StringName className, StringName property)
     {
         var __mb = __mb_is_class_property_disabled;
         if (__mb == 0)
@@ -4027,8 +4027,8 @@ public unsafe partial class EditorFeatureProfile : RefCounted
             if (__mb == 0) throw new MissingMethodException("EditorFeatureProfile.is_class_property_disabled is not available in this engine build.");
             __mb_is_class_property_disabled = __mb;
         }
-        ulong __a0 = StringNames.Get(className).Opaque;
-        ulong __a1 = StringNames.Get(property).Opaque;
+        ulong __a0 = className.NativeValue;
+        ulong __a1 = property.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -4477,7 +4477,7 @@ public unsafe partial class EditorFileSystemDirectory : GodotObject
     }
 
     private static nint __mb_get_file_type;
-    public string GetFileType(int idx)
+    public StringName GetFileType(int idx)
     {
         var __mb = __mb_get_file_type;
         if (__mb == 0)
@@ -4491,7 +4491,7 @@ public unsafe partial class EditorFileSystemDirectory : GodotObject
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_file_script_class_name;
@@ -5814,7 +5814,7 @@ public unsafe partial class EditorInterface : GodotObject
     }
 
     private static nint __mb_popup_create_dialog;
-    public void PopupCreateDialog(Callable callback, string baseType, string currentType, string dialogTitle, Godot.Collections.Array typeBlocklist)
+    public void PopupCreateDialog(Callable callback, StringName baseType, string currentType, string dialogTitle, Godot.Collections.Array typeBlocklist)
     {
         var __mb = __mb_popup_create_dialog;
         if (__mb == 0)
@@ -5824,7 +5824,7 @@ public unsafe partial class EditorInterface : GodotObject
             __mb_popup_create_dialog = __mb;
         }
         var __a0 = callback.Native;
-        ulong __a1 = StringNames.Get(baseType).Opaque;
+        ulong __a1 = baseType.NativeValue;
         ulong __a2 = NativeString.Create(currentType);
         ulong __a3 = NativeString.Create(dialogTitle);
         ulong __a4 = typeBlocklist.Native;
@@ -8261,44 +8261,44 @@ public unsafe partial class EditorProperty : Container
         set => SetNameSplitRatio(value);
     }
 
-    public delegate void PropertyChangedEventHandler(string property, Variant value, string field, bool changing);
+    public delegate void PropertyChangedEventHandler(StringName property, Variant value, StringName field, bool changing);
 
     public event PropertyChangedEventHandler PropertyChanged
     {
-        add => Connect("property_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), new Variant(Variants.NewCopy(*((NativeVariant**)__a)[1])), Variants.ToManagedString(*((NativeVariant**)__a)[2]), Variants.ToBool(*((NativeVariant**)__a)[3]))));
-        remove => Disconnect("property_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), new Variant(Variants.NewCopy(*((NativeVariant**)__a)[1])), Variants.ToManagedString(*((NativeVariant**)__a)[2]), Variants.ToBool(*((NativeVariant**)__a)[3]))));
+        add => Connect("property_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyChangedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), new Variant(Variants.NewCopy(*((NativeVariant**)__a)[1])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[2])), Variants.ToBool(*((NativeVariant**)__a)[3]))));
+        remove => Disconnect("property_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyChangedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), new Variant(Variants.NewCopy(*((NativeVariant**)__a)[1])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[2])), Variants.ToBool(*((NativeVariant**)__a)[3]))));
     }
 
-    public delegate void PropertyKeyedEventHandler(string property);
+    public delegate void PropertyKeyedEventHandler(StringName property);
 
     public event PropertyKeyedEventHandler PropertyKeyed
     {
-        add => Connect("property_keyed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyKeyedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Disconnect("property_keyed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyKeyedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Connect("property_keyed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyKeyedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("property_keyed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyKeyedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
-    public delegate void PropertyDeletedEventHandler(string property);
+    public delegate void PropertyDeletedEventHandler(StringName property);
 
     public event PropertyDeletedEventHandler PropertyDeleted
     {
-        add => Connect("property_deleted", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyDeletedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Disconnect("property_deleted", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyDeletedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Connect("property_deleted", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyDeletedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("property_deleted", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyDeletedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
-    public delegate void PropertyKeyedWithValueEventHandler(string property, Variant value);
+    public delegate void PropertyKeyedWithValueEventHandler(StringName property, Variant value);
 
     public event PropertyKeyedWithValueEventHandler PropertyKeyedWithValue
     {
-        add => Connect("property_keyed_with_value", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyKeyedWithValueEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), new Variant(Variants.NewCopy(*((NativeVariant**)__a)[1])))));
-        remove => Disconnect("property_keyed_with_value", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyKeyedWithValueEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), new Variant(Variants.NewCopy(*((NativeVariant**)__a)[1])))));
+        add => Connect("property_keyed_with_value", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyKeyedWithValueEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), new Variant(Variants.NewCopy(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("property_keyed_with_value", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyKeyedWithValueEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), new Variant(Variants.NewCopy(*((NativeVariant**)__a)[1])))));
     }
 
-    public delegate void PropertyCheckedEventHandler(string property, bool @checked);
+    public delegate void PropertyCheckedEventHandler(StringName property, bool @checked);
 
     public event PropertyCheckedEventHandler PropertyChecked
     {
-        add => Connect("property_checked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyCheckedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
-        remove => Disconnect("property_checked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyCheckedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        add => Connect("property_checked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyCheckedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("property_checked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyCheckedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), Variants.ToBool(*((NativeVariant**)__a)[1]))));
     }
 
     public delegate void PropertyOverriddenEventHandler();
@@ -8309,28 +8309,28 @@ public unsafe partial class EditorProperty : Container
         remove => Disconnect("property_overridden", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyOverriddenEventHandler)__d)()));
     }
 
-    public delegate void PropertyFavoritedEventHandler(string property, bool favorited);
+    public delegate void PropertyFavoritedEventHandler(StringName property, bool favorited);
 
     public event PropertyFavoritedEventHandler PropertyFavorited
     {
-        add => Connect("property_favorited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyFavoritedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
-        remove => Disconnect("property_favorited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyFavoritedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        add => Connect("property_favorited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyFavoritedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("property_favorited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyFavoritedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), Variants.ToBool(*((NativeVariant**)__a)[1]))));
     }
 
-    public delegate void PropertyPinnedEventHandler(string property, bool pinned);
+    public delegate void PropertyPinnedEventHandler(StringName property, bool pinned);
 
     public event PropertyPinnedEventHandler PropertyPinned
     {
-        add => Connect("property_pinned", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyPinnedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
-        remove => Disconnect("property_pinned", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyPinnedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        add => Connect("property_pinned", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyPinnedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("property_pinned", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyPinnedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), Variants.ToBool(*((NativeVariant**)__a)[1]))));
     }
 
-    public delegate void PropertyCanRevertChangedEventHandler(string property, bool canRevert);
+    public delegate void PropertyCanRevertChangedEventHandler(StringName property, bool canRevert);
 
     public event PropertyCanRevertChangedEventHandler PropertyCanRevertChanged
     {
-        add => Connect("property_can_revert_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyCanRevertChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
-        remove => Disconnect("property_can_revert_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyCanRevertChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        add => Connect("property_can_revert_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyCanRevertChangedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("property_can_revert_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyCanRevertChangedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), Variants.ToBool(*((NativeVariant**)__a)[1]))));
     }
 
     public delegate void ResourceSelectedEventHandler(string path, Resource? resource);
@@ -8341,12 +8341,12 @@ public unsafe partial class EditorProperty : Container
         remove => Disconnect("resource_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResourceSelectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), (Resource?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false))));
     }
 
-    public delegate void ObjectIdSelectedEventHandler(string property, long id);
+    public delegate void ObjectIdSelectedEventHandler(StringName property, long id);
 
     public event ObjectIdSelectedEventHandler ObjectIdSelected
     {
-        add => Connect("object_id_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ObjectIdSelectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
-        remove => Disconnect("object_id_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ObjectIdSelectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        add => Connect("object_id_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ObjectIdSelectedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("object_id_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ObjectIdSelectedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
     }
 
     public delegate void SelectedEventHandler(string path, long focusableIdx);
@@ -8638,7 +8638,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_get_edited_property;
-    public string GetEditedProperty()
+    public StringName GetEditedProperty()
     {
         var __mb = __mb_get_edited_property;
         if (__mb == 0)
@@ -8649,7 +8649,7 @@ public unsafe partial class EditorProperty : Container
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_edited_object;
@@ -8850,7 +8850,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_set_object_and_property;
-    public void SetObjectAndProperty(GodotObject? @object, string property)
+    public void SetObjectAndProperty(GodotObject? @object, StringName property)
     {
         var __mb = __mb_set_object_and_property;
         if (__mb == 0)
@@ -8860,7 +8860,7 @@ public unsafe partial class EditorProperty : Container
             __mb_set_object_and_property = __mb;
         }
         nint __a0 = @object?.NativePtr ?? 0;
-        ulong __a1 = StringNames.Get(property).Opaque;
+        ulong __a1 = property.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -8884,7 +8884,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_emit_changed;
-    public void EmitChanged(string property, Variant value, string field = "", bool changing = false)
+    public void EmitChanged(StringName property, Variant value, StringName field, bool changing = false)
     {
         var __mb = __mb_emit_changed;
         if (__mb == 0)
@@ -8893,9 +8893,9 @@ public unsafe partial class EditorProperty : Container
             if (__mb == 0) throw new MissingMethodException("EditorProperty.emit_changed is not available in this engine build.");
             __mb_emit_changed = __mb;
         }
-        ulong __a0 = StringNames.Get(property).Opaque;
+        ulong __a0 = property.NativeValue;
         var __a1 = value.Native;
-        ulong __a2 = StringNames.Get(field).Opaque;
+        ulong __a2 = field.NativeValue;
         byte __a3 = changing ? (byte)1 : (byte)0;
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
@@ -9216,7 +9216,7 @@ public unsafe partial class EditorResourcePreview : Node
     }
 
     private static nint __mb_queue_resource_preview;
-    public void QueueResourcePreview(string path, GodotObject? receiver, string receiverFunc, Variant userdata)
+    public void QueueResourcePreview(string path, GodotObject? receiver, StringName receiverFunc, Variant userdata)
     {
         var __mb = __mb_queue_resource_preview;
         if (__mb == 0)
@@ -9227,7 +9227,7 @@ public unsafe partial class EditorResourcePreview : Node
         }
         ulong __a0 = NativeString.Create(path);
         nint __a1 = receiver?.NativePtr ?? 0;
-        ulong __a2 = StringNames.Get(receiverFunc).Opaque;
+        ulong __a2 = receiverFunc.NativeValue;
         var __a3 = userdata.Native;
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
@@ -9239,7 +9239,7 @@ public unsafe partial class EditorResourcePreview : Node
     }
 
     private static nint __mb_queue_edited_resource_preview;
-    public void QueueEditedResourcePreview(Resource? resource, GodotObject? receiver, string receiverFunc, Variant userdata)
+    public void QueueEditedResourcePreview(Resource? resource, GodotObject? receiver, StringName receiverFunc, Variant userdata)
     {
         var __mb = __mb_queue_edited_resource_preview;
         if (__mb == 0)
@@ -9250,7 +9250,7 @@ public unsafe partial class EditorResourcePreview : Node
         }
         nint __a0 = resource?.NativePtr ?? 0;
         nint __a1 = receiver?.NativePtr ?? 0;
-        ulong __a2 = StringNames.Get(receiverFunc).Opaque;
+        ulong __a2 = receiverFunc.NativeValue;
         var __a3 = userdata.Native;
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
@@ -9608,7 +9608,7 @@ public unsafe partial class EditorScenePostImportPlugin : RefCounted
     }
 
     private static nint __mb_get_option_value;
-    public Variant GetOptionValue(string name)
+    public Variant GetOptionValue(StringName name)
     {
         var __mb = __mb_get_option_value;
         if (__mb == 0)
@@ -9617,7 +9617,7 @@ public unsafe partial class EditorScenePostImportPlugin : RefCounted
             if (__mb == 0) throw new MissingMethodException("EditorScenePostImportPlugin.get_option_value is not available in this engine build.");
             __mb_get_option_value = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -10042,7 +10042,7 @@ public unsafe partial class EditorSettings : Resource
     }
 
     private static nint __mb_set_initial_value;
-    public void SetInitialValue(string name, Variant value, bool updateCurrent)
+    public void SetInitialValue(StringName name, Variant value, bool updateCurrent)
     {
         var __mb = __mb_set_initial_value;
         if (__mb == 0)
@@ -10051,7 +10051,7 @@ public unsafe partial class EditorSettings : Resource
             if (__mb == 0) throw new MissingMethodException("EditorSettings.set_initial_value is not available in this engine build.");
             __mb_set_initial_value = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = value.Native;
         byte __a2 = updateCurrent ? (byte)1 : (byte)0;
         var __args = stackalloc nint[3];
@@ -10922,7 +10922,7 @@ public unsafe partial class EditorUndoRedoManager : GodotObject
     }
 
     private static nint __mb_add_do_method;
-    public void AddDoMethod(GodotObject? @object, string method, params Variant[] args)
+    public void AddDoMethod(GodotObject? @object, StringName method, params Variant[] args)
     {
         var __mb = __mb_add_do_method;
         if (__mb == 0)
@@ -10936,7 +10936,7 @@ public unsafe partial class EditorUndoRedoManager : GodotObject
         var __lead = stackalloc NativeVariant[2];
         __lead[0] = Variants.FromObject(@object?.NativePtr ?? 0);
         __ptrs[0] = (nint)(__lead + 0);
-        __lead[1] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __lead[1] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, method.NativeValue);
         __ptrs[1] = (nint)(__lead + 1);
         var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
         for (var __i = 0; __i < args.Length; __i++)
@@ -10957,7 +10957,7 @@ public unsafe partial class EditorUndoRedoManager : GodotObject
     }
 
     private static nint __mb_add_undo_method;
-    public void AddUndoMethod(GodotObject? @object, string method, params Variant[] args)
+    public void AddUndoMethod(GodotObject? @object, StringName method, params Variant[] args)
     {
         var __mb = __mb_add_undo_method;
         if (__mb == 0)
@@ -10971,7 +10971,7 @@ public unsafe partial class EditorUndoRedoManager : GodotObject
         var __lead = stackalloc NativeVariant[2];
         __lead[0] = Variants.FromObject(@object?.NativePtr ?? 0);
         __ptrs[0] = (nint)(__lead + 0);
-        __lead[1] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __lead[1] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, method.NativeValue);
         __ptrs[1] = (nint)(__lead + 1);
         var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
         for (var __i = 0; __i < args.Length; __i++)
@@ -10992,7 +10992,7 @@ public unsafe partial class EditorUndoRedoManager : GodotObject
     }
 
     private static nint __mb_add_do_property;
-    public void AddDoProperty(GodotObject? @object, string property, Variant value)
+    public void AddDoProperty(GodotObject? @object, StringName property, Variant value)
     {
         var __mb = __mb_add_do_property;
         if (__mb == 0)
@@ -11002,7 +11002,7 @@ public unsafe partial class EditorUndoRedoManager : GodotObject
             __mb_add_do_property = __mb;
         }
         nint __a0 = @object?.NativePtr ?? 0;
-        ulong __a1 = StringNames.Get(property).Opaque;
+        ulong __a1 = property.NativeValue;
         var __a2 = value.Native;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -11012,7 +11012,7 @@ public unsafe partial class EditorUndoRedoManager : GodotObject
     }
 
     private static nint __mb_add_undo_property;
-    public void AddUndoProperty(GodotObject? @object, string property, Variant value)
+    public void AddUndoProperty(GodotObject? @object, StringName property, Variant value)
     {
         var __mb = __mb_add_undo_property;
         if (__mb == 0)
@@ -11022,7 +11022,7 @@ public unsafe partial class EditorUndoRedoManager : GodotObject
             __mb_add_undo_property = __mb;
         }
         nint __a0 = @object?.NativePtr ?? 0;
-        ulong __a1 = StringNames.Get(property).Opaque;
+        ulong __a1 = property.NativeValue;
         var __a2 = value.Native;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -11958,7 +11958,7 @@ public static unsafe partial class Engine
     }
 
     private static nint __mb_has_singleton;
-    public static bool HasSingleton(string name)
+    public static bool HasSingleton(StringName name)
     {
         var __mb = __mb_has_singleton;
         if (__mb == 0)
@@ -11967,7 +11967,7 @@ public static unsafe partial class Engine
             if (__mb == 0) throw new MissingMethodException("Engine.has_singleton is not available in this engine build.");
             __mb_has_singleton = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -11976,7 +11976,7 @@ public static unsafe partial class Engine
     }
 
     private static nint __mb_get_singleton;
-    public static GodotObject? GetSingleton(string name)
+    public static GodotObject? GetSingleton(StringName name)
     {
         var __mb = __mb_get_singleton;
         if (__mb == 0)
@@ -11985,7 +11985,7 @@ public static unsafe partial class Engine
             if (__mb == 0) throw new MissingMethodException("Engine.get_singleton is not available in this engine build.");
             __mb_get_singleton = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
@@ -11994,7 +11994,7 @@ public static unsafe partial class Engine
     }
 
     private static nint __mb_register_singleton;
-    public static void RegisterSingleton(string name, GodotObject? instance)
+    public static void RegisterSingleton(StringName name, GodotObject? instance)
     {
         var __mb = __mb_register_singleton;
         if (__mb == 0)
@@ -12003,7 +12003,7 @@ public static unsafe partial class Engine
             if (__mb == 0) throw new MissingMethodException("Engine.register_singleton is not available in this engine build.");
             __mb_register_singleton = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = instance?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -12012,7 +12012,7 @@ public static unsafe partial class Engine
     }
 
     private static nint __mb_unregister_singleton;
-    public static void UnregisterSingleton(string name)
+    public static void UnregisterSingleton(StringName name)
     {
         var __mb = __mb_unregister_singleton;
         if (__mb == 0)
@@ -12021,7 +12021,7 @@ public static unsafe partial class Engine
             if (__mb == 0) throw new MissingMethodException("Engine.unregister_singleton is not available in this engine build.");
             __mb_unregister_singleton = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
@@ -12262,7 +12262,7 @@ public static unsafe partial class EngineDebugger
     }
 
     private static nint __mb_register_profiler;
-    public static void RegisterProfiler(string name, EngineProfiler? profiler)
+    public static void RegisterProfiler(StringName name, EngineProfiler? profiler)
     {
         var __mb = __mb_register_profiler;
         if (__mb == 0)
@@ -12271,7 +12271,7 @@ public static unsafe partial class EngineDebugger
             if (__mb == 0) throw new MissingMethodException("EngineDebugger.register_profiler is not available in this engine build.");
             __mb_register_profiler = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = profiler?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -12280,7 +12280,7 @@ public static unsafe partial class EngineDebugger
     }
 
     private static nint __mb_unregister_profiler;
-    public static void UnregisterProfiler(string name)
+    public static void UnregisterProfiler(StringName name)
     {
         var __mb = __mb_unregister_profiler;
         if (__mb == 0)
@@ -12289,14 +12289,14 @@ public static unsafe partial class EngineDebugger
             if (__mb == 0) throw new MissingMethodException("EngineDebugger.unregister_profiler is not available in this engine build.");
             __mb_unregister_profiler = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_profiling;
-    public static bool IsProfiling(string name)
+    public static bool IsProfiling(StringName name)
     {
         var __mb = __mb_is_profiling;
         if (__mb == 0)
@@ -12305,7 +12305,7 @@ public static unsafe partial class EngineDebugger
             if (__mb == 0) throw new MissingMethodException("EngineDebugger.is_profiling is not available in this engine build.");
             __mb_is_profiling = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -12314,7 +12314,7 @@ public static unsafe partial class EngineDebugger
     }
 
     private static nint __mb_has_profiler;
-    public static bool HasProfiler(string name)
+    public static bool HasProfiler(StringName name)
     {
         var __mb = __mb_has_profiler;
         if (__mb == 0)
@@ -12323,7 +12323,7 @@ public static unsafe partial class EngineDebugger
             if (__mb == 0) throw new MissingMethodException("EngineDebugger.has_profiler is not available in this engine build.");
             __mb_has_profiler = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -12332,7 +12332,7 @@ public static unsafe partial class EngineDebugger
     }
 
     private static nint __mb_profiler_add_frame_data;
-    public static void ProfilerAddFrameData(string name, Godot.Collections.Array data)
+    public static void ProfilerAddFrameData(StringName name, Godot.Collections.Array data)
     {
         var __mb = __mb_profiler_add_frame_data;
         if (__mb == 0)
@@ -12341,7 +12341,7 @@ public static unsafe partial class EngineDebugger
             if (__mb == 0) throw new MissingMethodException("EngineDebugger.profiler_add_frame_data is not available in this engine build.");
             __mb_profiler_add_frame_data = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         ulong __a1 = data.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -12350,7 +12350,7 @@ public static unsafe partial class EngineDebugger
     }
 
     private static nint __mb_profiler_enable;
-    public static void ProfilerEnable(string name, bool enable, Godot.Collections.Array arguments)
+    public static void ProfilerEnable(StringName name, bool enable, Godot.Collections.Array arguments)
     {
         var __mb = __mb_profiler_enable;
         if (__mb == 0)
@@ -12359,7 +12359,7 @@ public static unsafe partial class EngineDebugger
             if (__mb == 0) throw new MissingMethodException("EngineDebugger.profiler_enable is not available in this engine build.");
             __mb_profiler_enable = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         byte __a1 = enable ? (byte)1 : (byte)0;
         ulong __a2 = arguments.Native;
         var __args = stackalloc nint[3];
@@ -12370,7 +12370,7 @@ public static unsafe partial class EngineDebugger
     }
 
     private static nint __mb_register_message_capture;
-    public static void RegisterMessageCapture(string name, Callable callable)
+    public static void RegisterMessageCapture(StringName name, Callable callable)
     {
         var __mb = __mb_register_message_capture;
         if (__mb == 0)
@@ -12379,7 +12379,7 @@ public static unsafe partial class EngineDebugger
             if (__mb == 0) throw new MissingMethodException("EngineDebugger.register_message_capture is not available in this engine build.");
             __mb_register_message_capture = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = callable.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -12388,7 +12388,7 @@ public static unsafe partial class EngineDebugger
     }
 
     private static nint __mb_unregister_message_capture;
-    public static void UnregisterMessageCapture(string name)
+    public static void UnregisterMessageCapture(StringName name)
     {
         var __mb = __mb_unregister_message_capture;
         if (__mb == 0)
@@ -12397,14 +12397,14 @@ public static unsafe partial class EngineDebugger
             if (__mb == 0) throw new MissingMethodException("EngineDebugger.unregister_message_capture is not available in this engine build.");
             __mb_unregister_message_capture = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_capture;
-    public static bool HasCapture(string name)
+    public static bool HasCapture(StringName name)
     {
         var __mb = __mb_has_capture;
         if (__mb == 0)
@@ -12413,7 +12413,7 @@ public static unsafe partial class EngineDebugger
             if (__mb == 0) throw new MissingMethodException("EngineDebugger.has_capture is not available in this engine build.");
             __mb_has_capture = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -12554,7 +12554,7 @@ public static unsafe partial class EngineDebugger
     }
 
     private static nint __mb_is_breakpoint;
-    public static bool IsBreakpoint(int line, string source)
+    public static bool IsBreakpoint(int line, StringName source)
     {
         var __mb = __mb_is_breakpoint;
         if (__mb == 0)
@@ -12564,7 +12564,7 @@ public static unsafe partial class EngineDebugger
             __mb_is_breakpoint = __mb;
         }
         long __a0 = unchecked((long)line);
-        ulong __a1 = StringNames.Get(source).Opaque;
+        ulong __a1 = source.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -12589,7 +12589,7 @@ public static unsafe partial class EngineDebugger
     }
 
     private static nint __mb_insert_breakpoint;
-    public static void InsertBreakpoint(int line, string source)
+    public static void InsertBreakpoint(int line, StringName source)
     {
         var __mb = __mb_insert_breakpoint;
         if (__mb == 0)
@@ -12599,7 +12599,7 @@ public static unsafe partial class EngineDebugger
             __mb_insert_breakpoint = __mb;
         }
         long __a0 = unchecked((long)line);
-        ulong __a1 = StringNames.Get(source).Opaque;
+        ulong __a1 = source.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -12607,7 +12607,7 @@ public static unsafe partial class EngineDebugger
     }
 
     private static nint __mb_remove_breakpoint;
-    public static void RemoveBreakpoint(int line, string source)
+    public static void RemoveBreakpoint(int line, StringName source)
     {
         var __mb = __mb_remove_breakpoint;
         if (__mb == 0)
@@ -12617,7 +12617,7 @@ public static unsafe partial class EngineDebugger
             __mb_remove_breakpoint = __mb;
         }
         long __a0 = unchecked((long)line);
-        ulong __a1 = StringNames.Get(source).Opaque;
+        ulong __a1 = source.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);

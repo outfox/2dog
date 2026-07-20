@@ -28,7 +28,7 @@ public sealed unsafe class MemberRegistry
     /// </summary>
     public void Property(string name, VariantType type,
         Func<GodotObject, Variant> getter, Action<GodotObject, Variant> setter,
-        long hint = 0, string hintString = "")
+        long hint = 0, string hintString = "", long usage = PropertyUsageDefault)
     {
         var getterName = "get_" + name;
         var setterName = "set_" + name;
@@ -62,7 +62,7 @@ public sealed unsafe class MemberRegistry
             class_name = (nint)(&emptySn),
             hint = (uint)hint,
             hint_string = (nint)(&hintStr),
-            usage = PropertyUsageDefault,
+            usage = (uint)usage,
         };
         GdExtensionInterface.ClassdbRegisterExtensionClassProperty(
             GdExtensionHost.Library, (nint)(&classSn), (nint)(&info), (nint)(&setterSn), (nint)(&getterSn));

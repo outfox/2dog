@@ -3220,7 +3220,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_is_action_pressed;
-    public static bool IsActionPressed(string action, bool exactMatch = false)
+    public static bool IsActionPressed(StringName action, bool exactMatch = false)
     {
         var __mb = __mb_is_action_pressed;
         if (__mb == 0)
@@ -3229,7 +3229,7 @@ public static unsafe partial class Input
             if (__mb == 0) throw new MissingMethodException("Input.is_action_pressed is not available in this engine build.");
             __mb_is_action_pressed = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3240,7 +3240,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_is_action_just_pressed;
-    public static bool IsActionJustPressed(string action, bool exactMatch = false)
+    public static bool IsActionJustPressed(StringName action, bool exactMatch = false)
     {
         var __mb = __mb_is_action_just_pressed;
         if (__mb == 0)
@@ -3249,7 +3249,7 @@ public static unsafe partial class Input
             if (__mb == 0) throw new MissingMethodException("Input.is_action_just_pressed is not available in this engine build.");
             __mb_is_action_just_pressed = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3260,7 +3260,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_is_action_just_released;
-    public static bool IsActionJustReleased(string action, bool exactMatch = false)
+    public static bool IsActionJustReleased(StringName action, bool exactMatch = false)
     {
         var __mb = __mb_is_action_just_released;
         if (__mb == 0)
@@ -3269,7 +3269,7 @@ public static unsafe partial class Input
             if (__mb == 0) throw new MissingMethodException("Input.is_action_just_released is not available in this engine build.");
             __mb_is_action_just_released = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3280,7 +3280,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_is_action_just_pressed_by_event;
-    public static bool IsActionJustPressedByEvent(string action, InputEvent? @event, bool exactMatch = false)
+    public static bool IsActionJustPressedByEvent(StringName action, InputEvent? @event, bool exactMatch = false)
     {
         var __mb = __mb_is_action_just_pressed_by_event;
         if (__mb == 0)
@@ -3289,7 +3289,7 @@ public static unsafe partial class Input
             if (__mb == 0) throw new MissingMethodException("Input.is_action_just_pressed_by_event is not available in this engine build.");
             __mb_is_action_just_pressed_by_event = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         nint __a1 = @event?.NativePtr ?? 0;
         byte __a2 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[3];
@@ -3302,7 +3302,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_is_action_just_released_by_event;
-    public static bool IsActionJustReleasedByEvent(string action, InputEvent? @event, bool exactMatch = false)
+    public static bool IsActionJustReleasedByEvent(StringName action, InputEvent? @event, bool exactMatch = false)
     {
         var __mb = __mb_is_action_just_released_by_event;
         if (__mb == 0)
@@ -3311,7 +3311,7 @@ public static unsafe partial class Input
             if (__mb == 0) throw new MissingMethodException("Input.is_action_just_released_by_event is not available in this engine build.");
             __mb_is_action_just_released_by_event = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         nint __a1 = @event?.NativePtr ?? 0;
         byte __a2 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[3];
@@ -3324,7 +3324,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_get_action_strength;
-    public static float GetActionStrength(string action, bool exactMatch = false)
+    public static float GetActionStrength(StringName action, bool exactMatch = false)
     {
         var __mb = __mb_get_action_strength;
         if (__mb == 0)
@@ -3333,7 +3333,7 @@ public static unsafe partial class Input
             if (__mb == 0) throw new MissingMethodException("Input.get_action_strength is not available in this engine build.");
             __mb_get_action_strength = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3344,7 +3344,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_get_action_raw_strength;
-    public static float GetActionRawStrength(string action, bool exactMatch = false)
+    public static float GetActionRawStrength(StringName action, bool exactMatch = false)
     {
         var __mb = __mb_get_action_raw_strength;
         if (__mb == 0)
@@ -3353,7 +3353,7 @@ public static unsafe partial class Input
             if (__mb == 0) throw new MissingMethodException("Input.get_action_raw_strength is not available in this engine build.");
             __mb_get_action_raw_strength = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3364,7 +3364,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_get_axis;
-    public static float GetAxis(string negativeAction, string positiveAction)
+    public static float GetAxis(StringName negativeAction, StringName positiveAction)
     {
         var __mb = __mb_get_axis;
         if (__mb == 0)
@@ -3373,8 +3373,8 @@ public static unsafe partial class Input
             if (__mb == 0) throw new MissingMethodException("Input.get_axis is not available in this engine build.");
             __mb_get_axis = __mb;
         }
-        ulong __a0 = StringNames.Get(negativeAction).Opaque;
-        ulong __a1 = StringNames.Get(positiveAction).Opaque;
+        ulong __a0 = negativeAction.NativeValue;
+        ulong __a1 = positiveAction.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -3384,7 +3384,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_get_vector;
-    public static Vector2 GetVector(string negativeX, string positiveX, string negativeY, string positiveY, float deadzone = -1.0f)
+    public static Vector2 GetVector(StringName negativeX, StringName positiveX, StringName negativeY, StringName positiveY, float deadzone = -1.0f)
     {
         var __mb = __mb_get_vector;
         if (__mb == 0)
@@ -3393,10 +3393,10 @@ public static unsafe partial class Input
             if (__mb == 0) throw new MissingMethodException("Input.get_vector is not available in this engine build.");
             __mb_get_vector = __mb;
         }
-        ulong __a0 = StringNames.Get(negativeX).Opaque;
-        ulong __a1 = StringNames.Get(positiveX).Opaque;
-        ulong __a2 = StringNames.Get(negativeY).Opaque;
-        ulong __a3 = StringNames.Get(positiveY).Opaque;
+        ulong __a0 = negativeX.NativeValue;
+        ulong __a1 = positiveX.NativeValue;
+        ulong __a2 = negativeY.NativeValue;
+        ulong __a3 = positiveY.NativeValue;
         double __a4 = deadzone;
         var __args = stackalloc nint[5];
         __args[0] = (nint)(&__a0);
@@ -4248,7 +4248,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_action_press;
-    public static void ActionPress(string action, float strength = 1.0f)
+    public static void ActionPress(StringName action, float strength = 1.0f)
     {
         var __mb = __mb_action_press;
         if (__mb == 0)
@@ -4257,7 +4257,7 @@ public static unsafe partial class Input
             if (__mb == 0) throw new MissingMethodException("Input.action_press is not available in this engine build.");
             __mb_action_press = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         double __a1 = strength;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -4266,7 +4266,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_action_release;
-    public static void ActionRelease(string action)
+    public static void ActionRelease(StringName action)
     {
         var __mb = __mb_action_release;
         if (__mb == 0)
@@ -4275,7 +4275,7 @@ public static unsafe partial class Input
             if (__mb == 0) throw new MissingMethodException("Input.action_release is not available in this engine build.");
             __mb_action_release = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
@@ -4497,7 +4497,7 @@ public unsafe partial class InputEvent : Resource
     }
 
     private static nint __mb_is_action;
-    public bool IsAction(string action, bool exactMatch = false)
+    public bool IsAction(StringName action, bool exactMatch = false)
     {
         var __mb = __mb_is_action;
         if (__mb == 0)
@@ -4506,7 +4506,7 @@ public unsafe partial class InputEvent : Resource
             if (__mb == 0) throw new MissingMethodException("InputEvent.is_action is not available in this engine build.");
             __mb_is_action = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -4517,7 +4517,7 @@ public unsafe partial class InputEvent : Resource
     }
 
     private static nint __mb_is_action_pressed;
-    public bool IsActionPressed(string action, bool allowEcho = false, bool exactMatch = false)
+    public bool IsActionPressed(StringName action, bool allowEcho = false, bool exactMatch = false)
     {
         var __mb = __mb_is_action_pressed;
         if (__mb == 0)
@@ -4526,7 +4526,7 @@ public unsafe partial class InputEvent : Resource
             if (__mb == 0) throw new MissingMethodException("InputEvent.is_action_pressed is not available in this engine build.");
             __mb_is_action_pressed = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         byte __a1 = allowEcho ? (byte)1 : (byte)0;
         byte __a2 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[3];
@@ -4539,7 +4539,7 @@ public unsafe partial class InputEvent : Resource
     }
 
     private static nint __mb_is_action_released;
-    public bool IsActionReleased(string action, bool exactMatch = false)
+    public bool IsActionReleased(StringName action, bool exactMatch = false)
     {
         var __mb = __mb_is_action_released;
         if (__mb == 0)
@@ -4548,7 +4548,7 @@ public unsafe partial class InputEvent : Resource
             if (__mb == 0) throw new MissingMethodException("InputEvent.is_action_released is not available in this engine build.");
             __mb_is_action_released = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -4559,7 +4559,7 @@ public unsafe partial class InputEvent : Resource
     }
 
     private static nint __mb_get_action_strength;
-    public float GetActionStrength(string action, bool exactMatch = false)
+    public float GetActionStrength(StringName action, bool exactMatch = false)
     {
         var __mb = __mb_get_action_strength;
         if (__mb == 0)
@@ -4568,7 +4568,7 @@ public unsafe partial class InputEvent : Resource
             if (__mb == 0) throw new MissingMethodException("InputEvent.get_action_strength is not available in this engine build.");
             __mb_get_action_strength = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -4736,7 +4736,7 @@ public unsafe partial class InputEventAction : InputEvent
         ClassRegistry.AttachNew(this, "InputEventAction");
     }
 
-    public string Action
+    public StringName Action
     {
         get => GetAction();
         set => SetAction(value);
@@ -4761,7 +4761,7 @@ public unsafe partial class InputEventAction : InputEvent
     }
 
     private static nint __mb_set_action;
-    internal void SetAction(string action)
+    internal void SetAction(StringName action)
     {
         var __mb = __mb_set_action;
         if (__mb == 0)
@@ -4770,14 +4770,14 @@ public unsafe partial class InputEventAction : InputEvent
             if (__mb == 0) throw new MissingMethodException("InputEventAction.set_action is not available in this engine build.");
             __mb_set_action = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_action;
-    internal string GetAction()
+    internal StringName GetAction()
     {
         var __mb = __mb_get_action;
         if (__mb == 0)
@@ -4788,7 +4788,7 @@ public unsafe partial class InputEventAction : InputEvent
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_pressed;
@@ -7231,7 +7231,7 @@ public static unsafe partial class InputMap
     }
 
     private static nint __mb_has_action;
-    public static bool HasAction(string action)
+    public static bool HasAction(StringName action)
     {
         var __mb = __mb_has_action;
         if (__mb == 0)
@@ -7240,7 +7240,7 @@ public static unsafe partial class InputMap
             if (__mb == 0) throw new MissingMethodException("InputMap.has_action is not available in this engine build.");
             __mb_has_action = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -7264,7 +7264,7 @@ public static unsafe partial class InputMap
     }
 
     private static nint __mb_add_action;
-    public static void AddAction(string action, float deadzone = 0.2f)
+    public static void AddAction(StringName action, float deadzone = 0.2f)
     {
         var __mb = __mb_add_action;
         if (__mb == 0)
@@ -7273,7 +7273,7 @@ public static unsafe partial class InputMap
             if (__mb == 0) throw new MissingMethodException("InputMap.add_action is not available in this engine build.");
             __mb_add_action = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         double __a1 = deadzone;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -7282,7 +7282,7 @@ public static unsafe partial class InputMap
     }
 
     private static nint __mb_erase_action;
-    public static void EraseAction(string action)
+    public static void EraseAction(StringName action)
     {
         var __mb = __mb_erase_action;
         if (__mb == 0)
@@ -7291,14 +7291,14 @@ public static unsafe partial class InputMap
             if (__mb == 0) throw new MissingMethodException("InputMap.erase_action is not available in this engine build.");
             __mb_erase_action = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_action_description;
-    public static string GetActionDescription(string action)
+    public static string GetActionDescription(StringName action)
     {
         var __mb = __mb_get_action_description;
         if (__mb == 0)
@@ -7307,7 +7307,7 @@ public static unsafe partial class InputMap
             if (__mb == 0) throw new MissingMethodException("InputMap.get_action_description is not available in this engine build.");
             __mb_get_action_description = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
@@ -7316,7 +7316,7 @@ public static unsafe partial class InputMap
     }
 
     private static nint __mb_action_set_deadzone;
-    public static void ActionSetDeadzone(string action, float deadzone)
+    public static void ActionSetDeadzone(StringName action, float deadzone)
     {
         var __mb = __mb_action_set_deadzone;
         if (__mb == 0)
@@ -7325,7 +7325,7 @@ public static unsafe partial class InputMap
             if (__mb == 0) throw new MissingMethodException("InputMap.action_set_deadzone is not available in this engine build.");
             __mb_action_set_deadzone = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         double __a1 = deadzone;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -7334,7 +7334,7 @@ public static unsafe partial class InputMap
     }
 
     private static nint __mb_action_get_deadzone;
-    public static float ActionGetDeadzone(string action)
+    public static float ActionGetDeadzone(StringName action)
     {
         var __mb = __mb_action_get_deadzone;
         if (__mb == 0)
@@ -7343,7 +7343,7 @@ public static unsafe partial class InputMap
             if (__mb == 0) throw new MissingMethodException("InputMap.action_get_deadzone is not available in this engine build.");
             __mb_action_get_deadzone = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
@@ -7352,7 +7352,7 @@ public static unsafe partial class InputMap
     }
 
     private static nint __mb_action_add_event;
-    public static void ActionAddEvent(string action, InputEvent? @event)
+    public static void ActionAddEvent(StringName action, InputEvent? @event)
     {
         var __mb = __mb_action_add_event;
         if (__mb == 0)
@@ -7361,7 +7361,7 @@ public static unsafe partial class InputMap
             if (__mb == 0) throw new MissingMethodException("InputMap.action_add_event is not available in this engine build.");
             __mb_action_add_event = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         nint __a1 = @event?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -7370,7 +7370,7 @@ public static unsafe partial class InputMap
     }
 
     private static nint __mb_action_has_event;
-    public static bool ActionHasEvent(string action, InputEvent? @event)
+    public static bool ActionHasEvent(StringName action, InputEvent? @event)
     {
         var __mb = __mb_action_has_event;
         if (__mb == 0)
@@ -7379,7 +7379,7 @@ public static unsafe partial class InputMap
             if (__mb == 0) throw new MissingMethodException("InputMap.action_has_event is not available in this engine build.");
             __mb_action_has_event = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         nint __a1 = @event?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -7390,7 +7390,7 @@ public static unsafe partial class InputMap
     }
 
     private static nint __mb_action_erase_event;
-    public static void ActionEraseEvent(string action, InputEvent? @event)
+    public static void ActionEraseEvent(StringName action, InputEvent? @event)
     {
         var __mb = __mb_action_erase_event;
         if (__mb == 0)
@@ -7399,7 +7399,7 @@ public static unsafe partial class InputMap
             if (__mb == 0) throw new MissingMethodException("InputMap.action_erase_event is not available in this engine build.");
             __mb_action_erase_event = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         nint __a1 = @event?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -7408,7 +7408,7 @@ public static unsafe partial class InputMap
     }
 
     private static nint __mb_action_erase_events;
-    public static void ActionEraseEvents(string action)
+    public static void ActionEraseEvents(StringName action)
     {
         var __mb = __mb_action_erase_events;
         if (__mb == 0)
@@ -7417,14 +7417,14 @@ public static unsafe partial class InputMap
             if (__mb == 0) throw new MissingMethodException("InputMap.action_erase_events is not available in this engine build.");
             __mb_action_erase_events = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_action_get_events;
-    public static Godot.Collections.Array ActionGetEvents(string action)
+    public static Godot.Collections.Array ActionGetEvents(StringName action)
     {
         var __mb = __mb_action_get_events;
         if (__mb == 0)
@@ -7433,7 +7433,7 @@ public static unsafe partial class InputMap
             if (__mb == 0) throw new MissingMethodException("InputMap.action_get_events is not available in this engine build.");
             __mb_action_get_events = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
@@ -7442,7 +7442,7 @@ public static unsafe partial class InputMap
     }
 
     private static nint __mb_event_is_action;
-    public static bool EventIsAction(InputEvent? @event, string action, bool exactMatch = false)
+    public static bool EventIsAction(InputEvent? @event, StringName action, bool exactMatch = false)
     {
         var __mb = __mb_event_is_action;
         if (__mb == 0)
@@ -7452,7 +7452,7 @@ public static unsafe partial class InputMap
             __mb_event_is_action = __mb;
         }
         nint __a0 = @event?.NativePtr ?? 0;
-        ulong __a1 = StringNames.Get(action).Opaque;
+        ulong __a1 = action.NativeValue;
         byte __a2 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);

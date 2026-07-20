@@ -459,7 +459,7 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
         Max = 2,
     }
 
-    public string BodyTracker
+    public StringName BodyTracker
     {
         get => GetBodyTracker();
         set => SetBodyTracker(value);
@@ -478,7 +478,7 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_body_tracker;
-    internal void SetBodyTracker(string trackerName)
+    internal void SetBodyTracker(StringName trackerName)
     {
         var __mb = __mb_set_body_tracker;
         if (__mb == 0)
@@ -487,14 +487,14 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
             if (__mb == 0) throw new MissingMethodException("XRBodyModifier3D.set_body_tracker is not available in this engine build.");
             __mb_set_body_tracker = __mb;
         }
-        ulong __a0 = StringNames.Get(trackerName).Opaque;
+        ulong __a0 = trackerName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_body_tracker;
-    internal string GetBodyTracker()
+    internal StringName GetBodyTracker()
     {
         var __mb = __mb_get_body_tracker;
         if (__mb == 0)
@@ -505,7 +505,7 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_body_update;
@@ -896,7 +896,7 @@ public unsafe partial class XRController3D : XRNode3D
     }
 
     private static nint __mb_is_button_pressed;
-    public bool IsButtonPressed(string name)
+    public bool IsButtonPressed(StringName name)
     {
         var __mb = __mb_is_button_pressed;
         if (__mb == 0)
@@ -905,7 +905,7 @@ public unsafe partial class XRController3D : XRNode3D
             if (__mb == 0) throw new MissingMethodException("XRController3D.is_button_pressed is not available in this engine build.");
             __mb_is_button_pressed = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -914,7 +914,7 @@ public unsafe partial class XRController3D : XRNode3D
     }
 
     private static nint __mb_get_input;
-    public Variant GetInput(string name)
+    public Variant GetInput(StringName name)
     {
         var __mb = __mb_get_input;
         if (__mb == 0)
@@ -923,7 +923,7 @@ public unsafe partial class XRController3D : XRNode3D
             if (__mb == 0) throw new MissingMethodException("XRController3D.get_input is not available in this engine build.");
             __mb_get_input = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -932,7 +932,7 @@ public unsafe partial class XRController3D : XRNode3D
     }
 
     private static nint __mb_get_float;
-    public float GetFloat(string name)
+    public float GetFloat(StringName name)
     {
         var __mb = __mb_get_float;
         if (__mb == 0)
@@ -941,7 +941,7 @@ public unsafe partial class XRController3D : XRNode3D
             if (__mb == 0) throw new MissingMethodException("XRController3D.get_float is not available in this engine build.");
             __mb_get_float = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
@@ -950,7 +950,7 @@ public unsafe partial class XRController3D : XRNode3D
     }
 
     private static nint __mb_get_vector2;
-    public Vector2 GetVector2(string name)
+    public Vector2 GetVector2(StringName name)
     {
         var __mb = __mb_get_vector2;
         if (__mb == 0)
@@ -959,7 +959,7 @@ public unsafe partial class XRController3D : XRNode3D
             if (__mb == 0) throw new MissingMethodException("XRController3D.get_vector2 is not available in this engine build.");
             __mb_get_vector2 = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2);
@@ -1002,7 +1002,7 @@ public unsafe partial class XRFaceModifier3D : Node3D
         ClassRegistry.AttachNew(this, "XRFaceModifier3D");
     }
 
-    public string FaceTracker
+    public StringName FaceTracker
     {
         get => GetFaceTracker();
         set => SetFaceTracker(value);
@@ -1015,7 +1015,7 @@ public unsafe partial class XRFaceModifier3D : Node3D
     }
 
     private static nint __mb_set_face_tracker;
-    internal void SetFaceTracker(string trackerName)
+    internal void SetFaceTracker(StringName trackerName)
     {
         var __mb = __mb_set_face_tracker;
         if (__mb == 0)
@@ -1024,14 +1024,14 @@ public unsafe partial class XRFaceModifier3D : Node3D
             if (__mb == 0) throw new MissingMethodException("XRFaceModifier3D.set_face_tracker is not available in this engine build.");
             __mb_set_face_tracker = __mb;
         }
-        ulong __a0 = StringNames.Get(trackerName).Opaque;
+        ulong __a0 = trackerName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_face_tracker;
-    internal string GetFaceTracker()
+    internal StringName GetFaceTracker()
     {
         var __mb = __mb_get_face_tracker;
         if (__mb == 0)
@@ -1042,7 +1042,7 @@ public unsafe partial class XRFaceModifier3D : Node3D
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_target;
@@ -1325,7 +1325,7 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
         Max = 2,
     }
 
-    public string HandTracker
+    public StringName HandTracker
     {
         get => GetHandTracker();
         set => SetHandTracker(value);
@@ -1338,7 +1338,7 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_hand_tracker;
-    internal void SetHandTracker(string trackerName)
+    internal void SetHandTracker(StringName trackerName)
     {
         var __mb = __mb_set_hand_tracker;
         if (__mb == 0)
@@ -1347,14 +1347,14 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
             if (__mb == 0) throw new MissingMethodException("XRHandModifier3D.set_hand_tracker is not available in this engine build.");
             __mb_set_hand_tracker = __mb;
         }
-        ulong __a0 = StringNames.Get(trackerName).Opaque;
+        ulong __a0 = trackerName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_hand_tracker;
-    internal string GetHandTracker()
+    internal StringName GetHandTracker()
     {
         var __mb = __mb_get_hand_tracker;
         if (__mb == 0)
@@ -1365,7 +1365,7 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_bone_update;
@@ -1796,7 +1796,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_get_name;
-    public string GetName()
+    public StringName GetName()
     {
         var __mb = __mb_get_name;
         if (__mb == 0)
@@ -1807,7 +1807,7 @@ public unsafe partial class XRInterface : RefCounted
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_capabilities;
@@ -1960,7 +1960,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_trigger_haptic_pulse;
-    public void TriggerHapticPulse(string actionName, string trackerName, double frequency, double amplitude, double durationSec, double delaySec)
+    public void TriggerHapticPulse(string actionName, StringName trackerName, double frequency, double amplitude, double durationSec, double delaySec)
     {
         var __mb = __mb_trigger_haptic_pulse;
         if (__mb == 0)
@@ -1970,7 +1970,7 @@ public unsafe partial class XRInterface : RefCounted
             __mb_trigger_haptic_pulse = __mb;
         }
         ulong __a0 = NativeString.Create(actionName);
-        ulong __a1 = StringNames.Get(trackerName).Opaque;
+        ulong __a1 = trackerName.NativeValue;
         double __a2 = frequency;
         double __a3 = amplitude;
         double __a4 = durationSec;
@@ -2357,7 +2357,7 @@ public unsafe partial class XRInterfaceExtension : XRInterface
         return __ret;
     }
 
-    public virtual string _GetName() => default!;
+    public virtual StringName _GetName() => default!;
 
     public virtual uint _GetCapabilities() => default!;
 
@@ -2401,11 +2401,11 @@ public unsafe partial class XRInterfaceExtension : XRInterface
 
     public virtual string[] _GetSuggestedTrackerNames() => default!;
 
-    public virtual string[] _GetSuggestedPoseNames(string trackerName) => default!;
+    public virtual string[] _GetSuggestedPoseNames(StringName trackerName) => default!;
 
     public virtual XRInterface.TrackingStatus _GetTrackingStatus() => default!;
 
-    public virtual void _TriggerHapticPulse(string actionName, string trackerName, double frequency, double amplitude, double durationSec, double delaySec) { }
+    public virtual void _TriggerHapticPulse(string actionName, StringName trackerName, double frequency, double amplitude, double durationSec, double delaySec) { }
 
     public virtual bool _GetAnchorDetectionIsEnabled() => default!;
 
@@ -2456,7 +2456,7 @@ public unsafe partial class XRInterfaceExtension : XRInterface
         if (__vsn_get_name == 0) __vsn_get_name = StringNames.Get("_get_name").Opaque;
         if (nameSn == __vsn_get_name)
         {
-            *(ulong*)ret = StringNames.CreateOwned(_GetName() ?? "");
+            *(ulong*)ret = StringNames.CreateOwned(_GetName()?.ToString() ?? "");
             return true;
         }
         if (__vsn_get_capabilities == 0) __vsn_get_capabilities = StringNames.Get("_get_capabilities").Opaque;
@@ -2588,7 +2588,7 @@ public unsafe partial class XRInterfaceExtension : XRInterface
         if (__vsn_get_suggested_pose_names == 0) __vsn_get_suggested_pose_names = StringNames.Get("_get_suggested_pose_names").Opaque;
         if (nameSn == __vsn_get_suggested_pose_names)
         {
-            *(Opaque16*)ret = Packed.CreateStrings(_GetSuggestedPoseNames(StringNames.Read(*(ulong*)args[0])) ?? []);
+            *(Opaque16*)ret = Packed.CreateStrings(_GetSuggestedPoseNames(StringName.Intern(StringNames.Read(*(ulong*)args[0]))) ?? []);
             return true;
         }
         if (__vsn_get_tracking_status == 0) __vsn_get_tracking_status = StringNames.Get("_get_tracking_status").Opaque;
@@ -2600,7 +2600,7 @@ public unsafe partial class XRInterfaceExtension : XRInterface
         if (__vsn_trigger_haptic_pulse == 0) __vsn_trigger_haptic_pulse = StringNames.Get("_trigger_haptic_pulse").Opaque;
         if (nameSn == __vsn_trigger_haptic_pulse)
         {
-            _TriggerHapticPulse(NativeString.Read(*(ulong*)args[0]), StringNames.Read(*(ulong*)args[1]), *(double*)args[2], *(double*)args[3], *(double*)args[4], *(double*)args[5]);
+            _TriggerHapticPulse(NativeString.Read(*(ulong*)args[0]), StringName.Intern(StringNames.Read(*(ulong*)args[1])), *(double*)args[2], *(double*)args[3], *(double*)args[4], *(double*)args[5]);
             return true;
         }
         if (__vsn_get_anchor_detection_is_enabled == 0) __vsn_get_anchor_detection_is_enabled = StringNames.Get("_get_anchor_detection_is_enabled").Opaque;
@@ -2652,13 +2652,13 @@ public unsafe partial class XRNode3D : Node3D
         ClassRegistry.AttachNew(this, "XRNode3D");
     }
 
-    public string Tracker
+    public StringName Tracker
     {
         get => GetTracker();
         set => SetTracker(value);
     }
 
-    public string Pose
+    public StringName Pose
     {
         get => GetPoseName();
         set => SetPoseName(value);
@@ -2679,7 +2679,7 @@ public unsafe partial class XRNode3D : Node3D
     }
 
     private static nint __mb_set_tracker;
-    internal void SetTracker(string trackerName)
+    internal void SetTracker(StringName trackerName)
     {
         var __mb = __mb_set_tracker;
         if (__mb == 0)
@@ -2688,14 +2688,14 @@ public unsafe partial class XRNode3D : Node3D
             if (__mb == 0) throw new MissingMethodException("XRNode3D.set_tracker is not available in this engine build.");
             __mb_set_tracker = __mb;
         }
-        ulong __a0 = StringNames.Get(trackerName).Opaque;
+        ulong __a0 = trackerName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_tracker;
-    internal string GetTracker()
+    internal StringName GetTracker()
     {
         var __mb = __mb_get_tracker;
         if (__mb == 0)
@@ -2706,11 +2706,11 @@ public unsafe partial class XRNode3D : Node3D
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_pose_name;
-    internal void SetPoseName(string pose)
+    internal void SetPoseName(StringName pose)
     {
         var __mb = __mb_set_pose_name;
         if (__mb == 0)
@@ -2719,14 +2719,14 @@ public unsafe partial class XRNode3D : Node3D
             if (__mb == 0) throw new MissingMethodException("XRNode3D.set_pose_name is not available in this engine build.");
             __mb_set_pose_name = __mb;
         }
-        ulong __a0 = StringNames.Get(pose).Opaque;
+        ulong __a0 = pose.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_pose_name;
-    internal string GetPoseName()
+    internal StringName GetPoseName()
     {
         var __mb = __mb_get_pose_name;
         if (__mb == 0)
@@ -2737,7 +2737,7 @@ public unsafe partial class XRNode3D : Node3D
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_show_when_tracked;
@@ -2948,7 +2948,7 @@ public unsafe partial class XRPose : RefCounted
         set => SetHasTrackingData(value);
     }
 
-    public string Name
+    public StringName Name
     {
         get => GetName();
         set => SetName(value);
@@ -3010,7 +3010,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_set_name;
-    internal void SetName(string name)
+    internal void SetName(StringName name)
     {
         var __mb = __mb_set_name;
         if (__mb == 0)
@@ -3019,14 +3019,14 @@ public unsafe partial class XRPose : RefCounted
             if (__mb == 0) throw new MissingMethodException("XRPose.set_name is not available in this engine build.");
             __mb_set_name = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_name;
-    internal string GetName()
+    internal StringName GetName()
     {
         var __mb = __mb_get_name;
         if (__mb == 0)
@@ -3037,7 +3037,7 @@ public unsafe partial class XRPose : RefCounted
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_transform;
@@ -3329,7 +3329,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
     }
 
     private static nint __mb_has_pose;
-    public bool HasPose(string name)
+    public bool HasPose(StringName name)
     {
         var __mb = __mb_has_pose;
         if (__mb == 0)
@@ -3338,7 +3338,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
             if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.has_pose is not available in this engine build.");
             __mb_has_pose = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -3347,7 +3347,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
     }
 
     private static nint __mb_get_pose;
-    public XRPose? GetPose(string name)
+    public XRPose? GetPose(StringName name)
     {
         var __mb = __mb_get_pose;
         if (__mb == 0)
@@ -3356,7 +3356,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
             if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.get_pose is not available in this engine build.");
             __mb_get_pose = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
@@ -3365,7 +3365,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
     }
 
     private static nint __mb_invalidate_pose;
-    public void InvalidatePose(string name)
+    public void InvalidatePose(StringName name)
     {
         var __mb = __mb_invalidate_pose;
         if (__mb == 0)
@@ -3374,14 +3374,14 @@ public unsafe partial class XRPositionalTracker : XRTracker
             if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.invalidate_pose is not available in this engine build.");
             __mb_invalidate_pose = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_pose;
-    public void SetPose(string name, Transform3D transform, Vector3 linearVelocity, Vector3 angularVelocity, XRPose.TrackingConfidenceEnum trackingConfidence)
+    public void SetPose(StringName name, Transform3D transform, Vector3 linearVelocity, Vector3 angularVelocity, XRPose.TrackingConfidenceEnum trackingConfidence)
     {
         var __mb = __mb_set_pose;
         if (__mb == 0)
@@ -3390,7 +3390,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
             if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.set_pose is not available in this engine build.");
             __mb_set_pose = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = transform;
         var __a2 = linearVelocity;
         var __a3 = angularVelocity;
@@ -3405,7 +3405,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
     }
 
     private static nint __mb_get_input;
-    public Variant GetInput(string name)
+    public Variant GetInput(StringName name)
     {
         var __mb = __mb_get_input;
         if (__mb == 0)
@@ -3414,7 +3414,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
             if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.get_input is not available in this engine build.");
             __mb_get_input = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -3423,7 +3423,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
     }
 
     private static nint __mb_set_input;
-    public void SetInput(string name, Variant value)
+    public void SetInput(StringName name, Variant value)
     {
         var __mb = __mb_set_input;
         if (__mb == 0)
@@ -3432,7 +3432,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
             if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.set_input is not available in this engine build.");
             __mb_set_input = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = value.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3503,44 +3503,44 @@ public static unsafe partial class XRServer
         remove => Singleton.Disconnect("reference_frame_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ReferenceFrameChangedEventHandler)__d)()));
     }
 
-    public delegate void InterfaceAddedEventHandler(string interfaceName);
+    public delegate void InterfaceAddedEventHandler(StringName interfaceName);
 
     public static event InterfaceAddedEventHandler InterfaceAdded
     {
-        add => Singleton.Connect("interface_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Singleton.Disconnect("interface_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Singleton.Connect("interface_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceAddedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Singleton.Disconnect("interface_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceAddedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
-    public delegate void InterfaceRemovedEventHandler(string interfaceName);
+    public delegate void InterfaceRemovedEventHandler(StringName interfaceName);
 
     public static event InterfaceRemovedEventHandler InterfaceRemoved
     {
-        add => Singleton.Connect("interface_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Singleton.Disconnect("interface_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Singleton.Connect("interface_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceRemovedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Singleton.Disconnect("interface_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceRemovedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
-    public delegate void TrackerAddedEventHandler(string trackerName, long type);
+    public delegate void TrackerAddedEventHandler(StringName trackerName, long type);
 
     public static event TrackerAddedEventHandler TrackerAdded
     {
-        add => Singleton.Connect("tracker_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
-        remove => Singleton.Disconnect("tracker_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        add => Singleton.Connect("tracker_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerAddedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Singleton.Disconnect("tracker_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerAddedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
     }
 
-    public delegate void TrackerUpdatedEventHandler(string trackerName, long type);
+    public delegate void TrackerUpdatedEventHandler(StringName trackerName, long type);
 
     public static event TrackerUpdatedEventHandler TrackerUpdated
     {
-        add => Singleton.Connect("tracker_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerUpdatedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
-        remove => Singleton.Disconnect("tracker_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerUpdatedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        add => Singleton.Connect("tracker_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerUpdatedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Singleton.Disconnect("tracker_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerUpdatedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
     }
 
-    public delegate void TrackerRemovedEventHandler(string trackerName, long type);
+    public delegate void TrackerRemovedEventHandler(StringName trackerName, long type);
 
     public static event TrackerRemovedEventHandler TrackerRemoved
     {
-        add => Singleton.Connect("tracker_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
-        remove => Singleton.Disconnect("tracker_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        add => Singleton.Connect("tracker_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerRemovedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Singleton.Disconnect("tracker_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerRemovedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
     }
 
     public delegate void WorldOriginChangedEventHandler();
@@ -3855,7 +3855,7 @@ public static unsafe partial class XRServer
     }
 
     private static nint __mb_get_tracker;
-    public static XRTracker? GetTracker(string trackerName)
+    public static XRTracker? GetTracker(StringName trackerName)
     {
         var __mb = __mb_get_tracker;
         if (__mb == 0)
@@ -3864,7 +3864,7 @@ public static unsafe partial class XRServer
             if (__mb == 0) throw new MissingMethodException("XRServer.get_tracker is not available in this engine build.");
             __mb_get_tracker = __mb;
         }
-        ulong __a0 = StringNames.Get(trackerName).Opaque;
+        ulong __a0 = trackerName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
@@ -3914,7 +3914,7 @@ public unsafe partial class XRTracker : RefCounted
         set => SetTrackerType(value);
     }
 
-    public string Name
+    public StringName Name
     {
         get => GetTrackerName();
         set => SetTrackerName(value);
@@ -3958,7 +3958,7 @@ public unsafe partial class XRTracker : RefCounted
     }
 
     private static nint __mb_get_tracker_name;
-    internal string GetTrackerName()
+    internal StringName GetTrackerName()
     {
         var __mb = __mb_get_tracker_name;
         if (__mb == 0)
@@ -3969,11 +3969,11 @@ public unsafe partial class XRTracker : RefCounted
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_tracker_name;
-    internal void SetTrackerName(string name)
+    internal void SetTrackerName(StringName name)
     {
         var __mb = __mb_set_tracker_name;
         if (__mb == 0)
@@ -3982,7 +3982,7 @@ public unsafe partial class XRTracker : RefCounted
             if (__mb == 0) throw new MissingMethodException("XRTracker.set_tracker_name is not available in this engine build.");
             __mb_set_tracker_name = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);

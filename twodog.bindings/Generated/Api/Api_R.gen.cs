@@ -3799,7 +3799,7 @@ public unsafe partial class RDShaderFile : Resource
     }
 
     private static nint __mb_set_bytecode;
-    public void SetBytecode(RDShaderSPIRV? bytecode, string version = "")
+    public void SetBytecode(RDShaderSPIRV? bytecode, StringName version)
     {
         var __mb = __mb_set_bytecode;
         if (__mb == 0)
@@ -3809,7 +3809,7 @@ public unsafe partial class RDShaderFile : Resource
             __mb_set_bytecode = __mb;
         }
         nint __a0 = bytecode?.NativePtr ?? 0;
-        ulong __a1 = StringNames.Get(version).Opaque;
+        ulong __a1 = version.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -3817,7 +3817,7 @@ public unsafe partial class RDShaderFile : Resource
     }
 
     private static nint __mb_get_spirv;
-    public RDShaderSPIRV? GetSpirv(string version = "")
+    public RDShaderSPIRV? GetSpirv(StringName version)
     {
         var __mb = __mb_get_spirv;
         if (__mb == 0)
@@ -3826,7 +3826,7 @@ public unsafe partial class RDShaderFile : Resource
             if (__mb == 0) throw new MissingMethodException("RDShaderFile.get_spirv is not available in this engine build.");
             __mb_get_spirv = __mb;
         }
-        ulong __a0 = StringNames.Get(version).Opaque;
+        ulong __a0 = version.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
@@ -9137,7 +9137,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_has_texture;
-    public bool HasTexture(string context, string name)
+    public bool HasTexture(StringName context, StringName name)
     {
         var __mb = __mb_has_texture;
         if (__mb == 0)
@@ -9146,8 +9146,8 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
             if (__mb == 0) throw new MissingMethodException("RenderSceneBuffersRD.has_texture is not available in this engine build.");
             __mb_has_texture = __mb;
         }
-        ulong __a0 = StringNames.Get(context).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a0 = context.NativeValue;
+        ulong __a1 = name.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -9157,7 +9157,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_create_texture;
-    public Rid CreateTexture(string context, string name, RenderingDevice.DataFormat dataFormat, uint usageBits, RenderingDevice.TextureSamples textureSamples, Vector2I size, uint layers, uint mipmaps, bool unique, bool discardable)
+    public Rid CreateTexture(StringName context, StringName name, RenderingDevice.DataFormat dataFormat, uint usageBits, RenderingDevice.TextureSamples textureSamples, Vector2I size, uint layers, uint mipmaps, bool unique, bool discardable)
     {
         var __mb = __mb_create_texture;
         if (__mb == 0)
@@ -9166,8 +9166,8 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
             if (__mb == 0) throw new MissingMethodException("RenderSceneBuffersRD.create_texture is not available in this engine build.");
             __mb_create_texture = __mb;
         }
-        ulong __a0 = StringNames.Get(context).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a0 = context.NativeValue;
+        ulong __a1 = name.NativeValue;
         long __a2 = (long)dataFormat;
         long __a3 = unchecked((long)usageBits);
         long __a4 = (long)textureSamples;
@@ -9193,7 +9193,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_create_texture_from_format;
-    public Rid CreateTextureFromFormat(string context, string name, RDTextureFormat? format, RDTextureView? view, bool unique)
+    public Rid CreateTextureFromFormat(StringName context, StringName name, RDTextureFormat? format, RDTextureView? view, bool unique)
     {
         var __mb = __mb_create_texture_from_format;
         if (__mb == 0)
@@ -9202,8 +9202,8 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
             if (__mb == 0) throw new MissingMethodException("RenderSceneBuffersRD.create_texture_from_format is not available in this engine build.");
             __mb_create_texture_from_format = __mb;
         }
-        ulong __a0 = StringNames.Get(context).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a0 = context.NativeValue;
+        ulong __a1 = name.NativeValue;
         nint __a2 = format?.NativePtr ?? 0;
         nint __a3 = view?.NativePtr ?? 0;
         byte __a4 = unique ? (byte)1 : (byte)0;
@@ -9219,7 +9219,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_create_texture_view;
-    public Rid CreateTextureView(string context, string name, string viewName, RDTextureView? view)
+    public Rid CreateTextureView(StringName context, StringName name, StringName viewName, RDTextureView? view)
     {
         var __mb = __mb_create_texture_view;
         if (__mb == 0)
@@ -9228,9 +9228,9 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
             if (__mb == 0) throw new MissingMethodException("RenderSceneBuffersRD.create_texture_view is not available in this engine build.");
             __mb_create_texture_view = __mb;
         }
-        ulong __a0 = StringNames.Get(context).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
-        ulong __a2 = StringNames.Get(viewName).Opaque;
+        ulong __a0 = context.NativeValue;
+        ulong __a1 = name.NativeValue;
+        ulong __a2 = viewName.NativeValue;
         nint __a3 = view?.NativePtr ?? 0;
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
@@ -9243,7 +9243,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_get_texture;
-    public Rid GetTexture(string context, string name)
+    public Rid GetTexture(StringName context, StringName name)
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -9252,8 +9252,8 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
             if (__mb == 0) throw new MissingMethodException("RenderSceneBuffersRD.get_texture is not available in this engine build.");
             __mb_get_texture = __mb;
         }
-        ulong __a0 = StringNames.Get(context).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a0 = context.NativeValue;
+        ulong __a1 = name.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -9263,7 +9263,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_get_texture_format;
-    public RDTextureFormat? GetTextureFormat(string context, string name)
+    public RDTextureFormat? GetTextureFormat(StringName context, StringName name)
     {
         var __mb = __mb_get_texture_format;
         if (__mb == 0)
@@ -9272,8 +9272,8 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
             if (__mb == 0) throw new MissingMethodException("RenderSceneBuffersRD.get_texture_format is not available in this engine build.");
             __mb_get_texture_format = __mb;
         }
-        ulong __a0 = StringNames.Get(context).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a0 = context.NativeValue;
+        ulong __a1 = name.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -9283,7 +9283,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_get_texture_slice;
-    public Rid GetTextureSlice(string context, string name, uint layer, uint mipmap, uint layers, uint mipmaps)
+    public Rid GetTextureSlice(StringName context, StringName name, uint layer, uint mipmap, uint layers, uint mipmaps)
     {
         var __mb = __mb_get_texture_slice;
         if (__mb == 0)
@@ -9292,8 +9292,8 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
             if (__mb == 0) throw new MissingMethodException("RenderSceneBuffersRD.get_texture_slice is not available in this engine build.");
             __mb_get_texture_slice = __mb;
         }
-        ulong __a0 = StringNames.Get(context).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a0 = context.NativeValue;
+        ulong __a1 = name.NativeValue;
         long __a2 = unchecked((long)layer);
         long __a3 = unchecked((long)mipmap);
         long __a4 = unchecked((long)layers);
@@ -9311,7 +9311,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_get_texture_slice_view;
-    public Rid GetTextureSliceView(string context, string name, uint layer, uint mipmap, uint layers, uint mipmaps, RDTextureView? view)
+    public Rid GetTextureSliceView(StringName context, StringName name, uint layer, uint mipmap, uint layers, uint mipmaps, RDTextureView? view)
     {
         var __mb = __mb_get_texture_slice_view;
         if (__mb == 0)
@@ -9320,8 +9320,8 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
             if (__mb == 0) throw new MissingMethodException("RenderSceneBuffersRD.get_texture_slice_view is not available in this engine build.");
             __mb_get_texture_slice_view = __mb;
         }
-        ulong __a0 = StringNames.Get(context).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a0 = context.NativeValue;
+        ulong __a1 = name.NativeValue;
         long __a2 = unchecked((long)layer);
         long __a3 = unchecked((long)mipmap);
         long __a4 = unchecked((long)layers);
@@ -9341,7 +9341,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_get_texture_slice_size;
-    public Vector2I GetTextureSliceSize(string context, string name, uint mipmap)
+    public Vector2I GetTextureSliceSize(StringName context, StringName name, uint mipmap)
     {
         var __mb = __mb_get_texture_slice_size;
         if (__mb == 0)
@@ -9350,8 +9350,8 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
             if (__mb == 0) throw new MissingMethodException("RenderSceneBuffersRD.get_texture_slice_size is not available in this engine build.");
             __mb_get_texture_slice_size = __mb;
         }
-        ulong __a0 = StringNames.Get(context).Opaque;
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a0 = context.NativeValue;
+        ulong __a1 = name.NativeValue;
         long __a2 = unchecked((long)mipmap);
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -9363,7 +9363,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_clear_context;
-    public void ClearContext(string context)
+    public void ClearContext(StringName context)
     {
         var __mb = __mb_clear_context;
         if (__mb == 0)
@@ -9372,7 +9372,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
             if (__mb == 0) throw new MissingMethodException("RenderSceneBuffersRD.clear_context is not available in this engine build.");
             __mb_clear_context = __mb;
         }
-        ulong __a0 = StringNames.Get(context).Opaque;
+        ulong __a0 = context.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
@@ -14733,7 +14733,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_shader_get_parameter_default;
-    public static Variant ShaderGetParameterDefault(Rid shader, string name)
+    public static Variant ShaderGetParameterDefault(Rid shader, StringName name)
     {
         var __mb = __mb_shader_get_parameter_default;
         if (__mb == 0)
@@ -14743,7 +14743,7 @@ public static unsafe partial class RenderingServer
             __mb_shader_get_parameter_default = __mb;
         }
         var __a0 = shader;
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a1 = name.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -14753,7 +14753,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_shader_set_default_texture_parameter;
-    public static void ShaderSetDefaultTextureParameter(Rid shader, string name, Rid texture, int index = unchecked((int)(0)))
+    public static void ShaderSetDefaultTextureParameter(Rid shader, StringName name, Rid texture, int index = unchecked((int)(0)))
     {
         var __mb = __mb_shader_set_default_texture_parameter;
         if (__mb == 0)
@@ -14763,7 +14763,7 @@ public static unsafe partial class RenderingServer
             __mb_shader_set_default_texture_parameter = __mb;
         }
         var __a0 = shader;
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a1 = name.NativeValue;
         var __a2 = texture;
         long __a3 = unchecked((long)index);
         var __args = stackalloc nint[4];
@@ -14775,7 +14775,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_shader_get_default_texture_parameter;
-    public static Rid ShaderGetDefaultTextureParameter(Rid shader, string name, int index = unchecked((int)(0)))
+    public static Rid ShaderGetDefaultTextureParameter(Rid shader, StringName name, int index = unchecked((int)(0)))
     {
         var __mb = __mb_shader_get_default_texture_parameter;
         if (__mb == 0)
@@ -14785,7 +14785,7 @@ public static unsafe partial class RenderingServer
             __mb_shader_get_default_texture_parameter = __mb;
         }
         var __a0 = shader;
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a1 = name.NativeValue;
         long __a2 = unchecked((long)index);
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -14830,7 +14830,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_material_set_param;
-    public static void MaterialSetParam(Rid material, string parameter, Variant value)
+    public static void MaterialSetParam(Rid material, StringName parameter, Variant value)
     {
         var __mb = __mb_material_set_param;
         if (__mb == 0)
@@ -14840,7 +14840,7 @@ public static unsafe partial class RenderingServer
             __mb_material_set_param = __mb;
         }
         var __a0 = material;
-        ulong __a1 = StringNames.Get(parameter).Opaque;
+        ulong __a1 = parameter.NativeValue;
         var __a2 = value.Native;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -14850,7 +14850,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_material_get_param;
-    public static Variant MaterialGetParam(Rid material, string parameter)
+    public static Variant MaterialGetParam(Rid material, StringName parameter)
     {
         var __mb = __mb_material_get_param;
         if (__mb == 0)
@@ -14860,7 +14860,7 @@ public static unsafe partial class RenderingServer
             __mb_material_get_param = __mb;
         }
         var __a0 = material;
-        ulong __a1 = StringNames.Get(parameter).Opaque;
+        ulong __a1 = parameter.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -21465,7 +21465,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_instance_geometry_set_shader_parameter;
-    public static void InstanceGeometrySetShaderParameter(Rid instance, string parameter, Variant value)
+    public static void InstanceGeometrySetShaderParameter(Rid instance, StringName parameter, Variant value)
     {
         var __mb = __mb_instance_geometry_set_shader_parameter;
         if (__mb == 0)
@@ -21475,7 +21475,7 @@ public static unsafe partial class RenderingServer
             __mb_instance_geometry_set_shader_parameter = __mb;
         }
         var __a0 = instance;
-        ulong __a1 = StringNames.Get(parameter).Opaque;
+        ulong __a1 = parameter.NativeValue;
         var __a2 = value.Native;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -21485,7 +21485,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_instance_geometry_get_shader_parameter;
-    public static Variant InstanceGeometryGetShaderParameter(Rid instance, string parameter)
+    public static Variant InstanceGeometryGetShaderParameter(Rid instance, StringName parameter)
     {
         var __mb = __mb_instance_geometry_get_shader_parameter;
         if (__mb == 0)
@@ -21495,7 +21495,7 @@ public static unsafe partial class RenderingServer
             __mb_instance_geometry_get_shader_parameter = __mb;
         }
         var __a0 = instance;
-        ulong __a1 = StringNames.Get(parameter).Opaque;
+        ulong __a1 = parameter.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -21505,7 +21505,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_instance_geometry_get_shader_parameter_default_value;
-    public static Variant InstanceGeometryGetShaderParameterDefaultValue(Rid instance, string parameter)
+    public static Variant InstanceGeometryGetShaderParameterDefaultValue(Rid instance, StringName parameter)
     {
         var __mb = __mb_instance_geometry_get_shader_parameter_default_value;
         if (__mb == 0)
@@ -21515,7 +21515,7 @@ public static unsafe partial class RenderingServer
             __mb_instance_geometry_get_shader_parameter_default_value = __mb;
         }
         var __a0 = instance;
-        ulong __a1 = StringNames.Get(parameter).Opaque;
+        ulong __a1 = parameter.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -22780,7 +22780,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_canvas_item_set_instance_shader_parameter;
-    public static void CanvasItemSetInstanceShaderParameter(Rid instance, string parameter, Variant value)
+    public static void CanvasItemSetInstanceShaderParameter(Rid instance, StringName parameter, Variant value)
     {
         var __mb = __mb_canvas_item_set_instance_shader_parameter;
         if (__mb == 0)
@@ -22790,7 +22790,7 @@ public static unsafe partial class RenderingServer
             __mb_canvas_item_set_instance_shader_parameter = __mb;
         }
         var __a0 = instance;
-        ulong __a1 = StringNames.Get(parameter).Opaque;
+        ulong __a1 = parameter.NativeValue;
         var __a2 = value.Native;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -22800,7 +22800,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_canvas_item_get_instance_shader_parameter;
-    public static Variant CanvasItemGetInstanceShaderParameter(Rid instance, string parameter)
+    public static Variant CanvasItemGetInstanceShaderParameter(Rid instance, StringName parameter)
     {
         var __mb = __mb_canvas_item_get_instance_shader_parameter;
         if (__mb == 0)
@@ -22810,7 +22810,7 @@ public static unsafe partial class RenderingServer
             __mb_canvas_item_get_instance_shader_parameter = __mb;
         }
         var __a0 = instance;
-        ulong __a1 = StringNames.Get(parameter).Opaque;
+        ulong __a1 = parameter.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -22820,7 +22820,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_canvas_item_get_instance_shader_parameter_default_value;
-    public static Variant CanvasItemGetInstanceShaderParameterDefaultValue(Rid instance, string parameter)
+    public static Variant CanvasItemGetInstanceShaderParameterDefaultValue(Rid instance, StringName parameter)
     {
         var __mb = __mb_canvas_item_get_instance_shader_parameter_default_value;
         if (__mb == 0)
@@ -22830,7 +22830,7 @@ public static unsafe partial class RenderingServer
             __mb_canvas_item_get_instance_shader_parameter_default_value = __mb;
         }
         var __a0 = instance;
-        ulong __a1 = StringNames.Get(parameter).Opaque;
+        ulong __a1 = parameter.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -23584,7 +23584,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_global_shader_parameter_add;
-    public static void GlobalShaderParameterAdd(string name, RenderingServer.GlobalShaderParameterType type, Variant defaultValue)
+    public static void GlobalShaderParameterAdd(StringName name, RenderingServer.GlobalShaderParameterType type, Variant defaultValue)
     {
         var __mb = __mb_global_shader_parameter_add;
         if (__mb == 0)
@@ -23593,7 +23593,7 @@ public static unsafe partial class RenderingServer
             if (__mb == 0) throw new MissingMethodException("RenderingServer.global_shader_parameter_add is not available in this engine build.");
             __mb_global_shader_parameter_add = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         long __a1 = (long)type;
         var __a2 = defaultValue.Native;
         var __args = stackalloc nint[3];
@@ -23604,7 +23604,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_global_shader_parameter_remove;
-    public static void GlobalShaderParameterRemove(string name)
+    public static void GlobalShaderParameterRemove(StringName name)
     {
         var __mb = __mb_global_shader_parameter_remove;
         if (__mb == 0)
@@ -23613,7 +23613,7 @@ public static unsafe partial class RenderingServer
             if (__mb == 0) throw new MissingMethodException("RenderingServer.global_shader_parameter_remove is not available in this engine build.");
             __mb_global_shader_parameter_remove = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
@@ -23635,7 +23635,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_global_shader_parameter_set;
-    public static void GlobalShaderParameterSet(string name, Variant value)
+    public static void GlobalShaderParameterSet(StringName name, Variant value)
     {
         var __mb = __mb_global_shader_parameter_set;
         if (__mb == 0)
@@ -23644,7 +23644,7 @@ public static unsafe partial class RenderingServer
             if (__mb == 0) throw new MissingMethodException("RenderingServer.global_shader_parameter_set is not available in this engine build.");
             __mb_global_shader_parameter_set = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = value.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -23653,7 +23653,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_global_shader_parameter_set_override;
-    public static void GlobalShaderParameterSetOverride(string name, Variant value)
+    public static void GlobalShaderParameterSetOverride(StringName name, Variant value)
     {
         var __mb = __mb_global_shader_parameter_set_override;
         if (__mb == 0)
@@ -23662,7 +23662,7 @@ public static unsafe partial class RenderingServer
             if (__mb == 0) throw new MissingMethodException("RenderingServer.global_shader_parameter_set_override is not available in this engine build.");
             __mb_global_shader_parameter_set_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = value.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -23671,7 +23671,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_global_shader_parameter_get;
-    public static Variant GlobalShaderParameterGet(string name)
+    public static Variant GlobalShaderParameterGet(StringName name)
     {
         var __mb = __mb_global_shader_parameter_get;
         if (__mb == 0)
@@ -23680,7 +23680,7 @@ public static unsafe partial class RenderingServer
             if (__mb == 0) throw new MissingMethodException("RenderingServer.global_shader_parameter_get is not available in this engine build.");
             __mb_global_shader_parameter_get = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -23689,7 +23689,7 @@ public static unsafe partial class RenderingServer
     }
 
     private static nint __mb_global_shader_parameter_get_type;
-    public static RenderingServer.GlobalShaderParameterType GlobalShaderParameterGetType(string name)
+    public static RenderingServer.GlobalShaderParameterType GlobalShaderParameterGetType(StringName name)
     {
         var __mb = __mb_global_shader_parameter_get_type;
         if (__mb == 0)
@@ -23698,7 +23698,7 @@ public static unsafe partial class RenderingServer
             if (__mb == 0) throw new MissingMethodException("RenderingServer.global_shader_parameter_get_type is not available in this engine build.");
             __mb_global_shader_parameter_get_type = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
@@ -24667,9 +24667,9 @@ public unsafe partial class ResourceFormatLoader : RefCounted
 
     public virtual string[] _GetRecognizedExtensions() => default!;
 
-    public virtual bool _RecognizePath(string path, string type) => default!;
+    public virtual bool _RecognizePath(string path, StringName type) => default!;
 
-    public virtual bool _HandlesType(string type) => default!;
+    public virtual bool _HandlesType(StringName type) => default!;
 
     public virtual string _GetResourceType(string path) => default!;
 
@@ -24704,13 +24704,13 @@ public unsafe partial class ResourceFormatLoader : RefCounted
         if (__vsn_recognize_path == 0) __vsn_recognize_path = StringNames.Get("_recognize_path").Opaque;
         if (nameSn == __vsn_recognize_path)
         {
-            *(byte*)ret = _RecognizePath(NativeString.Read(*(ulong*)args[0]), StringNames.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _RecognizePath(NativeString.Read(*(ulong*)args[0]), StringName.Intern(StringNames.Read(*(ulong*)args[1]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_handles_type == 0) __vsn_handles_type = StringNames.Get("_handles_type").Opaque;
         if (nameSn == __vsn_handles_type)
         {
-            *(byte*)ret = _HandlesType(StringNames.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _HandlesType(StringName.Intern(StringNames.Read(*(ulong*)args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_get_resource_type == 0) __vsn_get_resource_type = StringNames.Get("_get_resource_type").Opaque;
@@ -25351,7 +25351,7 @@ public unsafe partial class ResourcePreloader : Node
     }
 
     private static nint __mb_add_resource;
-    public void AddResource(string name, Resource? resource)
+    public void AddResource(StringName name, Resource? resource)
     {
         var __mb = __mb_add_resource;
         if (__mb == 0)
@@ -25360,7 +25360,7 @@ public unsafe partial class ResourcePreloader : Node
             if (__mb == 0) throw new MissingMethodException("ResourcePreloader.add_resource is not available in this engine build.");
             __mb_add_resource = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = resource?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -25369,7 +25369,7 @@ public unsafe partial class ResourcePreloader : Node
     }
 
     private static nint __mb_remove_resource;
-    public void RemoveResource(string name)
+    public void RemoveResource(StringName name)
     {
         var __mb = __mb_remove_resource;
         if (__mb == 0)
@@ -25378,14 +25378,14 @@ public unsafe partial class ResourcePreloader : Node
             if (__mb == 0) throw new MissingMethodException("ResourcePreloader.remove_resource is not available in this engine build.");
             __mb_remove_resource = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_rename_resource;
-    public void RenameResource(string name, string newname)
+    public void RenameResource(StringName name, StringName newname)
     {
         var __mb = __mb_rename_resource;
         if (__mb == 0)
@@ -25394,8 +25394,8 @@ public unsafe partial class ResourcePreloader : Node
             if (__mb == 0) throw new MissingMethodException("ResourcePreloader.rename_resource is not available in this engine build.");
             __mb_rename_resource = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(newname).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = newname.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -25403,7 +25403,7 @@ public unsafe partial class ResourcePreloader : Node
     }
 
     private static nint __mb_has_resource;
-    public bool HasResource(string name)
+    public bool HasResource(StringName name)
     {
         var __mb = __mb_has_resource;
         if (__mb == 0)
@@ -25412,7 +25412,7 @@ public unsafe partial class ResourcePreloader : Node
             if (__mb == 0) throw new MissingMethodException("ResourcePreloader.has_resource is not available in this engine build.");
             __mb_has_resource = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -25421,7 +25421,7 @@ public unsafe partial class ResourcePreloader : Node
     }
 
     private static nint __mb_get_resource;
-    public Resource? GetResource(string name)
+    public Resource? GetResource(StringName name)
     {
         var __mb = __mb_get_resource;
         if (__mb == 0)
@@ -25430,7 +25430,7 @@ public unsafe partial class ResourcePreloader : Node
             if (__mb == 0) throw new MissingMethodException("ResourcePreloader.get_resource is not available in this engine build.");
             __mb_get_resource = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;

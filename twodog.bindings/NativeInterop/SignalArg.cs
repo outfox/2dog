@@ -28,6 +28,20 @@ public static unsafe class SignalArg
     /// <summary>Owned copy; dispose it (or accept the small leak on POD contents).</summary>
     public static Variant VariantAt(nint args, int index) => new(Variants.NewCopy(in At(args, index)));
 
+    public static Godot.StringName StringNameAt(nint args, int index) =>
+        Godot.StringName.Intern(Variants.ToManagedString(in At(args, index)));
+
+    /// <summary>Owned Array handle; dispose it.</summary>
+    public static Collections.Array ArrayAt(nint args, int index) =>
+        new(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_ARRAY, in At(args, index)));
+
+    /// <summary>Owned Dictionary handle; dispose it.</summary>
+    public static Collections.Dictionary DictionaryAt(nint args, int index) =>
+        new(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_DICTIONARY, in At(args, index)));
+
+    public static NodePath NodePathAt(nint args, int index) =>
+        new(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_NODE_PATH, in At(args, index)));
+
     public static T? Object<T>(nint args, int index) where T : GodotObject =>
         (T?)InstanceBindings.GetOrCreate(Variants.ToObject(in At(args, index)), adoptRef: false);
 }

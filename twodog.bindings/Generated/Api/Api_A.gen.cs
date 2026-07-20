@@ -1801,12 +1801,12 @@ public unsafe partial class AcceptDialog : Window
         remove => Disconnect("canceled", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CanceledEventHandler)__d)()));
     }
 
-    public delegate void CustomActionEventHandler(string action);
+    public delegate void CustomActionEventHandler(StringName action);
 
     public event CustomActionEventHandler CustomAction
     {
-        add => Connect("custom_action", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CustomActionEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Disconnect("custom_action", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CustomActionEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Connect("custom_action", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CustomActionEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("custom_action", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CustomActionEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
     private static nint __mb_get_ok_button;
@@ -3877,7 +3877,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
         set => SetSpriteFrames(value);
     }
 
-    public string Animation
+    public StringName Animation
     {
         get => GetAnimation();
         set => SetAnimation(value);
@@ -4003,7 +4003,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_set_animation;
-    internal void SetAnimation(string name)
+    internal void SetAnimation(StringName name)
     {
         var __mb = __mb_set_animation;
         if (__mb == 0)
@@ -4012,14 +4012,14 @@ public unsafe partial class AnimatedSprite2D : Node2D
             if (__mb == 0) throw new MissingMethodException("AnimatedSprite2D.set_animation is not available in this engine build.");
             __mb_set_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_animation;
-    internal string GetAnimation()
+    internal StringName GetAnimation()
     {
         var __mb = __mb_get_animation;
         if (__mb == 0)
@@ -4030,7 +4030,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_autoplay;
@@ -4081,7 +4081,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_play;
-    public void Play(string name = "", float customSpeed = 1.0f, bool fromEnd = false)
+    public void Play(StringName name, float customSpeed = 1.0f, bool fromEnd = false)
     {
         var __mb = __mb_play;
         if (__mb == 0)
@@ -4090,7 +4090,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
             if (__mb == 0) throw new MissingMethodException("AnimatedSprite2D.play is not available in this engine build.");
             __mb_play = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         double __a1 = customSpeed;
         byte __a2 = fromEnd ? (byte)1 : (byte)0;
         var __args = stackalloc nint[3];
@@ -4101,7 +4101,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_play_backwards;
-    public void PlayBackwards(string name = "")
+    public void PlayBackwards(StringName name)
     {
         var __mb = __mb_play_backwards;
         if (__mb == 0)
@@ -4110,7 +4110,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
             if (__mb == 0) throw new MissingMethodException("AnimatedSprite2D.play_backwards is not available in this engine build.");
             __mb_play_backwards = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
@@ -4408,7 +4408,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
         set => SetSpriteFrames(value);
     }
 
-    public string Animation
+    public StringName Animation
     {
         get => GetAnimation();
         set => SetAnimation(value);
@@ -4510,7 +4510,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_set_animation;
-    internal void SetAnimation(string name)
+    internal void SetAnimation(StringName name)
     {
         var __mb = __mb_set_animation;
         if (__mb == 0)
@@ -4519,14 +4519,14 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
             if (__mb == 0) throw new MissingMethodException("AnimatedSprite3D.set_animation is not available in this engine build.");
             __mb_set_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_animation;
-    internal string GetAnimation()
+    internal StringName GetAnimation()
     {
         var __mb = __mb_get_animation;
         if (__mb == 0)
@@ -4537,7 +4537,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_autoplay;
@@ -4588,7 +4588,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_play;
-    public void Play(string name = "", float customSpeed = 1.0f, bool fromEnd = false)
+    public void Play(StringName name, float customSpeed = 1.0f, bool fromEnd = false)
     {
         var __mb = __mb_play;
         if (__mb == 0)
@@ -4597,7 +4597,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
             if (__mb == 0) throw new MissingMethodException("AnimatedSprite3D.play is not available in this engine build.");
             __mb_play = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         double __a1 = customSpeed;
         byte __a2 = fromEnd ? (byte)1 : (byte)0;
         var __args = stackalloc nint[3];
@@ -4608,7 +4608,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_play_backwards;
-    public void PlayBackwards(string name = "")
+    public void PlayBackwards(StringName name)
     {
         var __mb = __mb_play_backwards;
         if (__mb == 0)
@@ -4617,7 +4617,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
             if (__mb == 0) throw new MissingMethodException("AnimatedSprite3D.play_backwards is not available in this engine build.");
             __mb_play_backwards = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
@@ -5936,7 +5936,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_method_track_get_name;
-    public string MethodTrackGetName(int trackIdx, int keyIdx)
+    public StringName MethodTrackGetName(int trackIdx, int keyIdx)
     {
         var __mb = __mb_method_track_get_name;
         if (__mb == 0)
@@ -5952,7 +5952,7 @@ public unsafe partial class Animation : Resource
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_method_track_get_params;
@@ -6328,7 +6328,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_animation_track_insert_key;
-    public int AnimationTrackInsertKey(int trackIdx, double time, string animation)
+    public int AnimationTrackInsertKey(int trackIdx, double time, StringName animation)
     {
         var __mb = __mb_animation_track_insert_key;
         if (__mb == 0)
@@ -6339,7 +6339,7 @@ public unsafe partial class Animation : Resource
         }
         long __a0 = unchecked((long)trackIdx);
         double __a1 = time;
-        ulong __a2 = StringNames.Get(animation).Opaque;
+        ulong __a2 = animation.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -6350,7 +6350,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_animation_track_set_key_animation;
-    public void AnimationTrackSetKeyAnimation(int trackIdx, int keyIdx, string animation)
+    public void AnimationTrackSetKeyAnimation(int trackIdx, int keyIdx, StringName animation)
     {
         var __mb = __mb_animation_track_set_key_animation;
         if (__mb == 0)
@@ -6361,7 +6361,7 @@ public unsafe partial class Animation : Resource
         }
         long __a0 = unchecked((long)trackIdx);
         long __a1 = unchecked((long)keyIdx);
-        ulong __a2 = StringNames.Get(animation).Opaque;
+        ulong __a2 = animation.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -6370,7 +6370,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_animation_track_get_key_animation;
-    public string AnimationTrackGetKeyAnimation(int trackIdx, int keyIdx)
+    public StringName AnimationTrackGetKeyAnimation(int trackIdx, int keyIdx)
     {
         var __mb = __mb_animation_track_get_key_animation;
         if (__mb == 0)
@@ -6386,11 +6386,11 @@ public unsafe partial class Animation : Resource
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_add_marker;
-    public void AddMarker(string name, double time)
+    public void AddMarker(StringName name, double time)
     {
         var __mb = __mb_add_marker;
         if (__mb == 0)
@@ -6399,7 +6399,7 @@ public unsafe partial class Animation : Resource
             if (__mb == 0) throw new MissingMethodException("Animation.add_marker is not available in this engine build.");
             __mb_add_marker = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         double __a1 = time;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -6408,7 +6408,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_remove_marker;
-    public void RemoveMarker(string name)
+    public void RemoveMarker(StringName name)
     {
         var __mb = __mb_remove_marker;
         if (__mb == 0)
@@ -6417,14 +6417,14 @@ public unsafe partial class Animation : Resource
             if (__mb == 0) throw new MissingMethodException("Animation.remove_marker is not available in this engine build.");
             __mb_remove_marker = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_marker;
-    public bool HasMarker(string name)
+    public bool HasMarker(StringName name)
     {
         var __mb = __mb_has_marker;
         if (__mb == 0)
@@ -6433,7 +6433,7 @@ public unsafe partial class Animation : Resource
             if (__mb == 0) throw new MissingMethodException("Animation.has_marker is not available in this engine build.");
             __mb_has_marker = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -6442,7 +6442,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_get_marker_at_time;
-    public string GetMarkerAtTime(double time)
+    public StringName GetMarkerAtTime(double time)
     {
         var __mb = __mb_get_marker_at_time;
         if (__mb == 0)
@@ -6456,11 +6456,11 @@ public unsafe partial class Animation : Resource
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_next_marker;
-    public string GetNextMarker(double time)
+    public StringName GetNextMarker(double time)
     {
         var __mb = __mb_get_next_marker;
         if (__mb == 0)
@@ -6474,11 +6474,11 @@ public unsafe partial class Animation : Resource
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_prev_marker;
-    public string GetPrevMarker(double time)
+    public StringName GetPrevMarker(double time)
     {
         var __mb = __mb_get_prev_marker;
         if (__mb == 0)
@@ -6492,11 +6492,11 @@ public unsafe partial class Animation : Resource
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_marker_time;
-    public double GetMarkerTime(string name)
+    public double GetMarkerTime(StringName name)
     {
         var __mb = __mb_get_marker_time;
         if (__mb == 0)
@@ -6505,7 +6505,7 @@ public unsafe partial class Animation : Resource
             if (__mb == 0) throw new MissingMethodException("Animation.get_marker_time is not available in this engine build.");
             __mb_get_marker_time = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
@@ -6529,7 +6529,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_get_marker_color;
-    public Color GetMarkerColor(string name)
+    public Color GetMarkerColor(StringName name)
     {
         var __mb = __mb_get_marker_color;
         if (__mb == 0)
@@ -6538,7 +6538,7 @@ public unsafe partial class Animation : Resource
             if (__mb == 0) throw new MissingMethodException("Animation.get_marker_color is not available in this engine build.");
             __mb_get_marker_color = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Color);
@@ -6547,7 +6547,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_set_marker_color;
-    public void SetMarkerColor(string name, Color color)
+    public void SetMarkerColor(StringName name, Color color)
     {
         var __mb = __mb_set_marker_color;
         if (__mb == 0)
@@ -6556,7 +6556,7 @@ public unsafe partial class Animation : Resource
             if (__mb == 0) throw new MissingMethodException("Animation.set_marker_color is not available in this engine build.");
             __mb_set_marker_color = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = color;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -6753,40 +6753,40 @@ public unsafe partial class AnimationLibrary : Resource
         ClassRegistry.AttachNew(this, "AnimationLibrary");
     }
 
-    public delegate void AnimationAddedEventHandler(string animName);
+    public delegate void AnimationAddedEventHandler(StringName animName);
 
     public event AnimationAddedEventHandler AnimationAdded
     {
-        add => Connect("animation_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Disconnect("animation_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Connect("animation_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationAddedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("animation_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationAddedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
-    public delegate void AnimationRemovedEventHandler(string animName);
+    public delegate void AnimationRemovedEventHandler(StringName animName);
 
     public event AnimationRemovedEventHandler AnimationRemoved
     {
-        add => Connect("animation_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Disconnect("animation_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Connect("animation_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationRemovedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("animation_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationRemovedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
-    public delegate void AnimationRenamedEventHandler(string oldName, string newName);
+    public delegate void AnimationRenamedEventHandler(StringName oldName, StringName newName);
 
     public event AnimationRenamedEventHandler AnimationRenamed
     {
-        add => Connect("animation_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationRenamedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
-        remove => Disconnect("animation_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationRenamedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+        add => Connect("animation_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationRenamedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("animation_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationRenamedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[1])))));
     }
 
-    public delegate void AnimationChangedEventHandler(string animName);
+    public delegate void AnimationChangedEventHandler(StringName animName);
 
     public event AnimationChangedEventHandler AnimationChanged
     {
-        add => Connect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Disconnect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Connect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
     private static nint __mb_add_animation;
-    public Error AddAnimation(string name, Animation? animation)
+    public Error AddAnimation(StringName name, Animation? animation)
     {
         var __mb = __mb_add_animation;
         if (__mb == 0)
@@ -6795,7 +6795,7 @@ public unsafe partial class AnimationLibrary : Resource
             if (__mb == 0) throw new MissingMethodException("AnimationLibrary.add_animation is not available in this engine build.");
             __mb_add_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = animation?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -6806,7 +6806,7 @@ public unsafe partial class AnimationLibrary : Resource
     }
 
     private static nint __mb_remove_animation;
-    public void RemoveAnimation(string name)
+    public void RemoveAnimation(StringName name)
     {
         var __mb = __mb_remove_animation;
         if (__mb == 0)
@@ -6815,14 +6815,14 @@ public unsafe partial class AnimationLibrary : Resource
             if (__mb == 0) throw new MissingMethodException("AnimationLibrary.remove_animation is not available in this engine build.");
             __mb_remove_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_rename_animation;
-    public void RenameAnimation(string name, string newname)
+    public void RenameAnimation(StringName name, StringName newname)
     {
         var __mb = __mb_rename_animation;
         if (__mb == 0)
@@ -6831,8 +6831,8 @@ public unsafe partial class AnimationLibrary : Resource
             if (__mb == 0) throw new MissingMethodException("AnimationLibrary.rename_animation is not available in this engine build.");
             __mb_rename_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(newname).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = newname.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -6840,7 +6840,7 @@ public unsafe partial class AnimationLibrary : Resource
     }
 
     private static nint __mb_has_animation;
-    public bool HasAnimation(string name)
+    public bool HasAnimation(StringName name)
     {
         var __mb = __mb_has_animation;
         if (__mb == 0)
@@ -6849,7 +6849,7 @@ public unsafe partial class AnimationLibrary : Resource
             if (__mb == 0) throw new MissingMethodException("AnimationLibrary.has_animation is not available in this engine build.");
             __mb_has_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -6858,7 +6858,7 @@ public unsafe partial class AnimationLibrary : Resource
     }
 
     private static nint __mb_get_animation;
-    public Animation? GetAnimation(string name)
+    public Animation? GetAnimation(StringName name)
     {
         var __mb = __mb_get_animation;
         if (__mb == 0)
@@ -6867,7 +6867,7 @@ public unsafe partial class AnimationLibrary : Resource
             if (__mb == 0) throw new MissingMethodException("AnimationLibrary.get_animation is not available in this engine build.");
             __mb_get_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
@@ -7006,20 +7006,20 @@ public unsafe partial class AnimationMixer : Node
         remove => Disconnect("animation_libraries_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationLibrariesUpdatedEventHandler)__d)()));
     }
 
-    public delegate void AnimationFinishedEventHandler(string animName);
+    public delegate void AnimationFinishedEventHandler(StringName animName);
 
     public event AnimationFinishedEventHandler AnimationFinished
     {
-        add => Connect("animation_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationFinishedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Disconnect("animation_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationFinishedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Connect("animation_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationFinishedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("animation_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationFinishedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
-    public delegate void AnimationStartedEventHandler(string animName);
+    public delegate void AnimationStartedEventHandler(StringName animName);
 
     public event AnimationStartedEventHandler AnimationStarted
     {
-        add => Connect("animation_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationStartedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Disconnect("animation_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationStartedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Connect("animation_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationStartedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("animation_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationStartedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
     public delegate void CachesClearedEventHandler();
@@ -7047,7 +7047,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_add_animation_library;
-    public Error AddAnimationLibrary(string name, AnimationLibrary? library)
+    public Error AddAnimationLibrary(StringName name, AnimationLibrary? library)
     {
         var __mb = __mb_add_animation_library;
         if (__mb == 0)
@@ -7056,7 +7056,7 @@ public unsafe partial class AnimationMixer : Node
             if (__mb == 0) throw new MissingMethodException("AnimationMixer.add_animation_library is not available in this engine build.");
             __mb_add_animation_library = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = library?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -7067,7 +7067,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_remove_animation_library;
-    public void RemoveAnimationLibrary(string name)
+    public void RemoveAnimationLibrary(StringName name)
     {
         var __mb = __mb_remove_animation_library;
         if (__mb == 0)
@@ -7076,14 +7076,14 @@ public unsafe partial class AnimationMixer : Node
             if (__mb == 0) throw new MissingMethodException("AnimationMixer.remove_animation_library is not available in this engine build.");
             __mb_remove_animation_library = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_rename_animation_library;
-    public void RenameAnimationLibrary(string name, string newname)
+    public void RenameAnimationLibrary(StringName name, StringName newname)
     {
         var __mb = __mb_rename_animation_library;
         if (__mb == 0)
@@ -7092,8 +7092,8 @@ public unsafe partial class AnimationMixer : Node
             if (__mb == 0) throw new MissingMethodException("AnimationMixer.rename_animation_library is not available in this engine build.");
             __mb_rename_animation_library = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(newname).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = newname.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -7101,7 +7101,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_has_animation_library;
-    public bool HasAnimationLibrary(string name)
+    public bool HasAnimationLibrary(StringName name)
     {
         var __mb = __mb_has_animation_library;
         if (__mb == 0)
@@ -7110,7 +7110,7 @@ public unsafe partial class AnimationMixer : Node
             if (__mb == 0) throw new MissingMethodException("AnimationMixer.has_animation_library is not available in this engine build.");
             __mb_has_animation_library = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -7119,7 +7119,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_get_animation_library;
-    public AnimationLibrary? GetAnimationLibrary(string name)
+    public AnimationLibrary? GetAnimationLibrary(StringName name)
     {
         var __mb = __mb_get_animation_library;
         if (__mb == 0)
@@ -7128,7 +7128,7 @@ public unsafe partial class AnimationMixer : Node
             if (__mb == 0) throw new MissingMethodException("AnimationMixer.get_animation_library is not available in this engine build.");
             __mb_get_animation_library = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
@@ -7152,7 +7152,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_has_animation;
-    public bool HasAnimation(string name)
+    public bool HasAnimation(StringName name)
     {
         var __mb = __mb_has_animation;
         if (__mb == 0)
@@ -7161,7 +7161,7 @@ public unsafe partial class AnimationMixer : Node
             if (__mb == 0) throw new MissingMethodException("AnimationMixer.has_animation is not available in this engine build.");
             __mb_has_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -7170,7 +7170,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_get_animation;
-    public Animation? GetAnimation(string name)
+    public Animation? GetAnimation(StringName name)
     {
         var __mb = __mb_get_animation;
         if (__mb == 0)
@@ -7179,7 +7179,7 @@ public unsafe partial class AnimationMixer : Node
             if (__mb == 0) throw new MissingMethodException("AnimationMixer.get_animation is not available in this engine build.");
             __mb_get_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
@@ -7601,7 +7601,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_capture;
-    public void Capture(string name, double duration, Tween.TransitionType transType = (Tween.TransitionType)(0), Tween.EaseType easeType = (Tween.EaseType)(0))
+    public void Capture(StringName name, double duration, Tween.TransitionType transType = (Tween.TransitionType)(0), Tween.EaseType easeType = (Tween.EaseType)(0))
     {
         var __mb = __mb_capture;
         if (__mb == 0)
@@ -7610,7 +7610,7 @@ public unsafe partial class AnimationMixer : Node
             if (__mb == 0) throw new MissingMethodException("AnimationMixer.capture is not available in this engine build.");
             __mb_capture = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         double __a1 = duration;
         long __a2 = (long)transType;
         long __a3 = (long)easeType;
@@ -7654,7 +7654,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_find_animation;
-    public string FindAnimation(Animation? animation)
+    public StringName FindAnimation(Animation? animation)
     {
         var __mb = __mb_find_animation;
         if (__mb == 0)
@@ -7668,11 +7668,11 @@ public unsafe partial class AnimationMixer : Node
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_find_animation_library;
-    public string FindAnimationLibrary(Animation? animation)
+    public StringName FindAnimationLibrary(Animation? animation)
     {
         var __mb = __mb_find_animation_library;
         if (__mb == 0)
@@ -7686,7 +7686,7 @@ public unsafe partial class AnimationMixer : Node
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 }
 
@@ -7951,7 +7951,7 @@ public unsafe partial class AnimationNode : Resource
     }
 
     private static nint __mb_blend_animation;
-    public void BlendAnimation(string animation, double time, double delta, bool seeked, bool isExternalSeeking, float blend, Animation.LoopedFlag loopedFlag = (Animation.LoopedFlag)(0))
+    public void BlendAnimation(StringName animation, double time, double delta, bool seeked, bool isExternalSeeking, float blend, Animation.LoopedFlag loopedFlag = (Animation.LoopedFlag)(0))
     {
         var __mb = __mb_blend_animation;
         if (__mb == 0)
@@ -7960,7 +7960,7 @@ public unsafe partial class AnimationNode : Resource
             if (__mb == 0) throw new MissingMethodException("AnimationNode.blend_animation is not available in this engine build.");
             __mb_blend_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(animation).Opaque;
+        ulong __a0 = animation.NativeValue;
         double __a1 = time;
         double __a2 = delta;
         byte __a3 = seeked ? (byte)1 : (byte)0;
@@ -7979,7 +7979,7 @@ public unsafe partial class AnimationNode : Resource
     }
 
     private static nint __mb_blend_node;
-    public double BlendNode(string name, AnimationNode? node, double time, bool seek, bool isExternalSeeking, float blend, AnimationNode.FilterAction filter = (AnimationNode.FilterAction)(0), bool sync = true, bool testOnly = false)
+    public double BlendNode(StringName name, AnimationNode? node, double time, bool seek, bool isExternalSeeking, float blend, AnimationNode.FilterAction filter = (AnimationNode.FilterAction)(0), bool sync = true, bool testOnly = false)
     {
         var __mb = __mb_blend_node;
         if (__mb == 0)
@@ -7988,7 +7988,7 @@ public unsafe partial class AnimationNode : Resource
             if (__mb == 0) throw new MissingMethodException("AnimationNode.blend_node is not available in this engine build.");
             __mb_blend_node = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = node?.NativePtr ?? 0;
         double __a2 = time;
         byte __a3 = seek ? (byte)1 : (byte)0;
@@ -8045,7 +8045,7 @@ public unsafe partial class AnimationNode : Resource
     }
 
     private static nint __mb_set_parameter;
-    public void SetParameter(string name, Variant value)
+    public void SetParameter(StringName name, Variant value)
     {
         var __mb = __mb_set_parameter;
         if (__mb == 0)
@@ -8054,7 +8054,7 @@ public unsafe partial class AnimationNode : Resource
             if (__mb == 0) throw new MissingMethodException("AnimationNode.set_parameter is not available in this engine build.");
             __mb_set_parameter = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = value.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -8063,7 +8063,7 @@ public unsafe partial class AnimationNode : Resource
     }
 
     private static nint __mb_get_parameter;
-    public Variant GetParameter(string name)
+    public Variant GetParameter(StringName name)
     {
         var __mb = __mb_get_parameter;
         if (__mb == 0)
@@ -8072,7 +8072,7 @@ public unsafe partial class AnimationNode : Resource
             if (__mb == 0) throw new MissingMethodException("AnimationNode.get_parameter is not available in this engine build.");
             __mb_get_parameter = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -8080,9 +8080,9 @@ public unsafe partial class AnimationNode : Resource
         return new Variant(__ret);
     }
 
-    public virtual AnimationNode? _GetChildByName(string name) => default!;
+    public virtual AnimationNode? _GetChildByName(StringName name) => default!;
 
-    public virtual bool _IsParameterReadOnly(string parameter) => default!;
+    public virtual bool _IsParameterReadOnly(StringName parameter) => default!;
 
     public virtual double _Process(double time, bool seek, bool isExternalSeeking, bool testOnly) => default!;
 
@@ -8101,13 +8101,13 @@ public unsafe partial class AnimationNode : Resource
         if (__vsn_get_child_by_name == 0) __vsn_get_child_by_name = StringNames.Get("_get_child_by_name").Opaque;
         if (nameSn == __vsn_get_child_by_name)
         {
-            *(nint*)ret = _GetChildByName(StringNames.Read(*(ulong*)args[0]))?.NativePtr ?? 0;
+            *(nint*)ret = _GetChildByName(StringName.Intern(StringNames.Read(*(ulong*)args[0])))?.NativePtr ?? 0;
             return true;
         }
         if (__vsn_is_parameter_read_only == 0) __vsn_is_parameter_read_only = StringNames.Get("_is_parameter_read_only").Opaque;
         if (nameSn == __vsn_is_parameter_read_only)
         {
-            *(byte*)ret = _IsParameterReadOnly(StringNames.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _IsParameterReadOnly(StringName.Intern(StringNames.Read(*(ulong*)args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_process == 0) __vsn_process = StringNames.Get("_process").Opaque;
@@ -8167,7 +8167,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
         Backward = 1,
     }
 
-    public string Animation
+    public StringName Animation
     {
         get => GetAnimation();
         set => SetAnimation(value);
@@ -8216,7 +8216,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
     }
 
     private static nint __mb_set_animation;
-    internal void SetAnimation(string name)
+    internal void SetAnimation(StringName name)
     {
         var __mb = __mb_set_animation;
         if (__mb == 0)
@@ -8225,14 +8225,14 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeAnimation.set_animation is not available in this engine build.");
             __mb_set_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_animation;
-    internal string GetAnimation()
+    internal StringName GetAnimation()
     {
         var __mb = __mb_get_animation;
         if (__mb == 0)
@@ -8243,7 +8243,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_play_mode;
@@ -8557,7 +8557,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_add_blend_point;
-    public void AddBlendPoint(AnimationRootNode? node, float pos, int atIndex = unchecked((int)(-1)), string name = "")
+    public void AddBlendPoint(AnimationRootNode? node, float pos, int atIndex, StringName name)
     {
         var __mb = __mb_add_blend_point;
         if (__mb == 0)
@@ -8569,7 +8569,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
         nint __a0 = node?.NativePtr ?? 0;
         double __a1 = pos;
         long __a2 = unchecked((long)atIndex);
-        ulong __a3 = StringNames.Get(name).Opaque;
+        ulong __a3 = name.NativeValue;
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -8651,7 +8651,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_set_blend_point_name;
-    public void SetBlendPointName(int point, string name)
+    public void SetBlendPointName(int point, StringName name)
     {
         var __mb = __mb_set_blend_point_name;
         if (__mb == 0)
@@ -8661,7 +8661,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
             __mb_set_blend_point_name = __mb;
         }
         long __a0 = unchecked((long)point);
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a1 = name.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -8669,7 +8669,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_get_blend_point_name;
-    public string GetBlendPointName(int point)
+    public StringName GetBlendPointName(int point)
     {
         var __mb = __mb_get_blend_point_name;
         if (__mb == 0)
@@ -8683,11 +8683,11 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_find_blend_point_by_name;
-    public int FindBlendPointByName(string name)
+    public int FindBlendPointByName(StringName name)
     {
         var __mb = __mb_find_blend_point_by_name;
         if (__mb == 0)
@@ -8696,7 +8696,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeBlendSpace1D.find_blend_point_by_name is not available in this engine build.");
             __mb_find_blend_point_by_name = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
@@ -9096,7 +9096,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_add_blend_point;
-    public void AddBlendPoint(AnimationRootNode? node, Vector2 pos, int atIndex = unchecked((int)(-1)), string name = "")
+    public void AddBlendPoint(AnimationRootNode? node, Vector2 pos, int atIndex, StringName name)
     {
         var __mb = __mb_add_blend_point;
         if (__mb == 0)
@@ -9108,7 +9108,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
         nint __a0 = node?.NativePtr ?? 0;
         var __a1 = pos;
         long __a2 = unchecked((long)atIndex);
-        ulong __a3 = StringNames.Get(name).Opaque;
+        ulong __a3 = name.NativeValue;
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -9190,7 +9190,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_set_blend_point_name;
-    public void SetBlendPointName(int point, string name)
+    public void SetBlendPointName(int point, StringName name)
     {
         var __mb = __mb_set_blend_point_name;
         if (__mb == 0)
@@ -9200,7 +9200,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
             __mb_set_blend_point_name = __mb;
         }
         long __a0 = unchecked((long)point);
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a1 = name.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -9208,7 +9208,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_get_blend_point_name;
-    public string GetBlendPointName(int point)
+    public StringName GetBlendPointName(int point)
     {
         var __mb = __mb_get_blend_point_name;
         if (__mb == 0)
@@ -9222,11 +9222,11 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_find_blend_point_by_name;
-    public int FindBlendPointByName(string name)
+    public int FindBlendPointByName(StringName name)
     {
         var __mb = __mb_find_blend_point_by_name;
         if (__mb == 0)
@@ -9235,7 +9235,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeBlendSpace2D.find_blend_point_by_name is not available in this engine build.");
             __mb_find_blend_point_by_name = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
@@ -9693,16 +9693,16 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
         set => SetGraphOffset(value);
     }
 
-    public delegate void NodeChangedEventHandler(string nodeName);
+    public delegate void NodeChangedEventHandler(StringName nodeName);
 
     public event NodeChangedEventHandler NodeChanged
     {
-        add => Connect("node_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Disconnect("node_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Connect("node_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeChangedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("node_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeChangedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
     private static nint __mb_add_node;
-    public void AddNode(string name, AnimationNode? node, Vector2 position = default)
+    public void AddNode(StringName name, AnimationNode? node, Vector2 position = default)
     {
         var __mb = __mb_add_node;
         if (__mb == 0)
@@ -9711,7 +9711,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeBlendTree.add_node is not available in this engine build.");
             __mb_add_node = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = node?.NativePtr ?? 0;
         var __a2 = position;
         var __args = stackalloc nint[3];
@@ -9722,7 +9722,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
     }
 
     private static nint __mb_get_node;
-    public AnimationNode? GetNode(string name)
+    public AnimationNode? GetNode(StringName name)
     {
         var __mb = __mb_get_node;
         if (__mb == 0)
@@ -9731,7 +9731,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeBlendTree.get_node is not available in this engine build.");
             __mb_get_node = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
@@ -9740,7 +9740,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
     }
 
     private static nint __mb_remove_node;
-    public void RemoveNode(string name)
+    public void RemoveNode(StringName name)
     {
         var __mb = __mb_remove_node;
         if (__mb == 0)
@@ -9749,14 +9749,14 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeBlendTree.remove_node is not available in this engine build.");
             __mb_remove_node = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_rename_node;
-    public void RenameNode(string name, string newName)
+    public void RenameNode(StringName name, StringName newName)
     {
         var __mb = __mb_rename_node;
         if (__mb == 0)
@@ -9765,8 +9765,8 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeBlendTree.rename_node is not available in this engine build.");
             __mb_rename_node = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(newName).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = newName.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -9774,7 +9774,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
     }
 
     private static nint __mb_has_node;
-    public bool HasNode(string name)
+    public bool HasNode(StringName name)
     {
         var __mb = __mb_has_node;
         if (__mb == 0)
@@ -9783,7 +9783,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeBlendTree.has_node is not available in this engine build.");
             __mb_has_node = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -9792,7 +9792,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
     }
 
     private static nint __mb_connect_node;
-    public void ConnectNode(string inputNode, int inputIndex, string outputNode)
+    public void ConnectNode(StringName inputNode, int inputIndex, StringName outputNode)
     {
         var __mb = __mb_connect_node;
         if (__mb == 0)
@@ -9801,9 +9801,9 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeBlendTree.connect_node is not available in this engine build.");
             __mb_connect_node = __mb;
         }
-        ulong __a0 = StringNames.Get(inputNode).Opaque;
+        ulong __a0 = inputNode.NativeValue;
         long __a1 = unchecked((long)inputIndex);
-        ulong __a2 = StringNames.Get(outputNode).Opaque;
+        ulong __a2 = outputNode.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -9812,7 +9812,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
     }
 
     private static nint __mb_disconnect_node;
-    public void DisconnectNode(string inputNode, int inputIndex)
+    public void DisconnectNode(StringName inputNode, int inputIndex)
     {
         var __mb = __mb_disconnect_node;
         if (__mb == 0)
@@ -9821,7 +9821,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeBlendTree.disconnect_node is not available in this engine build.");
             __mb_disconnect_node = __mb;
         }
-        ulong __a0 = StringNames.Get(inputNode).Opaque;
+        ulong __a0 = inputNode.NativeValue;
         long __a1 = unchecked((long)inputIndex);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -9845,7 +9845,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
     }
 
     private static nint __mb_set_node_position;
-    public void SetNodePosition(string name, Vector2 position)
+    public void SetNodePosition(StringName name, Vector2 position)
     {
         var __mb = __mb_set_node_position;
         if (__mb == 0)
@@ -9854,7 +9854,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeBlendTree.set_node_position is not available in this engine build.");
             __mb_set_node_position = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = position;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -9863,7 +9863,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
     }
 
     private static nint __mb_get_node_position;
-    public Vector2 GetNodePosition(string name)
+    public Vector2 GetNodePosition(StringName name)
     {
         var __mb = __mb_get_node_position;
         if (__mb == 0)
@@ -9872,7 +9872,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeBlendTree.get_node_position is not available in this engine build.");
             __mb_get_node_position = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2);
@@ -10416,7 +10416,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_add_node;
-    public void AddNode(string name, AnimationNode? node, Vector2 position = default)
+    public void AddNode(StringName name, AnimationNode? node, Vector2 position = default)
     {
         var __mb = __mb_add_node;
         if (__mb == 0)
@@ -10425,7 +10425,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachine.add_node is not available in this engine build.");
             __mb_add_node = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = node?.NativePtr ?? 0;
         var __a2 = position;
         var __args = stackalloc nint[3];
@@ -10436,7 +10436,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_replace_node;
-    public void ReplaceNode(string name, AnimationNode? node)
+    public void ReplaceNode(StringName name, AnimationNode? node)
     {
         var __mb = __mb_replace_node;
         if (__mb == 0)
@@ -10445,7 +10445,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachine.replace_node is not available in this engine build.");
             __mb_replace_node = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = node?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -10454,7 +10454,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_get_node;
-    public AnimationNode? GetNode(string name)
+    public AnimationNode? GetNode(StringName name)
     {
         var __mb = __mb_get_node;
         if (__mb == 0)
@@ -10463,7 +10463,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachine.get_node is not available in this engine build.");
             __mb_get_node = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
@@ -10472,7 +10472,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_remove_node;
-    public void RemoveNode(string name)
+    public void RemoveNode(StringName name)
     {
         var __mb = __mb_remove_node;
         if (__mb == 0)
@@ -10481,14 +10481,14 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachine.remove_node is not available in this engine build.");
             __mb_remove_node = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_rename_node;
-    public void RenameNode(string name, string newName)
+    public void RenameNode(StringName name, StringName newName)
     {
         var __mb = __mb_rename_node;
         if (__mb == 0)
@@ -10497,8 +10497,8 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachine.rename_node is not available in this engine build.");
             __mb_rename_node = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(newName).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = newName.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -10506,7 +10506,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_has_node;
-    public bool HasNode(string name)
+    public bool HasNode(StringName name)
     {
         var __mb = __mb_has_node;
         if (__mb == 0)
@@ -10515,7 +10515,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachine.has_node is not available in this engine build.");
             __mb_has_node = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -10524,7 +10524,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_get_node_name;
-    public string GetNodeName(AnimationNode? node)
+    public StringName GetNodeName(AnimationNode? node)
     {
         var __mb = __mb_get_node_name;
         if (__mb == 0)
@@ -10538,7 +10538,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_node_list;
@@ -10557,7 +10557,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_set_node_position;
-    public void SetNodePosition(string name, Vector2 position)
+    public void SetNodePosition(StringName name, Vector2 position)
     {
         var __mb = __mb_set_node_position;
         if (__mb == 0)
@@ -10566,7 +10566,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachine.set_node_position is not available in this engine build.");
             __mb_set_node_position = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = position;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -10575,7 +10575,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_get_node_position;
-    public Vector2 GetNodePosition(string name)
+    public Vector2 GetNodePosition(StringName name)
     {
         var __mb = __mb_get_node_position;
         if (__mb == 0)
@@ -10584,7 +10584,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachine.get_node_position is not available in this engine build.");
             __mb_get_node_position = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2);
@@ -10593,7 +10593,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_has_transition;
-    public bool HasTransition(string from, string to)
+    public bool HasTransition(StringName from, StringName to)
     {
         var __mb = __mb_has_transition;
         if (__mb == 0)
@@ -10602,8 +10602,8 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachine.has_transition is not available in this engine build.");
             __mb_has_transition = __mb;
         }
-        ulong __a0 = StringNames.Get(from).Opaque;
-        ulong __a1 = StringNames.Get(to).Opaque;
+        ulong __a0 = from.NativeValue;
+        ulong __a1 = to.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -10613,7 +10613,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_add_transition;
-    public void AddTransition(string from, string to, AnimationNodeStateMachineTransition? transition)
+    public void AddTransition(StringName from, StringName to, AnimationNodeStateMachineTransition? transition)
     {
         var __mb = __mb_add_transition;
         if (__mb == 0)
@@ -10622,8 +10622,8 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachine.add_transition is not available in this engine build.");
             __mb_add_transition = __mb;
         }
-        ulong __a0 = StringNames.Get(from).Opaque;
-        ulong __a1 = StringNames.Get(to).Opaque;
+        ulong __a0 = from.NativeValue;
+        ulong __a1 = to.NativeValue;
         nint __a2 = transition?.NativePtr ?? 0;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -10651,7 +10651,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_get_transition_from;
-    public string GetTransitionFrom(int idx)
+    public StringName GetTransitionFrom(int idx)
     {
         var __mb = __mb_get_transition_from;
         if (__mb == 0)
@@ -10665,11 +10665,11 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_transition_to;
-    public string GetTransitionTo(int idx)
+    public StringName GetTransitionTo(int idx)
     {
         var __mb = __mb_get_transition_to;
         if (__mb == 0)
@@ -10683,7 +10683,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_transition_count;
@@ -10718,7 +10718,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_remove_transition;
-    public void RemoveTransition(string from, string to)
+    public void RemoveTransition(StringName from, StringName to)
     {
         var __mb = __mb_remove_transition;
         if (__mb == 0)
@@ -10727,8 +10727,8 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
             if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachine.remove_transition is not available in this engine build.");
             __mb_remove_transition = __mb;
         }
-        ulong __a0 = StringNames.Get(from).Opaque;
-        ulong __a1 = StringNames.Get(to).Opaque;
+        ulong __a0 = from.NativeValue;
+        ulong __a1 = to.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -10869,24 +10869,24 @@ public unsafe partial class AnimationNodeStateMachinePlayback : Resource
         ClassRegistry.AttachNew(this, "AnimationNodeStateMachinePlayback");
     }
 
-    public delegate void StateStartedEventHandler(string state);
+    public delegate void StateStartedEventHandler(StringName state);
 
     public event StateStartedEventHandler StateStarted
     {
-        add => Connect("state_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StateStartedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Disconnect("state_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StateStartedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Connect("state_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StateStartedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("state_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StateStartedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
-    public delegate void StateFinishedEventHandler(string state);
+    public delegate void StateFinishedEventHandler(StringName state);
 
     public event StateFinishedEventHandler StateFinished
     {
-        add => Connect("state_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StateFinishedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Disconnect("state_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StateFinishedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Connect("state_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StateFinishedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("state_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StateFinishedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
     private static nint __mb_travel;
-    public void Travel(string toNode, bool resetOnTeleport = true)
+    public void Travel(StringName toNode, bool resetOnTeleport = true)
     {
         var __mb = __mb_travel;
         if (__mb == 0)
@@ -10895,7 +10895,7 @@ public unsafe partial class AnimationNodeStateMachinePlayback : Resource
             if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachinePlayback.travel is not available in this engine build.");
             __mb_travel = __mb;
         }
-        ulong __a0 = StringNames.Get(toNode).Opaque;
+        ulong __a0 = toNode.NativeValue;
         byte __a1 = resetOnTeleport ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -10904,7 +10904,7 @@ public unsafe partial class AnimationNodeStateMachinePlayback : Resource
     }
 
     private static nint __mb_start;
-    public void Start(string node, bool reset = true)
+    public void Start(StringName node, bool reset = true)
     {
         var __mb = __mb_start;
         if (__mb == 0)
@@ -10913,7 +10913,7 @@ public unsafe partial class AnimationNodeStateMachinePlayback : Resource
             if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachinePlayback.start is not available in this engine build.");
             __mb_start = __mb;
         }
-        ulong __a0 = StringNames.Get(node).Opaque;
+        ulong __a0 = node.NativeValue;
         byte __a1 = reset ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -10963,7 +10963,7 @@ public unsafe partial class AnimationNodeStateMachinePlayback : Resource
     }
 
     private static nint __mb_get_current_node;
-    public string GetCurrentNode()
+    public StringName GetCurrentNode()
     {
         var __mb = __mb_get_current_node;
         if (__mb == 0)
@@ -10974,7 +10974,7 @@ public unsafe partial class AnimationNodeStateMachinePlayback : Resource
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_current_play_position;
@@ -11008,7 +11008,7 @@ public unsafe partial class AnimationNodeStateMachinePlayback : Resource
     }
 
     private static nint __mb_get_fading_from_node;
-    public string GetFadingFromNode()
+    public StringName GetFadingFromNode()
     {
         var __mb = __mb_get_fading_from_node;
         if (__mb == 0)
@@ -11019,7 +11019,7 @@ public unsafe partial class AnimationNodeStateMachinePlayback : Resource
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_fading_from_play_position;
@@ -11163,7 +11163,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
         set => SetAdvanceMode(value);
     }
 
-    public string AdvanceCondition
+    public StringName AdvanceCondition
     {
         get => GetAdvanceCondition();
         set => SetAdvanceCondition(value);
@@ -11246,7 +11246,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_set_advance_condition;
-    internal void SetAdvanceCondition(string name)
+    internal void SetAdvanceCondition(StringName name)
     {
         var __mb = __mb_set_advance_condition;
         if (__mb == 0)
@@ -11255,14 +11255,14 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
             if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachineTransition.set_advance_condition is not available in this engine build.");
             __mb_set_advance_condition = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_advance_condition;
-    internal string GetAdvanceCondition()
+    internal StringName GetAdvanceCondition()
     {
         var __mb = __mb_get_advance_condition;
         if (__mb == 0)
@@ -11273,7 +11273,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_xfade_time;
@@ -11851,19 +11851,19 @@ public unsafe partial class AnimationPlayer : AnimationMixer
         Immediate = 1,
     }
 
-    public string CurrentAnimation
+    public StringName CurrentAnimation
     {
         get => GetCurrentAnimation();
         set => SetCurrentAnimation(value);
     }
 
-    public string AssignedAnimation
+    public StringName AssignedAnimation
     {
         get => GetAssignedAnimation();
         set => SetAssignedAnimation(value);
     }
 
-    public string Autoplay
+    public StringName Autoplay
     {
         get => GetAutoplay();
         set => SetAutoplay(value);
@@ -11915,24 +11915,24 @@ public unsafe partial class AnimationPlayer : AnimationMixer
         set => SetMovieQuitOnFinishEnabled(value);
     }
 
-    public delegate void CurrentAnimationChangedEventHandler(string animName);
+    public delegate void CurrentAnimationChangedEventHandler(StringName animName);
 
     public event CurrentAnimationChangedEventHandler CurrentAnimationChanged
     {
-        add => Connect("current_animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CurrentAnimationChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
-        remove => Disconnect("current_animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CurrentAnimationChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        add => Connect("current_animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CurrentAnimationChangedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("current_animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CurrentAnimationChangedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])))));
     }
 
-    public delegate void AnimationChangedEventHandler(string oldName, string newName);
+    public delegate void AnimationChangedEventHandler(StringName oldName, StringName newName);
 
     public event AnimationChangedEventHandler AnimationChanged
     {
-        add => Connect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
-        remove => Disconnect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+        add => Connect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[1])))));
     }
 
     private static nint __mb_animation_set_next;
-    public void AnimationSetNext(string animationFrom, string animationTo)
+    public void AnimationSetNext(StringName animationFrom, StringName animationTo)
     {
         var __mb = __mb_animation_set_next;
         if (__mb == 0)
@@ -11941,8 +11941,8 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.animation_set_next is not available in this engine build.");
             __mb_animation_set_next = __mb;
         }
-        ulong __a0 = StringNames.Get(animationFrom).Opaque;
-        ulong __a1 = StringNames.Get(animationTo).Opaque;
+        ulong __a0 = animationFrom.NativeValue;
+        ulong __a1 = animationTo.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -11950,7 +11950,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_animation_get_next;
-    public string AnimationGetNext(string animationFrom)
+    public StringName AnimationGetNext(StringName animationFrom)
     {
         var __mb = __mb_animation_get_next;
         if (__mb == 0)
@@ -11959,16 +11959,16 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.animation_get_next is not available in this engine build.");
             __mb_animation_get_next = __mb;
         }
-        ulong __a0 = StringNames.Get(animationFrom).Opaque;
+        ulong __a0 = animationFrom.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_blend_time;
-    public void SetBlendTime(string animationFrom, string animationTo, double sec)
+    public void SetBlendTime(StringName animationFrom, StringName animationTo, double sec)
     {
         var __mb = __mb_set_blend_time;
         if (__mb == 0)
@@ -11977,8 +11977,8 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.set_blend_time is not available in this engine build.");
             __mb_set_blend_time = __mb;
         }
-        ulong __a0 = StringNames.Get(animationFrom).Opaque;
-        ulong __a1 = StringNames.Get(animationTo).Opaque;
+        ulong __a0 = animationFrom.NativeValue;
+        ulong __a1 = animationTo.NativeValue;
         double __a2 = sec;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -11988,7 +11988,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_get_blend_time;
-    public double GetBlendTime(string animationFrom, string animationTo)
+    public double GetBlendTime(StringName animationFrom, StringName animationTo)
     {
         var __mb = __mb_get_blend_time;
         if (__mb == 0)
@@ -11997,8 +11997,8 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.get_blend_time is not available in this engine build.");
             __mb_get_blend_time = __mb;
         }
-        ulong __a0 = StringNames.Get(animationFrom).Opaque;
-        ulong __a1 = StringNames.Get(animationTo).Opaque;
+        ulong __a0 = animationFrom.NativeValue;
+        ulong __a1 = animationTo.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -12163,7 +12163,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_play;
-    public void Play(string name = "", double customBlend = -1, float customSpeed = 1.0f, bool fromEnd = false)
+    public void Play(StringName name, double customBlend = -1, float customSpeed = 1.0f, bool fromEnd = false)
     {
         var __mb = __mb_play;
         if (__mb == 0)
@@ -12172,7 +12172,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.play is not available in this engine build.");
             __mb_play = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         double __a1 = customBlend;
         double __a2 = customSpeed;
         byte __a3 = fromEnd ? (byte)1 : (byte)0;
@@ -12185,7 +12185,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_play_section_with_markers;
-    public void PlaySectionWithMarkers(string name = "", string startMarker = "", string endMarker = "", double customBlend = -1, float customSpeed = 1.0f, bool fromEnd = false)
+    public void PlaySectionWithMarkers(StringName name, StringName startMarker, StringName endMarker, double customBlend = -1, float customSpeed = 1.0f, bool fromEnd = false)
     {
         var __mb = __mb_play_section_with_markers;
         if (__mb == 0)
@@ -12194,9 +12194,9 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.play_section_with_markers is not available in this engine build.");
             __mb_play_section_with_markers = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(startMarker).Opaque;
-        ulong __a2 = StringNames.Get(endMarker).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = startMarker.NativeValue;
+        ulong __a2 = endMarker.NativeValue;
         double __a3 = customBlend;
         double __a4 = customSpeed;
         byte __a5 = fromEnd ? (byte)1 : (byte)0;
@@ -12211,7 +12211,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_play_section;
-    public void PlaySection(string name = "", double startTime = -1, double endTime = -1, double customBlend = -1, float customSpeed = 1.0f, bool fromEnd = false)
+    public void PlaySection(StringName name, double startTime = -1, double endTime = -1, double customBlend = -1, float customSpeed = 1.0f, bool fromEnd = false)
     {
         var __mb = __mb_play_section;
         if (__mb == 0)
@@ -12220,7 +12220,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.play_section is not available in this engine build.");
             __mb_play_section = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         double __a1 = startTime;
         double __a2 = endTime;
         double __a3 = customBlend;
@@ -12237,7 +12237,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_play_backwards;
-    public void PlayBackwards(string name = "", double customBlend = -1)
+    public void PlayBackwards(StringName name, double customBlend = -1)
     {
         var __mb = __mb_play_backwards;
         if (__mb == 0)
@@ -12246,7 +12246,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.play_backwards is not available in this engine build.");
             __mb_play_backwards = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         double __a1 = customBlend;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -12255,7 +12255,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_play_section_with_markers_backwards;
-    public void PlaySectionWithMarkersBackwards(string name = "", string startMarker = "", string endMarker = "", double customBlend = -1)
+    public void PlaySectionWithMarkersBackwards(StringName name, StringName startMarker, StringName endMarker, double customBlend = -1)
     {
         var __mb = __mb_play_section_with_markers_backwards;
         if (__mb == 0)
@@ -12264,9 +12264,9 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.play_section_with_markers_backwards is not available in this engine build.");
             __mb_play_section_with_markers_backwards = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(startMarker).Opaque;
-        ulong __a2 = StringNames.Get(endMarker).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = startMarker.NativeValue;
+        ulong __a2 = endMarker.NativeValue;
         double __a3 = customBlend;
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
@@ -12277,7 +12277,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_play_section_backwards;
-    public void PlaySectionBackwards(string name = "", double startTime = -1, double endTime = -1, double customBlend = -1)
+    public void PlaySectionBackwards(StringName name, double startTime = -1, double endTime = -1, double customBlend = -1)
     {
         var __mb = __mb_play_section_backwards;
         if (__mb == 0)
@@ -12286,7 +12286,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.play_section_backwards is not available in this engine build.");
             __mb_play_section_backwards = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         double __a1 = startTime;
         double __a2 = endTime;
         double __a3 = customBlend;
@@ -12299,7 +12299,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_play_with_capture;
-    public void PlayWithCapture(string name = "", double duration = -1.0, double customBlend = -1, float customSpeed = 1.0f, bool fromEnd = false, Tween.TransitionType transType = (Tween.TransitionType)(0), Tween.EaseType easeType = (Tween.EaseType)(0))
+    public void PlayWithCapture(StringName name, double duration = -1.0, double customBlend = -1, float customSpeed = 1.0f, bool fromEnd = false, Tween.TransitionType transType = (Tween.TransitionType)(0), Tween.EaseType easeType = (Tween.EaseType)(0))
     {
         var __mb = __mb_play_with_capture;
         if (__mb == 0)
@@ -12308,7 +12308,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.play_with_capture is not available in this engine build.");
             __mb_play_with_capture = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         double __a1 = duration;
         double __a2 = customBlend;
         double __a3 = customSpeed;
@@ -12386,7 +12386,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_set_current_animation;
-    internal void SetCurrentAnimation(string animation)
+    internal void SetCurrentAnimation(StringName animation)
     {
         var __mb = __mb_set_current_animation;
         if (__mb == 0)
@@ -12395,14 +12395,14 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.set_current_animation is not available in this engine build.");
             __mb_set_current_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(animation).Opaque;
+        ulong __a0 = animation.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_current_animation;
-    internal string GetCurrentAnimation()
+    internal StringName GetCurrentAnimation()
     {
         var __mb = __mb_get_current_animation;
         if (__mb == 0)
@@ -12413,11 +12413,11 @@ public unsafe partial class AnimationPlayer : AnimationMixer
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_assigned_animation;
-    internal void SetAssignedAnimation(string animation)
+    internal void SetAssignedAnimation(StringName animation)
     {
         var __mb = __mb_set_assigned_animation;
         if (__mb == 0)
@@ -12426,14 +12426,14 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.set_assigned_animation is not available in this engine build.");
             __mb_set_assigned_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(animation).Opaque;
+        ulong __a0 = animation.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_assigned_animation;
-    internal string GetAssignedAnimation()
+    internal StringName GetAssignedAnimation()
     {
         var __mb = __mb_get_assigned_animation;
         if (__mb == 0)
@@ -12444,11 +12444,11 @@ public unsafe partial class AnimationPlayer : AnimationMixer
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_queue;
-    public void Queue(string name)
+    public void Queue(StringName name)
     {
         var __mb = __mb_queue;
         if (__mb == 0)
@@ -12457,7 +12457,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.queue is not available in this engine build.");
             __mb_queue = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
@@ -12538,7 +12538,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_set_autoplay;
-    internal void SetAutoplay(string name)
+    internal void SetAutoplay(StringName name)
     {
         var __mb = __mb_set_autoplay;
         if (__mb == 0)
@@ -12547,14 +12547,14 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.set_autoplay is not available in this engine build.");
             __mb_set_autoplay = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_autoplay;
-    internal string GetAutoplay()
+    internal StringName GetAutoplay()
     {
         var __mb = __mb_get_autoplay;
         if (__mb == 0)
@@ -12565,7 +12565,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_movie_quit_on_finish_enabled;
@@ -12630,7 +12630,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_set_section_with_markers;
-    public void SetSectionWithMarkers(string startMarker = "", string endMarker = "")
+    public void SetSectionWithMarkers(StringName startMarker, StringName endMarker)
     {
         var __mb = __mb_set_section_with_markers;
         if (__mb == 0)
@@ -12639,8 +12639,8 @@ public unsafe partial class AnimationPlayer : AnimationMixer
             if (__mb == 0) throw new MissingMethodException("AnimationPlayer.set_section_with_markers is not available in this engine build.");
             __mb_set_section_with_markers = __mb;
         }
-        ulong __a0 = StringNames.Get(startMarker).Opaque;
-        ulong __a1 = StringNames.Get(endMarker).Opaque;
+        ulong __a0 = startMarker.NativeValue;
+        ulong __a1 = endMarker.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -13116,7 +13116,7 @@ public unsafe partial class Area2D : CollisionObject2D
         set => SetAudioBusOverride(value);
     }
 
-    public string AudioBusName
+    public StringName AudioBusName
     {
         get => GetAudioBusName();
         set => SetAudioBusName(value);
@@ -13686,7 +13686,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_set_audio_bus_name;
-    internal void SetAudioBusName(string name)
+    internal void SetAudioBusName(StringName name)
     {
         var __mb = __mb_set_audio_bus_name;
         if (__mb == 0)
@@ -13695,14 +13695,14 @@ public unsafe partial class Area2D : CollisionObject2D
             if (__mb == 0) throw new MissingMethodException("Area2D.set_audio_bus_name is not available in this engine build.");
             __mb_set_audio_bus_name = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_audio_bus_name;
-    internal string GetAudioBusName()
+    internal StringName GetAudioBusName()
     {
         var __mb = __mb_get_audio_bus_name;
         if (__mb == 0)
@@ -13713,7 +13713,7 @@ public unsafe partial class Area2D : CollisionObject2D
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_audio_bus_override;
@@ -13868,7 +13868,7 @@ public unsafe partial class Area3D : CollisionObject3D
         set => SetAudioBusOverride(value);
     }
 
-    public string AudioBusName
+    public StringName AudioBusName
     {
         get => GetAudioBusName();
         set => SetAudioBusName(value);
@@ -13880,7 +13880,7 @@ public unsafe partial class Area3D : CollisionObject3D
         set => SetUseReverbBus(value);
     }
 
-    public string ReverbBusName
+    public StringName ReverbBusName
     {
         get => GetReverbBusName();
         set => SetReverbBusName(value);
@@ -14586,7 +14586,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_audio_bus_name;
-    internal void SetAudioBusName(string name)
+    internal void SetAudioBusName(StringName name)
     {
         var __mb = __mb_set_audio_bus_name;
         if (__mb == 0)
@@ -14595,14 +14595,14 @@ public unsafe partial class Area3D : CollisionObject3D
             if (__mb == 0) throw new MissingMethodException("Area3D.set_audio_bus_name is not available in this engine build.");
             __mb_set_audio_bus_name = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_audio_bus_name;
-    internal string GetAudioBusName()
+    internal StringName GetAudioBusName()
     {
         var __mb = __mb_get_audio_bus_name;
         if (__mb == 0)
@@ -14613,7 +14613,7 @@ public unsafe partial class Area3D : CollisionObject3D
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_use_reverb_bus;
@@ -14648,7 +14648,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_reverb_bus_name;
-    internal void SetReverbBusName(string name)
+    internal void SetReverbBusName(StringName name)
     {
         var __mb = __mb_set_reverb_bus_name;
         if (__mb == 0)
@@ -14657,14 +14657,14 @@ public unsafe partial class Area3D : CollisionObject3D
             if (__mb == 0) throw new MissingMethodException("Area3D.set_reverb_bus_name is not available in this engine build.");
             __mb_set_reverb_bus_name = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_reverb_bus_name;
-    internal string GetReverbBusName()
+    internal StringName GetReverbBusName()
     {
         var __mb = __mb_get_reverb_bus_name;
         if (__mb == 0)
@@ -14675,7 +14675,7 @@ public unsafe partial class Area3D : CollisionObject3D
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_reverb_amount;
@@ -14902,7 +14902,7 @@ public unsafe partial class ArrayMesh : Mesh
     }
 
     private static nint __mb_add_blend_shape;
-    public void AddBlendShape(string name)
+    public void AddBlendShape(StringName name)
     {
         var __mb = __mb_add_blend_shape;
         if (__mb == 0)
@@ -14911,7 +14911,7 @@ public unsafe partial class ArrayMesh : Mesh
             if (__mb == 0) throw new MissingMethodException("ArrayMesh.add_blend_shape is not available in this engine build.");
             __mb_add_blend_shape = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
@@ -14933,7 +14933,7 @@ public unsafe partial class ArrayMesh : Mesh
     }
 
     private static nint __mb_get_blend_shape_name;
-    public string GetBlendShapeName(int index)
+    public StringName GetBlendShapeName(int index)
     {
         var __mb = __mb_get_blend_shape_name;
         if (__mb == 0)
@@ -14947,11 +14947,11 @@ public unsafe partial class ArrayMesh : Mesh
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_blend_shape_name;
-    public void SetBlendShapeName(int index, string name)
+    public void SetBlendShapeName(int index, StringName name)
     {
         var __mb = __mb_set_blend_shape_name;
         if (__mb == 0)
@@ -14961,7 +14961,7 @@ public unsafe partial class ArrayMesh : Mesh
             __mb_set_blend_shape_name = __mb;
         }
         long __a0 = unchecked((long)index);
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a1 = name.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -16436,7 +16436,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
         set => SetMix(value);
     }
 
-    public string Sidechain
+    public StringName Sidechain
     {
         get => GetSidechain();
         set => SetSidechain(value);
@@ -16629,7 +16629,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
     }
 
     private static nint __mb_set_sidechain;
-    internal void SetSidechain(string sidechain)
+    internal void SetSidechain(StringName sidechain)
     {
         var __mb = __mb_set_sidechain;
         if (__mb == 0)
@@ -16638,14 +16638,14 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
             if (__mb == 0) throw new MissingMethodException("AudioEffectCompressor.set_sidechain is not available in this engine build.");
             __mb_set_sidechain = __mb;
         }
-        ulong __a0 = StringNames.Get(sidechain).Opaque;
+        ulong __a0 = sidechain.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_sidechain;
-    internal string GetSidechain()
+    internal StringName GetSidechain()
     {
         var __mb = __mb_get_sidechain;
         if (__mb == 0)
@@ -16656,7 +16656,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 }
 
@@ -19224,12 +19224,12 @@ public static unsafe partial class AudioServer
         remove => Singleton.Disconnect("bus_layout_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BusLayoutChangedEventHandler)__d)()));
     }
 
-    public delegate void BusRenamedEventHandler(long busIndex, string oldName, string newName);
+    public delegate void BusRenamedEventHandler(long busIndex, StringName oldName, StringName newName);
 
     public static event BusRenamedEventHandler BusRenamed
     {
-        add => Singleton.Connect("bus_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BusRenamedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToManagedString(*((NativeVariant**)__a)[1]), Variants.ToManagedString(*((NativeVariant**)__a)[2]))));
-        remove => Singleton.Disconnect("bus_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BusRenamedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToManagedString(*((NativeVariant**)__a)[1]), Variants.ToManagedString(*((NativeVariant**)__a)[2]))));
+        add => Singleton.Connect("bus_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BusRenamedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[1])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[2])))));
+        remove => Singleton.Disconnect("bus_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BusRenamedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[1])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[2])))));
     }
 
     private static nint __mb_set_bus_count;
@@ -19351,7 +19351,7 @@ public static unsafe partial class AudioServer
     }
 
     private static nint __mb_get_bus_index;
-    public static int GetBusIndex(string busName)
+    public static int GetBusIndex(StringName busName)
     {
         var __mb = __mb_get_bus_index;
         if (__mb == 0)
@@ -19360,7 +19360,7 @@ public static unsafe partial class AudioServer
             if (__mb == 0) throw new MissingMethodException("AudioServer.get_bus_index is not available in this engine build.");
             __mb_get_bus_index = __mb;
         }
-        ulong __a0 = StringNames.Get(busName).Opaque;
+        ulong __a0 = busName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
@@ -19459,7 +19459,7 @@ public static unsafe partial class AudioServer
     }
 
     private static nint __mb_set_bus_send;
-    public static void SetBusSend(int busIdx, string send)
+    public static void SetBusSend(int busIdx, StringName send)
     {
         var __mb = __mb_set_bus_send;
         if (__mb == 0)
@@ -19469,7 +19469,7 @@ public static unsafe partial class AudioServer
             __mb_set_bus_send = __mb;
         }
         long __a0 = unchecked((long)busIdx);
-        ulong __a1 = StringNames.Get(send).Opaque;
+        ulong __a1 = send.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -19477,7 +19477,7 @@ public static unsafe partial class AudioServer
     }
 
     private static nint __mb_get_bus_send;
-    public static string GetBusSend(int busIdx)
+    public static StringName GetBusSend(int busIdx)
     {
         var __mb = __mb_get_bus_send;
         if (__mb == 0)
@@ -19491,7 +19491,7 @@ public static unsafe partial class AudioServer
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_bus_solo;
@@ -20737,7 +20737,7 @@ public unsafe partial class AudioStreamInteractive : AudioStream
     }
 
     private static nint __mb_set_clip_name;
-    public void SetClipName(int clipIndex, string name)
+    public void SetClipName(int clipIndex, StringName name)
     {
         var __mb = __mb_set_clip_name;
         if (__mb == 0)
@@ -20747,7 +20747,7 @@ public unsafe partial class AudioStreamInteractive : AudioStream
             __mb_set_clip_name = __mb;
         }
         long __a0 = unchecked((long)clipIndex);
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a1 = name.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -20755,7 +20755,7 @@ public unsafe partial class AudioStreamInteractive : AudioStream
     }
 
     private static nint __mb_get_clip_name;
-    public string GetClipName(int clipIndex)
+    public StringName GetClipName(int clipIndex)
     {
         var __mb = __mb_get_clip_name;
         if (__mb == 0)
@@ -20769,7 +20769,7 @@ public unsafe partial class AudioStreamInteractive : AudioStream
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_clip_stream;
@@ -21919,7 +21919,7 @@ public unsafe partial class AudioStreamPlaybackInteractive : AudioStreamPlayback
     internal AudioStreamPlaybackInteractive(nint ptr, bool rc) : base(ptr, rc) { }
 
     private static nint __mb_switch_to_clip_by_name;
-    public void SwitchToClipByName(string clipName)
+    public void SwitchToClipByName(StringName clipName)
     {
         var __mb = __mb_switch_to_clip_by_name;
         if (__mb == 0)
@@ -21928,7 +21928,7 @@ public unsafe partial class AudioStreamPlaybackInteractive : AudioStreamPlayback
             if (__mb == 0) throw new MissingMethodException("AudioStreamPlaybackInteractive.switch_to_clip_by_name is not available in this engine build.");
             __mb_switch_to_clip_by_name = __mb;
         }
-        ulong __a0 = StringNames.Get(clipName).Opaque;
+        ulong __a0 = clipName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
@@ -21986,7 +21986,7 @@ public unsafe partial class AudioStreamPlaybackPolyphonic : AudioStreamPlayback
     internal AudioStreamPlaybackPolyphonic(nint ptr, bool rc) : base(ptr, rc) { }
 
     private static nint __mb_play_stream;
-    public long PlayStream(AudioStream? stream, float fromOffset = 0f, float volumeDb = 0f, float pitchScale = 1.0f, AudioServer.PlaybackType playbackType = (AudioServer.PlaybackType)(0), string bus = "Master")
+    public long PlayStream(AudioStream? stream, float fromOffset, float volumeDb, float pitchScale, AudioServer.PlaybackType playbackType, StringName bus)
     {
         var __mb = __mb_play_stream;
         if (__mb == 0)
@@ -22000,7 +22000,7 @@ public unsafe partial class AudioStreamPlaybackPolyphonic : AudioStreamPlayback
         double __a2 = volumeDb;
         double __a3 = pitchScale;
         long __a4 = (long)playbackType;
-        ulong __a5 = StringNames.Get(bus).Opaque;
+        ulong __a5 = bus.NativeValue;
         var __args = stackalloc nint[6];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -22197,7 +22197,7 @@ public unsafe partial class AudioStreamPlayer : Node
         set => SetMaxPolyphony(value);
     }
 
-    public string Bus
+    public StringName Bus
     {
         get => GetBus();
         set => SetBus(value);
@@ -22417,7 +22417,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_set_bus;
-    internal void SetBus(string bus)
+    internal void SetBus(StringName bus)
     {
         var __mb = __mb_set_bus;
         if (__mb == 0)
@@ -22426,14 +22426,14 @@ public unsafe partial class AudioStreamPlayer : Node
             if (__mb == 0) throw new MissingMethodException("AudioStreamPlayer.set_bus is not available in this engine build.");
             __mb_set_bus = __mb;
         }
-        ulong __a0 = StringNames.Get(bus).Opaque;
+        ulong __a0 = bus.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bus;
-    internal string GetBus()
+    internal StringName GetBus()
     {
         var __mb = __mb_get_bus;
         if (__mb == 0)
@@ -22444,7 +22444,7 @@ public unsafe partial class AudioStreamPlayer : Node
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_autoplay;
@@ -22724,7 +22724,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
         set => SetPanningStrength(value);
     }
 
-    public string Bus
+    public StringName Bus
     {
         get => GetBus();
         set => SetBus(value);
@@ -22950,7 +22950,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_set_bus;
-    internal void SetBus(string bus)
+    internal void SetBus(StringName bus)
     {
         var __mb = __mb_set_bus;
         if (__mb == 0)
@@ -22959,14 +22959,14 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
             if (__mb == 0) throw new MissingMethodException("AudioStreamPlayer2D.set_bus is not available in this engine build.");
             __mb_set_bus = __mb;
         }
-        ulong __a0 = StringNames.Get(bus).Opaque;
+        ulong __a0 = bus.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bus;
-    internal string GetBus()
+    internal StringName GetBus()
     {
         var __mb = __mb_get_bus;
         if (__mb == 0)
@@ -22977,7 +22977,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_autoplay;
@@ -23377,7 +23377,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
         set => SetPanningStrength(value);
     }
 
-    public string Bus
+    public StringName Bus
     {
         get => GetBus();
         set => SetBus(value);
@@ -23701,7 +23701,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_bus;
-    internal void SetBus(string bus)
+    internal void SetBus(StringName bus)
     {
         var __mb = __mb_set_bus;
         if (__mb == 0)
@@ -23710,14 +23710,14 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
             if (__mb == 0) throw new MissingMethodException("AudioStreamPlayer3D.set_bus is not available in this engine build.");
             __mb_set_bus = __mb;
         }
-        ulong __a0 = StringNames.Get(bus).Opaque;
+        ulong __a0 = bus.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bus;
-    internal string GetBus()
+    internal StringName GetBus()
     {
         var __mb = __mb_get_bus;
         if (__mb == 0)
@@ -23728,7 +23728,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_autoplay;

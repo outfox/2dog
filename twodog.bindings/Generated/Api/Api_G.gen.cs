@@ -1647,7 +1647,7 @@ public unsafe partial class GLTFAnimation : Resource
     }
 
     private static nint __mb_get_additional_data;
-    public Variant GetAdditionalData(string extensionName)
+    public Variant GetAdditionalData(StringName extensionName)
     {
         var __mb = __mb_get_additional_data;
         if (__mb == 0)
@@ -1656,7 +1656,7 @@ public unsafe partial class GLTFAnimation : Resource
             if (__mb == 0) throw new MissingMethodException("GLTFAnimation.get_additional_data is not available in this engine build.");
             __mb_get_additional_data = __mb;
         }
-        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        ulong __a0 = extensionName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -1665,7 +1665,7 @@ public unsafe partial class GLTFAnimation : Resource
     }
 
     private static nint __mb_set_additional_data;
-    public void SetAdditionalData(string extensionName, Variant additionalData)
+    public void SetAdditionalData(StringName extensionName, Variant additionalData)
     {
         var __mb = __mb_set_additional_data;
         if (__mb == 0)
@@ -1674,7 +1674,7 @@ public unsafe partial class GLTFAnimation : Resource
             if (__mb == 0) throw new MissingMethodException("GLTFAnimation.set_additional_data is not available in this engine build.");
             __mb_set_additional_data = __mb;
         }
-        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        ulong __a0 = extensionName.NativeValue;
         var __a1 = additionalData.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3218,7 +3218,7 @@ public unsafe partial class GLTFLight : Resource
     }
 
     private static nint __mb_get_additional_data;
-    public Variant GetAdditionalData(string extensionName)
+    public Variant GetAdditionalData(StringName extensionName)
     {
         var __mb = __mb_get_additional_data;
         if (__mb == 0)
@@ -3227,7 +3227,7 @@ public unsafe partial class GLTFLight : Resource
             if (__mb == 0) throw new MissingMethodException("GLTFLight.get_additional_data is not available in this engine build.");
             __mb_get_additional_data = __mb;
         }
-        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        ulong __a0 = extensionName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -3236,7 +3236,7 @@ public unsafe partial class GLTFLight : Resource
     }
 
     private static nint __mb_set_additional_data;
-    public void SetAdditionalData(string extensionName, Variant additionalData)
+    public void SetAdditionalData(StringName extensionName, Variant additionalData)
     {
         var __mb = __mb_set_additional_data;
         if (__mb == 0)
@@ -3245,7 +3245,7 @@ public unsafe partial class GLTFLight : Resource
             if (__mb == 0) throw new MissingMethodException("GLTFLight.set_additional_data is not available in this engine build.");
             __mb_set_additional_data = __mb;
         }
-        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        ulong __a0 = extensionName.NativeValue;
         var __a1 = additionalData.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3414,7 +3414,7 @@ public unsafe partial class GLTFMesh : Resource
     }
 
     private static nint __mb_get_additional_data;
-    public Variant GetAdditionalData(string extensionName)
+    public Variant GetAdditionalData(StringName extensionName)
     {
         var __mb = __mb_get_additional_data;
         if (__mb == 0)
@@ -3423,7 +3423,7 @@ public unsafe partial class GLTFMesh : Resource
             if (__mb == 0) throw new MissingMethodException("GLTFMesh.get_additional_data is not available in this engine build.");
             __mb_get_additional_data = __mb;
         }
-        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        ulong __a0 = extensionName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -3432,7 +3432,7 @@ public unsafe partial class GLTFMesh : Resource
     }
 
     private static nint __mb_set_additional_data;
-    public void SetAdditionalData(string extensionName, Variant additionalData)
+    public void SetAdditionalData(StringName extensionName, Variant additionalData)
     {
         var __mb = __mb_set_additional_data;
         if (__mb == 0)
@@ -3441,7 +3441,7 @@ public unsafe partial class GLTFMesh : Resource
             if (__mb == 0) throw new MissingMethodException("GLTFMesh.set_additional_data is not available in this engine build.");
             __mb_set_additional_data = __mb;
         }
-        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        ulong __a0 = extensionName.NativeValue;
         var __a1 = additionalData.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3996,7 +3996,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_get_additional_data;
-    public Variant GetAdditionalData(string extensionName)
+    public Variant GetAdditionalData(StringName extensionName)
     {
         var __mb = __mb_get_additional_data;
         if (__mb == 0)
@@ -4005,7 +4005,7 @@ public unsafe partial class GLTFNode : Resource
             if (__mb == 0) throw new MissingMethodException("GLTFNode.get_additional_data is not available in this engine build.");
             __mb_get_additional_data = __mb;
         }
-        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        ulong __a0 = extensionName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -4014,7 +4014,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_set_additional_data;
-    public void SetAdditionalData(string extensionName, Variant additionalData)
+    public void SetAdditionalData(StringName extensionName, Variant additionalData)
     {
         var __mb = __mb_set_additional_data;
         if (__mb == 0)
@@ -4023,7 +4023,7 @@ public unsafe partial class GLTFNode : Resource
             if (__mb == 0) throw new MissingMethodException("GLTFNode.set_additional_data is not available in this engine build.");
             __mb_set_additional_data = __mb;
         }
-        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        ulong __a0 = extensionName.NativeValue;
         var __a1 = additionalData.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -4129,7 +4129,7 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
     }
 
     private static nint __mb_append_path_to_property;
-    public void AppendPathToProperty(NodePath nodePath, string propName)
+    public void AppendPathToProperty(NodePath nodePath, StringName propName)
     {
         var __mb = __mb_append_path_to_property;
         if (__mb == 0)
@@ -4139,7 +4139,7 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
             __mb_append_path_to_property = __mb;
         }
         ulong __a0 = nodePath.Native;
-        ulong __a1 = StringNames.Get(propName).Opaque;
+        ulong __a1 = propName.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -7143,7 +7143,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_additional_data;
-    public Variant GetAdditionalData(string extensionName)
+    public Variant GetAdditionalData(StringName extensionName)
     {
         var __mb = __mb_get_additional_data;
         if (__mb == 0)
@@ -7152,7 +7152,7 @@ public unsafe partial class GLTFState : Resource
             if (__mb == 0) throw new MissingMethodException("GLTFState.get_additional_data is not available in this engine build.");
             __mb_get_additional_data = __mb;
         }
-        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        ulong __a0 = extensionName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -7161,7 +7161,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_additional_data;
-    public void SetAdditionalData(string extensionName, Variant additionalData)
+    public void SetAdditionalData(StringName extensionName, Variant additionalData)
     {
         var __mb = __mb_set_additional_data;
         if (__mb == 0)
@@ -7170,7 +7170,7 @@ public unsafe partial class GLTFState : Resource
             if (__mb == 0) throw new MissingMethodException("GLTFState.set_additional_data is not available in this engine build.");
             __mb_set_additional_data = __mb;
         }
-        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        ulong __a0 = extensionName.NativeValue;
         var __a1 = additionalData.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -12351,7 +12351,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_instance_shader_parameter;
-    public void SetInstanceShaderParameter(string name, Variant value)
+    public void SetInstanceShaderParameter(StringName name, Variant value)
     {
         var __mb = __mb_set_instance_shader_parameter;
         if (__mb == 0)
@@ -12360,7 +12360,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
             if (__mb == 0) throw new MissingMethodException("GeometryInstance3D.set_instance_shader_parameter is not available in this engine build.");
             __mb_set_instance_shader_parameter = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = value.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -12369,7 +12369,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_instance_shader_parameter;
-    public Variant GetInstanceShaderParameter(string name)
+    public Variant GetInstanceShaderParameter(StringName name)
     {
         var __mb = __mb_get_instance_shader_parameter;
         if (__mb == 0)
@@ -12378,7 +12378,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
             if (__mb == 0) throw new MissingMethodException("GeometryInstance3D.get_instance_shader_parameter is not available in this engine build.");
             __mb_get_instance_shader_parameter = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -13569,44 +13569,44 @@ public unsafe partial class GraphEdit : Control
         set => SetShowArrangeButton(value);
     }
 
-    public delegate void ConnectionRequestEventHandler(string fromNode, long fromPort, string toNode, long toPort);
+    public delegate void ConnectionRequestEventHandler(StringName fromNode, long fromPort, StringName toNode, long toPort);
 
     public event ConnectionRequestEventHandler ConnectionRequest
     {
-        add => Connect("connection_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionRequestEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToManagedString(*((NativeVariant**)__a)[2]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
-        remove => Disconnect("connection_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionRequestEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToManagedString(*((NativeVariant**)__a)[2]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        add => Connect("connection_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionRequestEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("connection_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionRequestEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
     }
 
-    public delegate void DisconnectionRequestEventHandler(string fromNode, long fromPort, string toNode, long toPort);
+    public delegate void DisconnectionRequestEventHandler(StringName fromNode, long fromPort, StringName toNode, long toPort);
 
     public event DisconnectionRequestEventHandler DisconnectionRequest
     {
-        add => Connect("disconnection_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DisconnectionRequestEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToManagedString(*((NativeVariant**)__a)[2]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
-        remove => Disconnect("disconnection_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DisconnectionRequestEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToManagedString(*((NativeVariant**)__a)[2]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        add => Connect("disconnection_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DisconnectionRequestEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("disconnection_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DisconnectionRequestEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
     }
 
-    public delegate void ConnectionToEmptyEventHandler(string fromNode, long fromPort, Vector2 releasePosition);
+    public delegate void ConnectionToEmptyEventHandler(StringName fromNode, long fromPort, Vector2 releasePosition);
 
     public event ConnectionToEmptyEventHandler ConnectionToEmpty
     {
-        add => Connect("connection_to_empty", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionToEmptyEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[2]))));
-        remove => Disconnect("connection_to_empty", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionToEmptyEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[2]))));
+        add => Connect("connection_to_empty", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionToEmptyEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[2]))));
+        remove => Disconnect("connection_to_empty", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionToEmptyEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[2]))));
     }
 
-    public delegate void ConnectionFromEmptyEventHandler(string toNode, long toPort, Vector2 releasePosition);
+    public delegate void ConnectionFromEmptyEventHandler(StringName toNode, long toPort, Vector2 releasePosition);
 
     public event ConnectionFromEmptyEventHandler ConnectionFromEmpty
     {
-        add => Connect("connection_from_empty", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionFromEmptyEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[2]))));
-        remove => Disconnect("connection_from_empty", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionFromEmptyEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[2]))));
+        add => Connect("connection_from_empty", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionFromEmptyEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[2]))));
+        remove => Disconnect("connection_from_empty", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionFromEmptyEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[2]))));
     }
 
-    public delegate void ConnectionDragStartedEventHandler(string fromNode, long fromPort, bool isOutput);
+    public delegate void ConnectionDragStartedEventHandler(StringName fromNode, long fromPort, bool isOutput);
 
     public event ConnectionDragStartedEventHandler ConnectionDragStarted
     {
-        add => Connect("connection_drag_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionDragStartedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToBool(*((NativeVariant**)__a)[2]))));
-        remove => Disconnect("connection_drag_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionDragStartedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToBool(*((NativeVariant**)__a)[2]))));
+        add => Connect("connection_drag_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionDragStartedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToBool(*((NativeVariant**)__a)[2]))));
+        remove => Disconnect("connection_drag_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionDragStartedEventHandler)__d)(StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToBool(*((NativeVariant**)__a)[2]))));
     }
 
     public delegate void ConnectionDragEndedEventHandler();
@@ -13705,12 +13705,12 @@ public unsafe partial class GraphEdit : Control
         remove => Disconnect("end_node_move", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EndNodeMoveEventHandler)__d)()));
     }
 
-    public delegate void GraphElementsLinkedToFrameRequestEventHandler(Godot.Collections.Array elements, string frame);
+    public delegate void GraphElementsLinkedToFrameRequestEventHandler(Godot.Collections.Array elements, StringName frame);
 
     public event GraphElementsLinkedToFrameRequestEventHandler GraphElementsLinkedToFrameRequest
     {
-        add => Connect("graph_elements_linked_to_frame_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GraphElementsLinkedToFrameRequestEventHandler)__d)(new Godot.Collections.Array(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_ARRAY, *((NativeVariant**)__a)[0])), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
-        remove => Disconnect("graph_elements_linked_to_frame_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GraphElementsLinkedToFrameRequestEventHandler)__d)(new Godot.Collections.Array(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_ARRAY, *((NativeVariant**)__a)[0])), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+        add => Connect("graph_elements_linked_to_frame_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GraphElementsLinkedToFrameRequestEventHandler)__d)(new Godot.Collections.Array(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_ARRAY, *((NativeVariant**)__a)[0])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("graph_elements_linked_to_frame_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GraphElementsLinkedToFrameRequestEventHandler)__d)(new Godot.Collections.Array(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_ARRAY, *((NativeVariant**)__a)[0])), StringName.Intern(Variants.ToManagedString(*((NativeVariant**)__a)[1])))));
     }
 
     public delegate void ScrollOffsetChangedEventHandler(Vector2 offset);
@@ -13722,7 +13722,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_connect_node;
-    public Error ConnectNode(string fromNode, int fromPort, string toNode, int toPort, bool keepAlive = false)
+    public Error ConnectNode(StringName fromNode, int fromPort, StringName toNode, int toPort, bool keepAlive = false)
     {
         var __mb = __mb_connect_node;
         if (__mb == 0)
@@ -13731,9 +13731,9 @@ public unsafe partial class GraphEdit : Control
             if (__mb == 0) throw new MissingMethodException("GraphEdit.connect_node is not available in this engine build.");
             __mb_connect_node = __mb;
         }
-        ulong __a0 = StringNames.Get(fromNode).Opaque;
+        ulong __a0 = fromNode.NativeValue;
         long __a1 = unchecked((long)fromPort);
-        ulong __a2 = StringNames.Get(toNode).Opaque;
+        ulong __a2 = toNode.NativeValue;
         long __a3 = unchecked((long)toPort);
         byte __a4 = keepAlive ? (byte)1 : (byte)0;
         var __args = stackalloc nint[5];
@@ -13748,7 +13748,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_is_node_connected;
-    public bool IsNodeConnected(string fromNode, int fromPort, string toNode, int toPort)
+    public bool IsNodeConnected(StringName fromNode, int fromPort, StringName toNode, int toPort)
     {
         var __mb = __mb_is_node_connected;
         if (__mb == 0)
@@ -13757,9 +13757,9 @@ public unsafe partial class GraphEdit : Control
             if (__mb == 0) throw new MissingMethodException("GraphEdit.is_node_connected is not available in this engine build.");
             __mb_is_node_connected = __mb;
         }
-        ulong __a0 = StringNames.Get(fromNode).Opaque;
+        ulong __a0 = fromNode.NativeValue;
         long __a1 = unchecked((long)fromPort);
-        ulong __a2 = StringNames.Get(toNode).Opaque;
+        ulong __a2 = toNode.NativeValue;
         long __a3 = unchecked((long)toPort);
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
@@ -13772,7 +13772,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_disconnect_node;
-    public void DisconnectNode(string fromNode, int fromPort, string toNode, int toPort)
+    public void DisconnectNode(StringName fromNode, int fromPort, StringName toNode, int toPort)
     {
         var __mb = __mb_disconnect_node;
         if (__mb == 0)
@@ -13781,9 +13781,9 @@ public unsafe partial class GraphEdit : Control
             if (__mb == 0) throw new MissingMethodException("GraphEdit.disconnect_node is not available in this engine build.");
             __mb_disconnect_node = __mb;
         }
-        ulong __a0 = StringNames.Get(fromNode).Opaque;
+        ulong __a0 = fromNode.NativeValue;
         long __a1 = unchecked((long)fromPort);
-        ulong __a2 = StringNames.Get(toNode).Opaque;
+        ulong __a2 = toNode.NativeValue;
         long __a3 = unchecked((long)toPort);
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
@@ -13794,7 +13794,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_connection_activity;
-    public void SetConnectionActivity(string fromNode, int fromPort, string toNode, int toPort, float amount)
+    public void SetConnectionActivity(StringName fromNode, int fromPort, StringName toNode, int toPort, float amount)
     {
         var __mb = __mb_set_connection_activity;
         if (__mb == 0)
@@ -13803,9 +13803,9 @@ public unsafe partial class GraphEdit : Control
             if (__mb == 0) throw new MissingMethodException("GraphEdit.set_connection_activity is not available in this engine build.");
             __mb_set_connection_activity = __mb;
         }
-        ulong __a0 = StringNames.Get(fromNode).Opaque;
+        ulong __a0 = fromNode.NativeValue;
         long __a1 = unchecked((long)fromPort);
-        ulong __a2 = StringNames.Get(toNode).Opaque;
+        ulong __a2 = toNode.NativeValue;
         long __a3 = unchecked((long)toPort);
         double __a4 = amount;
         var __args = stackalloc nint[5];
@@ -13849,7 +13849,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_connection_count;
-    public int GetConnectionCount(string fromNode, int fromPort)
+    public int GetConnectionCount(StringName fromNode, int fromPort)
     {
         var __mb = __mb_get_connection_count;
         if (__mb == 0)
@@ -13858,7 +13858,7 @@ public unsafe partial class GraphEdit : Control
             if (__mb == 0) throw new MissingMethodException("GraphEdit.get_connection_count is not available in this engine build.");
             __mb_get_connection_count = __mb;
         }
-        ulong __a0 = StringNames.Get(fromNode).Opaque;
+        ulong __a0 = fromNode.NativeValue;
         long __a1 = unchecked((long)fromPort);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -13889,7 +13889,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_connection_list_from_node;
-    public Godot.Collections.Array GetConnectionListFromNode(string node)
+    public Godot.Collections.Array GetConnectionListFromNode(StringName node)
     {
         var __mb = __mb_get_connection_list_from_node;
         if (__mb == 0)
@@ -13898,7 +13898,7 @@ public unsafe partial class GraphEdit : Control
             if (__mb == 0) throw new MissingMethodException("GraphEdit.get_connection_list_from_node is not available in this engine build.");
             __mb_get_connection_list_from_node = __mb;
         }
-        ulong __a0 = StringNames.Get(node).Opaque;
+        ulong __a0 = node.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
@@ -14122,7 +14122,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_attach_graph_element_to_frame;
-    public void AttachGraphElementToFrame(string element, string frame)
+    public void AttachGraphElementToFrame(StringName element, StringName frame)
     {
         var __mb = __mb_attach_graph_element_to_frame;
         if (__mb == 0)
@@ -14131,8 +14131,8 @@ public unsafe partial class GraphEdit : Control
             if (__mb == 0) throw new MissingMethodException("GraphEdit.attach_graph_element_to_frame is not available in this engine build.");
             __mb_attach_graph_element_to_frame = __mb;
         }
-        ulong __a0 = StringNames.Get(element).Opaque;
-        ulong __a1 = StringNames.Get(frame).Opaque;
+        ulong __a0 = element.NativeValue;
+        ulong __a1 = frame.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -14140,7 +14140,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_detach_graph_element_from_frame;
-    public void DetachGraphElementFromFrame(string element)
+    public void DetachGraphElementFromFrame(StringName element)
     {
         var __mb = __mb_detach_graph_element_from_frame;
         if (__mb == 0)
@@ -14149,14 +14149,14 @@ public unsafe partial class GraphEdit : Control
             if (__mb == 0) throw new MissingMethodException("GraphEdit.detach_graph_element_from_frame is not available in this engine build.");
             __mb_detach_graph_element_from_frame = __mb;
         }
-        ulong __a0 = StringNames.Get(element).Opaque;
+        ulong __a0 = element.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_element_frame;
-    public GraphFrame? GetElementFrame(string element)
+    public GraphFrame? GetElementFrame(StringName element)
     {
         var __mb = __mb_get_element_frame;
         if (__mb == 0)
@@ -14165,7 +14165,7 @@ public unsafe partial class GraphEdit : Control
             if (__mb == 0) throw new MissingMethodException("GraphEdit.get_element_frame is not available in this engine build.");
             __mb_get_element_frame = __mb;
         }
-        ulong __a0 = StringNames.Get(element).Opaque;
+        ulong __a0 = element.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
@@ -14174,7 +14174,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_attached_nodes_of_frame;
-    public Godot.Collections.Array GetAttachedNodesOfFrame(string frame)
+    public Godot.Collections.Array GetAttachedNodesOfFrame(StringName frame)
     {
         var __mb = __mb_get_attached_nodes_of_frame;
         if (__mb == 0)
@@ -14183,7 +14183,7 @@ public unsafe partial class GraphEdit : Control
             if (__mb == 0) throw new MissingMethodException("GraphEdit.get_attached_nodes_of_frame is not available in this engine build.");
             __mb_get_attached_nodes_of_frame = __mb;
         }
-        ulong __a0 = StringNames.Get(frame).Opaque;
+        ulong __a0 = frame.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
@@ -14954,7 +14954,7 @@ public unsafe partial class GraphEdit : Control
 
     public virtual Vector2[] _GetConnectionLine(Vector2 fromPosition, Vector2 toPosition) => default!;
 
-    public virtual bool _IsNodeHoverValid(string fromNode, int fromPort, string toNode, int toPort) => default!;
+    public virtual bool _IsNodeHoverValid(StringName fromNode, int fromPort, StringName toNode, int toPort) => default!;
 
     private static ulong __vsn_is_in_input_hotzone;
     private static ulong __vsn_is_in_output_hotzone;
@@ -14984,7 +14984,7 @@ public unsafe partial class GraphEdit : Control
         if (__vsn_is_node_hover_valid == 0) __vsn_is_node_hover_valid = StringNames.Get("_is_node_hover_valid").Opaque;
         if (nameSn == __vsn_is_node_hover_valid)
         {
-            *(byte*)ret = _IsNodeHoverValid(StringNames.Read(*(ulong*)args[0]), unchecked((int)(*(long*)args[1])), StringNames.Read(*(ulong*)args[2]), unchecked((int)(*(long*)args[3]))) ? (byte)1 : (byte)0;
+            *(byte*)ret = _IsNodeHoverValid(StringName.Intern(StringNames.Read(*(ulong*)args[0])), unchecked((int)(*(long*)args[1])), StringName.Intern(StringNames.Read(*(ulong*)args[2])), unchecked((int)(*(long*)args[3]))) ? (byte)1 : (byte)0;
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);
@@ -17681,7 +17681,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_is_class;
-    public bool IsClass(string @class)
+    public bool IsClass(StringName @class)
     {
         var __mb = __mb_is_class;
         if (__mb == 0)
@@ -17690,7 +17690,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.is_class is not available in this engine build.");
             __mb_is_class = __mb;
         }
-        ulong __a0 = StringNames.Get(@class).Opaque;
+        ulong __a0 = @class.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -17699,7 +17699,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_set;
-    public void Set(string property, Variant value)
+    public void Set(StringName property, Variant value)
     {
         var __mb = __mb_set;
         if (__mb == 0)
@@ -17708,7 +17708,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.set is not available in this engine build.");
             __mb_set = __mb;
         }
-        ulong __a0 = StringNames.Get(property).Opaque;
+        ulong __a0 = property.NativeValue;
         var __a1 = value.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -17717,7 +17717,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_get;
-    public Variant Get(string property)
+    public Variant Get(StringName property)
     {
         var __mb = __mb_get;
         if (__mb == 0)
@@ -17726,7 +17726,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.get is not available in this engine build.");
             __mb_get = __mb;
         }
-        ulong __a0 = StringNames.Get(property).Opaque;
+        ulong __a0 = property.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -17801,7 +17801,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_property_can_revert;
-    public bool PropertyCanRevert(string property)
+    public bool PropertyCanRevert(StringName property)
     {
         var __mb = __mb_property_can_revert;
         if (__mb == 0)
@@ -17810,7 +17810,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.property_can_revert is not available in this engine build.");
             __mb_property_can_revert = __mb;
         }
-        ulong __a0 = StringNames.Get(property).Opaque;
+        ulong __a0 = property.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -17819,7 +17819,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_property_get_revert;
-    public Variant PropertyGetRevert(string property)
+    public Variant PropertyGetRevert(StringName property)
     {
         var __mb = __mb_property_get_revert;
         if (__mb == 0)
@@ -17828,7 +17828,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.property_get_revert is not available in this engine build.");
             __mb_property_get_revert = __mb;
         }
-        ulong __a0 = StringNames.Get(property).Opaque;
+        ulong __a0 = property.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -17901,7 +17901,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_set_meta;
-    public void SetMeta(string name, Variant value)
+    public void SetMeta(StringName name, Variant value)
     {
         var __mb = __mb_set_meta;
         if (__mb == 0)
@@ -17910,7 +17910,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.set_meta is not available in this engine build.");
             __mb_set_meta = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = value.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -17919,7 +17919,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_remove_meta;
-    public void RemoveMeta(string name)
+    public void RemoveMeta(StringName name)
     {
         var __mb = __mb_remove_meta;
         if (__mb == 0)
@@ -17928,14 +17928,14 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.remove_meta is not available in this engine build.");
             __mb_remove_meta = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_meta;
-    public Variant GetMeta(string name, Variant @default = default)
+    public Variant GetMeta(StringName name, Variant @default = default)
     {
         var __mb = __mb_get_meta;
         if (__mb == 0)
@@ -17944,7 +17944,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.get_meta is not available in this engine build.");
             __mb_get_meta = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = @default.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -17955,7 +17955,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_has_meta;
-    public bool HasMeta(string name)
+    public bool HasMeta(StringName name)
     {
         var __mb = __mb_has_meta;
         if (__mb == 0)
@@ -17964,7 +17964,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.has_meta is not available in this engine build.");
             __mb_has_meta = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -18007,7 +18007,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_has_user_signal;
-    public bool HasUserSignal(string signal)
+    public bool HasUserSignal(StringName signal)
     {
         var __mb = __mb_has_user_signal;
         if (__mb == 0)
@@ -18016,7 +18016,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.has_user_signal is not available in this engine build.");
             __mb_has_user_signal = __mb;
         }
-        ulong __a0 = StringNames.Get(signal).Opaque;
+        ulong __a0 = signal.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -18025,7 +18025,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_remove_user_signal;
-    public void RemoveUserSignal(string signal)
+    public void RemoveUserSignal(StringName signal)
     {
         var __mb = __mb_remove_user_signal;
         if (__mb == 0)
@@ -18034,14 +18034,14 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.remove_user_signal is not available in this engine build.");
             __mb_remove_user_signal = __mb;
         }
-        ulong __a0 = StringNames.Get(signal).Opaque;
+        ulong __a0 = signal.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_emit_signal;
-    public Error EmitSignal(string signal, params Variant[] args)
+    public Error EmitSignal(StringName signal, params Variant[] args)
     {
         var __mb = __mb_emit_signal;
         if (__mb == 0)
@@ -18053,7 +18053,7 @@ public unsafe partial class GodotObject
         var __n = 1 + args.Length;
         var __ptrs = stackalloc nint[Math.Max(__n, 1)];
         var __lead = stackalloc NativeVariant[1];
-        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(signal).Opaque);
+        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, signal.NativeValue);
         __ptrs[0] = (nint)(__lead + 0);
         var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
         for (var __i = 0; __i < args.Length; __i++)
@@ -18076,7 +18076,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_call;
-    public Variant Call(string method, params Variant[] args)
+    public Variant Call(StringName method, params Variant[] args)
     {
         var __mb = __mb_call;
         if (__mb == 0)
@@ -18088,7 +18088,7 @@ public unsafe partial class GodotObject
         var __n = 1 + args.Length;
         var __ptrs = stackalloc nint[Math.Max(__n, 1)];
         var __lead = stackalloc NativeVariant[1];
-        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, method.NativeValue);
         __ptrs[0] = (nint)(__lead + 0);
         var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
         for (var __i = 0; __i < args.Length; __i++)
@@ -18109,7 +18109,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_call_deferred;
-    public Variant CallDeferred(string method, params Variant[] args)
+    public Variant CallDeferred(StringName method, params Variant[] args)
     {
         var __mb = __mb_call_deferred;
         if (__mb == 0)
@@ -18121,7 +18121,7 @@ public unsafe partial class GodotObject
         var __n = 1 + args.Length;
         var __ptrs = stackalloc nint[Math.Max(__n, 1)];
         var __lead = stackalloc NativeVariant[1];
-        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, method.NativeValue);
         __ptrs[0] = (nint)(__lead + 0);
         var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
         for (var __i = 0; __i < args.Length; __i++)
@@ -18142,7 +18142,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_set_deferred;
-    public void SetDeferred(string property, Variant value)
+    public void SetDeferred(StringName property, Variant value)
     {
         var __mb = __mb_set_deferred;
         if (__mb == 0)
@@ -18151,7 +18151,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.set_deferred is not available in this engine build.");
             __mb_set_deferred = __mb;
         }
-        ulong __a0 = StringNames.Get(property).Opaque;
+        ulong __a0 = property.NativeValue;
         var __a1 = value.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -18160,7 +18160,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_callv;
-    public Variant Callv(string method, Godot.Collections.Array argArray)
+    public Variant Callv(StringName method, Godot.Collections.Array argArray)
     {
         var __mb = __mb_callv;
         if (__mb == 0)
@@ -18169,7 +18169,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.callv is not available in this engine build.");
             __mb_callv = __mb;
         }
-        ulong __a0 = StringNames.Get(method).Opaque;
+        ulong __a0 = method.NativeValue;
         ulong __a1 = argArray.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -18180,7 +18180,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_has_method;
-    public bool HasMethod(string method)
+    public bool HasMethod(StringName method)
     {
         var __mb = __mb_has_method;
         if (__mb == 0)
@@ -18189,7 +18189,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.has_method is not available in this engine build.");
             __mb_has_method = __mb;
         }
-        ulong __a0 = StringNames.Get(method).Opaque;
+        ulong __a0 = method.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -18198,7 +18198,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_get_method_argument_count;
-    public int GetMethodArgumentCount(string method)
+    public int GetMethodArgumentCount(StringName method)
     {
         var __mb = __mb_get_method_argument_count;
         if (__mb == 0)
@@ -18207,7 +18207,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.get_method_argument_count is not available in this engine build.");
             __mb_get_method_argument_count = __mb;
         }
-        ulong __a0 = StringNames.Get(method).Opaque;
+        ulong __a0 = method.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
@@ -18216,7 +18216,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_has_signal;
-    public bool HasSignal(string signal)
+    public bool HasSignal(StringName signal)
     {
         var __mb = __mb_has_signal;
         if (__mb == 0)
@@ -18225,7 +18225,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.has_signal is not available in this engine build.");
             __mb_has_signal = __mb;
         }
-        ulong __a0 = StringNames.Get(signal).Opaque;
+        ulong __a0 = signal.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -18249,7 +18249,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_get_signal_connection_list;
-    public Godot.Collections.Array GetSignalConnectionList(string signal)
+    public Godot.Collections.Array GetSignalConnectionList(StringName signal)
     {
         var __mb = __mb_get_signal_connection_list;
         if (__mb == 0)
@@ -18258,7 +18258,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.get_signal_connection_list is not available in this engine build.");
             __mb_get_signal_connection_list = __mb;
         }
-        ulong __a0 = StringNames.Get(signal).Opaque;
+        ulong __a0 = signal.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
@@ -18282,7 +18282,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_connect;
-    public Error Connect(string signal, Callable callable, uint flags = unchecked((uint)(0)))
+    public Error Connect(StringName signal, Callable callable, uint flags = unchecked((uint)(0)))
     {
         var __mb = __mb_connect;
         if (__mb == 0)
@@ -18291,7 +18291,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.connect is not available in this engine build.");
             __mb_connect = __mb;
         }
-        ulong __a0 = StringNames.Get(signal).Opaque;
+        ulong __a0 = signal.NativeValue;
         var __a1 = callable.Native;
         long __a2 = unchecked((long)flags);
         var __args = stackalloc nint[3];
@@ -18304,7 +18304,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_disconnect;
-    public void Disconnect(string signal, Callable callable)
+    public void Disconnect(StringName signal, Callable callable)
     {
         var __mb = __mb_disconnect;
         if (__mb == 0)
@@ -18313,7 +18313,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.disconnect is not available in this engine build.");
             __mb_disconnect = __mb;
         }
-        ulong __a0 = StringNames.Get(signal).Opaque;
+        ulong __a0 = signal.NativeValue;
         var __a1 = callable.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -18322,7 +18322,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_is_connected;
-    public bool IsConnected(string signal, Callable callable)
+    public bool IsConnected(StringName signal, Callable callable)
     {
         var __mb = __mb_is_connected;
         if (__mb == 0)
@@ -18331,7 +18331,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.is_connected is not available in this engine build.");
             __mb_is_connected = __mb;
         }
-        ulong __a0 = StringNames.Get(signal).Opaque;
+        ulong __a0 = signal.NativeValue;
         var __a1 = callable.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -18342,7 +18342,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_has_connections;
-    public bool HasConnections(string signal)
+    public bool HasConnections(StringName signal)
     {
         var __mb = __mb_has_connections;
         if (__mb == 0)
@@ -18351,7 +18351,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.has_connections is not available in this engine build.");
             __mb_has_connections = __mb;
         }
-        ulong __a0 = StringNames.Get(signal).Opaque;
+        ulong __a0 = signal.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -18435,7 +18435,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_tr;
-    public string Tr(string message, string context = "")
+    public string Tr(StringName message, StringName context)
     {
         var __mb = __mb_tr;
         if (__mb == 0)
@@ -18444,8 +18444,8 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.tr is not available in this engine build.");
             __mb_tr = __mb;
         }
-        ulong __a0 = StringNames.Get(message).Opaque;
-        ulong __a1 = StringNames.Get(context).Opaque;
+        ulong __a0 = message.NativeValue;
+        ulong __a1 = context.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -18455,7 +18455,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_tr_n;
-    public string TrN(string message, string pluralMessage, int n, string context = "")
+    public string TrN(StringName message, StringName pluralMessage, int n, StringName context)
     {
         var __mb = __mb_tr_n;
         if (__mb == 0)
@@ -18464,10 +18464,10 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.tr_n is not available in this engine build.");
             __mb_tr_n = __mb;
         }
-        ulong __a0 = StringNames.Get(message).Opaque;
-        ulong __a1 = StringNames.Get(pluralMessage).Opaque;
+        ulong __a0 = message.NativeValue;
+        ulong __a1 = pluralMessage.NativeValue;
         long __a2 = unchecked((long)n);
-        ulong __a3 = StringNames.Get(context).Opaque;
+        ulong __a3 = context.NativeValue;
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -18479,7 +18479,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_get_translation_domain;
-    public string GetTranslationDomain()
+    public StringName GetTranslationDomain()
     {
         var __mb = __mb_get_translation_domain;
         if (__mb == 0)
@@ -18490,11 +18490,11 @@ public unsafe partial class GodotObject
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_translation_domain;
-    public void SetTranslationDomain(string domain)
+    public void SetTranslationDomain(StringName domain)
     {
         var __mb = __mb_set_translation_domain;
         if (__mb == 0)
@@ -18503,7 +18503,7 @@ public unsafe partial class GodotObject
             if (__mb == 0) throw new MissingMethodException("Object.set_translation_domain is not available in this engine build.");
             __mb_set_translation_domain = __mb;
         }
-        ulong __a0 = StringNames.Get(domain).Opaque;
+        ulong __a0 = domain.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);

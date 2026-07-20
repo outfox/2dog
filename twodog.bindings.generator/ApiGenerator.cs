@@ -349,7 +349,8 @@ public static class ApiGenerator
         "int" => $"unchecked(({t.Cs})Variants.ToInt({v}))",
         "enum" => $"({t.Cs})Variants.ToInt({v})",
         "float" => $"({t.Cs})Variants.ToFloat({v})",
-        "string" or "stringname" => $"Variants.ToManagedString({v})",
+        "string" => $"Variants.ToManagedString({v})",
+        "stringname" => $"StringName.Intern(Variants.ToManagedString({v}))",
         "class" => $"({t.Cs}?)InstanceBindings.GetOrCreate(Variants.ToObject({v}), adoptRef: false)",
         "variant" => $"new Variant(Variants.NewCopy({v}))",
         "math" => $"Variants.ToStruct<{t.Cs}>({VtOf(t.Cs)}, {v})",
@@ -561,7 +562,7 @@ public static class ApiGenerator
                 "float" => $"double __a{i} = {name};",
                 "enum" => $"long __a{i} = (long){name};",
                 "string" => $"ulong __a{i} = NativeString.Create({name});",
-                "stringname" => $"ulong __a{i} = StringNames.Get({name}).Opaque;",
+                "stringname" => $"ulong __a{i} = {name}.NativeValue;",
                 "math" => $"var __a{i} = {name};",
                 "class" => $"nint __a{i} = {name}?.NativePtr ?? 0;",
                 "variant" => $"var __a{i} = {name}.Native;",
@@ -650,7 +651,7 @@ public static class ApiGenerator
             case "enum": sb.AppendLine($"        return ({ret.Cs})__ret;"); break;
             case "float": sb.AppendLine($"        return ({ret.Cs})__ret;"); break;
             case "string": sb.AppendLine("        return NativeString.ReadAndDestroy(ref __ret);"); break;
-            case "stringname": sb.AppendLine("        return StringNames.ReadAndDestroy(ref __ret);"); break;
+            case "stringname": sb.AppendLine("        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));"); break;
             case "math": sb.AppendLine("        return __ret;"); break;
             case "class":
                 var refCounted = _classes.TryGetValue(GdOf(ret.Cs), out var rc2) && rc2.RefCounted;
@@ -684,7 +685,7 @@ public static class ApiGenerator
         "enum" => $"Variants.FromInt((long){name})",
         "float" => $"Variants.FromFloat({name})",
         "string" => $"Variants.FromString({name})",
-        "stringname" => $"Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get({name}).Opaque)",
+        "stringname" => $"Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, {name}.NativeValue)",
         "class" => $"Variants.FromObject({name}?.NativePtr ?? 0)",
         "variant" => $"Variants.NewCopy(in {name}.Native)",
         _ => throw new InvalidOperationException(t.Kind),
@@ -903,7 +904,7 @@ public static class ApiGenerator
                     "float" => $"double __a{i} = {name};",
                     "enum" => $"long __a{i} = (long){name};",
                     "string" => $"ulong __a{i} = NativeString.Create({name});",
-                    "stringname" => $"ulong __a{i} = StringNames.Get({name}).Opaque;",
+                    "stringname" => $"ulong __a{i} = {name}.NativeValue;",
                     "math" => $"var __a{i} = {name};",
                     "class" => $"nint __a{i} = {name}?.NativePtr ?? 0;",
                     "variant" => $"var __a{i} = {name}.Native;",
@@ -969,7 +970,7 @@ public static class ApiGenerator
                 case "enum": sb.AppendLine($"        return ({ret.Cs})__ret;"); break;
                 case "float": sb.AppendLine($"        return ({ret.Cs})__ret;"); break;
                 case "string": sb.AppendLine("        return NativeString.ReadAndDestroy(ref __ret);"); break;
-                case "stringname": sb.AppendLine("        return StringNames.ReadAndDestroy(ref __ret);"); break;
+                case "stringname": sb.AppendLine("        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));"); break;
                 case "math": sb.AppendLine("        return __ret;"); break;
                 case "class": sb.AppendLine($"        return ({ret.Cs}?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);"); break;
                 case "variant": sb.AppendLine("        return new Variant(__ret);"); break;
@@ -1011,12 +1012,11 @@ public static class ApiGenerator
                         ? t.Cs == "float" ? $"{dv}f" : dv
                         : null,
                 };
-            case "string" or "stringname":
+            case "string":
             {
-                // String defaults arrive quoted ("..."), StringName as &"...".
-                var s = dv.StartsWith("&") ? dv[1..] : dv;
-                if (s.Length < 2 || s[0] != '"' || s[^1] != '"') return null;
-                return '"' + s[1..^1].Replace("\\", "\\\\").Replace("\"", "\\\"") + '"';
+                // String defaults arrive quoted ("...").
+                if (dv.Length < 2 || dv[0] != '"' || dv[^1] != '"') return null;
+                return '"' + dv[1..^1].Replace("\\", "\\\\").Replace("\"", "\\\"") + '"';
             }
             case "class":
                 return dv == "null" ? "null" : null;
@@ -1250,7 +1250,7 @@ public static class ApiGenerator
                 "float" => a.type.Cs == "float" ? $"(float)(*(double*)args[{i}])" : $"*(double*)args[{i}]",
                 "enum" => $"({a.type.Cs})(*(long*)args[{i}])",
                 "string" => $"NativeString.Read(*(ulong*)args[{i}])",
-                "stringname" => $"StringNames.Read(*(ulong*)args[{i}])",
+                "stringname" => $"StringName.Intern(StringNames.Read(*(ulong*)args[{i}]))",
                 "math" => $"*({a.type.Cs}*)args[{i}]",
                 "class" => $"({a.type.Cs}?)InstanceBindings.GetOrCreate(*(nint*)args[{i}], adoptRef: false)",
                 "packed" => a.type.PackedElem == "string"
@@ -1289,7 +1289,7 @@ public static class ApiGenerator
                     sb.AppendLine($"            *(ulong*)ret = NativeString.Create({call} ?? \"\");");
                     break;
                 case "stringname":
-                    sb.AppendLine($"            *(ulong*)ret = StringNames.CreateOwned({call} ?? \"\");");
+                    sb.AppendLine($"            *(ulong*)ret = StringNames.CreateOwned({call}?.ToString() ?? \"\");");
                     break;
                 case "packed":
                     // Ownership transfers into the engine-destructed ret slot
@@ -1327,7 +1327,7 @@ public static class ApiGenerator
         if (t == "float")
             return new TypeRef("float", meta == "float" ? "float" : "double");
         if (t == "String") return new TypeRef("string", "string");
-        if (t == "StringName") return new TypeRef("stringname", "string");
+        if (t == "StringName") return new TypeRef("stringname", "StringName");
         if (t.StartsWith("enum::") || t.StartsWith("bitfield::"))
         {
             var refName = t[(t.IndexOf(':') + 2)..];

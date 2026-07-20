@@ -37,13 +37,28 @@ public struct Variant : IDisposable
     public static implicit operator Variant(Color value) =>
         new(Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_COLOR, in value));
 
+    public static implicit operator Variant(StringName value) =>
+        new(Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, value.NativeValue));
+
     public static Variant From(GodotObject? value) => new(Variants.FromObject(value?.NativePtr ?? 0));
 
-    public static Variant From(Array value) =>
-        new(Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_ARRAY, in value.Native));
+    // Null-tolerant From overloads (null -> NIL variant), used by generated
+    // [Export] getters where the backing member may be null.
+    public static Variant From(NodePath? value) => value is null
+        ? default
+        : new(Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_NODE_PATH, value.Native));
 
-    public static Variant From(Dictionary value) =>
-        new(Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_DICTIONARY, in value.Native));
+    public static Variant From(StringName? value) => value is null
+        ? default
+        : new(Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, value.NativeValue));
+
+    public static Variant From(Array? value) => value is null
+        ? default
+        : new(Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_ARRAY, in value.Native));
+
+    public static Variant From(Dictionary? value) => value is null
+        ? default
+        : new(Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_DICTIONARY, in value.Native));
 
     // ---- out ----
 
@@ -69,6 +84,14 @@ public struct Variant : IDisposable
     /// <summary>Extracts an owned Dictionary reference (COW handle; dispose it separately).</summary>
     public Dictionary AsGodotDictionary() =>
         new(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_DICTIONARY, in Native));
+
+    public StringName AsStringName() => StringName.Intern(AsString());
+
+    public NodePath AsNodePath() =>
+        new(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_NODE_PATH, in Native));
+
+    /// <summary>An independently owned deep copy of this variant.</summary>
+    public Variant Copy() => new(Variants.NewCopy(in Native));
 
     public override string ToString() => AsString();
 

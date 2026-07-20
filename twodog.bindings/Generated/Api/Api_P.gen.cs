@@ -5308,7 +5308,7 @@ public static unsafe partial class Performance
     }
 
     private static nint __mb_add_custom_monitor;
-    public static void AddCustomMonitor(string id, Callable callable, Godot.Collections.Array arguments, Performance.MonitorType type = (Performance.MonitorType)(0))
+    public static void AddCustomMonitor(StringName id, Callable callable, Godot.Collections.Array arguments, Performance.MonitorType type = (Performance.MonitorType)(0))
     {
         var __mb = __mb_add_custom_monitor;
         if (__mb == 0)
@@ -5317,7 +5317,7 @@ public static unsafe partial class Performance
             if (__mb == 0) throw new MissingMethodException("Performance.add_custom_monitor is not available in this engine build.");
             __mb_add_custom_monitor = __mb;
         }
-        ulong __a0 = StringNames.Get(id).Opaque;
+        ulong __a0 = id.NativeValue;
         var __a1 = callable.Native;
         ulong __a2 = arguments.Native;
         long __a3 = (long)type;
@@ -5330,7 +5330,7 @@ public static unsafe partial class Performance
     }
 
     private static nint __mb_remove_custom_monitor;
-    public static void RemoveCustomMonitor(string id)
+    public static void RemoveCustomMonitor(StringName id)
     {
         var __mb = __mb_remove_custom_monitor;
         if (__mb == 0)
@@ -5339,14 +5339,14 @@ public static unsafe partial class Performance
             if (__mb == 0) throw new MissingMethodException("Performance.remove_custom_monitor is not available in this engine build.");
             __mb_remove_custom_monitor = __mb;
         }
-        ulong __a0 = StringNames.Get(id).Opaque;
+        ulong __a0 = id.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_custom_monitor;
-    public static bool HasCustomMonitor(string id)
+    public static bool HasCustomMonitor(StringName id)
     {
         var __mb = __mb_has_custom_monitor;
         if (__mb == 0)
@@ -5355,7 +5355,7 @@ public static unsafe partial class Performance
             if (__mb == 0) throw new MissingMethodException("Performance.has_custom_monitor is not available in this engine build.");
             __mb_has_custom_monitor = __mb;
         }
-        ulong __a0 = StringNames.Get(id).Opaque;
+        ulong __a0 = id.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -5364,7 +5364,7 @@ public static unsafe partial class Performance
     }
 
     private static nint __mb_get_custom_monitor;
-    public static Variant GetCustomMonitor(string id)
+    public static Variant GetCustomMonitor(StringName id)
     {
         var __mb = __mb_get_custom_monitor;
         if (__mb == 0)
@@ -5373,7 +5373,7 @@ public static unsafe partial class Performance
             if (__mb == 0) throw new MissingMethodException("Performance.get_custom_monitor is not available in this engine build.");
             __mb_get_custom_monitor = __mb;
         }
-        ulong __a0 = StringNames.Get(id).Opaque;
+        ulong __a0 = id.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -26777,7 +26777,7 @@ public static unsafe partial class ProjectSettings
     }
 
     private static nint __mb_get_setting_with_override;
-    public static Variant GetSettingWithOverride(string name)
+    public static Variant GetSettingWithOverride(StringName name)
     {
         var __mb = __mb_get_setting_with_override;
         if (__mb == 0)
@@ -26786,7 +26786,7 @@ public static unsafe partial class ProjectSettings
             if (__mb == 0) throw new MissingMethodException("ProjectSettings.get_setting_with_override is not available in this engine build.");
             __mb_get_setting_with_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -26810,7 +26810,7 @@ public static unsafe partial class ProjectSettings
     }
 
     private static nint __mb_get_setting_with_override_and_custom_features;
-    public static Variant GetSettingWithOverrideAndCustomFeatures(string name, string[] features)
+    public static Variant GetSettingWithOverrideAndCustomFeatures(StringName name, string[] features)
     {
         var __mb = __mb_get_setting_with_override_and_custom_features;
         if (__mb == 0)
@@ -26819,7 +26819,7 @@ public static unsafe partial class ProjectSettings
             if (__mb == 0) throw new MissingMethodException("ProjectSettings.get_setting_with_override_and_custom_features is not available in this engine build.");
             __mb_get_setting_with_override_and_custom_features = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = Packed.CreateStrings(features);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);

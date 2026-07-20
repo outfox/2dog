@@ -35,7 +35,7 @@ public sealed class SignalAwaiter : IAwaiter<Variant[]>, IAwaitable<Variant[]>
     private Variant[] _result = [];
     private Action? _continuation;
 
-    public SignalAwaiter(GodotObject source, string signal)
+    public SignalAwaiter(GodotObject source, StringName signal)
     {
         // The handler delegate closes over `this`: the engine connection keeps
         // the awaiter reachable until fired.

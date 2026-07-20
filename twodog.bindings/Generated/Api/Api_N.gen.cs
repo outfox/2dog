@@ -5442,7 +5442,7 @@ public unsafe partial class NavigationMesh : Resource
         set => SetSourceGeometryMode(value);
     }
 
-    public string GeometrySourceGroupName
+    public StringName GeometrySourceGroupName
     {
         get => GetSourceGroupName();
         set => SetSourceGroupName(value);
@@ -5723,7 +5723,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_source_group_name;
-    internal void SetSourceGroupName(string mask)
+    internal void SetSourceGroupName(StringName mask)
     {
         var __mb = __mb_set_source_group_name;
         if (__mb == 0)
@@ -5732,14 +5732,14 @@ public unsafe partial class NavigationMesh : Resource
             if (__mb == 0) throw new MissingMethodException("NavigationMesh.set_source_group_name is not available in this engine build.");
             __mb_set_source_group_name = __mb;
         }
-        ulong __a0 = StringNames.Get(mask).Opaque;
+        ulong __a0 = mask.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_source_group_name;
-    internal string GetSourceGroupName()
+    internal StringName GetSourceGroupName()
     {
         var __mb = __mb_get_source_group_name;
         if (__mb == 0)
@@ -5750,7 +5750,7 @@ public unsafe partial class NavigationMesh : Resource
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_cell_size;
@@ -9572,7 +9572,7 @@ public unsafe partial class NavigationPolygon : Resource
         set => SetSourceGeometryMode(value);
     }
 
-    public string SourceGeometryGroupName
+    public StringName SourceGeometryGroupName
     {
         get => GetSourceGeometryGroupName();
         set => SetSourceGeometryGroupName(value);
@@ -10071,7 +10071,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_set_source_geometry_group_name;
-    internal void SetSourceGeometryGroupName(string groupName)
+    internal void SetSourceGeometryGroupName(StringName groupName)
     {
         var __mb = __mb_set_source_geometry_group_name;
         if (__mb == 0)
@@ -10080,14 +10080,14 @@ public unsafe partial class NavigationPolygon : Resource
             if (__mb == 0) throw new MissingMethodException("NavigationPolygon.set_source_geometry_group_name is not available in this engine build.");
             __mb_set_source_geometry_group_name = __mb;
         }
-        ulong __a0 = StringNames.Get(groupName).Opaque;
+        ulong __a0 = groupName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_source_geometry_group_name;
-    internal string GetSourceGeometryGroupName()
+    internal StringName GetSourceGeometryGroupName()
     {
         var __mb = __mb_get_source_geometry_group_name;
         if (__mb == 0)
@@ -10098,7 +10098,7 @@ public unsafe partial class NavigationPolygon : Resource
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_agent_radius;
@@ -16790,7 +16790,7 @@ public unsafe partial class Node : GodotObject
         Disabled = 2,
     }
 
-    public string Name
+    public StringName Name
     {
         get => GetName();
         set => SetName(value);
@@ -17005,7 +17005,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_set_name;
-    internal void SetName(string name)
+    internal void SetName(StringName name)
     {
         var __mb = __mb_set_name;
         if (__mb == 0)
@@ -17014,14 +17014,14 @@ public unsafe partial class Node : GodotObject
             if (__mb == 0) throw new MissingMethodException("Node.set_name is not available in this engine build.");
             __mb_set_name = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_name;
-    internal string GetName()
+    internal StringName GetName()
     {
         var __mb = __mb_get_name;
         if (__mb == 0)
@@ -17032,7 +17032,7 @@ public unsafe partial class Node : GodotObject
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_add_child;
@@ -17420,7 +17420,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_add_to_group;
-    public void AddToGroup(string group, bool persistent = false)
+    public void AddToGroup(StringName group, bool persistent = false)
     {
         var __mb = __mb_add_to_group;
         if (__mb == 0)
@@ -17429,7 +17429,7 @@ public unsafe partial class Node : GodotObject
             if (__mb == 0) throw new MissingMethodException("Node.add_to_group is not available in this engine build.");
             __mb_add_to_group = __mb;
         }
-        ulong __a0 = StringNames.Get(group).Opaque;
+        ulong __a0 = group.NativeValue;
         byte __a1 = persistent ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -17438,7 +17438,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_remove_from_group;
-    public void RemoveFromGroup(string group)
+    public void RemoveFromGroup(StringName group)
     {
         var __mb = __mb_remove_from_group;
         if (__mb == 0)
@@ -17447,14 +17447,14 @@ public unsafe partial class Node : GodotObject
             if (__mb == 0) throw new MissingMethodException("Node.remove_from_group is not available in this engine build.");
             __mb_remove_from_group = __mb;
         }
-        ulong __a0 = StringNames.Get(group).Opaque;
+        ulong __a0 = group.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_in_group;
-    public bool IsInGroup(string group)
+    public bool IsInGroup(StringName group)
     {
         var __mb = __mb_is_in_group;
         if (__mb == 0)
@@ -17463,7 +17463,7 @@ public unsafe partial class Node : GodotObject
             if (__mb == 0) throw new MissingMethodException("Node.is_in_group is not available in this engine build.");
             __mb_is_in_group = __mb;
         }
-        ulong __a0 = StringNames.Get(group).Opaque;
+        ulong __a0 = group.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -17658,7 +17658,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_propagate_call;
-    public void PropagateCall(string method, Godot.Collections.Array args, bool parentFirst = false)
+    public void PropagateCall(StringName method, Godot.Collections.Array args, bool parentFirst = false)
     {
         var __mb = __mb_propagate_call;
         if (__mb == 0)
@@ -17667,7 +17667,7 @@ public unsafe partial class Node : GodotObject
             if (__mb == 0) throw new MissingMethodException("Node.propagate_call is not available in this engine build.");
             __mb_propagate_call = __mb;
         }
-        ulong __a0 = StringNames.Get(method).Opaque;
+        ulong __a0 = method.NativeValue;
         ulong __a1 = args.Native;
         byte __a2 = parentFirst ? (byte)1 : (byte)0;
         var __args = stackalloc nint[3];
@@ -18631,7 +18631,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_rpc_config;
-    public void RpcConfig(string method, Variant config)
+    public void RpcConfig(StringName method, Variant config)
     {
         var __mb = __mb_rpc_config;
         if (__mb == 0)
@@ -18640,7 +18640,7 @@ public unsafe partial class Node : GodotObject
             if (__mb == 0) throw new MissingMethodException("Node.rpc_config is not available in this engine build.");
             __mb_rpc_config = __mb;
         }
-        ulong __a0 = StringNames.Get(method).Opaque;
+        ulong __a0 = method.NativeValue;
         var __a1 = config.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -18727,7 +18727,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_atr;
-    public string Atr(string message, string context = "")
+    public string Atr(string message, StringName context)
     {
         var __mb = __mb_atr;
         if (__mb == 0)
@@ -18737,7 +18737,7 @@ public unsafe partial class Node : GodotObject
             __mb_atr = __mb;
         }
         ulong __a0 = NativeString.Create(message);
-        ulong __a1 = StringNames.Get(context).Opaque;
+        ulong __a1 = context.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -18748,7 +18748,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_atr_n;
-    public string AtrN(string message, string pluralMessage, int n, string context = "")
+    public string AtrN(string message, StringName pluralMessage, int n, StringName context)
     {
         var __mb = __mb_atr_n;
         if (__mb == 0)
@@ -18758,9 +18758,9 @@ public unsafe partial class Node : GodotObject
             __mb_atr_n = __mb;
         }
         ulong __a0 = NativeString.Create(message);
-        ulong __a1 = StringNames.Get(pluralMessage).Opaque;
+        ulong __a1 = pluralMessage.NativeValue;
         long __a2 = unchecked((long)n);
-        ulong __a3 = StringNames.Get(context).Opaque;
+        ulong __a3 = context.NativeValue;
         var __args = stackalloc nint[4];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -18773,7 +18773,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_rpc;
-    public Error Rpc(string method, params Variant[] args)
+    public Error Rpc(StringName method, params Variant[] args)
     {
         var __mb = __mb_rpc;
         if (__mb == 0)
@@ -18785,7 +18785,7 @@ public unsafe partial class Node : GodotObject
         var __n = 1 + args.Length;
         var __ptrs = stackalloc nint[Math.Max(__n, 1)];
         var __lead = stackalloc NativeVariant[1];
-        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, method.NativeValue);
         __ptrs[0] = (nint)(__lead + 0);
         var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
         for (var __i = 0; __i < args.Length; __i++)
@@ -18808,7 +18808,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_rpc_id;
-    public Error RpcId(long peerId, string method, params Variant[] args)
+    public Error RpcId(long peerId, StringName method, params Variant[] args)
     {
         var __mb = __mb_rpc_id;
         if (__mb == 0)
@@ -18822,7 +18822,7 @@ public unsafe partial class Node : GodotObject
         var __lead = stackalloc NativeVariant[2];
         __lead[0] = Variants.FromInt(unchecked((long)peerId));
         __ptrs[0] = (nint)(__lead + 0);
-        __lead[1] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __lead[1] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, method.NativeValue);
         __ptrs[1] = (nint)(__lead + 1);
         var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
         for (var __i = 0; __i < args.Length; __i++)
@@ -18858,7 +18858,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_call_deferred_thread_group;
-    public Variant CallDeferredThreadGroup(string method, params Variant[] args)
+    public Variant CallDeferredThreadGroup(StringName method, params Variant[] args)
     {
         var __mb = __mb_call_deferred_thread_group;
         if (__mb == 0)
@@ -18870,7 +18870,7 @@ public unsafe partial class Node : GodotObject
         var __n = 1 + args.Length;
         var __ptrs = stackalloc nint[Math.Max(__n, 1)];
         var __lead = stackalloc NativeVariant[1];
-        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, method.NativeValue);
         __ptrs[0] = (nint)(__lead + 0);
         var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
         for (var __i = 0; __i < args.Length; __i++)
@@ -18891,7 +18891,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_set_deferred_thread_group;
-    public void SetDeferredThreadGroup(string property, Variant value)
+    public void SetDeferredThreadGroup(StringName property, Variant value)
     {
         var __mb = __mb_set_deferred_thread_group;
         if (__mb == 0)
@@ -18900,7 +18900,7 @@ public unsafe partial class Node : GodotObject
             if (__mb == 0) throw new MissingMethodException("Node.set_deferred_thread_group is not available in this engine build.");
             __mb_set_deferred_thread_group = __mb;
         }
-        ulong __a0 = StringNames.Get(property).Opaque;
+        ulong __a0 = property.NativeValue;
         var __a1 = value.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -18925,7 +18925,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_call_thread_safe;
-    public Variant CallThreadSafe(string method, params Variant[] args)
+    public Variant CallThreadSafe(StringName method, params Variant[] args)
     {
         var __mb = __mb_call_thread_safe;
         if (__mb == 0)
@@ -18937,7 +18937,7 @@ public unsafe partial class Node : GodotObject
         var __n = 1 + args.Length;
         var __ptrs = stackalloc nint[Math.Max(__n, 1)];
         var __lead = stackalloc NativeVariant[1];
-        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, method.NativeValue);
         __ptrs[0] = (nint)(__lead + 0);
         var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
         for (var __i = 0; __i < args.Length; __i++)
@@ -18958,7 +18958,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_set_thread_safe;
-    public void SetThreadSafe(string property, Variant value)
+    public void SetThreadSafe(StringName property, Variant value)
     {
         var __mb = __mb_set_thread_safe;
         if (__mb == 0)
@@ -18967,7 +18967,7 @@ public unsafe partial class Node : GodotObject
             if (__mb == 0) throw new MissingMethodException("Node.set_thread_safe is not available in this engine build.");
             __mb_set_thread_safe = __mb;
         }
-        ulong __a0 = StringNames.Get(property).Opaque;
+        ulong __a0 = property.NativeValue;
         var __a1 = value.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);

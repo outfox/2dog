@@ -744,7 +744,7 @@ public unsafe partial class SceneState : RefCounted
     }
 
     private static nint __mb_get_node_type;
-    public string GetNodeType(int idx)
+    public StringName GetNodeType(int idx)
     {
         var __mb = __mb_get_node_type;
         if (__mb == 0)
@@ -758,11 +758,11 @@ public unsafe partial class SceneState : RefCounted
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_node_name;
-    public string GetNodeName(int idx)
+    public StringName GetNodeName(int idx)
     {
         var __mb = __mb_get_node_name;
         if (__mb == 0)
@@ -776,7 +776,7 @@ public unsafe partial class SceneState : RefCounted
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_node_path;
@@ -926,7 +926,7 @@ public unsafe partial class SceneState : RefCounted
     }
 
     private static nint __mb_get_node_property_name;
-    public string GetNodePropertyName(int idx, int propIdx)
+    public StringName GetNodePropertyName(int idx, int propIdx)
     {
         var __mb = __mb_get_node_property_name;
         if (__mb == 0)
@@ -942,7 +942,7 @@ public unsafe partial class SceneState : RefCounted
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_node_property_value;
@@ -999,7 +999,7 @@ public unsafe partial class SceneState : RefCounted
     }
 
     private static nint __mb_get_connection_signal;
-    public string GetConnectionSignal(int idx)
+    public StringName GetConnectionSignal(int idx)
     {
         var __mb = __mb_get_connection_signal;
         if (__mb == 0)
@@ -1013,7 +1013,7 @@ public unsafe partial class SceneState : RefCounted
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_connection_target;
@@ -1035,7 +1035,7 @@ public unsafe partial class SceneState : RefCounted
     }
 
     private static nint __mb_get_connection_method;
-    public string GetConnectionMethod(int idx)
+    public StringName GetConnectionMethod(int idx)
     {
         var __mb = __mb_get_connection_method;
         if (__mb == 0)
@@ -1049,7 +1049,7 @@ public unsafe partial class SceneState : RefCounted
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_connection_flags;
@@ -1274,7 +1274,7 @@ public unsafe partial class SceneTree : MainLoop
     }
 
     private static nint __mb_has_group;
-    public bool HasGroup(string name)
+    public bool HasGroup(StringName name)
     {
         var __mb = __mb_has_group;
         if (__mb == 0)
@@ -1283,7 +1283,7 @@ public unsafe partial class SceneTree : MainLoop
             if (__mb == 0) throw new MissingMethodException("SceneTree.has_group is not available in this engine build.");
             __mb_has_group = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -1686,7 +1686,7 @@ public unsafe partial class SceneTree : MainLoop
     }
 
     private static nint __mb_call_group_flags;
-    public void CallGroupFlags(long flags, string group, string method, params Variant[] args)
+    public void CallGroupFlags(long flags, StringName group, StringName method, params Variant[] args)
     {
         var __mb = __mb_call_group_flags;
         if (__mb == 0)
@@ -1700,9 +1700,9 @@ public unsafe partial class SceneTree : MainLoop
         var __lead = stackalloc NativeVariant[3];
         __lead[0] = Variants.FromInt(unchecked((long)flags));
         __ptrs[0] = (nint)(__lead + 0);
-        __lead[1] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(group).Opaque);
+        __lead[1] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, group.NativeValue);
         __ptrs[1] = (nint)(__lead + 1);
-        __lead[2] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __lead[2] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, method.NativeValue);
         __ptrs[2] = (nint)(__lead + 2);
         var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
         for (var __i = 0; __i < args.Length; __i++)
@@ -1723,7 +1723,7 @@ public unsafe partial class SceneTree : MainLoop
     }
 
     private static nint __mb_notify_group_flags;
-    public void NotifyGroupFlags(uint callFlags, string group, int notification)
+    public void NotifyGroupFlags(uint callFlags, StringName group, int notification)
     {
         var __mb = __mb_notify_group_flags;
         if (__mb == 0)
@@ -1733,7 +1733,7 @@ public unsafe partial class SceneTree : MainLoop
             __mb_notify_group_flags = __mb;
         }
         long __a0 = unchecked((long)callFlags);
-        ulong __a1 = StringNames.Get(group).Opaque;
+        ulong __a1 = group.NativeValue;
         long __a2 = unchecked((long)notification);
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -1743,7 +1743,7 @@ public unsafe partial class SceneTree : MainLoop
     }
 
     private static nint __mb_set_group_flags;
-    public void SetGroupFlags(uint callFlags, string group, string property, Variant value)
+    public void SetGroupFlags(uint callFlags, StringName group, string property, Variant value)
     {
         var __mb = __mb_set_group_flags;
         if (__mb == 0)
@@ -1753,7 +1753,7 @@ public unsafe partial class SceneTree : MainLoop
             __mb_set_group_flags = __mb;
         }
         long __a0 = unchecked((long)callFlags);
-        ulong __a1 = StringNames.Get(group).Opaque;
+        ulong __a1 = group.NativeValue;
         ulong __a2 = NativeString.Create(property);
         var __a3 = value.Native;
         var __args = stackalloc nint[4];
@@ -1766,7 +1766,7 @@ public unsafe partial class SceneTree : MainLoop
     }
 
     private static nint __mb_call_group;
-    public void CallGroup(string group, string method, params Variant[] args)
+    public void CallGroup(StringName group, StringName method, params Variant[] args)
     {
         var __mb = __mb_call_group;
         if (__mb == 0)
@@ -1778,9 +1778,9 @@ public unsafe partial class SceneTree : MainLoop
         var __n = 2 + args.Length;
         var __ptrs = stackalloc nint[Math.Max(__n, 1)];
         var __lead = stackalloc NativeVariant[2];
-        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(group).Opaque);
+        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, group.NativeValue);
         __ptrs[0] = (nint)(__lead + 0);
-        __lead[1] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __lead[1] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, method.NativeValue);
         __ptrs[1] = (nint)(__lead + 1);
         var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
         for (var __i = 0; __i < args.Length; __i++)
@@ -1801,7 +1801,7 @@ public unsafe partial class SceneTree : MainLoop
     }
 
     private static nint __mb_notify_group;
-    public void NotifyGroup(string group, int notification)
+    public void NotifyGroup(StringName group, int notification)
     {
         var __mb = __mb_notify_group;
         if (__mb == 0)
@@ -1810,7 +1810,7 @@ public unsafe partial class SceneTree : MainLoop
             if (__mb == 0) throw new MissingMethodException("SceneTree.notify_group is not available in this engine build.");
             __mb_notify_group = __mb;
         }
-        ulong __a0 = StringNames.Get(group).Opaque;
+        ulong __a0 = group.NativeValue;
         long __a1 = unchecked((long)notification);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -1819,7 +1819,7 @@ public unsafe partial class SceneTree : MainLoop
     }
 
     private static nint __mb_set_group;
-    public void SetGroup(string group, string property, Variant value)
+    public void SetGroup(StringName group, string property, Variant value)
     {
         var __mb = __mb_set_group;
         if (__mb == 0)
@@ -1828,7 +1828,7 @@ public unsafe partial class SceneTree : MainLoop
             if (__mb == 0) throw new MissingMethodException("SceneTree.set_group is not available in this engine build.");
             __mb_set_group = __mb;
         }
-        ulong __a0 = StringNames.Get(group).Opaque;
+        ulong __a0 = group.NativeValue;
         ulong __a1 = NativeString.Create(property);
         var __a2 = value.Native;
         var __args = stackalloc nint[3];
@@ -1840,7 +1840,7 @@ public unsafe partial class SceneTree : MainLoop
     }
 
     private static nint __mb_get_nodes_in_group;
-    public Godot.Collections.Array GetNodesInGroup(string group)
+    public Godot.Collections.Array GetNodesInGroup(StringName group)
     {
         var __mb = __mb_get_nodes_in_group;
         if (__mb == 0)
@@ -1849,7 +1849,7 @@ public unsafe partial class SceneTree : MainLoop
             if (__mb == 0) throw new MissingMethodException("SceneTree.get_nodes_in_group is not available in this engine build.");
             __mb_get_nodes_in_group = __mb;
         }
-        ulong __a0 = StringNames.Get(group).Opaque;
+        ulong __a0 = group.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
@@ -1858,7 +1858,7 @@ public unsafe partial class SceneTree : MainLoop
     }
 
     private static nint __mb_get_first_node_in_group;
-    public Node? GetFirstNodeInGroup(string group)
+    public Node? GetFirstNodeInGroup(StringName group)
     {
         var __mb = __mb_get_first_node_in_group;
         if (__mb == 0)
@@ -1867,7 +1867,7 @@ public unsafe partial class SceneTree : MainLoop
             if (__mb == 0) throw new MissingMethodException("SceneTree.get_first_node_in_group is not available in this engine build.");
             __mb_get_first_node_in_group = __mb;
         }
-        ulong __a0 = StringNames.Get(group).Opaque;
+        ulong __a0 = group.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
@@ -1876,7 +1876,7 @@ public unsafe partial class SceneTree : MainLoop
     }
 
     private static nint __mb_get_node_count_in_group;
-    public int GetNodeCountInGroup(string group)
+    public int GetNodeCountInGroup(StringName group)
     {
         var __mb = __mb_get_node_count_in_group;
         if (__mb == 0)
@@ -1885,7 +1885,7 @@ public unsafe partial class SceneTree : MainLoop
             if (__mb == 0) throw new MissingMethodException("SceneTree.get_node_count_in_group is not available in this engine build.");
             __mb_get_node_count_in_group = __mb;
         }
-        ulong __a0 = StringNames.Get(group).Opaque;
+        ulong __a0 = group.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
@@ -2231,7 +2231,7 @@ public unsafe partial class Script : Resource
     }
 
     private static nint __mb_get_instance_base_type;
-    public string GetInstanceBaseType()
+    public StringName GetInstanceBaseType()
     {
         var __mb = __mb_get_instance_base_type;
         if (__mb == 0)
@@ -2242,11 +2242,11 @@ public unsafe partial class Script : Resource
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_global_name;
-    public string GetGlobalName()
+    public StringName GetGlobalName()
     {
         var __mb = __mb_get_global_name;
         if (__mb == 0)
@@ -2257,11 +2257,11 @@ public unsafe partial class Script : Resource
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_has_script_method;
-    public bool HasScriptMethod(string methodName)
+    public bool HasScriptMethod(StringName methodName)
     {
         var __mb = __mb_has_script_method;
         if (__mb == 0)
@@ -2270,7 +2270,7 @@ public unsafe partial class Script : Resource
             if (__mb == 0) throw new MissingMethodException("Script.has_script_method is not available in this engine build.");
             __mb_has_script_method = __mb;
         }
-        ulong __a0 = StringNames.Get(methodName).Opaque;
+        ulong __a0 = methodName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -2279,7 +2279,7 @@ public unsafe partial class Script : Resource
     }
 
     private static nint __mb_has_script_signal;
-    public bool HasScriptSignal(string signalName)
+    public bool HasScriptSignal(StringName signalName)
     {
         var __mb = __mb_has_script_signal;
         if (__mb == 0)
@@ -2288,7 +2288,7 @@ public unsafe partial class Script : Resource
             if (__mb == 0) throw new MissingMethodException("Script.has_script_signal is not available in this engine build.");
             __mb_has_script_signal = __mb;
         }
-        ulong __a0 = StringNames.Get(signalName).Opaque;
+        ulong __a0 = signalName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -2357,7 +2357,7 @@ public unsafe partial class Script : Resource
     }
 
     private static nint __mb_get_property_default_value;
-    public Variant GetPropertyDefaultValue(string property)
+    public Variant GetPropertyDefaultValue(StringName property)
     {
         var __mb = __mb_get_property_default_value;
         if (__mb == 0)
@@ -2366,7 +2366,7 @@ public unsafe partial class Script : Resource
             if (__mb == 0) throw new MissingMethodException("Script.get_property_default_value is not available in this engine build.");
             __mb_get_property_default_value = __mb;
         }
-        ulong __a0 = StringNames.Get(property).Opaque;
+        ulong __a0 = property.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -3180,11 +3180,11 @@ public unsafe partial class ScriptExtension : Script
 
     public virtual Script? _GetBaseScript() => default!;
 
-    public virtual string _GetGlobalName() => default!;
+    public virtual StringName _GetGlobalName() => default!;
 
     public virtual bool _InheritsScript(Script? script) => default!;
 
-    public virtual string _GetInstanceBaseType() => default!;
+    public virtual StringName _GetInstanceBaseType() => default!;
 
     public virtual bool _HasSourceCode() => default!;
 
@@ -3194,13 +3194,13 @@ public unsafe partial class ScriptExtension : Script
 
     public virtual Error _Reload(bool keepState) => default!;
 
-    public virtual string _GetDocClassName() => default!;
+    public virtual StringName _GetDocClassName() => default!;
 
     public virtual string _GetClassIconPath() => default!;
 
-    public virtual bool _HasMethod(string method) => default!;
+    public virtual bool _HasMethod(StringName method) => default!;
 
-    public virtual bool _HasStaticMethod(string method) => default!;
+    public virtual bool _HasStaticMethod(StringName method) => default!;
 
     public virtual bool _IsTool() => default!;
 
@@ -3210,13 +3210,13 @@ public unsafe partial class ScriptExtension : Script
 
     public virtual ScriptLanguage? _GetLanguage() => default!;
 
-    public virtual bool _HasScriptSignal(string signal) => default!;
+    public virtual bool _HasScriptSignal(StringName signal) => default!;
 
-    public virtual bool _HasPropertyDefaultValue(string property) => default!;
+    public virtual bool _HasPropertyDefaultValue(StringName property) => default!;
 
     public virtual void _UpdateExports() { }
 
-    public virtual int _GetMemberLine(string member) => default!;
+    public virtual int _GetMemberLine(StringName member) => default!;
 
     public virtual bool _IsPlaceholderFallbackEnabled() => default!;
 
@@ -3270,7 +3270,7 @@ public unsafe partial class ScriptExtension : Script
         if (__vsn_get_global_name == 0) __vsn_get_global_name = StringNames.Get("_get_global_name").Opaque;
         if (nameSn == __vsn_get_global_name)
         {
-            *(ulong*)ret = StringNames.CreateOwned(_GetGlobalName() ?? "");
+            *(ulong*)ret = StringNames.CreateOwned(_GetGlobalName()?.ToString() ?? "");
             return true;
         }
         if (__vsn_inherits_script == 0) __vsn_inherits_script = StringNames.Get("_inherits_script").Opaque;
@@ -3282,7 +3282,7 @@ public unsafe partial class ScriptExtension : Script
         if (__vsn_get_instance_base_type == 0) __vsn_get_instance_base_type = StringNames.Get("_get_instance_base_type").Opaque;
         if (nameSn == __vsn_get_instance_base_type)
         {
-            *(ulong*)ret = StringNames.CreateOwned(_GetInstanceBaseType() ?? "");
+            *(ulong*)ret = StringNames.CreateOwned(_GetInstanceBaseType()?.ToString() ?? "");
             return true;
         }
         if (__vsn_has_source_code == 0) __vsn_has_source_code = StringNames.Get("_has_source_code").Opaque;
@@ -3312,7 +3312,7 @@ public unsafe partial class ScriptExtension : Script
         if (__vsn_get_doc_class_name == 0) __vsn_get_doc_class_name = StringNames.Get("_get_doc_class_name").Opaque;
         if (nameSn == __vsn_get_doc_class_name)
         {
-            *(ulong*)ret = StringNames.CreateOwned(_GetDocClassName() ?? "");
+            *(ulong*)ret = StringNames.CreateOwned(_GetDocClassName()?.ToString() ?? "");
             return true;
         }
         if (__vsn_get_class_icon_path == 0) __vsn_get_class_icon_path = StringNames.Get("_get_class_icon_path").Opaque;
@@ -3324,13 +3324,13 @@ public unsafe partial class ScriptExtension : Script
         if (__vsn_has_method == 0) __vsn_has_method = StringNames.Get("_has_method").Opaque;
         if (nameSn == __vsn_has_method)
         {
-            *(byte*)ret = _HasMethod(StringNames.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _HasMethod(StringName.Intern(StringNames.Read(*(ulong*)args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_has_static_method == 0) __vsn_has_static_method = StringNames.Get("_has_static_method").Opaque;
         if (nameSn == __vsn_has_static_method)
         {
-            *(byte*)ret = _HasStaticMethod(StringNames.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _HasStaticMethod(StringName.Intern(StringNames.Read(*(ulong*)args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_is_tool == 0) __vsn_is_tool = StringNames.Get("_is_tool").Opaque;
@@ -3360,13 +3360,13 @@ public unsafe partial class ScriptExtension : Script
         if (__vsn_has_script_signal == 0) __vsn_has_script_signal = StringNames.Get("_has_script_signal").Opaque;
         if (nameSn == __vsn_has_script_signal)
         {
-            *(byte*)ret = _HasScriptSignal(StringNames.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _HasScriptSignal(StringName.Intern(StringNames.Read(*(ulong*)args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_has_property_default_value == 0) __vsn_has_property_default_value = StringNames.Get("_has_property_default_value").Opaque;
         if (nameSn == __vsn_has_property_default_value)
         {
-            *(byte*)ret = _HasPropertyDefaultValue(StringNames.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _HasPropertyDefaultValue(StringName.Intern(StringNames.Read(*(ulong*)args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_update_exports == 0) __vsn_update_exports = StringNames.Get("_update_exports").Opaque;
@@ -3378,7 +3378,7 @@ public unsafe partial class ScriptExtension : Script
         if (__vsn_get_member_line == 0) __vsn_get_member_line = StringNames.Get("_get_member_line").Opaque;
         if (nameSn == __vsn_get_member_line)
         {
-            *(long*)ret = unchecked((long)_GetMemberLine(StringNames.Read(*(ulong*)args[0])));
+            *(long*)ret = unchecked((long)_GetMemberLine(StringName.Intern(StringNames.Read(*(ulong*)args[0]))));
             return true;
         }
         if (__vsn_is_placeholder_fallback_enabled == 0) __vsn_is_placeholder_fallback_enabled = StringNames.Get("_is_placeholder_fallback_enabled").Opaque;
@@ -3510,7 +3510,7 @@ public unsafe partial class ScriptLanguageExtension : ScriptLanguage
 
     public virtual string _AutoIndentCode(string code, int fromLine, int toLine) => default!;
 
-    public virtual void _RemoveNamedGlobalConstant(string name) { }
+    public virtual void _RemoveNamedGlobalConstant(StringName name) { }
 
     public virtual void _ThreadEnter() { }
 
@@ -3742,7 +3742,7 @@ public unsafe partial class ScriptLanguageExtension : ScriptLanguage
         if (__vsn_remove_named_global_constant == 0) __vsn_remove_named_global_constant = StringNames.Get("_remove_named_global_constant").Opaque;
         if (nameSn == __vsn_remove_named_global_constant)
         {
-            _RemoveNamedGlobalConstant(StringNames.Read(*(ulong*)args[0]));
+            _RemoveNamedGlobalConstant(StringName.Intern(StringNames.Read(*(ulong*)args[0])));
             return true;
         }
         if (__vsn_thread_enter == 0) __vsn_thread_enter = StringNames.Get("_thread_enter").Opaque;
@@ -4813,7 +4813,7 @@ public unsafe partial class Shader : Resource
     }
 
     private static nint __mb_set_default_texture_parameter;
-    public void SetDefaultTextureParameter(string name, Texture? texture, int index = unchecked((int)(0)))
+    public void SetDefaultTextureParameter(StringName name, Texture? texture, int index = unchecked((int)(0)))
     {
         var __mb = __mb_set_default_texture_parameter;
         if (__mb == 0)
@@ -4822,7 +4822,7 @@ public unsafe partial class Shader : Resource
             if (__mb == 0) throw new MissingMethodException("Shader.set_default_texture_parameter is not available in this engine build.");
             __mb_set_default_texture_parameter = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = texture?.NativePtr ?? 0;
         long __a2 = unchecked((long)index);
         var __args = stackalloc nint[3];
@@ -4833,7 +4833,7 @@ public unsafe partial class Shader : Resource
     }
 
     private static nint __mb_get_default_texture_parameter;
-    public Texture? GetDefaultTextureParameter(string name, int index = unchecked((int)(0)))
+    public Texture? GetDefaultTextureParameter(StringName name, int index = unchecked((int)(0)))
     {
         var __mb = __mb_get_default_texture_parameter;
         if (__mb == 0)
@@ -4842,7 +4842,7 @@ public unsafe partial class Shader : Resource
             if (__mb == 0) throw new MissingMethodException("Shader.get_default_texture_parameter is not available in this engine build.");
             __mb_get_default_texture_parameter = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         long __a1 = unchecked((long)index);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -5052,7 +5052,7 @@ public unsafe partial class ShaderMaterial : Material
     }
 
     private static nint __mb_set_shader_parameter;
-    public void SetShaderParameter(string param, Variant value)
+    public void SetShaderParameter(StringName param, Variant value)
     {
         var __mb = __mb_set_shader_parameter;
         if (__mb == 0)
@@ -5061,7 +5061,7 @@ public unsafe partial class ShaderMaterial : Material
             if (__mb == 0) throw new MissingMethodException("ShaderMaterial.set_shader_parameter is not available in this engine build.");
             __mb_set_shader_parameter = __mb;
         }
-        ulong __a0 = StringNames.Get(param).Opaque;
+        ulong __a0 = param.NativeValue;
         var __a1 = value.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -5070,7 +5070,7 @@ public unsafe partial class ShaderMaterial : Material
     }
 
     private static nint __mb_get_shader_parameter;
-    public Variant GetShaderParameter(string param)
+    public Variant GetShaderParameter(StringName param)
     {
         var __mb = __mb_get_shader_parameter;
         if (__mb == 0)
@@ -5079,7 +5079,7 @@ public unsafe partial class ShaderMaterial : Material
             if (__mb == 0) throw new MissingMethodException("ShaderMaterial.get_shader_parameter is not available in this engine build.");
             __mb_get_shader_parameter = __mb;
         }
-        ulong __a0 = StringNames.Get(param).Opaque;
+        ulong __a0 = param.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
@@ -7092,7 +7092,7 @@ public unsafe partial class Skeleton3D : Node3D
     }
 
     private static nint __mb_get_bone_meta;
-    public Variant GetBoneMeta(int boneIdx, string key)
+    public Variant GetBoneMeta(int boneIdx, StringName key)
     {
         var __mb = __mb_get_bone_meta;
         if (__mb == 0)
@@ -7102,7 +7102,7 @@ public unsafe partial class Skeleton3D : Node3D
             __mb_get_bone_meta = __mb;
         }
         long __a0 = unchecked((long)boneIdx);
-        ulong __a1 = StringNames.Get(key).Opaque;
+        ulong __a1 = key.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -7130,7 +7130,7 @@ public unsafe partial class Skeleton3D : Node3D
     }
 
     private static nint __mb_has_bone_meta;
-    public bool HasBoneMeta(int boneIdx, string key)
+    public bool HasBoneMeta(int boneIdx, StringName key)
     {
         var __mb = __mb_has_bone_meta;
         if (__mb == 0)
@@ -7140,7 +7140,7 @@ public unsafe partial class Skeleton3D : Node3D
             __mb_has_bone_meta = __mb;
         }
         long __a0 = unchecked((long)boneIdx);
-        ulong __a1 = StringNames.Get(key).Opaque;
+        ulong __a1 = key.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -7150,7 +7150,7 @@ public unsafe partial class Skeleton3D : Node3D
     }
 
     private static nint __mb_set_bone_meta;
-    public void SetBoneMeta(int boneIdx, string key, Variant value)
+    public void SetBoneMeta(int boneIdx, StringName key, Variant value)
     {
         var __mb = __mb_set_bone_meta;
         if (__mb == 0)
@@ -7160,7 +7160,7 @@ public unsafe partial class Skeleton3D : Node3D
             __mb_set_bone_meta = __mb;
         }
         long __a0 = unchecked((long)boneIdx);
-        ulong __a1 = StringNames.Get(key).Opaque;
+        ulong __a1 = key.NativeValue;
         var __a2 = value.Native;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
@@ -7170,7 +7170,7 @@ public unsafe partial class Skeleton3D : Node3D
     }
 
     private static nint __mb_get_concatenated_bone_names;
-    public string GetConcatenatedBoneNames()
+    public StringName GetConcatenatedBoneNames()
     {
         var __mb = __mb_get_concatenated_bone_names;
         if (__mb == 0)
@@ -7181,7 +7181,7 @@ public unsafe partial class Skeleton3D : Node3D
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_bone_parent;
@@ -7968,13 +7968,13 @@ public unsafe partial class SkeletonIK3D : SkeletonModifier3D
         ClassRegistry.AttachNew(this, "SkeletonIK3D");
     }
 
-    public string RootBone
+    public StringName RootBone
     {
         get => GetRootBone();
         set => SetRootBone(value);
     }
 
-    public string TipBone
+    public StringName TipBone
     {
         get => GetTipBone();
         set => SetTipBone(value);
@@ -8029,7 +8029,7 @@ public unsafe partial class SkeletonIK3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_root_bone;
-    internal void SetRootBone(string rootBone)
+    internal void SetRootBone(StringName rootBone)
     {
         var __mb = __mb_set_root_bone;
         if (__mb == 0)
@@ -8038,14 +8038,14 @@ public unsafe partial class SkeletonIK3D : SkeletonModifier3D
             if (__mb == 0) throw new MissingMethodException("SkeletonIK3D.set_root_bone is not available in this engine build.");
             __mb_set_root_bone = __mb;
         }
-        ulong __a0 = StringNames.Get(rootBone).Opaque;
+        ulong __a0 = rootBone.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_root_bone;
-    internal string GetRootBone()
+    internal StringName GetRootBone()
     {
         var __mb = __mb_get_root_bone;
         if (__mb == 0)
@@ -8056,11 +8056,11 @@ public unsafe partial class SkeletonIK3D : SkeletonModifier3D
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_tip_bone;
-    internal void SetTipBone(string tipBone)
+    internal void SetTipBone(StringName tipBone)
     {
         var __mb = __mb_set_tip_bone;
         if (__mb == 0)
@@ -8069,14 +8069,14 @@ public unsafe partial class SkeletonIK3D : SkeletonModifier3D
             if (__mb == 0) throw new MissingMethodException("SkeletonIK3D.set_tip_bone is not available in this engine build.");
             __mb_set_tip_bone = __mb;
         }
-        ulong __a0 = StringNames.Get(tipBone).Opaque;
+        ulong __a0 = tipBone.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_tip_bone;
-    internal string GetTipBone()
+    internal StringName GetTipBone()
     {
         var __mb = __mb_get_tip_bone;
         if (__mb == 0)
@@ -8087,7 +8087,7 @@ public unsafe partial class SkeletonIK3D : SkeletonModifier3D
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_target_transform;
@@ -11049,13 +11049,13 @@ public unsafe partial class SkeletonProfile : Resource
         End = 2,
     }
 
-    public string RootBone
+    public StringName RootBone
     {
         get => GetRootBone();
         set => SetRootBone(value);
     }
 
-    public string ScaleBaseBone
+    public StringName ScaleBaseBone
     {
         get => GetScaleBaseBone();
         set => SetScaleBaseBone(value);
@@ -11082,7 +11082,7 @@ public unsafe partial class SkeletonProfile : Resource
     }
 
     private static nint __mb_set_root_bone;
-    internal void SetRootBone(string boneName)
+    internal void SetRootBone(StringName boneName)
     {
         var __mb = __mb_set_root_bone;
         if (__mb == 0)
@@ -11091,14 +11091,14 @@ public unsafe partial class SkeletonProfile : Resource
             if (__mb == 0) throw new MissingMethodException("SkeletonProfile.set_root_bone is not available in this engine build.");
             __mb_set_root_bone = __mb;
         }
-        ulong __a0 = StringNames.Get(boneName).Opaque;
+        ulong __a0 = boneName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_root_bone;
-    internal string GetRootBone()
+    internal StringName GetRootBone()
     {
         var __mb = __mb_get_root_bone;
         if (__mb == 0)
@@ -11109,11 +11109,11 @@ public unsafe partial class SkeletonProfile : Resource
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_scale_base_bone;
-    internal void SetScaleBaseBone(string boneName)
+    internal void SetScaleBaseBone(StringName boneName)
     {
         var __mb = __mb_set_scale_base_bone;
         if (__mb == 0)
@@ -11122,14 +11122,14 @@ public unsafe partial class SkeletonProfile : Resource
             if (__mb == 0) throw new MissingMethodException("SkeletonProfile.set_scale_base_bone is not available in this engine build.");
             __mb_set_scale_base_bone = __mb;
         }
-        ulong __a0 = StringNames.Get(boneName).Opaque;
+        ulong __a0 = boneName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_scale_base_bone;
-    internal string GetScaleBaseBone()
+    internal StringName GetScaleBaseBone()
     {
         var __mb = __mb_get_scale_base_bone;
         if (__mb == 0)
@@ -11140,7 +11140,7 @@ public unsafe partial class SkeletonProfile : Resource
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_group_size;
@@ -11175,7 +11175,7 @@ public unsafe partial class SkeletonProfile : Resource
     }
 
     private static nint __mb_get_group_name;
-    public string GetGroupName(int groupIdx)
+    public StringName GetGroupName(int groupIdx)
     {
         var __mb = __mb_get_group_name;
         if (__mb == 0)
@@ -11189,11 +11189,11 @@ public unsafe partial class SkeletonProfile : Resource
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_group_name;
-    public void SetGroupName(int groupIdx, string groupName)
+    public void SetGroupName(int groupIdx, StringName groupName)
     {
         var __mb = __mb_set_group_name;
         if (__mb == 0)
@@ -11203,7 +11203,7 @@ public unsafe partial class SkeletonProfile : Resource
             __mb_set_group_name = __mb;
         }
         long __a0 = unchecked((long)groupIdx);
-        ulong __a1 = StringNames.Get(groupName).Opaque;
+        ulong __a1 = groupName.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -11278,7 +11278,7 @@ public unsafe partial class SkeletonProfile : Resource
     }
 
     private static nint __mb_find_bone;
-    public int FindBone(string boneName)
+    public int FindBone(StringName boneName)
     {
         var __mb = __mb_find_bone;
         if (__mb == 0)
@@ -11287,7 +11287,7 @@ public unsafe partial class SkeletonProfile : Resource
             if (__mb == 0) throw new MissingMethodException("SkeletonProfile.find_bone is not available in this engine build.");
             __mb_find_bone = __mb;
         }
-        ulong __a0 = StringNames.Get(boneName).Opaque;
+        ulong __a0 = boneName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
@@ -11296,7 +11296,7 @@ public unsafe partial class SkeletonProfile : Resource
     }
 
     private static nint __mb_get_bone_name;
-    public string GetBoneName(int boneIdx)
+    public StringName GetBoneName(int boneIdx)
     {
         var __mb = __mb_get_bone_name;
         if (__mb == 0)
@@ -11310,11 +11310,11 @@ public unsafe partial class SkeletonProfile : Resource
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_bone_name;
-    public void SetBoneName(int boneIdx, string boneName)
+    public void SetBoneName(int boneIdx, StringName boneName)
     {
         var __mb = __mb_set_bone_name;
         if (__mb == 0)
@@ -11324,7 +11324,7 @@ public unsafe partial class SkeletonProfile : Resource
             __mb_set_bone_name = __mb;
         }
         long __a0 = unchecked((long)boneIdx);
-        ulong __a1 = StringNames.Get(boneName).Opaque;
+        ulong __a1 = boneName.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -11332,7 +11332,7 @@ public unsafe partial class SkeletonProfile : Resource
     }
 
     private static nint __mb_get_bone_parent;
-    public string GetBoneParent(int boneIdx)
+    public StringName GetBoneParent(int boneIdx)
     {
         var __mb = __mb_get_bone_parent;
         if (__mb == 0)
@@ -11346,11 +11346,11 @@ public unsafe partial class SkeletonProfile : Resource
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_bone_parent;
-    public void SetBoneParent(int boneIdx, string boneParent)
+    public void SetBoneParent(int boneIdx, StringName boneParent)
     {
         var __mb = __mb_set_bone_parent;
         if (__mb == 0)
@@ -11360,7 +11360,7 @@ public unsafe partial class SkeletonProfile : Resource
             __mb_set_bone_parent = __mb;
         }
         long __a0 = unchecked((long)boneIdx);
-        ulong __a1 = StringNames.Get(boneParent).Opaque;
+        ulong __a1 = boneParent.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -11404,7 +11404,7 @@ public unsafe partial class SkeletonProfile : Resource
     }
 
     private static nint __mb_get_bone_tail;
-    public string GetBoneTail(int boneIdx)
+    public StringName GetBoneTail(int boneIdx)
     {
         var __mb = __mb_get_bone_tail;
         if (__mb == 0)
@@ -11418,11 +11418,11 @@ public unsafe partial class SkeletonProfile : Resource
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_bone_tail;
-    public void SetBoneTail(int boneIdx, string boneTail)
+    public void SetBoneTail(int boneIdx, StringName boneTail)
     {
         var __mb = __mb_set_bone_tail;
         if (__mb == 0)
@@ -11432,7 +11432,7 @@ public unsafe partial class SkeletonProfile : Resource
             __mb_set_bone_tail = __mb;
         }
         long __a0 = unchecked((long)boneIdx);
-        ulong __a1 = StringNames.Get(boneTail).Opaque;
+        ulong __a1 = boneTail.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -11512,7 +11512,7 @@ public unsafe partial class SkeletonProfile : Resource
     }
 
     private static nint __mb_get_group;
-    public string GetGroup(int boneIdx)
+    public StringName GetGroup(int boneIdx)
     {
         var __mb = __mb_get_group;
         if (__mb == 0)
@@ -11526,11 +11526,11 @@ public unsafe partial class SkeletonProfile : Resource
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_group;
-    public void SetGroup(int boneIdx, string group)
+    public void SetGroup(int boneIdx, StringName group)
     {
         var __mb = __mb_set_group;
         if (__mb == 0)
@@ -11540,7 +11540,7 @@ public unsafe partial class SkeletonProfile : Resource
             __mb_set_group = __mb;
         }
         long __a0 = unchecked((long)boneIdx);
-        ulong __a1 = StringNames.Get(group).Opaque;
+        ulong __a1 = group.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -11708,7 +11708,7 @@ public unsafe partial class Skin : Resource
     }
 
     private static nint __mb_set_bind_name;
-    public void SetBindName(int bindIndex, string name)
+    public void SetBindName(int bindIndex, StringName name)
     {
         var __mb = __mb_set_bind_name;
         if (__mb == 0)
@@ -11718,7 +11718,7 @@ public unsafe partial class Skin : Resource
             __mb_set_bind_name = __mb;
         }
         long __a0 = unchecked((long)bindIndex);
-        ulong __a1 = StringNames.Get(name).Opaque;
+        ulong __a1 = name.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -11726,7 +11726,7 @@ public unsafe partial class Skin : Resource
     }
 
     private static nint __mb_get_bind_name;
-    public string GetBindName(int bindIndex)
+    public StringName GetBindName(int bindIndex)
     {
         var __mb = __mb_get_bind_name;
         if (__mb == 0)
@@ -11740,7 +11740,7 @@ public unsafe partial class Skin : Resource
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_bind_bone;
@@ -18021,7 +18021,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_add_animation;
-    public void AddAnimation(string anim)
+    public void AddAnimation(StringName anim)
     {
         var __mb = __mb_add_animation;
         if (__mb == 0)
@@ -18030,14 +18030,14 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.add_animation is not available in this engine build.");
             __mb_add_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_animation;
-    public bool HasAnimation(string anim)
+    public bool HasAnimation(StringName anim)
     {
         var __mb = __mb_has_animation;
         if (__mb == 0)
@@ -18046,7 +18046,7 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.has_animation is not available in this engine build.");
             __mb_has_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -18055,7 +18055,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_duplicate_animation;
-    public void DuplicateAnimation(string animFrom, string animTo)
+    public void DuplicateAnimation(StringName animFrom, StringName animTo)
     {
         var __mb = __mb_duplicate_animation;
         if (__mb == 0)
@@ -18064,8 +18064,8 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.duplicate_animation is not available in this engine build.");
             __mb_duplicate_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(animFrom).Opaque;
-        ulong __a1 = StringNames.Get(animTo).Opaque;
+        ulong __a0 = animFrom.NativeValue;
+        ulong __a1 = animTo.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -18073,7 +18073,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_remove_animation;
-    public void RemoveAnimation(string anim)
+    public void RemoveAnimation(StringName anim)
     {
         var __mb = __mb_remove_animation;
         if (__mb == 0)
@@ -18082,14 +18082,14 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.remove_animation is not available in this engine build.");
             __mb_remove_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_rename_animation;
-    public void RenameAnimation(string anim, string newname)
+    public void RenameAnimation(StringName anim, StringName newname)
     {
         var __mb = __mb_rename_animation;
         if (__mb == 0)
@@ -18098,8 +18098,8 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.rename_animation is not available in this engine build.");
             __mb_rename_animation = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
-        ulong __a1 = StringNames.Get(newname).Opaque;
+        ulong __a0 = anim.NativeValue;
+        ulong __a1 = newname.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -18122,7 +18122,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_set_animation_speed;
-    public void SetAnimationSpeed(string anim, double fps)
+    public void SetAnimationSpeed(StringName anim, double fps)
     {
         var __mb = __mb_set_animation_speed;
         if (__mb == 0)
@@ -18131,7 +18131,7 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.set_animation_speed is not available in this engine build.");
             __mb_set_animation_speed = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         double __a1 = fps;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -18140,7 +18140,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_get_animation_speed;
-    public double GetAnimationSpeed(string anim)
+    public double GetAnimationSpeed(StringName anim)
     {
         var __mb = __mb_get_animation_speed;
         if (__mb == 0)
@@ -18149,7 +18149,7 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.get_animation_speed is not available in this engine build.");
             __mb_get_animation_speed = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
@@ -18158,7 +18158,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_set_animation_loop;
-    public void SetAnimationLoop(string anim, bool loop)
+    public void SetAnimationLoop(StringName anim, bool loop)
     {
         var __mb = __mb_set_animation_loop;
         if (__mb == 0)
@@ -18167,7 +18167,7 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.set_animation_loop is not available in this engine build.");
             __mb_set_animation_loop = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         byte __a1 = loop ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -18176,7 +18176,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_get_animation_loop;
-    public bool GetAnimationLoop(string anim)
+    public bool GetAnimationLoop(StringName anim)
     {
         var __mb = __mb_get_animation_loop;
         if (__mb == 0)
@@ -18185,7 +18185,7 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.get_animation_loop is not available in this engine build.");
             __mb_get_animation_loop = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -18194,7 +18194,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_set_animation_loop_mode;
-    public void SetAnimationLoopMode(string anim, SpriteFrames.LoopMode loopMode)
+    public void SetAnimationLoopMode(StringName anim, SpriteFrames.LoopMode loopMode)
     {
         var __mb = __mb_set_animation_loop_mode;
         if (__mb == 0)
@@ -18203,7 +18203,7 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.set_animation_loop_mode is not available in this engine build.");
             __mb_set_animation_loop_mode = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         long __a1 = (long)loopMode;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -18212,7 +18212,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_get_animation_loop_mode;
-    public SpriteFrames.LoopMode GetAnimationLoopMode(string anim)
+    public SpriteFrames.LoopMode GetAnimationLoopMode(StringName anim)
     {
         var __mb = __mb_get_animation_loop_mode;
         if (__mb == 0)
@@ -18221,7 +18221,7 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.get_animation_loop_mode is not available in this engine build.");
             __mb_get_animation_loop_mode = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
@@ -18230,7 +18230,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_add_frame;
-    public void AddFrame(string anim, Texture2D? texture, float duration = 1.0f, int atPosition = unchecked((int)(-1)))
+    public void AddFrame(StringName anim, Texture2D? texture, float duration = 1.0f, int atPosition = unchecked((int)(-1)))
     {
         var __mb = __mb_add_frame;
         if (__mb == 0)
@@ -18239,7 +18239,7 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.add_frame is not available in this engine build.");
             __mb_add_frame = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         nint __a1 = texture?.NativePtr ?? 0;
         double __a2 = duration;
         long __a3 = unchecked((long)atPosition);
@@ -18252,7 +18252,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_set_frame;
-    public void SetFrame(string anim, int idx, Texture2D? texture, float duration = 1.0f)
+    public void SetFrame(StringName anim, int idx, Texture2D? texture, float duration = 1.0f)
     {
         var __mb = __mb_set_frame;
         if (__mb == 0)
@@ -18261,7 +18261,7 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.set_frame is not available in this engine build.");
             __mb_set_frame = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         long __a1 = unchecked((long)idx);
         nint __a2 = texture?.NativePtr ?? 0;
         double __a3 = duration;
@@ -18274,7 +18274,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_remove_frame;
-    public void RemoveFrame(string anim, int idx)
+    public void RemoveFrame(StringName anim, int idx)
     {
         var __mb = __mb_remove_frame;
         if (__mb == 0)
@@ -18283,7 +18283,7 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.remove_frame is not available in this engine build.");
             __mb_remove_frame = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -18292,7 +18292,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_get_frame_count;
-    public int GetFrameCount(string anim)
+    public int GetFrameCount(StringName anim)
     {
         var __mb = __mb_get_frame_count;
         if (__mb == 0)
@@ -18301,7 +18301,7 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.get_frame_count is not available in this engine build.");
             __mb_get_frame_count = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
@@ -18310,7 +18310,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_get_frame_texture;
-    public Texture2D? GetFrameTexture(string anim, int idx)
+    public Texture2D? GetFrameTexture(StringName anim, int idx)
     {
         var __mb = __mb_get_frame_texture;
         if (__mb == 0)
@@ -18319,7 +18319,7 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.get_frame_texture is not available in this engine build.");
             __mb_get_frame_texture = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -18330,7 +18330,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_get_frame_duration;
-    public float GetFrameDuration(string anim, int idx)
+    public float GetFrameDuration(StringName anim, int idx)
     {
         var __mb = __mb_get_frame_duration;
         if (__mb == 0)
@@ -18339,7 +18339,7 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.get_frame_duration is not available in this engine build.");
             __mb_get_frame_duration = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -18350,7 +18350,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_clear;
-    public void Clear(string anim)
+    public void Clear(StringName anim)
     {
         var __mb = __mb_clear;
         if (__mb == 0)
@@ -18359,7 +18359,7 @@ public unsafe partial class SpriteFrames : Resource
             if (__mb == 0) throw new MissingMethodException("SpriteFrames.clear is not available in this engine build.");
             __mb_clear = __mb;
         }
-        ulong __a0 = StringNames.Get(anim).Opaque;
+        ulong __a0 = anim.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);

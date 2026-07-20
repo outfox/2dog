@@ -116,7 +116,18 @@ public sealed class ExportSignalGenerator : IIncrementalGenerator
             diagnostics.Add($"[Export] {name}: type '{type.ToDisplayString()}' is not supported by the twodog source generator yet.");
             return;
         }
-        exports.Add(new ExportInfo(name, ToSnake(name), key, objectType, args.hint, args.hintString));
+
+        // GodotSharp compat: enums with no explicit hint get PropertyHint.Enum
+        // and a member-name hint string (inspector dropdown).
+        var (hint, hintString) = args;
+        if (key == "enum" && hint == 0)
+        {
+            hint = 2; // PropertyHint.Enum
+            hintString = string.Join(",", type.GetMembers().OfType<IFieldSymbol>()
+                .Where(f => f.HasConstantValue)
+                .Select(f => f.Name));
+        }
+        exports.Add(new ExportInfo(name, ToSnake(name), key, objectType, hint, hintString));
     }
 
     private static void AddSignal(List<SignalInfo> signals, List<string> diagnostics, INamedTypeSymbol del)
@@ -148,7 +159,7 @@ public sealed class ExportSignalGenerator : IIncrementalGenerator
         signals.Add(new SignalInfo(del.Name, eventName, ToSnake(eventName), ps));
     }
 
-    /// <summary>Maps a C# type to a marshalling key (+ object type for GodotObject-derived).</summary>
+    /// <summary>Maps a C# type to a marshalling key (+ carried type name where needed).</summary>
     private static (string? key, string? objectType) ClassifyType(ITypeSymbol type)
     {
         switch (type.ToDisplayString().TrimEnd('?'))
@@ -162,7 +173,14 @@ public sealed class ExportSignalGenerator : IIncrementalGenerator
             case "Godot.Vector2": return ("vector2", null);
             case "Godot.Vector3": return ("vector3", null);
             case "Godot.Color": return ("color", null);
+            case "Godot.Variant": return ("variant", null);
+            case "Godot.StringName": return ("stringname", null);
+            case "Godot.NodePath": return ("nodepath", null);
+            case "Godot.Collections.Array": return ("garray", null);
+            case "Godot.Collections.Dictionary": return ("gdict", null);
         }
+        if (type.TypeKind == TypeKind.Enum)
+            return ("enum", type.ToDisplayString().TrimEnd('?'));
         for (var t = type; t is not null; t = t.BaseType)
         {
             if (t.ToDisplayString() == "Godot.GodotObject")
@@ -194,19 +212,26 @@ public sealed class ExportSignalGenerator : IIncrementalGenerator
     private static string VariantTypeOf(string key) => key switch
     {
         "bool" => "Godot.VariantType.Bool",
-        "int32" or "int64" => "Godot.VariantType.Int",
+        "int32" or "int64" or "enum" => "Godot.VariantType.Int",
         "single" or "double" => "Godot.VariantType.Float",
         "string" => "Godot.VariantType.String",
+        "stringname" => "Godot.VariantType.StringName",
+        "nodepath" => "Godot.VariantType.NodePath",
         "vector2" => "Godot.VariantType.Vector2",
         "vector3" => "Godot.VariantType.Vector3",
         "color" => "Godot.VariantType.Color",
         "object" => "Godot.VariantType.Object",
+        "variant" => "Godot.VariantType.Nil",
+        "garray" => "Godot.VariantType.Array",
+        "gdict" => "Godot.VariantType.Dictionary",
         _ => throw new InvalidOperationException(key),
     };
 
     private static string ToVariantExpr(string key, string expr) => key switch
     {
-        "object" => $"Godot.Variant.From({expr})",
+        "object" or "stringname" or "nodepath" or "garray" or "gdict" => $"Godot.Variant.From({expr})",
+        "enum" => $"(Godot.Variant)(long){expr}",
+        "variant" => $"{expr}.Copy()",
         _ => $"(Godot.Variant){expr}",
     };
 
@@ -218,10 +243,16 @@ public sealed class ExportSignalGenerator : IIncrementalGenerator
         "single" => $"(float){variantExpr}.AsDouble()",
         "double" => $"{variantExpr}.AsDouble()",
         "string" => $"{variantExpr}.AsString()",
+        "stringname" => $"{variantExpr}.AsStringName()",
+        "nodepath" => $"{variantExpr}.AsNodePath()",
         "vector2" => $"{variantExpr}.AsVector2()",
         "vector3" => $"{variantExpr}.AsVector3()",
         "color" => $"{variantExpr}.AsColor()",
         "object" => $"({objectType}?){variantExpr}.AsGodotObject()",
+        "enum" => $"({objectType}){variantExpr}.AsInt64()",
+        "variant" => $"{variantExpr}.Copy()",
+        "garray" => $"{variantExpr}.AsGodotArray()",
+        "gdict" => $"{variantExpr}.AsGodotDictionary()",
         _ => throw new InvalidOperationException(key),
     };
 
@@ -233,10 +264,16 @@ public sealed class ExportSignalGenerator : IIncrementalGenerator
         "single" => $"Godot.NativeInterop.SignalArg.Single(__a, {index})",
         "double" => $"Godot.NativeInterop.SignalArg.Double(__a, {index})",
         "string" => $"Godot.NativeInterop.SignalArg.StringOf(__a, {index})",
+        "stringname" => $"Godot.NativeInterop.SignalArg.StringNameAt(__a, {index})",
+        "nodepath" => $"Godot.NativeInterop.SignalArg.NodePathAt(__a, {index})",
         "vector2" => $"Godot.NativeInterop.SignalArg.Vector2At(__a, {index})",
         "vector3" => $"Godot.NativeInterop.SignalArg.Vector3At(__a, {index})",
         "color" => $"Godot.NativeInterop.SignalArg.ColorAt(__a, {index})",
         "object" => $"Godot.NativeInterop.SignalArg.Object<{objectType}>(__a, {index})",
+        "enum" => $"({objectType})Godot.NativeInterop.SignalArg.Int64(__a, {index})",
+        "variant" => $"Godot.NativeInterop.SignalArg.VariantAt(__a, {index})",
+        "garray" => $"Godot.NativeInterop.SignalArg.ArrayAt(__a, {index})",
+        "gdict" => $"Godot.NativeInterop.SignalArg.DictionaryAt(__a, {index})",
         _ => throw new InvalidOperationException(key),
     };
 
@@ -265,10 +302,15 @@ public sealed class ExportSignalGenerator : IIncrementalGenerator
         {
             var get = ToVariantExpr(e.TypeKey, $"(({info.ClassName})__o).{e.MemberName}");
             var set = FromVariantExpr(e.TypeKey, e.ObjectType, "__v");
+            // Variant-typed properties need NIL_IS_VARIANT so the engine treats
+            // the NIL declared type as "any variant".
+            var usage = e.TypeKey == "variant"
+                ? "(long)(Godot.PropertyUsageFlags.Storage | Godot.PropertyUsageFlags.Editor | Godot.PropertyUsageFlags.NilIsVariant)"
+                : "6";
             sb.AppendLine($"        r.Property(\"{e.GdName}\", {VariantTypeOf(e.TypeKey)},");
             sb.AppendLine($"            static __o => {get},");
             sb.AppendLine($"            static (__o, __v) => (({info.ClassName})__o).{e.MemberName} = {set},");
-            sb.AppendLine($"            {e.Hint}, \"{Escape(e.HintString)}\");");
+            sb.AppendLine($"            {e.Hint}, \"{Escape(e.HintString)}\", {usage});");
         }
         foreach (var s in info.Signals)
         {

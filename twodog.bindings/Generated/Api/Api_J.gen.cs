@@ -20,7 +20,7 @@ public unsafe partial class JNISingleton : GodotObject
     }
 
     private static nint __mb_has_java_method;
-    public bool HasJavaMethod(string method)
+    public bool HasJavaMethod(StringName method)
     {
         var __mb = __mb_has_java_method;
         if (__mb == 0)
@@ -29,7 +29,7 @@ public unsafe partial class JNISingleton : GodotObject
             if (__mb == 0) throw new MissingMethodException("JNISingleton.has_java_method is not available in this engine build.");
             __mb_has_java_method = __mb;
         }
-        ulong __a0 = StringNames.Get(method).Opaque;
+        ulong __a0 = method.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -464,7 +464,7 @@ public unsafe partial class JavaClass : RefCounted
     }
 
     private static nint __mb_has_java_method;
-    public bool HasJavaMethod(string method)
+    public bool HasJavaMethod(StringName method)
     {
         var __mb = __mb_has_java_method;
         if (__mb == 0)
@@ -473,7 +473,7 @@ public unsafe partial class JavaClass : RefCounted
             if (__mb == 0) throw new MissingMethodException("JavaClass.has_java_method is not available in this engine build.");
             __mb_has_java_method = __mb;
         }
-        ulong __a0 = StringNames.Get(method).Opaque;
+        ulong __a0 = method.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -593,7 +593,7 @@ public unsafe partial class JavaObject : RefCounted
     }
 
     private static nint __mb_has_java_method;
-    public bool HasJavaMethod(string method)
+    public bool HasJavaMethod(StringName method)
     {
         var __mb = __mb_has_java_method;
         if (__mb == 0)
@@ -602,7 +602,7 @@ public unsafe partial class JavaObject : RefCounted
             if (__mb == 0) throw new MissingMethodException("JavaObject.has_java_method is not available in this engine build.");
             __mb_has_java_method = __mb;
         }
-        ulong __a0 = StringNames.Get(method).Opaque;
+        ulong __a0 = method.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;

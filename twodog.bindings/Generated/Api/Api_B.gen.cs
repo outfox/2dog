@@ -5083,7 +5083,7 @@ public unsafe partial class BoneMap : Resource
     }
 
     private static nint __mb_get_skeleton_bone_name;
-    public string GetSkeletonBoneName(string profileBoneName)
+    public StringName GetSkeletonBoneName(StringName profileBoneName)
     {
         var __mb = __mb_get_skeleton_bone_name;
         if (__mb == 0)
@@ -5092,16 +5092,16 @@ public unsafe partial class BoneMap : Resource
             if (__mb == 0) throw new MissingMethodException("BoneMap.get_skeleton_bone_name is not available in this engine build.");
             __mb_get_skeleton_bone_name = __mb;
         }
-        ulong __a0 = StringNames.Get(profileBoneName).Opaque;
+        ulong __a0 = profileBoneName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_skeleton_bone_name;
-    public void SetSkeletonBoneName(string profileBoneName, string skeletonBoneName)
+    public void SetSkeletonBoneName(StringName profileBoneName, StringName skeletonBoneName)
     {
         var __mb = __mb_set_skeleton_bone_name;
         if (__mb == 0)
@@ -5110,8 +5110,8 @@ public unsafe partial class BoneMap : Resource
             if (__mb == 0) throw new MissingMethodException("BoneMap.set_skeleton_bone_name is not available in this engine build.");
             __mb_set_skeleton_bone_name = __mb;
         }
-        ulong __a0 = StringNames.Get(profileBoneName).Opaque;
-        ulong __a1 = StringNames.Get(skeletonBoneName).Opaque;
+        ulong __a0 = profileBoneName.NativeValue;
+        ulong __a1 = skeletonBoneName.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -5119,7 +5119,7 @@ public unsafe partial class BoneMap : Resource
     }
 
     private static nint __mb_find_profile_bone_name;
-    public string FindProfileBoneName(string skeletonBoneName)
+    public StringName FindProfileBoneName(StringName skeletonBoneName)
     {
         var __mb = __mb_find_profile_bone_name;
         if (__mb == 0)
@@ -5128,12 +5128,12 @@ public unsafe partial class BoneMap : Resource
             if (__mb == 0) throw new MissingMethodException("BoneMap.find_profile_bone_name is not available in this engine build.");
             __mb_find_profile_bone_name = __mb;
         }
-        ulong __a0 = StringNames.Get(skeletonBoneName).Opaque;
+        ulong __a0 = skeletonBoneName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 }
 

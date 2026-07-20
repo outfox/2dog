@@ -1103,7 +1103,7 @@ public unsafe partial class VideoStreamPlayer : Control
         set => SetStreamPosition(value);
     }
 
-    public string Bus
+    public StringName Bus
     {
         get => GetBus();
         set => SetBus(value);
@@ -1530,7 +1530,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_set_bus;
-    internal void SetBus(string bus)
+    internal void SetBus(StringName bus)
     {
         var __mb = __mb_set_bus;
         if (__mb == 0)
@@ -1539,14 +1539,14 @@ public unsafe partial class VideoStreamPlayer : Control
             if (__mb == 0) throw new MissingMethodException("VideoStreamPlayer.set_bus is not available in this engine build.");
             __mb_set_bus = __mb;
         }
-        ulong __a0 = StringNames.Get(bus).Opaque;
+        ulong __a0 = bus.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bus;
-    internal string GetBus()
+    internal StringName GetBus()
     {
         var __mb = __mb_get_bus;
         if (__mb == 0)
@@ -1557,7 +1557,7 @@ public unsafe partial class VideoStreamPlayer : Control
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_video_texture;
@@ -4175,25 +4175,25 @@ public unsafe partial class VirtualJoystick : Control
         set => SetInitialOffsetRatio(value);
     }
 
-    public string ActionLeft
+    public StringName ActionLeft
     {
         get => GetActionLeft();
         set => SetActionLeft(value);
     }
 
-    public string ActionRight
+    public StringName ActionRight
     {
         get => GetActionRight();
         set => SetActionRight(value);
     }
 
-    public string ActionUp
+    public StringName ActionUp
     {
         get => GetActionUp();
         set => SetActionUp(value);
     }
 
-    public string ActionDown
+    public StringName ActionDown
     {
         get => GetActionDown();
         set => SetActionDown(value);
@@ -4432,7 +4432,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_set_action_left;
-    internal void SetActionLeft(string action)
+    internal void SetActionLeft(StringName action)
     {
         var __mb = __mb_set_action_left;
         if (__mb == 0)
@@ -4441,14 +4441,14 @@ public unsafe partial class VirtualJoystick : Control
             if (__mb == 0) throw new MissingMethodException("VirtualJoystick.set_action_left is not available in this engine build.");
             __mb_set_action_left = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_action_left;
-    internal string GetActionLeft()
+    internal StringName GetActionLeft()
     {
         var __mb = __mb_get_action_left;
         if (__mb == 0)
@@ -4459,11 +4459,11 @@ public unsafe partial class VirtualJoystick : Control
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_action_right;
-    internal void SetActionRight(string action)
+    internal void SetActionRight(StringName action)
     {
         var __mb = __mb_set_action_right;
         if (__mb == 0)
@@ -4472,14 +4472,14 @@ public unsafe partial class VirtualJoystick : Control
             if (__mb == 0) throw new MissingMethodException("VirtualJoystick.set_action_right is not available in this engine build.");
             __mb_set_action_right = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_action_right;
-    internal string GetActionRight()
+    internal StringName GetActionRight()
     {
         var __mb = __mb_get_action_right;
         if (__mb == 0)
@@ -4490,11 +4490,11 @@ public unsafe partial class VirtualJoystick : Control
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_action_up;
-    internal void SetActionUp(string action)
+    internal void SetActionUp(StringName action)
     {
         var __mb = __mb_set_action_up;
         if (__mb == 0)
@@ -4503,14 +4503,14 @@ public unsafe partial class VirtualJoystick : Control
             if (__mb == 0) throw new MissingMethodException("VirtualJoystick.set_action_up is not available in this engine build.");
             __mb_set_action_up = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_action_up;
-    internal string GetActionUp()
+    internal StringName GetActionUp()
     {
         var __mb = __mb_get_action_up;
         if (__mb == 0)
@@ -4521,11 +4521,11 @@ public unsafe partial class VirtualJoystick : Control
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_action_down;
-    internal void SetActionDown(string action)
+    internal void SetActionDown(StringName action)
     {
         var __mb = __mb_set_action_down;
         if (__mb == 0)
@@ -4534,14 +4534,14 @@ public unsafe partial class VirtualJoystick : Control
             if (__mb == 0) throw new MissingMethodException("VirtualJoystick.set_action_down is not available in this engine build.");
             __mb_set_action_down = __mb;
         }
-        ulong __a0 = StringNames.Get(action).Opaque;
+        ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_action_down;
-    internal string GetActionDown()
+    internal StringName GetActionDown()
     {
         var __mb = __mb_get_action_down;
         if (__mb == 0)
@@ -4552,7 +4552,7 @@ public unsafe partial class VirtualJoystick : Control
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_visibility_mode;
@@ -5384,7 +5384,7 @@ public unsafe partial class VisualShader : Shader
     }
 
     private static nint __mb_replace_node;
-    public void ReplaceNode(VisualShader.Type type, int id, string newClass)
+    public void ReplaceNode(VisualShader.Type type, int id, StringName newClass)
     {
         var __mb = __mb_replace_node;
         if (__mb == 0)
@@ -5395,7 +5395,7 @@ public unsafe partial class VisualShader : Shader
         }
         long __a0 = (long)type;
         long __a1 = unchecked((long)id);
-        ulong __a2 = StringNames.Get(newClass).Opaque;
+        ulong __a2 = newClass.NativeValue;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);

@@ -647,7 +647,7 @@ public unsafe partial class WebRTCPeerConnection : RefCounted
     }
 
     private static nint __mb_set_default_extension;
-    public static void SetDefaultExtension(string extensionClass)
+    public static void SetDefaultExtension(StringName extensionClass)
     {
         var __mb = __mb_set_default_extension;
         if (__mb == 0)
@@ -656,7 +656,7 @@ public unsafe partial class WebRTCPeerConnection : RefCounted
             if (__mb == 0) throw new MissingMethodException("WebRTCPeerConnection.set_default_extension is not available in this engine build.");
             __mb_set_default_extension = __mb;
         }
-        ulong __a0 = StringNames.Get(extensionClass).Opaque;
+        ulong __a0 = extensionClass.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, 0);
@@ -2553,7 +2553,7 @@ public unsafe partial class Window : Viewport
         set => SetTheme(value);
     }
 
-    public string ThemeTypeVariation
+    public StringName ThemeTypeVariation
     {
         get => GetThemeTypeVariation();
         set => SetThemeTypeVariation(value);
@@ -3795,7 +3795,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_theme_type_variation;
-    internal void SetThemeTypeVariation(string themeType)
+    internal void SetThemeTypeVariation(StringName themeType)
     {
         var __mb = __mb_set_theme_type_variation;
         if (__mb == 0)
@@ -3804,14 +3804,14 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.set_theme_type_variation is not available in this engine build.");
             __mb_set_theme_type_variation = __mb;
         }
-        ulong __a0 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = themeType.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_theme_type_variation;
-    internal string GetThemeTypeVariation()
+    internal StringName GetThemeTypeVariation()
     {
         var __mb = __mb_get_theme_type_variation;
         if (__mb == 0)
@@ -3822,7 +3822,7 @@ public unsafe partial class Window : Viewport
         }
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return StringNames.ReadAndDestroy(ref __ret);
+        return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_begin_bulk_theme_override;
@@ -3852,7 +3852,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_add_theme_icon_override;
-    public void AddThemeIconOverride(string name, Texture2D? texture)
+    public void AddThemeIconOverride(StringName name, Texture2D? texture)
     {
         var __mb = __mb_add_theme_icon_override;
         if (__mb == 0)
@@ -3861,7 +3861,7 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.add_theme_icon_override is not available in this engine build.");
             __mb_add_theme_icon_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = texture?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3870,7 +3870,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_add_theme_stylebox_override;
-    public void AddThemeStyleboxOverride(string name, StyleBox? stylebox)
+    public void AddThemeStyleboxOverride(StringName name, StyleBox? stylebox)
     {
         var __mb = __mb_add_theme_stylebox_override;
         if (__mb == 0)
@@ -3879,7 +3879,7 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.add_theme_stylebox_override is not available in this engine build.");
             __mb_add_theme_stylebox_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = stylebox?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3888,7 +3888,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_add_theme_font_override;
-    public void AddThemeFontOverride(string name, Font? font)
+    public void AddThemeFontOverride(StringName name, Font? font)
     {
         var __mb = __mb_add_theme_font_override;
         if (__mb == 0)
@@ -3897,7 +3897,7 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.add_theme_font_override is not available in this engine build.");
             __mb_add_theme_font_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         nint __a1 = font?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3906,7 +3906,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_add_theme_font_size_override;
-    public void AddThemeFontSizeOverride(string name, int fontSize)
+    public void AddThemeFontSizeOverride(StringName name, int fontSize)
     {
         var __mb = __mb_add_theme_font_size_override;
         if (__mb == 0)
@@ -3915,7 +3915,7 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.add_theme_font_size_override is not available in this engine build.");
             __mb_add_theme_font_size_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         long __a1 = unchecked((long)fontSize);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3924,7 +3924,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_add_theme_color_override;
-    public void AddThemeColorOverride(string name, Color color)
+    public void AddThemeColorOverride(StringName name, Color color)
     {
         var __mb = __mb_add_theme_color_override;
         if (__mb == 0)
@@ -3933,7 +3933,7 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.add_theme_color_override is not available in this engine build.");
             __mb_add_theme_color_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __a1 = color;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3942,7 +3942,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_add_theme_constant_override;
-    public void AddThemeConstantOverride(string name, int constant)
+    public void AddThemeConstantOverride(StringName name, int constant)
     {
         var __mb = __mb_add_theme_constant_override;
         if (__mb == 0)
@@ -3951,7 +3951,7 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.add_theme_constant_override is not available in this engine build.");
             __mb_add_theme_constant_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         long __a1 = unchecked((long)constant);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -3960,7 +3960,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_remove_theme_icon_override;
-    public void RemoveThemeIconOverride(string name)
+    public void RemoveThemeIconOverride(StringName name)
     {
         var __mb = __mb_remove_theme_icon_override;
         if (__mb == 0)
@@ -3969,14 +3969,14 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.remove_theme_icon_override is not available in this engine build.");
             __mb_remove_theme_icon_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_stylebox_override;
-    public void RemoveThemeStyleboxOverride(string name)
+    public void RemoveThemeStyleboxOverride(StringName name)
     {
         var __mb = __mb_remove_theme_stylebox_override;
         if (__mb == 0)
@@ -3985,14 +3985,14 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.remove_theme_stylebox_override is not available in this engine build.");
             __mb_remove_theme_stylebox_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_font_override;
-    public void RemoveThemeFontOverride(string name)
+    public void RemoveThemeFontOverride(StringName name)
     {
         var __mb = __mb_remove_theme_font_override;
         if (__mb == 0)
@@ -4001,14 +4001,14 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.remove_theme_font_override is not available in this engine build.");
             __mb_remove_theme_font_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_font_size_override;
-    public void RemoveThemeFontSizeOverride(string name)
+    public void RemoveThemeFontSizeOverride(StringName name)
     {
         var __mb = __mb_remove_theme_font_size_override;
         if (__mb == 0)
@@ -4017,14 +4017,14 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.remove_theme_font_size_override is not available in this engine build.");
             __mb_remove_theme_font_size_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_color_override;
-    public void RemoveThemeColorOverride(string name)
+    public void RemoveThemeColorOverride(StringName name)
     {
         var __mb = __mb_remove_theme_color_override;
         if (__mb == 0)
@@ -4033,14 +4033,14 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.remove_theme_color_override is not available in this engine build.");
             __mb_remove_theme_color_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_constant_override;
-    public void RemoveThemeConstantOverride(string name)
+    public void RemoveThemeConstantOverride(StringName name)
     {
         var __mb = __mb_remove_theme_constant_override;
         if (__mb == 0)
@@ -4049,14 +4049,14 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.remove_theme_constant_override is not available in this engine build.");
             __mb_remove_theme_constant_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_theme_icon;
-    public Texture2D? GetThemeIcon(string name, string themeType = "")
+    public Texture2D? GetThemeIcon(StringName name, StringName themeType)
     {
         var __mb = __mb_get_theme_icon;
         if (__mb == 0)
@@ -4065,8 +4065,8 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.get_theme_icon is not available in this engine build.");
             __mb_get_theme_icon = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -4076,7 +4076,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_theme_stylebox;
-    public StyleBox? GetThemeStylebox(string name, string themeType = "")
+    public StyleBox? GetThemeStylebox(StringName name, StringName themeType)
     {
         var __mb = __mb_get_theme_stylebox;
         if (__mb == 0)
@@ -4085,8 +4085,8 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.get_theme_stylebox is not available in this engine build.");
             __mb_get_theme_stylebox = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -4096,7 +4096,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_theme_font;
-    public Font? GetThemeFont(string name, string themeType = "")
+    public Font? GetThemeFont(StringName name, StringName themeType)
     {
         var __mb = __mb_get_theme_font;
         if (__mb == 0)
@@ -4105,8 +4105,8 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.get_theme_font is not available in this engine build.");
             __mb_get_theme_font = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -4116,7 +4116,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_theme_font_size;
-    public int GetThemeFontSize(string name, string themeType = "")
+    public int GetThemeFontSize(StringName name, StringName themeType)
     {
         var __mb = __mb_get_theme_font_size;
         if (__mb == 0)
@@ -4125,8 +4125,8 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.get_theme_font_size is not available in this engine build.");
             __mb_get_theme_font_size = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -4136,7 +4136,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_theme_color;
-    public Color GetThemeColor(string name, string themeType = "")
+    public Color GetThemeColor(StringName name, StringName themeType)
     {
         var __mb = __mb_get_theme_color;
         if (__mb == 0)
@@ -4145,8 +4145,8 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.get_theme_color is not available in this engine build.");
             __mb_get_theme_color = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -4156,7 +4156,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_theme_constant;
-    public int GetThemeConstant(string name, string themeType = "")
+    public int GetThemeConstant(StringName name, StringName themeType)
     {
         var __mb = __mb_get_theme_constant;
         if (__mb == 0)
@@ -4165,8 +4165,8 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.get_theme_constant is not available in this engine build.");
             __mb_get_theme_constant = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -4176,7 +4176,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_icon_override;
-    public bool HasThemeIconOverride(string name)
+    public bool HasThemeIconOverride(StringName name)
     {
         var __mb = __mb_has_theme_icon_override;
         if (__mb == 0)
@@ -4185,7 +4185,7 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.has_theme_icon_override is not available in this engine build.");
             __mb_has_theme_icon_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -4194,7 +4194,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_stylebox_override;
-    public bool HasThemeStyleboxOverride(string name)
+    public bool HasThemeStyleboxOverride(StringName name)
     {
         var __mb = __mb_has_theme_stylebox_override;
         if (__mb == 0)
@@ -4203,7 +4203,7 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.has_theme_stylebox_override is not available in this engine build.");
             __mb_has_theme_stylebox_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -4212,7 +4212,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_font_override;
-    public bool HasThemeFontOverride(string name)
+    public bool HasThemeFontOverride(StringName name)
     {
         var __mb = __mb_has_theme_font_override;
         if (__mb == 0)
@@ -4221,7 +4221,7 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.has_theme_font_override is not available in this engine build.");
             __mb_has_theme_font_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -4230,7 +4230,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_font_size_override;
-    public bool HasThemeFontSizeOverride(string name)
+    public bool HasThemeFontSizeOverride(StringName name)
     {
         var __mb = __mb_has_theme_font_size_override;
         if (__mb == 0)
@@ -4239,7 +4239,7 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.has_theme_font_size_override is not available in this engine build.");
             __mb_has_theme_font_size_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -4248,7 +4248,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_color_override;
-    public bool HasThemeColorOverride(string name)
+    public bool HasThemeColorOverride(StringName name)
     {
         var __mb = __mb_has_theme_color_override;
         if (__mb == 0)
@@ -4257,7 +4257,7 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.has_theme_color_override is not available in this engine build.");
             __mb_has_theme_color_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -4266,7 +4266,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_constant_override;
-    public bool HasThemeConstantOverride(string name)
+    public bool HasThemeConstantOverride(StringName name)
     {
         var __mb = __mb_has_theme_constant_override;
         if (__mb == 0)
@@ -4275,7 +4275,7 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.has_theme_constant_override is not available in this engine build.");
             __mb_has_theme_constant_override = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
+        ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
@@ -4284,7 +4284,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_icon;
-    public bool HasThemeIcon(string name, string themeType = "")
+    public bool HasThemeIcon(StringName name, StringName themeType)
     {
         var __mb = __mb_has_theme_icon;
         if (__mb == 0)
@@ -4293,8 +4293,8 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.has_theme_icon is not available in this engine build.");
             __mb_has_theme_icon = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -4304,7 +4304,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_stylebox;
-    public bool HasThemeStylebox(string name, string themeType = "")
+    public bool HasThemeStylebox(StringName name, StringName themeType)
     {
         var __mb = __mb_has_theme_stylebox;
         if (__mb == 0)
@@ -4313,8 +4313,8 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.has_theme_stylebox is not available in this engine build.");
             __mb_has_theme_stylebox = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -4324,7 +4324,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_font;
-    public bool HasThemeFont(string name, string themeType = "")
+    public bool HasThemeFont(StringName name, StringName themeType)
     {
         var __mb = __mb_has_theme_font;
         if (__mb == 0)
@@ -4333,8 +4333,8 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.has_theme_font is not available in this engine build.");
             __mb_has_theme_font = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -4344,7 +4344,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_font_size;
-    public bool HasThemeFontSize(string name, string themeType = "")
+    public bool HasThemeFontSize(StringName name, StringName themeType)
     {
         var __mb = __mb_has_theme_font_size;
         if (__mb == 0)
@@ -4353,8 +4353,8 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.has_theme_font_size is not available in this engine build.");
             __mb_has_theme_font_size = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -4364,7 +4364,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_color;
-    public bool HasThemeColor(string name, string themeType = "")
+    public bool HasThemeColor(StringName name, StringName themeType)
     {
         var __mb = __mb_has_theme_color;
         if (__mb == 0)
@@ -4373,8 +4373,8 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.has_theme_color is not available in this engine build.");
             __mb_has_theme_color = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -4384,7 +4384,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_constant;
-    public bool HasThemeConstant(string name, string themeType = "")
+    public bool HasThemeConstant(StringName name, StringName themeType)
     {
         var __mb = __mb_has_theme_constant;
         if (__mb == 0)
@@ -4393,8 +4393,8 @@ public unsafe partial class Window : Viewport
             if (__mb == 0) throw new MissingMethodException("Window.has_theme_constant is not available in this engine build.");
             __mb_has_theme_constant = __mb;
         }
-        ulong __a0 = StringNames.Get(name).Opaque;
-        ulong __a1 = StringNames.Get(themeType).Opaque;
+        ulong __a0 = name.NativeValue;
+        ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);

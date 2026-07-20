@@ -11,24 +11,24 @@ namespace Godot.NativeInterop;
 /// destructed), so copying the 8-byte payload around without engine
 /// copy-constructor calls is safe.
 /// </summary>
-public readonly struct StringName(ulong opaque) : IEquatable<StringName>
+public readonly struct InternedName(ulong opaque) : IEquatable<InternedName>
 {
     public readonly ulong Opaque = opaque;
 
-    public bool Equals(StringName other) => Opaque == other.Opaque;
-    public override bool Equals(object? obj) => obj is StringName other && Equals(other);
+    public bool Equals(InternedName other) => Opaque == other.Opaque;
+    public override bool Equals(object? obj) => obj is InternedName other && Equals(other);
     public override int GetHashCode() => Opaque.GetHashCode();
-    public static bool operator ==(StringName a, StringName b) => a.Opaque == b.Opaque;
-    public static bool operator !=(StringName a, StringName b) => a.Opaque != b.Opaque;
+    public static bool operator ==(InternedName a, InternedName b) => a.Opaque == b.Opaque;
+    public static bool operator !=(InternedName a, InternedName b) => a.Opaque != b.Opaque;
 }
 
 public static unsafe class StringNames
 {
-    private static readonly Dictionary<string, StringName> Cache = [];
+    private static readonly Dictionary<string, InternedName> Cache = [];
     private static readonly Lock CacheLock = new();
 
     /// <summary>Gets (or creates and caches for process lifetime) the StringName for <paramref name="name"/>.</summary>
-    public static StringName Get(string name)
+    public static InternedName Get(string name)
     {
         lock (CacheLock)
         {
@@ -53,7 +53,7 @@ public static unsafe class StringNames
                 }
             }
 
-            var sn = new StringName(opaque);
+            var sn = new InternedName(opaque);
             Cache[name] = sn;
             return sn;
         }
