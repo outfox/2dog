@@ -115,11 +115,15 @@ public static unsafe class ClassRegistry
                 return (parentName, engineName, refCounted);
             }
             // Intermediate user class: must be registered so the engine knows
-            // the full chain.
-            if (ByType.TryGetValue(t, out var parentInfo))
+            // the full chain - silently reparenting to the engine base would
+            // hide the user hierarchy from ClassDB.
+            if (!ByType.TryGetValue(t, out var parentInfo))
             {
-                parentName ??= parentInfo.ClassName;
+                throw new InvalidOperationException(
+                    $"{type.Name}: base class {t.Name} is not registered. " +
+                    $"Register base classes first (ClassRegistry.Register<{t.Name}>()).");
             }
+            parentName ??= parentInfo.ClassName;
         }
         throw new InvalidOperationException($"{type.Name} does not inherit from a Godot engine class.");
     }
