@@ -41,6 +41,28 @@ using (var engine = new Engine("gdext.host.demo", projectDir, "--headless"))
     Check(spinner.Rotation != 0f, $"typed property writes took effect (rotation = {spinner.Rotation:F3})");
 
     GD.Print((Variant)"[host-demo] engine-side print through GD");
+
+    // The async experience end-to-end: await an engine signal, then a Task
+    // continuation that must marshal back through the host loop's pump.
+    var hostThread = System.Environment.CurrentManagedThreadId;
+    var resumedOn = 0;
+    var story = AsyncStory();
+    var guard = 0;
+    while (!story.IsCompleted && guard++ < 600 && !godot.Iteration())
+    {
+    }
+    Check(story.IsCompleted, "async story completed through the host loop");
+    Check(resumedOn == hostThread, $"Task.Delay resumed on the host thread (thread {resumedOn})");
+
+    async Task AsyncStory()
+    {
+        var timer = tree.CreateTimer(0.03, true, false, false)!;
+        await tree.ToSignal(timer, "timeout");   // engine-driven resume
+        timer.Dispose();
+        await Task.Delay(15);                    // timer-thread completion, pumped back
+        resumedOn = System.Environment.CurrentManagedThreadId;
+    }
+
     tree.Root.RemoveChild(spinner);
     spinner.Free();
 }

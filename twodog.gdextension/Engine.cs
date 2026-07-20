@@ -85,6 +85,10 @@ public sealed unsafe class Engine : IDisposable
             throw new InvalidOperationException($"{nameof(Engine)}: Error starting Godot instance.");
         }
 
+        // Async support: await Task.* continuations marshal back to this
+        // thread, pumped once per Iteration.
+        GodotSynchronizationContext.Install();
+
         _ownsInstance = true;
         _instance = new GodotInstance(native);
         return _instance;
@@ -181,6 +185,7 @@ public sealed class GodotInstance(Godot.GodotInstance native) : IDisposable
     public bool Iteration()
     {
         var quit = Native.Iteration();
+        GodotSynchronizationContext.PumpAll();
         DisposalQueue.Drain();
         return quit;
     }

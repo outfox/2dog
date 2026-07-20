@@ -41,6 +41,13 @@ public unsafe partial class GodotObject : IDisposable
     /// <summary>Called from the binding free callback when the engine destroyed the object.</summary>
     internal void NativeFreed() => NativePtr = 0;
 
+    /// <summary>
+    /// Awaits a one-shot signal emission, GodotSharp-style:
+    /// <c>await ToSignal(GetTree().CreateTimer(1.0), "timeout")</c>.
+    /// The result is the emitted signal's arguments.
+    /// </summary>
+    public SignalAwaiter ToSignal(GodotObject source, string signal) => new(source, signal);
+
     /// <summary>Explicitly destroys a non-RefCounted object (Node.free() semantics).</summary>
     public void Free()
     {
