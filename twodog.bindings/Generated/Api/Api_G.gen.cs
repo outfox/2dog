@@ -903,6 +903,78 @@ public unsafe partial class GLTFAccessor : Resource
         COMPONENT_TYPE_UNSIGNED_LONG = 5135,
     }
 
+    public int BufferView
+    {
+        get => GetBufferView();
+        set => SetBufferView(value);
+    }
+
+    public long ByteOffset
+    {
+        get => GetByteOffset();
+        set => SetByteOffset(value);
+    }
+
+    public GLTFAccessor.GLTFComponentType ComponentType
+    {
+        get => GetComponentType();
+        set => SetComponentType(value);
+    }
+
+    public bool Normalized
+    {
+        get => GetNormalized();
+        set => SetNormalized(value);
+    }
+
+    public long Count
+    {
+        get => GetCount();
+        set => SetCount(value);
+    }
+
+    public GLTFAccessor.GLTFAccessorType AccessorType
+    {
+        get => GetAccessorType();
+        set => SetAccessorType(value);
+    }
+
+    public long SparseCount
+    {
+        get => GetSparseCount();
+        set => SetSparseCount(value);
+    }
+
+    public int SparseIndicesBufferView
+    {
+        get => GetSparseIndicesBufferView();
+        set => SetSparseIndicesBufferView(value);
+    }
+
+    public long SparseIndicesByteOffset
+    {
+        get => GetSparseIndicesByteOffset();
+        set => SetSparseIndicesByteOffset(value);
+    }
+
+    public GLTFAccessor.GLTFComponentType SparseIndicesComponentType
+    {
+        get => GetSparseIndicesComponentType();
+        set => SetSparseIndicesComponentType(value);
+    }
+
+    public int SparseValuesBufferView
+    {
+        get => GetSparseValuesBufferView();
+        set => SetSparseValuesBufferView(value);
+    }
+
+    public long SparseValuesByteOffset
+    {
+        get => GetSparseValuesByteOffset();
+        set => SetSparseValuesByteOffset(value);
+    }
+
     private static nint __mb_from_dictionary;
     public static GLTFAccessor? FromDictionary(Godot.Collections.Dictionary dictionary)
     {
@@ -937,7 +1009,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_get_buffer_view;
-    public int GetBufferView()
+    internal int GetBufferView()
     {
         var __mb = __mb_get_buffer_view;
         if (__mb == 0)
@@ -952,7 +1024,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_set_buffer_view;
-    public void SetBufferView(int bufferView)
+    internal void SetBufferView(int bufferView)
     {
         var __mb = __mb_set_buffer_view;
         if (__mb == 0)
@@ -968,7 +1040,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_get_byte_offset;
-    public long GetByteOffset()
+    internal long GetByteOffset()
     {
         var __mb = __mb_get_byte_offset;
         if (__mb == 0)
@@ -983,7 +1055,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_set_byte_offset;
-    public void SetByteOffset(long byteOffset)
+    internal void SetByteOffset(long byteOffset)
     {
         var __mb = __mb_set_byte_offset;
         if (__mb == 0)
@@ -999,7 +1071,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_get_component_type;
-    public GLTFAccessor.GLTFComponentType GetComponentType()
+    internal GLTFAccessor.GLTFComponentType GetComponentType()
     {
         var __mb = __mb_get_component_type;
         if (__mb == 0)
@@ -1014,7 +1086,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_set_component_type;
-    public void SetComponentType(GLTFAccessor.GLTFComponentType componentType)
+    internal void SetComponentType(GLTFAccessor.GLTFComponentType componentType)
     {
         var __mb = __mb_set_component_type;
         if (__mb == 0)
@@ -1030,7 +1102,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_get_normalized;
-    public bool GetNormalized()
+    internal bool GetNormalized()
     {
         var __mb = __mb_get_normalized;
         if (__mb == 0)
@@ -1045,7 +1117,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_set_normalized;
-    public void SetNormalized(bool normalized)
+    internal void SetNormalized(bool normalized)
     {
         var __mb = __mb_set_normalized;
         if (__mb == 0)
@@ -1061,7 +1133,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_get_count;
-    public long GetCount()
+    internal long GetCount()
     {
         var __mb = __mb_get_count;
         if (__mb == 0)
@@ -1076,7 +1148,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_set_count;
-    public void SetCount(long count)
+    internal void SetCount(long count)
     {
         var __mb = __mb_set_count;
         if (__mb == 0)
@@ -1092,7 +1164,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_get_accessor_type;
-    public GLTFAccessor.GLTFAccessorType GetAccessorType()
+    internal GLTFAccessor.GLTFAccessorType GetAccessorType()
     {
         var __mb = __mb_get_accessor_type;
         if (__mb == 0)
@@ -1107,7 +1179,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_set_accessor_type;
-    public void SetAccessorType(GLTFAccessor.GLTFAccessorType accessorType)
+    internal void SetAccessorType(GLTFAccessor.GLTFAccessorType accessorType)
     {
         var __mb = __mb_set_accessor_type;
         if (__mb == 0)
@@ -1139,7 +1211,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_get_sparse_count;
-    public long GetSparseCount()
+    internal long GetSparseCount()
     {
         var __mb = __mb_get_sparse_count;
         if (__mb == 0)
@@ -1154,7 +1226,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_set_sparse_count;
-    public void SetSparseCount(long sparseCount)
+    internal void SetSparseCount(long sparseCount)
     {
         var __mb = __mb_set_sparse_count;
         if (__mb == 0)
@@ -1170,7 +1242,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_get_sparse_indices_buffer_view;
-    public int GetSparseIndicesBufferView()
+    internal int GetSparseIndicesBufferView()
     {
         var __mb = __mb_get_sparse_indices_buffer_view;
         if (__mb == 0)
@@ -1185,7 +1257,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_set_sparse_indices_buffer_view;
-    public void SetSparseIndicesBufferView(int sparseIndicesBufferView)
+    internal void SetSparseIndicesBufferView(int sparseIndicesBufferView)
     {
         var __mb = __mb_set_sparse_indices_buffer_view;
         if (__mb == 0)
@@ -1201,7 +1273,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_get_sparse_indices_byte_offset;
-    public long GetSparseIndicesByteOffset()
+    internal long GetSparseIndicesByteOffset()
     {
         var __mb = __mb_get_sparse_indices_byte_offset;
         if (__mb == 0)
@@ -1216,7 +1288,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_set_sparse_indices_byte_offset;
-    public void SetSparseIndicesByteOffset(long sparseIndicesByteOffset)
+    internal void SetSparseIndicesByteOffset(long sparseIndicesByteOffset)
     {
         var __mb = __mb_set_sparse_indices_byte_offset;
         if (__mb == 0)
@@ -1232,7 +1304,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_get_sparse_indices_component_type;
-    public GLTFAccessor.GLTFComponentType GetSparseIndicesComponentType()
+    internal GLTFAccessor.GLTFComponentType GetSparseIndicesComponentType()
     {
         var __mb = __mb_get_sparse_indices_component_type;
         if (__mb == 0)
@@ -1247,7 +1319,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_set_sparse_indices_component_type;
-    public void SetSparseIndicesComponentType(GLTFAccessor.GLTFComponentType sparseIndicesComponentType)
+    internal void SetSparseIndicesComponentType(GLTFAccessor.GLTFComponentType sparseIndicesComponentType)
     {
         var __mb = __mb_set_sparse_indices_component_type;
         if (__mb == 0)
@@ -1263,7 +1335,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_get_sparse_values_buffer_view;
-    public int GetSparseValuesBufferView()
+    internal int GetSparseValuesBufferView()
     {
         var __mb = __mb_get_sparse_values_buffer_view;
         if (__mb == 0)
@@ -1278,7 +1350,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_set_sparse_values_buffer_view;
-    public void SetSparseValuesBufferView(int sparseValuesBufferView)
+    internal void SetSparseValuesBufferView(int sparseValuesBufferView)
     {
         var __mb = __mb_set_sparse_values_buffer_view;
         if (__mb == 0)
@@ -1294,7 +1366,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_get_sparse_values_byte_offset;
-    public long GetSparseValuesByteOffset()
+    internal long GetSparseValuesByteOffset()
     {
         var __mb = __mb_get_sparse_values_byte_offset;
         if (__mb == 0)
@@ -1309,7 +1381,7 @@ public unsafe partial class GLTFAccessor : Resource
     }
 
     private static nint __mb_set_sparse_values_byte_offset;
-    public void SetSparseValuesByteOffset(long sparseValuesByteOffset)
+    internal void SetSparseValuesByteOffset(long sparseValuesByteOffset)
     {
         var __mb = __mb_set_sparse_values_byte_offset;
         if (__mb == 0)
@@ -1334,8 +1406,20 @@ public unsafe partial class GLTFAnimation : Resource
         ClassRegistry.AttachNew(this, "GLTFAnimation");
     }
 
+    public string OriginalName
+    {
+        get => GetOriginalName();
+        set => SetOriginalName(value);
+    }
+
+    public bool Loop
+    {
+        get => GetLoop();
+        set => SetLoop(value);
+    }
+
     private static nint __mb_get_original_name;
-    public string GetOriginalName()
+    internal string GetOriginalName()
     {
         var __mb = __mb_get_original_name;
         if (__mb == 0)
@@ -1350,7 +1434,7 @@ public unsafe partial class GLTFAnimation : Resource
     }
 
     private static nint __mb_set_original_name;
-    public void SetOriginalName(string originalName)
+    internal void SetOriginalName(string originalName)
     {
         var __mb = __mb_set_original_name;
         if (__mb == 0)
@@ -1367,7 +1451,7 @@ public unsafe partial class GLTFAnimation : Resource
     }
 
     private static nint __mb_get_loop;
-    public bool GetLoop()
+    internal bool GetLoop()
     {
         var __mb = __mb_get_loop;
         if (__mb == 0)
@@ -1382,7 +1466,7 @@ public unsafe partial class GLTFAnimation : Resource
     }
 
     private static nint __mb_set_loop;
-    public void SetLoop(bool loop)
+    internal void SetLoop(bool loop)
     {
         var __mb = __mb_set_loop;
         if (__mb == 0)
@@ -1443,6 +1527,42 @@ public unsafe partial class GLTFBufferView : Resource
         ClassRegistry.AttachNew(this, "GLTFBufferView");
     }
 
+    public int Buffer
+    {
+        get => GetBuffer();
+        set => SetBuffer(value);
+    }
+
+    public long ByteOffset
+    {
+        get => GetByteOffset();
+        set => SetByteOffset(value);
+    }
+
+    public long ByteLength
+    {
+        get => GetByteLength();
+        set => SetByteLength(value);
+    }
+
+    public long ByteStride
+    {
+        get => GetByteStride();
+        set => SetByteStride(value);
+    }
+
+    public bool Indices
+    {
+        get => GetIndices();
+        set => SetIndices(value);
+    }
+
+    public bool VertexAttributes
+    {
+        get => GetVertexAttributes();
+        set => SetVertexAttributes(value);
+    }
+
     private static nint __mb_from_dictionary;
     public static GLTFBufferView? FromDictionary(Godot.Collections.Dictionary dictionary)
     {
@@ -1477,7 +1597,7 @@ public unsafe partial class GLTFBufferView : Resource
     }
 
     private static nint __mb_get_buffer;
-    public int GetBuffer()
+    internal int GetBuffer()
     {
         var __mb = __mb_get_buffer;
         if (__mb == 0)
@@ -1492,7 +1612,7 @@ public unsafe partial class GLTFBufferView : Resource
     }
 
     private static nint __mb_set_buffer;
-    public void SetBuffer(int buffer)
+    internal void SetBuffer(int buffer)
     {
         var __mb = __mb_set_buffer;
         if (__mb == 0)
@@ -1508,7 +1628,7 @@ public unsafe partial class GLTFBufferView : Resource
     }
 
     private static nint __mb_get_byte_offset;
-    public long GetByteOffset()
+    internal long GetByteOffset()
     {
         var __mb = __mb_get_byte_offset;
         if (__mb == 0)
@@ -1523,7 +1643,7 @@ public unsafe partial class GLTFBufferView : Resource
     }
 
     private static nint __mb_set_byte_offset;
-    public void SetByteOffset(long byteOffset)
+    internal void SetByteOffset(long byteOffset)
     {
         var __mb = __mb_set_byte_offset;
         if (__mb == 0)
@@ -1539,7 +1659,7 @@ public unsafe partial class GLTFBufferView : Resource
     }
 
     private static nint __mb_get_byte_length;
-    public long GetByteLength()
+    internal long GetByteLength()
     {
         var __mb = __mb_get_byte_length;
         if (__mb == 0)
@@ -1554,7 +1674,7 @@ public unsafe partial class GLTFBufferView : Resource
     }
 
     private static nint __mb_set_byte_length;
-    public void SetByteLength(long byteLength)
+    internal void SetByteLength(long byteLength)
     {
         var __mb = __mb_set_byte_length;
         if (__mb == 0)
@@ -1570,7 +1690,7 @@ public unsafe partial class GLTFBufferView : Resource
     }
 
     private static nint __mb_get_byte_stride;
-    public long GetByteStride()
+    internal long GetByteStride()
     {
         var __mb = __mb_get_byte_stride;
         if (__mb == 0)
@@ -1585,7 +1705,7 @@ public unsafe partial class GLTFBufferView : Resource
     }
 
     private static nint __mb_set_byte_stride;
-    public void SetByteStride(long byteStride)
+    internal void SetByteStride(long byteStride)
     {
         var __mb = __mb_set_byte_stride;
         if (__mb == 0)
@@ -1601,7 +1721,7 @@ public unsafe partial class GLTFBufferView : Resource
     }
 
     private static nint __mb_get_indices;
-    public bool GetIndices()
+    internal bool GetIndices()
     {
         var __mb = __mb_get_indices;
         if (__mb == 0)
@@ -1616,7 +1736,7 @@ public unsafe partial class GLTFBufferView : Resource
     }
 
     private static nint __mb_set_indices;
-    public void SetIndices(bool indices)
+    internal void SetIndices(bool indices)
     {
         var __mb = __mb_set_indices;
         if (__mb == 0)
@@ -1632,7 +1752,7 @@ public unsafe partial class GLTFBufferView : Resource
     }
 
     private static nint __mb_get_vertex_attributes;
-    public bool GetVertexAttributes()
+    internal bool GetVertexAttributes()
     {
         var __mb = __mb_get_vertex_attributes;
         if (__mb == 0)
@@ -1647,7 +1767,7 @@ public unsafe partial class GLTFBufferView : Resource
     }
 
     private static nint __mb_set_vertex_attributes;
-    public void SetVertexAttributes(bool isAttributes)
+    internal void SetVertexAttributes(bool isAttributes)
     {
         var __mb = __mb_set_vertex_attributes;
         if (__mb == 0)
@@ -1670,6 +1790,36 @@ public unsafe partial class GLTFCamera : Resource
     public GLTFCamera() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "GLTFCamera");
+    }
+
+    public bool Perspective
+    {
+        get => GetPerspective();
+        set => SetPerspective(value);
+    }
+
+    public float Fov
+    {
+        get => GetFov();
+        set => SetFov(value);
+    }
+
+    public float SizeMag
+    {
+        get => GetSizeMag();
+        set => SetSizeMag(value);
+    }
+
+    public float DepthFar
+    {
+        get => GetDepthFar();
+        set => SetDepthFar(value);
+    }
+
+    public float DepthNear
+    {
+        get => GetDepthNear();
+        set => SetDepthNear(value);
     }
 
     private static nint __mb_from_node;
@@ -1739,7 +1889,7 @@ public unsafe partial class GLTFCamera : Resource
     }
 
     private static nint __mb_get_perspective;
-    public bool GetPerspective()
+    internal bool GetPerspective()
     {
         var __mb = __mb_get_perspective;
         if (__mb == 0)
@@ -1754,7 +1904,7 @@ public unsafe partial class GLTFCamera : Resource
     }
 
     private static nint __mb_set_perspective;
-    public void SetPerspective(bool perspective)
+    internal void SetPerspective(bool perspective)
     {
         var __mb = __mb_set_perspective;
         if (__mb == 0)
@@ -1770,7 +1920,7 @@ public unsafe partial class GLTFCamera : Resource
     }
 
     private static nint __mb_get_fov;
-    public float GetFov()
+    internal float GetFov()
     {
         var __mb = __mb_get_fov;
         if (__mb == 0)
@@ -1785,7 +1935,7 @@ public unsafe partial class GLTFCamera : Resource
     }
 
     private static nint __mb_set_fov;
-    public void SetFov(float fov)
+    internal void SetFov(float fov)
     {
         var __mb = __mb_set_fov;
         if (__mb == 0)
@@ -1801,7 +1951,7 @@ public unsafe partial class GLTFCamera : Resource
     }
 
     private static nint __mb_get_size_mag;
-    public float GetSizeMag()
+    internal float GetSizeMag()
     {
         var __mb = __mb_get_size_mag;
         if (__mb == 0)
@@ -1816,7 +1966,7 @@ public unsafe partial class GLTFCamera : Resource
     }
 
     private static nint __mb_set_size_mag;
-    public void SetSizeMag(float sizeMag)
+    internal void SetSizeMag(float sizeMag)
     {
         var __mb = __mb_set_size_mag;
         if (__mb == 0)
@@ -1832,7 +1982,7 @@ public unsafe partial class GLTFCamera : Resource
     }
 
     private static nint __mb_get_depth_far;
-    public float GetDepthFar()
+    internal float GetDepthFar()
     {
         var __mb = __mb_get_depth_far;
         if (__mb == 0)
@@ -1847,7 +1997,7 @@ public unsafe partial class GLTFCamera : Resource
     }
 
     private static nint __mb_set_depth_far;
-    public void SetDepthFar(float zdepthFar)
+    internal void SetDepthFar(float zdepthFar)
     {
         var __mb = __mb_set_depth_far;
         if (__mb == 0)
@@ -1863,7 +2013,7 @@ public unsafe partial class GLTFCamera : Resource
     }
 
     private static nint __mb_get_depth_near;
-    public float GetDepthNear()
+    internal float GetDepthNear()
     {
         var __mb = __mb_get_depth_near;
         if (__mb == 0)
@@ -1878,7 +2028,7 @@ public unsafe partial class GLTFCamera : Resource
     }
 
     private static nint __mb_set_depth_near;
-    public void SetDepthNear(float zdepthNear)
+    internal void SetDepthNear(float zdepthNear)
     {
         var __mb = __mb_set_depth_near;
         if (__mb == 0)
@@ -1903,20 +2053,20 @@ public unsafe partial class GLTFDocument : Resource
         ClassRegistry.AttachNew(this, "GLTFDocument");
     }
 
-    public enum RootNodeMode : long
+    public enum RootNodeModeEnum : long
     {
         ROOT_NODE_MODE_SINGLE_ROOT = 0,
         ROOT_NODE_MODE_KEEP_ROOT = 1,
         ROOT_NODE_MODE_MULTI_ROOT = 2,
     }
 
-    public enum TextureMapMode : long
+    public enum TextureMapModeEnum : long
     {
         TEXTURE_MAP_MODE_DO_NOT_REMAP = 0,
         TEXTURE_MAP_MODE_REMAP_TO_STANDARD_MATERIAL = 1,
     }
 
-    public enum VisibilityMode : long
+    public enum VisibilityModeEnum : long
     {
         VISIBILITY_MODE_INCLUDE_REQUIRED = 0,
         VISIBILITY_MODE_INCLUDE_OPTIONAL = 1,
@@ -1932,8 +2082,50 @@ public unsafe partial class GLTFDocument : Resource
         IMPORT_FLAG_FORCE_DISABLE_MESH_COMPRESSION = 64,
     }
 
+    public string ImageFormat
+    {
+        get => GetImageFormat();
+        set => SetImageFormat(value);
+    }
+
+    public float LossyQuality
+    {
+        get => GetLossyQuality();
+        set => SetLossyQuality(value);
+    }
+
+    public string FallbackImageFormat
+    {
+        get => GetFallbackImageFormat();
+        set => SetFallbackImageFormat(value);
+    }
+
+    public float FallbackImageQuality
+    {
+        get => GetFallbackImageQuality();
+        set => SetFallbackImageQuality(value);
+    }
+
+    public GLTFDocument.RootNodeModeEnum RootNodeMode
+    {
+        get => GetRootNodeMode();
+        set => SetRootNodeMode(value);
+    }
+
+    public GLTFDocument.TextureMapModeEnum TextureMapMode
+    {
+        get => GetTextureMapMode();
+        set => SetTextureMapMode(value);
+    }
+
+    public GLTFDocument.VisibilityModeEnum VisibilityMode
+    {
+        get => GetVisibilityMode();
+        set => SetVisibilityMode(value);
+    }
+
     private static nint __mb_set_image_format;
-    public void SetImageFormat(string imageFormat)
+    internal void SetImageFormat(string imageFormat)
     {
         var __mb = __mb_set_image_format;
         if (__mb == 0)
@@ -1950,7 +2142,7 @@ public unsafe partial class GLTFDocument : Resource
     }
 
     private static nint __mb_get_image_format;
-    public string GetImageFormat()
+    internal string GetImageFormat()
     {
         var __mb = __mb_get_image_format;
         if (__mb == 0)
@@ -1965,7 +2157,7 @@ public unsafe partial class GLTFDocument : Resource
     }
 
     private static nint __mb_set_lossy_quality;
-    public void SetLossyQuality(float lossyQuality)
+    internal void SetLossyQuality(float lossyQuality)
     {
         var __mb = __mb_set_lossy_quality;
         if (__mb == 0)
@@ -1981,7 +2173,7 @@ public unsafe partial class GLTFDocument : Resource
     }
 
     private static nint __mb_get_lossy_quality;
-    public float GetLossyQuality()
+    internal float GetLossyQuality()
     {
         var __mb = __mb_get_lossy_quality;
         if (__mb == 0)
@@ -1996,7 +2188,7 @@ public unsafe partial class GLTFDocument : Resource
     }
 
     private static nint __mb_set_fallback_image_format;
-    public void SetFallbackImageFormat(string fallbackImageFormat)
+    internal void SetFallbackImageFormat(string fallbackImageFormat)
     {
         var __mb = __mb_set_fallback_image_format;
         if (__mb == 0)
@@ -2013,7 +2205,7 @@ public unsafe partial class GLTFDocument : Resource
     }
 
     private static nint __mb_get_fallback_image_format;
-    public string GetFallbackImageFormat()
+    internal string GetFallbackImageFormat()
     {
         var __mb = __mb_get_fallback_image_format;
         if (__mb == 0)
@@ -2028,7 +2220,7 @@ public unsafe partial class GLTFDocument : Resource
     }
 
     private static nint __mb_set_fallback_image_quality;
-    public void SetFallbackImageQuality(float fallbackImageQuality)
+    internal void SetFallbackImageQuality(float fallbackImageQuality)
     {
         var __mb = __mb_set_fallback_image_quality;
         if (__mb == 0)
@@ -2044,7 +2236,7 @@ public unsafe partial class GLTFDocument : Resource
     }
 
     private static nint __mb_get_fallback_image_quality;
-    public float GetFallbackImageQuality()
+    internal float GetFallbackImageQuality()
     {
         var __mb = __mb_get_fallback_image_quality;
         if (__mb == 0)
@@ -2059,7 +2251,7 @@ public unsafe partial class GLTFDocument : Resource
     }
 
     private static nint __mb_set_root_node_mode;
-    public void SetRootNodeMode(GLTFDocument.RootNodeMode rootNodeMode)
+    internal void SetRootNodeMode(GLTFDocument.RootNodeModeEnum rootNodeMode)
     {
         var __mb = __mb_set_root_node_mode;
         if (__mb == 0)
@@ -2075,7 +2267,7 @@ public unsafe partial class GLTFDocument : Resource
     }
 
     private static nint __mb_get_root_node_mode;
-    public GLTFDocument.RootNodeMode GetRootNodeMode()
+    internal GLTFDocument.RootNodeModeEnum GetRootNodeMode()
     {
         var __mb = __mb_get_root_node_mode;
         if (__mb == 0)
@@ -2086,11 +2278,11 @@ public unsafe partial class GLTFDocument : Resource
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (GLTFDocument.RootNodeMode)__ret;
+        return (GLTFDocument.RootNodeModeEnum)__ret;
     }
 
     private static nint __mb_set_texture_map_mode;
-    public void SetTextureMapMode(GLTFDocument.TextureMapMode textureMapMode)
+    internal void SetTextureMapMode(GLTFDocument.TextureMapModeEnum textureMapMode)
     {
         var __mb = __mb_set_texture_map_mode;
         if (__mb == 0)
@@ -2106,7 +2298,7 @@ public unsafe partial class GLTFDocument : Resource
     }
 
     private static nint __mb_get_texture_map_mode;
-    public GLTFDocument.TextureMapMode GetTextureMapMode()
+    internal GLTFDocument.TextureMapModeEnum GetTextureMapMode()
     {
         var __mb = __mb_get_texture_map_mode;
         if (__mb == 0)
@@ -2117,11 +2309,11 @@ public unsafe partial class GLTFDocument : Resource
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (GLTFDocument.TextureMapMode)__ret;
+        return (GLTFDocument.TextureMapModeEnum)__ret;
     }
 
     private static nint __mb_set_visibility_mode;
-    public void SetVisibilityMode(GLTFDocument.VisibilityMode visibilityMode)
+    internal void SetVisibilityMode(GLTFDocument.VisibilityModeEnum visibilityMode)
     {
         var __mb = __mb_set_visibility_mode;
         if (__mb == 0)
@@ -2137,7 +2329,7 @@ public unsafe partial class GLTFDocument : Resource
     }
 
     private static nint __mb_get_visibility_mode;
-    public GLTFDocument.VisibilityMode GetVisibilityMode()
+    internal GLTFDocument.VisibilityModeEnum GetVisibilityMode()
     {
         var __mb = __mb_get_visibility_mode;
         if (__mb == 0)
@@ -2148,7 +2340,7 @@ public unsafe partial class GLTFDocument : Resource
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (GLTFDocument.VisibilityMode)__ret;
+        return (GLTFDocument.VisibilityModeEnum)__ret;
     }
 
     private static nint __mb_append_from_file;
@@ -2458,6 +2650,42 @@ public unsafe partial class GLTFLight : Resource
         ClassRegistry.AttachNew(this, "GLTFLight");
     }
 
+    public Color Color
+    {
+        get => GetColor();
+        set => SetColor(value);
+    }
+
+    public float Intensity
+    {
+        get => GetIntensity();
+        set => SetIntensity(value);
+    }
+
+    public string LightType
+    {
+        get => GetLightType();
+        set => SetLightType(value);
+    }
+
+    public float Range
+    {
+        get => GetRange();
+        set => SetRange(value);
+    }
+
+    public float InnerConeAngle
+    {
+        get => GetInnerConeAngle();
+        set => SetInnerConeAngle(value);
+    }
+
+    public float OuterConeAngle
+    {
+        get => GetOuterConeAngle();
+        set => SetOuterConeAngle(value);
+    }
+
     private static nint __mb_from_node;
     public static GLTFLight? FromNode(Light3D? lightNode)
     {
@@ -2525,7 +2753,7 @@ public unsafe partial class GLTFLight : Resource
     }
 
     private static nint __mb_get_color;
-    public Color GetColor()
+    internal Color GetColor()
     {
         var __mb = __mb_get_color;
         if (__mb == 0)
@@ -2540,7 +2768,7 @@ public unsafe partial class GLTFLight : Resource
     }
 
     private static nint __mb_set_color;
-    public void SetColor(Color color)
+    internal void SetColor(Color color)
     {
         var __mb = __mb_set_color;
         if (__mb == 0)
@@ -2556,7 +2784,7 @@ public unsafe partial class GLTFLight : Resource
     }
 
     private static nint __mb_get_intensity;
-    public float GetIntensity()
+    internal float GetIntensity()
     {
         var __mb = __mb_get_intensity;
         if (__mb == 0)
@@ -2571,7 +2799,7 @@ public unsafe partial class GLTFLight : Resource
     }
 
     private static nint __mb_set_intensity;
-    public void SetIntensity(float intensity)
+    internal void SetIntensity(float intensity)
     {
         var __mb = __mb_set_intensity;
         if (__mb == 0)
@@ -2587,7 +2815,7 @@ public unsafe partial class GLTFLight : Resource
     }
 
     private static nint __mb_get_light_type;
-    public string GetLightType()
+    internal string GetLightType()
     {
         var __mb = __mb_get_light_type;
         if (__mb == 0)
@@ -2602,7 +2830,7 @@ public unsafe partial class GLTFLight : Resource
     }
 
     private static nint __mb_set_light_type;
-    public void SetLightType(string lightType)
+    internal void SetLightType(string lightType)
     {
         var __mb = __mb_set_light_type;
         if (__mb == 0)
@@ -2619,7 +2847,7 @@ public unsafe partial class GLTFLight : Resource
     }
 
     private static nint __mb_get_range;
-    public float GetRange()
+    internal float GetRange()
     {
         var __mb = __mb_get_range;
         if (__mb == 0)
@@ -2634,7 +2862,7 @@ public unsafe partial class GLTFLight : Resource
     }
 
     private static nint __mb_set_range;
-    public void SetRange(float range)
+    internal void SetRange(float range)
     {
         var __mb = __mb_set_range;
         if (__mb == 0)
@@ -2650,7 +2878,7 @@ public unsafe partial class GLTFLight : Resource
     }
 
     private static nint __mb_get_inner_cone_angle;
-    public float GetInnerConeAngle()
+    internal float GetInnerConeAngle()
     {
         var __mb = __mb_get_inner_cone_angle;
         if (__mb == 0)
@@ -2665,7 +2893,7 @@ public unsafe partial class GLTFLight : Resource
     }
 
     private static nint __mb_set_inner_cone_angle;
-    public void SetInnerConeAngle(float innerConeAngle)
+    internal void SetInnerConeAngle(float innerConeAngle)
     {
         var __mb = __mb_set_inner_cone_angle;
         if (__mb == 0)
@@ -2681,7 +2909,7 @@ public unsafe partial class GLTFLight : Resource
     }
 
     private static nint __mb_get_outer_cone_angle;
-    public float GetOuterConeAngle()
+    internal float GetOuterConeAngle()
     {
         var __mb = __mb_get_outer_cone_angle;
         if (__mb == 0)
@@ -2696,7 +2924,7 @@ public unsafe partial class GLTFLight : Resource
     }
 
     private static nint __mb_set_outer_cone_angle;
-    public void SetOuterConeAngle(float outerConeAngle)
+    internal void SetOuterConeAngle(float outerConeAngle)
     {
         var __mb = __mb_set_outer_cone_angle;
         if (__mb == 0)
@@ -2757,8 +2985,26 @@ public unsafe partial class GLTFMesh : Resource
         ClassRegistry.AttachNew(this, "GLTFMesh");
     }
 
+    public string OriginalName
+    {
+        get => GetOriginalName();
+        set => SetOriginalName(value);
+    }
+
+    public ImporterMesh? Mesh
+    {
+        get => GetMesh();
+        set => SetMesh(value);
+    }
+
+    public Godot.Collections.Array InstanceMaterials
+    {
+        get => GetInstanceMaterials();
+        set => SetInstanceMaterials(value);
+    }
+
     private static nint __mb_get_original_name;
-    public string GetOriginalName()
+    internal string GetOriginalName()
     {
         var __mb = __mb_get_original_name;
         if (__mb == 0)
@@ -2773,7 +3019,7 @@ public unsafe partial class GLTFMesh : Resource
     }
 
     private static nint __mb_set_original_name;
-    public void SetOriginalName(string originalName)
+    internal void SetOriginalName(string originalName)
     {
         var __mb = __mb_set_original_name;
         if (__mb == 0)
@@ -2790,7 +3036,7 @@ public unsafe partial class GLTFMesh : Resource
     }
 
     private static nint __mb_get_mesh;
-    public ImporterMesh? GetMesh()
+    internal ImporterMesh? GetMesh()
     {
         var __mb = __mb_get_mesh;
         if (__mb == 0)
@@ -2805,7 +3051,7 @@ public unsafe partial class GLTFMesh : Resource
     }
 
     private static nint __mb_set_mesh;
-    public void SetMesh(ImporterMesh? mesh)
+    internal void SetMesh(ImporterMesh? mesh)
     {
         var __mb = __mb_set_mesh;
         if (__mb == 0)
@@ -2821,7 +3067,7 @@ public unsafe partial class GLTFMesh : Resource
     }
 
     private static nint __mb_get_instance_materials;
-    public Godot.Collections.Array GetInstanceMaterials()
+    internal Godot.Collections.Array GetInstanceMaterials()
     {
         var __mb = __mb_get_instance_materials;
         if (__mb == 0)
@@ -2836,7 +3082,7 @@ public unsafe partial class GLTFMesh : Resource
     }
 
     private static nint __mb_set_instance_materials;
-    public void SetInstanceMaterials(Godot.Collections.Array instanceMaterials)
+    internal void SetInstanceMaterials(Godot.Collections.Array instanceMaterials)
     {
         var __mb = __mb_set_instance_materials;
         if (__mb == 0)
@@ -2897,8 +3143,86 @@ public unsafe partial class GLTFNode : Resource
         ClassRegistry.AttachNew(this, "GLTFNode");
     }
 
+    public string OriginalName
+    {
+        get => GetOriginalName();
+        set => SetOriginalName(value);
+    }
+
+    public int Parent
+    {
+        get => GetParent();
+        set => SetParent(value);
+    }
+
+    public int Height
+    {
+        get => GetHeight();
+        set => SetHeight(value);
+    }
+
+    public Transform3D Xform
+    {
+        get => GetXform();
+        set => SetXform(value);
+    }
+
+    public int Mesh
+    {
+        get => GetMesh();
+        set => SetMesh(value);
+    }
+
+    public int Camera
+    {
+        get => GetCamera();
+        set => SetCamera(value);
+    }
+
+    public int Skin
+    {
+        get => GetSkin();
+        set => SetSkin(value);
+    }
+
+    public int Skeleton
+    {
+        get => GetSkeleton();
+        set => SetSkeleton(value);
+    }
+
+    public Vector3 Position
+    {
+        get => GetPosition();
+        set => SetPosition(value);
+    }
+
+    public Quaternion Rotation
+    {
+        get => GetRotation();
+        set => SetRotation(value);
+    }
+
+    public Vector3 Scale
+    {
+        get => GetScale();
+        set => SetScale(value);
+    }
+
+    public int Light
+    {
+        get => GetLight();
+        set => SetLight(value);
+    }
+
+    public bool Visible
+    {
+        get => GetVisible();
+        set => SetVisible(value);
+    }
+
     private static nint __mb_get_original_name;
-    public string GetOriginalName()
+    internal string GetOriginalName()
     {
         var __mb = __mb_get_original_name;
         if (__mb == 0)
@@ -2913,7 +3237,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_set_original_name;
-    public void SetOriginalName(string originalName)
+    internal void SetOriginalName(string originalName)
     {
         var __mb = __mb_set_original_name;
         if (__mb == 0)
@@ -2930,7 +3254,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_get_parent;
-    public int GetParent()
+    internal int GetParent()
     {
         var __mb = __mb_get_parent;
         if (__mb == 0)
@@ -2945,7 +3269,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_set_parent;
-    public void SetParent(int parent)
+    internal void SetParent(int parent)
     {
         var __mb = __mb_set_parent;
         if (__mb == 0)
@@ -2961,7 +3285,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_get_height;
-    public int GetHeight()
+    internal int GetHeight()
     {
         var __mb = __mb_get_height;
         if (__mb == 0)
@@ -2976,7 +3300,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_set_height;
-    public void SetHeight(int height)
+    internal void SetHeight(int height)
     {
         var __mb = __mb_set_height;
         if (__mb == 0)
@@ -2992,7 +3316,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_get_xform;
-    public Transform3D GetXform()
+    internal Transform3D GetXform()
     {
         var __mb = __mb_get_xform;
         if (__mb == 0)
@@ -3007,7 +3331,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_set_xform;
-    public void SetXform(Transform3D xform)
+    internal void SetXform(Transform3D xform)
     {
         var __mb = __mb_set_xform;
         if (__mb == 0)
@@ -3023,7 +3347,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_get_mesh;
-    public int GetMesh()
+    internal int GetMesh()
     {
         var __mb = __mb_get_mesh;
         if (__mb == 0)
@@ -3038,7 +3362,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_set_mesh;
-    public void SetMesh(int mesh)
+    internal void SetMesh(int mesh)
     {
         var __mb = __mb_set_mesh;
         if (__mb == 0)
@@ -3054,7 +3378,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_get_camera;
-    public int GetCamera()
+    internal int GetCamera()
     {
         var __mb = __mb_get_camera;
         if (__mb == 0)
@@ -3069,7 +3393,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_set_camera;
-    public void SetCamera(int camera)
+    internal void SetCamera(int camera)
     {
         var __mb = __mb_set_camera;
         if (__mb == 0)
@@ -3085,7 +3409,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_get_skin;
-    public int GetSkin()
+    internal int GetSkin()
     {
         var __mb = __mb_get_skin;
         if (__mb == 0)
@@ -3100,7 +3424,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_set_skin;
-    public void SetSkin(int skin)
+    internal void SetSkin(int skin)
     {
         var __mb = __mb_set_skin;
         if (__mb == 0)
@@ -3116,7 +3440,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_get_skeleton;
-    public int GetSkeleton()
+    internal int GetSkeleton()
     {
         var __mb = __mb_get_skeleton;
         if (__mb == 0)
@@ -3131,7 +3455,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_set_skeleton;
-    public void SetSkeleton(int skeleton)
+    internal void SetSkeleton(int skeleton)
     {
         var __mb = __mb_set_skeleton;
         if (__mb == 0)
@@ -3147,7 +3471,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_get_position;
-    public Vector3 GetPosition()
+    internal Vector3 GetPosition()
     {
         var __mb = __mb_get_position;
         if (__mb == 0)
@@ -3162,7 +3486,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_set_position;
-    public void SetPosition(Vector3 position)
+    internal void SetPosition(Vector3 position)
     {
         var __mb = __mb_set_position;
         if (__mb == 0)
@@ -3178,7 +3502,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_get_rotation;
-    public Quaternion GetRotation()
+    internal Quaternion GetRotation()
     {
         var __mb = __mb_get_rotation;
         if (__mb == 0)
@@ -3193,7 +3517,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_set_rotation;
-    public void SetRotation(Quaternion rotation)
+    internal void SetRotation(Quaternion rotation)
     {
         var __mb = __mb_set_rotation;
         if (__mb == 0)
@@ -3209,7 +3533,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_get_scale;
-    public Vector3 GetScale()
+    internal Vector3 GetScale()
     {
         var __mb = __mb_get_scale;
         if (__mb == 0)
@@ -3224,7 +3548,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_set_scale;
-    public void SetScale(Vector3 scale)
+    internal void SetScale(Vector3 scale)
     {
         var __mb = __mb_set_scale;
         if (__mb == 0)
@@ -3256,7 +3580,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_get_light;
-    public int GetLight()
+    internal int GetLight()
     {
         var __mb = __mb_get_light;
         if (__mb == 0)
@@ -3271,7 +3595,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_set_light;
-    public void SetLight(int light)
+    internal void SetLight(int light)
     {
         var __mb = __mb_set_light;
         if (__mb == 0)
@@ -3287,7 +3611,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_get_visible;
-    public bool GetVisible()
+    internal bool GetVisible()
     {
         var __mb = __mb_get_visible;
         if (__mb == 0)
@@ -3302,7 +3626,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_set_visible;
-    public void SetVisible(bool visible)
+    internal void SetVisible(bool visible)
     {
         var __mb = __mb_set_visible;
         if (__mb == 0)
@@ -3398,6 +3722,42 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
         GLTF_OBJECT_MODEL_TYPE_INT = 10,
     }
 
+    public Expression? GltfToGodotExpression
+    {
+        get => GetGltfToGodotExpression();
+        set => SetGltfToGodotExpression(value);
+    }
+
+    public Expression? GodotToGltfExpression
+    {
+        get => GetGodotToGltfExpression();
+        set => SetGodotToGltfExpression(value);
+    }
+
+    public Godot.Collections.Array NodePaths
+    {
+        get => GetNodePaths();
+        set => SetNodePaths(value);
+    }
+
+    public GLTFObjectModelProperty.GLTFObjectModelType ObjectModelType
+    {
+        get => GetObjectModelType();
+        set => SetObjectModelType(value);
+    }
+
+    public Godot.Collections.Array JsonPointers
+    {
+        get => GetJsonPointers();
+        set => SetJsonPointers(value);
+    }
+
+    public VariantType VariantType
+    {
+        get => GetVariantType();
+        set => SetVariantType(value);
+    }
+
     private static nint __mb_append_node_path;
     public void AppendNodePath(NodePath nodePath)
     {
@@ -3448,7 +3808,7 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
     }
 
     private static nint __mb_get_gltf_to_godot_expression;
-    public Expression? GetGltfToGodotExpression()
+    internal Expression? GetGltfToGodotExpression()
     {
         var __mb = __mb_get_gltf_to_godot_expression;
         if (__mb == 0)
@@ -3463,7 +3823,7 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
     }
 
     private static nint __mb_set_gltf_to_godot_expression;
-    public void SetGltfToGodotExpression(Expression? gltfToGodotExpr)
+    internal void SetGltfToGodotExpression(Expression? gltfToGodotExpr)
     {
         var __mb = __mb_set_gltf_to_godot_expression;
         if (__mb == 0)
@@ -3479,7 +3839,7 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
     }
 
     private static nint __mb_get_godot_to_gltf_expression;
-    public Expression? GetGodotToGltfExpression()
+    internal Expression? GetGodotToGltfExpression()
     {
         var __mb = __mb_get_godot_to_gltf_expression;
         if (__mb == 0)
@@ -3494,7 +3854,7 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
     }
 
     private static nint __mb_set_godot_to_gltf_expression;
-    public void SetGodotToGltfExpression(Expression? godotToGltfExpr)
+    internal void SetGodotToGltfExpression(Expression? godotToGltfExpr)
     {
         var __mb = __mb_set_godot_to_gltf_expression;
         if (__mb == 0)
@@ -3510,7 +3870,7 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
     }
 
     private static nint __mb_get_node_paths;
-    public Godot.Collections.Array GetNodePaths()
+    internal Godot.Collections.Array GetNodePaths()
     {
         var __mb = __mb_get_node_paths;
         if (__mb == 0)
@@ -3540,7 +3900,7 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
     }
 
     private static nint __mb_set_node_paths;
-    public void SetNodePaths(Godot.Collections.Array nodePaths)
+    internal void SetNodePaths(Godot.Collections.Array nodePaths)
     {
         var __mb = __mb_set_node_paths;
         if (__mb == 0)
@@ -3556,7 +3916,7 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
     }
 
     private static nint __mb_get_object_model_type;
-    public GLTFObjectModelProperty.GLTFObjectModelType GetObjectModelType()
+    internal GLTFObjectModelProperty.GLTFObjectModelType GetObjectModelType()
     {
         var __mb = __mb_get_object_model_type;
         if (__mb == 0)
@@ -3571,7 +3931,7 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
     }
 
     private static nint __mb_set_object_model_type;
-    public void SetObjectModelType(GLTFObjectModelProperty.GLTFObjectModelType type)
+    internal void SetObjectModelType(GLTFObjectModelProperty.GLTFObjectModelType type)
     {
         var __mb = __mb_set_object_model_type;
         if (__mb == 0)
@@ -3587,7 +3947,7 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
     }
 
     private static nint __mb_get_json_pointers;
-    public Godot.Collections.Array GetJsonPointers()
+    internal Godot.Collections.Array GetJsonPointers()
     {
         var __mb = __mb_get_json_pointers;
         if (__mb == 0)
@@ -3617,7 +3977,7 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
     }
 
     private static nint __mb_set_json_pointers;
-    public void SetJsonPointers(Godot.Collections.Array jsonPointers)
+    internal void SetJsonPointers(Godot.Collections.Array jsonPointers)
     {
         var __mb = __mb_set_json_pointers;
         if (__mb == 0)
@@ -3633,7 +3993,7 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
     }
 
     private static nint __mb_get_variant_type;
-    public VariantType GetVariantType()
+    internal VariantType GetVariantType()
     {
         var __mb = __mb_get_variant_type;
         if (__mb == 0)
@@ -3648,7 +4008,7 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
     }
 
     private static nint __mb_set_variant_type;
-    public void SetVariantType(VariantType variantType)
+    internal void SetVariantType(VariantType variantType)
     {
         var __mb = __mb_set_variant_type;
         if (__mb == 0)
@@ -3689,6 +4049,54 @@ public unsafe partial class GLTFPhysicsBody : Resource
     public GLTFPhysicsBody() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "GLTFPhysicsBody");
+    }
+
+    public string BodyType
+    {
+        get => GetBodyType();
+        set => SetBodyType(value);
+    }
+
+    public float Mass
+    {
+        get => GetMass();
+        set => SetMass(value);
+    }
+
+    public Vector3 LinearVelocity
+    {
+        get => GetLinearVelocity();
+        set => SetLinearVelocity(value);
+    }
+
+    public Vector3 AngularVelocity
+    {
+        get => GetAngularVelocity();
+        set => SetAngularVelocity(value);
+    }
+
+    public Vector3 CenterOfMass
+    {
+        get => GetCenterOfMass();
+        set => SetCenterOfMass(value);
+    }
+
+    public Vector3 InertiaDiagonal
+    {
+        get => GetInertiaDiagonal();
+        set => SetInertiaDiagonal(value);
+    }
+
+    public Quaternion InertiaOrientation
+    {
+        get => GetInertiaOrientation();
+        set => SetInertiaOrientation(value);
+    }
+
+    public Basis InertiaTensor
+    {
+        get => GetInertiaTensor();
+        set => SetInertiaTensor(value);
     }
 
     private static nint __mb_from_node;
@@ -3758,7 +4166,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_get_body_type;
-    public string GetBodyType()
+    internal string GetBodyType()
     {
         var __mb = __mb_get_body_type;
         if (__mb == 0)
@@ -3773,7 +4181,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_set_body_type;
-    public void SetBodyType(string bodyType)
+    internal void SetBodyType(string bodyType)
     {
         var __mb = __mb_set_body_type;
         if (__mb == 0)
@@ -3790,7 +4198,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_get_mass;
-    public float GetMass()
+    internal float GetMass()
     {
         var __mb = __mb_get_mass;
         if (__mb == 0)
@@ -3805,7 +4213,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_set_mass;
-    public void SetMass(float mass)
+    internal void SetMass(float mass)
     {
         var __mb = __mb_set_mass;
         if (__mb == 0)
@@ -3821,7 +4229,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_get_linear_velocity;
-    public Vector3 GetLinearVelocity()
+    internal Vector3 GetLinearVelocity()
     {
         var __mb = __mb_get_linear_velocity;
         if (__mb == 0)
@@ -3836,7 +4244,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_set_linear_velocity;
-    public void SetLinearVelocity(Vector3 linearVelocity)
+    internal void SetLinearVelocity(Vector3 linearVelocity)
     {
         var __mb = __mb_set_linear_velocity;
         if (__mb == 0)
@@ -3852,7 +4260,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_get_angular_velocity;
-    public Vector3 GetAngularVelocity()
+    internal Vector3 GetAngularVelocity()
     {
         var __mb = __mb_get_angular_velocity;
         if (__mb == 0)
@@ -3867,7 +4275,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_set_angular_velocity;
-    public void SetAngularVelocity(Vector3 angularVelocity)
+    internal void SetAngularVelocity(Vector3 angularVelocity)
     {
         var __mb = __mb_set_angular_velocity;
         if (__mb == 0)
@@ -3883,7 +4291,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_get_center_of_mass;
-    public Vector3 GetCenterOfMass()
+    internal Vector3 GetCenterOfMass()
     {
         var __mb = __mb_get_center_of_mass;
         if (__mb == 0)
@@ -3898,7 +4306,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_set_center_of_mass;
-    public void SetCenterOfMass(Vector3 centerOfMass)
+    internal void SetCenterOfMass(Vector3 centerOfMass)
     {
         var __mb = __mb_set_center_of_mass;
         if (__mb == 0)
@@ -3914,7 +4322,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_get_inertia_diagonal;
-    public Vector3 GetInertiaDiagonal()
+    internal Vector3 GetInertiaDiagonal()
     {
         var __mb = __mb_get_inertia_diagonal;
         if (__mb == 0)
@@ -3929,7 +4337,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_set_inertia_diagonal;
-    public void SetInertiaDiagonal(Vector3 inertiaDiagonal)
+    internal void SetInertiaDiagonal(Vector3 inertiaDiagonal)
     {
         var __mb = __mb_set_inertia_diagonal;
         if (__mb == 0)
@@ -3945,7 +4353,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_get_inertia_orientation;
-    public Quaternion GetInertiaOrientation()
+    internal Quaternion GetInertiaOrientation()
     {
         var __mb = __mb_get_inertia_orientation;
         if (__mb == 0)
@@ -3960,7 +4368,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_set_inertia_orientation;
-    public void SetInertiaOrientation(Quaternion inertiaOrientation)
+    internal void SetInertiaOrientation(Quaternion inertiaOrientation)
     {
         var __mb = __mb_set_inertia_orientation;
         if (__mb == 0)
@@ -3976,7 +4384,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_get_inertia_tensor;
-    public Basis GetInertiaTensor()
+    internal Basis GetInertiaTensor()
     {
         var __mb = __mb_get_inertia_tensor;
         if (__mb == 0)
@@ -3991,7 +4399,7 @@ public unsafe partial class GLTFPhysicsBody : Resource
     }
 
     private static nint __mb_set_inertia_tensor;
-    public void SetInertiaTensor(Basis inertiaTensor)
+    internal void SetInertiaTensor(Basis inertiaTensor)
     {
         var __mb = __mb_set_inertia_tensor;
         if (__mb == 0)
@@ -4014,6 +4422,48 @@ public unsafe partial class GLTFPhysicsShape : Resource
     public GLTFPhysicsShape() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "GLTFPhysicsShape");
+    }
+
+    public string ShapeType
+    {
+        get => GetShapeType();
+        set => SetShapeType(value);
+    }
+
+    public Vector3 Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
+    public float Radius
+    {
+        get => GetRadius();
+        set => SetRadius(value);
+    }
+
+    public float Height
+    {
+        get => GetHeight();
+        set => SetHeight(value);
+    }
+
+    public bool IsTrigger
+    {
+        get => GetIsTrigger();
+        set => SetIsTrigger(value);
+    }
+
+    public int MeshIndex
+    {
+        get => GetMeshIndex();
+        set => SetMeshIndex(value);
+    }
+
+    public ImporterMesh? ImporterMesh
+    {
+        get => GetImporterMesh();
+        set => SetImporterMesh(value);
     }
 
     private static nint __mb_from_node;
@@ -4122,7 +4572,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_get_shape_type;
-    public string GetShapeType()
+    internal string GetShapeType()
     {
         var __mb = __mb_get_shape_type;
         if (__mb == 0)
@@ -4137,7 +4587,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_set_shape_type;
-    public void SetShapeType(string shapeType)
+    internal void SetShapeType(string shapeType)
     {
         var __mb = __mb_set_shape_type;
         if (__mb == 0)
@@ -4154,7 +4604,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_get_size;
-    public Vector3 GetSize()
+    internal Vector3 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -4169,7 +4619,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_set_size;
-    public void SetSize(Vector3 size)
+    internal void SetSize(Vector3 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -4185,7 +4635,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_get_radius;
-    public float GetRadius()
+    internal float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -4200,7 +4650,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_set_radius;
-    public void SetRadius(float radius)
+    internal void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -4216,7 +4666,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_get_height;
-    public float GetHeight()
+    internal float GetHeight()
     {
         var __mb = __mb_get_height;
         if (__mb == 0)
@@ -4231,7 +4681,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_set_height;
-    public void SetHeight(float height)
+    internal void SetHeight(float height)
     {
         var __mb = __mb_set_height;
         if (__mb == 0)
@@ -4247,7 +4697,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_get_is_trigger;
-    public bool GetIsTrigger()
+    internal bool GetIsTrigger()
     {
         var __mb = __mb_get_is_trigger;
         if (__mb == 0)
@@ -4262,7 +4712,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_set_is_trigger;
-    public void SetIsTrigger(bool isTrigger)
+    internal void SetIsTrigger(bool isTrigger)
     {
         var __mb = __mb_set_is_trigger;
         if (__mb == 0)
@@ -4278,7 +4728,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_get_mesh_index;
-    public int GetMeshIndex()
+    internal int GetMeshIndex()
     {
         var __mb = __mb_get_mesh_index;
         if (__mb == 0)
@@ -4293,7 +4743,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_set_mesh_index;
-    public void SetMeshIndex(int meshIndex)
+    internal void SetMeshIndex(int meshIndex)
     {
         var __mb = __mb_set_mesh_index;
         if (__mb == 0)
@@ -4309,7 +4759,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_get_importer_mesh;
-    public ImporterMesh? GetImporterMesh()
+    internal ImporterMesh? GetImporterMesh()
     {
         var __mb = __mb_get_importer_mesh;
         if (__mb == 0)
@@ -4324,7 +4774,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_set_importer_mesh;
-    public void SetImporterMesh(ImporterMesh? importerMesh)
+    internal void SetImporterMesh(ImporterMesh? importerMesh)
     {
         var __mb = __mb_set_importer_mesh;
         if (__mb == 0)
@@ -4349,6 +4799,18 @@ public unsafe partial class GLTFSkeleton : Resource
         ClassRegistry.AttachNew(this, "GLTFSkeleton");
     }
 
+    public Godot.Collections.Array UniqueNames
+    {
+        get => GetUniqueNames();
+        set => SetUniqueNames(value);
+    }
+
+    public Godot.Collections.Dictionary GodotBoneNode
+    {
+        get => GetGodotBoneNode();
+        set => SetGodotBoneNode(value);
+    }
+
     private static nint __mb_get_godot_skeleton;
     public Skeleton3D? GetGodotSkeleton()
     {
@@ -4365,7 +4827,7 @@ public unsafe partial class GLTFSkeleton : Resource
     }
 
     private static nint __mb_get_unique_names;
-    public Godot.Collections.Array GetUniqueNames()
+    internal Godot.Collections.Array GetUniqueNames()
     {
         var __mb = __mb_get_unique_names;
         if (__mb == 0)
@@ -4380,7 +4842,7 @@ public unsafe partial class GLTFSkeleton : Resource
     }
 
     private static nint __mb_set_unique_names;
-    public void SetUniqueNames(Godot.Collections.Array uniqueNames)
+    internal void SetUniqueNames(Godot.Collections.Array uniqueNames)
     {
         var __mb = __mb_set_unique_names;
         if (__mb == 0)
@@ -4396,7 +4858,7 @@ public unsafe partial class GLTFSkeleton : Resource
     }
 
     private static nint __mb_get_godot_bone_node;
-    public Godot.Collections.Dictionary GetGodotBoneNode()
+    internal Godot.Collections.Dictionary GetGodotBoneNode()
     {
         var __mb = __mb_get_godot_bone_node;
         if (__mb == 0)
@@ -4411,7 +4873,7 @@ public unsafe partial class GLTFSkeleton : Resource
     }
 
     private static nint __mb_set_godot_bone_node;
-    public void SetGodotBoneNode(Godot.Collections.Dictionary godotBoneNode)
+    internal void SetGodotBoneNode(Godot.Collections.Dictionary godotBoneNode)
     {
         var __mb = __mb_set_godot_bone_node;
         if (__mb == 0)
@@ -4469,8 +4931,44 @@ public unsafe partial class GLTFSkin : Resource
         ClassRegistry.AttachNew(this, "GLTFSkin");
     }
 
+    public int SkinRoot
+    {
+        get => GetSkinRoot();
+        set => SetSkinRoot(value);
+    }
+
+    public Godot.Collections.Array InverseBinds
+    {
+        get => GetInverseBinds();
+        set => SetInverseBinds(value);
+    }
+
+    public int Skeleton
+    {
+        get => GetSkeleton();
+        set => SetSkeleton(value);
+    }
+
+    public Godot.Collections.Dictionary JointIToBoneI
+    {
+        get => GetJointIToBoneI();
+        set => SetJointIToBoneI(value);
+    }
+
+    public Godot.Collections.Dictionary JointIToName
+    {
+        get => GetJointIToName();
+        set => SetJointIToName(value);
+    }
+
+    public Skin? GodotSkin
+    {
+        get => GetGodotSkin();
+        set => SetGodotSkin(value);
+    }
+
     private static nint __mb_get_skin_root;
-    public int GetSkinRoot()
+    internal int GetSkinRoot()
     {
         var __mb = __mb_get_skin_root;
         if (__mb == 0)
@@ -4485,7 +4983,7 @@ public unsafe partial class GLTFSkin : Resource
     }
 
     private static nint __mb_set_skin_root;
-    public void SetSkinRoot(int skinRoot)
+    internal void SetSkinRoot(int skinRoot)
     {
         var __mb = __mb_set_skin_root;
         if (__mb == 0)
@@ -4501,7 +4999,7 @@ public unsafe partial class GLTFSkin : Resource
     }
 
     private static nint __mb_get_inverse_binds;
-    public Godot.Collections.Array GetInverseBinds()
+    internal Godot.Collections.Array GetInverseBinds()
     {
         var __mb = __mb_get_inverse_binds;
         if (__mb == 0)
@@ -4516,7 +5014,7 @@ public unsafe partial class GLTFSkin : Resource
     }
 
     private static nint __mb_set_inverse_binds;
-    public void SetInverseBinds(Godot.Collections.Array inverseBinds)
+    internal void SetInverseBinds(Godot.Collections.Array inverseBinds)
     {
         var __mb = __mb_set_inverse_binds;
         if (__mb == 0)
@@ -4532,7 +5030,7 @@ public unsafe partial class GLTFSkin : Resource
     }
 
     private static nint __mb_get_skeleton;
-    public int GetSkeleton()
+    internal int GetSkeleton()
     {
         var __mb = __mb_get_skeleton;
         if (__mb == 0)
@@ -4547,7 +5045,7 @@ public unsafe partial class GLTFSkin : Resource
     }
 
     private static nint __mb_set_skeleton;
-    public void SetSkeleton(int skeleton)
+    internal void SetSkeleton(int skeleton)
     {
         var __mb = __mb_set_skeleton;
         if (__mb == 0)
@@ -4563,7 +5061,7 @@ public unsafe partial class GLTFSkin : Resource
     }
 
     private static nint __mb_get_joint_i_to_bone_i;
-    public Godot.Collections.Dictionary GetJointIToBoneI()
+    internal Godot.Collections.Dictionary GetJointIToBoneI()
     {
         var __mb = __mb_get_joint_i_to_bone_i;
         if (__mb == 0)
@@ -4578,7 +5076,7 @@ public unsafe partial class GLTFSkin : Resource
     }
 
     private static nint __mb_set_joint_i_to_bone_i;
-    public void SetJointIToBoneI(Godot.Collections.Dictionary jointIToBoneI)
+    internal void SetJointIToBoneI(Godot.Collections.Dictionary jointIToBoneI)
     {
         var __mb = __mb_set_joint_i_to_bone_i;
         if (__mb == 0)
@@ -4594,7 +5092,7 @@ public unsafe partial class GLTFSkin : Resource
     }
 
     private static nint __mb_get_joint_i_to_name;
-    public Godot.Collections.Dictionary GetJointIToName()
+    internal Godot.Collections.Dictionary GetJointIToName()
     {
         var __mb = __mb_get_joint_i_to_name;
         if (__mb == 0)
@@ -4609,7 +5107,7 @@ public unsafe partial class GLTFSkin : Resource
     }
 
     private static nint __mb_set_joint_i_to_name;
-    public void SetJointIToName(Godot.Collections.Dictionary jointIToName)
+    internal void SetJointIToName(Godot.Collections.Dictionary jointIToName)
     {
         var __mb = __mb_set_joint_i_to_name;
         if (__mb == 0)
@@ -4625,7 +5123,7 @@ public unsafe partial class GLTFSkin : Resource
     }
 
     private static nint __mb_get_godot_skin;
-    public Skin? GetGodotSkin()
+    internal Skin? GetGodotSkin()
     {
         var __mb = __mb_get_godot_skin;
         if (__mb == 0)
@@ -4640,7 +5138,7 @@ public unsafe partial class GLTFSkin : Resource
     }
 
     private static nint __mb_set_godot_skin;
-    public void SetGodotSkin(Skin? godotSkin)
+    internal void SetGodotSkin(Skin? godotSkin)
     {
         var __mb = __mb_set_godot_skin;
         if (__mb == 0)
@@ -4665,8 +5163,38 @@ public unsafe partial class GLTFSpecGloss : Resource
         ClassRegistry.AttachNew(this, "GLTFSpecGloss");
     }
 
+    public Image? DiffuseImg
+    {
+        get => GetDiffuseImg();
+        set => SetDiffuseImg(value);
+    }
+
+    public Color DiffuseFactor
+    {
+        get => GetDiffuseFactor();
+        set => SetDiffuseFactor(value);
+    }
+
+    public float GlossFactor
+    {
+        get => GetGlossFactor();
+        set => SetGlossFactor(value);
+    }
+
+    public Color SpecularFactor
+    {
+        get => GetSpecularFactor();
+        set => SetSpecularFactor(value);
+    }
+
+    public Image? SpecGlossImg
+    {
+        get => GetSpecGlossImg();
+        set => SetSpecGlossImg(value);
+    }
+
     private static nint __mb_get_diffuse_img;
-    public Image? GetDiffuseImg()
+    internal Image? GetDiffuseImg()
     {
         var __mb = __mb_get_diffuse_img;
         if (__mb == 0)
@@ -4681,7 +5209,7 @@ public unsafe partial class GLTFSpecGloss : Resource
     }
 
     private static nint __mb_set_diffuse_img;
-    public void SetDiffuseImg(Image? diffuseImg)
+    internal void SetDiffuseImg(Image? diffuseImg)
     {
         var __mb = __mb_set_diffuse_img;
         if (__mb == 0)
@@ -4697,7 +5225,7 @@ public unsafe partial class GLTFSpecGloss : Resource
     }
 
     private static nint __mb_get_diffuse_factor;
-    public Color GetDiffuseFactor()
+    internal Color GetDiffuseFactor()
     {
         var __mb = __mb_get_diffuse_factor;
         if (__mb == 0)
@@ -4712,7 +5240,7 @@ public unsafe partial class GLTFSpecGloss : Resource
     }
 
     private static nint __mb_set_diffuse_factor;
-    public void SetDiffuseFactor(Color diffuseFactor)
+    internal void SetDiffuseFactor(Color diffuseFactor)
     {
         var __mb = __mb_set_diffuse_factor;
         if (__mb == 0)
@@ -4728,7 +5256,7 @@ public unsafe partial class GLTFSpecGloss : Resource
     }
 
     private static nint __mb_get_gloss_factor;
-    public float GetGlossFactor()
+    internal float GetGlossFactor()
     {
         var __mb = __mb_get_gloss_factor;
         if (__mb == 0)
@@ -4743,7 +5271,7 @@ public unsafe partial class GLTFSpecGloss : Resource
     }
 
     private static nint __mb_set_gloss_factor;
-    public void SetGlossFactor(float glossFactor)
+    internal void SetGlossFactor(float glossFactor)
     {
         var __mb = __mb_set_gloss_factor;
         if (__mb == 0)
@@ -4759,7 +5287,7 @@ public unsafe partial class GLTFSpecGloss : Resource
     }
 
     private static nint __mb_get_specular_factor;
-    public Color GetSpecularFactor()
+    internal Color GetSpecularFactor()
     {
         var __mb = __mb_get_specular_factor;
         if (__mb == 0)
@@ -4774,7 +5302,7 @@ public unsafe partial class GLTFSpecGloss : Resource
     }
 
     private static nint __mb_set_specular_factor;
-    public void SetSpecularFactor(Color specularFactor)
+    internal void SetSpecularFactor(Color specularFactor)
     {
         var __mb = __mb_set_specular_factor;
         if (__mb == 0)
@@ -4790,7 +5318,7 @@ public unsafe partial class GLTFSpecGloss : Resource
     }
 
     private static nint __mb_get_spec_gloss_img;
-    public Image? GetSpecGlossImg()
+    internal Image? GetSpecGlossImg()
     {
         var __mb = __mb_get_spec_gloss_img;
         if (__mb == 0)
@@ -4805,7 +5333,7 @@ public unsafe partial class GLTFSpecGloss : Resource
     }
 
     private static nint __mb_set_spec_gloss_img;
-    public void SetSpecGlossImg(Image? specGlossImg)
+    internal void SetSpecGlossImg(Image? specGlossImg)
     {
         var __mb = __mb_set_spec_gloss_img;
         if (__mb == 0)
@@ -4830,12 +5358,186 @@ public unsafe partial class GLTFState : Resource
         ClassRegistry.AttachNew(this, "GLTFState");
     }
 
-    public enum HandleBinaryImageMode : long
+    public enum HandleBinaryImageModeEnum : long
     {
         HANDLE_BINARY_IMAGE_MODE_DISCARD_TEXTURES = 0,
         HANDLE_BINARY_IMAGE_MODE_EXTRACT_TEXTURES = 1,
         HANDLE_BINARY_IMAGE_MODE_EMBED_AS_BASISU = 2,
         HANDLE_BINARY_IMAGE_MODE_EMBED_AS_UNCOMPRESSED = 3,
+    }
+
+    public Godot.Collections.Dictionary Json
+    {
+        get => GetJson();
+        set => SetJson(value);
+    }
+
+    public int MajorVersion
+    {
+        get => GetMajorVersion();
+        set => SetMajorVersion(value);
+    }
+
+    public int MinorVersion
+    {
+        get => GetMinorVersion();
+        set => SetMinorVersion(value);
+    }
+
+    public string Copyright
+    {
+        get => GetCopyright();
+        set => SetCopyright(value);
+    }
+
+    public bool UseNamedSkinBinds
+    {
+        get => GetUseNamedSkinBinds();
+        set => SetUseNamedSkinBinds(value);
+    }
+
+    public Godot.Collections.Array Nodes
+    {
+        get => GetNodes();
+        set => SetNodes(value);
+    }
+
+    public Godot.Collections.Array Buffers
+    {
+        get => GetBuffers();
+        set => SetBuffers(value);
+    }
+
+    public Godot.Collections.Array BufferViews
+    {
+        get => GetBufferViews();
+        set => SetBufferViews(value);
+    }
+
+    public Godot.Collections.Array Accessors
+    {
+        get => GetAccessors();
+        set => SetAccessors(value);
+    }
+
+    public Godot.Collections.Array Meshes
+    {
+        get => GetMeshes();
+        set => SetMeshes(value);
+    }
+
+    public Godot.Collections.Array Materials
+    {
+        get => GetMaterials();
+        set => SetMaterials(value);
+    }
+
+    public string SceneName
+    {
+        get => GetSceneName();
+        set => SetSceneName(value);
+    }
+
+    public string BasePath
+    {
+        get => GetBasePath();
+        set => SetBasePath(value);
+    }
+
+    public string Filename
+    {
+        get => GetFilename();
+        set => SetFilename(value);
+    }
+
+    public Godot.Collections.Array Textures
+    {
+        get => GetTextures();
+        set => SetTextures(value);
+    }
+
+    public Godot.Collections.Array TextureSamplers
+    {
+        get => GetTextureSamplers();
+        set => SetTextureSamplers(value);
+    }
+
+    public Godot.Collections.Array Images
+    {
+        get => GetImages();
+        set => SetImages(value);
+    }
+
+    public Godot.Collections.Array Skins
+    {
+        get => GetSkins();
+        set => SetSkins(value);
+    }
+
+    public Godot.Collections.Array Cameras
+    {
+        get => GetCameras();
+        set => SetCameras(value);
+    }
+
+    public Godot.Collections.Array Lights
+    {
+        get => GetLights();
+        set => SetLights(value);
+    }
+
+    public Godot.Collections.Array UniqueNames
+    {
+        get => GetUniqueNames();
+        set => SetUniqueNames(value);
+    }
+
+    public Godot.Collections.Array UniqueAnimationNames
+    {
+        get => GetUniqueAnimationNames();
+        set => SetUniqueAnimationNames(value);
+    }
+
+    public Godot.Collections.Array Skeletons
+    {
+        get => GetSkeletons();
+        set => SetSkeletons(value);
+    }
+
+    public bool CreateAnimations
+    {
+        get => GetCreateAnimations();
+        set => SetCreateAnimations(value);
+    }
+
+    public bool ImportAsSkeletonBones
+    {
+        get => GetImportAsSkeletonBones();
+        set => SetImportAsSkeletonBones(value);
+    }
+
+    public Godot.Collections.Array Animations
+    {
+        get => GetAnimations();
+        set => SetAnimations(value);
+    }
+
+    public GLTFState.HandleBinaryImageModeEnum HandleBinaryImageMode
+    {
+        get => GetHandleBinaryImageMode();
+        set => SetHandleBinaryImageMode(value);
+    }
+
+    public double BakeFps
+    {
+        get => GetBakeFps();
+        set => SetBakeFps(value);
+    }
+
+    public int HandleBinaryImage
+    {
+        get => GetHandleBinaryImage();
+        set => SetHandleBinaryImage(value);
     }
 
     private static nint __mb_add_used_extension;
@@ -4880,7 +5582,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_json;
-    public Godot.Collections.Dictionary GetJson()
+    internal Godot.Collections.Dictionary GetJson()
     {
         var __mb = __mb_get_json;
         if (__mb == 0)
@@ -4895,7 +5597,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_json;
-    public void SetJson(Godot.Collections.Dictionary json)
+    internal void SetJson(Godot.Collections.Dictionary json)
     {
         var __mb = __mb_set_json;
         if (__mb == 0)
@@ -4911,7 +5613,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_major_version;
-    public int GetMajorVersion()
+    internal int GetMajorVersion()
     {
         var __mb = __mb_get_major_version;
         if (__mb == 0)
@@ -4926,7 +5628,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_major_version;
-    public void SetMajorVersion(int majorVersion)
+    internal void SetMajorVersion(int majorVersion)
     {
         var __mb = __mb_set_major_version;
         if (__mb == 0)
@@ -4942,7 +5644,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_minor_version;
-    public int GetMinorVersion()
+    internal int GetMinorVersion()
     {
         var __mb = __mb_get_minor_version;
         if (__mb == 0)
@@ -4957,7 +5659,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_minor_version;
-    public void SetMinorVersion(int minorVersion)
+    internal void SetMinorVersion(int minorVersion)
     {
         var __mb = __mb_set_minor_version;
         if (__mb == 0)
@@ -4973,7 +5675,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_copyright;
-    public string GetCopyright()
+    internal string GetCopyright()
     {
         var __mb = __mb_get_copyright;
         if (__mb == 0)
@@ -4988,7 +5690,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_copyright;
-    public void SetCopyright(string copyright)
+    internal void SetCopyright(string copyright)
     {
         var __mb = __mb_set_copyright;
         if (__mb == 0)
@@ -5005,7 +5707,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_use_named_skin_binds;
-    public bool GetUseNamedSkinBinds()
+    internal bool GetUseNamedSkinBinds()
     {
         var __mb = __mb_get_use_named_skin_binds;
         if (__mb == 0)
@@ -5020,7 +5722,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_use_named_skin_binds;
-    public void SetUseNamedSkinBinds(bool useNamedSkinBinds)
+    internal void SetUseNamedSkinBinds(bool useNamedSkinBinds)
     {
         var __mb = __mb_set_use_named_skin_binds;
         if (__mb == 0)
@@ -5036,7 +5738,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_nodes;
-    public Godot.Collections.Array GetNodes()
+    internal Godot.Collections.Array GetNodes()
     {
         var __mb = __mb_get_nodes;
         if (__mb == 0)
@@ -5051,7 +5753,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_nodes;
-    public void SetNodes(Godot.Collections.Array nodes)
+    internal void SetNodes(Godot.Collections.Array nodes)
     {
         var __mb = __mb_set_nodes;
         if (__mb == 0)
@@ -5067,7 +5769,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_buffers;
-    public Godot.Collections.Array GetBuffers()
+    internal Godot.Collections.Array GetBuffers()
     {
         var __mb = __mb_get_buffers;
         if (__mb == 0)
@@ -5082,7 +5784,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_buffers;
-    public void SetBuffers(Godot.Collections.Array buffers)
+    internal void SetBuffers(Godot.Collections.Array buffers)
     {
         var __mb = __mb_set_buffers;
         if (__mb == 0)
@@ -5098,7 +5800,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_buffer_views;
-    public Godot.Collections.Array GetBufferViews()
+    internal Godot.Collections.Array GetBufferViews()
     {
         var __mb = __mb_get_buffer_views;
         if (__mb == 0)
@@ -5113,7 +5815,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_buffer_views;
-    public void SetBufferViews(Godot.Collections.Array bufferViews)
+    internal void SetBufferViews(Godot.Collections.Array bufferViews)
     {
         var __mb = __mb_set_buffer_views;
         if (__mb == 0)
@@ -5129,7 +5831,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_accessors;
-    public Godot.Collections.Array GetAccessors()
+    internal Godot.Collections.Array GetAccessors()
     {
         var __mb = __mb_get_accessors;
         if (__mb == 0)
@@ -5144,7 +5846,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_accessors;
-    public void SetAccessors(Godot.Collections.Array accessors)
+    internal void SetAccessors(Godot.Collections.Array accessors)
     {
         var __mb = __mb_set_accessors;
         if (__mb == 0)
@@ -5160,7 +5862,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_meshes;
-    public Godot.Collections.Array GetMeshes()
+    internal Godot.Collections.Array GetMeshes()
     {
         var __mb = __mb_get_meshes;
         if (__mb == 0)
@@ -5175,7 +5877,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_meshes;
-    public void SetMeshes(Godot.Collections.Array meshes)
+    internal void SetMeshes(Godot.Collections.Array meshes)
     {
         var __mb = __mb_set_meshes;
         if (__mb == 0)
@@ -5227,7 +5929,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_materials;
-    public Godot.Collections.Array GetMaterials()
+    internal Godot.Collections.Array GetMaterials()
     {
         var __mb = __mb_get_materials;
         if (__mb == 0)
@@ -5242,7 +5944,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_materials;
-    public void SetMaterials(Godot.Collections.Array materials)
+    internal void SetMaterials(Godot.Collections.Array materials)
     {
         var __mb = __mb_set_materials;
         if (__mb == 0)
@@ -5258,7 +5960,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_scene_name;
-    public string GetSceneName()
+    internal string GetSceneName()
     {
         var __mb = __mb_get_scene_name;
         if (__mb == 0)
@@ -5273,7 +5975,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_scene_name;
-    public void SetSceneName(string sceneName)
+    internal void SetSceneName(string sceneName)
     {
         var __mb = __mb_set_scene_name;
         if (__mb == 0)
@@ -5290,7 +5992,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_base_path;
-    public string GetBasePath()
+    internal string GetBasePath()
     {
         var __mb = __mb_get_base_path;
         if (__mb == 0)
@@ -5305,7 +6007,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_base_path;
-    public void SetBasePath(string basePath)
+    internal void SetBasePath(string basePath)
     {
         var __mb = __mb_set_base_path;
         if (__mb == 0)
@@ -5322,7 +6024,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_filename;
-    public string GetFilename()
+    internal string GetFilename()
     {
         var __mb = __mb_get_filename;
         if (__mb == 0)
@@ -5337,7 +6039,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_filename;
-    public void SetFilename(string filename)
+    internal void SetFilename(string filename)
     {
         var __mb = __mb_set_filename;
         if (__mb == 0)
@@ -5354,7 +6056,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_textures;
-    public Godot.Collections.Array GetTextures()
+    internal Godot.Collections.Array GetTextures()
     {
         var __mb = __mb_get_textures;
         if (__mb == 0)
@@ -5369,7 +6071,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_textures;
-    public void SetTextures(Godot.Collections.Array textures)
+    internal void SetTextures(Godot.Collections.Array textures)
     {
         var __mb = __mb_set_textures;
         if (__mb == 0)
@@ -5385,7 +6087,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_texture_samplers;
-    public Godot.Collections.Array GetTextureSamplers()
+    internal Godot.Collections.Array GetTextureSamplers()
     {
         var __mb = __mb_get_texture_samplers;
         if (__mb == 0)
@@ -5400,7 +6102,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_texture_samplers;
-    public void SetTextureSamplers(Godot.Collections.Array textureSamplers)
+    internal void SetTextureSamplers(Godot.Collections.Array textureSamplers)
     {
         var __mb = __mb_set_texture_samplers;
         if (__mb == 0)
@@ -5416,7 +6118,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_images;
-    public Godot.Collections.Array GetImages()
+    internal Godot.Collections.Array GetImages()
     {
         var __mb = __mb_get_images;
         if (__mb == 0)
@@ -5431,7 +6133,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_images;
-    public void SetImages(Godot.Collections.Array images)
+    internal void SetImages(Godot.Collections.Array images)
     {
         var __mb = __mb_set_images;
         if (__mb == 0)
@@ -5447,7 +6149,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_skins;
-    public Godot.Collections.Array GetSkins()
+    internal Godot.Collections.Array GetSkins()
     {
         var __mb = __mb_get_skins;
         if (__mb == 0)
@@ -5462,7 +6164,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_skins;
-    public void SetSkins(Godot.Collections.Array skins)
+    internal void SetSkins(Godot.Collections.Array skins)
     {
         var __mb = __mb_set_skins;
         if (__mb == 0)
@@ -5478,7 +6180,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_cameras;
-    public Godot.Collections.Array GetCameras()
+    internal Godot.Collections.Array GetCameras()
     {
         var __mb = __mb_get_cameras;
         if (__mb == 0)
@@ -5493,7 +6195,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_cameras;
-    public void SetCameras(Godot.Collections.Array cameras)
+    internal void SetCameras(Godot.Collections.Array cameras)
     {
         var __mb = __mb_set_cameras;
         if (__mb == 0)
@@ -5509,7 +6211,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_lights;
-    public Godot.Collections.Array GetLights()
+    internal Godot.Collections.Array GetLights()
     {
         var __mb = __mb_get_lights;
         if (__mb == 0)
@@ -5524,7 +6226,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_lights;
-    public void SetLights(Godot.Collections.Array lights)
+    internal void SetLights(Godot.Collections.Array lights)
     {
         var __mb = __mb_set_lights;
         if (__mb == 0)
@@ -5540,7 +6242,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_unique_names;
-    public Godot.Collections.Array GetUniqueNames()
+    internal Godot.Collections.Array GetUniqueNames()
     {
         var __mb = __mb_get_unique_names;
         if (__mb == 0)
@@ -5555,7 +6257,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_unique_names;
-    public void SetUniqueNames(Godot.Collections.Array uniqueNames)
+    internal void SetUniqueNames(Godot.Collections.Array uniqueNames)
     {
         var __mb = __mb_set_unique_names;
         if (__mb == 0)
@@ -5571,7 +6273,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_unique_animation_names;
-    public Godot.Collections.Array GetUniqueAnimationNames()
+    internal Godot.Collections.Array GetUniqueAnimationNames()
     {
         var __mb = __mb_get_unique_animation_names;
         if (__mb == 0)
@@ -5586,7 +6288,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_unique_animation_names;
-    public void SetUniqueAnimationNames(Godot.Collections.Array uniqueAnimationNames)
+    internal void SetUniqueAnimationNames(Godot.Collections.Array uniqueAnimationNames)
     {
         var __mb = __mb_set_unique_animation_names;
         if (__mb == 0)
@@ -5602,7 +6304,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_skeletons;
-    public Godot.Collections.Array GetSkeletons()
+    internal Godot.Collections.Array GetSkeletons()
     {
         var __mb = __mb_get_skeletons;
         if (__mb == 0)
@@ -5617,7 +6319,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_skeletons;
-    public void SetSkeletons(Godot.Collections.Array skeletons)
+    internal void SetSkeletons(Godot.Collections.Array skeletons)
     {
         var __mb = __mb_set_skeletons;
         if (__mb == 0)
@@ -5633,7 +6335,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_create_animations;
-    public bool GetCreateAnimations()
+    internal bool GetCreateAnimations()
     {
         var __mb = __mb_get_create_animations;
         if (__mb == 0)
@@ -5648,7 +6350,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_create_animations;
-    public void SetCreateAnimations(bool createAnimations)
+    internal void SetCreateAnimations(bool createAnimations)
     {
         var __mb = __mb_set_create_animations;
         if (__mb == 0)
@@ -5664,7 +6366,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_import_as_skeleton_bones;
-    public bool GetImportAsSkeletonBones()
+    internal bool GetImportAsSkeletonBones()
     {
         var __mb = __mb_get_import_as_skeleton_bones;
         if (__mb == 0)
@@ -5679,7 +6381,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_import_as_skeleton_bones;
-    public void SetImportAsSkeletonBones(bool importAsSkeletonBones)
+    internal void SetImportAsSkeletonBones(bool importAsSkeletonBones)
     {
         var __mb = __mb_set_import_as_skeleton_bones;
         if (__mb == 0)
@@ -5695,7 +6397,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_animations;
-    public Godot.Collections.Array GetAnimations()
+    internal Godot.Collections.Array GetAnimations()
     {
         var __mb = __mb_get_animations;
         if (__mb == 0)
@@ -5710,7 +6412,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_animations;
-    public void SetAnimations(Godot.Collections.Array animations)
+    internal void SetAnimations(Godot.Collections.Array animations)
     {
         var __mb = __mb_set_animations;
         if (__mb == 0)
@@ -5798,7 +6500,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_handle_binary_image_mode;
-    public GLTFState.HandleBinaryImageMode GetHandleBinaryImageMode()
+    internal GLTFState.HandleBinaryImageModeEnum GetHandleBinaryImageMode()
     {
         var __mb = __mb_get_handle_binary_image_mode;
         if (__mb == 0)
@@ -5809,11 +6511,11 @@ public unsafe partial class GLTFState : Resource
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (GLTFState.HandleBinaryImageMode)__ret;
+        return (GLTFState.HandleBinaryImageModeEnum)__ret;
     }
 
     private static nint __mb_set_handle_binary_image_mode;
-    public void SetHandleBinaryImageMode(GLTFState.HandleBinaryImageMode method)
+    internal void SetHandleBinaryImageMode(GLTFState.HandleBinaryImageModeEnum method)
     {
         var __mb = __mb_set_handle_binary_image_mode;
         if (__mb == 0)
@@ -5829,7 +6531,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_bake_fps;
-    public void SetBakeFps(double value)
+    internal void SetBakeFps(double value)
     {
         var __mb = __mb_set_bake_fps;
         if (__mb == 0)
@@ -5845,7 +6547,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_bake_fps;
-    public double GetBakeFps()
+    internal double GetBakeFps()
     {
         var __mb = __mb_get_bake_fps;
         if (__mb == 0)
@@ -5860,7 +6562,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_get_handle_binary_image;
-    public int GetHandleBinaryImage()
+    internal int GetHandleBinaryImage()
     {
         var __mb = __mb_get_handle_binary_image;
         if (__mb == 0)
@@ -5875,7 +6577,7 @@ public unsafe partial class GLTFState : Resource
     }
 
     private static nint __mb_set_handle_binary_image;
-    public void SetHandleBinaryImage(int method)
+    internal void SetHandleBinaryImage(int method)
     {
         var __mb = __mb_set_handle_binary_image;
         if (__mb == 0)
@@ -5900,8 +6602,20 @@ public unsafe partial class GLTFTexture : Resource
         ClassRegistry.AttachNew(this, "GLTFTexture");
     }
 
+    public int SrcImage
+    {
+        get => GetSrcImage();
+        set => SetSrcImage(value);
+    }
+
+    public int Sampler
+    {
+        get => GetSampler();
+        set => SetSampler(value);
+    }
+
     private static nint __mb_get_src_image;
-    public int GetSrcImage()
+    internal int GetSrcImage()
     {
         var __mb = __mb_get_src_image;
         if (__mb == 0)
@@ -5916,7 +6630,7 @@ public unsafe partial class GLTFTexture : Resource
     }
 
     private static nint __mb_set_src_image;
-    public void SetSrcImage(int srcImage)
+    internal void SetSrcImage(int srcImage)
     {
         var __mb = __mb_set_src_image;
         if (__mb == 0)
@@ -5932,7 +6646,7 @@ public unsafe partial class GLTFTexture : Resource
     }
 
     private static nint __mb_get_sampler;
-    public int GetSampler()
+    internal int GetSampler()
     {
         var __mb = __mb_get_sampler;
         if (__mb == 0)
@@ -5947,7 +6661,7 @@ public unsafe partial class GLTFTexture : Resource
     }
 
     private static nint __mb_set_sampler;
-    public void SetSampler(int sampler)
+    internal void SetSampler(int sampler)
     {
         var __mb = __mb_set_sampler;
         if (__mb == 0)
@@ -5972,8 +6686,32 @@ public unsafe partial class GLTFTextureSampler : Resource
         ClassRegistry.AttachNew(this, "GLTFTextureSampler");
     }
 
+    public int MagFilter
+    {
+        get => GetMagFilter();
+        set => SetMagFilter(value);
+    }
+
+    public int MinFilter
+    {
+        get => GetMinFilter();
+        set => SetMinFilter(value);
+    }
+
+    public int WrapS
+    {
+        get => GetWrapS();
+        set => SetWrapS(value);
+    }
+
+    public int WrapT
+    {
+        get => GetWrapT();
+        set => SetWrapT(value);
+    }
+
     private static nint __mb_get_mag_filter;
-    public int GetMagFilter()
+    internal int GetMagFilter()
     {
         var __mb = __mb_get_mag_filter;
         if (__mb == 0)
@@ -5988,7 +6726,7 @@ public unsafe partial class GLTFTextureSampler : Resource
     }
 
     private static nint __mb_set_mag_filter;
-    public void SetMagFilter(int filterMode)
+    internal void SetMagFilter(int filterMode)
     {
         var __mb = __mb_set_mag_filter;
         if (__mb == 0)
@@ -6004,7 +6742,7 @@ public unsafe partial class GLTFTextureSampler : Resource
     }
 
     private static nint __mb_get_min_filter;
-    public int GetMinFilter()
+    internal int GetMinFilter()
     {
         var __mb = __mb_get_min_filter;
         if (__mb == 0)
@@ -6019,7 +6757,7 @@ public unsafe partial class GLTFTextureSampler : Resource
     }
 
     private static nint __mb_set_min_filter;
-    public void SetMinFilter(int filterMode)
+    internal void SetMinFilter(int filterMode)
     {
         var __mb = __mb_set_min_filter;
         if (__mb == 0)
@@ -6035,7 +6773,7 @@ public unsafe partial class GLTFTextureSampler : Resource
     }
 
     private static nint __mb_get_wrap_s;
-    public int GetWrapS()
+    internal int GetWrapS()
     {
         var __mb = __mb_get_wrap_s;
         if (__mb == 0)
@@ -6050,7 +6788,7 @@ public unsafe partial class GLTFTextureSampler : Resource
     }
 
     private static nint __mb_set_wrap_s;
-    public void SetWrapS(int wrapMode)
+    internal void SetWrapS(int wrapMode)
     {
         var __mb = __mb_set_wrap_s;
         if (__mb == 0)
@@ -6066,7 +6804,7 @@ public unsafe partial class GLTFTextureSampler : Resource
     }
 
     private static nint __mb_get_wrap_t;
-    public int GetWrapT()
+    internal int GetWrapT()
     {
         var __mb = __mb_get_wrap_t;
         if (__mb == 0)
@@ -6081,7 +6819,7 @@ public unsafe partial class GLTFTextureSampler : Resource
     }
 
     private static nint __mb_set_wrap_t;
-    public void SetWrapT(int wrapMode)
+    internal void SetWrapT(int wrapMode)
     {
         var __mb = __mb_set_wrap_t;
         if (__mb == 0)
@@ -6106,7 +6844,7 @@ public unsafe partial class GPUParticles2D : Node2D
         ClassRegistry.AttachNew(this, "GPUParticles2D");
     }
 
-    public enum DrawOrder : long
+    public enum DrawOrderEnum : long
     {
         DRAW_ORDER_INDEX = 0,
         DRAW_ORDER_LIFETIME = 1,
@@ -6122,8 +6860,164 @@ public unsafe partial class GPUParticles2D : Node2D
         EMIT_FLAG_CUSTOM = 16,
     }
 
+    public bool Emitting
+    {
+        get => IsEmitting();
+        set => SetEmitting(value);
+    }
+
+    public int Amount
+    {
+        get => GetAmount();
+        set => SetAmount(value);
+    }
+
+    public float AmountRatio
+    {
+        get => GetAmountRatio();
+        set => SetAmountRatio(value);
+    }
+
+    public NodePath SubEmitter
+    {
+        get => GetSubEmitter();
+        set => SetSubEmitter(value);
+    }
+
+    public Texture2D? Texture
+    {
+        get => GetTexture();
+        set => SetTexture(value);
+    }
+
+    public double Lifetime
+    {
+        get => GetLifetime();
+        set => SetLifetime(value);
+    }
+
+    public float InterpToEnd
+    {
+        get => GetInterpToEnd();
+        set => SetInterpToEnd(value);
+    }
+
+    public bool OneShot
+    {
+        get => GetOneShot();
+        set => SetOneShot(value);
+    }
+
+    public double Preprocess
+    {
+        get => GetPreProcessTime();
+        set => SetPreProcessTime(value);
+    }
+
+    public double SpeedScale
+    {
+        get => GetSpeedScale();
+        set => SetSpeedScale(value);
+    }
+
+    public float Explosiveness
+    {
+        get => GetExplosivenessRatio();
+        set => SetExplosivenessRatio(value);
+    }
+
+    public float Randomness
+    {
+        get => GetRandomnessRatio();
+        set => SetRandomnessRatio(value);
+    }
+
+    public bool UseFixedSeed
+    {
+        get => GetUseFixedSeed();
+        set => SetUseFixedSeed(value);
+    }
+
+    public uint Seed
+    {
+        get => GetSeed();
+        set => SetSeed(value);
+    }
+
+    public int FixedFps
+    {
+        get => GetFixedFps();
+        set => SetFixedFps(value);
+    }
+
+    public bool Interpolate
+    {
+        get => GetInterpolate();
+        set => SetInterpolate(value);
+    }
+
+    public bool FractDelta
+    {
+        get => GetFractionalDelta();
+        set => SetFractionalDelta(value);
+    }
+
+    public float CollisionBaseSize
+    {
+        get => GetCollisionBaseSize();
+        set => SetCollisionBaseSize(value);
+    }
+
+    public Rect2 VisibilityRect
+    {
+        get => GetVisibilityRect();
+        set => SetVisibilityRect(value);
+    }
+
+    public bool LocalCoords
+    {
+        get => GetUseLocalCoordinates();
+        set => SetUseLocalCoordinates(value);
+    }
+
+    public GPUParticles2D.DrawOrderEnum DrawOrder
+    {
+        get => GetDrawOrder();
+        set => SetDrawOrder(value);
+    }
+
+    public bool TrailEnabled
+    {
+        get => IsTrailEnabled();
+        set => SetTrailEnabled(value);
+    }
+
+    public double TrailLifetime
+    {
+        get => GetTrailLifetime();
+        set => SetTrailLifetime(value);
+    }
+
+    public int TrailSections
+    {
+        get => GetTrailSections();
+        set => SetTrailSections(value);
+    }
+
+    public int TrailSectionSubdivisions
+    {
+        get => GetTrailSectionSubdivisions();
+        set => SetTrailSectionSubdivisions(value);
+    }
+
+    public Material? ProcessMaterial
+    {
+        get => GetProcessMaterial();
+        set => SetProcessMaterial(value);
+    }
+
     private static nint __mb_set_emitting;
-    public void SetEmitting(bool emitting)
+    internal void SetEmitting(bool emitting)
     {
         var __mb = __mb_set_emitting;
         if (__mb == 0)
@@ -6139,7 +7033,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_amount;
-    public void SetAmount(int amount)
+    internal void SetAmount(int amount)
     {
         var __mb = __mb_set_amount;
         if (__mb == 0)
@@ -6155,7 +7049,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_lifetime;
-    public void SetLifetime(double secs)
+    internal void SetLifetime(double secs)
     {
         var __mb = __mb_set_lifetime;
         if (__mb == 0)
@@ -6171,7 +7065,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_one_shot;
-    public void SetOneShot(bool secs)
+    internal void SetOneShot(bool secs)
     {
         var __mb = __mb_set_one_shot;
         if (__mb == 0)
@@ -6187,7 +7081,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_pre_process_time;
-    public void SetPreProcessTime(double secs)
+    internal void SetPreProcessTime(double secs)
     {
         var __mb = __mb_set_pre_process_time;
         if (__mb == 0)
@@ -6203,7 +7097,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_explosiveness_ratio;
-    public void SetExplosivenessRatio(float ratio)
+    internal void SetExplosivenessRatio(float ratio)
     {
         var __mb = __mb_set_explosiveness_ratio;
         if (__mb == 0)
@@ -6219,7 +7113,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_randomness_ratio;
-    public void SetRandomnessRatio(float ratio)
+    internal void SetRandomnessRatio(float ratio)
     {
         var __mb = __mb_set_randomness_ratio;
         if (__mb == 0)
@@ -6235,7 +7129,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_visibility_rect;
-    public void SetVisibilityRect(Rect2 visibilityRect)
+    internal void SetVisibilityRect(Rect2 visibilityRect)
     {
         var __mb = __mb_set_visibility_rect;
         if (__mb == 0)
@@ -6251,7 +7145,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_use_local_coordinates;
-    public void SetUseLocalCoordinates(bool enable)
+    internal void SetUseLocalCoordinates(bool enable)
     {
         var __mb = __mb_set_use_local_coordinates;
         if (__mb == 0)
@@ -6267,7 +7161,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_fixed_fps;
-    public void SetFixedFps(int fps)
+    internal void SetFixedFps(int fps)
     {
         var __mb = __mb_set_fixed_fps;
         if (__mb == 0)
@@ -6283,7 +7177,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_fractional_delta;
-    public void SetFractionalDelta(bool enable)
+    internal void SetFractionalDelta(bool enable)
     {
         var __mb = __mb_set_fractional_delta;
         if (__mb == 0)
@@ -6299,7 +7193,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_interpolate;
-    public void SetInterpolate(bool enable)
+    internal void SetInterpolate(bool enable)
     {
         var __mb = __mb_set_interpolate;
         if (__mb == 0)
@@ -6315,7 +7209,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_process_material;
-    public void SetProcessMaterial(Material? material)
+    internal void SetProcessMaterial(Material? material)
     {
         var __mb = __mb_set_process_material;
         if (__mb == 0)
@@ -6331,7 +7225,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_speed_scale;
-    public void SetSpeedScale(double scale)
+    internal void SetSpeedScale(double scale)
     {
         var __mb = __mb_set_speed_scale;
         if (__mb == 0)
@@ -6347,7 +7241,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_collision_base_size;
-    public void SetCollisionBaseSize(float size)
+    internal void SetCollisionBaseSize(float size)
     {
         var __mb = __mb_set_collision_base_size;
         if (__mb == 0)
@@ -6363,7 +7257,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_interp_to_end;
-    public void SetInterpToEnd(float interp)
+    internal void SetInterpToEnd(float interp)
     {
         var __mb = __mb_set_interp_to_end;
         if (__mb == 0)
@@ -6397,7 +7291,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_is_emitting;
-    public bool IsEmitting()
+    internal bool IsEmitting()
     {
         var __mb = __mb_is_emitting;
         if (__mb == 0)
@@ -6412,7 +7306,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_amount;
-    public int GetAmount()
+    internal int GetAmount()
     {
         var __mb = __mb_get_amount;
         if (__mb == 0)
@@ -6427,7 +7321,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_lifetime;
-    public double GetLifetime()
+    internal double GetLifetime()
     {
         var __mb = __mb_get_lifetime;
         if (__mb == 0)
@@ -6442,7 +7336,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_one_shot;
-    public bool GetOneShot()
+    internal bool GetOneShot()
     {
         var __mb = __mb_get_one_shot;
         if (__mb == 0)
@@ -6457,7 +7351,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_pre_process_time;
-    public double GetPreProcessTime()
+    internal double GetPreProcessTime()
     {
         var __mb = __mb_get_pre_process_time;
         if (__mb == 0)
@@ -6472,7 +7366,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_explosiveness_ratio;
-    public float GetExplosivenessRatio()
+    internal float GetExplosivenessRatio()
     {
         var __mb = __mb_get_explosiveness_ratio;
         if (__mb == 0)
@@ -6487,7 +7381,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_randomness_ratio;
-    public float GetRandomnessRatio()
+    internal float GetRandomnessRatio()
     {
         var __mb = __mb_get_randomness_ratio;
         if (__mb == 0)
@@ -6502,7 +7396,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_visibility_rect;
-    public Rect2 GetVisibilityRect()
+    internal Rect2 GetVisibilityRect()
     {
         var __mb = __mb_get_visibility_rect;
         if (__mb == 0)
@@ -6517,7 +7411,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_use_local_coordinates;
-    public bool GetUseLocalCoordinates()
+    internal bool GetUseLocalCoordinates()
     {
         var __mb = __mb_get_use_local_coordinates;
         if (__mb == 0)
@@ -6532,7 +7426,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_fixed_fps;
-    public int GetFixedFps()
+    internal int GetFixedFps()
     {
         var __mb = __mb_get_fixed_fps;
         if (__mb == 0)
@@ -6547,7 +7441,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_fractional_delta;
-    public bool GetFractionalDelta()
+    internal bool GetFractionalDelta()
     {
         var __mb = __mb_get_fractional_delta;
         if (__mb == 0)
@@ -6562,7 +7456,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_interpolate;
-    public bool GetInterpolate()
+    internal bool GetInterpolate()
     {
         var __mb = __mb_get_interpolate;
         if (__mb == 0)
@@ -6577,7 +7471,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_process_material;
-    public Material? GetProcessMaterial()
+    internal Material? GetProcessMaterial()
     {
         var __mb = __mb_get_process_material;
         if (__mb == 0)
@@ -6592,7 +7486,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_speed_scale;
-    public double GetSpeedScale()
+    internal double GetSpeedScale()
     {
         var __mb = __mb_get_speed_scale;
         if (__mb == 0)
@@ -6607,7 +7501,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_collision_base_size;
-    public float GetCollisionBaseSize()
+    internal float GetCollisionBaseSize()
     {
         var __mb = __mb_get_collision_base_size;
         if (__mb == 0)
@@ -6622,7 +7516,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_interp_to_end;
-    public float GetInterpToEnd()
+    internal float GetInterpToEnd()
     {
         var __mb = __mb_get_interp_to_end;
         if (__mb == 0)
@@ -6637,7 +7531,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_draw_order;
-    public void SetDrawOrder(GPUParticles2D.DrawOrder order)
+    internal void SetDrawOrder(GPUParticles2D.DrawOrderEnum order)
     {
         var __mb = __mb_set_draw_order;
         if (__mb == 0)
@@ -6653,7 +7547,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_draw_order;
-    public GPUParticles2D.DrawOrder GetDrawOrder()
+    internal GPUParticles2D.DrawOrderEnum GetDrawOrder()
     {
         var __mb = __mb_get_draw_order;
         if (__mb == 0)
@@ -6664,11 +7558,11 @@ public unsafe partial class GPUParticles2D : Node2D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (GPUParticles2D.DrawOrder)__ret;
+        return (GPUParticles2D.DrawOrderEnum)__ret;
     }
 
     private static nint __mb_set_texture;
-    public void SetTexture(Texture2D? texture)
+    internal void SetTexture(Texture2D? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -6684,7 +7578,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_texture;
-    public Texture2D? GetTexture()
+    internal Texture2D? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -6730,7 +7624,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_sub_emitter;
-    public void SetSubEmitter(NodePath path)
+    internal void SetSubEmitter(NodePath path)
     {
         var __mb = __mb_set_sub_emitter;
         if (__mb == 0)
@@ -6746,7 +7640,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_sub_emitter;
-    public NodePath GetSubEmitter()
+    internal NodePath GetSubEmitter()
     {
         var __mb = __mb_get_sub_emitter;
         if (__mb == 0)
@@ -6785,7 +7679,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_trail_enabled;
-    public void SetTrailEnabled(bool enabled)
+    internal void SetTrailEnabled(bool enabled)
     {
         var __mb = __mb_set_trail_enabled;
         if (__mb == 0)
@@ -6801,7 +7695,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_trail_lifetime;
-    public void SetTrailLifetime(double secs)
+    internal void SetTrailLifetime(double secs)
     {
         var __mb = __mb_set_trail_lifetime;
         if (__mb == 0)
@@ -6817,7 +7711,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_is_trail_enabled;
-    public bool IsTrailEnabled()
+    internal bool IsTrailEnabled()
     {
         var __mb = __mb_is_trail_enabled;
         if (__mb == 0)
@@ -6832,7 +7726,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_trail_lifetime;
-    public double GetTrailLifetime()
+    internal double GetTrailLifetime()
     {
         var __mb = __mb_get_trail_lifetime;
         if (__mb == 0)
@@ -6847,7 +7741,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_trail_sections;
-    public void SetTrailSections(int sections)
+    internal void SetTrailSections(int sections)
     {
         var __mb = __mb_set_trail_sections;
         if (__mb == 0)
@@ -6863,7 +7757,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_trail_sections;
-    public int GetTrailSections()
+    internal int GetTrailSections()
     {
         var __mb = __mb_get_trail_sections;
         if (__mb == 0)
@@ -6878,7 +7772,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_trail_section_subdivisions;
-    public void SetTrailSectionSubdivisions(int subdivisions)
+    internal void SetTrailSectionSubdivisions(int subdivisions)
     {
         var __mb = __mb_set_trail_section_subdivisions;
         if (__mb == 0)
@@ -6894,7 +7788,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_trail_section_subdivisions;
-    public int GetTrailSectionSubdivisions()
+    internal int GetTrailSectionSubdivisions()
     {
         var __mb = __mb_get_trail_section_subdivisions;
         if (__mb == 0)
@@ -6925,7 +7819,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_amount_ratio;
-    public void SetAmountRatio(float ratio)
+    internal void SetAmountRatio(float ratio)
     {
         var __mb = __mb_set_amount_ratio;
         if (__mb == 0)
@@ -6941,7 +7835,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_amount_ratio;
-    public float GetAmountRatio()
+    internal float GetAmountRatio()
     {
         var __mb = __mb_get_amount_ratio;
         if (__mb == 0)
@@ -6956,7 +7850,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_use_fixed_seed;
-    public void SetUseFixedSeed(bool useFixedSeed)
+    internal void SetUseFixedSeed(bool useFixedSeed)
     {
         var __mb = __mb_set_use_fixed_seed;
         if (__mb == 0)
@@ -6972,7 +7866,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_use_fixed_seed;
-    public bool GetUseFixedSeed()
+    internal bool GetUseFixedSeed()
     {
         var __mb = __mb_get_use_fixed_seed;
         if (__mb == 0)
@@ -6987,7 +7881,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_set_seed;
-    public void SetSeed(uint seed)
+    internal void SetSeed(uint seed)
     {
         var __mb = __mb_set_seed;
         if (__mb == 0)
@@ -7003,7 +7897,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_get_seed;
-    public uint GetSeed()
+    internal uint GetSeed()
     {
         var __mb = __mb_get_seed;
         if (__mb == 0)
@@ -7027,7 +7921,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
         ClassRegistry.AttachNew(this, "GPUParticles3D");
     }
 
-    public enum DrawOrder : long
+    public enum DrawOrderEnum : long
     {
         DRAW_ORDER_INDEX = 0,
         DRAW_ORDER_LIFETIME = 1,
@@ -7044,7 +7938,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
         EMIT_FLAG_CUSTOM = 16,
     }
 
-    public enum TransformAlign : long
+    public enum TransformAlignEnum : long
     {
         TRANSFORM_ALIGN_DISABLED = 0,
         TRANSFORM_ALIGN_Z_BILLBOARD = 1,
@@ -7053,8 +7947,200 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
         TRANSFORM_ALIGN_LOCAL_BILLBOARD = 4,
     }
 
+    public bool Emitting
+    {
+        get => IsEmitting();
+        set => SetEmitting(value);
+    }
+
+    public int Amount
+    {
+        get => GetAmount();
+        set => SetAmount(value);
+    }
+
+    public float AmountRatio
+    {
+        get => GetAmountRatio();
+        set => SetAmountRatio(value);
+    }
+
+    public NodePath SubEmitter
+    {
+        get => GetSubEmitter();
+        set => SetSubEmitter(value);
+    }
+
+    public double Lifetime
+    {
+        get => GetLifetime();
+        set => SetLifetime(value);
+    }
+
+    public float InterpToEnd
+    {
+        get => GetInterpToEnd();
+        set => SetInterpToEnd(value);
+    }
+
+    public bool OneShot
+    {
+        get => GetOneShot();
+        set => SetOneShot(value);
+    }
+
+    public double Preprocess
+    {
+        get => GetPreProcessTime();
+        set => SetPreProcessTime(value);
+    }
+
+    public double SpeedScale
+    {
+        get => GetSpeedScale();
+        set => SetSpeedScale(value);
+    }
+
+    public float Explosiveness
+    {
+        get => GetExplosivenessRatio();
+        set => SetExplosivenessRatio(value);
+    }
+
+    public float Randomness
+    {
+        get => GetRandomnessRatio();
+        set => SetRandomnessRatio(value);
+    }
+
+    public bool UseFixedSeed
+    {
+        get => GetUseFixedSeed();
+        set => SetUseFixedSeed(value);
+    }
+
+    public uint Seed
+    {
+        get => GetSeed();
+        set => SetSeed(value);
+    }
+
+    public int FixedFps
+    {
+        get => GetFixedFps();
+        set => SetFixedFps(value);
+    }
+
+    public bool Interpolate
+    {
+        get => GetInterpolate();
+        set => SetInterpolate(value);
+    }
+
+    public bool FractDelta
+    {
+        get => GetFractionalDelta();
+        set => SetFractionalDelta(value);
+    }
+
+    public float CollisionBaseSize
+    {
+        get => GetCollisionBaseSize();
+        set => SetCollisionBaseSize(value);
+    }
+
+    public Aabb VisibilityAabb
+    {
+        get => GetVisibilityAabb();
+        set => SetVisibilityAabb(value);
+    }
+
+    public bool LocalCoords
+    {
+        get => GetUseLocalCoordinates();
+        set => SetUseLocalCoordinates(value);
+    }
+
+    public GPUParticles3D.DrawOrderEnum DrawOrder
+    {
+        get => GetDrawOrder();
+        set => SetDrawOrder(value);
+    }
+
+    public GPUParticles3D.TransformAlignEnum TransformAlign
+    {
+        get => GetTransformAlign();
+        set => SetTransformAlign(value);
+    }
+
+    public RenderingServer.ParticlesTransformAlignAxis TransformAlignAxis
+    {
+        get => GetTransformAlignAxis();
+        set => SetTransformAlignAxis(value);
+    }
+
+    public RenderingServer.ParticlesTransformAlignCustomSrc TransformAlignChannelFilter
+    {
+        get => GetTransformAlignChannelFilter();
+        set => SetTransformAlignChannelFilter(value);
+    }
+
+    public bool TrailEnabled
+    {
+        get => IsTrailEnabled();
+        set => SetTrailEnabled(value);
+    }
+
+    public double TrailLifetime
+    {
+        get => GetTrailLifetime();
+        set => SetTrailLifetime(value);
+    }
+
+    public Material? ProcessMaterial
+    {
+        get => GetProcessMaterial();
+        set => SetProcessMaterial(value);
+    }
+
+    public int DrawPasses
+    {
+        get => GetDrawPasses();
+        set => SetDrawPasses(value);
+    }
+
+    public Mesh? DrawPass1
+    {
+        get => GetDrawPassMesh(((int)(0)));
+        set => SetDrawPassMesh(((int)(0)), value);
+    }
+
+    public Mesh? DrawPass2
+    {
+        get => GetDrawPassMesh(((int)(1)));
+        set => SetDrawPassMesh(((int)(1)), value);
+    }
+
+    public Mesh? DrawPass3
+    {
+        get => GetDrawPassMesh(((int)(2)));
+        set => SetDrawPassMesh(((int)(2)), value);
+    }
+
+    public Mesh? DrawPass4
+    {
+        get => GetDrawPassMesh(((int)(3)));
+        set => SetDrawPassMesh(((int)(3)), value);
+    }
+
+    public Skin? DrawSkin
+    {
+        get => GetSkin();
+        set => SetSkin(value);
+    }
+
     private static nint __mb_set_emitting;
-    public void SetEmitting(bool emitting)
+    internal void SetEmitting(bool emitting)
     {
         var __mb = __mb_set_emitting;
         if (__mb == 0)
@@ -7070,7 +8156,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_amount;
-    public void SetAmount(int amount)
+    internal void SetAmount(int amount)
     {
         var __mb = __mb_set_amount;
         if (__mb == 0)
@@ -7086,7 +8172,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_lifetime;
-    public void SetLifetime(double secs)
+    internal void SetLifetime(double secs)
     {
         var __mb = __mb_set_lifetime;
         if (__mb == 0)
@@ -7102,7 +8188,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_one_shot;
-    public void SetOneShot(bool enable)
+    internal void SetOneShot(bool enable)
     {
         var __mb = __mb_set_one_shot;
         if (__mb == 0)
@@ -7118,7 +8204,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_pre_process_time;
-    public void SetPreProcessTime(double secs)
+    internal void SetPreProcessTime(double secs)
     {
         var __mb = __mb_set_pre_process_time;
         if (__mb == 0)
@@ -7134,7 +8220,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_explosiveness_ratio;
-    public void SetExplosivenessRatio(float ratio)
+    internal void SetExplosivenessRatio(float ratio)
     {
         var __mb = __mb_set_explosiveness_ratio;
         if (__mb == 0)
@@ -7150,7 +8236,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_randomness_ratio;
-    public void SetRandomnessRatio(float ratio)
+    internal void SetRandomnessRatio(float ratio)
     {
         var __mb = __mb_set_randomness_ratio;
         if (__mb == 0)
@@ -7166,7 +8252,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_visibility_aabb;
-    public void SetVisibilityAabb(Aabb aabb)
+    internal void SetVisibilityAabb(Aabb aabb)
     {
         var __mb = __mb_set_visibility_aabb;
         if (__mb == 0)
@@ -7182,7 +8268,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_use_local_coordinates;
-    public void SetUseLocalCoordinates(bool enable)
+    internal void SetUseLocalCoordinates(bool enable)
     {
         var __mb = __mb_set_use_local_coordinates;
         if (__mb == 0)
@@ -7198,7 +8284,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_fixed_fps;
-    public void SetFixedFps(int fps)
+    internal void SetFixedFps(int fps)
     {
         var __mb = __mb_set_fixed_fps;
         if (__mb == 0)
@@ -7214,7 +8300,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_fractional_delta;
-    public void SetFractionalDelta(bool enable)
+    internal void SetFractionalDelta(bool enable)
     {
         var __mb = __mb_set_fractional_delta;
         if (__mb == 0)
@@ -7230,7 +8316,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_interpolate;
-    public void SetInterpolate(bool enable)
+    internal void SetInterpolate(bool enable)
     {
         var __mb = __mb_set_interpolate;
         if (__mb == 0)
@@ -7246,7 +8332,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_process_material;
-    public void SetProcessMaterial(Material? material)
+    internal void SetProcessMaterial(Material? material)
     {
         var __mb = __mb_set_process_material;
         if (__mb == 0)
@@ -7262,7 +8348,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_speed_scale;
-    public void SetSpeedScale(double scale)
+    internal void SetSpeedScale(double scale)
     {
         var __mb = __mb_set_speed_scale;
         if (__mb == 0)
@@ -7278,7 +8364,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_collision_base_size;
-    public void SetCollisionBaseSize(float size)
+    internal void SetCollisionBaseSize(float size)
     {
         var __mb = __mb_set_collision_base_size;
         if (__mb == 0)
@@ -7294,7 +8380,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_interp_to_end;
-    public void SetInterpToEnd(float interp)
+    internal void SetInterpToEnd(float interp)
     {
         var __mb = __mb_set_interp_to_end;
         if (__mb == 0)
@@ -7310,7 +8396,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_is_emitting;
-    public bool IsEmitting()
+    internal bool IsEmitting()
     {
         var __mb = __mb_is_emitting;
         if (__mb == 0)
@@ -7325,7 +8411,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_amount;
-    public int GetAmount()
+    internal int GetAmount()
     {
         var __mb = __mb_get_amount;
         if (__mb == 0)
@@ -7340,7 +8426,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_lifetime;
-    public double GetLifetime()
+    internal double GetLifetime()
     {
         var __mb = __mb_get_lifetime;
         if (__mb == 0)
@@ -7355,7 +8441,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_one_shot;
-    public bool GetOneShot()
+    internal bool GetOneShot()
     {
         var __mb = __mb_get_one_shot;
         if (__mb == 0)
@@ -7370,7 +8456,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_pre_process_time;
-    public double GetPreProcessTime()
+    internal double GetPreProcessTime()
     {
         var __mb = __mb_get_pre_process_time;
         if (__mb == 0)
@@ -7385,7 +8471,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_explosiveness_ratio;
-    public float GetExplosivenessRatio()
+    internal float GetExplosivenessRatio()
     {
         var __mb = __mb_get_explosiveness_ratio;
         if (__mb == 0)
@@ -7400,7 +8486,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_randomness_ratio;
-    public float GetRandomnessRatio()
+    internal float GetRandomnessRatio()
     {
         var __mb = __mb_get_randomness_ratio;
         if (__mb == 0)
@@ -7415,7 +8501,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_visibility_aabb;
-    public Aabb GetVisibilityAabb()
+    internal Aabb GetVisibilityAabb()
     {
         var __mb = __mb_get_visibility_aabb;
         if (__mb == 0)
@@ -7430,7 +8516,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_use_local_coordinates;
-    public bool GetUseLocalCoordinates()
+    internal bool GetUseLocalCoordinates()
     {
         var __mb = __mb_get_use_local_coordinates;
         if (__mb == 0)
@@ -7445,7 +8531,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_fixed_fps;
-    public int GetFixedFps()
+    internal int GetFixedFps()
     {
         var __mb = __mb_get_fixed_fps;
         if (__mb == 0)
@@ -7460,7 +8546,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_fractional_delta;
-    public bool GetFractionalDelta()
+    internal bool GetFractionalDelta()
     {
         var __mb = __mb_get_fractional_delta;
         if (__mb == 0)
@@ -7475,7 +8561,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_interpolate;
-    public bool GetInterpolate()
+    internal bool GetInterpolate()
     {
         var __mb = __mb_get_interpolate;
         if (__mb == 0)
@@ -7490,7 +8576,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_process_material;
-    public Material? GetProcessMaterial()
+    internal Material? GetProcessMaterial()
     {
         var __mb = __mb_get_process_material;
         if (__mb == 0)
@@ -7505,7 +8591,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_speed_scale;
-    public double GetSpeedScale()
+    internal double GetSpeedScale()
     {
         var __mb = __mb_get_speed_scale;
         if (__mb == 0)
@@ -7520,7 +8606,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_collision_base_size;
-    public float GetCollisionBaseSize()
+    internal float GetCollisionBaseSize()
     {
         var __mb = __mb_get_collision_base_size;
         if (__mb == 0)
@@ -7535,7 +8621,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_interp_to_end;
-    public float GetInterpToEnd()
+    internal float GetInterpToEnd()
     {
         var __mb = __mb_get_interp_to_end;
         if (__mb == 0)
@@ -7550,7 +8636,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_use_fixed_seed;
-    public void SetUseFixedSeed(bool useFixedSeed)
+    internal void SetUseFixedSeed(bool useFixedSeed)
     {
         var __mb = __mb_set_use_fixed_seed;
         if (__mb == 0)
@@ -7566,7 +8652,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_use_fixed_seed;
-    public bool GetUseFixedSeed()
+    internal bool GetUseFixedSeed()
     {
         var __mb = __mb_get_use_fixed_seed;
         if (__mb == 0)
@@ -7581,7 +8667,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_seed;
-    public void SetSeed(uint seed)
+    internal void SetSeed(uint seed)
     {
         var __mb = __mb_set_seed;
         if (__mb == 0)
@@ -7597,7 +8683,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_seed;
-    public uint GetSeed()
+    internal uint GetSeed()
     {
         var __mb = __mb_get_seed;
         if (__mb == 0)
@@ -7612,7 +8698,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_draw_order;
-    public void SetDrawOrder(GPUParticles3D.DrawOrder order)
+    internal void SetDrawOrder(GPUParticles3D.DrawOrderEnum order)
     {
         var __mb = __mb_set_draw_order;
         if (__mb == 0)
@@ -7628,7 +8714,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_draw_order;
-    public GPUParticles3D.DrawOrder GetDrawOrder()
+    internal GPUParticles3D.DrawOrderEnum GetDrawOrder()
     {
         var __mb = __mb_get_draw_order;
         if (__mb == 0)
@@ -7639,11 +8725,11 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (GPUParticles3D.DrawOrder)__ret;
+        return (GPUParticles3D.DrawOrderEnum)__ret;
     }
 
     private static nint __mb_set_draw_passes;
-    public void SetDrawPasses(int passes)
+    internal void SetDrawPasses(int passes)
     {
         var __mb = __mb_set_draw_passes;
         if (__mb == 0)
@@ -7659,7 +8745,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_draw_pass_mesh;
-    public void SetDrawPassMesh(int pass, Mesh? mesh)
+    internal void SetDrawPassMesh(int pass, Mesh? mesh)
     {
         var __mb = __mb_set_draw_pass_mesh;
         if (__mb == 0)
@@ -7677,7 +8763,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_draw_passes;
-    public int GetDrawPasses()
+    internal int GetDrawPasses()
     {
         var __mb = __mb_get_draw_passes;
         if (__mb == 0)
@@ -7692,7 +8778,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_draw_pass_mesh;
-    public Mesh? GetDrawPassMesh(int pass)
+    internal Mesh? GetDrawPassMesh(int pass)
     {
         var __mb = __mb_get_draw_pass_mesh;
         if (__mb == 0)
@@ -7710,7 +8796,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_skin;
-    public void SetSkin(Skin? skin)
+    internal void SetSkin(Skin? skin)
     {
         var __mb = __mb_set_skin;
         if (__mb == 0)
@@ -7726,7 +8812,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_skin;
-    public Skin? GetSkin()
+    internal Skin? GetSkin()
     {
         var __mb = __mb_get_skin;
         if (__mb == 0)
@@ -7772,7 +8858,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_sub_emitter;
-    public void SetSubEmitter(NodePath path)
+    internal void SetSubEmitter(NodePath path)
     {
         var __mb = __mb_set_sub_emitter;
         if (__mb == 0)
@@ -7788,7 +8874,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_sub_emitter;
-    public NodePath GetSubEmitter()
+    internal NodePath GetSubEmitter()
     {
         var __mb = __mb_get_sub_emitter;
         if (__mb == 0)
@@ -7827,7 +8913,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_trail_enabled;
-    public void SetTrailEnabled(bool enabled)
+    internal void SetTrailEnabled(bool enabled)
     {
         var __mb = __mb_set_trail_enabled;
         if (__mb == 0)
@@ -7843,7 +8929,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_trail_lifetime;
-    public void SetTrailLifetime(double secs)
+    internal void SetTrailLifetime(double secs)
     {
         var __mb = __mb_set_trail_lifetime;
         if (__mb == 0)
@@ -7859,7 +8945,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_is_trail_enabled;
-    public bool IsTrailEnabled()
+    internal bool IsTrailEnabled()
     {
         var __mb = __mb_is_trail_enabled;
         if (__mb == 0)
@@ -7874,7 +8960,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_trail_lifetime;
-    public double GetTrailLifetime()
+    internal double GetTrailLifetime()
     {
         var __mb = __mb_get_trail_lifetime;
         if (__mb == 0)
@@ -7889,7 +8975,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_transform_align;
-    public void SetTransformAlign(GPUParticles3D.TransformAlign align)
+    internal void SetTransformAlign(GPUParticles3D.TransformAlignEnum align)
     {
         var __mb = __mb_set_transform_align;
         if (__mb == 0)
@@ -7905,7 +8991,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_transform_align;
-    public GPUParticles3D.TransformAlign GetTransformAlign()
+    internal GPUParticles3D.TransformAlignEnum GetTransformAlign()
     {
         var __mb = __mb_get_transform_align;
         if (__mb == 0)
@@ -7916,11 +9002,11 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (GPUParticles3D.TransformAlign)__ret;
+        return (GPUParticles3D.TransformAlignEnum)__ret;
     }
 
     private static nint __mb_set_transform_align_channel_filter;
-    public void SetTransformAlignChannelFilter(RenderingServer.ParticlesTransformAlignCustomSrc channelFilter)
+    internal void SetTransformAlignChannelFilter(RenderingServer.ParticlesTransformAlignCustomSrc channelFilter)
     {
         var __mb = __mb_set_transform_align_channel_filter;
         if (__mb == 0)
@@ -7936,7 +9022,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_transform_align_channel_filter;
-    public RenderingServer.ParticlesTransformAlignCustomSrc GetTransformAlignChannelFilter()
+    internal RenderingServer.ParticlesTransformAlignCustomSrc GetTransformAlignChannelFilter()
     {
         var __mb = __mb_get_transform_align_channel_filter;
         if (__mb == 0)
@@ -7951,7 +9037,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_transform_align_axis;
-    public void SetTransformAlignAxis(RenderingServer.ParticlesTransformAlignAxis align)
+    internal void SetTransformAlignAxis(RenderingServer.ParticlesTransformAlignAxis align)
     {
         var __mb = __mb_set_transform_align_axis;
         if (__mb == 0)
@@ -7967,7 +9053,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_transform_align_axis;
-    public RenderingServer.ParticlesTransformAlignAxis GetTransformAlignAxis()
+    internal RenderingServer.ParticlesTransformAlignAxis GetTransformAlignAxis()
     {
         var __mb = __mb_get_transform_align_axis;
         if (__mb == 0)
@@ -7998,7 +9084,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_amount_ratio;
-    public void SetAmountRatio(float ratio)
+    internal void SetAmountRatio(float ratio)
     {
         var __mb = __mb_set_amount_ratio;
         if (__mb == 0)
@@ -8014,7 +9100,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_amount_ratio;
-    public float GetAmountRatio()
+    internal float GetAmountRatio()
     {
         var __mb = __mb_get_amount_ratio;
         if (__mb == 0)
@@ -8051,8 +9137,32 @@ public unsafe partial class GPUParticlesAttractor3D : VisualInstance3D
 {
     internal GPUParticlesAttractor3D(nint ptr, bool rc) : base(ptr, rc) { }
 
+    public float Strength
+    {
+        get => GetStrength();
+        set => SetStrength(value);
+    }
+
+    public float Attenuation
+    {
+        get => GetAttenuation();
+        set => SetAttenuation(value);
+    }
+
+    public float Directionality
+    {
+        get => GetDirectionality();
+        set => SetDirectionality(value);
+    }
+
+    public uint CullMask
+    {
+        get => GetCullMask();
+        set => SetCullMask(value);
+    }
+
     private static nint __mb_set_cull_mask;
-    public void SetCullMask(uint mask)
+    internal void SetCullMask(uint mask)
     {
         var __mb = __mb_set_cull_mask;
         if (__mb == 0)
@@ -8068,7 +9178,7 @@ public unsafe partial class GPUParticlesAttractor3D : VisualInstance3D
     }
 
     private static nint __mb_get_cull_mask;
-    public uint GetCullMask()
+    internal uint GetCullMask()
     {
         var __mb = __mb_get_cull_mask;
         if (__mb == 0)
@@ -8083,7 +9193,7 @@ public unsafe partial class GPUParticlesAttractor3D : VisualInstance3D
     }
 
     private static nint __mb_set_strength;
-    public void SetStrength(float strength)
+    internal void SetStrength(float strength)
     {
         var __mb = __mb_set_strength;
         if (__mb == 0)
@@ -8099,7 +9209,7 @@ public unsafe partial class GPUParticlesAttractor3D : VisualInstance3D
     }
 
     private static nint __mb_get_strength;
-    public float GetStrength()
+    internal float GetStrength()
     {
         var __mb = __mb_get_strength;
         if (__mb == 0)
@@ -8114,7 +9224,7 @@ public unsafe partial class GPUParticlesAttractor3D : VisualInstance3D
     }
 
     private static nint __mb_set_attenuation;
-    public void SetAttenuation(float attenuation)
+    internal void SetAttenuation(float attenuation)
     {
         var __mb = __mb_set_attenuation;
         if (__mb == 0)
@@ -8130,7 +9240,7 @@ public unsafe partial class GPUParticlesAttractor3D : VisualInstance3D
     }
 
     private static nint __mb_get_attenuation;
-    public float GetAttenuation()
+    internal float GetAttenuation()
     {
         var __mb = __mb_get_attenuation;
         if (__mb == 0)
@@ -8145,7 +9255,7 @@ public unsafe partial class GPUParticlesAttractor3D : VisualInstance3D
     }
 
     private static nint __mb_set_directionality;
-    public void SetDirectionality(float amount)
+    internal void SetDirectionality(float amount)
     {
         var __mb = __mb_set_directionality;
         if (__mb == 0)
@@ -8161,7 +9271,7 @@ public unsafe partial class GPUParticlesAttractor3D : VisualInstance3D
     }
 
     private static nint __mb_get_directionality;
-    public float GetDirectionality()
+    internal float GetDirectionality()
     {
         var __mb = __mb_get_directionality;
         if (__mb == 0)
@@ -8185,8 +9295,14 @@ public unsafe partial class GPUParticlesAttractorBox3D : GPUParticlesAttractor3D
         ClassRegistry.AttachNew(this, "GPUParticlesAttractorBox3D");
     }
 
+    public Vector3 Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
     private static nint __mb_set_size;
-    public void SetSize(Vector3 size)
+    internal void SetSize(Vector3 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -8202,7 +9318,7 @@ public unsafe partial class GPUParticlesAttractorBox3D : GPUParticlesAttractor3D
     }
 
     private static nint __mb_get_size;
-    public Vector3 GetSize()
+    internal Vector3 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -8226,8 +9342,14 @@ public unsafe partial class GPUParticlesAttractorSphere3D : GPUParticlesAttracto
         ClassRegistry.AttachNew(this, "GPUParticlesAttractorSphere3D");
     }
 
+    public float Radius
+    {
+        get => GetRadius();
+        set => SetRadius(value);
+    }
+
     private static nint __mb_set_radius;
-    public void SetRadius(float radius)
+    internal void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -8243,7 +9365,7 @@ public unsafe partial class GPUParticlesAttractorSphere3D : GPUParticlesAttracto
     }
 
     private static nint __mb_get_radius;
-    public float GetRadius()
+    internal float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -8267,8 +9389,20 @@ public unsafe partial class GPUParticlesAttractorVectorField3D : GPUParticlesAtt
         ClassRegistry.AttachNew(this, "GPUParticlesAttractorVectorField3D");
     }
 
+    public Vector3 Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
+    public Texture3D? Texture
+    {
+        get => GetTexture();
+        set => SetTexture(value);
+    }
+
     private static nint __mb_set_size;
-    public void SetSize(Vector3 size)
+    internal void SetSize(Vector3 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -8284,7 +9418,7 @@ public unsafe partial class GPUParticlesAttractorVectorField3D : GPUParticlesAtt
     }
 
     private static nint __mb_get_size;
-    public Vector3 GetSize()
+    internal Vector3 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -8299,7 +9433,7 @@ public unsafe partial class GPUParticlesAttractorVectorField3D : GPUParticlesAtt
     }
 
     private static nint __mb_set_texture;
-    public void SetTexture(Texture3D? texture)
+    internal void SetTexture(Texture3D? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -8315,7 +9449,7 @@ public unsafe partial class GPUParticlesAttractorVectorField3D : GPUParticlesAtt
     }
 
     private static nint __mb_get_texture;
-    public Texture3D? GetTexture()
+    internal Texture3D? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -8334,8 +9468,14 @@ public unsafe partial class GPUParticlesCollision3D : VisualInstance3D
 {
     internal GPUParticlesCollision3D(nint ptr, bool rc) : base(ptr, rc) { }
 
+    public uint CullMask
+    {
+        get => GetCullMask();
+        set => SetCullMask(value);
+    }
+
     private static nint __mb_set_cull_mask;
-    public void SetCullMask(uint mask)
+    internal void SetCullMask(uint mask)
     {
         var __mb = __mb_set_cull_mask;
         if (__mb == 0)
@@ -8351,7 +9491,7 @@ public unsafe partial class GPUParticlesCollision3D : VisualInstance3D
     }
 
     private static nint __mb_get_cull_mask;
-    public uint GetCullMask()
+    internal uint GetCullMask()
     {
         var __mb = __mb_get_cull_mask;
         if (__mb == 0)
@@ -8375,8 +9515,14 @@ public unsafe partial class GPUParticlesCollisionBox3D : GPUParticlesCollision3D
         ClassRegistry.AttachNew(this, "GPUParticlesCollisionBox3D");
     }
 
+    public Vector3 Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
     private static nint __mb_set_size;
-    public void SetSize(Vector3 size)
+    internal void SetSize(Vector3 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -8392,7 +9538,7 @@ public unsafe partial class GPUParticlesCollisionBox3D : GPUParticlesCollision3D
     }
 
     private static nint __mb_get_size;
-    public Vector3 GetSize()
+    internal Vector3 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -8416,7 +9562,7 @@ public unsafe partial class GPUParticlesCollisionHeightField3D : GPUParticlesCol
         ClassRegistry.AttachNew(this, "GPUParticlesCollisionHeightField3D");
     }
 
-    public enum Resolution : long
+    public enum ResolutionEnum : long
     {
         RESOLUTION_256 = 0,
         RESOLUTION_512 = 1,
@@ -8427,14 +9573,44 @@ public unsafe partial class GPUParticlesCollisionHeightField3D : GPUParticlesCol
         RESOLUTION_MAX = 6,
     }
 
-    public enum UpdateMode : long
+    public enum UpdateModeEnum : long
     {
         UPDATE_MODE_WHEN_MOVED = 0,
         UPDATE_MODE_ALWAYS = 1,
     }
 
+    public Vector3 Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
+    public GPUParticlesCollisionHeightField3D.ResolutionEnum Resolution
+    {
+        get => GetResolution();
+        set => SetResolution(value);
+    }
+
+    public GPUParticlesCollisionHeightField3D.UpdateModeEnum UpdateMode
+    {
+        get => GetUpdateMode();
+        set => SetUpdateMode(value);
+    }
+
+    public bool FollowCameraEnabled
+    {
+        get => IsFollowCameraEnabled();
+        set => SetFollowCameraEnabled(value);
+    }
+
+    public uint HeightfieldMask
+    {
+        get => GetHeightfieldMask();
+        set => SetHeightfieldMask(value);
+    }
+
     private static nint __mb_set_size;
-    public void SetSize(Vector3 size)
+    internal void SetSize(Vector3 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -8450,7 +9626,7 @@ public unsafe partial class GPUParticlesCollisionHeightField3D : GPUParticlesCol
     }
 
     private static nint __mb_get_size;
-    public Vector3 GetSize()
+    internal Vector3 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -8465,7 +9641,7 @@ public unsafe partial class GPUParticlesCollisionHeightField3D : GPUParticlesCol
     }
 
     private static nint __mb_set_resolution;
-    public void SetResolution(GPUParticlesCollisionHeightField3D.Resolution resolution)
+    internal void SetResolution(GPUParticlesCollisionHeightField3D.ResolutionEnum resolution)
     {
         var __mb = __mb_set_resolution;
         if (__mb == 0)
@@ -8481,7 +9657,7 @@ public unsafe partial class GPUParticlesCollisionHeightField3D : GPUParticlesCol
     }
 
     private static nint __mb_get_resolution;
-    public GPUParticlesCollisionHeightField3D.Resolution GetResolution()
+    internal GPUParticlesCollisionHeightField3D.ResolutionEnum GetResolution()
     {
         var __mb = __mb_get_resolution;
         if (__mb == 0)
@@ -8492,11 +9668,11 @@ public unsafe partial class GPUParticlesCollisionHeightField3D : GPUParticlesCol
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (GPUParticlesCollisionHeightField3D.Resolution)__ret;
+        return (GPUParticlesCollisionHeightField3D.ResolutionEnum)__ret;
     }
 
     private static nint __mb_set_update_mode;
-    public void SetUpdateMode(GPUParticlesCollisionHeightField3D.UpdateMode updateMode)
+    internal void SetUpdateMode(GPUParticlesCollisionHeightField3D.UpdateModeEnum updateMode)
     {
         var __mb = __mb_set_update_mode;
         if (__mb == 0)
@@ -8512,7 +9688,7 @@ public unsafe partial class GPUParticlesCollisionHeightField3D : GPUParticlesCol
     }
 
     private static nint __mb_get_update_mode;
-    public GPUParticlesCollisionHeightField3D.UpdateMode GetUpdateMode()
+    internal GPUParticlesCollisionHeightField3D.UpdateModeEnum GetUpdateMode()
     {
         var __mb = __mb_get_update_mode;
         if (__mb == 0)
@@ -8523,11 +9699,11 @@ public unsafe partial class GPUParticlesCollisionHeightField3D : GPUParticlesCol
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (GPUParticlesCollisionHeightField3D.UpdateMode)__ret;
+        return (GPUParticlesCollisionHeightField3D.UpdateModeEnum)__ret;
     }
 
     private static nint __mb_set_heightfield_mask;
-    public void SetHeightfieldMask(uint heightfieldMask)
+    internal void SetHeightfieldMask(uint heightfieldMask)
     {
         var __mb = __mb_set_heightfield_mask;
         if (__mb == 0)
@@ -8543,7 +9719,7 @@ public unsafe partial class GPUParticlesCollisionHeightField3D : GPUParticlesCol
     }
 
     private static nint __mb_get_heightfield_mask;
-    public uint GetHeightfieldMask()
+    internal uint GetHeightfieldMask()
     {
         var __mb = __mb_get_heightfield_mask;
         if (__mb == 0)
@@ -8594,7 +9770,7 @@ public unsafe partial class GPUParticlesCollisionHeightField3D : GPUParticlesCol
     }
 
     private static nint __mb_set_follow_camera_enabled;
-    public void SetFollowCameraEnabled(bool enabled)
+    internal void SetFollowCameraEnabled(bool enabled)
     {
         var __mb = __mb_set_follow_camera_enabled;
         if (__mb == 0)
@@ -8610,7 +9786,7 @@ public unsafe partial class GPUParticlesCollisionHeightField3D : GPUParticlesCol
     }
 
     private static nint __mb_is_follow_camera_enabled;
-    public bool IsFollowCameraEnabled()
+    internal bool IsFollowCameraEnabled()
     {
         var __mb = __mb_is_follow_camera_enabled;
         if (__mb == 0)
@@ -8634,7 +9810,7 @@ public unsafe partial class GPUParticlesCollisionSDF3D : GPUParticlesCollision3D
         ClassRegistry.AttachNew(this, "GPUParticlesCollisionSDF3D");
     }
 
-    public enum Resolution : long
+    public enum ResolutionEnum : long
     {
         RESOLUTION_16 = 0,
         RESOLUTION_32 = 1,
@@ -8645,8 +9821,38 @@ public unsafe partial class GPUParticlesCollisionSDF3D : GPUParticlesCollision3D
         RESOLUTION_MAX = 6,
     }
 
+    public Vector3 Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
+    public GPUParticlesCollisionSDF3D.ResolutionEnum Resolution
+    {
+        get => GetResolution();
+        set => SetResolution(value);
+    }
+
+    public float Thickness
+    {
+        get => GetThickness();
+        set => SetThickness(value);
+    }
+
+    public uint BakeMask
+    {
+        get => GetBakeMask();
+        set => SetBakeMask(value);
+    }
+
+    public Texture3D? Texture
+    {
+        get => GetTexture();
+        set => SetTexture(value);
+    }
+
     private static nint __mb_set_size;
-    public void SetSize(Vector3 size)
+    internal void SetSize(Vector3 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -8662,7 +9868,7 @@ public unsafe partial class GPUParticlesCollisionSDF3D : GPUParticlesCollision3D
     }
 
     private static nint __mb_get_size;
-    public Vector3 GetSize()
+    internal Vector3 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -8677,7 +9883,7 @@ public unsafe partial class GPUParticlesCollisionSDF3D : GPUParticlesCollision3D
     }
 
     private static nint __mb_set_resolution;
-    public void SetResolution(GPUParticlesCollisionSDF3D.Resolution resolution)
+    internal void SetResolution(GPUParticlesCollisionSDF3D.ResolutionEnum resolution)
     {
         var __mb = __mb_set_resolution;
         if (__mb == 0)
@@ -8693,7 +9899,7 @@ public unsafe partial class GPUParticlesCollisionSDF3D : GPUParticlesCollision3D
     }
 
     private static nint __mb_get_resolution;
-    public GPUParticlesCollisionSDF3D.Resolution GetResolution()
+    internal GPUParticlesCollisionSDF3D.ResolutionEnum GetResolution()
     {
         var __mb = __mb_get_resolution;
         if (__mb == 0)
@@ -8704,11 +9910,11 @@ public unsafe partial class GPUParticlesCollisionSDF3D : GPUParticlesCollision3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (GPUParticlesCollisionSDF3D.Resolution)__ret;
+        return (GPUParticlesCollisionSDF3D.ResolutionEnum)__ret;
     }
 
     private static nint __mb_set_texture;
-    public void SetTexture(Texture3D? texture)
+    internal void SetTexture(Texture3D? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -8724,7 +9930,7 @@ public unsafe partial class GPUParticlesCollisionSDF3D : GPUParticlesCollision3D
     }
 
     private static nint __mb_get_texture;
-    public Texture3D? GetTexture()
+    internal Texture3D? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -8739,7 +9945,7 @@ public unsafe partial class GPUParticlesCollisionSDF3D : GPUParticlesCollision3D
     }
 
     private static nint __mb_set_thickness;
-    public void SetThickness(float thickness)
+    internal void SetThickness(float thickness)
     {
         var __mb = __mb_set_thickness;
         if (__mb == 0)
@@ -8755,7 +9961,7 @@ public unsafe partial class GPUParticlesCollisionSDF3D : GPUParticlesCollision3D
     }
 
     private static nint __mb_get_thickness;
-    public float GetThickness()
+    internal float GetThickness()
     {
         var __mb = __mb_get_thickness;
         if (__mb == 0)
@@ -8770,7 +9976,7 @@ public unsafe partial class GPUParticlesCollisionSDF3D : GPUParticlesCollision3D
     }
 
     private static nint __mb_set_bake_mask;
-    public void SetBakeMask(uint mask)
+    internal void SetBakeMask(uint mask)
     {
         var __mb = __mb_set_bake_mask;
         if (__mb == 0)
@@ -8786,7 +9992,7 @@ public unsafe partial class GPUParticlesCollisionSDF3D : GPUParticlesCollision3D
     }
 
     private static nint __mb_get_bake_mask;
-    public uint GetBakeMask()
+    internal uint GetBakeMask()
     {
         var __mb = __mb_get_bake_mask;
         if (__mb == 0)
@@ -8846,8 +10052,14 @@ public unsafe partial class GPUParticlesCollisionSphere3D : GPUParticlesCollisio
         ClassRegistry.AttachNew(this, "GPUParticlesCollisionSphere3D");
     }
 
+    public float Radius
+    {
+        get => GetRadius();
+        set => SetRadius(value);
+    }
+
     private static nint __mb_set_radius;
-    public void SetRadius(float radius)
+    internal void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -8863,7 +10075,7 @@ public unsafe partial class GPUParticlesCollisionSphere3D : GPUParticlesCollisio
     }
 
     private static nint __mb_get_radius;
-    public float GetRadius()
+    internal float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -9545,15 +10757,111 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
         LIGHTMAP_SCALE_MAX = 4,
     }
 
-    public enum VisibilityRangeFadeMode : long
+    public enum VisibilityRangeFadeModeEnum : long
     {
         VISIBILITY_RANGE_FADE_DISABLED = 0,
         VISIBILITY_RANGE_FADE_SELF = 1,
         VISIBILITY_RANGE_FADE_DEPENDENCIES = 2,
     }
 
+    public Material? MaterialOverride
+    {
+        get => GetMaterialOverride();
+        set => SetMaterialOverride(value);
+    }
+
+    public Material? MaterialOverlay
+    {
+        get => GetMaterialOverlay();
+        set => SetMaterialOverlay(value);
+    }
+
+    public float Transparency
+    {
+        get => GetTransparency();
+        set => SetTransparency(value);
+    }
+
+    public GeometryInstance3D.ShadowCastingSetting CastShadow
+    {
+        get => GetCastShadowsSetting();
+        set => SetCastShadowsSetting(value);
+    }
+
+    public float ExtraCullMargin
+    {
+        get => GetExtraCullMargin();
+        set => SetExtraCullMargin(value);
+    }
+
+    public Aabb CustomAabb
+    {
+        get => GetCustomAabb();
+        set => SetCustomAabb(value);
+    }
+
+    public float LodBias
+    {
+        get => GetLodBias();
+        set => SetLodBias(value);
+    }
+
+    public bool IgnoreOcclusionCulling
+    {
+        get => IsIgnoringOcclusionCulling();
+        set => SetIgnoreOcclusionCulling(value);
+    }
+
+    public GeometryInstance3D.GIMode GiMode
+    {
+        get => GetGiMode();
+        set => SetGiMode(value);
+    }
+
+    public float GiLightmapTexelScale
+    {
+        get => GetLightmapTexelScale();
+        set => SetLightmapTexelScale(value);
+    }
+
+    public GeometryInstance3D.LightmapScale GiLightmapScale
+    {
+        get => GetLightmapScale();
+        set => SetLightmapScale(value);
+    }
+
+    public float VisibilityRangeBegin
+    {
+        get => GetVisibilityRangeBegin();
+        set => SetVisibilityRangeBegin(value);
+    }
+
+    public float VisibilityRangeBeginMargin
+    {
+        get => GetVisibilityRangeBeginMargin();
+        set => SetVisibilityRangeBeginMargin(value);
+    }
+
+    public float VisibilityRangeEnd
+    {
+        get => GetVisibilityRangeEnd();
+        set => SetVisibilityRangeEnd(value);
+    }
+
+    public float VisibilityRangeEndMargin
+    {
+        get => GetVisibilityRangeEndMargin();
+        set => SetVisibilityRangeEndMargin(value);
+    }
+
+    public GeometryInstance3D.VisibilityRangeFadeModeEnum VisibilityRangeFadeMode
+    {
+        get => GetVisibilityRangeFadeMode();
+        set => SetVisibilityRangeFadeMode(value);
+    }
+
     private static nint __mb_set_material_override;
-    public void SetMaterialOverride(Material? material)
+    internal void SetMaterialOverride(Material? material)
     {
         var __mb = __mb_set_material_override;
         if (__mb == 0)
@@ -9569,7 +10877,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_material_override;
-    public Material? GetMaterialOverride()
+    internal Material? GetMaterialOverride()
     {
         var __mb = __mb_get_material_override;
         if (__mb == 0)
@@ -9584,7 +10892,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_material_overlay;
-    public void SetMaterialOverlay(Material? material)
+    internal void SetMaterialOverlay(Material? material)
     {
         var __mb = __mb_set_material_overlay;
         if (__mb == 0)
@@ -9600,7 +10908,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_material_overlay;
-    public Material? GetMaterialOverlay()
+    internal Material? GetMaterialOverlay()
     {
         var __mb = __mb_get_material_overlay;
         if (__mb == 0)
@@ -9615,7 +10923,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_cast_shadows_setting;
-    public void SetCastShadowsSetting(GeometryInstance3D.ShadowCastingSetting shadowCastingSetting)
+    internal void SetCastShadowsSetting(GeometryInstance3D.ShadowCastingSetting shadowCastingSetting)
     {
         var __mb = __mb_set_cast_shadows_setting;
         if (__mb == 0)
@@ -9631,7 +10939,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_cast_shadows_setting;
-    public GeometryInstance3D.ShadowCastingSetting GetCastShadowsSetting()
+    internal GeometryInstance3D.ShadowCastingSetting GetCastShadowsSetting()
     {
         var __mb = __mb_get_cast_shadows_setting;
         if (__mb == 0)
@@ -9646,7 +10954,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_lod_bias;
-    public void SetLodBias(float bias)
+    internal void SetLodBias(float bias)
     {
         var __mb = __mb_set_lod_bias;
         if (__mb == 0)
@@ -9662,7 +10970,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_lod_bias;
-    public float GetLodBias()
+    internal float GetLodBias()
     {
         var __mb = __mb_get_lod_bias;
         if (__mb == 0)
@@ -9677,7 +10985,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_transparency;
-    public void SetTransparency(float transparency)
+    internal void SetTransparency(float transparency)
     {
         var __mb = __mb_set_transparency;
         if (__mb == 0)
@@ -9693,7 +11001,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_transparency;
-    public float GetTransparency()
+    internal float GetTransparency()
     {
         var __mb = __mb_get_transparency;
         if (__mb == 0)
@@ -9708,7 +11016,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_visibility_range_end_margin;
-    public void SetVisibilityRangeEndMargin(float distance)
+    internal void SetVisibilityRangeEndMargin(float distance)
     {
         var __mb = __mb_set_visibility_range_end_margin;
         if (__mb == 0)
@@ -9724,7 +11032,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_visibility_range_end_margin;
-    public float GetVisibilityRangeEndMargin()
+    internal float GetVisibilityRangeEndMargin()
     {
         var __mb = __mb_get_visibility_range_end_margin;
         if (__mb == 0)
@@ -9739,7 +11047,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_visibility_range_end;
-    public void SetVisibilityRangeEnd(float distance)
+    internal void SetVisibilityRangeEnd(float distance)
     {
         var __mb = __mb_set_visibility_range_end;
         if (__mb == 0)
@@ -9755,7 +11063,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_visibility_range_end;
-    public float GetVisibilityRangeEnd()
+    internal float GetVisibilityRangeEnd()
     {
         var __mb = __mb_get_visibility_range_end;
         if (__mb == 0)
@@ -9770,7 +11078,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_visibility_range_begin_margin;
-    public void SetVisibilityRangeBeginMargin(float distance)
+    internal void SetVisibilityRangeBeginMargin(float distance)
     {
         var __mb = __mb_set_visibility_range_begin_margin;
         if (__mb == 0)
@@ -9786,7 +11094,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_visibility_range_begin_margin;
-    public float GetVisibilityRangeBeginMargin()
+    internal float GetVisibilityRangeBeginMargin()
     {
         var __mb = __mb_get_visibility_range_begin_margin;
         if (__mb == 0)
@@ -9801,7 +11109,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_visibility_range_begin;
-    public void SetVisibilityRangeBegin(float distance)
+    internal void SetVisibilityRangeBegin(float distance)
     {
         var __mb = __mb_set_visibility_range_begin;
         if (__mb == 0)
@@ -9817,7 +11125,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_visibility_range_begin;
-    public float GetVisibilityRangeBegin()
+    internal float GetVisibilityRangeBegin()
     {
         var __mb = __mb_get_visibility_range_begin;
         if (__mb == 0)
@@ -9832,7 +11140,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_visibility_range_fade_mode;
-    public void SetVisibilityRangeFadeMode(GeometryInstance3D.VisibilityRangeFadeMode mode)
+    internal void SetVisibilityRangeFadeMode(GeometryInstance3D.VisibilityRangeFadeModeEnum mode)
     {
         var __mb = __mb_set_visibility_range_fade_mode;
         if (__mb == 0)
@@ -9848,7 +11156,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_visibility_range_fade_mode;
-    public GeometryInstance3D.VisibilityRangeFadeMode GetVisibilityRangeFadeMode()
+    internal GeometryInstance3D.VisibilityRangeFadeModeEnum GetVisibilityRangeFadeMode()
     {
         var __mb = __mb_get_visibility_range_fade_mode;
         if (__mb == 0)
@@ -9859,7 +11167,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (GeometryInstance3D.VisibilityRangeFadeMode)__ret;
+        return (GeometryInstance3D.VisibilityRangeFadeModeEnum)__ret;
     }
 
     private static nint __mb_set_instance_shader_parameter;
@@ -9899,7 +11207,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_extra_cull_margin;
-    public void SetExtraCullMargin(float margin)
+    internal void SetExtraCullMargin(float margin)
     {
         var __mb = __mb_set_extra_cull_margin;
         if (__mb == 0)
@@ -9915,7 +11223,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_extra_cull_margin;
-    public float GetExtraCullMargin()
+    internal float GetExtraCullMargin()
     {
         var __mb = __mb_get_extra_cull_margin;
         if (__mb == 0)
@@ -9930,7 +11238,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_lightmap_texel_scale;
-    public void SetLightmapTexelScale(float scale)
+    internal void SetLightmapTexelScale(float scale)
     {
         var __mb = __mb_set_lightmap_texel_scale;
         if (__mb == 0)
@@ -9946,7 +11254,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_lightmap_texel_scale;
-    public float GetLightmapTexelScale()
+    internal float GetLightmapTexelScale()
     {
         var __mb = __mb_get_lightmap_texel_scale;
         if (__mb == 0)
@@ -9961,7 +11269,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_lightmap_scale;
-    public void SetLightmapScale(GeometryInstance3D.LightmapScale scale)
+    internal void SetLightmapScale(GeometryInstance3D.LightmapScale scale)
     {
         var __mb = __mb_set_lightmap_scale;
         if (__mb == 0)
@@ -9977,7 +11285,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_lightmap_scale;
-    public GeometryInstance3D.LightmapScale GetLightmapScale()
+    internal GeometryInstance3D.LightmapScale GetLightmapScale()
     {
         var __mb = __mb_get_lightmap_scale;
         if (__mb == 0)
@@ -9992,7 +11300,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_gi_mode;
-    public void SetGiMode(GeometryInstance3D.GIMode mode)
+    internal void SetGiMode(GeometryInstance3D.GIMode mode)
     {
         var __mb = __mb_set_gi_mode;
         if (__mb == 0)
@@ -10008,7 +11316,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_gi_mode;
-    public GeometryInstance3D.GIMode GetGiMode()
+    internal GeometryInstance3D.GIMode GetGiMode()
     {
         var __mb = __mb_get_gi_mode;
         if (__mb == 0)
@@ -10023,7 +11331,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_ignore_occlusion_culling;
-    public void SetIgnoreOcclusionCulling(bool ignoreCulling)
+    internal void SetIgnoreOcclusionCulling(bool ignoreCulling)
     {
         var __mb = __mb_set_ignore_occlusion_culling;
         if (__mb == 0)
@@ -10039,7 +11347,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_is_ignoring_occlusion_culling;
-    public bool IsIgnoringOcclusionCulling()
+    internal bool IsIgnoringOcclusionCulling()
     {
         var __mb = __mb_is_ignoring_occlusion_culling;
         if (__mb == 0)
@@ -10054,7 +11362,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_custom_aabb;
-    public void SetCustomAabb(Aabb aabb)
+    internal void SetCustomAabb(Aabb aabb)
     {
         var __mb = __mb_set_custom_aabb;
         if (__mb == 0)
@@ -10070,7 +11378,7 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_custom_aabb;
-    public Aabb GetCustomAabb()
+    internal Aabb GetCustomAabb()
     {
         var __mb = __mb_get_custom_aabb;
         if (__mb == 0)
@@ -10196,7 +11504,7 @@ public unsafe partial class Gradient : Resource
         ClassRegistry.AttachNew(this, "Gradient");
     }
 
-    public enum InterpolationMode : long
+    public enum InterpolationModeEnum : long
     {
         GRADIENT_INTERPOLATE_LINEAR = 0,
         GRADIENT_INTERPOLATE_CONSTANT = 1,
@@ -10208,6 +11516,18 @@ public unsafe partial class Gradient : Resource
         GRADIENT_COLOR_SPACE_SRGB = 0,
         GRADIENT_COLOR_SPACE_LINEAR_SRGB = 1,
         GRADIENT_COLOR_SPACE_OKLAB = 2,
+    }
+
+    public Gradient.InterpolationModeEnum InterpolationMode
+    {
+        get => GetInterpolationMode();
+        set => SetInterpolationMode(value);
+    }
+
+    public Gradient.ColorSpace InterpolationColorSpace
+    {
+        get => GetInterpolationColorSpace();
+        set => SetInterpolationColorSpace(value);
     }
 
     private static nint __mb_add_point;
@@ -10363,7 +11683,7 @@ public unsafe partial class Gradient : Resource
     }
 
     private static nint __mb_set_interpolation_mode;
-    public void SetInterpolationMode(Gradient.InterpolationMode interpolationMode)
+    internal void SetInterpolationMode(Gradient.InterpolationModeEnum interpolationMode)
     {
         var __mb = __mb_set_interpolation_mode;
         if (__mb == 0)
@@ -10379,7 +11699,7 @@ public unsafe partial class Gradient : Resource
     }
 
     private static nint __mb_get_interpolation_mode;
-    public Gradient.InterpolationMode GetInterpolationMode()
+    internal Gradient.InterpolationModeEnum GetInterpolationMode()
     {
         var __mb = __mb_get_interpolation_mode;
         if (__mb == 0)
@@ -10390,11 +11710,11 @@ public unsafe partial class Gradient : Resource
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Gradient.InterpolationMode)__ret;
+        return (Gradient.InterpolationModeEnum)__ret;
     }
 
     private static nint __mb_set_interpolation_color_space;
-    public void SetInterpolationColorSpace(Gradient.ColorSpace interpolationColorSpace)
+    internal void SetInterpolationColorSpace(Gradient.ColorSpace interpolationColorSpace)
     {
         var __mb = __mb_set_interpolation_color_space;
         if (__mb == 0)
@@ -10410,7 +11730,7 @@ public unsafe partial class Gradient : Resource
     }
 
     private static nint __mb_get_interpolation_color_space;
-    public Gradient.ColorSpace GetInterpolationColorSpace()
+    internal Gradient.ColorSpace GetInterpolationColorSpace()
     {
         var __mb = __mb_get_interpolation_color_space;
         if (__mb == 0)
@@ -10434,8 +11754,26 @@ public unsafe partial class GradientTexture1D : Texture2D
         ClassRegistry.AttachNew(this, "GradientTexture1D");
     }
 
+    public Gradient? Gradient
+    {
+        get => GetGradient();
+        set => SetGradient(value);
+    }
+
+    public int Width
+    {
+        get => GetWidth();
+        set => SetWidth(value);
+    }
+
+    public bool UseHdr
+    {
+        get => IsUsingHdr();
+        set => SetUseHdr(value);
+    }
+
     private static nint __mb_set_gradient;
-    public void SetGradient(Gradient? gradient)
+    internal void SetGradient(Gradient? gradient)
     {
         var __mb = __mb_set_gradient;
         if (__mb == 0)
@@ -10451,7 +11789,7 @@ public unsafe partial class GradientTexture1D : Texture2D
     }
 
     private static nint __mb_get_gradient;
-    public Gradient? GetGradient()
+    internal Gradient? GetGradient()
     {
         var __mb = __mb_get_gradient;
         if (__mb == 0)
@@ -10466,7 +11804,7 @@ public unsafe partial class GradientTexture1D : Texture2D
     }
 
     private static nint __mb_set_width;
-    public void SetWidth(int width)
+    internal void SetWidth(int width)
     {
         var __mb = __mb_set_width;
         if (__mb == 0)
@@ -10482,7 +11820,7 @@ public unsafe partial class GradientTexture1D : Texture2D
     }
 
     private static nint __mb_set_use_hdr;
-    public void SetUseHdr(bool enabled)
+    internal void SetUseHdr(bool enabled)
     {
         var __mb = __mb_set_use_hdr;
         if (__mb == 0)
@@ -10498,7 +11836,7 @@ public unsafe partial class GradientTexture1D : Texture2D
     }
 
     private static nint __mb_is_using_hdr;
-    public bool IsUsingHdr()
+    internal bool IsUsingHdr()
     {
         var __mb = __mb_is_using_hdr;
         if (__mb == 0)
@@ -10522,7 +11860,7 @@ public unsafe partial class GradientTexture2D : Texture2D
         ClassRegistry.AttachNew(this, "GradientTexture2D");
     }
 
-    public enum Fill : long
+    public enum FillEnum : long
     {
         FILL_LINEAR = 0,
         FILL_RADIAL = 1,
@@ -10530,15 +11868,63 @@ public unsafe partial class GradientTexture2D : Texture2D
         FILL_CONIC = 3,
     }
 
-    public enum Repeat : long
+    public enum RepeatEnum : long
     {
         REPEAT_NONE = 0,
         REPEAT = 1,
         REPEAT_MIRROR = 2,
     }
 
+    public Gradient? Gradient
+    {
+        get => GetGradient();
+        set => SetGradient(value);
+    }
+
+    public int Width
+    {
+        get => GetWidth();
+        set => SetWidth(value);
+    }
+
+    public int Height
+    {
+        get => GetHeight();
+        set => SetHeight(value);
+    }
+
+    public bool UseHdr
+    {
+        get => IsUsingHdr();
+        set => SetUseHdr(value);
+    }
+
+    public GradientTexture2D.FillEnum Fill
+    {
+        get => GetFill();
+        set => SetFill(value);
+    }
+
+    public Vector2 FillFrom
+    {
+        get => GetFillFrom();
+        set => SetFillFrom(value);
+    }
+
+    public Vector2 FillTo
+    {
+        get => GetFillTo();
+        set => SetFillTo(value);
+    }
+
+    public GradientTexture2D.RepeatEnum Repeat
+    {
+        get => GetRepeat();
+        set => SetRepeat(value);
+    }
+
     private static nint __mb_set_gradient;
-    public void SetGradient(Gradient? gradient)
+    internal void SetGradient(Gradient? gradient)
     {
         var __mb = __mb_set_gradient;
         if (__mb == 0)
@@ -10554,7 +11940,7 @@ public unsafe partial class GradientTexture2D : Texture2D
     }
 
     private static nint __mb_get_gradient;
-    public Gradient? GetGradient()
+    internal Gradient? GetGradient()
     {
         var __mb = __mb_get_gradient;
         if (__mb == 0)
@@ -10569,7 +11955,7 @@ public unsafe partial class GradientTexture2D : Texture2D
     }
 
     private static nint __mb_set_width;
-    public void SetWidth(int width)
+    internal void SetWidth(int width)
     {
         var __mb = __mb_set_width;
         if (__mb == 0)
@@ -10585,7 +11971,7 @@ public unsafe partial class GradientTexture2D : Texture2D
     }
 
     private static nint __mb_set_height;
-    public void SetHeight(int height)
+    internal void SetHeight(int height)
     {
         var __mb = __mb_set_height;
         if (__mb == 0)
@@ -10601,7 +11987,7 @@ public unsafe partial class GradientTexture2D : Texture2D
     }
 
     private static nint __mb_set_use_hdr;
-    public void SetUseHdr(bool enabled)
+    internal void SetUseHdr(bool enabled)
     {
         var __mb = __mb_set_use_hdr;
         if (__mb == 0)
@@ -10617,7 +12003,7 @@ public unsafe partial class GradientTexture2D : Texture2D
     }
 
     private static nint __mb_is_using_hdr;
-    public bool IsUsingHdr()
+    internal bool IsUsingHdr()
     {
         var __mb = __mb_is_using_hdr;
         if (__mb == 0)
@@ -10632,7 +12018,7 @@ public unsafe partial class GradientTexture2D : Texture2D
     }
 
     private static nint __mb_set_fill;
-    public void SetFill(GradientTexture2D.Fill fill)
+    internal void SetFill(GradientTexture2D.FillEnum fill)
     {
         var __mb = __mb_set_fill;
         if (__mb == 0)
@@ -10648,7 +12034,7 @@ public unsafe partial class GradientTexture2D : Texture2D
     }
 
     private static nint __mb_get_fill;
-    public GradientTexture2D.Fill GetFill()
+    internal GradientTexture2D.FillEnum GetFill()
     {
         var __mb = __mb_get_fill;
         if (__mb == 0)
@@ -10659,11 +12045,11 @@ public unsafe partial class GradientTexture2D : Texture2D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (GradientTexture2D.Fill)__ret;
+        return (GradientTexture2D.FillEnum)__ret;
     }
 
     private static nint __mb_set_fill_from;
-    public void SetFillFrom(Vector2 fillFrom)
+    internal void SetFillFrom(Vector2 fillFrom)
     {
         var __mb = __mb_set_fill_from;
         if (__mb == 0)
@@ -10679,7 +12065,7 @@ public unsafe partial class GradientTexture2D : Texture2D
     }
 
     private static nint __mb_get_fill_from;
-    public Vector2 GetFillFrom()
+    internal Vector2 GetFillFrom()
     {
         var __mb = __mb_get_fill_from;
         if (__mb == 0)
@@ -10694,7 +12080,7 @@ public unsafe partial class GradientTexture2D : Texture2D
     }
 
     private static nint __mb_set_fill_to;
-    public void SetFillTo(Vector2 fillTo)
+    internal void SetFillTo(Vector2 fillTo)
     {
         var __mb = __mb_set_fill_to;
         if (__mb == 0)
@@ -10710,7 +12096,7 @@ public unsafe partial class GradientTexture2D : Texture2D
     }
 
     private static nint __mb_get_fill_to;
-    public Vector2 GetFillTo()
+    internal Vector2 GetFillTo()
     {
         var __mb = __mb_get_fill_to;
         if (__mb == 0)
@@ -10725,7 +12111,7 @@ public unsafe partial class GradientTexture2D : Texture2D
     }
 
     private static nint __mb_set_repeat;
-    public void SetRepeat(GradientTexture2D.Repeat repeat)
+    internal void SetRepeat(GradientTexture2D.RepeatEnum repeat)
     {
         var __mb = __mb_set_repeat;
         if (__mb == 0)
@@ -10741,7 +12127,7 @@ public unsafe partial class GradientTexture2D : Texture2D
     }
 
     private static nint __mb_get_repeat;
-    public GradientTexture2D.Repeat GetRepeat()
+    internal GradientTexture2D.RepeatEnum GetRepeat()
     {
         var __mb = __mb_get_repeat;
         if (__mb == 0)
@@ -10752,7 +12138,7 @@ public unsafe partial class GradientTexture2D : Texture2D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (GradientTexture2D.Repeat)__ret;
+        return (GradientTexture2D.RepeatEnum)__ret;
     }
 }
 
@@ -10765,16 +12151,166 @@ public unsafe partial class GraphEdit : Control
         ClassRegistry.AttachNew(this, "GraphEdit");
     }
 
-    public enum PanningScheme : long
+    public enum PanningSchemeEnum : long
     {
         SCROLL_ZOOMS = 0,
         SCROLL_PANS = 1,
     }
 
-    public enum GridPattern : long
+    public enum GridPatternEnum : long
     {
         GRID_PATTERN_LINES = 0,
         GRID_PATTERN_DOTS = 1,
+    }
+
+    public Vector2 ScrollOffset
+    {
+        get => GetScrollOffset();
+        set => SetScrollOffset(value);
+    }
+
+    public bool ShowGrid
+    {
+        get => IsShowingGrid();
+        set => SetShowGrid(value);
+    }
+
+    public GraphEdit.GridPatternEnum GridPattern
+    {
+        get => GetGridPattern();
+        set => SetGridPattern(value);
+    }
+
+    public bool SnappingEnabled
+    {
+        get => IsSnappingEnabled();
+        set => SetSnappingEnabled(value);
+    }
+
+    public int SnappingDistance
+    {
+        get => GetSnappingDistance();
+        set => SetSnappingDistance(value);
+    }
+
+    public GraphEdit.PanningSchemeEnum PanningScheme
+    {
+        get => GetPanningScheme();
+        set => SetPanningScheme(value);
+    }
+
+    public bool RightDisconnects
+    {
+        get => IsRightDisconnectsEnabled();
+        set => SetRightDisconnects(value);
+    }
+
+    public Godot.Collections.Dictionary TypeNames
+    {
+        get => GetTypeNames();
+        set => SetTypeNames(value);
+    }
+
+    public float ConnectionLinesCurvature
+    {
+        get => GetConnectionLinesCurvature();
+        set => SetConnectionLinesCurvature(value);
+    }
+
+    public float ConnectionLinesThickness
+    {
+        get => GetConnectionLinesThickness();
+        set => SetConnectionLinesThickness(value);
+    }
+
+    public bool ConnectionLinesAntialiased
+    {
+        get => IsConnectionLinesAntialiased();
+        set => SetConnectionLinesAntialiased(value);
+    }
+
+    public Godot.Collections.Array Connections
+    {
+        get => GetConnectionList();
+        set => SetConnections(value);
+    }
+
+    public float Zoom
+    {
+        get => GetZoom();
+        set => SetZoom(value);
+    }
+
+    public float ZoomMin
+    {
+        get => GetZoomMin();
+        set => SetZoomMin(value);
+    }
+
+    public float ZoomMax
+    {
+        get => GetZoomMax();
+        set => SetZoomMax(value);
+    }
+
+    public float ZoomStep
+    {
+        get => GetZoomStep();
+        set => SetZoomStep(value);
+    }
+
+    public bool MinimapEnabled
+    {
+        get => IsMinimapEnabled();
+        set => SetMinimapEnabled(value);
+    }
+
+    public Vector2 MinimapSize
+    {
+        get => GetMinimapSize();
+        set => SetMinimapSize(value);
+    }
+
+    public float MinimapOpacity
+    {
+        get => GetMinimapOpacity();
+        set => SetMinimapOpacity(value);
+    }
+
+    public bool ShowMenu
+    {
+        get => IsShowingMenu();
+        set => SetShowMenu(value);
+    }
+
+    public bool ShowZoomLabel
+    {
+        get => IsShowingZoomLabel();
+        set => SetShowZoomLabel(value);
+    }
+
+    public bool ShowZoomButtons
+    {
+        get => IsShowingZoomButtons();
+        set => SetShowZoomButtons(value);
+    }
+
+    public bool ShowGridButtons
+    {
+        get => IsShowingGridButtons();
+        set => SetShowGridButtons(value);
+    }
+
+    public bool ShowMinimapButton
+    {
+        get => IsShowingMinimapButton();
+        set => SetShowMinimapButton(value);
+    }
+
+    public bool ShowArrangeButton
+    {
+        get => IsShowingArrangeButton();
+        set => SetShowArrangeButton(value);
     }
 
     private static nint __mb_connect_node;
@@ -10874,7 +12410,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_connections;
-    public void SetConnections(Godot.Collections.Array connections)
+    internal void SetConnections(Godot.Collections.Array connections)
     {
         var __mb = __mb_set_connections;
         if (__mb == 0)
@@ -10890,7 +12426,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_connection_list;
-    public Godot.Collections.Array GetConnectionList()
+    internal Godot.Collections.Array GetConnectionList()
     {
         var __mb = __mb_get_connection_list;
         if (__mb == 0)
@@ -11007,7 +12543,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_scroll_offset;
-    public Vector2 GetScrollOffset()
+    internal Vector2 GetScrollOffset()
     {
         var __mb = __mb_get_scroll_offset;
         if (__mb == 0)
@@ -11022,7 +12558,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_scroll_offset;
-    public void SetScrollOffset(Vector2 offset)
+    internal void SetScrollOffset(Vector2 offset)
     {
         var __mb = __mb_set_scroll_offset;
         if (__mb == 0)
@@ -11228,7 +12764,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_panning_scheme;
-    public void SetPanningScheme(GraphEdit.PanningScheme scheme)
+    internal void SetPanningScheme(GraphEdit.PanningSchemeEnum scheme)
     {
         var __mb = __mb_set_panning_scheme;
         if (__mb == 0)
@@ -11244,7 +12780,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_panning_scheme;
-    public GraphEdit.PanningScheme GetPanningScheme()
+    internal GraphEdit.PanningSchemeEnum GetPanningScheme()
     {
         var __mb = __mb_get_panning_scheme;
         if (__mb == 0)
@@ -11255,11 +12791,11 @@ public unsafe partial class GraphEdit : Control
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (GraphEdit.PanningScheme)__ret;
+        return (GraphEdit.PanningSchemeEnum)__ret;
     }
 
     private static nint __mb_set_zoom;
-    public void SetZoom(float zoom)
+    internal void SetZoom(float zoom)
     {
         var __mb = __mb_set_zoom;
         if (__mb == 0)
@@ -11275,7 +12811,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_zoom;
-    public float GetZoom()
+    internal float GetZoom()
     {
         var __mb = __mb_get_zoom;
         if (__mb == 0)
@@ -11290,7 +12826,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_zoom_min;
-    public void SetZoomMin(float zoomMin)
+    internal void SetZoomMin(float zoomMin)
     {
         var __mb = __mb_set_zoom_min;
         if (__mb == 0)
@@ -11306,7 +12842,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_zoom_min;
-    public float GetZoomMin()
+    internal float GetZoomMin()
     {
         var __mb = __mb_get_zoom_min;
         if (__mb == 0)
@@ -11321,7 +12857,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_zoom_max;
-    public void SetZoomMax(float zoomMax)
+    internal void SetZoomMax(float zoomMax)
     {
         var __mb = __mb_set_zoom_max;
         if (__mb == 0)
@@ -11337,7 +12873,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_zoom_max;
-    public float GetZoomMax()
+    internal float GetZoomMax()
     {
         var __mb = __mb_get_zoom_max;
         if (__mb == 0)
@@ -11352,7 +12888,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_zoom_step;
-    public void SetZoomStep(float zoomStep)
+    internal void SetZoomStep(float zoomStep)
     {
         var __mb = __mb_set_zoom_step;
         if (__mb == 0)
@@ -11368,7 +12904,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_zoom_step;
-    public float GetZoomStep()
+    internal float GetZoomStep()
     {
         var __mb = __mb_get_zoom_step;
         if (__mb == 0)
@@ -11383,7 +12919,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_show_grid;
-    public void SetShowGrid(bool enable)
+    internal void SetShowGrid(bool enable)
     {
         var __mb = __mb_set_show_grid;
         if (__mb == 0)
@@ -11399,7 +12935,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_is_showing_grid;
-    public bool IsShowingGrid()
+    internal bool IsShowingGrid()
     {
         var __mb = __mb_is_showing_grid;
         if (__mb == 0)
@@ -11414,7 +12950,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_grid_pattern;
-    public void SetGridPattern(GraphEdit.GridPattern pattern)
+    internal void SetGridPattern(GraphEdit.GridPatternEnum pattern)
     {
         var __mb = __mb_set_grid_pattern;
         if (__mb == 0)
@@ -11430,7 +12966,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_grid_pattern;
-    public GraphEdit.GridPattern GetGridPattern()
+    internal GraphEdit.GridPatternEnum GetGridPattern()
     {
         var __mb = __mb_get_grid_pattern;
         if (__mb == 0)
@@ -11441,11 +12977,11 @@ public unsafe partial class GraphEdit : Control
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (GraphEdit.GridPattern)__ret;
+        return (GraphEdit.GridPatternEnum)__ret;
     }
 
     private static nint __mb_set_snapping_enabled;
-    public void SetSnappingEnabled(bool enable)
+    internal void SetSnappingEnabled(bool enable)
     {
         var __mb = __mb_set_snapping_enabled;
         if (__mb == 0)
@@ -11461,7 +12997,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_is_snapping_enabled;
-    public bool IsSnappingEnabled()
+    internal bool IsSnappingEnabled()
     {
         var __mb = __mb_is_snapping_enabled;
         if (__mb == 0)
@@ -11476,7 +13012,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_snapping_distance;
-    public void SetSnappingDistance(int pixels)
+    internal void SetSnappingDistance(int pixels)
     {
         var __mb = __mb_set_snapping_distance;
         if (__mb == 0)
@@ -11492,7 +13028,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_snapping_distance;
-    public int GetSnappingDistance()
+    internal int GetSnappingDistance()
     {
         var __mb = __mb_get_snapping_distance;
         if (__mb == 0)
@@ -11507,7 +13043,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_connection_lines_curvature;
-    public void SetConnectionLinesCurvature(float curvature)
+    internal void SetConnectionLinesCurvature(float curvature)
     {
         var __mb = __mb_set_connection_lines_curvature;
         if (__mb == 0)
@@ -11523,7 +13059,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_connection_lines_curvature;
-    public float GetConnectionLinesCurvature()
+    internal float GetConnectionLinesCurvature()
     {
         var __mb = __mb_get_connection_lines_curvature;
         if (__mb == 0)
@@ -11538,7 +13074,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_connection_lines_thickness;
-    public void SetConnectionLinesThickness(float pixels)
+    internal void SetConnectionLinesThickness(float pixels)
     {
         var __mb = __mb_set_connection_lines_thickness;
         if (__mb == 0)
@@ -11554,7 +13090,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_connection_lines_thickness;
-    public float GetConnectionLinesThickness()
+    internal float GetConnectionLinesThickness()
     {
         var __mb = __mb_get_connection_lines_thickness;
         if (__mb == 0)
@@ -11569,7 +13105,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_connection_lines_antialiased;
-    public void SetConnectionLinesAntialiased(bool pixels)
+    internal void SetConnectionLinesAntialiased(bool pixels)
     {
         var __mb = __mb_set_connection_lines_antialiased;
         if (__mb == 0)
@@ -11585,7 +13121,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_is_connection_lines_antialiased;
-    public bool IsConnectionLinesAntialiased()
+    internal bool IsConnectionLinesAntialiased()
     {
         var __mb = __mb_is_connection_lines_antialiased;
         if (__mb == 0)
@@ -11600,7 +13136,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_minimap_size;
-    public void SetMinimapSize(Vector2 size)
+    internal void SetMinimapSize(Vector2 size)
     {
         var __mb = __mb_set_minimap_size;
         if (__mb == 0)
@@ -11616,7 +13152,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_minimap_size;
-    public Vector2 GetMinimapSize()
+    internal Vector2 GetMinimapSize()
     {
         var __mb = __mb_get_minimap_size;
         if (__mb == 0)
@@ -11631,7 +13167,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_minimap_opacity;
-    public void SetMinimapOpacity(float opacity)
+    internal void SetMinimapOpacity(float opacity)
     {
         var __mb = __mb_set_minimap_opacity;
         if (__mb == 0)
@@ -11647,7 +13183,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_minimap_opacity;
-    public float GetMinimapOpacity()
+    internal float GetMinimapOpacity()
     {
         var __mb = __mb_get_minimap_opacity;
         if (__mb == 0)
@@ -11662,7 +13198,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_minimap_enabled;
-    public void SetMinimapEnabled(bool enable)
+    internal void SetMinimapEnabled(bool enable)
     {
         var __mb = __mb_set_minimap_enabled;
         if (__mb == 0)
@@ -11678,7 +13214,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_is_minimap_enabled;
-    public bool IsMinimapEnabled()
+    internal bool IsMinimapEnabled()
     {
         var __mb = __mb_is_minimap_enabled;
         if (__mb == 0)
@@ -11693,7 +13229,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_show_menu;
-    public void SetShowMenu(bool hidden)
+    internal void SetShowMenu(bool hidden)
     {
         var __mb = __mb_set_show_menu;
         if (__mb == 0)
@@ -11709,7 +13245,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_is_showing_menu;
-    public bool IsShowingMenu()
+    internal bool IsShowingMenu()
     {
         var __mb = __mb_is_showing_menu;
         if (__mb == 0)
@@ -11724,7 +13260,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_show_zoom_label;
-    public void SetShowZoomLabel(bool enable)
+    internal void SetShowZoomLabel(bool enable)
     {
         var __mb = __mb_set_show_zoom_label;
         if (__mb == 0)
@@ -11740,7 +13276,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_is_showing_zoom_label;
-    public bool IsShowingZoomLabel()
+    internal bool IsShowingZoomLabel()
     {
         var __mb = __mb_is_showing_zoom_label;
         if (__mb == 0)
@@ -11755,7 +13291,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_show_grid_buttons;
-    public void SetShowGridButtons(bool hidden)
+    internal void SetShowGridButtons(bool hidden)
     {
         var __mb = __mb_set_show_grid_buttons;
         if (__mb == 0)
@@ -11771,7 +13307,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_is_showing_grid_buttons;
-    public bool IsShowingGridButtons()
+    internal bool IsShowingGridButtons()
     {
         var __mb = __mb_is_showing_grid_buttons;
         if (__mb == 0)
@@ -11786,7 +13322,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_show_zoom_buttons;
-    public void SetShowZoomButtons(bool hidden)
+    internal void SetShowZoomButtons(bool hidden)
     {
         var __mb = __mb_set_show_zoom_buttons;
         if (__mb == 0)
@@ -11802,7 +13338,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_is_showing_zoom_buttons;
-    public bool IsShowingZoomButtons()
+    internal bool IsShowingZoomButtons()
     {
         var __mb = __mb_is_showing_zoom_buttons;
         if (__mb == 0)
@@ -11817,7 +13353,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_show_minimap_button;
-    public void SetShowMinimapButton(bool hidden)
+    internal void SetShowMinimapButton(bool hidden)
     {
         var __mb = __mb_set_show_minimap_button;
         if (__mb == 0)
@@ -11833,7 +13369,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_is_showing_minimap_button;
-    public bool IsShowingMinimapButton()
+    internal bool IsShowingMinimapButton()
     {
         var __mb = __mb_is_showing_minimap_button;
         if (__mb == 0)
@@ -11848,7 +13384,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_show_arrange_button;
-    public void SetShowArrangeButton(bool hidden)
+    internal void SetShowArrangeButton(bool hidden)
     {
         var __mb = __mb_set_show_arrange_button;
         if (__mb == 0)
@@ -11864,7 +13400,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_is_showing_arrange_button;
-    public bool IsShowingArrangeButton()
+    internal bool IsShowingArrangeButton()
     {
         var __mb = __mb_is_showing_arrange_button;
         if (__mb == 0)
@@ -11879,7 +13415,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_right_disconnects;
-    public void SetRightDisconnects(bool enable)
+    internal void SetRightDisconnects(bool enable)
     {
         var __mb = __mb_set_right_disconnects;
         if (__mb == 0)
@@ -11895,7 +13431,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_is_right_disconnects_enabled;
-    public bool IsRightDisconnectsEnabled()
+    internal bool IsRightDisconnectsEnabled()
     {
         var __mb = __mb_is_right_disconnects_enabled;
         if (__mb == 0)
@@ -11910,7 +13446,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_set_type_names;
-    public void SetTypeNames(Godot.Collections.Dictionary typeNames)
+    internal void SetTypeNames(Godot.Collections.Dictionary typeNames)
     {
         var __mb = __mb_set_type_names;
         if (__mb == 0)
@@ -11926,7 +13462,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_type_names;
-    public Godot.Collections.Dictionary GetTypeNames()
+    internal Godot.Collections.Dictionary GetTypeNames()
     {
         var __mb = __mb_get_type_names;
         if (__mb == 0)
@@ -12027,8 +13563,44 @@ public unsafe partial class GraphElement : Container
         ClassRegistry.AttachNew(this, "GraphElement");
     }
 
+    public Vector2 PositionOffset
+    {
+        get => GetPositionOffset();
+        set => SetPositionOffset(value);
+    }
+
+    public bool Resizable
+    {
+        get => IsResizable();
+        set => SetResizable(value);
+    }
+
+    public bool Draggable
+    {
+        get => IsDraggable();
+        set => SetDraggable(value);
+    }
+
+    public bool Selectable
+    {
+        get => IsSelectable();
+        set => SetSelectable(value);
+    }
+
+    public bool Selected
+    {
+        get => IsSelected();
+        set => SetSelected(value);
+    }
+
+    public bool ScalingMenus
+    {
+        get => IsScalingMenus();
+        set => SetScalingMenus(value);
+    }
+
     private static nint __mb_set_resizable;
-    public void SetResizable(bool resizable)
+    internal void SetResizable(bool resizable)
     {
         var __mb = __mb_set_resizable;
         if (__mb == 0)
@@ -12044,7 +13616,7 @@ public unsafe partial class GraphElement : Container
     }
 
     private static nint __mb_is_resizable;
-    public bool IsResizable()
+    internal bool IsResizable()
     {
         var __mb = __mb_is_resizable;
         if (__mb == 0)
@@ -12059,7 +13631,7 @@ public unsafe partial class GraphElement : Container
     }
 
     private static nint __mb_set_draggable;
-    public void SetDraggable(bool draggable)
+    internal void SetDraggable(bool draggable)
     {
         var __mb = __mb_set_draggable;
         if (__mb == 0)
@@ -12075,7 +13647,7 @@ public unsafe partial class GraphElement : Container
     }
 
     private static nint __mb_is_draggable;
-    public bool IsDraggable()
+    internal bool IsDraggable()
     {
         var __mb = __mb_is_draggable;
         if (__mb == 0)
@@ -12090,7 +13662,7 @@ public unsafe partial class GraphElement : Container
     }
 
     private static nint __mb_set_selectable;
-    public void SetSelectable(bool selectable)
+    internal void SetSelectable(bool selectable)
     {
         var __mb = __mb_set_selectable;
         if (__mb == 0)
@@ -12106,7 +13678,7 @@ public unsafe partial class GraphElement : Container
     }
 
     private static nint __mb_is_selectable;
-    public bool IsSelectable()
+    internal bool IsSelectable()
     {
         var __mb = __mb_is_selectable;
         if (__mb == 0)
@@ -12121,7 +13693,7 @@ public unsafe partial class GraphElement : Container
     }
 
     private static nint __mb_set_selected;
-    public void SetSelected(bool selected)
+    internal void SetSelected(bool selected)
     {
         var __mb = __mb_set_selected;
         if (__mb == 0)
@@ -12137,7 +13709,7 @@ public unsafe partial class GraphElement : Container
     }
 
     private static nint __mb_is_selected;
-    public bool IsSelected()
+    internal bool IsSelected()
     {
         var __mb = __mb_is_selected;
         if (__mb == 0)
@@ -12152,7 +13724,7 @@ public unsafe partial class GraphElement : Container
     }
 
     private static nint __mb_set_scaling_menus;
-    public void SetScalingMenus(bool scalingMenus)
+    internal void SetScalingMenus(bool scalingMenus)
     {
         var __mb = __mb_set_scaling_menus;
         if (__mb == 0)
@@ -12168,7 +13740,7 @@ public unsafe partial class GraphElement : Container
     }
 
     private static nint __mb_is_scaling_menus;
-    public bool IsScalingMenus()
+    internal bool IsScalingMenus()
     {
         var __mb = __mb_is_scaling_menus;
         if (__mb == 0)
@@ -12183,7 +13755,7 @@ public unsafe partial class GraphElement : Container
     }
 
     private static nint __mb_set_position_offset;
-    public void SetPositionOffset(Vector2 offset)
+    internal void SetPositionOffset(Vector2 offset)
     {
         var __mb = __mb_set_position_offset;
         if (__mb == 0)
@@ -12199,7 +13771,7 @@ public unsafe partial class GraphElement : Container
     }
 
     private static nint __mb_get_position_offset;
-    public Vector2 GetPositionOffset()
+    internal Vector2 GetPositionOffset()
     {
         var __mb = __mb_get_position_offset;
         if (__mb == 0)
@@ -12223,8 +13795,44 @@ public unsafe partial class GraphFrame : GraphElement
         ClassRegistry.AttachNew(this, "GraphFrame");
     }
 
+    public string Title
+    {
+        get => GetTitle();
+        set => SetTitle(value);
+    }
+
+    public bool AutoshrinkEnabled
+    {
+        get => IsAutoshrinkEnabled();
+        set => SetAutoshrinkEnabled(value);
+    }
+
+    public int AutoshrinkMargin
+    {
+        get => GetAutoshrinkMargin();
+        set => SetAutoshrinkMargin(value);
+    }
+
+    public int DragMargin
+    {
+        get => GetDragMargin();
+        set => SetDragMargin(value);
+    }
+
+    public bool TintColorEnabled
+    {
+        get => IsTintColorEnabled();
+        set => SetTintColorEnabled(value);
+    }
+
+    public Color TintColor
+    {
+        get => GetTintColor();
+        set => SetTintColor(value);
+    }
+
     private static nint __mb_set_title;
-    public void SetTitle(string title)
+    internal void SetTitle(string title)
     {
         var __mb = __mb_set_title;
         if (__mb == 0)
@@ -12241,7 +13849,7 @@ public unsafe partial class GraphFrame : GraphElement
     }
 
     private static nint __mb_get_title;
-    public string GetTitle()
+    internal string GetTitle()
     {
         var __mb = __mb_get_title;
         if (__mb == 0)
@@ -12271,7 +13879,7 @@ public unsafe partial class GraphFrame : GraphElement
     }
 
     private static nint __mb_set_autoshrink_enabled;
-    public void SetAutoshrinkEnabled(bool shrink)
+    internal void SetAutoshrinkEnabled(bool shrink)
     {
         var __mb = __mb_set_autoshrink_enabled;
         if (__mb == 0)
@@ -12287,7 +13895,7 @@ public unsafe partial class GraphFrame : GraphElement
     }
 
     private static nint __mb_is_autoshrink_enabled;
-    public bool IsAutoshrinkEnabled()
+    internal bool IsAutoshrinkEnabled()
     {
         var __mb = __mb_is_autoshrink_enabled;
         if (__mb == 0)
@@ -12302,7 +13910,7 @@ public unsafe partial class GraphFrame : GraphElement
     }
 
     private static nint __mb_set_autoshrink_margin;
-    public void SetAutoshrinkMargin(int autoshrinkMargin)
+    internal void SetAutoshrinkMargin(int autoshrinkMargin)
     {
         var __mb = __mb_set_autoshrink_margin;
         if (__mb == 0)
@@ -12318,7 +13926,7 @@ public unsafe partial class GraphFrame : GraphElement
     }
 
     private static nint __mb_get_autoshrink_margin;
-    public int GetAutoshrinkMargin()
+    internal int GetAutoshrinkMargin()
     {
         var __mb = __mb_get_autoshrink_margin;
         if (__mb == 0)
@@ -12333,7 +13941,7 @@ public unsafe partial class GraphFrame : GraphElement
     }
 
     private static nint __mb_set_drag_margin;
-    public void SetDragMargin(int dragMargin)
+    internal void SetDragMargin(int dragMargin)
     {
         var __mb = __mb_set_drag_margin;
         if (__mb == 0)
@@ -12349,7 +13957,7 @@ public unsafe partial class GraphFrame : GraphElement
     }
 
     private static nint __mb_get_drag_margin;
-    public int GetDragMargin()
+    internal int GetDragMargin()
     {
         var __mb = __mb_get_drag_margin;
         if (__mb == 0)
@@ -12364,7 +13972,7 @@ public unsafe partial class GraphFrame : GraphElement
     }
 
     private static nint __mb_set_tint_color_enabled;
-    public void SetTintColorEnabled(bool enable)
+    internal void SetTintColorEnabled(bool enable)
     {
         var __mb = __mb_set_tint_color_enabled;
         if (__mb == 0)
@@ -12380,7 +13988,7 @@ public unsafe partial class GraphFrame : GraphElement
     }
 
     private static nint __mb_is_tint_color_enabled;
-    public bool IsTintColorEnabled()
+    internal bool IsTintColorEnabled()
     {
         var __mb = __mb_is_tint_color_enabled;
         if (__mb == 0)
@@ -12395,7 +14003,7 @@ public unsafe partial class GraphFrame : GraphElement
     }
 
     private static nint __mb_set_tint_color;
-    public void SetTintColor(Color color)
+    internal void SetTintColor(Color color)
     {
         var __mb = __mb_set_tint_color;
         if (__mb == 0)
@@ -12411,7 +14019,7 @@ public unsafe partial class GraphFrame : GraphElement
     }
 
     private static nint __mb_get_tint_color;
-    public Color GetTintColor()
+    internal Color GetTintColor()
     {
         var __mb = __mb_get_tint_color;
         if (__mb == 0)
@@ -12435,8 +14043,26 @@ public unsafe partial class GraphNode : GraphElement
         ClassRegistry.AttachNew(this, "GraphNode");
     }
 
+    public string Title
+    {
+        get => GetTitle();
+        set => SetTitle(value);
+    }
+
+    public bool IgnoreInvalidConnectionType
+    {
+        get => IsIgnoringValidConnectionType();
+        set => SetIgnoreInvalidConnectionType(value);
+    }
+
+    public Control.FocusModeEnum SlotsFocusMode
+    {
+        get => GetSlotsFocusMode();
+        set => SetSlotsFocusMode(value);
+    }
+
     private static nint __mb_set_title;
-    public void SetTitle(string title)
+    internal void SetTitle(string title)
     {
         var __mb = __mb_set_title;
         if (__mb == 0)
@@ -12453,7 +14079,7 @@ public unsafe partial class GraphNode : GraphElement
     }
 
     private static nint __mb_get_title;
-    public string GetTitle()
+    internal string GetTitle()
     {
         var __mb = __mb_get_title;
         if (__mb == 0)
@@ -12942,7 +14568,7 @@ public unsafe partial class GraphNode : GraphElement
     }
 
     private static nint __mb_set_ignore_invalid_connection_type;
-    public void SetIgnoreInvalidConnectionType(bool ignore)
+    internal void SetIgnoreInvalidConnectionType(bool ignore)
     {
         var __mb = __mb_set_ignore_invalid_connection_type;
         if (__mb == 0)
@@ -12958,7 +14584,7 @@ public unsafe partial class GraphNode : GraphElement
     }
 
     private static nint __mb_is_ignoring_valid_connection_type;
-    public bool IsIgnoringValidConnectionType()
+    internal bool IsIgnoringValidConnectionType()
     {
         var __mb = __mb_is_ignoring_valid_connection_type;
         if (__mb == 0)
@@ -12973,7 +14599,7 @@ public unsafe partial class GraphNode : GraphElement
     }
 
     private static nint __mb_set_slots_focus_mode;
-    public void SetSlotsFocusMode(Control.FocusMode focusMode)
+    internal void SetSlotsFocusMode(Control.FocusModeEnum focusMode)
     {
         var __mb = __mb_set_slots_focus_mode;
         if (__mb == 0)
@@ -12989,7 +14615,7 @@ public unsafe partial class GraphNode : GraphElement
     }
 
     private static nint __mb_get_slots_focus_mode;
-    public Control.FocusMode GetSlotsFocusMode()
+    internal Control.FocusModeEnum GetSlotsFocusMode()
     {
         var __mb = __mb_get_slots_focus_mode;
         if (__mb == 0)
@@ -13000,7 +14626,7 @@ public unsafe partial class GraphNode : GraphElement
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Control.FocusMode)__ret;
+        return (Control.FocusModeEnum)__ret;
     }
 
     private static nint __mb_get_input_port_count;
@@ -13202,8 +14828,14 @@ public unsafe partial class GridContainer : Container
         ClassRegistry.AttachNew(this, "GridContainer");
     }
 
+    public int Columns
+    {
+        get => GetColumns();
+        set => SetColumns(value);
+    }
+
     private static nint __mb_set_columns;
-    public void SetColumns(int columns)
+    internal void SetColumns(int columns)
     {
         var __mb = __mb_set_columns;
         if (__mb == 0)
@@ -13219,7 +14851,7 @@ public unsafe partial class GridContainer : Container
     }
 
     private static nint __mb_get_columns;
-    public int GetColumns()
+    internal int GetColumns()
     {
         var __mb = __mb_get_columns;
         if (__mb == 0)
@@ -13250,8 +14882,86 @@ public unsafe partial class GridMap : Node3D
         DEBUG_VISIBILITY_MODE_FORCE_HIDE = 2,
     }
 
+    public MeshLibrary? MeshLibrary
+    {
+        get => GetMeshLibrary();
+        set => SetMeshLibrary(value);
+    }
+
+    public PhysicsMaterial? PhysicsMaterial
+    {
+        get => GetPhysicsMaterial();
+        set => SetPhysicsMaterial(value);
+    }
+
+    public Vector3 CellSize
+    {
+        get => GetCellSize();
+        set => SetCellSize(value);
+    }
+
+    public int CellOctantSize
+    {
+        get => GetOctantSize();
+        set => SetOctantSize(value);
+    }
+
+    public bool CellCenterX
+    {
+        get => GetCenterX();
+        set => SetCenterX(value);
+    }
+
+    public bool CellCenterY
+    {
+        get => GetCenterY();
+        set => SetCenterY(value);
+    }
+
+    public bool CellCenterZ
+    {
+        get => GetCenterZ();
+        set => SetCenterZ(value);
+    }
+
+    public float CellScale
+    {
+        get => GetCellScale();
+        set => SetCellScale(value);
+    }
+
+    public uint CollisionLayer
+    {
+        get => GetCollisionLayer();
+        set => SetCollisionLayer(value);
+    }
+
+    public uint CollisionMask
+    {
+        get => GetCollisionMask();
+        set => SetCollisionMask(value);
+    }
+
+    public float CollisionPriority
+    {
+        get => GetCollisionPriority();
+        set => SetCollisionPriority(value);
+    }
+
+    public GridMap.DebugVisibilityMode CollisionVisibilityMode
+    {
+        get => GetCollisionVisibilityMode();
+        set => SetCollisionVisibilityMode(value);
+    }
+
+    public bool BakeNavigation
+    {
+        get => IsBakingNavigation();
+        set => SetBakeNavigation(value);
+    }
+
     private static nint __mb_set_collision_layer;
-    public void SetCollisionLayer(uint layer)
+    internal void SetCollisionLayer(uint layer)
     {
         var __mb = __mb_set_collision_layer;
         if (__mb == 0)
@@ -13267,7 +14977,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_get_collision_layer;
-    public uint GetCollisionLayer()
+    internal uint GetCollisionLayer()
     {
         var __mb = __mb_get_collision_layer;
         if (__mb == 0)
@@ -13282,7 +14992,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_set_collision_mask;
-    public void SetCollisionMask(uint mask)
+    internal void SetCollisionMask(uint mask)
     {
         var __mb = __mb_set_collision_mask;
         if (__mb == 0)
@@ -13298,7 +15008,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_get_collision_mask;
-    public uint GetCollisionMask()
+    internal uint GetCollisionMask()
     {
         var __mb = __mb_get_collision_mask;
         if (__mb == 0)
@@ -13385,7 +15095,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_set_collision_priority;
-    public void SetCollisionPriority(float priority)
+    internal void SetCollisionPriority(float priority)
     {
         var __mb = __mb_set_collision_priority;
         if (__mb == 0)
@@ -13401,7 +15111,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_get_collision_priority;
-    public float GetCollisionPriority()
+    internal float GetCollisionPriority()
     {
         var __mb = __mb_get_collision_priority;
         if (__mb == 0)
@@ -13416,7 +15126,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_set_collision_visibility_mode;
-    public void SetCollisionVisibilityMode(GridMap.DebugVisibilityMode visibilityMode)
+    internal void SetCollisionVisibilityMode(GridMap.DebugVisibilityMode visibilityMode)
     {
         var __mb = __mb_set_collision_visibility_mode;
         if (__mb == 0)
@@ -13432,7 +15142,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_get_collision_visibility_mode;
-    public GridMap.DebugVisibilityMode GetCollisionVisibilityMode()
+    internal GridMap.DebugVisibilityMode GetCollisionVisibilityMode()
     {
         var __mb = __mb_get_collision_visibility_mode;
         if (__mb == 0)
@@ -13447,7 +15157,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_set_physics_material;
-    public void SetPhysicsMaterial(PhysicsMaterial? material)
+    internal void SetPhysicsMaterial(PhysicsMaterial? material)
     {
         var __mb = __mb_set_physics_material;
         if (__mb == 0)
@@ -13463,7 +15173,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_get_physics_material;
-    public PhysicsMaterial? GetPhysicsMaterial()
+    internal PhysicsMaterial? GetPhysicsMaterial()
     {
         var __mb = __mb_get_physics_material;
         if (__mb == 0)
@@ -13478,7 +15188,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_set_bake_navigation;
-    public void SetBakeNavigation(bool bakeNavigation)
+    internal void SetBakeNavigation(bool bakeNavigation)
     {
         var __mb = __mb_set_bake_navigation;
         if (__mb == 0)
@@ -13494,7 +15204,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_is_baking_navigation;
-    public bool IsBakingNavigation()
+    internal bool IsBakingNavigation()
     {
         var __mb = __mb_is_baking_navigation;
         if (__mb == 0)
@@ -13540,7 +15250,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_set_mesh_library;
-    public void SetMeshLibrary(MeshLibrary? meshLibrary)
+    internal void SetMeshLibrary(MeshLibrary? meshLibrary)
     {
         var __mb = __mb_set_mesh_library;
         if (__mb == 0)
@@ -13556,7 +15266,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_get_mesh_library;
-    public MeshLibrary? GetMeshLibrary()
+    internal MeshLibrary? GetMeshLibrary()
     {
         var __mb = __mb_get_mesh_library;
         if (__mb == 0)
@@ -13571,7 +15281,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_set_cell_size;
-    public void SetCellSize(Vector3 size)
+    internal void SetCellSize(Vector3 size)
     {
         var __mb = __mb_set_cell_size;
         if (__mb == 0)
@@ -13587,7 +15297,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_get_cell_size;
-    public Vector3 GetCellSize()
+    internal Vector3 GetCellSize()
     {
         var __mb = __mb_get_cell_size;
         if (__mb == 0)
@@ -13602,7 +15312,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_set_cell_scale;
-    public void SetCellScale(float scale)
+    internal void SetCellScale(float scale)
     {
         var __mb = __mb_set_cell_scale;
         if (__mb == 0)
@@ -13618,7 +15328,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_get_cell_scale;
-    public float GetCellScale()
+    internal float GetCellScale()
     {
         var __mb = __mb_get_cell_scale;
         if (__mb == 0)
@@ -13633,7 +15343,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_set_octant_size;
-    public void SetOctantSize(int size)
+    internal void SetOctantSize(int size)
     {
         var __mb = __mb_set_octant_size;
         if (__mb == 0)
@@ -13649,7 +15359,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_get_octant_size;
-    public int GetOctantSize()
+    internal int GetOctantSize()
     {
         var __mb = __mb_get_octant_size;
         if (__mb == 0)
@@ -13826,7 +15536,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_set_center_x;
-    public void SetCenterX(bool enable)
+    internal void SetCenterX(bool enable)
     {
         var __mb = __mb_set_center_x;
         if (__mb == 0)
@@ -13842,7 +15552,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_get_center_x;
-    public bool GetCenterX()
+    internal bool GetCenterX()
     {
         var __mb = __mb_get_center_x;
         if (__mb == 0)
@@ -13857,7 +15567,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_set_center_y;
-    public void SetCenterY(bool enable)
+    internal void SetCenterY(bool enable)
     {
         var __mb = __mb_set_center_y;
         if (__mb == 0)
@@ -13873,7 +15583,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_get_center_y;
-    public bool GetCenterY()
+    internal bool GetCenterY()
     {
         var __mb = __mb_get_center_y;
         if (__mb == 0)
@@ -13888,7 +15598,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_set_center_z;
-    public void SetCenterZ(bool enable)
+    internal void SetCenterZ(bool enable)
     {
         var __mb = __mb_set_center_z;
         if (__mb == 0)
@@ -13904,7 +15614,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_get_center_z;
-    public bool GetCenterZ()
+    internal bool GetCenterZ()
     {
         var __mb = __mb_get_center_z;
         if (__mb == 0)
@@ -14310,8 +16020,20 @@ public unsafe partial class GrooveJoint2D : Joint2D
         ClassRegistry.AttachNew(this, "GrooveJoint2D");
     }
 
+    public float Length
+    {
+        get => GetLength();
+        set => SetLength(value);
+    }
+
+    public float InitialOffset
+    {
+        get => GetInitialOffset();
+        set => SetInitialOffset(value);
+    }
+
     private static nint __mb_set_length;
-    public void SetLength(float length)
+    internal void SetLength(float length)
     {
         var __mb = __mb_set_length;
         if (__mb == 0)
@@ -14327,7 +16049,7 @@ public unsafe partial class GrooveJoint2D : Joint2D
     }
 
     private static nint __mb_get_length;
-    public float GetLength()
+    internal float GetLength()
     {
         var __mb = __mb_get_length;
         if (__mb == 0)
@@ -14342,7 +16064,7 @@ public unsafe partial class GrooveJoint2D : Joint2D
     }
 
     private static nint __mb_set_initial_offset;
-    public void SetInitialOffset(float offset)
+    internal void SetInitialOffset(float offset)
     {
         var __mb = __mb_set_initial_offset;
         if (__mb == 0)
@@ -14358,7 +16080,7 @@ public unsafe partial class GrooveJoint2D : Joint2D
     }
 
     private static nint __mb_get_initial_offset;
-    public float GetInitialOffset()
+    internal float GetInitialOffset()
     {
         var __mb = __mb_get_initial_offset;
         if (__mb == 0)

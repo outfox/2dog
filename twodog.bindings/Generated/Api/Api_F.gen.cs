@@ -39,8 +39,14 @@ public unsafe partial class FBXState : GLTFState
         ClassRegistry.AttachNew(this, "FBXState");
     }
 
+    public bool AllowGeometryHelperNodes
+    {
+        get => GetAllowGeometryHelperNodes();
+        set => SetAllowGeometryHelperNodes(value);
+    }
+
     private static nint __mb_get_allow_geometry_helper_nodes;
-    public bool GetAllowGeometryHelperNodes()
+    internal bool GetAllowGeometryHelperNodes()
     {
         var __mb = __mb_get_allow_geometry_helper_nodes;
         if (__mb == 0)
@@ -55,7 +61,7 @@ public unsafe partial class FBXState : GLTFState
     }
 
     private static nint __mb_set_allow_geometry_helper_nodes;
-    public void SetAllowGeometryHelperNodes(bool allow)
+    internal void SetAllowGeometryHelperNodes(bool allow)
     {
         var __mb = __mb_set_allow_geometry_helper_nodes;
         if (__mb == 0)
@@ -80,7 +86,7 @@ public unsafe partial class FastNoiseLite : Noise
         ClassRegistry.AttachNew(this, "FastNoiseLite");
     }
 
-    public enum NoiseType : long
+    public enum NoiseTypeEnum : long
     {
         TYPE_VALUE = 5,
         TYPE_VALUE_CUBIC = 4,
@@ -90,7 +96,7 @@ public unsafe partial class FastNoiseLite : Noise
         TYPE_SIMPLEX_SMOOTH = 1,
     }
 
-    public enum FractalType : long
+    public enum FractalTypeEnum : long
     {
         FRACTAL_NONE = 0,
         FRACTAL_FBM = 1,
@@ -98,7 +104,7 @@ public unsafe partial class FastNoiseLite : Noise
         FRACTAL_PING_PONG = 3,
     }
 
-    public enum CellularDistanceFunction : long
+    public enum CellularDistanceFunctionEnum : long
     {
         DISTANCE_EUCLIDEAN = 0,
         DISTANCE_EUCLIDEAN_SQUARED = 1,
@@ -106,7 +112,7 @@ public unsafe partial class FastNoiseLite : Noise
         DISTANCE_HYBRID = 3,
     }
 
-    public enum CellularReturnType : long
+    public enum CellularReturnTypeEnum : long
     {
         RETURN_CELL_VALUE = 0,
         RETURN_DISTANCE = 1,
@@ -117,22 +123,148 @@ public unsafe partial class FastNoiseLite : Noise
         RETURN_DISTANCE2_DIV = 6,
     }
 
-    public enum DomainWarpType : long
+    public enum DomainWarpTypeEnum : long
     {
         DOMAIN_WARP_SIMPLEX = 0,
         DOMAIN_WARP_SIMPLEX_REDUCED = 1,
         DOMAIN_WARP_BASIC_GRID = 2,
     }
 
-    public enum DomainWarpFractalType : long
+    public enum DomainWarpFractalTypeEnum : long
     {
         DOMAIN_WARP_FRACTAL_NONE = 0,
         DOMAIN_WARP_FRACTAL_PROGRESSIVE = 1,
         DOMAIN_WARP_FRACTAL_INDEPENDENT = 2,
     }
 
+    public FastNoiseLite.NoiseTypeEnum NoiseType
+    {
+        get => GetNoiseType();
+        set => SetNoiseType(value);
+    }
+
+    public int Seed
+    {
+        get => GetSeed();
+        set => SetSeed(value);
+    }
+
+    public float Frequency
+    {
+        get => GetFrequency();
+        set => SetFrequency(value);
+    }
+
+    public Vector3 Offset
+    {
+        get => GetOffset();
+        set => SetOffset(value);
+    }
+
+    public FastNoiseLite.FractalTypeEnum FractalType
+    {
+        get => GetFractalType();
+        set => SetFractalType(value);
+    }
+
+    public int FractalOctaves
+    {
+        get => GetFractalOctaves();
+        set => SetFractalOctaves(value);
+    }
+
+    public float FractalLacunarity
+    {
+        get => GetFractalLacunarity();
+        set => SetFractalLacunarity(value);
+    }
+
+    public float FractalGain
+    {
+        get => GetFractalGain();
+        set => SetFractalGain(value);
+    }
+
+    public float FractalWeightedStrength
+    {
+        get => GetFractalWeightedStrength();
+        set => SetFractalWeightedStrength(value);
+    }
+
+    public float FractalPingPongStrength
+    {
+        get => GetFractalPingPongStrength();
+        set => SetFractalPingPongStrength(value);
+    }
+
+    public FastNoiseLite.CellularDistanceFunctionEnum CellularDistanceFunction
+    {
+        get => GetCellularDistanceFunction();
+        set => SetCellularDistanceFunction(value);
+    }
+
+    public float CellularJitter
+    {
+        get => GetCellularJitter();
+        set => SetCellularJitter(value);
+    }
+
+    public FastNoiseLite.CellularReturnTypeEnum CellularReturnType
+    {
+        get => GetCellularReturnType();
+        set => SetCellularReturnType(value);
+    }
+
+    public bool DomainWarpEnabled
+    {
+        get => IsDomainWarpEnabled();
+        set => SetDomainWarpEnabled(value);
+    }
+
+    public FastNoiseLite.DomainWarpTypeEnum DomainWarpType
+    {
+        get => GetDomainWarpType();
+        set => SetDomainWarpType(value);
+    }
+
+    public float DomainWarpAmplitude
+    {
+        get => GetDomainWarpAmplitude();
+        set => SetDomainWarpAmplitude(value);
+    }
+
+    public float DomainWarpFrequency
+    {
+        get => GetDomainWarpFrequency();
+        set => SetDomainWarpFrequency(value);
+    }
+
+    public FastNoiseLite.DomainWarpFractalTypeEnum DomainWarpFractalType
+    {
+        get => GetDomainWarpFractalType();
+        set => SetDomainWarpFractalType(value);
+    }
+
+    public int DomainWarpFractalOctaves
+    {
+        get => GetDomainWarpFractalOctaves();
+        set => SetDomainWarpFractalOctaves(value);
+    }
+
+    public float DomainWarpFractalLacunarity
+    {
+        get => GetDomainWarpFractalLacunarity();
+        set => SetDomainWarpFractalLacunarity(value);
+    }
+
+    public float DomainWarpFractalGain
+    {
+        get => GetDomainWarpFractalGain();
+        set => SetDomainWarpFractalGain(value);
+    }
+
     private static nint __mb_set_noise_type;
-    public void SetNoiseType(FastNoiseLite.NoiseType type)
+    internal void SetNoiseType(FastNoiseLite.NoiseTypeEnum type)
     {
         var __mb = __mb_set_noise_type;
         if (__mb == 0)
@@ -148,7 +280,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_noise_type;
-    public FastNoiseLite.NoiseType GetNoiseType()
+    internal FastNoiseLite.NoiseTypeEnum GetNoiseType()
     {
         var __mb = __mb_get_noise_type;
         if (__mb == 0)
@@ -159,11 +291,11 @@ public unsafe partial class FastNoiseLite : Noise
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (FastNoiseLite.NoiseType)__ret;
+        return (FastNoiseLite.NoiseTypeEnum)__ret;
     }
 
     private static nint __mb_set_seed;
-    public void SetSeed(int seed)
+    internal void SetSeed(int seed)
     {
         var __mb = __mb_set_seed;
         if (__mb == 0)
@@ -179,7 +311,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_seed;
-    public int GetSeed()
+    internal int GetSeed()
     {
         var __mb = __mb_get_seed;
         if (__mb == 0)
@@ -194,7 +326,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_set_frequency;
-    public void SetFrequency(float freq)
+    internal void SetFrequency(float freq)
     {
         var __mb = __mb_set_frequency;
         if (__mb == 0)
@@ -210,7 +342,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_frequency;
-    public float GetFrequency()
+    internal float GetFrequency()
     {
         var __mb = __mb_get_frequency;
         if (__mb == 0)
@@ -225,7 +357,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_set_offset;
-    public void SetOffset(Vector3 offset)
+    internal void SetOffset(Vector3 offset)
     {
         var __mb = __mb_set_offset;
         if (__mb == 0)
@@ -241,7 +373,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_offset;
-    public Vector3 GetOffset()
+    internal Vector3 GetOffset()
     {
         var __mb = __mb_get_offset;
         if (__mb == 0)
@@ -256,7 +388,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_set_fractal_type;
-    public void SetFractalType(FastNoiseLite.FractalType type)
+    internal void SetFractalType(FastNoiseLite.FractalTypeEnum type)
     {
         var __mb = __mb_set_fractal_type;
         if (__mb == 0)
@@ -272,7 +404,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_fractal_type;
-    public FastNoiseLite.FractalType GetFractalType()
+    internal FastNoiseLite.FractalTypeEnum GetFractalType()
     {
         var __mb = __mb_get_fractal_type;
         if (__mb == 0)
@@ -283,11 +415,11 @@ public unsafe partial class FastNoiseLite : Noise
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (FastNoiseLite.FractalType)__ret;
+        return (FastNoiseLite.FractalTypeEnum)__ret;
     }
 
     private static nint __mb_set_fractal_octaves;
-    public void SetFractalOctaves(int octaveCount)
+    internal void SetFractalOctaves(int octaveCount)
     {
         var __mb = __mb_set_fractal_octaves;
         if (__mb == 0)
@@ -303,7 +435,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_fractal_octaves;
-    public int GetFractalOctaves()
+    internal int GetFractalOctaves()
     {
         var __mb = __mb_get_fractal_octaves;
         if (__mb == 0)
@@ -318,7 +450,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_set_fractal_lacunarity;
-    public void SetFractalLacunarity(float lacunarity)
+    internal void SetFractalLacunarity(float lacunarity)
     {
         var __mb = __mb_set_fractal_lacunarity;
         if (__mb == 0)
@@ -334,7 +466,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_fractal_lacunarity;
-    public float GetFractalLacunarity()
+    internal float GetFractalLacunarity()
     {
         var __mb = __mb_get_fractal_lacunarity;
         if (__mb == 0)
@@ -349,7 +481,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_set_fractal_gain;
-    public void SetFractalGain(float gain)
+    internal void SetFractalGain(float gain)
     {
         var __mb = __mb_set_fractal_gain;
         if (__mb == 0)
@@ -365,7 +497,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_fractal_gain;
-    public float GetFractalGain()
+    internal float GetFractalGain()
     {
         var __mb = __mb_get_fractal_gain;
         if (__mb == 0)
@@ -380,7 +512,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_set_fractal_weighted_strength;
-    public void SetFractalWeightedStrength(float weightedStrength)
+    internal void SetFractalWeightedStrength(float weightedStrength)
     {
         var __mb = __mb_set_fractal_weighted_strength;
         if (__mb == 0)
@@ -396,7 +528,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_fractal_weighted_strength;
-    public float GetFractalWeightedStrength()
+    internal float GetFractalWeightedStrength()
     {
         var __mb = __mb_get_fractal_weighted_strength;
         if (__mb == 0)
@@ -411,7 +543,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_set_fractal_ping_pong_strength;
-    public void SetFractalPingPongStrength(float pingPongStrength)
+    internal void SetFractalPingPongStrength(float pingPongStrength)
     {
         var __mb = __mb_set_fractal_ping_pong_strength;
         if (__mb == 0)
@@ -427,7 +559,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_fractal_ping_pong_strength;
-    public float GetFractalPingPongStrength()
+    internal float GetFractalPingPongStrength()
     {
         var __mb = __mb_get_fractal_ping_pong_strength;
         if (__mb == 0)
@@ -442,7 +574,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_set_cellular_distance_function;
-    public void SetCellularDistanceFunction(FastNoiseLite.CellularDistanceFunction func)
+    internal void SetCellularDistanceFunction(FastNoiseLite.CellularDistanceFunctionEnum func)
     {
         var __mb = __mb_set_cellular_distance_function;
         if (__mb == 0)
@@ -458,7 +590,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_cellular_distance_function;
-    public FastNoiseLite.CellularDistanceFunction GetCellularDistanceFunction()
+    internal FastNoiseLite.CellularDistanceFunctionEnum GetCellularDistanceFunction()
     {
         var __mb = __mb_get_cellular_distance_function;
         if (__mb == 0)
@@ -469,11 +601,11 @@ public unsafe partial class FastNoiseLite : Noise
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (FastNoiseLite.CellularDistanceFunction)__ret;
+        return (FastNoiseLite.CellularDistanceFunctionEnum)__ret;
     }
 
     private static nint __mb_set_cellular_jitter;
-    public void SetCellularJitter(float jitter)
+    internal void SetCellularJitter(float jitter)
     {
         var __mb = __mb_set_cellular_jitter;
         if (__mb == 0)
@@ -489,7 +621,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_cellular_jitter;
-    public float GetCellularJitter()
+    internal float GetCellularJitter()
     {
         var __mb = __mb_get_cellular_jitter;
         if (__mb == 0)
@@ -504,7 +636,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_set_cellular_return_type;
-    public void SetCellularReturnType(FastNoiseLite.CellularReturnType ret)
+    internal void SetCellularReturnType(FastNoiseLite.CellularReturnTypeEnum ret)
     {
         var __mb = __mb_set_cellular_return_type;
         if (__mb == 0)
@@ -520,7 +652,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_cellular_return_type;
-    public FastNoiseLite.CellularReturnType GetCellularReturnType()
+    internal FastNoiseLite.CellularReturnTypeEnum GetCellularReturnType()
     {
         var __mb = __mb_get_cellular_return_type;
         if (__mb == 0)
@@ -531,11 +663,11 @@ public unsafe partial class FastNoiseLite : Noise
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (FastNoiseLite.CellularReturnType)__ret;
+        return (FastNoiseLite.CellularReturnTypeEnum)__ret;
     }
 
     private static nint __mb_set_domain_warp_enabled;
-    public void SetDomainWarpEnabled(bool domainWarpEnabled)
+    internal void SetDomainWarpEnabled(bool domainWarpEnabled)
     {
         var __mb = __mb_set_domain_warp_enabled;
         if (__mb == 0)
@@ -551,7 +683,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_is_domain_warp_enabled;
-    public bool IsDomainWarpEnabled()
+    internal bool IsDomainWarpEnabled()
     {
         var __mb = __mb_is_domain_warp_enabled;
         if (__mb == 0)
@@ -566,7 +698,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_set_domain_warp_type;
-    public void SetDomainWarpType(FastNoiseLite.DomainWarpType domainWarpType)
+    internal void SetDomainWarpType(FastNoiseLite.DomainWarpTypeEnum domainWarpType)
     {
         var __mb = __mb_set_domain_warp_type;
         if (__mb == 0)
@@ -582,7 +714,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_domain_warp_type;
-    public FastNoiseLite.DomainWarpType GetDomainWarpType()
+    internal FastNoiseLite.DomainWarpTypeEnum GetDomainWarpType()
     {
         var __mb = __mb_get_domain_warp_type;
         if (__mb == 0)
@@ -593,11 +725,11 @@ public unsafe partial class FastNoiseLite : Noise
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (FastNoiseLite.DomainWarpType)__ret;
+        return (FastNoiseLite.DomainWarpTypeEnum)__ret;
     }
 
     private static nint __mb_set_domain_warp_amplitude;
-    public void SetDomainWarpAmplitude(float domainWarpAmplitude)
+    internal void SetDomainWarpAmplitude(float domainWarpAmplitude)
     {
         var __mb = __mb_set_domain_warp_amplitude;
         if (__mb == 0)
@@ -613,7 +745,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_domain_warp_amplitude;
-    public float GetDomainWarpAmplitude()
+    internal float GetDomainWarpAmplitude()
     {
         var __mb = __mb_get_domain_warp_amplitude;
         if (__mb == 0)
@@ -628,7 +760,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_set_domain_warp_frequency;
-    public void SetDomainWarpFrequency(float domainWarpFrequency)
+    internal void SetDomainWarpFrequency(float domainWarpFrequency)
     {
         var __mb = __mb_set_domain_warp_frequency;
         if (__mb == 0)
@@ -644,7 +776,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_domain_warp_frequency;
-    public float GetDomainWarpFrequency()
+    internal float GetDomainWarpFrequency()
     {
         var __mb = __mb_get_domain_warp_frequency;
         if (__mb == 0)
@@ -659,7 +791,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_set_domain_warp_fractal_type;
-    public void SetDomainWarpFractalType(FastNoiseLite.DomainWarpFractalType domainWarpFractalType)
+    internal void SetDomainWarpFractalType(FastNoiseLite.DomainWarpFractalTypeEnum domainWarpFractalType)
     {
         var __mb = __mb_set_domain_warp_fractal_type;
         if (__mb == 0)
@@ -675,7 +807,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_domain_warp_fractal_type;
-    public FastNoiseLite.DomainWarpFractalType GetDomainWarpFractalType()
+    internal FastNoiseLite.DomainWarpFractalTypeEnum GetDomainWarpFractalType()
     {
         var __mb = __mb_get_domain_warp_fractal_type;
         if (__mb == 0)
@@ -686,11 +818,11 @@ public unsafe partial class FastNoiseLite : Noise
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (FastNoiseLite.DomainWarpFractalType)__ret;
+        return (FastNoiseLite.DomainWarpFractalTypeEnum)__ret;
     }
 
     private static nint __mb_set_domain_warp_fractal_octaves;
-    public void SetDomainWarpFractalOctaves(int domainWarpOctaveCount)
+    internal void SetDomainWarpFractalOctaves(int domainWarpOctaveCount)
     {
         var __mb = __mb_set_domain_warp_fractal_octaves;
         if (__mb == 0)
@@ -706,7 +838,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_domain_warp_fractal_octaves;
-    public int GetDomainWarpFractalOctaves()
+    internal int GetDomainWarpFractalOctaves()
     {
         var __mb = __mb_get_domain_warp_fractal_octaves;
         if (__mb == 0)
@@ -721,7 +853,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_set_domain_warp_fractal_lacunarity;
-    public void SetDomainWarpFractalLacunarity(float domainWarpLacunarity)
+    internal void SetDomainWarpFractalLacunarity(float domainWarpLacunarity)
     {
         var __mb = __mb_set_domain_warp_fractal_lacunarity;
         if (__mb == 0)
@@ -737,7 +869,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_domain_warp_fractal_lacunarity;
-    public float GetDomainWarpFractalLacunarity()
+    internal float GetDomainWarpFractalLacunarity()
     {
         var __mb = __mb_get_domain_warp_fractal_lacunarity;
         if (__mb == 0)
@@ -752,7 +884,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_set_domain_warp_fractal_gain;
-    public void SetDomainWarpFractalGain(float domainWarpGain)
+    internal void SetDomainWarpFractalGain(float domainWarpGain)
     {
         var __mb = __mb_set_domain_warp_fractal_gain;
         if (__mb == 0)
@@ -768,7 +900,7 @@ public unsafe partial class FastNoiseLite : Noise
     }
 
     private static nint __mb_get_domain_warp_fractal_gain;
-    public float GetDomainWarpFractalGain()
+    internal float GetDomainWarpFractalGain()
     {
         var __mb = __mb_get_domain_warp_fractal_gain;
         if (__mb == 0)
@@ -819,6 +951,12 @@ public unsafe partial class FileAccess : RefCounted
         UNIX_SET_USER_ID = 2048,
         UNIX_SET_GROUP_ID = 1024,
         UNIX_RESTRICTED_DELETE = 512,
+    }
+
+    public bool BigEndian
+    {
+        get => IsBigEndian();
+        set => SetBigEndian(value);
     }
 
     private static nint __mb_open;
@@ -1291,7 +1429,7 @@ public unsafe partial class FileAccess : RefCounted
     }
 
     private static nint __mb_is_big_endian;
-    public bool IsBigEndian()
+    internal bool IsBigEndian()
     {
         var __mb = __mb_is_big_endian;
         if (__mb == 0)
@@ -1306,7 +1444,7 @@ public unsafe partial class FileAccess : RefCounted
     }
 
     private static nint __mb_set_big_endian;
-    public void SetBigEndian(bool bigEndian)
+    internal void SetBigEndian(bool bigEndian)
     {
         var __mb = __mb_set_big_endian;
         if (__mb == 0)
@@ -1878,7 +2016,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
         ClassRegistry.AttachNew(this, "FileDialog");
     }
 
-    public enum FileMode : long
+    public enum FileModeEnum : long
     {
         FILE_MODE_OPEN_FILE = 0,
         FILE_MODE_OPEN_FILES = 1,
@@ -1887,14 +2025,14 @@ public unsafe partial class FileDialog : ConfirmationDialog
         FILE_MODE_SAVE_FILE = 4,
     }
 
-    public enum Access : long
+    public enum AccessEnum : long
     {
         ACCESS_RESOURCES = 0,
         ACCESS_USERDATA = 1,
         ACCESS_FILESYSTEM = 2,
     }
 
-    public enum DisplayMode : long
+    public enum DisplayModeEnum : long
     {
         DISPLAY_THUMBNAILS = 0,
         DISPLAY_LIST = 1,
@@ -1911,6 +2049,132 @@ public unsafe partial class FileDialog : ConfirmationDialog
         CUSTOMIZATION_LAYOUT = 6,
         CUSTOMIZATION_OVERWRITE_WARNING = 7,
         CUSTOMIZATION_DELETE = 8,
+    }
+
+    public bool ModeOverridesTitle
+    {
+        get => IsModeOverridingTitle();
+        set => SetModeOverridesTitle(value);
+    }
+
+    public FileDialog.FileModeEnum FileMode
+    {
+        get => GetFileMode();
+        set => SetFileMode(value);
+    }
+
+    public FileDialog.DisplayModeEnum DisplayMode
+    {
+        get => GetDisplayMode();
+        set => SetDisplayMode(value);
+    }
+
+    public FileDialog.AccessEnum Access
+    {
+        get => GetAccess();
+        set => SetAccess(value);
+    }
+
+    public string RootSubfolder
+    {
+        get => GetRootSubfolder();
+        set => SetRootSubfolder(value);
+    }
+
+    public string FilenameFilter
+    {
+        get => GetFilenameFilter();
+        set => SetFilenameFilter(value);
+    }
+
+    public bool ShowHiddenFiles
+    {
+        get => IsShowingHiddenFiles();
+        set => SetShowHiddenFiles(value);
+    }
+
+    public bool UseNativeDialog
+    {
+        get => GetUseNativeDialog();
+        set => SetUseNativeDialog(value);
+    }
+
+    public int OptionCount
+    {
+        get => GetOptionCount();
+        set => SetOptionCount(value);
+    }
+
+    public bool HiddenFilesToggleEnabled
+    {
+        get => IsCustomizationFlagEnabled(((FileDialog.Customization)(0)));
+        set => SetCustomizationFlagEnabled(((FileDialog.Customization)(0)), value);
+    }
+
+    public bool FileFilterToggleEnabled
+    {
+        get => IsCustomizationFlagEnabled(((FileDialog.Customization)(2)));
+        set => SetCustomizationFlagEnabled(((FileDialog.Customization)(2)), value);
+    }
+
+    public bool FileSortOptionsEnabled
+    {
+        get => IsCustomizationFlagEnabled(((FileDialog.Customization)(3)));
+        set => SetCustomizationFlagEnabled(((FileDialog.Customization)(3)), value);
+    }
+
+    public bool FolderCreationEnabled
+    {
+        get => IsCustomizationFlagEnabled(((FileDialog.Customization)(1)));
+        set => SetCustomizationFlagEnabled(((FileDialog.Customization)(1)), value);
+    }
+
+    public bool FavoritesEnabled
+    {
+        get => IsCustomizationFlagEnabled(((FileDialog.Customization)(4)));
+        set => SetCustomizationFlagEnabled(((FileDialog.Customization)(4)), value);
+    }
+
+    public bool RecentListEnabled
+    {
+        get => IsCustomizationFlagEnabled(((FileDialog.Customization)(5)));
+        set => SetCustomizationFlagEnabled(((FileDialog.Customization)(5)), value);
+    }
+
+    public bool LayoutToggleEnabled
+    {
+        get => IsCustomizationFlagEnabled(((FileDialog.Customization)(6)));
+        set => SetCustomizationFlagEnabled(((FileDialog.Customization)(6)), value);
+    }
+
+    public bool OverwriteWarningEnabled
+    {
+        get => IsCustomizationFlagEnabled(((FileDialog.Customization)(7)));
+        set => SetCustomizationFlagEnabled(((FileDialog.Customization)(7)), value);
+    }
+
+    public bool DeletingEnabled
+    {
+        get => IsCustomizationFlagEnabled(((FileDialog.Customization)(8)));
+        set => SetCustomizationFlagEnabled(((FileDialog.Customization)(8)), value);
+    }
+
+    public string CurrentDir
+    {
+        get => GetCurrentDir();
+        set => SetCurrentDir(value);
+    }
+
+    public string CurrentFile
+    {
+        get => GetCurrentFile();
+        set => SetCurrentFile(value);
+    }
+
+    public string CurrentPath
+    {
+        get => GetCurrentPath();
+        set => SetCurrentPath(value);
     }
 
     private static nint __mb_clear_filters;
@@ -1963,7 +2227,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_set_filename_filter;
-    public void SetFilenameFilter(string filter)
+    internal void SetFilenameFilter(string filter)
     {
         var __mb = __mb_set_filename_filter;
         if (__mb == 0)
@@ -1980,7 +2244,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_get_filename_filter;
-    public string GetFilenameFilter()
+    internal string GetFilenameFilter()
     {
         var __mb = __mb_get_filename_filter;
         if (__mb == 0)
@@ -2068,7 +2332,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_set_option_count;
-    public void SetOptionCount(int count)
+    internal void SetOptionCount(int count)
     {
         var __mb = __mb_set_option_count;
         if (__mb == 0)
@@ -2084,7 +2348,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_get_option_count;
-    public int GetOptionCount()
+    internal int GetOptionCount()
     {
         var __mb = __mb_get_option_count;
         if (__mb == 0)
@@ -2114,7 +2378,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_get_current_dir;
-    public string GetCurrentDir()
+    internal string GetCurrentDir()
     {
         var __mb = __mb_get_current_dir;
         if (__mb == 0)
@@ -2129,7 +2393,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_get_current_file;
-    public string GetCurrentFile()
+    internal string GetCurrentFile()
     {
         var __mb = __mb_get_current_file;
         if (__mb == 0)
@@ -2144,7 +2408,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_get_current_path;
-    public string GetCurrentPath()
+    internal string GetCurrentPath()
     {
         var __mb = __mb_get_current_path;
         if (__mb == 0)
@@ -2159,7 +2423,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_set_current_dir;
-    public void SetCurrentDir(string dir)
+    internal void SetCurrentDir(string dir)
     {
         var __mb = __mb_set_current_dir;
         if (__mb == 0)
@@ -2176,7 +2440,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_set_current_file;
-    public void SetCurrentFile(string file)
+    internal void SetCurrentFile(string file)
     {
         var __mb = __mb_set_current_file;
         if (__mb == 0)
@@ -2193,7 +2457,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_set_current_path;
-    public void SetCurrentPath(string path)
+    internal void SetCurrentPath(string path)
     {
         var __mb = __mb_set_current_path;
         if (__mb == 0)
@@ -2210,7 +2474,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_set_mode_overrides_title;
-    public void SetModeOverridesTitle(bool @override)
+    internal void SetModeOverridesTitle(bool @override)
     {
         var __mb = __mb_set_mode_overrides_title;
         if (__mb == 0)
@@ -2226,7 +2490,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_is_mode_overriding_title;
-    public bool IsModeOverridingTitle()
+    internal bool IsModeOverridingTitle()
     {
         var __mb = __mb_is_mode_overriding_title;
         if (__mb == 0)
@@ -2241,7 +2505,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_set_file_mode;
-    public void SetFileMode(FileDialog.FileMode mode)
+    internal void SetFileMode(FileDialog.FileModeEnum mode)
     {
         var __mb = __mb_set_file_mode;
         if (__mb == 0)
@@ -2257,7 +2521,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_get_file_mode;
-    public FileDialog.FileMode GetFileMode()
+    internal FileDialog.FileModeEnum GetFileMode()
     {
         var __mb = __mb_get_file_mode;
         if (__mb == 0)
@@ -2268,11 +2532,11 @@ public unsafe partial class FileDialog : ConfirmationDialog
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (FileDialog.FileMode)__ret;
+        return (FileDialog.FileModeEnum)__ret;
     }
 
     private static nint __mb_set_display_mode;
-    public void SetDisplayMode(FileDialog.DisplayMode mode)
+    internal void SetDisplayMode(FileDialog.DisplayModeEnum mode)
     {
         var __mb = __mb_set_display_mode;
         if (__mb == 0)
@@ -2288,7 +2552,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_get_display_mode;
-    public FileDialog.DisplayMode GetDisplayMode()
+    internal FileDialog.DisplayModeEnum GetDisplayMode()
     {
         var __mb = __mb_get_display_mode;
         if (__mb == 0)
@@ -2299,7 +2563,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (FileDialog.DisplayMode)__ret;
+        return (FileDialog.DisplayModeEnum)__ret;
     }
 
     private static nint __mb_get_vbox;
@@ -2333,7 +2597,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_set_access;
-    public void SetAccess(FileDialog.Access access)
+    internal void SetAccess(FileDialog.AccessEnum access)
     {
         var __mb = __mb_set_access;
         if (__mb == 0)
@@ -2349,7 +2613,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_get_access;
-    public FileDialog.Access GetAccess()
+    internal FileDialog.AccessEnum GetAccess()
     {
         var __mb = __mb_get_access;
         if (__mb == 0)
@@ -2360,11 +2624,11 @@ public unsafe partial class FileDialog : ConfirmationDialog
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (FileDialog.Access)__ret;
+        return (FileDialog.AccessEnum)__ret;
     }
 
     private static nint __mb_set_root_subfolder;
-    public void SetRootSubfolder(string dir)
+    internal void SetRootSubfolder(string dir)
     {
         var __mb = __mb_set_root_subfolder;
         if (__mb == 0)
@@ -2381,7 +2645,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_get_root_subfolder;
-    public string GetRootSubfolder()
+    internal string GetRootSubfolder()
     {
         var __mb = __mb_get_root_subfolder;
         if (__mb == 0)
@@ -2396,7 +2660,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_set_show_hidden_files;
-    public void SetShowHiddenFiles(bool show)
+    internal void SetShowHiddenFiles(bool show)
     {
         var __mb = __mb_set_show_hidden_files;
         if (__mb == 0)
@@ -2412,7 +2676,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_is_showing_hidden_files;
-    public bool IsShowingHiddenFiles()
+    internal bool IsShowingHiddenFiles()
     {
         var __mb = __mb_is_showing_hidden_files;
         if (__mb == 0)
@@ -2427,7 +2691,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_set_use_native_dialog;
-    public void SetUseNativeDialog(bool native)
+    internal void SetUseNativeDialog(bool native)
     {
         var __mb = __mb_set_use_native_dialog;
         if (__mb == 0)
@@ -2443,7 +2707,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_get_use_native_dialog;
-    public bool GetUseNativeDialog()
+    internal bool GetUseNativeDialog()
     {
         var __mb = __mb_get_use_native_dialog;
         if (__mb == 0)
@@ -2458,7 +2722,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_set_customization_flag_enabled;
-    public void SetCustomizationFlagEnabled(FileDialog.Customization flag, bool enabled)
+    internal void SetCustomizationFlagEnabled(FileDialog.Customization flag, bool enabled)
     {
         var __mb = __mb_set_customization_flag_enabled;
         if (__mb == 0)
@@ -2476,7 +2740,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_is_customization_flag_enabled;
-    public bool IsCustomizationFlagEnabled(FileDialog.Customization flag)
+    internal bool IsCustomizationFlagEnabled(FileDialog.Customization flag)
     {
         var __mb = __mb_is_customization_flag_enabled;
         if (__mb == 0)
@@ -2611,6 +2875,30 @@ public unsafe partial class FlowContainer : Container
         LAST_WRAP_ALIGNMENT_END = 3,
     }
 
+    public FlowContainer.AlignmentMode Alignment
+    {
+        get => GetAlignment();
+        set => SetAlignment(value);
+    }
+
+    public FlowContainer.LastWrapAlignmentMode LastWrapAlignment
+    {
+        get => GetLastWrapAlignment();
+        set => SetLastWrapAlignment(value);
+    }
+
+    public bool Vertical
+    {
+        get => IsVertical();
+        set => SetVertical(value);
+    }
+
+    public bool ReverseFill
+    {
+        get => IsReverseFill();
+        set => SetReverseFill(value);
+    }
+
     private static nint __mb_get_line_count;
     public int GetLineCount()
     {
@@ -2627,7 +2915,7 @@ public unsafe partial class FlowContainer : Container
     }
 
     private static nint __mb_set_alignment;
-    public void SetAlignment(FlowContainer.AlignmentMode alignment)
+    internal void SetAlignment(FlowContainer.AlignmentMode alignment)
     {
         var __mb = __mb_set_alignment;
         if (__mb == 0)
@@ -2643,7 +2931,7 @@ public unsafe partial class FlowContainer : Container
     }
 
     private static nint __mb_get_alignment;
-    public FlowContainer.AlignmentMode GetAlignment()
+    internal FlowContainer.AlignmentMode GetAlignment()
     {
         var __mb = __mb_get_alignment;
         if (__mb == 0)
@@ -2658,7 +2946,7 @@ public unsafe partial class FlowContainer : Container
     }
 
     private static nint __mb_set_last_wrap_alignment;
-    public void SetLastWrapAlignment(FlowContainer.LastWrapAlignmentMode lastWrapAlignment)
+    internal void SetLastWrapAlignment(FlowContainer.LastWrapAlignmentMode lastWrapAlignment)
     {
         var __mb = __mb_set_last_wrap_alignment;
         if (__mb == 0)
@@ -2674,7 +2962,7 @@ public unsafe partial class FlowContainer : Container
     }
 
     private static nint __mb_get_last_wrap_alignment;
-    public FlowContainer.LastWrapAlignmentMode GetLastWrapAlignment()
+    internal FlowContainer.LastWrapAlignmentMode GetLastWrapAlignment()
     {
         var __mb = __mb_get_last_wrap_alignment;
         if (__mb == 0)
@@ -2689,7 +2977,7 @@ public unsafe partial class FlowContainer : Container
     }
 
     private static nint __mb_set_vertical;
-    public void SetVertical(bool vertical)
+    internal void SetVertical(bool vertical)
     {
         var __mb = __mb_set_vertical;
         if (__mb == 0)
@@ -2705,7 +2993,7 @@ public unsafe partial class FlowContainer : Container
     }
 
     private static nint __mb_is_vertical;
-    public bool IsVertical()
+    internal bool IsVertical()
     {
         var __mb = __mb_is_vertical;
         if (__mb == 0)
@@ -2720,7 +3008,7 @@ public unsafe partial class FlowContainer : Container
     }
 
     private static nint __mb_set_reverse_fill;
-    public void SetReverseFill(bool reverseFill)
+    internal void SetReverseFill(bool reverseFill)
     {
         var __mb = __mb_set_reverse_fill;
         if (__mb == 0)
@@ -2736,7 +3024,7 @@ public unsafe partial class FlowContainer : Container
     }
 
     private static nint __mb_is_reverse_fill;
-    public bool IsReverseFill()
+    internal bool IsReverseFill()
     {
         var __mb = __mb_is_reverse_fill;
         if (__mb == 0)
@@ -2760,8 +3048,44 @@ public unsafe partial class FogMaterial : Material
         ClassRegistry.AttachNew(this, "FogMaterial");
     }
 
+    public float Density
+    {
+        get => GetDensity();
+        set => SetDensity(value);
+    }
+
+    public Color Albedo
+    {
+        get => GetAlbedo();
+        set => SetAlbedo(value);
+    }
+
+    public Color Emission
+    {
+        get => GetEmission();
+        set => SetEmission(value);
+    }
+
+    public float HeightFalloff
+    {
+        get => GetHeightFalloff();
+        set => SetHeightFalloff(value);
+    }
+
+    public float EdgeFade
+    {
+        get => GetEdgeFade();
+        set => SetEdgeFade(value);
+    }
+
+    public Texture3D? DensityTexture
+    {
+        get => GetDensityTexture();
+        set => SetDensityTexture(value);
+    }
+
     private static nint __mb_set_density;
-    public void SetDensity(float density)
+    internal void SetDensity(float density)
     {
         var __mb = __mb_set_density;
         if (__mb == 0)
@@ -2777,7 +3101,7 @@ public unsafe partial class FogMaterial : Material
     }
 
     private static nint __mb_get_density;
-    public float GetDensity()
+    internal float GetDensity()
     {
         var __mb = __mb_get_density;
         if (__mb == 0)
@@ -2792,7 +3116,7 @@ public unsafe partial class FogMaterial : Material
     }
 
     private static nint __mb_set_albedo;
-    public void SetAlbedo(Color albedo)
+    internal void SetAlbedo(Color albedo)
     {
         var __mb = __mb_set_albedo;
         if (__mb == 0)
@@ -2808,7 +3132,7 @@ public unsafe partial class FogMaterial : Material
     }
 
     private static nint __mb_get_albedo;
-    public Color GetAlbedo()
+    internal Color GetAlbedo()
     {
         var __mb = __mb_get_albedo;
         if (__mb == 0)
@@ -2823,7 +3147,7 @@ public unsafe partial class FogMaterial : Material
     }
 
     private static nint __mb_set_emission;
-    public void SetEmission(Color emission)
+    internal void SetEmission(Color emission)
     {
         var __mb = __mb_set_emission;
         if (__mb == 0)
@@ -2839,7 +3163,7 @@ public unsafe partial class FogMaterial : Material
     }
 
     private static nint __mb_get_emission;
-    public Color GetEmission()
+    internal Color GetEmission()
     {
         var __mb = __mb_get_emission;
         if (__mb == 0)
@@ -2854,7 +3178,7 @@ public unsafe partial class FogMaterial : Material
     }
 
     private static nint __mb_set_height_falloff;
-    public void SetHeightFalloff(float heightFalloff)
+    internal void SetHeightFalloff(float heightFalloff)
     {
         var __mb = __mb_set_height_falloff;
         if (__mb == 0)
@@ -2870,7 +3194,7 @@ public unsafe partial class FogMaterial : Material
     }
 
     private static nint __mb_get_height_falloff;
-    public float GetHeightFalloff()
+    internal float GetHeightFalloff()
     {
         var __mb = __mb_get_height_falloff;
         if (__mb == 0)
@@ -2885,7 +3209,7 @@ public unsafe partial class FogMaterial : Material
     }
 
     private static nint __mb_set_edge_fade;
-    public void SetEdgeFade(float edgeFade)
+    internal void SetEdgeFade(float edgeFade)
     {
         var __mb = __mb_set_edge_fade;
         if (__mb == 0)
@@ -2901,7 +3225,7 @@ public unsafe partial class FogMaterial : Material
     }
 
     private static nint __mb_get_edge_fade;
-    public float GetEdgeFade()
+    internal float GetEdgeFade()
     {
         var __mb = __mb_get_edge_fade;
         if (__mb == 0)
@@ -2916,7 +3240,7 @@ public unsafe partial class FogMaterial : Material
     }
 
     private static nint __mb_set_density_texture;
-    public void SetDensityTexture(Texture3D? densityTexture)
+    internal void SetDensityTexture(Texture3D? densityTexture)
     {
         var __mb = __mb_set_density_texture;
         if (__mb == 0)
@@ -2932,7 +3256,7 @@ public unsafe partial class FogMaterial : Material
     }
 
     private static nint __mb_get_density_texture;
-    public Texture3D? GetDensityTexture()
+    internal Texture3D? GetDensityTexture()
     {
         var __mb = __mb_get_density_texture;
         if (__mb == 0)
@@ -2956,8 +3280,26 @@ public unsafe partial class FogVolume : VisualInstance3D
         ClassRegistry.AttachNew(this, "FogVolume");
     }
 
+    public Vector3 Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
+    public RenderingServer.FogVolumeShape Shape
+    {
+        get => GetShape();
+        set => SetShape(value);
+    }
+
+    public Material? Material
+    {
+        get => GetMaterial();
+        set => SetMaterial(value);
+    }
+
     private static nint __mb_set_size;
-    public void SetSize(Vector3 size)
+    internal void SetSize(Vector3 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -2973,7 +3315,7 @@ public unsafe partial class FogVolume : VisualInstance3D
     }
 
     private static nint __mb_get_size;
-    public Vector3 GetSize()
+    internal Vector3 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -2988,7 +3330,7 @@ public unsafe partial class FogVolume : VisualInstance3D
     }
 
     private static nint __mb_set_shape;
-    public void SetShape(RenderingServer.FogVolumeShape shape)
+    internal void SetShape(RenderingServer.FogVolumeShape shape)
     {
         var __mb = __mb_set_shape;
         if (__mb == 0)
@@ -3004,7 +3346,7 @@ public unsafe partial class FogVolume : VisualInstance3D
     }
 
     private static nint __mb_get_shape;
-    public RenderingServer.FogVolumeShape GetShape()
+    internal RenderingServer.FogVolumeShape GetShape()
     {
         var __mb = __mb_get_shape;
         if (__mb == 0)
@@ -3019,7 +3361,7 @@ public unsafe partial class FogVolume : VisualInstance3D
     }
 
     private static nint __mb_set_material;
-    public void SetMaterial(Material? material)
+    internal void SetMaterial(Material? material)
     {
         var __mb = __mb_set_material;
         if (__mb == 0)
@@ -3035,7 +3377,7 @@ public unsafe partial class FogVolume : VisualInstance3D
     }
 
     private static nint __mb_get_material;
-    public Material? GetMaterial()
+    internal Material? GetMaterial()
     {
         var __mb = __mb_get_material;
         if (__mb == 0)
@@ -3059,10 +3401,58 @@ public unsafe partial class FoldableContainer : Container
         ClassRegistry.AttachNew(this, "FoldableContainer");
     }
 
-    public enum TitlePosition : long
+    public enum TitlePositionEnum : long
     {
         POSITION_TOP = 0,
         POSITION_BOTTOM = 1,
+    }
+
+    public bool Folded
+    {
+        get => IsFolded();
+        set => SetFolded(value);
+    }
+
+    public string Title
+    {
+        get => GetTitle();
+        set => SetTitle(value);
+    }
+
+    public HorizontalAlignment TitleAlignment
+    {
+        get => GetTitleAlignment();
+        set => SetTitleAlignment(value);
+    }
+
+    public FoldableContainer.TitlePositionEnum TitlePosition
+    {
+        get => GetTitlePosition();
+        set => SetTitlePosition(value);
+    }
+
+    public TextServer.OverrunBehavior TitleTextOverrunBehavior
+    {
+        get => GetTitleTextOverrunBehavior();
+        set => SetTitleTextOverrunBehavior(value);
+    }
+
+    public FoldableGroup? FoldableGroup
+    {
+        get => GetFoldableGroup();
+        set => SetFoldableGroup(value);
+    }
+
+    public Control.TextDirection TitleTextDirection
+    {
+        get => GetTitleTextDirection();
+        set => SetTitleTextDirection(value);
+    }
+
+    public string Language
+    {
+        get => GetLanguage();
+        set => SetLanguage(value);
     }
 
     private static nint __mb_fold;
@@ -3092,7 +3482,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_set_folded;
-    public void SetFolded(bool folded)
+    internal void SetFolded(bool folded)
     {
         var __mb = __mb_set_folded;
         if (__mb == 0)
@@ -3108,7 +3498,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_is_folded;
-    public bool IsFolded()
+    internal bool IsFolded()
     {
         var __mb = __mb_is_folded;
         if (__mb == 0)
@@ -3123,7 +3513,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_set_foldable_group;
-    public void SetFoldableGroup(FoldableGroup? buttonGroup)
+    internal void SetFoldableGroup(FoldableGroup? buttonGroup)
     {
         var __mb = __mb_set_foldable_group;
         if (__mb == 0)
@@ -3139,7 +3529,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_get_foldable_group;
-    public FoldableGroup? GetFoldableGroup()
+    internal FoldableGroup? GetFoldableGroup()
     {
         var __mb = __mb_get_foldable_group;
         if (__mb == 0)
@@ -3154,7 +3544,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_set_title;
-    public void SetTitle(string text)
+    internal void SetTitle(string text)
     {
         var __mb = __mb_set_title;
         if (__mb == 0)
@@ -3171,7 +3561,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_get_title;
-    public string GetTitle()
+    internal string GetTitle()
     {
         var __mb = __mb_get_title;
         if (__mb == 0)
@@ -3186,7 +3576,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_set_title_alignment;
-    public void SetTitleAlignment(HorizontalAlignment alignment)
+    internal void SetTitleAlignment(HorizontalAlignment alignment)
     {
         var __mb = __mb_set_title_alignment;
         if (__mb == 0)
@@ -3202,7 +3592,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_get_title_alignment;
-    public HorizontalAlignment GetTitleAlignment()
+    internal HorizontalAlignment GetTitleAlignment()
     {
         var __mb = __mb_get_title_alignment;
         if (__mb == 0)
@@ -3217,7 +3607,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_set_language;
-    public void SetLanguage(string language)
+    internal void SetLanguage(string language)
     {
         var __mb = __mb_set_language;
         if (__mb == 0)
@@ -3234,7 +3624,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_get_language;
-    public string GetLanguage()
+    internal string GetLanguage()
     {
         var __mb = __mb_get_language;
         if (__mb == 0)
@@ -3249,7 +3639,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_set_title_text_direction;
-    public void SetTitleTextDirection(Control.TextDirection textDirection)
+    internal void SetTitleTextDirection(Control.TextDirection textDirection)
     {
         var __mb = __mb_set_title_text_direction;
         if (__mb == 0)
@@ -3265,7 +3655,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_get_title_text_direction;
-    public Control.TextDirection GetTitleTextDirection()
+    internal Control.TextDirection GetTitleTextDirection()
     {
         var __mb = __mb_get_title_text_direction;
         if (__mb == 0)
@@ -3280,7 +3670,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_set_title_text_overrun_behavior;
-    public void SetTitleTextOverrunBehavior(TextServer.OverrunBehavior overrunBehavior)
+    internal void SetTitleTextOverrunBehavior(TextServer.OverrunBehavior overrunBehavior)
     {
         var __mb = __mb_set_title_text_overrun_behavior;
         if (__mb == 0)
@@ -3296,7 +3686,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_get_title_text_overrun_behavior;
-    public TextServer.OverrunBehavior GetTitleTextOverrunBehavior()
+    internal TextServer.OverrunBehavior GetTitleTextOverrunBehavior()
     {
         var __mb = __mb_get_title_text_overrun_behavior;
         if (__mb == 0)
@@ -3311,7 +3701,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_set_title_position;
-    public void SetTitlePosition(FoldableContainer.TitlePosition titlePosition)
+    internal void SetTitlePosition(FoldableContainer.TitlePositionEnum titlePosition)
     {
         var __mb = __mb_set_title_position;
         if (__mb == 0)
@@ -3327,7 +3717,7 @@ public unsafe partial class FoldableContainer : Container
     }
 
     private static nint __mb_get_title_position;
-    public FoldableContainer.TitlePosition GetTitlePosition()
+    internal FoldableContainer.TitlePositionEnum GetTitlePosition()
     {
         var __mb = __mb_get_title_position;
         if (__mb == 0)
@@ -3338,7 +3728,7 @@ public unsafe partial class FoldableContainer : Container
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (FoldableContainer.TitlePosition)__ret;
+        return (FoldableContainer.TitlePositionEnum)__ret;
     }
 
     private static nint __mb_add_title_bar_control;
@@ -3383,6 +3773,12 @@ public unsafe partial class FoldableGroup : Resource
         ClassRegistry.AttachNew(this, "FoldableGroup");
     }
 
+    public bool AllowFoldingAll
+    {
+        get => IsAllowFoldingAll();
+        set => SetAllowFoldingAll(value);
+    }
+
     private static nint __mb_get_expanded_container;
     public FoldableContainer? GetExpandedContainer()
     {
@@ -3414,7 +3810,7 @@ public unsafe partial class FoldableGroup : Resource
     }
 
     private static nint __mb_set_allow_folding_all;
-    public void SetAllowFoldingAll(bool enabled)
+    internal void SetAllowFoldingAll(bool enabled)
     {
         var __mb = __mb_set_allow_folding_all;
         if (__mb == 0)
@@ -3430,7 +3826,7 @@ public unsafe partial class FoldableGroup : Resource
     }
 
     private static nint __mb_is_allow_folding_all;
-    public bool IsAllowFoldingAll()
+    internal bool IsAllowFoldingAll()
     {
         var __mb = __mb_is_allow_folding_all;
         if (__mb == 0)
@@ -3449,8 +3845,14 @@ public unsafe partial class Font : Resource
 {
     internal Font(nint ptr, bool rc) : base(ptr, rc) { }
 
+    public Godot.Collections.Array Fallbacks
+    {
+        get => GetFallbacks();
+        set => SetFallbacks(value);
+    }
+
     private static nint __mb_set_fallbacks;
-    public void SetFallbacks(Godot.Collections.Array fallbacks)
+    internal void SetFallbacks(Godot.Collections.Array fallbacks)
     {
         var __mb = __mb_set_fallbacks;
         if (__mb == 0)
@@ -3466,7 +3868,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_get_fallbacks;
-    public Godot.Collections.Array GetFallbacks()
+    internal Godot.Collections.Array GetFallbacks()
     {
         var __mb = __mb_get_fallbacks;
         if (__mb == 0)
@@ -3586,7 +3988,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_get_font_name;
-    public string GetFontName()
+    internal string GetFontName()
     {
         var __mb = __mb_get_font_name;
         if (__mb == 0)
@@ -3601,7 +4003,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_get_font_style_name;
-    public string GetFontStyleName()
+    internal string GetFontStyleName()
     {
         var __mb = __mb_get_font_style_name;
         if (__mb == 0)
@@ -3631,7 +4033,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_get_font_style;
-    public TextServer.FontStyle GetFontStyle()
+    internal TextServer.FontStyle GetFontStyle()
     {
         var __mb = __mb_get_font_style;
         if (__mb == 0)
@@ -3646,7 +4048,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_get_font_weight;
-    public int GetFontWeight()
+    internal int GetFontWeight()
     {
         var __mb = __mb_get_font_weight;
         if (__mb == 0)
@@ -3661,7 +4063,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_get_font_stretch;
-    public int GetFontStretch()
+    internal int GetFontStretch()
     {
         var __mb = __mb_get_font_stretch;
         if (__mb == 0)
@@ -3709,7 +4111,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_get_spacing;
-    public int GetSpacing(TextServer.SpacingType spacing)
+    internal int GetSpacing(TextServer.SpacingType spacing)
     {
         var __mb = __mb_get_spacing;
         if (__mb == 0)
@@ -3727,7 +4129,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_get_opentype_features;
-    public Godot.Collections.Dictionary GetOpentypeFeatures()
+    internal Godot.Collections.Dictionary GetOpentypeFeatures()
     {
         var __mb = __mb_get_opentype_features;
         if (__mb == 0)
@@ -4189,6 +4591,132 @@ public unsafe partial class FontFile : Font
         ClassRegistry.AttachNew(this, "FontFile");
     }
 
+    public bool GenerateMipmaps
+    {
+        get => GetGenerateMipmaps();
+        set => SetGenerateMipmaps(value);
+    }
+
+    public bool DisableEmbeddedBitmaps
+    {
+        get => GetDisableEmbeddedBitmaps();
+        set => SetDisableEmbeddedBitmaps(value);
+    }
+
+    public TextServer.FontAntialiasing Antialiasing
+    {
+        get => GetAntialiasing();
+        set => SetAntialiasing(value);
+    }
+
+    public string FontName
+    {
+        get => GetFontName();
+        set => SetFontName(value);
+    }
+
+    public string StyleName
+    {
+        get => GetFontStyleName();
+        set => SetFontStyleName(value);
+    }
+
+    public TextServer.FontStyle FontStyle
+    {
+        get => GetFontStyle();
+        set => SetFontStyle(value);
+    }
+
+    public int FontWeight
+    {
+        get => GetFontWeight();
+        set => SetFontWeight(value);
+    }
+
+    public int FontStretch
+    {
+        get => GetFontStretch();
+        set => SetFontStretch(value);
+    }
+
+    public TextServer.SubpixelPositioning SubpixelPositioning
+    {
+        get => GetSubpixelPositioning();
+        set => SetSubpixelPositioning(value);
+    }
+
+    public bool KeepRoundingRemainders
+    {
+        get => GetKeepRoundingRemainders();
+        set => SetKeepRoundingRemainders(value);
+    }
+
+    public bool MultichannelSignedDistanceField
+    {
+        get => IsMultichannelSignedDistanceField();
+        set => SetMultichannelSignedDistanceField(value);
+    }
+
+    public int MsdfPixelRange
+    {
+        get => GetMsdfPixelRange();
+        set => SetMsdfPixelRange(value);
+    }
+
+    public int MsdfSize
+    {
+        get => GetMsdfSize();
+        set => SetMsdfSize(value);
+    }
+
+    public bool AllowSystemFallback
+    {
+        get => IsAllowSystemFallback();
+        set => SetAllowSystemFallback(value);
+    }
+
+    public bool ForceAutohinter
+    {
+        get => IsForceAutohinter();
+        set => SetForceAutohinter(value);
+    }
+
+    public bool ModulateColorGlyphs
+    {
+        get => IsModulateColorGlyphs();
+        set => SetModulateColorGlyphs(value);
+    }
+
+    public TextServer.Hinting Hinting
+    {
+        get => GetHinting();
+        set => SetHinting(value);
+    }
+
+    public int FixedSize
+    {
+        get => GetFixedSize();
+        set => SetFixedSize(value);
+    }
+
+    public TextServer.FixedSizeScaleMode FixedSizeScaleMode
+    {
+        get => GetFixedSizeScaleMode();
+        set => SetFixedSizeScaleMode(value);
+    }
+
+    public Godot.Collections.Dictionary OpentypeFeatureOverrides
+    {
+        get => GetOpentypeFeatureOverrides();
+        set => SetOpentypeFeatureOverrides(value);
+    }
+
+    public float Oversampling
+    {
+        get => GetOversampling();
+        set => SetOversampling(value);
+    }
+
     private static nint __mb_load_bitmap_font;
     public Error LoadBitmapFont(string path)
     {
@@ -4228,7 +4756,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_font_name;
-    public void SetFontName(string name)
+    internal void SetFontName(string name)
     {
         var __mb = __mb_set_font_name;
         if (__mb == 0)
@@ -4245,7 +4773,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_font_style_name;
-    public void SetFontStyleName(string name)
+    internal void SetFontStyleName(string name)
     {
         var __mb = __mb_set_font_style_name;
         if (__mb == 0)
@@ -4262,7 +4790,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_font_style;
-    public void SetFontStyle(TextServer.FontStyle style)
+    internal void SetFontStyle(TextServer.FontStyle style)
     {
         var __mb = __mb_set_font_style;
         if (__mb == 0)
@@ -4278,7 +4806,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_font_weight;
-    public void SetFontWeight(int weight)
+    internal void SetFontWeight(int weight)
     {
         var __mb = __mb_set_font_weight;
         if (__mb == 0)
@@ -4294,7 +4822,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_font_stretch;
-    public void SetFontStretch(int stretch)
+    internal void SetFontStretch(int stretch)
     {
         var __mb = __mb_set_font_stretch;
         if (__mb == 0)
@@ -4310,7 +4838,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_antialiasing;
-    public void SetAntialiasing(TextServer.FontAntialiasing antialiasing)
+    internal void SetAntialiasing(TextServer.FontAntialiasing antialiasing)
     {
         var __mb = __mb_set_antialiasing;
         if (__mb == 0)
@@ -4326,7 +4854,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_get_antialiasing;
-    public TextServer.FontAntialiasing GetAntialiasing()
+    internal TextServer.FontAntialiasing GetAntialiasing()
     {
         var __mb = __mb_get_antialiasing;
         if (__mb == 0)
@@ -4341,7 +4869,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_disable_embedded_bitmaps;
-    public void SetDisableEmbeddedBitmaps(bool disableEmbeddedBitmaps)
+    internal void SetDisableEmbeddedBitmaps(bool disableEmbeddedBitmaps)
     {
         var __mb = __mb_set_disable_embedded_bitmaps;
         if (__mb == 0)
@@ -4357,7 +4885,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_get_disable_embedded_bitmaps;
-    public bool GetDisableEmbeddedBitmaps()
+    internal bool GetDisableEmbeddedBitmaps()
     {
         var __mb = __mb_get_disable_embedded_bitmaps;
         if (__mb == 0)
@@ -4372,7 +4900,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_generate_mipmaps;
-    public void SetGenerateMipmaps(bool generateMipmaps)
+    internal void SetGenerateMipmaps(bool generateMipmaps)
     {
         var __mb = __mb_set_generate_mipmaps;
         if (__mb == 0)
@@ -4388,7 +4916,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_get_generate_mipmaps;
-    public bool GetGenerateMipmaps()
+    internal bool GetGenerateMipmaps()
     {
         var __mb = __mb_get_generate_mipmaps;
         if (__mb == 0)
@@ -4403,7 +4931,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_multichannel_signed_distance_field;
-    public void SetMultichannelSignedDistanceField(bool msdf)
+    internal void SetMultichannelSignedDistanceField(bool msdf)
     {
         var __mb = __mb_set_multichannel_signed_distance_field;
         if (__mb == 0)
@@ -4419,7 +4947,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_is_multichannel_signed_distance_field;
-    public bool IsMultichannelSignedDistanceField()
+    internal bool IsMultichannelSignedDistanceField()
     {
         var __mb = __mb_is_multichannel_signed_distance_field;
         if (__mb == 0)
@@ -4434,7 +4962,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_msdf_pixel_range;
-    public void SetMsdfPixelRange(int msdfPixelRange)
+    internal void SetMsdfPixelRange(int msdfPixelRange)
     {
         var __mb = __mb_set_msdf_pixel_range;
         if (__mb == 0)
@@ -4450,7 +4978,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_get_msdf_pixel_range;
-    public int GetMsdfPixelRange()
+    internal int GetMsdfPixelRange()
     {
         var __mb = __mb_get_msdf_pixel_range;
         if (__mb == 0)
@@ -4465,7 +4993,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_msdf_size;
-    public void SetMsdfSize(int msdfSize)
+    internal void SetMsdfSize(int msdfSize)
     {
         var __mb = __mb_set_msdf_size;
         if (__mb == 0)
@@ -4481,7 +5009,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_get_msdf_size;
-    public int GetMsdfSize()
+    internal int GetMsdfSize()
     {
         var __mb = __mb_get_msdf_size;
         if (__mb == 0)
@@ -4496,7 +5024,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_fixed_size;
-    public void SetFixedSize(int fixedSize)
+    internal void SetFixedSize(int fixedSize)
     {
         var __mb = __mb_set_fixed_size;
         if (__mb == 0)
@@ -4512,7 +5040,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_get_fixed_size;
-    public int GetFixedSize()
+    internal int GetFixedSize()
     {
         var __mb = __mb_get_fixed_size;
         if (__mb == 0)
@@ -4527,7 +5055,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_fixed_size_scale_mode;
-    public void SetFixedSizeScaleMode(TextServer.FixedSizeScaleMode fixedSizeScaleMode)
+    internal void SetFixedSizeScaleMode(TextServer.FixedSizeScaleMode fixedSizeScaleMode)
     {
         var __mb = __mb_set_fixed_size_scale_mode;
         if (__mb == 0)
@@ -4543,7 +5071,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_get_fixed_size_scale_mode;
-    public TextServer.FixedSizeScaleMode GetFixedSizeScaleMode()
+    internal TextServer.FixedSizeScaleMode GetFixedSizeScaleMode()
     {
         var __mb = __mb_get_fixed_size_scale_mode;
         if (__mb == 0)
@@ -4558,7 +5086,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_allow_system_fallback;
-    public void SetAllowSystemFallback(bool allowSystemFallback)
+    internal void SetAllowSystemFallback(bool allowSystemFallback)
     {
         var __mb = __mb_set_allow_system_fallback;
         if (__mb == 0)
@@ -4574,7 +5102,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_is_allow_system_fallback;
-    public bool IsAllowSystemFallback()
+    internal bool IsAllowSystemFallback()
     {
         var __mb = __mb_is_allow_system_fallback;
         if (__mb == 0)
@@ -4589,7 +5117,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_force_autohinter;
-    public void SetForceAutohinter(bool forceAutohinter)
+    internal void SetForceAutohinter(bool forceAutohinter)
     {
         var __mb = __mb_set_force_autohinter;
         if (__mb == 0)
@@ -4605,7 +5133,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_is_force_autohinter;
-    public bool IsForceAutohinter()
+    internal bool IsForceAutohinter()
     {
         var __mb = __mb_is_force_autohinter;
         if (__mb == 0)
@@ -4620,7 +5148,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_modulate_color_glyphs;
-    public void SetModulateColorGlyphs(bool modulate)
+    internal void SetModulateColorGlyphs(bool modulate)
     {
         var __mb = __mb_set_modulate_color_glyphs;
         if (__mb == 0)
@@ -4636,7 +5164,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_is_modulate_color_glyphs;
-    public bool IsModulateColorGlyphs()
+    internal bool IsModulateColorGlyphs()
     {
         var __mb = __mb_is_modulate_color_glyphs;
         if (__mb == 0)
@@ -4651,7 +5179,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_hinting;
-    public void SetHinting(TextServer.Hinting hinting)
+    internal void SetHinting(TextServer.Hinting hinting)
     {
         var __mb = __mb_set_hinting;
         if (__mb == 0)
@@ -4667,7 +5195,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_get_hinting;
-    public TextServer.Hinting GetHinting()
+    internal TextServer.Hinting GetHinting()
     {
         var __mb = __mb_get_hinting;
         if (__mb == 0)
@@ -4682,7 +5210,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_subpixel_positioning;
-    public void SetSubpixelPositioning(TextServer.SubpixelPositioning subpixelPositioning)
+    internal void SetSubpixelPositioning(TextServer.SubpixelPositioning subpixelPositioning)
     {
         var __mb = __mb_set_subpixel_positioning;
         if (__mb == 0)
@@ -4698,7 +5226,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_get_subpixel_positioning;
-    public TextServer.SubpixelPositioning GetSubpixelPositioning()
+    internal TextServer.SubpixelPositioning GetSubpixelPositioning()
     {
         var __mb = __mb_get_subpixel_positioning;
         if (__mb == 0)
@@ -4713,7 +5241,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_keep_rounding_remainders;
-    public void SetKeepRoundingRemainders(bool keepRoundingRemainders)
+    internal void SetKeepRoundingRemainders(bool keepRoundingRemainders)
     {
         var __mb = __mb_set_keep_rounding_remainders;
         if (__mb == 0)
@@ -4729,7 +5257,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_get_keep_rounding_remainders;
-    public bool GetKeepRoundingRemainders()
+    internal bool GetKeepRoundingRemainders()
     {
         var __mb = __mb_get_keep_rounding_remainders;
         if (__mb == 0)
@@ -4744,7 +5272,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_oversampling;
-    public void SetOversampling(float oversampling)
+    internal void SetOversampling(float oversampling)
     {
         var __mb = __mb_set_oversampling;
         if (__mb == 0)
@@ -4760,7 +5288,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_get_oversampling;
-    public float GetOversampling()
+    internal float GetOversampling()
     {
         var __mb = __mb_get_oversampling;
         if (__mb == 0)
@@ -5905,7 +6433,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_set_opentype_feature_overrides;
-    public void SetOpentypeFeatureOverrides(Godot.Collections.Dictionary overrides)
+    internal void SetOpentypeFeatureOverrides(Godot.Collections.Dictionary overrides)
     {
         var __mb = __mb_set_opentype_feature_overrides;
         if (__mb == 0)
@@ -5921,7 +6449,7 @@ public unsafe partial class FontFile : Font
     }
 
     private static nint __mb_get_opentype_feature_overrides;
-    public Godot.Collections.Dictionary GetOpentypeFeatureOverrides()
+    internal Godot.Collections.Dictionary GetOpentypeFeatureOverrides()
     {
         var __mb = __mb_get_opentype_feature_overrides;
         if (__mb == 0)
@@ -5987,8 +6515,80 @@ public unsafe partial class FontVariation : Font
         ClassRegistry.AttachNew(this, "FontVariation");
     }
 
+    public Font? BaseFont
+    {
+        get => GetBaseFont();
+        set => SetBaseFont(value);
+    }
+
+    public Godot.Collections.Dictionary VariationOpentype
+    {
+        get => GetVariationOpentype();
+        set => SetVariationOpentype(value);
+    }
+
+    public int VariationFaceIndex
+    {
+        get => GetVariationFaceIndex();
+        set => SetVariationFaceIndex(value);
+    }
+
+    public float VariationEmbolden
+    {
+        get => GetVariationEmbolden();
+        set => SetVariationEmbolden(value);
+    }
+
+    public Transform2D VariationTransform
+    {
+        get => GetVariationTransform();
+        set => SetVariationTransform(value);
+    }
+
+    public Godot.Collections.Dictionary OpentypeFeatures
+    {
+        get => GetOpentypeFeatures();
+        set => SetOpentypeFeatures(value);
+    }
+
+    public int SpacingGlyph
+    {
+        get => GetSpacing(((TextServer.SpacingType)(0)));
+        set => SetSpacing(((TextServer.SpacingType)(0)), value);
+    }
+
+    public int SpacingSpace
+    {
+        get => GetSpacing(((TextServer.SpacingType)(1)));
+        set => SetSpacing(((TextServer.SpacingType)(1)), value);
+    }
+
+    public int SpacingTop
+    {
+        get => GetSpacing(((TextServer.SpacingType)(2)));
+        set => SetSpacing(((TextServer.SpacingType)(2)), value);
+    }
+
+    public int SpacingBottom
+    {
+        get => GetSpacing(((TextServer.SpacingType)(3)));
+        set => SetSpacing(((TextServer.SpacingType)(3)), value);
+    }
+
+    public float BaselineOffset
+    {
+        get => GetBaselineOffset();
+        set => SetBaselineOffset(value);
+    }
+
+    public long PaletteIndex
+    {
+        get => GetPaletteIndex();
+        set => SetPaletteIndex(value);
+    }
+
     private static nint __mb_set_base_font;
-    public void SetBaseFont(Font? font)
+    internal void SetBaseFont(Font? font)
     {
         var __mb = __mb_set_base_font;
         if (__mb == 0)
@@ -6004,7 +6604,7 @@ public unsafe partial class FontVariation : Font
     }
 
     private static nint __mb_get_base_font;
-    public Font? GetBaseFont()
+    internal Font? GetBaseFont()
     {
         var __mb = __mb_get_base_font;
         if (__mb == 0)
@@ -6019,7 +6619,7 @@ public unsafe partial class FontVariation : Font
     }
 
     private static nint __mb_set_variation_opentype;
-    public void SetVariationOpentype(Godot.Collections.Dictionary coords)
+    internal void SetVariationOpentype(Godot.Collections.Dictionary coords)
     {
         var __mb = __mb_set_variation_opentype;
         if (__mb == 0)
@@ -6035,7 +6635,7 @@ public unsafe partial class FontVariation : Font
     }
 
     private static nint __mb_get_variation_opentype;
-    public Godot.Collections.Dictionary GetVariationOpentype()
+    internal Godot.Collections.Dictionary GetVariationOpentype()
     {
         var __mb = __mb_get_variation_opentype;
         if (__mb == 0)
@@ -6050,7 +6650,7 @@ public unsafe partial class FontVariation : Font
     }
 
     private static nint __mb_set_variation_embolden;
-    public void SetVariationEmbolden(float strength)
+    internal void SetVariationEmbolden(float strength)
     {
         var __mb = __mb_set_variation_embolden;
         if (__mb == 0)
@@ -6066,7 +6666,7 @@ public unsafe partial class FontVariation : Font
     }
 
     private static nint __mb_get_variation_embolden;
-    public float GetVariationEmbolden()
+    internal float GetVariationEmbolden()
     {
         var __mb = __mb_get_variation_embolden;
         if (__mb == 0)
@@ -6081,7 +6681,7 @@ public unsafe partial class FontVariation : Font
     }
 
     private static nint __mb_set_variation_face_index;
-    public void SetVariationFaceIndex(int faceIndex)
+    internal void SetVariationFaceIndex(int faceIndex)
     {
         var __mb = __mb_set_variation_face_index;
         if (__mb == 0)
@@ -6097,7 +6697,7 @@ public unsafe partial class FontVariation : Font
     }
 
     private static nint __mb_get_variation_face_index;
-    public int GetVariationFaceIndex()
+    internal int GetVariationFaceIndex()
     {
         var __mb = __mb_get_variation_face_index;
         if (__mb == 0)
@@ -6112,7 +6712,7 @@ public unsafe partial class FontVariation : Font
     }
 
     private static nint __mb_set_variation_transform;
-    public void SetVariationTransform(Transform2D transform)
+    internal void SetVariationTransform(Transform2D transform)
     {
         var __mb = __mb_set_variation_transform;
         if (__mb == 0)
@@ -6128,7 +6728,7 @@ public unsafe partial class FontVariation : Font
     }
 
     private static nint __mb_get_variation_transform;
-    public Transform2D GetVariationTransform()
+    internal Transform2D GetVariationTransform()
     {
         var __mb = __mb_get_variation_transform;
         if (__mb == 0)
@@ -6143,7 +6743,7 @@ public unsafe partial class FontVariation : Font
     }
 
     private static nint __mb_set_opentype_features;
-    public void SetOpentypeFeatures(Godot.Collections.Dictionary features)
+    internal void SetOpentypeFeatures(Godot.Collections.Dictionary features)
     {
         var __mb = __mb_set_opentype_features;
         if (__mb == 0)
@@ -6159,7 +6759,7 @@ public unsafe partial class FontVariation : Font
     }
 
     private static nint __mb_set_spacing;
-    public void SetSpacing(TextServer.SpacingType spacing, int value)
+    internal void SetSpacing(TextServer.SpacingType spacing, int value)
     {
         var __mb = __mb_set_spacing;
         if (__mb == 0)
@@ -6177,7 +6777,7 @@ public unsafe partial class FontVariation : Font
     }
 
     private static nint __mb_set_baseline_offset;
-    public void SetBaselineOffset(float baselineOffset)
+    internal void SetBaselineOffset(float baselineOffset)
     {
         var __mb = __mb_set_baseline_offset;
         if (__mb == 0)
@@ -6193,7 +6793,7 @@ public unsafe partial class FontVariation : Font
     }
 
     private static nint __mb_get_baseline_offset;
-    public float GetBaselineOffset()
+    internal float GetBaselineOffset()
     {
         var __mb = __mb_get_baseline_offset;
         if (__mb == 0)
@@ -6208,7 +6808,7 @@ public unsafe partial class FontVariation : Font
     }
 
     private static nint __mb_get_palette_index;
-    public long GetPaletteIndex()
+    internal long GetPaletteIndex()
     {
         var __mb = __mb_get_palette_index;
         if (__mb == 0)
@@ -6223,7 +6823,7 @@ public unsafe partial class FontVariation : Font
     }
 
     private static nint __mb_set_palette_index;
-    public void SetPaletteIndex(long paletteIndex)
+    internal void SetPaletteIndex(long paletteIndex)
     {
         var __mb = __mb_set_palette_index;
         if (__mb == 0)

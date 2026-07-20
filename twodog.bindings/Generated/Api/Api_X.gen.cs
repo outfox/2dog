@@ -426,22 +426,40 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
     }
 
     [Flags]
-    public enum BodyUpdate : long
+    public enum BodyUpdateEnum : long
     {
         BODY_UPDATE_UPPER_BODY = 1,
         BODY_UPDATE_LOWER_BODY = 2,
         BODY_UPDATE_HANDS = 4,
     }
 
-    public enum BoneUpdate : long
+    public enum BoneUpdateEnum : long
     {
         BONE_UPDATE_FULL = 0,
         BONE_UPDATE_ROTATION_ONLY = 1,
         BONE_UPDATE_MAX = 2,
     }
 
+    public string BodyTracker
+    {
+        get => GetBodyTracker();
+        set => SetBodyTracker(value);
+    }
+
+    public XRBodyModifier3D.BodyUpdateEnum BodyUpdate
+    {
+        get => GetBodyUpdate();
+        set => SetBodyUpdate(value);
+    }
+
+    public XRBodyModifier3D.BoneUpdateEnum BoneUpdate
+    {
+        get => GetBoneUpdate();
+        set => SetBoneUpdate(value);
+    }
+
     private static nint __mb_set_body_tracker;
-    public void SetBodyTracker(string trackerName)
+    internal void SetBodyTracker(string trackerName)
     {
         var __mb = __mb_set_body_tracker;
         if (__mb == 0)
@@ -457,7 +475,7 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_body_tracker;
-    public string GetBodyTracker()
+    internal string GetBodyTracker()
     {
         var __mb = __mb_get_body_tracker;
         if (__mb == 0)
@@ -472,7 +490,7 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_body_update;
-    public void SetBodyUpdate(XRBodyModifier3D.BodyUpdate bodyUpdate)
+    internal void SetBodyUpdate(XRBodyModifier3D.BodyUpdateEnum bodyUpdate)
     {
         var __mb = __mb_set_body_update;
         if (__mb == 0)
@@ -488,7 +506,7 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_body_update;
-    public XRBodyModifier3D.BodyUpdate GetBodyUpdate()
+    internal XRBodyModifier3D.BodyUpdateEnum GetBodyUpdate()
     {
         var __mb = __mb_get_body_update;
         if (__mb == 0)
@@ -499,11 +517,11 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (XRBodyModifier3D.BodyUpdate)__ret;
+        return (XRBodyModifier3D.BodyUpdateEnum)__ret;
     }
 
     private static nint __mb_set_bone_update;
-    public void SetBoneUpdate(XRBodyModifier3D.BoneUpdate boneUpdate)
+    internal void SetBoneUpdate(XRBodyModifier3D.BoneUpdateEnum boneUpdate)
     {
         var __mb = __mb_set_bone_update;
         if (__mb == 0)
@@ -519,7 +537,7 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_bone_update;
-    public XRBodyModifier3D.BoneUpdate GetBoneUpdate()
+    internal XRBodyModifier3D.BoneUpdateEnum GetBoneUpdate()
     {
         var __mb = __mb_get_bone_update;
         if (__mb == 0)
@@ -530,7 +548,7 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (XRBodyModifier3D.BoneUpdate)__ret;
+        return (XRBodyModifier3D.BoneUpdateEnum)__ret;
     }
 }
 
@@ -544,7 +562,7 @@ public unsafe partial class XRBodyTracker : XRPositionalTracker
     }
 
     [Flags]
-    public enum BodyFlags : long
+    public enum BodyFlagsEnum : long
     {
         BODY_FLAG_UPPER_BODY_SUPPORTED = 1,
         BODY_FLAG_LOWER_BODY_SUPPORTED = 2,
@@ -652,8 +670,20 @@ public unsafe partial class XRBodyTracker : XRPositionalTracker
         JOINT_FLAG_POSITION_TRACKED = 8,
     }
 
+    public bool HasTrackingData
+    {
+        get => GetHasTrackingData();
+        set => SetHasTrackingData(value);
+    }
+
+    public XRBodyTracker.BodyFlagsEnum BodyFlags
+    {
+        get => GetBodyFlags();
+        set => SetBodyFlags(value);
+    }
+
     private static nint __mb_set_has_tracking_data;
-    public void SetHasTrackingData(bool hasData)
+    internal void SetHasTrackingData(bool hasData)
     {
         var __mb = __mb_set_has_tracking_data;
         if (__mb == 0)
@@ -669,7 +699,7 @@ public unsafe partial class XRBodyTracker : XRPositionalTracker
     }
 
     private static nint __mb_get_has_tracking_data;
-    public bool GetHasTrackingData()
+    internal bool GetHasTrackingData()
     {
         var __mb = __mb_get_has_tracking_data;
         if (__mb == 0)
@@ -684,7 +714,7 @@ public unsafe partial class XRBodyTracker : XRPositionalTracker
     }
 
     private static nint __mb_set_body_flags;
-    public void SetBodyFlags(XRBodyTracker.BodyFlags flags)
+    internal void SetBodyFlags(XRBodyTracker.BodyFlagsEnum flags)
     {
         var __mb = __mb_set_body_flags;
         if (__mb == 0)
@@ -700,7 +730,7 @@ public unsafe partial class XRBodyTracker : XRPositionalTracker
     }
 
     private static nint __mb_get_body_flags;
-    public XRBodyTracker.BodyFlags GetBodyFlags()
+    internal XRBodyTracker.BodyFlagsEnum GetBodyFlags()
     {
         var __mb = __mb_get_body_flags;
         if (__mb == 0)
@@ -711,7 +741,7 @@ public unsafe partial class XRBodyTracker : XRPositionalTracker
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (XRBodyTracker.BodyFlags)__ret;
+        return (XRBodyTracker.BodyFlagsEnum)__ret;
     }
 
     private static nint __mb_set_joint_flags;
@@ -913,8 +943,20 @@ public unsafe partial class XRFaceModifier3D : Node3D
         ClassRegistry.AttachNew(this, "XRFaceModifier3D");
     }
 
+    public string FaceTracker
+    {
+        get => GetFaceTracker();
+        set => SetFaceTracker(value);
+    }
+
+    public NodePath Target
+    {
+        get => GetTarget();
+        set => SetTarget(value);
+    }
+
     private static nint __mb_set_face_tracker;
-    public void SetFaceTracker(string trackerName)
+    internal void SetFaceTracker(string trackerName)
     {
         var __mb = __mb_set_face_tracker;
         if (__mb == 0)
@@ -930,7 +972,7 @@ public unsafe partial class XRFaceModifier3D : Node3D
     }
 
     private static nint __mb_get_face_tracker;
-    public string GetFaceTracker()
+    internal string GetFaceTracker()
     {
         var __mb = __mb_get_face_tracker;
         if (__mb == 0)
@@ -945,7 +987,7 @@ public unsafe partial class XRFaceModifier3D : Node3D
     }
 
     private static nint __mb_set_target;
-    public void SetTarget(NodePath target)
+    internal void SetTarget(NodePath target)
     {
         var __mb = __mb_set_target;
         if (__mb == 0)
@@ -961,7 +1003,7 @@ public unsafe partial class XRFaceModifier3D : Node3D
     }
 
     private static nint __mb_get_target;
-    public NodePath GetTarget()
+    internal NodePath GetTarget()
     {
         var __mb = __mb_get_target;
         if (__mb == 0)
@@ -1179,15 +1221,27 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
         ClassRegistry.AttachNew(this, "XRHandModifier3D");
     }
 
-    public enum BoneUpdate : long
+    public enum BoneUpdateEnum : long
     {
         BONE_UPDATE_FULL = 0,
         BONE_UPDATE_ROTATION_ONLY = 1,
         BONE_UPDATE_MAX = 2,
     }
 
+    public string HandTracker
+    {
+        get => GetHandTracker();
+        set => SetHandTracker(value);
+    }
+
+    public XRHandModifier3D.BoneUpdateEnum BoneUpdate
+    {
+        get => GetBoneUpdate();
+        set => SetBoneUpdate(value);
+    }
+
     private static nint __mb_set_hand_tracker;
-    public void SetHandTracker(string trackerName)
+    internal void SetHandTracker(string trackerName)
     {
         var __mb = __mb_set_hand_tracker;
         if (__mb == 0)
@@ -1203,7 +1257,7 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_hand_tracker;
-    public string GetHandTracker()
+    internal string GetHandTracker()
     {
         var __mb = __mb_get_hand_tracker;
         if (__mb == 0)
@@ -1218,7 +1272,7 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_bone_update;
-    public void SetBoneUpdate(XRHandModifier3D.BoneUpdate boneUpdate)
+    internal void SetBoneUpdate(XRHandModifier3D.BoneUpdateEnum boneUpdate)
     {
         var __mb = __mb_set_bone_update;
         if (__mb == 0)
@@ -1234,7 +1288,7 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_bone_update;
-    public XRHandModifier3D.BoneUpdate GetBoneUpdate()
+    internal XRHandModifier3D.BoneUpdateEnum GetBoneUpdate()
     {
         var __mb = __mb_get_bone_update;
         if (__mb == 0)
@@ -1245,7 +1299,7 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (XRHandModifier3D.BoneUpdate)__ret;
+        return (XRHandModifier3D.BoneUpdateEnum)__ret;
     }
 }
 
@@ -1258,7 +1312,7 @@ public unsafe partial class XRHandTracker : XRPositionalTracker
         ClassRegistry.AttachNew(this, "XRHandTracker");
     }
 
-    public enum HandTrackingSource : long
+    public enum HandTrackingSourceEnum : long
     {
         HAND_TRACKING_SOURCE_UNKNOWN = 0,
         HAND_TRACKING_SOURCE_UNOBSTRUCTED = 1,
@@ -1309,8 +1363,20 @@ public unsafe partial class XRHandTracker : XRPositionalTracker
         HAND_JOINT_FLAG_ANGULAR_VELOCITY_VALID = 32,
     }
 
+    public bool HasTrackingData
+    {
+        get => GetHasTrackingData();
+        set => SetHasTrackingData(value);
+    }
+
+    public XRHandTracker.HandTrackingSourceEnum HandTrackingSource
+    {
+        get => GetHandTrackingSource();
+        set => SetHandTrackingSource(value);
+    }
+
     private static nint __mb_set_has_tracking_data;
-    public void SetHasTrackingData(bool hasData)
+    internal void SetHasTrackingData(bool hasData)
     {
         var __mb = __mb_set_has_tracking_data;
         if (__mb == 0)
@@ -1326,7 +1392,7 @@ public unsafe partial class XRHandTracker : XRPositionalTracker
     }
 
     private static nint __mb_get_has_tracking_data;
-    public bool GetHasTrackingData()
+    internal bool GetHasTrackingData()
     {
         var __mb = __mb_get_has_tracking_data;
         if (__mb == 0)
@@ -1341,7 +1407,7 @@ public unsafe partial class XRHandTracker : XRPositionalTracker
     }
 
     private static nint __mb_set_hand_tracking_source;
-    public void SetHandTrackingSource(XRHandTracker.HandTrackingSource source)
+    internal void SetHandTrackingSource(XRHandTracker.HandTrackingSourceEnum source)
     {
         var __mb = __mb_set_hand_tracking_source;
         if (__mb == 0)
@@ -1357,7 +1423,7 @@ public unsafe partial class XRHandTracker : XRPositionalTracker
     }
 
     private static nint __mb_get_hand_tracking_source;
-    public XRHandTracker.HandTrackingSource GetHandTrackingSource()
+    internal XRHandTracker.HandTrackingSourceEnum GetHandTrackingSource()
     {
         var __mb = __mb_get_hand_tracking_source;
         if (__mb == 0)
@@ -1368,7 +1434,7 @@ public unsafe partial class XRHandTracker : XRPositionalTracker
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (XRHandTracker.HandTrackingSource)__ret;
+        return (XRHandTracker.HandTrackingSourceEnum)__ret;
     }
 
     private static nint __mb_set_hand_joint_flags;
@@ -1586,7 +1652,7 @@ public unsafe partial class XRInterface : RefCounted
         XR_PLAY_AREA_CUSTOM = 2147483647,
     }
 
-    public enum EnvironmentBlendMode : long
+    public enum EnvironmentBlendModeEnum : long
     {
         XR_ENV_BLEND_MODE_OPAQUE = 0,
         XR_ENV_BLEND_MODE_ADDITIVE = 1,
@@ -1598,6 +1664,30 @@ public unsafe partial class XRInterface : RefCounted
         XR_VRS_TEXTURE_FORMAT_UNIFIED = 0,
         XR_VRS_TEXTURE_FORMAT_FRAGMENT_SHADING_RATE = 1,
         XR_VRS_TEXTURE_FORMAT_FRAGMENT_DENSITY_MAP = 2,
+    }
+
+    public bool InterfaceIsPrimary
+    {
+        get => IsPrimary();
+        set => SetPrimary(value);
+    }
+
+    public XRInterface.PlayAreaMode XrPlayAreaMode
+    {
+        get => GetPlayAreaMode();
+        set => SetPlayAreaMode(value);
+    }
+
+    public XRInterface.EnvironmentBlendModeEnum EnvironmentBlendMode
+    {
+        get => GetEnvironmentBlendMode();
+        set => SetEnvironmentBlendMode(value);
+    }
+
+    public bool ArIsAnchorDetectionEnabled
+    {
+        get => GetAnchorDetectionIsEnabled();
+        set => SetAnchorDetectionIsEnabled(value);
     }
 
     private static nint __mb_get_name;
@@ -1631,7 +1721,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_is_primary;
-    public bool IsPrimary()
+    internal bool IsPrimary()
     {
         var __mb = __mb_is_primary;
         if (__mb == 0)
@@ -1646,7 +1736,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_set_primary;
-    public void SetPrimary(bool primary)
+    internal void SetPrimary(bool primary)
     {
         var __mb = __mb_set_primary;
         if (__mb == 0)
@@ -1810,7 +1900,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_get_play_area_mode;
-    public XRInterface.PlayAreaMode GetPlayAreaMode()
+    internal XRInterface.PlayAreaMode GetPlayAreaMode()
     {
         var __mb = __mb_get_play_area_mode;
         if (__mb == 0)
@@ -1825,7 +1915,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_set_play_area_mode;
-    public bool SetPlayAreaMode(XRInterface.PlayAreaMode mode)
+    internal bool SetPlayAreaMode(XRInterface.PlayAreaMode mode)
     {
         var __mb = __mb_set_play_area_mode;
         if (__mb == 0)
@@ -1843,7 +1933,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_get_anchor_detection_is_enabled;
-    public bool GetAnchorDetectionIsEnabled()
+    internal bool GetAnchorDetectionIsEnabled()
     {
         var __mb = __mb_get_anchor_detection_is_enabled;
         if (__mb == 0)
@@ -1858,7 +1948,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_set_anchor_detection_is_enabled;
-    public void SetAnchorDetectionIsEnabled(bool enable)
+    internal void SetAnchorDetectionIsEnabled(bool enable)
     {
         var __mb = __mb_set_anchor_detection_is_enabled;
         if (__mb == 0)
@@ -2006,7 +2096,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_set_environment_blend_mode;
-    public bool SetEnvironmentBlendMode(XRInterface.EnvironmentBlendMode mode)
+    internal bool SetEnvironmentBlendMode(XRInterface.EnvironmentBlendModeEnum mode)
     {
         var __mb = __mb_set_environment_blend_mode;
         if (__mb == 0)
@@ -2024,7 +2114,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_get_environment_blend_mode;
-    public XRInterface.EnvironmentBlendMode GetEnvironmentBlendMode()
+    internal XRInterface.EnvironmentBlendModeEnum GetEnvironmentBlendMode()
     {
         var __mb = __mb_get_environment_blend_mode;
         if (__mb == 0)
@@ -2035,7 +2125,7 @@ public unsafe partial class XRInterface : RefCounted
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (XRInterface.EnvironmentBlendMode)__ret;
+        return (XRInterface.EnvironmentBlendModeEnum)__ret;
     }
 }
 
@@ -2406,8 +2496,26 @@ public unsafe partial class XRNode3D : Node3D
         ClassRegistry.AttachNew(this, "XRNode3D");
     }
 
+    public string Tracker
+    {
+        get => GetTracker();
+        set => SetTracker(value);
+    }
+
+    public string Pose
+    {
+        get => GetPoseName();
+        set => SetPoseName(value);
+    }
+
+    public bool ShowWhenTracked
+    {
+        get => GetShowWhenTracked();
+        set => SetShowWhenTracked(value);
+    }
+
     private static nint __mb_set_tracker;
-    public void SetTracker(string trackerName)
+    internal void SetTracker(string trackerName)
     {
         var __mb = __mb_set_tracker;
         if (__mb == 0)
@@ -2423,7 +2531,7 @@ public unsafe partial class XRNode3D : Node3D
     }
 
     private static nint __mb_get_tracker;
-    public string GetTracker()
+    internal string GetTracker()
     {
         var __mb = __mb_get_tracker;
         if (__mb == 0)
@@ -2438,7 +2546,7 @@ public unsafe partial class XRNode3D : Node3D
     }
 
     private static nint __mb_set_pose_name;
-    public void SetPoseName(string pose)
+    internal void SetPoseName(string pose)
     {
         var __mb = __mb_set_pose_name;
         if (__mb == 0)
@@ -2454,7 +2562,7 @@ public unsafe partial class XRNode3D : Node3D
     }
 
     private static nint __mb_get_pose_name;
-    public string GetPoseName()
+    internal string GetPoseName()
     {
         var __mb = __mb_get_pose_name;
         if (__mb == 0)
@@ -2469,7 +2577,7 @@ public unsafe partial class XRNode3D : Node3D
     }
 
     private static nint __mb_set_show_when_tracked;
-    public void SetShowWhenTracked(bool show)
+    internal void SetShowWhenTracked(bool show)
     {
         var __mb = __mb_set_show_when_tracked;
         if (__mb == 0)
@@ -2485,7 +2593,7 @@ public unsafe partial class XRNode3D : Node3D
     }
 
     private static nint __mb_get_show_when_tracked;
-    public bool GetShowWhenTracked()
+    internal bool GetShowWhenTracked()
     {
         var __mb = __mb_get_show_when_tracked;
         if (__mb == 0)
@@ -2579,8 +2687,20 @@ public unsafe partial class XROrigin3D : Node3D
         ClassRegistry.AttachNew(this, "XROrigin3D");
     }
 
+    public float WorldScale
+    {
+        get => GetWorldScale();
+        set => SetWorldScale(value);
+    }
+
+    public bool Current
+    {
+        get => IsCurrent();
+        set => SetCurrent(value);
+    }
+
     private static nint __mb_set_world_scale;
-    public void SetWorldScale(float worldScale)
+    internal void SetWorldScale(float worldScale)
     {
         var __mb = __mb_set_world_scale;
         if (__mb == 0)
@@ -2596,7 +2716,7 @@ public unsafe partial class XROrigin3D : Node3D
     }
 
     private static nint __mb_get_world_scale;
-    public float GetWorldScale()
+    internal float GetWorldScale()
     {
         var __mb = __mb_get_world_scale;
         if (__mb == 0)
@@ -2611,7 +2731,7 @@ public unsafe partial class XROrigin3D : Node3D
     }
 
     private static nint __mb_set_current;
-    public void SetCurrent(bool enabled)
+    internal void SetCurrent(bool enabled)
     {
         var __mb = __mb_set_current;
         if (__mb == 0)
@@ -2627,7 +2747,7 @@ public unsafe partial class XROrigin3D : Node3D
     }
 
     private static nint __mb_is_current;
-    public bool IsCurrent()
+    internal bool IsCurrent()
     {
         var __mb = __mb_is_current;
         if (__mb == 0)
@@ -2651,15 +2771,51 @@ public unsafe partial class XRPose : RefCounted
         ClassRegistry.AttachNew(this, "XRPose");
     }
 
-    public enum TrackingConfidence : long
+    public enum TrackingConfidenceEnum : long
     {
         XR_TRACKING_CONFIDENCE_NONE = 0,
         XR_TRACKING_CONFIDENCE_LOW = 1,
         XR_TRACKING_CONFIDENCE_HIGH = 2,
     }
 
+    public bool HasTrackingData
+    {
+        get => GetHasTrackingData();
+        set => SetHasTrackingData(value);
+    }
+
+    public string Name
+    {
+        get => GetName();
+        set => SetName(value);
+    }
+
+    public Transform3D Transform
+    {
+        get => GetTransform();
+        set => SetTransform(value);
+    }
+
+    public Vector3 LinearVelocity
+    {
+        get => GetLinearVelocity();
+        set => SetLinearVelocity(value);
+    }
+
+    public Vector3 AngularVelocity
+    {
+        get => GetAngularVelocity();
+        set => SetAngularVelocity(value);
+    }
+
+    public XRPose.TrackingConfidenceEnum TrackingConfidence
+    {
+        get => GetTrackingConfidence();
+        set => SetTrackingConfidence(value);
+    }
+
     private static nint __mb_set_has_tracking_data;
-    public void SetHasTrackingData(bool hasTrackingData)
+    internal void SetHasTrackingData(bool hasTrackingData)
     {
         var __mb = __mb_set_has_tracking_data;
         if (__mb == 0)
@@ -2675,7 +2831,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_get_has_tracking_data;
-    public bool GetHasTrackingData()
+    internal bool GetHasTrackingData()
     {
         var __mb = __mb_get_has_tracking_data;
         if (__mb == 0)
@@ -2690,7 +2846,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_set_name;
-    public void SetName(string name)
+    internal void SetName(string name)
     {
         var __mb = __mb_set_name;
         if (__mb == 0)
@@ -2706,7 +2862,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_get_name;
-    public string GetName()
+    internal string GetName()
     {
         var __mb = __mb_get_name;
         if (__mb == 0)
@@ -2721,7 +2877,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_set_transform;
-    public void SetTransform(Transform3D transform)
+    internal void SetTransform(Transform3D transform)
     {
         var __mb = __mb_set_transform;
         if (__mb == 0)
@@ -2737,7 +2893,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_get_transform;
-    public Transform3D GetTransform()
+    internal Transform3D GetTransform()
     {
         var __mb = __mb_get_transform;
         if (__mb == 0)
@@ -2767,7 +2923,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_set_linear_velocity;
-    public void SetLinearVelocity(Vector3 velocity)
+    internal void SetLinearVelocity(Vector3 velocity)
     {
         var __mb = __mb_set_linear_velocity;
         if (__mb == 0)
@@ -2783,7 +2939,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_get_linear_velocity;
-    public Vector3 GetLinearVelocity()
+    internal Vector3 GetLinearVelocity()
     {
         var __mb = __mb_get_linear_velocity;
         if (__mb == 0)
@@ -2798,7 +2954,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_set_angular_velocity;
-    public void SetAngularVelocity(Vector3 velocity)
+    internal void SetAngularVelocity(Vector3 velocity)
     {
         var __mb = __mb_set_angular_velocity;
         if (__mb == 0)
@@ -2814,7 +2970,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_get_angular_velocity;
-    public Vector3 GetAngularVelocity()
+    internal Vector3 GetAngularVelocity()
     {
         var __mb = __mb_get_angular_velocity;
         if (__mb == 0)
@@ -2829,7 +2985,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_set_tracking_confidence;
-    public void SetTrackingConfidence(XRPose.TrackingConfidence trackingConfidence)
+    internal void SetTrackingConfidence(XRPose.TrackingConfidenceEnum trackingConfidence)
     {
         var __mb = __mb_set_tracking_confidence;
         if (__mb == 0)
@@ -2845,7 +3001,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_get_tracking_confidence;
-    public XRPose.TrackingConfidence GetTrackingConfidence()
+    internal XRPose.TrackingConfidenceEnum GetTrackingConfidence()
     {
         var __mb = __mb_get_tracking_confidence;
         if (__mb == 0)
@@ -2856,7 +3012,7 @@ public unsafe partial class XRPose : RefCounted
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (XRPose.TrackingConfidence)__ret;
+        return (XRPose.TrackingConfidenceEnum)__ret;
     }
 }
 
@@ -2877,8 +3033,20 @@ public unsafe partial class XRPositionalTracker : XRTracker
         TRACKER_HAND_MAX = 3,
     }
 
+    public string Profile
+    {
+        get => GetTrackerProfile();
+        set => SetTrackerProfile(value);
+    }
+
+    public XRPositionalTracker.TrackerHand Hand
+    {
+        get => GetTrackerHand();
+        set => SetTrackerHand(value);
+    }
+
     private static nint __mb_get_tracker_profile;
-    public string GetTrackerProfile()
+    internal string GetTrackerProfile()
     {
         var __mb = __mb_get_tracker_profile;
         if (__mb == 0)
@@ -2893,7 +3061,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
     }
 
     private static nint __mb_set_tracker_profile;
-    public void SetTrackerProfile(string profile)
+    internal void SetTrackerProfile(string profile)
     {
         var __mb = __mb_set_tracker_profile;
         if (__mb == 0)
@@ -2910,7 +3078,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
     }
 
     private static nint __mb_get_tracker_hand;
-    public XRPositionalTracker.TrackerHand GetTrackerHand()
+    internal XRPositionalTracker.TrackerHand GetTrackerHand()
     {
         var __mb = __mb_get_tracker_hand;
         if (__mb == 0)
@@ -2925,7 +3093,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
     }
 
     private static nint __mb_set_tracker_hand;
-    public void SetTrackerHand(XRPositionalTracker.TrackerHand hand)
+    internal void SetTrackerHand(XRPositionalTracker.TrackerHand hand)
     {
         var __mb = __mb_set_tracker_hand;
         if (__mb == 0)
@@ -2993,7 +3161,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
     }
 
     private static nint __mb_set_pose;
-    public void SetPose(string name, Transform3D transform, Vector3 linearVelocity, Vector3 angularVelocity, XRPose.TrackingConfidence trackingConfidence)
+    public void SetPose(string name, Transform3D transform, Vector3 linearVelocity, Vector3 angularVelocity, XRPose.TrackingConfidenceEnum trackingConfidence)
     {
         var __mb = __mb_set_pose;
         if (__mb == 0)
@@ -3086,8 +3254,32 @@ public unsafe partial class XRServer : GodotObject
         DONT_RESET_ROTATION = 2,
     }
 
+    public double WorldScale
+    {
+        get => GetWorldScale();
+        set => SetWorldScale(value);
+    }
+
+    public Transform3D WorldOrigin
+    {
+        get => GetWorldOrigin();
+        set => SetWorldOrigin(value);
+    }
+
+    public bool CameraLockedToOrigin
+    {
+        get => IsCameraLockedToOrigin();
+        set => SetCameraLockedToOrigin(value);
+    }
+
+    public XRInterface? PrimaryInterface
+    {
+        get => GetPrimaryInterface();
+        set => SetPrimaryInterface(value);
+    }
+
     private static nint __mb_get_world_scale;
-    public double GetWorldScale()
+    internal double GetWorldScale()
     {
         var __mb = __mb_get_world_scale;
         if (__mb == 0)
@@ -3102,7 +3294,7 @@ public unsafe partial class XRServer : GodotObject
     }
 
     private static nint __mb_set_world_scale;
-    public void SetWorldScale(double scale)
+    internal void SetWorldScale(double scale)
     {
         var __mb = __mb_set_world_scale;
         if (__mb == 0)
@@ -3118,7 +3310,7 @@ public unsafe partial class XRServer : GodotObject
     }
 
     private static nint __mb_get_world_origin;
-    public Transform3D GetWorldOrigin()
+    internal Transform3D GetWorldOrigin()
     {
         var __mb = __mb_get_world_origin;
         if (__mb == 0)
@@ -3133,7 +3325,7 @@ public unsafe partial class XRServer : GodotObject
     }
 
     private static nint __mb_set_world_origin;
-    public void SetWorldOrigin(Transform3D worldOrigin)
+    internal void SetWorldOrigin(Transform3D worldOrigin)
     {
         var __mb = __mb_set_world_origin;
         if (__mb == 0)
@@ -3210,7 +3402,7 @@ public unsafe partial class XRServer : GodotObject
     }
 
     private static nint __mb_set_camera_locked_to_origin;
-    public void SetCameraLockedToOrigin(bool enabled)
+    internal void SetCameraLockedToOrigin(bool enabled)
     {
         var __mb = __mb_set_camera_locked_to_origin;
         if (__mb == 0)
@@ -3226,7 +3418,7 @@ public unsafe partial class XRServer : GodotObject
     }
 
     private static nint __mb_is_camera_locked_to_origin;
-    public bool IsCameraLockedToOrigin()
+    internal bool IsCameraLockedToOrigin()
     {
         var __mb = __mb_is_camera_locked_to_origin;
         if (__mb == 0)
@@ -3408,7 +3600,7 @@ public unsafe partial class XRServer : GodotObject
     }
 
     private static nint __mb_get_primary_interface;
-    public XRInterface? GetPrimaryInterface()
+    internal XRInterface? GetPrimaryInterface()
     {
         var __mb = __mb_get_primary_interface;
         if (__mb == 0)
@@ -3423,7 +3615,7 @@ public unsafe partial class XRServer : GodotObject
     }
 
     private static nint __mb_set_primary_interface;
-    public void SetPrimaryInterface(XRInterface? @interface)
+    internal void SetPrimaryInterface(XRInterface? @interface)
     {
         var __mb = __mb_set_primary_interface;
         if (__mb == 0)
@@ -3443,8 +3635,26 @@ public unsafe partial class XRTracker : RefCounted
 {
     internal XRTracker(nint ptr, bool rc) : base(ptr, rc) { }
 
+    public XRServer.TrackerType Type
+    {
+        get => GetTrackerType();
+        set => SetTrackerType(value);
+    }
+
+    public string Name
+    {
+        get => GetTrackerName();
+        set => SetTrackerName(value);
+    }
+
+    public string Description
+    {
+        get => GetTrackerDesc();
+        set => SetTrackerDesc(value);
+    }
+
     private static nint __mb_get_tracker_type;
-    public XRServer.TrackerType GetTrackerType()
+    internal XRServer.TrackerType GetTrackerType()
     {
         var __mb = __mb_get_tracker_type;
         if (__mb == 0)
@@ -3459,7 +3669,7 @@ public unsafe partial class XRTracker : RefCounted
     }
 
     private static nint __mb_set_tracker_type;
-    public void SetTrackerType(XRServer.TrackerType type)
+    internal void SetTrackerType(XRServer.TrackerType type)
     {
         var __mb = __mb_set_tracker_type;
         if (__mb == 0)
@@ -3475,7 +3685,7 @@ public unsafe partial class XRTracker : RefCounted
     }
 
     private static nint __mb_get_tracker_name;
-    public string GetTrackerName()
+    internal string GetTrackerName()
     {
         var __mb = __mb_get_tracker_name;
         if (__mb == 0)
@@ -3490,7 +3700,7 @@ public unsafe partial class XRTracker : RefCounted
     }
 
     private static nint __mb_set_tracker_name;
-    public void SetTrackerName(string name)
+    internal void SetTrackerName(string name)
     {
         var __mb = __mb_set_tracker_name;
         if (__mb == 0)
@@ -3506,7 +3716,7 @@ public unsafe partial class XRTracker : RefCounted
     }
 
     private static nint __mb_get_tracker_desc;
-    public string GetTrackerDesc()
+    internal string GetTrackerDesc()
     {
         var __mb = __mb_get_tracker_desc;
         if (__mb == 0)
@@ -3521,7 +3731,7 @@ public unsafe partial class XRTracker : RefCounted
     }
 
     private static nint __mb_set_tracker_desc;
-    public void SetTrackerDesc(string description)
+    internal void SetTrackerDesc(string description)
     {
         var __mb = __mb_set_tracker_desc;
         if (__mb == 0)
@@ -3547,8 +3757,26 @@ public unsafe partial class XRVRS : GodotObject
         ClassRegistry.AttachNew(this, "XRVRS");
     }
 
+    public float VrsMinRadius
+    {
+        get => GetVrsMinRadius();
+        set => SetVrsMinRadius(value);
+    }
+
+    public float VrsStrength
+    {
+        get => GetVrsStrength();
+        set => SetVrsStrength(value);
+    }
+
+    public Rect2I VrsRenderRegion
+    {
+        get => GetVrsRenderRegion();
+        set => SetVrsRenderRegion(value);
+    }
+
     private static nint __mb_get_vrs_min_radius;
-    public float GetVrsMinRadius()
+    internal float GetVrsMinRadius()
     {
         var __mb = __mb_get_vrs_min_radius;
         if (__mb == 0)
@@ -3563,7 +3791,7 @@ public unsafe partial class XRVRS : GodotObject
     }
 
     private static nint __mb_set_vrs_min_radius;
-    public void SetVrsMinRadius(float radius)
+    internal void SetVrsMinRadius(float radius)
     {
         var __mb = __mb_set_vrs_min_radius;
         if (__mb == 0)
@@ -3579,7 +3807,7 @@ public unsafe partial class XRVRS : GodotObject
     }
 
     private static nint __mb_get_vrs_strength;
-    public float GetVrsStrength()
+    internal float GetVrsStrength()
     {
         var __mb = __mb_get_vrs_strength;
         if (__mb == 0)
@@ -3594,7 +3822,7 @@ public unsafe partial class XRVRS : GodotObject
     }
 
     private static nint __mb_set_vrs_strength;
-    public void SetVrsStrength(float strength)
+    internal void SetVrsStrength(float strength)
     {
         var __mb = __mb_set_vrs_strength;
         if (__mb == 0)
@@ -3610,7 +3838,7 @@ public unsafe partial class XRVRS : GodotObject
     }
 
     private static nint __mb_get_vrs_render_region;
-    public Rect2I GetVrsRenderRegion()
+    internal Rect2I GetVrsRenderRegion()
     {
         var __mb = __mb_get_vrs_render_region;
         if (__mb == 0)
@@ -3625,7 +3853,7 @@ public unsafe partial class XRVRS : GodotObject
     }
 
     private static nint __mb_set_vrs_render_region;
-    public void SetVrsRenderRegion(Rect2I renderRegion)
+    internal void SetVrsRenderRegion(Rect2I renderRegion)
     {
         var __mb = __mb_set_vrs_render_region;
         if (__mb == 0)

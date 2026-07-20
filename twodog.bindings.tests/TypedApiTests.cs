@@ -38,10 +38,10 @@ public class TypedApiTests(GodotBindingsFixture godot)
     public void IntArgAndReturn_Roundtrip()
     {
         var engine = Godot.Engine.Singleton;
-        var original = engine.GetPhysicsTicksPerSecond();
-        engine.SetPhysicsTicksPerSecond(120);
-        Assert.Equal(120, engine.GetPhysicsTicksPerSecond());
-        engine.SetPhysicsTicksPerSecond(original);
+        var original = engine.PhysicsTicksPerSecond;
+        engine.PhysicsTicksPerSecond = 120;
+        Assert.Equal(120, engine.PhysicsTicksPerSecond);
+        engine.PhysicsTicksPerSecond = original;
     }
 
     [Fact]
@@ -58,8 +58,8 @@ public class TypedApiTests(GodotBindingsFixture godot)
         var node = new Node();
         try
         {
-            node.SetName("test_node_😀");
-            Assert.Equal("test_node_😀", node.GetName());
+            node.Name = "test_node_😀";
+            Assert.Equal("test_node_😀", node.Name);
         }
         finally
         {
@@ -73,8 +73,8 @@ public class TypedApiTests(GodotBindingsFixture godot)
         var node = new Node2D();
         try
         {
-            node.SetPosition(new Vector2(12.5f, -0.25f));
-            var pos = node.GetPosition();
+            node.Position = new Vector2(12.5f, -0.25f);
+            var pos = node.Position;
             Assert.Equal(12.5f, pos.X);
             Assert.Equal(-0.25f, pos.Y);
         }
@@ -90,12 +90,12 @@ public class TypedApiTests(GodotBindingsFixture godot)
         var node = new Node3D();
         try
         {
-            node.SetPosition(new Vector3(1, 2, 3));
-            var pos = node.GetPosition();
+            node.Position = new Vector3(1, 2, 3);
+            var pos = node.Position;
             Assert.Equal(new Vector3(1, 2, 3).X, pos.X);
             Assert.Equal(3f, pos.Z);
 
-            var xf = node.GetTransform();
+            var xf = node.Transform;
             Assert.Equal(1f, xf.Basis.Row0.X); // identity basis
             Assert.Equal(1f, xf.Basis.Row1.Y);
             Assert.Equal(new Vector3(1, 2, 3).Y, xf.Origin.Y);
@@ -112,8 +112,10 @@ public class TypedApiTests(GodotBindingsFixture godot)
         var node = new Node();
         try
         {
-            node.SetProcessMode(Node.ProcessMode.PROCESS_MODE_DISABLED);
-            Assert.Equal(Node.ProcessMode.PROCESS_MODE_DISABLED, node.GetProcessMode());
+            // process_mode property + ProcessMode enum collide - GodotSharp
+            // renames the enum with an "Enum" suffix; ours does the same.
+            node.ProcessMode = Node.ProcessModeEnum.PROCESS_MODE_DISABLED;
+            Assert.Equal(Node.ProcessModeEnum.PROCESS_MODE_DISABLED, node.ProcessMode);
         }
         finally
         {
@@ -124,11 +126,11 @@ public class TypedApiTests(GodotBindingsFixture godot)
     [Fact]
     public void ObjectArg_Works_InSceneTree()
     {
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).GetRoot()!;
+        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
         var before = root.GetChildCount(false);
 
         var child = new Node();
-        child.SetName("typed_api_test_child");
+        child.Name = "typed_api_test_child";
         root.AddChild(child, false, Node.InternalMode.INTERNAL_MODE_DISABLED);
         Assert.Equal(before + 1, root.GetChildCount(false));
 

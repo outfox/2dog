@@ -29,7 +29,7 @@ public unsafe partial class CPUParticles2D : Node2D
         ClassRegistry.AttachNew(this, "CPUParticles2D");
     }
 
-    public enum DrawOrder : long
+    public enum DrawOrderEnum : long
     {
         DRAW_ORDER_INDEX = 0,
         DRAW_ORDER_LIFETIME = 1,
@@ -60,7 +60,7 @@ public unsafe partial class CPUParticles2D : Node2D
         PARTICLE_FLAG_MAX = 3,
     }
 
-    public enum EmissionShape : long
+    public enum EmissionShapeEnum : long
     {
         EMISSION_SHAPE_POINT = 0,
         EMISSION_SHAPE_SPHERE = 1,
@@ -72,8 +72,404 @@ public unsafe partial class CPUParticles2D : Node2D
         EMISSION_SHAPE_MAX = 7,
     }
 
+    public bool Emitting
+    {
+        get => IsEmitting();
+        set => SetEmitting(value);
+    }
+
+    public int Amount
+    {
+        get => GetAmount();
+        set => SetAmount(value);
+    }
+
+    public Texture2D? Texture
+    {
+        get => GetTexture();
+        set => SetTexture(value);
+    }
+
+    public double Lifetime
+    {
+        get => GetLifetime();
+        set => SetLifetime(value);
+    }
+
+    public bool OneShot
+    {
+        get => GetOneShot();
+        set => SetOneShot(value);
+    }
+
+    public double Preprocess
+    {
+        get => GetPreProcessTime();
+        set => SetPreProcessTime(value);
+    }
+
+    public double SpeedScale
+    {
+        get => GetSpeedScale();
+        set => SetSpeedScale(value);
+    }
+
+    public float Explosiveness
+    {
+        get => GetExplosivenessRatio();
+        set => SetExplosivenessRatio(value);
+    }
+
+    public float Randomness
+    {
+        get => GetRandomnessRatio();
+        set => SetRandomnessRatio(value);
+    }
+
+    public bool UseFixedSeed
+    {
+        get => GetUseFixedSeed();
+        set => SetUseFixedSeed(value);
+    }
+
+    public uint Seed
+    {
+        get => GetSeed();
+        set => SetSeed(value);
+    }
+
+    public double LifetimeRandomness
+    {
+        get => GetLifetimeRandomness();
+        set => SetLifetimeRandomness(value);
+    }
+
+    public int FixedFps
+    {
+        get => GetFixedFps();
+        set => SetFixedFps(value);
+    }
+
+    public bool FractDelta
+    {
+        get => GetFractionalDelta();
+        set => SetFractionalDelta(value);
+    }
+
+    public bool LocalCoords
+    {
+        get => GetUseLocalCoordinates();
+        set => SetUseLocalCoordinates(value);
+    }
+
+    public CPUParticles2D.DrawOrderEnum DrawOrder
+    {
+        get => GetDrawOrder();
+        set => SetDrawOrder(value);
+    }
+
+    public CPUParticles2D.EmissionShapeEnum EmissionShape
+    {
+        get => GetEmissionShape();
+        set => SetEmissionShape(value);
+    }
+
+    public float EmissionSphereRadius
+    {
+        get => GetEmissionSphereRadius();
+        set => SetEmissionSphereRadius(value);
+    }
+
+    public Vector2 EmissionRectExtents
+    {
+        get => GetEmissionRectExtents();
+        set => SetEmissionRectExtents(value);
+    }
+
+    public float EmissionRingInnerRadius
+    {
+        get => GetEmissionRingInnerRadius();
+        set => SetEmissionRingInnerRadius(value);
+    }
+
+    public float EmissionRingRadius
+    {
+        get => GetEmissionRingRadius();
+        set => SetEmissionRingRadius(value);
+    }
+
+    public bool ParticleFlagAlignY
+    {
+        get => GetParticleFlag(((CPUParticles2D.ParticleFlags)(0)));
+        set => SetParticleFlag(((CPUParticles2D.ParticleFlags)(0)), value);
+    }
+
+    public Vector2 Direction
+    {
+        get => GetDirection();
+        set => SetDirection(value);
+    }
+
+    public float Spread
+    {
+        get => GetSpread();
+        set => SetSpread(value);
+    }
+
+    public Vector2 Gravity
+    {
+        get => GetGravity();
+        set => SetGravity(value);
+    }
+
+    public float InitialVelocityMin
+    {
+        get => GetParamMin(((CPUParticles2D.Parameter)(0)));
+        set => SetParamMin(((CPUParticles2D.Parameter)(0)), value);
+    }
+
+    public float InitialVelocityMax
+    {
+        get => GetParamMax(((CPUParticles2D.Parameter)(0)));
+        set => SetParamMax(((CPUParticles2D.Parameter)(0)), value);
+    }
+
+    public float AngularVelocityMin
+    {
+        get => GetParamMin(((CPUParticles2D.Parameter)(1)));
+        set => SetParamMin(((CPUParticles2D.Parameter)(1)), value);
+    }
+
+    public float AngularVelocityMax
+    {
+        get => GetParamMax(((CPUParticles2D.Parameter)(1)));
+        set => SetParamMax(((CPUParticles2D.Parameter)(1)), value);
+    }
+
+    public Curve? AngularVelocityCurve
+    {
+        get => GetParamCurve(((CPUParticles2D.Parameter)(1)));
+        set => SetParamCurve(((CPUParticles2D.Parameter)(1)), value);
+    }
+
+    public float OrbitVelocityMin
+    {
+        get => GetParamMin(((CPUParticles2D.Parameter)(2)));
+        set => SetParamMin(((CPUParticles2D.Parameter)(2)), value);
+    }
+
+    public float OrbitVelocityMax
+    {
+        get => GetParamMax(((CPUParticles2D.Parameter)(2)));
+        set => SetParamMax(((CPUParticles2D.Parameter)(2)), value);
+    }
+
+    public Curve? OrbitVelocityCurve
+    {
+        get => GetParamCurve(((CPUParticles2D.Parameter)(2)));
+        set => SetParamCurve(((CPUParticles2D.Parameter)(2)), value);
+    }
+
+    public float LinearAccelMin
+    {
+        get => GetParamMin(((CPUParticles2D.Parameter)(3)));
+        set => SetParamMin(((CPUParticles2D.Parameter)(3)), value);
+    }
+
+    public float LinearAccelMax
+    {
+        get => GetParamMax(((CPUParticles2D.Parameter)(3)));
+        set => SetParamMax(((CPUParticles2D.Parameter)(3)), value);
+    }
+
+    public Curve? LinearAccelCurve
+    {
+        get => GetParamCurve(((CPUParticles2D.Parameter)(3)));
+        set => SetParamCurve(((CPUParticles2D.Parameter)(3)), value);
+    }
+
+    public float RadialAccelMin
+    {
+        get => GetParamMin(((CPUParticles2D.Parameter)(4)));
+        set => SetParamMin(((CPUParticles2D.Parameter)(4)), value);
+    }
+
+    public float RadialAccelMax
+    {
+        get => GetParamMax(((CPUParticles2D.Parameter)(4)));
+        set => SetParamMax(((CPUParticles2D.Parameter)(4)), value);
+    }
+
+    public Curve? RadialAccelCurve
+    {
+        get => GetParamCurve(((CPUParticles2D.Parameter)(4)));
+        set => SetParamCurve(((CPUParticles2D.Parameter)(4)), value);
+    }
+
+    public float TangentialAccelMin
+    {
+        get => GetParamMin(((CPUParticles2D.Parameter)(5)));
+        set => SetParamMin(((CPUParticles2D.Parameter)(5)), value);
+    }
+
+    public float TangentialAccelMax
+    {
+        get => GetParamMax(((CPUParticles2D.Parameter)(5)));
+        set => SetParamMax(((CPUParticles2D.Parameter)(5)), value);
+    }
+
+    public Curve? TangentialAccelCurve
+    {
+        get => GetParamCurve(((CPUParticles2D.Parameter)(5)));
+        set => SetParamCurve(((CPUParticles2D.Parameter)(5)), value);
+    }
+
+    public float DampingMin
+    {
+        get => GetParamMin(((CPUParticles2D.Parameter)(6)));
+        set => SetParamMin(((CPUParticles2D.Parameter)(6)), value);
+    }
+
+    public float DampingMax
+    {
+        get => GetParamMax(((CPUParticles2D.Parameter)(6)));
+        set => SetParamMax(((CPUParticles2D.Parameter)(6)), value);
+    }
+
+    public Curve? DampingCurve
+    {
+        get => GetParamCurve(((CPUParticles2D.Parameter)(6)));
+        set => SetParamCurve(((CPUParticles2D.Parameter)(6)), value);
+    }
+
+    public float AngleMin
+    {
+        get => GetParamMin(((CPUParticles2D.Parameter)(7)));
+        set => SetParamMin(((CPUParticles2D.Parameter)(7)), value);
+    }
+
+    public float AngleMax
+    {
+        get => GetParamMax(((CPUParticles2D.Parameter)(7)));
+        set => SetParamMax(((CPUParticles2D.Parameter)(7)), value);
+    }
+
+    public Curve? AngleCurve
+    {
+        get => GetParamCurve(((CPUParticles2D.Parameter)(7)));
+        set => SetParamCurve(((CPUParticles2D.Parameter)(7)), value);
+    }
+
+    public float ScaleAmountMin
+    {
+        get => GetParamMin(((CPUParticles2D.Parameter)(8)));
+        set => SetParamMin(((CPUParticles2D.Parameter)(8)), value);
+    }
+
+    public float ScaleAmountMax
+    {
+        get => GetParamMax(((CPUParticles2D.Parameter)(8)));
+        set => SetParamMax(((CPUParticles2D.Parameter)(8)), value);
+    }
+
+    public Curve? ScaleAmountCurve
+    {
+        get => GetParamCurve(((CPUParticles2D.Parameter)(8)));
+        set => SetParamCurve(((CPUParticles2D.Parameter)(8)), value);
+    }
+
+    public bool SplitScale
+    {
+        get => GetSplitScale();
+        set => SetSplitScale(value);
+    }
+
+    public Curve? ScaleCurveX
+    {
+        get => GetScaleCurveX();
+        set => SetScaleCurveX(value);
+    }
+
+    public Curve? ScaleCurveY
+    {
+        get => GetScaleCurveY();
+        set => SetScaleCurveY(value);
+    }
+
+    public Color Color
+    {
+        get => GetColor();
+        set => SetColor(value);
+    }
+
+    public Gradient? ColorRamp
+    {
+        get => GetColorRamp();
+        set => SetColorRamp(value);
+    }
+
+    public Gradient? ColorInitialRamp
+    {
+        get => GetColorInitialRamp();
+        set => SetColorInitialRamp(value);
+    }
+
+    public float HueVariationMin
+    {
+        get => GetParamMin(((CPUParticles2D.Parameter)(9)));
+        set => SetParamMin(((CPUParticles2D.Parameter)(9)), value);
+    }
+
+    public float HueVariationMax
+    {
+        get => GetParamMax(((CPUParticles2D.Parameter)(9)));
+        set => SetParamMax(((CPUParticles2D.Parameter)(9)), value);
+    }
+
+    public Curve? HueVariationCurve
+    {
+        get => GetParamCurve(((CPUParticles2D.Parameter)(9)));
+        set => SetParamCurve(((CPUParticles2D.Parameter)(9)), value);
+    }
+
+    public float AnimSpeedMin
+    {
+        get => GetParamMin(((CPUParticles2D.Parameter)(10)));
+        set => SetParamMin(((CPUParticles2D.Parameter)(10)), value);
+    }
+
+    public float AnimSpeedMax
+    {
+        get => GetParamMax(((CPUParticles2D.Parameter)(10)));
+        set => SetParamMax(((CPUParticles2D.Parameter)(10)), value);
+    }
+
+    public Curve? AnimSpeedCurve
+    {
+        get => GetParamCurve(((CPUParticles2D.Parameter)(10)));
+        set => SetParamCurve(((CPUParticles2D.Parameter)(10)), value);
+    }
+
+    public float AnimOffsetMin
+    {
+        get => GetParamMin(((CPUParticles2D.Parameter)(11)));
+        set => SetParamMin(((CPUParticles2D.Parameter)(11)), value);
+    }
+
+    public float AnimOffsetMax
+    {
+        get => GetParamMax(((CPUParticles2D.Parameter)(11)));
+        set => SetParamMax(((CPUParticles2D.Parameter)(11)), value);
+    }
+
+    public Curve? AnimOffsetCurve
+    {
+        get => GetParamCurve(((CPUParticles2D.Parameter)(11)));
+        set => SetParamCurve(((CPUParticles2D.Parameter)(11)), value);
+    }
+
     private static nint __mb_set_emitting;
-    public void SetEmitting(bool emitting)
+    internal void SetEmitting(bool emitting)
     {
         var __mb = __mb_set_emitting;
         if (__mb == 0)
@@ -89,7 +485,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_amount;
-    public void SetAmount(int amount)
+    internal void SetAmount(int amount)
     {
         var __mb = __mb_set_amount;
         if (__mb == 0)
@@ -105,7 +501,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_lifetime;
-    public void SetLifetime(double secs)
+    internal void SetLifetime(double secs)
     {
         var __mb = __mb_set_lifetime;
         if (__mb == 0)
@@ -121,7 +517,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_one_shot;
-    public void SetOneShot(bool enable)
+    internal void SetOneShot(bool enable)
     {
         var __mb = __mb_set_one_shot;
         if (__mb == 0)
@@ -137,7 +533,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_pre_process_time;
-    public void SetPreProcessTime(double secs)
+    internal void SetPreProcessTime(double secs)
     {
         var __mb = __mb_set_pre_process_time;
         if (__mb == 0)
@@ -153,7 +549,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_explosiveness_ratio;
-    public void SetExplosivenessRatio(float ratio)
+    internal void SetExplosivenessRatio(float ratio)
     {
         var __mb = __mb_set_explosiveness_ratio;
         if (__mb == 0)
@@ -169,7 +565,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_randomness_ratio;
-    public void SetRandomnessRatio(float ratio)
+    internal void SetRandomnessRatio(float ratio)
     {
         var __mb = __mb_set_randomness_ratio;
         if (__mb == 0)
@@ -185,7 +581,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_lifetime_randomness;
-    public void SetLifetimeRandomness(double random)
+    internal void SetLifetimeRandomness(double random)
     {
         var __mb = __mb_set_lifetime_randomness;
         if (__mb == 0)
@@ -201,7 +597,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_use_local_coordinates;
-    public void SetUseLocalCoordinates(bool enable)
+    internal void SetUseLocalCoordinates(bool enable)
     {
         var __mb = __mb_set_use_local_coordinates;
         if (__mb == 0)
@@ -217,7 +613,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_fixed_fps;
-    public void SetFixedFps(int fps)
+    internal void SetFixedFps(int fps)
     {
         var __mb = __mb_set_fixed_fps;
         if (__mb == 0)
@@ -233,7 +629,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_fractional_delta;
-    public void SetFractionalDelta(bool enable)
+    internal void SetFractionalDelta(bool enable)
     {
         var __mb = __mb_set_fractional_delta;
         if (__mb == 0)
@@ -249,7 +645,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_speed_scale;
-    public void SetSpeedScale(double scale)
+    internal void SetSpeedScale(double scale)
     {
         var __mb = __mb_set_speed_scale;
         if (__mb == 0)
@@ -283,7 +679,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_is_emitting;
-    public bool IsEmitting()
+    internal bool IsEmitting()
     {
         var __mb = __mb_is_emitting;
         if (__mb == 0)
@@ -298,7 +694,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_amount;
-    public int GetAmount()
+    internal int GetAmount()
     {
         var __mb = __mb_get_amount;
         if (__mb == 0)
@@ -313,7 +709,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_lifetime;
-    public double GetLifetime()
+    internal double GetLifetime()
     {
         var __mb = __mb_get_lifetime;
         if (__mb == 0)
@@ -328,7 +724,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_one_shot;
-    public bool GetOneShot()
+    internal bool GetOneShot()
     {
         var __mb = __mb_get_one_shot;
         if (__mb == 0)
@@ -343,7 +739,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_pre_process_time;
-    public double GetPreProcessTime()
+    internal double GetPreProcessTime()
     {
         var __mb = __mb_get_pre_process_time;
         if (__mb == 0)
@@ -358,7 +754,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_explosiveness_ratio;
-    public float GetExplosivenessRatio()
+    internal float GetExplosivenessRatio()
     {
         var __mb = __mb_get_explosiveness_ratio;
         if (__mb == 0)
@@ -373,7 +769,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_randomness_ratio;
-    public float GetRandomnessRatio()
+    internal float GetRandomnessRatio()
     {
         var __mb = __mb_get_randomness_ratio;
         if (__mb == 0)
@@ -388,7 +784,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_lifetime_randomness;
-    public double GetLifetimeRandomness()
+    internal double GetLifetimeRandomness()
     {
         var __mb = __mb_get_lifetime_randomness;
         if (__mb == 0)
@@ -403,7 +799,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_use_local_coordinates;
-    public bool GetUseLocalCoordinates()
+    internal bool GetUseLocalCoordinates()
     {
         var __mb = __mb_get_use_local_coordinates;
         if (__mb == 0)
@@ -418,7 +814,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_fixed_fps;
-    public int GetFixedFps()
+    internal int GetFixedFps()
     {
         var __mb = __mb_get_fixed_fps;
         if (__mb == 0)
@@ -433,7 +829,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_fractional_delta;
-    public bool GetFractionalDelta()
+    internal bool GetFractionalDelta()
     {
         var __mb = __mb_get_fractional_delta;
         if (__mb == 0)
@@ -448,7 +844,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_speed_scale;
-    public double GetSpeedScale()
+    internal double GetSpeedScale()
     {
         var __mb = __mb_get_speed_scale;
         if (__mb == 0)
@@ -463,7 +859,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_use_fixed_seed;
-    public void SetUseFixedSeed(bool useFixedSeed)
+    internal void SetUseFixedSeed(bool useFixedSeed)
     {
         var __mb = __mb_set_use_fixed_seed;
         if (__mb == 0)
@@ -479,7 +875,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_use_fixed_seed;
-    public bool GetUseFixedSeed()
+    internal bool GetUseFixedSeed()
     {
         var __mb = __mb_get_use_fixed_seed;
         if (__mb == 0)
@@ -494,7 +890,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_seed;
-    public void SetSeed(uint seed)
+    internal void SetSeed(uint seed)
     {
         var __mb = __mb_set_seed;
         if (__mb == 0)
@@ -510,7 +906,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_seed;
-    public uint GetSeed()
+    internal uint GetSeed()
     {
         var __mb = __mb_get_seed;
         if (__mb == 0)
@@ -525,7 +921,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_draw_order;
-    public void SetDrawOrder(CPUParticles2D.DrawOrder order)
+    internal void SetDrawOrder(CPUParticles2D.DrawOrderEnum order)
     {
         var __mb = __mb_set_draw_order;
         if (__mb == 0)
@@ -541,7 +937,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_draw_order;
-    public CPUParticles2D.DrawOrder GetDrawOrder()
+    internal CPUParticles2D.DrawOrderEnum GetDrawOrder()
     {
         var __mb = __mb_get_draw_order;
         if (__mb == 0)
@@ -552,11 +948,11 @@ public unsafe partial class CPUParticles2D : Node2D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CPUParticles2D.DrawOrder)__ret;
+        return (CPUParticles2D.DrawOrderEnum)__ret;
     }
 
     private static nint __mb_set_texture;
-    public void SetTexture(Texture2D? texture)
+    internal void SetTexture(Texture2D? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -572,7 +968,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_texture;
-    public Texture2D? GetTexture()
+    internal Texture2D? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -603,7 +999,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_direction;
-    public void SetDirection(Vector2 direction)
+    internal void SetDirection(Vector2 direction)
     {
         var __mb = __mb_set_direction;
         if (__mb == 0)
@@ -619,7 +1015,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_direction;
-    public Vector2 GetDirection()
+    internal Vector2 GetDirection()
     {
         var __mb = __mb_get_direction;
         if (__mb == 0)
@@ -634,7 +1030,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_spread;
-    public void SetSpread(float spread)
+    internal void SetSpread(float spread)
     {
         var __mb = __mb_set_spread;
         if (__mb == 0)
@@ -650,7 +1046,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_spread;
-    public float GetSpread()
+    internal float GetSpread()
     {
         var __mb = __mb_get_spread;
         if (__mb == 0)
@@ -665,7 +1061,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_param_min;
-    public void SetParamMin(CPUParticles2D.Parameter param, float value)
+    internal void SetParamMin(CPUParticles2D.Parameter param, float value)
     {
         var __mb = __mb_set_param_min;
         if (__mb == 0)
@@ -683,7 +1079,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_param_min;
-    public float GetParamMin(CPUParticles2D.Parameter param)
+    internal float GetParamMin(CPUParticles2D.Parameter param)
     {
         var __mb = __mb_get_param_min;
         if (__mb == 0)
@@ -701,7 +1097,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_param_max;
-    public void SetParamMax(CPUParticles2D.Parameter param, float value)
+    internal void SetParamMax(CPUParticles2D.Parameter param, float value)
     {
         var __mb = __mb_set_param_max;
         if (__mb == 0)
@@ -719,7 +1115,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_param_max;
-    public float GetParamMax(CPUParticles2D.Parameter param)
+    internal float GetParamMax(CPUParticles2D.Parameter param)
     {
         var __mb = __mb_get_param_max;
         if (__mb == 0)
@@ -737,7 +1133,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_param_curve;
-    public void SetParamCurve(CPUParticles2D.Parameter param, Curve? curve)
+    internal void SetParamCurve(CPUParticles2D.Parameter param, Curve? curve)
     {
         var __mb = __mb_set_param_curve;
         if (__mb == 0)
@@ -755,7 +1151,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_param_curve;
-    public Curve? GetParamCurve(CPUParticles2D.Parameter param)
+    internal Curve? GetParamCurve(CPUParticles2D.Parameter param)
     {
         var __mb = __mb_get_param_curve;
         if (__mb == 0)
@@ -773,7 +1169,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_color;
-    public void SetColor(Color color)
+    internal void SetColor(Color color)
     {
         var __mb = __mb_set_color;
         if (__mb == 0)
@@ -789,7 +1185,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_color;
-    public Color GetColor()
+    internal Color GetColor()
     {
         var __mb = __mb_get_color;
         if (__mb == 0)
@@ -804,7 +1200,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_color_ramp;
-    public void SetColorRamp(Gradient? ramp)
+    internal void SetColorRamp(Gradient? ramp)
     {
         var __mb = __mb_set_color_ramp;
         if (__mb == 0)
@@ -820,7 +1216,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_color_ramp;
-    public Gradient? GetColorRamp()
+    internal Gradient? GetColorRamp()
     {
         var __mb = __mb_get_color_ramp;
         if (__mb == 0)
@@ -835,7 +1231,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_color_initial_ramp;
-    public void SetColorInitialRamp(Gradient? ramp)
+    internal void SetColorInitialRamp(Gradient? ramp)
     {
         var __mb = __mb_set_color_initial_ramp;
         if (__mb == 0)
@@ -851,7 +1247,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_color_initial_ramp;
-    public Gradient? GetColorInitialRamp()
+    internal Gradient? GetColorInitialRamp()
     {
         var __mb = __mb_get_color_initial_ramp;
         if (__mb == 0)
@@ -866,7 +1262,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_particle_flag;
-    public void SetParticleFlag(CPUParticles2D.ParticleFlags particleFlag, bool enable)
+    internal void SetParticleFlag(CPUParticles2D.ParticleFlags particleFlag, bool enable)
     {
         var __mb = __mb_set_particle_flag;
         if (__mb == 0)
@@ -884,7 +1280,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_particle_flag;
-    public bool GetParticleFlag(CPUParticles2D.ParticleFlags particleFlag)
+    internal bool GetParticleFlag(CPUParticles2D.ParticleFlags particleFlag)
     {
         var __mb = __mb_get_particle_flag;
         if (__mb == 0)
@@ -902,7 +1298,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_emission_shape;
-    public void SetEmissionShape(CPUParticles2D.EmissionShape shape)
+    internal void SetEmissionShape(CPUParticles2D.EmissionShapeEnum shape)
     {
         var __mb = __mb_set_emission_shape;
         if (__mb == 0)
@@ -918,7 +1314,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_emission_shape;
-    public CPUParticles2D.EmissionShape GetEmissionShape()
+    internal CPUParticles2D.EmissionShapeEnum GetEmissionShape()
     {
         var __mb = __mb_get_emission_shape;
         if (__mb == 0)
@@ -929,11 +1325,11 @@ public unsafe partial class CPUParticles2D : Node2D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CPUParticles2D.EmissionShape)__ret;
+        return (CPUParticles2D.EmissionShapeEnum)__ret;
     }
 
     private static nint __mb_set_emission_sphere_radius;
-    public void SetEmissionSphereRadius(float radius)
+    internal void SetEmissionSphereRadius(float radius)
     {
         var __mb = __mb_set_emission_sphere_radius;
         if (__mb == 0)
@@ -949,7 +1345,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_emission_sphere_radius;
-    public float GetEmissionSphereRadius()
+    internal float GetEmissionSphereRadius()
     {
         var __mb = __mb_get_emission_sphere_radius;
         if (__mb == 0)
@@ -964,7 +1360,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_emission_rect_extents;
-    public void SetEmissionRectExtents(Vector2 extents)
+    internal void SetEmissionRectExtents(Vector2 extents)
     {
         var __mb = __mb_set_emission_rect_extents;
         if (__mb == 0)
@@ -980,7 +1376,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_emission_rect_extents;
-    public Vector2 GetEmissionRectExtents()
+    internal Vector2 GetEmissionRectExtents()
     {
         var __mb = __mb_get_emission_rect_extents;
         if (__mb == 0)
@@ -995,7 +1391,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_emission_ring_inner_radius;
-    public void SetEmissionRingInnerRadius(float innerRadius)
+    internal void SetEmissionRingInnerRadius(float innerRadius)
     {
         var __mb = __mb_set_emission_ring_inner_radius;
         if (__mb == 0)
@@ -1011,7 +1407,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_emission_ring_inner_radius;
-    public float GetEmissionRingInnerRadius()
+    internal float GetEmissionRingInnerRadius()
     {
         var __mb = __mb_get_emission_ring_inner_radius;
         if (__mb == 0)
@@ -1026,7 +1422,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_emission_ring_radius;
-    public void SetEmissionRingRadius(float radius)
+    internal void SetEmissionRingRadius(float radius)
     {
         var __mb = __mb_set_emission_ring_radius;
         if (__mb == 0)
@@ -1042,7 +1438,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_emission_ring_radius;
-    public float GetEmissionRingRadius()
+    internal float GetEmissionRingRadius()
     {
         var __mb = __mb_get_emission_ring_radius;
         if (__mb == 0)
@@ -1057,7 +1453,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_gravity;
-    public Vector2 GetGravity()
+    internal Vector2 GetGravity()
     {
         var __mb = __mb_get_gravity;
         if (__mb == 0)
@@ -1072,7 +1468,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_gravity;
-    public void SetGravity(Vector2 accelVec)
+    internal void SetGravity(Vector2 accelVec)
     {
         var __mb = __mb_set_gravity;
         if (__mb == 0)
@@ -1088,7 +1484,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_split_scale;
-    public bool GetSplitScale()
+    internal bool GetSplitScale()
     {
         var __mb = __mb_get_split_scale;
         if (__mb == 0)
@@ -1103,7 +1499,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_split_scale;
-    public void SetSplitScale(bool splitScale)
+    internal void SetSplitScale(bool splitScale)
     {
         var __mb = __mb_set_split_scale;
         if (__mb == 0)
@@ -1119,7 +1515,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_scale_curve_x;
-    public Curve? GetScaleCurveX()
+    internal Curve? GetScaleCurveX()
     {
         var __mb = __mb_get_scale_curve_x;
         if (__mb == 0)
@@ -1134,7 +1530,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_scale_curve_x;
-    public void SetScaleCurveX(Curve? scaleCurve)
+    internal void SetScaleCurveX(Curve? scaleCurve)
     {
         var __mb = __mb_set_scale_curve_x;
         if (__mb == 0)
@@ -1150,7 +1546,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_get_scale_curve_y;
-    public Curve? GetScaleCurveY()
+    internal Curve? GetScaleCurveY()
     {
         var __mb = __mb_get_scale_curve_y;
         if (__mb == 0)
@@ -1165,7 +1561,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_set_scale_curve_y;
-    public void SetScaleCurveY(Curve? scaleCurve)
+    internal void SetScaleCurveY(Curve? scaleCurve)
     {
         var __mb = __mb_set_scale_curve_y;
         if (__mb == 0)
@@ -1206,7 +1602,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
         ClassRegistry.AttachNew(this, "CPUParticles3D");
     }
 
-    public enum DrawOrder : long
+    public enum DrawOrderEnum : long
     {
         DRAW_ORDER_INDEX = 0,
         DRAW_ORDER_LIFETIME = 1,
@@ -1238,7 +1634,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
         PARTICLE_FLAG_MAX = 3,
     }
 
-    public enum EmissionShape : long
+    public enum EmissionShapeEnum : long
     {
         EMISSION_SHAPE_POINT = 0,
         EMISSION_SHAPE_SPHERE = 1,
@@ -1250,8 +1646,452 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
         EMISSION_SHAPE_MAX = 7,
     }
 
+    public bool Emitting
+    {
+        get => IsEmitting();
+        set => SetEmitting(value);
+    }
+
+    public int Amount
+    {
+        get => GetAmount();
+        set => SetAmount(value);
+    }
+
+    public double Lifetime
+    {
+        get => GetLifetime();
+        set => SetLifetime(value);
+    }
+
+    public bool OneShot
+    {
+        get => GetOneShot();
+        set => SetOneShot(value);
+    }
+
+    public double Preprocess
+    {
+        get => GetPreProcessTime();
+        set => SetPreProcessTime(value);
+    }
+
+    public double SpeedScale
+    {
+        get => GetSpeedScale();
+        set => SetSpeedScale(value);
+    }
+
+    public float Explosiveness
+    {
+        get => GetExplosivenessRatio();
+        set => SetExplosivenessRatio(value);
+    }
+
+    public float Randomness
+    {
+        get => GetRandomnessRatio();
+        set => SetRandomnessRatio(value);
+    }
+
+    public bool UseFixedSeed
+    {
+        get => GetUseFixedSeed();
+        set => SetUseFixedSeed(value);
+    }
+
+    public uint Seed
+    {
+        get => GetSeed();
+        set => SetSeed(value);
+    }
+
+    public double LifetimeRandomness
+    {
+        get => GetLifetimeRandomness();
+        set => SetLifetimeRandomness(value);
+    }
+
+    public int FixedFps
+    {
+        get => GetFixedFps();
+        set => SetFixedFps(value);
+    }
+
+    public bool FractDelta
+    {
+        get => GetFractionalDelta();
+        set => SetFractionalDelta(value);
+    }
+
+    public Aabb VisibilityAabb
+    {
+        get => GetVisibilityAabb();
+        set => SetVisibilityAabb(value);
+    }
+
+    public bool LocalCoords
+    {
+        get => GetUseLocalCoordinates();
+        set => SetUseLocalCoordinates(value);
+    }
+
+    public CPUParticles3D.DrawOrderEnum DrawOrder
+    {
+        get => GetDrawOrder();
+        set => SetDrawOrder(value);
+    }
+
+    public Mesh? Mesh
+    {
+        get => GetMesh();
+        set => SetMesh(value);
+    }
+
+    public CPUParticles3D.EmissionShapeEnum EmissionShape
+    {
+        get => GetEmissionShape();
+        set => SetEmissionShape(value);
+    }
+
+    public float EmissionSphereRadius
+    {
+        get => GetEmissionSphereRadius();
+        set => SetEmissionSphereRadius(value);
+    }
+
+    public Vector3 EmissionBoxExtents
+    {
+        get => GetEmissionBoxExtents();
+        set => SetEmissionBoxExtents(value);
+    }
+
+    public Vector3 EmissionRingAxis
+    {
+        get => GetEmissionRingAxis();
+        set => SetEmissionRingAxis(value);
+    }
+
+    public float EmissionRingHeight
+    {
+        get => GetEmissionRingHeight();
+        set => SetEmissionRingHeight(value);
+    }
+
+    public float EmissionRingRadius
+    {
+        get => GetEmissionRingRadius();
+        set => SetEmissionRingRadius(value);
+    }
+
+    public float EmissionRingInnerRadius
+    {
+        get => GetEmissionRingInnerRadius();
+        set => SetEmissionRingInnerRadius(value);
+    }
+
+    public float EmissionRingConeAngle
+    {
+        get => GetEmissionRingConeAngle();
+        set => SetEmissionRingConeAngle(value);
+    }
+
+    public bool ParticleFlagAlignY
+    {
+        get => GetParticleFlag(((CPUParticles3D.ParticleFlags)(0)));
+        set => SetParticleFlag(((CPUParticles3D.ParticleFlags)(0)), value);
+    }
+
+    public bool ParticleFlagRotateY
+    {
+        get => GetParticleFlag(((CPUParticles3D.ParticleFlags)(1)));
+        set => SetParticleFlag(((CPUParticles3D.ParticleFlags)(1)), value);
+    }
+
+    public bool ParticleFlagDisableZ
+    {
+        get => GetParticleFlag(((CPUParticles3D.ParticleFlags)(2)));
+        set => SetParticleFlag(((CPUParticles3D.ParticleFlags)(2)), value);
+    }
+
+    public Vector3 Direction
+    {
+        get => GetDirection();
+        set => SetDirection(value);
+    }
+
+    public float Spread
+    {
+        get => GetSpread();
+        set => SetSpread(value);
+    }
+
+    public float Flatness
+    {
+        get => GetFlatness();
+        set => SetFlatness(value);
+    }
+
+    public Vector3 Gravity
+    {
+        get => GetGravity();
+        set => SetGravity(value);
+    }
+
+    public float InitialVelocityMin
+    {
+        get => GetParamMin(((CPUParticles3D.Parameter)(0)));
+        set => SetParamMin(((CPUParticles3D.Parameter)(0)), value);
+    }
+
+    public float InitialVelocityMax
+    {
+        get => GetParamMax(((CPUParticles3D.Parameter)(0)));
+        set => SetParamMax(((CPUParticles3D.Parameter)(0)), value);
+    }
+
+    public float AngularVelocityMin
+    {
+        get => GetParamMin(((CPUParticles3D.Parameter)(1)));
+        set => SetParamMin(((CPUParticles3D.Parameter)(1)), value);
+    }
+
+    public float AngularVelocityMax
+    {
+        get => GetParamMax(((CPUParticles3D.Parameter)(1)));
+        set => SetParamMax(((CPUParticles3D.Parameter)(1)), value);
+    }
+
+    public Curve? AngularVelocityCurve
+    {
+        get => GetParamCurve(((CPUParticles3D.Parameter)(1)));
+        set => SetParamCurve(((CPUParticles3D.Parameter)(1)), value);
+    }
+
+    public float OrbitVelocityMin
+    {
+        get => GetParamMin(((CPUParticles3D.Parameter)(2)));
+        set => SetParamMin(((CPUParticles3D.Parameter)(2)), value);
+    }
+
+    public float OrbitVelocityMax
+    {
+        get => GetParamMax(((CPUParticles3D.Parameter)(2)));
+        set => SetParamMax(((CPUParticles3D.Parameter)(2)), value);
+    }
+
+    public Curve? OrbitVelocityCurve
+    {
+        get => GetParamCurve(((CPUParticles3D.Parameter)(2)));
+        set => SetParamCurve(((CPUParticles3D.Parameter)(2)), value);
+    }
+
+    public float LinearAccelMin
+    {
+        get => GetParamMin(((CPUParticles3D.Parameter)(3)));
+        set => SetParamMin(((CPUParticles3D.Parameter)(3)), value);
+    }
+
+    public float LinearAccelMax
+    {
+        get => GetParamMax(((CPUParticles3D.Parameter)(3)));
+        set => SetParamMax(((CPUParticles3D.Parameter)(3)), value);
+    }
+
+    public Curve? LinearAccelCurve
+    {
+        get => GetParamCurve(((CPUParticles3D.Parameter)(3)));
+        set => SetParamCurve(((CPUParticles3D.Parameter)(3)), value);
+    }
+
+    public float RadialAccelMin
+    {
+        get => GetParamMin(((CPUParticles3D.Parameter)(4)));
+        set => SetParamMin(((CPUParticles3D.Parameter)(4)), value);
+    }
+
+    public float RadialAccelMax
+    {
+        get => GetParamMax(((CPUParticles3D.Parameter)(4)));
+        set => SetParamMax(((CPUParticles3D.Parameter)(4)), value);
+    }
+
+    public Curve? RadialAccelCurve
+    {
+        get => GetParamCurve(((CPUParticles3D.Parameter)(4)));
+        set => SetParamCurve(((CPUParticles3D.Parameter)(4)), value);
+    }
+
+    public float TangentialAccelMin
+    {
+        get => GetParamMin(((CPUParticles3D.Parameter)(5)));
+        set => SetParamMin(((CPUParticles3D.Parameter)(5)), value);
+    }
+
+    public float TangentialAccelMax
+    {
+        get => GetParamMax(((CPUParticles3D.Parameter)(5)));
+        set => SetParamMax(((CPUParticles3D.Parameter)(5)), value);
+    }
+
+    public Curve? TangentialAccelCurve
+    {
+        get => GetParamCurve(((CPUParticles3D.Parameter)(5)));
+        set => SetParamCurve(((CPUParticles3D.Parameter)(5)), value);
+    }
+
+    public float DampingMin
+    {
+        get => GetParamMin(((CPUParticles3D.Parameter)(6)));
+        set => SetParamMin(((CPUParticles3D.Parameter)(6)), value);
+    }
+
+    public float DampingMax
+    {
+        get => GetParamMax(((CPUParticles3D.Parameter)(6)));
+        set => SetParamMax(((CPUParticles3D.Parameter)(6)), value);
+    }
+
+    public Curve? DampingCurve
+    {
+        get => GetParamCurve(((CPUParticles3D.Parameter)(6)));
+        set => SetParamCurve(((CPUParticles3D.Parameter)(6)), value);
+    }
+
+    public float AngleMin
+    {
+        get => GetParamMin(((CPUParticles3D.Parameter)(7)));
+        set => SetParamMin(((CPUParticles3D.Parameter)(7)), value);
+    }
+
+    public float AngleMax
+    {
+        get => GetParamMax(((CPUParticles3D.Parameter)(7)));
+        set => SetParamMax(((CPUParticles3D.Parameter)(7)), value);
+    }
+
+    public Curve? AngleCurve
+    {
+        get => GetParamCurve(((CPUParticles3D.Parameter)(7)));
+        set => SetParamCurve(((CPUParticles3D.Parameter)(7)), value);
+    }
+
+    public float ScaleAmountMin
+    {
+        get => GetParamMin(((CPUParticles3D.Parameter)(8)));
+        set => SetParamMin(((CPUParticles3D.Parameter)(8)), value);
+    }
+
+    public float ScaleAmountMax
+    {
+        get => GetParamMax(((CPUParticles3D.Parameter)(8)));
+        set => SetParamMax(((CPUParticles3D.Parameter)(8)), value);
+    }
+
+    public Curve? ScaleAmountCurve
+    {
+        get => GetParamCurve(((CPUParticles3D.Parameter)(8)));
+        set => SetParamCurve(((CPUParticles3D.Parameter)(8)), value);
+    }
+
+    public bool SplitScale
+    {
+        get => GetSplitScale();
+        set => SetSplitScale(value);
+    }
+
+    public Curve? ScaleCurveX
+    {
+        get => GetScaleCurveX();
+        set => SetScaleCurveX(value);
+    }
+
+    public Curve? ScaleCurveY
+    {
+        get => GetScaleCurveY();
+        set => SetScaleCurveY(value);
+    }
+
+    public Curve? ScaleCurveZ
+    {
+        get => GetScaleCurveZ();
+        set => SetScaleCurveZ(value);
+    }
+
+    public Color Color
+    {
+        get => GetColor();
+        set => SetColor(value);
+    }
+
+    public Gradient? ColorRamp
+    {
+        get => GetColorRamp();
+        set => SetColorRamp(value);
+    }
+
+    public Gradient? ColorInitialRamp
+    {
+        get => GetColorInitialRamp();
+        set => SetColorInitialRamp(value);
+    }
+
+    public float HueVariationMin
+    {
+        get => GetParamMin(((CPUParticles3D.Parameter)(9)));
+        set => SetParamMin(((CPUParticles3D.Parameter)(9)), value);
+    }
+
+    public float HueVariationMax
+    {
+        get => GetParamMax(((CPUParticles3D.Parameter)(9)));
+        set => SetParamMax(((CPUParticles3D.Parameter)(9)), value);
+    }
+
+    public Curve? HueVariationCurve
+    {
+        get => GetParamCurve(((CPUParticles3D.Parameter)(9)));
+        set => SetParamCurve(((CPUParticles3D.Parameter)(9)), value);
+    }
+
+    public float AnimSpeedMin
+    {
+        get => GetParamMin(((CPUParticles3D.Parameter)(10)));
+        set => SetParamMin(((CPUParticles3D.Parameter)(10)), value);
+    }
+
+    public float AnimSpeedMax
+    {
+        get => GetParamMax(((CPUParticles3D.Parameter)(10)));
+        set => SetParamMax(((CPUParticles3D.Parameter)(10)), value);
+    }
+
+    public Curve? AnimSpeedCurve
+    {
+        get => GetParamCurve(((CPUParticles3D.Parameter)(10)));
+        set => SetParamCurve(((CPUParticles3D.Parameter)(10)), value);
+    }
+
+    public float AnimOffsetMin
+    {
+        get => GetParamMin(((CPUParticles3D.Parameter)(11)));
+        set => SetParamMin(((CPUParticles3D.Parameter)(11)), value);
+    }
+
+    public float AnimOffsetMax
+    {
+        get => GetParamMax(((CPUParticles3D.Parameter)(11)));
+        set => SetParamMax(((CPUParticles3D.Parameter)(11)), value);
+    }
+
+    public Curve? AnimOffsetCurve
+    {
+        get => GetParamCurve(((CPUParticles3D.Parameter)(11)));
+        set => SetParamCurve(((CPUParticles3D.Parameter)(11)), value);
+    }
+
     private static nint __mb_set_emitting;
-    public void SetEmitting(bool emitting)
+    internal void SetEmitting(bool emitting)
     {
         var __mb = __mb_set_emitting;
         if (__mb == 0)
@@ -1267,7 +2107,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_amount;
-    public void SetAmount(int amount)
+    internal void SetAmount(int amount)
     {
         var __mb = __mb_set_amount;
         if (__mb == 0)
@@ -1283,7 +2123,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_lifetime;
-    public void SetLifetime(double secs)
+    internal void SetLifetime(double secs)
     {
         var __mb = __mb_set_lifetime;
         if (__mb == 0)
@@ -1299,7 +2139,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_one_shot;
-    public void SetOneShot(bool enable)
+    internal void SetOneShot(bool enable)
     {
         var __mb = __mb_set_one_shot;
         if (__mb == 0)
@@ -1315,7 +2155,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_pre_process_time;
-    public void SetPreProcessTime(double secs)
+    internal void SetPreProcessTime(double secs)
     {
         var __mb = __mb_set_pre_process_time;
         if (__mb == 0)
@@ -1331,7 +2171,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_explosiveness_ratio;
-    public void SetExplosivenessRatio(float ratio)
+    internal void SetExplosivenessRatio(float ratio)
     {
         var __mb = __mb_set_explosiveness_ratio;
         if (__mb == 0)
@@ -1347,7 +2187,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_randomness_ratio;
-    public void SetRandomnessRatio(float ratio)
+    internal void SetRandomnessRatio(float ratio)
     {
         var __mb = __mb_set_randomness_ratio;
         if (__mb == 0)
@@ -1363,7 +2203,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_visibility_aabb;
-    public void SetVisibilityAabb(Aabb aabb)
+    internal void SetVisibilityAabb(Aabb aabb)
     {
         var __mb = __mb_set_visibility_aabb;
         if (__mb == 0)
@@ -1379,7 +2219,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_lifetime_randomness;
-    public void SetLifetimeRandomness(double random)
+    internal void SetLifetimeRandomness(double random)
     {
         var __mb = __mb_set_lifetime_randomness;
         if (__mb == 0)
@@ -1395,7 +2235,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_use_local_coordinates;
-    public void SetUseLocalCoordinates(bool enable)
+    internal void SetUseLocalCoordinates(bool enable)
     {
         var __mb = __mb_set_use_local_coordinates;
         if (__mb == 0)
@@ -1411,7 +2251,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_fixed_fps;
-    public void SetFixedFps(int fps)
+    internal void SetFixedFps(int fps)
     {
         var __mb = __mb_set_fixed_fps;
         if (__mb == 0)
@@ -1427,7 +2267,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_fractional_delta;
-    public void SetFractionalDelta(bool enable)
+    internal void SetFractionalDelta(bool enable)
     {
         var __mb = __mb_set_fractional_delta;
         if (__mb == 0)
@@ -1443,7 +2283,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_speed_scale;
-    public void SetSpeedScale(double scale)
+    internal void SetSpeedScale(double scale)
     {
         var __mb = __mb_set_speed_scale;
         if (__mb == 0)
@@ -1459,7 +2299,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_is_emitting;
-    public bool IsEmitting()
+    internal bool IsEmitting()
     {
         var __mb = __mb_is_emitting;
         if (__mb == 0)
@@ -1474,7 +2314,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_amount;
-    public int GetAmount()
+    internal int GetAmount()
     {
         var __mb = __mb_get_amount;
         if (__mb == 0)
@@ -1489,7 +2329,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_lifetime;
-    public double GetLifetime()
+    internal double GetLifetime()
     {
         var __mb = __mb_get_lifetime;
         if (__mb == 0)
@@ -1504,7 +2344,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_one_shot;
-    public bool GetOneShot()
+    internal bool GetOneShot()
     {
         var __mb = __mb_get_one_shot;
         if (__mb == 0)
@@ -1519,7 +2359,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_pre_process_time;
-    public double GetPreProcessTime()
+    internal double GetPreProcessTime()
     {
         var __mb = __mb_get_pre_process_time;
         if (__mb == 0)
@@ -1534,7 +2374,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_explosiveness_ratio;
-    public float GetExplosivenessRatio()
+    internal float GetExplosivenessRatio()
     {
         var __mb = __mb_get_explosiveness_ratio;
         if (__mb == 0)
@@ -1549,7 +2389,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_randomness_ratio;
-    public float GetRandomnessRatio()
+    internal float GetRandomnessRatio()
     {
         var __mb = __mb_get_randomness_ratio;
         if (__mb == 0)
@@ -1564,7 +2404,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_visibility_aabb;
-    public Aabb GetVisibilityAabb()
+    internal Aabb GetVisibilityAabb()
     {
         var __mb = __mb_get_visibility_aabb;
         if (__mb == 0)
@@ -1579,7 +2419,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_lifetime_randomness;
-    public double GetLifetimeRandomness()
+    internal double GetLifetimeRandomness()
     {
         var __mb = __mb_get_lifetime_randomness;
         if (__mb == 0)
@@ -1594,7 +2434,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_use_local_coordinates;
-    public bool GetUseLocalCoordinates()
+    internal bool GetUseLocalCoordinates()
     {
         var __mb = __mb_get_use_local_coordinates;
         if (__mb == 0)
@@ -1609,7 +2449,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_fixed_fps;
-    public int GetFixedFps()
+    internal int GetFixedFps()
     {
         var __mb = __mb_get_fixed_fps;
         if (__mb == 0)
@@ -1624,7 +2464,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_fractional_delta;
-    public bool GetFractionalDelta()
+    internal bool GetFractionalDelta()
     {
         var __mb = __mb_get_fractional_delta;
         if (__mb == 0)
@@ -1639,7 +2479,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_speed_scale;
-    public double GetSpeedScale()
+    internal double GetSpeedScale()
     {
         var __mb = __mb_get_speed_scale;
         if (__mb == 0)
@@ -1654,7 +2494,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_draw_order;
-    public void SetDrawOrder(CPUParticles3D.DrawOrder order)
+    internal void SetDrawOrder(CPUParticles3D.DrawOrderEnum order)
     {
         var __mb = __mb_set_draw_order;
         if (__mb == 0)
@@ -1670,7 +2510,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_draw_order;
-    public CPUParticles3D.DrawOrder GetDrawOrder()
+    internal CPUParticles3D.DrawOrderEnum GetDrawOrder()
     {
         var __mb = __mb_get_draw_order;
         if (__mb == 0)
@@ -1681,11 +2521,11 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CPUParticles3D.DrawOrder)__ret;
+        return (CPUParticles3D.DrawOrderEnum)__ret;
     }
 
     private static nint __mb_set_mesh;
-    public void SetMesh(Mesh? mesh)
+    internal void SetMesh(Mesh? mesh)
     {
         var __mb = __mb_set_mesh;
         if (__mb == 0)
@@ -1701,7 +2541,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_mesh;
-    public Mesh? GetMesh()
+    internal Mesh? GetMesh()
     {
         var __mb = __mb_get_mesh;
         if (__mb == 0)
@@ -1716,7 +2556,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_use_fixed_seed;
-    public void SetUseFixedSeed(bool useFixedSeed)
+    internal void SetUseFixedSeed(bool useFixedSeed)
     {
         var __mb = __mb_set_use_fixed_seed;
         if (__mb == 0)
@@ -1732,7 +2572,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_use_fixed_seed;
-    public bool GetUseFixedSeed()
+    internal bool GetUseFixedSeed()
     {
         var __mb = __mb_get_use_fixed_seed;
         if (__mb == 0)
@@ -1747,7 +2587,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_seed;
-    public void SetSeed(uint seed)
+    internal void SetSeed(uint seed)
     {
         var __mb = __mb_set_seed;
         if (__mb == 0)
@@ -1763,7 +2603,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_seed;
-    public uint GetSeed()
+    internal uint GetSeed()
     {
         var __mb = __mb_get_seed;
         if (__mb == 0)
@@ -1827,7 +2667,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_direction;
-    public void SetDirection(Vector3 direction)
+    internal void SetDirection(Vector3 direction)
     {
         var __mb = __mb_set_direction;
         if (__mb == 0)
@@ -1843,7 +2683,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_direction;
-    public Vector3 GetDirection()
+    internal Vector3 GetDirection()
     {
         var __mb = __mb_get_direction;
         if (__mb == 0)
@@ -1858,7 +2698,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_spread;
-    public void SetSpread(float degrees)
+    internal void SetSpread(float degrees)
     {
         var __mb = __mb_set_spread;
         if (__mb == 0)
@@ -1874,7 +2714,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_spread;
-    public float GetSpread()
+    internal float GetSpread()
     {
         var __mb = __mb_get_spread;
         if (__mb == 0)
@@ -1889,7 +2729,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_flatness;
-    public void SetFlatness(float amount)
+    internal void SetFlatness(float amount)
     {
         var __mb = __mb_set_flatness;
         if (__mb == 0)
@@ -1905,7 +2745,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_flatness;
-    public float GetFlatness()
+    internal float GetFlatness()
     {
         var __mb = __mb_get_flatness;
         if (__mb == 0)
@@ -1920,7 +2760,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_param_min;
-    public void SetParamMin(CPUParticles3D.Parameter param, float value)
+    internal void SetParamMin(CPUParticles3D.Parameter param, float value)
     {
         var __mb = __mb_set_param_min;
         if (__mb == 0)
@@ -1938,7 +2778,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_param_min;
-    public float GetParamMin(CPUParticles3D.Parameter param)
+    internal float GetParamMin(CPUParticles3D.Parameter param)
     {
         var __mb = __mb_get_param_min;
         if (__mb == 0)
@@ -1956,7 +2796,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_param_max;
-    public void SetParamMax(CPUParticles3D.Parameter param, float value)
+    internal void SetParamMax(CPUParticles3D.Parameter param, float value)
     {
         var __mb = __mb_set_param_max;
         if (__mb == 0)
@@ -1974,7 +2814,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_param_max;
-    public float GetParamMax(CPUParticles3D.Parameter param)
+    internal float GetParamMax(CPUParticles3D.Parameter param)
     {
         var __mb = __mb_get_param_max;
         if (__mb == 0)
@@ -1992,7 +2832,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_param_curve;
-    public void SetParamCurve(CPUParticles3D.Parameter param, Curve? curve)
+    internal void SetParamCurve(CPUParticles3D.Parameter param, Curve? curve)
     {
         var __mb = __mb_set_param_curve;
         if (__mb == 0)
@@ -2010,7 +2850,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_param_curve;
-    public Curve? GetParamCurve(CPUParticles3D.Parameter param)
+    internal Curve? GetParamCurve(CPUParticles3D.Parameter param)
     {
         var __mb = __mb_get_param_curve;
         if (__mb == 0)
@@ -2028,7 +2868,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_color;
-    public void SetColor(Color color)
+    internal void SetColor(Color color)
     {
         var __mb = __mb_set_color;
         if (__mb == 0)
@@ -2044,7 +2884,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_color;
-    public Color GetColor()
+    internal Color GetColor()
     {
         var __mb = __mb_get_color;
         if (__mb == 0)
@@ -2059,7 +2899,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_color_ramp;
-    public void SetColorRamp(Gradient? ramp)
+    internal void SetColorRamp(Gradient? ramp)
     {
         var __mb = __mb_set_color_ramp;
         if (__mb == 0)
@@ -2075,7 +2915,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_color_ramp;
-    public Gradient? GetColorRamp()
+    internal Gradient? GetColorRamp()
     {
         var __mb = __mb_get_color_ramp;
         if (__mb == 0)
@@ -2090,7 +2930,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_color_initial_ramp;
-    public void SetColorInitialRamp(Gradient? ramp)
+    internal void SetColorInitialRamp(Gradient? ramp)
     {
         var __mb = __mb_set_color_initial_ramp;
         if (__mb == 0)
@@ -2106,7 +2946,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_color_initial_ramp;
-    public Gradient? GetColorInitialRamp()
+    internal Gradient? GetColorInitialRamp()
     {
         var __mb = __mb_get_color_initial_ramp;
         if (__mb == 0)
@@ -2121,7 +2961,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_particle_flag;
-    public void SetParticleFlag(CPUParticles3D.ParticleFlags particleFlag, bool enable)
+    internal void SetParticleFlag(CPUParticles3D.ParticleFlags particleFlag, bool enable)
     {
         var __mb = __mb_set_particle_flag;
         if (__mb == 0)
@@ -2139,7 +2979,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_particle_flag;
-    public bool GetParticleFlag(CPUParticles3D.ParticleFlags particleFlag)
+    internal bool GetParticleFlag(CPUParticles3D.ParticleFlags particleFlag)
     {
         var __mb = __mb_get_particle_flag;
         if (__mb == 0)
@@ -2157,7 +2997,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_emission_shape;
-    public void SetEmissionShape(CPUParticles3D.EmissionShape shape)
+    internal void SetEmissionShape(CPUParticles3D.EmissionShapeEnum shape)
     {
         var __mb = __mb_set_emission_shape;
         if (__mb == 0)
@@ -2173,7 +3013,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_emission_shape;
-    public CPUParticles3D.EmissionShape GetEmissionShape()
+    internal CPUParticles3D.EmissionShapeEnum GetEmissionShape()
     {
         var __mb = __mb_get_emission_shape;
         if (__mb == 0)
@@ -2184,11 +3024,11 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CPUParticles3D.EmissionShape)__ret;
+        return (CPUParticles3D.EmissionShapeEnum)__ret;
     }
 
     private static nint __mb_set_emission_sphere_radius;
-    public void SetEmissionSphereRadius(float radius)
+    internal void SetEmissionSphereRadius(float radius)
     {
         var __mb = __mb_set_emission_sphere_radius;
         if (__mb == 0)
@@ -2204,7 +3044,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_emission_sphere_radius;
-    public float GetEmissionSphereRadius()
+    internal float GetEmissionSphereRadius()
     {
         var __mb = __mb_get_emission_sphere_radius;
         if (__mb == 0)
@@ -2219,7 +3059,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_emission_box_extents;
-    public void SetEmissionBoxExtents(Vector3 extents)
+    internal void SetEmissionBoxExtents(Vector3 extents)
     {
         var __mb = __mb_set_emission_box_extents;
         if (__mb == 0)
@@ -2235,7 +3075,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_emission_box_extents;
-    public Vector3 GetEmissionBoxExtents()
+    internal Vector3 GetEmissionBoxExtents()
     {
         var __mb = __mb_get_emission_box_extents;
         if (__mb == 0)
@@ -2250,7 +3090,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_emission_ring_axis;
-    public void SetEmissionRingAxis(Vector3 axis)
+    internal void SetEmissionRingAxis(Vector3 axis)
     {
         var __mb = __mb_set_emission_ring_axis;
         if (__mb == 0)
@@ -2266,7 +3106,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_emission_ring_axis;
-    public Vector3 GetEmissionRingAxis()
+    internal Vector3 GetEmissionRingAxis()
     {
         var __mb = __mb_get_emission_ring_axis;
         if (__mb == 0)
@@ -2281,7 +3121,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_emission_ring_height;
-    public void SetEmissionRingHeight(float height)
+    internal void SetEmissionRingHeight(float height)
     {
         var __mb = __mb_set_emission_ring_height;
         if (__mb == 0)
@@ -2297,7 +3137,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_emission_ring_height;
-    public float GetEmissionRingHeight()
+    internal float GetEmissionRingHeight()
     {
         var __mb = __mb_get_emission_ring_height;
         if (__mb == 0)
@@ -2312,7 +3152,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_emission_ring_radius;
-    public void SetEmissionRingRadius(float radius)
+    internal void SetEmissionRingRadius(float radius)
     {
         var __mb = __mb_set_emission_ring_radius;
         if (__mb == 0)
@@ -2328,7 +3168,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_emission_ring_radius;
-    public float GetEmissionRingRadius()
+    internal float GetEmissionRingRadius()
     {
         var __mb = __mb_get_emission_ring_radius;
         if (__mb == 0)
@@ -2343,7 +3183,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_emission_ring_inner_radius;
-    public void SetEmissionRingInnerRadius(float innerRadius)
+    internal void SetEmissionRingInnerRadius(float innerRadius)
     {
         var __mb = __mb_set_emission_ring_inner_radius;
         if (__mb == 0)
@@ -2359,7 +3199,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_emission_ring_inner_radius;
-    public float GetEmissionRingInnerRadius()
+    internal float GetEmissionRingInnerRadius()
     {
         var __mb = __mb_get_emission_ring_inner_radius;
         if (__mb == 0)
@@ -2374,7 +3214,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_emission_ring_cone_angle;
-    public void SetEmissionRingConeAngle(float coneAngle)
+    internal void SetEmissionRingConeAngle(float coneAngle)
     {
         var __mb = __mb_set_emission_ring_cone_angle;
         if (__mb == 0)
@@ -2390,7 +3230,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_emission_ring_cone_angle;
-    public float GetEmissionRingConeAngle()
+    internal float GetEmissionRingConeAngle()
     {
         var __mb = __mb_get_emission_ring_cone_angle;
         if (__mb == 0)
@@ -2405,7 +3245,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_gravity;
-    public Vector3 GetGravity()
+    internal Vector3 GetGravity()
     {
         var __mb = __mb_get_gravity;
         if (__mb == 0)
@@ -2420,7 +3260,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_gravity;
-    public void SetGravity(Vector3 accelVec)
+    internal void SetGravity(Vector3 accelVec)
     {
         var __mb = __mb_set_gravity;
         if (__mb == 0)
@@ -2436,7 +3276,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_split_scale;
-    public bool GetSplitScale()
+    internal bool GetSplitScale()
     {
         var __mb = __mb_get_split_scale;
         if (__mb == 0)
@@ -2451,7 +3291,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_split_scale;
-    public void SetSplitScale(bool splitScale)
+    internal void SetSplitScale(bool splitScale)
     {
         var __mb = __mb_set_split_scale;
         if (__mb == 0)
@@ -2467,7 +3307,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_scale_curve_x;
-    public Curve? GetScaleCurveX()
+    internal Curve? GetScaleCurveX()
     {
         var __mb = __mb_get_scale_curve_x;
         if (__mb == 0)
@@ -2482,7 +3322,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_scale_curve_x;
-    public void SetScaleCurveX(Curve? scaleCurve)
+    internal void SetScaleCurveX(Curve? scaleCurve)
     {
         var __mb = __mb_set_scale_curve_x;
         if (__mb == 0)
@@ -2498,7 +3338,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_scale_curve_y;
-    public Curve? GetScaleCurveY()
+    internal Curve? GetScaleCurveY()
     {
         var __mb = __mb_get_scale_curve_y;
         if (__mb == 0)
@@ -2513,7 +3353,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_scale_curve_y;
-    public void SetScaleCurveY(Curve? scaleCurve)
+    internal void SetScaleCurveY(Curve? scaleCurve)
     {
         var __mb = __mb_set_scale_curve_y;
         if (__mb == 0)
@@ -2529,7 +3369,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_get_scale_curve_z;
-    public Curve? GetScaleCurveZ()
+    internal Curve? GetScaleCurveZ()
     {
         var __mb = __mb_get_scale_curve_z;
         if (__mb == 0)
@@ -2544,7 +3384,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_set_scale_curve_z;
-    public void SetScaleCurveZ(Curve? scaleCurve)
+    internal void SetScaleCurveZ(Curve? scaleCurve)
     {
         var __mb = __mb_set_scale_curve_z;
         if (__mb == 0)
@@ -2585,8 +3425,20 @@ public unsafe partial class CSGBox3D : CSGPrimitive3D
         ClassRegistry.AttachNew(this, "CSGBox3D");
     }
 
+    public Vector3 Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
+    public Material? Material
+    {
+        get => GetMaterial();
+        set => SetMaterial(value);
+    }
+
     private static nint __mb_set_size;
-    public void SetSize(Vector3 size)
+    internal void SetSize(Vector3 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -2602,7 +3454,7 @@ public unsafe partial class CSGBox3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_size;
-    public Vector3 GetSize()
+    internal Vector3 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -2617,7 +3469,7 @@ public unsafe partial class CSGBox3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_material;
-    public void SetMaterial(Material? material)
+    internal void SetMaterial(Material? material)
     {
         var __mb = __mb_set_material;
         if (__mb == 0)
@@ -2633,7 +3485,7 @@ public unsafe partial class CSGBox3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_material;
-    public Material? GetMaterial()
+    internal Material? GetMaterial()
     {
         var __mb = __mb_get_material;
         if (__mb == 0)
@@ -2667,8 +3519,44 @@ public unsafe partial class CSGCylinder3D : CSGPrimitive3D
         ClassRegistry.AttachNew(this, "CSGCylinder3D");
     }
 
+    public float Radius
+    {
+        get => GetRadius();
+        set => SetRadius(value);
+    }
+
+    public float Height
+    {
+        get => GetHeight();
+        set => SetHeight(value);
+    }
+
+    public int Sides
+    {
+        get => GetSides();
+        set => SetSides(value);
+    }
+
+    public bool Cone
+    {
+        get => IsCone();
+        set => SetCone(value);
+    }
+
+    public bool SmoothFaces
+    {
+        get => GetSmoothFaces();
+        set => SetSmoothFaces(value);
+    }
+
+    public Material? Material
+    {
+        get => GetMaterial();
+        set => SetMaterial(value);
+    }
+
     private static nint __mb_set_radius;
-    public void SetRadius(float radius)
+    internal void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -2684,7 +3572,7 @@ public unsafe partial class CSGCylinder3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_radius;
-    public float GetRadius()
+    internal float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -2699,7 +3587,7 @@ public unsafe partial class CSGCylinder3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_height;
-    public void SetHeight(float height)
+    internal void SetHeight(float height)
     {
         var __mb = __mb_set_height;
         if (__mb == 0)
@@ -2715,7 +3603,7 @@ public unsafe partial class CSGCylinder3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_height;
-    public float GetHeight()
+    internal float GetHeight()
     {
         var __mb = __mb_get_height;
         if (__mb == 0)
@@ -2730,7 +3618,7 @@ public unsafe partial class CSGCylinder3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_sides;
-    public void SetSides(int sides)
+    internal void SetSides(int sides)
     {
         var __mb = __mb_set_sides;
         if (__mb == 0)
@@ -2746,7 +3634,7 @@ public unsafe partial class CSGCylinder3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_sides;
-    public int GetSides()
+    internal int GetSides()
     {
         var __mb = __mb_get_sides;
         if (__mb == 0)
@@ -2761,7 +3649,7 @@ public unsafe partial class CSGCylinder3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_cone;
-    public void SetCone(bool cone)
+    internal void SetCone(bool cone)
     {
         var __mb = __mb_set_cone;
         if (__mb == 0)
@@ -2777,7 +3665,7 @@ public unsafe partial class CSGCylinder3D : CSGPrimitive3D
     }
 
     private static nint __mb_is_cone;
-    public bool IsCone()
+    internal bool IsCone()
     {
         var __mb = __mb_is_cone;
         if (__mb == 0)
@@ -2792,7 +3680,7 @@ public unsafe partial class CSGCylinder3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_material;
-    public void SetMaterial(Material? material)
+    internal void SetMaterial(Material? material)
     {
         var __mb = __mb_set_material;
         if (__mb == 0)
@@ -2808,7 +3696,7 @@ public unsafe partial class CSGCylinder3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_material;
-    public Material? GetMaterial()
+    internal Material? GetMaterial()
     {
         var __mb = __mb_get_material;
         if (__mb == 0)
@@ -2823,7 +3711,7 @@ public unsafe partial class CSGCylinder3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_smooth_faces;
-    public void SetSmoothFaces(bool smoothFaces)
+    internal void SetSmoothFaces(bool smoothFaces)
     {
         var __mb = __mb_set_smooth_faces;
         if (__mb == 0)
@@ -2839,7 +3727,7 @@ public unsafe partial class CSGCylinder3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_smooth_faces;
-    public bool GetSmoothFaces()
+    internal bool GetSmoothFaces()
     {
         var __mb = __mb_get_smooth_faces;
         if (__mb == 0)
@@ -2863,8 +3751,20 @@ public unsafe partial class CSGMesh3D : CSGPrimitive3D
         ClassRegistry.AttachNew(this, "CSGMesh3D");
     }
 
+    public Mesh? Mesh
+    {
+        get => GetMesh();
+        set => SetMesh(value);
+    }
+
+    public Material? Material
+    {
+        get => GetMaterial();
+        set => SetMaterial(value);
+    }
+
     private static nint __mb_set_mesh;
-    public void SetMesh(Mesh? mesh)
+    internal void SetMesh(Mesh? mesh)
     {
         var __mb = __mb_set_mesh;
         if (__mb == 0)
@@ -2880,7 +3780,7 @@ public unsafe partial class CSGMesh3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_mesh;
-    public Mesh? GetMesh()
+    internal Mesh? GetMesh()
     {
         var __mb = __mb_get_mesh;
         if (__mb == 0)
@@ -2895,7 +3795,7 @@ public unsafe partial class CSGMesh3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_material;
-    public void SetMaterial(Material? material)
+    internal void SetMaterial(Material? material)
     {
         var __mb = __mb_set_material;
         if (__mb == 0)
@@ -2911,7 +3811,7 @@ public unsafe partial class CSGMesh3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_material;
-    public Material? GetMaterial()
+    internal Material? GetMaterial()
     {
         var __mb = __mb_get_material;
         if (__mb == 0)
@@ -2935,28 +3835,124 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
         ClassRegistry.AttachNew(this, "CSGPolygon3D");
     }
 
-    public enum Mode : long
+    public enum ModeEnum : long
     {
         MODE_DEPTH = 0,
         MODE_SPIN = 1,
         MODE_PATH = 2,
     }
 
-    public enum PathRotation : long
+    public enum PathRotationEnum : long
     {
         PATH_ROTATION_POLYGON = 0,
         PATH_ROTATION_PATH = 1,
         PATH_ROTATION_PATH_FOLLOW = 2,
     }
 
-    public enum PathIntervalType : long
+    public enum PathIntervalTypeEnum : long
     {
         PATH_INTERVAL_DISTANCE = 0,
         PATH_INTERVAL_SUBDIVIDE = 1,
     }
 
+    public CSGPolygon3D.ModeEnum Mode
+    {
+        get => GetMode();
+        set => SetMode(value);
+    }
+
+    public float Depth
+    {
+        get => GetDepth();
+        set => SetDepth(value);
+    }
+
+    public float SpinDegrees
+    {
+        get => GetSpinDegrees();
+        set => SetSpinDegrees(value);
+    }
+
+    public int SpinSides
+    {
+        get => GetSpinSides();
+        set => SetSpinSides(value);
+    }
+
+    public NodePath PathNode
+    {
+        get => GetPathNode();
+        set => SetPathNode(value);
+    }
+
+    public CSGPolygon3D.PathIntervalTypeEnum PathIntervalType
+    {
+        get => GetPathIntervalType();
+        set => SetPathIntervalType(value);
+    }
+
+    public float PathInterval
+    {
+        get => GetPathInterval();
+        set => SetPathInterval(value);
+    }
+
+    public float PathSimplifyAngle
+    {
+        get => GetPathSimplifyAngle();
+        set => SetPathSimplifyAngle(value);
+    }
+
+    public CSGPolygon3D.PathRotationEnum PathRotation
+    {
+        get => GetPathRotation();
+        set => SetPathRotation(value);
+    }
+
+    public bool PathRotationAccurate
+    {
+        get => GetPathRotationAccurate();
+        set => SetPathRotationAccurate(value);
+    }
+
+    public bool PathLocal
+    {
+        get => IsPathLocal();
+        set => SetPathLocal(value);
+    }
+
+    public bool PathContinuousU
+    {
+        get => IsPathContinuousU();
+        set => SetPathContinuousU(value);
+    }
+
+    public float PathUDistance
+    {
+        get => GetPathUDistance();
+        set => SetPathUDistance(value);
+    }
+
+    public bool PathJoined
+    {
+        get => IsPathJoined();
+        set => SetPathJoined(value);
+    }
+
+    public bool SmoothFaces
+    {
+        get => GetSmoothFaces();
+        set => SetSmoothFaces(value);
+    }
+
+    public Material? Material
+    {
+        get => GetMaterial();
+        set => SetMaterial(value);
+    }
+
     private static nint __mb_set_mode;
-    public void SetMode(CSGPolygon3D.Mode mode)
+    internal void SetMode(CSGPolygon3D.ModeEnum mode)
     {
         var __mb = __mb_set_mode;
         if (__mb == 0)
@@ -2972,7 +3968,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_mode;
-    public CSGPolygon3D.Mode GetMode()
+    internal CSGPolygon3D.ModeEnum GetMode()
     {
         var __mb = __mb_get_mode;
         if (__mb == 0)
@@ -2983,11 +3979,11 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CSGPolygon3D.Mode)__ret;
+        return (CSGPolygon3D.ModeEnum)__ret;
     }
 
     private static nint __mb_set_depth;
-    public void SetDepth(float depth)
+    internal void SetDepth(float depth)
     {
         var __mb = __mb_set_depth;
         if (__mb == 0)
@@ -3003,7 +3999,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_depth;
-    public float GetDepth()
+    internal float GetDepth()
     {
         var __mb = __mb_get_depth;
         if (__mb == 0)
@@ -3018,7 +4014,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_spin_degrees;
-    public void SetSpinDegrees(float degrees)
+    internal void SetSpinDegrees(float degrees)
     {
         var __mb = __mb_set_spin_degrees;
         if (__mb == 0)
@@ -3034,7 +4030,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_spin_degrees;
-    public float GetSpinDegrees()
+    internal float GetSpinDegrees()
     {
         var __mb = __mb_get_spin_degrees;
         if (__mb == 0)
@@ -3049,7 +4045,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_spin_sides;
-    public void SetSpinSides(int spinSides)
+    internal void SetSpinSides(int spinSides)
     {
         var __mb = __mb_set_spin_sides;
         if (__mb == 0)
@@ -3065,7 +4061,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_spin_sides;
-    public int GetSpinSides()
+    internal int GetSpinSides()
     {
         var __mb = __mb_get_spin_sides;
         if (__mb == 0)
@@ -3080,7 +4076,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_path_node;
-    public void SetPathNode(NodePath path)
+    internal void SetPathNode(NodePath path)
     {
         var __mb = __mb_set_path_node;
         if (__mb == 0)
@@ -3096,7 +4092,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_path_node;
-    public NodePath GetPathNode()
+    internal NodePath GetPathNode()
     {
         var __mb = __mb_get_path_node;
         if (__mb == 0)
@@ -3111,7 +4107,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_path_interval_type;
-    public void SetPathIntervalType(CSGPolygon3D.PathIntervalType intervalType)
+    internal void SetPathIntervalType(CSGPolygon3D.PathIntervalTypeEnum intervalType)
     {
         var __mb = __mb_set_path_interval_type;
         if (__mb == 0)
@@ -3127,7 +4123,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_path_interval_type;
-    public CSGPolygon3D.PathIntervalType GetPathIntervalType()
+    internal CSGPolygon3D.PathIntervalTypeEnum GetPathIntervalType()
     {
         var __mb = __mb_get_path_interval_type;
         if (__mb == 0)
@@ -3138,11 +4134,11 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CSGPolygon3D.PathIntervalType)__ret;
+        return (CSGPolygon3D.PathIntervalTypeEnum)__ret;
     }
 
     private static nint __mb_set_path_interval;
-    public void SetPathInterval(float interval)
+    internal void SetPathInterval(float interval)
     {
         var __mb = __mb_set_path_interval;
         if (__mb == 0)
@@ -3158,7 +4154,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_path_interval;
-    public float GetPathInterval()
+    internal float GetPathInterval()
     {
         var __mb = __mb_get_path_interval;
         if (__mb == 0)
@@ -3173,7 +4169,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_path_simplify_angle;
-    public void SetPathSimplifyAngle(float degrees)
+    internal void SetPathSimplifyAngle(float degrees)
     {
         var __mb = __mb_set_path_simplify_angle;
         if (__mb == 0)
@@ -3189,7 +4185,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_path_simplify_angle;
-    public float GetPathSimplifyAngle()
+    internal float GetPathSimplifyAngle()
     {
         var __mb = __mb_get_path_simplify_angle;
         if (__mb == 0)
@@ -3204,7 +4200,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_path_rotation;
-    public void SetPathRotation(CSGPolygon3D.PathRotation pathRotation)
+    internal void SetPathRotation(CSGPolygon3D.PathRotationEnum pathRotation)
     {
         var __mb = __mb_set_path_rotation;
         if (__mb == 0)
@@ -3220,7 +4216,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_path_rotation;
-    public CSGPolygon3D.PathRotation GetPathRotation()
+    internal CSGPolygon3D.PathRotationEnum GetPathRotation()
     {
         var __mb = __mb_get_path_rotation;
         if (__mb == 0)
@@ -3231,11 +4227,11 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CSGPolygon3D.PathRotation)__ret;
+        return (CSGPolygon3D.PathRotationEnum)__ret;
     }
 
     private static nint __mb_set_path_rotation_accurate;
-    public void SetPathRotationAccurate(bool enable)
+    internal void SetPathRotationAccurate(bool enable)
     {
         var __mb = __mb_set_path_rotation_accurate;
         if (__mb == 0)
@@ -3251,7 +4247,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_path_rotation_accurate;
-    public bool GetPathRotationAccurate()
+    internal bool GetPathRotationAccurate()
     {
         var __mb = __mb_get_path_rotation_accurate;
         if (__mb == 0)
@@ -3266,7 +4262,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_path_local;
-    public void SetPathLocal(bool enable)
+    internal void SetPathLocal(bool enable)
     {
         var __mb = __mb_set_path_local;
         if (__mb == 0)
@@ -3282,7 +4278,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_is_path_local;
-    public bool IsPathLocal()
+    internal bool IsPathLocal()
     {
         var __mb = __mb_is_path_local;
         if (__mb == 0)
@@ -3297,7 +4293,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_path_continuous_u;
-    public void SetPathContinuousU(bool enable)
+    internal void SetPathContinuousU(bool enable)
     {
         var __mb = __mb_set_path_continuous_u;
         if (__mb == 0)
@@ -3313,7 +4309,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_is_path_continuous_u;
-    public bool IsPathContinuousU()
+    internal bool IsPathContinuousU()
     {
         var __mb = __mb_is_path_continuous_u;
         if (__mb == 0)
@@ -3328,7 +4324,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_path_u_distance;
-    public void SetPathUDistance(float distance)
+    internal void SetPathUDistance(float distance)
     {
         var __mb = __mb_set_path_u_distance;
         if (__mb == 0)
@@ -3344,7 +4340,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_path_u_distance;
-    public float GetPathUDistance()
+    internal float GetPathUDistance()
     {
         var __mb = __mb_get_path_u_distance;
         if (__mb == 0)
@@ -3359,7 +4355,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_path_joined;
-    public void SetPathJoined(bool enable)
+    internal void SetPathJoined(bool enable)
     {
         var __mb = __mb_set_path_joined;
         if (__mb == 0)
@@ -3375,7 +4371,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_is_path_joined;
-    public bool IsPathJoined()
+    internal bool IsPathJoined()
     {
         var __mb = __mb_is_path_joined;
         if (__mb == 0)
@@ -3390,7 +4386,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_material;
-    public void SetMaterial(Material? material)
+    internal void SetMaterial(Material? material)
     {
         var __mb = __mb_set_material;
         if (__mb == 0)
@@ -3406,7 +4402,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_material;
-    public Material? GetMaterial()
+    internal Material? GetMaterial()
     {
         var __mb = __mb_get_material;
         if (__mb == 0)
@@ -3421,7 +4417,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_smooth_faces;
-    public void SetSmoothFaces(bool smoothFaces)
+    internal void SetSmoothFaces(bool smoothFaces)
     {
         var __mb = __mb_set_smooth_faces;
         if (__mb == 0)
@@ -3437,7 +4433,7 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_smooth_faces;
-    public bool GetSmoothFaces()
+    internal bool GetSmoothFaces()
     {
         var __mb = __mb_get_smooth_faces;
         if (__mb == 0)
@@ -3456,8 +4452,14 @@ public unsafe partial class CSGPrimitive3D : CSGShape3D
 {
     internal CSGPrimitive3D(nint ptr, bool rc) : base(ptr, rc) { }
 
+    public bool FlipFaces
+    {
+        get => GetFlipFaces();
+        set => SetFlipFaces(value);
+    }
+
     private static nint __mb_set_flip_faces;
-    public void SetFlipFaces(bool flipFaces)
+    internal void SetFlipFaces(bool flipFaces)
     {
         var __mb = __mb_set_flip_faces;
         if (__mb == 0)
@@ -3473,7 +4475,7 @@ public unsafe partial class CSGPrimitive3D : CSGShape3D
     }
 
     private static nint __mb_get_flip_faces;
-    public bool GetFlipFaces()
+    internal bool GetFlipFaces()
     {
         var __mb = __mb_get_flip_faces;
         if (__mb == 0)
@@ -3492,11 +4494,65 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
 {
     internal CSGShape3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public enum Operation : long
+    public enum OperationEnum : long
     {
         OPERATION_UNION = 0,
         OPERATION_INTERSECTION = 1,
         OPERATION_SUBTRACTION = 2,
+    }
+
+    public bool Autosmooth
+    {
+        get => IsAutosmooth();
+        set => SetAutosmooth(value);
+    }
+
+    public float SmoothingAngle
+    {
+        get => GetSmoothingAngle();
+        set => SetSmoothingAngle(value);
+    }
+
+    public CSGShape3D.OperationEnum Operation
+    {
+        get => GetOperation();
+        set => SetOperation(value);
+    }
+
+    public float Snap
+    {
+        get => GetSnap();
+        set => SetSnap(value);
+    }
+
+    public bool CalculateTangents
+    {
+        get => IsCalculatingTangents();
+        set => SetCalculateTangents(value);
+    }
+
+    public bool UseCollision
+    {
+        get => IsUsingCollision();
+        set => SetUseCollision(value);
+    }
+
+    public uint CollisionLayer
+    {
+        get => GetCollisionLayer();
+        set => SetCollisionLayer(value);
+    }
+
+    public uint CollisionMask
+    {
+        get => GetCollisionMask();
+        set => SetCollisionMask(value);
+    }
+
+    public float CollisionPriority
+    {
+        get => GetCollisionPriority();
+        set => SetCollisionPriority(value);
     }
 
     private static nint __mb_is_root_shape;
@@ -3515,7 +4571,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_set_operation;
-    public void SetOperation(CSGShape3D.Operation operation)
+    internal void SetOperation(CSGShape3D.OperationEnum operation)
     {
         var __mb = __mb_set_operation;
         if (__mb == 0)
@@ -3531,7 +4587,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_get_operation;
-    public CSGShape3D.Operation GetOperation()
+    internal CSGShape3D.OperationEnum GetOperation()
     {
         var __mb = __mb_get_operation;
         if (__mb == 0)
@@ -3542,11 +4598,11 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CSGShape3D.Operation)__ret;
+        return (CSGShape3D.OperationEnum)__ret;
     }
 
     private static nint __mb_set_snap;
-    public void SetSnap(float snap)
+    internal void SetSnap(float snap)
     {
         var __mb = __mb_set_snap;
         if (__mb == 0)
@@ -3562,7 +4618,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_get_snap;
-    public float GetSnap()
+    internal float GetSnap()
     {
         var __mb = __mb_get_snap;
         if (__mb == 0)
@@ -3577,7 +4633,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_set_use_collision;
-    public void SetUseCollision(bool operation)
+    internal void SetUseCollision(bool operation)
     {
         var __mb = __mb_set_use_collision;
         if (__mb == 0)
@@ -3593,7 +4649,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_is_using_collision;
-    public bool IsUsingCollision()
+    internal bool IsUsingCollision()
     {
         var __mb = __mb_is_using_collision;
         if (__mb == 0)
@@ -3608,7 +4664,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_set_collision_layer;
-    public void SetCollisionLayer(uint layer)
+    internal void SetCollisionLayer(uint layer)
     {
         var __mb = __mb_set_collision_layer;
         if (__mb == 0)
@@ -3624,7 +4680,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_get_collision_layer;
-    public uint GetCollisionLayer()
+    internal uint GetCollisionLayer()
     {
         var __mb = __mb_get_collision_layer;
         if (__mb == 0)
@@ -3639,7 +4695,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_set_collision_mask;
-    public void SetCollisionMask(uint mask)
+    internal void SetCollisionMask(uint mask)
     {
         var __mb = __mb_set_collision_mask;
         if (__mb == 0)
@@ -3655,7 +4711,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_get_collision_mask;
-    public uint GetCollisionMask()
+    internal uint GetCollisionMask()
     {
         var __mb = __mb_get_collision_mask;
         if (__mb == 0)
@@ -3742,7 +4798,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_set_collision_priority;
-    public void SetCollisionPriority(float priority)
+    internal void SetCollisionPriority(float priority)
     {
         var __mb = __mb_set_collision_priority;
         if (__mb == 0)
@@ -3758,7 +4814,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_get_collision_priority;
-    public float GetCollisionPriority()
+    internal float GetCollisionPriority()
     {
         var __mb = __mb_get_collision_priority;
         if (__mb == 0)
@@ -3788,7 +4844,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_set_calculate_tangents;
-    public void SetCalculateTangents(bool enabled)
+    internal void SetCalculateTangents(bool enabled)
     {
         var __mb = __mb_set_calculate_tangents;
         if (__mb == 0)
@@ -3804,7 +4860,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_is_calculating_tangents;
-    public bool IsCalculatingTangents()
+    internal bool IsCalculatingTangents()
     {
         var __mb = __mb_is_calculating_tangents;
         if (__mb == 0)
@@ -3849,7 +4905,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_set_autosmooth;
-    public void SetAutosmooth(bool autosmooth)
+    internal void SetAutosmooth(bool autosmooth)
     {
         var __mb = __mb_set_autosmooth;
         if (__mb == 0)
@@ -3865,7 +4921,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_is_autosmooth;
-    public bool IsAutosmooth()
+    internal bool IsAutosmooth()
     {
         var __mb = __mb_is_autosmooth;
         if (__mb == 0)
@@ -3880,7 +4936,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_set_smoothing_angle;
-    public void SetSmoothingAngle(float smoothingAngle)
+    internal void SetSmoothingAngle(float smoothingAngle)
     {
         var __mb = __mb_set_smoothing_angle;
         if (__mb == 0)
@@ -3896,7 +4952,7 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
     }
 
     private static nint __mb_get_smoothing_angle;
-    public float GetSmoothingAngle()
+    internal float GetSmoothingAngle()
     {
         var __mb = __mb_get_smoothing_angle;
         if (__mb == 0)
@@ -3920,8 +4976,38 @@ public unsafe partial class CSGSphere3D : CSGPrimitive3D
         ClassRegistry.AttachNew(this, "CSGSphere3D");
     }
 
+    public float Radius
+    {
+        get => GetRadius();
+        set => SetRadius(value);
+    }
+
+    public int RadialSegments
+    {
+        get => GetRadialSegments();
+        set => SetRadialSegments(value);
+    }
+
+    public int Rings
+    {
+        get => GetRings();
+        set => SetRings(value);
+    }
+
+    public bool SmoothFaces
+    {
+        get => GetSmoothFaces();
+        set => SetSmoothFaces(value);
+    }
+
+    public Material? Material
+    {
+        get => GetMaterial();
+        set => SetMaterial(value);
+    }
+
     private static nint __mb_set_radius;
-    public void SetRadius(float radius)
+    internal void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -3937,7 +5023,7 @@ public unsafe partial class CSGSphere3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_radius;
-    public float GetRadius()
+    internal float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -3952,7 +5038,7 @@ public unsafe partial class CSGSphere3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_radial_segments;
-    public void SetRadialSegments(int radialSegments)
+    internal void SetRadialSegments(int radialSegments)
     {
         var __mb = __mb_set_radial_segments;
         if (__mb == 0)
@@ -3968,7 +5054,7 @@ public unsafe partial class CSGSphere3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_radial_segments;
-    public int GetRadialSegments()
+    internal int GetRadialSegments()
     {
         var __mb = __mb_get_radial_segments;
         if (__mb == 0)
@@ -3983,7 +5069,7 @@ public unsafe partial class CSGSphere3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_rings;
-    public void SetRings(int rings)
+    internal void SetRings(int rings)
     {
         var __mb = __mb_set_rings;
         if (__mb == 0)
@@ -3999,7 +5085,7 @@ public unsafe partial class CSGSphere3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_rings;
-    public int GetRings()
+    internal int GetRings()
     {
         var __mb = __mb_get_rings;
         if (__mb == 0)
@@ -4014,7 +5100,7 @@ public unsafe partial class CSGSphere3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_smooth_faces;
-    public void SetSmoothFaces(bool smoothFaces)
+    internal void SetSmoothFaces(bool smoothFaces)
     {
         var __mb = __mb_set_smooth_faces;
         if (__mb == 0)
@@ -4030,7 +5116,7 @@ public unsafe partial class CSGSphere3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_smooth_faces;
-    public bool GetSmoothFaces()
+    internal bool GetSmoothFaces()
     {
         var __mb = __mb_get_smooth_faces;
         if (__mb == 0)
@@ -4045,7 +5131,7 @@ public unsafe partial class CSGSphere3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_material;
-    public void SetMaterial(Material? material)
+    internal void SetMaterial(Material? material)
     {
         var __mb = __mb_set_material;
         if (__mb == 0)
@@ -4061,7 +5147,7 @@ public unsafe partial class CSGSphere3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_material;
-    public Material? GetMaterial()
+    internal Material? GetMaterial()
     {
         var __mb = __mb_get_material;
         if (__mb == 0)
@@ -4085,8 +5171,44 @@ public unsafe partial class CSGTorus3D : CSGPrimitive3D
         ClassRegistry.AttachNew(this, "CSGTorus3D");
     }
 
+    public float InnerRadius
+    {
+        get => GetInnerRadius();
+        set => SetInnerRadius(value);
+    }
+
+    public float OuterRadius
+    {
+        get => GetOuterRadius();
+        set => SetOuterRadius(value);
+    }
+
+    public int Sides
+    {
+        get => GetSides();
+        set => SetSides(value);
+    }
+
+    public int RingSides
+    {
+        get => GetRingSides();
+        set => SetRingSides(value);
+    }
+
+    public bool SmoothFaces
+    {
+        get => GetSmoothFaces();
+        set => SetSmoothFaces(value);
+    }
+
+    public Material? Material
+    {
+        get => GetMaterial();
+        set => SetMaterial(value);
+    }
+
     private static nint __mb_set_inner_radius;
-    public void SetInnerRadius(float radius)
+    internal void SetInnerRadius(float radius)
     {
         var __mb = __mb_set_inner_radius;
         if (__mb == 0)
@@ -4102,7 +5224,7 @@ public unsafe partial class CSGTorus3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_inner_radius;
-    public float GetInnerRadius()
+    internal float GetInnerRadius()
     {
         var __mb = __mb_get_inner_radius;
         if (__mb == 0)
@@ -4117,7 +5239,7 @@ public unsafe partial class CSGTorus3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_outer_radius;
-    public void SetOuterRadius(float radius)
+    internal void SetOuterRadius(float radius)
     {
         var __mb = __mb_set_outer_radius;
         if (__mb == 0)
@@ -4133,7 +5255,7 @@ public unsafe partial class CSGTorus3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_outer_radius;
-    public float GetOuterRadius()
+    internal float GetOuterRadius()
     {
         var __mb = __mb_get_outer_radius;
         if (__mb == 0)
@@ -4148,7 +5270,7 @@ public unsafe partial class CSGTorus3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_sides;
-    public void SetSides(int sides)
+    internal void SetSides(int sides)
     {
         var __mb = __mb_set_sides;
         if (__mb == 0)
@@ -4164,7 +5286,7 @@ public unsafe partial class CSGTorus3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_sides;
-    public int GetSides()
+    internal int GetSides()
     {
         var __mb = __mb_get_sides;
         if (__mb == 0)
@@ -4179,7 +5301,7 @@ public unsafe partial class CSGTorus3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_ring_sides;
-    public void SetRingSides(int sides)
+    internal void SetRingSides(int sides)
     {
         var __mb = __mb_set_ring_sides;
         if (__mb == 0)
@@ -4195,7 +5317,7 @@ public unsafe partial class CSGTorus3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_ring_sides;
-    public int GetRingSides()
+    internal int GetRingSides()
     {
         var __mb = __mb_get_ring_sides;
         if (__mb == 0)
@@ -4210,7 +5332,7 @@ public unsafe partial class CSGTorus3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_material;
-    public void SetMaterial(Material? material)
+    internal void SetMaterial(Material? material)
     {
         var __mb = __mb_set_material;
         if (__mb == 0)
@@ -4226,7 +5348,7 @@ public unsafe partial class CSGTorus3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_material;
-    public Material? GetMaterial()
+    internal Material? GetMaterial()
     {
         var __mb = __mb_get_material;
         if (__mb == 0)
@@ -4241,7 +5363,7 @@ public unsafe partial class CSGTorus3D : CSGPrimitive3D
     }
 
     private static nint __mb_set_smooth_faces;
-    public void SetSmoothFaces(bool smoothFaces)
+    internal void SetSmoothFaces(bool smoothFaces)
     {
         var __mb = __mb_set_smooth_faces;
         if (__mb == 0)
@@ -4257,7 +5379,7 @@ public unsafe partial class CSGTorus3D : CSGPrimitive3D
     }
 
     private static nint __mb_get_smooth_faces;
-    public bool GetSmoothFaces()
+    internal bool GetSmoothFaces()
     {
         var __mb = __mb_get_smooth_faces;
         if (__mb == 0)
@@ -4309,7 +5431,7 @@ public unsafe partial class Camera2D : Node2D
         ClassRegistry.AttachNew(this, "Camera2D");
     }
 
-    public enum AnchorMode : long
+    public enum AnchorModeEnum : long
     {
         ANCHOR_MODE_FIXED_TOP_LEFT = 0,
         ANCHOR_MODE_DRAG_CENTER = 1,
@@ -4321,8 +5443,176 @@ public unsafe partial class Camera2D : Node2D
         CAMERA2D_PROCESS_IDLE = 1,
     }
 
+    public Vector2 Offset
+    {
+        get => GetOffset();
+        set => SetOffset(value);
+    }
+
+    public Camera2D.AnchorModeEnum AnchorMode
+    {
+        get => GetAnchorMode();
+        set => SetAnchorMode(value);
+    }
+
+    public bool IgnoreRotation
+    {
+        get => IsIgnoringRotation();
+        set => SetIgnoreRotation(value);
+    }
+
+    public bool Enabled
+    {
+        get => IsEnabled();
+        set => SetEnabled(value);
+    }
+
+    public Vector2 Zoom
+    {
+        get => GetZoom();
+        set => SetZoom(value);
+    }
+
+    public Node? CustomViewport
+    {
+        get => GetCustomViewport();
+        set => SetCustomViewport(value);
+    }
+
+    public Camera2D.Camera2DProcessCallback ProcessCallback
+    {
+        get => GetProcessCallback();
+        set => SetProcessCallback(value);
+    }
+
+    public bool LimitEnabled
+    {
+        get => IsLimitEnabled();
+        set => SetLimitEnabled(value);
+    }
+
+    public int LimitLeft
+    {
+        get => GetLimit(((Side)(0)));
+        set => SetLimit(((Side)(0)), value);
+    }
+
+    public int LimitTop
+    {
+        get => GetLimit(((Side)(1)));
+        set => SetLimit(((Side)(1)), value);
+    }
+
+    public int LimitRight
+    {
+        get => GetLimit(((Side)(2)));
+        set => SetLimit(((Side)(2)), value);
+    }
+
+    public int LimitBottom
+    {
+        get => GetLimit(((Side)(3)));
+        set => SetLimit(((Side)(3)), value);
+    }
+
+    public bool LimitSmoothed
+    {
+        get => IsLimitSmoothingEnabled();
+        set => SetLimitSmoothingEnabled(value);
+    }
+
+    public bool PositionSmoothingEnabled
+    {
+        get => IsPositionSmoothingEnabled();
+        set => SetPositionSmoothingEnabled(value);
+    }
+
+    public float PositionSmoothingSpeed
+    {
+        get => GetPositionSmoothingSpeed();
+        set => SetPositionSmoothingSpeed(value);
+    }
+
+    public bool RotationSmoothingEnabled
+    {
+        get => IsRotationSmoothingEnabled();
+        set => SetRotationSmoothingEnabled(value);
+    }
+
+    public float RotationSmoothingSpeed
+    {
+        get => GetRotationSmoothingSpeed();
+        set => SetRotationSmoothingSpeed(value);
+    }
+
+    public bool DragHorizontalEnabled
+    {
+        get => IsDragHorizontalEnabled();
+        set => SetDragHorizontalEnabled(value);
+    }
+
+    public bool DragVerticalEnabled
+    {
+        get => IsDragVerticalEnabled();
+        set => SetDragVerticalEnabled(value);
+    }
+
+    public float DragHorizontalOffset
+    {
+        get => GetDragHorizontalOffset();
+        set => SetDragHorizontalOffset(value);
+    }
+
+    public float DragVerticalOffset
+    {
+        get => GetDragVerticalOffset();
+        set => SetDragVerticalOffset(value);
+    }
+
+    public float DragLeftMargin
+    {
+        get => GetDragMargin(((Side)(0)));
+        set => SetDragMargin(((Side)(0)), value);
+    }
+
+    public float DragTopMargin
+    {
+        get => GetDragMargin(((Side)(1)));
+        set => SetDragMargin(((Side)(1)), value);
+    }
+
+    public float DragRightMargin
+    {
+        get => GetDragMargin(((Side)(2)));
+        set => SetDragMargin(((Side)(2)), value);
+    }
+
+    public float DragBottomMargin
+    {
+        get => GetDragMargin(((Side)(3)));
+        set => SetDragMargin(((Side)(3)), value);
+    }
+
+    public bool EditorDrawScreen
+    {
+        get => IsScreenDrawingEnabled();
+        set => SetScreenDrawingEnabled(value);
+    }
+
+    public bool EditorDrawLimits
+    {
+        get => IsLimitDrawingEnabled();
+        set => SetLimitDrawingEnabled(value);
+    }
+
+    public bool EditorDrawDragMargin
+    {
+        get => IsMarginDrawingEnabled();
+        set => SetMarginDrawingEnabled(value);
+    }
+
     private static nint __mb_set_offset;
-    public void SetOffset(Vector2 offset)
+    internal void SetOffset(Vector2 offset)
     {
         var __mb = __mb_set_offset;
         if (__mb == 0)
@@ -4338,7 +5628,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_get_offset;
-    public Vector2 GetOffset()
+    internal Vector2 GetOffset()
     {
         var __mb = __mb_get_offset;
         if (__mb == 0)
@@ -4353,7 +5643,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_anchor_mode;
-    public void SetAnchorMode(Camera2D.AnchorMode anchorMode)
+    internal void SetAnchorMode(Camera2D.AnchorModeEnum anchorMode)
     {
         var __mb = __mb_set_anchor_mode;
         if (__mb == 0)
@@ -4369,7 +5659,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_get_anchor_mode;
-    public Camera2D.AnchorMode GetAnchorMode()
+    internal Camera2D.AnchorModeEnum GetAnchorMode()
     {
         var __mb = __mb_get_anchor_mode;
         if (__mb == 0)
@@ -4380,11 +5670,11 @@ public unsafe partial class Camera2D : Node2D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Camera2D.AnchorMode)__ret;
+        return (Camera2D.AnchorModeEnum)__ret;
     }
 
     private static nint __mb_set_ignore_rotation;
-    public void SetIgnoreRotation(bool ignore)
+    internal void SetIgnoreRotation(bool ignore)
     {
         var __mb = __mb_set_ignore_rotation;
         if (__mb == 0)
@@ -4400,7 +5690,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_is_ignoring_rotation;
-    public bool IsIgnoringRotation()
+    internal bool IsIgnoringRotation()
     {
         var __mb = __mb_is_ignoring_rotation;
         if (__mb == 0)
@@ -4415,7 +5705,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_process_callback;
-    public void SetProcessCallback(Camera2D.Camera2DProcessCallback mode)
+    internal void SetProcessCallback(Camera2D.Camera2DProcessCallback mode)
     {
         var __mb = __mb_set_process_callback;
         if (__mb == 0)
@@ -4431,7 +5721,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_get_process_callback;
-    public Camera2D.Camera2DProcessCallback GetProcessCallback()
+    internal Camera2D.Camera2DProcessCallback GetProcessCallback()
     {
         var __mb = __mb_get_process_callback;
         if (__mb == 0)
@@ -4446,7 +5736,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_enabled;
-    public void SetEnabled(bool enabled)
+    internal void SetEnabled(bool enabled)
     {
         var __mb = __mb_set_enabled;
         if (__mb == 0)
@@ -4462,7 +5752,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_is_enabled;
-    public bool IsEnabled()
+    internal bool IsEnabled()
     {
         var __mb = __mb_is_enabled;
         if (__mb == 0)
@@ -4505,7 +5795,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_limit_enabled;
-    public void SetLimitEnabled(bool limitEnabled)
+    internal void SetLimitEnabled(bool limitEnabled)
     {
         var __mb = __mb_set_limit_enabled;
         if (__mb == 0)
@@ -4521,7 +5811,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_is_limit_enabled;
-    public bool IsLimitEnabled()
+    internal bool IsLimitEnabled()
     {
         var __mb = __mb_is_limit_enabled;
         if (__mb == 0)
@@ -4536,7 +5826,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_limit;
-    public void SetLimit(Side margin, int limit)
+    internal void SetLimit(Side margin, int limit)
     {
         var __mb = __mb_set_limit;
         if (__mb == 0)
@@ -4554,7 +5844,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_get_limit;
-    public int GetLimit(Side margin)
+    internal int GetLimit(Side margin)
     {
         var __mb = __mb_get_limit;
         if (__mb == 0)
@@ -4572,7 +5862,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_limit_smoothing_enabled;
-    public void SetLimitSmoothingEnabled(bool limitSmoothingEnabled)
+    internal void SetLimitSmoothingEnabled(bool limitSmoothingEnabled)
     {
         var __mb = __mb_set_limit_smoothing_enabled;
         if (__mb == 0)
@@ -4588,7 +5878,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_is_limit_smoothing_enabled;
-    public bool IsLimitSmoothingEnabled()
+    internal bool IsLimitSmoothingEnabled()
     {
         var __mb = __mb_is_limit_smoothing_enabled;
         if (__mb == 0)
@@ -4603,7 +5893,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_drag_vertical_enabled;
-    public void SetDragVerticalEnabled(bool enabled)
+    internal void SetDragVerticalEnabled(bool enabled)
     {
         var __mb = __mb_set_drag_vertical_enabled;
         if (__mb == 0)
@@ -4619,7 +5909,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_is_drag_vertical_enabled;
-    public bool IsDragVerticalEnabled()
+    internal bool IsDragVerticalEnabled()
     {
         var __mb = __mb_is_drag_vertical_enabled;
         if (__mb == 0)
@@ -4634,7 +5924,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_drag_horizontal_enabled;
-    public void SetDragHorizontalEnabled(bool enabled)
+    internal void SetDragHorizontalEnabled(bool enabled)
     {
         var __mb = __mb_set_drag_horizontal_enabled;
         if (__mb == 0)
@@ -4650,7 +5940,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_is_drag_horizontal_enabled;
-    public bool IsDragHorizontalEnabled()
+    internal bool IsDragHorizontalEnabled()
     {
         var __mb = __mb_is_drag_horizontal_enabled;
         if (__mb == 0)
@@ -4665,7 +5955,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_drag_vertical_offset;
-    public void SetDragVerticalOffset(float offset)
+    internal void SetDragVerticalOffset(float offset)
     {
         var __mb = __mb_set_drag_vertical_offset;
         if (__mb == 0)
@@ -4681,7 +5971,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_get_drag_vertical_offset;
-    public float GetDragVerticalOffset()
+    internal float GetDragVerticalOffset()
     {
         var __mb = __mb_get_drag_vertical_offset;
         if (__mb == 0)
@@ -4696,7 +5986,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_drag_horizontal_offset;
-    public void SetDragHorizontalOffset(float offset)
+    internal void SetDragHorizontalOffset(float offset)
     {
         var __mb = __mb_set_drag_horizontal_offset;
         if (__mb == 0)
@@ -4712,7 +6002,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_get_drag_horizontal_offset;
-    public float GetDragHorizontalOffset()
+    internal float GetDragHorizontalOffset()
     {
         var __mb = __mb_get_drag_horizontal_offset;
         if (__mb == 0)
@@ -4727,7 +6017,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_drag_margin;
-    public void SetDragMargin(Side margin, float dragMargin)
+    internal void SetDragMargin(Side margin, float dragMargin)
     {
         var __mb = __mb_set_drag_margin;
         if (__mb == 0)
@@ -4745,7 +6035,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_get_drag_margin;
-    public float GetDragMargin(Side margin)
+    internal float GetDragMargin(Side margin)
     {
         var __mb = __mb_get_drag_margin;
         if (__mb == 0)
@@ -4808,7 +6098,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_zoom;
-    public void SetZoom(Vector2 zoom)
+    internal void SetZoom(Vector2 zoom)
     {
         var __mb = __mb_set_zoom;
         if (__mb == 0)
@@ -4824,7 +6114,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_get_zoom;
-    public Vector2 GetZoom()
+    internal Vector2 GetZoom()
     {
         var __mb = __mb_get_zoom;
         if (__mb == 0)
@@ -4839,7 +6129,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_custom_viewport;
-    public void SetCustomViewport(Node? viewport)
+    internal void SetCustomViewport(Node? viewport)
     {
         var __mb = __mb_set_custom_viewport;
         if (__mb == 0)
@@ -4855,7 +6145,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_get_custom_viewport;
-    public Node? GetCustomViewport()
+    internal Node? GetCustomViewport()
     {
         var __mb = __mb_get_custom_viewport;
         if (__mb == 0)
@@ -4870,7 +6160,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_position_smoothing_speed;
-    public void SetPositionSmoothingSpeed(float positionSmoothingSpeed)
+    internal void SetPositionSmoothingSpeed(float positionSmoothingSpeed)
     {
         var __mb = __mb_set_position_smoothing_speed;
         if (__mb == 0)
@@ -4886,7 +6176,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_get_position_smoothing_speed;
-    public float GetPositionSmoothingSpeed()
+    internal float GetPositionSmoothingSpeed()
     {
         var __mb = __mb_get_position_smoothing_speed;
         if (__mb == 0)
@@ -4901,7 +6191,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_position_smoothing_enabled;
-    public void SetPositionSmoothingEnabled(bool enabled)
+    internal void SetPositionSmoothingEnabled(bool enabled)
     {
         var __mb = __mb_set_position_smoothing_enabled;
         if (__mb == 0)
@@ -4917,7 +6207,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_is_position_smoothing_enabled;
-    public bool IsPositionSmoothingEnabled()
+    internal bool IsPositionSmoothingEnabled()
     {
         var __mb = __mb_is_position_smoothing_enabled;
         if (__mb == 0)
@@ -4932,7 +6222,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_rotation_smoothing_enabled;
-    public void SetRotationSmoothingEnabled(bool enabled)
+    internal void SetRotationSmoothingEnabled(bool enabled)
     {
         var __mb = __mb_set_rotation_smoothing_enabled;
         if (__mb == 0)
@@ -4948,7 +6238,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_is_rotation_smoothing_enabled;
-    public bool IsRotationSmoothingEnabled()
+    internal bool IsRotationSmoothingEnabled()
     {
         var __mb = __mb_is_rotation_smoothing_enabled;
         if (__mb == 0)
@@ -4963,7 +6253,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_rotation_smoothing_speed;
-    public void SetRotationSmoothingSpeed(float speed)
+    internal void SetRotationSmoothingSpeed(float speed)
     {
         var __mb = __mb_set_rotation_smoothing_speed;
         if (__mb == 0)
@@ -4979,7 +6269,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_get_rotation_smoothing_speed;
-    public float GetRotationSmoothingSpeed()
+    internal float GetRotationSmoothingSpeed()
     {
         var __mb = __mb_get_rotation_smoothing_speed;
         if (__mb == 0)
@@ -5033,7 +6323,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_screen_drawing_enabled;
-    public void SetScreenDrawingEnabled(bool screenDrawingEnabled)
+    internal void SetScreenDrawingEnabled(bool screenDrawingEnabled)
     {
         var __mb = __mb_set_screen_drawing_enabled;
         if (__mb == 0)
@@ -5049,7 +6339,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_is_screen_drawing_enabled;
-    public bool IsScreenDrawingEnabled()
+    internal bool IsScreenDrawingEnabled()
     {
         var __mb = __mb_is_screen_drawing_enabled;
         if (__mb == 0)
@@ -5064,7 +6354,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_limit_drawing_enabled;
-    public void SetLimitDrawingEnabled(bool limitDrawingEnabled)
+    internal void SetLimitDrawingEnabled(bool limitDrawingEnabled)
     {
         var __mb = __mb_set_limit_drawing_enabled;
         if (__mb == 0)
@@ -5080,7 +6370,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_is_limit_drawing_enabled;
-    public bool IsLimitDrawingEnabled()
+    internal bool IsLimitDrawingEnabled()
     {
         var __mb = __mb_is_limit_drawing_enabled;
         if (__mb == 0)
@@ -5095,7 +6385,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_set_margin_drawing_enabled;
-    public void SetMarginDrawingEnabled(bool marginDrawingEnabled)
+    internal void SetMarginDrawingEnabled(bool marginDrawingEnabled)
     {
         var __mb = __mb_set_margin_drawing_enabled;
         if (__mb == 0)
@@ -5111,7 +6401,7 @@ public unsafe partial class Camera2D : Node2D
     }
 
     private static nint __mb_is_margin_drawing_enabled;
-    public bool IsMarginDrawingEnabled()
+    internal bool IsMarginDrawingEnabled()
     {
         var __mb = __mb_is_margin_drawing_enabled;
         if (__mb == 0)
@@ -5142,17 +6432,107 @@ public unsafe partial class Camera3D : Node3D
         PROJECTION_FRUSTUM = 2,
     }
 
-    public enum KeepAspect : long
+    public enum KeepAspectEnum : long
     {
         KEEP_WIDTH = 0,
         KEEP_HEIGHT = 1,
     }
 
-    public enum DopplerTracking : long
+    public enum DopplerTrackingEnum : long
     {
         DOPPLER_TRACKING_DISABLED = 0,
         DOPPLER_TRACKING_IDLE_STEP = 1,
         DOPPLER_TRACKING_PHYSICS_STEP = 2,
+    }
+
+    public Camera3D.KeepAspectEnum KeepAspect
+    {
+        get => GetKeepAspectMode();
+        set => SetKeepAspectMode(value);
+    }
+
+    public uint CullMask
+    {
+        get => GetCullMask();
+        set => SetCullMask(value);
+    }
+
+    public Environment? Environment
+    {
+        get => GetEnvironment();
+        set => SetEnvironment(value);
+    }
+
+    public CameraAttributes? Attributes
+    {
+        get => GetAttributes();
+        set => SetAttributes(value);
+    }
+
+    public Compositor? Compositor
+    {
+        get => GetCompositor();
+        set => SetCompositor(value);
+    }
+
+    public float HOffset
+    {
+        get => GetHOffset();
+        set => SetHOffset(value);
+    }
+
+    public float VOffset
+    {
+        get => GetVOffset();
+        set => SetVOffset(value);
+    }
+
+    public Camera3D.DopplerTrackingEnum DopplerTracking
+    {
+        get => GetDopplerTracking();
+        set => SetDopplerTracking(value);
+    }
+
+    public Camera3D.ProjectionType Projection
+    {
+        get => GetProjection();
+        set => SetProjection(value);
+    }
+
+    public bool Current
+    {
+        get => IsCurrent();
+        set => SetCurrent(value);
+    }
+
+    public float Fov
+    {
+        get => GetFov();
+        set => SetFov(value);
+    }
+
+    public float Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
+    public Vector2 FrustumOffset
+    {
+        get => GetFrustumOffset();
+        set => SetFrustumOffset(value);
+    }
+
+    public float Near
+    {
+        get => GetNear();
+        set => SetNear(value);
+    }
+
+    public float Far
+    {
+        get => GetFar();
+        set => SetFar(value);
     }
 
     private static nint __mb_project_ray_normal;
@@ -5357,7 +6737,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_set_current;
-    public void SetCurrent(bool enabled)
+    internal void SetCurrent(bool enabled)
     {
         var __mb = __mb_set_current;
         if (__mb == 0)
@@ -5373,7 +6753,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_is_current;
-    public bool IsCurrent()
+    internal bool IsCurrent()
     {
         var __mb = __mb_is_current;
         if (__mb == 0)
@@ -5418,7 +6798,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_get_fov;
-    public float GetFov()
+    internal float GetFov()
     {
         var __mb = __mb_get_fov;
         if (__mb == 0)
@@ -5433,7 +6813,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_get_frustum_offset;
-    public Vector2 GetFrustumOffset()
+    internal Vector2 GetFrustumOffset()
     {
         var __mb = __mb_get_frustum_offset;
         if (__mb == 0)
@@ -5448,7 +6828,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_get_size;
-    public float GetSize()
+    internal float GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -5463,7 +6843,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_get_far;
-    public float GetFar()
+    internal float GetFar()
     {
         var __mb = __mb_get_far;
         if (__mb == 0)
@@ -5478,7 +6858,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_get_near;
-    public float GetNear()
+    internal float GetNear()
     {
         var __mb = __mb_get_near;
         if (__mb == 0)
@@ -5493,7 +6873,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_set_fov;
-    public void SetFov(float fov)
+    internal void SetFov(float fov)
     {
         var __mb = __mb_set_fov;
         if (__mb == 0)
@@ -5509,7 +6889,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_set_frustum_offset;
-    public void SetFrustumOffset(Vector2 offset)
+    internal void SetFrustumOffset(Vector2 offset)
     {
         var __mb = __mb_set_frustum_offset;
         if (__mb == 0)
@@ -5525,7 +6905,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_set_size;
-    public void SetSize(float size)
+    internal void SetSize(float size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -5541,7 +6921,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_set_far;
-    public void SetFar(float far)
+    internal void SetFar(float far)
     {
         var __mb = __mb_set_far;
         if (__mb == 0)
@@ -5557,7 +6937,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_set_near;
-    public void SetNear(float near)
+    internal void SetNear(float near)
     {
         var __mb = __mb_set_near;
         if (__mb == 0)
@@ -5573,7 +6953,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_get_projection;
-    public Camera3D.ProjectionType GetProjection()
+    internal Camera3D.ProjectionType GetProjection()
     {
         var __mb = __mb_get_projection;
         if (__mb == 0)
@@ -5588,7 +6968,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_set_projection;
-    public void SetProjection(Camera3D.ProjectionType mode)
+    internal void SetProjection(Camera3D.ProjectionType mode)
     {
         var __mb = __mb_set_projection;
         if (__mb == 0)
@@ -5604,7 +6984,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_set_h_offset;
-    public void SetHOffset(float offset)
+    internal void SetHOffset(float offset)
     {
         var __mb = __mb_set_h_offset;
         if (__mb == 0)
@@ -5620,7 +7000,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_get_h_offset;
-    public float GetHOffset()
+    internal float GetHOffset()
     {
         var __mb = __mb_get_h_offset;
         if (__mb == 0)
@@ -5635,7 +7015,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_set_v_offset;
-    public void SetVOffset(float offset)
+    internal void SetVOffset(float offset)
     {
         var __mb = __mb_set_v_offset;
         if (__mb == 0)
@@ -5651,7 +7031,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_get_v_offset;
-    public float GetVOffset()
+    internal float GetVOffset()
     {
         var __mb = __mb_get_v_offset;
         if (__mb == 0)
@@ -5666,7 +7046,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_set_cull_mask;
-    public void SetCullMask(uint mask)
+    internal void SetCullMask(uint mask)
     {
         var __mb = __mb_set_cull_mask;
         if (__mb == 0)
@@ -5682,7 +7062,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_get_cull_mask;
-    public uint GetCullMask()
+    internal uint GetCullMask()
     {
         var __mb = __mb_get_cull_mask;
         if (__mb == 0)
@@ -5697,7 +7077,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_set_environment;
-    public void SetEnvironment(Environment? env)
+    internal void SetEnvironment(Environment? env)
     {
         var __mb = __mb_set_environment;
         if (__mb == 0)
@@ -5713,7 +7093,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_get_environment;
-    public Environment? GetEnvironment()
+    internal Environment? GetEnvironment()
     {
         var __mb = __mb_get_environment;
         if (__mb == 0)
@@ -5728,7 +7108,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_set_attributes;
-    public void SetAttributes(CameraAttributes? env)
+    internal void SetAttributes(CameraAttributes? env)
     {
         var __mb = __mb_set_attributes;
         if (__mb == 0)
@@ -5744,7 +7124,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_get_attributes;
-    public CameraAttributes? GetAttributes()
+    internal CameraAttributes? GetAttributes()
     {
         var __mb = __mb_get_attributes;
         if (__mb == 0)
@@ -5759,7 +7139,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_set_compositor;
-    public void SetCompositor(Compositor? compositor)
+    internal void SetCompositor(Compositor? compositor)
     {
         var __mb = __mb_set_compositor;
         if (__mb == 0)
@@ -5775,7 +7155,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_get_compositor;
-    public Compositor? GetCompositor()
+    internal Compositor? GetCompositor()
     {
         var __mb = __mb_get_compositor;
         if (__mb == 0)
@@ -5790,7 +7170,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_set_keep_aspect_mode;
-    public void SetKeepAspectMode(Camera3D.KeepAspect mode)
+    internal void SetKeepAspectMode(Camera3D.KeepAspectEnum mode)
     {
         var __mb = __mb_set_keep_aspect_mode;
         if (__mb == 0)
@@ -5806,7 +7186,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_get_keep_aspect_mode;
-    public Camera3D.KeepAspect GetKeepAspectMode()
+    internal Camera3D.KeepAspectEnum GetKeepAspectMode()
     {
         var __mb = __mb_get_keep_aspect_mode;
         if (__mb == 0)
@@ -5817,11 +7197,11 @@ public unsafe partial class Camera3D : Node3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Camera3D.KeepAspect)__ret;
+        return (Camera3D.KeepAspectEnum)__ret;
     }
 
     private static nint __mb_set_doppler_tracking;
-    public void SetDopplerTracking(Camera3D.DopplerTracking mode)
+    internal void SetDopplerTracking(Camera3D.DopplerTrackingEnum mode)
     {
         var __mb = __mb_set_doppler_tracking;
         if (__mb == 0)
@@ -5837,7 +7217,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_get_doppler_tracking;
-    public Camera3D.DopplerTracking GetDopplerTracking()
+    internal Camera3D.DopplerTrackingEnum GetDopplerTracking()
     {
         var __mb = __mb_get_doppler_tracking;
         if (__mb == 0)
@@ -5848,7 +7228,7 @@ public unsafe partial class Camera3D : Node3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Camera3D.DopplerTracking)__ret;
+        return (Camera3D.DopplerTrackingEnum)__ret;
     }
 
     private static nint __mb_get_frustum;
@@ -5960,8 +7340,38 @@ public unsafe partial class CameraAttributes : Resource
         ClassRegistry.AttachNew(this, "CameraAttributes");
     }
 
+    public float ExposureSensitivity
+    {
+        get => GetExposureSensitivity();
+        set => SetExposureSensitivity(value);
+    }
+
+    public float ExposureMultiplier
+    {
+        get => GetExposureMultiplier();
+        set => SetExposureMultiplier(value);
+    }
+
+    public bool AutoExposureEnabled
+    {
+        get => IsAutoExposureEnabled();
+        set => SetAutoExposureEnabled(value);
+    }
+
+    public float AutoExposureScale
+    {
+        get => GetAutoExposureScale();
+        set => SetAutoExposureScale(value);
+    }
+
+    public float AutoExposureSpeed
+    {
+        get => GetAutoExposureSpeed();
+        set => SetAutoExposureSpeed(value);
+    }
+
     private static nint __mb_set_exposure_multiplier;
-    public void SetExposureMultiplier(float multiplier)
+    internal void SetExposureMultiplier(float multiplier)
     {
         var __mb = __mb_set_exposure_multiplier;
         if (__mb == 0)
@@ -5977,7 +7387,7 @@ public unsafe partial class CameraAttributes : Resource
     }
 
     private static nint __mb_get_exposure_multiplier;
-    public float GetExposureMultiplier()
+    internal float GetExposureMultiplier()
     {
         var __mb = __mb_get_exposure_multiplier;
         if (__mb == 0)
@@ -5992,7 +7402,7 @@ public unsafe partial class CameraAttributes : Resource
     }
 
     private static nint __mb_set_exposure_sensitivity;
-    public void SetExposureSensitivity(float sensitivity)
+    internal void SetExposureSensitivity(float sensitivity)
     {
         var __mb = __mb_set_exposure_sensitivity;
         if (__mb == 0)
@@ -6008,7 +7418,7 @@ public unsafe partial class CameraAttributes : Resource
     }
 
     private static nint __mb_get_exposure_sensitivity;
-    public float GetExposureSensitivity()
+    internal float GetExposureSensitivity()
     {
         var __mb = __mb_get_exposure_sensitivity;
         if (__mb == 0)
@@ -6023,7 +7433,7 @@ public unsafe partial class CameraAttributes : Resource
     }
 
     private static nint __mb_set_auto_exposure_enabled;
-    public void SetAutoExposureEnabled(bool enabled)
+    internal void SetAutoExposureEnabled(bool enabled)
     {
         var __mb = __mb_set_auto_exposure_enabled;
         if (__mb == 0)
@@ -6039,7 +7449,7 @@ public unsafe partial class CameraAttributes : Resource
     }
 
     private static nint __mb_is_auto_exposure_enabled;
-    public bool IsAutoExposureEnabled()
+    internal bool IsAutoExposureEnabled()
     {
         var __mb = __mb_is_auto_exposure_enabled;
         if (__mb == 0)
@@ -6054,7 +7464,7 @@ public unsafe partial class CameraAttributes : Resource
     }
 
     private static nint __mb_set_auto_exposure_speed;
-    public void SetAutoExposureSpeed(float exposureSpeed)
+    internal void SetAutoExposureSpeed(float exposureSpeed)
     {
         var __mb = __mb_set_auto_exposure_speed;
         if (__mb == 0)
@@ -6070,7 +7480,7 @@ public unsafe partial class CameraAttributes : Resource
     }
 
     private static nint __mb_get_auto_exposure_speed;
-    public float GetAutoExposureSpeed()
+    internal float GetAutoExposureSpeed()
     {
         var __mb = __mb_get_auto_exposure_speed;
         if (__mb == 0)
@@ -6085,7 +7495,7 @@ public unsafe partial class CameraAttributes : Resource
     }
 
     private static nint __mb_set_auto_exposure_scale;
-    public void SetAutoExposureScale(float exposureGrey)
+    internal void SetAutoExposureScale(float exposureGrey)
     {
         var __mb = __mb_set_auto_exposure_scale;
         if (__mb == 0)
@@ -6101,7 +7511,7 @@ public unsafe partial class CameraAttributes : Resource
     }
 
     private static nint __mb_get_auto_exposure_scale;
-    public float GetAutoExposureScale()
+    internal float GetAutoExposureScale()
     {
         var __mb = __mb_get_auto_exposure_scale;
         if (__mb == 0)
@@ -6125,8 +7535,56 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
         ClassRegistry.AttachNew(this, "CameraAttributesPhysical");
     }
 
+    public float FrustumFocusDistance
+    {
+        get => GetFocusDistance();
+        set => SetFocusDistance(value);
+    }
+
+    public float FrustumFocalLength
+    {
+        get => GetFocalLength();
+        set => SetFocalLength(value);
+    }
+
+    public float FrustumNear
+    {
+        get => GetNear();
+        set => SetNear(value);
+    }
+
+    public float FrustumFar
+    {
+        get => GetFar();
+        set => SetFar(value);
+    }
+
+    public float ExposureAperture
+    {
+        get => GetAperture();
+        set => SetAperture(value);
+    }
+
+    public float ExposureShutterSpeed
+    {
+        get => GetShutterSpeed();
+        set => SetShutterSpeed(value);
+    }
+
+    public float AutoExposureMinExposureValue
+    {
+        get => GetAutoExposureMinExposureValue();
+        set => SetAutoExposureMinExposureValue(value);
+    }
+
+    public float AutoExposureMaxExposureValue
+    {
+        get => GetAutoExposureMaxExposureValue();
+        set => SetAutoExposureMaxExposureValue(value);
+    }
+
     private static nint __mb_set_aperture;
-    public void SetAperture(float aperture)
+    internal void SetAperture(float aperture)
     {
         var __mb = __mb_set_aperture;
         if (__mb == 0)
@@ -6142,7 +7600,7 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
     }
 
     private static nint __mb_get_aperture;
-    public float GetAperture()
+    internal float GetAperture()
     {
         var __mb = __mb_get_aperture;
         if (__mb == 0)
@@ -6157,7 +7615,7 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
     }
 
     private static nint __mb_set_shutter_speed;
-    public void SetShutterSpeed(float shutterSpeed)
+    internal void SetShutterSpeed(float shutterSpeed)
     {
         var __mb = __mb_set_shutter_speed;
         if (__mb == 0)
@@ -6173,7 +7631,7 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
     }
 
     private static nint __mb_get_shutter_speed;
-    public float GetShutterSpeed()
+    internal float GetShutterSpeed()
     {
         var __mb = __mb_get_shutter_speed;
         if (__mb == 0)
@@ -6188,7 +7646,7 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
     }
 
     private static nint __mb_set_focal_length;
-    public void SetFocalLength(float focalLength)
+    internal void SetFocalLength(float focalLength)
     {
         var __mb = __mb_set_focal_length;
         if (__mb == 0)
@@ -6204,7 +7662,7 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
     }
 
     private static nint __mb_get_focal_length;
-    public float GetFocalLength()
+    internal float GetFocalLength()
     {
         var __mb = __mb_get_focal_length;
         if (__mb == 0)
@@ -6219,7 +7677,7 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
     }
 
     private static nint __mb_set_focus_distance;
-    public void SetFocusDistance(float focusDistance)
+    internal void SetFocusDistance(float focusDistance)
     {
         var __mb = __mb_set_focus_distance;
         if (__mb == 0)
@@ -6235,7 +7693,7 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
     }
 
     private static nint __mb_get_focus_distance;
-    public float GetFocusDistance()
+    internal float GetFocusDistance()
     {
         var __mb = __mb_get_focus_distance;
         if (__mb == 0)
@@ -6250,7 +7708,7 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
     }
 
     private static nint __mb_set_near;
-    public void SetNear(float near)
+    internal void SetNear(float near)
     {
         var __mb = __mb_set_near;
         if (__mb == 0)
@@ -6266,7 +7724,7 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
     }
 
     private static nint __mb_get_near;
-    public float GetNear()
+    internal float GetNear()
     {
         var __mb = __mb_get_near;
         if (__mb == 0)
@@ -6281,7 +7739,7 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
     }
 
     private static nint __mb_set_far;
-    public void SetFar(float far)
+    internal void SetFar(float far)
     {
         var __mb = __mb_set_far;
         if (__mb == 0)
@@ -6297,7 +7755,7 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
     }
 
     private static nint __mb_get_far;
-    public float GetFar()
+    internal float GetFar()
     {
         var __mb = __mb_get_far;
         if (__mb == 0)
@@ -6327,7 +7785,7 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
     }
 
     private static nint __mb_set_auto_exposure_max_exposure_value;
-    public void SetAutoExposureMaxExposureValue(float exposureValueMax)
+    internal void SetAutoExposureMaxExposureValue(float exposureValueMax)
     {
         var __mb = __mb_set_auto_exposure_max_exposure_value;
         if (__mb == 0)
@@ -6343,7 +7801,7 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
     }
 
     private static nint __mb_get_auto_exposure_max_exposure_value;
-    public float GetAutoExposureMaxExposureValue()
+    internal float GetAutoExposureMaxExposureValue()
     {
         var __mb = __mb_get_auto_exposure_max_exposure_value;
         if (__mb == 0)
@@ -6358,7 +7816,7 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
     }
 
     private static nint __mb_set_auto_exposure_min_exposure_value;
-    public void SetAutoExposureMinExposureValue(float exposureValueMin)
+    internal void SetAutoExposureMinExposureValue(float exposureValueMin)
     {
         var __mb = __mb_set_auto_exposure_min_exposure_value;
         if (__mb == 0)
@@ -6374,7 +7832,7 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
     }
 
     private static nint __mb_get_auto_exposure_min_exposure_value;
-    public float GetAutoExposureMinExposureValue()
+    internal float GetAutoExposureMinExposureValue()
     {
         var __mb = __mb_get_auto_exposure_min_exposure_value;
         if (__mb == 0)
@@ -6398,8 +7856,62 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
         ClassRegistry.AttachNew(this, "CameraAttributesPractical");
     }
 
+    public bool DofBlurFarEnabled
+    {
+        get => IsDofBlurFarEnabled();
+        set => SetDofBlurFarEnabled(value);
+    }
+
+    public float DofBlurFarDistance
+    {
+        get => GetDofBlurFarDistance();
+        set => SetDofBlurFarDistance(value);
+    }
+
+    public float DofBlurFarTransition
+    {
+        get => GetDofBlurFarTransition();
+        set => SetDofBlurFarTransition(value);
+    }
+
+    public bool DofBlurNearEnabled
+    {
+        get => IsDofBlurNearEnabled();
+        set => SetDofBlurNearEnabled(value);
+    }
+
+    public float DofBlurNearDistance
+    {
+        get => GetDofBlurNearDistance();
+        set => SetDofBlurNearDistance(value);
+    }
+
+    public float DofBlurNearTransition
+    {
+        get => GetDofBlurNearTransition();
+        set => SetDofBlurNearTransition(value);
+    }
+
+    public float DofBlurAmount
+    {
+        get => GetDofBlurAmount();
+        set => SetDofBlurAmount(value);
+    }
+
+    public float AutoExposureMinSensitivity
+    {
+        get => GetAutoExposureMinSensitivity();
+        set => SetAutoExposureMinSensitivity(value);
+    }
+
+    public float AutoExposureMaxSensitivity
+    {
+        get => GetAutoExposureMaxSensitivity();
+        set => SetAutoExposureMaxSensitivity(value);
+    }
+
     private static nint __mb_set_dof_blur_far_enabled;
-    public void SetDofBlurFarEnabled(bool enabled)
+    internal void SetDofBlurFarEnabled(bool enabled)
     {
         var __mb = __mb_set_dof_blur_far_enabled;
         if (__mb == 0)
@@ -6415,7 +7927,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_is_dof_blur_far_enabled;
-    public bool IsDofBlurFarEnabled()
+    internal bool IsDofBlurFarEnabled()
     {
         var __mb = __mb_is_dof_blur_far_enabled;
         if (__mb == 0)
@@ -6430,7 +7942,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_set_dof_blur_far_distance;
-    public void SetDofBlurFarDistance(float distance)
+    internal void SetDofBlurFarDistance(float distance)
     {
         var __mb = __mb_set_dof_blur_far_distance;
         if (__mb == 0)
@@ -6446,7 +7958,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_get_dof_blur_far_distance;
-    public float GetDofBlurFarDistance()
+    internal float GetDofBlurFarDistance()
     {
         var __mb = __mb_get_dof_blur_far_distance;
         if (__mb == 0)
@@ -6461,7 +7973,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_set_dof_blur_far_transition;
-    public void SetDofBlurFarTransition(float distance)
+    internal void SetDofBlurFarTransition(float distance)
     {
         var __mb = __mb_set_dof_blur_far_transition;
         if (__mb == 0)
@@ -6477,7 +7989,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_get_dof_blur_far_transition;
-    public float GetDofBlurFarTransition()
+    internal float GetDofBlurFarTransition()
     {
         var __mb = __mb_get_dof_blur_far_transition;
         if (__mb == 0)
@@ -6492,7 +8004,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_set_dof_blur_near_enabled;
-    public void SetDofBlurNearEnabled(bool enabled)
+    internal void SetDofBlurNearEnabled(bool enabled)
     {
         var __mb = __mb_set_dof_blur_near_enabled;
         if (__mb == 0)
@@ -6508,7 +8020,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_is_dof_blur_near_enabled;
-    public bool IsDofBlurNearEnabled()
+    internal bool IsDofBlurNearEnabled()
     {
         var __mb = __mb_is_dof_blur_near_enabled;
         if (__mb == 0)
@@ -6523,7 +8035,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_set_dof_blur_near_distance;
-    public void SetDofBlurNearDistance(float distance)
+    internal void SetDofBlurNearDistance(float distance)
     {
         var __mb = __mb_set_dof_blur_near_distance;
         if (__mb == 0)
@@ -6539,7 +8051,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_get_dof_blur_near_distance;
-    public float GetDofBlurNearDistance()
+    internal float GetDofBlurNearDistance()
     {
         var __mb = __mb_get_dof_blur_near_distance;
         if (__mb == 0)
@@ -6554,7 +8066,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_set_dof_blur_near_transition;
-    public void SetDofBlurNearTransition(float distance)
+    internal void SetDofBlurNearTransition(float distance)
     {
         var __mb = __mb_set_dof_blur_near_transition;
         if (__mb == 0)
@@ -6570,7 +8082,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_get_dof_blur_near_transition;
-    public float GetDofBlurNearTransition()
+    internal float GetDofBlurNearTransition()
     {
         var __mb = __mb_get_dof_blur_near_transition;
         if (__mb == 0)
@@ -6585,7 +8097,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_set_dof_blur_amount;
-    public void SetDofBlurAmount(float amount)
+    internal void SetDofBlurAmount(float amount)
     {
         var __mb = __mb_set_dof_blur_amount;
         if (__mb == 0)
@@ -6601,7 +8113,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_get_dof_blur_amount;
-    public float GetDofBlurAmount()
+    internal float GetDofBlurAmount()
     {
         var __mb = __mb_get_dof_blur_amount;
         if (__mb == 0)
@@ -6616,7 +8128,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_set_auto_exposure_max_sensitivity;
-    public void SetAutoExposureMaxSensitivity(float maxSensitivity)
+    internal void SetAutoExposureMaxSensitivity(float maxSensitivity)
     {
         var __mb = __mb_set_auto_exposure_max_sensitivity;
         if (__mb == 0)
@@ -6632,7 +8144,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_get_auto_exposure_max_sensitivity;
-    public float GetAutoExposureMaxSensitivity()
+    internal float GetAutoExposureMaxSensitivity()
     {
         var __mb = __mb_get_auto_exposure_max_sensitivity;
         if (__mb == 0)
@@ -6647,7 +8159,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_set_auto_exposure_min_sensitivity;
-    public void SetAutoExposureMinSensitivity(float minSensitivity)
+    internal void SetAutoExposureMinSensitivity(float minSensitivity)
     {
         var __mb = __mb_set_auto_exposure_min_sensitivity;
         if (__mb == 0)
@@ -6663,7 +8175,7 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
     }
 
     private static nint __mb_get_auto_exposure_min_sensitivity;
-    public float GetAutoExposureMinSensitivity()
+    internal float GetAutoExposureMinSensitivity()
     {
         var __mb = __mb_get_auto_exposure_min_sensitivity;
         if (__mb == 0)
@@ -6703,6 +8215,20 @@ public unsafe partial class CameraFeed : RefCounted
         FEED_BACK = 2,
     }
 
+    public bool FeedIsActive
+    {
+        get => IsActive();
+        set => SetActive(value);
+    }
+
+    public Transform2D FeedTransform
+    {
+        get => GetTransform();
+        set => SetTransform(value);
+    }
+
+    public Godot.Collections.Array Formats => GetFormats();
+
     private static nint __mb_get_id;
     public int GetId()
     {
@@ -6719,7 +8245,7 @@ public unsafe partial class CameraFeed : RefCounted
     }
 
     private static nint __mb_is_active;
-    public bool IsActive()
+    internal bool IsActive()
     {
         var __mb = __mb_is_active;
         if (__mb == 0)
@@ -6734,7 +8260,7 @@ public unsafe partial class CameraFeed : RefCounted
     }
 
     private static nint __mb_set_active;
-    public void SetActive(bool active)
+    internal void SetActive(bool active)
     {
         var __mb = __mb_set_active;
         if (__mb == 0)
@@ -6813,7 +8339,7 @@ public unsafe partial class CameraFeed : RefCounted
     }
 
     private static nint __mb_get_transform;
-    public Transform2D GetTransform()
+    internal Transform2D GetTransform()
     {
         var __mb = __mb_get_transform;
         if (__mb == 0)
@@ -6828,7 +8354,7 @@ public unsafe partial class CameraFeed : RefCounted
     }
 
     private static nint __mb_set_transform;
-    public void SetTransform(Transform2D transform)
+    internal void SetTransform(Transform2D transform)
     {
         var __mb = __mb_set_transform;
         if (__mb == 0)
@@ -6945,7 +8471,7 @@ public unsafe partial class CameraFeed : RefCounted
     }
 
     private static nint __mb_get_formats;
-    public Godot.Collections.Array GetFormats()
+    internal Godot.Collections.Array GetFormats()
     {
         var __mb = __mb_get_formats;
         if (__mb == 0)
@@ -7024,8 +8550,14 @@ public unsafe partial class CameraServer : GodotObject
         FEED_CBCR_IMAGE = 1,
     }
 
+    public bool MonitoringFeeds
+    {
+        get => IsMonitoringFeeds();
+        set => SetMonitoringFeeds(value);
+    }
+
     private static nint __mb_set_monitoring_feeds;
-    public void SetMonitoringFeeds(bool isMonitoringFeeds)
+    internal void SetMonitoringFeeds(bool isMonitoringFeeds)
     {
         var __mb = __mb_set_monitoring_feeds;
         if (__mb == 0)
@@ -7041,7 +8573,7 @@ public unsafe partial class CameraServer : GodotObject
     }
 
     private static nint __mb_is_monitoring_feeds;
-    public bool IsMonitoringFeeds()
+    internal bool IsMonitoringFeeds()
     {
         var __mb = __mb_is_monitoring_feeds;
         if (__mb == 0)
@@ -7145,8 +8677,26 @@ public unsafe partial class CameraTexture : Texture2D
         ClassRegistry.AttachNew(this, "CameraTexture");
     }
 
+    public int CameraFeedId
+    {
+        get => GetCameraFeedId();
+        set => SetCameraFeedId(value);
+    }
+
+    public CameraServer.FeedImage WhichFeed
+    {
+        get => GetWhichFeed();
+        set => SetWhichFeed(value);
+    }
+
+    public bool CameraIsActive
+    {
+        get => GetCameraActive();
+        set => SetCameraActive(value);
+    }
+
     private static nint __mb_set_camera_feed_id;
-    public void SetCameraFeedId(int feedId)
+    internal void SetCameraFeedId(int feedId)
     {
         var __mb = __mb_set_camera_feed_id;
         if (__mb == 0)
@@ -7162,7 +8712,7 @@ public unsafe partial class CameraTexture : Texture2D
     }
 
     private static nint __mb_get_camera_feed_id;
-    public int GetCameraFeedId()
+    internal int GetCameraFeedId()
     {
         var __mb = __mb_get_camera_feed_id;
         if (__mb == 0)
@@ -7177,7 +8727,7 @@ public unsafe partial class CameraTexture : Texture2D
     }
 
     private static nint __mb_set_which_feed;
-    public void SetWhichFeed(CameraServer.FeedImage whichFeed)
+    internal void SetWhichFeed(CameraServer.FeedImage whichFeed)
     {
         var __mb = __mb_set_which_feed;
         if (__mb == 0)
@@ -7193,7 +8743,7 @@ public unsafe partial class CameraTexture : Texture2D
     }
 
     private static nint __mb_get_which_feed;
-    public CameraServer.FeedImage GetWhichFeed()
+    internal CameraServer.FeedImage GetWhichFeed()
     {
         var __mb = __mb_get_which_feed;
         if (__mb == 0)
@@ -7208,7 +8758,7 @@ public unsafe partial class CameraTexture : Texture2D
     }
 
     private static nint __mb_set_camera_active;
-    public void SetCameraActive(bool active)
+    internal void SetCameraActive(bool active)
     {
         var __mb = __mb_set_camera_active;
         if (__mb == 0)
@@ -7224,7 +8774,7 @@ public unsafe partial class CameraTexture : Texture2D
     }
 
     private static nint __mb_get_camera_active;
-    public bool GetCameraActive()
+    internal bool GetCameraActive()
     {
         var __mb = __mb_get_camera_active;
         if (__mb == 0)
@@ -7248,8 +8798,26 @@ public unsafe partial class CanvasGroup : Node2D
         ClassRegistry.AttachNew(this, "CanvasGroup");
     }
 
+    public float FitMargin
+    {
+        get => GetFitMargin();
+        set => SetFitMargin(value);
+    }
+
+    public float ClearMargin
+    {
+        get => GetClearMargin();
+        set => SetClearMargin(value);
+    }
+
+    public bool UseMipmaps
+    {
+        get => IsUsingMipmaps();
+        set => SetUseMipmaps(value);
+    }
+
     private static nint __mb_set_fit_margin;
-    public void SetFitMargin(float fitMargin)
+    internal void SetFitMargin(float fitMargin)
     {
         var __mb = __mb_set_fit_margin;
         if (__mb == 0)
@@ -7265,7 +8833,7 @@ public unsafe partial class CanvasGroup : Node2D
     }
 
     private static nint __mb_get_fit_margin;
-    public float GetFitMargin()
+    internal float GetFitMargin()
     {
         var __mb = __mb_get_fit_margin;
         if (__mb == 0)
@@ -7280,7 +8848,7 @@ public unsafe partial class CanvasGroup : Node2D
     }
 
     private static nint __mb_set_clear_margin;
-    public void SetClearMargin(float clearMargin)
+    internal void SetClearMargin(float clearMargin)
     {
         var __mb = __mb_set_clear_margin;
         if (__mb == 0)
@@ -7296,7 +8864,7 @@ public unsafe partial class CanvasGroup : Node2D
     }
 
     private static nint __mb_get_clear_margin;
-    public float GetClearMargin()
+    internal float GetClearMargin()
     {
         var __mb = __mb_get_clear_margin;
         if (__mb == 0)
@@ -7311,7 +8879,7 @@ public unsafe partial class CanvasGroup : Node2D
     }
 
     private static nint __mb_set_use_mipmaps;
-    public void SetUseMipmaps(bool useMipmaps)
+    internal void SetUseMipmaps(bool useMipmaps)
     {
         var __mb = __mb_set_use_mipmaps;
         if (__mb == 0)
@@ -7327,7 +8895,7 @@ public unsafe partial class CanvasGroup : Node2D
     }
 
     private static nint __mb_is_using_mipmaps;
-    public bool IsUsingMipmaps()
+    internal bool IsUsingMipmaps()
     {
         var __mb = __mb_is_using_mipmaps;
         if (__mb == 0)
@@ -7346,7 +8914,7 @@ public unsafe partial class CanvasItem : Node
 {
     internal CanvasItem(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public enum TextureFilter : long
+    public enum TextureFilterEnum : long
     {
         TEXTURE_FILTER_PARENT_NODE = 0,
         TEXTURE_FILTER_NEAREST = 1,
@@ -7358,7 +8926,7 @@ public unsafe partial class CanvasItem : Node
         TEXTURE_FILTER_MAX = 7,
     }
 
-    public enum TextureRepeat : long
+    public enum TextureRepeatEnum : long
     {
         TEXTURE_REPEAT_PARENT_NODE = 0,
         TEXTURE_REPEAT_DISABLED = 1,
@@ -7375,12 +8943,108 @@ public unsafe partial class CanvasItem : Node
         CLIP_CHILDREN_MAX = 3,
     }
 
-    public enum OversamplingWithScale : long
+    public enum OversamplingWithScaleEnum : long
     {
         OVERSAMPLING_WITH_SCALE_PARENT_NODE = 0,
         OVERSAMPLING_WITH_SCALE_DISABLED = 1,
         OVERSAMPLING_WITH_SCALE_ENABLED = 2,
         OVERSAMPLING_WITH_SCALE_MAX = 3,
+    }
+
+    public bool Visible
+    {
+        get => IsVisible();
+        set => SetVisible(value);
+    }
+
+    public Color Modulate
+    {
+        get => GetModulate();
+        set => SetModulate(value);
+    }
+
+    public Color SelfModulate
+    {
+        get => GetSelfModulate();
+        set => SetSelfModulate(value);
+    }
+
+    public bool ShowBehindParent
+    {
+        get => IsDrawBehindParentEnabled();
+        set => SetDrawBehindParent(value);
+    }
+
+    public bool TopLevel
+    {
+        get => IsSetAsTopLevel();
+        set => SetAsTopLevel(value);
+    }
+
+    public CanvasItem.ClipChildrenMode ClipChildren
+    {
+        get => GetClipChildrenMode();
+        set => SetClipChildrenMode(value);
+    }
+
+    public CanvasItem.OversamplingWithScaleEnum OversamplingWithScale
+    {
+        get => GetOversamplingWithScale();
+        set => SetOversamplingWithScale(value);
+    }
+
+    public int LightMask
+    {
+        get => GetLightMask();
+        set => SetLightMask(value);
+    }
+
+    public uint VisibilityLayer
+    {
+        get => GetVisibilityLayer();
+        set => SetVisibilityLayer(value);
+    }
+
+    public int ZIndex
+    {
+        get => GetZIndex();
+        set => SetZIndex(value);
+    }
+
+    public bool ZAsRelative
+    {
+        get => IsZRelative();
+        set => SetZAsRelative(value);
+    }
+
+    public bool YSortEnabled
+    {
+        get => IsYSortEnabled();
+        set => SetYSortEnabled(value);
+    }
+
+    public CanvasItem.TextureFilterEnum TextureFilter
+    {
+        get => GetTextureFilter();
+        set => SetTextureFilter(value);
+    }
+
+    public CanvasItem.TextureRepeatEnum TextureRepeat
+    {
+        get => GetTextureRepeat();
+        set => SetTextureRepeat(value);
+    }
+
+    public Material? Material
+    {
+        get => GetMaterial();
+        set => SetMaterial(value);
+    }
+
+    public bool UseParentMaterial
+    {
+        get => GetUseParentMaterial();
+        set => SetUseParentMaterial(value);
     }
 
     private static nint __mb_get_canvas_item;
@@ -7399,7 +9063,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_set_visible;
-    public void SetVisible(bool visible)
+    internal void SetVisible(bool visible)
     {
         var __mb = __mb_set_visible;
         if (__mb == 0)
@@ -7415,7 +9079,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_is_visible;
-    public bool IsVisible()
+    internal bool IsVisible()
     {
         var __mb = __mb_is_visible;
         if (__mb == 0)
@@ -7497,7 +9161,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_set_as_top_level;
-    public void SetAsTopLevel(bool enable)
+    internal void SetAsTopLevel(bool enable)
     {
         var __mb = __mb_set_as_top_level;
         if (__mb == 0)
@@ -7513,7 +9177,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_is_set_as_top_level;
-    public bool IsSetAsTopLevel()
+    internal bool IsSetAsTopLevel()
     {
         var __mb = __mb_is_set_as_top_level;
         if (__mb == 0)
@@ -7528,7 +9192,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_set_light_mask;
-    public void SetLightMask(int lightMask)
+    internal void SetLightMask(int lightMask)
     {
         var __mb = __mb_set_light_mask;
         if (__mb == 0)
@@ -7544,7 +9208,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_get_light_mask;
-    public int GetLightMask()
+    internal int GetLightMask()
     {
         var __mb = __mb_get_light_mask;
         if (__mb == 0)
@@ -7559,7 +9223,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_set_modulate;
-    public void SetModulate(Color modulate)
+    internal void SetModulate(Color modulate)
     {
         var __mb = __mb_set_modulate;
         if (__mb == 0)
@@ -7575,7 +9239,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_get_modulate;
-    public Color GetModulate()
+    internal Color GetModulate()
     {
         var __mb = __mb_get_modulate;
         if (__mb == 0)
@@ -7590,7 +9254,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_set_self_modulate;
-    public void SetSelfModulate(Color selfModulate)
+    internal void SetSelfModulate(Color selfModulate)
     {
         var __mb = __mb_set_self_modulate;
         if (__mb == 0)
@@ -7606,7 +9270,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_get_self_modulate;
-    public Color GetSelfModulate()
+    internal Color GetSelfModulate()
     {
         var __mb = __mb_get_self_modulate;
         if (__mb == 0)
@@ -7621,7 +9285,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_set_z_index;
-    public void SetZIndex(int zIndex)
+    internal void SetZIndex(int zIndex)
     {
         var __mb = __mb_set_z_index;
         if (__mb == 0)
@@ -7637,7 +9301,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_get_z_index;
-    public int GetZIndex()
+    internal int GetZIndex()
     {
         var __mb = __mb_get_z_index;
         if (__mb == 0)
@@ -7652,7 +9316,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_set_z_as_relative;
-    public void SetZAsRelative(bool enable)
+    internal void SetZAsRelative(bool enable)
     {
         var __mb = __mb_set_z_as_relative;
         if (__mb == 0)
@@ -7668,7 +9332,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_is_z_relative;
-    public bool IsZRelative()
+    internal bool IsZRelative()
     {
         var __mb = __mb_is_z_relative;
         if (__mb == 0)
@@ -7683,7 +9347,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_set_y_sort_enabled;
-    public void SetYSortEnabled(bool enabled)
+    internal void SetYSortEnabled(bool enabled)
     {
         var __mb = __mb_set_y_sort_enabled;
         if (__mb == 0)
@@ -7699,7 +9363,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_is_y_sort_enabled;
-    public bool IsYSortEnabled()
+    internal bool IsYSortEnabled()
     {
         var __mb = __mb_is_y_sort_enabled;
         if (__mb == 0)
@@ -7714,7 +9378,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_set_draw_behind_parent;
-    public void SetDrawBehindParent(bool enable)
+    internal void SetDrawBehindParent(bool enable)
     {
         var __mb = __mb_set_draw_behind_parent;
         if (__mb == 0)
@@ -7730,7 +9394,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_is_draw_behind_parent_enabled;
-    public bool IsDrawBehindParentEnabled()
+    internal bool IsDrawBehindParentEnabled()
     {
         var __mb = __mb_is_draw_behind_parent_enabled;
         if (__mb == 0)
@@ -8402,7 +10066,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_get_transform;
-    public Transform2D GetTransform()
+    internal Transform2D GetTransform()
     {
         var __mb = __mb_get_transform;
         if (__mb == 0)
@@ -8417,7 +10081,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_get_global_transform;
-    public Transform2D GetGlobalTransform()
+    internal Transform2D GetGlobalTransform()
     {
         var __mb = __mb_get_global_transform;
         if (__mb == 0)
@@ -8582,7 +10246,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_set_material;
-    public void SetMaterial(Material? material)
+    internal void SetMaterial(Material? material)
     {
         var __mb = __mb_set_material;
         if (__mb == 0)
@@ -8598,7 +10262,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_get_material;
-    public Material? GetMaterial()
+    internal Material? GetMaterial()
     {
         var __mb = __mb_get_material;
         if (__mb == 0)
@@ -8649,7 +10313,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_set_use_parent_material;
-    public void SetUseParentMaterial(bool enable)
+    internal void SetUseParentMaterial(bool enable)
     {
         var __mb = __mb_set_use_parent_material;
         if (__mb == 0)
@@ -8665,7 +10329,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_get_use_parent_material;
-    public bool GetUseParentMaterial()
+    internal bool GetUseParentMaterial()
     {
         var __mb = __mb_get_use_parent_material;
         if (__mb == 0)
@@ -8791,7 +10455,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_set_visibility_layer;
-    public void SetVisibilityLayer(uint layer)
+    internal void SetVisibilityLayer(uint layer)
     {
         var __mb = __mb_set_visibility_layer;
         if (__mb == 0)
@@ -8807,7 +10471,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_get_visibility_layer;
-    public uint GetVisibilityLayer()
+    internal uint GetVisibilityLayer()
     {
         var __mb = __mb_get_visibility_layer;
         if (__mb == 0)
@@ -8858,7 +10522,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_set_texture_filter;
-    public void SetTextureFilter(CanvasItem.TextureFilter mode)
+    internal void SetTextureFilter(CanvasItem.TextureFilterEnum mode)
     {
         var __mb = __mb_set_texture_filter;
         if (__mb == 0)
@@ -8874,7 +10538,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_get_texture_filter;
-    public CanvasItem.TextureFilter GetTextureFilter()
+    internal CanvasItem.TextureFilterEnum GetTextureFilter()
     {
         var __mb = __mb_get_texture_filter;
         if (__mb == 0)
@@ -8885,11 +10549,11 @@ public unsafe partial class CanvasItem : Node
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CanvasItem.TextureFilter)__ret;
+        return (CanvasItem.TextureFilterEnum)__ret;
     }
 
     private static nint __mb_set_texture_repeat;
-    public void SetTextureRepeat(CanvasItem.TextureRepeat mode)
+    internal void SetTextureRepeat(CanvasItem.TextureRepeatEnum mode)
     {
         var __mb = __mb_set_texture_repeat;
         if (__mb == 0)
@@ -8905,7 +10569,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_get_texture_repeat;
-    public CanvasItem.TextureRepeat GetTextureRepeat()
+    internal CanvasItem.TextureRepeatEnum GetTextureRepeat()
     {
         var __mb = __mb_get_texture_repeat;
         if (__mb == 0)
@@ -8916,11 +10580,11 @@ public unsafe partial class CanvasItem : Node
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CanvasItem.TextureRepeat)__ret;
+        return (CanvasItem.TextureRepeatEnum)__ret;
     }
 
     private static nint __mb_set_clip_children_mode;
-    public void SetClipChildrenMode(CanvasItem.ClipChildrenMode mode)
+    internal void SetClipChildrenMode(CanvasItem.ClipChildrenMode mode)
     {
         var __mb = __mb_set_clip_children_mode;
         if (__mb == 0)
@@ -8936,7 +10600,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_get_clip_children_mode;
-    public CanvasItem.ClipChildrenMode GetClipChildrenMode()
+    internal CanvasItem.ClipChildrenMode GetClipChildrenMode()
     {
         var __mb = __mb_get_clip_children_mode;
         if (__mb == 0)
@@ -8951,7 +10615,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_set_oversampling_with_scale;
-    public void SetOversamplingWithScale(CanvasItem.OversamplingWithScale enabled)
+    internal void SetOversamplingWithScale(CanvasItem.OversamplingWithScaleEnum enabled)
     {
         var __mb = __mb_set_oversampling_with_scale;
         if (__mb == 0)
@@ -8967,7 +10631,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_get_oversampling_with_scale;
-    public CanvasItem.OversamplingWithScale GetOversamplingWithScale()
+    internal CanvasItem.OversamplingWithScaleEnum GetOversamplingWithScale()
     {
         var __mb = __mb_get_oversampling_with_scale;
         if (__mb == 0)
@@ -8978,7 +10642,7 @@ public unsafe partial class CanvasItem : Node
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CanvasItem.OversamplingWithScale)__ret;
+        return (CanvasItem.OversamplingWithScaleEnum)__ret;
     }
 
     public virtual void _Draw() { }
@@ -9006,7 +10670,7 @@ public unsafe partial class CanvasItemMaterial : Material
         ClassRegistry.AttachNew(this, "CanvasItemMaterial");
     }
 
-    public enum BlendMode : long
+    public enum BlendModeEnum : long
     {
         BLEND_MODE_MIX = 0,
         BLEND_MODE_ADD = 1,
@@ -9015,15 +10679,51 @@ public unsafe partial class CanvasItemMaterial : Material
         BLEND_MODE_PREMULT_ALPHA = 4,
     }
 
-    public enum LightMode : long
+    public enum LightModeEnum : long
     {
         LIGHT_MODE_NORMAL = 0,
         LIGHT_MODE_UNSHADED = 1,
         LIGHT_MODE_LIGHT_ONLY = 2,
     }
 
+    public CanvasItemMaterial.BlendModeEnum BlendMode
+    {
+        get => GetBlendMode();
+        set => SetBlendMode(value);
+    }
+
+    public CanvasItemMaterial.LightModeEnum LightMode
+    {
+        get => GetLightMode();
+        set => SetLightMode(value);
+    }
+
+    public bool ParticlesAnimation
+    {
+        get => GetParticlesAnimation();
+        set => SetParticlesAnimation(value);
+    }
+
+    public int ParticlesAnimHFrames
+    {
+        get => GetParticlesAnimHFrames();
+        set => SetParticlesAnimHFrames(value);
+    }
+
+    public int ParticlesAnimVFrames
+    {
+        get => GetParticlesAnimVFrames();
+        set => SetParticlesAnimVFrames(value);
+    }
+
+    public bool ParticlesAnimLoop
+    {
+        get => GetParticlesAnimLoop();
+        set => SetParticlesAnimLoop(value);
+    }
+
     private static nint __mb_set_blend_mode;
-    public void SetBlendMode(CanvasItemMaterial.BlendMode blendMode)
+    internal void SetBlendMode(CanvasItemMaterial.BlendModeEnum blendMode)
     {
         var __mb = __mb_set_blend_mode;
         if (__mb == 0)
@@ -9039,7 +10739,7 @@ public unsafe partial class CanvasItemMaterial : Material
     }
 
     private static nint __mb_get_blend_mode;
-    public CanvasItemMaterial.BlendMode GetBlendMode()
+    internal CanvasItemMaterial.BlendModeEnum GetBlendMode()
     {
         var __mb = __mb_get_blend_mode;
         if (__mb == 0)
@@ -9050,11 +10750,11 @@ public unsafe partial class CanvasItemMaterial : Material
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CanvasItemMaterial.BlendMode)__ret;
+        return (CanvasItemMaterial.BlendModeEnum)__ret;
     }
 
     private static nint __mb_set_light_mode;
-    public void SetLightMode(CanvasItemMaterial.LightMode lightMode)
+    internal void SetLightMode(CanvasItemMaterial.LightModeEnum lightMode)
     {
         var __mb = __mb_set_light_mode;
         if (__mb == 0)
@@ -9070,7 +10770,7 @@ public unsafe partial class CanvasItemMaterial : Material
     }
 
     private static nint __mb_get_light_mode;
-    public CanvasItemMaterial.LightMode GetLightMode()
+    internal CanvasItemMaterial.LightModeEnum GetLightMode()
     {
         var __mb = __mb_get_light_mode;
         if (__mb == 0)
@@ -9081,11 +10781,11 @@ public unsafe partial class CanvasItemMaterial : Material
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CanvasItemMaterial.LightMode)__ret;
+        return (CanvasItemMaterial.LightModeEnum)__ret;
     }
 
     private static nint __mb_set_particles_animation;
-    public void SetParticlesAnimation(bool particlesAnim)
+    internal void SetParticlesAnimation(bool particlesAnim)
     {
         var __mb = __mb_set_particles_animation;
         if (__mb == 0)
@@ -9101,7 +10801,7 @@ public unsafe partial class CanvasItemMaterial : Material
     }
 
     private static nint __mb_get_particles_animation;
-    public bool GetParticlesAnimation()
+    internal bool GetParticlesAnimation()
     {
         var __mb = __mb_get_particles_animation;
         if (__mb == 0)
@@ -9116,7 +10816,7 @@ public unsafe partial class CanvasItemMaterial : Material
     }
 
     private static nint __mb_set_particles_anim_h_frames;
-    public void SetParticlesAnimHFrames(int frames)
+    internal void SetParticlesAnimHFrames(int frames)
     {
         var __mb = __mb_set_particles_anim_h_frames;
         if (__mb == 0)
@@ -9132,7 +10832,7 @@ public unsafe partial class CanvasItemMaterial : Material
     }
 
     private static nint __mb_get_particles_anim_h_frames;
-    public int GetParticlesAnimHFrames()
+    internal int GetParticlesAnimHFrames()
     {
         var __mb = __mb_get_particles_anim_h_frames;
         if (__mb == 0)
@@ -9147,7 +10847,7 @@ public unsafe partial class CanvasItemMaterial : Material
     }
 
     private static nint __mb_set_particles_anim_v_frames;
-    public void SetParticlesAnimVFrames(int frames)
+    internal void SetParticlesAnimVFrames(int frames)
     {
         var __mb = __mb_set_particles_anim_v_frames;
         if (__mb == 0)
@@ -9163,7 +10863,7 @@ public unsafe partial class CanvasItemMaterial : Material
     }
 
     private static nint __mb_get_particles_anim_v_frames;
-    public int GetParticlesAnimVFrames()
+    internal int GetParticlesAnimVFrames()
     {
         var __mb = __mb_get_particles_anim_v_frames;
         if (__mb == 0)
@@ -9178,7 +10878,7 @@ public unsafe partial class CanvasItemMaterial : Material
     }
 
     private static nint __mb_set_particles_anim_loop;
-    public void SetParticlesAnimLoop(bool loop)
+    internal void SetParticlesAnimLoop(bool loop)
     {
         var __mb = __mb_set_particles_anim_loop;
         if (__mb == 0)
@@ -9194,7 +10894,7 @@ public unsafe partial class CanvasItemMaterial : Material
     }
 
     private static nint __mb_get_particles_anim_loop;
-    public bool GetParticlesAnimLoop()
+    internal bool GetParticlesAnimLoop()
     {
         var __mb = __mb_get_particles_anim_loop;
         if (__mb == 0)
@@ -9218,8 +10918,62 @@ public unsafe partial class CanvasLayer : Node
         ClassRegistry.AttachNew(this, "CanvasLayer");
     }
 
+    public int Layer
+    {
+        get => GetLayer();
+        set => SetLayer(value);
+    }
+
+    public bool Visible
+    {
+        get => IsVisible();
+        set => SetVisible(value);
+    }
+
+    public Vector2 Offset
+    {
+        get => GetOffset();
+        set => SetOffset(value);
+    }
+
+    public float Rotation
+    {
+        get => GetRotation();
+        set => SetRotation(value);
+    }
+
+    public Vector2 Scale
+    {
+        get => GetScale();
+        set => SetScale(value);
+    }
+
+    public Transform2D Transform
+    {
+        get => GetTransform();
+        set => SetTransform(value);
+    }
+
+    public Node? CustomViewport
+    {
+        get => GetCustomViewport();
+        set => SetCustomViewport(value);
+    }
+
+    public bool FollowViewportEnabled
+    {
+        get => IsFollowingViewport();
+        set => SetFollowViewport(value);
+    }
+
+    public float FollowViewportScale
+    {
+        get => GetFollowViewportScale();
+        set => SetFollowViewportScale(value);
+    }
+
     private static nint __mb_set_layer;
-    public void SetLayer(int layer)
+    internal void SetLayer(int layer)
     {
         var __mb = __mb_set_layer;
         if (__mb == 0)
@@ -9235,7 +10989,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_get_layer;
-    public int GetLayer()
+    internal int GetLayer()
     {
         var __mb = __mb_get_layer;
         if (__mb == 0)
@@ -9250,7 +11004,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_set_visible;
-    public void SetVisible(bool visible)
+    internal void SetVisible(bool visible)
     {
         var __mb = __mb_set_visible;
         if (__mb == 0)
@@ -9266,7 +11020,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_is_visible;
-    public bool IsVisible()
+    internal bool IsVisible()
     {
         var __mb = __mb_is_visible;
         if (__mb == 0)
@@ -9307,7 +11061,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_set_transform;
-    public void SetTransform(Transform2D transform)
+    internal void SetTransform(Transform2D transform)
     {
         var __mb = __mb_set_transform;
         if (__mb == 0)
@@ -9323,7 +11077,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_get_transform;
-    public Transform2D GetTransform()
+    internal Transform2D GetTransform()
     {
         var __mb = __mb_get_transform;
         if (__mb == 0)
@@ -9353,7 +11107,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_set_offset;
-    public void SetOffset(Vector2 offset)
+    internal void SetOffset(Vector2 offset)
     {
         var __mb = __mb_set_offset;
         if (__mb == 0)
@@ -9369,7 +11123,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_get_offset;
-    public Vector2 GetOffset()
+    internal Vector2 GetOffset()
     {
         var __mb = __mb_get_offset;
         if (__mb == 0)
@@ -9384,7 +11138,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_set_rotation;
-    public void SetRotation(float radians)
+    internal void SetRotation(float radians)
     {
         var __mb = __mb_set_rotation;
         if (__mb == 0)
@@ -9400,7 +11154,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_get_rotation;
-    public float GetRotation()
+    internal float GetRotation()
     {
         var __mb = __mb_get_rotation;
         if (__mb == 0)
@@ -9415,7 +11169,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_set_scale;
-    public void SetScale(Vector2 scale)
+    internal void SetScale(Vector2 scale)
     {
         var __mb = __mb_set_scale;
         if (__mb == 0)
@@ -9431,7 +11185,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_get_scale;
-    public Vector2 GetScale()
+    internal Vector2 GetScale()
     {
         var __mb = __mb_get_scale;
         if (__mb == 0)
@@ -9446,7 +11200,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_set_follow_viewport;
-    public void SetFollowViewport(bool enable)
+    internal void SetFollowViewport(bool enable)
     {
         var __mb = __mb_set_follow_viewport;
         if (__mb == 0)
@@ -9462,7 +11216,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_is_following_viewport;
-    public bool IsFollowingViewport()
+    internal bool IsFollowingViewport()
     {
         var __mb = __mb_is_following_viewport;
         if (__mb == 0)
@@ -9477,7 +11231,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_set_follow_viewport_scale;
-    public void SetFollowViewportScale(float scale)
+    internal void SetFollowViewportScale(float scale)
     {
         var __mb = __mb_set_follow_viewport_scale;
         if (__mb == 0)
@@ -9493,7 +11247,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_get_follow_viewport_scale;
-    public float GetFollowViewportScale()
+    internal float GetFollowViewportScale()
     {
         var __mb = __mb_get_follow_viewport_scale;
         if (__mb == 0)
@@ -9508,7 +11262,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_set_custom_viewport;
-    public void SetCustomViewport(Node? viewport)
+    internal void SetCustomViewport(Node? viewport)
     {
         var __mb = __mb_set_custom_viewport;
         if (__mb == 0)
@@ -9524,7 +11278,7 @@ public unsafe partial class CanvasLayer : Node
     }
 
     private static nint __mb_get_custom_viewport;
-    public Node? GetCustomViewport()
+    internal Node? GetCustomViewport()
     {
         var __mb = __mb_get_custom_viewport;
         if (__mb == 0)
@@ -9563,8 +11317,14 @@ public unsafe partial class CanvasModulate : Node2D
         ClassRegistry.AttachNew(this, "CanvasModulate");
     }
 
+    public Color Color
+    {
+        get => GetColor();
+        set => SetColor(value);
+    }
+
     private static nint __mb_set_color;
-    public void SetColor(Color color)
+    internal void SetColor(Color color)
     {
         var __mb = __mb_set_color;
         if (__mb == 0)
@@ -9580,7 +11340,7 @@ public unsafe partial class CanvasModulate : Node2D
     }
 
     private static nint __mb_get_color;
-    public Color GetColor()
+    internal Color GetColor()
     {
         var __mb = __mb_get_color;
         if (__mb == 0)
@@ -9604,8 +11364,50 @@ public unsafe partial class CanvasTexture : Texture2D
         ClassRegistry.AttachNew(this, "CanvasTexture");
     }
 
+    public Texture2D? DiffuseTexture
+    {
+        get => GetDiffuseTexture();
+        set => SetDiffuseTexture(value);
+    }
+
+    public Texture2D? NormalTexture
+    {
+        get => GetNormalTexture();
+        set => SetNormalTexture(value);
+    }
+
+    public Texture2D? SpecularTexture
+    {
+        get => GetSpecularTexture();
+        set => SetSpecularTexture(value);
+    }
+
+    public Color SpecularColor
+    {
+        get => GetSpecularColor();
+        set => SetSpecularColor(value);
+    }
+
+    public float SpecularShininess
+    {
+        get => GetSpecularShininess();
+        set => SetSpecularShininess(value);
+    }
+
+    public CanvasItem.TextureFilterEnum TextureFilter
+    {
+        get => GetTextureFilter();
+        set => SetTextureFilter(value);
+    }
+
+    public CanvasItem.TextureRepeatEnum TextureRepeat
+    {
+        get => GetTextureRepeat();
+        set => SetTextureRepeat(value);
+    }
+
     private static nint __mb_set_diffuse_texture;
-    public void SetDiffuseTexture(Texture2D? texture)
+    internal void SetDiffuseTexture(Texture2D? texture)
     {
         var __mb = __mb_set_diffuse_texture;
         if (__mb == 0)
@@ -9621,7 +11423,7 @@ public unsafe partial class CanvasTexture : Texture2D
     }
 
     private static nint __mb_get_diffuse_texture;
-    public Texture2D? GetDiffuseTexture()
+    internal Texture2D? GetDiffuseTexture()
     {
         var __mb = __mb_get_diffuse_texture;
         if (__mb == 0)
@@ -9636,7 +11438,7 @@ public unsafe partial class CanvasTexture : Texture2D
     }
 
     private static nint __mb_set_normal_texture;
-    public void SetNormalTexture(Texture2D? texture)
+    internal void SetNormalTexture(Texture2D? texture)
     {
         var __mb = __mb_set_normal_texture;
         if (__mb == 0)
@@ -9652,7 +11454,7 @@ public unsafe partial class CanvasTexture : Texture2D
     }
 
     private static nint __mb_get_normal_texture;
-    public Texture2D? GetNormalTexture()
+    internal Texture2D? GetNormalTexture()
     {
         var __mb = __mb_get_normal_texture;
         if (__mb == 0)
@@ -9667,7 +11469,7 @@ public unsafe partial class CanvasTexture : Texture2D
     }
 
     private static nint __mb_set_specular_texture;
-    public void SetSpecularTexture(Texture2D? texture)
+    internal void SetSpecularTexture(Texture2D? texture)
     {
         var __mb = __mb_set_specular_texture;
         if (__mb == 0)
@@ -9683,7 +11485,7 @@ public unsafe partial class CanvasTexture : Texture2D
     }
 
     private static nint __mb_get_specular_texture;
-    public Texture2D? GetSpecularTexture()
+    internal Texture2D? GetSpecularTexture()
     {
         var __mb = __mb_get_specular_texture;
         if (__mb == 0)
@@ -9698,7 +11500,7 @@ public unsafe partial class CanvasTexture : Texture2D
     }
 
     private static nint __mb_set_specular_color;
-    public void SetSpecularColor(Color color)
+    internal void SetSpecularColor(Color color)
     {
         var __mb = __mb_set_specular_color;
         if (__mb == 0)
@@ -9714,7 +11516,7 @@ public unsafe partial class CanvasTexture : Texture2D
     }
 
     private static nint __mb_get_specular_color;
-    public Color GetSpecularColor()
+    internal Color GetSpecularColor()
     {
         var __mb = __mb_get_specular_color;
         if (__mb == 0)
@@ -9729,7 +11531,7 @@ public unsafe partial class CanvasTexture : Texture2D
     }
 
     private static nint __mb_set_specular_shininess;
-    public void SetSpecularShininess(float shininess)
+    internal void SetSpecularShininess(float shininess)
     {
         var __mb = __mb_set_specular_shininess;
         if (__mb == 0)
@@ -9745,7 +11547,7 @@ public unsafe partial class CanvasTexture : Texture2D
     }
 
     private static nint __mb_get_specular_shininess;
-    public float GetSpecularShininess()
+    internal float GetSpecularShininess()
     {
         var __mb = __mb_get_specular_shininess;
         if (__mb == 0)
@@ -9760,7 +11562,7 @@ public unsafe partial class CanvasTexture : Texture2D
     }
 
     private static nint __mb_set_texture_filter;
-    public void SetTextureFilter(CanvasItem.TextureFilter filter)
+    internal void SetTextureFilter(CanvasItem.TextureFilterEnum filter)
     {
         var __mb = __mb_set_texture_filter;
         if (__mb == 0)
@@ -9776,7 +11578,7 @@ public unsafe partial class CanvasTexture : Texture2D
     }
 
     private static nint __mb_get_texture_filter;
-    public CanvasItem.TextureFilter GetTextureFilter()
+    internal CanvasItem.TextureFilterEnum GetTextureFilter()
     {
         var __mb = __mb_get_texture_filter;
         if (__mb == 0)
@@ -9787,11 +11589,11 @@ public unsafe partial class CanvasTexture : Texture2D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CanvasItem.TextureFilter)__ret;
+        return (CanvasItem.TextureFilterEnum)__ret;
     }
 
     private static nint __mb_set_texture_repeat;
-    public void SetTextureRepeat(CanvasItem.TextureRepeat repeat)
+    internal void SetTextureRepeat(CanvasItem.TextureRepeatEnum repeat)
     {
         var __mb = __mb_set_texture_repeat;
         if (__mb == 0)
@@ -9807,7 +11609,7 @@ public unsafe partial class CanvasTexture : Texture2D
     }
 
     private static nint __mb_get_texture_repeat;
-    public CanvasItem.TextureRepeat GetTextureRepeat()
+    internal CanvasItem.TextureRepeatEnum GetTextureRepeat()
     {
         var __mb = __mb_get_texture_repeat;
         if (__mb == 0)
@@ -9818,7 +11620,7 @@ public unsafe partial class CanvasTexture : Texture2D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CanvasItem.TextureRepeat)__ret;
+        return (CanvasItem.TextureRepeatEnum)__ret;
     }
 }
 
@@ -9831,8 +11633,32 @@ public unsafe partial class CapsuleMesh : PrimitiveMesh
         ClassRegistry.AttachNew(this, "CapsuleMesh");
     }
 
+    public float Radius
+    {
+        get => GetRadius();
+        set => SetRadius(value);
+    }
+
+    public float Height
+    {
+        get => GetHeight();
+        set => SetHeight(value);
+    }
+
+    public int RadialSegments
+    {
+        get => GetRadialSegments();
+        set => SetRadialSegments(value);
+    }
+
+    public int Rings
+    {
+        get => GetRings();
+        set => SetRings(value);
+    }
+
     private static nint __mb_set_radius;
-    public void SetRadius(float radius)
+    internal void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -9848,7 +11674,7 @@ public unsafe partial class CapsuleMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_radius;
-    public float GetRadius()
+    internal float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -9863,7 +11689,7 @@ public unsafe partial class CapsuleMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_height;
-    public void SetHeight(float height)
+    internal void SetHeight(float height)
     {
         var __mb = __mb_set_height;
         if (__mb == 0)
@@ -9879,7 +11705,7 @@ public unsafe partial class CapsuleMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_height;
-    public float GetHeight()
+    internal float GetHeight()
     {
         var __mb = __mb_get_height;
         if (__mb == 0)
@@ -9894,7 +11720,7 @@ public unsafe partial class CapsuleMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_radial_segments;
-    public void SetRadialSegments(int segments)
+    internal void SetRadialSegments(int segments)
     {
         var __mb = __mb_set_radial_segments;
         if (__mb == 0)
@@ -9910,7 +11736,7 @@ public unsafe partial class CapsuleMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_radial_segments;
-    public int GetRadialSegments()
+    internal int GetRadialSegments()
     {
         var __mb = __mb_get_radial_segments;
         if (__mb == 0)
@@ -9925,7 +11751,7 @@ public unsafe partial class CapsuleMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_rings;
-    public void SetRings(int rings)
+    internal void SetRings(int rings)
     {
         var __mb = __mb_set_rings;
         if (__mb == 0)
@@ -9941,7 +11767,7 @@ public unsafe partial class CapsuleMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_rings;
-    public int GetRings()
+    internal int GetRings()
     {
         var __mb = __mb_get_rings;
         if (__mb == 0)
@@ -9965,8 +11791,26 @@ public unsafe partial class CapsuleShape2D : Shape2D
         ClassRegistry.AttachNew(this, "CapsuleShape2D");
     }
 
+    public float Radius
+    {
+        get => GetRadius();
+        set => SetRadius(value);
+    }
+
+    public float Height
+    {
+        get => GetHeight();
+        set => SetHeight(value);
+    }
+
+    public float MidHeight
+    {
+        get => GetMidHeight();
+        set => SetMidHeight(value);
+    }
+
     private static nint __mb_set_radius;
-    public void SetRadius(float radius)
+    internal void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -9982,7 +11826,7 @@ public unsafe partial class CapsuleShape2D : Shape2D
     }
 
     private static nint __mb_get_radius;
-    public float GetRadius()
+    internal float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -9997,7 +11841,7 @@ public unsafe partial class CapsuleShape2D : Shape2D
     }
 
     private static nint __mb_set_height;
-    public void SetHeight(float height)
+    internal void SetHeight(float height)
     {
         var __mb = __mb_set_height;
         if (__mb == 0)
@@ -10013,7 +11857,7 @@ public unsafe partial class CapsuleShape2D : Shape2D
     }
 
     private static nint __mb_get_height;
-    public float GetHeight()
+    internal float GetHeight()
     {
         var __mb = __mb_get_height;
         if (__mb == 0)
@@ -10028,7 +11872,7 @@ public unsafe partial class CapsuleShape2D : Shape2D
     }
 
     private static nint __mb_set_mid_height;
-    public void SetMidHeight(float midHeight)
+    internal void SetMidHeight(float midHeight)
     {
         var __mb = __mb_set_mid_height;
         if (__mb == 0)
@@ -10044,7 +11888,7 @@ public unsafe partial class CapsuleShape2D : Shape2D
     }
 
     private static nint __mb_get_mid_height;
-    public float GetMidHeight()
+    internal float GetMidHeight()
     {
         var __mb = __mb_get_mid_height;
         if (__mb == 0)
@@ -10068,8 +11912,26 @@ public unsafe partial class CapsuleShape3D : Shape3D
         ClassRegistry.AttachNew(this, "CapsuleShape3D");
     }
 
+    public float Radius
+    {
+        get => GetRadius();
+        set => SetRadius(value);
+    }
+
+    public float Height
+    {
+        get => GetHeight();
+        set => SetHeight(value);
+    }
+
+    public float MidHeight
+    {
+        get => GetMidHeight();
+        set => SetMidHeight(value);
+    }
+
     private static nint __mb_set_radius;
-    public void SetRadius(float radius)
+    internal void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -10085,7 +11947,7 @@ public unsafe partial class CapsuleShape3D : Shape3D
     }
 
     private static nint __mb_get_radius;
-    public float GetRadius()
+    internal float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -10100,7 +11962,7 @@ public unsafe partial class CapsuleShape3D : Shape3D
     }
 
     private static nint __mb_set_height;
-    public void SetHeight(float height)
+    internal void SetHeight(float height)
     {
         var __mb = __mb_set_height;
         if (__mb == 0)
@@ -10116,7 +11978,7 @@ public unsafe partial class CapsuleShape3D : Shape3D
     }
 
     private static nint __mb_get_height;
-    public float GetHeight()
+    internal float GetHeight()
     {
         var __mb = __mb_get_height;
         if (__mb == 0)
@@ -10131,7 +11993,7 @@ public unsafe partial class CapsuleShape3D : Shape3D
     }
 
     private static nint __mb_set_mid_height;
-    public void SetMidHeight(float midHeight)
+    internal void SetMidHeight(float midHeight)
     {
         var __mb = __mb_set_mid_height;
         if (__mb == 0)
@@ -10147,7 +12009,7 @@ public unsafe partial class CapsuleShape3D : Shape3D
     }
 
     private static nint __mb_get_mid_height;
-    public float GetMidHeight()
+    internal float GetMidHeight()
     {
         var __mb = __mb_get_mid_height;
         if (__mb == 0)
@@ -10171,8 +12033,14 @@ public unsafe partial class CenterContainer : Container
         ClassRegistry.AttachNew(this, "CenterContainer");
     }
 
+    public bool UseTopLeft
+    {
+        get => IsUsingTopLeft();
+        set => SetUseTopLeft(value);
+    }
+
     private static nint __mb_set_use_top_left;
-    public void SetUseTopLeft(bool enable)
+    internal void SetUseTopLeft(bool enable)
     {
         var __mb = __mb_set_use_top_left;
         if (__mb == 0)
@@ -10188,7 +12056,7 @@ public unsafe partial class CenterContainer : Container
     }
 
     private static nint __mb_is_using_top_left;
-    public bool IsUsingTopLeft()
+    internal bool IsUsingTopLeft()
     {
         var __mb = __mb_is_using_top_left;
         if (__mb == 0)
@@ -10529,8 +12397,86 @@ public unsafe partial class CharFXTransform : RefCounted
         ClassRegistry.AttachNew(this, "CharFXTransform");
     }
 
+    public Transform2D Transform
+    {
+        get => GetTransform();
+        set => SetTransform(value);
+    }
+
+    public Vector2I Range
+    {
+        get => GetRange();
+        set => SetRange(value);
+    }
+
+    public double ElapsedTime
+    {
+        get => GetElapsedTime();
+        set => SetElapsedTime(value);
+    }
+
+    public bool Visible
+    {
+        get => IsVisible();
+        set => SetVisibility(value);
+    }
+
+    public bool Outline
+    {
+        get => IsOutline();
+        set => SetOutline(value);
+    }
+
+    public Vector2 Offset
+    {
+        get => GetOffset();
+        set => SetOffset(value);
+    }
+
+    public Color Color
+    {
+        get => GetColor();
+        set => SetColor(value);
+    }
+
+    public Godot.Collections.Dictionary Env
+    {
+        get => GetEnvironment();
+        set => SetEnvironment(value);
+    }
+
+    public uint GlyphIndex
+    {
+        get => GetGlyphIndex();
+        set => SetGlyphIndex(value);
+    }
+
+    public byte GlyphCount
+    {
+        get => GetGlyphCount();
+        set => SetGlyphCount(value);
+    }
+
+    public ushort GlyphFlags
+    {
+        get => GetGlyphFlags();
+        set => SetGlyphFlags(value);
+    }
+
+    public int RelativeIndex
+    {
+        get => GetRelativeIndex();
+        set => SetRelativeIndex(value);
+    }
+
+    public Rid Font
+    {
+        get => GetFont();
+        set => SetFont(value);
+    }
+
     private static nint __mb_get_transform;
-    public Transform2D GetTransform()
+    internal Transform2D GetTransform()
     {
         var __mb = __mb_get_transform;
         if (__mb == 0)
@@ -10545,7 +12491,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_set_transform;
-    public void SetTransform(Transform2D transform)
+    internal void SetTransform(Transform2D transform)
     {
         var __mb = __mb_set_transform;
         if (__mb == 0)
@@ -10561,7 +12507,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_get_range;
-    public Vector2I GetRange()
+    internal Vector2I GetRange()
     {
         var __mb = __mb_get_range;
         if (__mb == 0)
@@ -10576,7 +12522,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_set_range;
-    public void SetRange(Vector2I range)
+    internal void SetRange(Vector2I range)
     {
         var __mb = __mb_set_range;
         if (__mb == 0)
@@ -10592,7 +12538,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_get_elapsed_time;
-    public double GetElapsedTime()
+    internal double GetElapsedTime()
     {
         var __mb = __mb_get_elapsed_time;
         if (__mb == 0)
@@ -10607,7 +12553,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_set_elapsed_time;
-    public void SetElapsedTime(double time)
+    internal void SetElapsedTime(double time)
     {
         var __mb = __mb_set_elapsed_time;
         if (__mb == 0)
@@ -10623,7 +12569,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_is_visible;
-    public bool IsVisible()
+    internal bool IsVisible()
     {
         var __mb = __mb_is_visible;
         if (__mb == 0)
@@ -10638,7 +12584,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_set_visibility;
-    public void SetVisibility(bool visibility)
+    internal void SetVisibility(bool visibility)
     {
         var __mb = __mb_set_visibility;
         if (__mb == 0)
@@ -10654,7 +12600,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_is_outline;
-    public bool IsOutline()
+    internal bool IsOutline()
     {
         var __mb = __mb_is_outline;
         if (__mb == 0)
@@ -10669,7 +12615,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_set_outline;
-    public void SetOutline(bool outline)
+    internal void SetOutline(bool outline)
     {
         var __mb = __mb_set_outline;
         if (__mb == 0)
@@ -10685,7 +12631,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_get_offset;
-    public Vector2 GetOffset()
+    internal Vector2 GetOffset()
     {
         var __mb = __mb_get_offset;
         if (__mb == 0)
@@ -10700,7 +12646,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_set_offset;
-    public void SetOffset(Vector2 offset)
+    internal void SetOffset(Vector2 offset)
     {
         var __mb = __mb_set_offset;
         if (__mb == 0)
@@ -10716,7 +12662,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_get_color;
-    public Color GetColor()
+    internal Color GetColor()
     {
         var __mb = __mb_get_color;
         if (__mb == 0)
@@ -10731,7 +12677,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_set_color;
-    public void SetColor(Color color)
+    internal void SetColor(Color color)
     {
         var __mb = __mb_set_color;
         if (__mb == 0)
@@ -10747,7 +12693,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_get_environment;
-    public Godot.Collections.Dictionary GetEnvironment()
+    internal Godot.Collections.Dictionary GetEnvironment()
     {
         var __mb = __mb_get_environment;
         if (__mb == 0)
@@ -10762,7 +12708,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_set_environment;
-    public void SetEnvironment(Godot.Collections.Dictionary environment)
+    internal void SetEnvironment(Godot.Collections.Dictionary environment)
     {
         var __mb = __mb_set_environment;
         if (__mb == 0)
@@ -10778,7 +12724,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_get_glyph_index;
-    public uint GetGlyphIndex()
+    internal uint GetGlyphIndex()
     {
         var __mb = __mb_get_glyph_index;
         if (__mb == 0)
@@ -10793,7 +12739,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_set_glyph_index;
-    public void SetGlyphIndex(uint glyphIndex)
+    internal void SetGlyphIndex(uint glyphIndex)
     {
         var __mb = __mb_set_glyph_index;
         if (__mb == 0)
@@ -10809,7 +12755,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_get_relative_index;
-    public int GetRelativeIndex()
+    internal int GetRelativeIndex()
     {
         var __mb = __mb_get_relative_index;
         if (__mb == 0)
@@ -10824,7 +12770,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_set_relative_index;
-    public void SetRelativeIndex(int relativeIndex)
+    internal void SetRelativeIndex(int relativeIndex)
     {
         var __mb = __mb_set_relative_index;
         if (__mb == 0)
@@ -10840,7 +12786,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_get_glyph_count;
-    public byte GetGlyphCount()
+    internal byte GetGlyphCount()
     {
         var __mb = __mb_get_glyph_count;
         if (__mb == 0)
@@ -10855,7 +12801,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_set_glyph_count;
-    public void SetGlyphCount(byte glyphCount)
+    internal void SetGlyphCount(byte glyphCount)
     {
         var __mb = __mb_set_glyph_count;
         if (__mb == 0)
@@ -10871,7 +12817,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_get_glyph_flags;
-    public ushort GetGlyphFlags()
+    internal ushort GetGlyphFlags()
     {
         var __mb = __mb_get_glyph_flags;
         if (__mb == 0)
@@ -10886,7 +12832,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_set_glyph_flags;
-    public void SetGlyphFlags(ushort glyphFlags)
+    internal void SetGlyphFlags(ushort glyphFlags)
     {
         var __mb = __mb_set_glyph_flags;
         if (__mb == 0)
@@ -10902,7 +12848,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_get_font;
-    public Rid GetFont()
+    internal Rid GetFont()
     {
         var __mb = __mb_get_font;
         if (__mb == 0)
@@ -10917,7 +12863,7 @@ public unsafe partial class CharFXTransform : RefCounted
     }
 
     private static nint __mb_set_font;
-    public void SetFont(Rid font)
+    internal void SetFont(Rid font)
     {
         var __mb = __mb_set_font;
         if (__mb == 0)
@@ -10942,17 +12888,107 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
         ClassRegistry.AttachNew(this, "CharacterBody2D");
     }
 
-    public enum MotionMode : long
+    public enum MotionModeEnum : long
     {
         MOTION_MODE_GROUNDED = 0,
         MOTION_MODE_FLOATING = 1,
     }
 
-    public enum PlatformOnLeave : long
+    public enum PlatformOnLeaveEnum : long
     {
         PLATFORM_ON_LEAVE_ADD_VELOCITY = 0,
         PLATFORM_ON_LEAVE_ADD_UPWARD_VELOCITY = 1,
         PLATFORM_ON_LEAVE_DO_NOTHING = 2,
+    }
+
+    public CharacterBody2D.MotionModeEnum MotionMode
+    {
+        get => GetMotionMode();
+        set => SetMotionMode(value);
+    }
+
+    public Vector2 UpDirection
+    {
+        get => GetUpDirection();
+        set => SetUpDirection(value);
+    }
+
+    public Vector2 Velocity
+    {
+        get => GetVelocity();
+        set => SetVelocity(value);
+    }
+
+    public bool SlideOnCeiling
+    {
+        get => IsSlideOnCeilingEnabled();
+        set => SetSlideOnCeilingEnabled(value);
+    }
+
+    public int MaxSlides
+    {
+        get => GetMaxSlides();
+        set => SetMaxSlides(value);
+    }
+
+    public float WallMinSlideAngle
+    {
+        get => GetWallMinSlideAngle();
+        set => SetWallMinSlideAngle(value);
+    }
+
+    public bool FloorStopOnSlope
+    {
+        get => IsFloorStopOnSlopeEnabled();
+        set => SetFloorStopOnSlopeEnabled(value);
+    }
+
+    public bool FloorConstantSpeed
+    {
+        get => IsFloorConstantSpeedEnabled();
+        set => SetFloorConstantSpeedEnabled(value);
+    }
+
+    public bool FloorBlockOnWall
+    {
+        get => IsFloorBlockOnWallEnabled();
+        set => SetFloorBlockOnWallEnabled(value);
+    }
+
+    public float FloorMaxAngle
+    {
+        get => GetFloorMaxAngle();
+        set => SetFloorMaxAngle(value);
+    }
+
+    public float FloorSnapLength
+    {
+        get => GetFloorSnapLength();
+        set => SetFloorSnapLength(value);
+    }
+
+    public CharacterBody2D.PlatformOnLeaveEnum PlatformOnLeave
+    {
+        get => GetPlatformOnLeave();
+        set => SetPlatformOnLeave(value);
+    }
+
+    public uint PlatformFloorLayers
+    {
+        get => GetPlatformFloorLayers();
+        set => SetPlatformFloorLayers(value);
+    }
+
+    public uint PlatformWallLayers
+    {
+        get => GetPlatformWallLayers();
+        set => SetPlatformWallLayers(value);
+    }
+
+    public float SafeMargin
+    {
+        get => GetSafeMargin();
+        set => SetSafeMargin(value);
     }
 
     private static nint __mb_move_and_slide;
@@ -10984,7 +13020,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_velocity;
-    public void SetVelocity(Vector2 velocity)
+    internal void SetVelocity(Vector2 velocity)
     {
         var __mb = __mb_set_velocity;
         if (__mb == 0)
@@ -11000,7 +13036,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_velocity;
-    public Vector2 GetVelocity()
+    internal Vector2 GetVelocity()
     {
         var __mb = __mb_get_velocity;
         if (__mb == 0)
@@ -11015,7 +13051,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_safe_margin;
-    public void SetSafeMargin(float margin)
+    internal void SetSafeMargin(float margin)
     {
         var __mb = __mb_set_safe_margin;
         if (__mb == 0)
@@ -11031,7 +13067,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_safe_margin;
-    public float GetSafeMargin()
+    internal float GetSafeMargin()
     {
         var __mb = __mb_get_safe_margin;
         if (__mb == 0)
@@ -11046,7 +13082,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_is_floor_stop_on_slope_enabled;
-    public bool IsFloorStopOnSlopeEnabled()
+    internal bool IsFloorStopOnSlopeEnabled()
     {
         var __mb = __mb_is_floor_stop_on_slope_enabled;
         if (__mb == 0)
@@ -11061,7 +13097,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_floor_stop_on_slope_enabled;
-    public void SetFloorStopOnSlopeEnabled(bool enabled)
+    internal void SetFloorStopOnSlopeEnabled(bool enabled)
     {
         var __mb = __mb_set_floor_stop_on_slope_enabled;
         if (__mb == 0)
@@ -11077,7 +13113,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_floor_constant_speed_enabled;
-    public void SetFloorConstantSpeedEnabled(bool enabled)
+    internal void SetFloorConstantSpeedEnabled(bool enabled)
     {
         var __mb = __mb_set_floor_constant_speed_enabled;
         if (__mb == 0)
@@ -11093,7 +13129,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_is_floor_constant_speed_enabled;
-    public bool IsFloorConstantSpeedEnabled()
+    internal bool IsFloorConstantSpeedEnabled()
     {
         var __mb = __mb_is_floor_constant_speed_enabled;
         if (__mb == 0)
@@ -11108,7 +13144,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_floor_block_on_wall_enabled;
-    public void SetFloorBlockOnWallEnabled(bool enabled)
+    internal void SetFloorBlockOnWallEnabled(bool enabled)
     {
         var __mb = __mb_set_floor_block_on_wall_enabled;
         if (__mb == 0)
@@ -11124,7 +13160,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_is_floor_block_on_wall_enabled;
-    public bool IsFloorBlockOnWallEnabled()
+    internal bool IsFloorBlockOnWallEnabled()
     {
         var __mb = __mb_is_floor_block_on_wall_enabled;
         if (__mb == 0)
@@ -11139,7 +13175,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_slide_on_ceiling_enabled;
-    public void SetSlideOnCeilingEnabled(bool enabled)
+    internal void SetSlideOnCeilingEnabled(bool enabled)
     {
         var __mb = __mb_set_slide_on_ceiling_enabled;
         if (__mb == 0)
@@ -11155,7 +13191,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_is_slide_on_ceiling_enabled;
-    public bool IsSlideOnCeilingEnabled()
+    internal bool IsSlideOnCeilingEnabled()
     {
         var __mb = __mb_is_slide_on_ceiling_enabled;
         if (__mb == 0)
@@ -11170,7 +13206,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_platform_floor_layers;
-    public void SetPlatformFloorLayers(uint excludeLayer)
+    internal void SetPlatformFloorLayers(uint excludeLayer)
     {
         var __mb = __mb_set_platform_floor_layers;
         if (__mb == 0)
@@ -11186,7 +13222,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_platform_floor_layers;
-    public uint GetPlatformFloorLayers()
+    internal uint GetPlatformFloorLayers()
     {
         var __mb = __mb_get_platform_floor_layers;
         if (__mb == 0)
@@ -11201,7 +13237,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_platform_wall_layers;
-    public void SetPlatformWallLayers(uint excludeLayer)
+    internal void SetPlatformWallLayers(uint excludeLayer)
     {
         var __mb = __mb_set_platform_wall_layers;
         if (__mb == 0)
@@ -11217,7 +13253,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_platform_wall_layers;
-    public uint GetPlatformWallLayers()
+    internal uint GetPlatformWallLayers()
     {
         var __mb = __mb_get_platform_wall_layers;
         if (__mb == 0)
@@ -11232,7 +13268,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_max_slides;
-    public int GetMaxSlides()
+    internal int GetMaxSlides()
     {
         var __mb = __mb_get_max_slides;
         if (__mb == 0)
@@ -11247,7 +13283,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_max_slides;
-    public void SetMaxSlides(int maxSlides)
+    internal void SetMaxSlides(int maxSlides)
     {
         var __mb = __mb_set_max_slides;
         if (__mb == 0)
@@ -11263,7 +13299,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_floor_max_angle;
-    public float GetFloorMaxAngle()
+    internal float GetFloorMaxAngle()
     {
         var __mb = __mb_get_floor_max_angle;
         if (__mb == 0)
@@ -11278,7 +13314,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_floor_max_angle;
-    public void SetFloorMaxAngle(float radians)
+    internal void SetFloorMaxAngle(float radians)
     {
         var __mb = __mb_set_floor_max_angle;
         if (__mb == 0)
@@ -11294,7 +13330,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_floor_snap_length;
-    public float GetFloorSnapLength()
+    internal float GetFloorSnapLength()
     {
         var __mb = __mb_get_floor_snap_length;
         if (__mb == 0)
@@ -11309,7 +13345,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_floor_snap_length;
-    public void SetFloorSnapLength(float floorSnapLength)
+    internal void SetFloorSnapLength(float floorSnapLength)
     {
         var __mb = __mb_set_floor_snap_length;
         if (__mb == 0)
@@ -11325,7 +13361,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_wall_min_slide_angle;
-    public float GetWallMinSlideAngle()
+    internal float GetWallMinSlideAngle()
     {
         var __mb = __mb_get_wall_min_slide_angle;
         if (__mb == 0)
@@ -11340,7 +13376,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_wall_min_slide_angle;
-    public void SetWallMinSlideAngle(float radians)
+    internal void SetWallMinSlideAngle(float radians)
     {
         var __mb = __mb_set_wall_min_slide_angle;
         if (__mb == 0)
@@ -11356,7 +13392,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_up_direction;
-    public Vector2 GetUpDirection()
+    internal Vector2 GetUpDirection()
     {
         var __mb = __mb_get_up_direction;
         if (__mb == 0)
@@ -11371,7 +13407,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_up_direction;
-    public void SetUpDirection(Vector2 upDirection)
+    internal void SetUpDirection(Vector2 upDirection)
     {
         var __mb = __mb_set_up_direction;
         if (__mb == 0)
@@ -11387,7 +13423,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_motion_mode;
-    public void SetMotionMode(CharacterBody2D.MotionMode mode)
+    internal void SetMotionMode(CharacterBody2D.MotionModeEnum mode)
     {
         var __mb = __mb_set_motion_mode;
         if (__mb == 0)
@@ -11403,7 +13439,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_motion_mode;
-    public CharacterBody2D.MotionMode GetMotionMode()
+    internal CharacterBody2D.MotionModeEnum GetMotionMode()
     {
         var __mb = __mb_get_motion_mode;
         if (__mb == 0)
@@ -11414,11 +13450,11 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CharacterBody2D.MotionMode)__ret;
+        return (CharacterBody2D.MotionModeEnum)__ret;
     }
 
     private static nint __mb_set_platform_on_leave;
-    public void SetPlatformOnLeave(CharacterBody2D.PlatformOnLeave onLeaveApplyVelocity)
+    internal void SetPlatformOnLeave(CharacterBody2D.PlatformOnLeaveEnum onLeaveApplyVelocity)
     {
         var __mb = __mb_set_platform_on_leave;
         if (__mb == 0)
@@ -11434,7 +13470,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_platform_on_leave;
-    public CharacterBody2D.PlatformOnLeave GetPlatformOnLeave()
+    internal CharacterBody2D.PlatformOnLeaveEnum GetPlatformOnLeave()
     {
         var __mb = __mb_get_platform_on_leave;
         if (__mb == 0)
@@ -11445,7 +13481,7 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CharacterBody2D.PlatformOnLeave)__ret;
+        return (CharacterBody2D.PlatformOnLeaveEnum)__ret;
     }
 
     private static nint __mb_is_on_floor;
@@ -11704,17 +13740,107 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
         ClassRegistry.AttachNew(this, "CharacterBody3D");
     }
 
-    public enum MotionMode : long
+    public enum MotionModeEnum : long
     {
         MOTION_MODE_GROUNDED = 0,
         MOTION_MODE_FLOATING = 1,
     }
 
-    public enum PlatformOnLeave : long
+    public enum PlatformOnLeaveEnum : long
     {
         PLATFORM_ON_LEAVE_ADD_VELOCITY = 0,
         PLATFORM_ON_LEAVE_ADD_UPWARD_VELOCITY = 1,
         PLATFORM_ON_LEAVE_DO_NOTHING = 2,
+    }
+
+    public CharacterBody3D.MotionModeEnum MotionMode
+    {
+        get => GetMotionMode();
+        set => SetMotionMode(value);
+    }
+
+    public Vector3 UpDirection
+    {
+        get => GetUpDirection();
+        set => SetUpDirection(value);
+    }
+
+    public bool SlideOnCeiling
+    {
+        get => IsSlideOnCeilingEnabled();
+        set => SetSlideOnCeilingEnabled(value);
+    }
+
+    public Vector3 Velocity
+    {
+        get => GetVelocity();
+        set => SetVelocity(value);
+    }
+
+    public int MaxSlides
+    {
+        get => GetMaxSlides();
+        set => SetMaxSlides(value);
+    }
+
+    public float WallMinSlideAngle
+    {
+        get => GetWallMinSlideAngle();
+        set => SetWallMinSlideAngle(value);
+    }
+
+    public bool FloorStopOnSlope
+    {
+        get => IsFloorStopOnSlopeEnabled();
+        set => SetFloorStopOnSlopeEnabled(value);
+    }
+
+    public bool FloorConstantSpeed
+    {
+        get => IsFloorConstantSpeedEnabled();
+        set => SetFloorConstantSpeedEnabled(value);
+    }
+
+    public bool FloorBlockOnWall
+    {
+        get => IsFloorBlockOnWallEnabled();
+        set => SetFloorBlockOnWallEnabled(value);
+    }
+
+    public float FloorMaxAngle
+    {
+        get => GetFloorMaxAngle();
+        set => SetFloorMaxAngle(value);
+    }
+
+    public float FloorSnapLength
+    {
+        get => GetFloorSnapLength();
+        set => SetFloorSnapLength(value);
+    }
+
+    public CharacterBody3D.PlatformOnLeaveEnum PlatformOnLeave
+    {
+        get => GetPlatformOnLeave();
+        set => SetPlatformOnLeave(value);
+    }
+
+    public uint PlatformFloorLayers
+    {
+        get => GetPlatformFloorLayers();
+        set => SetPlatformFloorLayers(value);
+    }
+
+    public uint PlatformWallLayers
+    {
+        get => GetPlatformWallLayers();
+        set => SetPlatformWallLayers(value);
+    }
+
+    public float SafeMargin
+    {
+        get => GetSafeMargin();
+        set => SetSafeMargin(value);
     }
 
     private static nint __mb_move_and_slide;
@@ -11746,7 +13872,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_velocity;
-    public void SetVelocity(Vector3 velocity)
+    internal void SetVelocity(Vector3 velocity)
     {
         var __mb = __mb_set_velocity;
         if (__mb == 0)
@@ -11762,7 +13888,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_velocity;
-    public Vector3 GetVelocity()
+    internal Vector3 GetVelocity()
     {
         var __mb = __mb_get_velocity;
         if (__mb == 0)
@@ -11777,7 +13903,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_safe_margin;
-    public void SetSafeMargin(float margin)
+    internal void SetSafeMargin(float margin)
     {
         var __mb = __mb_set_safe_margin;
         if (__mb == 0)
@@ -11793,7 +13919,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_safe_margin;
-    public float GetSafeMargin()
+    internal float GetSafeMargin()
     {
         var __mb = __mb_get_safe_margin;
         if (__mb == 0)
@@ -11808,7 +13934,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_is_floor_stop_on_slope_enabled;
-    public bool IsFloorStopOnSlopeEnabled()
+    internal bool IsFloorStopOnSlopeEnabled()
     {
         var __mb = __mb_is_floor_stop_on_slope_enabled;
         if (__mb == 0)
@@ -11823,7 +13949,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_floor_stop_on_slope_enabled;
-    public void SetFloorStopOnSlopeEnabled(bool enabled)
+    internal void SetFloorStopOnSlopeEnabled(bool enabled)
     {
         var __mb = __mb_set_floor_stop_on_slope_enabled;
         if (__mb == 0)
@@ -11839,7 +13965,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_floor_constant_speed_enabled;
-    public void SetFloorConstantSpeedEnabled(bool enabled)
+    internal void SetFloorConstantSpeedEnabled(bool enabled)
     {
         var __mb = __mb_set_floor_constant_speed_enabled;
         if (__mb == 0)
@@ -11855,7 +13981,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_is_floor_constant_speed_enabled;
-    public bool IsFloorConstantSpeedEnabled()
+    internal bool IsFloorConstantSpeedEnabled()
     {
         var __mb = __mb_is_floor_constant_speed_enabled;
         if (__mb == 0)
@@ -11870,7 +13996,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_floor_block_on_wall_enabled;
-    public void SetFloorBlockOnWallEnabled(bool enabled)
+    internal void SetFloorBlockOnWallEnabled(bool enabled)
     {
         var __mb = __mb_set_floor_block_on_wall_enabled;
         if (__mb == 0)
@@ -11886,7 +14012,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_is_floor_block_on_wall_enabled;
-    public bool IsFloorBlockOnWallEnabled()
+    internal bool IsFloorBlockOnWallEnabled()
     {
         var __mb = __mb_is_floor_block_on_wall_enabled;
         if (__mb == 0)
@@ -11901,7 +14027,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_slide_on_ceiling_enabled;
-    public void SetSlideOnCeilingEnabled(bool enabled)
+    internal void SetSlideOnCeilingEnabled(bool enabled)
     {
         var __mb = __mb_set_slide_on_ceiling_enabled;
         if (__mb == 0)
@@ -11917,7 +14043,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_is_slide_on_ceiling_enabled;
-    public bool IsSlideOnCeilingEnabled()
+    internal bool IsSlideOnCeilingEnabled()
     {
         var __mb = __mb_is_slide_on_ceiling_enabled;
         if (__mb == 0)
@@ -11932,7 +14058,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_platform_floor_layers;
-    public void SetPlatformFloorLayers(uint excludeLayer)
+    internal void SetPlatformFloorLayers(uint excludeLayer)
     {
         var __mb = __mb_set_platform_floor_layers;
         if (__mb == 0)
@@ -11948,7 +14074,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_platform_floor_layers;
-    public uint GetPlatformFloorLayers()
+    internal uint GetPlatformFloorLayers()
     {
         var __mb = __mb_get_platform_floor_layers;
         if (__mb == 0)
@@ -11963,7 +14089,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_platform_wall_layers;
-    public void SetPlatformWallLayers(uint excludeLayer)
+    internal void SetPlatformWallLayers(uint excludeLayer)
     {
         var __mb = __mb_set_platform_wall_layers;
         if (__mb == 0)
@@ -11979,7 +14105,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_platform_wall_layers;
-    public uint GetPlatformWallLayers()
+    internal uint GetPlatformWallLayers()
     {
         var __mb = __mb_get_platform_wall_layers;
         if (__mb == 0)
@@ -11994,7 +14120,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_max_slides;
-    public int GetMaxSlides()
+    internal int GetMaxSlides()
     {
         var __mb = __mb_get_max_slides;
         if (__mb == 0)
@@ -12009,7 +14135,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_max_slides;
-    public void SetMaxSlides(int maxSlides)
+    internal void SetMaxSlides(int maxSlides)
     {
         var __mb = __mb_set_max_slides;
         if (__mb == 0)
@@ -12025,7 +14151,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_floor_max_angle;
-    public float GetFloorMaxAngle()
+    internal float GetFloorMaxAngle()
     {
         var __mb = __mb_get_floor_max_angle;
         if (__mb == 0)
@@ -12040,7 +14166,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_floor_max_angle;
-    public void SetFloorMaxAngle(float radians)
+    internal void SetFloorMaxAngle(float radians)
     {
         var __mb = __mb_set_floor_max_angle;
         if (__mb == 0)
@@ -12056,7 +14182,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_floor_snap_length;
-    public float GetFloorSnapLength()
+    internal float GetFloorSnapLength()
     {
         var __mb = __mb_get_floor_snap_length;
         if (__mb == 0)
@@ -12071,7 +14197,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_floor_snap_length;
-    public void SetFloorSnapLength(float floorSnapLength)
+    internal void SetFloorSnapLength(float floorSnapLength)
     {
         var __mb = __mb_set_floor_snap_length;
         if (__mb == 0)
@@ -12087,7 +14213,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_wall_min_slide_angle;
-    public float GetWallMinSlideAngle()
+    internal float GetWallMinSlideAngle()
     {
         var __mb = __mb_get_wall_min_slide_angle;
         if (__mb == 0)
@@ -12102,7 +14228,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_wall_min_slide_angle;
-    public void SetWallMinSlideAngle(float radians)
+    internal void SetWallMinSlideAngle(float radians)
     {
         var __mb = __mb_set_wall_min_slide_angle;
         if (__mb == 0)
@@ -12118,7 +14244,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_up_direction;
-    public Vector3 GetUpDirection()
+    internal Vector3 GetUpDirection()
     {
         var __mb = __mb_get_up_direction;
         if (__mb == 0)
@@ -12133,7 +14259,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_up_direction;
-    public void SetUpDirection(Vector3 upDirection)
+    internal void SetUpDirection(Vector3 upDirection)
     {
         var __mb = __mb_set_up_direction;
         if (__mb == 0)
@@ -12149,7 +14275,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_motion_mode;
-    public void SetMotionMode(CharacterBody3D.MotionMode mode)
+    internal void SetMotionMode(CharacterBody3D.MotionModeEnum mode)
     {
         var __mb = __mb_set_motion_mode;
         if (__mb == 0)
@@ -12165,7 +14291,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_motion_mode;
-    public CharacterBody3D.MotionMode GetMotionMode()
+    internal CharacterBody3D.MotionModeEnum GetMotionMode()
     {
         var __mb = __mb_get_motion_mode;
         if (__mb == 0)
@@ -12176,11 +14302,11 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CharacterBody3D.MotionMode)__ret;
+        return (CharacterBody3D.MotionModeEnum)__ret;
     }
 
     private static nint __mb_set_platform_on_leave;
-    public void SetPlatformOnLeave(CharacterBody3D.PlatformOnLeave onLeaveApplyVelocity)
+    internal void SetPlatformOnLeave(CharacterBody3D.PlatformOnLeaveEnum onLeaveApplyVelocity)
     {
         var __mb = __mb_set_platform_on_leave;
         if (__mb == 0)
@@ -12196,7 +14322,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_platform_on_leave;
-    public CharacterBody3D.PlatformOnLeave GetPlatformOnLeave()
+    internal CharacterBody3D.PlatformOnLeaveEnum GetPlatformOnLeave()
     {
         var __mb = __mb_get_platform_on_leave;
         if (__mb == 0)
@@ -12207,7 +14333,7 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CharacterBody3D.PlatformOnLeave)__ret;
+        return (CharacterBody3D.PlatformOnLeaveEnum)__ret;
     }
 
     private static nint __mb_is_on_floor;
@@ -12501,8 +14627,14 @@ public unsafe partial class CircleShape2D : Shape2D
         ClassRegistry.AttachNew(this, "CircleShape2D");
     }
 
+    public float Radius
+    {
+        get => GetRadius();
+        set => SetRadius(value);
+    }
+
     private static nint __mb_set_radius;
-    public void SetRadius(float radius)
+    internal void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -12518,7 +14650,7 @@ public unsafe partial class CircleShape2D : Shape2D
     }
 
     private static nint __mb_get_radius;
-    public float GetRadius()
+    internal float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -13067,8 +15199,140 @@ public unsafe partial class CodeEdit : TextEdit
         LOCATION_OTHER = 1024,
     }
 
+    public bool SymbolLookupOnClick
+    {
+        get => IsSymbolLookupOnClickEnabled();
+        set => SetSymbolLookupOnClickEnabled(value);
+    }
+
+    public bool SymbolTooltipOnHover
+    {
+        get => IsSymbolTooltipOnHoverEnabled();
+        set => SetSymbolTooltipOnHoverEnabled(value);
+    }
+
+    public bool LineFolding
+    {
+        get => IsLineFoldingEnabled();
+        set => SetLineFoldingEnabled(value);
+    }
+
+    public Godot.Collections.Array LineLengthGuidelines
+    {
+        get => GetLineLengthGuidelines();
+        set => SetLineLengthGuidelines(value);
+    }
+
+    public bool GuttersDrawBreakpointsGutter
+    {
+        get => IsDrawingBreakpointsGutter();
+        set => SetDrawBreakpointsGutter(value);
+    }
+
+    public bool GuttersDrawBookmarks
+    {
+        get => IsDrawingBookmarksGutter();
+        set => SetDrawBookmarksGutter(value);
+    }
+
+    public bool GuttersDrawExecutingLines
+    {
+        get => IsDrawingExecutingLinesGutter();
+        set => SetDrawExecutingLinesGutter(value);
+    }
+
+    public bool GuttersDrawLineNumbers
+    {
+        get => IsDrawLineNumbersEnabled();
+        set => SetDrawLineNumbers(value);
+    }
+
+    public bool GuttersZeroPadLineNumbers
+    {
+        get => IsLineNumbersZeroPadded();
+        set => SetLineNumbersZeroPadded(value);
+    }
+
+    public int GuttersLineNumbersMinDigits
+    {
+        get => GetLineNumbersMinDigits();
+        set => SetLineNumbersMinDigits(value);
+    }
+
+    public bool GuttersDrawFoldGutter
+    {
+        get => IsDrawingFoldGutter();
+        set => SetDrawFoldGutter(value);
+    }
+
+    public Godot.Collections.Array DelimiterStrings
+    {
+        get => GetStringDelimiters();
+        set => SetStringDelimiters(value);
+    }
+
+    public Godot.Collections.Array DelimiterComments
+    {
+        get => GetCommentDelimiters();
+        set => SetCommentDelimiters(value);
+    }
+
+    public bool CodeCompletionEnabled
+    {
+        get => IsCodeCompletionEnabled();
+        set => SetCodeCompletionEnabled(value);
+    }
+
+    public Godot.Collections.Array CodeCompletionPrefixes
+    {
+        get => GetCodeCompletionPrefixes();
+        set => SetCodeCompletionPrefixes(value);
+    }
+
+    public int IndentSize
+    {
+        get => GetIndentSize();
+        set => SetIndentSize(value);
+    }
+
+    public bool IndentUseSpaces
+    {
+        get => IsIndentUsingSpaces();
+        set => SetIndentUsingSpaces(value);
+    }
+
+    public bool IndentAutomatic
+    {
+        get => IsAutoIndentEnabled();
+        set => SetAutoIndentEnabled(value);
+    }
+
+    public Godot.Collections.Array IndentAutomaticPrefixes
+    {
+        get => GetAutoIndentPrefixes();
+        set => SetAutoIndentPrefixes(value);
+    }
+
+    public bool AutoBraceCompletionEnabled
+    {
+        get => IsAutoBraceCompletionEnabled();
+        set => SetAutoBraceCompletionEnabled(value);
+    }
+
+    public bool AutoBraceCompletionHighlightMatching
+    {
+        get => IsHighlightMatchingBracesEnabled();
+        set => SetHighlightMatchingBracesEnabled(value);
+    }
+
+    public Godot.Collections.Dictionary AutoBraceCompletionPairs
+    {
+        get => GetAutoBraceCompletionPairs();
+        set => SetAutoBraceCompletionPairs(value);
+    }
+
     private static nint __mb_set_indent_size;
-    public void SetIndentSize(int size)
+    internal void SetIndentSize(int size)
     {
         var __mb = __mb_set_indent_size;
         if (__mb == 0)
@@ -13084,7 +15348,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_get_indent_size;
-    public int GetIndentSize()
+    internal int GetIndentSize()
     {
         var __mb = __mb_get_indent_size;
         if (__mb == 0)
@@ -13099,7 +15363,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_indent_using_spaces;
-    public void SetIndentUsingSpaces(bool useSpaces)
+    internal void SetIndentUsingSpaces(bool useSpaces)
     {
         var __mb = __mb_set_indent_using_spaces;
         if (__mb == 0)
@@ -13115,7 +15379,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_indent_using_spaces;
-    public bool IsIndentUsingSpaces()
+    internal bool IsIndentUsingSpaces()
     {
         var __mb = __mb_is_indent_using_spaces;
         if (__mb == 0)
@@ -13130,7 +15394,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_auto_indent_enabled;
-    public void SetAutoIndentEnabled(bool enable)
+    internal void SetAutoIndentEnabled(bool enable)
     {
         var __mb = __mb_set_auto_indent_enabled;
         if (__mb == 0)
@@ -13146,7 +15410,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_auto_indent_enabled;
-    public bool IsAutoIndentEnabled()
+    internal bool IsAutoIndentEnabled()
     {
         var __mb = __mb_is_auto_indent_enabled;
         if (__mb == 0)
@@ -13161,7 +15425,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_auto_indent_prefixes;
-    public void SetAutoIndentPrefixes(Godot.Collections.Array prefixes)
+    internal void SetAutoIndentPrefixes(Godot.Collections.Array prefixes)
     {
         var __mb = __mb_set_auto_indent_prefixes;
         if (__mb == 0)
@@ -13177,7 +15441,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_get_auto_indent_prefixes;
-    public Godot.Collections.Array GetAutoIndentPrefixes()
+    internal Godot.Collections.Array GetAutoIndentPrefixes()
     {
         var __mb = __mb_get_auto_indent_prefixes;
         if (__mb == 0)
@@ -13249,7 +15513,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_auto_brace_completion_enabled;
-    public void SetAutoBraceCompletionEnabled(bool enable)
+    internal void SetAutoBraceCompletionEnabled(bool enable)
     {
         var __mb = __mb_set_auto_brace_completion_enabled;
         if (__mb == 0)
@@ -13265,7 +15529,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_auto_brace_completion_enabled;
-    public bool IsAutoBraceCompletionEnabled()
+    internal bool IsAutoBraceCompletionEnabled()
     {
         var __mb = __mb_is_auto_brace_completion_enabled;
         if (__mb == 0)
@@ -13280,7 +15544,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_highlight_matching_braces_enabled;
-    public void SetHighlightMatchingBracesEnabled(bool enable)
+    internal void SetHighlightMatchingBracesEnabled(bool enable)
     {
         var __mb = __mb_set_highlight_matching_braces_enabled;
         if (__mb == 0)
@@ -13296,7 +15560,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_highlight_matching_braces_enabled;
-    public bool IsHighlightMatchingBracesEnabled()
+    internal bool IsHighlightMatchingBracesEnabled()
     {
         var __mb = __mb_is_highlight_matching_braces_enabled;
         if (__mb == 0)
@@ -13331,7 +15595,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_auto_brace_completion_pairs;
-    public void SetAutoBraceCompletionPairs(Godot.Collections.Dictionary pairs)
+    internal void SetAutoBraceCompletionPairs(Godot.Collections.Dictionary pairs)
     {
         var __mb = __mb_set_auto_brace_completion_pairs;
         if (__mb == 0)
@@ -13347,7 +15611,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_get_auto_brace_completion_pairs;
-    public Godot.Collections.Dictionary GetAutoBraceCompletionPairs()
+    internal Godot.Collections.Dictionary GetAutoBraceCompletionPairs()
     {
         var __mb = __mb_get_auto_brace_completion_pairs;
         if (__mb == 0)
@@ -13419,7 +15683,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_draw_breakpoints_gutter;
-    public void SetDrawBreakpointsGutter(bool enable)
+    internal void SetDrawBreakpointsGutter(bool enable)
     {
         var __mb = __mb_set_draw_breakpoints_gutter;
         if (__mb == 0)
@@ -13435,7 +15699,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_drawing_breakpoints_gutter;
-    public bool IsDrawingBreakpointsGutter()
+    internal bool IsDrawingBreakpointsGutter()
     {
         var __mb = __mb_is_drawing_breakpoints_gutter;
         if (__mb == 0)
@@ -13450,7 +15714,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_draw_bookmarks_gutter;
-    public void SetDrawBookmarksGutter(bool enable)
+    internal void SetDrawBookmarksGutter(bool enable)
     {
         var __mb = __mb_set_draw_bookmarks_gutter;
         if (__mb == 0)
@@ -13466,7 +15730,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_drawing_bookmarks_gutter;
-    public bool IsDrawingBookmarksGutter()
+    internal bool IsDrawingBookmarksGutter()
     {
         var __mb = __mb_is_drawing_bookmarks_gutter;
         if (__mb == 0)
@@ -13481,7 +15745,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_draw_executing_lines_gutter;
-    public void SetDrawExecutingLinesGutter(bool enable)
+    internal void SetDrawExecutingLinesGutter(bool enable)
     {
         var __mb = __mb_set_draw_executing_lines_gutter;
         if (__mb == 0)
@@ -13497,7 +15761,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_drawing_executing_lines_gutter;
-    public bool IsDrawingExecutingLinesGutter()
+    internal bool IsDrawingExecutingLinesGutter()
     {
         var __mb = __mb_is_drawing_executing_lines_gutter;
         if (__mb == 0)
@@ -13659,7 +15923,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_draw_line_numbers;
-    public void SetDrawLineNumbers(bool enable)
+    internal void SetDrawLineNumbers(bool enable)
     {
         var __mb = __mb_set_draw_line_numbers;
         if (__mb == 0)
@@ -13675,7 +15939,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_draw_line_numbers_enabled;
-    public bool IsDrawLineNumbersEnabled()
+    internal bool IsDrawLineNumbersEnabled()
     {
         var __mb = __mb_is_draw_line_numbers_enabled;
         if (__mb == 0)
@@ -13690,7 +15954,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_line_numbers_zero_padded;
-    public void SetLineNumbersZeroPadded(bool enable)
+    internal void SetLineNumbersZeroPadded(bool enable)
     {
         var __mb = __mb_set_line_numbers_zero_padded;
         if (__mb == 0)
@@ -13706,7 +15970,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_line_numbers_zero_padded;
-    public bool IsLineNumbersZeroPadded()
+    internal bool IsLineNumbersZeroPadded()
     {
         var __mb = __mb_is_line_numbers_zero_padded;
         if (__mb == 0)
@@ -13721,7 +15985,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_line_numbers_min_digits;
-    public void SetLineNumbersMinDigits(int count)
+    internal void SetLineNumbersMinDigits(int count)
     {
         var __mb = __mb_set_line_numbers_min_digits;
         if (__mb == 0)
@@ -13737,7 +16001,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_get_line_numbers_min_digits;
-    public int GetLineNumbersMinDigits()
+    internal int GetLineNumbersMinDigits()
     {
         var __mb = __mb_get_line_numbers_min_digits;
         if (__mb == 0)
@@ -13752,7 +16016,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_draw_fold_gutter;
-    public void SetDrawFoldGutter(bool enable)
+    internal void SetDrawFoldGutter(bool enable)
     {
         var __mb = __mb_set_draw_fold_gutter;
         if (__mb == 0)
@@ -13768,7 +16032,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_drawing_fold_gutter;
-    public bool IsDrawingFoldGutter()
+    internal bool IsDrawingFoldGutter()
     {
         var __mb = __mb_is_drawing_fold_gutter;
         if (__mb == 0)
@@ -13783,7 +16047,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_line_folding_enabled;
-    public void SetLineFoldingEnabled(bool enabled)
+    internal void SetLineFoldingEnabled(bool enabled)
     {
         var __mb = __mb_set_line_folding_enabled;
         if (__mb == 0)
@@ -13799,7 +16063,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_line_folding_enabled;
-    public bool IsLineFoldingEnabled()
+    internal bool IsLineFoldingEnabled()
     {
         var __mb = __mb_is_line_folding_enabled;
         if (__mb == 0)
@@ -14109,7 +16373,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_string_delimiters;
-    public void SetStringDelimiters(Godot.Collections.Array stringDelimiters)
+    internal void SetStringDelimiters(Godot.Collections.Array stringDelimiters)
     {
         var __mb = __mb_set_string_delimiters;
         if (__mb == 0)
@@ -14138,7 +16402,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_get_string_delimiters;
-    public Godot.Collections.Array GetStringDelimiters()
+    internal Godot.Collections.Array GetStringDelimiters()
     {
         var __mb = __mb_get_string_delimiters;
         if (__mb == 0)
@@ -14231,7 +16495,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_comment_delimiters;
-    public void SetCommentDelimiters(Godot.Collections.Array commentDelimiters)
+    internal void SetCommentDelimiters(Godot.Collections.Array commentDelimiters)
     {
         var __mb = __mb_set_comment_delimiters;
         if (__mb == 0)
@@ -14260,7 +16524,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_get_comment_delimiters;
-    public Godot.Collections.Array GetCommentDelimiters()
+    internal Godot.Collections.Array GetCommentDelimiters()
     {
         var __mb = __mb_get_comment_delimiters;
         if (__mb == 0)
@@ -14574,7 +16838,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_code_completion_enabled;
-    public void SetCodeCompletionEnabled(bool enable)
+    internal void SetCodeCompletionEnabled(bool enable)
     {
         var __mb = __mb_set_code_completion_enabled;
         if (__mb == 0)
@@ -14590,7 +16854,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_code_completion_enabled;
-    public bool IsCodeCompletionEnabled()
+    internal bool IsCodeCompletionEnabled()
     {
         var __mb = __mb_is_code_completion_enabled;
         if (__mb == 0)
@@ -14605,7 +16869,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_code_completion_prefixes;
-    public void SetCodeCompletionPrefixes(Godot.Collections.Array prefixes)
+    internal void SetCodeCompletionPrefixes(Godot.Collections.Array prefixes)
     {
         var __mb = __mb_set_code_completion_prefixes;
         if (__mb == 0)
@@ -14621,7 +16885,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_get_code_completion_prefixes;
-    public Godot.Collections.Array GetCodeCompletionPrefixes()
+    internal Godot.Collections.Array GetCodeCompletionPrefixes()
     {
         var __mb = __mb_get_code_completion_prefixes;
         if (__mb == 0)
@@ -14636,7 +16900,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_line_length_guidelines;
-    public void SetLineLengthGuidelines(Godot.Collections.Array guidelineColumns)
+    internal void SetLineLengthGuidelines(Godot.Collections.Array guidelineColumns)
     {
         var __mb = __mb_set_line_length_guidelines;
         if (__mb == 0)
@@ -14652,7 +16916,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_get_line_length_guidelines;
-    public Godot.Collections.Array GetLineLengthGuidelines()
+    internal Godot.Collections.Array GetLineLengthGuidelines()
     {
         var __mb = __mb_get_line_length_guidelines;
         if (__mb == 0)
@@ -14667,7 +16931,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_symbol_lookup_on_click_enabled;
-    public void SetSymbolLookupOnClickEnabled(bool enable)
+    internal void SetSymbolLookupOnClickEnabled(bool enable)
     {
         var __mb = __mb_set_symbol_lookup_on_click_enabled;
         if (__mb == 0)
@@ -14683,7 +16947,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_symbol_lookup_on_click_enabled;
-    public bool IsSymbolLookupOnClickEnabled()
+    internal bool IsSymbolLookupOnClickEnabled()
     {
         var __mb = __mb_is_symbol_lookup_on_click_enabled;
         if (__mb == 0)
@@ -14749,7 +17013,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_symbol_tooltip_on_hover_enabled;
-    public void SetSymbolTooltipOnHoverEnabled(bool enable)
+    internal void SetSymbolTooltipOnHoverEnabled(bool enable)
     {
         var __mb = __mb_set_symbol_tooltip_on_hover_enabled;
         if (__mb == 0)
@@ -14765,7 +17029,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_symbol_tooltip_on_hover_enabled;
-    public bool IsSymbolTooltipOnHoverEnabled()
+    internal bool IsSymbolTooltipOnHoverEnabled()
     {
         var __mb = __mb_is_symbol_tooltip_on_hover_enabled;
         if (__mb == 0)
@@ -14895,6 +17159,48 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
         ClassRegistry.AttachNew(this, "CodeHighlighter");
     }
 
+    public Color NumberColor
+    {
+        get => GetNumberColor();
+        set => SetNumberColor(value);
+    }
+
+    public Color SymbolColor
+    {
+        get => GetSymbolColor();
+        set => SetSymbolColor(value);
+    }
+
+    public Color FunctionColor
+    {
+        get => GetFunctionColor();
+        set => SetFunctionColor(value);
+    }
+
+    public Color MemberVariableColor
+    {
+        get => GetMemberVariableColor();
+        set => SetMemberVariableColor(value);
+    }
+
+    public Godot.Collections.Dictionary KeywordColors
+    {
+        get => GetKeywordColors();
+        set => SetKeywordColors(value);
+    }
+
+    public Godot.Collections.Dictionary MemberKeywordColors
+    {
+        get => GetMemberKeywordColors();
+        set => SetMemberKeywordColors(value);
+    }
+
+    public Godot.Collections.Dictionary ColorRegions
+    {
+        get => GetColorRegions();
+        set => SetColorRegions(value);
+    }
+
     private static nint __mb_add_keyword_color;
     public void AddKeywordColor(string keyword, Color color)
     {
@@ -14970,7 +17276,7 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
     }
 
     private static nint __mb_set_keyword_colors;
-    public void SetKeywordColors(Godot.Collections.Dictionary keywords)
+    internal void SetKeywordColors(Godot.Collections.Dictionary keywords)
     {
         var __mb = __mb_set_keyword_colors;
         if (__mb == 0)
@@ -14999,7 +17305,7 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
     }
 
     private static nint __mb_get_keyword_colors;
-    public Godot.Collections.Dictionary GetKeywordColors()
+    internal Godot.Collections.Dictionary GetKeywordColors()
     {
         var __mb = __mb_get_keyword_colors;
         if (__mb == 0)
@@ -15088,7 +17394,7 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
     }
 
     private static nint __mb_set_member_keyword_colors;
-    public void SetMemberKeywordColors(Godot.Collections.Dictionary memberKeyword)
+    internal void SetMemberKeywordColors(Godot.Collections.Dictionary memberKeyword)
     {
         var __mb = __mb_set_member_keyword_colors;
         if (__mb == 0)
@@ -15117,7 +17423,7 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
     }
 
     private static nint __mb_get_member_keyword_colors;
-    public Godot.Collections.Dictionary GetMemberKeywordColors()
+    internal Godot.Collections.Dictionary GetMemberKeywordColors()
     {
         var __mb = __mb_get_member_keyword_colors;
         if (__mb == 0)
@@ -15192,7 +17498,7 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
     }
 
     private static nint __mb_set_color_regions;
-    public void SetColorRegions(Godot.Collections.Dictionary colorRegions)
+    internal void SetColorRegions(Godot.Collections.Dictionary colorRegions)
     {
         var __mb = __mb_set_color_regions;
         if (__mb == 0)
@@ -15221,7 +17527,7 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
     }
 
     private static nint __mb_get_color_regions;
-    public Godot.Collections.Dictionary GetColorRegions()
+    internal Godot.Collections.Dictionary GetColorRegions()
     {
         var __mb = __mb_get_color_regions;
         if (__mb == 0)
@@ -15236,7 +17542,7 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
     }
 
     private static nint __mb_set_function_color;
-    public void SetFunctionColor(Color color)
+    internal void SetFunctionColor(Color color)
     {
         var __mb = __mb_set_function_color;
         if (__mb == 0)
@@ -15252,7 +17558,7 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
     }
 
     private static nint __mb_get_function_color;
-    public Color GetFunctionColor()
+    internal Color GetFunctionColor()
     {
         var __mb = __mb_get_function_color;
         if (__mb == 0)
@@ -15267,7 +17573,7 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
     }
 
     private static nint __mb_set_number_color;
-    public void SetNumberColor(Color color)
+    internal void SetNumberColor(Color color)
     {
         var __mb = __mb_set_number_color;
         if (__mb == 0)
@@ -15283,7 +17589,7 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
     }
 
     private static nint __mb_get_number_color;
-    public Color GetNumberColor()
+    internal Color GetNumberColor()
     {
         var __mb = __mb_get_number_color;
         if (__mb == 0)
@@ -15298,7 +17604,7 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
     }
 
     private static nint __mb_set_symbol_color;
-    public void SetSymbolColor(Color color)
+    internal void SetSymbolColor(Color color)
     {
         var __mb = __mb_set_symbol_color;
         if (__mb == 0)
@@ -15314,7 +17620,7 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
     }
 
     private static nint __mb_get_symbol_color;
-    public Color GetSymbolColor()
+    internal Color GetSymbolColor()
     {
         var __mb = __mb_get_symbol_color;
         if (__mb == 0)
@@ -15329,7 +17635,7 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
     }
 
     private static nint __mb_set_member_variable_color;
-    public void SetMemberVariableColor(Color color)
+    internal void SetMemberVariableColor(Color color)
     {
         var __mb = __mb_set_member_variable_color;
         if (__mb == 0)
@@ -15345,7 +17651,7 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
     }
 
     private static nint __mb_get_member_variable_color;
-    public Color GetMemberVariableColor()
+    internal Color GetMemberVariableColor()
     {
         var __mb = __mb_get_member_variable_color;
         if (__mb == 0)
@@ -15364,11 +17670,41 @@ public unsafe partial class CollisionObject2D : Node2D
 {
     internal CollisionObject2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public enum DisableMode : long
+    public enum DisableModeEnum : long
     {
         DISABLE_MODE_REMOVE = 0,
         DISABLE_MODE_MAKE_STATIC = 1,
         DISABLE_MODE_KEEP_ACTIVE = 2,
+    }
+
+    public CollisionObject2D.DisableModeEnum DisableMode
+    {
+        get => GetDisableMode();
+        set => SetDisableMode(value);
+    }
+
+    public uint CollisionLayer
+    {
+        get => GetCollisionLayer();
+        set => SetCollisionLayer(value);
+    }
+
+    public uint CollisionMask
+    {
+        get => GetCollisionMask();
+        set => SetCollisionMask(value);
+    }
+
+    public float CollisionPriority
+    {
+        get => GetCollisionPriority();
+        set => SetCollisionPriority(value);
+    }
+
+    public bool InputPickable
+    {
+        get => IsPickable();
+        set => SetPickable(value);
     }
 
     private static nint __mb_get_rid;
@@ -15387,7 +17723,7 @@ public unsafe partial class CollisionObject2D : Node2D
     }
 
     private static nint __mb_set_collision_layer;
-    public void SetCollisionLayer(uint layer)
+    internal void SetCollisionLayer(uint layer)
     {
         var __mb = __mb_set_collision_layer;
         if (__mb == 0)
@@ -15403,7 +17739,7 @@ public unsafe partial class CollisionObject2D : Node2D
     }
 
     private static nint __mb_get_collision_layer;
-    public uint GetCollisionLayer()
+    internal uint GetCollisionLayer()
     {
         var __mb = __mb_get_collision_layer;
         if (__mb == 0)
@@ -15418,7 +17754,7 @@ public unsafe partial class CollisionObject2D : Node2D
     }
 
     private static nint __mb_set_collision_mask;
-    public void SetCollisionMask(uint mask)
+    internal void SetCollisionMask(uint mask)
     {
         var __mb = __mb_set_collision_mask;
         if (__mb == 0)
@@ -15434,7 +17770,7 @@ public unsafe partial class CollisionObject2D : Node2D
     }
 
     private static nint __mb_get_collision_mask;
-    public uint GetCollisionMask()
+    internal uint GetCollisionMask()
     {
         var __mb = __mb_get_collision_mask;
         if (__mb == 0)
@@ -15521,7 +17857,7 @@ public unsafe partial class CollisionObject2D : Node2D
     }
 
     private static nint __mb_set_collision_priority;
-    public void SetCollisionPriority(float priority)
+    internal void SetCollisionPriority(float priority)
     {
         var __mb = __mb_set_collision_priority;
         if (__mb == 0)
@@ -15537,7 +17873,7 @@ public unsafe partial class CollisionObject2D : Node2D
     }
 
     private static nint __mb_get_collision_priority;
-    public float GetCollisionPriority()
+    internal float GetCollisionPriority()
     {
         var __mb = __mb_get_collision_priority;
         if (__mb == 0)
@@ -15552,7 +17888,7 @@ public unsafe partial class CollisionObject2D : Node2D
     }
 
     private static nint __mb_set_disable_mode;
-    public void SetDisableMode(CollisionObject2D.DisableMode mode)
+    internal void SetDisableMode(CollisionObject2D.DisableModeEnum mode)
     {
         var __mb = __mb_set_disable_mode;
         if (__mb == 0)
@@ -15568,7 +17904,7 @@ public unsafe partial class CollisionObject2D : Node2D
     }
 
     private static nint __mb_get_disable_mode;
-    public CollisionObject2D.DisableMode GetDisableMode()
+    internal CollisionObject2D.DisableModeEnum GetDisableMode()
     {
         var __mb = __mb_get_disable_mode;
         if (__mb == 0)
@@ -15579,11 +17915,11 @@ public unsafe partial class CollisionObject2D : Node2D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CollisionObject2D.DisableMode)__ret;
+        return (CollisionObject2D.DisableModeEnum)__ret;
     }
 
     private static nint __mb_set_pickable;
-    public void SetPickable(bool enabled)
+    internal void SetPickable(bool enabled)
     {
         var __mb = __mb_set_pickable;
         if (__mb == 0)
@@ -15599,7 +17935,7 @@ public unsafe partial class CollisionObject2D : Node2D
     }
 
     private static nint __mb_is_pickable;
-    public bool IsPickable()
+    internal bool IsPickable()
     {
         var __mb = __mb_is_pickable;
         if (__mb == 0)
@@ -16029,15 +18365,51 @@ public unsafe partial class CollisionObject3D : Node3D
 {
     internal CollisionObject3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public enum DisableMode : long
+    public enum DisableModeEnum : long
     {
         DISABLE_MODE_REMOVE = 0,
         DISABLE_MODE_MAKE_STATIC = 1,
         DISABLE_MODE_KEEP_ACTIVE = 2,
     }
 
+    public CollisionObject3D.DisableModeEnum DisableMode
+    {
+        get => GetDisableMode();
+        set => SetDisableMode(value);
+    }
+
+    public uint CollisionLayer
+    {
+        get => GetCollisionLayer();
+        set => SetCollisionLayer(value);
+    }
+
+    public uint CollisionMask
+    {
+        get => GetCollisionMask();
+        set => SetCollisionMask(value);
+    }
+
+    public float CollisionPriority
+    {
+        get => GetCollisionPriority();
+        set => SetCollisionPriority(value);
+    }
+
+    public bool InputRayPickable
+    {
+        get => IsRayPickable();
+        set => SetRayPickable(value);
+    }
+
+    public bool InputCaptureOnDrag
+    {
+        get => GetCaptureInputOnDrag();
+        set => SetCaptureInputOnDrag(value);
+    }
+
     private static nint __mb_set_collision_layer;
-    public void SetCollisionLayer(uint layer)
+    internal void SetCollisionLayer(uint layer)
     {
         var __mb = __mb_set_collision_layer;
         if (__mb == 0)
@@ -16053,7 +18425,7 @@ public unsafe partial class CollisionObject3D : Node3D
     }
 
     private static nint __mb_get_collision_layer;
-    public uint GetCollisionLayer()
+    internal uint GetCollisionLayer()
     {
         var __mb = __mb_get_collision_layer;
         if (__mb == 0)
@@ -16068,7 +18440,7 @@ public unsafe partial class CollisionObject3D : Node3D
     }
 
     private static nint __mb_set_collision_mask;
-    public void SetCollisionMask(uint mask)
+    internal void SetCollisionMask(uint mask)
     {
         var __mb = __mb_set_collision_mask;
         if (__mb == 0)
@@ -16084,7 +18456,7 @@ public unsafe partial class CollisionObject3D : Node3D
     }
 
     private static nint __mb_get_collision_mask;
-    public uint GetCollisionMask()
+    internal uint GetCollisionMask()
     {
         var __mb = __mb_get_collision_mask;
         if (__mb == 0)
@@ -16171,7 +18543,7 @@ public unsafe partial class CollisionObject3D : Node3D
     }
 
     private static nint __mb_set_collision_priority;
-    public void SetCollisionPriority(float priority)
+    internal void SetCollisionPriority(float priority)
     {
         var __mb = __mb_set_collision_priority;
         if (__mb == 0)
@@ -16187,7 +18559,7 @@ public unsafe partial class CollisionObject3D : Node3D
     }
 
     private static nint __mb_get_collision_priority;
-    public float GetCollisionPriority()
+    internal float GetCollisionPriority()
     {
         var __mb = __mb_get_collision_priority;
         if (__mb == 0)
@@ -16202,7 +18574,7 @@ public unsafe partial class CollisionObject3D : Node3D
     }
 
     private static nint __mb_set_disable_mode;
-    public void SetDisableMode(CollisionObject3D.DisableMode mode)
+    internal void SetDisableMode(CollisionObject3D.DisableModeEnum mode)
     {
         var __mb = __mb_set_disable_mode;
         if (__mb == 0)
@@ -16218,7 +18590,7 @@ public unsafe partial class CollisionObject3D : Node3D
     }
 
     private static nint __mb_get_disable_mode;
-    public CollisionObject3D.DisableMode GetDisableMode()
+    internal CollisionObject3D.DisableModeEnum GetDisableMode()
     {
         var __mb = __mb_get_disable_mode;
         if (__mb == 0)
@@ -16229,11 +18601,11 @@ public unsafe partial class CollisionObject3D : Node3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CollisionObject3D.DisableMode)__ret;
+        return (CollisionObject3D.DisableModeEnum)__ret;
     }
 
     private static nint __mb_set_ray_pickable;
-    public void SetRayPickable(bool rayPickable)
+    internal void SetRayPickable(bool rayPickable)
     {
         var __mb = __mb_set_ray_pickable;
         if (__mb == 0)
@@ -16249,7 +18621,7 @@ public unsafe partial class CollisionObject3D : Node3D
     }
 
     private static nint __mb_is_ray_pickable;
-    public bool IsRayPickable()
+    internal bool IsRayPickable()
     {
         var __mb = __mb_is_ray_pickable;
         if (__mb == 0)
@@ -16264,7 +18636,7 @@ public unsafe partial class CollisionObject3D : Node3D
     }
 
     private static nint __mb_set_capture_input_on_drag;
-    public void SetCaptureInputOnDrag(bool enable)
+    internal void SetCaptureInputOnDrag(bool enable)
     {
         var __mb = __mb_set_capture_input_on_drag;
         if (__mb == 0)
@@ -16280,7 +18652,7 @@ public unsafe partial class CollisionObject3D : Node3D
     }
 
     private static nint __mb_get_capture_input_on_drag;
-    public bool GetCaptureInputOnDrag()
+    internal bool GetCaptureInputOnDrag()
     {
         var __mb = __mb_get_capture_input_on_drag;
         if (__mb == 0)
@@ -16604,14 +18976,44 @@ public unsafe partial class CollisionPolygon2D : Node2D
         ClassRegistry.AttachNew(this, "CollisionPolygon2D");
     }
 
-    public enum BuildMode : long
+    public enum BuildModeEnum : long
     {
         BUILD_SOLIDS = 0,
         BUILD_SEGMENTS = 1,
     }
 
+    public CollisionPolygon2D.BuildModeEnum BuildMode
+    {
+        get => GetBuildMode();
+        set => SetBuildMode(value);
+    }
+
+    public bool Disabled
+    {
+        get => IsDisabled();
+        set => SetDisabled(value);
+    }
+
+    public bool OneWayCollision
+    {
+        get => IsOneWayCollisionEnabled();
+        set => SetOneWayCollision(value);
+    }
+
+    public float OneWayCollisionMargin
+    {
+        get => GetOneWayCollisionMargin();
+        set => SetOneWayCollisionMargin(value);
+    }
+
+    public Vector2 OneWayCollisionDirection
+    {
+        get => GetOneWayCollisionDirection();
+        set => SetOneWayCollisionDirection(value);
+    }
+
     private static nint __mb_set_build_mode;
-    public void SetBuildMode(CollisionPolygon2D.BuildMode buildMode)
+    internal void SetBuildMode(CollisionPolygon2D.BuildModeEnum buildMode)
     {
         var __mb = __mb_set_build_mode;
         if (__mb == 0)
@@ -16627,7 +19029,7 @@ public unsafe partial class CollisionPolygon2D : Node2D
     }
 
     private static nint __mb_get_build_mode;
-    public CollisionPolygon2D.BuildMode GetBuildMode()
+    internal CollisionPolygon2D.BuildModeEnum GetBuildMode()
     {
         var __mb = __mb_get_build_mode;
         if (__mb == 0)
@@ -16638,11 +19040,11 @@ public unsafe partial class CollisionPolygon2D : Node2D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CollisionPolygon2D.BuildMode)__ret;
+        return (CollisionPolygon2D.BuildModeEnum)__ret;
     }
 
     private static nint __mb_set_disabled;
-    public void SetDisabled(bool disabled)
+    internal void SetDisabled(bool disabled)
     {
         var __mb = __mb_set_disabled;
         if (__mb == 0)
@@ -16658,7 +19060,7 @@ public unsafe partial class CollisionPolygon2D : Node2D
     }
 
     private static nint __mb_is_disabled;
-    public bool IsDisabled()
+    internal bool IsDisabled()
     {
         var __mb = __mb_is_disabled;
         if (__mb == 0)
@@ -16673,7 +19075,7 @@ public unsafe partial class CollisionPolygon2D : Node2D
     }
 
     private static nint __mb_set_one_way_collision;
-    public void SetOneWayCollision(bool enabled)
+    internal void SetOneWayCollision(bool enabled)
     {
         var __mb = __mb_set_one_way_collision;
         if (__mb == 0)
@@ -16689,7 +19091,7 @@ public unsafe partial class CollisionPolygon2D : Node2D
     }
 
     private static nint __mb_is_one_way_collision_enabled;
-    public bool IsOneWayCollisionEnabled()
+    internal bool IsOneWayCollisionEnabled()
     {
         var __mb = __mb_is_one_way_collision_enabled;
         if (__mb == 0)
@@ -16704,7 +19106,7 @@ public unsafe partial class CollisionPolygon2D : Node2D
     }
 
     private static nint __mb_set_one_way_collision_margin;
-    public void SetOneWayCollisionMargin(float margin)
+    internal void SetOneWayCollisionMargin(float margin)
     {
         var __mb = __mb_set_one_way_collision_margin;
         if (__mb == 0)
@@ -16720,7 +19122,7 @@ public unsafe partial class CollisionPolygon2D : Node2D
     }
 
     private static nint __mb_get_one_way_collision_margin;
-    public float GetOneWayCollisionMargin()
+    internal float GetOneWayCollisionMargin()
     {
         var __mb = __mb_get_one_way_collision_margin;
         if (__mb == 0)
@@ -16735,7 +19137,7 @@ public unsafe partial class CollisionPolygon2D : Node2D
     }
 
     private static nint __mb_set_one_way_collision_direction;
-    public void SetOneWayCollisionDirection(Vector2 direction)
+    internal void SetOneWayCollisionDirection(Vector2 direction)
     {
         var __mb = __mb_set_one_way_collision_direction;
         if (__mb == 0)
@@ -16751,7 +19153,7 @@ public unsafe partial class CollisionPolygon2D : Node2D
     }
 
     private static nint __mb_get_one_way_collision_direction;
-    public Vector2 GetOneWayCollisionDirection()
+    internal Vector2 GetOneWayCollisionDirection()
     {
         var __mb = __mb_get_one_way_collision_direction;
         if (__mb == 0)
@@ -16775,8 +19177,38 @@ public unsafe partial class CollisionPolygon3D : Node3D
         ClassRegistry.AttachNew(this, "CollisionPolygon3D");
     }
 
+    public float Depth
+    {
+        get => GetDepth();
+        set => SetDepth(value);
+    }
+
+    public bool Disabled
+    {
+        get => IsDisabled();
+        set => SetDisabled(value);
+    }
+
+    public float Margin
+    {
+        get => GetMargin();
+        set => SetMargin(value);
+    }
+
+    public Color DebugColor
+    {
+        get => GetDebugColor();
+        set => SetDebugColor(value);
+    }
+
+    public bool DebugFill
+    {
+        get => GetEnableDebugFill();
+        set => SetEnableDebugFill(value);
+    }
+
     private static nint __mb_set_depth;
-    public void SetDepth(float depth)
+    internal void SetDepth(float depth)
     {
         var __mb = __mb_set_depth;
         if (__mb == 0)
@@ -16792,7 +19224,7 @@ public unsafe partial class CollisionPolygon3D : Node3D
     }
 
     private static nint __mb_get_depth;
-    public float GetDepth()
+    internal float GetDepth()
     {
         var __mb = __mb_get_depth;
         if (__mb == 0)
@@ -16807,7 +19239,7 @@ public unsafe partial class CollisionPolygon3D : Node3D
     }
 
     private static nint __mb_set_disabled;
-    public void SetDisabled(bool disabled)
+    internal void SetDisabled(bool disabled)
     {
         var __mb = __mb_set_disabled;
         if (__mb == 0)
@@ -16823,7 +19255,7 @@ public unsafe partial class CollisionPolygon3D : Node3D
     }
 
     private static nint __mb_is_disabled;
-    public bool IsDisabled()
+    internal bool IsDisabled()
     {
         var __mb = __mb_is_disabled;
         if (__mb == 0)
@@ -16838,7 +19270,7 @@ public unsafe partial class CollisionPolygon3D : Node3D
     }
 
     private static nint __mb_set_debug_color;
-    public void SetDebugColor(Color color)
+    internal void SetDebugColor(Color color)
     {
         var __mb = __mb_set_debug_color;
         if (__mb == 0)
@@ -16854,7 +19286,7 @@ public unsafe partial class CollisionPolygon3D : Node3D
     }
 
     private static nint __mb_get_debug_color;
-    public Color GetDebugColor()
+    internal Color GetDebugColor()
     {
         var __mb = __mb_get_debug_color;
         if (__mb == 0)
@@ -16869,7 +19301,7 @@ public unsafe partial class CollisionPolygon3D : Node3D
     }
 
     private static nint __mb_set_enable_debug_fill;
-    public void SetEnableDebugFill(bool enable)
+    internal void SetEnableDebugFill(bool enable)
     {
         var __mb = __mb_set_enable_debug_fill;
         if (__mb == 0)
@@ -16885,7 +19317,7 @@ public unsafe partial class CollisionPolygon3D : Node3D
     }
 
     private static nint __mb_get_enable_debug_fill;
-    public bool GetEnableDebugFill()
+    internal bool GetEnableDebugFill()
     {
         var __mb = __mb_get_enable_debug_fill;
         if (__mb == 0)
@@ -16900,7 +19332,7 @@ public unsafe partial class CollisionPolygon3D : Node3D
     }
 
     private static nint __mb_set_margin;
-    public void SetMargin(float margin)
+    internal void SetMargin(float margin)
     {
         var __mb = __mb_set_margin;
         if (__mb == 0)
@@ -16916,7 +19348,7 @@ public unsafe partial class CollisionPolygon3D : Node3D
     }
 
     private static nint __mb_get_margin;
-    public float GetMargin()
+    internal float GetMargin()
     {
         var __mb = __mb_get_margin;
         if (__mb == 0)
@@ -16940,8 +19372,44 @@ public unsafe partial class CollisionShape2D : Node2D
         ClassRegistry.AttachNew(this, "CollisionShape2D");
     }
 
+    public Shape2D? Shape
+    {
+        get => GetShape();
+        set => SetShape(value);
+    }
+
+    public bool Disabled
+    {
+        get => IsDisabled();
+        set => SetDisabled(value);
+    }
+
+    public bool OneWayCollision
+    {
+        get => IsOneWayCollisionEnabled();
+        set => SetOneWayCollision(value);
+    }
+
+    public float OneWayCollisionMargin
+    {
+        get => GetOneWayCollisionMargin();
+        set => SetOneWayCollisionMargin(value);
+    }
+
+    public Vector2 OneWayCollisionDirection
+    {
+        get => GetOneWayCollisionDirection();
+        set => SetOneWayCollisionDirection(value);
+    }
+
+    public Color DebugColor
+    {
+        get => GetDebugColor();
+        set => SetDebugColor(value);
+    }
+
     private static nint __mb_set_shape;
-    public void SetShape(Shape2D? shape)
+    internal void SetShape(Shape2D? shape)
     {
         var __mb = __mb_set_shape;
         if (__mb == 0)
@@ -16957,7 +19425,7 @@ public unsafe partial class CollisionShape2D : Node2D
     }
 
     private static nint __mb_get_shape;
-    public Shape2D? GetShape()
+    internal Shape2D? GetShape()
     {
         var __mb = __mb_get_shape;
         if (__mb == 0)
@@ -16972,7 +19440,7 @@ public unsafe partial class CollisionShape2D : Node2D
     }
 
     private static nint __mb_set_disabled;
-    public void SetDisabled(bool disabled)
+    internal void SetDisabled(bool disabled)
     {
         var __mb = __mb_set_disabled;
         if (__mb == 0)
@@ -16988,7 +19456,7 @@ public unsafe partial class CollisionShape2D : Node2D
     }
 
     private static nint __mb_is_disabled;
-    public bool IsDisabled()
+    internal bool IsDisabled()
     {
         var __mb = __mb_is_disabled;
         if (__mb == 0)
@@ -17003,7 +19471,7 @@ public unsafe partial class CollisionShape2D : Node2D
     }
 
     private static nint __mb_set_one_way_collision;
-    public void SetOneWayCollision(bool enabled)
+    internal void SetOneWayCollision(bool enabled)
     {
         var __mb = __mb_set_one_way_collision;
         if (__mb == 0)
@@ -17019,7 +19487,7 @@ public unsafe partial class CollisionShape2D : Node2D
     }
 
     private static nint __mb_is_one_way_collision_enabled;
-    public bool IsOneWayCollisionEnabled()
+    internal bool IsOneWayCollisionEnabled()
     {
         var __mb = __mb_is_one_way_collision_enabled;
         if (__mb == 0)
@@ -17034,7 +19502,7 @@ public unsafe partial class CollisionShape2D : Node2D
     }
 
     private static nint __mb_set_one_way_collision_margin;
-    public void SetOneWayCollisionMargin(float margin)
+    internal void SetOneWayCollisionMargin(float margin)
     {
         var __mb = __mb_set_one_way_collision_margin;
         if (__mb == 0)
@@ -17050,7 +19518,7 @@ public unsafe partial class CollisionShape2D : Node2D
     }
 
     private static nint __mb_get_one_way_collision_margin;
-    public float GetOneWayCollisionMargin()
+    internal float GetOneWayCollisionMargin()
     {
         var __mb = __mb_get_one_way_collision_margin;
         if (__mb == 0)
@@ -17065,7 +19533,7 @@ public unsafe partial class CollisionShape2D : Node2D
     }
 
     private static nint __mb_set_one_way_collision_direction;
-    public void SetOneWayCollisionDirection(Vector2 direction)
+    internal void SetOneWayCollisionDirection(Vector2 direction)
     {
         var __mb = __mb_set_one_way_collision_direction;
         if (__mb == 0)
@@ -17081,7 +19549,7 @@ public unsafe partial class CollisionShape2D : Node2D
     }
 
     private static nint __mb_get_one_way_collision_direction;
-    public Vector2 GetOneWayCollisionDirection()
+    internal Vector2 GetOneWayCollisionDirection()
     {
         var __mb = __mb_get_one_way_collision_direction;
         if (__mb == 0)
@@ -17096,7 +19564,7 @@ public unsafe partial class CollisionShape2D : Node2D
     }
 
     private static nint __mb_set_debug_color;
-    public void SetDebugColor(Color color)
+    internal void SetDebugColor(Color color)
     {
         var __mb = __mb_set_debug_color;
         if (__mb == 0)
@@ -17112,7 +19580,7 @@ public unsafe partial class CollisionShape2D : Node2D
     }
 
     private static nint __mb_get_debug_color;
-    public Color GetDebugColor()
+    internal Color GetDebugColor()
     {
         var __mb = __mb_get_debug_color;
         if (__mb == 0)
@@ -17136,6 +19604,30 @@ public unsafe partial class CollisionShape3D : Node3D
         ClassRegistry.AttachNew(this, "CollisionShape3D");
     }
 
+    public Shape3D? Shape
+    {
+        get => GetShape();
+        set => SetShape(value);
+    }
+
+    public bool Disabled
+    {
+        get => IsDisabled();
+        set => SetDisabled(value);
+    }
+
+    public Color DebugColor
+    {
+        get => GetDebugColor();
+        set => SetDebugColor(value);
+    }
+
+    public bool DebugFill
+    {
+        get => GetEnableDebugFill();
+        set => SetEnableDebugFill(value);
+    }
+
     private static nint __mb_resource_changed;
     public void ResourceChanged(Resource? resource)
     {
@@ -17153,7 +19645,7 @@ public unsafe partial class CollisionShape3D : Node3D
     }
 
     private static nint __mb_set_shape;
-    public void SetShape(Shape3D? shape)
+    internal void SetShape(Shape3D? shape)
     {
         var __mb = __mb_set_shape;
         if (__mb == 0)
@@ -17169,7 +19661,7 @@ public unsafe partial class CollisionShape3D : Node3D
     }
 
     private static nint __mb_get_shape;
-    public Shape3D? GetShape()
+    internal Shape3D? GetShape()
     {
         var __mb = __mb_get_shape;
         if (__mb == 0)
@@ -17184,7 +19676,7 @@ public unsafe partial class CollisionShape3D : Node3D
     }
 
     private static nint __mb_set_disabled;
-    public void SetDisabled(bool enable)
+    internal void SetDisabled(bool enable)
     {
         var __mb = __mb_set_disabled;
         if (__mb == 0)
@@ -17200,7 +19692,7 @@ public unsafe partial class CollisionShape3D : Node3D
     }
 
     private static nint __mb_is_disabled;
-    public bool IsDisabled()
+    internal bool IsDisabled()
     {
         var __mb = __mb_is_disabled;
         if (__mb == 0)
@@ -17228,7 +19720,7 @@ public unsafe partial class CollisionShape3D : Node3D
     }
 
     private static nint __mb_set_debug_color;
-    public void SetDebugColor(Color color)
+    internal void SetDebugColor(Color color)
     {
         var __mb = __mb_set_debug_color;
         if (__mb == 0)
@@ -17244,7 +19736,7 @@ public unsafe partial class CollisionShape3D : Node3D
     }
 
     private static nint __mb_get_debug_color;
-    public Color GetDebugColor()
+    internal Color GetDebugColor()
     {
         var __mb = __mb_get_debug_color;
         if (__mb == 0)
@@ -17259,7 +19751,7 @@ public unsafe partial class CollisionShape3D : Node3D
     }
 
     private static nint __mb_set_enable_debug_fill;
-    public void SetEnableDebugFill(bool enable)
+    internal void SetEnableDebugFill(bool enable)
     {
         var __mb = __mb_set_enable_debug_fill;
         if (__mb == 0)
@@ -17275,7 +19767,7 @@ public unsafe partial class CollisionShape3D : Node3D
     }
 
     private static nint __mb_get_enable_debug_fill;
-    public bool GetEnableDebugFill()
+    internal bool GetEnableDebugFill()
     {
         var __mb = __mb_get_enable_debug_fill;
         if (__mb == 0)
@@ -17329,8 +19821,80 @@ public unsafe partial class ColorPicker : VBoxContainer
         SHAPE_OK_HL_RECTANGLE = 6,
     }
 
+    public Color Color
+    {
+        get => GetPickColor();
+        set => SetPickColor(value);
+    }
+
+    public bool EditAlpha
+    {
+        get => IsEditingAlpha();
+        set => SetEditAlpha(value);
+    }
+
+    public bool EditIntensity
+    {
+        get => IsEditingIntensity();
+        set => SetEditIntensity(value);
+    }
+
+    public ColorPicker.ColorModeType ColorMode
+    {
+        get => GetColorMode();
+        set => SetColorMode(value);
+    }
+
+    public bool DeferredMode
+    {
+        get => IsDeferredMode();
+        set => SetDeferredMode(value);
+    }
+
+    public ColorPicker.PickerShapeType PickerShape
+    {
+        get => GetPickerShape();
+        set => SetPickerShape(value);
+    }
+
+    public bool CanAddSwatches
+    {
+        get => AreSwatchesEnabled();
+        set => SetCanAddSwatches(value);
+    }
+
+    public bool SamplerVisible
+    {
+        get => IsSamplerVisible();
+        set => SetSamplerVisible(value);
+    }
+
+    public bool ColorModesVisible
+    {
+        get => AreModesVisible();
+        set => SetModesVisible(value);
+    }
+
+    public bool SlidersVisible
+    {
+        get => AreSlidersVisible();
+        set => SetSlidersVisible(value);
+    }
+
+    public bool HexVisible
+    {
+        get => IsHexVisible();
+        set => SetHexVisible(value);
+    }
+
+    public bool PresetsVisible
+    {
+        get => ArePresetsVisible();
+        set => SetPresetsVisible(value);
+    }
+
     private static nint __mb_set_pick_color;
-    public void SetPickColor(Color color)
+    internal void SetPickColor(Color color)
     {
         var __mb = __mb_set_pick_color;
         if (__mb == 0)
@@ -17346,7 +19910,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_get_pick_color;
-    public Color GetPickColor()
+    internal Color GetPickColor()
     {
         var __mb = __mb_get_pick_color;
         if (__mb == 0)
@@ -17361,7 +19925,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_set_deferred_mode;
-    public void SetDeferredMode(bool mode)
+    internal void SetDeferredMode(bool mode)
     {
         var __mb = __mb_set_deferred_mode;
         if (__mb == 0)
@@ -17377,7 +19941,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_is_deferred_mode;
-    public bool IsDeferredMode()
+    internal bool IsDeferredMode()
     {
         var __mb = __mb_is_deferred_mode;
         if (__mb == 0)
@@ -17392,7 +19956,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_set_color_mode;
-    public void SetColorMode(ColorPicker.ColorModeType colorMode)
+    internal void SetColorMode(ColorPicker.ColorModeType colorMode)
     {
         var __mb = __mb_set_color_mode;
         if (__mb == 0)
@@ -17408,7 +19972,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_get_color_mode;
-    public ColorPicker.ColorModeType GetColorMode()
+    internal ColorPicker.ColorModeType GetColorMode()
     {
         var __mb = __mb_get_color_mode;
         if (__mb == 0)
@@ -17423,7 +19987,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_set_edit_alpha;
-    public void SetEditAlpha(bool show)
+    internal void SetEditAlpha(bool show)
     {
         var __mb = __mb_set_edit_alpha;
         if (__mb == 0)
@@ -17439,7 +20003,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_is_editing_alpha;
-    public bool IsEditingAlpha()
+    internal bool IsEditingAlpha()
     {
         var __mb = __mb_is_editing_alpha;
         if (__mb == 0)
@@ -17454,7 +20018,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_set_edit_intensity;
-    public void SetEditIntensity(bool show)
+    internal void SetEditIntensity(bool show)
     {
         var __mb = __mb_set_edit_intensity;
         if (__mb == 0)
@@ -17470,7 +20034,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_is_editing_intensity;
-    public bool IsEditingIntensity()
+    internal bool IsEditingIntensity()
     {
         var __mb = __mb_is_editing_intensity;
         if (__mb == 0)
@@ -17485,7 +20049,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_set_can_add_swatches;
-    public void SetCanAddSwatches(bool enabled)
+    internal void SetCanAddSwatches(bool enabled)
     {
         var __mb = __mb_set_can_add_swatches;
         if (__mb == 0)
@@ -17501,7 +20065,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_are_swatches_enabled;
-    public bool AreSwatchesEnabled()
+    internal bool AreSwatchesEnabled()
     {
         var __mb = __mb_are_swatches_enabled;
         if (__mb == 0)
@@ -17516,7 +20080,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_set_presets_visible;
-    public void SetPresetsVisible(bool visible)
+    internal void SetPresetsVisible(bool visible)
     {
         var __mb = __mb_set_presets_visible;
         if (__mb == 0)
@@ -17532,7 +20096,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_are_presets_visible;
-    public bool ArePresetsVisible()
+    internal bool ArePresetsVisible()
     {
         var __mb = __mb_are_presets_visible;
         if (__mb == 0)
@@ -17547,7 +20111,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_set_modes_visible;
-    public void SetModesVisible(bool visible)
+    internal void SetModesVisible(bool visible)
     {
         var __mb = __mb_set_modes_visible;
         if (__mb == 0)
@@ -17563,7 +20127,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_are_modes_visible;
-    public bool AreModesVisible()
+    internal bool AreModesVisible()
     {
         var __mb = __mb_are_modes_visible;
         if (__mb == 0)
@@ -17578,7 +20142,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_set_sampler_visible;
-    public void SetSamplerVisible(bool visible)
+    internal void SetSamplerVisible(bool visible)
     {
         var __mb = __mb_set_sampler_visible;
         if (__mb == 0)
@@ -17594,7 +20158,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_is_sampler_visible;
-    public bool IsSamplerVisible()
+    internal bool IsSamplerVisible()
     {
         var __mb = __mb_is_sampler_visible;
         if (__mb == 0)
@@ -17609,7 +20173,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_set_sliders_visible;
-    public void SetSlidersVisible(bool visible)
+    internal void SetSlidersVisible(bool visible)
     {
         var __mb = __mb_set_sliders_visible;
         if (__mb == 0)
@@ -17625,7 +20189,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_are_sliders_visible;
-    public bool AreSlidersVisible()
+    internal bool AreSlidersVisible()
     {
         var __mb = __mb_are_sliders_visible;
         if (__mb == 0)
@@ -17640,7 +20204,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_set_hex_visible;
-    public void SetHexVisible(bool visible)
+    internal void SetHexVisible(bool visible)
     {
         var __mb = __mb_set_hex_visible;
         if (__mb == 0)
@@ -17656,7 +20220,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_is_hex_visible;
-    public bool IsHexVisible()
+    internal bool IsHexVisible()
     {
         var __mb = __mb_is_hex_visible;
         if (__mb == 0)
@@ -17735,7 +20299,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_set_picker_shape;
-    public void SetPickerShape(ColorPicker.PickerShapeType shape)
+    internal void SetPickerShape(ColorPicker.PickerShapeType shape)
     {
         var __mb = __mb_set_picker_shape;
         if (__mb == 0)
@@ -17751,7 +20315,7 @@ public unsafe partial class ColorPicker : VBoxContainer
     }
 
     private static nint __mb_get_picker_shape;
-    public ColorPicker.PickerShapeType GetPickerShape()
+    internal ColorPicker.PickerShapeType GetPickerShape()
     {
         var __mb = __mb_get_picker_shape;
         if (__mb == 0)
@@ -17775,8 +20339,26 @@ public unsafe partial class ColorPickerButton : Button
         ClassRegistry.AttachNew(this, "ColorPickerButton");
     }
 
+    public Color Color
+    {
+        get => GetPickColor();
+        set => SetPickColor(value);
+    }
+
+    public bool EditAlpha
+    {
+        get => IsEditingAlpha();
+        set => SetEditAlpha(value);
+    }
+
+    public bool EditIntensity
+    {
+        get => IsEditingIntensity();
+        set => SetEditIntensity(value);
+    }
+
     private static nint __mb_set_pick_color;
-    public void SetPickColor(Color color)
+    internal void SetPickColor(Color color)
     {
         var __mb = __mb_set_pick_color;
         if (__mb == 0)
@@ -17792,7 +20374,7 @@ public unsafe partial class ColorPickerButton : Button
     }
 
     private static nint __mb_get_pick_color;
-    public Color GetPickColor()
+    internal Color GetPickColor()
     {
         var __mb = __mb_get_pick_color;
         if (__mb == 0)
@@ -17837,7 +20419,7 @@ public unsafe partial class ColorPickerButton : Button
     }
 
     private static nint __mb_set_edit_alpha;
-    public void SetEditAlpha(bool show)
+    internal void SetEditAlpha(bool show)
     {
         var __mb = __mb_set_edit_alpha;
         if (__mb == 0)
@@ -17853,7 +20435,7 @@ public unsafe partial class ColorPickerButton : Button
     }
 
     private static nint __mb_is_editing_alpha;
-    public bool IsEditingAlpha()
+    internal bool IsEditingAlpha()
     {
         var __mb = __mb_is_editing_alpha;
         if (__mb == 0)
@@ -17868,7 +20450,7 @@ public unsafe partial class ColorPickerButton : Button
     }
 
     private static nint __mb_set_edit_intensity;
-    public void SetEditIntensity(bool show)
+    internal void SetEditIntensity(bool show)
     {
         var __mb = __mb_set_edit_intensity;
         if (__mb == 0)
@@ -17884,7 +20466,7 @@ public unsafe partial class ColorPickerButton : Button
     }
 
     private static nint __mb_is_editing_intensity;
-    public bool IsEditingIntensity()
+    internal bool IsEditingIntensity()
     {
         var __mb = __mb_is_editing_intensity;
         if (__mb == 0)
@@ -17908,8 +20490,14 @@ public unsafe partial class ColorRect : Control
         ClassRegistry.AttachNew(this, "ColorRect");
     }
 
+    public Color Color
+    {
+        get => GetColor();
+        set => SetColor(value);
+    }
+
     private static nint __mb_set_color;
-    public void SetColor(Color color)
+    internal void SetColor(Color color)
     {
         var __mb = __mb_set_color;
         if (__mb == 0)
@@ -17925,7 +20513,7 @@ public unsafe partial class ColorRect : Control
     }
 
     private static nint __mb_get_color;
-    public Color GetColor()
+    internal Color GetColor()
     {
         var __mb = __mb_get_color;
         if (__mb == 0)
@@ -17949,8 +20537,14 @@ public unsafe partial class Compositor : Resource
         ClassRegistry.AttachNew(this, "Compositor");
     }
 
+    public Godot.Collections.Array CompositorEffects
+    {
+        get => GetCompositorEffects();
+        set => SetCompositorEffects(value);
+    }
+
     private static nint __mb_set_compositor_effects;
-    public void SetCompositorEffects(Godot.Collections.Array compositorEffects)
+    internal void SetCompositorEffects(Godot.Collections.Array compositorEffects)
     {
         var __mb = __mb_set_compositor_effects;
         if (__mb == 0)
@@ -17966,7 +20560,7 @@ public unsafe partial class Compositor : Resource
     }
 
     private static nint __mb_get_compositor_effects;
-    public Godot.Collections.Array GetCompositorEffects()
+    internal Godot.Collections.Array GetCompositorEffects()
     {
         var __mb = __mb_get_compositor_effects;
         if (__mb == 0)
@@ -17990,7 +20584,7 @@ public unsafe partial class CompositorEffect : Resource
         ClassRegistry.AttachNew(this, "CompositorEffect");
     }
 
-    public enum EffectCallbackType : long
+    public enum EffectCallbackTypeEnum : long
     {
         EFFECT_CALLBACK_TYPE_PRE_OPAQUE = 0,
         EFFECT_CALLBACK_TYPE_POST_OPAQUE = 1,
@@ -18000,8 +20594,50 @@ public unsafe partial class CompositorEffect : Resource
         EFFECT_CALLBACK_TYPE_MAX = 5,
     }
 
+    public bool Enabled
+    {
+        get => GetEnabled();
+        set => SetEnabled(value);
+    }
+
+    public CompositorEffect.EffectCallbackTypeEnum EffectCallbackType
+    {
+        get => GetEffectCallbackType();
+        set => SetEffectCallbackType(value);
+    }
+
+    public bool AccessResolvedColor
+    {
+        get => GetAccessResolvedColor();
+        set => SetAccessResolvedColor(value);
+    }
+
+    public bool AccessResolvedDepth
+    {
+        get => GetAccessResolvedDepth();
+        set => SetAccessResolvedDepth(value);
+    }
+
+    public bool NeedsMotionVectors
+    {
+        get => GetNeedsMotionVectors();
+        set => SetNeedsMotionVectors(value);
+    }
+
+    public bool NeedsNormalRoughness
+    {
+        get => GetNeedsNormalRoughness();
+        set => SetNeedsNormalRoughness(value);
+    }
+
+    public bool NeedsSeparateSpecular
+    {
+        get => GetNeedsSeparateSpecular();
+        set => SetNeedsSeparateSpecular(value);
+    }
+
     private static nint __mb_set_enabled;
-    public void SetEnabled(bool enabled)
+    internal void SetEnabled(bool enabled)
     {
         var __mb = __mb_set_enabled;
         if (__mb == 0)
@@ -18017,7 +20653,7 @@ public unsafe partial class CompositorEffect : Resource
     }
 
     private static nint __mb_get_enabled;
-    public bool GetEnabled()
+    internal bool GetEnabled()
     {
         var __mb = __mb_get_enabled;
         if (__mb == 0)
@@ -18032,7 +20668,7 @@ public unsafe partial class CompositorEffect : Resource
     }
 
     private static nint __mb_set_effect_callback_type;
-    public void SetEffectCallbackType(CompositorEffect.EffectCallbackType effectCallbackType)
+    internal void SetEffectCallbackType(CompositorEffect.EffectCallbackTypeEnum effectCallbackType)
     {
         var __mb = __mb_set_effect_callback_type;
         if (__mb == 0)
@@ -18048,7 +20684,7 @@ public unsafe partial class CompositorEffect : Resource
     }
 
     private static nint __mb_get_effect_callback_type;
-    public CompositorEffect.EffectCallbackType GetEffectCallbackType()
+    internal CompositorEffect.EffectCallbackTypeEnum GetEffectCallbackType()
     {
         var __mb = __mb_get_effect_callback_type;
         if (__mb == 0)
@@ -18059,11 +20695,11 @@ public unsafe partial class CompositorEffect : Resource
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CompositorEffect.EffectCallbackType)__ret;
+        return (CompositorEffect.EffectCallbackTypeEnum)__ret;
     }
 
     private static nint __mb_set_access_resolved_color;
-    public void SetAccessResolvedColor(bool enable)
+    internal void SetAccessResolvedColor(bool enable)
     {
         var __mb = __mb_set_access_resolved_color;
         if (__mb == 0)
@@ -18079,7 +20715,7 @@ public unsafe partial class CompositorEffect : Resource
     }
 
     private static nint __mb_get_access_resolved_color;
-    public bool GetAccessResolvedColor()
+    internal bool GetAccessResolvedColor()
     {
         var __mb = __mb_get_access_resolved_color;
         if (__mb == 0)
@@ -18094,7 +20730,7 @@ public unsafe partial class CompositorEffect : Resource
     }
 
     private static nint __mb_set_access_resolved_depth;
-    public void SetAccessResolvedDepth(bool enable)
+    internal void SetAccessResolvedDepth(bool enable)
     {
         var __mb = __mb_set_access_resolved_depth;
         if (__mb == 0)
@@ -18110,7 +20746,7 @@ public unsafe partial class CompositorEffect : Resource
     }
 
     private static nint __mb_get_access_resolved_depth;
-    public bool GetAccessResolvedDepth()
+    internal bool GetAccessResolvedDepth()
     {
         var __mb = __mb_get_access_resolved_depth;
         if (__mb == 0)
@@ -18125,7 +20761,7 @@ public unsafe partial class CompositorEffect : Resource
     }
 
     private static nint __mb_set_needs_motion_vectors;
-    public void SetNeedsMotionVectors(bool enable)
+    internal void SetNeedsMotionVectors(bool enable)
     {
         var __mb = __mb_set_needs_motion_vectors;
         if (__mb == 0)
@@ -18141,7 +20777,7 @@ public unsafe partial class CompositorEffect : Resource
     }
 
     private static nint __mb_get_needs_motion_vectors;
-    public bool GetNeedsMotionVectors()
+    internal bool GetNeedsMotionVectors()
     {
         var __mb = __mb_get_needs_motion_vectors;
         if (__mb == 0)
@@ -18156,7 +20792,7 @@ public unsafe partial class CompositorEffect : Resource
     }
 
     private static nint __mb_set_needs_normal_roughness;
-    public void SetNeedsNormalRoughness(bool enable)
+    internal void SetNeedsNormalRoughness(bool enable)
     {
         var __mb = __mb_set_needs_normal_roughness;
         if (__mb == 0)
@@ -18172,7 +20808,7 @@ public unsafe partial class CompositorEffect : Resource
     }
 
     private static nint __mb_get_needs_normal_roughness;
-    public bool GetNeedsNormalRoughness()
+    internal bool GetNeedsNormalRoughness()
     {
         var __mb = __mb_get_needs_normal_roughness;
         if (__mb == 0)
@@ -18187,7 +20823,7 @@ public unsafe partial class CompositorEffect : Resource
     }
 
     private static nint __mb_set_needs_separate_specular;
-    public void SetNeedsSeparateSpecular(bool enable)
+    internal void SetNeedsSeparateSpecular(bool enable)
     {
         var __mb = __mb_set_needs_separate_specular;
         if (__mb == 0)
@@ -18203,7 +20839,7 @@ public unsafe partial class CompositorEffect : Resource
     }
 
     private static nint __mb_get_needs_separate_specular;
-    public bool GetNeedsSeparateSpecular()
+    internal bool GetNeedsSeparateSpecular()
     {
         var __mb = __mb_get_needs_separate_specular;
         if (__mb == 0)
@@ -18262,8 +20898,14 @@ public unsafe partial class CompressedTexture2D : Texture2D
         ClassRegistry.AttachNew(this, "CompressedTexture2D");
     }
 
+    public string LoadPath
+    {
+        get => GetLoadPath();
+        set => Load(value);
+    }
+
     private static nint __mb_load;
-    public Error Load(string path)
+    internal Error Load(string path)
     {
         var __mb = __mb_load;
         if (__mb == 0)
@@ -18282,7 +20924,7 @@ public unsafe partial class CompressedTexture2D : Texture2D
     }
 
     private static nint __mb_get_load_path;
-    public string GetLoadPath()
+    internal string GetLoadPath()
     {
         var __mb = __mb_get_load_path;
         if (__mb == 0)
@@ -18316,8 +20958,14 @@ public unsafe partial class CompressedTexture3D : Texture3D
         ClassRegistry.AttachNew(this, "CompressedTexture3D");
     }
 
+    public string LoadPath
+    {
+        get => GetLoadPath();
+        set => Load(value);
+    }
+
     private static nint __mb_load;
-    public Error Load(string path)
+    internal Error Load(string path)
     {
         var __mb = __mb_load;
         if (__mb == 0)
@@ -18336,7 +20984,7 @@ public unsafe partial class CompressedTexture3D : Texture3D
     }
 
     private static nint __mb_get_load_path;
-    public string GetLoadPath()
+    internal string GetLoadPath()
     {
         var __mb = __mb_get_load_path;
         if (__mb == 0)
@@ -18355,8 +21003,14 @@ public unsafe partial class CompressedTextureLayered : TextureLayered
 {
     internal CompressedTextureLayered(nint ptr, bool rc) : base(ptr, rc) { }
 
+    public string LoadPath
+    {
+        get => GetLoadPath();
+        set => Load(value);
+    }
+
     private static nint __mb_load;
-    public Error Load(string path)
+    internal Error Load(string path)
     {
         var __mb = __mb_load;
         if (__mb == 0)
@@ -18375,7 +21029,7 @@ public unsafe partial class CompressedTextureLayered : TextureLayered
     }
 
     private static nint __mb_get_load_path;
-    public string GetLoadPath()
+    internal string GetLoadPath()
     {
         var __mb = __mb_get_load_path;
         if (__mb == 0)
@@ -18409,8 +21063,14 @@ public unsafe partial class ConcavePolygonShape3D : Shape3D
         ClassRegistry.AttachNew(this, "ConcavePolygonShape3D");
     }
 
+    public bool BackfaceCollision
+    {
+        get => IsBackfaceCollisionEnabled();
+        set => SetBackfaceCollisionEnabled(value);
+    }
+
     private static nint __mb_set_backface_collision_enabled;
-    public void SetBackfaceCollisionEnabled(bool enabled)
+    internal void SetBackfaceCollisionEnabled(bool enabled)
     {
         var __mb = __mb_set_backface_collision_enabled;
         if (__mb == 0)
@@ -18426,7 +21086,7 @@ public unsafe partial class ConcavePolygonShape3D : Shape3D
     }
 
     private static nint __mb_is_backface_collision_enabled;
-    public bool IsBackfaceCollisionEnabled()
+    internal bool IsBackfaceCollisionEnabled()
     {
         var __mb = __mb_is_backface_collision_enabled;
         if (__mb == 0)
@@ -18460,8 +21120,38 @@ public unsafe partial class ConeTwistJoint3D : Joint3D
         PARAM_MAX = 5,
     }
 
+    public float SwingSpan
+    {
+        get => GetParam(((ConeTwistJoint3D.Param)(0)));
+        set => SetParam(((ConeTwistJoint3D.Param)(0)), value);
+    }
+
+    public float TwistSpan
+    {
+        get => GetParam(((ConeTwistJoint3D.Param)(1)));
+        set => SetParam(((ConeTwistJoint3D.Param)(1)), value);
+    }
+
+    public float Bias
+    {
+        get => GetParam(((ConeTwistJoint3D.Param)(2)));
+        set => SetParam(((ConeTwistJoint3D.Param)(2)), value);
+    }
+
+    public float Softness
+    {
+        get => GetParam(((ConeTwistJoint3D.Param)(3)));
+        set => SetParam(((ConeTwistJoint3D.Param)(3)), value);
+    }
+
+    public float Relaxation
+    {
+        get => GetParam(((ConeTwistJoint3D.Param)(4)));
+        set => SetParam(((ConeTwistJoint3D.Param)(4)), value);
+    }
+
     private static nint __mb_set_param;
-    public void SetParam(ConeTwistJoint3D.Param param, float value)
+    internal void SetParam(ConeTwistJoint3D.Param param, float value)
     {
         var __mb = __mb_set_param;
         if (__mb == 0)
@@ -18479,7 +21169,7 @@ public unsafe partial class ConeTwistJoint3D : Joint3D
     }
 
     private static nint __mb_get_param;
-    public float GetParam(ConeTwistJoint3D.Param param)
+    internal float GetParam(ConeTwistJoint3D.Param param)
     {
         var __mb = __mb_get_param;
         if (__mb == 0)
@@ -18769,6 +21459,12 @@ public unsafe partial class ConfirmationDialog : AcceptDialog
         ClassRegistry.AttachNew(this, "ConfirmationDialog");
     }
 
+    public string CancelButtonText
+    {
+        get => GetCancelButtonText();
+        set => SetCancelButtonText(value);
+    }
+
     private static nint __mb_get_cancel_button;
     public Button? GetCancelButton()
     {
@@ -18785,7 +21481,7 @@ public unsafe partial class ConfirmationDialog : AcceptDialog
     }
 
     private static nint __mb_set_cancel_button_text;
-    public void SetCancelButtonText(string text)
+    internal void SetCancelButtonText(string text)
     {
         var __mb = __mb_set_cancel_button_text;
         if (__mb == 0)
@@ -18802,7 +21498,7 @@ public unsafe partial class ConfirmationDialog : AcceptDialog
     }
 
     private static nint __mb_get_cancel_button_text;
-    public string GetCancelButtonText()
+    internal string GetCancelButtonText()
     {
         var __mb = __mb_get_cancel_button_text;
         if (__mb == 0)
@@ -18824,6 +21520,12 @@ public unsafe partial class Container : Control
     public Container() : this(0, false)
     {
         ClassRegistry.AttachNew(this, "Container");
+    }
+
+    public bool AccessibilityRegion
+    {
+        get => IsAccessibilityRegion();
+        set => SetAccessibilityRegion(value);
     }
 
     private static nint __mb_queue_sort;
@@ -18858,7 +21560,7 @@ public unsafe partial class Container : Control
     }
 
     private static nint __mb_set_accessibility_region;
-    public void SetAccessibilityRegion(bool region)
+    internal void SetAccessibilityRegion(bool region)
     {
         var __mb = __mb_set_accessibility_region;
         if (__mb == 0)
@@ -18874,7 +21576,7 @@ public unsafe partial class Container : Control
     }
 
     private static nint __mb_is_accessibility_region;
-    public bool IsAccessibilityRegion()
+    internal bool IsAccessibilityRegion()
     {
         var __mb = __mb_is_accessibility_region;
         if (__mb == 0)
@@ -18898,7 +21600,7 @@ public unsafe partial class Control : CanvasItem
         ClassRegistry.AttachNew(this, "Control");
     }
 
-    public enum FocusMode : long
+    public enum FocusModeEnum : long
     {
         FOCUS_NONE = 0,
         FOCUS_CLICK = 1,
@@ -18906,14 +21608,14 @@ public unsafe partial class Control : CanvasItem
         FOCUS_ACCESSIBILITY = 3,
     }
 
-    public enum FocusBehaviorRecursive : long
+    public enum FocusBehaviorRecursiveEnum : long
     {
         FOCUS_BEHAVIOR_INHERITED = 0,
         FOCUS_BEHAVIOR_DISABLED = 1,
         FOCUS_BEHAVIOR_ENABLED = 2,
     }
 
-    public enum MouseBehaviorRecursive : long
+    public enum MouseBehaviorRecursiveEnum : long
     {
         MOUSE_BEHAVIOR_INHERITED = 0,
         MOUSE_BEHAVIOR_DISABLED = 1,
@@ -18980,7 +21682,7 @@ public unsafe partial class Control : CanvasItem
         SIZE_SHRINK_END = 8,
     }
 
-    public enum MouseFilter : long
+    public enum MouseFilterEnum : long
     {
         MOUSE_FILTER_STOP = 0,
         MOUSE_FILTER_PASS = 1,
@@ -19000,7 +21702,7 @@ public unsafe partial class Control : CanvasItem
         ANCHOR_END = 1,
     }
 
-    public enum LayoutDirection : long
+    public enum LayoutDirectionEnum : long
     {
         LAYOUT_DIRECTION_INHERITED = 0,
         LAYOUT_DIRECTION_APPLICATION_LOCALE = 1,
@@ -19017,6 +21719,344 @@ public unsafe partial class Control : CanvasItem
         TEXT_DIRECTION_AUTO = 0,
         TEXT_DIRECTION_LTR = 1,
         TEXT_DIRECTION_RTL = 2,
+    }
+
+    public Vector2 CustomMinimumSize
+    {
+        get => GetCustomMinimumSize();
+        set => SetCustomMinimumSize(value);
+    }
+
+    public Vector2 CustomMaximumSize
+    {
+        get => GetCustomMaximumSize();
+        set => SetCustomMaximumSize(value);
+    }
+
+    public bool PropagateMaximumSize
+    {
+        get => IsPropagatingMaximumSize();
+        set => SetPropagateMaximumSize(value);
+    }
+
+    public bool ClipContents
+    {
+        get => IsClippingContents();
+        set => SetClipContents(value);
+    }
+
+    public float AnchorLeft => GetAnchor(((Side)(0)));
+
+    public float AnchorTop => GetAnchor(((Side)(1)));
+
+    public float AnchorRight => GetAnchor(((Side)(2)));
+
+    public float AnchorBottom => GetAnchor(((Side)(3)));
+
+    public float OffsetLeft
+    {
+        get => GetOffset(((Side)(0)));
+        set => SetOffset(((Side)(0)), value);
+    }
+
+    public float OffsetTop
+    {
+        get => GetOffset(((Side)(1)));
+        set => SetOffset(((Side)(1)), value);
+    }
+
+    public float OffsetRight
+    {
+        get => GetOffset(((Side)(2)));
+        set => SetOffset(((Side)(2)), value);
+    }
+
+    public float OffsetBottom
+    {
+        get => GetOffset(((Side)(3)));
+        set => SetOffset(((Side)(3)), value);
+    }
+
+    public Control.GrowDirection GrowHorizontal
+    {
+        get => GetHGrowDirection();
+        set => SetHGrowDirection(value);
+    }
+
+    public Control.GrowDirection GrowVertical
+    {
+        get => GetVGrowDirection();
+        set => SetVGrowDirection(value);
+    }
+
+    public Vector2 Size => GetSize();
+
+    public Vector2 Position => GetPosition();
+
+    public Vector2 GlobalPosition => GetGlobalPosition();
+
+    public float Rotation
+    {
+        get => GetRotation();
+        set => SetRotation(value);
+    }
+
+    public float RotationDegrees
+    {
+        get => GetRotationDegrees();
+        set => SetRotationDegrees(value);
+    }
+
+    public Vector2 Scale
+    {
+        get => GetScale();
+        set => SetScale(value);
+    }
+
+    public Vector2 PivotOffset
+    {
+        get => GetPivotOffset();
+        set => SetPivotOffset(value);
+    }
+
+    public Vector2 PivotOffsetRatio
+    {
+        get => GetPivotOffsetRatio();
+        set => SetPivotOffsetRatio(value);
+    }
+
+    public Control.SizeFlags SizeFlagsHorizontal
+    {
+        get => GetHSizeFlags();
+        set => SetHSizeFlags(value);
+    }
+
+    public Control.SizeFlags SizeFlagsVertical
+    {
+        get => GetVSizeFlags();
+        set => SetVSizeFlags(value);
+    }
+
+    public float SizeFlagsStretchRatio
+    {
+        get => GetStretchRatio();
+        set => SetStretchRatio(value);
+    }
+
+    public bool OffsetTransformEnabled
+    {
+        get => IsOffsetTransformEnabled();
+        set => SetOffsetTransformEnabled(value);
+    }
+
+    public Vector2 OffsetTransformPosition
+    {
+        get => GetOffsetTransformPosition();
+        set => SetOffsetTransformPosition(value);
+    }
+
+    public Vector2 OffsetTransformPositionRatio
+    {
+        get => GetOffsetTransformPositionRatio();
+        set => SetOffsetTransformPositionRatio(value);
+    }
+
+    public Vector2 OffsetTransformScale
+    {
+        get => GetOffsetTransformScale();
+        set => SetOffsetTransformScale(value);
+    }
+
+    public float OffsetTransformRotation
+    {
+        get => GetOffsetTransformRotation();
+        set => SetOffsetTransformRotation(value);
+    }
+
+    public Vector2 OffsetTransformPivot
+    {
+        get => GetOffsetTransformPivot();
+        set => SetOffsetTransformPivot(value);
+    }
+
+    public Vector2 OffsetTransformPivotRatio
+    {
+        get => GetOffsetTransformPivotRatio();
+        set => SetOffsetTransformPivotRatio(value);
+    }
+
+    public bool OffsetTransformVisualOnly
+    {
+        get => IsOffsetTransformVisualOnly();
+        set => SetOffsetTransformVisualOnly(value);
+    }
+
+    public bool LocalizeNumeralSystem
+    {
+        get => IsLocalizingNumeralSystem();
+        set => SetLocalizeNumeralSystem(value);
+    }
+
+    public Control.LayoutDirectionEnum LayoutDirection
+    {
+        get => GetLayoutDirection();
+        set => SetLayoutDirection(value);
+    }
+
+    public string TranslationContext
+    {
+        get => GetTranslationContext();
+        set => SetTranslationContext(value);
+    }
+
+    public bool AutoTranslate
+    {
+        get => IsAutoTranslating();
+        set => SetAutoTranslate(value);
+    }
+
+    public string TooltipText
+    {
+        get => GetTooltipText();
+        set => SetTooltipText(value);
+    }
+
+    public Node.AutoTranslateModeEnum TooltipAutoTranslateMode
+    {
+        get => GetTooltipAutoTranslateMode();
+        set => SetTooltipAutoTranslateMode(value);
+    }
+
+    public NodePath FocusNeighborLeft
+    {
+        get => GetFocusNeighbor(((Side)(0)));
+        set => SetFocusNeighbor(((Side)(0)), value);
+    }
+
+    public NodePath FocusNeighborTop
+    {
+        get => GetFocusNeighbor(((Side)(1)));
+        set => SetFocusNeighbor(((Side)(1)), value);
+    }
+
+    public NodePath FocusNeighborRight
+    {
+        get => GetFocusNeighbor(((Side)(2)));
+        set => SetFocusNeighbor(((Side)(2)), value);
+    }
+
+    public NodePath FocusNeighborBottom
+    {
+        get => GetFocusNeighbor(((Side)(3)));
+        set => SetFocusNeighbor(((Side)(3)), value);
+    }
+
+    public NodePath FocusNext
+    {
+        get => GetFocusNext();
+        set => SetFocusNext(value);
+    }
+
+    public NodePath FocusPrevious
+    {
+        get => GetFocusPrevious();
+        set => SetFocusPrevious(value);
+    }
+
+    public Control.FocusModeEnum FocusMode
+    {
+        get => GetFocusMode();
+        set => SetFocusMode(value);
+    }
+
+    public Control.FocusBehaviorRecursiveEnum FocusBehaviorRecursive
+    {
+        get => GetFocusBehaviorRecursive();
+        set => SetFocusBehaviorRecursive(value);
+    }
+
+    public Control.MouseFilterEnum MouseFilter
+    {
+        get => GetMouseFilter();
+        set => SetMouseFilter(value);
+    }
+
+    public Control.MouseBehaviorRecursiveEnum MouseBehaviorRecursive
+    {
+        get => GetMouseBehaviorRecursive();
+        set => SetMouseBehaviorRecursive(value);
+    }
+
+    public bool MouseForcePassScrollEvents
+    {
+        get => IsForcePassScrollEvents();
+        set => SetForcePassScrollEvents(value);
+    }
+
+    public Control.CursorShape MouseDefaultCursorShape
+    {
+        get => GetDefaultCursorShape();
+        set => SetDefaultCursorShape(value);
+    }
+
+    public Node? ShortcutContext
+    {
+        get => GetShortcutContext();
+        set => SetShortcutContext(value);
+    }
+
+    public string AccessibilityName
+    {
+        get => GetAccessibilityName();
+        set => SetAccessibilityName(value);
+    }
+
+    public string AccessibilityDescription
+    {
+        get => GetAccessibilityDescription();
+        set => SetAccessibilityDescription(value);
+    }
+
+    public AccessibilityServer.AccessibilityLiveMode AccessibilityLive
+    {
+        get => GetAccessibilityLive();
+        set => SetAccessibilityLive(value);
+    }
+
+    public Godot.Collections.Array AccessibilityControlsNodes
+    {
+        get => GetAccessibilityControlsNodes();
+        set => SetAccessibilityControlsNodes(value);
+    }
+
+    public Godot.Collections.Array AccessibilityDescribedByNodes
+    {
+        get => GetAccessibilityDescribedByNodes();
+        set => SetAccessibilityDescribedByNodes(value);
+    }
+
+    public Godot.Collections.Array AccessibilityLabeledByNodes
+    {
+        get => GetAccessibilityLabeledByNodes();
+        set => SetAccessibilityLabeledByNodes(value);
+    }
+
+    public Godot.Collections.Array AccessibilityFlowToNodes
+    {
+        get => GetAccessibilityFlowToNodes();
+        set => SetAccessibilityFlowToNodes(value);
+    }
+
+    public Theme? Theme
+    {
+        get => GetTheme();
+        set => SetTheme(value);
+    }
+
+    public string ThemeTypeVariation
+    {
+        get => GetThemeTypeVariation();
+        set => SetThemeTypeVariation(value);
     }
 
     private static nint __mb_accept_event;
@@ -19093,7 +22133,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_propagate_maximum_size;
-    public void SetPropagateMaximumSize(bool enable)
+    internal void SetPropagateMaximumSize(bool enable)
     {
         var __mb = __mb_set_propagate_maximum_size;
         if (__mb == 0)
@@ -19109,7 +22149,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_is_propagating_maximum_size;
-    public bool IsPropagatingMaximumSize()
+    internal bool IsPropagatingMaximumSize()
     {
         var __mb = __mb_is_propagating_maximum_size;
         if (__mb == 0)
@@ -19219,7 +22259,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_anchor;
-    public float GetAnchor(Side side)
+    internal float GetAnchor(Side side)
     {
         var __mb = __mb_get_anchor;
         if (__mb == 0)
@@ -19237,7 +22277,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_offset;
-    public void SetOffset(Side side, float offset)
+    internal void SetOffset(Side side, float offset)
     {
         var __mb = __mb_set_offset;
         if (__mb == 0)
@@ -19255,7 +22295,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_offset;
-    public float GetOffset(Side offset)
+    internal float GetOffset(Side offset)
     {
         var __mb = __mb_get_offset;
         if (__mb == 0)
@@ -19376,7 +22416,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_custom_maximum_size;
-    public void SetCustomMaximumSize(Vector2 size)
+    internal void SetCustomMaximumSize(Vector2 size)
     {
         var __mb = __mb_set_custom_maximum_size;
         if (__mb == 0)
@@ -19392,7 +22432,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_custom_minimum_size;
-    public void SetCustomMinimumSize(Vector2 size)
+    internal void SetCustomMinimumSize(Vector2 size)
     {
         var __mb = __mb_set_custom_minimum_size;
         if (__mb == 0)
@@ -19426,7 +22466,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_rotation;
-    public void SetRotation(float radians)
+    internal void SetRotation(float radians)
     {
         var __mb = __mb_set_rotation;
         if (__mb == 0)
@@ -19442,7 +22482,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_rotation_degrees;
-    public void SetRotationDegrees(float degrees)
+    internal void SetRotationDegrees(float degrees)
     {
         var __mb = __mb_set_rotation_degrees;
         if (__mb == 0)
@@ -19458,7 +22498,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_scale;
-    public void SetScale(Vector2 scale)
+    internal void SetScale(Vector2 scale)
     {
         var __mb = __mb_set_scale;
         if (__mb == 0)
@@ -19474,7 +22514,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_pivot_offset;
-    public void SetPivotOffset(Vector2 pivotOffset)
+    internal void SetPivotOffset(Vector2 pivotOffset)
     {
         var __mb = __mb_set_pivot_offset;
         if (__mb == 0)
@@ -19490,7 +22530,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_pivot_offset_ratio;
-    public void SetPivotOffsetRatio(Vector2 ratio)
+    internal void SetPivotOffsetRatio(Vector2 ratio)
     {
         var __mb = __mb_set_pivot_offset_ratio;
         if (__mb == 0)
@@ -19536,7 +22576,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_position;
-    public Vector2 GetPosition()
+    internal Vector2 GetPosition()
     {
         var __mb = __mb_get_position;
         if (__mb == 0)
@@ -19551,7 +22591,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_size;
-    public Vector2 GetSize()
+    internal Vector2 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -19566,7 +22606,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_rotation;
-    public float GetRotation()
+    internal float GetRotation()
     {
         var __mb = __mb_get_rotation;
         if (__mb == 0)
@@ -19581,7 +22621,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_rotation_degrees;
-    public float GetRotationDegrees()
+    internal float GetRotationDegrees()
     {
         var __mb = __mb_get_rotation_degrees;
         if (__mb == 0)
@@ -19596,7 +22636,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_scale;
-    public Vector2 GetScale()
+    internal Vector2 GetScale()
     {
         var __mb = __mb_get_scale;
         if (__mb == 0)
@@ -19611,7 +22651,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_pivot_offset;
-    public Vector2 GetPivotOffset()
+    internal Vector2 GetPivotOffset()
     {
         var __mb = __mb_get_pivot_offset;
         if (__mb == 0)
@@ -19626,7 +22666,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_pivot_offset_ratio;
-    public Vector2 GetPivotOffsetRatio()
+    internal Vector2 GetPivotOffsetRatio()
     {
         var __mb = __mb_get_pivot_offset_ratio;
         if (__mb == 0)
@@ -19656,7 +22696,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_custom_maximum_size;
-    public Vector2 GetCustomMaximumSize()
+    internal Vector2 GetCustomMaximumSize()
     {
         var __mb = __mb_get_custom_maximum_size;
         if (__mb == 0)
@@ -19671,7 +22711,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_custom_minimum_size;
-    public Vector2 GetCustomMinimumSize()
+    internal Vector2 GetCustomMinimumSize()
     {
         var __mb = __mb_get_custom_minimum_size;
         if (__mb == 0)
@@ -19701,7 +22741,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_global_position;
-    public Vector2 GetGlobalPosition()
+    internal Vector2 GetGlobalPosition()
     {
         var __mb = __mb_get_global_position;
         if (__mb == 0)
@@ -19761,7 +22801,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_focus_mode;
-    public void SetFocusMode(Control.FocusMode mode)
+    internal void SetFocusMode(Control.FocusModeEnum mode)
     {
         var __mb = __mb_set_focus_mode;
         if (__mb == 0)
@@ -19777,7 +22817,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_focus_mode;
-    public Control.FocusMode GetFocusMode()
+    internal Control.FocusModeEnum GetFocusMode()
     {
         var __mb = __mb_get_focus_mode;
         if (__mb == 0)
@@ -19788,11 +22828,11 @@ public unsafe partial class Control : CanvasItem
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Control.FocusMode)__ret;
+        return (Control.FocusModeEnum)__ret;
     }
 
     private static nint __mb_get_focus_mode_with_override;
-    public Control.FocusMode GetFocusModeWithOverride()
+    public Control.FocusModeEnum GetFocusModeWithOverride()
     {
         var __mb = __mb_get_focus_mode_with_override;
         if (__mb == 0)
@@ -19803,11 +22843,11 @@ public unsafe partial class Control : CanvasItem
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Control.FocusMode)__ret;
+        return (Control.FocusModeEnum)__ret;
     }
 
     private static nint __mb_set_focus_behavior_recursive;
-    public void SetFocusBehaviorRecursive(Control.FocusBehaviorRecursive focusBehaviorRecursive)
+    internal void SetFocusBehaviorRecursive(Control.FocusBehaviorRecursiveEnum focusBehaviorRecursive)
     {
         var __mb = __mb_set_focus_behavior_recursive;
         if (__mb == 0)
@@ -19823,7 +22863,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_focus_behavior_recursive;
-    public Control.FocusBehaviorRecursive GetFocusBehaviorRecursive()
+    internal Control.FocusBehaviorRecursiveEnum GetFocusBehaviorRecursive()
     {
         var __mb = __mb_get_focus_behavior_recursive;
         if (__mb == 0)
@@ -19834,7 +22874,7 @@ public unsafe partial class Control : CanvasItem
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Control.FocusBehaviorRecursive)__ret;
+        return (Control.FocusBehaviorRecursiveEnum)__ret;
     }
 
     private static nint __mb_has_focus;
@@ -19933,7 +22973,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_h_size_flags;
-    public void SetHSizeFlags(Control.SizeFlags flags)
+    internal void SetHSizeFlags(Control.SizeFlags flags)
     {
         var __mb = __mb_set_h_size_flags;
         if (__mb == 0)
@@ -19949,7 +22989,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_h_size_flags;
-    public Control.SizeFlags GetHSizeFlags()
+    internal Control.SizeFlags GetHSizeFlags()
     {
         var __mb = __mb_get_h_size_flags;
         if (__mb == 0)
@@ -19964,7 +23004,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_stretch_ratio;
-    public void SetStretchRatio(float ratio)
+    internal void SetStretchRatio(float ratio)
     {
         var __mb = __mb_set_stretch_ratio;
         if (__mb == 0)
@@ -19980,7 +23020,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_stretch_ratio;
-    public float GetStretchRatio()
+    internal float GetStretchRatio()
     {
         var __mb = __mb_get_stretch_ratio;
         if (__mb == 0)
@@ -19995,7 +23035,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_v_size_flags;
-    public void SetVSizeFlags(Control.SizeFlags flags)
+    internal void SetVSizeFlags(Control.SizeFlags flags)
     {
         var __mb = __mb_set_v_size_flags;
         if (__mb == 0)
@@ -20011,7 +23051,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_v_size_flags;
-    public Control.SizeFlags GetVSizeFlags()
+    internal Control.SizeFlags GetVSizeFlags()
     {
         var __mb = __mb_get_v_size_flags;
         if (__mb == 0)
@@ -20026,7 +23066,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_offset_transform_enabled;
-    public void SetOffsetTransformEnabled(bool enabled)
+    internal void SetOffsetTransformEnabled(bool enabled)
     {
         var __mb = __mb_set_offset_transform_enabled;
         if (__mb == 0)
@@ -20042,7 +23082,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_is_offset_transform_enabled;
-    public bool IsOffsetTransformEnabled()
+    internal bool IsOffsetTransformEnabled()
     {
         var __mb = __mb_is_offset_transform_enabled;
         if (__mb == 0)
@@ -20057,7 +23097,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_offset_transform_position;
-    public void SetOffsetTransformPosition(Vector2 offset)
+    internal void SetOffsetTransformPosition(Vector2 offset)
     {
         var __mb = __mb_set_offset_transform_position;
         if (__mb == 0)
@@ -20073,7 +23113,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_offset_transform_position;
-    public Vector2 GetOffsetTransformPosition()
+    internal Vector2 GetOffsetTransformPosition()
     {
         var __mb = __mb_get_offset_transform_position;
         if (__mb == 0)
@@ -20088,7 +23128,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_offset_transform_position_ratio;
-    public void SetOffsetTransformPositionRatio(Vector2 offset)
+    internal void SetOffsetTransformPositionRatio(Vector2 offset)
     {
         var __mb = __mb_set_offset_transform_position_ratio;
         if (__mb == 0)
@@ -20104,7 +23144,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_offset_transform_position_ratio;
-    public Vector2 GetOffsetTransformPositionRatio()
+    internal Vector2 GetOffsetTransformPositionRatio()
     {
         var __mb = __mb_get_offset_transform_position_ratio;
         if (__mb == 0)
@@ -20119,7 +23159,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_offset_transform_scale;
-    public void SetOffsetTransformScale(Vector2 scale)
+    internal void SetOffsetTransformScale(Vector2 scale)
     {
         var __mb = __mb_set_offset_transform_scale;
         if (__mb == 0)
@@ -20135,7 +23175,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_offset_transform_scale;
-    public Vector2 GetOffsetTransformScale()
+    internal Vector2 GetOffsetTransformScale()
     {
         var __mb = __mb_get_offset_transform_scale;
         if (__mb == 0)
@@ -20150,7 +23190,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_offset_transform_rotation;
-    public void SetOffsetTransformRotation(float rotation)
+    internal void SetOffsetTransformRotation(float rotation)
     {
         var __mb = __mb_set_offset_transform_rotation;
         if (__mb == 0)
@@ -20166,7 +23206,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_offset_transform_rotation;
-    public float GetOffsetTransformRotation()
+    internal float GetOffsetTransformRotation()
     {
         var __mb = __mb_get_offset_transform_rotation;
         if (__mb == 0)
@@ -20181,7 +23221,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_offset_transform_pivot;
-    public void SetOffsetTransformPivot(Vector2 pivot)
+    internal void SetOffsetTransformPivot(Vector2 pivot)
     {
         var __mb = __mb_set_offset_transform_pivot;
         if (__mb == 0)
@@ -20197,7 +23237,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_offset_transform_pivot;
-    public Vector2 GetOffsetTransformPivot()
+    internal Vector2 GetOffsetTransformPivot()
     {
         var __mb = __mb_get_offset_transform_pivot;
         if (__mb == 0)
@@ -20212,7 +23252,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_offset_transform_pivot_ratio;
-    public void SetOffsetTransformPivotRatio(Vector2 pivot)
+    internal void SetOffsetTransformPivotRatio(Vector2 pivot)
     {
         var __mb = __mb_set_offset_transform_pivot_ratio;
         if (__mb == 0)
@@ -20228,7 +23268,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_offset_transform_pivot_ratio;
-    public Vector2 GetOffsetTransformPivotRatio()
+    internal Vector2 GetOffsetTransformPivotRatio()
     {
         var __mb = __mb_get_offset_transform_pivot_ratio;
         if (__mb == 0)
@@ -20243,7 +23283,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_offset_transform_visual_only;
-    public void SetOffsetTransformVisualOnly(bool enabled)
+    internal void SetOffsetTransformVisualOnly(bool enabled)
     {
         var __mb = __mb_set_offset_transform_visual_only;
         if (__mb == 0)
@@ -20259,7 +23299,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_is_offset_transform_visual_only;
-    public bool IsOffsetTransformVisualOnly()
+    internal bool IsOffsetTransformVisualOnly()
     {
         var __mb = __mb_is_offset_transform_visual_only;
         if (__mb == 0)
@@ -20274,7 +23314,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_theme;
-    public void SetTheme(Theme? theme)
+    internal void SetTheme(Theme? theme)
     {
         var __mb = __mb_set_theme;
         if (__mb == 0)
@@ -20290,7 +23330,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_theme;
-    public Theme? GetTheme()
+    internal Theme? GetTheme()
     {
         var __mb = __mb_get_theme;
         if (__mb == 0)
@@ -20305,7 +23345,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_theme_type_variation;
-    public void SetThemeTypeVariation(string themeType)
+    internal void SetThemeTypeVariation(string themeType)
     {
         var __mb = __mb_set_theme_type_variation;
         if (__mb == 0)
@@ -20321,7 +23361,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_theme_type_variation;
-    public string GetThemeTypeVariation()
+    internal string GetThemeTypeVariation()
     {
         var __mb = __mb_get_theme_type_variation;
         if (__mb == 0)
@@ -20974,7 +24014,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_h_grow_direction;
-    public void SetHGrowDirection(Control.GrowDirection direction)
+    internal void SetHGrowDirection(Control.GrowDirection direction)
     {
         var __mb = __mb_set_h_grow_direction;
         if (__mb == 0)
@@ -20990,7 +24030,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_h_grow_direction;
-    public Control.GrowDirection GetHGrowDirection()
+    internal Control.GrowDirection GetHGrowDirection()
     {
         var __mb = __mb_get_h_grow_direction;
         if (__mb == 0)
@@ -21005,7 +24045,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_v_grow_direction;
-    public void SetVGrowDirection(Control.GrowDirection direction)
+    internal void SetVGrowDirection(Control.GrowDirection direction)
     {
         var __mb = __mb_set_v_grow_direction;
         if (__mb == 0)
@@ -21021,7 +24061,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_v_grow_direction;
-    public Control.GrowDirection GetVGrowDirection()
+    internal Control.GrowDirection GetVGrowDirection()
     {
         var __mb = __mb_get_v_grow_direction;
         if (__mb == 0)
@@ -21036,7 +24076,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_tooltip_auto_translate_mode;
-    public void SetTooltipAutoTranslateMode(Node.AutoTranslateMode mode)
+    internal void SetTooltipAutoTranslateMode(Node.AutoTranslateModeEnum mode)
     {
         var __mb = __mb_set_tooltip_auto_translate_mode;
         if (__mb == 0)
@@ -21052,7 +24092,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_tooltip_auto_translate_mode;
-    public Node.AutoTranslateMode GetTooltipAutoTranslateMode()
+    internal Node.AutoTranslateModeEnum GetTooltipAutoTranslateMode()
     {
         var __mb = __mb_get_tooltip_auto_translate_mode;
         if (__mb == 0)
@@ -21063,11 +24103,11 @@ public unsafe partial class Control : CanvasItem
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Node.AutoTranslateMode)__ret;
+        return (Node.AutoTranslateModeEnum)__ret;
     }
 
     private static nint __mb_set_tooltip_text;
-    public void SetTooltipText(string hint)
+    internal void SetTooltipText(string hint)
     {
         var __mb = __mb_set_tooltip_text;
         if (__mb == 0)
@@ -21084,7 +24124,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_tooltip_text;
-    public string GetTooltipText()
+    internal string GetTooltipText()
     {
         var __mb = __mb_get_tooltip_text;
         if (__mb == 0)
@@ -21117,7 +24157,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_translation_context;
-    public void SetTranslationContext(string context)
+    internal void SetTranslationContext(string context)
     {
         var __mb = __mb_set_translation_context;
         if (__mb == 0)
@@ -21133,7 +24173,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_translation_context;
-    public string GetTranslationContext()
+    internal string GetTranslationContext()
     {
         var __mb = __mb_get_translation_context;
         if (__mb == 0)
@@ -21148,7 +24188,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_default_cursor_shape;
-    public void SetDefaultCursorShape(Control.CursorShape shape)
+    internal void SetDefaultCursorShape(Control.CursorShape shape)
     {
         var __mb = __mb_set_default_cursor_shape;
         if (__mb == 0)
@@ -21164,7 +24204,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_default_cursor_shape;
-    public Control.CursorShape GetDefaultCursorShape()
+    internal Control.CursorShape GetDefaultCursorShape()
     {
         var __mb = __mb_get_default_cursor_shape;
         if (__mb == 0)
@@ -21197,7 +24237,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_focus_neighbor;
-    public void SetFocusNeighbor(Side side, NodePath neighbor)
+    internal void SetFocusNeighbor(Side side, NodePath neighbor)
     {
         var __mb = __mb_set_focus_neighbor;
         if (__mb == 0)
@@ -21215,7 +24255,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_focus_neighbor;
-    public NodePath GetFocusNeighbor(Side side)
+    internal NodePath GetFocusNeighbor(Side side)
     {
         var __mb = __mb_get_focus_neighbor;
         if (__mb == 0)
@@ -21233,7 +24273,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_focus_next;
-    public void SetFocusNext(NodePath next)
+    internal void SetFocusNext(NodePath next)
     {
         var __mb = __mb_set_focus_next;
         if (__mb == 0)
@@ -21249,7 +24289,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_focus_next;
-    public NodePath GetFocusNext()
+    internal NodePath GetFocusNext()
     {
         var __mb = __mb_get_focus_next;
         if (__mb == 0)
@@ -21264,7 +24304,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_focus_previous;
-    public void SetFocusPrevious(NodePath previous)
+    internal void SetFocusPrevious(NodePath previous)
     {
         var __mb = __mb_set_focus_previous;
         if (__mb == 0)
@@ -21280,7 +24320,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_focus_previous;
-    public NodePath GetFocusPrevious()
+    internal NodePath GetFocusPrevious()
     {
         var __mb = __mb_get_focus_previous;
         if (__mb == 0)
@@ -21339,7 +24379,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_accessibility_name;
-    public void SetAccessibilityName(string name)
+    internal void SetAccessibilityName(string name)
     {
         var __mb = __mb_set_accessibility_name;
         if (__mb == 0)
@@ -21356,7 +24396,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_accessibility_name;
-    public string GetAccessibilityName()
+    internal string GetAccessibilityName()
     {
         var __mb = __mb_get_accessibility_name;
         if (__mb == 0)
@@ -21371,7 +24411,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_accessibility_description;
-    public void SetAccessibilityDescription(string description)
+    internal void SetAccessibilityDescription(string description)
     {
         var __mb = __mb_set_accessibility_description;
         if (__mb == 0)
@@ -21388,7 +24428,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_accessibility_description;
-    public string GetAccessibilityDescription()
+    internal string GetAccessibilityDescription()
     {
         var __mb = __mb_get_accessibility_description;
         if (__mb == 0)
@@ -21403,7 +24443,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_accessibility_live;
-    public void SetAccessibilityLive(AccessibilityServer.AccessibilityLiveMode mode)
+    internal void SetAccessibilityLive(AccessibilityServer.AccessibilityLiveMode mode)
     {
         var __mb = __mb_set_accessibility_live;
         if (__mb == 0)
@@ -21419,7 +24459,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_accessibility_live;
-    public AccessibilityServer.AccessibilityLiveMode GetAccessibilityLive()
+    internal AccessibilityServer.AccessibilityLiveMode GetAccessibilityLive()
     {
         var __mb = __mb_get_accessibility_live;
         if (__mb == 0)
@@ -21434,7 +24474,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_accessibility_controls_nodes;
-    public void SetAccessibilityControlsNodes(Godot.Collections.Array nodePath)
+    internal void SetAccessibilityControlsNodes(Godot.Collections.Array nodePath)
     {
         var __mb = __mb_set_accessibility_controls_nodes;
         if (__mb == 0)
@@ -21450,7 +24490,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_accessibility_controls_nodes;
-    public Godot.Collections.Array GetAccessibilityControlsNodes()
+    internal Godot.Collections.Array GetAccessibilityControlsNodes()
     {
         var __mb = __mb_get_accessibility_controls_nodes;
         if (__mb == 0)
@@ -21465,7 +24505,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_accessibility_described_by_nodes;
-    public void SetAccessibilityDescribedByNodes(Godot.Collections.Array nodePath)
+    internal void SetAccessibilityDescribedByNodes(Godot.Collections.Array nodePath)
     {
         var __mb = __mb_set_accessibility_described_by_nodes;
         if (__mb == 0)
@@ -21481,7 +24521,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_accessibility_described_by_nodes;
-    public Godot.Collections.Array GetAccessibilityDescribedByNodes()
+    internal Godot.Collections.Array GetAccessibilityDescribedByNodes()
     {
         var __mb = __mb_get_accessibility_described_by_nodes;
         if (__mb == 0)
@@ -21496,7 +24536,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_accessibility_labeled_by_nodes;
-    public void SetAccessibilityLabeledByNodes(Godot.Collections.Array nodePath)
+    internal void SetAccessibilityLabeledByNodes(Godot.Collections.Array nodePath)
     {
         var __mb = __mb_set_accessibility_labeled_by_nodes;
         if (__mb == 0)
@@ -21512,7 +24552,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_accessibility_labeled_by_nodes;
-    public Godot.Collections.Array GetAccessibilityLabeledByNodes()
+    internal Godot.Collections.Array GetAccessibilityLabeledByNodes()
     {
         var __mb = __mb_get_accessibility_labeled_by_nodes;
         if (__mb == 0)
@@ -21527,7 +24567,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_accessibility_flow_to_nodes;
-    public void SetAccessibilityFlowToNodes(Godot.Collections.Array nodePath)
+    internal void SetAccessibilityFlowToNodes(Godot.Collections.Array nodePath)
     {
         var __mb = __mb_set_accessibility_flow_to_nodes;
         if (__mb == 0)
@@ -21543,7 +24583,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_accessibility_flow_to_nodes;
-    public Godot.Collections.Array GetAccessibilityFlowToNodes()
+    internal Godot.Collections.Array GetAccessibilityFlowToNodes()
     {
         var __mb = __mb_get_accessibility_flow_to_nodes;
         if (__mb == 0)
@@ -21558,7 +24598,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_mouse_filter;
-    public void SetMouseFilter(Control.MouseFilter filter)
+    internal void SetMouseFilter(Control.MouseFilterEnum filter)
     {
         var __mb = __mb_set_mouse_filter;
         if (__mb == 0)
@@ -21574,7 +24614,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_mouse_filter;
-    public Control.MouseFilter GetMouseFilter()
+    internal Control.MouseFilterEnum GetMouseFilter()
     {
         var __mb = __mb_get_mouse_filter;
         if (__mb == 0)
@@ -21585,11 +24625,11 @@ public unsafe partial class Control : CanvasItem
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Control.MouseFilter)__ret;
+        return (Control.MouseFilterEnum)__ret;
     }
 
     private static nint __mb_get_mouse_filter_with_override;
-    public Control.MouseFilter GetMouseFilterWithOverride()
+    public Control.MouseFilterEnum GetMouseFilterWithOverride()
     {
         var __mb = __mb_get_mouse_filter_with_override;
         if (__mb == 0)
@@ -21600,11 +24640,11 @@ public unsafe partial class Control : CanvasItem
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Control.MouseFilter)__ret;
+        return (Control.MouseFilterEnum)__ret;
     }
 
     private static nint __mb_set_mouse_behavior_recursive;
-    public void SetMouseBehaviorRecursive(Control.MouseBehaviorRecursive mouseBehaviorRecursive)
+    internal void SetMouseBehaviorRecursive(Control.MouseBehaviorRecursiveEnum mouseBehaviorRecursive)
     {
         var __mb = __mb_set_mouse_behavior_recursive;
         if (__mb == 0)
@@ -21620,7 +24660,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_mouse_behavior_recursive;
-    public Control.MouseBehaviorRecursive GetMouseBehaviorRecursive()
+    internal Control.MouseBehaviorRecursiveEnum GetMouseBehaviorRecursive()
     {
         var __mb = __mb_get_mouse_behavior_recursive;
         if (__mb == 0)
@@ -21631,11 +24671,11 @@ public unsafe partial class Control : CanvasItem
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Control.MouseBehaviorRecursive)__ret;
+        return (Control.MouseBehaviorRecursiveEnum)__ret;
     }
 
     private static nint __mb_set_force_pass_scroll_events;
-    public void SetForcePassScrollEvents(bool forcePassScrollEvents)
+    internal void SetForcePassScrollEvents(bool forcePassScrollEvents)
     {
         var __mb = __mb_set_force_pass_scroll_events;
         if (__mb == 0)
@@ -21651,7 +24691,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_is_force_pass_scroll_events;
-    public bool IsForcePassScrollEvents()
+    internal bool IsForcePassScrollEvents()
     {
         var __mb = __mb_is_force_pass_scroll_events;
         if (__mb == 0)
@@ -21666,7 +24706,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_clip_contents;
-    public void SetClipContents(bool enable)
+    internal void SetClipContents(bool enable)
     {
         var __mb = __mb_set_clip_contents;
         if (__mb == 0)
@@ -21682,7 +24722,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_is_clipping_contents;
-    public bool IsClippingContents()
+    internal bool IsClippingContents()
     {
         var __mb = __mb_is_clipping_contents;
         if (__mb == 0)
@@ -21757,7 +24797,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_shortcut_context;
-    public void SetShortcutContext(Node? node)
+    internal void SetShortcutContext(Node? node)
     {
         var __mb = __mb_set_shortcut_context;
         if (__mb == 0)
@@ -21773,7 +24813,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_shortcut_context;
-    public Node? GetShortcutContext()
+    internal Node? GetShortcutContext()
     {
         var __mb = __mb_get_shortcut_context;
         if (__mb == 0)
@@ -21814,7 +24854,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_layout_direction;
-    public void SetLayoutDirection(Control.LayoutDirection direction)
+    internal void SetLayoutDirection(Control.LayoutDirectionEnum direction)
     {
         var __mb = __mb_set_layout_direction;
         if (__mb == 0)
@@ -21830,7 +24870,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_layout_direction;
-    public Control.LayoutDirection GetLayoutDirection()
+    internal Control.LayoutDirectionEnum GetLayoutDirection()
     {
         var __mb = __mb_get_layout_direction;
         if (__mb == 0)
@@ -21841,7 +24881,7 @@ public unsafe partial class Control : CanvasItem
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Control.LayoutDirection)__ret;
+        return (Control.LayoutDirectionEnum)__ret;
     }
 
     private static nint __mb_is_layout_rtl;
@@ -21860,7 +24900,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_auto_translate;
-    public void SetAutoTranslate(bool enable)
+    internal void SetAutoTranslate(bool enable)
     {
         var __mb = __mb_set_auto_translate;
         if (__mb == 0)
@@ -21876,7 +24916,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_is_auto_translating;
-    public bool IsAutoTranslating()
+    internal bool IsAutoTranslating()
     {
         var __mb = __mb_is_auto_translating;
         if (__mb == 0)
@@ -21891,7 +24931,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_localize_numeral_system;
-    public void SetLocalizeNumeralSystem(bool enable)
+    internal void SetLocalizeNumeralSystem(bool enable)
     {
         var __mb = __mb_set_localize_numeral_system;
         if (__mb == 0)
@@ -21907,7 +24947,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_is_localizing_numeral_system;
-    public bool IsLocalizingNumeralSystem()
+    internal bool IsLocalizingNumeralSystem()
     {
         var __mb = __mb_is_localizing_numeral_system;
         if (__mb == 0)
@@ -21929,7 +24969,7 @@ public unsafe partial class Control : CanvasItem
 
     public virtual string _GetTooltip(Vector2 atPosition) => default!;
 
-    public virtual Node.AutoTranslateMode _GetTooltipAutoTranslateModeAt(Vector2 atPosition) => default!;
+    public virtual Node.AutoTranslateModeEnum _GetTooltipAutoTranslateModeAt(Vector2 atPosition) => default!;
 
     public virtual GodotObject? _MakeCustomTooltip(string forText) => default!;
 
@@ -22032,6 +25072,12 @@ public unsafe partial class ConvertTransformModifier3D : BoneConstraint3D
         TRANSFORM_MODE_POSITION = 0,
         TRANSFORM_MODE_ROTATION = 1,
         TRANSFORM_MODE_SCALE = 2,
+    }
+
+    public int SettingCount
+    {
+        get => GetSettingCount();
+        set => SetSettingCount(value);
     }
 
     private static nint __mb_set_apply_transform_mode;
@@ -22368,6 +25414,12 @@ public unsafe partial class CopyTransformModifier3D : BoneConstraint3D
         AXIS_FLAG_Y = 2,
         AXIS_FLAG_Z = 4,
         AXIS_FLAG_ALL = 7,
+    }
+
+    public int SettingCount
+    {
+        get => GetSettingCount();
+        set => SetSettingCount(value);
     }
 
     private static nint __mb_set_copy_flags;
@@ -23102,8 +26154,44 @@ public unsafe partial class Curve : Resource
         TANGENT_MODE_COUNT = 2,
     }
 
+    public float MinDomain
+    {
+        get => GetMinDomain();
+        set => SetMinDomain(value);
+    }
+
+    public float MaxDomain
+    {
+        get => GetMaxDomain();
+        set => SetMaxDomain(value);
+    }
+
+    public float MinValue
+    {
+        get => GetMinValue();
+        set => SetMinValue(value);
+    }
+
+    public float MaxValue
+    {
+        get => GetMaxValue();
+        set => SetMaxValue(value);
+    }
+
+    public int BakeResolution
+    {
+        get => GetBakeResolution();
+        set => SetBakeResolution(value);
+    }
+
+    public int PointCount
+    {
+        get => GetPointCount();
+        set => SetPointCount(value);
+    }
+
     private static nint __mb_get_point_count;
-    public int GetPointCount()
+    internal int GetPointCount()
     {
         var __mb = __mb_get_point_count;
         if (__mb == 0)
@@ -23118,7 +26206,7 @@ public unsafe partial class Curve : Resource
     }
 
     private static nint __mb_set_point_count;
-    public void SetPointCount(int count)
+    internal void SetPointCount(int count)
     {
         var __mb = __mb_set_point_count;
         if (__mb == 0)
@@ -23425,7 +26513,7 @@ public unsafe partial class Curve : Resource
     }
 
     private static nint __mb_get_min_value;
-    public float GetMinValue()
+    internal float GetMinValue()
     {
         var __mb = __mb_get_min_value;
         if (__mb == 0)
@@ -23440,7 +26528,7 @@ public unsafe partial class Curve : Resource
     }
 
     private static nint __mb_set_min_value;
-    public void SetMinValue(float min)
+    internal void SetMinValue(float min)
     {
         var __mb = __mb_set_min_value;
         if (__mb == 0)
@@ -23456,7 +26544,7 @@ public unsafe partial class Curve : Resource
     }
 
     private static nint __mb_get_max_value;
-    public float GetMaxValue()
+    internal float GetMaxValue()
     {
         var __mb = __mb_get_max_value;
         if (__mb == 0)
@@ -23471,7 +26559,7 @@ public unsafe partial class Curve : Resource
     }
 
     private static nint __mb_set_max_value;
-    public void SetMaxValue(float max)
+    internal void SetMaxValue(float max)
     {
         var __mb = __mb_set_max_value;
         if (__mb == 0)
@@ -23502,7 +26590,7 @@ public unsafe partial class Curve : Resource
     }
 
     private static nint __mb_get_min_domain;
-    public float GetMinDomain()
+    internal float GetMinDomain()
     {
         var __mb = __mb_get_min_domain;
         if (__mb == 0)
@@ -23517,7 +26605,7 @@ public unsafe partial class Curve : Resource
     }
 
     private static nint __mb_set_min_domain;
-    public void SetMinDomain(float min)
+    internal void SetMinDomain(float min)
     {
         var __mb = __mb_set_min_domain;
         if (__mb == 0)
@@ -23533,7 +26621,7 @@ public unsafe partial class Curve : Resource
     }
 
     private static nint __mb_get_max_domain;
-    public float GetMaxDomain()
+    internal float GetMaxDomain()
     {
         var __mb = __mb_get_max_domain;
         if (__mb == 0)
@@ -23548,7 +26636,7 @@ public unsafe partial class Curve : Resource
     }
 
     private static nint __mb_set_max_domain;
-    public void SetMaxDomain(float max)
+    internal void SetMaxDomain(float max)
     {
         var __mb = __mb_set_max_domain;
         if (__mb == 0)
@@ -23605,7 +26693,7 @@ public unsafe partial class Curve : Resource
     }
 
     private static nint __mb_get_bake_resolution;
-    public int GetBakeResolution()
+    internal int GetBakeResolution()
     {
         var __mb = __mb_get_bake_resolution;
         if (__mb == 0)
@@ -23620,7 +26708,7 @@ public unsafe partial class Curve : Resource
     }
 
     private static nint __mb_set_bake_resolution;
-    public void SetBakeResolution(int resolution)
+    internal void SetBakeResolution(int resolution)
     {
         var __mb = __mb_set_bake_resolution;
         if (__mb == 0)
@@ -23645,8 +26733,20 @@ public unsafe partial class Curve2D : Resource
         ClassRegistry.AttachNew(this, "Curve2D");
     }
 
+    public float BakeInterval
+    {
+        get => GetBakeInterval();
+        set => SetBakeInterval(value);
+    }
+
+    public int PointCount
+    {
+        get => GetPointCount();
+        set => SetPointCount(value);
+    }
+
     private static nint __mb_get_point_count;
-    public int GetPointCount()
+    internal int GetPointCount()
     {
         var __mb = __mb_get_point_count;
         if (__mb == 0)
@@ -23661,7 +26761,7 @@ public unsafe partial class Curve2D : Resource
     }
 
     private static nint __mb_set_point_count;
-    public void SetPointCount(int count)
+    internal void SetPointCount(int count)
     {
         var __mb = __mb_set_point_count;
         if (__mb == 0)
@@ -23874,7 +26974,7 @@ public unsafe partial class Curve2D : Resource
     }
 
     private static nint __mb_set_bake_interval;
-    public void SetBakeInterval(float distance)
+    internal void SetBakeInterval(float distance)
     {
         var __mb = __mb_set_bake_interval;
         if (__mb == 0)
@@ -23890,7 +26990,7 @@ public unsafe partial class Curve2D : Resource
     }
 
     private static nint __mb_get_bake_interval;
-    public float GetBakeInterval()
+    internal float GetBakeInterval()
     {
         var __mb = __mb_get_bake_interval;
         if (__mb == 0)
@@ -24005,8 +27105,32 @@ public unsafe partial class Curve3D : Resource
         ClassRegistry.AttachNew(this, "Curve3D");
     }
 
+    public bool Closed
+    {
+        get => IsClosed();
+        set => SetClosed(value);
+    }
+
+    public float BakeInterval
+    {
+        get => GetBakeInterval();
+        set => SetBakeInterval(value);
+    }
+
+    public int PointCount
+    {
+        get => GetPointCount();
+        set => SetPointCount(value);
+    }
+
+    public bool UpVectorEnabled
+    {
+        get => IsUpVectorEnabled();
+        set => SetUpVectorEnabled(value);
+    }
+
     private static nint __mb_get_point_count;
-    public int GetPointCount()
+    internal int GetPointCount()
     {
         var __mb = __mb_get_point_count;
         if (__mb == 0)
@@ -24021,7 +27145,7 @@ public unsafe partial class Curve3D : Resource
     }
 
     private static nint __mb_set_point_count;
-    public void SetPointCount(int count)
+    internal void SetPointCount(int count)
     {
         var __mb = __mb_set_point_count;
         if (__mb == 0)
@@ -24270,7 +27394,7 @@ public unsafe partial class Curve3D : Resource
     }
 
     private static nint __mb_set_closed;
-    public void SetClosed(bool closed)
+    internal void SetClosed(bool closed)
     {
         var __mb = __mb_set_closed;
         if (__mb == 0)
@@ -24286,7 +27410,7 @@ public unsafe partial class Curve3D : Resource
     }
 
     private static nint __mb_is_closed;
-    public bool IsClosed()
+    internal bool IsClosed()
     {
         var __mb = __mb_is_closed;
         if (__mb == 0)
@@ -24301,7 +27425,7 @@ public unsafe partial class Curve3D : Resource
     }
 
     private static nint __mb_set_bake_interval;
-    public void SetBakeInterval(float distance)
+    internal void SetBakeInterval(float distance)
     {
         var __mb = __mb_set_bake_interval;
         if (__mb == 0)
@@ -24317,7 +27441,7 @@ public unsafe partial class Curve3D : Resource
     }
 
     private static nint __mb_get_bake_interval;
-    public float GetBakeInterval()
+    internal float GetBakeInterval()
     {
         var __mb = __mb_get_bake_interval;
         if (__mb == 0)
@@ -24332,7 +27456,7 @@ public unsafe partial class Curve3D : Resource
     }
 
     private static nint __mb_set_up_vector_enabled;
-    public void SetUpVectorEnabled(bool enable)
+    internal void SetUpVectorEnabled(bool enable)
     {
         var __mb = __mb_set_up_vector_enabled;
         if (__mb == 0)
@@ -24348,7 +27472,7 @@ public unsafe partial class Curve3D : Resource
     }
 
     private static nint __mb_is_up_vector_enabled;
-    public bool IsUpVectorEnabled()
+    internal bool IsUpVectorEnabled()
     {
         var __mb = __mb_is_up_vector_enabled;
         if (__mb == 0)
@@ -24485,14 +27609,32 @@ public unsafe partial class CurveTexture : Texture2D
         ClassRegistry.AttachNew(this, "CurveTexture");
     }
 
-    public enum TextureMode : long
+    public enum TextureModeEnum : long
     {
         TEXTURE_MODE_RGB = 0,
         TEXTURE_MODE_RED = 1,
     }
 
+    public int Width
+    {
+        get => GetWidth();
+        set => SetWidth(value);
+    }
+
+    public CurveTexture.TextureModeEnum TextureMode
+    {
+        get => GetTextureMode();
+        set => SetTextureMode(value);
+    }
+
+    public Curve? Curve
+    {
+        get => GetCurve();
+        set => SetCurve(value);
+    }
+
     private static nint __mb_set_width;
-    public void SetWidth(int width)
+    internal void SetWidth(int width)
     {
         var __mb = __mb_set_width;
         if (__mb == 0)
@@ -24508,7 +27650,7 @@ public unsafe partial class CurveTexture : Texture2D
     }
 
     private static nint __mb_set_curve;
-    public void SetCurve(Curve? curve)
+    internal void SetCurve(Curve? curve)
     {
         var __mb = __mb_set_curve;
         if (__mb == 0)
@@ -24524,7 +27666,7 @@ public unsafe partial class CurveTexture : Texture2D
     }
 
     private static nint __mb_get_curve;
-    public Curve? GetCurve()
+    internal Curve? GetCurve()
     {
         var __mb = __mb_get_curve;
         if (__mb == 0)
@@ -24539,7 +27681,7 @@ public unsafe partial class CurveTexture : Texture2D
     }
 
     private static nint __mb_set_texture_mode;
-    public void SetTextureMode(CurveTexture.TextureMode textureMode)
+    internal void SetTextureMode(CurveTexture.TextureModeEnum textureMode)
     {
         var __mb = __mb_set_texture_mode;
         if (__mb == 0)
@@ -24555,7 +27697,7 @@ public unsafe partial class CurveTexture : Texture2D
     }
 
     private static nint __mb_get_texture_mode;
-    public CurveTexture.TextureMode GetTextureMode()
+    internal CurveTexture.TextureModeEnum GetTextureMode()
     {
         var __mb = __mb_get_texture_mode;
         if (__mb == 0)
@@ -24566,7 +27708,7 @@ public unsafe partial class CurveTexture : Texture2D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (CurveTexture.TextureMode)__ret;
+        return (CurveTexture.TextureModeEnum)__ret;
     }
 }
 
@@ -24579,8 +27721,32 @@ public unsafe partial class CurveXYZTexture : Texture2D
         ClassRegistry.AttachNew(this, "CurveXYZTexture");
     }
 
+    public int Width
+    {
+        get => GetWidth();
+        set => SetWidth(value);
+    }
+
+    public Curve? CurveX
+    {
+        get => GetCurveX();
+        set => SetCurveX(value);
+    }
+
+    public Curve? CurveY
+    {
+        get => GetCurveY();
+        set => SetCurveY(value);
+    }
+
+    public Curve? CurveZ
+    {
+        get => GetCurveZ();
+        set => SetCurveZ(value);
+    }
+
     private static nint __mb_set_width;
-    public void SetWidth(int width)
+    internal void SetWidth(int width)
     {
         var __mb = __mb_set_width;
         if (__mb == 0)
@@ -24596,7 +27762,7 @@ public unsafe partial class CurveXYZTexture : Texture2D
     }
 
     private static nint __mb_set_curve_x;
-    public void SetCurveX(Curve? curve)
+    internal void SetCurveX(Curve? curve)
     {
         var __mb = __mb_set_curve_x;
         if (__mb == 0)
@@ -24612,7 +27778,7 @@ public unsafe partial class CurveXYZTexture : Texture2D
     }
 
     private static nint __mb_get_curve_x;
-    public Curve? GetCurveX()
+    internal Curve? GetCurveX()
     {
         var __mb = __mb_get_curve_x;
         if (__mb == 0)
@@ -24627,7 +27793,7 @@ public unsafe partial class CurveXYZTexture : Texture2D
     }
 
     private static nint __mb_set_curve_y;
-    public void SetCurveY(Curve? curve)
+    internal void SetCurveY(Curve? curve)
     {
         var __mb = __mb_set_curve_y;
         if (__mb == 0)
@@ -24643,7 +27809,7 @@ public unsafe partial class CurveXYZTexture : Texture2D
     }
 
     private static nint __mb_get_curve_y;
-    public Curve? GetCurveY()
+    internal Curve? GetCurveY()
     {
         var __mb = __mb_get_curve_y;
         if (__mb == 0)
@@ -24658,7 +27824,7 @@ public unsafe partial class CurveXYZTexture : Texture2D
     }
 
     private static nint __mb_set_curve_z;
-    public void SetCurveZ(Curve? curve)
+    internal void SetCurveZ(Curve? curve)
     {
         var __mb = __mb_set_curve_z;
         if (__mb == 0)
@@ -24674,7 +27840,7 @@ public unsafe partial class CurveXYZTexture : Texture2D
     }
 
     private static nint __mb_get_curve_z;
-    public Curve? GetCurveZ()
+    internal Curve? GetCurveZ()
     {
         var __mb = __mb_get_curve_z;
         if (__mb == 0)
@@ -24698,8 +27864,50 @@ public unsafe partial class CylinderMesh : PrimitiveMesh
         ClassRegistry.AttachNew(this, "CylinderMesh");
     }
 
+    public float TopRadius
+    {
+        get => GetTopRadius();
+        set => SetTopRadius(value);
+    }
+
+    public float BottomRadius
+    {
+        get => GetBottomRadius();
+        set => SetBottomRadius(value);
+    }
+
+    public float Height
+    {
+        get => GetHeight();
+        set => SetHeight(value);
+    }
+
+    public int RadialSegments
+    {
+        get => GetRadialSegments();
+        set => SetRadialSegments(value);
+    }
+
+    public int Rings
+    {
+        get => GetRings();
+        set => SetRings(value);
+    }
+
+    public bool CapTop
+    {
+        get => IsCapTop();
+        set => SetCapTop(value);
+    }
+
+    public bool CapBottom
+    {
+        get => IsCapBottom();
+        set => SetCapBottom(value);
+    }
+
     private static nint __mb_set_top_radius;
-    public void SetTopRadius(float radius)
+    internal void SetTopRadius(float radius)
     {
         var __mb = __mb_set_top_radius;
         if (__mb == 0)
@@ -24715,7 +27923,7 @@ public unsafe partial class CylinderMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_top_radius;
-    public float GetTopRadius()
+    internal float GetTopRadius()
     {
         var __mb = __mb_get_top_radius;
         if (__mb == 0)
@@ -24730,7 +27938,7 @@ public unsafe partial class CylinderMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_bottom_radius;
-    public void SetBottomRadius(float radius)
+    internal void SetBottomRadius(float radius)
     {
         var __mb = __mb_set_bottom_radius;
         if (__mb == 0)
@@ -24746,7 +27954,7 @@ public unsafe partial class CylinderMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_bottom_radius;
-    public float GetBottomRadius()
+    internal float GetBottomRadius()
     {
         var __mb = __mb_get_bottom_radius;
         if (__mb == 0)
@@ -24761,7 +27969,7 @@ public unsafe partial class CylinderMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_height;
-    public void SetHeight(float height)
+    internal void SetHeight(float height)
     {
         var __mb = __mb_set_height;
         if (__mb == 0)
@@ -24777,7 +27985,7 @@ public unsafe partial class CylinderMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_height;
-    public float GetHeight()
+    internal float GetHeight()
     {
         var __mb = __mb_get_height;
         if (__mb == 0)
@@ -24792,7 +28000,7 @@ public unsafe partial class CylinderMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_radial_segments;
-    public void SetRadialSegments(int segments)
+    internal void SetRadialSegments(int segments)
     {
         var __mb = __mb_set_radial_segments;
         if (__mb == 0)
@@ -24808,7 +28016,7 @@ public unsafe partial class CylinderMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_radial_segments;
-    public int GetRadialSegments()
+    internal int GetRadialSegments()
     {
         var __mb = __mb_get_radial_segments;
         if (__mb == 0)
@@ -24823,7 +28031,7 @@ public unsafe partial class CylinderMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_rings;
-    public void SetRings(int rings)
+    internal void SetRings(int rings)
     {
         var __mb = __mb_set_rings;
         if (__mb == 0)
@@ -24839,7 +28047,7 @@ public unsafe partial class CylinderMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_rings;
-    public int GetRings()
+    internal int GetRings()
     {
         var __mb = __mb_get_rings;
         if (__mb == 0)
@@ -24854,7 +28062,7 @@ public unsafe partial class CylinderMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_cap_top;
-    public void SetCapTop(bool capTop)
+    internal void SetCapTop(bool capTop)
     {
         var __mb = __mb_set_cap_top;
         if (__mb == 0)
@@ -24870,7 +28078,7 @@ public unsafe partial class CylinderMesh : PrimitiveMesh
     }
 
     private static nint __mb_is_cap_top;
-    public bool IsCapTop()
+    internal bool IsCapTop()
     {
         var __mb = __mb_is_cap_top;
         if (__mb == 0)
@@ -24885,7 +28093,7 @@ public unsafe partial class CylinderMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_cap_bottom;
-    public void SetCapBottom(bool capBottom)
+    internal void SetCapBottom(bool capBottom)
     {
         var __mb = __mb_set_cap_bottom;
         if (__mb == 0)
@@ -24901,7 +28109,7 @@ public unsafe partial class CylinderMesh : PrimitiveMesh
     }
 
     private static nint __mb_is_cap_bottom;
-    public bool IsCapBottom()
+    internal bool IsCapBottom()
     {
         var __mb = __mb_is_cap_bottom;
         if (__mb == 0)
@@ -24925,8 +28133,20 @@ public unsafe partial class CylinderShape3D : Shape3D
         ClassRegistry.AttachNew(this, "CylinderShape3D");
     }
 
+    public float Height
+    {
+        get => GetHeight();
+        set => SetHeight(value);
+    }
+
+    public float Radius
+    {
+        get => GetRadius();
+        set => SetRadius(value);
+    }
+
     private static nint __mb_set_radius;
-    public void SetRadius(float radius)
+    internal void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -24942,7 +28162,7 @@ public unsafe partial class CylinderShape3D : Shape3D
     }
 
     private static nint __mb_get_radius;
-    public float GetRadius()
+    internal float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -24957,7 +28177,7 @@ public unsafe partial class CylinderShape3D : Shape3D
     }
 
     private static nint __mb_set_height;
-    public void SetHeight(float height)
+    internal void SetHeight(float height)
     {
         var __mb = __mb_set_height;
         if (__mb == 0)
@@ -24973,7 +28193,7 @@ public unsafe partial class CylinderShape3D : Shape3D
     }
 
     private static nint __mb_get_height;
-    public float GetHeight()
+    internal float GetHeight()
     {
         var __mb = __mb_get_height;
         if (__mb == 0)

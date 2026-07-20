@@ -152,7 +152,7 @@ public class CollectionsTests(GodotBindingsFixture godot)
     [Fact]
     public void EngineArray_GetChildren_ElementIdentity()
     {
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).GetRoot()!;
+        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
         var child = new Node();
         try
         {
@@ -173,10 +173,10 @@ public class CollectionsTests(GodotBindingsFixture godot)
     [Fact]
     public void NodePath_GetNodeAndToString()
     {
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).GetRoot()!;
+        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
         var main = root.GetNode("Main"); // implicit string -> NodePath
         Assert.NotNull(main);
-        Assert.Equal("Main", main!.GetName());
+        Assert.Equal("Main", main!.Name);
 
         using var path = main.GetPath();
         Assert.Equal("/root/Main", path.ToString());

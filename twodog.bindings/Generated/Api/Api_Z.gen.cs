@@ -26,12 +26,18 @@ public unsafe partial class ZIPPacker : RefCounted
         APPEND_ADDINZIP = 2,
     }
 
-    public enum CompressionLevel : long
+    public enum CompressionLevelEnum : long
     {
         COMPRESSION_DEFAULT = -1,
         COMPRESSION_NONE = 0,
         COMPRESSION_FAST = 1,
         COMPRESSION_BEST = 9,
+    }
+
+    public int CompressionLevel
+    {
+        get => GetCompressionLevel();
+        set => SetCompressionLevel(value);
     }
 
     private static nint __mb_open;
@@ -56,7 +62,7 @@ public unsafe partial class ZIPPacker : RefCounted
     }
 
     private static nint __mb_set_compression_level;
-    public void SetCompressionLevel(int compressionLevel)
+    internal void SetCompressionLevel(int compressionLevel)
     {
         var __mb = __mb_set_compression_level;
         if (__mb == 0)
@@ -72,7 +78,7 @@ public unsafe partial class ZIPPacker : RefCounted
     }
 
     private static nint __mb_get_compression_level;
-    public int GetCompressionLevel()
+    internal int GetCompressionLevel()
     {
         var __mb = __mb_get_compression_level;
         if (__mb == 0)

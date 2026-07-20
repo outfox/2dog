@@ -103,7 +103,7 @@ public class ExtensionClassTests(GodotBindingsFixture godot)
     public void Virtuals_DispatchIntoOverrides()
     {
         EnsureRegistered();
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).GetRoot()!;
+        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
         var node = new TestNode();
         try
         {
@@ -131,7 +131,7 @@ public class ExtensionClassTests(GodotBindingsFixture godot)
         Assert.True(ClassDB.Singleton.ClassExists("TestNodeChild"));
         Assert.True(ClassDB.Singleton.IsParentClass("TestNodeChild", "TestNode"));
 
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).GetRoot()!;
+        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
         var node = new TestNodeChild();
         try
         {

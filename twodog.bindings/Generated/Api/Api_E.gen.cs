@@ -345,6 +345,8 @@ public unsafe partial class ENetMultiplayerPeer : MultiplayerPeer
         ClassRegistry.AttachNew(this, "ENetMultiplayerPeer");
     }
 
+    public ENetConnection? Host => GetHost();
+
     private static nint __mb_create_server;
     public Error CreateServer(int port, int maxClients, int maxChannels, int inBandwidth, int outBandwidth)
     {
@@ -456,7 +458,7 @@ public unsafe partial class ENetMultiplayerPeer : MultiplayerPeer
     }
 
     private static nint __mb_get_host;
-    public ENetConnection? GetHost()
+    internal ENetConnection? GetHost()
     {
         var __mb = __mb_get_host;
         if (__mb == 0)
@@ -1127,6 +1129,78 @@ public unsafe partial class EditorDock : MarginContainer
         DOCK_SLOT_MAX = 11,
     }
 
+    public string Title
+    {
+        get => GetTitle();
+        set => SetTitle(value);
+    }
+
+    public string LayoutKey
+    {
+        get => GetLayoutKey();
+        set => SetLayoutKey(value);
+    }
+
+    public bool Global
+    {
+        get => IsGlobal();
+        set => SetGlobal(value);
+    }
+
+    public bool Transient
+    {
+        get => IsTransient();
+        set => SetTransient(value);
+    }
+
+    public bool Closable
+    {
+        get => IsClosable();
+        set => SetClosable(value);
+    }
+
+    public string IconName
+    {
+        get => GetIconName();
+        set => SetIconName(value);
+    }
+
+    public Texture2D? DockIcon
+    {
+        get => GetDockIcon();
+        set => SetDockIcon(value);
+    }
+
+    public bool ForceShowIcon
+    {
+        get => GetForceShowIcon();
+        set => SetForceShowIcon(value);
+    }
+
+    public Color TitleColor
+    {
+        get => GetTitleColor();
+        set => SetTitleColor(value);
+    }
+
+    public Shortcut? DockShortcut
+    {
+        get => GetDockShortcut();
+        set => SetDockShortcut(value);
+    }
+
+    public EditorDock.DockSlot DefaultSlot
+    {
+        get => GetDefaultSlot();
+        set => SetDefaultSlot(value);
+    }
+
+    public EditorDock.DockLayout AvailableLayouts
+    {
+        get => GetAvailableLayouts();
+        set => SetAvailableLayouts(value);
+    }
+
     private static nint __mb_open;
     public void Open()
     {
@@ -1167,7 +1241,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_set_title;
-    public void SetTitle(string title)
+    internal void SetTitle(string title)
     {
         var __mb = __mb_set_title;
         if (__mb == 0)
@@ -1184,7 +1258,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_get_title;
-    public string GetTitle()
+    internal string GetTitle()
     {
         var __mb = __mb_get_title;
         if (__mb == 0)
@@ -1199,7 +1273,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_set_layout_key;
-    public void SetLayoutKey(string layoutKey)
+    internal void SetLayoutKey(string layoutKey)
     {
         var __mb = __mb_set_layout_key;
         if (__mb == 0)
@@ -1216,7 +1290,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_get_layout_key;
-    public string GetLayoutKey()
+    internal string GetLayoutKey()
     {
         var __mb = __mb_get_layout_key;
         if (__mb == 0)
@@ -1231,7 +1305,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_set_global;
-    public void SetGlobal(bool global)
+    internal void SetGlobal(bool global)
     {
         var __mb = __mb_set_global;
         if (__mb == 0)
@@ -1247,7 +1321,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_is_global;
-    public bool IsGlobal()
+    internal bool IsGlobal()
     {
         var __mb = __mb_is_global;
         if (__mb == 0)
@@ -1262,7 +1336,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_set_transient;
-    public void SetTransient(bool transient)
+    internal void SetTransient(bool transient)
     {
         var __mb = __mb_set_transient;
         if (__mb == 0)
@@ -1278,7 +1352,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_is_transient;
-    public bool IsTransient()
+    internal bool IsTransient()
     {
         var __mb = __mb_is_transient;
         if (__mb == 0)
@@ -1293,7 +1367,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_set_closable;
-    public void SetClosable(bool closable)
+    internal void SetClosable(bool closable)
     {
         var __mb = __mb_set_closable;
         if (__mb == 0)
@@ -1309,7 +1383,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_is_closable;
-    public bool IsClosable()
+    internal bool IsClosable()
     {
         var __mb = __mb_is_closable;
         if (__mb == 0)
@@ -1324,7 +1398,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_set_icon_name;
-    public void SetIconName(string iconName)
+    internal void SetIconName(string iconName)
     {
         var __mb = __mb_set_icon_name;
         if (__mb == 0)
@@ -1340,7 +1414,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_get_icon_name;
-    public string GetIconName()
+    internal string GetIconName()
     {
         var __mb = __mb_get_icon_name;
         if (__mb == 0)
@@ -1355,7 +1429,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_set_dock_icon;
-    public void SetDockIcon(Texture2D? icon)
+    internal void SetDockIcon(Texture2D? icon)
     {
         var __mb = __mb_set_dock_icon;
         if (__mb == 0)
@@ -1371,7 +1445,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_get_dock_icon;
-    public Texture2D? GetDockIcon()
+    internal Texture2D? GetDockIcon()
     {
         var __mb = __mb_get_dock_icon;
         if (__mb == 0)
@@ -1386,7 +1460,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_set_force_show_icon;
-    public void SetForceShowIcon(bool force)
+    internal void SetForceShowIcon(bool force)
     {
         var __mb = __mb_set_force_show_icon;
         if (__mb == 0)
@@ -1402,7 +1476,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_get_force_show_icon;
-    public bool GetForceShowIcon()
+    internal bool GetForceShowIcon()
     {
         var __mb = __mb_get_force_show_icon;
         if (__mb == 0)
@@ -1417,7 +1491,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_set_title_color;
-    public void SetTitleColor(Color color)
+    internal void SetTitleColor(Color color)
     {
         var __mb = __mb_set_title_color;
         if (__mb == 0)
@@ -1433,7 +1507,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_get_title_color;
-    public Color GetTitleColor()
+    internal Color GetTitleColor()
     {
         var __mb = __mb_get_title_color;
         if (__mb == 0)
@@ -1448,7 +1522,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_set_dock_shortcut;
-    public void SetDockShortcut(Shortcut? shortcut)
+    internal void SetDockShortcut(Shortcut? shortcut)
     {
         var __mb = __mb_set_dock_shortcut;
         if (__mb == 0)
@@ -1464,7 +1538,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_get_dock_shortcut;
-    public Shortcut? GetDockShortcut()
+    internal Shortcut? GetDockShortcut()
     {
         var __mb = __mb_get_dock_shortcut;
         if (__mb == 0)
@@ -1479,7 +1553,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_set_default_slot;
-    public void SetDefaultSlot(EditorDock.DockSlot slot)
+    internal void SetDefaultSlot(EditorDock.DockSlot slot)
     {
         var __mb = __mb_set_default_slot;
         if (__mb == 0)
@@ -1495,7 +1569,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_get_default_slot;
-    public EditorDock.DockSlot GetDefaultSlot()
+    internal EditorDock.DockSlot GetDefaultSlot()
     {
         var __mb = __mb_get_default_slot;
         if (__mb == 0)
@@ -1510,7 +1584,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_set_available_layouts;
-    public void SetAvailableLayouts(EditorDock.DockLayout layouts)
+    internal void SetAvailableLayouts(EditorDock.DockLayout layouts)
     {
         var __mb = __mb_set_available_layouts;
         if (__mb == 0)
@@ -1526,7 +1600,7 @@ public unsafe partial class EditorDock : MarginContainer
     }
 
     private static nint __mb_get_available_layouts;
-    public EditorDock.DockLayout GetAvailableLayouts()
+    internal EditorDock.DockLayout GetAvailableLayouts()
     {
         var __mb = __mb_get_available_layouts;
         if (__mb == 0)
@@ -3462,6 +3536,12 @@ public unsafe partial class EditorFileDialog : FileDialog
         ClassRegistry.AttachNew(this, "EditorFileDialog");
     }
 
+    public bool DisableOverwriteWarning
+    {
+        get => IsOverwriteWarningDisabled();
+        set => SetDisableOverwriteWarning(value);
+    }
+
     private static nint __mb_add_side_menu;
     public void AddSideMenu(Control? menu, string title)
     {
@@ -3482,7 +3562,7 @@ public unsafe partial class EditorFileDialog : FileDialog
     }
 
     private static nint __mb_set_disable_overwrite_warning;
-    public void SetDisableOverwriteWarning(bool disable)
+    internal void SetDisableOverwriteWarning(bool disable)
     {
         var __mb = __mb_set_disable_overwrite_warning;
         if (__mb == 0)
@@ -3498,7 +3578,7 @@ public unsafe partial class EditorFileDialog : FileDialog
     }
 
     private static nint __mb_is_overwrite_warning_disabled;
-    public bool IsOverwriteWarningDisabled()
+    internal bool IsOverwriteWarningDisabled()
     {
         var __mb = __mb_is_overwrite_warning_disabled;
         if (__mb == 0)
@@ -4336,6 +4416,18 @@ public unsafe partial class EditorInterface : GodotObject
     private static EditorInterface? _singleton;
     public static EditorInterface Singleton => _singleton ??= (EditorInterface)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("EditorInterface"), adoptRef: false)!;
 
+    public bool DistractionFreeMode
+    {
+        get => IsDistractionFreeModeEnabled();
+        set => SetDistractionFreeMode(value);
+    }
+
+    public bool MovieMakerEnabled
+    {
+        get => IsMovieMakerEnabled();
+        set => SetMovieMakerEnabled(value);
+    }
+
     private static nint __mb_restart_editor;
     public void RestartEditor(bool save)
     {
@@ -4641,7 +4733,7 @@ public unsafe partial class EditorInterface : GodotObject
     }
 
     private static nint __mb_set_distraction_free_mode;
-    public void SetDistractionFreeMode(bool enter)
+    internal void SetDistractionFreeMode(bool enter)
     {
         var __mb = __mb_set_distraction_free_mode;
         if (__mb == 0)
@@ -4657,7 +4749,7 @@ public unsafe partial class EditorInterface : GodotObject
     }
 
     private static nint __mb_is_distraction_free_mode_enabled;
-    public bool IsDistractionFreeModeEnabled()
+    internal bool IsDistractionFreeModeEnabled()
     {
         var __mb = __mb_is_distraction_free_mode_enabled;
         if (__mb == 0)
@@ -5314,7 +5406,7 @@ public unsafe partial class EditorInterface : GodotObject
     }
 
     private static nint __mb_set_movie_maker_enabled;
-    public void SetMovieMakerEnabled(bool enabled)
+    internal void SetMovieMakerEnabled(bool enabled)
     {
         var __mb = __mb_set_movie_maker_enabled;
         if (__mb == 0)
@@ -5330,7 +5422,7 @@ public unsafe partial class EditorInterface : GodotObject
     }
 
     private static nint __mb_is_movie_maker_enabled;
-    public bool IsMovieMakerEnabled()
+    internal bool IsMovieMakerEnabled()
     {
         var __mb = __mb_is_movie_maker_enabled;
         if (__mb == 0)
@@ -6989,8 +7081,80 @@ public unsafe partial class EditorProperty : Container
         ClassRegistry.AttachNew(this, "EditorProperty");
     }
 
+    public string Label
+    {
+        get => GetLabel();
+        set => SetLabel(value);
+    }
+
+    public bool ReadOnly
+    {
+        get => IsReadOnly();
+        set => SetReadOnly(value);
+    }
+
+    public bool DrawLabel
+    {
+        get => IsDrawLabel();
+        set => SetDrawLabel(value);
+    }
+
+    public bool DrawBackground
+    {
+        get => IsDrawBackground();
+        set => SetDrawBackground(value);
+    }
+
+    public bool Checkable
+    {
+        get => IsCheckable();
+        set => SetCheckable(value);
+    }
+
+    public bool Checked
+    {
+        get => IsChecked();
+        set => SetChecked(value);
+    }
+
+    public bool DrawWarning
+    {
+        get => IsDrawWarning();
+        set => SetDrawWarning(value);
+    }
+
+    public bool Keying
+    {
+        get => IsKeying();
+        set => SetKeying(value);
+    }
+
+    public bool Deletable
+    {
+        get => IsDeletable();
+        set => SetDeletable(value);
+    }
+
+    public bool Selectable
+    {
+        get => IsSelectable();
+        set => SetSelectable(value);
+    }
+
+    public bool UseFolding
+    {
+        get => IsUsingFolding();
+        set => SetUseFolding(value);
+    }
+
+    public float NameSplitRatio
+    {
+        get => GetNameSplitRatio();
+        set => SetNameSplitRatio(value);
+    }
+
     private static nint __mb_set_label;
-    public void SetLabel(string text)
+    internal void SetLabel(string text)
     {
         var __mb = __mb_set_label;
         if (__mb == 0)
@@ -7007,7 +7171,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_get_label;
-    public string GetLabel()
+    internal string GetLabel()
     {
         var __mb = __mb_get_label;
         if (__mb == 0)
@@ -7022,7 +7186,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_set_read_only;
-    public void SetReadOnly(bool readOnly)
+    internal void SetReadOnly(bool readOnly)
     {
         var __mb = __mb_set_read_only;
         if (__mb == 0)
@@ -7038,7 +7202,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_is_read_only;
-    public bool IsReadOnly()
+    internal bool IsReadOnly()
     {
         var __mb = __mb_is_read_only;
         if (__mb == 0)
@@ -7053,7 +7217,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_set_draw_label;
-    public void SetDrawLabel(bool drawLabel)
+    internal void SetDrawLabel(bool drawLabel)
     {
         var __mb = __mb_set_draw_label;
         if (__mb == 0)
@@ -7069,7 +7233,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_is_draw_label;
-    public bool IsDrawLabel()
+    internal bool IsDrawLabel()
     {
         var __mb = __mb_is_draw_label;
         if (__mb == 0)
@@ -7084,7 +7248,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_set_draw_background;
-    public void SetDrawBackground(bool drawBackground)
+    internal void SetDrawBackground(bool drawBackground)
     {
         var __mb = __mb_set_draw_background;
         if (__mb == 0)
@@ -7100,7 +7264,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_is_draw_background;
-    public bool IsDrawBackground()
+    internal bool IsDrawBackground()
     {
         var __mb = __mb_is_draw_background;
         if (__mb == 0)
@@ -7115,7 +7279,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_set_checkable;
-    public void SetCheckable(bool checkable)
+    internal void SetCheckable(bool checkable)
     {
         var __mb = __mb_set_checkable;
         if (__mb == 0)
@@ -7131,7 +7295,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_is_checkable;
-    public bool IsCheckable()
+    internal bool IsCheckable()
     {
         var __mb = __mb_is_checkable;
         if (__mb == 0)
@@ -7146,7 +7310,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_set_checked;
-    public void SetChecked(bool @checked)
+    internal void SetChecked(bool @checked)
     {
         var __mb = __mb_set_checked;
         if (__mb == 0)
@@ -7162,7 +7326,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_is_checked;
-    public bool IsChecked()
+    internal bool IsChecked()
     {
         var __mb = __mb_is_checked;
         if (__mb == 0)
@@ -7177,7 +7341,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_set_draw_warning;
-    public void SetDrawWarning(bool drawWarning)
+    internal void SetDrawWarning(bool drawWarning)
     {
         var __mb = __mb_set_draw_warning;
         if (__mb == 0)
@@ -7193,7 +7357,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_is_draw_warning;
-    public bool IsDrawWarning()
+    internal bool IsDrawWarning()
     {
         var __mb = __mb_is_draw_warning;
         if (__mb == 0)
@@ -7208,7 +7372,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_set_keying;
-    public void SetKeying(bool keying)
+    internal void SetKeying(bool keying)
     {
         var __mb = __mb_set_keying;
         if (__mb == 0)
@@ -7224,7 +7388,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_is_keying;
-    public bool IsKeying()
+    internal bool IsKeying()
     {
         var __mb = __mb_is_keying;
         if (__mb == 0)
@@ -7239,7 +7403,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_set_deletable;
-    public void SetDeletable(bool deletable)
+    internal void SetDeletable(bool deletable)
     {
         var __mb = __mb_set_deletable;
         if (__mb == 0)
@@ -7255,7 +7419,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_is_deletable;
-    public bool IsDeletable()
+    internal bool IsDeletable()
     {
         var __mb = __mb_is_deletable;
         if (__mb == 0)
@@ -7345,7 +7509,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_set_selectable;
-    public void SetSelectable(bool selectable)
+    internal void SetSelectable(bool selectable)
     {
         var __mb = __mb_set_selectable;
         if (__mb == 0)
@@ -7361,7 +7525,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_is_selectable;
-    public bool IsSelectable()
+    internal bool IsSelectable()
     {
         var __mb = __mb_is_selectable;
         if (__mb == 0)
@@ -7376,7 +7540,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_set_use_folding;
-    public void SetUseFolding(bool useFolding)
+    internal void SetUseFolding(bool useFolding)
     {
         var __mb = __mb_set_use_folding;
         if (__mb == 0)
@@ -7392,7 +7556,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_is_using_folding;
-    public bool IsUsingFolding()
+    internal bool IsUsingFolding()
     {
         var __mb = __mb_is_using_folding;
         if (__mb == 0)
@@ -7407,7 +7571,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_set_name_split_ratio;
-    public void SetNameSplitRatio(float ratio)
+    internal void SetNameSplitRatio(float ratio)
     {
         var __mb = __mb_set_name_split_ratio;
         if (__mb == 0)
@@ -7423,7 +7587,7 @@ public unsafe partial class EditorProperty : Container
     }
 
     private static nint __mb_get_name_split_ratio;
-    public float GetNameSplitRatio()
+    internal float GetNameSplitRatio()
     {
         var __mb = __mb_get_name_split_ratio;
         if (__mb == 0)
@@ -7614,8 +7778,32 @@ public unsafe partial class EditorResourcePicker : HBoxContainer
         ClassRegistry.AttachNew(this, "EditorResourcePicker");
     }
 
+    public string BaseType
+    {
+        get => GetBaseType();
+        set => SetBaseType(value);
+    }
+
+    public Resource? EditedResource
+    {
+        get => GetEditedResource();
+        set => SetEditedResource(value);
+    }
+
+    public bool Editable
+    {
+        get => IsEditable();
+        set => SetEditable(value);
+    }
+
+    public bool ToggleMode
+    {
+        get => IsToggleMode();
+        set => SetToggleMode(value);
+    }
+
     private static nint __mb_set_base_type;
-    public void SetBaseType(string baseType)
+    internal void SetBaseType(string baseType)
     {
         var __mb = __mb_set_base_type;
         if (__mb == 0)
@@ -7632,7 +7820,7 @@ public unsafe partial class EditorResourcePicker : HBoxContainer
     }
 
     private static nint __mb_get_base_type;
-    public string GetBaseType()
+    internal string GetBaseType()
     {
         var __mb = __mb_get_base_type;
         if (__mb == 0)
@@ -7647,7 +7835,7 @@ public unsafe partial class EditorResourcePicker : HBoxContainer
     }
 
     private static nint __mb_set_edited_resource;
-    public void SetEditedResource(Resource? resource)
+    internal void SetEditedResource(Resource? resource)
     {
         var __mb = __mb_set_edited_resource;
         if (__mb == 0)
@@ -7663,7 +7851,7 @@ public unsafe partial class EditorResourcePicker : HBoxContainer
     }
 
     private static nint __mb_get_edited_resource;
-    public Resource? GetEditedResource()
+    internal Resource? GetEditedResource()
     {
         var __mb = __mb_get_edited_resource;
         if (__mb == 0)
@@ -7678,7 +7866,7 @@ public unsafe partial class EditorResourcePicker : HBoxContainer
     }
 
     private static nint __mb_set_toggle_mode;
-    public void SetToggleMode(bool enable)
+    internal void SetToggleMode(bool enable)
     {
         var __mb = __mb_set_toggle_mode;
         if (__mb == 0)
@@ -7694,7 +7882,7 @@ public unsafe partial class EditorResourcePicker : HBoxContainer
     }
 
     private static nint __mb_is_toggle_mode;
-    public bool IsToggleMode()
+    internal bool IsToggleMode()
     {
         var __mb = __mb_is_toggle_mode;
         if (__mb == 0)
@@ -7725,7 +7913,7 @@ public unsafe partial class EditorResourcePicker : HBoxContainer
     }
 
     private static nint __mb_set_editable;
-    public void SetEditable(bool enable)
+    internal void SetEditable(bool enable)
     {
         var __mb = __mb_set_editable;
         if (__mb == 0)
@@ -7741,7 +7929,7 @@ public unsafe partial class EditorResourcePicker : HBoxContainer
     }
 
     private static nint __mb_is_editable;
-    public bool IsEditable()
+    internal bool IsEditable()
     {
         var __mb = __mb_is_editable;
         if (__mb == 0)
@@ -8364,8 +8552,14 @@ public unsafe partial class EditorScriptPicker : EditorResourcePicker
         ClassRegistry.AttachNew(this, "EditorScriptPicker");
     }
 
+    public Node? ScriptOwner
+    {
+        get => GetScriptOwner();
+        set => SetScriptOwner(value);
+    }
+
     private static nint __mb_set_script_owner;
-    public void SetScriptOwner(Node? ownerNode)
+    internal void SetScriptOwner(Node? ownerNode)
     {
         var __mb = __mb_set_script_owner;
         if (__mb == 0)
@@ -8381,7 +8575,7 @@ public unsafe partial class EditorScriptPicker : EditorResourcePicker
     }
 
     private static nint __mb_get_script_owner;
-    public Node? GetScriptOwner()
+    internal Node? GetScriptOwner()
     {
         var __mb = __mb_get_script_owner;
         if (__mb == 0)
@@ -8821,15 +9015,63 @@ public unsafe partial class EditorSpinSlider : Range
         ClassRegistry.AttachNew(this, "EditorSpinSlider");
     }
 
-    public enum ControlState : long
+    public enum ControlStateEnum : long
     {
         CONTROL_STATE_DEFAULT = 0,
         CONTROL_STATE_PREFER_SLIDER = 1,
         CONTROL_STATE_HIDE = 2,
     }
 
+    public string Label
+    {
+        get => GetLabel();
+        set => SetLabel(value);
+    }
+
+    public string Suffix
+    {
+        get => GetSuffix();
+        set => SetSuffix(value);
+    }
+
+    public bool ReadOnly
+    {
+        get => IsReadOnly();
+        set => SetReadOnly(value);
+    }
+
+    public bool Flat
+    {
+        get => IsFlat();
+        set => SetFlat(value);
+    }
+
+    public EditorSpinSlider.ControlStateEnum ControlState
+    {
+        get => GetControlState();
+        set => SetControlState(value);
+    }
+
+    public bool HideSlider
+    {
+        get => IsHidingSlider();
+        set => SetHideSlider(value);
+    }
+
+    public bool EditingInteger
+    {
+        get => IsEditingInteger();
+        set => SetEditingInteger(value);
+    }
+
+    public bool DeferredDragMode
+    {
+        get => IsDeferredDragModeEnabled();
+        set => SetDeferredDragModeEnabled(value);
+    }
+
     private static nint __mb_set_label;
-    public void SetLabel(string label)
+    internal void SetLabel(string label)
     {
         var __mb = __mb_set_label;
         if (__mb == 0)
@@ -8846,7 +9088,7 @@ public unsafe partial class EditorSpinSlider : Range
     }
 
     private static nint __mb_get_label;
-    public string GetLabel()
+    internal string GetLabel()
     {
         var __mb = __mb_get_label;
         if (__mb == 0)
@@ -8861,7 +9103,7 @@ public unsafe partial class EditorSpinSlider : Range
     }
 
     private static nint __mb_set_suffix;
-    public void SetSuffix(string suffix)
+    internal void SetSuffix(string suffix)
     {
         var __mb = __mb_set_suffix;
         if (__mb == 0)
@@ -8878,7 +9120,7 @@ public unsafe partial class EditorSpinSlider : Range
     }
 
     private static nint __mb_get_suffix;
-    public string GetSuffix()
+    internal string GetSuffix()
     {
         var __mb = __mb_get_suffix;
         if (__mb == 0)
@@ -8893,7 +9135,7 @@ public unsafe partial class EditorSpinSlider : Range
     }
 
     private static nint __mb_set_read_only;
-    public void SetReadOnly(bool readOnly)
+    internal void SetReadOnly(bool readOnly)
     {
         var __mb = __mb_set_read_only;
         if (__mb == 0)
@@ -8909,7 +9151,7 @@ public unsafe partial class EditorSpinSlider : Range
     }
 
     private static nint __mb_is_read_only;
-    public bool IsReadOnly()
+    internal bool IsReadOnly()
     {
         var __mb = __mb_is_read_only;
         if (__mb == 0)
@@ -8924,7 +9166,7 @@ public unsafe partial class EditorSpinSlider : Range
     }
 
     private static nint __mb_set_flat;
-    public void SetFlat(bool flat)
+    internal void SetFlat(bool flat)
     {
         var __mb = __mb_set_flat;
         if (__mb == 0)
@@ -8940,7 +9182,7 @@ public unsafe partial class EditorSpinSlider : Range
     }
 
     private static nint __mb_is_flat;
-    public bool IsFlat()
+    internal bool IsFlat()
     {
         var __mb = __mb_is_flat;
         if (__mb == 0)
@@ -8955,7 +9197,7 @@ public unsafe partial class EditorSpinSlider : Range
     }
 
     private static nint __mb_set_control_state;
-    public void SetControlState(EditorSpinSlider.ControlState state)
+    internal void SetControlState(EditorSpinSlider.ControlStateEnum state)
     {
         var __mb = __mb_set_control_state;
         if (__mb == 0)
@@ -8971,7 +9213,7 @@ public unsafe partial class EditorSpinSlider : Range
     }
 
     private static nint __mb_get_control_state;
-    public EditorSpinSlider.ControlState GetControlState()
+    internal EditorSpinSlider.ControlStateEnum GetControlState()
     {
         var __mb = __mb_get_control_state;
         if (__mb == 0)
@@ -8982,11 +9224,11 @@ public unsafe partial class EditorSpinSlider : Range
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (EditorSpinSlider.ControlState)__ret;
+        return (EditorSpinSlider.ControlStateEnum)__ret;
     }
 
     private static nint __mb_set_hide_slider;
-    public void SetHideSlider(bool hideSlider)
+    internal void SetHideSlider(bool hideSlider)
     {
         var __mb = __mb_set_hide_slider;
         if (__mb == 0)
@@ -9002,7 +9244,7 @@ public unsafe partial class EditorSpinSlider : Range
     }
 
     private static nint __mb_is_hiding_slider;
-    public bool IsHidingSlider()
+    internal bool IsHidingSlider()
     {
         var __mb = __mb_is_hiding_slider;
         if (__mb == 0)
@@ -9017,7 +9259,7 @@ public unsafe partial class EditorSpinSlider : Range
     }
 
     private static nint __mb_set_editing_integer;
-    public void SetEditingInteger(bool editingInteger)
+    internal void SetEditingInteger(bool editingInteger)
     {
         var __mb = __mb_set_editing_integer;
         if (__mb == 0)
@@ -9033,7 +9275,7 @@ public unsafe partial class EditorSpinSlider : Range
     }
 
     private static nint __mb_is_editing_integer;
-    public bool IsEditingInteger()
+    internal bool IsEditingInteger()
     {
         var __mb = __mb_is_editing_integer;
         if (__mb == 0)
@@ -9048,7 +9290,7 @@ public unsafe partial class EditorSpinSlider : Range
     }
 
     private static nint __mb_set_deferred_drag_mode_enabled;
-    public void SetDeferredDragModeEnabled(bool enabled)
+    internal void SetDeferredDragModeEnabled(bool enabled)
     {
         var __mb = __mb_set_deferred_drag_mode_enabled;
         if (__mb == 0)
@@ -9064,7 +9306,7 @@ public unsafe partial class EditorSpinSlider : Range
     }
 
     private static nint __mb_is_deferred_drag_mode_enabled;
-    public bool IsDeferredDragModeEnabled()
+    internal bool IsDeferredDragModeEnabled()
     {
         var __mb = __mb_is_deferred_drag_mode_enabled;
         if (__mb == 0)
@@ -9749,8 +9991,14 @@ public unsafe partial class EncodedObjectAsID : RefCounted
         ClassRegistry.AttachNew(this, "EncodedObjectAsID");
     }
 
+    public ulong ObjectId
+    {
+        get => GetObjectId();
+        set => SetObjectId(value);
+    }
+
     private static nint __mb_set_object_id;
-    public void SetObjectId(ulong id)
+    internal void SetObjectId(ulong id)
     {
         var __mb = __mb_set_object_id;
         if (__mb == 0)
@@ -9766,7 +10014,7 @@ public unsafe partial class EncodedObjectAsID : RefCounted
     }
 
     private static nint __mb_get_object_id;
-    public ulong GetObjectId()
+    internal ulong GetObjectId()
     {
         var __mb = __mb_get_object_id;
         if (__mb == 0)
@@ -9793,8 +10041,50 @@ public unsafe partial class Engine : GodotObject
     private static Engine? _singleton;
     public static Engine Singleton => _singleton ??= (Engine)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("Engine"), adoptRef: false)!;
 
+    public bool PrintErrorMessages
+    {
+        get => IsPrintingErrorMessages();
+        set => SetPrintErrorMessages(value);
+    }
+
+    public bool PrintToStdout
+    {
+        get => IsPrintingToStdout();
+        set => SetPrintToStdout(value);
+    }
+
+    public int PhysicsTicksPerSecond
+    {
+        get => GetPhysicsTicksPerSecond();
+        set => SetPhysicsTicksPerSecond(value);
+    }
+
+    public int MaxPhysicsStepsPerFrame
+    {
+        get => GetMaxPhysicsStepsPerFrame();
+        set => SetMaxPhysicsStepsPerFrame(value);
+    }
+
+    public int MaxFps
+    {
+        get => GetMaxFps();
+        set => SetMaxFps(value);
+    }
+
+    public double TimeScale
+    {
+        get => GetTimeScale();
+        set => SetTimeScale(value);
+    }
+
+    public double PhysicsJitterFix
+    {
+        get => GetPhysicsJitterFix();
+        set => SetPhysicsJitterFix(value);
+    }
+
     private static nint __mb_set_physics_ticks_per_second;
-    public void SetPhysicsTicksPerSecond(int physicsTicksPerSecond)
+    internal void SetPhysicsTicksPerSecond(int physicsTicksPerSecond)
     {
         var __mb = __mb_set_physics_ticks_per_second;
         if (__mb == 0)
@@ -9810,7 +10100,7 @@ public unsafe partial class Engine : GodotObject
     }
 
     private static nint __mb_get_physics_ticks_per_second;
-    public int GetPhysicsTicksPerSecond()
+    internal int GetPhysicsTicksPerSecond()
     {
         var __mb = __mb_get_physics_ticks_per_second;
         if (__mb == 0)
@@ -9825,7 +10115,7 @@ public unsafe partial class Engine : GodotObject
     }
 
     private static nint __mb_set_max_physics_steps_per_frame;
-    public void SetMaxPhysicsStepsPerFrame(int maxPhysicsSteps)
+    internal void SetMaxPhysicsStepsPerFrame(int maxPhysicsSteps)
     {
         var __mb = __mb_set_max_physics_steps_per_frame;
         if (__mb == 0)
@@ -9841,7 +10131,7 @@ public unsafe partial class Engine : GodotObject
     }
 
     private static nint __mb_get_max_physics_steps_per_frame;
-    public int GetMaxPhysicsStepsPerFrame()
+    internal int GetMaxPhysicsStepsPerFrame()
     {
         var __mb = __mb_get_max_physics_steps_per_frame;
         if (__mb == 0)
@@ -9856,7 +10146,7 @@ public unsafe partial class Engine : GodotObject
     }
 
     private static nint __mb_set_physics_jitter_fix;
-    public void SetPhysicsJitterFix(double physicsJitterFix)
+    internal void SetPhysicsJitterFix(double physicsJitterFix)
     {
         var __mb = __mb_set_physics_jitter_fix;
         if (__mb == 0)
@@ -9872,7 +10162,7 @@ public unsafe partial class Engine : GodotObject
     }
 
     private static nint __mb_get_physics_jitter_fix;
-    public double GetPhysicsJitterFix()
+    internal double GetPhysicsJitterFix()
     {
         var __mb = __mb_get_physics_jitter_fix;
         if (__mb == 0)
@@ -9902,7 +10192,7 @@ public unsafe partial class Engine : GodotObject
     }
 
     private static nint __mb_set_max_fps;
-    public void SetMaxFps(int maxFps)
+    internal void SetMaxFps(int maxFps)
     {
         var __mb = __mb_set_max_fps;
         if (__mb == 0)
@@ -9918,7 +10208,7 @@ public unsafe partial class Engine : GodotObject
     }
 
     private static nint __mb_get_max_fps;
-    public int GetMaxFps()
+    internal int GetMaxFps()
     {
         var __mb = __mb_get_max_fps;
         if (__mb == 0)
@@ -9933,7 +10223,7 @@ public unsafe partial class Engine : GodotObject
     }
 
     private static nint __mb_set_time_scale;
-    public void SetTimeScale(double timeScale)
+    internal void SetTimeScale(double timeScale)
     {
         var __mb = __mb_set_time_scale;
         if (__mb == 0)
@@ -9949,7 +10239,7 @@ public unsafe partial class Engine : GodotObject
     }
 
     private static nint __mb_get_time_scale;
-    public double GetTimeScale()
+    internal double GetTimeScale()
     {
         var __mb = __mb_get_time_scale;
         if (__mb == 0)
@@ -10361,7 +10651,7 @@ public unsafe partial class Engine : GodotObject
     }
 
     private static nint __mb_set_print_to_stdout;
-    public void SetPrintToStdout(bool enabled)
+    internal void SetPrintToStdout(bool enabled)
     {
         var __mb = __mb_set_print_to_stdout;
         if (__mb == 0)
@@ -10377,7 +10667,7 @@ public unsafe partial class Engine : GodotObject
     }
 
     private static nint __mb_is_printing_to_stdout;
-    public bool IsPrintingToStdout()
+    internal bool IsPrintingToStdout()
     {
         var __mb = __mb_is_printing_to_stdout;
         if (__mb == 0)
@@ -10392,7 +10682,7 @@ public unsafe partial class Engine : GodotObject
     }
 
     private static nint __mb_set_print_error_messages;
-    public void SetPrintErrorMessages(bool enabled)
+    internal void SetPrintErrorMessages(bool enabled)
     {
         var __mb = __mb_set_print_error_messages;
         if (__mb == 0)
@@ -10408,7 +10698,7 @@ public unsafe partial class Engine : GodotObject
     }
 
     private static nint __mb_is_printing_error_messages;
-    public bool IsPrintingErrorMessages()
+    internal bool IsPrintingErrorMessages()
     {
         var __mb = __mb_is_printing_error_messages;
         if (__mb == 0)
@@ -10878,7 +11168,7 @@ public unsafe partial class Environment : Resource
         TONE_MAPPER_AGX = 4,
     }
 
-    public enum GlowBlendMode : long
+    public enum GlowBlendModeEnum : long
     {
         GLOW_BLEND_MODE_ADDITIVE = 0,
         GLOW_BLEND_MODE_SCREEN = 1,
@@ -10887,7 +11177,7 @@ public unsafe partial class Environment : Resource
         GLOW_BLEND_MODE_MIX = 4,
     }
 
-    public enum FogMode : long
+    public enum FogModeEnum : long
     {
         FOG_MODE_EXPONENTIAL = 0,
         FOG_MODE_DEPTH = 1,
@@ -10900,8 +11190,566 @@ public unsafe partial class Environment : Resource
         SDFGI_Y_SCALE_100_PERCENT = 2,
     }
 
+    public Environment.BGMode BackgroundMode
+    {
+        get => GetBackground();
+        set => SetBackground(value);
+    }
+
+    public Color BackgroundColor
+    {
+        get => GetBgColor();
+        set => SetBgColor(value);
+    }
+
+    public float BackgroundEnergyMultiplier
+    {
+        get => GetBgEnergyMultiplier();
+        set => SetBgEnergyMultiplier(value);
+    }
+
+    public float BackgroundIntensity
+    {
+        get => GetBgIntensity();
+        set => SetBgIntensity(value);
+    }
+
+    public int BackgroundCanvasMaxLayer
+    {
+        get => GetCanvasMaxLayer();
+        set => SetCanvasMaxLayer(value);
+    }
+
+    public int BackgroundCameraFeedId
+    {
+        get => GetCameraFeedId();
+        set => SetCameraFeedId(value);
+    }
+
+    public Sky? Sky
+    {
+        get => GetSky();
+        set => SetSky(value);
+    }
+
+    public float SkyCustomFov
+    {
+        get => GetSkyCustomFov();
+        set => SetSkyCustomFov(value);
+    }
+
+    public Vector3 SkyRotation
+    {
+        get => GetSkyRotation();
+        set => SetSkyRotation(value);
+    }
+
+    public Environment.AmbientSource AmbientLightSource
+    {
+        get => GetAmbientSource();
+        set => SetAmbientSource(value);
+    }
+
+    public Color AmbientLightColor
+    {
+        get => GetAmbientLightColor();
+        set => SetAmbientLightColor(value);
+    }
+
+    public float AmbientLightSkyContribution
+    {
+        get => GetAmbientLightSkyContribution();
+        set => SetAmbientLightSkyContribution(value);
+    }
+
+    public float AmbientLightEnergy
+    {
+        get => GetAmbientLightEnergy();
+        set => SetAmbientLightEnergy(value);
+    }
+
+    public Environment.ReflectionSource ReflectedLightSource
+    {
+        get => GetReflectionSource();
+        set => SetReflectionSource(value);
+    }
+
+    public Environment.ToneMapper TonemapMode
+    {
+        get => GetTonemapper();
+        set => SetTonemapper(value);
+    }
+
+    public float TonemapExposure
+    {
+        get => GetTonemapExposure();
+        set => SetTonemapExposure(value);
+    }
+
+    public float TonemapWhite
+    {
+        get => GetTonemapWhite();
+        set => SetTonemapWhite(value);
+    }
+
+    public float TonemapAgxWhite
+    {
+        get => GetTonemapAgxWhite();
+        set => SetTonemapAgxWhite(value);
+    }
+
+    public float TonemapAgxContrast
+    {
+        get => GetTonemapAgxContrast();
+        set => SetTonemapAgxContrast(value);
+    }
+
+    public bool SsrEnabled
+    {
+        get => IsSsrEnabled();
+        set => SetSsrEnabled(value);
+    }
+
+    public int SsrMaxSteps
+    {
+        get => GetSsrMaxSteps();
+        set => SetSsrMaxSteps(value);
+    }
+
+    public float SsrFadeIn
+    {
+        get => GetSsrFadeIn();
+        set => SetSsrFadeIn(value);
+    }
+
+    public float SsrFadeOut
+    {
+        get => GetSsrFadeOut();
+        set => SetSsrFadeOut(value);
+    }
+
+    public float SsrDepthTolerance
+    {
+        get => GetSsrDepthTolerance();
+        set => SetSsrDepthTolerance(value);
+    }
+
+    public bool SsaoEnabled
+    {
+        get => IsSsaoEnabled();
+        set => SetSsaoEnabled(value);
+    }
+
+    public float SsaoRadius
+    {
+        get => GetSsaoRadius();
+        set => SetSsaoRadius(value);
+    }
+
+    public float SsaoIntensity
+    {
+        get => GetSsaoIntensity();
+        set => SetSsaoIntensity(value);
+    }
+
+    public float SsaoPower
+    {
+        get => GetSsaoPower();
+        set => SetSsaoPower(value);
+    }
+
+    public float SsaoDetail
+    {
+        get => GetSsaoDetail();
+        set => SetSsaoDetail(value);
+    }
+
+    public float SsaoHorizon
+    {
+        get => GetSsaoHorizon();
+        set => SetSsaoHorizon(value);
+    }
+
+    public float SsaoSharpness
+    {
+        get => GetSsaoSharpness();
+        set => SetSsaoSharpness(value);
+    }
+
+    public float SsaoLightAffect
+    {
+        get => GetSsaoDirectLightAffect();
+        set => SetSsaoDirectLightAffect(value);
+    }
+
+    public float SsaoAoChannelAffect
+    {
+        get => GetSsaoAoChannelAffect();
+        set => SetSsaoAoChannelAffect(value);
+    }
+
+    public bool SsilEnabled
+    {
+        get => IsSsilEnabled();
+        set => SetSsilEnabled(value);
+    }
+
+    public float SsilRadius
+    {
+        get => GetSsilRadius();
+        set => SetSsilRadius(value);
+    }
+
+    public float SsilIntensity
+    {
+        get => GetSsilIntensity();
+        set => SetSsilIntensity(value);
+    }
+
+    public float SsilSharpness
+    {
+        get => GetSsilSharpness();
+        set => SetSsilSharpness(value);
+    }
+
+    public float SsilNormalRejection
+    {
+        get => GetSsilNormalRejection();
+        set => SetSsilNormalRejection(value);
+    }
+
+    public bool SdfgiEnabled
+    {
+        get => IsSdfgiEnabled();
+        set => SetSdfgiEnabled(value);
+    }
+
+    public bool SdfgiUseOcclusion
+    {
+        get => IsSdfgiUsingOcclusion();
+        set => SetSdfgiUseOcclusion(value);
+    }
+
+    public bool SdfgiReadSkyLight
+    {
+        get => IsSdfgiReadingSkyLight();
+        set => SetSdfgiReadSkyLight(value);
+    }
+
+    public float SdfgiBounceFeedback
+    {
+        get => GetSdfgiBounceFeedback();
+        set => SetSdfgiBounceFeedback(value);
+    }
+
+    public int SdfgiCascades
+    {
+        get => GetSdfgiCascades();
+        set => SetSdfgiCascades(value);
+    }
+
+    public float SdfgiMinCellSize
+    {
+        get => GetSdfgiMinCellSize();
+        set => SetSdfgiMinCellSize(value);
+    }
+
+    public float SdfgiCascade0Distance
+    {
+        get => GetSdfgiCascade0Distance();
+        set => SetSdfgiCascade0Distance(value);
+    }
+
+    public float SdfgiMaxDistance
+    {
+        get => GetSdfgiMaxDistance();
+        set => SetSdfgiMaxDistance(value);
+    }
+
+    public Environment.SDFGIYScale SdfgiYScale
+    {
+        get => GetSdfgiYScale();
+        set => SetSdfgiYScale(value);
+    }
+
+    public float SdfgiEnergy
+    {
+        get => GetSdfgiEnergy();
+        set => SetSdfgiEnergy(value);
+    }
+
+    public float SdfgiNormalBias
+    {
+        get => GetSdfgiNormalBias();
+        set => SetSdfgiNormalBias(value);
+    }
+
+    public float SdfgiProbeBias
+    {
+        get => GetSdfgiProbeBias();
+        set => SetSdfgiProbeBias(value);
+    }
+
+    public bool GlowEnabled
+    {
+        get => IsGlowEnabled();
+        set => SetGlowEnabled(value);
+    }
+
+    public bool GlowNormalized
+    {
+        get => IsGlowNormalized();
+        set => SetGlowNormalized(value);
+    }
+
+    public float GlowIntensity
+    {
+        get => GetGlowIntensity();
+        set => SetGlowIntensity(value);
+    }
+
+    public float GlowStrength
+    {
+        get => GetGlowStrength();
+        set => SetGlowStrength(value);
+    }
+
+    public float GlowMix
+    {
+        get => GetGlowMix();
+        set => SetGlowMix(value);
+    }
+
+    public float GlowBloom
+    {
+        get => GetGlowBloom();
+        set => SetGlowBloom(value);
+    }
+
+    public Environment.GlowBlendModeEnum GlowBlendMode
+    {
+        get => GetGlowBlendMode();
+        set => SetGlowBlendMode(value);
+    }
+
+    public float GlowHdrThreshold
+    {
+        get => GetGlowHdrBleedThreshold();
+        set => SetGlowHdrBleedThreshold(value);
+    }
+
+    public float GlowHdrScale
+    {
+        get => GetGlowHdrBleedScale();
+        set => SetGlowHdrBleedScale(value);
+    }
+
+    public float GlowHdrLuminanceCap
+    {
+        get => GetGlowHdrLuminanceCap();
+        set => SetGlowHdrLuminanceCap(value);
+    }
+
+    public float GlowMapStrength
+    {
+        get => GetGlowMapStrength();
+        set => SetGlowMapStrength(value);
+    }
+
+    public Texture? GlowMap
+    {
+        get => GetGlowMap();
+        set => SetGlowMap(value);
+    }
+
+    public bool FogEnabled
+    {
+        get => IsFogEnabled();
+        set => SetFogEnabled(value);
+    }
+
+    public Environment.FogModeEnum FogMode
+    {
+        get => GetFogMode();
+        set => SetFogMode(value);
+    }
+
+    public Color FogLightColor
+    {
+        get => GetFogLightColor();
+        set => SetFogLightColor(value);
+    }
+
+    public float FogLightEnergy
+    {
+        get => GetFogLightEnergy();
+        set => SetFogLightEnergy(value);
+    }
+
+    public float FogSunScatter
+    {
+        get => GetFogSunScatter();
+        set => SetFogSunScatter(value);
+    }
+
+    public float FogDensity
+    {
+        get => GetFogDensity();
+        set => SetFogDensity(value);
+    }
+
+    public float FogAerialPerspective
+    {
+        get => GetFogAerialPerspective();
+        set => SetFogAerialPerspective(value);
+    }
+
+    public float FogSkyAffect
+    {
+        get => GetFogSkyAffect();
+        set => SetFogSkyAffect(value);
+    }
+
+    public float FogHeight
+    {
+        get => GetFogHeight();
+        set => SetFogHeight(value);
+    }
+
+    public float FogHeightDensity
+    {
+        get => GetFogHeightDensity();
+        set => SetFogHeightDensity(value);
+    }
+
+    public float FogDepthCurve
+    {
+        get => GetFogDepthCurve();
+        set => SetFogDepthCurve(value);
+    }
+
+    public float FogDepthBegin
+    {
+        get => GetFogDepthBegin();
+        set => SetFogDepthBegin(value);
+    }
+
+    public float FogDepthEnd
+    {
+        get => GetFogDepthEnd();
+        set => SetFogDepthEnd(value);
+    }
+
+    public bool VolumetricFogEnabled
+    {
+        get => IsVolumetricFogEnabled();
+        set => SetVolumetricFogEnabled(value);
+    }
+
+    public float VolumetricFogDensity
+    {
+        get => GetVolumetricFogDensity();
+        set => SetVolumetricFogDensity(value);
+    }
+
+    public Color VolumetricFogAlbedo
+    {
+        get => GetVolumetricFogAlbedo();
+        set => SetVolumetricFogAlbedo(value);
+    }
+
+    public Color VolumetricFogEmission
+    {
+        get => GetVolumetricFogEmission();
+        set => SetVolumetricFogEmission(value);
+    }
+
+    public float VolumetricFogEmissionEnergy
+    {
+        get => GetVolumetricFogEmissionEnergy();
+        set => SetVolumetricFogEmissionEnergy(value);
+    }
+
+    public float VolumetricFogGiInject
+    {
+        get => GetVolumetricFogGiInject();
+        set => SetVolumetricFogGiInject(value);
+    }
+
+    public float VolumetricFogAnisotropy
+    {
+        get => GetVolumetricFogAnisotropy();
+        set => SetVolumetricFogAnisotropy(value);
+    }
+
+    public float VolumetricFogLength
+    {
+        get => GetVolumetricFogLength();
+        set => SetVolumetricFogLength(value);
+    }
+
+    public float VolumetricFogDetailSpread
+    {
+        get => GetVolumetricFogDetailSpread();
+        set => SetVolumetricFogDetailSpread(value);
+    }
+
+    public float VolumetricFogAmbientInject
+    {
+        get => GetVolumetricFogAmbientInject();
+        set => SetVolumetricFogAmbientInject(value);
+    }
+
+    public float VolumetricFogSkyAffect
+    {
+        get => GetVolumetricFogSkyAffect();
+        set => SetVolumetricFogSkyAffect(value);
+    }
+
+    public bool VolumetricFogTemporalReprojectionEnabled
+    {
+        get => IsVolumetricFogTemporalReprojectionEnabled();
+        set => SetVolumetricFogTemporalReprojectionEnabled(value);
+    }
+
+    public float VolumetricFogTemporalReprojectionAmount
+    {
+        get => GetVolumetricFogTemporalReprojectionAmount();
+        set => SetVolumetricFogTemporalReprojectionAmount(value);
+    }
+
+    public bool AdjustmentEnabled
+    {
+        get => IsAdjustmentEnabled();
+        set => SetAdjustmentEnabled(value);
+    }
+
+    public float AdjustmentBrightness
+    {
+        get => GetAdjustmentBrightness();
+        set => SetAdjustmentBrightness(value);
+    }
+
+    public float AdjustmentContrast
+    {
+        get => GetAdjustmentContrast();
+        set => SetAdjustmentContrast(value);
+    }
+
+    public float AdjustmentSaturation
+    {
+        get => GetAdjustmentSaturation();
+        set => SetAdjustmentSaturation(value);
+    }
+
+    public Texture? AdjustmentColorCorrection
+    {
+        get => GetAdjustmentColorCorrection();
+        set => SetAdjustmentColorCorrection(value);
+    }
+
     private static nint __mb_set_background;
-    public void SetBackground(Environment.BGMode mode)
+    internal void SetBackground(Environment.BGMode mode)
     {
         var __mb = __mb_set_background;
         if (__mb == 0)
@@ -10917,7 +11765,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_background;
-    public Environment.BGMode GetBackground()
+    internal Environment.BGMode GetBackground()
     {
         var __mb = __mb_get_background;
         if (__mb == 0)
@@ -10932,7 +11780,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_sky;
-    public void SetSky(Sky? sky)
+    internal void SetSky(Sky? sky)
     {
         var __mb = __mb_set_sky;
         if (__mb == 0)
@@ -10948,7 +11796,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_sky;
-    public Sky? GetSky()
+    internal Sky? GetSky()
     {
         var __mb = __mb_get_sky;
         if (__mb == 0)
@@ -10963,7 +11811,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_sky_custom_fov;
-    public void SetSkyCustomFov(float scale)
+    internal void SetSkyCustomFov(float scale)
     {
         var __mb = __mb_set_sky_custom_fov;
         if (__mb == 0)
@@ -10979,7 +11827,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_sky_custom_fov;
-    public float GetSkyCustomFov()
+    internal float GetSkyCustomFov()
     {
         var __mb = __mb_get_sky_custom_fov;
         if (__mb == 0)
@@ -10994,7 +11842,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_sky_rotation;
-    public void SetSkyRotation(Vector3 eulerRadians)
+    internal void SetSkyRotation(Vector3 eulerRadians)
     {
         var __mb = __mb_set_sky_rotation;
         if (__mb == 0)
@@ -11010,7 +11858,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_sky_rotation;
-    public Vector3 GetSkyRotation()
+    internal Vector3 GetSkyRotation()
     {
         var __mb = __mb_get_sky_rotation;
         if (__mb == 0)
@@ -11025,7 +11873,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_bg_color;
-    public void SetBgColor(Color color)
+    internal void SetBgColor(Color color)
     {
         var __mb = __mb_set_bg_color;
         if (__mb == 0)
@@ -11041,7 +11889,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_bg_color;
-    public Color GetBgColor()
+    internal Color GetBgColor()
     {
         var __mb = __mb_get_bg_color;
         if (__mb == 0)
@@ -11056,7 +11904,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_bg_energy_multiplier;
-    public void SetBgEnergyMultiplier(float energy)
+    internal void SetBgEnergyMultiplier(float energy)
     {
         var __mb = __mb_set_bg_energy_multiplier;
         if (__mb == 0)
@@ -11072,7 +11920,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_bg_energy_multiplier;
-    public float GetBgEnergyMultiplier()
+    internal float GetBgEnergyMultiplier()
     {
         var __mb = __mb_get_bg_energy_multiplier;
         if (__mb == 0)
@@ -11087,7 +11935,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_bg_intensity;
-    public void SetBgIntensity(float energy)
+    internal void SetBgIntensity(float energy)
     {
         var __mb = __mb_set_bg_intensity;
         if (__mb == 0)
@@ -11103,7 +11951,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_bg_intensity;
-    public float GetBgIntensity()
+    internal float GetBgIntensity()
     {
         var __mb = __mb_get_bg_intensity;
         if (__mb == 0)
@@ -11118,7 +11966,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_canvas_max_layer;
-    public void SetCanvasMaxLayer(int layer)
+    internal void SetCanvasMaxLayer(int layer)
     {
         var __mb = __mb_set_canvas_max_layer;
         if (__mb == 0)
@@ -11134,7 +11982,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_canvas_max_layer;
-    public int GetCanvasMaxLayer()
+    internal int GetCanvasMaxLayer()
     {
         var __mb = __mb_get_canvas_max_layer;
         if (__mb == 0)
@@ -11149,7 +11997,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_camera_feed_id;
-    public void SetCameraFeedId(int id)
+    internal void SetCameraFeedId(int id)
     {
         var __mb = __mb_set_camera_feed_id;
         if (__mb == 0)
@@ -11165,7 +12013,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_camera_feed_id;
-    public int GetCameraFeedId()
+    internal int GetCameraFeedId()
     {
         var __mb = __mb_get_camera_feed_id;
         if (__mb == 0)
@@ -11180,7 +12028,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ambient_light_color;
-    public void SetAmbientLightColor(Color color)
+    internal void SetAmbientLightColor(Color color)
     {
         var __mb = __mb_set_ambient_light_color;
         if (__mb == 0)
@@ -11196,7 +12044,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ambient_light_color;
-    public Color GetAmbientLightColor()
+    internal Color GetAmbientLightColor()
     {
         var __mb = __mb_get_ambient_light_color;
         if (__mb == 0)
@@ -11211,7 +12059,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ambient_source;
-    public void SetAmbientSource(Environment.AmbientSource source)
+    internal void SetAmbientSource(Environment.AmbientSource source)
     {
         var __mb = __mb_set_ambient_source;
         if (__mb == 0)
@@ -11227,7 +12075,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ambient_source;
-    public Environment.AmbientSource GetAmbientSource()
+    internal Environment.AmbientSource GetAmbientSource()
     {
         var __mb = __mb_get_ambient_source;
         if (__mb == 0)
@@ -11242,7 +12090,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ambient_light_energy;
-    public void SetAmbientLightEnergy(float energy)
+    internal void SetAmbientLightEnergy(float energy)
     {
         var __mb = __mb_set_ambient_light_energy;
         if (__mb == 0)
@@ -11258,7 +12106,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ambient_light_energy;
-    public float GetAmbientLightEnergy()
+    internal float GetAmbientLightEnergy()
     {
         var __mb = __mb_get_ambient_light_energy;
         if (__mb == 0)
@@ -11273,7 +12121,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ambient_light_sky_contribution;
-    public void SetAmbientLightSkyContribution(float ratio)
+    internal void SetAmbientLightSkyContribution(float ratio)
     {
         var __mb = __mb_set_ambient_light_sky_contribution;
         if (__mb == 0)
@@ -11289,7 +12137,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ambient_light_sky_contribution;
-    public float GetAmbientLightSkyContribution()
+    internal float GetAmbientLightSkyContribution()
     {
         var __mb = __mb_get_ambient_light_sky_contribution;
         if (__mb == 0)
@@ -11304,7 +12152,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_reflection_source;
-    public void SetReflectionSource(Environment.ReflectionSource source)
+    internal void SetReflectionSource(Environment.ReflectionSource source)
     {
         var __mb = __mb_set_reflection_source;
         if (__mb == 0)
@@ -11320,7 +12168,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_reflection_source;
-    public Environment.ReflectionSource GetReflectionSource()
+    internal Environment.ReflectionSource GetReflectionSource()
     {
         var __mb = __mb_get_reflection_source;
         if (__mb == 0)
@@ -11335,7 +12183,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_tonemapper;
-    public void SetTonemapper(Environment.ToneMapper mode)
+    internal void SetTonemapper(Environment.ToneMapper mode)
     {
         var __mb = __mb_set_tonemapper;
         if (__mb == 0)
@@ -11351,7 +12199,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_tonemapper;
-    public Environment.ToneMapper GetTonemapper()
+    internal Environment.ToneMapper GetTonemapper()
     {
         var __mb = __mb_get_tonemapper;
         if (__mb == 0)
@@ -11366,7 +12214,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_tonemap_exposure;
-    public void SetTonemapExposure(float exposure)
+    internal void SetTonemapExposure(float exposure)
     {
         var __mb = __mb_set_tonemap_exposure;
         if (__mb == 0)
@@ -11382,7 +12230,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_tonemap_exposure;
-    public float GetTonemapExposure()
+    internal float GetTonemapExposure()
     {
         var __mb = __mb_get_tonemap_exposure;
         if (__mb == 0)
@@ -11397,7 +12245,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_tonemap_white;
-    public void SetTonemapWhite(float white)
+    internal void SetTonemapWhite(float white)
     {
         var __mb = __mb_set_tonemap_white;
         if (__mb == 0)
@@ -11413,7 +12261,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_tonemap_white;
-    public float GetTonemapWhite()
+    internal float GetTonemapWhite()
     {
         var __mb = __mb_get_tonemap_white;
         if (__mb == 0)
@@ -11428,7 +12276,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_tonemap_agx_white;
-    public void SetTonemapAgxWhite(float white)
+    internal void SetTonemapAgxWhite(float white)
     {
         var __mb = __mb_set_tonemap_agx_white;
         if (__mb == 0)
@@ -11444,7 +12292,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_tonemap_agx_white;
-    public float GetTonemapAgxWhite()
+    internal float GetTonemapAgxWhite()
     {
         var __mb = __mb_get_tonemap_agx_white;
         if (__mb == 0)
@@ -11459,7 +12307,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_tonemap_agx_contrast;
-    public void SetTonemapAgxContrast(float contrast)
+    internal void SetTonemapAgxContrast(float contrast)
     {
         var __mb = __mb_set_tonemap_agx_contrast;
         if (__mb == 0)
@@ -11475,7 +12323,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_tonemap_agx_contrast;
-    public float GetTonemapAgxContrast()
+    internal float GetTonemapAgxContrast()
     {
         var __mb = __mb_get_tonemap_agx_contrast;
         if (__mb == 0)
@@ -11490,7 +12338,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssr_enabled;
-    public void SetSsrEnabled(bool enabled)
+    internal void SetSsrEnabled(bool enabled)
     {
         var __mb = __mb_set_ssr_enabled;
         if (__mb == 0)
@@ -11506,7 +12354,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_is_ssr_enabled;
-    public bool IsSsrEnabled()
+    internal bool IsSsrEnabled()
     {
         var __mb = __mb_is_ssr_enabled;
         if (__mb == 0)
@@ -11521,7 +12369,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssr_max_steps;
-    public void SetSsrMaxSteps(int maxSteps)
+    internal void SetSsrMaxSteps(int maxSteps)
     {
         var __mb = __mb_set_ssr_max_steps;
         if (__mb == 0)
@@ -11537,7 +12385,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssr_max_steps;
-    public int GetSsrMaxSteps()
+    internal int GetSsrMaxSteps()
     {
         var __mb = __mb_get_ssr_max_steps;
         if (__mb == 0)
@@ -11552,7 +12400,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssr_fade_in;
-    public void SetSsrFadeIn(float fadeIn)
+    internal void SetSsrFadeIn(float fadeIn)
     {
         var __mb = __mb_set_ssr_fade_in;
         if (__mb == 0)
@@ -11568,7 +12416,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssr_fade_in;
-    public float GetSsrFadeIn()
+    internal float GetSsrFadeIn()
     {
         var __mb = __mb_get_ssr_fade_in;
         if (__mb == 0)
@@ -11583,7 +12431,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssr_fade_out;
-    public void SetSsrFadeOut(float fadeOut)
+    internal void SetSsrFadeOut(float fadeOut)
     {
         var __mb = __mb_set_ssr_fade_out;
         if (__mb == 0)
@@ -11599,7 +12447,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssr_fade_out;
-    public float GetSsrFadeOut()
+    internal float GetSsrFadeOut()
     {
         var __mb = __mb_get_ssr_fade_out;
         if (__mb == 0)
@@ -11614,7 +12462,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssr_depth_tolerance;
-    public void SetSsrDepthTolerance(float depthTolerance)
+    internal void SetSsrDepthTolerance(float depthTolerance)
     {
         var __mb = __mb_set_ssr_depth_tolerance;
         if (__mb == 0)
@@ -11630,7 +12478,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssr_depth_tolerance;
-    public float GetSsrDepthTolerance()
+    internal float GetSsrDepthTolerance()
     {
         var __mb = __mb_get_ssr_depth_tolerance;
         if (__mb == 0)
@@ -11645,7 +12493,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssao_enabled;
-    public void SetSsaoEnabled(bool enabled)
+    internal void SetSsaoEnabled(bool enabled)
     {
         var __mb = __mb_set_ssao_enabled;
         if (__mb == 0)
@@ -11661,7 +12509,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_is_ssao_enabled;
-    public bool IsSsaoEnabled()
+    internal bool IsSsaoEnabled()
     {
         var __mb = __mb_is_ssao_enabled;
         if (__mb == 0)
@@ -11676,7 +12524,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssao_radius;
-    public void SetSsaoRadius(float radius)
+    internal void SetSsaoRadius(float radius)
     {
         var __mb = __mb_set_ssao_radius;
         if (__mb == 0)
@@ -11692,7 +12540,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssao_radius;
-    public float GetSsaoRadius()
+    internal float GetSsaoRadius()
     {
         var __mb = __mb_get_ssao_radius;
         if (__mb == 0)
@@ -11707,7 +12555,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssao_intensity;
-    public void SetSsaoIntensity(float intensity)
+    internal void SetSsaoIntensity(float intensity)
     {
         var __mb = __mb_set_ssao_intensity;
         if (__mb == 0)
@@ -11723,7 +12571,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssao_intensity;
-    public float GetSsaoIntensity()
+    internal float GetSsaoIntensity()
     {
         var __mb = __mb_get_ssao_intensity;
         if (__mb == 0)
@@ -11738,7 +12586,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssao_power;
-    public void SetSsaoPower(float power)
+    internal void SetSsaoPower(float power)
     {
         var __mb = __mb_set_ssao_power;
         if (__mb == 0)
@@ -11754,7 +12602,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssao_power;
-    public float GetSsaoPower()
+    internal float GetSsaoPower()
     {
         var __mb = __mb_get_ssao_power;
         if (__mb == 0)
@@ -11769,7 +12617,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssao_detail;
-    public void SetSsaoDetail(float detail)
+    internal void SetSsaoDetail(float detail)
     {
         var __mb = __mb_set_ssao_detail;
         if (__mb == 0)
@@ -11785,7 +12633,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssao_detail;
-    public float GetSsaoDetail()
+    internal float GetSsaoDetail()
     {
         var __mb = __mb_get_ssao_detail;
         if (__mb == 0)
@@ -11800,7 +12648,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssao_horizon;
-    public void SetSsaoHorizon(float horizon)
+    internal void SetSsaoHorizon(float horizon)
     {
         var __mb = __mb_set_ssao_horizon;
         if (__mb == 0)
@@ -11816,7 +12664,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssao_horizon;
-    public float GetSsaoHorizon()
+    internal float GetSsaoHorizon()
     {
         var __mb = __mb_get_ssao_horizon;
         if (__mb == 0)
@@ -11831,7 +12679,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssao_sharpness;
-    public void SetSsaoSharpness(float sharpness)
+    internal void SetSsaoSharpness(float sharpness)
     {
         var __mb = __mb_set_ssao_sharpness;
         if (__mb == 0)
@@ -11847,7 +12695,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssao_sharpness;
-    public float GetSsaoSharpness()
+    internal float GetSsaoSharpness()
     {
         var __mb = __mb_get_ssao_sharpness;
         if (__mb == 0)
@@ -11862,7 +12710,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssao_direct_light_affect;
-    public void SetSsaoDirectLightAffect(float amount)
+    internal void SetSsaoDirectLightAffect(float amount)
     {
         var __mb = __mb_set_ssao_direct_light_affect;
         if (__mb == 0)
@@ -11878,7 +12726,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssao_direct_light_affect;
-    public float GetSsaoDirectLightAffect()
+    internal float GetSsaoDirectLightAffect()
     {
         var __mb = __mb_get_ssao_direct_light_affect;
         if (__mb == 0)
@@ -11893,7 +12741,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssao_ao_channel_affect;
-    public void SetSsaoAoChannelAffect(float amount)
+    internal void SetSsaoAoChannelAffect(float amount)
     {
         var __mb = __mb_set_ssao_ao_channel_affect;
         if (__mb == 0)
@@ -11909,7 +12757,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssao_ao_channel_affect;
-    public float GetSsaoAoChannelAffect()
+    internal float GetSsaoAoChannelAffect()
     {
         var __mb = __mb_get_ssao_ao_channel_affect;
         if (__mb == 0)
@@ -11924,7 +12772,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssil_enabled;
-    public void SetSsilEnabled(bool enabled)
+    internal void SetSsilEnabled(bool enabled)
     {
         var __mb = __mb_set_ssil_enabled;
         if (__mb == 0)
@@ -11940,7 +12788,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_is_ssil_enabled;
-    public bool IsSsilEnabled()
+    internal bool IsSsilEnabled()
     {
         var __mb = __mb_is_ssil_enabled;
         if (__mb == 0)
@@ -11955,7 +12803,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssil_radius;
-    public void SetSsilRadius(float radius)
+    internal void SetSsilRadius(float radius)
     {
         var __mb = __mb_set_ssil_radius;
         if (__mb == 0)
@@ -11971,7 +12819,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssil_radius;
-    public float GetSsilRadius()
+    internal float GetSsilRadius()
     {
         var __mb = __mb_get_ssil_radius;
         if (__mb == 0)
@@ -11986,7 +12834,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssil_intensity;
-    public void SetSsilIntensity(float intensity)
+    internal void SetSsilIntensity(float intensity)
     {
         var __mb = __mb_set_ssil_intensity;
         if (__mb == 0)
@@ -12002,7 +12850,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssil_intensity;
-    public float GetSsilIntensity()
+    internal float GetSsilIntensity()
     {
         var __mb = __mb_get_ssil_intensity;
         if (__mb == 0)
@@ -12017,7 +12865,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssil_sharpness;
-    public void SetSsilSharpness(float sharpness)
+    internal void SetSsilSharpness(float sharpness)
     {
         var __mb = __mb_set_ssil_sharpness;
         if (__mb == 0)
@@ -12033,7 +12881,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssil_sharpness;
-    public float GetSsilSharpness()
+    internal float GetSsilSharpness()
     {
         var __mb = __mb_get_ssil_sharpness;
         if (__mb == 0)
@@ -12048,7 +12896,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_ssil_normal_rejection;
-    public void SetSsilNormalRejection(float normalRejection)
+    internal void SetSsilNormalRejection(float normalRejection)
     {
         var __mb = __mb_set_ssil_normal_rejection;
         if (__mb == 0)
@@ -12064,7 +12912,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_ssil_normal_rejection;
-    public float GetSsilNormalRejection()
+    internal float GetSsilNormalRejection()
     {
         var __mb = __mb_get_ssil_normal_rejection;
         if (__mb == 0)
@@ -12079,7 +12927,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_sdfgi_enabled;
-    public void SetSdfgiEnabled(bool enabled)
+    internal void SetSdfgiEnabled(bool enabled)
     {
         var __mb = __mb_set_sdfgi_enabled;
         if (__mb == 0)
@@ -12095,7 +12943,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_is_sdfgi_enabled;
-    public bool IsSdfgiEnabled()
+    internal bool IsSdfgiEnabled()
     {
         var __mb = __mb_is_sdfgi_enabled;
         if (__mb == 0)
@@ -12110,7 +12958,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_sdfgi_cascades;
-    public void SetSdfgiCascades(int amount)
+    internal void SetSdfgiCascades(int amount)
     {
         var __mb = __mb_set_sdfgi_cascades;
         if (__mb == 0)
@@ -12126,7 +12974,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_sdfgi_cascades;
-    public int GetSdfgiCascades()
+    internal int GetSdfgiCascades()
     {
         var __mb = __mb_get_sdfgi_cascades;
         if (__mb == 0)
@@ -12141,7 +12989,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_sdfgi_min_cell_size;
-    public void SetSdfgiMinCellSize(float size)
+    internal void SetSdfgiMinCellSize(float size)
     {
         var __mb = __mb_set_sdfgi_min_cell_size;
         if (__mb == 0)
@@ -12157,7 +13005,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_sdfgi_min_cell_size;
-    public float GetSdfgiMinCellSize()
+    internal float GetSdfgiMinCellSize()
     {
         var __mb = __mb_get_sdfgi_min_cell_size;
         if (__mb == 0)
@@ -12172,7 +13020,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_sdfgi_max_distance;
-    public void SetSdfgiMaxDistance(float distance)
+    internal void SetSdfgiMaxDistance(float distance)
     {
         var __mb = __mb_set_sdfgi_max_distance;
         if (__mb == 0)
@@ -12188,7 +13036,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_sdfgi_max_distance;
-    public float GetSdfgiMaxDistance()
+    internal float GetSdfgiMaxDistance()
     {
         var __mb = __mb_get_sdfgi_max_distance;
         if (__mb == 0)
@@ -12203,7 +13051,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_sdfgi_cascade0_distance;
-    public void SetSdfgiCascade0Distance(float distance)
+    internal void SetSdfgiCascade0Distance(float distance)
     {
         var __mb = __mb_set_sdfgi_cascade0_distance;
         if (__mb == 0)
@@ -12219,7 +13067,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_sdfgi_cascade0_distance;
-    public float GetSdfgiCascade0Distance()
+    internal float GetSdfgiCascade0Distance()
     {
         var __mb = __mb_get_sdfgi_cascade0_distance;
         if (__mb == 0)
@@ -12234,7 +13082,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_sdfgi_y_scale;
-    public void SetSdfgiYScale(Environment.SDFGIYScale scale)
+    internal void SetSdfgiYScale(Environment.SDFGIYScale scale)
     {
         var __mb = __mb_set_sdfgi_y_scale;
         if (__mb == 0)
@@ -12250,7 +13098,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_sdfgi_y_scale;
-    public Environment.SDFGIYScale GetSdfgiYScale()
+    internal Environment.SDFGIYScale GetSdfgiYScale()
     {
         var __mb = __mb_get_sdfgi_y_scale;
         if (__mb == 0)
@@ -12265,7 +13113,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_sdfgi_use_occlusion;
-    public void SetSdfgiUseOcclusion(bool enable)
+    internal void SetSdfgiUseOcclusion(bool enable)
     {
         var __mb = __mb_set_sdfgi_use_occlusion;
         if (__mb == 0)
@@ -12281,7 +13129,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_is_sdfgi_using_occlusion;
-    public bool IsSdfgiUsingOcclusion()
+    internal bool IsSdfgiUsingOcclusion()
     {
         var __mb = __mb_is_sdfgi_using_occlusion;
         if (__mb == 0)
@@ -12296,7 +13144,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_sdfgi_bounce_feedback;
-    public void SetSdfgiBounceFeedback(float amount)
+    internal void SetSdfgiBounceFeedback(float amount)
     {
         var __mb = __mb_set_sdfgi_bounce_feedback;
         if (__mb == 0)
@@ -12312,7 +13160,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_sdfgi_bounce_feedback;
-    public float GetSdfgiBounceFeedback()
+    internal float GetSdfgiBounceFeedback()
     {
         var __mb = __mb_get_sdfgi_bounce_feedback;
         if (__mb == 0)
@@ -12327,7 +13175,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_sdfgi_read_sky_light;
-    public void SetSdfgiReadSkyLight(bool enable)
+    internal void SetSdfgiReadSkyLight(bool enable)
     {
         var __mb = __mb_set_sdfgi_read_sky_light;
         if (__mb == 0)
@@ -12343,7 +13191,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_is_sdfgi_reading_sky_light;
-    public bool IsSdfgiReadingSkyLight()
+    internal bool IsSdfgiReadingSkyLight()
     {
         var __mb = __mb_is_sdfgi_reading_sky_light;
         if (__mb == 0)
@@ -12358,7 +13206,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_sdfgi_energy;
-    public void SetSdfgiEnergy(float amount)
+    internal void SetSdfgiEnergy(float amount)
     {
         var __mb = __mb_set_sdfgi_energy;
         if (__mb == 0)
@@ -12374,7 +13222,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_sdfgi_energy;
-    public float GetSdfgiEnergy()
+    internal float GetSdfgiEnergy()
     {
         var __mb = __mb_get_sdfgi_energy;
         if (__mb == 0)
@@ -12389,7 +13237,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_sdfgi_normal_bias;
-    public void SetSdfgiNormalBias(float bias)
+    internal void SetSdfgiNormalBias(float bias)
     {
         var __mb = __mb_set_sdfgi_normal_bias;
         if (__mb == 0)
@@ -12405,7 +13253,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_sdfgi_normal_bias;
-    public float GetSdfgiNormalBias()
+    internal float GetSdfgiNormalBias()
     {
         var __mb = __mb_get_sdfgi_normal_bias;
         if (__mb == 0)
@@ -12420,7 +13268,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_sdfgi_probe_bias;
-    public void SetSdfgiProbeBias(float bias)
+    internal void SetSdfgiProbeBias(float bias)
     {
         var __mb = __mb_set_sdfgi_probe_bias;
         if (__mb == 0)
@@ -12436,7 +13284,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_sdfgi_probe_bias;
-    public float GetSdfgiProbeBias()
+    internal float GetSdfgiProbeBias()
     {
         var __mb = __mb_get_sdfgi_probe_bias;
         if (__mb == 0)
@@ -12451,7 +13299,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_glow_enabled;
-    public void SetGlowEnabled(bool enabled)
+    internal void SetGlowEnabled(bool enabled)
     {
         var __mb = __mb_set_glow_enabled;
         if (__mb == 0)
@@ -12467,7 +13315,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_is_glow_enabled;
-    public bool IsGlowEnabled()
+    internal bool IsGlowEnabled()
     {
         var __mb = __mb_is_glow_enabled;
         if (__mb == 0)
@@ -12518,7 +13366,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_glow_normalized;
-    public void SetGlowNormalized(bool normalize)
+    internal void SetGlowNormalized(bool normalize)
     {
         var __mb = __mb_set_glow_normalized;
         if (__mb == 0)
@@ -12534,7 +13382,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_is_glow_normalized;
-    public bool IsGlowNormalized()
+    internal bool IsGlowNormalized()
     {
         var __mb = __mb_is_glow_normalized;
         if (__mb == 0)
@@ -12549,7 +13397,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_glow_intensity;
-    public void SetGlowIntensity(float intensity)
+    internal void SetGlowIntensity(float intensity)
     {
         var __mb = __mb_set_glow_intensity;
         if (__mb == 0)
@@ -12565,7 +13413,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_glow_intensity;
-    public float GetGlowIntensity()
+    internal float GetGlowIntensity()
     {
         var __mb = __mb_get_glow_intensity;
         if (__mb == 0)
@@ -12580,7 +13428,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_glow_strength;
-    public void SetGlowStrength(float strength)
+    internal void SetGlowStrength(float strength)
     {
         var __mb = __mb_set_glow_strength;
         if (__mb == 0)
@@ -12596,7 +13444,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_glow_strength;
-    public float GetGlowStrength()
+    internal float GetGlowStrength()
     {
         var __mb = __mb_get_glow_strength;
         if (__mb == 0)
@@ -12611,7 +13459,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_glow_mix;
-    public void SetGlowMix(float mix)
+    internal void SetGlowMix(float mix)
     {
         var __mb = __mb_set_glow_mix;
         if (__mb == 0)
@@ -12627,7 +13475,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_glow_mix;
-    public float GetGlowMix()
+    internal float GetGlowMix()
     {
         var __mb = __mb_get_glow_mix;
         if (__mb == 0)
@@ -12642,7 +13490,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_glow_bloom;
-    public void SetGlowBloom(float amount)
+    internal void SetGlowBloom(float amount)
     {
         var __mb = __mb_set_glow_bloom;
         if (__mb == 0)
@@ -12658,7 +13506,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_glow_bloom;
-    public float GetGlowBloom()
+    internal float GetGlowBloom()
     {
         var __mb = __mb_get_glow_bloom;
         if (__mb == 0)
@@ -12673,7 +13521,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_glow_blend_mode;
-    public void SetGlowBlendMode(Environment.GlowBlendMode mode)
+    internal void SetGlowBlendMode(Environment.GlowBlendModeEnum mode)
     {
         var __mb = __mb_set_glow_blend_mode;
         if (__mb == 0)
@@ -12689,7 +13537,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_glow_blend_mode;
-    public Environment.GlowBlendMode GetGlowBlendMode()
+    internal Environment.GlowBlendModeEnum GetGlowBlendMode()
     {
         var __mb = __mb_get_glow_blend_mode;
         if (__mb == 0)
@@ -12700,11 +13548,11 @@ public unsafe partial class Environment : Resource
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Environment.GlowBlendMode)__ret;
+        return (Environment.GlowBlendModeEnum)__ret;
     }
 
     private static nint __mb_set_glow_hdr_bleed_threshold;
-    public void SetGlowHdrBleedThreshold(float threshold)
+    internal void SetGlowHdrBleedThreshold(float threshold)
     {
         var __mb = __mb_set_glow_hdr_bleed_threshold;
         if (__mb == 0)
@@ -12720,7 +13568,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_glow_hdr_bleed_threshold;
-    public float GetGlowHdrBleedThreshold()
+    internal float GetGlowHdrBleedThreshold()
     {
         var __mb = __mb_get_glow_hdr_bleed_threshold;
         if (__mb == 0)
@@ -12735,7 +13583,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_glow_hdr_bleed_scale;
-    public void SetGlowHdrBleedScale(float scale)
+    internal void SetGlowHdrBleedScale(float scale)
     {
         var __mb = __mb_set_glow_hdr_bleed_scale;
         if (__mb == 0)
@@ -12751,7 +13599,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_glow_hdr_bleed_scale;
-    public float GetGlowHdrBleedScale()
+    internal float GetGlowHdrBleedScale()
     {
         var __mb = __mb_get_glow_hdr_bleed_scale;
         if (__mb == 0)
@@ -12766,7 +13614,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_glow_hdr_luminance_cap;
-    public void SetGlowHdrLuminanceCap(float amount)
+    internal void SetGlowHdrLuminanceCap(float amount)
     {
         var __mb = __mb_set_glow_hdr_luminance_cap;
         if (__mb == 0)
@@ -12782,7 +13630,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_glow_hdr_luminance_cap;
-    public float GetGlowHdrLuminanceCap()
+    internal float GetGlowHdrLuminanceCap()
     {
         var __mb = __mb_get_glow_hdr_luminance_cap;
         if (__mb == 0)
@@ -12797,7 +13645,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_glow_map_strength;
-    public void SetGlowMapStrength(float strength)
+    internal void SetGlowMapStrength(float strength)
     {
         var __mb = __mb_set_glow_map_strength;
         if (__mb == 0)
@@ -12813,7 +13661,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_glow_map_strength;
-    public float GetGlowMapStrength()
+    internal float GetGlowMapStrength()
     {
         var __mb = __mb_get_glow_map_strength;
         if (__mb == 0)
@@ -12828,7 +13676,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_glow_map;
-    public void SetGlowMap(Texture? mode)
+    internal void SetGlowMap(Texture? mode)
     {
         var __mb = __mb_set_glow_map;
         if (__mb == 0)
@@ -12844,7 +13692,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_glow_map;
-    public Texture? GetGlowMap()
+    internal Texture? GetGlowMap()
     {
         var __mb = __mb_get_glow_map;
         if (__mb == 0)
@@ -12859,7 +13707,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_fog_enabled;
-    public void SetFogEnabled(bool enabled)
+    internal void SetFogEnabled(bool enabled)
     {
         var __mb = __mb_set_fog_enabled;
         if (__mb == 0)
@@ -12875,7 +13723,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_is_fog_enabled;
-    public bool IsFogEnabled()
+    internal bool IsFogEnabled()
     {
         var __mb = __mb_is_fog_enabled;
         if (__mb == 0)
@@ -12890,7 +13738,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_fog_mode;
-    public void SetFogMode(Environment.FogMode mode)
+    internal void SetFogMode(Environment.FogModeEnum mode)
     {
         var __mb = __mb_set_fog_mode;
         if (__mb == 0)
@@ -12906,7 +13754,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_fog_mode;
-    public Environment.FogMode GetFogMode()
+    internal Environment.FogModeEnum GetFogMode()
     {
         var __mb = __mb_get_fog_mode;
         if (__mb == 0)
@@ -12917,11 +13765,11 @@ public unsafe partial class Environment : Resource
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Environment.FogMode)__ret;
+        return (Environment.FogModeEnum)__ret;
     }
 
     private static nint __mb_set_fog_light_color;
-    public void SetFogLightColor(Color lightColor)
+    internal void SetFogLightColor(Color lightColor)
     {
         var __mb = __mb_set_fog_light_color;
         if (__mb == 0)
@@ -12937,7 +13785,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_fog_light_color;
-    public Color GetFogLightColor()
+    internal Color GetFogLightColor()
     {
         var __mb = __mb_get_fog_light_color;
         if (__mb == 0)
@@ -12952,7 +13800,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_fog_light_energy;
-    public void SetFogLightEnergy(float lightEnergy)
+    internal void SetFogLightEnergy(float lightEnergy)
     {
         var __mb = __mb_set_fog_light_energy;
         if (__mb == 0)
@@ -12968,7 +13816,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_fog_light_energy;
-    public float GetFogLightEnergy()
+    internal float GetFogLightEnergy()
     {
         var __mb = __mb_get_fog_light_energy;
         if (__mb == 0)
@@ -12983,7 +13831,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_fog_sun_scatter;
-    public void SetFogSunScatter(float sunScatter)
+    internal void SetFogSunScatter(float sunScatter)
     {
         var __mb = __mb_set_fog_sun_scatter;
         if (__mb == 0)
@@ -12999,7 +13847,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_fog_sun_scatter;
-    public float GetFogSunScatter()
+    internal float GetFogSunScatter()
     {
         var __mb = __mb_get_fog_sun_scatter;
         if (__mb == 0)
@@ -13014,7 +13862,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_fog_density;
-    public void SetFogDensity(float density)
+    internal void SetFogDensity(float density)
     {
         var __mb = __mb_set_fog_density;
         if (__mb == 0)
@@ -13030,7 +13878,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_fog_density;
-    public float GetFogDensity()
+    internal float GetFogDensity()
     {
         var __mb = __mb_get_fog_density;
         if (__mb == 0)
@@ -13045,7 +13893,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_fog_height;
-    public void SetFogHeight(float height)
+    internal void SetFogHeight(float height)
     {
         var __mb = __mb_set_fog_height;
         if (__mb == 0)
@@ -13061,7 +13909,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_fog_height;
-    public float GetFogHeight()
+    internal float GetFogHeight()
     {
         var __mb = __mb_get_fog_height;
         if (__mb == 0)
@@ -13076,7 +13924,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_fog_height_density;
-    public void SetFogHeightDensity(float heightDensity)
+    internal void SetFogHeightDensity(float heightDensity)
     {
         var __mb = __mb_set_fog_height_density;
         if (__mb == 0)
@@ -13092,7 +13940,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_fog_height_density;
-    public float GetFogHeightDensity()
+    internal float GetFogHeightDensity()
     {
         var __mb = __mb_get_fog_height_density;
         if (__mb == 0)
@@ -13107,7 +13955,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_fog_aerial_perspective;
-    public void SetFogAerialPerspective(float aerialPerspective)
+    internal void SetFogAerialPerspective(float aerialPerspective)
     {
         var __mb = __mb_set_fog_aerial_perspective;
         if (__mb == 0)
@@ -13123,7 +13971,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_fog_aerial_perspective;
-    public float GetFogAerialPerspective()
+    internal float GetFogAerialPerspective()
     {
         var __mb = __mb_get_fog_aerial_perspective;
         if (__mb == 0)
@@ -13138,7 +13986,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_fog_sky_affect;
-    public void SetFogSkyAffect(float skyAffect)
+    internal void SetFogSkyAffect(float skyAffect)
     {
         var __mb = __mb_set_fog_sky_affect;
         if (__mb == 0)
@@ -13154,7 +14002,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_fog_sky_affect;
-    public float GetFogSkyAffect()
+    internal float GetFogSkyAffect()
     {
         var __mb = __mb_get_fog_sky_affect;
         if (__mb == 0)
@@ -13169,7 +14017,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_fog_depth_curve;
-    public void SetFogDepthCurve(float curve)
+    internal void SetFogDepthCurve(float curve)
     {
         var __mb = __mb_set_fog_depth_curve;
         if (__mb == 0)
@@ -13185,7 +14033,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_fog_depth_curve;
-    public float GetFogDepthCurve()
+    internal float GetFogDepthCurve()
     {
         var __mb = __mb_get_fog_depth_curve;
         if (__mb == 0)
@@ -13200,7 +14048,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_fog_depth_begin;
-    public void SetFogDepthBegin(float begin)
+    internal void SetFogDepthBegin(float begin)
     {
         var __mb = __mb_set_fog_depth_begin;
         if (__mb == 0)
@@ -13216,7 +14064,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_fog_depth_begin;
-    public float GetFogDepthBegin()
+    internal float GetFogDepthBegin()
     {
         var __mb = __mb_get_fog_depth_begin;
         if (__mb == 0)
@@ -13231,7 +14079,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_fog_depth_end;
-    public void SetFogDepthEnd(float end)
+    internal void SetFogDepthEnd(float end)
     {
         var __mb = __mb_set_fog_depth_end;
         if (__mb == 0)
@@ -13247,7 +14095,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_fog_depth_end;
-    public float GetFogDepthEnd()
+    internal float GetFogDepthEnd()
     {
         var __mb = __mb_get_fog_depth_end;
         if (__mb == 0)
@@ -13262,7 +14110,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_volumetric_fog_enabled;
-    public void SetVolumetricFogEnabled(bool enabled)
+    internal void SetVolumetricFogEnabled(bool enabled)
     {
         var __mb = __mb_set_volumetric_fog_enabled;
         if (__mb == 0)
@@ -13278,7 +14126,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_is_volumetric_fog_enabled;
-    public bool IsVolumetricFogEnabled()
+    internal bool IsVolumetricFogEnabled()
     {
         var __mb = __mb_is_volumetric_fog_enabled;
         if (__mb == 0)
@@ -13293,7 +14141,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_volumetric_fog_emission;
-    public void SetVolumetricFogEmission(Color color)
+    internal void SetVolumetricFogEmission(Color color)
     {
         var __mb = __mb_set_volumetric_fog_emission;
         if (__mb == 0)
@@ -13309,7 +14157,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_volumetric_fog_emission;
-    public Color GetVolumetricFogEmission()
+    internal Color GetVolumetricFogEmission()
     {
         var __mb = __mb_get_volumetric_fog_emission;
         if (__mb == 0)
@@ -13324,7 +14172,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_volumetric_fog_albedo;
-    public void SetVolumetricFogAlbedo(Color color)
+    internal void SetVolumetricFogAlbedo(Color color)
     {
         var __mb = __mb_set_volumetric_fog_albedo;
         if (__mb == 0)
@@ -13340,7 +14188,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_volumetric_fog_albedo;
-    public Color GetVolumetricFogAlbedo()
+    internal Color GetVolumetricFogAlbedo()
     {
         var __mb = __mb_get_volumetric_fog_albedo;
         if (__mb == 0)
@@ -13355,7 +14203,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_volumetric_fog_density;
-    public void SetVolumetricFogDensity(float density)
+    internal void SetVolumetricFogDensity(float density)
     {
         var __mb = __mb_set_volumetric_fog_density;
         if (__mb == 0)
@@ -13371,7 +14219,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_volumetric_fog_density;
-    public float GetVolumetricFogDensity()
+    internal float GetVolumetricFogDensity()
     {
         var __mb = __mb_get_volumetric_fog_density;
         if (__mb == 0)
@@ -13386,7 +14234,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_volumetric_fog_emission_energy;
-    public void SetVolumetricFogEmissionEnergy(float begin)
+    internal void SetVolumetricFogEmissionEnergy(float begin)
     {
         var __mb = __mb_set_volumetric_fog_emission_energy;
         if (__mb == 0)
@@ -13402,7 +14250,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_volumetric_fog_emission_energy;
-    public float GetVolumetricFogEmissionEnergy()
+    internal float GetVolumetricFogEmissionEnergy()
     {
         var __mb = __mb_get_volumetric_fog_emission_energy;
         if (__mb == 0)
@@ -13417,7 +14265,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_volumetric_fog_anisotropy;
-    public void SetVolumetricFogAnisotropy(float anisotropy)
+    internal void SetVolumetricFogAnisotropy(float anisotropy)
     {
         var __mb = __mb_set_volumetric_fog_anisotropy;
         if (__mb == 0)
@@ -13433,7 +14281,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_volumetric_fog_anisotropy;
-    public float GetVolumetricFogAnisotropy()
+    internal float GetVolumetricFogAnisotropy()
     {
         var __mb = __mb_get_volumetric_fog_anisotropy;
         if (__mb == 0)
@@ -13448,7 +14296,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_volumetric_fog_length;
-    public void SetVolumetricFogLength(float length)
+    internal void SetVolumetricFogLength(float length)
     {
         var __mb = __mb_set_volumetric_fog_length;
         if (__mb == 0)
@@ -13464,7 +14312,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_volumetric_fog_length;
-    public float GetVolumetricFogLength()
+    internal float GetVolumetricFogLength()
     {
         var __mb = __mb_get_volumetric_fog_length;
         if (__mb == 0)
@@ -13479,7 +14327,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_volumetric_fog_detail_spread;
-    public void SetVolumetricFogDetailSpread(float detailSpread)
+    internal void SetVolumetricFogDetailSpread(float detailSpread)
     {
         var __mb = __mb_set_volumetric_fog_detail_spread;
         if (__mb == 0)
@@ -13495,7 +14343,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_volumetric_fog_detail_spread;
-    public float GetVolumetricFogDetailSpread()
+    internal float GetVolumetricFogDetailSpread()
     {
         var __mb = __mb_get_volumetric_fog_detail_spread;
         if (__mb == 0)
@@ -13510,7 +14358,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_volumetric_fog_gi_inject;
-    public void SetVolumetricFogGiInject(float giInject)
+    internal void SetVolumetricFogGiInject(float giInject)
     {
         var __mb = __mb_set_volumetric_fog_gi_inject;
         if (__mb == 0)
@@ -13526,7 +14374,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_volumetric_fog_gi_inject;
-    public float GetVolumetricFogGiInject()
+    internal float GetVolumetricFogGiInject()
     {
         var __mb = __mb_get_volumetric_fog_gi_inject;
         if (__mb == 0)
@@ -13541,7 +14389,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_volumetric_fog_ambient_inject;
-    public void SetVolumetricFogAmbientInject(float enabled)
+    internal void SetVolumetricFogAmbientInject(float enabled)
     {
         var __mb = __mb_set_volumetric_fog_ambient_inject;
         if (__mb == 0)
@@ -13557,7 +14405,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_volumetric_fog_ambient_inject;
-    public float GetVolumetricFogAmbientInject()
+    internal float GetVolumetricFogAmbientInject()
     {
         var __mb = __mb_get_volumetric_fog_ambient_inject;
         if (__mb == 0)
@@ -13572,7 +14420,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_volumetric_fog_sky_affect;
-    public void SetVolumetricFogSkyAffect(float skyAffect)
+    internal void SetVolumetricFogSkyAffect(float skyAffect)
     {
         var __mb = __mb_set_volumetric_fog_sky_affect;
         if (__mb == 0)
@@ -13588,7 +14436,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_volumetric_fog_sky_affect;
-    public float GetVolumetricFogSkyAffect()
+    internal float GetVolumetricFogSkyAffect()
     {
         var __mb = __mb_get_volumetric_fog_sky_affect;
         if (__mb == 0)
@@ -13603,7 +14451,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_volumetric_fog_temporal_reprojection_enabled;
-    public void SetVolumetricFogTemporalReprojectionEnabled(bool enabled)
+    internal void SetVolumetricFogTemporalReprojectionEnabled(bool enabled)
     {
         var __mb = __mb_set_volumetric_fog_temporal_reprojection_enabled;
         if (__mb == 0)
@@ -13619,7 +14467,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_is_volumetric_fog_temporal_reprojection_enabled;
-    public bool IsVolumetricFogTemporalReprojectionEnabled()
+    internal bool IsVolumetricFogTemporalReprojectionEnabled()
     {
         var __mb = __mb_is_volumetric_fog_temporal_reprojection_enabled;
         if (__mb == 0)
@@ -13634,7 +14482,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_volumetric_fog_temporal_reprojection_amount;
-    public void SetVolumetricFogTemporalReprojectionAmount(float temporalReprojectionAmount)
+    internal void SetVolumetricFogTemporalReprojectionAmount(float temporalReprojectionAmount)
     {
         var __mb = __mb_set_volumetric_fog_temporal_reprojection_amount;
         if (__mb == 0)
@@ -13650,7 +14498,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_volumetric_fog_temporal_reprojection_amount;
-    public float GetVolumetricFogTemporalReprojectionAmount()
+    internal float GetVolumetricFogTemporalReprojectionAmount()
     {
         var __mb = __mb_get_volumetric_fog_temporal_reprojection_amount;
         if (__mb == 0)
@@ -13665,7 +14513,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_adjustment_enabled;
-    public void SetAdjustmentEnabled(bool enabled)
+    internal void SetAdjustmentEnabled(bool enabled)
     {
         var __mb = __mb_set_adjustment_enabled;
         if (__mb == 0)
@@ -13681,7 +14529,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_is_adjustment_enabled;
-    public bool IsAdjustmentEnabled()
+    internal bool IsAdjustmentEnabled()
     {
         var __mb = __mb_is_adjustment_enabled;
         if (__mb == 0)
@@ -13696,7 +14544,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_adjustment_brightness;
-    public void SetAdjustmentBrightness(float brightness)
+    internal void SetAdjustmentBrightness(float brightness)
     {
         var __mb = __mb_set_adjustment_brightness;
         if (__mb == 0)
@@ -13712,7 +14560,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_adjustment_brightness;
-    public float GetAdjustmentBrightness()
+    internal float GetAdjustmentBrightness()
     {
         var __mb = __mb_get_adjustment_brightness;
         if (__mb == 0)
@@ -13727,7 +14575,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_adjustment_contrast;
-    public void SetAdjustmentContrast(float contrast)
+    internal void SetAdjustmentContrast(float contrast)
     {
         var __mb = __mb_set_adjustment_contrast;
         if (__mb == 0)
@@ -13743,7 +14591,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_adjustment_contrast;
-    public float GetAdjustmentContrast()
+    internal float GetAdjustmentContrast()
     {
         var __mb = __mb_get_adjustment_contrast;
         if (__mb == 0)
@@ -13758,7 +14606,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_adjustment_saturation;
-    public void SetAdjustmentSaturation(float saturation)
+    internal void SetAdjustmentSaturation(float saturation)
     {
         var __mb = __mb_set_adjustment_saturation;
         if (__mb == 0)
@@ -13774,7 +14622,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_adjustment_saturation;
-    public float GetAdjustmentSaturation()
+    internal float GetAdjustmentSaturation()
     {
         var __mb = __mb_get_adjustment_saturation;
         if (__mb == 0)
@@ -13789,7 +14637,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_set_adjustment_color_correction;
-    public void SetAdjustmentColorCorrection(Texture? colorCorrection)
+    internal void SetAdjustmentColorCorrection(Texture? colorCorrection)
     {
         var __mb = __mb_set_adjustment_color_correction;
         if (__mb == 0)
@@ -13805,7 +14653,7 @@ public unsafe partial class Environment : Resource
     }
 
     private static nint __mb_get_adjustment_color_correction;
-    public Texture? GetAdjustmentColorCorrection()
+    internal Texture? GetAdjustmentColorCorrection()
     {
         var __mb = __mb_get_adjustment_color_correction;
         if (__mb == 0)
@@ -13893,8 +14741,14 @@ public unsafe partial class ExternalTexture : Texture2D
         ClassRegistry.AttachNew(this, "ExternalTexture");
     }
 
+    public Vector2 Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
     private static nint __mb_set_size;
-    public void SetSize(Vector2 size)
+    internal void SetSize(Vector2 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)

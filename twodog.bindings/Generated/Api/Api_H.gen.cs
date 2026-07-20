@@ -182,6 +182,24 @@ public unsafe partial class HTTPClient : RefCounted
         RESPONSE_NETWORK_AUTH_REQUIRED = 511,
     }
 
+    public bool BlockingModeEnabled
+    {
+        get => IsBlockingModeEnabled();
+        set => SetBlockingMode(value);
+    }
+
+    public StreamPeer? Connection
+    {
+        get => GetConnection();
+        set => SetConnection(value);
+    }
+
+    public int ReadChunkSize
+    {
+        get => GetReadChunkSize();
+        set => SetReadChunkSize(value);
+    }
+
     private static nint __mb_connect_to_host;
     public Error ConnectToHost(string host, int port, TLSOptions? tlsOptions)
     {
@@ -206,7 +224,7 @@ public unsafe partial class HTTPClient : RefCounted
     }
 
     private static nint __mb_set_connection;
-    public void SetConnection(StreamPeer? connection)
+    internal void SetConnection(StreamPeer? connection)
     {
         var __mb = __mb_set_connection;
         if (__mb == 0)
@@ -222,7 +240,7 @@ public unsafe partial class HTTPClient : RefCounted
     }
 
     private static nint __mb_get_connection;
-    public StreamPeer? GetConnection()
+    internal StreamPeer? GetConnection()
     {
         var __mb = __mb_get_connection;
         if (__mb == 0)
@@ -325,7 +343,7 @@ public unsafe partial class HTTPClient : RefCounted
     }
 
     private static nint __mb_set_read_chunk_size;
-    public void SetReadChunkSize(int bytes)
+    internal void SetReadChunkSize(int bytes)
     {
         var __mb = __mb_set_read_chunk_size;
         if (__mb == 0)
@@ -341,7 +359,7 @@ public unsafe partial class HTTPClient : RefCounted
     }
 
     private static nint __mb_get_read_chunk_size;
-    public int GetReadChunkSize()
+    internal int GetReadChunkSize()
     {
         var __mb = __mb_get_read_chunk_size;
         if (__mb == 0)
@@ -356,7 +374,7 @@ public unsafe partial class HTTPClient : RefCounted
     }
 
     private static nint __mb_set_blocking_mode;
-    public void SetBlockingMode(bool enabled)
+    internal void SetBlockingMode(bool enabled)
     {
         var __mb = __mb_set_blocking_mode;
         if (__mb == 0)
@@ -372,7 +390,7 @@ public unsafe partial class HTTPClient : RefCounted
     }
 
     private static nint __mb_is_blocking_mode_enabled;
-    public bool IsBlockingModeEnabled()
+    internal bool IsBlockingModeEnabled()
     {
         var __mb = __mb_is_blocking_mode_enabled;
         if (__mb == 0)
@@ -500,6 +518,48 @@ public unsafe partial class HTTPRequest : Node
         RESULT_TIMEOUT = 13,
     }
 
+    public string DownloadFile
+    {
+        get => GetDownloadFile();
+        set => SetDownloadFile(value);
+    }
+
+    public int DownloadChunkSize
+    {
+        get => GetDownloadChunkSize();
+        set => SetDownloadChunkSize(value);
+    }
+
+    public bool UseThreads
+    {
+        get => IsUsingThreads();
+        set => SetUseThreads(value);
+    }
+
+    public bool AcceptGzip
+    {
+        get => IsAcceptingGzip();
+        set => SetAcceptGzip(value);
+    }
+
+    public int BodySizeLimit
+    {
+        get => GetBodySizeLimit();
+        set => SetBodySizeLimit(value);
+    }
+
+    public int MaxRedirects
+    {
+        get => GetMaxRedirects();
+        set => SetMaxRedirects(value);
+    }
+
+    public double Timeout
+    {
+        get => GetTimeout();
+        set => SetTimeout(value);
+    }
+
     private static nint __mb_cancel_request;
     public void CancelRequest()
     {
@@ -545,7 +605,7 @@ public unsafe partial class HTTPRequest : Node
     }
 
     private static nint __mb_set_use_threads;
-    public void SetUseThreads(bool enable)
+    internal void SetUseThreads(bool enable)
     {
         var __mb = __mb_set_use_threads;
         if (__mb == 0)
@@ -561,7 +621,7 @@ public unsafe partial class HTTPRequest : Node
     }
 
     private static nint __mb_is_using_threads;
-    public bool IsUsingThreads()
+    internal bool IsUsingThreads()
     {
         var __mb = __mb_is_using_threads;
         if (__mb == 0)
@@ -576,7 +636,7 @@ public unsafe partial class HTTPRequest : Node
     }
 
     private static nint __mb_set_accept_gzip;
-    public void SetAcceptGzip(bool enable)
+    internal void SetAcceptGzip(bool enable)
     {
         var __mb = __mb_set_accept_gzip;
         if (__mb == 0)
@@ -592,7 +652,7 @@ public unsafe partial class HTTPRequest : Node
     }
 
     private static nint __mb_is_accepting_gzip;
-    public bool IsAcceptingGzip()
+    internal bool IsAcceptingGzip()
     {
         var __mb = __mb_is_accepting_gzip;
         if (__mb == 0)
@@ -607,7 +667,7 @@ public unsafe partial class HTTPRequest : Node
     }
 
     private static nint __mb_set_body_size_limit;
-    public void SetBodySizeLimit(int bytes)
+    internal void SetBodySizeLimit(int bytes)
     {
         var __mb = __mb_set_body_size_limit;
         if (__mb == 0)
@@ -623,7 +683,7 @@ public unsafe partial class HTTPRequest : Node
     }
 
     private static nint __mb_get_body_size_limit;
-    public int GetBodySizeLimit()
+    internal int GetBodySizeLimit()
     {
         var __mb = __mb_get_body_size_limit;
         if (__mb == 0)
@@ -638,7 +698,7 @@ public unsafe partial class HTTPRequest : Node
     }
 
     private static nint __mb_set_max_redirects;
-    public void SetMaxRedirects(int amount)
+    internal void SetMaxRedirects(int amount)
     {
         var __mb = __mb_set_max_redirects;
         if (__mb == 0)
@@ -654,7 +714,7 @@ public unsafe partial class HTTPRequest : Node
     }
 
     private static nint __mb_get_max_redirects;
-    public int GetMaxRedirects()
+    internal int GetMaxRedirects()
     {
         var __mb = __mb_get_max_redirects;
         if (__mb == 0)
@@ -669,7 +729,7 @@ public unsafe partial class HTTPRequest : Node
     }
 
     private static nint __mb_set_download_file;
-    public void SetDownloadFile(string path)
+    internal void SetDownloadFile(string path)
     {
         var __mb = __mb_set_download_file;
         if (__mb == 0)
@@ -686,7 +746,7 @@ public unsafe partial class HTTPRequest : Node
     }
 
     private static nint __mb_get_download_file;
-    public string GetDownloadFile()
+    internal string GetDownloadFile()
     {
         var __mb = __mb_get_download_file;
         if (__mb == 0)
@@ -731,7 +791,7 @@ public unsafe partial class HTTPRequest : Node
     }
 
     private static nint __mb_set_timeout;
-    public void SetTimeout(double timeout)
+    internal void SetTimeout(double timeout)
     {
         var __mb = __mb_set_timeout;
         if (__mb == 0)
@@ -747,7 +807,7 @@ public unsafe partial class HTTPRequest : Node
     }
 
     private static nint __mb_get_timeout;
-    public double GetTimeout()
+    internal double GetTimeout()
     {
         var __mb = __mb_get_timeout;
         if (__mb == 0)
@@ -762,7 +822,7 @@ public unsafe partial class HTTPRequest : Node
     }
 
     private static nint __mb_set_download_chunk_size;
-    public void SetDownloadChunkSize(int chunkSize)
+    internal void SetDownloadChunkSize(int chunkSize)
     {
         var __mb = __mb_set_download_chunk_size;
         if (__mb == 0)
@@ -778,7 +838,7 @@ public unsafe partial class HTTPRequest : Node
     }
 
     private static nint __mb_get_download_chunk_size;
-    public int GetDownloadChunkSize()
+    internal int GetDownloadChunkSize()
     {
         var __mb = __mb_get_download_chunk_size;
         if (__mb == 0)
@@ -875,8 +935,20 @@ public unsafe partial class HeightMapShape3D : Shape3D
         ClassRegistry.AttachNew(this, "HeightMapShape3D");
     }
 
+    public int MapWidth
+    {
+        get => GetMapWidth();
+        set => SetMapWidth(value);
+    }
+
+    public int MapDepth
+    {
+        get => GetMapDepth();
+        set => SetMapDepth(value);
+    }
+
     private static nint __mb_set_map_width;
-    public void SetMapWidth(int width)
+    internal void SetMapWidth(int width)
     {
         var __mb = __mb_set_map_width;
         if (__mb == 0)
@@ -892,7 +964,7 @@ public unsafe partial class HeightMapShape3D : Shape3D
     }
 
     private static nint __mb_get_map_width;
-    public int GetMapWidth()
+    internal int GetMapWidth()
     {
         var __mb = __mb_get_map_width;
         if (__mb == 0)
@@ -907,7 +979,7 @@ public unsafe partial class HeightMapShape3D : Shape3D
     }
 
     private static nint __mb_set_map_depth;
-    public void SetMapDepth(int height)
+    internal void SetMapDepth(int height)
     {
         var __mb = __mb_set_map_depth;
         if (__mb == 0)
@@ -923,7 +995,7 @@ public unsafe partial class HeightMapShape3D : Shape3D
     }
 
     private static nint __mb_get_map_depth;
-    public int GetMapDepth()
+    internal int GetMapDepth()
     {
         var __mb = __mb_get_map_depth;
         if (__mb == 0)

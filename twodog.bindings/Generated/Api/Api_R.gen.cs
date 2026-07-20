@@ -19,8 +19,62 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
         ClassRegistry.AttachNew(this, "RDAccelerationStructureGeometry");
     }
 
+    public RenderingDevice.AccelerationStructureGeometryFlagBits Flags
+    {
+        get => GetFlags();
+        set => SetFlags(value);
+    }
+
+    public Rid VertexBuffer
+    {
+        get => GetVertexBuffer();
+        set => SetVertexBuffer(value);
+    }
+
+    public uint VertexOffset
+    {
+        get => GetVertexOffset();
+        set => SetVertexOffset(value);
+    }
+
+    public uint VertexStride
+    {
+        get => GetVertexStride();
+        set => SetVertexStride(value);
+    }
+
+    public uint VertexCount
+    {
+        get => GetVertexCount();
+        set => SetVertexCount(value);
+    }
+
+    public RenderingDevice.DataFormat VertexFormat
+    {
+        get => GetVertexFormat();
+        set => SetVertexFormat(value);
+    }
+
+    public Rid IndexBuffer
+    {
+        get => GetIndexBuffer();
+        set => SetIndexBuffer(value);
+    }
+
+    public uint IndexOffset
+    {
+        get => GetIndexOffset();
+        set => SetIndexOffset(value);
+    }
+
+    public uint IndexCount
+    {
+        get => GetIndexCount();
+        set => SetIndexCount(value);
+    }
+
     private static nint __mb_set_flags;
-    public void SetFlags(RenderingDevice.AccelerationStructureGeometryFlagBits pMember)
+    internal void SetFlags(RenderingDevice.AccelerationStructureGeometryFlagBits pMember)
     {
         var __mb = __mb_set_flags;
         if (__mb == 0)
@@ -36,7 +90,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_get_flags;
-    public RenderingDevice.AccelerationStructureGeometryFlagBits GetFlags()
+    internal RenderingDevice.AccelerationStructureGeometryFlagBits GetFlags()
     {
         var __mb = __mb_get_flags;
         if (__mb == 0)
@@ -51,7 +105,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_set_vertex_buffer;
-    public void SetVertexBuffer(Rid pMember)
+    internal void SetVertexBuffer(Rid pMember)
     {
         var __mb = __mb_set_vertex_buffer;
         if (__mb == 0)
@@ -67,7 +121,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_get_vertex_buffer;
-    public Rid GetVertexBuffer()
+    internal Rid GetVertexBuffer()
     {
         var __mb = __mb_get_vertex_buffer;
         if (__mb == 0)
@@ -82,7 +136,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_set_vertex_offset;
-    public void SetVertexOffset(uint pMember)
+    internal void SetVertexOffset(uint pMember)
     {
         var __mb = __mb_set_vertex_offset;
         if (__mb == 0)
@@ -98,7 +152,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_get_vertex_offset;
-    public uint GetVertexOffset()
+    internal uint GetVertexOffset()
     {
         var __mb = __mb_get_vertex_offset;
         if (__mb == 0)
@@ -113,7 +167,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_set_vertex_stride;
-    public void SetVertexStride(uint pMember)
+    internal void SetVertexStride(uint pMember)
     {
         var __mb = __mb_set_vertex_stride;
         if (__mb == 0)
@@ -129,7 +183,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_get_vertex_stride;
-    public uint GetVertexStride()
+    internal uint GetVertexStride()
     {
         var __mb = __mb_get_vertex_stride;
         if (__mb == 0)
@@ -144,7 +198,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_set_vertex_count;
-    public void SetVertexCount(uint pMember)
+    internal void SetVertexCount(uint pMember)
     {
         var __mb = __mb_set_vertex_count;
         if (__mb == 0)
@@ -160,7 +214,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_get_vertex_count;
-    public uint GetVertexCount()
+    internal uint GetVertexCount()
     {
         var __mb = __mb_get_vertex_count;
         if (__mb == 0)
@@ -175,7 +229,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_set_vertex_format;
-    public void SetVertexFormat(RenderingDevice.DataFormat pMember)
+    internal void SetVertexFormat(RenderingDevice.DataFormat pMember)
     {
         var __mb = __mb_set_vertex_format;
         if (__mb == 0)
@@ -191,7 +245,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_get_vertex_format;
-    public RenderingDevice.DataFormat GetVertexFormat()
+    internal RenderingDevice.DataFormat GetVertexFormat()
     {
         var __mb = __mb_get_vertex_format;
         if (__mb == 0)
@@ -206,7 +260,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_set_index_buffer;
-    public void SetIndexBuffer(Rid pMember)
+    internal void SetIndexBuffer(Rid pMember)
     {
         var __mb = __mb_set_index_buffer;
         if (__mb == 0)
@@ -222,7 +276,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_get_index_buffer;
-    public Rid GetIndexBuffer()
+    internal Rid GetIndexBuffer()
     {
         var __mb = __mb_get_index_buffer;
         if (__mb == 0)
@@ -237,7 +291,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_set_index_offset;
-    public void SetIndexOffset(uint pMember)
+    internal void SetIndexOffset(uint pMember)
     {
         var __mb = __mb_set_index_offset;
         if (__mb == 0)
@@ -253,7 +307,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_get_index_offset;
-    public uint GetIndexOffset()
+    internal uint GetIndexOffset()
     {
         var __mb = __mb_get_index_offset;
         if (__mb == 0)
@@ -268,7 +322,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_set_index_count;
-    public void SetIndexCount(uint pMember)
+    internal void SetIndexCount(uint pMember)
     {
         var __mb = __mb_set_index_count;
         if (__mb == 0)
@@ -284,7 +338,7 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
     }
 
     private static nint __mb_get_index_count;
-    public uint GetIndexCount()
+    internal uint GetIndexCount()
     {
         var __mb = __mb_get_index_count;
         if (__mb == 0)
@@ -308,8 +362,44 @@ public unsafe partial class RDAccelerationStructureInstance : RefCounted
         ClassRegistry.AttachNew(this, "RDAccelerationStructureInstance");
     }
 
+    public Transform3D Transform
+    {
+        get => GetTransform();
+        set => SetTransform(value);
+    }
+
+    public uint Id
+    {
+        get => GetId();
+        set => SetId(value);
+    }
+
+    public byte Mask
+    {
+        get => GetMask();
+        set => SetMask(value);
+    }
+
+    public long HitSbtRange
+    {
+        get => GetHitSbtRange();
+        set => SetHitSbtRange(value);
+    }
+
+    public RenderingDevice.AccelerationStructureInstanceFlagBits Flags
+    {
+        get => GetFlags();
+        set => SetFlags(value);
+    }
+
+    public Rid Blas
+    {
+        get => GetBlas();
+        set => SetBlas(value);
+    }
+
     private static nint __mb_set_transform;
-    public void SetTransform(Transform3D pMember)
+    internal void SetTransform(Transform3D pMember)
     {
         var __mb = __mb_set_transform;
         if (__mb == 0)
@@ -325,7 +415,7 @@ public unsafe partial class RDAccelerationStructureInstance : RefCounted
     }
 
     private static nint __mb_get_transform;
-    public Transform3D GetTransform()
+    internal Transform3D GetTransform()
     {
         var __mb = __mb_get_transform;
         if (__mb == 0)
@@ -340,7 +430,7 @@ public unsafe partial class RDAccelerationStructureInstance : RefCounted
     }
 
     private static nint __mb_set_id;
-    public void SetId(uint pMember)
+    internal void SetId(uint pMember)
     {
         var __mb = __mb_set_id;
         if (__mb == 0)
@@ -356,7 +446,7 @@ public unsafe partial class RDAccelerationStructureInstance : RefCounted
     }
 
     private static nint __mb_get_id;
-    public uint GetId()
+    internal uint GetId()
     {
         var __mb = __mb_get_id;
         if (__mb == 0)
@@ -371,7 +461,7 @@ public unsafe partial class RDAccelerationStructureInstance : RefCounted
     }
 
     private static nint __mb_set_mask;
-    public void SetMask(byte pMember)
+    internal void SetMask(byte pMember)
     {
         var __mb = __mb_set_mask;
         if (__mb == 0)
@@ -387,7 +477,7 @@ public unsafe partial class RDAccelerationStructureInstance : RefCounted
     }
 
     private static nint __mb_get_mask;
-    public byte GetMask()
+    internal byte GetMask()
     {
         var __mb = __mb_get_mask;
         if (__mb == 0)
@@ -402,7 +492,7 @@ public unsafe partial class RDAccelerationStructureInstance : RefCounted
     }
 
     private static nint __mb_set_hit_sbt_range;
-    public void SetHitSbtRange(long pMember)
+    internal void SetHitSbtRange(long pMember)
     {
         var __mb = __mb_set_hit_sbt_range;
         if (__mb == 0)
@@ -418,7 +508,7 @@ public unsafe partial class RDAccelerationStructureInstance : RefCounted
     }
 
     private static nint __mb_get_hit_sbt_range;
-    public long GetHitSbtRange()
+    internal long GetHitSbtRange()
     {
         var __mb = __mb_get_hit_sbt_range;
         if (__mb == 0)
@@ -433,7 +523,7 @@ public unsafe partial class RDAccelerationStructureInstance : RefCounted
     }
 
     private static nint __mb_set_flags;
-    public void SetFlags(RenderingDevice.AccelerationStructureInstanceFlagBits pMember)
+    internal void SetFlags(RenderingDevice.AccelerationStructureInstanceFlagBits pMember)
     {
         var __mb = __mb_set_flags;
         if (__mb == 0)
@@ -449,7 +539,7 @@ public unsafe partial class RDAccelerationStructureInstance : RefCounted
     }
 
     private static nint __mb_get_flags;
-    public RenderingDevice.AccelerationStructureInstanceFlagBits GetFlags()
+    internal RenderingDevice.AccelerationStructureInstanceFlagBits GetFlags()
     {
         var __mb = __mb_get_flags;
         if (__mb == 0)
@@ -464,7 +554,7 @@ public unsafe partial class RDAccelerationStructureInstance : RefCounted
     }
 
     private static nint __mb_set_blas;
-    public void SetBlas(Rid pMember)
+    internal void SetBlas(Rid pMember)
     {
         var __mb = __mb_set_blas;
         if (__mb == 0)
@@ -480,7 +570,7 @@ public unsafe partial class RDAccelerationStructureInstance : RefCounted
     }
 
     private static nint __mb_get_blas;
-    public Rid GetBlas()
+    internal Rid GetBlas()
     {
         var __mb = __mb_get_blas;
         if (__mb == 0)
@@ -504,8 +594,26 @@ public unsafe partial class RDAttachmentFormat : RefCounted
         ClassRegistry.AttachNew(this, "RDAttachmentFormat");
     }
 
+    public RenderingDevice.DataFormat Format
+    {
+        get => GetFormat();
+        set => SetFormat(value);
+    }
+
+    public RenderingDevice.TextureSamples Samples
+    {
+        get => GetSamples();
+        set => SetSamples(value);
+    }
+
+    public uint UsageFlags
+    {
+        get => GetUsageFlags();
+        set => SetUsageFlags(value);
+    }
+
     private static nint __mb_set_format;
-    public void SetFormat(RenderingDevice.DataFormat pMember)
+    internal void SetFormat(RenderingDevice.DataFormat pMember)
     {
         var __mb = __mb_set_format;
         if (__mb == 0)
@@ -521,7 +629,7 @@ public unsafe partial class RDAttachmentFormat : RefCounted
     }
 
     private static nint __mb_get_format;
-    public RenderingDevice.DataFormat GetFormat()
+    internal RenderingDevice.DataFormat GetFormat()
     {
         var __mb = __mb_get_format;
         if (__mb == 0)
@@ -536,7 +644,7 @@ public unsafe partial class RDAttachmentFormat : RefCounted
     }
 
     private static nint __mb_set_samples;
-    public void SetSamples(RenderingDevice.TextureSamples pMember)
+    internal void SetSamples(RenderingDevice.TextureSamples pMember)
     {
         var __mb = __mb_set_samples;
         if (__mb == 0)
@@ -552,7 +660,7 @@ public unsafe partial class RDAttachmentFormat : RefCounted
     }
 
     private static nint __mb_get_samples;
-    public RenderingDevice.TextureSamples GetSamples()
+    internal RenderingDevice.TextureSamples GetSamples()
     {
         var __mb = __mb_get_samples;
         if (__mb == 0)
@@ -567,7 +675,7 @@ public unsafe partial class RDAttachmentFormat : RefCounted
     }
 
     private static nint __mb_set_usage_flags;
-    public void SetUsageFlags(uint pMember)
+    internal void SetUsageFlags(uint pMember)
     {
         var __mb = __mb_set_usage_flags;
         if (__mb == 0)
@@ -583,7 +691,7 @@ public unsafe partial class RDAttachmentFormat : RefCounted
     }
 
     private static nint __mb_get_usage_flags;
-    public uint GetUsageFlags()
+    internal uint GetUsageFlags()
     {
         var __mb = __mb_get_usage_flags;
         if (__mb == 0)
@@ -607,8 +715,14 @@ public unsafe partial class RDFramebufferPass : RefCounted
         ClassRegistry.AttachNew(this, "RDFramebufferPass");
     }
 
+    public int DepthAttachment
+    {
+        get => GetDepthAttachment();
+        set => SetDepthAttachment(value);
+    }
+
     private static nint __mb_set_depth_attachment;
-    public void SetDepthAttachment(int pMember)
+    internal void SetDepthAttachment(int pMember)
     {
         var __mb = __mb_set_depth_attachment;
         if (__mb == 0)
@@ -624,7 +738,7 @@ public unsafe partial class RDFramebufferPass : RefCounted
     }
 
     private static nint __mb_get_depth_attachment;
-    public int GetDepthAttachment()
+    internal int GetDepthAttachment()
     {
         var __mb = __mb_get_depth_attachment;
         if (__mb == 0)
@@ -648,8 +762,26 @@ public unsafe partial class RDHitGroup : RefCounted
         ClassRegistry.AttachNew(this, "RDHitGroup");
     }
 
+    public RDPipelineShader? ClosestHitShader
+    {
+        get => GetClosestHitShader();
+        set => SetClosestHitShader(value);
+    }
+
+    public RDPipelineShader? AnyHitShader
+    {
+        get => GetAnyHitShader();
+        set => SetAnyHitShader(value);
+    }
+
+    public RDPipelineShader? IntersectionShader
+    {
+        get => GetIntersectionShader();
+        set => SetIntersectionShader(value);
+    }
+
     private static nint __mb_set_closest_hit_shader;
-    public void SetClosestHitShader(RDPipelineShader? pMember)
+    internal void SetClosestHitShader(RDPipelineShader? pMember)
     {
         var __mb = __mb_set_closest_hit_shader;
         if (__mb == 0)
@@ -665,7 +797,7 @@ public unsafe partial class RDHitGroup : RefCounted
     }
 
     private static nint __mb_get_closest_hit_shader;
-    public RDPipelineShader? GetClosestHitShader()
+    internal RDPipelineShader? GetClosestHitShader()
     {
         var __mb = __mb_get_closest_hit_shader;
         if (__mb == 0)
@@ -680,7 +812,7 @@ public unsafe partial class RDHitGroup : RefCounted
     }
 
     private static nint __mb_set_any_hit_shader;
-    public void SetAnyHitShader(RDPipelineShader? pMember)
+    internal void SetAnyHitShader(RDPipelineShader? pMember)
     {
         var __mb = __mb_set_any_hit_shader;
         if (__mb == 0)
@@ -696,7 +828,7 @@ public unsafe partial class RDHitGroup : RefCounted
     }
 
     private static nint __mb_get_any_hit_shader;
-    public RDPipelineShader? GetAnyHitShader()
+    internal RDPipelineShader? GetAnyHitShader()
     {
         var __mb = __mb_get_any_hit_shader;
         if (__mb == 0)
@@ -711,7 +843,7 @@ public unsafe partial class RDHitGroup : RefCounted
     }
 
     private static nint __mb_set_intersection_shader;
-    public void SetIntersectionShader(RDPipelineShader? pMember)
+    internal void SetIntersectionShader(RDPipelineShader? pMember)
     {
         var __mb = __mb_set_intersection_shader;
         if (__mb == 0)
@@ -727,7 +859,7 @@ public unsafe partial class RDHitGroup : RefCounted
     }
 
     private static nint __mb_get_intersection_shader;
-    public RDPipelineShader? GetIntersectionShader()
+    internal RDPipelineShader? GetIntersectionShader()
     {
         var __mb = __mb_get_intersection_shader;
         if (__mb == 0)
@@ -751,8 +883,32 @@ public unsafe partial class RDPipelineColorBlendState : RefCounted
         ClassRegistry.AttachNew(this, "RDPipelineColorBlendState");
     }
 
+    public bool EnableLogicOp
+    {
+        get => GetEnableLogicOp();
+        set => SetEnableLogicOp(value);
+    }
+
+    public RenderingDevice.LogicOperation LogicOp
+    {
+        get => GetLogicOp();
+        set => SetLogicOp(value);
+    }
+
+    public Color BlendConstant
+    {
+        get => GetBlendConstant();
+        set => SetBlendConstant(value);
+    }
+
+    public Godot.Collections.Array Attachments
+    {
+        get => GetAttachments();
+        set => SetAttachments(value);
+    }
+
     private static nint __mb_set_enable_logic_op;
-    public void SetEnableLogicOp(bool pMember)
+    internal void SetEnableLogicOp(bool pMember)
     {
         var __mb = __mb_set_enable_logic_op;
         if (__mb == 0)
@@ -768,7 +924,7 @@ public unsafe partial class RDPipelineColorBlendState : RefCounted
     }
 
     private static nint __mb_get_enable_logic_op;
-    public bool GetEnableLogicOp()
+    internal bool GetEnableLogicOp()
     {
         var __mb = __mb_get_enable_logic_op;
         if (__mb == 0)
@@ -783,7 +939,7 @@ public unsafe partial class RDPipelineColorBlendState : RefCounted
     }
 
     private static nint __mb_set_logic_op;
-    public void SetLogicOp(RenderingDevice.LogicOperation pMember)
+    internal void SetLogicOp(RenderingDevice.LogicOperation pMember)
     {
         var __mb = __mb_set_logic_op;
         if (__mb == 0)
@@ -799,7 +955,7 @@ public unsafe partial class RDPipelineColorBlendState : RefCounted
     }
 
     private static nint __mb_get_logic_op;
-    public RenderingDevice.LogicOperation GetLogicOp()
+    internal RenderingDevice.LogicOperation GetLogicOp()
     {
         var __mb = __mb_get_logic_op;
         if (__mb == 0)
@@ -814,7 +970,7 @@ public unsafe partial class RDPipelineColorBlendState : RefCounted
     }
 
     private static nint __mb_set_blend_constant;
-    public void SetBlendConstant(Color pMember)
+    internal void SetBlendConstant(Color pMember)
     {
         var __mb = __mb_set_blend_constant;
         if (__mb == 0)
@@ -830,7 +986,7 @@ public unsafe partial class RDPipelineColorBlendState : RefCounted
     }
 
     private static nint __mb_get_blend_constant;
-    public Color GetBlendConstant()
+    internal Color GetBlendConstant()
     {
         var __mb = __mb_get_blend_constant;
         if (__mb == 0)
@@ -845,7 +1001,7 @@ public unsafe partial class RDPipelineColorBlendState : RefCounted
     }
 
     private static nint __mb_set_attachments;
-    public void SetAttachments(Godot.Collections.Array attachments)
+    internal void SetAttachments(Godot.Collections.Array attachments)
     {
         var __mb = __mb_set_attachments;
         if (__mb == 0)
@@ -861,7 +1017,7 @@ public unsafe partial class RDPipelineColorBlendState : RefCounted
     }
 
     private static nint __mb_get_attachments;
-    public Godot.Collections.Array GetAttachments()
+    internal Godot.Collections.Array GetAttachments()
     {
         var __mb = __mb_get_attachments;
         if (__mb == 0)
@@ -885,6 +1041,72 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
         ClassRegistry.AttachNew(this, "RDPipelineColorBlendStateAttachment");
     }
 
+    public bool EnableBlend
+    {
+        get => GetEnableBlend();
+        set => SetEnableBlend(value);
+    }
+
+    public RenderingDevice.BlendFactor SrcColorBlendFactor
+    {
+        get => GetSrcColorBlendFactor();
+        set => SetSrcColorBlendFactor(value);
+    }
+
+    public RenderingDevice.BlendFactor DstColorBlendFactor
+    {
+        get => GetDstColorBlendFactor();
+        set => SetDstColorBlendFactor(value);
+    }
+
+    public RenderingDevice.BlendOperation ColorBlendOp
+    {
+        get => GetColorBlendOp();
+        set => SetColorBlendOp(value);
+    }
+
+    public RenderingDevice.BlendFactor SrcAlphaBlendFactor
+    {
+        get => GetSrcAlphaBlendFactor();
+        set => SetSrcAlphaBlendFactor(value);
+    }
+
+    public RenderingDevice.BlendFactor DstAlphaBlendFactor
+    {
+        get => GetDstAlphaBlendFactor();
+        set => SetDstAlphaBlendFactor(value);
+    }
+
+    public RenderingDevice.BlendOperation AlphaBlendOp
+    {
+        get => GetAlphaBlendOp();
+        set => SetAlphaBlendOp(value);
+    }
+
+    public bool WriteR
+    {
+        get => GetWriteR();
+        set => SetWriteR(value);
+    }
+
+    public bool WriteG
+    {
+        get => GetWriteG();
+        set => SetWriteG(value);
+    }
+
+    public bool WriteB
+    {
+        get => GetWriteB();
+        set => SetWriteB(value);
+    }
+
+    public bool WriteA
+    {
+        get => GetWriteA();
+        set => SetWriteA(value);
+    }
+
     private static nint __mb_set_as_mix;
     public void SetAsMix()
     {
@@ -899,7 +1121,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_set_enable_blend;
-    public void SetEnableBlend(bool pMember)
+    internal void SetEnableBlend(bool pMember)
     {
         var __mb = __mb_set_enable_blend;
         if (__mb == 0)
@@ -915,7 +1137,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_get_enable_blend;
-    public bool GetEnableBlend()
+    internal bool GetEnableBlend()
     {
         var __mb = __mb_get_enable_blend;
         if (__mb == 0)
@@ -930,7 +1152,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_set_src_color_blend_factor;
-    public void SetSrcColorBlendFactor(RenderingDevice.BlendFactor pMember)
+    internal void SetSrcColorBlendFactor(RenderingDevice.BlendFactor pMember)
     {
         var __mb = __mb_set_src_color_blend_factor;
         if (__mb == 0)
@@ -946,7 +1168,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_get_src_color_blend_factor;
-    public RenderingDevice.BlendFactor GetSrcColorBlendFactor()
+    internal RenderingDevice.BlendFactor GetSrcColorBlendFactor()
     {
         var __mb = __mb_get_src_color_blend_factor;
         if (__mb == 0)
@@ -961,7 +1183,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_set_dst_color_blend_factor;
-    public void SetDstColorBlendFactor(RenderingDevice.BlendFactor pMember)
+    internal void SetDstColorBlendFactor(RenderingDevice.BlendFactor pMember)
     {
         var __mb = __mb_set_dst_color_blend_factor;
         if (__mb == 0)
@@ -977,7 +1199,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_get_dst_color_blend_factor;
-    public RenderingDevice.BlendFactor GetDstColorBlendFactor()
+    internal RenderingDevice.BlendFactor GetDstColorBlendFactor()
     {
         var __mb = __mb_get_dst_color_blend_factor;
         if (__mb == 0)
@@ -992,7 +1214,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_set_color_blend_op;
-    public void SetColorBlendOp(RenderingDevice.BlendOperation pMember)
+    internal void SetColorBlendOp(RenderingDevice.BlendOperation pMember)
     {
         var __mb = __mb_set_color_blend_op;
         if (__mb == 0)
@@ -1008,7 +1230,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_get_color_blend_op;
-    public RenderingDevice.BlendOperation GetColorBlendOp()
+    internal RenderingDevice.BlendOperation GetColorBlendOp()
     {
         var __mb = __mb_get_color_blend_op;
         if (__mb == 0)
@@ -1023,7 +1245,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_set_src_alpha_blend_factor;
-    public void SetSrcAlphaBlendFactor(RenderingDevice.BlendFactor pMember)
+    internal void SetSrcAlphaBlendFactor(RenderingDevice.BlendFactor pMember)
     {
         var __mb = __mb_set_src_alpha_blend_factor;
         if (__mb == 0)
@@ -1039,7 +1261,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_get_src_alpha_blend_factor;
-    public RenderingDevice.BlendFactor GetSrcAlphaBlendFactor()
+    internal RenderingDevice.BlendFactor GetSrcAlphaBlendFactor()
     {
         var __mb = __mb_get_src_alpha_blend_factor;
         if (__mb == 0)
@@ -1054,7 +1276,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_set_dst_alpha_blend_factor;
-    public void SetDstAlphaBlendFactor(RenderingDevice.BlendFactor pMember)
+    internal void SetDstAlphaBlendFactor(RenderingDevice.BlendFactor pMember)
     {
         var __mb = __mb_set_dst_alpha_blend_factor;
         if (__mb == 0)
@@ -1070,7 +1292,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_get_dst_alpha_blend_factor;
-    public RenderingDevice.BlendFactor GetDstAlphaBlendFactor()
+    internal RenderingDevice.BlendFactor GetDstAlphaBlendFactor()
     {
         var __mb = __mb_get_dst_alpha_blend_factor;
         if (__mb == 0)
@@ -1085,7 +1307,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_set_alpha_blend_op;
-    public void SetAlphaBlendOp(RenderingDevice.BlendOperation pMember)
+    internal void SetAlphaBlendOp(RenderingDevice.BlendOperation pMember)
     {
         var __mb = __mb_set_alpha_blend_op;
         if (__mb == 0)
@@ -1101,7 +1323,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_get_alpha_blend_op;
-    public RenderingDevice.BlendOperation GetAlphaBlendOp()
+    internal RenderingDevice.BlendOperation GetAlphaBlendOp()
     {
         var __mb = __mb_get_alpha_blend_op;
         if (__mb == 0)
@@ -1116,7 +1338,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_set_write_r;
-    public void SetWriteR(bool pMember)
+    internal void SetWriteR(bool pMember)
     {
         var __mb = __mb_set_write_r;
         if (__mb == 0)
@@ -1132,7 +1354,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_get_write_r;
-    public bool GetWriteR()
+    internal bool GetWriteR()
     {
         var __mb = __mb_get_write_r;
         if (__mb == 0)
@@ -1147,7 +1369,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_set_write_g;
-    public void SetWriteG(bool pMember)
+    internal void SetWriteG(bool pMember)
     {
         var __mb = __mb_set_write_g;
         if (__mb == 0)
@@ -1163,7 +1385,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_get_write_g;
-    public bool GetWriteG()
+    internal bool GetWriteG()
     {
         var __mb = __mb_get_write_g;
         if (__mb == 0)
@@ -1178,7 +1400,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_set_write_b;
-    public void SetWriteB(bool pMember)
+    internal void SetWriteB(bool pMember)
     {
         var __mb = __mb_set_write_b;
         if (__mb == 0)
@@ -1194,7 +1416,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_get_write_b;
-    public bool GetWriteB()
+    internal bool GetWriteB()
     {
         var __mb = __mb_get_write_b;
         if (__mb == 0)
@@ -1209,7 +1431,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_set_write_a;
-    public void SetWriteA(bool pMember)
+    internal void SetWriteA(bool pMember)
     {
         var __mb = __mb_set_write_a;
         if (__mb == 0)
@@ -1225,7 +1447,7 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
     }
 
     private static nint __mb_get_write_a;
-    public bool GetWriteA()
+    internal bool GetWriteA()
     {
         var __mb = __mb_get_write_a;
         if (__mb == 0)
@@ -1249,8 +1471,134 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
         ClassRegistry.AttachNew(this, "RDPipelineDepthStencilState");
     }
 
+    public bool EnableDepthTest
+    {
+        get => GetEnableDepthTest();
+        set => SetEnableDepthTest(value);
+    }
+
+    public bool EnableDepthWrite
+    {
+        get => GetEnableDepthWrite();
+        set => SetEnableDepthWrite(value);
+    }
+
+    public RenderingDevice.CompareOperator DepthCompareOperator
+    {
+        get => GetDepthCompareOperator();
+        set => SetDepthCompareOperator(value);
+    }
+
+    public bool EnableDepthRange
+    {
+        get => GetEnableDepthRange();
+        set => SetEnableDepthRange(value);
+    }
+
+    public float DepthRangeMin
+    {
+        get => GetDepthRangeMin();
+        set => SetDepthRangeMin(value);
+    }
+
+    public float DepthRangeMax
+    {
+        get => GetDepthRangeMax();
+        set => SetDepthRangeMax(value);
+    }
+
+    public bool EnableStencil
+    {
+        get => GetEnableStencil();
+        set => SetEnableStencil(value);
+    }
+
+    public RenderingDevice.StencilOperation FrontOpFail
+    {
+        get => GetFrontOpFail();
+        set => SetFrontOpFail(value);
+    }
+
+    public RenderingDevice.StencilOperation FrontOpPass
+    {
+        get => GetFrontOpPass();
+        set => SetFrontOpPass(value);
+    }
+
+    public RenderingDevice.StencilOperation FrontOpDepthFail
+    {
+        get => GetFrontOpDepthFail();
+        set => SetFrontOpDepthFail(value);
+    }
+
+    public RenderingDevice.CompareOperator FrontOpCompare
+    {
+        get => GetFrontOpCompare();
+        set => SetFrontOpCompare(value);
+    }
+
+    public uint FrontOpCompareMask
+    {
+        get => GetFrontOpCompareMask();
+        set => SetFrontOpCompareMask(value);
+    }
+
+    public uint FrontOpWriteMask
+    {
+        get => GetFrontOpWriteMask();
+        set => SetFrontOpWriteMask(value);
+    }
+
+    public uint FrontOpReference
+    {
+        get => GetFrontOpReference();
+        set => SetFrontOpReference(value);
+    }
+
+    public RenderingDevice.StencilOperation BackOpFail
+    {
+        get => GetBackOpFail();
+        set => SetBackOpFail(value);
+    }
+
+    public RenderingDevice.StencilOperation BackOpPass
+    {
+        get => GetBackOpPass();
+        set => SetBackOpPass(value);
+    }
+
+    public RenderingDevice.StencilOperation BackOpDepthFail
+    {
+        get => GetBackOpDepthFail();
+        set => SetBackOpDepthFail(value);
+    }
+
+    public RenderingDevice.CompareOperator BackOpCompare
+    {
+        get => GetBackOpCompare();
+        set => SetBackOpCompare(value);
+    }
+
+    public uint BackOpCompareMask
+    {
+        get => GetBackOpCompareMask();
+        set => SetBackOpCompareMask(value);
+    }
+
+    public uint BackOpWriteMask
+    {
+        get => GetBackOpWriteMask();
+        set => SetBackOpWriteMask(value);
+    }
+
+    public uint BackOpReference
+    {
+        get => GetBackOpReference();
+        set => SetBackOpReference(value);
+    }
+
     private static nint __mb_set_enable_depth_test;
-    public void SetEnableDepthTest(bool pMember)
+    internal void SetEnableDepthTest(bool pMember)
     {
         var __mb = __mb_set_enable_depth_test;
         if (__mb == 0)
@@ -1266,7 +1614,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_enable_depth_test;
-    public bool GetEnableDepthTest()
+    internal bool GetEnableDepthTest()
     {
         var __mb = __mb_get_enable_depth_test;
         if (__mb == 0)
@@ -1281,7 +1629,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_enable_depth_write;
-    public void SetEnableDepthWrite(bool pMember)
+    internal void SetEnableDepthWrite(bool pMember)
     {
         var __mb = __mb_set_enable_depth_write;
         if (__mb == 0)
@@ -1297,7 +1645,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_enable_depth_write;
-    public bool GetEnableDepthWrite()
+    internal bool GetEnableDepthWrite()
     {
         var __mb = __mb_get_enable_depth_write;
         if (__mb == 0)
@@ -1312,7 +1660,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_depth_compare_operator;
-    public void SetDepthCompareOperator(RenderingDevice.CompareOperator pMember)
+    internal void SetDepthCompareOperator(RenderingDevice.CompareOperator pMember)
     {
         var __mb = __mb_set_depth_compare_operator;
         if (__mb == 0)
@@ -1328,7 +1676,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_depth_compare_operator;
-    public RenderingDevice.CompareOperator GetDepthCompareOperator()
+    internal RenderingDevice.CompareOperator GetDepthCompareOperator()
     {
         var __mb = __mb_get_depth_compare_operator;
         if (__mb == 0)
@@ -1343,7 +1691,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_enable_depth_range;
-    public void SetEnableDepthRange(bool pMember)
+    internal void SetEnableDepthRange(bool pMember)
     {
         var __mb = __mb_set_enable_depth_range;
         if (__mb == 0)
@@ -1359,7 +1707,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_enable_depth_range;
-    public bool GetEnableDepthRange()
+    internal bool GetEnableDepthRange()
     {
         var __mb = __mb_get_enable_depth_range;
         if (__mb == 0)
@@ -1374,7 +1722,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_depth_range_min;
-    public void SetDepthRangeMin(float pMember)
+    internal void SetDepthRangeMin(float pMember)
     {
         var __mb = __mb_set_depth_range_min;
         if (__mb == 0)
@@ -1390,7 +1738,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_depth_range_min;
-    public float GetDepthRangeMin()
+    internal float GetDepthRangeMin()
     {
         var __mb = __mb_get_depth_range_min;
         if (__mb == 0)
@@ -1405,7 +1753,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_depth_range_max;
-    public void SetDepthRangeMax(float pMember)
+    internal void SetDepthRangeMax(float pMember)
     {
         var __mb = __mb_set_depth_range_max;
         if (__mb == 0)
@@ -1421,7 +1769,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_depth_range_max;
-    public float GetDepthRangeMax()
+    internal float GetDepthRangeMax()
     {
         var __mb = __mb_get_depth_range_max;
         if (__mb == 0)
@@ -1436,7 +1784,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_enable_stencil;
-    public void SetEnableStencil(bool pMember)
+    internal void SetEnableStencil(bool pMember)
     {
         var __mb = __mb_set_enable_stencil;
         if (__mb == 0)
@@ -1452,7 +1800,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_enable_stencil;
-    public bool GetEnableStencil()
+    internal bool GetEnableStencil()
     {
         var __mb = __mb_get_enable_stencil;
         if (__mb == 0)
@@ -1467,7 +1815,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_front_op_fail;
-    public void SetFrontOpFail(RenderingDevice.StencilOperation pMember)
+    internal void SetFrontOpFail(RenderingDevice.StencilOperation pMember)
     {
         var __mb = __mb_set_front_op_fail;
         if (__mb == 0)
@@ -1483,7 +1831,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_front_op_fail;
-    public RenderingDevice.StencilOperation GetFrontOpFail()
+    internal RenderingDevice.StencilOperation GetFrontOpFail()
     {
         var __mb = __mb_get_front_op_fail;
         if (__mb == 0)
@@ -1498,7 +1846,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_front_op_pass;
-    public void SetFrontOpPass(RenderingDevice.StencilOperation pMember)
+    internal void SetFrontOpPass(RenderingDevice.StencilOperation pMember)
     {
         var __mb = __mb_set_front_op_pass;
         if (__mb == 0)
@@ -1514,7 +1862,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_front_op_pass;
-    public RenderingDevice.StencilOperation GetFrontOpPass()
+    internal RenderingDevice.StencilOperation GetFrontOpPass()
     {
         var __mb = __mb_get_front_op_pass;
         if (__mb == 0)
@@ -1529,7 +1877,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_front_op_depth_fail;
-    public void SetFrontOpDepthFail(RenderingDevice.StencilOperation pMember)
+    internal void SetFrontOpDepthFail(RenderingDevice.StencilOperation pMember)
     {
         var __mb = __mb_set_front_op_depth_fail;
         if (__mb == 0)
@@ -1545,7 +1893,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_front_op_depth_fail;
-    public RenderingDevice.StencilOperation GetFrontOpDepthFail()
+    internal RenderingDevice.StencilOperation GetFrontOpDepthFail()
     {
         var __mb = __mb_get_front_op_depth_fail;
         if (__mb == 0)
@@ -1560,7 +1908,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_front_op_compare;
-    public void SetFrontOpCompare(RenderingDevice.CompareOperator pMember)
+    internal void SetFrontOpCompare(RenderingDevice.CompareOperator pMember)
     {
         var __mb = __mb_set_front_op_compare;
         if (__mb == 0)
@@ -1576,7 +1924,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_front_op_compare;
-    public RenderingDevice.CompareOperator GetFrontOpCompare()
+    internal RenderingDevice.CompareOperator GetFrontOpCompare()
     {
         var __mb = __mb_get_front_op_compare;
         if (__mb == 0)
@@ -1591,7 +1939,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_front_op_compare_mask;
-    public void SetFrontOpCompareMask(uint pMember)
+    internal void SetFrontOpCompareMask(uint pMember)
     {
         var __mb = __mb_set_front_op_compare_mask;
         if (__mb == 0)
@@ -1607,7 +1955,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_front_op_compare_mask;
-    public uint GetFrontOpCompareMask()
+    internal uint GetFrontOpCompareMask()
     {
         var __mb = __mb_get_front_op_compare_mask;
         if (__mb == 0)
@@ -1622,7 +1970,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_front_op_write_mask;
-    public void SetFrontOpWriteMask(uint pMember)
+    internal void SetFrontOpWriteMask(uint pMember)
     {
         var __mb = __mb_set_front_op_write_mask;
         if (__mb == 0)
@@ -1638,7 +1986,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_front_op_write_mask;
-    public uint GetFrontOpWriteMask()
+    internal uint GetFrontOpWriteMask()
     {
         var __mb = __mb_get_front_op_write_mask;
         if (__mb == 0)
@@ -1653,7 +2001,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_front_op_reference;
-    public void SetFrontOpReference(uint pMember)
+    internal void SetFrontOpReference(uint pMember)
     {
         var __mb = __mb_set_front_op_reference;
         if (__mb == 0)
@@ -1669,7 +2017,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_front_op_reference;
-    public uint GetFrontOpReference()
+    internal uint GetFrontOpReference()
     {
         var __mb = __mb_get_front_op_reference;
         if (__mb == 0)
@@ -1684,7 +2032,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_back_op_fail;
-    public void SetBackOpFail(RenderingDevice.StencilOperation pMember)
+    internal void SetBackOpFail(RenderingDevice.StencilOperation pMember)
     {
         var __mb = __mb_set_back_op_fail;
         if (__mb == 0)
@@ -1700,7 +2048,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_back_op_fail;
-    public RenderingDevice.StencilOperation GetBackOpFail()
+    internal RenderingDevice.StencilOperation GetBackOpFail()
     {
         var __mb = __mb_get_back_op_fail;
         if (__mb == 0)
@@ -1715,7 +2063,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_back_op_pass;
-    public void SetBackOpPass(RenderingDevice.StencilOperation pMember)
+    internal void SetBackOpPass(RenderingDevice.StencilOperation pMember)
     {
         var __mb = __mb_set_back_op_pass;
         if (__mb == 0)
@@ -1731,7 +2079,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_back_op_pass;
-    public RenderingDevice.StencilOperation GetBackOpPass()
+    internal RenderingDevice.StencilOperation GetBackOpPass()
     {
         var __mb = __mb_get_back_op_pass;
         if (__mb == 0)
@@ -1746,7 +2094,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_back_op_depth_fail;
-    public void SetBackOpDepthFail(RenderingDevice.StencilOperation pMember)
+    internal void SetBackOpDepthFail(RenderingDevice.StencilOperation pMember)
     {
         var __mb = __mb_set_back_op_depth_fail;
         if (__mb == 0)
@@ -1762,7 +2110,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_back_op_depth_fail;
-    public RenderingDevice.StencilOperation GetBackOpDepthFail()
+    internal RenderingDevice.StencilOperation GetBackOpDepthFail()
     {
         var __mb = __mb_get_back_op_depth_fail;
         if (__mb == 0)
@@ -1777,7 +2125,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_back_op_compare;
-    public void SetBackOpCompare(RenderingDevice.CompareOperator pMember)
+    internal void SetBackOpCompare(RenderingDevice.CompareOperator pMember)
     {
         var __mb = __mb_set_back_op_compare;
         if (__mb == 0)
@@ -1793,7 +2141,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_back_op_compare;
-    public RenderingDevice.CompareOperator GetBackOpCompare()
+    internal RenderingDevice.CompareOperator GetBackOpCompare()
     {
         var __mb = __mb_get_back_op_compare;
         if (__mb == 0)
@@ -1808,7 +2156,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_back_op_compare_mask;
-    public void SetBackOpCompareMask(uint pMember)
+    internal void SetBackOpCompareMask(uint pMember)
     {
         var __mb = __mb_set_back_op_compare_mask;
         if (__mb == 0)
@@ -1824,7 +2172,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_back_op_compare_mask;
-    public uint GetBackOpCompareMask()
+    internal uint GetBackOpCompareMask()
     {
         var __mb = __mb_get_back_op_compare_mask;
         if (__mb == 0)
@@ -1839,7 +2187,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_back_op_write_mask;
-    public void SetBackOpWriteMask(uint pMember)
+    internal void SetBackOpWriteMask(uint pMember)
     {
         var __mb = __mb_set_back_op_write_mask;
         if (__mb == 0)
@@ -1855,7 +2203,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_back_op_write_mask;
-    public uint GetBackOpWriteMask()
+    internal uint GetBackOpWriteMask()
     {
         var __mb = __mb_get_back_op_write_mask;
         if (__mb == 0)
@@ -1870,7 +2218,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_set_back_op_reference;
-    public void SetBackOpReference(uint pMember)
+    internal void SetBackOpReference(uint pMember)
     {
         var __mb = __mb_set_back_op_reference;
         if (__mb == 0)
@@ -1886,7 +2234,7 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
     }
 
     private static nint __mb_get_back_op_reference;
-    public uint GetBackOpReference()
+    internal uint GetBackOpReference()
     {
         var __mb = __mb_get_back_op_reference;
         if (__mb == 0)
@@ -1910,8 +2258,44 @@ public unsafe partial class RDPipelineMultisampleState : RefCounted
         ClassRegistry.AttachNew(this, "RDPipelineMultisampleState");
     }
 
+    public RenderingDevice.TextureSamples SampleCount
+    {
+        get => GetSampleCount();
+        set => SetSampleCount(value);
+    }
+
+    public bool EnableSampleShading
+    {
+        get => GetEnableSampleShading();
+        set => SetEnableSampleShading(value);
+    }
+
+    public float MinSampleShading
+    {
+        get => GetMinSampleShading();
+        set => SetMinSampleShading(value);
+    }
+
+    public bool EnableAlphaToCoverage
+    {
+        get => GetEnableAlphaToCoverage();
+        set => SetEnableAlphaToCoverage(value);
+    }
+
+    public bool EnableAlphaToOne
+    {
+        get => GetEnableAlphaToOne();
+        set => SetEnableAlphaToOne(value);
+    }
+
+    public Godot.Collections.Array SampleMasks
+    {
+        get => GetSampleMasks();
+        set => SetSampleMasks(value);
+    }
+
     private static nint __mb_set_sample_count;
-    public void SetSampleCount(RenderingDevice.TextureSamples pMember)
+    internal void SetSampleCount(RenderingDevice.TextureSamples pMember)
     {
         var __mb = __mb_set_sample_count;
         if (__mb == 0)
@@ -1927,7 +2311,7 @@ public unsafe partial class RDPipelineMultisampleState : RefCounted
     }
 
     private static nint __mb_get_sample_count;
-    public RenderingDevice.TextureSamples GetSampleCount()
+    internal RenderingDevice.TextureSamples GetSampleCount()
     {
         var __mb = __mb_get_sample_count;
         if (__mb == 0)
@@ -1942,7 +2326,7 @@ public unsafe partial class RDPipelineMultisampleState : RefCounted
     }
 
     private static nint __mb_set_enable_sample_shading;
-    public void SetEnableSampleShading(bool pMember)
+    internal void SetEnableSampleShading(bool pMember)
     {
         var __mb = __mb_set_enable_sample_shading;
         if (__mb == 0)
@@ -1958,7 +2342,7 @@ public unsafe partial class RDPipelineMultisampleState : RefCounted
     }
 
     private static nint __mb_get_enable_sample_shading;
-    public bool GetEnableSampleShading()
+    internal bool GetEnableSampleShading()
     {
         var __mb = __mb_get_enable_sample_shading;
         if (__mb == 0)
@@ -1973,7 +2357,7 @@ public unsafe partial class RDPipelineMultisampleState : RefCounted
     }
 
     private static nint __mb_set_min_sample_shading;
-    public void SetMinSampleShading(float pMember)
+    internal void SetMinSampleShading(float pMember)
     {
         var __mb = __mb_set_min_sample_shading;
         if (__mb == 0)
@@ -1989,7 +2373,7 @@ public unsafe partial class RDPipelineMultisampleState : RefCounted
     }
 
     private static nint __mb_get_min_sample_shading;
-    public float GetMinSampleShading()
+    internal float GetMinSampleShading()
     {
         var __mb = __mb_get_min_sample_shading;
         if (__mb == 0)
@@ -2004,7 +2388,7 @@ public unsafe partial class RDPipelineMultisampleState : RefCounted
     }
 
     private static nint __mb_set_enable_alpha_to_coverage;
-    public void SetEnableAlphaToCoverage(bool pMember)
+    internal void SetEnableAlphaToCoverage(bool pMember)
     {
         var __mb = __mb_set_enable_alpha_to_coverage;
         if (__mb == 0)
@@ -2020,7 +2404,7 @@ public unsafe partial class RDPipelineMultisampleState : RefCounted
     }
 
     private static nint __mb_get_enable_alpha_to_coverage;
-    public bool GetEnableAlphaToCoverage()
+    internal bool GetEnableAlphaToCoverage()
     {
         var __mb = __mb_get_enable_alpha_to_coverage;
         if (__mb == 0)
@@ -2035,7 +2419,7 @@ public unsafe partial class RDPipelineMultisampleState : RefCounted
     }
 
     private static nint __mb_set_enable_alpha_to_one;
-    public void SetEnableAlphaToOne(bool pMember)
+    internal void SetEnableAlphaToOne(bool pMember)
     {
         var __mb = __mb_set_enable_alpha_to_one;
         if (__mb == 0)
@@ -2051,7 +2435,7 @@ public unsafe partial class RDPipelineMultisampleState : RefCounted
     }
 
     private static nint __mb_get_enable_alpha_to_one;
-    public bool GetEnableAlphaToOne()
+    internal bool GetEnableAlphaToOne()
     {
         var __mb = __mb_get_enable_alpha_to_one;
         if (__mb == 0)
@@ -2066,7 +2450,7 @@ public unsafe partial class RDPipelineMultisampleState : RefCounted
     }
 
     private static nint __mb_set_sample_masks;
-    public void SetSampleMasks(Godot.Collections.Array masks)
+    internal void SetSampleMasks(Godot.Collections.Array masks)
     {
         var __mb = __mb_set_sample_masks;
         if (__mb == 0)
@@ -2082,7 +2466,7 @@ public unsafe partial class RDPipelineMultisampleState : RefCounted
     }
 
     private static nint __mb_get_sample_masks;
-    public Godot.Collections.Array GetSampleMasks()
+    internal Godot.Collections.Array GetSampleMasks()
     {
         var __mb = __mb_get_sample_masks;
         if (__mb == 0)
@@ -2106,8 +2490,74 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
         ClassRegistry.AttachNew(this, "RDPipelineRasterizationState");
     }
 
+    public bool EnableDepthClamp
+    {
+        get => GetEnableDepthClamp();
+        set => SetEnableDepthClamp(value);
+    }
+
+    public bool DiscardPrimitives
+    {
+        get => GetDiscardPrimitives();
+        set => SetDiscardPrimitives(value);
+    }
+
+    public bool Wireframe
+    {
+        get => GetWireframe();
+        set => SetWireframe(value);
+    }
+
+    public RenderingDevice.PolygonCullMode CullMode
+    {
+        get => GetCullMode();
+        set => SetCullMode(value);
+    }
+
+    public RenderingDevice.PolygonFrontFace FrontFace
+    {
+        get => GetFrontFace();
+        set => SetFrontFace(value);
+    }
+
+    public bool DepthBiasEnabled
+    {
+        get => GetDepthBiasEnabled();
+        set => SetDepthBiasEnabled(value);
+    }
+
+    public float DepthBiasConstantFactor
+    {
+        get => GetDepthBiasConstantFactor();
+        set => SetDepthBiasConstantFactor(value);
+    }
+
+    public float DepthBiasClamp
+    {
+        get => GetDepthBiasClamp();
+        set => SetDepthBiasClamp(value);
+    }
+
+    public float DepthBiasSlopeFactor
+    {
+        get => GetDepthBiasSlopeFactor();
+        set => SetDepthBiasSlopeFactor(value);
+    }
+
+    public float LineWidth
+    {
+        get => GetLineWidth();
+        set => SetLineWidth(value);
+    }
+
+    public uint PatchControlPoints
+    {
+        get => GetPatchControlPoints();
+        set => SetPatchControlPoints(value);
+    }
+
     private static nint __mb_set_enable_depth_clamp;
-    public void SetEnableDepthClamp(bool pMember)
+    internal void SetEnableDepthClamp(bool pMember)
     {
         var __mb = __mb_set_enable_depth_clamp;
         if (__mb == 0)
@@ -2123,7 +2573,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_get_enable_depth_clamp;
-    public bool GetEnableDepthClamp()
+    internal bool GetEnableDepthClamp()
     {
         var __mb = __mb_get_enable_depth_clamp;
         if (__mb == 0)
@@ -2138,7 +2588,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_set_discard_primitives;
-    public void SetDiscardPrimitives(bool pMember)
+    internal void SetDiscardPrimitives(bool pMember)
     {
         var __mb = __mb_set_discard_primitives;
         if (__mb == 0)
@@ -2154,7 +2604,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_get_discard_primitives;
-    public bool GetDiscardPrimitives()
+    internal bool GetDiscardPrimitives()
     {
         var __mb = __mb_get_discard_primitives;
         if (__mb == 0)
@@ -2169,7 +2619,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_set_wireframe;
-    public void SetWireframe(bool pMember)
+    internal void SetWireframe(bool pMember)
     {
         var __mb = __mb_set_wireframe;
         if (__mb == 0)
@@ -2185,7 +2635,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_get_wireframe;
-    public bool GetWireframe()
+    internal bool GetWireframe()
     {
         var __mb = __mb_get_wireframe;
         if (__mb == 0)
@@ -2200,7 +2650,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_set_cull_mode;
-    public void SetCullMode(RenderingDevice.PolygonCullMode pMember)
+    internal void SetCullMode(RenderingDevice.PolygonCullMode pMember)
     {
         var __mb = __mb_set_cull_mode;
         if (__mb == 0)
@@ -2216,7 +2666,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_get_cull_mode;
-    public RenderingDevice.PolygonCullMode GetCullMode()
+    internal RenderingDevice.PolygonCullMode GetCullMode()
     {
         var __mb = __mb_get_cull_mode;
         if (__mb == 0)
@@ -2231,7 +2681,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_set_front_face;
-    public void SetFrontFace(RenderingDevice.PolygonFrontFace pMember)
+    internal void SetFrontFace(RenderingDevice.PolygonFrontFace pMember)
     {
         var __mb = __mb_set_front_face;
         if (__mb == 0)
@@ -2247,7 +2697,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_get_front_face;
-    public RenderingDevice.PolygonFrontFace GetFrontFace()
+    internal RenderingDevice.PolygonFrontFace GetFrontFace()
     {
         var __mb = __mb_get_front_face;
         if (__mb == 0)
@@ -2262,7 +2712,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_set_depth_bias_enabled;
-    public void SetDepthBiasEnabled(bool pMember)
+    internal void SetDepthBiasEnabled(bool pMember)
     {
         var __mb = __mb_set_depth_bias_enabled;
         if (__mb == 0)
@@ -2278,7 +2728,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_get_depth_bias_enabled;
-    public bool GetDepthBiasEnabled()
+    internal bool GetDepthBiasEnabled()
     {
         var __mb = __mb_get_depth_bias_enabled;
         if (__mb == 0)
@@ -2293,7 +2743,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_set_depth_bias_constant_factor;
-    public void SetDepthBiasConstantFactor(float pMember)
+    internal void SetDepthBiasConstantFactor(float pMember)
     {
         var __mb = __mb_set_depth_bias_constant_factor;
         if (__mb == 0)
@@ -2309,7 +2759,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_get_depth_bias_constant_factor;
-    public float GetDepthBiasConstantFactor()
+    internal float GetDepthBiasConstantFactor()
     {
         var __mb = __mb_get_depth_bias_constant_factor;
         if (__mb == 0)
@@ -2324,7 +2774,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_set_depth_bias_clamp;
-    public void SetDepthBiasClamp(float pMember)
+    internal void SetDepthBiasClamp(float pMember)
     {
         var __mb = __mb_set_depth_bias_clamp;
         if (__mb == 0)
@@ -2340,7 +2790,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_get_depth_bias_clamp;
-    public float GetDepthBiasClamp()
+    internal float GetDepthBiasClamp()
     {
         var __mb = __mb_get_depth_bias_clamp;
         if (__mb == 0)
@@ -2355,7 +2805,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_set_depth_bias_slope_factor;
-    public void SetDepthBiasSlopeFactor(float pMember)
+    internal void SetDepthBiasSlopeFactor(float pMember)
     {
         var __mb = __mb_set_depth_bias_slope_factor;
         if (__mb == 0)
@@ -2371,7 +2821,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_get_depth_bias_slope_factor;
-    public float GetDepthBiasSlopeFactor()
+    internal float GetDepthBiasSlopeFactor()
     {
         var __mb = __mb_get_depth_bias_slope_factor;
         if (__mb == 0)
@@ -2386,7 +2836,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_set_line_width;
-    public void SetLineWidth(float pMember)
+    internal void SetLineWidth(float pMember)
     {
         var __mb = __mb_set_line_width;
         if (__mb == 0)
@@ -2402,7 +2852,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_get_line_width;
-    public float GetLineWidth()
+    internal float GetLineWidth()
     {
         var __mb = __mb_get_line_width;
         if (__mb == 0)
@@ -2417,7 +2867,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_set_patch_control_points;
-    public void SetPatchControlPoints(uint pMember)
+    internal void SetPatchControlPoints(uint pMember)
     {
         var __mb = __mb_set_patch_control_points;
         if (__mb == 0)
@@ -2433,7 +2883,7 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
     }
 
     private static nint __mb_get_patch_control_points;
-    public uint GetPatchControlPoints()
+    internal uint GetPatchControlPoints()
     {
         var __mb = __mb_get_patch_control_points;
         if (__mb == 0)
@@ -2457,8 +2907,20 @@ public unsafe partial class RDPipelineShader : RefCounted
         ClassRegistry.AttachNew(this, "RDPipelineShader");
     }
 
+    public Rid Shader
+    {
+        get => GetShader();
+        set => SetShader(value);
+    }
+
+    public Godot.Collections.Array SpecializationConstants
+    {
+        get => GetSpecializationConstants();
+        set => SetSpecializationConstants(value);
+    }
+
     private static nint __mb_set_shader;
-    public void SetShader(Rid pMember)
+    internal void SetShader(Rid pMember)
     {
         var __mb = __mb_set_shader;
         if (__mb == 0)
@@ -2474,7 +2936,7 @@ public unsafe partial class RDPipelineShader : RefCounted
     }
 
     private static nint __mb_get_shader;
-    public Rid GetShader()
+    internal Rid GetShader()
     {
         var __mb = __mb_get_shader;
         if (__mb == 0)
@@ -2489,7 +2951,7 @@ public unsafe partial class RDPipelineShader : RefCounted
     }
 
     private static nint __mb_set_specialization_constants;
-    public void SetSpecializationConstants(Godot.Collections.Array specializationConstants)
+    internal void SetSpecializationConstants(Godot.Collections.Array specializationConstants)
     {
         var __mb = __mb_set_specialization_constants;
         if (__mb == 0)
@@ -2505,7 +2967,7 @@ public unsafe partial class RDPipelineShader : RefCounted
     }
 
     private static nint __mb_get_specialization_constants;
-    public Godot.Collections.Array GetSpecializationConstants()
+    internal Godot.Collections.Array GetSpecializationConstants()
     {
         var __mb = __mb_get_specialization_constants;
         if (__mb == 0)
@@ -2529,8 +2991,20 @@ public unsafe partial class RDPipelineSpecializationConstant : RefCounted
         ClassRegistry.AttachNew(this, "RDPipelineSpecializationConstant");
     }
 
+    public Variant Value
+    {
+        get => GetValue();
+        set => SetValue(value);
+    }
+
+    public uint ConstantId
+    {
+        get => GetConstantId();
+        set => SetConstantId(value);
+    }
+
     private static nint __mb_set_value;
-    public void SetValue(Variant value)
+    internal void SetValue(Variant value)
     {
         var __mb = __mb_set_value;
         if (__mb == 0)
@@ -2546,7 +3020,7 @@ public unsafe partial class RDPipelineSpecializationConstant : RefCounted
     }
 
     private static nint __mb_get_value;
-    public Variant GetValue()
+    internal Variant GetValue()
     {
         var __mb = __mb_get_value;
         if (__mb == 0)
@@ -2561,7 +3035,7 @@ public unsafe partial class RDPipelineSpecializationConstant : RefCounted
     }
 
     private static nint __mb_set_constant_id;
-    public void SetConstantId(uint constantId)
+    internal void SetConstantId(uint constantId)
     {
         var __mb = __mb_set_constant_id;
         if (__mb == 0)
@@ -2577,7 +3051,7 @@ public unsafe partial class RDPipelineSpecializationConstant : RefCounted
     }
 
     private static nint __mb_get_constant_id;
-    public uint GetConstantId()
+    internal uint GetConstantId()
     {
         var __mb = __mb_get_constant_id;
         if (__mb == 0)
@@ -2601,8 +3075,98 @@ public unsafe partial class RDSamplerState : RefCounted
         ClassRegistry.AttachNew(this, "RDSamplerState");
     }
 
+    public RenderingDevice.SamplerFilter MagFilter
+    {
+        get => GetMagFilter();
+        set => SetMagFilter(value);
+    }
+
+    public RenderingDevice.SamplerFilter MinFilter
+    {
+        get => GetMinFilter();
+        set => SetMinFilter(value);
+    }
+
+    public RenderingDevice.SamplerFilter MipFilter
+    {
+        get => GetMipFilter();
+        set => SetMipFilter(value);
+    }
+
+    public RenderingDevice.SamplerRepeatMode RepeatU
+    {
+        get => GetRepeatU();
+        set => SetRepeatU(value);
+    }
+
+    public RenderingDevice.SamplerRepeatMode RepeatV
+    {
+        get => GetRepeatV();
+        set => SetRepeatV(value);
+    }
+
+    public RenderingDevice.SamplerRepeatMode RepeatW
+    {
+        get => GetRepeatW();
+        set => SetRepeatW(value);
+    }
+
+    public float LodBias
+    {
+        get => GetLodBias();
+        set => SetLodBias(value);
+    }
+
+    public bool UseAnisotropy
+    {
+        get => GetUseAnisotropy();
+        set => SetUseAnisotropy(value);
+    }
+
+    public float AnisotropyMax
+    {
+        get => GetAnisotropyMax();
+        set => SetAnisotropyMax(value);
+    }
+
+    public bool EnableCompare
+    {
+        get => GetEnableCompare();
+        set => SetEnableCompare(value);
+    }
+
+    public RenderingDevice.CompareOperator CompareOp
+    {
+        get => GetCompareOp();
+        set => SetCompareOp(value);
+    }
+
+    public float MinLod
+    {
+        get => GetMinLod();
+        set => SetMinLod(value);
+    }
+
+    public float MaxLod
+    {
+        get => GetMaxLod();
+        set => SetMaxLod(value);
+    }
+
+    public RenderingDevice.SamplerBorderColor BorderColor
+    {
+        get => GetBorderColor();
+        set => SetBorderColor(value);
+    }
+
+    public bool UnnormalizedUvw
+    {
+        get => GetUnnormalizedUvw();
+        set => SetUnnormalizedUvw(value);
+    }
+
     private static nint __mb_set_mag_filter;
-    public void SetMagFilter(RenderingDevice.SamplerFilter pMember)
+    internal void SetMagFilter(RenderingDevice.SamplerFilter pMember)
     {
         var __mb = __mb_set_mag_filter;
         if (__mb == 0)
@@ -2618,7 +3182,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_get_mag_filter;
-    public RenderingDevice.SamplerFilter GetMagFilter()
+    internal RenderingDevice.SamplerFilter GetMagFilter()
     {
         var __mb = __mb_get_mag_filter;
         if (__mb == 0)
@@ -2633,7 +3197,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_set_min_filter;
-    public void SetMinFilter(RenderingDevice.SamplerFilter pMember)
+    internal void SetMinFilter(RenderingDevice.SamplerFilter pMember)
     {
         var __mb = __mb_set_min_filter;
         if (__mb == 0)
@@ -2649,7 +3213,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_get_min_filter;
-    public RenderingDevice.SamplerFilter GetMinFilter()
+    internal RenderingDevice.SamplerFilter GetMinFilter()
     {
         var __mb = __mb_get_min_filter;
         if (__mb == 0)
@@ -2664,7 +3228,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_set_mip_filter;
-    public void SetMipFilter(RenderingDevice.SamplerFilter pMember)
+    internal void SetMipFilter(RenderingDevice.SamplerFilter pMember)
     {
         var __mb = __mb_set_mip_filter;
         if (__mb == 0)
@@ -2680,7 +3244,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_get_mip_filter;
-    public RenderingDevice.SamplerFilter GetMipFilter()
+    internal RenderingDevice.SamplerFilter GetMipFilter()
     {
         var __mb = __mb_get_mip_filter;
         if (__mb == 0)
@@ -2695,7 +3259,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_set_repeat_u;
-    public void SetRepeatU(RenderingDevice.SamplerRepeatMode pMember)
+    internal void SetRepeatU(RenderingDevice.SamplerRepeatMode pMember)
     {
         var __mb = __mb_set_repeat_u;
         if (__mb == 0)
@@ -2711,7 +3275,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_get_repeat_u;
-    public RenderingDevice.SamplerRepeatMode GetRepeatU()
+    internal RenderingDevice.SamplerRepeatMode GetRepeatU()
     {
         var __mb = __mb_get_repeat_u;
         if (__mb == 0)
@@ -2726,7 +3290,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_set_repeat_v;
-    public void SetRepeatV(RenderingDevice.SamplerRepeatMode pMember)
+    internal void SetRepeatV(RenderingDevice.SamplerRepeatMode pMember)
     {
         var __mb = __mb_set_repeat_v;
         if (__mb == 0)
@@ -2742,7 +3306,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_get_repeat_v;
-    public RenderingDevice.SamplerRepeatMode GetRepeatV()
+    internal RenderingDevice.SamplerRepeatMode GetRepeatV()
     {
         var __mb = __mb_get_repeat_v;
         if (__mb == 0)
@@ -2757,7 +3321,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_set_repeat_w;
-    public void SetRepeatW(RenderingDevice.SamplerRepeatMode pMember)
+    internal void SetRepeatW(RenderingDevice.SamplerRepeatMode pMember)
     {
         var __mb = __mb_set_repeat_w;
         if (__mb == 0)
@@ -2773,7 +3337,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_get_repeat_w;
-    public RenderingDevice.SamplerRepeatMode GetRepeatW()
+    internal RenderingDevice.SamplerRepeatMode GetRepeatW()
     {
         var __mb = __mb_get_repeat_w;
         if (__mb == 0)
@@ -2788,7 +3352,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_set_lod_bias;
-    public void SetLodBias(float pMember)
+    internal void SetLodBias(float pMember)
     {
         var __mb = __mb_set_lod_bias;
         if (__mb == 0)
@@ -2804,7 +3368,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_get_lod_bias;
-    public float GetLodBias()
+    internal float GetLodBias()
     {
         var __mb = __mb_get_lod_bias;
         if (__mb == 0)
@@ -2819,7 +3383,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_set_use_anisotropy;
-    public void SetUseAnisotropy(bool pMember)
+    internal void SetUseAnisotropy(bool pMember)
     {
         var __mb = __mb_set_use_anisotropy;
         if (__mb == 0)
@@ -2835,7 +3399,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_get_use_anisotropy;
-    public bool GetUseAnisotropy()
+    internal bool GetUseAnisotropy()
     {
         var __mb = __mb_get_use_anisotropy;
         if (__mb == 0)
@@ -2850,7 +3414,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_set_anisotropy_max;
-    public void SetAnisotropyMax(float pMember)
+    internal void SetAnisotropyMax(float pMember)
     {
         var __mb = __mb_set_anisotropy_max;
         if (__mb == 0)
@@ -2866,7 +3430,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_get_anisotropy_max;
-    public float GetAnisotropyMax()
+    internal float GetAnisotropyMax()
     {
         var __mb = __mb_get_anisotropy_max;
         if (__mb == 0)
@@ -2881,7 +3445,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_set_enable_compare;
-    public void SetEnableCompare(bool pMember)
+    internal void SetEnableCompare(bool pMember)
     {
         var __mb = __mb_set_enable_compare;
         if (__mb == 0)
@@ -2897,7 +3461,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_get_enable_compare;
-    public bool GetEnableCompare()
+    internal bool GetEnableCompare()
     {
         var __mb = __mb_get_enable_compare;
         if (__mb == 0)
@@ -2912,7 +3476,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_set_compare_op;
-    public void SetCompareOp(RenderingDevice.CompareOperator pMember)
+    internal void SetCompareOp(RenderingDevice.CompareOperator pMember)
     {
         var __mb = __mb_set_compare_op;
         if (__mb == 0)
@@ -2928,7 +3492,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_get_compare_op;
-    public RenderingDevice.CompareOperator GetCompareOp()
+    internal RenderingDevice.CompareOperator GetCompareOp()
     {
         var __mb = __mb_get_compare_op;
         if (__mb == 0)
@@ -2943,7 +3507,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_set_min_lod;
-    public void SetMinLod(float pMember)
+    internal void SetMinLod(float pMember)
     {
         var __mb = __mb_set_min_lod;
         if (__mb == 0)
@@ -2959,7 +3523,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_get_min_lod;
-    public float GetMinLod()
+    internal float GetMinLod()
     {
         var __mb = __mb_get_min_lod;
         if (__mb == 0)
@@ -2974,7 +3538,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_set_max_lod;
-    public void SetMaxLod(float pMember)
+    internal void SetMaxLod(float pMember)
     {
         var __mb = __mb_set_max_lod;
         if (__mb == 0)
@@ -2990,7 +3554,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_get_max_lod;
-    public float GetMaxLod()
+    internal float GetMaxLod()
     {
         var __mb = __mb_get_max_lod;
         if (__mb == 0)
@@ -3005,7 +3569,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_set_border_color;
-    public void SetBorderColor(RenderingDevice.SamplerBorderColor pMember)
+    internal void SetBorderColor(RenderingDevice.SamplerBorderColor pMember)
     {
         var __mb = __mb_set_border_color;
         if (__mb == 0)
@@ -3021,7 +3585,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_get_border_color;
-    public RenderingDevice.SamplerBorderColor GetBorderColor()
+    internal RenderingDevice.SamplerBorderColor GetBorderColor()
     {
         var __mb = __mb_get_border_color;
         if (__mb == 0)
@@ -3036,7 +3600,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_set_unnormalized_uvw;
-    public void SetUnnormalizedUvw(bool pMember)
+    internal void SetUnnormalizedUvw(bool pMember)
     {
         var __mb = __mb_set_unnormalized_uvw;
         if (__mb == 0)
@@ -3052,7 +3616,7 @@ public unsafe partial class RDSamplerState : RefCounted
     }
 
     private static nint __mb_get_unnormalized_uvw;
-    public bool GetUnnormalizedUvw()
+    internal bool GetUnnormalizedUvw()
     {
         var __mb = __mb_get_unnormalized_uvw;
         if (__mb == 0)
@@ -3074,6 +3638,12 @@ public unsafe partial class RDShaderFile : Resource
     public RDShaderFile() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "RDShaderFile");
+    }
+
+    public string BaseError
+    {
+        get => GetBaseError();
+        set => SetBaseError(value);
     }
 
     private static nint __mb_set_bytecode;
@@ -3128,7 +3698,7 @@ public unsafe partial class RDShaderFile : Resource
     }
 
     private static nint __mb_set_base_error;
-    public void SetBaseError(string error)
+    internal void SetBaseError(string error)
     {
         var __mb = __mb_set_base_error;
         if (__mb == 0)
@@ -3145,7 +3715,7 @@ public unsafe partial class RDShaderFile : Resource
     }
 
     private static nint __mb_get_base_error;
-    public string GetBaseError()
+    internal string GetBaseError()
     {
         var __mb = __mb_get_base_error;
         if (__mb == 0)
@@ -3169,8 +3739,68 @@ public unsafe partial class RDShaderSPIRV : Resource
         ClassRegistry.AttachNew(this, "RDShaderSPIRV");
     }
 
+    public string CompileErrorVertex
+    {
+        get => GetStageCompileError(((RenderingDevice.ShaderStage)(0)));
+        set => SetStageCompileError(((RenderingDevice.ShaderStage)(0)), value);
+    }
+
+    public string CompileErrorFragment
+    {
+        get => GetStageCompileError(((RenderingDevice.ShaderStage)(1)));
+        set => SetStageCompileError(((RenderingDevice.ShaderStage)(1)), value);
+    }
+
+    public string CompileErrorTesselationControl
+    {
+        get => GetStageCompileError(((RenderingDevice.ShaderStage)(2)));
+        set => SetStageCompileError(((RenderingDevice.ShaderStage)(2)), value);
+    }
+
+    public string CompileErrorTesselationEvaluation
+    {
+        get => GetStageCompileError(((RenderingDevice.ShaderStage)(3)));
+        set => SetStageCompileError(((RenderingDevice.ShaderStage)(3)), value);
+    }
+
+    public string CompileErrorCompute
+    {
+        get => GetStageCompileError(((RenderingDevice.ShaderStage)(4)));
+        set => SetStageCompileError(((RenderingDevice.ShaderStage)(4)), value);
+    }
+
+    public string CompileErrorRaygen
+    {
+        get => GetStageCompileError(((RenderingDevice.ShaderStage)(5)));
+        set => SetStageCompileError(((RenderingDevice.ShaderStage)(5)), value);
+    }
+
+    public string CompileErrorAnyHit
+    {
+        get => GetStageCompileError(((RenderingDevice.ShaderStage)(6)));
+        set => SetStageCompileError(((RenderingDevice.ShaderStage)(6)), value);
+    }
+
+    public string CompileErrorClosestHit
+    {
+        get => GetStageCompileError(((RenderingDevice.ShaderStage)(7)));
+        set => SetStageCompileError(((RenderingDevice.ShaderStage)(7)), value);
+    }
+
+    public string CompileErrorMiss
+    {
+        get => GetStageCompileError(((RenderingDevice.ShaderStage)(8)));
+        set => SetStageCompileError(((RenderingDevice.ShaderStage)(8)), value);
+    }
+
+    public string CompileErrorIntersection
+    {
+        get => GetStageCompileError(((RenderingDevice.ShaderStage)(9)));
+        set => SetStageCompileError(((RenderingDevice.ShaderStage)(9)), value);
+    }
+
     private static nint __mb_set_stage_compile_error;
-    public void SetStageCompileError(RenderingDevice.ShaderStage stage, string compileError)
+    internal void SetStageCompileError(RenderingDevice.ShaderStage stage, string compileError)
     {
         var __mb = __mb_set_stage_compile_error;
         if (__mb == 0)
@@ -3189,7 +3819,7 @@ public unsafe partial class RDShaderSPIRV : Resource
     }
 
     private static nint __mb_get_stage_compile_error;
-    public string GetStageCompileError(RenderingDevice.ShaderStage stage)
+    internal string GetStageCompileError(RenderingDevice.ShaderStage stage)
     {
         var __mb = __mb_get_stage_compile_error;
         if (__mb == 0)
@@ -3216,8 +3846,74 @@ public unsafe partial class RDShaderSource : RefCounted
         ClassRegistry.AttachNew(this, "RDShaderSource");
     }
 
+    public string SourceVertex
+    {
+        get => GetStageSource(((RenderingDevice.ShaderStage)(0)));
+        set => SetStageSource(((RenderingDevice.ShaderStage)(0)), value);
+    }
+
+    public string SourceFragment
+    {
+        get => GetStageSource(((RenderingDevice.ShaderStage)(1)));
+        set => SetStageSource(((RenderingDevice.ShaderStage)(1)), value);
+    }
+
+    public string SourceTesselationControl
+    {
+        get => GetStageSource(((RenderingDevice.ShaderStage)(2)));
+        set => SetStageSource(((RenderingDevice.ShaderStage)(2)), value);
+    }
+
+    public string SourceTesselationEvaluation
+    {
+        get => GetStageSource(((RenderingDevice.ShaderStage)(3)));
+        set => SetStageSource(((RenderingDevice.ShaderStage)(3)), value);
+    }
+
+    public string SourceCompute
+    {
+        get => GetStageSource(((RenderingDevice.ShaderStage)(4)));
+        set => SetStageSource(((RenderingDevice.ShaderStage)(4)), value);
+    }
+
+    public string SourceRaygen
+    {
+        get => GetStageSource(((RenderingDevice.ShaderStage)(5)));
+        set => SetStageSource(((RenderingDevice.ShaderStage)(5)), value);
+    }
+
+    public string SourceAnyHit
+    {
+        get => GetStageSource(((RenderingDevice.ShaderStage)(6)));
+        set => SetStageSource(((RenderingDevice.ShaderStage)(6)), value);
+    }
+
+    public string SourceClosestHit
+    {
+        get => GetStageSource(((RenderingDevice.ShaderStage)(7)));
+        set => SetStageSource(((RenderingDevice.ShaderStage)(7)), value);
+    }
+
+    public string SourceMiss
+    {
+        get => GetStageSource(((RenderingDevice.ShaderStage)(8)));
+        set => SetStageSource(((RenderingDevice.ShaderStage)(8)), value);
+    }
+
+    public string SourceIntersection
+    {
+        get => GetStageSource(((RenderingDevice.ShaderStage)(9)));
+        set => SetStageSource(((RenderingDevice.ShaderStage)(9)), value);
+    }
+
+    public RenderingDevice.ShaderLanguage Language
+    {
+        get => GetLanguage();
+        set => SetLanguage(value);
+    }
+
     private static nint __mb_set_stage_source;
-    public void SetStageSource(RenderingDevice.ShaderStage stage, string source)
+    internal void SetStageSource(RenderingDevice.ShaderStage stage, string source)
     {
         var __mb = __mb_set_stage_source;
         if (__mb == 0)
@@ -3236,7 +3932,7 @@ public unsafe partial class RDShaderSource : RefCounted
     }
 
     private static nint __mb_get_stage_source;
-    public string GetStageSource(RenderingDevice.ShaderStage stage)
+    internal string GetStageSource(RenderingDevice.ShaderStage stage)
     {
         var __mb = __mb_get_stage_source;
         if (__mb == 0)
@@ -3254,7 +3950,7 @@ public unsafe partial class RDShaderSource : RefCounted
     }
 
     private static nint __mb_set_language;
-    public void SetLanguage(RenderingDevice.ShaderLanguage language)
+    internal void SetLanguage(RenderingDevice.ShaderLanguage language)
     {
         var __mb = __mb_set_language;
         if (__mb == 0)
@@ -3270,7 +3966,7 @@ public unsafe partial class RDShaderSource : RefCounted
     }
 
     private static nint __mb_get_language;
-    public RenderingDevice.ShaderLanguage GetLanguage()
+    internal RenderingDevice.ShaderLanguage GetLanguage()
     {
         var __mb = __mb_get_language;
         if (__mb == 0)
@@ -3294,8 +3990,74 @@ public unsafe partial class RDTextureFormat : RefCounted
         ClassRegistry.AttachNew(this, "RDTextureFormat");
     }
 
+    public RenderingDevice.DataFormat Format
+    {
+        get => GetFormat();
+        set => SetFormat(value);
+    }
+
+    public uint Width
+    {
+        get => GetWidth();
+        set => SetWidth(value);
+    }
+
+    public uint Height
+    {
+        get => GetHeight();
+        set => SetHeight(value);
+    }
+
+    public uint Depth
+    {
+        get => GetDepth();
+        set => SetDepth(value);
+    }
+
+    public uint ArrayLayers
+    {
+        get => GetArrayLayers();
+        set => SetArrayLayers(value);
+    }
+
+    public uint Mipmaps
+    {
+        get => GetMipmaps();
+        set => SetMipmaps(value);
+    }
+
+    public RenderingDevice.TextureType TextureType
+    {
+        get => GetTextureType();
+        set => SetTextureType(value);
+    }
+
+    public RenderingDevice.TextureSamples Samples
+    {
+        get => GetSamples();
+        set => SetSamples(value);
+    }
+
+    public RenderingDevice.TextureUsageBits UsageBits
+    {
+        get => GetUsageBits();
+        set => SetUsageBits(value);
+    }
+
+    public bool IsResolveBuffer
+    {
+        get => GetIsResolveBuffer();
+        set => SetIsResolveBuffer(value);
+    }
+
+    public bool IsDiscardable
+    {
+        get => GetIsDiscardable();
+        set => SetIsDiscardable(value);
+    }
+
     private static nint __mb_set_format;
-    public void SetFormat(RenderingDevice.DataFormat pMember)
+    internal void SetFormat(RenderingDevice.DataFormat pMember)
     {
         var __mb = __mb_set_format;
         if (__mb == 0)
@@ -3311,7 +4073,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_get_format;
-    public RenderingDevice.DataFormat GetFormat()
+    internal RenderingDevice.DataFormat GetFormat()
     {
         var __mb = __mb_get_format;
         if (__mb == 0)
@@ -3326,7 +4088,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_set_width;
-    public void SetWidth(uint pMember)
+    internal void SetWidth(uint pMember)
     {
         var __mb = __mb_set_width;
         if (__mb == 0)
@@ -3342,7 +4104,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_get_width;
-    public uint GetWidth()
+    internal uint GetWidth()
     {
         var __mb = __mb_get_width;
         if (__mb == 0)
@@ -3357,7 +4119,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_set_height;
-    public void SetHeight(uint pMember)
+    internal void SetHeight(uint pMember)
     {
         var __mb = __mb_set_height;
         if (__mb == 0)
@@ -3373,7 +4135,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_get_height;
-    public uint GetHeight()
+    internal uint GetHeight()
     {
         var __mb = __mb_get_height;
         if (__mb == 0)
@@ -3388,7 +4150,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_set_depth;
-    public void SetDepth(uint pMember)
+    internal void SetDepth(uint pMember)
     {
         var __mb = __mb_set_depth;
         if (__mb == 0)
@@ -3404,7 +4166,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_get_depth;
-    public uint GetDepth()
+    internal uint GetDepth()
     {
         var __mb = __mb_get_depth;
         if (__mb == 0)
@@ -3419,7 +4181,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_set_array_layers;
-    public void SetArrayLayers(uint pMember)
+    internal void SetArrayLayers(uint pMember)
     {
         var __mb = __mb_set_array_layers;
         if (__mb == 0)
@@ -3435,7 +4197,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_get_array_layers;
-    public uint GetArrayLayers()
+    internal uint GetArrayLayers()
     {
         var __mb = __mb_get_array_layers;
         if (__mb == 0)
@@ -3450,7 +4212,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_set_mipmaps;
-    public void SetMipmaps(uint pMember)
+    internal void SetMipmaps(uint pMember)
     {
         var __mb = __mb_set_mipmaps;
         if (__mb == 0)
@@ -3466,7 +4228,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_get_mipmaps;
-    public uint GetMipmaps()
+    internal uint GetMipmaps()
     {
         var __mb = __mb_get_mipmaps;
         if (__mb == 0)
@@ -3481,7 +4243,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_set_texture_type;
-    public void SetTextureType(RenderingDevice.TextureType pMember)
+    internal void SetTextureType(RenderingDevice.TextureType pMember)
     {
         var __mb = __mb_set_texture_type;
         if (__mb == 0)
@@ -3497,7 +4259,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_get_texture_type;
-    public RenderingDevice.TextureType GetTextureType()
+    internal RenderingDevice.TextureType GetTextureType()
     {
         var __mb = __mb_get_texture_type;
         if (__mb == 0)
@@ -3512,7 +4274,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_set_samples;
-    public void SetSamples(RenderingDevice.TextureSamples pMember)
+    internal void SetSamples(RenderingDevice.TextureSamples pMember)
     {
         var __mb = __mb_set_samples;
         if (__mb == 0)
@@ -3528,7 +4290,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_get_samples;
-    public RenderingDevice.TextureSamples GetSamples()
+    internal RenderingDevice.TextureSamples GetSamples()
     {
         var __mb = __mb_get_samples;
         if (__mb == 0)
@@ -3543,7 +4305,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_set_usage_bits;
-    public void SetUsageBits(RenderingDevice.TextureUsageBits pMember)
+    internal void SetUsageBits(RenderingDevice.TextureUsageBits pMember)
     {
         var __mb = __mb_set_usage_bits;
         if (__mb == 0)
@@ -3559,7 +4321,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_get_usage_bits;
-    public RenderingDevice.TextureUsageBits GetUsageBits()
+    internal RenderingDevice.TextureUsageBits GetUsageBits()
     {
         var __mb = __mb_get_usage_bits;
         if (__mb == 0)
@@ -3574,7 +4336,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_set_is_resolve_buffer;
-    public void SetIsResolveBuffer(bool pMember)
+    internal void SetIsResolveBuffer(bool pMember)
     {
         var __mb = __mb_set_is_resolve_buffer;
         if (__mb == 0)
@@ -3590,7 +4352,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_get_is_resolve_buffer;
-    public bool GetIsResolveBuffer()
+    internal bool GetIsResolveBuffer()
     {
         var __mb = __mb_get_is_resolve_buffer;
         if (__mb == 0)
@@ -3605,7 +4367,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_set_is_discardable;
-    public void SetIsDiscardable(bool pMember)
+    internal void SetIsDiscardable(bool pMember)
     {
         var __mb = __mb_set_is_discardable;
         if (__mb == 0)
@@ -3621,7 +4383,7 @@ public unsafe partial class RDTextureFormat : RefCounted
     }
 
     private static nint __mb_get_is_discardable;
-    public bool GetIsDiscardable()
+    internal bool GetIsDiscardable()
     {
         var __mb = __mb_get_is_discardable;
         if (__mb == 0)
@@ -3677,8 +4439,38 @@ public unsafe partial class RDTextureView : RefCounted
         ClassRegistry.AttachNew(this, "RDTextureView");
     }
 
+    public RenderingDevice.DataFormat FormatOverride
+    {
+        get => GetFormatOverride();
+        set => SetFormatOverride(value);
+    }
+
+    public RenderingDevice.TextureSwizzle SwizzleR
+    {
+        get => GetSwizzleR();
+        set => SetSwizzleR(value);
+    }
+
+    public RenderingDevice.TextureSwizzle SwizzleG
+    {
+        get => GetSwizzleG();
+        set => SetSwizzleG(value);
+    }
+
+    public RenderingDevice.TextureSwizzle SwizzleB
+    {
+        get => GetSwizzleB();
+        set => SetSwizzleB(value);
+    }
+
+    public RenderingDevice.TextureSwizzle SwizzleA
+    {
+        get => GetSwizzleA();
+        set => SetSwizzleA(value);
+    }
+
     private static nint __mb_set_format_override;
-    public void SetFormatOverride(RenderingDevice.DataFormat pMember)
+    internal void SetFormatOverride(RenderingDevice.DataFormat pMember)
     {
         var __mb = __mb_set_format_override;
         if (__mb == 0)
@@ -3694,7 +4486,7 @@ public unsafe partial class RDTextureView : RefCounted
     }
 
     private static nint __mb_get_format_override;
-    public RenderingDevice.DataFormat GetFormatOverride()
+    internal RenderingDevice.DataFormat GetFormatOverride()
     {
         var __mb = __mb_get_format_override;
         if (__mb == 0)
@@ -3709,7 +4501,7 @@ public unsafe partial class RDTextureView : RefCounted
     }
 
     private static nint __mb_set_swizzle_r;
-    public void SetSwizzleR(RenderingDevice.TextureSwizzle pMember)
+    internal void SetSwizzleR(RenderingDevice.TextureSwizzle pMember)
     {
         var __mb = __mb_set_swizzle_r;
         if (__mb == 0)
@@ -3725,7 +4517,7 @@ public unsafe partial class RDTextureView : RefCounted
     }
 
     private static nint __mb_get_swizzle_r;
-    public RenderingDevice.TextureSwizzle GetSwizzleR()
+    internal RenderingDevice.TextureSwizzle GetSwizzleR()
     {
         var __mb = __mb_get_swizzle_r;
         if (__mb == 0)
@@ -3740,7 +4532,7 @@ public unsafe partial class RDTextureView : RefCounted
     }
 
     private static nint __mb_set_swizzle_g;
-    public void SetSwizzleG(RenderingDevice.TextureSwizzle pMember)
+    internal void SetSwizzleG(RenderingDevice.TextureSwizzle pMember)
     {
         var __mb = __mb_set_swizzle_g;
         if (__mb == 0)
@@ -3756,7 +4548,7 @@ public unsafe partial class RDTextureView : RefCounted
     }
 
     private static nint __mb_get_swizzle_g;
-    public RenderingDevice.TextureSwizzle GetSwizzleG()
+    internal RenderingDevice.TextureSwizzle GetSwizzleG()
     {
         var __mb = __mb_get_swizzle_g;
         if (__mb == 0)
@@ -3771,7 +4563,7 @@ public unsafe partial class RDTextureView : RefCounted
     }
 
     private static nint __mb_set_swizzle_b;
-    public void SetSwizzleB(RenderingDevice.TextureSwizzle pMember)
+    internal void SetSwizzleB(RenderingDevice.TextureSwizzle pMember)
     {
         var __mb = __mb_set_swizzle_b;
         if (__mb == 0)
@@ -3787,7 +4579,7 @@ public unsafe partial class RDTextureView : RefCounted
     }
 
     private static nint __mb_get_swizzle_b;
-    public RenderingDevice.TextureSwizzle GetSwizzleB()
+    internal RenderingDevice.TextureSwizzle GetSwizzleB()
     {
         var __mb = __mb_get_swizzle_b;
         if (__mb == 0)
@@ -3802,7 +4594,7 @@ public unsafe partial class RDTextureView : RefCounted
     }
 
     private static nint __mb_set_swizzle_a;
-    public void SetSwizzleA(RenderingDevice.TextureSwizzle pMember)
+    internal void SetSwizzleA(RenderingDevice.TextureSwizzle pMember)
     {
         var __mb = __mb_set_swizzle_a;
         if (__mb == 0)
@@ -3818,7 +4610,7 @@ public unsafe partial class RDTextureView : RefCounted
     }
 
     private static nint __mb_get_swizzle_a;
-    public RenderingDevice.TextureSwizzle GetSwizzleA()
+    internal RenderingDevice.TextureSwizzle GetSwizzleA()
     {
         var __mb = __mb_get_swizzle_a;
         if (__mb == 0)
@@ -3842,8 +4634,20 @@ public unsafe partial class RDUniform : RefCounted
         ClassRegistry.AttachNew(this, "RDUniform");
     }
 
+    public RenderingDevice.UniformType UniformType
+    {
+        get => GetUniformType();
+        set => SetUniformType(value);
+    }
+
+    public int Binding
+    {
+        get => GetBinding();
+        set => SetBinding(value);
+    }
+
     private static nint __mb_set_uniform_type;
-    public void SetUniformType(RenderingDevice.UniformType pMember)
+    internal void SetUniformType(RenderingDevice.UniformType pMember)
     {
         var __mb = __mb_set_uniform_type;
         if (__mb == 0)
@@ -3859,7 +4663,7 @@ public unsafe partial class RDUniform : RefCounted
     }
 
     private static nint __mb_get_uniform_type;
-    public RenderingDevice.UniformType GetUniformType()
+    internal RenderingDevice.UniformType GetUniformType()
     {
         var __mb = __mb_get_uniform_type;
         if (__mb == 0)
@@ -3874,7 +4678,7 @@ public unsafe partial class RDUniform : RefCounted
     }
 
     private static nint __mb_set_binding;
-    public void SetBinding(int pMember)
+    internal void SetBinding(int pMember)
     {
         var __mb = __mb_set_binding;
         if (__mb == 0)
@@ -3890,7 +4694,7 @@ public unsafe partial class RDUniform : RefCounted
     }
 
     private static nint __mb_get_binding;
-    public int GetBinding()
+    internal int GetBinding()
     {
         var __mb = __mb_get_binding;
         if (__mb == 0)
@@ -3958,8 +4762,44 @@ public unsafe partial class RDVertexAttribute : RefCounted
         ClassRegistry.AttachNew(this, "RDVertexAttribute");
     }
 
+    public uint Binding
+    {
+        get => GetBinding();
+        set => SetBinding(value);
+    }
+
+    public uint Location
+    {
+        get => GetLocation();
+        set => SetLocation(value);
+    }
+
+    public uint Offset
+    {
+        get => GetOffset();
+        set => SetOffset(value);
+    }
+
+    public RenderingDevice.DataFormat Format
+    {
+        get => GetFormat();
+        set => SetFormat(value);
+    }
+
+    public uint Stride
+    {
+        get => GetStride();
+        set => SetStride(value);
+    }
+
+    public RenderingDevice.VertexFrequency Frequency
+    {
+        get => GetFrequency();
+        set => SetFrequency(value);
+    }
+
     private static nint __mb_set_binding;
-    public void SetBinding(uint pMember)
+    internal void SetBinding(uint pMember)
     {
         var __mb = __mb_set_binding;
         if (__mb == 0)
@@ -3975,7 +4815,7 @@ public unsafe partial class RDVertexAttribute : RefCounted
     }
 
     private static nint __mb_get_binding;
-    public uint GetBinding()
+    internal uint GetBinding()
     {
         var __mb = __mb_get_binding;
         if (__mb == 0)
@@ -3990,7 +4830,7 @@ public unsafe partial class RDVertexAttribute : RefCounted
     }
 
     private static nint __mb_set_location;
-    public void SetLocation(uint pMember)
+    internal void SetLocation(uint pMember)
     {
         var __mb = __mb_set_location;
         if (__mb == 0)
@@ -4006,7 +4846,7 @@ public unsafe partial class RDVertexAttribute : RefCounted
     }
 
     private static nint __mb_get_location;
-    public uint GetLocation()
+    internal uint GetLocation()
     {
         var __mb = __mb_get_location;
         if (__mb == 0)
@@ -4021,7 +4861,7 @@ public unsafe partial class RDVertexAttribute : RefCounted
     }
 
     private static nint __mb_set_offset;
-    public void SetOffset(uint pMember)
+    internal void SetOffset(uint pMember)
     {
         var __mb = __mb_set_offset;
         if (__mb == 0)
@@ -4037,7 +4877,7 @@ public unsafe partial class RDVertexAttribute : RefCounted
     }
 
     private static nint __mb_get_offset;
-    public uint GetOffset()
+    internal uint GetOffset()
     {
         var __mb = __mb_get_offset;
         if (__mb == 0)
@@ -4052,7 +4892,7 @@ public unsafe partial class RDVertexAttribute : RefCounted
     }
 
     private static nint __mb_set_format;
-    public void SetFormat(RenderingDevice.DataFormat pMember)
+    internal void SetFormat(RenderingDevice.DataFormat pMember)
     {
         var __mb = __mb_set_format;
         if (__mb == 0)
@@ -4068,7 +4908,7 @@ public unsafe partial class RDVertexAttribute : RefCounted
     }
 
     private static nint __mb_get_format;
-    public RenderingDevice.DataFormat GetFormat()
+    internal RenderingDevice.DataFormat GetFormat()
     {
         var __mb = __mb_get_format;
         if (__mb == 0)
@@ -4083,7 +4923,7 @@ public unsafe partial class RDVertexAttribute : RefCounted
     }
 
     private static nint __mb_set_stride;
-    public void SetStride(uint pMember)
+    internal void SetStride(uint pMember)
     {
         var __mb = __mb_set_stride;
         if (__mb == 0)
@@ -4099,7 +4939,7 @@ public unsafe partial class RDVertexAttribute : RefCounted
     }
 
     private static nint __mb_get_stride;
-    public uint GetStride()
+    internal uint GetStride()
     {
         var __mb = __mb_get_stride;
         if (__mb == 0)
@@ -4114,7 +4954,7 @@ public unsafe partial class RDVertexAttribute : RefCounted
     }
 
     private static nint __mb_set_frequency;
-    public void SetFrequency(RenderingDevice.VertexFrequency pMember)
+    internal void SetFrequency(RenderingDevice.VertexFrequency pMember)
     {
         var __mb = __mb_set_frequency;
         if (__mb == 0)
@@ -4130,7 +4970,7 @@ public unsafe partial class RDVertexAttribute : RefCounted
     }
 
     private static nint __mb_get_frequency;
-    public RenderingDevice.VertexFrequency GetFrequency()
+    internal RenderingDevice.VertexFrequency GetFrequency()
     {
         var __mb = __mb_get_frequency;
         if (__mb == 0)
@@ -4154,8 +4994,20 @@ public unsafe partial class RandomNumberGenerator : RefCounted
         ClassRegistry.AttachNew(this, "RandomNumberGenerator");
     }
 
+    public ulong Seed
+    {
+        get => GetSeed();
+        set => SetSeed(value);
+    }
+
+    public ulong State
+    {
+        get => GetState();
+        set => SetState(value);
+    }
+
     private static nint __mb_set_seed;
-    public void SetSeed(ulong seed)
+    internal void SetSeed(ulong seed)
     {
         var __mb = __mb_set_seed;
         if (__mb == 0)
@@ -4171,7 +5023,7 @@ public unsafe partial class RandomNumberGenerator : RefCounted
     }
 
     private static nint __mb_get_seed;
-    public ulong GetSeed()
+    internal ulong GetSeed()
     {
         var __mb = __mb_get_seed;
         if (__mb == 0)
@@ -4186,7 +5038,7 @@ public unsafe partial class RandomNumberGenerator : RefCounted
     }
 
     private static nint __mb_set_state;
-    public void SetState(ulong state)
+    internal void SetState(ulong state)
     {
         var __mb = __mb_set_state;
         if (__mb == 0)
@@ -4202,7 +5054,7 @@ public unsafe partial class RandomNumberGenerator : RefCounted
     }
 
     private static nint __mb_get_state;
-    public ulong GetState()
+    internal ulong GetState()
     {
         var __mb = __mb_get_state;
         if (__mb == 0)
@@ -4329,8 +5181,68 @@ public unsafe partial class Range : Control
         ClassRegistry.AttachNew(this, "Range");
     }
 
+    public double MinValue
+    {
+        get => GetMin();
+        set => SetMin(value);
+    }
+
+    public double MaxValue
+    {
+        get => GetMax();
+        set => SetMax(value);
+    }
+
+    public double Step
+    {
+        get => GetStep();
+        set => SetStep(value);
+    }
+
+    public double Page
+    {
+        get => GetPage();
+        set => SetPage(value);
+    }
+
+    public double Value
+    {
+        get => GetValue();
+        set => SetValue(value);
+    }
+
+    public double Ratio
+    {
+        get => GetAsRatio();
+        set => SetAsRatio(value);
+    }
+
+    public bool ExpEdit
+    {
+        get => IsRatioExp();
+        set => SetExpRatio(value);
+    }
+
+    public bool Rounded
+    {
+        get => IsUsingRoundedValues();
+        set => SetUseRoundedValues(value);
+    }
+
+    public bool AllowGreater
+    {
+        get => IsGreaterAllowed();
+        set => SetAllowGreater(value);
+    }
+
+    public bool AllowLesser
+    {
+        get => IsLesserAllowed();
+        set => SetAllowLesser(value);
+    }
+
     private static nint __mb_get_value;
-    public double GetValue()
+    internal double GetValue()
     {
         var __mb = __mb_get_value;
         if (__mb == 0)
@@ -4345,7 +5257,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_get_min;
-    public double GetMin()
+    internal double GetMin()
     {
         var __mb = __mb_get_min;
         if (__mb == 0)
@@ -4360,7 +5272,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_get_max;
-    public double GetMax()
+    internal double GetMax()
     {
         var __mb = __mb_get_max;
         if (__mb == 0)
@@ -4375,7 +5287,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_get_step;
-    public double GetStep()
+    internal double GetStep()
     {
         var __mb = __mb_get_step;
         if (__mb == 0)
@@ -4390,7 +5302,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_get_page;
-    public double GetPage()
+    internal double GetPage()
     {
         var __mb = __mb_get_page;
         if (__mb == 0)
@@ -4405,7 +5317,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_get_as_ratio;
-    public double GetAsRatio()
+    internal double GetAsRatio()
     {
         var __mb = __mb_get_as_ratio;
         if (__mb == 0)
@@ -4420,7 +5332,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_set_value;
-    public void SetValue(double value)
+    internal void SetValue(double value)
     {
         var __mb = __mb_set_value;
         if (__mb == 0)
@@ -4452,7 +5364,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_set_min;
-    public void SetMin(double minimum)
+    internal void SetMin(double minimum)
     {
         var __mb = __mb_set_min;
         if (__mb == 0)
@@ -4468,7 +5380,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_set_max;
-    public void SetMax(double maximum)
+    internal void SetMax(double maximum)
     {
         var __mb = __mb_set_max;
         if (__mb == 0)
@@ -4484,7 +5396,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_set_step;
-    public void SetStep(double step)
+    internal void SetStep(double step)
     {
         var __mb = __mb_set_step;
         if (__mb == 0)
@@ -4500,7 +5412,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_set_page;
-    public void SetPage(double pagesize)
+    internal void SetPage(double pagesize)
     {
         var __mb = __mb_set_page;
         if (__mb == 0)
@@ -4516,7 +5428,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_set_as_ratio;
-    public void SetAsRatio(double value)
+    internal void SetAsRatio(double value)
     {
         var __mb = __mb_set_as_ratio;
         if (__mb == 0)
@@ -4532,7 +5444,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_set_use_rounded_values;
-    public void SetUseRoundedValues(bool enabled)
+    internal void SetUseRoundedValues(bool enabled)
     {
         var __mb = __mb_set_use_rounded_values;
         if (__mb == 0)
@@ -4548,7 +5460,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_is_using_rounded_values;
-    public bool IsUsingRoundedValues()
+    internal bool IsUsingRoundedValues()
     {
         var __mb = __mb_is_using_rounded_values;
         if (__mb == 0)
@@ -4563,7 +5475,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_set_exp_ratio;
-    public void SetExpRatio(bool enabled)
+    internal void SetExpRatio(bool enabled)
     {
         var __mb = __mb_set_exp_ratio;
         if (__mb == 0)
@@ -4579,7 +5491,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_is_ratio_exp;
-    public bool IsRatioExp()
+    internal bool IsRatioExp()
     {
         var __mb = __mb_is_ratio_exp;
         if (__mb == 0)
@@ -4594,7 +5506,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_set_allow_greater;
-    public void SetAllowGreater(bool allow)
+    internal void SetAllowGreater(bool allow)
     {
         var __mb = __mb_set_allow_greater;
         if (__mb == 0)
@@ -4610,7 +5522,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_is_greater_allowed;
-    public bool IsGreaterAllowed()
+    internal bool IsGreaterAllowed()
     {
         var __mb = __mb_is_greater_allowed;
         if (__mb == 0)
@@ -4625,7 +5537,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_set_allow_lesser;
-    public void SetAllowLesser(bool allow)
+    internal void SetAllowLesser(bool allow)
     {
         var __mb = __mb_set_allow_lesser;
         if (__mb == 0)
@@ -4641,7 +5553,7 @@ public unsafe partial class Range : Control
     }
 
     private static nint __mb_is_lesser_allowed;
-    public bool IsLesserAllowed()
+    internal bool IsLesserAllowed()
     {
         var __mb = __mb_is_lesser_allowed;
         if (__mb == 0)
@@ -4709,8 +5621,50 @@ public unsafe partial class RayCast2D : Node2D
         ClassRegistry.AttachNew(this, "RayCast2D");
     }
 
+    public bool Enabled
+    {
+        get => IsEnabled();
+        set => SetEnabled(value);
+    }
+
+    public bool ExcludeParent
+    {
+        get => GetExcludeParentBody();
+        set => SetExcludeParentBody(value);
+    }
+
+    public Vector2 TargetPosition
+    {
+        get => GetTargetPosition();
+        set => SetTargetPosition(value);
+    }
+
+    public uint CollisionMask
+    {
+        get => GetCollisionMask();
+        set => SetCollisionMask(value);
+    }
+
+    public bool HitFromInside
+    {
+        get => IsHitFromInsideEnabled();
+        set => SetHitFromInside(value);
+    }
+
+    public bool CollideWithAreas
+    {
+        get => IsCollideWithAreasEnabled();
+        set => SetCollideWithAreas(value);
+    }
+
+    public bool CollideWithBodies
+    {
+        get => IsCollideWithBodiesEnabled();
+        set => SetCollideWithBodies(value);
+    }
+
     private static nint __mb_set_enabled;
-    public void SetEnabled(bool enabled)
+    internal void SetEnabled(bool enabled)
     {
         var __mb = __mb_set_enabled;
         if (__mb == 0)
@@ -4726,7 +5680,7 @@ public unsafe partial class RayCast2D : Node2D
     }
 
     private static nint __mb_is_enabled;
-    public bool IsEnabled()
+    internal bool IsEnabled()
     {
         var __mb = __mb_is_enabled;
         if (__mb == 0)
@@ -4741,7 +5695,7 @@ public unsafe partial class RayCast2D : Node2D
     }
 
     private static nint __mb_set_target_position;
-    public void SetTargetPosition(Vector2 localPoint)
+    internal void SetTargetPosition(Vector2 localPoint)
     {
         var __mb = __mb_set_target_position;
         if (__mb == 0)
@@ -4757,7 +5711,7 @@ public unsafe partial class RayCast2D : Node2D
     }
 
     private static nint __mb_get_target_position;
-    public Vector2 GetTargetPosition()
+    internal Vector2 GetTargetPosition()
     {
         var __mb = __mb_get_target_position;
         if (__mb == 0)
@@ -4952,7 +5906,7 @@ public unsafe partial class RayCast2D : Node2D
     }
 
     private static nint __mb_set_collision_mask;
-    public void SetCollisionMask(uint mask)
+    internal void SetCollisionMask(uint mask)
     {
         var __mb = __mb_set_collision_mask;
         if (__mb == 0)
@@ -4968,7 +5922,7 @@ public unsafe partial class RayCast2D : Node2D
     }
 
     private static nint __mb_get_collision_mask;
-    public uint GetCollisionMask()
+    internal uint GetCollisionMask()
     {
         var __mb = __mb_get_collision_mask;
         if (__mb == 0)
@@ -5019,7 +5973,7 @@ public unsafe partial class RayCast2D : Node2D
     }
 
     private static nint __mb_set_exclude_parent_body;
-    public void SetExcludeParentBody(bool mask)
+    internal void SetExcludeParentBody(bool mask)
     {
         var __mb = __mb_set_exclude_parent_body;
         if (__mb == 0)
@@ -5035,7 +5989,7 @@ public unsafe partial class RayCast2D : Node2D
     }
 
     private static nint __mb_get_exclude_parent_body;
-    public bool GetExcludeParentBody()
+    internal bool GetExcludeParentBody()
     {
         var __mb = __mb_get_exclude_parent_body;
         if (__mb == 0)
@@ -5050,7 +6004,7 @@ public unsafe partial class RayCast2D : Node2D
     }
 
     private static nint __mb_set_collide_with_areas;
-    public void SetCollideWithAreas(bool enable)
+    internal void SetCollideWithAreas(bool enable)
     {
         var __mb = __mb_set_collide_with_areas;
         if (__mb == 0)
@@ -5066,7 +6020,7 @@ public unsafe partial class RayCast2D : Node2D
     }
 
     private static nint __mb_is_collide_with_areas_enabled;
-    public bool IsCollideWithAreasEnabled()
+    internal bool IsCollideWithAreasEnabled()
     {
         var __mb = __mb_is_collide_with_areas_enabled;
         if (__mb == 0)
@@ -5081,7 +6035,7 @@ public unsafe partial class RayCast2D : Node2D
     }
 
     private static nint __mb_set_collide_with_bodies;
-    public void SetCollideWithBodies(bool enable)
+    internal void SetCollideWithBodies(bool enable)
     {
         var __mb = __mb_set_collide_with_bodies;
         if (__mb == 0)
@@ -5097,7 +6051,7 @@ public unsafe partial class RayCast2D : Node2D
     }
 
     private static nint __mb_is_collide_with_bodies_enabled;
-    public bool IsCollideWithBodiesEnabled()
+    internal bool IsCollideWithBodiesEnabled()
     {
         var __mb = __mb_is_collide_with_bodies_enabled;
         if (__mb == 0)
@@ -5112,7 +6066,7 @@ public unsafe partial class RayCast2D : Node2D
     }
 
     private static nint __mb_set_hit_from_inside;
-    public void SetHitFromInside(bool enable)
+    internal void SetHitFromInside(bool enable)
     {
         var __mb = __mb_set_hit_from_inside;
         if (__mb == 0)
@@ -5128,7 +6082,7 @@ public unsafe partial class RayCast2D : Node2D
     }
 
     private static nint __mb_is_hit_from_inside_enabled;
-    public bool IsHitFromInsideEnabled()
+    internal bool IsHitFromInsideEnabled()
     {
         var __mb = __mb_is_hit_from_inside_enabled;
         if (__mb == 0)
@@ -5152,8 +6106,68 @@ public unsafe partial class RayCast3D : Node3D
         ClassRegistry.AttachNew(this, "RayCast3D");
     }
 
+    public bool Enabled
+    {
+        get => IsEnabled();
+        set => SetEnabled(value);
+    }
+
+    public bool ExcludeParent
+    {
+        get => GetExcludeParentBody();
+        set => SetExcludeParentBody(value);
+    }
+
+    public Vector3 TargetPosition
+    {
+        get => GetTargetPosition();
+        set => SetTargetPosition(value);
+    }
+
+    public uint CollisionMask
+    {
+        get => GetCollisionMask();
+        set => SetCollisionMask(value);
+    }
+
+    public bool HitFromInside
+    {
+        get => IsHitFromInsideEnabled();
+        set => SetHitFromInside(value);
+    }
+
+    public bool HitBackFaces
+    {
+        get => IsHitBackFacesEnabled();
+        set => SetHitBackFaces(value);
+    }
+
+    public bool CollideWithAreas
+    {
+        get => IsCollideWithAreasEnabled();
+        set => SetCollideWithAreas(value);
+    }
+
+    public bool CollideWithBodies
+    {
+        get => IsCollideWithBodiesEnabled();
+        set => SetCollideWithBodies(value);
+    }
+
+    public Color DebugShapeCustomColor
+    {
+        get => GetDebugShapeCustomColor();
+        set => SetDebugShapeCustomColor(value);
+    }
+
+    public int DebugShapeThickness
+    {
+        get => GetDebugShapeThickness();
+        set => SetDebugShapeThickness(value);
+    }
+
     private static nint __mb_set_enabled;
-    public void SetEnabled(bool enabled)
+    internal void SetEnabled(bool enabled)
     {
         var __mb = __mb_set_enabled;
         if (__mb == 0)
@@ -5169,7 +6183,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_is_enabled;
-    public bool IsEnabled()
+    internal bool IsEnabled()
     {
         var __mb = __mb_is_enabled;
         if (__mb == 0)
@@ -5184,7 +6198,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_set_target_position;
-    public void SetTargetPosition(Vector3 localPoint)
+    internal void SetTargetPosition(Vector3 localPoint)
     {
         var __mb = __mb_set_target_position;
         if (__mb == 0)
@@ -5200,7 +6214,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_get_target_position;
-    public Vector3 GetTargetPosition()
+    internal Vector3 GetTargetPosition()
     {
         var __mb = __mb_get_target_position;
         if (__mb == 0)
@@ -5410,7 +6424,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_set_collision_mask;
-    public void SetCollisionMask(uint mask)
+    internal void SetCollisionMask(uint mask)
     {
         var __mb = __mb_set_collision_mask;
         if (__mb == 0)
@@ -5426,7 +6440,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_get_collision_mask;
-    public uint GetCollisionMask()
+    internal uint GetCollisionMask()
     {
         var __mb = __mb_get_collision_mask;
         if (__mb == 0)
@@ -5477,7 +6491,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_set_exclude_parent_body;
-    public void SetExcludeParentBody(bool mask)
+    internal void SetExcludeParentBody(bool mask)
     {
         var __mb = __mb_set_exclude_parent_body;
         if (__mb == 0)
@@ -5493,7 +6507,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_get_exclude_parent_body;
-    public bool GetExcludeParentBody()
+    internal bool GetExcludeParentBody()
     {
         var __mb = __mb_get_exclude_parent_body;
         if (__mb == 0)
@@ -5508,7 +6522,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_set_collide_with_areas;
-    public void SetCollideWithAreas(bool enable)
+    internal void SetCollideWithAreas(bool enable)
     {
         var __mb = __mb_set_collide_with_areas;
         if (__mb == 0)
@@ -5524,7 +6538,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_is_collide_with_areas_enabled;
-    public bool IsCollideWithAreasEnabled()
+    internal bool IsCollideWithAreasEnabled()
     {
         var __mb = __mb_is_collide_with_areas_enabled;
         if (__mb == 0)
@@ -5539,7 +6553,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_set_collide_with_bodies;
-    public void SetCollideWithBodies(bool enable)
+    internal void SetCollideWithBodies(bool enable)
     {
         var __mb = __mb_set_collide_with_bodies;
         if (__mb == 0)
@@ -5555,7 +6569,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_is_collide_with_bodies_enabled;
-    public bool IsCollideWithBodiesEnabled()
+    internal bool IsCollideWithBodiesEnabled()
     {
         var __mb = __mb_is_collide_with_bodies_enabled;
         if (__mb == 0)
@@ -5570,7 +6584,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_set_hit_from_inside;
-    public void SetHitFromInside(bool enable)
+    internal void SetHitFromInside(bool enable)
     {
         var __mb = __mb_set_hit_from_inside;
         if (__mb == 0)
@@ -5586,7 +6600,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_is_hit_from_inside_enabled;
-    public bool IsHitFromInsideEnabled()
+    internal bool IsHitFromInsideEnabled()
     {
         var __mb = __mb_is_hit_from_inside_enabled;
         if (__mb == 0)
@@ -5601,7 +6615,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_set_hit_back_faces;
-    public void SetHitBackFaces(bool enable)
+    internal void SetHitBackFaces(bool enable)
     {
         var __mb = __mb_set_hit_back_faces;
         if (__mb == 0)
@@ -5617,7 +6631,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_is_hit_back_faces_enabled;
-    public bool IsHitBackFacesEnabled()
+    internal bool IsHitBackFacesEnabled()
     {
         var __mb = __mb_is_hit_back_faces_enabled;
         if (__mb == 0)
@@ -5632,7 +6646,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_set_debug_shape_custom_color;
-    public void SetDebugShapeCustomColor(Color debugShapeCustomColor)
+    internal void SetDebugShapeCustomColor(Color debugShapeCustomColor)
     {
         var __mb = __mb_set_debug_shape_custom_color;
         if (__mb == 0)
@@ -5648,7 +6662,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_get_debug_shape_custom_color;
-    public Color GetDebugShapeCustomColor()
+    internal Color GetDebugShapeCustomColor()
     {
         var __mb = __mb_get_debug_shape_custom_color;
         if (__mb == 0)
@@ -5663,7 +6677,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_set_debug_shape_thickness;
-    public void SetDebugShapeThickness(int debugShapeThickness)
+    internal void SetDebugShapeThickness(int debugShapeThickness)
     {
         var __mb = __mb_set_debug_shape_thickness;
         if (__mb == 0)
@@ -5679,7 +6693,7 @@ public unsafe partial class RayCast3D : Node3D
     }
 
     private static nint __mb_get_debug_shape_thickness;
-    public int GetDebugShapeThickness()
+    internal int GetDebugShapeThickness()
     {
         var __mb = __mb_get_debug_shape_thickness;
         if (__mb == 0)
@@ -5703,8 +6717,14 @@ public unsafe partial class RectangleShape2D : Shape2D
         ClassRegistry.AttachNew(this, "RectangleShape2D");
     }
 
+    public Vector2 Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
     private static nint __mb_set_size;
-    public void SetSize(Vector2 size)
+    internal void SetSize(Vector2 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -5720,7 +6740,7 @@ public unsafe partial class RectangleShape2D : Shape2D
     }
 
     private static nint __mb_get_size;
-    public Vector2 GetSize()
+    internal Vector2 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -5814,8 +6834,26 @@ public unsafe partial class ReferenceRect : Control
         ClassRegistry.AttachNew(this, "ReferenceRect");
     }
 
+    public Color BorderColor
+    {
+        get => GetBorderColor();
+        set => SetBorderColor(value);
+    }
+
+    public float BorderWidth
+    {
+        get => GetBorderWidth();
+        set => SetBorderWidth(value);
+    }
+
+    public bool EditorOnly
+    {
+        get => GetEditorOnly();
+        set => SetEditorOnly(value);
+    }
+
     private static nint __mb_get_border_color;
-    public Color GetBorderColor()
+    internal Color GetBorderColor()
     {
         var __mb = __mb_get_border_color;
         if (__mb == 0)
@@ -5830,7 +6868,7 @@ public unsafe partial class ReferenceRect : Control
     }
 
     private static nint __mb_set_border_color;
-    public void SetBorderColor(Color color)
+    internal void SetBorderColor(Color color)
     {
         var __mb = __mb_set_border_color;
         if (__mb == 0)
@@ -5846,7 +6884,7 @@ public unsafe partial class ReferenceRect : Control
     }
 
     private static nint __mb_get_border_width;
-    public float GetBorderWidth()
+    internal float GetBorderWidth()
     {
         var __mb = __mb_get_border_width;
         if (__mb == 0)
@@ -5861,7 +6899,7 @@ public unsafe partial class ReferenceRect : Control
     }
 
     private static nint __mb_set_border_width;
-    public void SetBorderWidth(float width)
+    internal void SetBorderWidth(float width)
     {
         var __mb = __mb_set_border_width;
         if (__mb == 0)
@@ -5877,7 +6915,7 @@ public unsafe partial class ReferenceRect : Control
     }
 
     private static nint __mb_get_editor_only;
-    public bool GetEditorOnly()
+    internal bool GetEditorOnly()
     {
         var __mb = __mb_get_editor_only;
         if (__mb == 0)
@@ -5892,7 +6930,7 @@ public unsafe partial class ReferenceRect : Control
     }
 
     private static nint __mb_set_editor_only;
-    public void SetEditorOnly(bool enabled)
+    internal void SetEditorOnly(bool enabled)
     {
         var __mb = __mb_set_editor_only;
         if (__mb == 0)
@@ -5917,21 +6955,111 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
         ClassRegistry.AttachNew(this, "ReflectionProbe");
     }
 
-    public enum UpdateMode : long
+    public enum UpdateModeEnum : long
     {
         UPDATE_ONCE = 0,
         UPDATE_ALWAYS = 1,
     }
 
-    public enum AmbientMode : long
+    public enum AmbientModeEnum : long
     {
         AMBIENT_DISABLED = 0,
         AMBIENT_ENVIRONMENT = 1,
         AMBIENT_COLOR = 2,
     }
 
+    public ReflectionProbe.UpdateModeEnum UpdateMode
+    {
+        get => GetUpdateMode();
+        set => SetUpdateMode(value);
+    }
+
+    public float Intensity
+    {
+        get => GetIntensity();
+        set => SetIntensity(value);
+    }
+
+    public float BlendDistance
+    {
+        get => GetBlendDistance();
+        set => SetBlendDistance(value);
+    }
+
+    public float MaxDistance
+    {
+        get => GetMaxDistance();
+        set => SetMaxDistance(value);
+    }
+
+    public Vector3 Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
+    public Vector3 OriginOffset
+    {
+        get => GetOriginOffset();
+        set => SetOriginOffset(value);
+    }
+
+    public bool BoxProjection
+    {
+        get => IsBoxProjectionEnabled();
+        set => SetEnableBoxProjection(value);
+    }
+
+    public bool Interior
+    {
+        get => IsSetAsInterior();
+        set => SetAsInterior(value);
+    }
+
+    public bool EnableShadows
+    {
+        get => AreShadowsEnabled();
+        set => SetEnableShadows(value);
+    }
+
+    public uint CullMask
+    {
+        get => GetCullMask();
+        set => SetCullMask(value);
+    }
+
+    public uint ReflectionMask
+    {
+        get => GetReflectionMask();
+        set => SetReflectionMask(value);
+    }
+
+    public float MeshLodThreshold
+    {
+        get => GetMeshLodThreshold();
+        set => SetMeshLodThreshold(value);
+    }
+
+    public ReflectionProbe.AmbientModeEnum AmbientMode
+    {
+        get => GetAmbientMode();
+        set => SetAmbientMode(value);
+    }
+
+    public Color AmbientColor
+    {
+        get => GetAmbientColor();
+        set => SetAmbientColor(value);
+    }
+
+    public float AmbientColorEnergy
+    {
+        get => GetAmbientColorEnergy();
+        set => SetAmbientColorEnergy(value);
+    }
+
     private static nint __mb_set_intensity;
-    public void SetIntensity(float intensity)
+    internal void SetIntensity(float intensity)
     {
         var __mb = __mb_set_intensity;
         if (__mb == 0)
@@ -5947,7 +7075,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_get_intensity;
-    public float GetIntensity()
+    internal float GetIntensity()
     {
         var __mb = __mb_get_intensity;
         if (__mb == 0)
@@ -5962,7 +7090,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_set_blend_distance;
-    public void SetBlendDistance(float blendDistance)
+    internal void SetBlendDistance(float blendDistance)
     {
         var __mb = __mb_set_blend_distance;
         if (__mb == 0)
@@ -5978,7 +7106,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_get_blend_distance;
-    public float GetBlendDistance()
+    internal float GetBlendDistance()
     {
         var __mb = __mb_get_blend_distance;
         if (__mb == 0)
@@ -5993,7 +7121,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_set_ambient_mode;
-    public void SetAmbientMode(ReflectionProbe.AmbientMode ambient)
+    internal void SetAmbientMode(ReflectionProbe.AmbientModeEnum ambient)
     {
         var __mb = __mb_set_ambient_mode;
         if (__mb == 0)
@@ -6009,7 +7137,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_get_ambient_mode;
-    public ReflectionProbe.AmbientMode GetAmbientMode()
+    internal ReflectionProbe.AmbientModeEnum GetAmbientMode()
     {
         var __mb = __mb_get_ambient_mode;
         if (__mb == 0)
@@ -6020,11 +7148,11 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (ReflectionProbe.AmbientMode)__ret;
+        return (ReflectionProbe.AmbientModeEnum)__ret;
     }
 
     private static nint __mb_set_ambient_color;
-    public void SetAmbientColor(Color ambient)
+    internal void SetAmbientColor(Color ambient)
     {
         var __mb = __mb_set_ambient_color;
         if (__mb == 0)
@@ -6040,7 +7168,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_get_ambient_color;
-    public Color GetAmbientColor()
+    internal Color GetAmbientColor()
     {
         var __mb = __mb_get_ambient_color;
         if (__mb == 0)
@@ -6055,7 +7183,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_set_ambient_color_energy;
-    public void SetAmbientColorEnergy(float ambientEnergy)
+    internal void SetAmbientColorEnergy(float ambientEnergy)
     {
         var __mb = __mb_set_ambient_color_energy;
         if (__mb == 0)
@@ -6071,7 +7199,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_get_ambient_color_energy;
-    public float GetAmbientColorEnergy()
+    internal float GetAmbientColorEnergy()
     {
         var __mb = __mb_get_ambient_color_energy;
         if (__mb == 0)
@@ -6086,7 +7214,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_set_max_distance;
-    public void SetMaxDistance(float maxDistance)
+    internal void SetMaxDistance(float maxDistance)
     {
         var __mb = __mb_set_max_distance;
         if (__mb == 0)
@@ -6102,7 +7230,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_get_max_distance;
-    public float GetMaxDistance()
+    internal float GetMaxDistance()
     {
         var __mb = __mb_get_max_distance;
         if (__mb == 0)
@@ -6117,7 +7245,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_set_mesh_lod_threshold;
-    public void SetMeshLodThreshold(float ratio)
+    internal void SetMeshLodThreshold(float ratio)
     {
         var __mb = __mb_set_mesh_lod_threshold;
         if (__mb == 0)
@@ -6133,7 +7261,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_get_mesh_lod_threshold;
-    public float GetMeshLodThreshold()
+    internal float GetMeshLodThreshold()
     {
         var __mb = __mb_get_mesh_lod_threshold;
         if (__mb == 0)
@@ -6148,7 +7276,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_set_size;
-    public void SetSize(Vector3 size)
+    internal void SetSize(Vector3 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -6164,7 +7292,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_get_size;
-    public Vector3 GetSize()
+    internal Vector3 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -6179,7 +7307,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_set_origin_offset;
-    public void SetOriginOffset(Vector3 originOffset)
+    internal void SetOriginOffset(Vector3 originOffset)
     {
         var __mb = __mb_set_origin_offset;
         if (__mb == 0)
@@ -6195,7 +7323,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_get_origin_offset;
-    public Vector3 GetOriginOffset()
+    internal Vector3 GetOriginOffset()
     {
         var __mb = __mb_get_origin_offset;
         if (__mb == 0)
@@ -6210,7 +7338,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_set_as_interior;
-    public void SetAsInterior(bool enable)
+    internal void SetAsInterior(bool enable)
     {
         var __mb = __mb_set_as_interior;
         if (__mb == 0)
@@ -6226,7 +7354,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_is_set_as_interior;
-    public bool IsSetAsInterior()
+    internal bool IsSetAsInterior()
     {
         var __mb = __mb_is_set_as_interior;
         if (__mb == 0)
@@ -6241,7 +7369,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_set_enable_box_projection;
-    public void SetEnableBoxProjection(bool enable)
+    internal void SetEnableBoxProjection(bool enable)
     {
         var __mb = __mb_set_enable_box_projection;
         if (__mb == 0)
@@ -6257,7 +7385,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_is_box_projection_enabled;
-    public bool IsBoxProjectionEnabled()
+    internal bool IsBoxProjectionEnabled()
     {
         var __mb = __mb_is_box_projection_enabled;
         if (__mb == 0)
@@ -6272,7 +7400,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_set_enable_shadows;
-    public void SetEnableShadows(bool enable)
+    internal void SetEnableShadows(bool enable)
     {
         var __mb = __mb_set_enable_shadows;
         if (__mb == 0)
@@ -6288,7 +7416,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_are_shadows_enabled;
-    public bool AreShadowsEnabled()
+    internal bool AreShadowsEnabled()
     {
         var __mb = __mb_are_shadows_enabled;
         if (__mb == 0)
@@ -6303,7 +7431,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_set_cull_mask;
-    public void SetCullMask(uint layers)
+    internal void SetCullMask(uint layers)
     {
         var __mb = __mb_set_cull_mask;
         if (__mb == 0)
@@ -6319,7 +7447,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_get_cull_mask;
-    public uint GetCullMask()
+    internal uint GetCullMask()
     {
         var __mb = __mb_get_cull_mask;
         if (__mb == 0)
@@ -6334,7 +7462,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_set_reflection_mask;
-    public void SetReflectionMask(uint layers)
+    internal void SetReflectionMask(uint layers)
     {
         var __mb = __mb_set_reflection_mask;
         if (__mb == 0)
@@ -6350,7 +7478,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_get_reflection_mask;
-    public uint GetReflectionMask()
+    internal uint GetReflectionMask()
     {
         var __mb = __mb_get_reflection_mask;
         if (__mb == 0)
@@ -6365,7 +7493,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_set_update_mode;
-    public void SetUpdateMode(ReflectionProbe.UpdateMode mode)
+    internal void SetUpdateMode(ReflectionProbe.UpdateModeEnum mode)
     {
         var __mb = __mb_set_update_mode;
         if (__mb == 0)
@@ -6381,7 +7509,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
     }
 
     private static nint __mb_get_update_mode;
-    public ReflectionProbe.UpdateMode GetUpdateMode()
+    internal ReflectionProbe.UpdateModeEnum GetUpdateMode()
     {
         var __mb = __mb_get_update_mode;
         if (__mb == 0)
@@ -6392,7 +7520,7 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (ReflectionProbe.UpdateMode)__ret;
+        return (ReflectionProbe.UpdateModeEnum)__ret;
     }
 }
 
@@ -6574,8 +7702,12 @@ public unsafe partial class RegExMatch : RefCounted
         ClassRegistry.AttachNew(this, "RegExMatch");
     }
 
+    public string Subject => GetSubject();
+
+    public Godot.Collections.Dictionary Names => GetNames();
+
     private static nint __mb_get_subject;
-    public string GetSubject()
+    internal string GetSubject()
     {
         var __mb = __mb_get_subject;
         if (__mb == 0)
@@ -6605,7 +7737,7 @@ public unsafe partial class RegExMatch : RefCounted
     }
 
     private static nint __mb_get_names;
-    public Godot.Collections.Dictionary GetNames()
+    internal Godot.Collections.Dictionary GetNames()
     {
         var __mb = __mb_get_names;
         if (__mb == 0)
@@ -6683,8 +7815,38 @@ public unsafe partial class RemoteTransform2D : Node2D
         ClassRegistry.AttachNew(this, "RemoteTransform2D");
     }
 
+    public NodePath RemotePath
+    {
+        get => GetRemoteNode();
+        set => SetRemoteNode(value);
+    }
+
+    public bool UseGlobalCoordinates
+    {
+        get => GetUseGlobalCoordinates();
+        set => SetUseGlobalCoordinates(value);
+    }
+
+    public bool UpdatePosition
+    {
+        get => GetUpdatePosition();
+        set => SetUpdatePosition(value);
+    }
+
+    public bool UpdateRotation
+    {
+        get => GetUpdateRotation();
+        set => SetUpdateRotation(value);
+    }
+
+    public bool UpdateScale
+    {
+        get => GetUpdateScale();
+        set => SetUpdateScale(value);
+    }
+
     private static nint __mb_set_remote_node;
-    public void SetRemoteNode(NodePath path)
+    internal void SetRemoteNode(NodePath path)
     {
         var __mb = __mb_set_remote_node;
         if (__mb == 0)
@@ -6700,7 +7862,7 @@ public unsafe partial class RemoteTransform2D : Node2D
     }
 
     private static nint __mb_get_remote_node;
-    public NodePath GetRemoteNode()
+    internal NodePath GetRemoteNode()
     {
         var __mb = __mb_get_remote_node;
         if (__mb == 0)
@@ -6728,7 +7890,7 @@ public unsafe partial class RemoteTransform2D : Node2D
     }
 
     private static nint __mb_set_use_global_coordinates;
-    public void SetUseGlobalCoordinates(bool useGlobalCoordinates)
+    internal void SetUseGlobalCoordinates(bool useGlobalCoordinates)
     {
         var __mb = __mb_set_use_global_coordinates;
         if (__mb == 0)
@@ -6744,7 +7906,7 @@ public unsafe partial class RemoteTransform2D : Node2D
     }
 
     private static nint __mb_get_use_global_coordinates;
-    public bool GetUseGlobalCoordinates()
+    internal bool GetUseGlobalCoordinates()
     {
         var __mb = __mb_get_use_global_coordinates;
         if (__mb == 0)
@@ -6759,7 +7921,7 @@ public unsafe partial class RemoteTransform2D : Node2D
     }
 
     private static nint __mb_set_update_position;
-    public void SetUpdatePosition(bool updateRemotePosition)
+    internal void SetUpdatePosition(bool updateRemotePosition)
     {
         var __mb = __mb_set_update_position;
         if (__mb == 0)
@@ -6775,7 +7937,7 @@ public unsafe partial class RemoteTransform2D : Node2D
     }
 
     private static nint __mb_get_update_position;
-    public bool GetUpdatePosition()
+    internal bool GetUpdatePosition()
     {
         var __mb = __mb_get_update_position;
         if (__mb == 0)
@@ -6790,7 +7952,7 @@ public unsafe partial class RemoteTransform2D : Node2D
     }
 
     private static nint __mb_set_update_rotation;
-    public void SetUpdateRotation(bool updateRemoteRotation)
+    internal void SetUpdateRotation(bool updateRemoteRotation)
     {
         var __mb = __mb_set_update_rotation;
         if (__mb == 0)
@@ -6806,7 +7968,7 @@ public unsafe partial class RemoteTransform2D : Node2D
     }
 
     private static nint __mb_get_update_rotation;
-    public bool GetUpdateRotation()
+    internal bool GetUpdateRotation()
     {
         var __mb = __mb_get_update_rotation;
         if (__mb == 0)
@@ -6821,7 +7983,7 @@ public unsafe partial class RemoteTransform2D : Node2D
     }
 
     private static nint __mb_set_update_scale;
-    public void SetUpdateScale(bool updateRemoteScale)
+    internal void SetUpdateScale(bool updateRemoteScale)
     {
         var __mb = __mb_set_update_scale;
         if (__mb == 0)
@@ -6837,7 +7999,7 @@ public unsafe partial class RemoteTransform2D : Node2D
     }
 
     private static nint __mb_get_update_scale;
-    public bool GetUpdateScale()
+    internal bool GetUpdateScale()
     {
         var __mb = __mb_get_update_scale;
         if (__mb == 0)
@@ -6861,8 +8023,38 @@ public unsafe partial class RemoteTransform3D : Node3D
         ClassRegistry.AttachNew(this, "RemoteTransform3D");
     }
 
+    public NodePath RemotePath
+    {
+        get => GetRemoteNode();
+        set => SetRemoteNode(value);
+    }
+
+    public bool UseGlobalCoordinates
+    {
+        get => GetUseGlobalCoordinates();
+        set => SetUseGlobalCoordinates(value);
+    }
+
+    public bool UpdatePosition
+    {
+        get => GetUpdatePosition();
+        set => SetUpdatePosition(value);
+    }
+
+    public bool UpdateRotation
+    {
+        get => GetUpdateRotation();
+        set => SetUpdateRotation(value);
+    }
+
+    public bool UpdateScale
+    {
+        get => GetUpdateScale();
+        set => SetUpdateScale(value);
+    }
+
     private static nint __mb_set_remote_node;
-    public void SetRemoteNode(NodePath path)
+    internal void SetRemoteNode(NodePath path)
     {
         var __mb = __mb_set_remote_node;
         if (__mb == 0)
@@ -6878,7 +8070,7 @@ public unsafe partial class RemoteTransform3D : Node3D
     }
 
     private static nint __mb_get_remote_node;
-    public NodePath GetRemoteNode()
+    internal NodePath GetRemoteNode()
     {
         var __mb = __mb_get_remote_node;
         if (__mb == 0)
@@ -6906,7 +8098,7 @@ public unsafe partial class RemoteTransform3D : Node3D
     }
 
     private static nint __mb_set_use_global_coordinates;
-    public void SetUseGlobalCoordinates(bool useGlobalCoordinates)
+    internal void SetUseGlobalCoordinates(bool useGlobalCoordinates)
     {
         var __mb = __mb_set_use_global_coordinates;
         if (__mb == 0)
@@ -6922,7 +8114,7 @@ public unsafe partial class RemoteTransform3D : Node3D
     }
 
     private static nint __mb_get_use_global_coordinates;
-    public bool GetUseGlobalCoordinates()
+    internal bool GetUseGlobalCoordinates()
     {
         var __mb = __mb_get_use_global_coordinates;
         if (__mb == 0)
@@ -6937,7 +8129,7 @@ public unsafe partial class RemoteTransform3D : Node3D
     }
 
     private static nint __mb_set_update_position;
-    public void SetUpdatePosition(bool updateRemotePosition)
+    internal void SetUpdatePosition(bool updateRemotePosition)
     {
         var __mb = __mb_set_update_position;
         if (__mb == 0)
@@ -6953,7 +8145,7 @@ public unsafe partial class RemoteTransform3D : Node3D
     }
 
     private static nint __mb_get_update_position;
-    public bool GetUpdatePosition()
+    internal bool GetUpdatePosition()
     {
         var __mb = __mb_get_update_position;
         if (__mb == 0)
@@ -6968,7 +8160,7 @@ public unsafe partial class RemoteTransform3D : Node3D
     }
 
     private static nint __mb_set_update_rotation;
-    public void SetUpdateRotation(bool updateRemoteRotation)
+    internal void SetUpdateRotation(bool updateRemoteRotation)
     {
         var __mb = __mb_set_update_rotation;
         if (__mb == 0)
@@ -6984,7 +8176,7 @@ public unsafe partial class RemoteTransform3D : Node3D
     }
 
     private static nint __mb_get_update_rotation;
-    public bool GetUpdateRotation()
+    internal bool GetUpdateRotation()
     {
         var __mb = __mb_get_update_rotation;
         if (__mb == 0)
@@ -6999,7 +8191,7 @@ public unsafe partial class RemoteTransform3D : Node3D
     }
 
     private static nint __mb_set_update_scale;
-    public void SetUpdateScale(bool updateRemoteScale)
+    internal void SetUpdateScale(bool updateRemoteScale)
     {
         var __mb = __mb_set_update_scale;
         if (__mb == 0)
@@ -7015,7 +8207,7 @@ public unsafe partial class RemoteTransform3D : Node3D
     }
 
     private static nint __mb_get_update_scale;
-    public bool GetUpdateScale()
+    internal bool GetUpdateScale()
     {
         var __mb = __mb_get_update_scale;
         if (__mb == 0)
@@ -7187,8 +8379,68 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
         ClassRegistry.AttachNew(this, "RenderSceneBuffersConfiguration");
     }
 
+    public Rid RenderTarget
+    {
+        get => GetRenderTarget();
+        set => SetRenderTarget(value);
+    }
+
+    public Vector2I InternalSize
+    {
+        get => GetInternalSize();
+        set => SetInternalSize(value);
+    }
+
+    public Vector2I TargetSize
+    {
+        get => GetTargetSize();
+        set => SetTargetSize(value);
+    }
+
+    public uint ViewCount
+    {
+        get => GetViewCount();
+        set => SetViewCount(value);
+    }
+
+    public RenderingServer.ViewportScaling3DMode Scaling3dMode
+    {
+        get => GetScaling3dMode();
+        set => SetScaling3dMode(value);
+    }
+
+    public RenderingServer.ViewportMSAA Msaa3d
+    {
+        get => GetMsaa3d();
+        set => SetMsaa3d(value);
+    }
+
+    public RenderingServer.ViewportScreenSpaceAA ScreenSpaceAa
+    {
+        get => GetScreenSpaceAa();
+        set => SetScreenSpaceAa(value);
+    }
+
+    public float FsrSharpness
+    {
+        get => GetFsrSharpness();
+        set => SetFsrSharpness(value);
+    }
+
+    public float TextureMipmapBias
+    {
+        get => GetTextureMipmapBias();
+        set => SetTextureMipmapBias(value);
+    }
+
+    public RenderingServer.ViewportAnisotropicFiltering AnisotropicFilteringLevel
+    {
+        get => GetAnisotropicFilteringLevel();
+        set => SetAnisotropicFilteringLevel(value);
+    }
+
     private static nint __mb_get_render_target;
-    public Rid GetRenderTarget()
+    internal Rid GetRenderTarget()
     {
         var __mb = __mb_get_render_target;
         if (__mb == 0)
@@ -7203,7 +8455,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_set_render_target;
-    public void SetRenderTarget(Rid renderTarget)
+    internal void SetRenderTarget(Rid renderTarget)
     {
         var __mb = __mb_set_render_target;
         if (__mb == 0)
@@ -7219,7 +8471,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_get_internal_size;
-    public Vector2I GetInternalSize()
+    internal Vector2I GetInternalSize()
     {
         var __mb = __mb_get_internal_size;
         if (__mb == 0)
@@ -7234,7 +8486,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_set_internal_size;
-    public void SetInternalSize(Vector2I internalSize)
+    internal void SetInternalSize(Vector2I internalSize)
     {
         var __mb = __mb_set_internal_size;
         if (__mb == 0)
@@ -7250,7 +8502,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_get_target_size;
-    public Vector2I GetTargetSize()
+    internal Vector2I GetTargetSize()
     {
         var __mb = __mb_get_target_size;
         if (__mb == 0)
@@ -7265,7 +8517,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_set_target_size;
-    public void SetTargetSize(Vector2I targetSize)
+    internal void SetTargetSize(Vector2I targetSize)
     {
         var __mb = __mb_set_target_size;
         if (__mb == 0)
@@ -7281,7 +8533,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_get_view_count;
-    public uint GetViewCount()
+    internal uint GetViewCount()
     {
         var __mb = __mb_get_view_count;
         if (__mb == 0)
@@ -7296,7 +8548,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_set_view_count;
-    public void SetViewCount(uint viewCount)
+    internal void SetViewCount(uint viewCount)
     {
         var __mb = __mb_set_view_count;
         if (__mb == 0)
@@ -7312,7 +8564,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_get_scaling_3d_mode;
-    public RenderingServer.ViewportScaling3DMode GetScaling3dMode()
+    internal RenderingServer.ViewportScaling3DMode GetScaling3dMode()
     {
         var __mb = __mb_get_scaling_3d_mode;
         if (__mb == 0)
@@ -7327,7 +8579,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_set_scaling_3d_mode;
-    public void SetScaling3dMode(RenderingServer.ViewportScaling3DMode scaling3dMode)
+    internal void SetScaling3dMode(RenderingServer.ViewportScaling3DMode scaling3dMode)
     {
         var __mb = __mb_set_scaling_3d_mode;
         if (__mb == 0)
@@ -7343,7 +8595,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_get_msaa_3d;
-    public RenderingServer.ViewportMSAA GetMsaa3d()
+    internal RenderingServer.ViewportMSAA GetMsaa3d()
     {
         var __mb = __mb_get_msaa_3d;
         if (__mb == 0)
@@ -7358,7 +8610,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_set_msaa_3d;
-    public void SetMsaa3d(RenderingServer.ViewportMSAA msaa3d)
+    internal void SetMsaa3d(RenderingServer.ViewportMSAA msaa3d)
     {
         var __mb = __mb_set_msaa_3d;
         if (__mb == 0)
@@ -7374,7 +8626,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_get_screen_space_aa;
-    public RenderingServer.ViewportScreenSpaceAA GetScreenSpaceAa()
+    internal RenderingServer.ViewportScreenSpaceAA GetScreenSpaceAa()
     {
         var __mb = __mb_get_screen_space_aa;
         if (__mb == 0)
@@ -7389,7 +8641,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_set_screen_space_aa;
-    public void SetScreenSpaceAa(RenderingServer.ViewportScreenSpaceAA screenSpaceAa)
+    internal void SetScreenSpaceAa(RenderingServer.ViewportScreenSpaceAA screenSpaceAa)
     {
         var __mb = __mb_set_screen_space_aa;
         if (__mb == 0)
@@ -7405,7 +8657,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_get_fsr_sharpness;
-    public float GetFsrSharpness()
+    internal float GetFsrSharpness()
     {
         var __mb = __mb_get_fsr_sharpness;
         if (__mb == 0)
@@ -7420,7 +8672,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_set_fsr_sharpness;
-    public void SetFsrSharpness(float fsrSharpness)
+    internal void SetFsrSharpness(float fsrSharpness)
     {
         var __mb = __mb_set_fsr_sharpness;
         if (__mb == 0)
@@ -7436,7 +8688,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_get_texture_mipmap_bias;
-    public float GetTextureMipmapBias()
+    internal float GetTextureMipmapBias()
     {
         var __mb = __mb_get_texture_mipmap_bias;
         if (__mb == 0)
@@ -7451,7 +8703,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_set_texture_mipmap_bias;
-    public void SetTextureMipmapBias(float textureMipmapBias)
+    internal void SetTextureMipmapBias(float textureMipmapBias)
     {
         var __mb = __mb_set_texture_mipmap_bias;
         if (__mb == 0)
@@ -7467,7 +8719,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_get_anisotropic_filtering_level;
-    public RenderingServer.ViewportAnisotropicFiltering GetAnisotropicFilteringLevel()
+    internal RenderingServer.ViewportAnisotropicFiltering GetAnisotropicFilteringLevel()
     {
         var __mb = __mb_get_anisotropic_filtering_level;
         if (__mb == 0)
@@ -7482,7 +8734,7 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
     }
 
     private static nint __mb_set_anisotropic_filtering_level;
-    public void SetAnisotropicFilteringLevel(RenderingServer.ViewportAnisotropicFiltering anisotropicFilteringLevel)
+    internal void SetAnisotropicFilteringLevel(RenderingServer.ViewportAnisotropicFiltering anisotropicFilteringLevel)
     {
         var __mb = __mb_set_anisotropic_filtering_level;
         if (__mb == 0)
@@ -11994,6 +13246,12 @@ public unsafe partial class RenderingServer : GodotObject
     {
         FEATURE_SHADERS = 0,
         FEATURE_MULTITHREADED = 1,
+    }
+
+    public bool RenderLoopEnabled
+    {
+        get => IsRenderLoopEnabled();
+        set => SetRenderLoopEnabled(value);
     }
 
     private static nint __mb_texture_2d_create;
@@ -21195,7 +22453,7 @@ public unsafe partial class RenderingServer : GodotObject
     }
 
     private static nint __mb_is_render_loop_enabled;
-    public bool IsRenderLoopEnabled()
+    internal bool IsRenderLoopEnabled()
     {
         var __mb = __mb_is_render_loop_enabled;
         if (__mb == 0)
@@ -21210,7 +22468,7 @@ public unsafe partial class RenderingServer : GodotObject
     }
 
     private static nint __mb_set_render_loop_enabled;
-    public void SetRenderLoopEnabled(bool enabled)
+    internal void SetRenderLoopEnabled(bool enabled)
     {
         var __mb = __mb_set_render_loop_enabled;
         if (__mb == 0)
@@ -21351,8 +22609,32 @@ public unsafe partial class Resource : RefCounted
         DEEP_DUPLICATE_ALL = 2,
     }
 
+    public bool ResourceLocalToScene
+    {
+        get => IsLocalToScene();
+        set => SetLocalToScene(value);
+    }
+
+    public string ResourcePath
+    {
+        get => GetPath();
+        set => SetPath(value);
+    }
+
+    public string ResourceName
+    {
+        get => GetName();
+        set => SetName(value);
+    }
+
+    public string ResourceSceneUniqueId
+    {
+        get => GetSceneUniqueId();
+        set => SetSceneUniqueId(value);
+    }
+
     private static nint __mb_set_path;
-    public void SetPath(string path)
+    internal void SetPath(string path)
     {
         var __mb = __mb_set_path;
         if (__mb == 0)
@@ -21386,7 +22668,7 @@ public unsafe partial class Resource : RefCounted
     }
 
     private static nint __mb_get_path;
-    public string GetPath()
+    internal string GetPath()
     {
         var __mb = __mb_get_path;
         if (__mb == 0)
@@ -21418,7 +22700,7 @@ public unsafe partial class Resource : RefCounted
     }
 
     private static nint __mb_set_name;
-    public void SetName(string name)
+    internal void SetName(string name)
     {
         var __mb = __mb_set_name;
         if (__mb == 0)
@@ -21435,7 +22717,7 @@ public unsafe partial class Resource : RefCounted
     }
 
     private static nint __mb_get_name;
-    public string GetName()
+    internal string GetName()
     {
         var __mb = __mb_get_name;
         if (__mb == 0)
@@ -21465,7 +22747,7 @@ public unsafe partial class Resource : RefCounted
     }
 
     private static nint __mb_set_local_to_scene;
-    public void SetLocalToScene(bool enable)
+    internal void SetLocalToScene(bool enable)
     {
         var __mb = __mb_set_local_to_scene;
         if (__mb == 0)
@@ -21481,7 +22763,7 @@ public unsafe partial class Resource : RefCounted
     }
 
     private static nint __mb_is_local_to_scene;
-    public bool IsLocalToScene()
+    internal bool IsLocalToScene()
     {
         var __mb = __mb_is_local_to_scene;
         if (__mb == 0)
@@ -21606,7 +22888,7 @@ public unsafe partial class Resource : RefCounted
     }
 
     private static nint __mb_set_scene_unique_id;
-    public void SetSceneUniqueId(string id)
+    internal void SetSceneUniqueId(string id)
     {
         var __mb = __mb_set_scene_unique_id;
         if (__mb == 0)
@@ -21623,7 +22905,7 @@ public unsafe partial class Resource : RefCounted
     }
 
     private static nint __mb_get_scene_unique_id;
-    public string GetSceneUniqueId()
+    internal string GetSceneUniqueId()
     {
         var __mb = __mb_get_scene_unique_id;
         if (__mb == 0)
@@ -22784,8 +24066,26 @@ public unsafe partial class RetargetModifier3D : SkeletonModifier3D
         TRANSFORM_FLAG_ALL = 7,
     }
 
+    public SkeletonProfile? Profile
+    {
+        get => GetProfile();
+        set => SetProfile(value);
+    }
+
+    public bool UseGlobalPose
+    {
+        get => IsUsingGlobalPose();
+        set => SetUseGlobalPose(value);
+    }
+
+    public RetargetModifier3D.TransformFlag Enable
+    {
+        get => GetEnableFlags();
+        set => SetEnableFlags(value);
+    }
+
     private static nint __mb_set_profile;
-    public void SetProfile(SkeletonProfile? profile)
+    internal void SetProfile(SkeletonProfile? profile)
     {
         var __mb = __mb_set_profile;
         if (__mb == 0)
@@ -22801,7 +24101,7 @@ public unsafe partial class RetargetModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_profile;
-    public SkeletonProfile? GetProfile()
+    internal SkeletonProfile? GetProfile()
     {
         var __mb = __mb_get_profile;
         if (__mb == 0)
@@ -22816,7 +24116,7 @@ public unsafe partial class RetargetModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_use_global_pose;
-    public void SetUseGlobalPose(bool useGlobalPose)
+    internal void SetUseGlobalPose(bool useGlobalPose)
     {
         var __mb = __mb_set_use_global_pose;
         if (__mb == 0)
@@ -22832,7 +24132,7 @@ public unsafe partial class RetargetModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_is_using_global_pose;
-    public bool IsUsingGlobalPose()
+    internal bool IsUsingGlobalPose()
     {
         var __mb = __mb_is_using_global_pose;
         if (__mb == 0)
@@ -22847,7 +24147,7 @@ public unsafe partial class RetargetModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_enable_flags;
-    public void SetEnableFlags(RetargetModifier3D.TransformFlag enableFlags)
+    internal void SetEnableFlags(RetargetModifier3D.TransformFlag enableFlags)
     {
         var __mb = __mb_set_enable_flags;
         if (__mb == 0)
@@ -22863,7 +24163,7 @@ public unsafe partial class RetargetModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_enable_flags;
-    public RetargetModifier3D.TransformFlag GetEnableFlags()
+    internal RetargetModifier3D.TransformFlag GetEnableFlags()
     {
         var __mb = __mb_get_enable_flags;
         if (__mb == 0)
@@ -22980,14 +24280,50 @@ public unsafe partial class RibbonTrailMesh : PrimitiveMesh
         ClassRegistry.AttachNew(this, "RibbonTrailMesh");
     }
 
-    public enum Shape : long
+    public enum ShapeEnum : long
     {
         SHAPE_FLAT = 0,
         SHAPE_CROSS = 1,
     }
 
+    public RibbonTrailMesh.ShapeEnum Shape
+    {
+        get => GetShape();
+        set => SetShape(value);
+    }
+
+    public float Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
+    public int Sections
+    {
+        get => GetSections();
+        set => SetSections(value);
+    }
+
+    public float SectionLength
+    {
+        get => GetSectionLength();
+        set => SetSectionLength(value);
+    }
+
+    public int SectionSegments
+    {
+        get => GetSectionSegments();
+        set => SetSectionSegments(value);
+    }
+
+    public Curve? Curve
+    {
+        get => GetCurve();
+        set => SetCurve(value);
+    }
+
     private static nint __mb_set_size;
-    public void SetSize(float size)
+    internal void SetSize(float size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -23003,7 +24339,7 @@ public unsafe partial class RibbonTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_size;
-    public float GetSize()
+    internal float GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -23018,7 +24354,7 @@ public unsafe partial class RibbonTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_sections;
-    public void SetSections(int sections)
+    internal void SetSections(int sections)
     {
         var __mb = __mb_set_sections;
         if (__mb == 0)
@@ -23034,7 +24370,7 @@ public unsafe partial class RibbonTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_sections;
-    public int GetSections()
+    internal int GetSections()
     {
         var __mb = __mb_get_sections;
         if (__mb == 0)
@@ -23049,7 +24385,7 @@ public unsafe partial class RibbonTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_section_length;
-    public void SetSectionLength(float sectionLength)
+    internal void SetSectionLength(float sectionLength)
     {
         var __mb = __mb_set_section_length;
         if (__mb == 0)
@@ -23065,7 +24401,7 @@ public unsafe partial class RibbonTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_section_length;
-    public float GetSectionLength()
+    internal float GetSectionLength()
     {
         var __mb = __mb_get_section_length;
         if (__mb == 0)
@@ -23080,7 +24416,7 @@ public unsafe partial class RibbonTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_section_segments;
-    public void SetSectionSegments(int sectionSegments)
+    internal void SetSectionSegments(int sectionSegments)
     {
         var __mb = __mb_set_section_segments;
         if (__mb == 0)
@@ -23096,7 +24432,7 @@ public unsafe partial class RibbonTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_section_segments;
-    public int GetSectionSegments()
+    internal int GetSectionSegments()
     {
         var __mb = __mb_get_section_segments;
         if (__mb == 0)
@@ -23111,7 +24447,7 @@ public unsafe partial class RibbonTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_curve;
-    public void SetCurve(Curve? curve)
+    internal void SetCurve(Curve? curve)
     {
         var __mb = __mb_set_curve;
         if (__mb == 0)
@@ -23127,7 +24463,7 @@ public unsafe partial class RibbonTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_curve;
-    public Curve? GetCurve()
+    internal Curve? GetCurve()
     {
         var __mb = __mb_get_curve;
         if (__mb == 0)
@@ -23142,7 +24478,7 @@ public unsafe partial class RibbonTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_shape;
-    public void SetShape(RibbonTrailMesh.Shape shape)
+    internal void SetShape(RibbonTrailMesh.ShapeEnum shape)
     {
         var __mb = __mb_set_shape;
         if (__mb == 0)
@@ -23158,7 +24494,7 @@ public unsafe partial class RibbonTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_shape;
-    public RibbonTrailMesh.Shape GetShape()
+    internal RibbonTrailMesh.ShapeEnum GetShape()
     {
         var __mb = __mb_get_shape;
         if (__mb == 0)
@@ -23169,7 +24505,7 @@ public unsafe partial class RibbonTrailMesh : PrimitiveMesh
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (RibbonTrailMesh.Shape)__ret;
+        return (RibbonTrailMesh.ShapeEnum)__ret;
     }
 }
 
@@ -23249,6 +24585,180 @@ public unsafe partial class RichTextLabel : Control
         IMAGE_UNIT_EM = 2,
     }
 
+    public bool BbcodeEnabled
+    {
+        get => IsUsingBbcode();
+        set => SetUseBbcode(value);
+    }
+
+    public string Text
+    {
+        get => GetText();
+        set => SetText(value);
+    }
+
+    public bool FitContent
+    {
+        get => IsFitContentEnabled();
+        set => SetFitContent(value);
+    }
+
+    public bool ScrollActive
+    {
+        get => IsScrollActive();
+        set => SetScrollActive(value);
+    }
+
+    public bool ScrollFollowing
+    {
+        get => IsScrollFollowing();
+        set => SetScrollFollow(value);
+    }
+
+    public bool ScrollFollowingVisibleCharacters
+    {
+        get => IsScrollFollowingVisibleCharacters();
+        set => SetScrollFollowVisibleCharacters(value);
+    }
+
+    public TextServer.AutowrapMode AutowrapMode
+    {
+        get => GetAutowrapMode();
+        set => SetAutowrapMode(value);
+    }
+
+    public TextServer.LineBreakFlag AutowrapTrimFlags
+    {
+        get => GetAutowrapTrimFlags();
+        set => SetAutowrapTrimFlags(value);
+    }
+
+    public int TabSize
+    {
+        get => GetTabSize();
+        set => SetTabSize(value);
+    }
+
+    public bool ContextMenuEnabled
+    {
+        get => IsContextMenuEnabled();
+        set => SetContextMenuEnabled(value);
+    }
+
+    public bool ShortcutKeysEnabled
+    {
+        get => IsShortcutKeysEnabled();
+        set => SetShortcutKeysEnabled(value);
+    }
+
+    public HorizontalAlignment HorizontalAlignment
+    {
+        get => GetHorizontalAlignment();
+        set => SetHorizontalAlignment(value);
+    }
+
+    public VerticalAlignment VerticalAlignment
+    {
+        get => GetVerticalAlignment();
+        set => SetVerticalAlignment(value);
+    }
+
+    public TextServer.JustificationFlag JustificationFlags
+    {
+        get => GetJustificationFlags();
+        set => SetJustificationFlags(value);
+    }
+
+    public Godot.Collections.Array CustomEffects
+    {
+        get => GetEffects();
+        set => SetEffects(value);
+    }
+
+    public bool MetaUnderlined
+    {
+        get => IsMetaUnderlined();
+        set => SetMetaUnderline(value);
+    }
+
+    public bool HintUnderlined
+    {
+        get => IsHintUnderlined();
+        set => SetHintUnderline(value);
+    }
+
+    public bool Threaded
+    {
+        get => IsThreaded();
+        set => SetThreaded(value);
+    }
+
+    public int ProgressBarDelay
+    {
+        get => GetProgressBarDelay();
+        set => SetProgressBarDelay(value);
+    }
+
+    public bool SelectionEnabled
+    {
+        get => IsSelectionEnabled();
+        set => SetSelectionEnabled(value);
+    }
+
+    public bool DeselectOnFocusLossEnabled
+    {
+        get => IsDeselectOnFocusLossEnabled();
+        set => SetDeselectOnFocusLossEnabled(value);
+    }
+
+    public bool DragAndDropSelectionEnabled
+    {
+        get => IsDragAndDropSelectionEnabled();
+        set => SetDragAndDropSelectionEnabled(value);
+    }
+
+    public int VisibleCharacters
+    {
+        get => GetVisibleCharacters();
+        set => SetVisibleCharacters(value);
+    }
+
+    public TextServer.VisibleCharactersBehavior VisibleCharactersBehavior
+    {
+        get => GetVisibleCharactersBehavior();
+        set => SetVisibleCharactersBehavior(value);
+    }
+
+    public float VisibleRatio
+    {
+        get => GetVisibleRatio();
+        set => SetVisibleRatio(value);
+    }
+
+    public Control.TextDirection TextDirection
+    {
+        get => GetTextDirection();
+        set => SetTextDirection(value);
+    }
+
+    public string Language
+    {
+        get => GetLanguage();
+        set => SetLanguage(value);
+    }
+
+    public TextServer.StructuredTextParser StructuredTextBidiOverride
+    {
+        get => GetStructuredTextBidiOverride();
+        set => SetStructuredTextBidiOverride(value);
+    }
+
+    public Godot.Collections.Array StructuredTextBidiOverrideOptions
+    {
+        get => GetStructuredTextBidiOverrideOptions();
+        set => SetStructuredTextBidiOverrideOptions(value);
+    }
+
     private static nint __mb_get_parsed_text;
     public string GetParsedText()
     {
@@ -23282,7 +24792,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_text;
-    public void SetText(string text)
+    internal void SetText(string text)
     {
         var __mb = __mb_set_text;
         if (__mb == 0)
@@ -24017,7 +25527,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_structured_text_bidi_override;
-    public void SetStructuredTextBidiOverride(TextServer.StructuredTextParser parser)
+    internal void SetStructuredTextBidiOverride(TextServer.StructuredTextParser parser)
     {
         var __mb = __mb_set_structured_text_bidi_override;
         if (__mb == 0)
@@ -24033,7 +25543,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_structured_text_bidi_override;
-    public TextServer.StructuredTextParser GetStructuredTextBidiOverride()
+    internal TextServer.StructuredTextParser GetStructuredTextBidiOverride()
     {
         var __mb = __mb_get_structured_text_bidi_override;
         if (__mb == 0)
@@ -24048,7 +25558,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_structured_text_bidi_override_options;
-    public void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
+    internal void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
     {
         var __mb = __mb_set_structured_text_bidi_override_options;
         if (__mb == 0)
@@ -24064,7 +25574,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_structured_text_bidi_override_options;
-    public Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
+    internal Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
     {
         var __mb = __mb_get_structured_text_bidi_override_options;
         if (__mb == 0)
@@ -24079,7 +25589,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_text_direction;
-    public void SetTextDirection(Control.TextDirection direction)
+    internal void SetTextDirection(Control.TextDirection direction)
     {
         var __mb = __mb_set_text_direction;
         if (__mb == 0)
@@ -24095,7 +25605,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_text_direction;
-    public Control.TextDirection GetTextDirection()
+    internal Control.TextDirection GetTextDirection()
     {
         var __mb = __mb_get_text_direction;
         if (__mb == 0)
@@ -24110,7 +25620,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_language;
-    public void SetLanguage(string language)
+    internal void SetLanguage(string language)
     {
         var __mb = __mb_set_language;
         if (__mb == 0)
@@ -24127,7 +25637,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_language;
-    public string GetLanguage()
+    internal string GetLanguage()
     {
         var __mb = __mb_get_language;
         if (__mb == 0)
@@ -24142,7 +25652,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_horizontal_alignment;
-    public void SetHorizontalAlignment(HorizontalAlignment alignment)
+    internal void SetHorizontalAlignment(HorizontalAlignment alignment)
     {
         var __mb = __mb_set_horizontal_alignment;
         if (__mb == 0)
@@ -24158,7 +25668,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_horizontal_alignment;
-    public HorizontalAlignment GetHorizontalAlignment()
+    internal HorizontalAlignment GetHorizontalAlignment()
     {
         var __mb = __mb_get_horizontal_alignment;
         if (__mb == 0)
@@ -24173,7 +25683,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_vertical_alignment;
-    public void SetVerticalAlignment(VerticalAlignment alignment)
+    internal void SetVerticalAlignment(VerticalAlignment alignment)
     {
         var __mb = __mb_set_vertical_alignment;
         if (__mb == 0)
@@ -24189,7 +25699,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_vertical_alignment;
-    public VerticalAlignment GetVerticalAlignment()
+    internal VerticalAlignment GetVerticalAlignment()
     {
         var __mb = __mb_get_vertical_alignment;
         if (__mb == 0)
@@ -24204,7 +25714,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_justification_flags;
-    public void SetJustificationFlags(TextServer.JustificationFlag justificationFlags)
+    internal void SetJustificationFlags(TextServer.JustificationFlag justificationFlags)
     {
         var __mb = __mb_set_justification_flags;
         if (__mb == 0)
@@ -24220,7 +25730,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_justification_flags;
-    public TextServer.JustificationFlag GetJustificationFlags()
+    internal TextServer.JustificationFlag GetJustificationFlags()
     {
         var __mb = __mb_get_justification_flags;
         if (__mb == 0)
@@ -24235,7 +25745,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_autowrap_mode;
-    public void SetAutowrapMode(TextServer.AutowrapMode autowrapMode)
+    internal void SetAutowrapMode(TextServer.AutowrapMode autowrapMode)
     {
         var __mb = __mb_set_autowrap_mode;
         if (__mb == 0)
@@ -24251,7 +25761,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_autowrap_mode;
-    public TextServer.AutowrapMode GetAutowrapMode()
+    internal TextServer.AutowrapMode GetAutowrapMode()
     {
         var __mb = __mb_get_autowrap_mode;
         if (__mb == 0)
@@ -24266,7 +25776,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_autowrap_trim_flags;
-    public void SetAutowrapTrimFlags(TextServer.LineBreakFlag autowrapTrimFlags)
+    internal void SetAutowrapTrimFlags(TextServer.LineBreakFlag autowrapTrimFlags)
     {
         var __mb = __mb_set_autowrap_trim_flags;
         if (__mb == 0)
@@ -24282,7 +25792,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_autowrap_trim_flags;
-    public TextServer.LineBreakFlag GetAutowrapTrimFlags()
+    internal TextServer.LineBreakFlag GetAutowrapTrimFlags()
     {
         var __mb = __mb_get_autowrap_trim_flags;
         if (__mb == 0)
@@ -24297,7 +25807,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_meta_underline;
-    public void SetMetaUnderline(bool enable)
+    internal void SetMetaUnderline(bool enable)
     {
         var __mb = __mb_set_meta_underline;
         if (__mb == 0)
@@ -24313,7 +25823,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_is_meta_underlined;
-    public bool IsMetaUnderlined()
+    internal bool IsMetaUnderlined()
     {
         var __mb = __mb_is_meta_underlined;
         if (__mb == 0)
@@ -24328,7 +25838,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_hint_underline;
-    public void SetHintUnderline(bool enable)
+    internal void SetHintUnderline(bool enable)
     {
         var __mb = __mb_set_hint_underline;
         if (__mb == 0)
@@ -24344,7 +25854,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_is_hint_underlined;
-    public bool IsHintUnderlined()
+    internal bool IsHintUnderlined()
     {
         var __mb = __mb_is_hint_underlined;
         if (__mb == 0)
@@ -24359,7 +25869,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_scroll_active;
-    public void SetScrollActive(bool active)
+    internal void SetScrollActive(bool active)
     {
         var __mb = __mb_set_scroll_active;
         if (__mb == 0)
@@ -24375,7 +25885,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_is_scroll_active;
-    public bool IsScrollActive()
+    internal bool IsScrollActive()
     {
         var __mb = __mb_is_scroll_active;
         if (__mb == 0)
@@ -24390,7 +25900,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_scroll_follow_visible_characters;
-    public void SetScrollFollowVisibleCharacters(bool follow)
+    internal void SetScrollFollowVisibleCharacters(bool follow)
     {
         var __mb = __mb_set_scroll_follow_visible_characters;
         if (__mb == 0)
@@ -24406,7 +25916,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_is_scroll_following_visible_characters;
-    public bool IsScrollFollowingVisibleCharacters()
+    internal bool IsScrollFollowingVisibleCharacters()
     {
         var __mb = __mb_is_scroll_following_visible_characters;
         if (__mb == 0)
@@ -24421,7 +25931,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_scroll_follow;
-    public void SetScrollFollow(bool follow)
+    internal void SetScrollFollow(bool follow)
     {
         var __mb = __mb_set_scroll_follow;
         if (__mb == 0)
@@ -24437,7 +25947,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_is_scroll_following;
-    public bool IsScrollFollowing()
+    internal bool IsScrollFollowing()
     {
         var __mb = __mb_is_scroll_following;
         if (__mb == 0)
@@ -24512,7 +26022,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_tab_size;
-    public void SetTabSize(int spaces)
+    internal void SetTabSize(int spaces)
     {
         var __mb = __mb_set_tab_size;
         if (__mb == 0)
@@ -24528,7 +26038,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_tab_size;
-    public int GetTabSize()
+    internal int GetTabSize()
     {
         var __mb = __mb_get_tab_size;
         if (__mb == 0)
@@ -24543,7 +26053,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_fit_content;
-    public void SetFitContent(bool enabled)
+    internal void SetFitContent(bool enabled)
     {
         var __mb = __mb_set_fit_content;
         if (__mb == 0)
@@ -24559,7 +26069,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_is_fit_content_enabled;
-    public bool IsFitContentEnabled()
+    internal bool IsFitContentEnabled()
     {
         var __mb = __mb_is_fit_content_enabled;
         if (__mb == 0)
@@ -24574,7 +26084,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_selection_enabled;
-    public void SetSelectionEnabled(bool enabled)
+    internal void SetSelectionEnabled(bool enabled)
     {
         var __mb = __mb_set_selection_enabled;
         if (__mb == 0)
@@ -24590,7 +26100,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_is_selection_enabled;
-    public bool IsSelectionEnabled()
+    internal bool IsSelectionEnabled()
     {
         var __mb = __mb_is_selection_enabled;
         if (__mb == 0)
@@ -24605,7 +26115,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_context_menu_enabled;
-    public void SetContextMenuEnabled(bool enabled)
+    internal void SetContextMenuEnabled(bool enabled)
     {
         var __mb = __mb_set_context_menu_enabled;
         if (__mb == 0)
@@ -24621,7 +26131,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_is_context_menu_enabled;
-    public bool IsContextMenuEnabled()
+    internal bool IsContextMenuEnabled()
     {
         var __mb = __mb_is_context_menu_enabled;
         if (__mb == 0)
@@ -24636,7 +26146,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_shortcut_keys_enabled;
-    public void SetShortcutKeysEnabled(bool enabled)
+    internal void SetShortcutKeysEnabled(bool enabled)
     {
         var __mb = __mb_set_shortcut_keys_enabled;
         if (__mb == 0)
@@ -24652,7 +26162,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_is_shortcut_keys_enabled;
-    public bool IsShortcutKeysEnabled()
+    internal bool IsShortcutKeysEnabled()
     {
         var __mb = __mb_is_shortcut_keys_enabled;
         if (__mb == 0)
@@ -24667,7 +26177,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_deselect_on_focus_loss_enabled;
-    public void SetDeselectOnFocusLossEnabled(bool enable)
+    internal void SetDeselectOnFocusLossEnabled(bool enable)
     {
         var __mb = __mb_set_deselect_on_focus_loss_enabled;
         if (__mb == 0)
@@ -24683,7 +26193,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_is_deselect_on_focus_loss_enabled;
-    public bool IsDeselectOnFocusLossEnabled()
+    internal bool IsDeselectOnFocusLossEnabled()
     {
         var __mb = __mb_is_deselect_on_focus_loss_enabled;
         if (__mb == 0)
@@ -24698,7 +26208,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_drag_and_drop_selection_enabled;
-    public void SetDragAndDropSelectionEnabled(bool enable)
+    internal void SetDragAndDropSelectionEnabled(bool enable)
     {
         var __mb = __mb_set_drag_and_drop_selection_enabled;
         if (__mb == 0)
@@ -24714,7 +26224,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_is_drag_and_drop_selection_enabled;
-    public bool IsDragAndDropSelectionEnabled()
+    internal bool IsDragAndDropSelectionEnabled()
     {
         var __mb = __mb_is_drag_and_drop_selection_enabled;
         if (__mb == 0)
@@ -24849,7 +26359,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_text;
-    public string GetText()
+    internal string GetText()
     {
         var __mb = __mb_get_text;
         if (__mb == 0)
@@ -24894,7 +26404,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_threaded;
-    public void SetThreaded(bool threaded)
+    internal void SetThreaded(bool threaded)
     {
         var __mb = __mb_set_threaded;
         if (__mb == 0)
@@ -24910,7 +26420,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_is_threaded;
-    public bool IsThreaded()
+    internal bool IsThreaded()
     {
         var __mb = __mb_is_threaded;
         if (__mb == 0)
@@ -24925,7 +26435,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_progress_bar_delay;
-    public void SetProgressBarDelay(int delayMs)
+    internal void SetProgressBarDelay(int delayMs)
     {
         var __mb = __mb_set_progress_bar_delay;
         if (__mb == 0)
@@ -24941,7 +26451,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_progress_bar_delay;
-    public int GetProgressBarDelay()
+    internal int GetProgressBarDelay()
     {
         var __mb = __mb_get_progress_bar_delay;
         if (__mb == 0)
@@ -24956,7 +26466,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_visible_characters;
-    public void SetVisibleCharacters(int amount)
+    internal void SetVisibleCharacters(int amount)
     {
         var __mb = __mb_set_visible_characters;
         if (__mb == 0)
@@ -24972,7 +26482,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_visible_characters;
-    public int GetVisibleCharacters()
+    internal int GetVisibleCharacters()
     {
         var __mb = __mb_get_visible_characters;
         if (__mb == 0)
@@ -24987,7 +26497,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_visible_characters_behavior;
-    public TextServer.VisibleCharactersBehavior GetVisibleCharactersBehavior()
+    internal TextServer.VisibleCharactersBehavior GetVisibleCharactersBehavior()
     {
         var __mb = __mb_get_visible_characters_behavior;
         if (__mb == 0)
@@ -25002,7 +26512,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_visible_characters_behavior;
-    public void SetVisibleCharactersBehavior(TextServer.VisibleCharactersBehavior behavior)
+    internal void SetVisibleCharactersBehavior(TextServer.VisibleCharactersBehavior behavior)
     {
         var __mb = __mb_set_visible_characters_behavior;
         if (__mb == 0)
@@ -25018,7 +26528,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_visible_ratio;
-    public void SetVisibleRatio(float ratio)
+    internal void SetVisibleRatio(float ratio)
     {
         var __mb = __mb_set_visible_ratio;
         if (__mb == 0)
@@ -25034,7 +26544,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_visible_ratio;
-    public float GetVisibleRatio()
+    internal float GetVisibleRatio()
     {
         var __mb = __mb_get_visible_ratio;
         if (__mb == 0)
@@ -25100,7 +26610,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_use_bbcode;
-    public void SetUseBbcode(bool enable)
+    internal void SetUseBbcode(bool enable)
     {
         var __mb = __mb_set_use_bbcode;
         if (__mb == 0)
@@ -25116,7 +26626,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_is_using_bbcode;
-    public bool IsUsingBbcode()
+    internal bool IsUsingBbcode()
     {
         var __mb = __mb_is_using_bbcode;
         if (__mb == 0)
@@ -25326,7 +26836,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_effects;
-    public void SetEffects(Godot.Collections.Array effects)
+    internal void SetEffects(Godot.Collections.Array effects)
     {
         var __mb = __mb_set_effects;
         if (__mb == 0)
@@ -25342,7 +26852,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_get_effects;
-    public Godot.Collections.Array GetEffects()
+    internal Godot.Collections.Array GetEffects()
     {
         var __mb = __mb_get_effects;
         if (__mb == 0)
@@ -25441,13 +26951,13 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
         ClassRegistry.AttachNew(this, "RigidBody2D");
     }
 
-    public enum FreezeMode : long
+    public enum FreezeModeEnum : long
     {
         FREEZE_MODE_STATIC = 0,
         FREEZE_MODE_KINEMATIC = 1,
     }
 
-    public enum CenterOfMassMode : long
+    public enum CenterOfMassModeEnum : long
     {
         CENTER_OF_MASS_MODE_AUTO = 0,
         CENTER_OF_MASS_MODE_CUSTOM = 1,
@@ -25466,8 +26976,146 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
         CCD_MODE_CAST_SHAPE = 2,
     }
 
+    public float Mass
+    {
+        get => GetMass();
+        set => SetMass(value);
+    }
+
+    public PhysicsMaterial? PhysicsMaterialOverride
+    {
+        get => GetPhysicsMaterialOverride();
+        set => SetPhysicsMaterialOverride(value);
+    }
+
+    public float GravityScale
+    {
+        get => GetGravityScale();
+        set => SetGravityScale(value);
+    }
+
+    public RigidBody2D.CenterOfMassModeEnum CenterOfMassMode
+    {
+        get => GetCenterOfMassMode();
+        set => SetCenterOfMassMode(value);
+    }
+
+    public Vector2 CenterOfMass
+    {
+        get => GetCenterOfMass();
+        set => SetCenterOfMass(value);
+    }
+
+    public float Inertia
+    {
+        get => GetInertia();
+        set => SetInertia(value);
+    }
+
+    public bool Sleeping
+    {
+        get => IsSleeping();
+        set => SetSleeping(value);
+    }
+
+    public bool CanSleep
+    {
+        get => IsAbleToSleep();
+        set => SetCanSleep(value);
+    }
+
+    public bool LockRotation
+    {
+        get => IsLockRotationEnabled();
+        set => SetLockRotationEnabled(value);
+    }
+
+    public bool Freeze
+    {
+        get => IsFreezeEnabled();
+        set => SetFreezeEnabled(value);
+    }
+
+    public RigidBody2D.FreezeModeEnum FreezeMode
+    {
+        get => GetFreezeMode();
+        set => SetFreezeMode(value);
+    }
+
+    public bool CustomIntegrator
+    {
+        get => IsUsingCustomIntegrator();
+        set => SetUseCustomIntegrator(value);
+    }
+
+    public RigidBody2D.CCDMode ContinuousCd
+    {
+        get => GetContinuousCollisionDetectionMode();
+        set => SetContinuousCollisionDetectionMode(value);
+    }
+
+    public bool ContactMonitor
+    {
+        get => IsContactMonitorEnabled();
+        set => SetContactMonitor(value);
+    }
+
+    public int MaxContactsReported
+    {
+        get => GetMaxContactsReported();
+        set => SetMaxContactsReported(value);
+    }
+
+    public Vector2 LinearVelocity
+    {
+        get => GetLinearVelocity();
+        set => SetLinearVelocity(value);
+    }
+
+    public RigidBody2D.DampMode LinearDampMode
+    {
+        get => GetLinearDampMode();
+        set => SetLinearDampMode(value);
+    }
+
+    public float LinearDamp
+    {
+        get => GetLinearDamp();
+        set => SetLinearDamp(value);
+    }
+
+    public float AngularVelocity
+    {
+        get => GetAngularVelocity();
+        set => SetAngularVelocity(value);
+    }
+
+    public RigidBody2D.DampMode AngularDampMode
+    {
+        get => GetAngularDampMode();
+        set => SetAngularDampMode(value);
+    }
+
+    public float AngularDamp
+    {
+        get => GetAngularDamp();
+        set => SetAngularDamp(value);
+    }
+
+    public Vector2 ConstantForce
+    {
+        get => GetConstantForce();
+        set => SetConstantForce(value);
+    }
+
+    public float ConstantTorque
+    {
+        get => GetConstantTorque();
+        set => SetConstantTorque(value);
+    }
+
     private static nint __mb_set_mass;
-    public void SetMass(float mass)
+    internal void SetMass(float mass)
     {
         var __mb = __mb_set_mass;
         if (__mb == 0)
@@ -25483,7 +27131,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_mass;
-    public float GetMass()
+    internal float GetMass()
     {
         var __mb = __mb_get_mass;
         if (__mb == 0)
@@ -25498,7 +27146,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_inertia;
-    public float GetInertia()
+    internal float GetInertia()
     {
         var __mb = __mb_get_inertia;
         if (__mb == 0)
@@ -25513,7 +27161,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_inertia;
-    public void SetInertia(float inertia)
+    internal void SetInertia(float inertia)
     {
         var __mb = __mb_set_inertia;
         if (__mb == 0)
@@ -25529,7 +27177,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_center_of_mass_mode;
-    public void SetCenterOfMassMode(RigidBody2D.CenterOfMassMode mode)
+    internal void SetCenterOfMassMode(RigidBody2D.CenterOfMassModeEnum mode)
     {
         var __mb = __mb_set_center_of_mass_mode;
         if (__mb == 0)
@@ -25545,7 +27193,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_center_of_mass_mode;
-    public RigidBody2D.CenterOfMassMode GetCenterOfMassMode()
+    internal RigidBody2D.CenterOfMassModeEnum GetCenterOfMassMode()
     {
         var __mb = __mb_get_center_of_mass_mode;
         if (__mb == 0)
@@ -25556,11 +27204,11 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (RigidBody2D.CenterOfMassMode)__ret;
+        return (RigidBody2D.CenterOfMassModeEnum)__ret;
     }
 
     private static nint __mb_set_center_of_mass;
-    public void SetCenterOfMass(Vector2 centerOfMass)
+    internal void SetCenterOfMass(Vector2 centerOfMass)
     {
         var __mb = __mb_set_center_of_mass;
         if (__mb == 0)
@@ -25576,7 +27224,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_center_of_mass;
-    public Vector2 GetCenterOfMass()
+    internal Vector2 GetCenterOfMass()
     {
         var __mb = __mb_get_center_of_mass;
         if (__mb == 0)
@@ -25591,7 +27239,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_physics_material_override;
-    public void SetPhysicsMaterialOverride(PhysicsMaterial? physicsMaterialOverride)
+    internal void SetPhysicsMaterialOverride(PhysicsMaterial? physicsMaterialOverride)
     {
         var __mb = __mb_set_physics_material_override;
         if (__mb == 0)
@@ -25607,7 +27255,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_physics_material_override;
-    public PhysicsMaterial? GetPhysicsMaterialOverride()
+    internal PhysicsMaterial? GetPhysicsMaterialOverride()
     {
         var __mb = __mb_get_physics_material_override;
         if (__mb == 0)
@@ -25622,7 +27270,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_gravity_scale;
-    public void SetGravityScale(float gravityScale)
+    internal void SetGravityScale(float gravityScale)
     {
         var __mb = __mb_set_gravity_scale;
         if (__mb == 0)
@@ -25638,7 +27286,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_gravity_scale;
-    public float GetGravityScale()
+    internal float GetGravityScale()
     {
         var __mb = __mb_get_gravity_scale;
         if (__mb == 0)
@@ -25653,7 +27301,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_linear_damp_mode;
-    public void SetLinearDampMode(RigidBody2D.DampMode linearDampMode)
+    internal void SetLinearDampMode(RigidBody2D.DampMode linearDampMode)
     {
         var __mb = __mb_set_linear_damp_mode;
         if (__mb == 0)
@@ -25669,7 +27317,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_linear_damp_mode;
-    public RigidBody2D.DampMode GetLinearDampMode()
+    internal RigidBody2D.DampMode GetLinearDampMode()
     {
         var __mb = __mb_get_linear_damp_mode;
         if (__mb == 0)
@@ -25684,7 +27332,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_angular_damp_mode;
-    public void SetAngularDampMode(RigidBody2D.DampMode angularDampMode)
+    internal void SetAngularDampMode(RigidBody2D.DampMode angularDampMode)
     {
         var __mb = __mb_set_angular_damp_mode;
         if (__mb == 0)
@@ -25700,7 +27348,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_angular_damp_mode;
-    public RigidBody2D.DampMode GetAngularDampMode()
+    internal RigidBody2D.DampMode GetAngularDampMode()
     {
         var __mb = __mb_get_angular_damp_mode;
         if (__mb == 0)
@@ -25715,7 +27363,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_linear_damp;
-    public void SetLinearDamp(float linearDamp)
+    internal void SetLinearDamp(float linearDamp)
     {
         var __mb = __mb_set_linear_damp;
         if (__mb == 0)
@@ -25731,7 +27379,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_linear_damp;
-    public float GetLinearDamp()
+    internal float GetLinearDamp()
     {
         var __mb = __mb_get_linear_damp;
         if (__mb == 0)
@@ -25746,7 +27394,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_angular_damp;
-    public void SetAngularDamp(float angularDamp)
+    internal void SetAngularDamp(float angularDamp)
     {
         var __mb = __mb_set_angular_damp;
         if (__mb == 0)
@@ -25762,7 +27410,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_angular_damp;
-    public float GetAngularDamp()
+    internal float GetAngularDamp()
     {
         var __mb = __mb_get_angular_damp;
         if (__mb == 0)
@@ -25777,7 +27425,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_linear_velocity;
-    public void SetLinearVelocity(Vector2 linearVelocity)
+    internal void SetLinearVelocity(Vector2 linearVelocity)
     {
         var __mb = __mb_set_linear_velocity;
         if (__mb == 0)
@@ -25793,7 +27441,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_linear_velocity;
-    public Vector2 GetLinearVelocity()
+    internal Vector2 GetLinearVelocity()
     {
         var __mb = __mb_get_linear_velocity;
         if (__mb == 0)
@@ -25808,7 +27456,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_angular_velocity;
-    public void SetAngularVelocity(float angularVelocity)
+    internal void SetAngularVelocity(float angularVelocity)
     {
         var __mb = __mb_set_angular_velocity;
         if (__mb == 0)
@@ -25824,7 +27472,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_angular_velocity;
-    public float GetAngularVelocity()
+    internal float GetAngularVelocity()
     {
         var __mb = __mb_get_angular_velocity;
         if (__mb == 0)
@@ -25839,7 +27487,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_max_contacts_reported;
-    public void SetMaxContactsReported(int amount)
+    internal void SetMaxContactsReported(int amount)
     {
         var __mb = __mb_set_max_contacts_reported;
         if (__mb == 0)
@@ -25855,7 +27503,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_max_contacts_reported;
-    public int GetMaxContactsReported()
+    internal int GetMaxContactsReported()
     {
         var __mb = __mb_get_max_contacts_reported;
         if (__mb == 0)
@@ -25885,7 +27533,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_use_custom_integrator;
-    public void SetUseCustomIntegrator(bool enable)
+    internal void SetUseCustomIntegrator(bool enable)
     {
         var __mb = __mb_set_use_custom_integrator;
         if (__mb == 0)
@@ -25901,7 +27549,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_is_using_custom_integrator;
-    public bool IsUsingCustomIntegrator()
+    internal bool IsUsingCustomIntegrator()
     {
         var __mb = __mb_is_using_custom_integrator;
         if (__mb == 0)
@@ -25916,7 +27564,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_contact_monitor;
-    public void SetContactMonitor(bool enabled)
+    internal void SetContactMonitor(bool enabled)
     {
         var __mb = __mb_set_contact_monitor;
         if (__mb == 0)
@@ -25932,7 +27580,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_is_contact_monitor_enabled;
-    public bool IsContactMonitorEnabled()
+    internal bool IsContactMonitorEnabled()
     {
         var __mb = __mb_is_contact_monitor_enabled;
         if (__mb == 0)
@@ -25947,7 +27595,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_continuous_collision_detection_mode;
-    public void SetContinuousCollisionDetectionMode(RigidBody2D.CCDMode mode)
+    internal void SetContinuousCollisionDetectionMode(RigidBody2D.CCDMode mode)
     {
         var __mb = __mb_set_continuous_collision_detection_mode;
         if (__mb == 0)
@@ -25963,7 +27611,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_continuous_collision_detection_mode;
-    public RigidBody2D.CCDMode GetContinuousCollisionDetectionMode()
+    internal RigidBody2D.CCDMode GetContinuousCollisionDetectionMode()
     {
         var __mb = __mb_get_continuous_collision_detection_mode;
         if (__mb == 0)
@@ -26144,7 +27792,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_constant_force;
-    public void SetConstantForce(Vector2 force)
+    internal void SetConstantForce(Vector2 force)
     {
         var __mb = __mb_set_constant_force;
         if (__mb == 0)
@@ -26160,7 +27808,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_constant_force;
-    public Vector2 GetConstantForce()
+    internal Vector2 GetConstantForce()
     {
         var __mb = __mb_get_constant_force;
         if (__mb == 0)
@@ -26175,7 +27823,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_constant_torque;
-    public void SetConstantTorque(float torque)
+    internal void SetConstantTorque(float torque)
     {
         var __mb = __mb_set_constant_torque;
         if (__mb == 0)
@@ -26191,7 +27839,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_constant_torque;
-    public float GetConstantTorque()
+    internal float GetConstantTorque()
     {
         var __mb = __mb_get_constant_torque;
         if (__mb == 0)
@@ -26206,7 +27854,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_sleeping;
-    public void SetSleeping(bool sleeping)
+    internal void SetSleeping(bool sleeping)
     {
         var __mb = __mb_set_sleeping;
         if (__mb == 0)
@@ -26222,7 +27870,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_is_sleeping;
-    public bool IsSleeping()
+    internal bool IsSleeping()
     {
         var __mb = __mb_is_sleeping;
         if (__mb == 0)
@@ -26237,7 +27885,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_can_sleep;
-    public void SetCanSleep(bool ableToSleep)
+    internal void SetCanSleep(bool ableToSleep)
     {
         var __mb = __mb_set_can_sleep;
         if (__mb == 0)
@@ -26253,7 +27901,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_is_able_to_sleep;
-    public bool IsAbleToSleep()
+    internal bool IsAbleToSleep()
     {
         var __mb = __mb_is_able_to_sleep;
         if (__mb == 0)
@@ -26268,7 +27916,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_lock_rotation_enabled;
-    public void SetLockRotationEnabled(bool lockRotation)
+    internal void SetLockRotationEnabled(bool lockRotation)
     {
         var __mb = __mb_set_lock_rotation_enabled;
         if (__mb == 0)
@@ -26284,7 +27932,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_is_lock_rotation_enabled;
-    public bool IsLockRotationEnabled()
+    internal bool IsLockRotationEnabled()
     {
         var __mb = __mb_is_lock_rotation_enabled;
         if (__mb == 0)
@@ -26299,7 +27947,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_freeze_enabled;
-    public void SetFreezeEnabled(bool freezeMode)
+    internal void SetFreezeEnabled(bool freezeMode)
     {
         var __mb = __mb_set_freeze_enabled;
         if (__mb == 0)
@@ -26315,7 +27963,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_is_freeze_enabled;
-    public bool IsFreezeEnabled()
+    internal bool IsFreezeEnabled()
     {
         var __mb = __mb_is_freeze_enabled;
         if (__mb == 0)
@@ -26330,7 +27978,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_set_freeze_mode;
-    public void SetFreezeMode(RigidBody2D.FreezeMode freezeMode)
+    internal void SetFreezeMode(RigidBody2D.FreezeModeEnum freezeMode)
     {
         var __mb = __mb_set_freeze_mode;
         if (__mb == 0)
@@ -26346,7 +27994,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_get_freeze_mode;
-    public RigidBody2D.FreezeMode GetFreezeMode()
+    internal RigidBody2D.FreezeModeEnum GetFreezeMode()
     {
         var __mb = __mb_get_freeze_mode;
         if (__mb == 0)
@@ -26357,7 +28005,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (RigidBody2D.FreezeMode)__ret;
+        return (RigidBody2D.FreezeModeEnum)__ret;
     }
 
     private static nint __mb_get_colliding_bodies;
@@ -26400,13 +28048,13 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
         ClassRegistry.AttachNew(this, "RigidBody3D");
     }
 
-    public enum FreezeMode : long
+    public enum FreezeModeEnum : long
     {
         FREEZE_MODE_STATIC = 0,
         FREEZE_MODE_KINEMATIC = 1,
     }
 
-    public enum CenterOfMassMode : long
+    public enum CenterOfMassModeEnum : long
     {
         CENTER_OF_MASS_MODE_AUTO = 0,
         CENTER_OF_MASS_MODE_CUSTOM = 1,
@@ -26418,8 +28066,146 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
         DAMP_MODE_REPLACE = 1,
     }
 
+    public float Mass
+    {
+        get => GetMass();
+        set => SetMass(value);
+    }
+
+    public PhysicsMaterial? PhysicsMaterialOverride
+    {
+        get => GetPhysicsMaterialOverride();
+        set => SetPhysicsMaterialOverride(value);
+    }
+
+    public float GravityScale
+    {
+        get => GetGravityScale();
+        set => SetGravityScale(value);
+    }
+
+    public RigidBody3D.CenterOfMassModeEnum CenterOfMassMode
+    {
+        get => GetCenterOfMassMode();
+        set => SetCenterOfMassMode(value);
+    }
+
+    public Vector3 CenterOfMass
+    {
+        get => GetCenterOfMass();
+        set => SetCenterOfMass(value);
+    }
+
+    public Vector3 Inertia
+    {
+        get => GetInertia();
+        set => SetInertia(value);
+    }
+
+    public bool Sleeping
+    {
+        get => IsSleeping();
+        set => SetSleeping(value);
+    }
+
+    public bool CanSleep
+    {
+        get => IsAbleToSleep();
+        set => SetCanSleep(value);
+    }
+
+    public bool LockRotation
+    {
+        get => IsLockRotationEnabled();
+        set => SetLockRotationEnabled(value);
+    }
+
+    public bool Freeze
+    {
+        get => IsFreezeEnabled();
+        set => SetFreezeEnabled(value);
+    }
+
+    public RigidBody3D.FreezeModeEnum FreezeMode
+    {
+        get => GetFreezeMode();
+        set => SetFreezeMode(value);
+    }
+
+    public bool CustomIntegrator
+    {
+        get => IsUsingCustomIntegrator();
+        set => SetUseCustomIntegrator(value);
+    }
+
+    public bool ContinuousCd
+    {
+        get => IsUsingContinuousCollisionDetection();
+        set => SetUseContinuousCollisionDetection(value);
+    }
+
+    public bool ContactMonitor
+    {
+        get => IsContactMonitorEnabled();
+        set => SetContactMonitor(value);
+    }
+
+    public int MaxContactsReported
+    {
+        get => GetMaxContactsReported();
+        set => SetMaxContactsReported(value);
+    }
+
+    public Vector3 LinearVelocity
+    {
+        get => GetLinearVelocity();
+        set => SetLinearVelocity(value);
+    }
+
+    public RigidBody3D.DampMode LinearDampMode
+    {
+        get => GetLinearDampMode();
+        set => SetLinearDampMode(value);
+    }
+
+    public float LinearDamp
+    {
+        get => GetLinearDamp();
+        set => SetLinearDamp(value);
+    }
+
+    public Vector3 AngularVelocity
+    {
+        get => GetAngularVelocity();
+        set => SetAngularVelocity(value);
+    }
+
+    public RigidBody3D.DampMode AngularDampMode
+    {
+        get => GetAngularDampMode();
+        set => SetAngularDampMode(value);
+    }
+
+    public float AngularDamp
+    {
+        get => GetAngularDamp();
+        set => SetAngularDamp(value);
+    }
+
+    public Vector3 ConstantForce
+    {
+        get => GetConstantForce();
+        set => SetConstantForce(value);
+    }
+
+    public Vector3 ConstantTorque
+    {
+        get => GetConstantTorque();
+        set => SetConstantTorque(value);
+    }
+
     private static nint __mb_set_mass;
-    public void SetMass(float mass)
+    internal void SetMass(float mass)
     {
         var __mb = __mb_set_mass;
         if (__mb == 0)
@@ -26435,7 +28221,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_mass;
-    public float GetMass()
+    internal float GetMass()
     {
         var __mb = __mb_get_mass;
         if (__mb == 0)
@@ -26450,7 +28236,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_inertia;
-    public void SetInertia(Vector3 inertia)
+    internal void SetInertia(Vector3 inertia)
     {
         var __mb = __mb_set_inertia;
         if (__mb == 0)
@@ -26466,7 +28252,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_inertia;
-    public Vector3 GetInertia()
+    internal Vector3 GetInertia()
     {
         var __mb = __mb_get_inertia;
         if (__mb == 0)
@@ -26481,7 +28267,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_center_of_mass_mode;
-    public void SetCenterOfMassMode(RigidBody3D.CenterOfMassMode mode)
+    internal void SetCenterOfMassMode(RigidBody3D.CenterOfMassModeEnum mode)
     {
         var __mb = __mb_set_center_of_mass_mode;
         if (__mb == 0)
@@ -26497,7 +28283,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_center_of_mass_mode;
-    public RigidBody3D.CenterOfMassMode GetCenterOfMassMode()
+    internal RigidBody3D.CenterOfMassModeEnum GetCenterOfMassMode()
     {
         var __mb = __mb_get_center_of_mass_mode;
         if (__mb == 0)
@@ -26508,11 +28294,11 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (RigidBody3D.CenterOfMassMode)__ret;
+        return (RigidBody3D.CenterOfMassModeEnum)__ret;
     }
 
     private static nint __mb_set_center_of_mass;
-    public void SetCenterOfMass(Vector3 centerOfMass)
+    internal void SetCenterOfMass(Vector3 centerOfMass)
     {
         var __mb = __mb_set_center_of_mass;
         if (__mb == 0)
@@ -26528,7 +28314,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_center_of_mass;
-    public Vector3 GetCenterOfMass()
+    internal Vector3 GetCenterOfMass()
     {
         var __mb = __mb_get_center_of_mass;
         if (__mb == 0)
@@ -26543,7 +28329,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_physics_material_override;
-    public void SetPhysicsMaterialOverride(PhysicsMaterial? physicsMaterialOverride)
+    internal void SetPhysicsMaterialOverride(PhysicsMaterial? physicsMaterialOverride)
     {
         var __mb = __mb_set_physics_material_override;
         if (__mb == 0)
@@ -26559,7 +28345,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_physics_material_override;
-    public PhysicsMaterial? GetPhysicsMaterialOverride()
+    internal PhysicsMaterial? GetPhysicsMaterialOverride()
     {
         var __mb = __mb_get_physics_material_override;
         if (__mb == 0)
@@ -26574,7 +28360,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_linear_velocity;
-    public void SetLinearVelocity(Vector3 linearVelocity)
+    internal void SetLinearVelocity(Vector3 linearVelocity)
     {
         var __mb = __mb_set_linear_velocity;
         if (__mb == 0)
@@ -26590,7 +28376,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_linear_velocity;
-    public Vector3 GetLinearVelocity()
+    internal Vector3 GetLinearVelocity()
     {
         var __mb = __mb_get_linear_velocity;
         if (__mb == 0)
@@ -26605,7 +28391,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_angular_velocity;
-    public void SetAngularVelocity(Vector3 angularVelocity)
+    internal void SetAngularVelocity(Vector3 angularVelocity)
     {
         var __mb = __mb_set_angular_velocity;
         if (__mb == 0)
@@ -26621,7 +28407,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_angular_velocity;
-    public Vector3 GetAngularVelocity()
+    internal Vector3 GetAngularVelocity()
     {
         var __mb = __mb_get_angular_velocity;
         if (__mb == 0)
@@ -26651,7 +28437,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_gravity_scale;
-    public void SetGravityScale(float gravityScale)
+    internal void SetGravityScale(float gravityScale)
     {
         var __mb = __mb_set_gravity_scale;
         if (__mb == 0)
@@ -26667,7 +28453,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_gravity_scale;
-    public float GetGravityScale()
+    internal float GetGravityScale()
     {
         var __mb = __mb_get_gravity_scale;
         if (__mb == 0)
@@ -26682,7 +28468,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_linear_damp_mode;
-    public void SetLinearDampMode(RigidBody3D.DampMode linearDampMode)
+    internal void SetLinearDampMode(RigidBody3D.DampMode linearDampMode)
     {
         var __mb = __mb_set_linear_damp_mode;
         if (__mb == 0)
@@ -26698,7 +28484,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_linear_damp_mode;
-    public RigidBody3D.DampMode GetLinearDampMode()
+    internal RigidBody3D.DampMode GetLinearDampMode()
     {
         var __mb = __mb_get_linear_damp_mode;
         if (__mb == 0)
@@ -26713,7 +28499,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_angular_damp_mode;
-    public void SetAngularDampMode(RigidBody3D.DampMode angularDampMode)
+    internal void SetAngularDampMode(RigidBody3D.DampMode angularDampMode)
     {
         var __mb = __mb_set_angular_damp_mode;
         if (__mb == 0)
@@ -26729,7 +28515,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_angular_damp_mode;
-    public RigidBody3D.DampMode GetAngularDampMode()
+    internal RigidBody3D.DampMode GetAngularDampMode()
     {
         var __mb = __mb_get_angular_damp_mode;
         if (__mb == 0)
@@ -26744,7 +28530,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_linear_damp;
-    public void SetLinearDamp(float linearDamp)
+    internal void SetLinearDamp(float linearDamp)
     {
         var __mb = __mb_set_linear_damp;
         if (__mb == 0)
@@ -26760,7 +28546,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_linear_damp;
-    public float GetLinearDamp()
+    internal float GetLinearDamp()
     {
         var __mb = __mb_get_linear_damp;
         if (__mb == 0)
@@ -26775,7 +28561,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_angular_damp;
-    public void SetAngularDamp(float angularDamp)
+    internal void SetAngularDamp(float angularDamp)
     {
         var __mb = __mb_set_angular_damp;
         if (__mb == 0)
@@ -26791,7 +28577,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_angular_damp;
-    public float GetAngularDamp()
+    internal float GetAngularDamp()
     {
         var __mb = __mb_get_angular_damp;
         if (__mb == 0)
@@ -26806,7 +28592,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_max_contacts_reported;
-    public void SetMaxContactsReported(int amount)
+    internal void SetMaxContactsReported(int amount)
     {
         var __mb = __mb_set_max_contacts_reported;
         if (__mb == 0)
@@ -26822,7 +28608,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_max_contacts_reported;
-    public int GetMaxContactsReported()
+    internal int GetMaxContactsReported()
     {
         var __mb = __mb_get_max_contacts_reported;
         if (__mb == 0)
@@ -26852,7 +28638,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_use_custom_integrator;
-    public void SetUseCustomIntegrator(bool enable)
+    internal void SetUseCustomIntegrator(bool enable)
     {
         var __mb = __mb_set_use_custom_integrator;
         if (__mb == 0)
@@ -26868,7 +28654,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_is_using_custom_integrator;
-    public bool IsUsingCustomIntegrator()
+    internal bool IsUsingCustomIntegrator()
     {
         var __mb = __mb_is_using_custom_integrator;
         if (__mb == 0)
@@ -26883,7 +28669,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_contact_monitor;
-    public void SetContactMonitor(bool enabled)
+    internal void SetContactMonitor(bool enabled)
     {
         var __mb = __mb_set_contact_monitor;
         if (__mb == 0)
@@ -26899,7 +28685,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_is_contact_monitor_enabled;
-    public bool IsContactMonitorEnabled()
+    internal bool IsContactMonitorEnabled()
     {
         var __mb = __mb_is_contact_monitor_enabled;
         if (__mb == 0)
@@ -26914,7 +28700,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_use_continuous_collision_detection;
-    public void SetUseContinuousCollisionDetection(bool enable)
+    internal void SetUseContinuousCollisionDetection(bool enable)
     {
         var __mb = __mb_set_use_continuous_collision_detection;
         if (__mb == 0)
@@ -26930,7 +28716,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_is_using_continuous_collision_detection;
-    public bool IsUsingContinuousCollisionDetection()
+    internal bool IsUsingContinuousCollisionDetection()
     {
         var __mb = __mb_is_using_continuous_collision_detection;
         if (__mb == 0)
@@ -27111,7 +28897,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_constant_force;
-    public void SetConstantForce(Vector3 force)
+    internal void SetConstantForce(Vector3 force)
     {
         var __mb = __mb_set_constant_force;
         if (__mb == 0)
@@ -27127,7 +28913,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_constant_force;
-    public Vector3 GetConstantForce()
+    internal Vector3 GetConstantForce()
     {
         var __mb = __mb_get_constant_force;
         if (__mb == 0)
@@ -27142,7 +28928,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_constant_torque;
-    public void SetConstantTorque(Vector3 torque)
+    internal void SetConstantTorque(Vector3 torque)
     {
         var __mb = __mb_set_constant_torque;
         if (__mb == 0)
@@ -27158,7 +28944,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_constant_torque;
-    public Vector3 GetConstantTorque()
+    internal Vector3 GetConstantTorque()
     {
         var __mb = __mb_get_constant_torque;
         if (__mb == 0)
@@ -27173,7 +28959,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_sleeping;
-    public void SetSleeping(bool sleeping)
+    internal void SetSleeping(bool sleeping)
     {
         var __mb = __mb_set_sleeping;
         if (__mb == 0)
@@ -27189,7 +28975,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_is_sleeping;
-    public bool IsSleeping()
+    internal bool IsSleeping()
     {
         var __mb = __mb_is_sleeping;
         if (__mb == 0)
@@ -27204,7 +28990,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_can_sleep;
-    public void SetCanSleep(bool ableToSleep)
+    internal void SetCanSleep(bool ableToSleep)
     {
         var __mb = __mb_set_can_sleep;
         if (__mb == 0)
@@ -27220,7 +29006,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_is_able_to_sleep;
-    public bool IsAbleToSleep()
+    internal bool IsAbleToSleep()
     {
         var __mb = __mb_is_able_to_sleep;
         if (__mb == 0)
@@ -27235,7 +29021,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_lock_rotation_enabled;
-    public void SetLockRotationEnabled(bool lockRotation)
+    internal void SetLockRotationEnabled(bool lockRotation)
     {
         var __mb = __mb_set_lock_rotation_enabled;
         if (__mb == 0)
@@ -27251,7 +29037,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_is_lock_rotation_enabled;
-    public bool IsLockRotationEnabled()
+    internal bool IsLockRotationEnabled()
     {
         var __mb = __mb_is_lock_rotation_enabled;
         if (__mb == 0)
@@ -27266,7 +29052,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_freeze_enabled;
-    public void SetFreezeEnabled(bool freezeMode)
+    internal void SetFreezeEnabled(bool freezeMode)
     {
         var __mb = __mb_set_freeze_enabled;
         if (__mb == 0)
@@ -27282,7 +29068,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_is_freeze_enabled;
-    public bool IsFreezeEnabled()
+    internal bool IsFreezeEnabled()
     {
         var __mb = __mb_is_freeze_enabled;
         if (__mb == 0)
@@ -27297,7 +29083,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_set_freeze_mode;
-    public void SetFreezeMode(RigidBody3D.FreezeMode freezeMode)
+    internal void SetFreezeMode(RigidBody3D.FreezeModeEnum freezeMode)
     {
         var __mb = __mb_set_freeze_mode;
         if (__mb == 0)
@@ -27313,7 +29099,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_get_freeze_mode;
-    public RigidBody3D.FreezeMode GetFreezeMode()
+    internal RigidBody3D.FreezeModeEnum GetFreezeMode()
     {
         var __mb = __mb_get_freeze_mode;
         if (__mb == 0)
@@ -27324,7 +29110,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (RigidBody3D.FreezeMode)__ret;
+        return (RigidBody3D.FreezeModeEnum)__ret;
     }
 
     private static nint __mb_get_colliding_bodies;
@@ -27367,8 +29153,38 @@ public unsafe partial class RootMotionView : VisualInstance3D
         ClassRegistry.AttachNew(this, "RootMotionView");
     }
 
+    public NodePath AnimationPath
+    {
+        get => GetAnimationPath();
+        set => SetAnimationPath(value);
+    }
+
+    public Color Color
+    {
+        get => GetColor();
+        set => SetColor(value);
+    }
+
+    public float CellSize
+    {
+        get => GetCellSize();
+        set => SetCellSize(value);
+    }
+
+    public float Radius
+    {
+        get => GetRadius();
+        set => SetRadius(value);
+    }
+
+    public bool ZeroY
+    {
+        get => GetZeroY();
+        set => SetZeroY(value);
+    }
+
     private static nint __mb_set_animation_path;
-    public void SetAnimationPath(NodePath path)
+    internal void SetAnimationPath(NodePath path)
     {
         var __mb = __mb_set_animation_path;
         if (__mb == 0)
@@ -27384,7 +29200,7 @@ public unsafe partial class RootMotionView : VisualInstance3D
     }
 
     private static nint __mb_get_animation_path;
-    public NodePath GetAnimationPath()
+    internal NodePath GetAnimationPath()
     {
         var __mb = __mb_get_animation_path;
         if (__mb == 0)
@@ -27399,7 +29215,7 @@ public unsafe partial class RootMotionView : VisualInstance3D
     }
 
     private static nint __mb_set_color;
-    public void SetColor(Color color)
+    internal void SetColor(Color color)
     {
         var __mb = __mb_set_color;
         if (__mb == 0)
@@ -27415,7 +29231,7 @@ public unsafe partial class RootMotionView : VisualInstance3D
     }
 
     private static nint __mb_get_color;
-    public Color GetColor()
+    internal Color GetColor()
     {
         var __mb = __mb_get_color;
         if (__mb == 0)
@@ -27430,7 +29246,7 @@ public unsafe partial class RootMotionView : VisualInstance3D
     }
 
     private static nint __mb_set_cell_size;
-    public void SetCellSize(float size)
+    internal void SetCellSize(float size)
     {
         var __mb = __mb_set_cell_size;
         if (__mb == 0)
@@ -27446,7 +29262,7 @@ public unsafe partial class RootMotionView : VisualInstance3D
     }
 
     private static nint __mb_get_cell_size;
-    public float GetCellSize()
+    internal float GetCellSize()
     {
         var __mb = __mb_get_cell_size;
         if (__mb == 0)
@@ -27461,7 +29277,7 @@ public unsafe partial class RootMotionView : VisualInstance3D
     }
 
     private static nint __mb_set_radius;
-    public void SetRadius(float size)
+    internal void SetRadius(float size)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -27477,7 +29293,7 @@ public unsafe partial class RootMotionView : VisualInstance3D
     }
 
     private static nint __mb_get_radius;
-    public float GetRadius()
+    internal float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -27492,7 +29308,7 @@ public unsafe partial class RootMotionView : VisualInstance3D
     }
 
     private static nint __mb_set_zero_y;
-    public void SetZeroY(bool enable)
+    internal void SetZeroY(bool enable)
     {
         var __mb = __mb_set_zero_y;
         if (__mb == 0)
@@ -27508,7 +29324,7 @@ public unsafe partial class RootMotionView : VisualInstance3D
     }
 
     private static nint __mb_get_zero_y;
-    public bool GetZeroY()
+    internal bool GetZeroY()
     {
         var __mb = __mb_get_zero_y;
         if (__mb == 0)

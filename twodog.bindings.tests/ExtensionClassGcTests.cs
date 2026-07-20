@@ -29,7 +29,7 @@ public class ExtensionClassGcTests(GodotBindingsFixture godot)
     public void StrongHandle_StateSurvivesGc_WhileOnlyEngineOwns()
     {
         EnsureRegistered();
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).GetRoot()!;
+        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
 
         var id = CreateInTreeUnrooted(root);
         GC.Collect();
@@ -41,7 +41,7 @@ public class ExtensionClassGcTests(GodotBindingsFixture godot)
         Assert.NotEqual(0, ptr); // engine object alive (tree owns it)
 
         var node = Assert.IsType<TestNode>(InstanceBindings.GetOrCreate(ptr, adoptRef: false));
-        Assert.Equal("gc_survivor", node.GetName());
+        Assert.Equal("gc_survivor", node.Name);
         // State intact (marker) AND _Process kept incrementing across the GC.
         Assert.True(node.ProcessCalls >= 1003,
             $"expected marker 1000 + >=3 pumped frames, got {node.ProcessCalls}");
@@ -57,7 +57,7 @@ public class ExtensionClassGcTests(GodotBindingsFixture godot)
     private static ulong CreateInTreeUnrooted(Window root)
     {
         var node = new TestNode();
-        node.SetName("gc_survivor");
+        node.Name = "gc_survivor";
         root.AddChild(node, false, Node.InternalMode.INTERNAL_MODE_DISABLED);
         node.ProcessCalls = 1000; // distinctive managed state
         return node.InstanceId;
@@ -107,7 +107,7 @@ public class ExtensionClassGcTests(GodotBindingsFixture godot)
     public void EngineReturnedChild_IsSameManagedInstance()
     {
         EnsureRegistered();
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).GetRoot()!;
+        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
         var node = new TestNode();
         try
         {
@@ -127,7 +127,7 @@ public class ExtensionClassGcTests(GodotBindingsFixture godot)
     public void QueueFree_EngineInitiatedDeath_DetachesWrapper()
     {
         EnsureRegistered();
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).GetRoot()!;
+        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
         var node = new TestNode();
         root.AddChild(node, false, Node.InternalMode.INTERNAL_MODE_DISABLED);
 

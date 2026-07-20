@@ -258,6 +258,12 @@ public unsafe partial class PacketPeer : RefCounted
 {
     internal PacketPeer(nint ptr, bool rc) : base(ptr, rc) { }
 
+    public int EncodeBufferMaxSize
+    {
+        get => GetEncodeBufferMaxSize();
+        set => SetEncodeBufferMaxSize(value);
+    }
+
     private static nint __mb_get_var;
     public Variant GetVar(bool allowObjects)
     {
@@ -327,7 +333,7 @@ public unsafe partial class PacketPeer : RefCounted
     }
 
     private static nint __mb_get_encode_buffer_max_size;
-    public int GetEncodeBufferMaxSize()
+    internal int GetEncodeBufferMaxSize()
     {
         var __mb = __mb_get_encode_buffer_max_size;
         if (__mb == 0)
@@ -342,7 +348,7 @@ public unsafe partial class PacketPeer : RefCounted
     }
 
     private static nint __mb_set_encode_buffer_max_size;
-    public void SetEncodeBufferMaxSize(int maxSize)
+    internal void SetEncodeBufferMaxSize(int maxSize)
     {
         var __mb = __mb_set_encode_buffer_max_size;
         if (__mb == 0)
@@ -484,8 +490,26 @@ public unsafe partial class PacketPeerStream : PacketPeer
         ClassRegistry.AttachNew(this, "PacketPeerStream");
     }
 
+    public int InputBufferMaxSize
+    {
+        get => GetInputBufferMaxSize();
+        set => SetInputBufferMaxSize(value);
+    }
+
+    public int OutputBufferMaxSize
+    {
+        get => GetOutputBufferMaxSize();
+        set => SetOutputBufferMaxSize(value);
+    }
+
+    public StreamPeer? StreamPeer
+    {
+        get => GetStreamPeer();
+        set => SetStreamPeer(value);
+    }
+
     private static nint __mb_set_stream_peer;
-    public void SetStreamPeer(StreamPeer? peer)
+    internal void SetStreamPeer(StreamPeer? peer)
     {
         var __mb = __mb_set_stream_peer;
         if (__mb == 0)
@@ -501,7 +525,7 @@ public unsafe partial class PacketPeerStream : PacketPeer
     }
 
     private static nint __mb_get_stream_peer;
-    public StreamPeer? GetStreamPeer()
+    internal StreamPeer? GetStreamPeer()
     {
         var __mb = __mb_get_stream_peer;
         if (__mb == 0)
@@ -516,7 +540,7 @@ public unsafe partial class PacketPeerStream : PacketPeer
     }
 
     private static nint __mb_set_input_buffer_max_size;
-    public void SetInputBufferMaxSize(int maxSizeBytes)
+    internal void SetInputBufferMaxSize(int maxSizeBytes)
     {
         var __mb = __mb_set_input_buffer_max_size;
         if (__mb == 0)
@@ -532,7 +556,7 @@ public unsafe partial class PacketPeerStream : PacketPeer
     }
 
     private static nint __mb_set_output_buffer_max_size;
-    public void SetOutputBufferMaxSize(int maxSizeBytes)
+    internal void SetOutputBufferMaxSize(int maxSizeBytes)
     {
         var __mb = __mb_set_output_buffer_max_size;
         if (__mb == 0)
@@ -548,7 +572,7 @@ public unsafe partial class PacketPeerStream : PacketPeer
     }
 
     private static nint __mb_get_input_buffer_max_size;
-    public int GetInputBufferMaxSize()
+    internal int GetInputBufferMaxSize()
     {
         var __mb = __mb_get_input_buffer_max_size;
         if (__mb == 0)
@@ -563,7 +587,7 @@ public unsafe partial class PacketPeerStream : PacketPeer
     }
 
     private static nint __mb_get_output_buffer_max_size;
-    public int GetOutputBufferMaxSize()
+    internal int GetOutputBufferMaxSize()
     {
         var __mb = __mb_get_output_buffer_max_size;
         if (__mb == 0)
@@ -845,8 +869,26 @@ public unsafe partial class PanoramaSkyMaterial : Material
         ClassRegistry.AttachNew(this, "PanoramaSkyMaterial");
     }
 
+    public Texture2D? Panorama
+    {
+        get => GetPanorama();
+        set => SetPanorama(value);
+    }
+
+    public bool Filter
+    {
+        get => IsFilteringEnabled();
+        set => SetFilteringEnabled(value);
+    }
+
+    public float EnergyMultiplier
+    {
+        get => GetEnergyMultiplier();
+        set => SetEnergyMultiplier(value);
+    }
+
     private static nint __mb_set_panorama;
-    public void SetPanorama(Texture2D? texture)
+    internal void SetPanorama(Texture2D? texture)
     {
         var __mb = __mb_set_panorama;
         if (__mb == 0)
@@ -862,7 +904,7 @@ public unsafe partial class PanoramaSkyMaterial : Material
     }
 
     private static nint __mb_get_panorama;
-    public Texture2D? GetPanorama()
+    internal Texture2D? GetPanorama()
     {
         var __mb = __mb_get_panorama;
         if (__mb == 0)
@@ -877,7 +919,7 @@ public unsafe partial class PanoramaSkyMaterial : Material
     }
 
     private static nint __mb_set_filtering_enabled;
-    public void SetFilteringEnabled(bool enabled)
+    internal void SetFilteringEnabled(bool enabled)
     {
         var __mb = __mb_set_filtering_enabled;
         if (__mb == 0)
@@ -893,7 +935,7 @@ public unsafe partial class PanoramaSkyMaterial : Material
     }
 
     private static nint __mb_is_filtering_enabled;
-    public bool IsFilteringEnabled()
+    internal bool IsFilteringEnabled()
     {
         var __mb = __mb_is_filtering_enabled;
         if (__mb == 0)
@@ -908,7 +950,7 @@ public unsafe partial class PanoramaSkyMaterial : Material
     }
 
     private static nint __mb_set_energy_multiplier;
-    public void SetEnergyMultiplier(float multiplier)
+    internal void SetEnergyMultiplier(float multiplier)
     {
         var __mb = __mb_set_energy_multiplier;
         if (__mb == 0)
@@ -924,7 +966,7 @@ public unsafe partial class PanoramaSkyMaterial : Material
     }
 
     private static nint __mb_get_energy_multiplier;
-    public float GetEnergyMultiplier()
+    internal float GetEnergyMultiplier()
     {
         var __mb = __mb_get_energy_multiplier;
         if (__mb == 0)
@@ -948,8 +990,68 @@ public unsafe partial class Parallax2D : Node2D
         ClassRegistry.AttachNew(this, "Parallax2D");
     }
 
+    public Vector2 ScrollScale
+    {
+        get => GetScrollScale();
+        set => SetScrollScale(value);
+    }
+
+    public Vector2 ScrollOffset
+    {
+        get => GetScrollOffset();
+        set => SetScrollOffset(value);
+    }
+
+    public Vector2 RepeatSize
+    {
+        get => GetRepeatSize();
+        set => SetRepeatSize(value);
+    }
+
+    public Vector2 Autoscroll
+    {
+        get => GetAutoscroll();
+        set => SetAutoscroll(value);
+    }
+
+    public int RepeatTimes
+    {
+        get => GetRepeatTimes();
+        set => SetRepeatTimes(value);
+    }
+
+    public Vector2 LimitBegin
+    {
+        get => GetLimitBegin();
+        set => SetLimitBegin(value);
+    }
+
+    public Vector2 LimitEnd
+    {
+        get => GetLimitEnd();
+        set => SetLimitEnd(value);
+    }
+
+    public bool FollowViewport
+    {
+        get => GetFollowViewport();
+        set => SetFollowViewport(value);
+    }
+
+    public bool IgnoreCameraScroll
+    {
+        get => IsIgnoreCameraScroll();
+        set => SetIgnoreCameraScroll(value);
+    }
+
+    public Vector2 ScreenOffset
+    {
+        get => GetScreenOffset();
+        set => SetScreenOffset(value);
+    }
+
     private static nint __mb_set_scroll_scale;
-    public void SetScrollScale(Vector2 scale)
+    internal void SetScrollScale(Vector2 scale)
     {
         var __mb = __mb_set_scroll_scale;
         if (__mb == 0)
@@ -965,7 +1067,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_get_scroll_scale;
-    public Vector2 GetScrollScale()
+    internal Vector2 GetScrollScale()
     {
         var __mb = __mb_get_scroll_scale;
         if (__mb == 0)
@@ -980,7 +1082,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_set_repeat_size;
-    public void SetRepeatSize(Vector2 repeatSize)
+    internal void SetRepeatSize(Vector2 repeatSize)
     {
         var __mb = __mb_set_repeat_size;
         if (__mb == 0)
@@ -996,7 +1098,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_get_repeat_size;
-    public Vector2 GetRepeatSize()
+    internal Vector2 GetRepeatSize()
     {
         var __mb = __mb_get_repeat_size;
         if (__mb == 0)
@@ -1011,7 +1113,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_set_repeat_times;
-    public void SetRepeatTimes(int repeatTimes)
+    internal void SetRepeatTimes(int repeatTimes)
     {
         var __mb = __mb_set_repeat_times;
         if (__mb == 0)
@@ -1027,7 +1129,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_get_repeat_times;
-    public int GetRepeatTimes()
+    internal int GetRepeatTimes()
     {
         var __mb = __mb_get_repeat_times;
         if (__mb == 0)
@@ -1042,7 +1144,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_set_autoscroll;
-    public void SetAutoscroll(Vector2 autoscroll)
+    internal void SetAutoscroll(Vector2 autoscroll)
     {
         var __mb = __mb_set_autoscroll;
         if (__mb == 0)
@@ -1058,7 +1160,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_get_autoscroll;
-    public Vector2 GetAutoscroll()
+    internal Vector2 GetAutoscroll()
     {
         var __mb = __mb_get_autoscroll;
         if (__mb == 0)
@@ -1073,7 +1175,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_set_scroll_offset;
-    public void SetScrollOffset(Vector2 offset)
+    internal void SetScrollOffset(Vector2 offset)
     {
         var __mb = __mb_set_scroll_offset;
         if (__mb == 0)
@@ -1089,7 +1191,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_get_scroll_offset;
-    public Vector2 GetScrollOffset()
+    internal Vector2 GetScrollOffset()
     {
         var __mb = __mb_get_scroll_offset;
         if (__mb == 0)
@@ -1104,7 +1206,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_set_screen_offset;
-    public void SetScreenOffset(Vector2 offset)
+    internal void SetScreenOffset(Vector2 offset)
     {
         var __mb = __mb_set_screen_offset;
         if (__mb == 0)
@@ -1120,7 +1222,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_get_screen_offset;
-    public Vector2 GetScreenOffset()
+    internal Vector2 GetScreenOffset()
     {
         var __mb = __mb_get_screen_offset;
         if (__mb == 0)
@@ -1135,7 +1237,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_set_limit_begin;
-    public void SetLimitBegin(Vector2 offset)
+    internal void SetLimitBegin(Vector2 offset)
     {
         var __mb = __mb_set_limit_begin;
         if (__mb == 0)
@@ -1151,7 +1253,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_get_limit_begin;
-    public Vector2 GetLimitBegin()
+    internal Vector2 GetLimitBegin()
     {
         var __mb = __mb_get_limit_begin;
         if (__mb == 0)
@@ -1166,7 +1268,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_set_limit_end;
-    public void SetLimitEnd(Vector2 offset)
+    internal void SetLimitEnd(Vector2 offset)
     {
         var __mb = __mb_set_limit_end;
         if (__mb == 0)
@@ -1182,7 +1284,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_get_limit_end;
-    public Vector2 GetLimitEnd()
+    internal Vector2 GetLimitEnd()
     {
         var __mb = __mb_get_limit_end;
         if (__mb == 0)
@@ -1197,7 +1299,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_set_follow_viewport;
-    public void SetFollowViewport(bool follow)
+    internal void SetFollowViewport(bool follow)
     {
         var __mb = __mb_set_follow_viewport;
         if (__mb == 0)
@@ -1213,7 +1315,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_get_follow_viewport;
-    public bool GetFollowViewport()
+    internal bool GetFollowViewport()
     {
         var __mb = __mb_get_follow_viewport;
         if (__mb == 0)
@@ -1228,7 +1330,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_set_ignore_camera_scroll;
-    public void SetIgnoreCameraScroll(bool ignore)
+    internal void SetIgnoreCameraScroll(bool ignore)
     {
         var __mb = __mb_set_ignore_camera_scroll;
         if (__mb == 0)
@@ -1244,7 +1346,7 @@ public unsafe partial class Parallax2D : Node2D
     }
 
     private static nint __mb_is_ignore_camera_scroll;
-    public bool IsIgnoreCameraScroll()
+    internal bool IsIgnoreCameraScroll()
     {
         var __mb = __mb_is_ignore_camera_scroll;
         if (__mb == 0)
@@ -1268,8 +1370,44 @@ public unsafe partial class ParallaxBackground : CanvasLayer
         ClassRegistry.AttachNew(this, "ParallaxBackground");
     }
 
+    public Vector2 ScrollOffset
+    {
+        get => GetScrollOffset();
+        set => SetScrollOffset(value);
+    }
+
+    public Vector2 ScrollBaseOffset
+    {
+        get => GetScrollBaseOffset();
+        set => SetScrollBaseOffset(value);
+    }
+
+    public Vector2 ScrollBaseScale
+    {
+        get => GetScrollBaseScale();
+        set => SetScrollBaseScale(value);
+    }
+
+    public Vector2 ScrollLimitBegin
+    {
+        get => GetLimitBegin();
+        set => SetLimitBegin(value);
+    }
+
+    public Vector2 ScrollLimitEnd
+    {
+        get => GetLimitEnd();
+        set => SetLimitEnd(value);
+    }
+
+    public bool ScrollIgnoreCameraZoom
+    {
+        get => IsIgnoreCameraZoom();
+        set => SetIgnoreCameraZoom(value);
+    }
+
     private static nint __mb_set_scroll_offset;
-    public void SetScrollOffset(Vector2 offset)
+    internal void SetScrollOffset(Vector2 offset)
     {
         var __mb = __mb_set_scroll_offset;
         if (__mb == 0)
@@ -1285,7 +1423,7 @@ public unsafe partial class ParallaxBackground : CanvasLayer
     }
 
     private static nint __mb_get_scroll_offset;
-    public Vector2 GetScrollOffset()
+    internal Vector2 GetScrollOffset()
     {
         var __mb = __mb_get_scroll_offset;
         if (__mb == 0)
@@ -1300,7 +1438,7 @@ public unsafe partial class ParallaxBackground : CanvasLayer
     }
 
     private static nint __mb_set_scroll_base_offset;
-    public void SetScrollBaseOffset(Vector2 offset)
+    internal void SetScrollBaseOffset(Vector2 offset)
     {
         var __mb = __mb_set_scroll_base_offset;
         if (__mb == 0)
@@ -1316,7 +1454,7 @@ public unsafe partial class ParallaxBackground : CanvasLayer
     }
 
     private static nint __mb_get_scroll_base_offset;
-    public Vector2 GetScrollBaseOffset()
+    internal Vector2 GetScrollBaseOffset()
     {
         var __mb = __mb_get_scroll_base_offset;
         if (__mb == 0)
@@ -1331,7 +1469,7 @@ public unsafe partial class ParallaxBackground : CanvasLayer
     }
 
     private static nint __mb_set_scroll_base_scale;
-    public void SetScrollBaseScale(Vector2 scale)
+    internal void SetScrollBaseScale(Vector2 scale)
     {
         var __mb = __mb_set_scroll_base_scale;
         if (__mb == 0)
@@ -1347,7 +1485,7 @@ public unsafe partial class ParallaxBackground : CanvasLayer
     }
 
     private static nint __mb_get_scroll_base_scale;
-    public Vector2 GetScrollBaseScale()
+    internal Vector2 GetScrollBaseScale()
     {
         var __mb = __mb_get_scroll_base_scale;
         if (__mb == 0)
@@ -1362,7 +1500,7 @@ public unsafe partial class ParallaxBackground : CanvasLayer
     }
 
     private static nint __mb_set_limit_begin;
-    public void SetLimitBegin(Vector2 offset)
+    internal void SetLimitBegin(Vector2 offset)
     {
         var __mb = __mb_set_limit_begin;
         if (__mb == 0)
@@ -1378,7 +1516,7 @@ public unsafe partial class ParallaxBackground : CanvasLayer
     }
 
     private static nint __mb_get_limit_begin;
-    public Vector2 GetLimitBegin()
+    internal Vector2 GetLimitBegin()
     {
         var __mb = __mb_get_limit_begin;
         if (__mb == 0)
@@ -1393,7 +1531,7 @@ public unsafe partial class ParallaxBackground : CanvasLayer
     }
 
     private static nint __mb_set_limit_end;
-    public void SetLimitEnd(Vector2 offset)
+    internal void SetLimitEnd(Vector2 offset)
     {
         var __mb = __mb_set_limit_end;
         if (__mb == 0)
@@ -1409,7 +1547,7 @@ public unsafe partial class ParallaxBackground : CanvasLayer
     }
 
     private static nint __mb_get_limit_end;
-    public Vector2 GetLimitEnd()
+    internal Vector2 GetLimitEnd()
     {
         var __mb = __mb_get_limit_end;
         if (__mb == 0)
@@ -1424,7 +1562,7 @@ public unsafe partial class ParallaxBackground : CanvasLayer
     }
 
     private static nint __mb_set_ignore_camera_zoom;
-    public void SetIgnoreCameraZoom(bool ignore)
+    internal void SetIgnoreCameraZoom(bool ignore)
     {
         var __mb = __mb_set_ignore_camera_zoom;
         if (__mb == 0)
@@ -1440,7 +1578,7 @@ public unsafe partial class ParallaxBackground : CanvasLayer
     }
 
     private static nint __mb_is_ignore_camera_zoom;
-    public bool IsIgnoreCameraZoom()
+    internal bool IsIgnoreCameraZoom()
     {
         var __mb = __mb_is_ignore_camera_zoom;
         if (__mb == 0)
@@ -1464,8 +1602,26 @@ public unsafe partial class ParallaxLayer : Node2D
         ClassRegistry.AttachNew(this, "ParallaxLayer");
     }
 
+    public Vector2 MotionScale
+    {
+        get => GetMotionScale();
+        set => SetMotionScale(value);
+    }
+
+    public Vector2 MotionOffset
+    {
+        get => GetMotionOffset();
+        set => SetMotionOffset(value);
+    }
+
+    public Vector2 MotionMirroring
+    {
+        get => GetMirroring();
+        set => SetMirroring(value);
+    }
+
     private static nint __mb_set_motion_scale;
-    public void SetMotionScale(Vector2 scale)
+    internal void SetMotionScale(Vector2 scale)
     {
         var __mb = __mb_set_motion_scale;
         if (__mb == 0)
@@ -1481,7 +1637,7 @@ public unsafe partial class ParallaxLayer : Node2D
     }
 
     private static nint __mb_get_motion_scale;
-    public Vector2 GetMotionScale()
+    internal Vector2 GetMotionScale()
     {
         var __mb = __mb_get_motion_scale;
         if (__mb == 0)
@@ -1496,7 +1652,7 @@ public unsafe partial class ParallaxLayer : Node2D
     }
 
     private static nint __mb_set_motion_offset;
-    public void SetMotionOffset(Vector2 offset)
+    internal void SetMotionOffset(Vector2 offset)
     {
         var __mb = __mb_set_motion_offset;
         if (__mb == 0)
@@ -1512,7 +1668,7 @@ public unsafe partial class ParallaxLayer : Node2D
     }
 
     private static nint __mb_get_motion_offset;
-    public Vector2 GetMotionOffset()
+    internal Vector2 GetMotionOffset()
     {
         var __mb = __mb_get_motion_offset;
         if (__mb == 0)
@@ -1527,7 +1683,7 @@ public unsafe partial class ParallaxLayer : Node2D
     }
 
     private static nint __mb_set_mirroring;
-    public void SetMirroring(Vector2 mirror)
+    internal void SetMirroring(Vector2 mirror)
     {
         var __mb = __mb_set_mirroring;
         if (__mb == 0)
@@ -1543,7 +1699,7 @@ public unsafe partial class ParallaxLayer : Node2D
     }
 
     private static nint __mb_get_mirroring;
-    public Vector2 GetMirroring()
+    internal Vector2 GetMirroring()
     {
         var __mb = __mb_get_mirroring;
         if (__mb == 0)
@@ -1600,7 +1756,7 @@ public unsafe partial class ParticleProcessMaterial : Material
         PARTICLE_FLAG_MAX = 5,
     }
 
-    public enum EmissionShape : long
+    public enum EmissionShapeEnum : long
     {
         EMISSION_SHAPE_POINT = 0,
         EMISSION_SHAPE_SPHERE = 1,
@@ -1612,7 +1768,7 @@ public unsafe partial class ParticleProcessMaterial : Material
         EMISSION_SHAPE_MAX = 7,
     }
 
-    public enum SubEmitterMode : long
+    public enum SubEmitterModeEnum : long
     {
         SUB_EMITTER_DISABLED = 0,
         SUB_EMITTER_CONSTANT = 1,
@@ -1622,7 +1778,7 @@ public unsafe partial class ParticleProcessMaterial : Material
         SUB_EMITTER_MAX = 5,
     }
 
-    public enum CollisionMode : long
+    public enum CollisionModeEnum : long
     {
         COLLISION_DISABLED = 0,
         COLLISION_RIGID = 1,
@@ -1630,8 +1786,752 @@ public unsafe partial class ParticleProcessMaterial : Material
         COLLISION_MAX = 3,
     }
 
+    public double LifetimeRandomness
+    {
+        get => GetLifetimeRandomness();
+        set => SetLifetimeRandomness(value);
+    }
+
+    public bool ParticleFlagAlignY
+    {
+        get => GetParticleFlag(((ParticleProcessMaterial.ParticleFlags)(0)));
+        set => SetParticleFlag(((ParticleProcessMaterial.ParticleFlags)(0)), value);
+    }
+
+    public bool ParticleFlagRotateY
+    {
+        get => GetParticleFlag(((ParticleProcessMaterial.ParticleFlags)(1)));
+        set => SetParticleFlag(((ParticleProcessMaterial.ParticleFlags)(1)), value);
+    }
+
+    public bool ParticleFlagDisableZ
+    {
+        get => GetParticleFlag(((ParticleProcessMaterial.ParticleFlags)(2)));
+        set => SetParticleFlag(((ParticleProcessMaterial.ParticleFlags)(2)), value);
+    }
+
+    public bool ParticleFlagDampingAsFriction
+    {
+        get => GetParticleFlag(((ParticleProcessMaterial.ParticleFlags)(3)));
+        set => SetParticleFlag(((ParticleProcessMaterial.ParticleFlags)(3)), value);
+    }
+
+    public bool ParticleFlagInheritEmitterScale
+    {
+        get => GetParticleFlag(((ParticleProcessMaterial.ParticleFlags)(4)));
+        set => SetParticleFlag(((ParticleProcessMaterial.ParticleFlags)(4)), value);
+    }
+
+    public Vector3 EmissionShapeOffset
+    {
+        get => GetEmissionShapeOffset();
+        set => SetEmissionShapeOffset(value);
+    }
+
+    public Vector3 EmissionShapeScale
+    {
+        get => GetEmissionShapeScale();
+        set => SetEmissionShapeScale(value);
+    }
+
+    public ParticleProcessMaterial.EmissionShapeEnum EmissionShape
+    {
+        get => GetEmissionShape();
+        set => SetEmissionShape(value);
+    }
+
+    public float EmissionSphereRadius
+    {
+        get => GetEmissionSphereRadius();
+        set => SetEmissionSphereRadius(value);
+    }
+
+    public Vector3 EmissionBoxExtents
+    {
+        get => GetEmissionBoxExtents();
+        set => SetEmissionBoxExtents(value);
+    }
+
+    public Texture2D? EmissionPointTexture
+    {
+        get => GetEmissionPointTexture();
+        set => SetEmissionPointTexture(value);
+    }
+
+    public Texture2D? EmissionNormalTexture
+    {
+        get => GetEmissionNormalTexture();
+        set => SetEmissionNormalTexture(value);
+    }
+
+    public Texture2D? EmissionColorTexture
+    {
+        get => GetEmissionColorTexture();
+        set => SetEmissionColorTexture(value);
+    }
+
+    public int EmissionPointCount
+    {
+        get => GetEmissionPointCount();
+        set => SetEmissionPointCount(value);
+    }
+
+    public Vector3 EmissionRingAxis
+    {
+        get => GetEmissionRingAxis();
+        set => SetEmissionRingAxis(value);
+    }
+
+    public float EmissionRingHeight
+    {
+        get => GetEmissionRingHeight();
+        set => SetEmissionRingHeight(value);
+    }
+
+    public float EmissionRingRadius
+    {
+        get => GetEmissionRingRadius();
+        set => SetEmissionRingRadius(value);
+    }
+
+    public float EmissionRingInnerRadius
+    {
+        get => GetEmissionRingInnerRadius();
+        set => SetEmissionRingInnerRadius(value);
+    }
+
+    public float EmissionRingConeAngle
+    {
+        get => GetEmissionRingConeAngle();
+        set => SetEmissionRingConeAngle(value);
+    }
+
+    public Vector2 Angle
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(7)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(7)), value);
+    }
+
+    public float AngleMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(7)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(7)), value);
+    }
+
+    public float AngleMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(7)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(7)), value);
+    }
+
+    public Texture2D? AngleCurve
+    {
+        get => GetParamTexture(((ParticleProcessMaterial.Parameter)(7)));
+        set => SetParamTexture(((ParticleProcessMaterial.Parameter)(7)), value);
+    }
+
+    public bool UseRotation3d
+    {
+        get => IsUsingRotation3d();
+        set => SetUseRotation3d(value);
+    }
+
+    public Vector3 Rotation3dMin
+    {
+        get => GetRotation3dMin();
+        set => SetRotation3dMin(value);
+    }
+
+    public Vector3 Rotation3dMax
+    {
+        get => GetRotation3dMax();
+        set => SetRotation3dMax(value);
+    }
+
+    public double InheritVelocityRatio
+    {
+        get => GetInheritVelocityRatio();
+        set => SetInheritVelocityRatio(value);
+    }
+
+    public Vector3 VelocityPivot
+    {
+        get => GetVelocityPivot();
+        set => SetVelocityPivot(value);
+    }
+
+    public Vector3 Direction
+    {
+        get => GetDirection();
+        set => SetDirection(value);
+    }
+
+    public float Spread
+    {
+        get => GetSpread();
+        set => SetSpread(value);
+    }
+
+    public float Flatness
+    {
+        get => GetFlatness();
+        set => SetFlatness(value);
+    }
+
+    public Vector2 InitialVelocity
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(0)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(0)), value);
+    }
+
+    public float InitialVelocityMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(0)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(0)), value);
+    }
+
+    public float InitialVelocityMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(0)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(0)), value);
+    }
+
+    public Vector2 AngularVelocity
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(1)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(1)), value);
+    }
+
+    public float AngularVelocityMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(1)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(1)), value);
+    }
+
+    public float AngularVelocityMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(1)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(1)), value);
+    }
+
+    public Texture2D? AngularVelocityCurve
+    {
+        get => GetParamTexture(((ParticleProcessMaterial.Parameter)(1)));
+        set => SetParamTexture(((ParticleProcessMaterial.Parameter)(1)), value);
+    }
+
+    public Vector2 DirectionalVelocity
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(16)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(16)), value);
+    }
+
+    public float DirectionalVelocityMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(16)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(16)), value);
+    }
+
+    public float DirectionalVelocityMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(16)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(16)), value);
+    }
+
+    public Texture2D? DirectionalVelocityCurve
+    {
+        get => GetParamTexture(((ParticleProcessMaterial.Parameter)(16)));
+        set => SetParamTexture(((ParticleProcessMaterial.Parameter)(16)), value);
+    }
+
+    public Vector2 OrbitVelocity
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(2)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(2)), value);
+    }
+
+    public float OrbitVelocityMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(2)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(2)), value);
+    }
+
+    public float OrbitVelocityMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(2)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(2)), value);
+    }
+
+    public Texture2D? OrbitVelocityCurve
+    {
+        get => GetParamTexture(((ParticleProcessMaterial.Parameter)(2)));
+        set => SetParamTexture(((ParticleProcessMaterial.Parameter)(2)), value);
+    }
+
+    public Vector2 RadialVelocity
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(15)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(15)), value);
+    }
+
+    public float RadialVelocityMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(15)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(15)), value);
+    }
+
+    public float RadialVelocityMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(15)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(15)), value);
+    }
+
+    public Texture2D? RadialVelocityCurve
+    {
+        get => GetParamTexture(((ParticleProcessMaterial.Parameter)(15)));
+        set => SetParamTexture(((ParticleProcessMaterial.Parameter)(15)), value);
+    }
+
+    public Texture2D? VelocityLimitCurve
+    {
+        get => GetVelocityLimitCurve();
+        set => SetVelocityLimitCurve(value);
+    }
+
+    public bool UseRotationVelocity3d
+    {
+        get => IsUsingRotationVelocity3d();
+        set => SetUsingRotationVelocity3d(value);
+    }
+
+    public Vector3 RotationVelocity3dMin
+    {
+        get => GetRotationVelocity3dMin();
+        set => SetRotationVelocity3dMin(value);
+    }
+
+    public Vector3 RotationVelocity3dMax
+    {
+        get => GetRotationVelocity3dMax();
+        set => SetRotationVelocity3dMax(value);
+    }
+
+    public Texture2D? RotationVelocity3dCurve
+    {
+        get => GetRotationVelocity3dCurve();
+        set => SetRotationVelocity3dCurve(value);
+    }
+
+    public Vector3 Gravity
+    {
+        get => GetGravity();
+        set => SetGravity(value);
+    }
+
+    public Vector2 LinearAccel
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(3)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(3)), value);
+    }
+
+    public float LinearAccelMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(3)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(3)), value);
+    }
+
+    public float LinearAccelMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(3)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(3)), value);
+    }
+
+    public Texture2D? LinearAccelCurve
+    {
+        get => GetParamTexture(((ParticleProcessMaterial.Parameter)(3)));
+        set => SetParamTexture(((ParticleProcessMaterial.Parameter)(3)), value);
+    }
+
+    public Vector2 RadialAccel
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(4)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(4)), value);
+    }
+
+    public float RadialAccelMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(4)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(4)), value);
+    }
+
+    public float RadialAccelMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(4)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(4)), value);
+    }
+
+    public Texture2D? RadialAccelCurve
+    {
+        get => GetParamTexture(((ParticleProcessMaterial.Parameter)(4)));
+        set => SetParamTexture(((ParticleProcessMaterial.Parameter)(4)), value);
+    }
+
+    public Vector2 TangentialAccel
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(5)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(5)), value);
+    }
+
+    public float TangentialAccelMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(5)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(5)), value);
+    }
+
+    public float TangentialAccelMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(5)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(5)), value);
+    }
+
+    public Texture2D? TangentialAccelCurve
+    {
+        get => GetParamTexture(((ParticleProcessMaterial.Parameter)(5)));
+        set => SetParamTexture(((ParticleProcessMaterial.Parameter)(5)), value);
+    }
+
+    public Vector2 Damping
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(6)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(6)), value);
+    }
+
+    public float DampingMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(6)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(6)), value);
+    }
+
+    public float DampingMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(6)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(6)), value);
+    }
+
+    public Texture2D? DampingCurve
+    {
+        get => GetParamTexture(((ParticleProcessMaterial.Parameter)(6)));
+        set => SetParamTexture(((ParticleProcessMaterial.Parameter)(6)), value);
+    }
+
+    public bool AttractorInteractionEnabled
+    {
+        get => IsAttractorInteractionEnabled();
+        set => SetAttractorInteractionEnabled(value);
+    }
+
+    public bool UseScale3d
+    {
+        get => IsUsingScale3d();
+        set => SetUseScale3d(value);
+    }
+
+    public Vector3 Scale3dMin
+    {
+        get => GetScale3dMin();
+        set => SetScale3dMin(value);
+    }
+
+    public Vector3 Scale3dMax
+    {
+        get => GetScale3dMax();
+        set => SetScale3dMax(value);
+    }
+
+    public Vector2 Scale
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(8)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(8)), value);
+    }
+
+    public float ScaleMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(8)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(8)), value);
+    }
+
+    public float ScaleMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(8)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(8)), value);
+    }
+
+    public Texture2D? ScaleCurve
+    {
+        get => GetParamTexture(((ParticleProcessMaterial.Parameter)(8)));
+        set => SetParamTexture(((ParticleProcessMaterial.Parameter)(8)), value);
+    }
+
+    public Vector2 ScaleOverVelocity
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(17)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(17)), value);
+    }
+
+    public float ScaleOverVelocityMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(17)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(17)), value);
+    }
+
+    public float ScaleOverVelocityMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(17)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(17)), value);
+    }
+
+    public Texture2D? ScaleOverVelocityCurve
+    {
+        get => GetParamTexture(((ParticleProcessMaterial.Parameter)(17)));
+        set => SetParamTexture(((ParticleProcessMaterial.Parameter)(17)), value);
+    }
+
+    public Color Color
+    {
+        get => GetColor();
+        set => SetColor(value);
+    }
+
+    public Texture2D? ColorRamp
+    {
+        get => GetColorRamp();
+        set => SetColorRamp(value);
+    }
+
+    public Texture2D? ColorInitialRamp
+    {
+        get => GetColorInitialRamp();
+        set => SetColorInitialRamp(value);
+    }
+
+    public Texture2D? AlphaCurve
+    {
+        get => GetAlphaCurve();
+        set => SetAlphaCurve(value);
+    }
+
+    public Texture2D? EmissionCurve
+    {
+        get => GetEmissionCurve();
+        set => SetEmissionCurve(value);
+    }
+
+    public Vector2 HueVariation
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(9)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(9)), value);
+    }
+
+    public float HueVariationMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(9)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(9)), value);
+    }
+
+    public float HueVariationMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(9)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(9)), value);
+    }
+
+    public Texture2D? HueVariationCurve
+    {
+        get => GetParamTexture(((ParticleProcessMaterial.Parameter)(9)));
+        set => SetParamTexture(((ParticleProcessMaterial.Parameter)(9)), value);
+    }
+
+    public Vector2 AnimSpeed
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(10)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(10)), value);
+    }
+
+    public float AnimSpeedMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(10)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(10)), value);
+    }
+
+    public float AnimSpeedMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(10)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(10)), value);
+    }
+
+    public Texture2D? AnimSpeedCurve
+    {
+        get => GetParamTexture(((ParticleProcessMaterial.Parameter)(10)));
+        set => SetParamTexture(((ParticleProcessMaterial.Parameter)(10)), value);
+    }
+
+    public Vector2 AnimOffset
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(11)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(11)), value);
+    }
+
+    public float AnimOffsetMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(11)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(11)), value);
+    }
+
+    public float AnimOffsetMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(11)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(11)), value);
+    }
+
+    public Texture2D? AnimOffsetCurve
+    {
+        get => GetParamTexture(((ParticleProcessMaterial.Parameter)(11)));
+        set => SetParamTexture(((ParticleProcessMaterial.Parameter)(11)), value);
+    }
+
+    public bool TurbulenceEnabled
+    {
+        get => GetTurbulenceEnabled();
+        set => SetTurbulenceEnabled(value);
+    }
+
+    public float TurbulenceNoiseStrength
+    {
+        get => GetTurbulenceNoiseStrength();
+        set => SetTurbulenceNoiseStrength(value);
+    }
+
+    public float TurbulenceNoiseScale
+    {
+        get => GetTurbulenceNoiseScale();
+        set => SetTurbulenceNoiseScale(value);
+    }
+
+    public Vector3 TurbulenceNoiseSpeed
+    {
+        get => GetTurbulenceNoiseSpeed();
+        set => SetTurbulenceNoiseSpeed(value);
+    }
+
+    public float TurbulenceNoiseSpeedRandom
+    {
+        get => GetTurbulenceNoiseSpeedRandom();
+        set => SetTurbulenceNoiseSpeedRandom(value);
+    }
+
+    public Vector2 TurbulenceInfluence
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(13)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(13)), value);
+    }
+
+    public float TurbulenceInfluenceMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(13)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(13)), value);
+    }
+
+    public float TurbulenceInfluenceMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(13)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(13)), value);
+    }
+
+    public Vector2 TurbulenceInitialDisplacement
+    {
+        get => GetParam(((ParticleProcessMaterial.Parameter)(14)));
+        set => SetParam(((ParticleProcessMaterial.Parameter)(14)), value);
+    }
+
+    public float TurbulenceInitialDisplacementMin
+    {
+        get => GetParamMin(((ParticleProcessMaterial.Parameter)(14)));
+        set => SetParamMin(((ParticleProcessMaterial.Parameter)(14)), value);
+    }
+
+    public float TurbulenceInitialDisplacementMax
+    {
+        get => GetParamMax(((ParticleProcessMaterial.Parameter)(14)));
+        set => SetParamMax(((ParticleProcessMaterial.Parameter)(14)), value);
+    }
+
+    public Texture2D? TurbulenceInfluenceOverLife
+    {
+        get => GetParamTexture(((ParticleProcessMaterial.Parameter)(12)));
+        set => SetParamTexture(((ParticleProcessMaterial.Parameter)(12)), value);
+    }
+
+    public ParticleProcessMaterial.CollisionModeEnum CollisionMode
+    {
+        get => GetCollisionMode();
+        set => SetCollisionMode(value);
+    }
+
+    public float CollisionFriction
+    {
+        get => GetCollisionFriction();
+        set => SetCollisionFriction(value);
+    }
+
+    public float CollisionBounce
+    {
+        get => GetCollisionBounce();
+        set => SetCollisionBounce(value);
+    }
+
+    public bool CollisionUseScale
+    {
+        get => IsCollisionUsingScale();
+        set => SetCollisionUseScale(value);
+    }
+
+    public ParticleProcessMaterial.SubEmitterModeEnum SubEmitterMode
+    {
+        get => GetSubEmitterMode();
+        set => SetSubEmitterMode(value);
+    }
+
+    public double SubEmitterFrequency
+    {
+        get => GetSubEmitterFrequency();
+        set => SetSubEmitterFrequency(value);
+    }
+
+    public int SubEmitterAmountAtEnd
+    {
+        get => GetSubEmitterAmountAtEnd();
+        set => SetSubEmitterAmountAtEnd(value);
+    }
+
+    public int SubEmitterAmountAtCollision
+    {
+        get => GetSubEmitterAmountAtCollision();
+        set => SetSubEmitterAmountAtCollision(value);
+    }
+
+    public int SubEmitterAmountAtStart
+    {
+        get => GetSubEmitterAmountAtStart();
+        set => SetSubEmitterAmountAtStart(value);
+    }
+
+    public bool SubEmitterKeepVelocity
+    {
+        get => GetSubEmitterKeepVelocity();
+        set => SetSubEmitterKeepVelocity(value);
+    }
+
     private static nint __mb_set_direction;
-    public void SetDirection(Vector3 degrees)
+    internal void SetDirection(Vector3 degrees)
     {
         var __mb = __mb_set_direction;
         if (__mb == 0)
@@ -1647,7 +2547,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_direction;
-    public Vector3 GetDirection()
+    internal Vector3 GetDirection()
     {
         var __mb = __mb_get_direction;
         if (__mb == 0)
@@ -1662,7 +2562,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_inherit_velocity_ratio;
-    public void SetInheritVelocityRatio(double ratio)
+    internal void SetInheritVelocityRatio(double ratio)
     {
         var __mb = __mb_set_inherit_velocity_ratio;
         if (__mb == 0)
@@ -1678,7 +2578,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_inherit_velocity_ratio;
-    public double GetInheritVelocityRatio()
+    internal double GetInheritVelocityRatio()
     {
         var __mb = __mb_get_inherit_velocity_ratio;
         if (__mb == 0)
@@ -1693,7 +2593,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_spread;
-    public void SetSpread(float degrees)
+    internal void SetSpread(float degrees)
     {
         var __mb = __mb_set_spread;
         if (__mb == 0)
@@ -1709,7 +2609,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_spread;
-    public float GetSpread()
+    internal float GetSpread()
     {
         var __mb = __mb_get_spread;
         if (__mb == 0)
@@ -1724,7 +2624,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_flatness;
-    public void SetFlatness(float amount)
+    internal void SetFlatness(float amount)
     {
         var __mb = __mb_set_flatness;
         if (__mb == 0)
@@ -1740,7 +2640,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_flatness;
-    public float GetFlatness()
+    internal float GetFlatness()
     {
         var __mb = __mb_get_flatness;
         if (__mb == 0)
@@ -1755,7 +2655,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_param;
-    public void SetParam(ParticleProcessMaterial.Parameter param, Vector2 value)
+    internal void SetParam(ParticleProcessMaterial.Parameter param, Vector2 value)
     {
         var __mb = __mb_set_param;
         if (__mb == 0)
@@ -1773,7 +2673,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_param;
-    public Vector2 GetParam(ParticleProcessMaterial.Parameter param)
+    internal Vector2 GetParam(ParticleProcessMaterial.Parameter param)
     {
         var __mb = __mb_get_param;
         if (__mb == 0)
@@ -1791,7 +2691,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_param_min;
-    public void SetParamMin(ParticleProcessMaterial.Parameter param, float value)
+    internal void SetParamMin(ParticleProcessMaterial.Parameter param, float value)
     {
         var __mb = __mb_set_param_min;
         if (__mb == 0)
@@ -1809,7 +2709,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_param_min;
-    public float GetParamMin(ParticleProcessMaterial.Parameter param)
+    internal float GetParamMin(ParticleProcessMaterial.Parameter param)
     {
         var __mb = __mb_get_param_min;
         if (__mb == 0)
@@ -1827,7 +2727,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_param_max;
-    public void SetParamMax(ParticleProcessMaterial.Parameter param, float value)
+    internal void SetParamMax(ParticleProcessMaterial.Parameter param, float value)
     {
         var __mb = __mb_set_param_max;
         if (__mb == 0)
@@ -1845,7 +2745,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_param_max;
-    public float GetParamMax(ParticleProcessMaterial.Parameter param)
+    internal float GetParamMax(ParticleProcessMaterial.Parameter param)
     {
         var __mb = __mb_get_param_max;
         if (__mb == 0)
@@ -1863,7 +2763,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_param_texture;
-    public void SetParamTexture(ParticleProcessMaterial.Parameter param, Texture2D? texture)
+    internal void SetParamTexture(ParticleProcessMaterial.Parameter param, Texture2D? texture)
     {
         var __mb = __mb_set_param_texture;
         if (__mb == 0)
@@ -1881,7 +2781,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_param_texture;
-    public Texture2D? GetParamTexture(ParticleProcessMaterial.Parameter param)
+    internal Texture2D? GetParamTexture(ParticleProcessMaterial.Parameter param)
     {
         var __mb = __mb_get_param_texture;
         if (__mb == 0)
@@ -1899,7 +2799,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_color;
-    public void SetColor(Color color)
+    internal void SetColor(Color color)
     {
         var __mb = __mb_set_color;
         if (__mb == 0)
@@ -1915,7 +2815,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_color;
-    public Color GetColor()
+    internal Color GetColor()
     {
         var __mb = __mb_get_color;
         if (__mb == 0)
@@ -1930,7 +2830,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_use_scale_3d;
-    public void SetUseScale3d(bool usingScale3d)
+    internal void SetUseScale3d(bool usingScale3d)
     {
         var __mb = __mb_set_use_scale_3d;
         if (__mb == 0)
@@ -1946,7 +2846,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_is_using_scale_3d;
-    public bool IsUsingScale3d()
+    internal bool IsUsingScale3d()
     {
         var __mb = __mb_is_using_scale_3d;
         if (__mb == 0)
@@ -1961,7 +2861,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_scale_3d_min;
-    public void SetScale3dMin(Vector3 scale3dMin)
+    internal void SetScale3dMin(Vector3 scale3dMin)
     {
         var __mb = __mb_set_scale_3d_min;
         if (__mb == 0)
@@ -1977,7 +2877,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_scale_3d_min;
-    public Vector3 GetScale3dMin()
+    internal Vector3 GetScale3dMin()
     {
         var __mb = __mb_get_scale_3d_min;
         if (__mb == 0)
@@ -1992,7 +2892,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_scale_3d_max;
-    public void SetScale3dMax(Vector3 scale3dMax)
+    internal void SetScale3dMax(Vector3 scale3dMax)
     {
         var __mb = __mb_set_scale_3d_max;
         if (__mb == 0)
@@ -2008,7 +2908,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_scale_3d_max;
-    public Vector3 GetScale3dMax()
+    internal Vector3 GetScale3dMax()
     {
         var __mb = __mb_get_scale_3d_max;
         if (__mb == 0)
@@ -2023,7 +2923,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_use_rotation_3d;
-    public void SetUseRotation3d(bool usingRotation3d)
+    internal void SetUseRotation3d(bool usingRotation3d)
     {
         var __mb = __mb_set_use_rotation_3d;
         if (__mb == 0)
@@ -2039,7 +2939,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_is_using_rotation_3d;
-    public bool IsUsingRotation3d()
+    internal bool IsUsingRotation3d()
     {
         var __mb = __mb_is_using_rotation_3d;
         if (__mb == 0)
@@ -2054,7 +2954,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_rotation_3d_min;
-    public void SetRotation3dMin(Vector3 rotation3dMin)
+    internal void SetRotation3dMin(Vector3 rotation3dMin)
     {
         var __mb = __mb_set_rotation_3d_min;
         if (__mb == 0)
@@ -2070,7 +2970,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_rotation_3d_min;
-    public Vector3 GetRotation3dMin()
+    internal Vector3 GetRotation3dMin()
     {
         var __mb = __mb_get_rotation_3d_min;
         if (__mb == 0)
@@ -2085,7 +2985,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_rotation_3d_max;
-    public void SetRotation3dMax(Vector3 rotation3dMax)
+    internal void SetRotation3dMax(Vector3 rotation3dMax)
     {
         var __mb = __mb_set_rotation_3d_max;
         if (__mb == 0)
@@ -2101,7 +3001,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_rotation_3d_max;
-    public Vector3 GetRotation3dMax()
+    internal Vector3 GetRotation3dMax()
     {
         var __mb = __mb_get_rotation_3d_max;
         if (__mb == 0)
@@ -2116,7 +3016,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_color_ramp;
-    public void SetColorRamp(Texture2D? ramp)
+    internal void SetColorRamp(Texture2D? ramp)
     {
         var __mb = __mb_set_color_ramp;
         if (__mb == 0)
@@ -2132,7 +3032,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_color_ramp;
-    public Texture2D? GetColorRamp()
+    internal Texture2D? GetColorRamp()
     {
         var __mb = __mb_get_color_ramp;
         if (__mb == 0)
@@ -2147,7 +3047,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_alpha_curve;
-    public void SetAlphaCurve(Texture2D? curve)
+    internal void SetAlphaCurve(Texture2D? curve)
     {
         var __mb = __mb_set_alpha_curve;
         if (__mb == 0)
@@ -2163,7 +3063,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_alpha_curve;
-    public Texture2D? GetAlphaCurve()
+    internal Texture2D? GetAlphaCurve()
     {
         var __mb = __mb_get_alpha_curve;
         if (__mb == 0)
@@ -2178,7 +3078,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_emission_curve;
-    public void SetEmissionCurve(Texture2D? curve)
+    internal void SetEmissionCurve(Texture2D? curve)
     {
         var __mb = __mb_set_emission_curve;
         if (__mb == 0)
@@ -2194,7 +3094,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_emission_curve;
-    public Texture2D? GetEmissionCurve()
+    internal Texture2D? GetEmissionCurve()
     {
         var __mb = __mb_get_emission_curve;
         if (__mb == 0)
@@ -2209,7 +3109,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_color_initial_ramp;
-    public void SetColorInitialRamp(Texture2D? ramp)
+    internal void SetColorInitialRamp(Texture2D? ramp)
     {
         var __mb = __mb_set_color_initial_ramp;
         if (__mb == 0)
@@ -2225,7 +3125,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_color_initial_ramp;
-    public Texture2D? GetColorInitialRamp()
+    internal Texture2D? GetColorInitialRamp()
     {
         var __mb = __mb_get_color_initial_ramp;
         if (__mb == 0)
@@ -2240,7 +3140,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_velocity_limit_curve;
-    public void SetVelocityLimitCurve(Texture2D? curve)
+    internal void SetVelocityLimitCurve(Texture2D? curve)
     {
         var __mb = __mb_set_velocity_limit_curve;
         if (__mb == 0)
@@ -2256,7 +3156,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_velocity_limit_curve;
-    public Texture2D? GetVelocityLimitCurve()
+    internal Texture2D? GetVelocityLimitCurve()
     {
         var __mb = __mb_get_velocity_limit_curve;
         if (__mb == 0)
@@ -2271,7 +3171,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_particle_flag;
-    public void SetParticleFlag(ParticleProcessMaterial.ParticleFlags particleFlag, bool enable)
+    internal void SetParticleFlag(ParticleProcessMaterial.ParticleFlags particleFlag, bool enable)
     {
         var __mb = __mb_set_particle_flag;
         if (__mb == 0)
@@ -2289,7 +3189,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_particle_flag;
-    public bool GetParticleFlag(ParticleProcessMaterial.ParticleFlags particleFlag)
+    internal bool GetParticleFlag(ParticleProcessMaterial.ParticleFlags particleFlag)
     {
         var __mb = __mb_get_particle_flag;
         if (__mb == 0)
@@ -2307,7 +3207,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_velocity_pivot;
-    public void SetVelocityPivot(Vector3 pivot)
+    internal void SetVelocityPivot(Vector3 pivot)
     {
         var __mb = __mb_set_velocity_pivot;
         if (__mb == 0)
@@ -2323,7 +3223,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_velocity_pivot;
-    public Vector3 GetVelocityPivot()
+    internal Vector3 GetVelocityPivot()
     {
         var __mb = __mb_get_velocity_pivot;
         if (__mb == 0)
@@ -2338,7 +3238,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_emission_shape;
-    public void SetEmissionShape(ParticleProcessMaterial.EmissionShape shape)
+    internal void SetEmissionShape(ParticleProcessMaterial.EmissionShapeEnum shape)
     {
         var __mb = __mb_set_emission_shape;
         if (__mb == 0)
@@ -2354,7 +3254,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_emission_shape;
-    public ParticleProcessMaterial.EmissionShape GetEmissionShape()
+    internal ParticleProcessMaterial.EmissionShapeEnum GetEmissionShape()
     {
         var __mb = __mb_get_emission_shape;
         if (__mb == 0)
@@ -2365,11 +3265,11 @@ public unsafe partial class ParticleProcessMaterial : Material
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (ParticleProcessMaterial.EmissionShape)__ret;
+        return (ParticleProcessMaterial.EmissionShapeEnum)__ret;
     }
 
     private static nint __mb_set_emission_sphere_radius;
-    public void SetEmissionSphereRadius(float radius)
+    internal void SetEmissionSphereRadius(float radius)
     {
         var __mb = __mb_set_emission_sphere_radius;
         if (__mb == 0)
@@ -2385,7 +3285,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_emission_sphere_radius;
-    public float GetEmissionSphereRadius()
+    internal float GetEmissionSphereRadius()
     {
         var __mb = __mb_get_emission_sphere_radius;
         if (__mb == 0)
@@ -2400,7 +3300,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_emission_box_extents;
-    public void SetEmissionBoxExtents(Vector3 extents)
+    internal void SetEmissionBoxExtents(Vector3 extents)
     {
         var __mb = __mb_set_emission_box_extents;
         if (__mb == 0)
@@ -2416,7 +3316,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_emission_box_extents;
-    public Vector3 GetEmissionBoxExtents()
+    internal Vector3 GetEmissionBoxExtents()
     {
         var __mb = __mb_get_emission_box_extents;
         if (__mb == 0)
@@ -2431,7 +3331,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_emission_point_texture;
-    public void SetEmissionPointTexture(Texture2D? texture)
+    internal void SetEmissionPointTexture(Texture2D? texture)
     {
         var __mb = __mb_set_emission_point_texture;
         if (__mb == 0)
@@ -2447,7 +3347,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_emission_point_texture;
-    public Texture2D? GetEmissionPointTexture()
+    internal Texture2D? GetEmissionPointTexture()
     {
         var __mb = __mb_get_emission_point_texture;
         if (__mb == 0)
@@ -2462,7 +3362,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_emission_normal_texture;
-    public void SetEmissionNormalTexture(Texture2D? texture)
+    internal void SetEmissionNormalTexture(Texture2D? texture)
     {
         var __mb = __mb_set_emission_normal_texture;
         if (__mb == 0)
@@ -2478,7 +3378,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_emission_normal_texture;
-    public Texture2D? GetEmissionNormalTexture()
+    internal Texture2D? GetEmissionNormalTexture()
     {
         var __mb = __mb_get_emission_normal_texture;
         if (__mb == 0)
@@ -2493,7 +3393,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_emission_color_texture;
-    public void SetEmissionColorTexture(Texture2D? texture)
+    internal void SetEmissionColorTexture(Texture2D? texture)
     {
         var __mb = __mb_set_emission_color_texture;
         if (__mb == 0)
@@ -2509,7 +3409,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_emission_color_texture;
-    public Texture2D? GetEmissionColorTexture()
+    internal Texture2D? GetEmissionColorTexture()
     {
         var __mb = __mb_get_emission_color_texture;
         if (__mb == 0)
@@ -2524,7 +3424,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_emission_point_count;
-    public void SetEmissionPointCount(int pointCount)
+    internal void SetEmissionPointCount(int pointCount)
     {
         var __mb = __mb_set_emission_point_count;
         if (__mb == 0)
@@ -2540,7 +3440,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_emission_point_count;
-    public int GetEmissionPointCount()
+    internal int GetEmissionPointCount()
     {
         var __mb = __mb_get_emission_point_count;
         if (__mb == 0)
@@ -2555,7 +3455,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_emission_ring_axis;
-    public void SetEmissionRingAxis(Vector3 axis)
+    internal void SetEmissionRingAxis(Vector3 axis)
     {
         var __mb = __mb_set_emission_ring_axis;
         if (__mb == 0)
@@ -2571,7 +3471,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_emission_ring_axis;
-    public Vector3 GetEmissionRingAxis()
+    internal Vector3 GetEmissionRingAxis()
     {
         var __mb = __mb_get_emission_ring_axis;
         if (__mb == 0)
@@ -2586,7 +3486,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_emission_ring_height;
-    public void SetEmissionRingHeight(float height)
+    internal void SetEmissionRingHeight(float height)
     {
         var __mb = __mb_set_emission_ring_height;
         if (__mb == 0)
@@ -2602,7 +3502,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_emission_ring_height;
-    public float GetEmissionRingHeight()
+    internal float GetEmissionRingHeight()
     {
         var __mb = __mb_get_emission_ring_height;
         if (__mb == 0)
@@ -2617,7 +3517,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_emission_ring_radius;
-    public void SetEmissionRingRadius(float radius)
+    internal void SetEmissionRingRadius(float radius)
     {
         var __mb = __mb_set_emission_ring_radius;
         if (__mb == 0)
@@ -2633,7 +3533,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_emission_ring_radius;
-    public float GetEmissionRingRadius()
+    internal float GetEmissionRingRadius()
     {
         var __mb = __mb_get_emission_ring_radius;
         if (__mb == 0)
@@ -2648,7 +3548,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_emission_ring_inner_radius;
-    public void SetEmissionRingInnerRadius(float innerRadius)
+    internal void SetEmissionRingInnerRadius(float innerRadius)
     {
         var __mb = __mb_set_emission_ring_inner_radius;
         if (__mb == 0)
@@ -2664,7 +3564,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_emission_ring_inner_radius;
-    public float GetEmissionRingInnerRadius()
+    internal float GetEmissionRingInnerRadius()
     {
         var __mb = __mb_get_emission_ring_inner_radius;
         if (__mb == 0)
@@ -2679,7 +3579,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_emission_ring_cone_angle;
-    public void SetEmissionRingConeAngle(float coneAngle)
+    internal void SetEmissionRingConeAngle(float coneAngle)
     {
         var __mb = __mb_set_emission_ring_cone_angle;
         if (__mb == 0)
@@ -2695,7 +3595,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_emission_ring_cone_angle;
-    public float GetEmissionRingConeAngle()
+    internal float GetEmissionRingConeAngle()
     {
         var __mb = __mb_get_emission_ring_cone_angle;
         if (__mb == 0)
@@ -2710,7 +3610,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_emission_shape_offset;
-    public void SetEmissionShapeOffset(Vector3 emissionShapeOffset)
+    internal void SetEmissionShapeOffset(Vector3 emissionShapeOffset)
     {
         var __mb = __mb_set_emission_shape_offset;
         if (__mb == 0)
@@ -2726,7 +3626,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_emission_shape_offset;
-    public Vector3 GetEmissionShapeOffset()
+    internal Vector3 GetEmissionShapeOffset()
     {
         var __mb = __mb_get_emission_shape_offset;
         if (__mb == 0)
@@ -2741,7 +3641,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_emission_shape_scale;
-    public void SetEmissionShapeScale(Vector3 emissionShapeScale)
+    internal void SetEmissionShapeScale(Vector3 emissionShapeScale)
     {
         var __mb = __mb_set_emission_shape_scale;
         if (__mb == 0)
@@ -2757,7 +3657,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_emission_shape_scale;
-    public Vector3 GetEmissionShapeScale()
+    internal Vector3 GetEmissionShapeScale()
     {
         var __mb = __mb_get_emission_shape_scale;
         if (__mb == 0)
@@ -2772,7 +3672,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_turbulence_enabled;
-    public bool GetTurbulenceEnabled()
+    internal bool GetTurbulenceEnabled()
     {
         var __mb = __mb_get_turbulence_enabled;
         if (__mb == 0)
@@ -2787,7 +3687,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_turbulence_enabled;
-    public void SetTurbulenceEnabled(bool turbulenceEnabled)
+    internal void SetTurbulenceEnabled(bool turbulenceEnabled)
     {
         var __mb = __mb_set_turbulence_enabled;
         if (__mb == 0)
@@ -2803,7 +3703,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_turbulence_noise_strength;
-    public float GetTurbulenceNoiseStrength()
+    internal float GetTurbulenceNoiseStrength()
     {
         var __mb = __mb_get_turbulence_noise_strength;
         if (__mb == 0)
@@ -2818,7 +3718,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_turbulence_noise_strength;
-    public void SetTurbulenceNoiseStrength(float turbulenceNoiseStrength)
+    internal void SetTurbulenceNoiseStrength(float turbulenceNoiseStrength)
     {
         var __mb = __mb_set_turbulence_noise_strength;
         if (__mb == 0)
@@ -2834,7 +3734,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_turbulence_noise_scale;
-    public float GetTurbulenceNoiseScale()
+    internal float GetTurbulenceNoiseScale()
     {
         var __mb = __mb_get_turbulence_noise_scale;
         if (__mb == 0)
@@ -2849,7 +3749,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_turbulence_noise_scale;
-    public void SetTurbulenceNoiseScale(float turbulenceNoiseScale)
+    internal void SetTurbulenceNoiseScale(float turbulenceNoiseScale)
     {
         var __mb = __mb_set_turbulence_noise_scale;
         if (__mb == 0)
@@ -2865,7 +3765,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_turbulence_noise_speed_random;
-    public float GetTurbulenceNoiseSpeedRandom()
+    internal float GetTurbulenceNoiseSpeedRandom()
     {
         var __mb = __mb_get_turbulence_noise_speed_random;
         if (__mb == 0)
@@ -2880,7 +3780,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_turbulence_noise_speed_random;
-    public void SetTurbulenceNoiseSpeedRandom(float turbulenceNoiseSpeedRandom)
+    internal void SetTurbulenceNoiseSpeedRandom(float turbulenceNoiseSpeedRandom)
     {
         var __mb = __mb_set_turbulence_noise_speed_random;
         if (__mb == 0)
@@ -2896,7 +3796,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_turbulence_noise_speed;
-    public Vector3 GetTurbulenceNoiseSpeed()
+    internal Vector3 GetTurbulenceNoiseSpeed()
     {
         var __mb = __mb_get_turbulence_noise_speed;
         if (__mb == 0)
@@ -2911,7 +3811,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_turbulence_noise_speed;
-    public void SetTurbulenceNoiseSpeed(Vector3 turbulenceNoiseSpeed)
+    internal void SetTurbulenceNoiseSpeed(Vector3 turbulenceNoiseSpeed)
     {
         var __mb = __mb_set_turbulence_noise_speed;
         if (__mb == 0)
@@ -2927,7 +3827,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_gravity;
-    public Vector3 GetGravity()
+    internal Vector3 GetGravity()
     {
         var __mb = __mb_get_gravity;
         if (__mb == 0)
@@ -2942,7 +3842,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_gravity;
-    public void SetGravity(Vector3 accelVec)
+    internal void SetGravity(Vector3 accelVec)
     {
         var __mb = __mb_set_gravity;
         if (__mb == 0)
@@ -2958,7 +3858,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_lifetime_randomness;
-    public void SetLifetimeRandomness(double randomness)
+    internal void SetLifetimeRandomness(double randomness)
     {
         var __mb = __mb_set_lifetime_randomness;
         if (__mb == 0)
@@ -2974,7 +3874,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_lifetime_randomness;
-    public double GetLifetimeRandomness()
+    internal double GetLifetimeRandomness()
     {
         var __mb = __mb_get_lifetime_randomness;
         if (__mb == 0)
@@ -2989,7 +3889,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_sub_emitter_mode;
-    public ParticleProcessMaterial.SubEmitterMode GetSubEmitterMode()
+    internal ParticleProcessMaterial.SubEmitterModeEnum GetSubEmitterMode()
     {
         var __mb = __mb_get_sub_emitter_mode;
         if (__mb == 0)
@@ -3000,11 +3900,11 @@ public unsafe partial class ParticleProcessMaterial : Material
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (ParticleProcessMaterial.SubEmitterMode)__ret;
+        return (ParticleProcessMaterial.SubEmitterModeEnum)__ret;
     }
 
     private static nint __mb_set_sub_emitter_mode;
-    public void SetSubEmitterMode(ParticleProcessMaterial.SubEmitterMode mode)
+    internal void SetSubEmitterMode(ParticleProcessMaterial.SubEmitterModeEnum mode)
     {
         var __mb = __mb_set_sub_emitter_mode;
         if (__mb == 0)
@@ -3020,7 +3920,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_sub_emitter_frequency;
-    public double GetSubEmitterFrequency()
+    internal double GetSubEmitterFrequency()
     {
         var __mb = __mb_get_sub_emitter_frequency;
         if (__mb == 0)
@@ -3035,7 +3935,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_sub_emitter_frequency;
-    public void SetSubEmitterFrequency(double hz)
+    internal void SetSubEmitterFrequency(double hz)
     {
         var __mb = __mb_set_sub_emitter_frequency;
         if (__mb == 0)
@@ -3051,7 +3951,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_sub_emitter_amount_at_end;
-    public int GetSubEmitterAmountAtEnd()
+    internal int GetSubEmitterAmountAtEnd()
     {
         var __mb = __mb_get_sub_emitter_amount_at_end;
         if (__mb == 0)
@@ -3066,7 +3966,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_sub_emitter_amount_at_end;
-    public void SetSubEmitterAmountAtEnd(int amount)
+    internal void SetSubEmitterAmountAtEnd(int amount)
     {
         var __mb = __mb_set_sub_emitter_amount_at_end;
         if (__mb == 0)
@@ -3082,7 +3982,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_sub_emitter_amount_at_collision;
-    public int GetSubEmitterAmountAtCollision()
+    internal int GetSubEmitterAmountAtCollision()
     {
         var __mb = __mb_get_sub_emitter_amount_at_collision;
         if (__mb == 0)
@@ -3097,7 +3997,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_sub_emitter_amount_at_collision;
-    public void SetSubEmitterAmountAtCollision(int amount)
+    internal void SetSubEmitterAmountAtCollision(int amount)
     {
         var __mb = __mb_set_sub_emitter_amount_at_collision;
         if (__mb == 0)
@@ -3113,7 +4013,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_sub_emitter_amount_at_start;
-    public int GetSubEmitterAmountAtStart()
+    internal int GetSubEmitterAmountAtStart()
     {
         var __mb = __mb_get_sub_emitter_amount_at_start;
         if (__mb == 0)
@@ -3128,7 +4028,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_sub_emitter_amount_at_start;
-    public void SetSubEmitterAmountAtStart(int amount)
+    internal void SetSubEmitterAmountAtStart(int amount)
     {
         var __mb = __mb_set_sub_emitter_amount_at_start;
         if (__mb == 0)
@@ -3144,7 +4044,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_sub_emitter_keep_velocity;
-    public bool GetSubEmitterKeepVelocity()
+    internal bool GetSubEmitterKeepVelocity()
     {
         var __mb = __mb_get_sub_emitter_keep_velocity;
         if (__mb == 0)
@@ -3159,7 +4059,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_sub_emitter_keep_velocity;
-    public void SetSubEmitterKeepVelocity(bool enable)
+    internal void SetSubEmitterKeepVelocity(bool enable)
     {
         var __mb = __mb_set_sub_emitter_keep_velocity;
         if (__mb == 0)
@@ -3175,7 +4075,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_attractor_interaction_enabled;
-    public void SetAttractorInteractionEnabled(bool enabled)
+    internal void SetAttractorInteractionEnabled(bool enabled)
     {
         var __mb = __mb_set_attractor_interaction_enabled;
         if (__mb == 0)
@@ -3191,7 +4091,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_is_attractor_interaction_enabled;
-    public bool IsAttractorInteractionEnabled()
+    internal bool IsAttractorInteractionEnabled()
     {
         var __mb = __mb_is_attractor_interaction_enabled;
         if (__mb == 0)
@@ -3206,7 +4106,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_collision_mode;
-    public void SetCollisionMode(ParticleProcessMaterial.CollisionMode mode)
+    internal void SetCollisionMode(ParticleProcessMaterial.CollisionModeEnum mode)
     {
         var __mb = __mb_set_collision_mode;
         if (__mb == 0)
@@ -3222,7 +4122,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_collision_mode;
-    public ParticleProcessMaterial.CollisionMode GetCollisionMode()
+    internal ParticleProcessMaterial.CollisionModeEnum GetCollisionMode()
     {
         var __mb = __mb_get_collision_mode;
         if (__mb == 0)
@@ -3233,11 +4133,11 @@ public unsafe partial class ParticleProcessMaterial : Material
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (ParticleProcessMaterial.CollisionMode)__ret;
+        return (ParticleProcessMaterial.CollisionModeEnum)__ret;
     }
 
     private static nint __mb_set_collision_use_scale;
-    public void SetCollisionUseScale(bool radius)
+    internal void SetCollisionUseScale(bool radius)
     {
         var __mb = __mb_set_collision_use_scale;
         if (__mb == 0)
@@ -3253,7 +4153,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_is_collision_using_scale;
-    public bool IsCollisionUsingScale()
+    internal bool IsCollisionUsingScale()
     {
         var __mb = __mb_is_collision_using_scale;
         if (__mb == 0)
@@ -3268,7 +4168,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_collision_friction;
-    public void SetCollisionFriction(float friction)
+    internal void SetCollisionFriction(float friction)
     {
         var __mb = __mb_set_collision_friction;
         if (__mb == 0)
@@ -3284,7 +4184,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_collision_friction;
-    public float GetCollisionFriction()
+    internal float GetCollisionFriction()
     {
         var __mb = __mb_get_collision_friction;
         if (__mb == 0)
@@ -3299,7 +4199,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_collision_bounce;
-    public void SetCollisionBounce(float bounce)
+    internal void SetCollisionBounce(float bounce)
     {
         var __mb = __mb_set_collision_bounce;
         if (__mb == 0)
@@ -3315,7 +4215,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_collision_bounce;
-    public float GetCollisionBounce()
+    internal float GetCollisionBounce()
     {
         var __mb = __mb_get_collision_bounce;
         if (__mb == 0)
@@ -3330,7 +4230,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_using_rotation_velocity_3d;
-    public void SetUsingRotationVelocity3d(bool useRotationVelocity3d)
+    internal void SetUsingRotationVelocity3d(bool useRotationVelocity3d)
     {
         var __mb = __mb_set_using_rotation_velocity_3d;
         if (__mb == 0)
@@ -3346,7 +4246,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_is_using_rotation_velocity_3d;
-    public bool IsUsingRotationVelocity3d()
+    internal bool IsUsingRotationVelocity3d()
     {
         var __mb = __mb_is_using_rotation_velocity_3d;
         if (__mb == 0)
@@ -3361,7 +4261,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_rotation_velocity_3d_max;
-    public void SetRotationVelocity3dMax(Vector3 rotationVelocity3dMax)
+    internal void SetRotationVelocity3dMax(Vector3 rotationVelocity3dMax)
     {
         var __mb = __mb_set_rotation_velocity_3d_max;
         if (__mb == 0)
@@ -3377,7 +4277,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_rotation_velocity_3d_max;
-    public Vector3 GetRotationVelocity3dMax()
+    internal Vector3 GetRotationVelocity3dMax()
     {
         var __mb = __mb_get_rotation_velocity_3d_max;
         if (__mb == 0)
@@ -3392,7 +4292,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_rotation_velocity_3d_min;
-    public void SetRotationVelocity3dMin(Vector3 rotationVelocity3dMin)
+    internal void SetRotationVelocity3dMin(Vector3 rotationVelocity3dMin)
     {
         var __mb = __mb_set_rotation_velocity_3d_min;
         if (__mb == 0)
@@ -3408,7 +4308,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_rotation_velocity_3d_min;
-    public Vector3 GetRotationVelocity3dMin()
+    internal Vector3 GetRotationVelocity3dMin()
     {
         var __mb = __mb_get_rotation_velocity_3d_min;
         if (__mb == 0)
@@ -3423,7 +4323,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_set_rotation_velocity_3d_curve;
-    public void SetRotationVelocity3dCurve(Texture2D? rotationVelocity3dCurve)
+    internal void SetRotationVelocity3dCurve(Texture2D? rotationVelocity3dCurve)
     {
         var __mb = __mb_set_rotation_velocity_3d_curve;
         if (__mb == 0)
@@ -3439,7 +4339,7 @@ public unsafe partial class ParticleProcessMaterial : Material
     }
 
     private static nint __mb_get_rotation_velocity_3d_curve;
-    public Texture2D? GetRotationVelocity3dCurve()
+    internal Texture2D? GetRotationVelocity3dCurve()
     {
         var __mb = __mb_get_rotation_velocity_3d_curve;
         if (__mb == 0)
@@ -3463,8 +4363,14 @@ public unsafe partial class Path2D : Node2D
         ClassRegistry.AttachNew(this, "Path2D");
     }
 
+    public Curve2D? Curve
+    {
+        get => GetCurve();
+        set => SetCurve(value);
+    }
+
     private static nint __mb_set_curve;
-    public void SetCurve(Curve2D? curve)
+    internal void SetCurve(Curve2D? curve)
     {
         var __mb = __mb_set_curve;
         if (__mb == 0)
@@ -3480,7 +4386,7 @@ public unsafe partial class Path2D : Node2D
     }
 
     private static nint __mb_get_curve;
-    public Curve2D? GetCurve()
+    internal Curve2D? GetCurve()
     {
         var __mb = __mb_get_curve;
         if (__mb == 0)
@@ -3504,8 +4410,20 @@ public unsafe partial class Path3D : Node3D
         ClassRegistry.AttachNew(this, "Path3D");
     }
 
+    public Curve3D? Curve
+    {
+        get => GetCurve();
+        set => SetCurve(value);
+    }
+
+    public Color DebugCustomColor
+    {
+        get => GetDebugCustomColor();
+        set => SetDebugCustomColor(value);
+    }
+
     private static nint __mb_set_curve;
-    public void SetCurve(Curve3D? curve)
+    internal void SetCurve(Curve3D? curve)
     {
         var __mb = __mb_set_curve;
         if (__mb == 0)
@@ -3521,7 +4439,7 @@ public unsafe partial class Path3D : Node3D
     }
 
     private static nint __mb_get_curve;
-    public Curve3D? GetCurve()
+    internal Curve3D? GetCurve()
     {
         var __mb = __mb_get_curve;
         if (__mb == 0)
@@ -3536,7 +4454,7 @@ public unsafe partial class Path3D : Node3D
     }
 
     private static nint __mb_set_debug_custom_color;
-    public void SetDebugCustomColor(Color debugCustomColor)
+    internal void SetDebugCustomColor(Color debugCustomColor)
     {
         var __mb = __mb_set_debug_custom_color;
         if (__mb == 0)
@@ -3552,7 +4470,7 @@ public unsafe partial class Path3D : Node3D
     }
 
     private static nint __mb_get_debug_custom_color;
-    public Color GetDebugCustomColor()
+    internal Color GetDebugCustomColor()
     {
         var __mb = __mb_get_debug_custom_color;
         if (__mb == 0)
@@ -3576,8 +4494,50 @@ public unsafe partial class PathFollow2D : Node2D
         ClassRegistry.AttachNew(this, "PathFollow2D");
     }
 
+    public float Progress
+    {
+        get => GetProgress();
+        set => SetProgress(value);
+    }
+
+    public float ProgressRatio
+    {
+        get => GetProgressRatio();
+        set => SetProgressRatio(value);
+    }
+
+    public float HOffset
+    {
+        get => GetHOffset();
+        set => SetHOffset(value);
+    }
+
+    public float VOffset
+    {
+        get => GetVOffset();
+        set => SetVOffset(value);
+    }
+
+    public bool Rotates
+    {
+        get => IsRotating();
+        set => SetRotates(value);
+    }
+
+    public bool CubicInterp
+    {
+        get => GetCubicInterpolation();
+        set => SetCubicInterpolation(value);
+    }
+
+    public bool Loop
+    {
+        get => HasLoop();
+        set => SetLoop(value);
+    }
+
     private static nint __mb_set_progress;
-    public void SetProgress(float progress)
+    internal void SetProgress(float progress)
     {
         var __mb = __mb_set_progress;
         if (__mb == 0)
@@ -3593,7 +4553,7 @@ public unsafe partial class PathFollow2D : Node2D
     }
 
     private static nint __mb_get_progress;
-    public float GetProgress()
+    internal float GetProgress()
     {
         var __mb = __mb_get_progress;
         if (__mb == 0)
@@ -3608,7 +4568,7 @@ public unsafe partial class PathFollow2D : Node2D
     }
 
     private static nint __mb_set_h_offset;
-    public void SetHOffset(float hOffset)
+    internal void SetHOffset(float hOffset)
     {
         var __mb = __mb_set_h_offset;
         if (__mb == 0)
@@ -3624,7 +4584,7 @@ public unsafe partial class PathFollow2D : Node2D
     }
 
     private static nint __mb_get_h_offset;
-    public float GetHOffset()
+    internal float GetHOffset()
     {
         var __mb = __mb_get_h_offset;
         if (__mb == 0)
@@ -3639,7 +4599,7 @@ public unsafe partial class PathFollow2D : Node2D
     }
 
     private static nint __mb_set_v_offset;
-    public void SetVOffset(float vOffset)
+    internal void SetVOffset(float vOffset)
     {
         var __mb = __mb_set_v_offset;
         if (__mb == 0)
@@ -3655,7 +4615,7 @@ public unsafe partial class PathFollow2D : Node2D
     }
 
     private static nint __mb_get_v_offset;
-    public float GetVOffset()
+    internal float GetVOffset()
     {
         var __mb = __mb_get_v_offset;
         if (__mb == 0)
@@ -3670,7 +4630,7 @@ public unsafe partial class PathFollow2D : Node2D
     }
 
     private static nint __mb_set_progress_ratio;
-    public void SetProgressRatio(float ratio)
+    internal void SetProgressRatio(float ratio)
     {
         var __mb = __mb_set_progress_ratio;
         if (__mb == 0)
@@ -3686,7 +4646,7 @@ public unsafe partial class PathFollow2D : Node2D
     }
 
     private static nint __mb_get_progress_ratio;
-    public float GetProgressRatio()
+    internal float GetProgressRatio()
     {
         var __mb = __mb_get_progress_ratio;
         if (__mb == 0)
@@ -3701,7 +4661,7 @@ public unsafe partial class PathFollow2D : Node2D
     }
 
     private static nint __mb_set_rotates;
-    public void SetRotates(bool enabled)
+    internal void SetRotates(bool enabled)
     {
         var __mb = __mb_set_rotates;
         if (__mb == 0)
@@ -3717,7 +4677,7 @@ public unsafe partial class PathFollow2D : Node2D
     }
 
     private static nint __mb_is_rotating;
-    public bool IsRotating()
+    internal bool IsRotating()
     {
         var __mb = __mb_is_rotating;
         if (__mb == 0)
@@ -3732,7 +4692,7 @@ public unsafe partial class PathFollow2D : Node2D
     }
 
     private static nint __mb_set_cubic_interpolation;
-    public void SetCubicInterpolation(bool enabled)
+    internal void SetCubicInterpolation(bool enabled)
     {
         var __mb = __mb_set_cubic_interpolation;
         if (__mb == 0)
@@ -3748,7 +4708,7 @@ public unsafe partial class PathFollow2D : Node2D
     }
 
     private static nint __mb_get_cubic_interpolation;
-    public bool GetCubicInterpolation()
+    internal bool GetCubicInterpolation()
     {
         var __mb = __mb_get_cubic_interpolation;
         if (__mb == 0)
@@ -3763,7 +4723,7 @@ public unsafe partial class PathFollow2D : Node2D
     }
 
     private static nint __mb_set_loop;
-    public void SetLoop(bool loop)
+    internal void SetLoop(bool loop)
     {
         var __mb = __mb_set_loop;
         if (__mb == 0)
@@ -3779,7 +4739,7 @@ public unsafe partial class PathFollow2D : Node2D
     }
 
     private static nint __mb_has_loop;
-    public bool HasLoop()
+    internal bool HasLoop()
     {
         var __mb = __mb_has_loop;
         if (__mb == 0)
@@ -3803,7 +4763,7 @@ public unsafe partial class PathFollow3D : Node3D
         ClassRegistry.AttachNew(this, "PathFollow3D");
     }
 
-    public enum RotationMode : long
+    public enum RotationModeEnum : long
     {
         ROTATION_NONE = 0,
         ROTATION_Y = 1,
@@ -3812,8 +4772,62 @@ public unsafe partial class PathFollow3D : Node3D
         ROTATION_ORIENTED = 4,
     }
 
+    public float Progress
+    {
+        get => GetProgress();
+        set => SetProgress(value);
+    }
+
+    public float ProgressRatio
+    {
+        get => GetProgressRatio();
+        set => SetProgressRatio(value);
+    }
+
+    public float HOffset
+    {
+        get => GetHOffset();
+        set => SetHOffset(value);
+    }
+
+    public float VOffset
+    {
+        get => GetVOffset();
+        set => SetVOffset(value);
+    }
+
+    public PathFollow3D.RotationModeEnum RotationMode
+    {
+        get => GetRotationMode();
+        set => SetRotationMode(value);
+    }
+
+    public bool UseModelFront
+    {
+        get => IsUsingModelFront();
+        set => SetUseModelFront(value);
+    }
+
+    public bool CubicInterp
+    {
+        get => GetCubicInterpolation();
+        set => SetCubicInterpolation(value);
+    }
+
+    public bool Loop
+    {
+        get => HasLoop();
+        set => SetLoop(value);
+    }
+
+    public bool TiltEnabled
+    {
+        get => IsTiltEnabled();
+        set => SetTiltEnabled(value);
+    }
+
     private static nint __mb_set_progress;
-    public void SetProgress(float progress)
+    internal void SetProgress(float progress)
     {
         var __mb = __mb_set_progress;
         if (__mb == 0)
@@ -3829,7 +4843,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_get_progress;
-    public float GetProgress()
+    internal float GetProgress()
     {
         var __mb = __mb_get_progress;
         if (__mb == 0)
@@ -3844,7 +4858,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_set_h_offset;
-    public void SetHOffset(float hOffset)
+    internal void SetHOffset(float hOffset)
     {
         var __mb = __mb_set_h_offset;
         if (__mb == 0)
@@ -3860,7 +4874,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_get_h_offset;
-    public float GetHOffset()
+    internal float GetHOffset()
     {
         var __mb = __mb_get_h_offset;
         if (__mb == 0)
@@ -3875,7 +4889,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_set_v_offset;
-    public void SetVOffset(float vOffset)
+    internal void SetVOffset(float vOffset)
     {
         var __mb = __mb_set_v_offset;
         if (__mb == 0)
@@ -3891,7 +4905,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_get_v_offset;
-    public float GetVOffset()
+    internal float GetVOffset()
     {
         var __mb = __mb_get_v_offset;
         if (__mb == 0)
@@ -3906,7 +4920,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_set_progress_ratio;
-    public void SetProgressRatio(float ratio)
+    internal void SetProgressRatio(float ratio)
     {
         var __mb = __mb_set_progress_ratio;
         if (__mb == 0)
@@ -3922,7 +4936,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_get_progress_ratio;
-    public float GetProgressRatio()
+    internal float GetProgressRatio()
     {
         var __mb = __mb_get_progress_ratio;
         if (__mb == 0)
@@ -3937,7 +4951,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_set_rotation_mode;
-    public void SetRotationMode(PathFollow3D.RotationMode rotationMode)
+    internal void SetRotationMode(PathFollow3D.RotationModeEnum rotationMode)
     {
         var __mb = __mb_set_rotation_mode;
         if (__mb == 0)
@@ -3953,7 +4967,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_get_rotation_mode;
-    public PathFollow3D.RotationMode GetRotationMode()
+    internal PathFollow3D.RotationModeEnum GetRotationMode()
     {
         var __mb = __mb_get_rotation_mode;
         if (__mb == 0)
@@ -3964,11 +4978,11 @@ public unsafe partial class PathFollow3D : Node3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (PathFollow3D.RotationMode)__ret;
+        return (PathFollow3D.RotationModeEnum)__ret;
     }
 
     private static nint __mb_set_cubic_interpolation;
-    public void SetCubicInterpolation(bool enabled)
+    internal void SetCubicInterpolation(bool enabled)
     {
         var __mb = __mb_set_cubic_interpolation;
         if (__mb == 0)
@@ -3984,7 +4998,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_get_cubic_interpolation;
-    public bool GetCubicInterpolation()
+    internal bool GetCubicInterpolation()
     {
         var __mb = __mb_get_cubic_interpolation;
         if (__mb == 0)
@@ -3999,7 +5013,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_set_use_model_front;
-    public void SetUseModelFront(bool enabled)
+    internal void SetUseModelFront(bool enabled)
     {
         var __mb = __mb_set_use_model_front;
         if (__mb == 0)
@@ -4015,7 +5029,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_is_using_model_front;
-    public bool IsUsingModelFront()
+    internal bool IsUsingModelFront()
     {
         var __mb = __mb_is_using_model_front;
         if (__mb == 0)
@@ -4030,7 +5044,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_set_loop;
-    public void SetLoop(bool loop)
+    internal void SetLoop(bool loop)
     {
         var __mb = __mb_set_loop;
         if (__mb == 0)
@@ -4046,7 +5060,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_has_loop;
-    public bool HasLoop()
+    internal bool HasLoop()
     {
         var __mb = __mb_has_loop;
         if (__mb == 0)
@@ -4061,7 +5075,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_set_tilt_enabled;
-    public void SetTiltEnabled(bool enabled)
+    internal void SetTiltEnabled(bool enabled)
     {
         var __mb = __mb_set_tilt_enabled;
         if (__mb == 0)
@@ -4077,7 +5091,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_is_tilt_enabled;
-    public bool IsTiltEnabled()
+    internal bool IsTiltEnabled()
     {
         var __mb = __mb_is_tilt_enabled;
         if (__mb == 0)
@@ -4092,7 +5106,7 @@ public unsafe partial class PathFollow3D : Node3D
     }
 
     private static nint __mb_correct_posture;
-    public static Transform3D CorrectPosture(Transform3D transform, PathFollow3D.RotationMode rotationMode)
+    public static Transform3D CorrectPosture(Transform3D transform, PathFollow3D.RotationModeEnum rotationMode)
     {
         var __mb = __mb_correct_posture;
         if (__mb == 0)
@@ -4306,6 +5320,36 @@ public unsafe partial class PhysicalBone2D : RigidBody2D
         ClassRegistry.AttachNew(this, "PhysicalBone2D");
     }
 
+    public NodePath Bone2dNodepath
+    {
+        get => GetBone2dNodepath();
+        set => SetBone2dNodepath(value);
+    }
+
+    public int Bone2dIndex
+    {
+        get => GetBone2dIndex();
+        set => SetBone2dIndex(value);
+    }
+
+    public bool AutoConfigureJoint
+    {
+        get => GetAutoConfigureJoint();
+        set => SetAutoConfigureJoint(value);
+    }
+
+    public bool SimulatePhysics
+    {
+        get => GetSimulatePhysics();
+        set => SetSimulatePhysics(value);
+    }
+
+    public bool FollowBoneWhenSimulating
+    {
+        get => GetFollowBoneWhenSimulating();
+        set => SetFollowBoneWhenSimulating(value);
+    }
+
     private static nint __mb_get_joint;
     public Joint2D? GetJoint()
     {
@@ -4322,7 +5366,7 @@ public unsafe partial class PhysicalBone2D : RigidBody2D
     }
 
     private static nint __mb_get_auto_configure_joint;
-    public bool GetAutoConfigureJoint()
+    internal bool GetAutoConfigureJoint()
     {
         var __mb = __mb_get_auto_configure_joint;
         if (__mb == 0)
@@ -4337,7 +5381,7 @@ public unsafe partial class PhysicalBone2D : RigidBody2D
     }
 
     private static nint __mb_set_auto_configure_joint;
-    public void SetAutoConfigureJoint(bool autoConfigureJoint)
+    internal void SetAutoConfigureJoint(bool autoConfigureJoint)
     {
         var __mb = __mb_set_auto_configure_joint;
         if (__mb == 0)
@@ -4353,7 +5397,7 @@ public unsafe partial class PhysicalBone2D : RigidBody2D
     }
 
     private static nint __mb_set_simulate_physics;
-    public void SetSimulatePhysics(bool simulatePhysics)
+    internal void SetSimulatePhysics(bool simulatePhysics)
     {
         var __mb = __mb_set_simulate_physics;
         if (__mb == 0)
@@ -4369,7 +5413,7 @@ public unsafe partial class PhysicalBone2D : RigidBody2D
     }
 
     private static nint __mb_get_simulate_physics;
-    public bool GetSimulatePhysics()
+    internal bool GetSimulatePhysics()
     {
         var __mb = __mb_get_simulate_physics;
         if (__mb == 0)
@@ -4399,7 +5443,7 @@ public unsafe partial class PhysicalBone2D : RigidBody2D
     }
 
     private static nint __mb_set_bone2d_nodepath;
-    public void SetBone2dNodepath(NodePath nodepath)
+    internal void SetBone2dNodepath(NodePath nodepath)
     {
         var __mb = __mb_set_bone2d_nodepath;
         if (__mb == 0)
@@ -4415,7 +5459,7 @@ public unsafe partial class PhysicalBone2D : RigidBody2D
     }
 
     private static nint __mb_get_bone2d_nodepath;
-    public NodePath GetBone2dNodepath()
+    internal NodePath GetBone2dNodepath()
     {
         var __mb = __mb_get_bone2d_nodepath;
         if (__mb == 0)
@@ -4430,7 +5474,7 @@ public unsafe partial class PhysicalBone2D : RigidBody2D
     }
 
     private static nint __mb_set_bone2d_index;
-    public void SetBone2dIndex(int boneIndex)
+    internal void SetBone2dIndex(int boneIndex)
     {
         var __mb = __mb_set_bone2d_index;
         if (__mb == 0)
@@ -4446,7 +5490,7 @@ public unsafe partial class PhysicalBone2D : RigidBody2D
     }
 
     private static nint __mb_get_bone2d_index;
-    public int GetBone2dIndex()
+    internal int GetBone2dIndex()
     {
         var __mb = __mb_get_bone2d_index;
         if (__mb == 0)
@@ -4461,7 +5505,7 @@ public unsafe partial class PhysicalBone2D : RigidBody2D
     }
 
     private static nint __mb_set_follow_bone_when_simulating;
-    public void SetFollowBoneWhenSimulating(bool followBone)
+    internal void SetFollowBoneWhenSimulating(bool followBone)
     {
         var __mb = __mb_set_follow_bone_when_simulating;
         if (__mb == 0)
@@ -4477,7 +5521,7 @@ public unsafe partial class PhysicalBone2D : RigidBody2D
     }
 
     private static nint __mb_get_follow_bone_when_simulating;
-    public bool GetFollowBoneWhenSimulating()
+    internal bool GetFollowBoneWhenSimulating()
     {
         var __mb = __mb_get_follow_bone_when_simulating;
         if (__mb == 0)
@@ -4507,7 +5551,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
         DAMP_MODE_REPLACE = 1,
     }
 
-    public enum JointType : long
+    public enum JointTypeEnum : long
     {
         JOINT_TYPE_NONE = 0,
         JOINT_TYPE_PIN = 1,
@@ -4515,6 +5559,102 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
         JOINT_TYPE_HINGE = 3,
         JOINT_TYPE_SLIDER = 4,
         JOINT_TYPE_6DOF = 5,
+    }
+
+    public PhysicalBone3D.JointTypeEnum JointType
+    {
+        get => GetJointType();
+        set => SetJointType(value);
+    }
+
+    public Transform3D JointOffset
+    {
+        get => GetJointOffset();
+        set => SetJointOffset(value);
+    }
+
+    public Vector3 JointRotation
+    {
+        get => GetJointRotation();
+        set => SetJointRotation(value);
+    }
+
+    public Transform3D BodyOffset
+    {
+        get => GetBodyOffset();
+        set => SetBodyOffset(value);
+    }
+
+    public float Mass
+    {
+        get => GetMass();
+        set => SetMass(value);
+    }
+
+    public float Friction
+    {
+        get => GetFriction();
+        set => SetFriction(value);
+    }
+
+    public float Bounce
+    {
+        get => GetBounce();
+        set => SetBounce(value);
+    }
+
+    public float GravityScale
+    {
+        get => GetGravityScale();
+        set => SetGravityScale(value);
+    }
+
+    public bool CustomIntegrator
+    {
+        get => IsUsingCustomIntegrator();
+        set => SetUseCustomIntegrator(value);
+    }
+
+    public PhysicalBone3D.DampMode LinearDampMode
+    {
+        get => GetLinearDampMode();
+        set => SetLinearDampMode(value);
+    }
+
+    public float LinearDamp
+    {
+        get => GetLinearDamp();
+        set => SetLinearDamp(value);
+    }
+
+    public PhysicalBone3D.DampMode AngularDampMode
+    {
+        get => GetAngularDampMode();
+        set => SetAngularDampMode(value);
+    }
+
+    public float AngularDamp
+    {
+        get => GetAngularDamp();
+        set => SetAngularDamp(value);
+    }
+
+    public Vector3 LinearVelocity
+    {
+        get => GetLinearVelocity();
+        set => SetLinearVelocity(value);
+    }
+
+    public Vector3 AngularVelocity
+    {
+        get => GetAngularVelocity();
+        set => SetAngularVelocity(value);
+    }
+
+    public bool CanSleep
+    {
+        get => IsAbleToSleep();
+        set => SetCanSleep(value);
     }
 
     private static nint __mb_apply_central_impulse;
@@ -4552,7 +5692,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_set_joint_type;
-    public void SetJointType(PhysicalBone3D.JointType jointType)
+    internal void SetJointType(PhysicalBone3D.JointTypeEnum jointType)
     {
         var __mb = __mb_set_joint_type;
         if (__mb == 0)
@@ -4568,7 +5708,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_get_joint_type;
-    public PhysicalBone3D.JointType GetJointType()
+    internal PhysicalBone3D.JointTypeEnum GetJointType()
     {
         var __mb = __mb_get_joint_type;
         if (__mb == 0)
@@ -4579,11 +5719,11 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (PhysicalBone3D.JointType)__ret;
+        return (PhysicalBone3D.JointTypeEnum)__ret;
     }
 
     private static nint __mb_set_joint_offset;
-    public void SetJointOffset(Transform3D offset)
+    internal void SetJointOffset(Transform3D offset)
     {
         var __mb = __mb_set_joint_offset;
         if (__mb == 0)
@@ -4599,7 +5739,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_get_joint_offset;
-    public Transform3D GetJointOffset()
+    internal Transform3D GetJointOffset()
     {
         var __mb = __mb_get_joint_offset;
         if (__mb == 0)
@@ -4614,7 +5754,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_set_joint_rotation;
-    public void SetJointRotation(Vector3 euler)
+    internal void SetJointRotation(Vector3 euler)
     {
         var __mb = __mb_set_joint_rotation;
         if (__mb == 0)
@@ -4630,7 +5770,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_get_joint_rotation;
-    public Vector3 GetJointRotation()
+    internal Vector3 GetJointRotation()
     {
         var __mb = __mb_get_joint_rotation;
         if (__mb == 0)
@@ -4645,7 +5785,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_set_body_offset;
-    public void SetBodyOffset(Transform3D offset)
+    internal void SetBodyOffset(Transform3D offset)
     {
         var __mb = __mb_set_body_offset;
         if (__mb == 0)
@@ -4661,7 +5801,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_get_body_offset;
-    public Transform3D GetBodyOffset()
+    internal Transform3D GetBodyOffset()
     {
         var __mb = __mb_get_body_offset;
         if (__mb == 0)
@@ -4721,7 +5861,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_set_mass;
-    public void SetMass(float mass)
+    internal void SetMass(float mass)
     {
         var __mb = __mb_set_mass;
         if (__mb == 0)
@@ -4737,7 +5877,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_get_mass;
-    public float GetMass()
+    internal float GetMass()
     {
         var __mb = __mb_get_mass;
         if (__mb == 0)
@@ -4752,7 +5892,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_set_friction;
-    public void SetFriction(float friction)
+    internal void SetFriction(float friction)
     {
         var __mb = __mb_set_friction;
         if (__mb == 0)
@@ -4768,7 +5908,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_get_friction;
-    public float GetFriction()
+    internal float GetFriction()
     {
         var __mb = __mb_get_friction;
         if (__mb == 0)
@@ -4783,7 +5923,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_set_bounce;
-    public void SetBounce(float bounce)
+    internal void SetBounce(float bounce)
     {
         var __mb = __mb_set_bounce;
         if (__mb == 0)
@@ -4799,7 +5939,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_get_bounce;
-    public float GetBounce()
+    internal float GetBounce()
     {
         var __mb = __mb_get_bounce;
         if (__mb == 0)
@@ -4814,7 +5954,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_set_gravity_scale;
-    public void SetGravityScale(float gravityScale)
+    internal void SetGravityScale(float gravityScale)
     {
         var __mb = __mb_set_gravity_scale;
         if (__mb == 0)
@@ -4830,7 +5970,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_get_gravity_scale;
-    public float GetGravityScale()
+    internal float GetGravityScale()
     {
         var __mb = __mb_get_gravity_scale;
         if (__mb == 0)
@@ -4845,7 +5985,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_set_linear_damp_mode;
-    public void SetLinearDampMode(PhysicalBone3D.DampMode linearDampMode)
+    internal void SetLinearDampMode(PhysicalBone3D.DampMode linearDampMode)
     {
         var __mb = __mb_set_linear_damp_mode;
         if (__mb == 0)
@@ -4861,7 +6001,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_get_linear_damp_mode;
-    public PhysicalBone3D.DampMode GetLinearDampMode()
+    internal PhysicalBone3D.DampMode GetLinearDampMode()
     {
         var __mb = __mb_get_linear_damp_mode;
         if (__mb == 0)
@@ -4876,7 +6016,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_set_angular_damp_mode;
-    public void SetAngularDampMode(PhysicalBone3D.DampMode angularDampMode)
+    internal void SetAngularDampMode(PhysicalBone3D.DampMode angularDampMode)
     {
         var __mb = __mb_set_angular_damp_mode;
         if (__mb == 0)
@@ -4892,7 +6032,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_get_angular_damp_mode;
-    public PhysicalBone3D.DampMode GetAngularDampMode()
+    internal PhysicalBone3D.DampMode GetAngularDampMode()
     {
         var __mb = __mb_get_angular_damp_mode;
         if (__mb == 0)
@@ -4907,7 +6047,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_set_linear_damp;
-    public void SetLinearDamp(float linearDamp)
+    internal void SetLinearDamp(float linearDamp)
     {
         var __mb = __mb_set_linear_damp;
         if (__mb == 0)
@@ -4923,7 +6063,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_get_linear_damp;
-    public float GetLinearDamp()
+    internal float GetLinearDamp()
     {
         var __mb = __mb_get_linear_damp;
         if (__mb == 0)
@@ -4938,7 +6078,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_set_angular_damp;
-    public void SetAngularDamp(float angularDamp)
+    internal void SetAngularDamp(float angularDamp)
     {
         var __mb = __mb_set_angular_damp;
         if (__mb == 0)
@@ -4954,7 +6094,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_get_angular_damp;
-    public float GetAngularDamp()
+    internal float GetAngularDamp()
     {
         var __mb = __mb_get_angular_damp;
         if (__mb == 0)
@@ -4969,7 +6109,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_set_linear_velocity;
-    public void SetLinearVelocity(Vector3 linearVelocity)
+    internal void SetLinearVelocity(Vector3 linearVelocity)
     {
         var __mb = __mb_set_linear_velocity;
         if (__mb == 0)
@@ -4985,7 +6125,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_get_linear_velocity;
-    public Vector3 GetLinearVelocity()
+    internal Vector3 GetLinearVelocity()
     {
         var __mb = __mb_get_linear_velocity;
         if (__mb == 0)
@@ -5000,7 +6140,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_set_angular_velocity;
-    public void SetAngularVelocity(Vector3 angularVelocity)
+    internal void SetAngularVelocity(Vector3 angularVelocity)
     {
         var __mb = __mb_set_angular_velocity;
         if (__mb == 0)
@@ -5016,7 +6156,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_get_angular_velocity;
-    public Vector3 GetAngularVelocity()
+    internal Vector3 GetAngularVelocity()
     {
         var __mb = __mb_get_angular_velocity;
         if (__mb == 0)
@@ -5031,7 +6171,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_set_use_custom_integrator;
-    public void SetUseCustomIntegrator(bool enable)
+    internal void SetUseCustomIntegrator(bool enable)
     {
         var __mb = __mb_set_use_custom_integrator;
         if (__mb == 0)
@@ -5047,7 +6187,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_is_using_custom_integrator;
-    public bool IsUsingCustomIntegrator()
+    internal bool IsUsingCustomIntegrator()
     {
         var __mb = __mb_is_using_custom_integrator;
         if (__mb == 0)
@@ -5062,7 +6202,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_set_can_sleep;
-    public void SetCanSleep(bool ableToSleep)
+    internal void SetCanSleep(bool ableToSleep)
     {
         var __mb = __mb_set_can_sleep;
         if (__mb == 0)
@@ -5078,7 +6218,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_is_able_to_sleep;
-    public bool IsAbleToSleep()
+    internal bool IsAbleToSleep()
     {
         var __mb = __mb_is_able_to_sleep;
         if (__mb == 0)
@@ -5203,8 +6343,74 @@ public unsafe partial class PhysicalSkyMaterial : Material
         ClassRegistry.AttachNew(this, "PhysicalSkyMaterial");
     }
 
+    public float RayleighCoefficient
+    {
+        get => GetRayleighCoefficient();
+        set => SetRayleighCoefficient(value);
+    }
+
+    public Color RayleighColor
+    {
+        get => GetRayleighColor();
+        set => SetRayleighColor(value);
+    }
+
+    public float MieCoefficient
+    {
+        get => GetMieCoefficient();
+        set => SetMieCoefficient(value);
+    }
+
+    public float MieEccentricity
+    {
+        get => GetMieEccentricity();
+        set => SetMieEccentricity(value);
+    }
+
+    public Color MieColor
+    {
+        get => GetMieColor();
+        set => SetMieColor(value);
+    }
+
+    public float Turbidity
+    {
+        get => GetTurbidity();
+        set => SetTurbidity(value);
+    }
+
+    public float SunDiskScale
+    {
+        get => GetSunDiskScale();
+        set => SetSunDiskScale(value);
+    }
+
+    public Color GroundColor
+    {
+        get => GetGroundColor();
+        set => SetGroundColor(value);
+    }
+
+    public float EnergyMultiplier
+    {
+        get => GetEnergyMultiplier();
+        set => SetEnergyMultiplier(value);
+    }
+
+    public bool UseDebanding
+    {
+        get => GetUseDebanding();
+        set => SetUseDebanding(value);
+    }
+
+    public Texture2D? NightSky
+    {
+        get => GetNightSky();
+        set => SetNightSky(value);
+    }
+
     private static nint __mb_set_rayleigh_coefficient;
-    public void SetRayleighCoefficient(float rayleigh)
+    internal void SetRayleighCoefficient(float rayleigh)
     {
         var __mb = __mb_set_rayleigh_coefficient;
         if (__mb == 0)
@@ -5220,7 +6426,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_get_rayleigh_coefficient;
-    public float GetRayleighCoefficient()
+    internal float GetRayleighCoefficient()
     {
         var __mb = __mb_get_rayleigh_coefficient;
         if (__mb == 0)
@@ -5235,7 +6441,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_set_rayleigh_color;
-    public void SetRayleighColor(Color color)
+    internal void SetRayleighColor(Color color)
     {
         var __mb = __mb_set_rayleigh_color;
         if (__mb == 0)
@@ -5251,7 +6457,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_get_rayleigh_color;
-    public Color GetRayleighColor()
+    internal Color GetRayleighColor()
     {
         var __mb = __mb_get_rayleigh_color;
         if (__mb == 0)
@@ -5266,7 +6472,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_set_mie_coefficient;
-    public void SetMieCoefficient(float mie)
+    internal void SetMieCoefficient(float mie)
     {
         var __mb = __mb_set_mie_coefficient;
         if (__mb == 0)
@@ -5282,7 +6488,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_get_mie_coefficient;
-    public float GetMieCoefficient()
+    internal float GetMieCoefficient()
     {
         var __mb = __mb_get_mie_coefficient;
         if (__mb == 0)
@@ -5297,7 +6503,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_set_mie_eccentricity;
-    public void SetMieEccentricity(float eccentricity)
+    internal void SetMieEccentricity(float eccentricity)
     {
         var __mb = __mb_set_mie_eccentricity;
         if (__mb == 0)
@@ -5313,7 +6519,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_get_mie_eccentricity;
-    public float GetMieEccentricity()
+    internal float GetMieEccentricity()
     {
         var __mb = __mb_get_mie_eccentricity;
         if (__mb == 0)
@@ -5328,7 +6534,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_set_mie_color;
-    public void SetMieColor(Color color)
+    internal void SetMieColor(Color color)
     {
         var __mb = __mb_set_mie_color;
         if (__mb == 0)
@@ -5344,7 +6550,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_get_mie_color;
-    public Color GetMieColor()
+    internal Color GetMieColor()
     {
         var __mb = __mb_get_mie_color;
         if (__mb == 0)
@@ -5359,7 +6565,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_set_turbidity;
-    public void SetTurbidity(float turbidity)
+    internal void SetTurbidity(float turbidity)
     {
         var __mb = __mb_set_turbidity;
         if (__mb == 0)
@@ -5375,7 +6581,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_get_turbidity;
-    public float GetTurbidity()
+    internal float GetTurbidity()
     {
         var __mb = __mb_get_turbidity;
         if (__mb == 0)
@@ -5390,7 +6596,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_set_sun_disk_scale;
-    public void SetSunDiskScale(float scale)
+    internal void SetSunDiskScale(float scale)
     {
         var __mb = __mb_set_sun_disk_scale;
         if (__mb == 0)
@@ -5406,7 +6612,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_get_sun_disk_scale;
-    public float GetSunDiskScale()
+    internal float GetSunDiskScale()
     {
         var __mb = __mb_get_sun_disk_scale;
         if (__mb == 0)
@@ -5421,7 +6627,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_set_ground_color;
-    public void SetGroundColor(Color color)
+    internal void SetGroundColor(Color color)
     {
         var __mb = __mb_set_ground_color;
         if (__mb == 0)
@@ -5437,7 +6643,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_get_ground_color;
-    public Color GetGroundColor()
+    internal Color GetGroundColor()
     {
         var __mb = __mb_get_ground_color;
         if (__mb == 0)
@@ -5452,7 +6658,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_set_energy_multiplier;
-    public void SetEnergyMultiplier(float multiplier)
+    internal void SetEnergyMultiplier(float multiplier)
     {
         var __mb = __mb_set_energy_multiplier;
         if (__mb == 0)
@@ -5468,7 +6674,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_get_energy_multiplier;
-    public float GetEnergyMultiplier()
+    internal float GetEnergyMultiplier()
     {
         var __mb = __mb_get_energy_multiplier;
         if (__mb == 0)
@@ -5483,7 +6689,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_set_use_debanding;
-    public void SetUseDebanding(bool useDebanding)
+    internal void SetUseDebanding(bool useDebanding)
     {
         var __mb = __mb_set_use_debanding;
         if (__mb == 0)
@@ -5499,7 +6705,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_get_use_debanding;
-    public bool GetUseDebanding()
+    internal bool GetUseDebanding()
     {
         var __mb = __mb_get_use_debanding;
         if (__mb == 0)
@@ -5514,7 +6720,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_set_night_sky;
-    public void SetNightSky(Texture2D? nightSky)
+    internal void SetNightSky(Texture2D? nightSky)
     {
         var __mb = __mb_set_night_sky;
         if (__mb == 0)
@@ -5530,7 +6736,7 @@ public unsafe partial class PhysicalSkyMaterial : Material
     }
 
     private static nint __mb_get_night_sky;
-    public Texture2D? GetNightSky()
+    internal Texture2D? GetNightSky()
     {
         var __mb = __mb_get_night_sky;
         if (__mb == 0)
@@ -5666,6 +6872,42 @@ public unsafe partial class PhysicsBody3D : CollisionObject3D
 {
     internal PhysicsBody3D(nint ptr, bool rc) : base(ptr, rc) { }
 
+    public bool AxisLockLinearX
+    {
+        get => GetAxisLock(((PhysicsServer3D.BodyAxis)(1)));
+        set => SetAxisLock(((PhysicsServer3D.BodyAxis)(1)), value);
+    }
+
+    public bool AxisLockLinearY
+    {
+        get => GetAxisLock(((PhysicsServer3D.BodyAxis)(2)));
+        set => SetAxisLock(((PhysicsServer3D.BodyAxis)(2)), value);
+    }
+
+    public bool AxisLockLinearZ
+    {
+        get => GetAxisLock(((PhysicsServer3D.BodyAxis)(4)));
+        set => SetAxisLock(((PhysicsServer3D.BodyAxis)(4)), value);
+    }
+
+    public bool AxisLockAngularX
+    {
+        get => GetAxisLock(((PhysicsServer3D.BodyAxis)(8)));
+        set => SetAxisLock(((PhysicsServer3D.BodyAxis)(8)), value);
+    }
+
+    public bool AxisLockAngularY
+    {
+        get => GetAxisLock(((PhysicsServer3D.BodyAxis)(16)));
+        set => SetAxisLock(((PhysicsServer3D.BodyAxis)(16)), value);
+    }
+
+    public bool AxisLockAngularZ
+    {
+        get => GetAxisLock(((PhysicsServer3D.BodyAxis)(32)));
+        set => SetAxisLock(((PhysicsServer3D.BodyAxis)(32)), value);
+    }
+
     private static nint __mb_move_and_collide;
     public KinematicCollision3D? MoveAndCollide(Vector3 motion, bool testOnly, float safeMargin, bool recoveryAsCollision, int maxCollisions)
     {
@@ -5736,7 +6978,7 @@ public unsafe partial class PhysicsBody3D : CollisionObject3D
     }
 
     private static nint __mb_set_axis_lock;
-    public void SetAxisLock(PhysicsServer3D.BodyAxis axis, bool @lock)
+    internal void SetAxisLock(PhysicsServer3D.BodyAxis axis, bool @lock)
     {
         var __mb = __mb_set_axis_lock;
         if (__mb == 0)
@@ -5754,7 +6996,7 @@ public unsafe partial class PhysicsBody3D : CollisionObject3D
     }
 
     private static nint __mb_get_axis_lock;
-    public bool GetAxisLock(PhysicsServer3D.BodyAxis axis)
+    internal bool GetAxisLock(PhysicsServer3D.BodyAxis axis)
     {
         var __mb = __mb_get_axis_lock;
         if (__mb == 0)
@@ -5823,8 +7065,60 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
 {
     internal PhysicsDirectBodyState2D(nint ptr, bool rc) : base(ptr, rc) { }
 
+    public float Step => GetStep();
+
+    public float InverseMass => GetInverseMass();
+
+    public float InverseInertia => GetInverseInertia();
+
+    public float TotalAngularDamp => GetTotalAngularDamp();
+
+    public float TotalLinearDamp => GetTotalLinearDamp();
+
+    public Vector2 TotalGravity => GetTotalGravity();
+
+    public Vector2 CenterOfMass => GetCenterOfMass();
+
+    public Vector2 CenterOfMassLocal => GetCenterOfMassLocal();
+
+    public float AngularVelocity
+    {
+        get => GetAngularVelocity();
+        set => SetAngularVelocity(value);
+    }
+
+    public Vector2 LinearVelocity
+    {
+        get => GetLinearVelocity();
+        set => SetLinearVelocity(value);
+    }
+
+    public bool Sleeping
+    {
+        get => IsSleeping();
+        set => SetSleepState(value);
+    }
+
+    public uint CollisionLayer
+    {
+        get => GetCollisionLayer();
+        set => SetCollisionLayer(value);
+    }
+
+    public uint CollisionMask
+    {
+        get => GetCollisionMask();
+        set => SetCollisionMask(value);
+    }
+
+    public Transform2D Transform
+    {
+        get => GetTransform();
+        set => SetTransform(value);
+    }
+
     private static nint __mb_get_total_gravity;
-    public Vector2 GetTotalGravity()
+    internal Vector2 GetTotalGravity()
     {
         var __mb = __mb_get_total_gravity;
         if (__mb == 0)
@@ -5839,7 +7133,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_get_total_linear_damp;
-    public float GetTotalLinearDamp()
+    internal float GetTotalLinearDamp()
     {
         var __mb = __mb_get_total_linear_damp;
         if (__mb == 0)
@@ -5854,7 +7148,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_get_total_angular_damp;
-    public float GetTotalAngularDamp()
+    internal float GetTotalAngularDamp()
     {
         var __mb = __mb_get_total_angular_damp;
         if (__mb == 0)
@@ -5869,7 +7163,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_get_center_of_mass;
-    public Vector2 GetCenterOfMass()
+    internal Vector2 GetCenterOfMass()
     {
         var __mb = __mb_get_center_of_mass;
         if (__mb == 0)
@@ -5884,7 +7178,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_get_center_of_mass_local;
-    public Vector2 GetCenterOfMassLocal()
+    internal Vector2 GetCenterOfMassLocal()
     {
         var __mb = __mb_get_center_of_mass_local;
         if (__mb == 0)
@@ -5899,7 +7193,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_get_inverse_mass;
-    public float GetInverseMass()
+    internal float GetInverseMass()
     {
         var __mb = __mb_get_inverse_mass;
         if (__mb == 0)
@@ -5914,7 +7208,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_get_inverse_inertia;
-    public float GetInverseInertia()
+    internal float GetInverseInertia()
     {
         var __mb = __mb_get_inverse_inertia;
         if (__mb == 0)
@@ -5929,7 +7223,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_set_linear_velocity;
-    public void SetLinearVelocity(Vector2 velocity)
+    internal void SetLinearVelocity(Vector2 velocity)
     {
         var __mb = __mb_set_linear_velocity;
         if (__mb == 0)
@@ -5945,7 +7239,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_get_linear_velocity;
-    public Vector2 GetLinearVelocity()
+    internal Vector2 GetLinearVelocity()
     {
         var __mb = __mb_get_linear_velocity;
         if (__mb == 0)
@@ -5960,7 +7254,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_set_angular_velocity;
-    public void SetAngularVelocity(float velocity)
+    internal void SetAngularVelocity(float velocity)
     {
         var __mb = __mb_set_angular_velocity;
         if (__mb == 0)
@@ -5976,7 +7270,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_get_angular_velocity;
-    public float GetAngularVelocity()
+    internal float GetAngularVelocity()
     {
         var __mb = __mb_get_angular_velocity;
         if (__mb == 0)
@@ -5991,7 +7285,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_set_transform;
-    public void SetTransform(Transform2D transform)
+    internal void SetTransform(Transform2D transform)
     {
         var __mb = __mb_set_transform;
         if (__mb == 0)
@@ -6007,7 +7301,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_get_transform;
-    public Transform2D GetTransform()
+    internal Transform2D GetTransform()
     {
         var __mb = __mb_get_transform;
         if (__mb == 0)
@@ -6252,7 +7546,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_set_sleep_state;
-    public void SetSleepState(bool enabled)
+    internal void SetSleepState(bool enabled)
     {
         var __mb = __mb_set_sleep_state;
         if (__mb == 0)
@@ -6268,7 +7562,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_is_sleeping;
-    public bool IsSleeping()
+    internal bool IsSleeping()
     {
         var __mb = __mb_is_sleeping;
         if (__mb == 0)
@@ -6283,7 +7577,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_set_collision_layer;
-    public void SetCollisionLayer(uint layer)
+    internal void SetCollisionLayer(uint layer)
     {
         var __mb = __mb_set_collision_layer;
         if (__mb == 0)
@@ -6299,7 +7593,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_get_collision_layer;
-    public uint GetCollisionLayer()
+    internal uint GetCollisionLayer()
     {
         var __mb = __mb_get_collision_layer;
         if (__mb == 0)
@@ -6314,7 +7608,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_set_collision_mask;
-    public void SetCollisionMask(uint mask)
+    internal void SetCollisionMask(uint mask)
     {
         var __mb = __mb_set_collision_mask;
         if (__mb == 0)
@@ -6330,7 +7624,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_get_collision_mask;
-    public uint GetCollisionMask()
+    internal uint GetCollisionMask()
     {
         var __mb = __mb_get_collision_mask;
         if (__mb == 0)
@@ -6558,7 +7852,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_get_step;
-    public float GetStep()
+    internal float GetStep()
     {
         var __mb = __mb_get_step;
         if (__mb == 0)
@@ -7053,8 +8347,64 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
 {
     internal PhysicsDirectBodyState3D(nint ptr, bool rc) : base(ptr, rc) { }
 
+    public float Step => GetStep();
+
+    public float InverseMass => GetInverseMass();
+
+    public float TotalAngularDamp => GetTotalAngularDamp();
+
+    public float TotalLinearDamp => GetTotalLinearDamp();
+
+    public Vector3 InverseInertia => GetInverseInertia();
+
+    public Basis InverseInertiaTensor => GetInverseInertiaTensor();
+
+    public Vector3 TotalGravity => GetTotalGravity();
+
+    public Vector3 CenterOfMass => GetCenterOfMass();
+
+    public Vector3 CenterOfMassLocal => GetCenterOfMassLocal();
+
+    public Basis PrincipalInertiaAxes => GetPrincipalInertiaAxes();
+
+    public Vector3 AngularVelocity
+    {
+        get => GetAngularVelocity();
+        set => SetAngularVelocity(value);
+    }
+
+    public Vector3 LinearVelocity
+    {
+        get => GetLinearVelocity();
+        set => SetLinearVelocity(value);
+    }
+
+    public bool Sleeping
+    {
+        get => IsSleeping();
+        set => SetSleepState(value);
+    }
+
+    public uint CollisionLayer
+    {
+        get => GetCollisionLayer();
+        set => SetCollisionLayer(value);
+    }
+
+    public uint CollisionMask
+    {
+        get => GetCollisionMask();
+        set => SetCollisionMask(value);
+    }
+
+    public Transform3D Transform
+    {
+        get => GetTransform();
+        set => SetTransform(value);
+    }
+
     private static nint __mb_get_total_gravity;
-    public Vector3 GetTotalGravity()
+    internal Vector3 GetTotalGravity()
     {
         var __mb = __mb_get_total_gravity;
         if (__mb == 0)
@@ -7069,7 +8419,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_get_total_linear_damp;
-    public float GetTotalLinearDamp()
+    internal float GetTotalLinearDamp()
     {
         var __mb = __mb_get_total_linear_damp;
         if (__mb == 0)
@@ -7084,7 +8434,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_get_total_angular_damp;
-    public float GetTotalAngularDamp()
+    internal float GetTotalAngularDamp()
     {
         var __mb = __mb_get_total_angular_damp;
         if (__mb == 0)
@@ -7099,7 +8449,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_get_center_of_mass;
-    public Vector3 GetCenterOfMass()
+    internal Vector3 GetCenterOfMass()
     {
         var __mb = __mb_get_center_of_mass;
         if (__mb == 0)
@@ -7114,7 +8464,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_get_center_of_mass_local;
-    public Vector3 GetCenterOfMassLocal()
+    internal Vector3 GetCenterOfMassLocal()
     {
         var __mb = __mb_get_center_of_mass_local;
         if (__mb == 0)
@@ -7129,7 +8479,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_get_principal_inertia_axes;
-    public Basis GetPrincipalInertiaAxes()
+    internal Basis GetPrincipalInertiaAxes()
     {
         var __mb = __mb_get_principal_inertia_axes;
         if (__mb == 0)
@@ -7144,7 +8494,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_get_inverse_mass;
-    public float GetInverseMass()
+    internal float GetInverseMass()
     {
         var __mb = __mb_get_inverse_mass;
         if (__mb == 0)
@@ -7159,7 +8509,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_get_inverse_inertia;
-    public Vector3 GetInverseInertia()
+    internal Vector3 GetInverseInertia()
     {
         var __mb = __mb_get_inverse_inertia;
         if (__mb == 0)
@@ -7174,7 +8524,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_get_inverse_inertia_tensor;
-    public Basis GetInverseInertiaTensor()
+    internal Basis GetInverseInertiaTensor()
     {
         var __mb = __mb_get_inverse_inertia_tensor;
         if (__mb == 0)
@@ -7189,7 +8539,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_set_linear_velocity;
-    public void SetLinearVelocity(Vector3 velocity)
+    internal void SetLinearVelocity(Vector3 velocity)
     {
         var __mb = __mb_set_linear_velocity;
         if (__mb == 0)
@@ -7205,7 +8555,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_get_linear_velocity;
-    public Vector3 GetLinearVelocity()
+    internal Vector3 GetLinearVelocity()
     {
         var __mb = __mb_get_linear_velocity;
         if (__mb == 0)
@@ -7220,7 +8570,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_set_angular_velocity;
-    public void SetAngularVelocity(Vector3 velocity)
+    internal void SetAngularVelocity(Vector3 velocity)
     {
         var __mb = __mb_set_angular_velocity;
         if (__mb == 0)
@@ -7236,7 +8586,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_get_angular_velocity;
-    public Vector3 GetAngularVelocity()
+    internal Vector3 GetAngularVelocity()
     {
         var __mb = __mb_get_angular_velocity;
         if (__mb == 0)
@@ -7251,7 +8601,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_set_transform;
-    public void SetTransform(Transform3D transform)
+    internal void SetTransform(Transform3D transform)
     {
         var __mb = __mb_set_transform;
         if (__mb == 0)
@@ -7267,7 +8617,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_get_transform;
-    public Transform3D GetTransform()
+    internal Transform3D GetTransform()
     {
         var __mb = __mb_get_transform;
         if (__mb == 0)
@@ -7512,7 +8862,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_set_sleep_state;
-    public void SetSleepState(bool enabled)
+    internal void SetSleepState(bool enabled)
     {
         var __mb = __mb_set_sleep_state;
         if (__mb == 0)
@@ -7528,7 +8878,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_is_sleeping;
-    public bool IsSleeping()
+    internal bool IsSleeping()
     {
         var __mb = __mb_is_sleeping;
         if (__mb == 0)
@@ -7543,7 +8893,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_set_collision_layer;
-    public void SetCollisionLayer(uint layer)
+    internal void SetCollisionLayer(uint layer)
     {
         var __mb = __mb_set_collision_layer;
         if (__mb == 0)
@@ -7559,7 +8909,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_get_collision_layer;
-    public uint GetCollisionLayer()
+    internal uint GetCollisionLayer()
     {
         var __mb = __mb_get_collision_layer;
         if (__mb == 0)
@@ -7574,7 +8924,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_set_collision_mask;
-    public void SetCollisionMask(uint mask)
+    internal void SetCollisionMask(uint mask)
     {
         var __mb = __mb_set_collision_mask;
         if (__mb == 0)
@@ -7590,7 +8940,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_get_collision_mask;
-    public uint GetCollisionMask()
+    internal uint GetCollisionMask()
     {
         var __mb = __mb_get_collision_mask;
         if (__mb == 0)
@@ -7818,7 +9168,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_get_step;
-    public float GetStep()
+    internal float GetStep()
     {
         var __mb = __mb_get_step;
         if (__mb == 0)
@@ -8609,8 +9959,32 @@ public unsafe partial class PhysicsMaterial : Resource
         ClassRegistry.AttachNew(this, "PhysicsMaterial");
     }
 
+    public float Friction
+    {
+        get => GetFriction();
+        set => SetFriction(value);
+    }
+
+    public bool Rough
+    {
+        get => IsRough();
+        set => SetRough(value);
+    }
+
+    public float Bounce
+    {
+        get => GetBounce();
+        set => SetBounce(value);
+    }
+
+    public bool Absorbent
+    {
+        get => IsAbsorbent();
+        set => SetAbsorbent(value);
+    }
+
     private static nint __mb_set_friction;
-    public void SetFriction(float friction)
+    internal void SetFriction(float friction)
     {
         var __mb = __mb_set_friction;
         if (__mb == 0)
@@ -8626,7 +10000,7 @@ public unsafe partial class PhysicsMaterial : Resource
     }
 
     private static nint __mb_get_friction;
-    public float GetFriction()
+    internal float GetFriction()
     {
         var __mb = __mb_get_friction;
         if (__mb == 0)
@@ -8641,7 +10015,7 @@ public unsafe partial class PhysicsMaterial : Resource
     }
 
     private static nint __mb_set_rough;
-    public void SetRough(bool rough)
+    internal void SetRough(bool rough)
     {
         var __mb = __mb_set_rough;
         if (__mb == 0)
@@ -8657,7 +10031,7 @@ public unsafe partial class PhysicsMaterial : Resource
     }
 
     private static nint __mb_is_rough;
-    public bool IsRough()
+    internal bool IsRough()
     {
         var __mb = __mb_is_rough;
         if (__mb == 0)
@@ -8672,7 +10046,7 @@ public unsafe partial class PhysicsMaterial : Resource
     }
 
     private static nint __mb_set_bounce;
-    public void SetBounce(float bounce)
+    internal void SetBounce(float bounce)
     {
         var __mb = __mb_set_bounce;
         if (__mb == 0)
@@ -8688,7 +10062,7 @@ public unsafe partial class PhysicsMaterial : Resource
     }
 
     private static nint __mb_get_bounce;
-    public float GetBounce()
+    internal float GetBounce()
     {
         var __mb = __mb_get_bounce;
         if (__mb == 0)
@@ -8703,7 +10077,7 @@ public unsafe partial class PhysicsMaterial : Resource
     }
 
     private static nint __mb_set_absorbent;
-    public void SetAbsorbent(bool absorbent)
+    internal void SetAbsorbent(bool absorbent)
     {
         var __mb = __mb_set_absorbent;
         if (__mb == 0)
@@ -8719,7 +10093,7 @@ public unsafe partial class PhysicsMaterial : Resource
     }
 
     private static nint __mb_is_absorbent;
-    public bool IsAbsorbent()
+    internal bool IsAbsorbent()
     {
         var __mb = __mb_is_absorbent;
         if (__mb == 0)
@@ -8743,8 +10117,44 @@ public unsafe partial class PhysicsPointQueryParameters2D : RefCounted
         ClassRegistry.AttachNew(this, "PhysicsPointQueryParameters2D");
     }
 
+    public Vector2 Position
+    {
+        get => GetPosition();
+        set => SetPosition(value);
+    }
+
+    public ulong CanvasInstanceId
+    {
+        get => GetCanvasInstanceId();
+        set => SetCanvasInstanceId(value);
+    }
+
+    public uint CollisionMask
+    {
+        get => GetCollisionMask();
+        set => SetCollisionMask(value);
+    }
+
+    public Godot.Collections.Array Exclude
+    {
+        get => GetExclude();
+        set => SetExclude(value);
+    }
+
+    public bool CollideWithBodies
+    {
+        get => IsCollideWithBodiesEnabled();
+        set => SetCollideWithBodies(value);
+    }
+
+    public bool CollideWithAreas
+    {
+        get => IsCollideWithAreasEnabled();
+        set => SetCollideWithAreas(value);
+    }
+
     private static nint __mb_set_position;
-    public void SetPosition(Vector2 position)
+    internal void SetPosition(Vector2 position)
     {
         var __mb = __mb_set_position;
         if (__mb == 0)
@@ -8760,7 +10170,7 @@ public unsafe partial class PhysicsPointQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_position;
-    public Vector2 GetPosition()
+    internal Vector2 GetPosition()
     {
         var __mb = __mb_get_position;
         if (__mb == 0)
@@ -8775,7 +10185,7 @@ public unsafe partial class PhysicsPointQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_canvas_instance_id;
-    public void SetCanvasInstanceId(ulong canvasInstanceId)
+    internal void SetCanvasInstanceId(ulong canvasInstanceId)
     {
         var __mb = __mb_set_canvas_instance_id;
         if (__mb == 0)
@@ -8791,7 +10201,7 @@ public unsafe partial class PhysicsPointQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_canvas_instance_id;
-    public ulong GetCanvasInstanceId()
+    internal ulong GetCanvasInstanceId()
     {
         var __mb = __mb_get_canvas_instance_id;
         if (__mb == 0)
@@ -8806,7 +10216,7 @@ public unsafe partial class PhysicsPointQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_collision_mask;
-    public void SetCollisionMask(uint collisionMask)
+    internal void SetCollisionMask(uint collisionMask)
     {
         var __mb = __mb_set_collision_mask;
         if (__mb == 0)
@@ -8822,7 +10232,7 @@ public unsafe partial class PhysicsPointQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_collision_mask;
-    public uint GetCollisionMask()
+    internal uint GetCollisionMask()
     {
         var __mb = __mb_get_collision_mask;
         if (__mb == 0)
@@ -8837,7 +10247,7 @@ public unsafe partial class PhysicsPointQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_exclude;
-    public void SetExclude(Godot.Collections.Array exclude)
+    internal void SetExclude(Godot.Collections.Array exclude)
     {
         var __mb = __mb_set_exclude;
         if (__mb == 0)
@@ -8853,7 +10263,7 @@ public unsafe partial class PhysicsPointQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_exclude;
-    public Godot.Collections.Array GetExclude()
+    internal Godot.Collections.Array GetExclude()
     {
         var __mb = __mb_get_exclude;
         if (__mb == 0)
@@ -8868,7 +10278,7 @@ public unsafe partial class PhysicsPointQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_collide_with_bodies;
-    public void SetCollideWithBodies(bool enable)
+    internal void SetCollideWithBodies(bool enable)
     {
         var __mb = __mb_set_collide_with_bodies;
         if (__mb == 0)
@@ -8884,7 +10294,7 @@ public unsafe partial class PhysicsPointQueryParameters2D : RefCounted
     }
 
     private static nint __mb_is_collide_with_bodies_enabled;
-    public bool IsCollideWithBodiesEnabled()
+    internal bool IsCollideWithBodiesEnabled()
     {
         var __mb = __mb_is_collide_with_bodies_enabled;
         if (__mb == 0)
@@ -8899,7 +10309,7 @@ public unsafe partial class PhysicsPointQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_collide_with_areas;
-    public void SetCollideWithAreas(bool enable)
+    internal void SetCollideWithAreas(bool enable)
     {
         var __mb = __mb_set_collide_with_areas;
         if (__mb == 0)
@@ -8915,7 +10325,7 @@ public unsafe partial class PhysicsPointQueryParameters2D : RefCounted
     }
 
     private static nint __mb_is_collide_with_areas_enabled;
-    public bool IsCollideWithAreasEnabled()
+    internal bool IsCollideWithAreasEnabled()
     {
         var __mb = __mb_is_collide_with_areas_enabled;
         if (__mb == 0)
@@ -8939,8 +10349,38 @@ public unsafe partial class PhysicsPointQueryParameters3D : RefCounted
         ClassRegistry.AttachNew(this, "PhysicsPointQueryParameters3D");
     }
 
+    public Vector3 Position
+    {
+        get => GetPosition();
+        set => SetPosition(value);
+    }
+
+    public uint CollisionMask
+    {
+        get => GetCollisionMask();
+        set => SetCollisionMask(value);
+    }
+
+    public Godot.Collections.Array Exclude
+    {
+        get => GetExclude();
+        set => SetExclude(value);
+    }
+
+    public bool CollideWithBodies
+    {
+        get => IsCollideWithBodiesEnabled();
+        set => SetCollideWithBodies(value);
+    }
+
+    public bool CollideWithAreas
+    {
+        get => IsCollideWithAreasEnabled();
+        set => SetCollideWithAreas(value);
+    }
+
     private static nint __mb_set_position;
-    public void SetPosition(Vector3 position)
+    internal void SetPosition(Vector3 position)
     {
         var __mb = __mb_set_position;
         if (__mb == 0)
@@ -8956,7 +10396,7 @@ public unsafe partial class PhysicsPointQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_position;
-    public Vector3 GetPosition()
+    internal Vector3 GetPosition()
     {
         var __mb = __mb_get_position;
         if (__mb == 0)
@@ -8971,7 +10411,7 @@ public unsafe partial class PhysicsPointQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_collision_mask;
-    public void SetCollisionMask(uint collisionMask)
+    internal void SetCollisionMask(uint collisionMask)
     {
         var __mb = __mb_set_collision_mask;
         if (__mb == 0)
@@ -8987,7 +10427,7 @@ public unsafe partial class PhysicsPointQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_collision_mask;
-    public uint GetCollisionMask()
+    internal uint GetCollisionMask()
     {
         var __mb = __mb_get_collision_mask;
         if (__mb == 0)
@@ -9002,7 +10442,7 @@ public unsafe partial class PhysicsPointQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_exclude;
-    public void SetExclude(Godot.Collections.Array exclude)
+    internal void SetExclude(Godot.Collections.Array exclude)
     {
         var __mb = __mb_set_exclude;
         if (__mb == 0)
@@ -9018,7 +10458,7 @@ public unsafe partial class PhysicsPointQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_exclude;
-    public Godot.Collections.Array GetExclude()
+    internal Godot.Collections.Array GetExclude()
     {
         var __mb = __mb_get_exclude;
         if (__mb == 0)
@@ -9033,7 +10473,7 @@ public unsafe partial class PhysicsPointQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_collide_with_bodies;
-    public void SetCollideWithBodies(bool enable)
+    internal void SetCollideWithBodies(bool enable)
     {
         var __mb = __mb_set_collide_with_bodies;
         if (__mb == 0)
@@ -9049,7 +10489,7 @@ public unsafe partial class PhysicsPointQueryParameters3D : RefCounted
     }
 
     private static nint __mb_is_collide_with_bodies_enabled;
-    public bool IsCollideWithBodiesEnabled()
+    internal bool IsCollideWithBodiesEnabled()
     {
         var __mb = __mb_is_collide_with_bodies_enabled;
         if (__mb == 0)
@@ -9064,7 +10504,7 @@ public unsafe partial class PhysicsPointQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_collide_with_areas;
-    public void SetCollideWithAreas(bool enable)
+    internal void SetCollideWithAreas(bool enable)
     {
         var __mb = __mb_set_collide_with_areas;
         if (__mb == 0)
@@ -9080,7 +10520,7 @@ public unsafe partial class PhysicsPointQueryParameters3D : RefCounted
     }
 
     private static nint __mb_is_collide_with_areas_enabled;
-    public bool IsCollideWithAreasEnabled()
+    internal bool IsCollideWithAreasEnabled()
     {
         var __mb = __mb_is_collide_with_areas_enabled;
         if (__mb == 0)
@@ -9102,6 +10542,48 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     public PhysicsRayQueryParameters2D() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "PhysicsRayQueryParameters2D");
+    }
+
+    public Vector2 From
+    {
+        get => GetFrom();
+        set => SetFrom(value);
+    }
+
+    public Vector2 To
+    {
+        get => GetTo();
+        set => SetTo(value);
+    }
+
+    public uint CollisionMask
+    {
+        get => GetCollisionMask();
+        set => SetCollisionMask(value);
+    }
+
+    public Godot.Collections.Array Exclude
+    {
+        get => GetExclude();
+        set => SetExclude(value);
+    }
+
+    public bool CollideWithBodies
+    {
+        get => IsCollideWithBodiesEnabled();
+        set => SetCollideWithBodies(value);
+    }
+
+    public bool CollideWithAreas
+    {
+        get => IsCollideWithAreasEnabled();
+        set => SetCollideWithAreas(value);
+    }
+
+    public bool HitFromInside
+    {
+        get => IsHitFromInsideEnabled();
+        set => SetHitFromInside(value);
     }
 
     private static nint __mb_create;
@@ -9129,7 +10611,7 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_from;
-    public void SetFrom(Vector2 from)
+    internal void SetFrom(Vector2 from)
     {
         var __mb = __mb_set_from;
         if (__mb == 0)
@@ -9145,7 +10627,7 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_from;
-    public Vector2 GetFrom()
+    internal Vector2 GetFrom()
     {
         var __mb = __mb_get_from;
         if (__mb == 0)
@@ -9160,7 +10642,7 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_to;
-    public void SetTo(Vector2 to)
+    internal void SetTo(Vector2 to)
     {
         var __mb = __mb_set_to;
         if (__mb == 0)
@@ -9176,7 +10658,7 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_to;
-    public Vector2 GetTo()
+    internal Vector2 GetTo()
     {
         var __mb = __mb_get_to;
         if (__mb == 0)
@@ -9191,7 +10673,7 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_collision_mask;
-    public void SetCollisionMask(uint collisionMask)
+    internal void SetCollisionMask(uint collisionMask)
     {
         var __mb = __mb_set_collision_mask;
         if (__mb == 0)
@@ -9207,7 +10689,7 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_collision_mask;
-    public uint GetCollisionMask()
+    internal uint GetCollisionMask()
     {
         var __mb = __mb_get_collision_mask;
         if (__mb == 0)
@@ -9222,7 +10704,7 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_exclude;
-    public void SetExclude(Godot.Collections.Array exclude)
+    internal void SetExclude(Godot.Collections.Array exclude)
     {
         var __mb = __mb_set_exclude;
         if (__mb == 0)
@@ -9238,7 +10720,7 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_exclude;
-    public Godot.Collections.Array GetExclude()
+    internal Godot.Collections.Array GetExclude()
     {
         var __mb = __mb_get_exclude;
         if (__mb == 0)
@@ -9253,7 +10735,7 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_collide_with_bodies;
-    public void SetCollideWithBodies(bool enable)
+    internal void SetCollideWithBodies(bool enable)
     {
         var __mb = __mb_set_collide_with_bodies;
         if (__mb == 0)
@@ -9269,7 +10751,7 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     }
 
     private static nint __mb_is_collide_with_bodies_enabled;
-    public bool IsCollideWithBodiesEnabled()
+    internal bool IsCollideWithBodiesEnabled()
     {
         var __mb = __mb_is_collide_with_bodies_enabled;
         if (__mb == 0)
@@ -9284,7 +10766,7 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_collide_with_areas;
-    public void SetCollideWithAreas(bool enable)
+    internal void SetCollideWithAreas(bool enable)
     {
         var __mb = __mb_set_collide_with_areas;
         if (__mb == 0)
@@ -9300,7 +10782,7 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     }
 
     private static nint __mb_is_collide_with_areas_enabled;
-    public bool IsCollideWithAreasEnabled()
+    internal bool IsCollideWithAreasEnabled()
     {
         var __mb = __mb_is_collide_with_areas_enabled;
         if (__mb == 0)
@@ -9315,7 +10797,7 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_hit_from_inside;
-    public void SetHitFromInside(bool enable)
+    internal void SetHitFromInside(bool enable)
     {
         var __mb = __mb_set_hit_from_inside;
         if (__mb == 0)
@@ -9331,7 +10813,7 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     }
 
     private static nint __mb_is_hit_from_inside_enabled;
-    public bool IsHitFromInsideEnabled()
+    internal bool IsHitFromInsideEnabled()
     {
         var __mb = __mb_is_hit_from_inside_enabled;
         if (__mb == 0)
@@ -9353,6 +10835,54 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     public PhysicsRayQueryParameters3D() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "PhysicsRayQueryParameters3D");
+    }
+
+    public Vector3 From
+    {
+        get => GetFrom();
+        set => SetFrom(value);
+    }
+
+    public Vector3 To
+    {
+        get => GetTo();
+        set => SetTo(value);
+    }
+
+    public uint CollisionMask
+    {
+        get => GetCollisionMask();
+        set => SetCollisionMask(value);
+    }
+
+    public Godot.Collections.Array Exclude
+    {
+        get => GetExclude();
+        set => SetExclude(value);
+    }
+
+    public bool CollideWithBodies
+    {
+        get => IsCollideWithBodiesEnabled();
+        set => SetCollideWithBodies(value);
+    }
+
+    public bool CollideWithAreas
+    {
+        get => IsCollideWithAreasEnabled();
+        set => SetCollideWithAreas(value);
+    }
+
+    public bool HitFromInside
+    {
+        get => IsHitFromInsideEnabled();
+        set => SetHitFromInside(value);
+    }
+
+    public bool HitBackFaces
+    {
+        get => IsHitBackFacesEnabled();
+        set => SetHitBackFaces(value);
     }
 
     private static nint __mb_create;
@@ -9380,7 +10910,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_from;
-    public void SetFrom(Vector3 from)
+    internal void SetFrom(Vector3 from)
     {
         var __mb = __mb_set_from;
         if (__mb == 0)
@@ -9396,7 +10926,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_from;
-    public Vector3 GetFrom()
+    internal Vector3 GetFrom()
     {
         var __mb = __mb_get_from;
         if (__mb == 0)
@@ -9411,7 +10941,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_to;
-    public void SetTo(Vector3 to)
+    internal void SetTo(Vector3 to)
     {
         var __mb = __mb_set_to;
         if (__mb == 0)
@@ -9427,7 +10957,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_to;
-    public Vector3 GetTo()
+    internal Vector3 GetTo()
     {
         var __mb = __mb_get_to;
         if (__mb == 0)
@@ -9442,7 +10972,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_collision_mask;
-    public void SetCollisionMask(uint collisionMask)
+    internal void SetCollisionMask(uint collisionMask)
     {
         var __mb = __mb_set_collision_mask;
         if (__mb == 0)
@@ -9458,7 +10988,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_collision_mask;
-    public uint GetCollisionMask()
+    internal uint GetCollisionMask()
     {
         var __mb = __mb_get_collision_mask;
         if (__mb == 0)
@@ -9473,7 +11003,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_exclude;
-    public void SetExclude(Godot.Collections.Array exclude)
+    internal void SetExclude(Godot.Collections.Array exclude)
     {
         var __mb = __mb_set_exclude;
         if (__mb == 0)
@@ -9489,7 +11019,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_exclude;
-    public Godot.Collections.Array GetExclude()
+    internal Godot.Collections.Array GetExclude()
     {
         var __mb = __mb_get_exclude;
         if (__mb == 0)
@@ -9504,7 +11034,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_collide_with_bodies;
-    public void SetCollideWithBodies(bool enable)
+    internal void SetCollideWithBodies(bool enable)
     {
         var __mb = __mb_set_collide_with_bodies;
         if (__mb == 0)
@@ -9520,7 +11050,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_is_collide_with_bodies_enabled;
-    public bool IsCollideWithBodiesEnabled()
+    internal bool IsCollideWithBodiesEnabled()
     {
         var __mb = __mb_is_collide_with_bodies_enabled;
         if (__mb == 0)
@@ -9535,7 +11065,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_collide_with_areas;
-    public void SetCollideWithAreas(bool enable)
+    internal void SetCollideWithAreas(bool enable)
     {
         var __mb = __mb_set_collide_with_areas;
         if (__mb == 0)
@@ -9551,7 +11081,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_is_collide_with_areas_enabled;
-    public bool IsCollideWithAreasEnabled()
+    internal bool IsCollideWithAreasEnabled()
     {
         var __mb = __mb_is_collide_with_areas_enabled;
         if (__mb == 0)
@@ -9566,7 +11096,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_hit_from_inside;
-    public void SetHitFromInside(bool enable)
+    internal void SetHitFromInside(bool enable)
     {
         var __mb = __mb_set_hit_from_inside;
         if (__mb == 0)
@@ -9582,7 +11112,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_is_hit_from_inside_enabled;
-    public bool IsHitFromInsideEnabled()
+    internal bool IsHitFromInsideEnabled()
     {
         var __mb = __mb_is_hit_from_inside_enabled;
         if (__mb == 0)
@@ -9597,7 +11127,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_hit_back_faces;
-    public void SetHitBackFaces(bool enable)
+    internal void SetHitBackFaces(bool enable)
     {
         var __mb = __mb_set_hit_back_faces;
         if (__mb == 0)
@@ -9613,7 +11143,7 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
     }
 
     private static nint __mb_is_hit_back_faces_enabled;
-    public bool IsHitBackFacesEnabled()
+    internal bool IsHitBackFacesEnabled()
     {
         var __mb = __mb_is_hit_back_faces_enabled;
         if (__mb == 0)
@@ -18107,8 +19637,62 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
         ClassRegistry.AttachNew(this, "PhysicsShapeQueryParameters2D");
     }
 
+    public uint CollisionMask
+    {
+        get => GetCollisionMask();
+        set => SetCollisionMask(value);
+    }
+
+    public Godot.Collections.Array Exclude
+    {
+        get => GetExclude();
+        set => SetExclude(value);
+    }
+
+    public float Margin
+    {
+        get => GetMargin();
+        set => SetMargin(value);
+    }
+
+    public Vector2 Motion
+    {
+        get => GetMotion();
+        set => SetMotion(value);
+    }
+
+    public Resource? Shape
+    {
+        get => GetShape();
+        set => SetShape(value);
+    }
+
+    public Rid ShapeRid
+    {
+        get => GetShapeRid();
+        set => SetShapeRid(value);
+    }
+
+    public Transform2D Transform
+    {
+        get => GetTransform();
+        set => SetTransform(value);
+    }
+
+    public bool CollideWithBodies
+    {
+        get => IsCollideWithBodiesEnabled();
+        set => SetCollideWithBodies(value);
+    }
+
+    public bool CollideWithAreas
+    {
+        get => IsCollideWithAreasEnabled();
+        set => SetCollideWithAreas(value);
+    }
+
     private static nint __mb_set_shape;
-    public void SetShape(Resource? shape)
+    internal void SetShape(Resource? shape)
     {
         var __mb = __mb_set_shape;
         if (__mb == 0)
@@ -18124,7 +19708,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_shape;
-    public Resource? GetShape()
+    internal Resource? GetShape()
     {
         var __mb = __mb_get_shape;
         if (__mb == 0)
@@ -18139,7 +19723,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_shape_rid;
-    public void SetShapeRid(Rid shape)
+    internal void SetShapeRid(Rid shape)
     {
         var __mb = __mb_set_shape_rid;
         if (__mb == 0)
@@ -18155,7 +19739,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_shape_rid;
-    public Rid GetShapeRid()
+    internal Rid GetShapeRid()
     {
         var __mb = __mb_get_shape_rid;
         if (__mb == 0)
@@ -18170,7 +19754,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_transform;
-    public void SetTransform(Transform2D transform)
+    internal void SetTransform(Transform2D transform)
     {
         var __mb = __mb_set_transform;
         if (__mb == 0)
@@ -18186,7 +19770,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_transform;
-    public Transform2D GetTransform()
+    internal Transform2D GetTransform()
     {
         var __mb = __mb_get_transform;
         if (__mb == 0)
@@ -18201,7 +19785,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_motion;
-    public void SetMotion(Vector2 motion)
+    internal void SetMotion(Vector2 motion)
     {
         var __mb = __mb_set_motion;
         if (__mb == 0)
@@ -18217,7 +19801,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_motion;
-    public Vector2 GetMotion()
+    internal Vector2 GetMotion()
     {
         var __mb = __mb_get_motion;
         if (__mb == 0)
@@ -18232,7 +19816,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_margin;
-    public void SetMargin(float margin)
+    internal void SetMargin(float margin)
     {
         var __mb = __mb_set_margin;
         if (__mb == 0)
@@ -18248,7 +19832,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_margin;
-    public float GetMargin()
+    internal float GetMargin()
     {
         var __mb = __mb_get_margin;
         if (__mb == 0)
@@ -18263,7 +19847,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_collision_mask;
-    public void SetCollisionMask(uint collisionMask)
+    internal void SetCollisionMask(uint collisionMask)
     {
         var __mb = __mb_set_collision_mask;
         if (__mb == 0)
@@ -18279,7 +19863,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_collision_mask;
-    public uint GetCollisionMask()
+    internal uint GetCollisionMask()
     {
         var __mb = __mb_get_collision_mask;
         if (__mb == 0)
@@ -18294,7 +19878,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_exclude;
-    public void SetExclude(Godot.Collections.Array exclude)
+    internal void SetExclude(Godot.Collections.Array exclude)
     {
         var __mb = __mb_set_exclude;
         if (__mb == 0)
@@ -18310,7 +19894,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_exclude;
-    public Godot.Collections.Array GetExclude()
+    internal Godot.Collections.Array GetExclude()
     {
         var __mb = __mb_get_exclude;
         if (__mb == 0)
@@ -18325,7 +19909,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_collide_with_bodies;
-    public void SetCollideWithBodies(bool enable)
+    internal void SetCollideWithBodies(bool enable)
     {
         var __mb = __mb_set_collide_with_bodies;
         if (__mb == 0)
@@ -18341,7 +19925,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_is_collide_with_bodies_enabled;
-    public bool IsCollideWithBodiesEnabled()
+    internal bool IsCollideWithBodiesEnabled()
     {
         var __mb = __mb_is_collide_with_bodies_enabled;
         if (__mb == 0)
@@ -18356,7 +19940,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_collide_with_areas;
-    public void SetCollideWithAreas(bool enable)
+    internal void SetCollideWithAreas(bool enable)
     {
         var __mb = __mb_set_collide_with_areas;
         if (__mb == 0)
@@ -18372,7 +19956,7 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
     }
 
     private static nint __mb_is_collide_with_areas_enabled;
-    public bool IsCollideWithAreasEnabled()
+    internal bool IsCollideWithAreasEnabled()
     {
         var __mb = __mb_is_collide_with_areas_enabled;
         if (__mb == 0)
@@ -18396,8 +19980,62 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
         ClassRegistry.AttachNew(this, "PhysicsShapeQueryParameters3D");
     }
 
+    public uint CollisionMask
+    {
+        get => GetCollisionMask();
+        set => SetCollisionMask(value);
+    }
+
+    public Godot.Collections.Array Exclude
+    {
+        get => GetExclude();
+        set => SetExclude(value);
+    }
+
+    public float Margin
+    {
+        get => GetMargin();
+        set => SetMargin(value);
+    }
+
+    public Vector3 Motion
+    {
+        get => GetMotion();
+        set => SetMotion(value);
+    }
+
+    public Resource? Shape
+    {
+        get => GetShape();
+        set => SetShape(value);
+    }
+
+    public Rid ShapeRid
+    {
+        get => GetShapeRid();
+        set => SetShapeRid(value);
+    }
+
+    public Transform3D Transform
+    {
+        get => GetTransform();
+        set => SetTransform(value);
+    }
+
+    public bool CollideWithBodies
+    {
+        get => IsCollideWithBodiesEnabled();
+        set => SetCollideWithBodies(value);
+    }
+
+    public bool CollideWithAreas
+    {
+        get => IsCollideWithAreasEnabled();
+        set => SetCollideWithAreas(value);
+    }
+
     private static nint __mb_set_shape;
-    public void SetShape(Resource? shape)
+    internal void SetShape(Resource? shape)
     {
         var __mb = __mb_set_shape;
         if (__mb == 0)
@@ -18413,7 +20051,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_shape;
-    public Resource? GetShape()
+    internal Resource? GetShape()
     {
         var __mb = __mb_get_shape;
         if (__mb == 0)
@@ -18428,7 +20066,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_shape_rid;
-    public void SetShapeRid(Rid shape)
+    internal void SetShapeRid(Rid shape)
     {
         var __mb = __mb_set_shape_rid;
         if (__mb == 0)
@@ -18444,7 +20082,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_shape_rid;
-    public Rid GetShapeRid()
+    internal Rid GetShapeRid()
     {
         var __mb = __mb_get_shape_rid;
         if (__mb == 0)
@@ -18459,7 +20097,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_transform;
-    public void SetTransform(Transform3D transform)
+    internal void SetTransform(Transform3D transform)
     {
         var __mb = __mb_set_transform;
         if (__mb == 0)
@@ -18475,7 +20113,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_transform;
-    public Transform3D GetTransform()
+    internal Transform3D GetTransform()
     {
         var __mb = __mb_get_transform;
         if (__mb == 0)
@@ -18490,7 +20128,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_motion;
-    public void SetMotion(Vector3 motion)
+    internal void SetMotion(Vector3 motion)
     {
         var __mb = __mb_set_motion;
         if (__mb == 0)
@@ -18506,7 +20144,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_motion;
-    public Vector3 GetMotion()
+    internal Vector3 GetMotion()
     {
         var __mb = __mb_get_motion;
         if (__mb == 0)
@@ -18521,7 +20159,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_margin;
-    public void SetMargin(float margin)
+    internal void SetMargin(float margin)
     {
         var __mb = __mb_set_margin;
         if (__mb == 0)
@@ -18537,7 +20175,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_margin;
-    public float GetMargin()
+    internal float GetMargin()
     {
         var __mb = __mb_get_margin;
         if (__mb == 0)
@@ -18552,7 +20190,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_collision_mask;
-    public void SetCollisionMask(uint collisionMask)
+    internal void SetCollisionMask(uint collisionMask)
     {
         var __mb = __mb_set_collision_mask;
         if (__mb == 0)
@@ -18568,7 +20206,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_collision_mask;
-    public uint GetCollisionMask()
+    internal uint GetCollisionMask()
     {
         var __mb = __mb_get_collision_mask;
         if (__mb == 0)
@@ -18583,7 +20221,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_exclude;
-    public void SetExclude(Godot.Collections.Array exclude)
+    internal void SetExclude(Godot.Collections.Array exclude)
     {
         var __mb = __mb_set_exclude;
         if (__mb == 0)
@@ -18599,7 +20237,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_exclude;
-    public Godot.Collections.Array GetExclude()
+    internal Godot.Collections.Array GetExclude()
     {
         var __mb = __mb_get_exclude;
         if (__mb == 0)
@@ -18614,7 +20252,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_collide_with_bodies;
-    public void SetCollideWithBodies(bool enable)
+    internal void SetCollideWithBodies(bool enable)
     {
         var __mb = __mb_set_collide_with_bodies;
         if (__mb == 0)
@@ -18630,7 +20268,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_is_collide_with_bodies_enabled;
-    public bool IsCollideWithBodiesEnabled()
+    internal bool IsCollideWithBodiesEnabled()
     {
         var __mb = __mb_is_collide_with_bodies_enabled;
         if (__mb == 0)
@@ -18645,7 +20283,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_collide_with_areas;
-    public void SetCollideWithAreas(bool enable)
+    internal void SetCollideWithAreas(bool enable)
     {
         var __mb = __mb_set_collide_with_areas;
         if (__mb == 0)
@@ -18661,7 +20299,7 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
     }
 
     private static nint __mb_is_collide_with_areas_enabled;
-    public bool IsCollideWithAreasEnabled()
+    internal bool IsCollideWithAreasEnabled()
     {
         var __mb = __mb_is_collide_with_areas_enabled;
         if (__mb == 0)
@@ -18685,8 +20323,50 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
         ClassRegistry.AttachNew(this, "PhysicsTestMotionParameters2D");
     }
 
+    public Transform2D From
+    {
+        get => GetFrom();
+        set => SetFrom(value);
+    }
+
+    public Vector2 Motion
+    {
+        get => GetMotion();
+        set => SetMotion(value);
+    }
+
+    public float Margin
+    {
+        get => GetMargin();
+        set => SetMargin(value);
+    }
+
+    public bool CollideSeparationRay
+    {
+        get => IsCollideSeparationRayEnabled();
+        set => SetCollideSeparationRayEnabled(value);
+    }
+
+    public Godot.Collections.Array ExcludeBodies
+    {
+        get => GetExcludeBodies();
+        set => SetExcludeBodies(value);
+    }
+
+    public Godot.Collections.Array ExcludeObjects
+    {
+        get => GetExcludeObjects();
+        set => SetExcludeObjects(value);
+    }
+
+    public bool RecoveryAsCollision
+    {
+        get => IsRecoveryAsCollisionEnabled();
+        set => SetRecoveryAsCollisionEnabled(value);
+    }
+
     private static nint __mb_get_from;
-    public Transform2D GetFrom()
+    internal Transform2D GetFrom()
     {
         var __mb = __mb_get_from;
         if (__mb == 0)
@@ -18701,7 +20381,7 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
     }
 
     private static nint __mb_set_from;
-    public void SetFrom(Transform2D from)
+    internal void SetFrom(Transform2D from)
     {
         var __mb = __mb_set_from;
         if (__mb == 0)
@@ -18717,7 +20397,7 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
     }
 
     private static nint __mb_get_motion;
-    public Vector2 GetMotion()
+    internal Vector2 GetMotion()
     {
         var __mb = __mb_get_motion;
         if (__mb == 0)
@@ -18732,7 +20412,7 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
     }
 
     private static nint __mb_set_motion;
-    public void SetMotion(Vector2 motion)
+    internal void SetMotion(Vector2 motion)
     {
         var __mb = __mb_set_motion;
         if (__mb == 0)
@@ -18748,7 +20428,7 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
     }
 
     private static nint __mb_get_margin;
-    public float GetMargin()
+    internal float GetMargin()
     {
         var __mb = __mb_get_margin;
         if (__mb == 0)
@@ -18763,7 +20443,7 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
     }
 
     private static nint __mb_set_margin;
-    public void SetMargin(float margin)
+    internal void SetMargin(float margin)
     {
         var __mb = __mb_set_margin;
         if (__mb == 0)
@@ -18779,7 +20459,7 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
     }
 
     private static nint __mb_is_collide_separation_ray_enabled;
-    public bool IsCollideSeparationRayEnabled()
+    internal bool IsCollideSeparationRayEnabled()
     {
         var __mb = __mb_is_collide_separation_ray_enabled;
         if (__mb == 0)
@@ -18794,7 +20474,7 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
     }
 
     private static nint __mb_set_collide_separation_ray_enabled;
-    public void SetCollideSeparationRayEnabled(bool enabled)
+    internal void SetCollideSeparationRayEnabled(bool enabled)
     {
         var __mb = __mb_set_collide_separation_ray_enabled;
         if (__mb == 0)
@@ -18810,7 +20490,7 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
     }
 
     private static nint __mb_get_exclude_bodies;
-    public Godot.Collections.Array GetExcludeBodies()
+    internal Godot.Collections.Array GetExcludeBodies()
     {
         var __mb = __mb_get_exclude_bodies;
         if (__mb == 0)
@@ -18825,7 +20505,7 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
     }
 
     private static nint __mb_set_exclude_bodies;
-    public void SetExcludeBodies(Godot.Collections.Array excludeList)
+    internal void SetExcludeBodies(Godot.Collections.Array excludeList)
     {
         var __mb = __mb_set_exclude_bodies;
         if (__mb == 0)
@@ -18841,7 +20521,7 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
     }
 
     private static nint __mb_get_exclude_objects;
-    public Godot.Collections.Array GetExcludeObjects()
+    internal Godot.Collections.Array GetExcludeObjects()
     {
         var __mb = __mb_get_exclude_objects;
         if (__mb == 0)
@@ -18856,7 +20536,7 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
     }
 
     private static nint __mb_set_exclude_objects;
-    public void SetExcludeObjects(Godot.Collections.Array excludeList)
+    internal void SetExcludeObjects(Godot.Collections.Array excludeList)
     {
         var __mb = __mb_set_exclude_objects;
         if (__mb == 0)
@@ -18872,7 +20552,7 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
     }
 
     private static nint __mb_is_recovery_as_collision_enabled;
-    public bool IsRecoveryAsCollisionEnabled()
+    internal bool IsRecoveryAsCollisionEnabled()
     {
         var __mb = __mb_is_recovery_as_collision_enabled;
         if (__mb == 0)
@@ -18887,7 +20567,7 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
     }
 
     private static nint __mb_set_recovery_as_collision_enabled;
-    public void SetRecoveryAsCollisionEnabled(bool enabled)
+    internal void SetRecoveryAsCollisionEnabled(bool enabled)
     {
         var __mb = __mb_set_recovery_as_collision_enabled;
         if (__mb == 0)
@@ -18912,8 +20592,56 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
         ClassRegistry.AttachNew(this, "PhysicsTestMotionParameters3D");
     }
 
+    public Transform3D From
+    {
+        get => GetFrom();
+        set => SetFrom(value);
+    }
+
+    public Vector3 Motion
+    {
+        get => GetMotion();
+        set => SetMotion(value);
+    }
+
+    public float Margin
+    {
+        get => GetMargin();
+        set => SetMargin(value);
+    }
+
+    public int MaxCollisions
+    {
+        get => GetMaxCollisions();
+        set => SetMaxCollisions(value);
+    }
+
+    public bool CollideSeparationRay
+    {
+        get => IsCollideSeparationRayEnabled();
+        set => SetCollideSeparationRayEnabled(value);
+    }
+
+    public Godot.Collections.Array ExcludeBodies
+    {
+        get => GetExcludeBodies();
+        set => SetExcludeBodies(value);
+    }
+
+    public Godot.Collections.Array ExcludeObjects
+    {
+        get => GetExcludeObjects();
+        set => SetExcludeObjects(value);
+    }
+
+    public bool RecoveryAsCollision
+    {
+        get => IsRecoveryAsCollisionEnabled();
+        set => SetRecoveryAsCollisionEnabled(value);
+    }
+
     private static nint __mb_get_from;
-    public Transform3D GetFrom()
+    internal Transform3D GetFrom()
     {
         var __mb = __mb_get_from;
         if (__mb == 0)
@@ -18928,7 +20656,7 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
     }
 
     private static nint __mb_set_from;
-    public void SetFrom(Transform3D from)
+    internal void SetFrom(Transform3D from)
     {
         var __mb = __mb_set_from;
         if (__mb == 0)
@@ -18944,7 +20672,7 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
     }
 
     private static nint __mb_get_motion;
-    public Vector3 GetMotion()
+    internal Vector3 GetMotion()
     {
         var __mb = __mb_get_motion;
         if (__mb == 0)
@@ -18959,7 +20687,7 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
     }
 
     private static nint __mb_set_motion;
-    public void SetMotion(Vector3 motion)
+    internal void SetMotion(Vector3 motion)
     {
         var __mb = __mb_set_motion;
         if (__mb == 0)
@@ -18975,7 +20703,7 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
     }
 
     private static nint __mb_get_margin;
-    public float GetMargin()
+    internal float GetMargin()
     {
         var __mb = __mb_get_margin;
         if (__mb == 0)
@@ -18990,7 +20718,7 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
     }
 
     private static nint __mb_set_margin;
-    public void SetMargin(float margin)
+    internal void SetMargin(float margin)
     {
         var __mb = __mb_set_margin;
         if (__mb == 0)
@@ -19006,7 +20734,7 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
     }
 
     private static nint __mb_get_max_collisions;
-    public int GetMaxCollisions()
+    internal int GetMaxCollisions()
     {
         var __mb = __mb_get_max_collisions;
         if (__mb == 0)
@@ -19021,7 +20749,7 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
     }
 
     private static nint __mb_set_max_collisions;
-    public void SetMaxCollisions(int maxCollisions)
+    internal void SetMaxCollisions(int maxCollisions)
     {
         var __mb = __mb_set_max_collisions;
         if (__mb == 0)
@@ -19037,7 +20765,7 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
     }
 
     private static nint __mb_is_collide_separation_ray_enabled;
-    public bool IsCollideSeparationRayEnabled()
+    internal bool IsCollideSeparationRayEnabled()
     {
         var __mb = __mb_is_collide_separation_ray_enabled;
         if (__mb == 0)
@@ -19052,7 +20780,7 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
     }
 
     private static nint __mb_set_collide_separation_ray_enabled;
-    public void SetCollideSeparationRayEnabled(bool enabled)
+    internal void SetCollideSeparationRayEnabled(bool enabled)
     {
         var __mb = __mb_set_collide_separation_ray_enabled;
         if (__mb == 0)
@@ -19068,7 +20796,7 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
     }
 
     private static nint __mb_get_exclude_bodies;
-    public Godot.Collections.Array GetExcludeBodies()
+    internal Godot.Collections.Array GetExcludeBodies()
     {
         var __mb = __mb_get_exclude_bodies;
         if (__mb == 0)
@@ -19083,7 +20811,7 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
     }
 
     private static nint __mb_set_exclude_bodies;
-    public void SetExcludeBodies(Godot.Collections.Array excludeList)
+    internal void SetExcludeBodies(Godot.Collections.Array excludeList)
     {
         var __mb = __mb_set_exclude_bodies;
         if (__mb == 0)
@@ -19099,7 +20827,7 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
     }
 
     private static nint __mb_get_exclude_objects;
-    public Godot.Collections.Array GetExcludeObjects()
+    internal Godot.Collections.Array GetExcludeObjects()
     {
         var __mb = __mb_get_exclude_objects;
         if (__mb == 0)
@@ -19114,7 +20842,7 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
     }
 
     private static nint __mb_set_exclude_objects;
-    public void SetExcludeObjects(Godot.Collections.Array excludeList)
+    internal void SetExcludeObjects(Godot.Collections.Array excludeList)
     {
         var __mb = __mb_set_exclude_objects;
         if (__mb == 0)
@@ -19130,7 +20858,7 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
     }
 
     private static nint __mb_is_recovery_as_collision_enabled;
-    public bool IsRecoveryAsCollisionEnabled()
+    internal bool IsRecoveryAsCollisionEnabled()
     {
         var __mb = __mb_is_recovery_as_collision_enabled;
         if (__mb == 0)
@@ -19145,7 +20873,7 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
     }
 
     private static nint __mb_set_recovery_as_collision_enabled;
-    public void SetRecoveryAsCollisionEnabled(bool enabled)
+    internal void SetRecoveryAsCollisionEnabled(bool enabled)
     {
         var __mb = __mb_set_recovery_as_collision_enabled;
         if (__mb == 0)
@@ -19622,8 +21350,44 @@ public unsafe partial class PinJoint2D : Joint2D
         ClassRegistry.AttachNew(this, "PinJoint2D");
     }
 
+    public float Softness
+    {
+        get => GetSoftness();
+        set => SetSoftness(value);
+    }
+
+    public bool AngularLimitEnabled
+    {
+        get => IsAngularLimitEnabled();
+        set => SetAngularLimitEnabled(value);
+    }
+
+    public float AngularLimitLower
+    {
+        get => GetAngularLimitLower();
+        set => SetAngularLimitLower(value);
+    }
+
+    public float AngularLimitUpper
+    {
+        get => GetAngularLimitUpper();
+        set => SetAngularLimitUpper(value);
+    }
+
+    public bool MotorEnabled
+    {
+        get => IsMotorEnabled();
+        set => SetMotorEnabled(value);
+    }
+
+    public float MotorTargetVelocity
+    {
+        get => GetMotorTargetVelocity();
+        set => SetMotorTargetVelocity(value);
+    }
+
     private static nint __mb_set_softness;
-    public void SetSoftness(float softness)
+    internal void SetSoftness(float softness)
     {
         var __mb = __mb_set_softness;
         if (__mb == 0)
@@ -19639,7 +21403,7 @@ public unsafe partial class PinJoint2D : Joint2D
     }
 
     private static nint __mb_get_softness;
-    public float GetSoftness()
+    internal float GetSoftness()
     {
         var __mb = __mb_get_softness;
         if (__mb == 0)
@@ -19654,7 +21418,7 @@ public unsafe partial class PinJoint2D : Joint2D
     }
 
     private static nint __mb_set_angular_limit_lower;
-    public void SetAngularLimitLower(float angularLimitLower)
+    internal void SetAngularLimitLower(float angularLimitLower)
     {
         var __mb = __mb_set_angular_limit_lower;
         if (__mb == 0)
@@ -19670,7 +21434,7 @@ public unsafe partial class PinJoint2D : Joint2D
     }
 
     private static nint __mb_get_angular_limit_lower;
-    public float GetAngularLimitLower()
+    internal float GetAngularLimitLower()
     {
         var __mb = __mb_get_angular_limit_lower;
         if (__mb == 0)
@@ -19685,7 +21449,7 @@ public unsafe partial class PinJoint2D : Joint2D
     }
 
     private static nint __mb_set_angular_limit_upper;
-    public void SetAngularLimitUpper(float angularLimitUpper)
+    internal void SetAngularLimitUpper(float angularLimitUpper)
     {
         var __mb = __mb_set_angular_limit_upper;
         if (__mb == 0)
@@ -19701,7 +21465,7 @@ public unsafe partial class PinJoint2D : Joint2D
     }
 
     private static nint __mb_get_angular_limit_upper;
-    public float GetAngularLimitUpper()
+    internal float GetAngularLimitUpper()
     {
         var __mb = __mb_get_angular_limit_upper;
         if (__mb == 0)
@@ -19716,7 +21480,7 @@ public unsafe partial class PinJoint2D : Joint2D
     }
 
     private static nint __mb_set_motor_target_velocity;
-    public void SetMotorTargetVelocity(float motorTargetVelocity)
+    internal void SetMotorTargetVelocity(float motorTargetVelocity)
     {
         var __mb = __mb_set_motor_target_velocity;
         if (__mb == 0)
@@ -19732,7 +21496,7 @@ public unsafe partial class PinJoint2D : Joint2D
     }
 
     private static nint __mb_get_motor_target_velocity;
-    public float GetMotorTargetVelocity()
+    internal float GetMotorTargetVelocity()
     {
         var __mb = __mb_get_motor_target_velocity;
         if (__mb == 0)
@@ -19747,7 +21511,7 @@ public unsafe partial class PinJoint2D : Joint2D
     }
 
     private static nint __mb_set_motor_enabled;
-    public void SetMotorEnabled(bool enabled)
+    internal void SetMotorEnabled(bool enabled)
     {
         var __mb = __mb_set_motor_enabled;
         if (__mb == 0)
@@ -19763,7 +21527,7 @@ public unsafe partial class PinJoint2D : Joint2D
     }
 
     private static nint __mb_is_motor_enabled;
-    public bool IsMotorEnabled()
+    internal bool IsMotorEnabled()
     {
         var __mb = __mb_is_motor_enabled;
         if (__mb == 0)
@@ -19778,7 +21542,7 @@ public unsafe partial class PinJoint2D : Joint2D
     }
 
     private static nint __mb_set_angular_limit_enabled;
-    public void SetAngularLimitEnabled(bool enabled)
+    internal void SetAngularLimitEnabled(bool enabled)
     {
         var __mb = __mb_set_angular_limit_enabled;
         if (__mb == 0)
@@ -19794,7 +21558,7 @@ public unsafe partial class PinJoint2D : Joint2D
     }
 
     private static nint __mb_is_angular_limit_enabled;
-    public bool IsAngularLimitEnabled()
+    internal bool IsAngularLimitEnabled()
     {
         var __mb = __mb_is_angular_limit_enabled;
         if (__mb == 0)
@@ -19901,8 +21665,14 @@ public unsafe partial class PlaceholderMesh : Mesh
         ClassRegistry.AttachNew(this, "PlaceholderMesh");
     }
 
+    public Aabb Aabb
+    {
+        get => GetAabb();
+        set => SetAabb(value);
+    }
+
     private static nint __mb_set_aabb;
-    public void SetAabb(Aabb aabb)
+    internal void SetAabb(Aabb aabb)
     {
         var __mb = __mb_set_aabb;
         if (__mb == 0)
@@ -19927,8 +21697,14 @@ public unsafe partial class PlaceholderTexture2D : Texture2D
         ClassRegistry.AttachNew(this, "PlaceholderTexture2D");
     }
 
+    public Vector2 Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
     private static nint __mb_set_size;
-    public void SetSize(Vector2 size)
+    internal void SetSize(Vector2 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -19963,8 +21739,14 @@ public unsafe partial class PlaceholderTexture3D : Texture3D
         ClassRegistry.AttachNew(this, "PlaceholderTexture3D");
     }
 
+    public Vector3I Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
     private static nint __mb_set_size;
-    public void SetSize(Vector3I size)
+    internal void SetSize(Vector3I size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -19980,7 +21762,7 @@ public unsafe partial class PlaceholderTexture3D : Texture3D
     }
 
     private static nint __mb_get_size;
-    public Vector3I GetSize()
+    internal Vector3I GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -19999,8 +21781,20 @@ public unsafe partial class PlaceholderTextureLayered : TextureLayered
 {
     internal PlaceholderTextureLayered(nint ptr, bool rc) : base(ptr, rc) { }
 
+    public Vector2I Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
+    public int Layers
+    {
+        get => GetLayers();
+        set => SetLayers(value);
+    }
+
     private static nint __mb_set_size;
-    public void SetSize(Vector2I size)
+    internal void SetSize(Vector2I size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -20016,7 +21810,7 @@ public unsafe partial class PlaceholderTextureLayered : TextureLayered
     }
 
     private static nint __mb_get_size;
-    public Vector2I GetSize()
+    internal Vector2I GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -20031,7 +21825,7 @@ public unsafe partial class PlaceholderTextureLayered : TextureLayered
     }
 
     private static nint __mb_set_layers;
-    public void SetLayers(int layers)
+    internal void SetLayers(int layers)
     {
         var __mb = __mb_set_layers;
         if (__mb == 0)
@@ -20056,15 +21850,45 @@ public unsafe partial class PlaneMesh : PrimitiveMesh
         ClassRegistry.AttachNew(this, "PlaneMesh");
     }
 
-    public enum Orientation : long
+    public enum OrientationEnum : long
     {
         FACE_X = 0,
         FACE_Y = 1,
         FACE_Z = 2,
     }
 
+    public Vector2 Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
+    public int SubdivideWidth
+    {
+        get => GetSubdivideWidth();
+        set => SetSubdivideWidth(value);
+    }
+
+    public int SubdivideDepth
+    {
+        get => GetSubdivideDepth();
+        set => SetSubdivideDepth(value);
+    }
+
+    public Vector3 CenterOffset
+    {
+        get => GetCenterOffset();
+        set => SetCenterOffset(value);
+    }
+
+    public PlaneMesh.OrientationEnum Orientation
+    {
+        get => GetOrientation();
+        set => SetOrientation(value);
+    }
+
     private static nint __mb_set_size;
-    public void SetSize(Vector2 size)
+    internal void SetSize(Vector2 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -20080,7 +21904,7 @@ public unsafe partial class PlaneMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_size;
-    public Vector2 GetSize()
+    internal Vector2 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -20095,7 +21919,7 @@ public unsafe partial class PlaneMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_subdivide_width;
-    public void SetSubdivideWidth(int subdivide)
+    internal void SetSubdivideWidth(int subdivide)
     {
         var __mb = __mb_set_subdivide_width;
         if (__mb == 0)
@@ -20111,7 +21935,7 @@ public unsafe partial class PlaneMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_subdivide_width;
-    public int GetSubdivideWidth()
+    internal int GetSubdivideWidth()
     {
         var __mb = __mb_get_subdivide_width;
         if (__mb == 0)
@@ -20126,7 +21950,7 @@ public unsafe partial class PlaneMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_subdivide_depth;
-    public void SetSubdivideDepth(int subdivide)
+    internal void SetSubdivideDepth(int subdivide)
     {
         var __mb = __mb_set_subdivide_depth;
         if (__mb == 0)
@@ -20142,7 +21966,7 @@ public unsafe partial class PlaneMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_subdivide_depth;
-    public int GetSubdivideDepth()
+    internal int GetSubdivideDepth()
     {
         var __mb = __mb_get_subdivide_depth;
         if (__mb == 0)
@@ -20157,7 +21981,7 @@ public unsafe partial class PlaneMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_center_offset;
-    public void SetCenterOffset(Vector3 offset)
+    internal void SetCenterOffset(Vector3 offset)
     {
         var __mb = __mb_set_center_offset;
         if (__mb == 0)
@@ -20173,7 +21997,7 @@ public unsafe partial class PlaneMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_center_offset;
-    public Vector3 GetCenterOffset()
+    internal Vector3 GetCenterOffset()
     {
         var __mb = __mb_get_center_offset;
         if (__mb == 0)
@@ -20188,7 +22012,7 @@ public unsafe partial class PlaneMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_orientation;
-    public void SetOrientation(PlaneMesh.Orientation orientation)
+    internal void SetOrientation(PlaneMesh.OrientationEnum orientation)
     {
         var __mb = __mb_set_orientation;
         if (__mb == 0)
@@ -20204,7 +22028,7 @@ public unsafe partial class PlaneMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_orientation;
-    public PlaneMesh.Orientation GetOrientation()
+    internal PlaneMesh.OrientationEnum GetOrientation()
     {
         var __mb = __mb_get_orientation;
         if (__mb == 0)
@@ -20215,7 +22039,7 @@ public unsafe partial class PlaneMesh : PrimitiveMesh
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (PlaneMesh.Orientation)__ret;
+        return (PlaneMesh.OrientationEnum)__ret;
     }
 }
 
@@ -20228,8 +22052,32 @@ public unsafe partial class PointLight2D : Light2D
         ClassRegistry.AttachNew(this, "PointLight2D");
     }
 
+    public Texture2D? Texture
+    {
+        get => GetTexture();
+        set => SetTexture(value);
+    }
+
+    public Vector2 Offset
+    {
+        get => GetTextureOffset();
+        set => SetTextureOffset(value);
+    }
+
+    public float TextureScale
+    {
+        get => GetTextureScale();
+        set => SetTextureScale(value);
+    }
+
+    public float Height
+    {
+        get => GetHeight();
+        set => SetHeight(value);
+    }
+
     private static nint __mb_set_texture;
-    public void SetTexture(Texture2D? texture)
+    internal void SetTexture(Texture2D? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -20245,7 +22093,7 @@ public unsafe partial class PointLight2D : Light2D
     }
 
     private static nint __mb_get_texture;
-    public Texture2D? GetTexture()
+    internal Texture2D? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -20260,7 +22108,7 @@ public unsafe partial class PointLight2D : Light2D
     }
 
     private static nint __mb_set_texture_offset;
-    public void SetTextureOffset(Vector2 textureOffset)
+    internal void SetTextureOffset(Vector2 textureOffset)
     {
         var __mb = __mb_set_texture_offset;
         if (__mb == 0)
@@ -20276,7 +22124,7 @@ public unsafe partial class PointLight2D : Light2D
     }
 
     private static nint __mb_get_texture_offset;
-    public Vector2 GetTextureOffset()
+    internal Vector2 GetTextureOffset()
     {
         var __mb = __mb_get_texture_offset;
         if (__mb == 0)
@@ -20291,7 +22139,7 @@ public unsafe partial class PointLight2D : Light2D
     }
 
     private static nint __mb_set_texture_scale;
-    public void SetTextureScale(float textureScale)
+    internal void SetTextureScale(float textureScale)
     {
         var __mb = __mb_set_texture_scale;
         if (__mb == 0)
@@ -20307,7 +22155,7 @@ public unsafe partial class PointLight2D : Light2D
     }
 
     private static nint __mb_get_texture_scale;
-    public float GetTextureScale()
+    internal float GetTextureScale()
     {
         var __mb = __mb_get_texture_scale;
         if (__mb == 0)
@@ -20341,8 +22189,80 @@ public unsafe partial class Polygon2D : Node2D
         ClassRegistry.AttachNew(this, "Polygon2D");
     }
 
+    public Color Color
+    {
+        get => GetColor();
+        set => SetColor(value);
+    }
+
+    public Vector2 Offset
+    {
+        get => GetOffset();
+        set => SetOffset(value);
+    }
+
+    public bool Antialiased
+    {
+        get => GetAntialiased();
+        set => SetAntialiased(value);
+    }
+
+    public Texture2D? Texture
+    {
+        get => GetTexture();
+        set => SetTexture(value);
+    }
+
+    public Vector2 TextureOffset
+    {
+        get => GetTextureOffset();
+        set => SetTextureOffset(value);
+    }
+
+    public Vector2 TextureScale
+    {
+        get => GetTextureScale();
+        set => SetTextureScale(value);
+    }
+
+    public float TextureRotation
+    {
+        get => GetTextureRotation();
+        set => SetTextureRotation(value);
+    }
+
+    public NodePath Skeleton
+    {
+        get => GetSkeleton();
+        set => SetSkeleton(value);
+    }
+
+    public bool InvertEnabled
+    {
+        get => GetInvertEnabled();
+        set => SetInvertEnabled(value);
+    }
+
+    public float InvertBorder
+    {
+        get => GetInvertBorder();
+        set => SetInvertBorder(value);
+    }
+
+    public Godot.Collections.Array Polygons
+    {
+        get => GetPolygons();
+        set => SetPolygons(value);
+    }
+
+    public int InternalVertexCount
+    {
+        get => GetInternalVertexCount();
+        set => SetInternalVertexCount(value);
+    }
+
     private static nint __mb_set_color;
-    public void SetColor(Color color)
+    internal void SetColor(Color color)
     {
         var __mb = __mb_set_color;
         if (__mb == 0)
@@ -20358,7 +22278,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_get_color;
-    public Color GetColor()
+    internal Color GetColor()
     {
         var __mb = __mb_get_color;
         if (__mb == 0)
@@ -20373,7 +22293,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_set_polygons;
-    public void SetPolygons(Godot.Collections.Array polygons)
+    internal void SetPolygons(Godot.Collections.Array polygons)
     {
         var __mb = __mb_set_polygons;
         if (__mb == 0)
@@ -20389,7 +22309,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_get_polygons;
-    public Godot.Collections.Array GetPolygons()
+    internal Godot.Collections.Array GetPolygons()
     {
         var __mb = __mb_get_polygons;
         if (__mb == 0)
@@ -20404,7 +22324,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_set_texture;
-    public void SetTexture(Texture2D? texture)
+    internal void SetTexture(Texture2D? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -20420,7 +22340,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_get_texture;
-    public Texture2D? GetTexture()
+    internal Texture2D? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -20435,7 +22355,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_set_texture_offset;
-    public void SetTextureOffset(Vector2 textureOffset)
+    internal void SetTextureOffset(Vector2 textureOffset)
     {
         var __mb = __mb_set_texture_offset;
         if (__mb == 0)
@@ -20451,7 +22371,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_get_texture_offset;
-    public Vector2 GetTextureOffset()
+    internal Vector2 GetTextureOffset()
     {
         var __mb = __mb_get_texture_offset;
         if (__mb == 0)
@@ -20466,7 +22386,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_set_texture_rotation;
-    public void SetTextureRotation(float textureRotation)
+    internal void SetTextureRotation(float textureRotation)
     {
         var __mb = __mb_set_texture_rotation;
         if (__mb == 0)
@@ -20482,7 +22402,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_get_texture_rotation;
-    public float GetTextureRotation()
+    internal float GetTextureRotation()
     {
         var __mb = __mb_get_texture_rotation;
         if (__mb == 0)
@@ -20497,7 +22417,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_set_texture_scale;
-    public void SetTextureScale(Vector2 textureScale)
+    internal void SetTextureScale(Vector2 textureScale)
     {
         var __mb = __mb_set_texture_scale;
         if (__mb == 0)
@@ -20513,7 +22433,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_get_texture_scale;
-    public Vector2 GetTextureScale()
+    internal Vector2 GetTextureScale()
     {
         var __mb = __mb_get_texture_scale;
         if (__mb == 0)
@@ -20528,7 +22448,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_set_invert_enabled;
-    public void SetInvertEnabled(bool invert)
+    internal void SetInvertEnabled(bool invert)
     {
         var __mb = __mb_set_invert_enabled;
         if (__mb == 0)
@@ -20544,7 +22464,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_get_invert_enabled;
-    public bool GetInvertEnabled()
+    internal bool GetInvertEnabled()
     {
         var __mb = __mb_get_invert_enabled;
         if (__mb == 0)
@@ -20559,7 +22479,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_set_antialiased;
-    public void SetAntialiased(bool antialiased)
+    internal void SetAntialiased(bool antialiased)
     {
         var __mb = __mb_set_antialiased;
         if (__mb == 0)
@@ -20575,7 +22495,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_get_antialiased;
-    public bool GetAntialiased()
+    internal bool GetAntialiased()
     {
         var __mb = __mb_get_antialiased;
         if (__mb == 0)
@@ -20590,7 +22510,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_set_invert_border;
-    public void SetInvertBorder(float invertBorder)
+    internal void SetInvertBorder(float invertBorder)
     {
         var __mb = __mb_set_invert_border;
         if (__mb == 0)
@@ -20606,7 +22526,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_get_invert_border;
-    public float GetInvertBorder()
+    internal float GetInvertBorder()
     {
         var __mb = __mb_get_invert_border;
         if (__mb == 0)
@@ -20621,7 +22541,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_set_offset;
-    public void SetOffset(Vector2 offset)
+    internal void SetOffset(Vector2 offset)
     {
         var __mb = __mb_set_offset;
         if (__mb == 0)
@@ -20637,7 +22557,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_get_offset;
-    public Vector2 GetOffset()
+    internal Vector2 GetOffset()
     {
         var __mb = __mb_get_offset;
         if (__mb == 0)
@@ -20732,7 +22652,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_set_skeleton;
-    public void SetSkeleton(NodePath skeleton)
+    internal void SetSkeleton(NodePath skeleton)
     {
         var __mb = __mb_set_skeleton;
         if (__mb == 0)
@@ -20748,7 +22668,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_get_skeleton;
-    public NodePath GetSkeleton()
+    internal NodePath GetSkeleton()
     {
         var __mb = __mb_get_skeleton;
         if (__mb == 0)
@@ -20763,7 +22683,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_set_internal_vertex_count;
-    public void SetInternalVertexCount(int internalVertexCount)
+    internal void SetInternalVertexCount(int internalVertexCount)
     {
         var __mb = __mb_set_internal_vertex_count;
         if (__mb == 0)
@@ -20779,7 +22699,7 @@ public unsafe partial class Polygon2D : Node2D
     }
 
     private static nint __mb_get_internal_vertex_count;
-    public int GetInternalVertexCount()
+    internal int GetInternalVertexCount()
     {
         var __mb = __mb_get_internal_vertex_count;
         if (__mb == 0)
@@ -20920,6 +22840,90 @@ public unsafe partial class PopupMenu : Popup
         ClassRegistry.AttachNew(this, "PopupMenu");
     }
 
+    public bool HideOnItemSelection
+    {
+        get => IsHideOnItemSelection();
+        set => SetHideOnItemSelection(value);
+    }
+
+    public bool HideOnCheckableItemSelection
+    {
+        get => IsHideOnCheckableItemSelection();
+        set => SetHideOnCheckableItemSelection(value);
+    }
+
+    public bool HideOnStateItemSelection
+    {
+        get => IsHideOnStateItemSelection();
+        set => SetHideOnStateItemSelection(value);
+    }
+
+    public float SubmenuPopupDelay
+    {
+        get => GetSubmenuPopupDelay();
+        set => SetSubmenuPopupDelay(value);
+    }
+
+    public bool AllowSearch
+    {
+        get => GetAllowSearch();
+        set => SetAllowSearch(value);
+    }
+
+    public NativeMenu.SystemMenus SystemMenuId
+    {
+        get => GetSystemMenu();
+        set => SetSystemMenu(value);
+    }
+
+    public bool PreferNativeMenu
+    {
+        get => IsPreferNativeMenu();
+        set => SetPreferNativeMenu(value);
+    }
+
+    public bool ShrinkHeight
+    {
+        get => GetShrinkHeight();
+        set => SetShrinkHeight(value);
+    }
+
+    public bool ShrinkWidth
+    {
+        get => GetShrinkWidth();
+        set => SetShrinkWidth(value);
+    }
+
+    public bool SearchBarEnabled
+    {
+        get => IsSearchBarEnabled();
+        set => SetSearchBarEnabled(value);
+    }
+
+    public int SearchBarMinItemCount
+    {
+        get => GetSearchBarMinItemCount();
+        set => SetSearchBarMinItemCount(value);
+    }
+
+    public bool SearchBarFuzzySearchEnabled
+    {
+        get => IsSearchBarFuzzySearchEnabled();
+        set => SetSearchBarFuzzySearchEnabled(value);
+    }
+
+    public int SearchBarFuzzySearchMaxMisses
+    {
+        get => GetSearchBarFuzzySearchMaxMisses();
+        set => SetSearchBarFuzzySearchMaxMisses(value);
+    }
+
+    public int ItemCount
+    {
+        get => GetItemCount();
+        set => SetItemCount(value);
+    }
+
     private static nint __mb_activate_item_by_event;
     public bool ActivateItemByEvent(InputEvent? @event, bool forGlobalOnly)
     {
@@ -20941,7 +22945,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_prefer_native_menu;
-    public void SetPreferNativeMenu(bool enabled)
+    internal void SetPreferNativeMenu(bool enabled)
     {
         var __mb = __mb_set_prefer_native_menu;
         if (__mb == 0)
@@ -20957,7 +22961,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_is_prefer_native_menu;
-    public bool IsPreferNativeMenu()
+    internal bool IsPreferNativeMenu()
     {
         var __mb = __mb_is_prefer_native_menu;
         if (__mb == 0)
@@ -21373,7 +23377,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_item_auto_translate_mode;
-    public void SetItemAutoTranslateMode(int index, Node.AutoTranslateMode mode)
+    public void SetItemAutoTranslateMode(int index, Node.AutoTranslateModeEnum mode)
     {
         var __mb = __mb_set_item_auto_translate_mode;
         if (__mb == 0)
@@ -21841,7 +23845,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_get_item_auto_translate_mode;
-    public Node.AutoTranslateMode GetItemAutoTranslateMode(int index)
+    public Node.AutoTranslateModeEnum GetItemAutoTranslateMode(int index)
     {
         var __mb = __mb_get_item_auto_translate_mode;
         if (__mb == 0)
@@ -21855,7 +23859,7 @@ public unsafe partial class PopupMenu : Popup
         __args[0] = (nint)(&__a0);
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
-        return (Node.AutoTranslateMode)__ret;
+        return (Node.AutoTranslateModeEnum)__ret;
     }
 
     private static nint __mb_get_item_icon;
@@ -22250,7 +24254,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_item_count;
-    public void SetItemCount(int count)
+    internal void SetItemCount(int count)
     {
         var __mb = __mb_set_item_count;
         if (__mb == 0)
@@ -22266,7 +24270,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_get_item_count;
-    public int GetItemCount()
+    internal int GetItemCount()
     {
         var __mb = __mb_get_item_count;
         if (__mb == 0)
@@ -22348,7 +24352,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_hide_on_item_selection;
-    public void SetHideOnItemSelection(bool enable)
+    internal void SetHideOnItemSelection(bool enable)
     {
         var __mb = __mb_set_hide_on_item_selection;
         if (__mb == 0)
@@ -22364,7 +24368,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_is_hide_on_item_selection;
-    public bool IsHideOnItemSelection()
+    internal bool IsHideOnItemSelection()
     {
         var __mb = __mb_is_hide_on_item_selection;
         if (__mb == 0)
@@ -22379,7 +24383,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_hide_on_checkable_item_selection;
-    public void SetHideOnCheckableItemSelection(bool enable)
+    internal void SetHideOnCheckableItemSelection(bool enable)
     {
         var __mb = __mb_set_hide_on_checkable_item_selection;
         if (__mb == 0)
@@ -22395,7 +24399,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_is_hide_on_checkable_item_selection;
-    public bool IsHideOnCheckableItemSelection()
+    internal bool IsHideOnCheckableItemSelection()
     {
         var __mb = __mb_is_hide_on_checkable_item_selection;
         if (__mb == 0)
@@ -22410,7 +24414,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_hide_on_state_item_selection;
-    public void SetHideOnStateItemSelection(bool enable)
+    internal void SetHideOnStateItemSelection(bool enable)
     {
         var __mb = __mb_set_hide_on_state_item_selection;
         if (__mb == 0)
@@ -22426,7 +24430,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_is_hide_on_state_item_selection;
-    public bool IsHideOnStateItemSelection()
+    internal bool IsHideOnStateItemSelection()
     {
         var __mb = __mb_is_hide_on_state_item_selection;
         if (__mb == 0)
@@ -22441,7 +24445,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_submenu_popup_delay;
-    public void SetSubmenuPopupDelay(float seconds)
+    internal void SetSubmenuPopupDelay(float seconds)
     {
         var __mb = __mb_set_submenu_popup_delay;
         if (__mb == 0)
@@ -22457,7 +24461,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_get_submenu_popup_delay;
-    public float GetSubmenuPopupDelay()
+    internal float GetSubmenuPopupDelay()
     {
         var __mb = __mb_get_submenu_popup_delay;
         if (__mb == 0)
@@ -22472,7 +24476,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_allow_search;
-    public void SetAllowSearch(bool allow)
+    internal void SetAllowSearch(bool allow)
     {
         var __mb = __mb_set_allow_search;
         if (__mb == 0)
@@ -22488,7 +24492,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_get_allow_search;
-    public bool GetAllowSearch()
+    internal bool GetAllowSearch()
     {
         var __mb = __mb_get_allow_search;
         if (__mb == 0)
@@ -22518,7 +24522,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_system_menu;
-    public void SetSystemMenu(NativeMenu.SystemMenus systemMenuId)
+    internal void SetSystemMenu(NativeMenu.SystemMenus systemMenuId)
     {
         var __mb = __mb_set_system_menu;
         if (__mb == 0)
@@ -22534,7 +24538,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_get_system_menu;
-    public NativeMenu.SystemMenus GetSystemMenu()
+    internal NativeMenu.SystemMenus GetSystemMenu()
     {
         var __mb = __mb_get_system_menu;
         if (__mb == 0)
@@ -22549,7 +24553,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_search_bar_enabled;
-    public void SetSearchBarEnabled(bool enabled)
+    internal void SetSearchBarEnabled(bool enabled)
     {
         var __mb = __mb_set_search_bar_enabled;
         if (__mb == 0)
@@ -22565,7 +24569,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_is_search_bar_enabled;
-    public bool IsSearchBarEnabled()
+    internal bool IsSearchBarEnabled()
     {
         var __mb = __mb_is_search_bar_enabled;
         if (__mb == 0)
@@ -22580,7 +24584,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_search_bar_min_item_count;
-    public void SetSearchBarMinItemCount(int count)
+    internal void SetSearchBarMinItemCount(int count)
     {
         var __mb = __mb_set_search_bar_min_item_count;
         if (__mb == 0)
@@ -22596,7 +24600,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_get_search_bar_min_item_count;
-    public int GetSearchBarMinItemCount()
+    internal int GetSearchBarMinItemCount()
     {
         var __mb = __mb_get_search_bar_min_item_count;
         if (__mb == 0)
@@ -22611,7 +24615,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_search_bar_fuzzy_search_enabled;
-    public void SetSearchBarFuzzySearchEnabled(bool enabled)
+    internal void SetSearchBarFuzzySearchEnabled(bool enabled)
     {
         var __mb = __mb_set_search_bar_fuzzy_search_enabled;
         if (__mb == 0)
@@ -22627,7 +24631,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_is_search_bar_fuzzy_search_enabled;
-    public bool IsSearchBarFuzzySearchEnabled()
+    internal bool IsSearchBarFuzzySearchEnabled()
     {
         var __mb = __mb_is_search_bar_fuzzy_search_enabled;
         if (__mb == 0)
@@ -22642,7 +24646,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_search_bar_fuzzy_search_max_misses;
-    public void SetSearchBarFuzzySearchMaxMisses(int maxMisses)
+    internal void SetSearchBarFuzzySearchMaxMisses(int maxMisses)
     {
         var __mb = __mb_set_search_bar_fuzzy_search_max_misses;
         if (__mb == 0)
@@ -22658,7 +24662,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_get_search_bar_fuzzy_search_max_misses;
-    public int GetSearchBarFuzzySearchMaxMisses()
+    internal int GetSearchBarFuzzySearchMaxMisses()
     {
         var __mb = __mb_get_search_bar_fuzzy_search_max_misses;
         if (__mb == 0)
@@ -22673,7 +24677,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_shrink_height;
-    public void SetShrinkHeight(bool shrink)
+    internal void SetShrinkHeight(bool shrink)
     {
         var __mb = __mb_set_shrink_height;
         if (__mb == 0)
@@ -22689,7 +24693,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_get_shrink_height;
-    public bool GetShrinkHeight()
+    internal bool GetShrinkHeight()
     {
         var __mb = __mb_get_shrink_height;
         if (__mb == 0)
@@ -22704,7 +24708,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_shrink_width;
-    public void SetShrinkWidth(bool shrink)
+    internal void SetShrinkWidth(bool shrink)
     {
         var __mb = __mb_set_shrink_width;
         if (__mb == 0)
@@ -22720,7 +24724,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_get_shrink_width;
-    public bool GetShrinkWidth()
+    internal bool GetShrinkWidth()
     {
         var __mb = __mb_get_shrink_width;
         if (__mb == 0)
@@ -22765,6 +24769,18 @@ public unsafe partial class PortableCompressedTexture2D : Texture2D
         COMPRESSION_MODE_ASTC = 6,
     }
 
+    public Vector2 SizeOverride
+    {
+        get => GetSizeOverride();
+        set => SetSizeOverride(value);
+    }
+
+    public bool KeepCompressedBuffer
+    {
+        get => IsKeepingCompressedBuffer();
+        set => SetKeepCompressedBuffer(value);
+    }
+
     private static nint __mb_create_from_image;
     public void CreateFromImage(Image? image, PortableCompressedTexture2D.CompressionMode compressionMode, bool normalMap, float lossyQuality)
     {
@@ -22803,7 +24819,7 @@ public unsafe partial class PortableCompressedTexture2D : Texture2D
     }
 
     private static nint __mb_set_size_override;
-    public void SetSizeOverride(Vector2 size)
+    internal void SetSizeOverride(Vector2 size)
     {
         var __mb = __mb_set_size_override;
         if (__mb == 0)
@@ -22819,7 +24835,7 @@ public unsafe partial class PortableCompressedTexture2D : Texture2D
     }
 
     private static nint __mb_get_size_override;
-    public Vector2 GetSizeOverride()
+    internal Vector2 GetSizeOverride()
     {
         var __mb = __mb_get_size_override;
         if (__mb == 0)
@@ -22834,7 +24850,7 @@ public unsafe partial class PortableCompressedTexture2D : Texture2D
     }
 
     private static nint __mb_set_keep_compressed_buffer;
-    public void SetKeepCompressedBuffer(bool keep)
+    internal void SetKeepCompressedBuffer(bool keep)
     {
         var __mb = __mb_set_keep_compressed_buffer;
         if (__mb == 0)
@@ -22850,7 +24866,7 @@ public unsafe partial class PortableCompressedTexture2D : Texture2D
     }
 
     private static nint __mb_is_keeping_compressed_buffer;
-    public bool IsKeepingCompressedBuffer()
+    internal bool IsKeepingCompressedBuffer()
     {
         var __mb = __mb_is_keeping_compressed_buffer;
         if (__mb == 0)
@@ -22923,8 +24939,38 @@ public unsafe partial class PrimitiveMesh : Mesh
         ClassRegistry.AttachNew(this, "PrimitiveMesh");
     }
 
+    public Material? Material
+    {
+        get => GetMaterial();
+        set => SetMaterial(value);
+    }
+
+    public Aabb CustomAabb
+    {
+        get => GetCustomAabb();
+        set => SetCustomAabb(value);
+    }
+
+    public bool FlipFaces
+    {
+        get => GetFlipFaces();
+        set => SetFlipFaces(value);
+    }
+
+    public bool AddUv2
+    {
+        get => GetAddUv2();
+        set => SetAddUv2(value);
+    }
+
+    public float Uv2Padding
+    {
+        get => GetUv2Padding();
+        set => SetUv2Padding(value);
+    }
+
     private static nint __mb_set_material;
-    public void SetMaterial(Material? material)
+    internal void SetMaterial(Material? material)
     {
         var __mb = __mb_set_material;
         if (__mb == 0)
@@ -22940,7 +24986,7 @@ public unsafe partial class PrimitiveMesh : Mesh
     }
 
     private static nint __mb_get_material;
-    public Material? GetMaterial()
+    internal Material? GetMaterial()
     {
         var __mb = __mb_get_material;
         if (__mb == 0)
@@ -22970,7 +25016,7 @@ public unsafe partial class PrimitiveMesh : Mesh
     }
 
     private static nint __mb_set_custom_aabb;
-    public void SetCustomAabb(Aabb aabb)
+    internal void SetCustomAabb(Aabb aabb)
     {
         var __mb = __mb_set_custom_aabb;
         if (__mb == 0)
@@ -22986,7 +25032,7 @@ public unsafe partial class PrimitiveMesh : Mesh
     }
 
     private static nint __mb_get_custom_aabb;
-    public Aabb GetCustomAabb()
+    internal Aabb GetCustomAabb()
     {
         var __mb = __mb_get_custom_aabb;
         if (__mb == 0)
@@ -23001,7 +25047,7 @@ public unsafe partial class PrimitiveMesh : Mesh
     }
 
     private static nint __mb_set_flip_faces;
-    public void SetFlipFaces(bool flipFaces)
+    internal void SetFlipFaces(bool flipFaces)
     {
         var __mb = __mb_set_flip_faces;
         if (__mb == 0)
@@ -23017,7 +25063,7 @@ public unsafe partial class PrimitiveMesh : Mesh
     }
 
     private static nint __mb_get_flip_faces;
-    public bool GetFlipFaces()
+    internal bool GetFlipFaces()
     {
         var __mb = __mb_get_flip_faces;
         if (__mb == 0)
@@ -23032,7 +25078,7 @@ public unsafe partial class PrimitiveMesh : Mesh
     }
 
     private static nint __mb_set_add_uv2;
-    public void SetAddUv2(bool addUv2)
+    internal void SetAddUv2(bool addUv2)
     {
         var __mb = __mb_set_add_uv2;
         if (__mb == 0)
@@ -23048,7 +25094,7 @@ public unsafe partial class PrimitiveMesh : Mesh
     }
 
     private static nint __mb_get_add_uv2;
-    public bool GetAddUv2()
+    internal bool GetAddUv2()
     {
         var __mb = __mb_get_add_uv2;
         if (__mb == 0)
@@ -23063,7 +25109,7 @@ public unsafe partial class PrimitiveMesh : Mesh
     }
 
     private static nint __mb_set_uv2_padding;
-    public void SetUv2Padding(float uv2Padding)
+    internal void SetUv2Padding(float uv2Padding)
     {
         var __mb = __mb_set_uv2_padding;
         if (__mb == 0)
@@ -23079,7 +25125,7 @@ public unsafe partial class PrimitiveMesh : Mesh
     }
 
     private static nint __mb_get_uv2_padding;
-    public float GetUv2Padding()
+    internal float GetUv2Padding()
     {
         var __mb = __mb_get_uv2_padding;
         if (__mb == 0)
@@ -23116,8 +25162,38 @@ public unsafe partial class PrismMesh : PrimitiveMesh
         ClassRegistry.AttachNew(this, "PrismMesh");
     }
 
+    public float LeftToRight
+    {
+        get => GetLeftToRight();
+        set => SetLeftToRight(value);
+    }
+
+    public Vector3 Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
+    public int SubdivideWidth
+    {
+        get => GetSubdivideWidth();
+        set => SetSubdivideWidth(value);
+    }
+
+    public int SubdivideHeight
+    {
+        get => GetSubdivideHeight();
+        set => SetSubdivideHeight(value);
+    }
+
+    public int SubdivideDepth
+    {
+        get => GetSubdivideDepth();
+        set => SetSubdivideDepth(value);
+    }
+
     private static nint __mb_set_left_to_right;
-    public void SetLeftToRight(float leftToRight)
+    internal void SetLeftToRight(float leftToRight)
     {
         var __mb = __mb_set_left_to_right;
         if (__mb == 0)
@@ -23133,7 +25209,7 @@ public unsafe partial class PrismMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_left_to_right;
-    public float GetLeftToRight()
+    internal float GetLeftToRight()
     {
         var __mb = __mb_get_left_to_right;
         if (__mb == 0)
@@ -23148,7 +25224,7 @@ public unsafe partial class PrismMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_size;
-    public void SetSize(Vector3 size)
+    internal void SetSize(Vector3 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -23164,7 +25240,7 @@ public unsafe partial class PrismMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_size;
-    public Vector3 GetSize()
+    internal Vector3 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -23179,7 +25255,7 @@ public unsafe partial class PrismMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_subdivide_width;
-    public void SetSubdivideWidth(int segments)
+    internal void SetSubdivideWidth(int segments)
     {
         var __mb = __mb_set_subdivide_width;
         if (__mb == 0)
@@ -23195,7 +25271,7 @@ public unsafe partial class PrismMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_subdivide_width;
-    public int GetSubdivideWidth()
+    internal int GetSubdivideWidth()
     {
         var __mb = __mb_get_subdivide_width;
         if (__mb == 0)
@@ -23210,7 +25286,7 @@ public unsafe partial class PrismMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_subdivide_height;
-    public void SetSubdivideHeight(int segments)
+    internal void SetSubdivideHeight(int segments)
     {
         var __mb = __mb_set_subdivide_height;
         if (__mb == 0)
@@ -23226,7 +25302,7 @@ public unsafe partial class PrismMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_subdivide_height;
-    public int GetSubdivideHeight()
+    internal int GetSubdivideHeight()
     {
         var __mb = __mb_get_subdivide_height;
         if (__mb == 0)
@@ -23241,7 +25317,7 @@ public unsafe partial class PrismMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_subdivide_depth;
-    public void SetSubdivideDepth(int segments)
+    internal void SetSubdivideDepth(int segments)
     {
         var __mb = __mb_set_subdivide_depth;
         if (__mb == 0)
@@ -23257,7 +25333,7 @@ public unsafe partial class PrismMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_subdivide_depth;
-    public int GetSubdivideDepth()
+    internal int GetSubdivideDepth()
     {
         var __mb = __mb_get_subdivide_depth;
         if (__mb == 0)
@@ -23281,8 +25357,92 @@ public unsafe partial class ProceduralSkyMaterial : Material
         ClassRegistry.AttachNew(this, "ProceduralSkyMaterial");
     }
 
+    public Color SkyTopColor
+    {
+        get => GetSkyTopColor();
+        set => SetSkyTopColor(value);
+    }
+
+    public Color SkyHorizonColor
+    {
+        get => GetSkyHorizonColor();
+        set => SetSkyHorizonColor(value);
+    }
+
+    public float SkyCurve
+    {
+        get => GetSkyCurve();
+        set => SetSkyCurve(value);
+    }
+
+    public float SkyEnergyMultiplier
+    {
+        get => GetSkyEnergyMultiplier();
+        set => SetSkyEnergyMultiplier(value);
+    }
+
+    public Texture2D? SkyCover
+    {
+        get => GetSkyCover();
+        set => SetSkyCover(value);
+    }
+
+    public Color SkyCoverModulate
+    {
+        get => GetSkyCoverModulate();
+        set => SetSkyCoverModulate(value);
+    }
+
+    public Color GroundBottomColor
+    {
+        get => GetGroundBottomColor();
+        set => SetGroundBottomColor(value);
+    }
+
+    public Color GroundHorizonColor
+    {
+        get => GetGroundHorizonColor();
+        set => SetGroundHorizonColor(value);
+    }
+
+    public float GroundCurve
+    {
+        get => GetGroundCurve();
+        set => SetGroundCurve(value);
+    }
+
+    public float GroundEnergyMultiplier
+    {
+        get => GetGroundEnergyMultiplier();
+        set => SetGroundEnergyMultiplier(value);
+    }
+
+    public float SunAngleMax
+    {
+        get => GetSunAngleMax();
+        set => SetSunAngleMax(value);
+    }
+
+    public float SunCurve
+    {
+        get => GetSunCurve();
+        set => SetSunCurve(value);
+    }
+
+    public bool UseDebanding
+    {
+        get => GetUseDebanding();
+        set => SetUseDebanding(value);
+    }
+
+    public float EnergyMultiplier
+    {
+        get => GetEnergyMultiplier();
+        set => SetEnergyMultiplier(value);
+    }
+
     private static nint __mb_set_sky_top_color;
-    public void SetSkyTopColor(Color color)
+    internal void SetSkyTopColor(Color color)
     {
         var __mb = __mb_set_sky_top_color;
         if (__mb == 0)
@@ -23298,7 +25458,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_get_sky_top_color;
-    public Color GetSkyTopColor()
+    internal Color GetSkyTopColor()
     {
         var __mb = __mb_get_sky_top_color;
         if (__mb == 0)
@@ -23313,7 +25473,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_set_sky_horizon_color;
-    public void SetSkyHorizonColor(Color color)
+    internal void SetSkyHorizonColor(Color color)
     {
         var __mb = __mb_set_sky_horizon_color;
         if (__mb == 0)
@@ -23329,7 +25489,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_get_sky_horizon_color;
-    public Color GetSkyHorizonColor()
+    internal Color GetSkyHorizonColor()
     {
         var __mb = __mb_get_sky_horizon_color;
         if (__mb == 0)
@@ -23344,7 +25504,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_set_sky_curve;
-    public void SetSkyCurve(float curve)
+    internal void SetSkyCurve(float curve)
     {
         var __mb = __mb_set_sky_curve;
         if (__mb == 0)
@@ -23360,7 +25520,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_get_sky_curve;
-    public float GetSkyCurve()
+    internal float GetSkyCurve()
     {
         var __mb = __mb_get_sky_curve;
         if (__mb == 0)
@@ -23375,7 +25535,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_set_sky_energy_multiplier;
-    public void SetSkyEnergyMultiplier(float multiplier)
+    internal void SetSkyEnergyMultiplier(float multiplier)
     {
         var __mb = __mb_set_sky_energy_multiplier;
         if (__mb == 0)
@@ -23391,7 +25551,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_get_sky_energy_multiplier;
-    public float GetSkyEnergyMultiplier()
+    internal float GetSkyEnergyMultiplier()
     {
         var __mb = __mb_get_sky_energy_multiplier;
         if (__mb == 0)
@@ -23406,7 +25566,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_set_sky_cover;
-    public void SetSkyCover(Texture2D? skyCover)
+    internal void SetSkyCover(Texture2D? skyCover)
     {
         var __mb = __mb_set_sky_cover;
         if (__mb == 0)
@@ -23422,7 +25582,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_get_sky_cover;
-    public Texture2D? GetSkyCover()
+    internal Texture2D? GetSkyCover()
     {
         var __mb = __mb_get_sky_cover;
         if (__mb == 0)
@@ -23437,7 +25597,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_set_sky_cover_modulate;
-    public void SetSkyCoverModulate(Color color)
+    internal void SetSkyCoverModulate(Color color)
     {
         var __mb = __mb_set_sky_cover_modulate;
         if (__mb == 0)
@@ -23453,7 +25613,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_get_sky_cover_modulate;
-    public Color GetSkyCoverModulate()
+    internal Color GetSkyCoverModulate()
     {
         var __mb = __mb_get_sky_cover_modulate;
         if (__mb == 0)
@@ -23468,7 +25628,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_set_ground_bottom_color;
-    public void SetGroundBottomColor(Color color)
+    internal void SetGroundBottomColor(Color color)
     {
         var __mb = __mb_set_ground_bottom_color;
         if (__mb == 0)
@@ -23484,7 +25644,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_get_ground_bottom_color;
-    public Color GetGroundBottomColor()
+    internal Color GetGroundBottomColor()
     {
         var __mb = __mb_get_ground_bottom_color;
         if (__mb == 0)
@@ -23499,7 +25659,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_set_ground_horizon_color;
-    public void SetGroundHorizonColor(Color color)
+    internal void SetGroundHorizonColor(Color color)
     {
         var __mb = __mb_set_ground_horizon_color;
         if (__mb == 0)
@@ -23515,7 +25675,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_get_ground_horizon_color;
-    public Color GetGroundHorizonColor()
+    internal Color GetGroundHorizonColor()
     {
         var __mb = __mb_get_ground_horizon_color;
         if (__mb == 0)
@@ -23530,7 +25690,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_set_ground_curve;
-    public void SetGroundCurve(float curve)
+    internal void SetGroundCurve(float curve)
     {
         var __mb = __mb_set_ground_curve;
         if (__mb == 0)
@@ -23546,7 +25706,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_get_ground_curve;
-    public float GetGroundCurve()
+    internal float GetGroundCurve()
     {
         var __mb = __mb_get_ground_curve;
         if (__mb == 0)
@@ -23561,7 +25721,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_set_ground_energy_multiplier;
-    public void SetGroundEnergyMultiplier(float energy)
+    internal void SetGroundEnergyMultiplier(float energy)
     {
         var __mb = __mb_set_ground_energy_multiplier;
         if (__mb == 0)
@@ -23577,7 +25737,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_get_ground_energy_multiplier;
-    public float GetGroundEnergyMultiplier()
+    internal float GetGroundEnergyMultiplier()
     {
         var __mb = __mb_get_ground_energy_multiplier;
         if (__mb == 0)
@@ -23592,7 +25752,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_set_sun_angle_max;
-    public void SetSunAngleMax(float degrees)
+    internal void SetSunAngleMax(float degrees)
     {
         var __mb = __mb_set_sun_angle_max;
         if (__mb == 0)
@@ -23608,7 +25768,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_get_sun_angle_max;
-    public float GetSunAngleMax()
+    internal float GetSunAngleMax()
     {
         var __mb = __mb_get_sun_angle_max;
         if (__mb == 0)
@@ -23623,7 +25783,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_set_sun_curve;
-    public void SetSunCurve(float curve)
+    internal void SetSunCurve(float curve)
     {
         var __mb = __mb_set_sun_curve;
         if (__mb == 0)
@@ -23639,7 +25799,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_get_sun_curve;
-    public float GetSunCurve()
+    internal float GetSunCurve()
     {
         var __mb = __mb_get_sun_curve;
         if (__mb == 0)
@@ -23654,7 +25814,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_set_use_debanding;
-    public void SetUseDebanding(bool useDebanding)
+    internal void SetUseDebanding(bool useDebanding)
     {
         var __mb = __mb_set_use_debanding;
         if (__mb == 0)
@@ -23670,7 +25830,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_get_use_debanding;
-    public bool GetUseDebanding()
+    internal bool GetUseDebanding()
     {
         var __mb = __mb_get_use_debanding;
         if (__mb == 0)
@@ -23685,7 +25845,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_set_energy_multiplier;
-    public void SetEnergyMultiplier(float multiplier)
+    internal void SetEnergyMultiplier(float multiplier)
     {
         var __mb = __mb_set_energy_multiplier;
         if (__mb == 0)
@@ -23701,7 +25861,7 @@ public unsafe partial class ProceduralSkyMaterial : Material
     }
 
     private static nint __mb_get_energy_multiplier;
-    public float GetEnergyMultiplier()
+    internal float GetEnergyMultiplier()
     {
         var __mb = __mb_get_energy_multiplier;
         if (__mb == 0)
@@ -23725,7 +25885,7 @@ public unsafe partial class ProgressBar : Range
         ClassRegistry.AttachNew(this, "ProgressBar");
     }
 
-    public enum FillMode : long
+    public enum FillModeEnum : long
     {
         FILL_BEGIN_TO_END = 0,
         FILL_END_TO_BEGIN = 1,
@@ -23733,8 +25893,32 @@ public unsafe partial class ProgressBar : Range
         FILL_BOTTOM_TO_TOP = 3,
     }
 
+    public int FillMode
+    {
+        get => GetFillMode();
+        set => SetFillMode(value);
+    }
+
+    public bool ShowPercentage
+    {
+        get => IsPercentageShown();
+        set => SetShowPercentage(value);
+    }
+
+    public bool Indeterminate
+    {
+        get => IsIndeterminate();
+        set => SetIndeterminate(value);
+    }
+
+    public bool EditorPreviewIndeterminate
+    {
+        get => IsEditorPreviewIndeterminateEnabled();
+        set => SetEditorPreviewIndeterminate(value);
+    }
+
     private static nint __mb_set_fill_mode;
-    public void SetFillMode(int mode)
+    internal void SetFillMode(int mode)
     {
         var __mb = __mb_set_fill_mode;
         if (__mb == 0)
@@ -23750,7 +25934,7 @@ public unsafe partial class ProgressBar : Range
     }
 
     private static nint __mb_get_fill_mode;
-    public int GetFillMode()
+    internal int GetFillMode()
     {
         var __mb = __mb_get_fill_mode;
         if (__mb == 0)
@@ -23765,7 +25949,7 @@ public unsafe partial class ProgressBar : Range
     }
 
     private static nint __mb_set_show_percentage;
-    public void SetShowPercentage(bool visible)
+    internal void SetShowPercentage(bool visible)
     {
         var __mb = __mb_set_show_percentage;
         if (__mb == 0)
@@ -23781,7 +25965,7 @@ public unsafe partial class ProgressBar : Range
     }
 
     private static nint __mb_is_percentage_shown;
-    public bool IsPercentageShown()
+    internal bool IsPercentageShown()
     {
         var __mb = __mb_is_percentage_shown;
         if (__mb == 0)
@@ -23796,7 +25980,7 @@ public unsafe partial class ProgressBar : Range
     }
 
     private static nint __mb_set_indeterminate;
-    public void SetIndeterminate(bool indeterminate)
+    internal void SetIndeterminate(bool indeterminate)
     {
         var __mb = __mb_set_indeterminate;
         if (__mb == 0)
@@ -23812,7 +25996,7 @@ public unsafe partial class ProgressBar : Range
     }
 
     private static nint __mb_is_indeterminate;
-    public bool IsIndeterminate()
+    internal bool IsIndeterminate()
     {
         var __mb = __mb_is_indeterminate;
         if (__mb == 0)
@@ -23827,7 +26011,7 @@ public unsafe partial class ProgressBar : Range
     }
 
     private static nint __mb_set_editor_preview_indeterminate;
-    public void SetEditorPreviewIndeterminate(bool previewIndeterminate)
+    internal void SetEditorPreviewIndeterminate(bool previewIndeterminate)
     {
         var __mb = __mb_set_editor_preview_indeterminate;
         if (__mb == 0)
@@ -23843,7 +26027,7 @@ public unsafe partial class ProgressBar : Range
     }
 
     private static nint __mb_is_editor_preview_indeterminate_enabled;
-    public bool IsEditorPreviewIndeterminateEnabled()
+    internal bool IsEditorPreviewIndeterminateEnabled()
     {
         var __mb = __mb_is_editor_preview_indeterminate_enabled;
         if (__mb == 0)

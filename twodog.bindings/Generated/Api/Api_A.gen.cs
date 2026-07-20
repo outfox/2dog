@@ -51,6 +51,12 @@ public unsafe partial class AStar2D : RefCounted
         ClassRegistry.AttachNew(this, "AStar2D");
     }
 
+    public bool NeighborFilterEnabled
+    {
+        get => IsNeighborFilterEnabled();
+        set => SetNeighborFilterEnabled(value);
+    }
+
     private static nint __mb_get_available_point_id;
     public long GetAvailablePointId()
     {
@@ -193,7 +199,7 @@ public unsafe partial class AStar2D : RefCounted
     }
 
     private static nint __mb_set_neighbor_filter_enabled;
-    public void SetNeighborFilterEnabled(bool enabled)
+    internal void SetNeighborFilterEnabled(bool enabled)
     {
         var __mb = __mb_set_neighbor_filter_enabled;
         if (__mb == 0)
@@ -209,7 +215,7 @@ public unsafe partial class AStar2D : RefCounted
     }
 
     private static nint __mb_is_neighbor_filter_enabled;
-    public bool IsNeighborFilterEnabled()
+    internal bool IsNeighborFilterEnabled()
     {
         var __mb = __mb_is_neighbor_filter_enabled;
         if (__mb == 0)
@@ -461,6 +467,12 @@ public unsafe partial class AStar3D : RefCounted
         ClassRegistry.AttachNew(this, "AStar3D");
     }
 
+    public bool NeighborFilterEnabled
+    {
+        get => IsNeighborFilterEnabled();
+        set => SetNeighborFilterEnabled(value);
+    }
+
     private static nint __mb_get_available_point_id;
     public long GetAvailablePointId()
     {
@@ -639,7 +651,7 @@ public unsafe partial class AStar3D : RefCounted
     }
 
     private static nint __mb_set_neighbor_filter_enabled;
-    public void SetNeighborFilterEnabled(bool enabled)
+    internal void SetNeighborFilterEnabled(bool enabled)
     {
         var __mb = __mb_set_neighbor_filter_enabled;
         if (__mb == 0)
@@ -655,7 +667,7 @@ public unsafe partial class AStar3D : RefCounted
     }
 
     private static nint __mb_is_neighbor_filter_enabled;
-    public bool IsNeighborFilterEnabled()
+    internal bool IsNeighborFilterEnabled()
     {
         var __mb = __mb_is_neighbor_filter_enabled;
         if (__mb == 0)
@@ -880,7 +892,7 @@ public unsafe partial class AStarGrid2D : RefCounted
         HEURISTIC_MAX = 4,
     }
 
-    public enum DiagonalMode : long
+    public enum DiagonalModeEnum : long
     {
         DIAGONAL_MODE_ALWAYS = 0,
         DIAGONAL_MODE_NEVER = 1,
@@ -889,7 +901,7 @@ public unsafe partial class AStarGrid2D : RefCounted
         DIAGONAL_MODE_MAX = 4,
     }
 
-    public enum CellShape : long
+    public enum CellShapeEnum : long
     {
         CELL_SHAPE_SQUARE = 0,
         CELL_SHAPE_ISOMETRIC_RIGHT = 1,
@@ -897,8 +909,62 @@ public unsafe partial class AStarGrid2D : RefCounted
         CELL_SHAPE_MAX = 3,
     }
 
+    public Rect2I Region
+    {
+        get => GetRegion();
+        set => SetRegion(value);
+    }
+
+    public Vector2I Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
+    public Vector2 Offset
+    {
+        get => GetOffset();
+        set => SetOffset(value);
+    }
+
+    public Vector2 CellSize
+    {
+        get => GetCellSize();
+        set => SetCellSize(value);
+    }
+
+    public AStarGrid2D.CellShapeEnum CellShape
+    {
+        get => GetCellShape();
+        set => SetCellShape(value);
+    }
+
+    public bool JumpingEnabled
+    {
+        get => IsJumpingEnabled();
+        set => SetJumpingEnabled(value);
+    }
+
+    public AStarGrid2D.Heuristic DefaultComputeHeuristic
+    {
+        get => GetDefaultComputeHeuristic();
+        set => SetDefaultComputeHeuristic(value);
+    }
+
+    public AStarGrid2D.Heuristic DefaultEstimateHeuristic
+    {
+        get => GetDefaultEstimateHeuristic();
+        set => SetDefaultEstimateHeuristic(value);
+    }
+
+    public AStarGrid2D.DiagonalModeEnum DiagonalMode
+    {
+        get => GetDiagonalMode();
+        set => SetDiagonalMode(value);
+    }
+
     private static nint __mb_set_region;
-    public void SetRegion(Rect2I region)
+    internal void SetRegion(Rect2I region)
     {
         var __mb = __mb_set_region;
         if (__mb == 0)
@@ -914,7 +980,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_get_region;
-    public Rect2I GetRegion()
+    internal Rect2I GetRegion()
     {
         var __mb = __mb_get_region;
         if (__mb == 0)
@@ -929,7 +995,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_set_size;
-    public void SetSize(Vector2I size)
+    internal void SetSize(Vector2I size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -945,7 +1011,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_get_size;
-    public Vector2I GetSize()
+    internal Vector2I GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -960,7 +1026,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_set_offset;
-    public void SetOffset(Vector2 offset)
+    internal void SetOffset(Vector2 offset)
     {
         var __mb = __mb_set_offset;
         if (__mb == 0)
@@ -976,7 +1042,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_get_offset;
-    public Vector2 GetOffset()
+    internal Vector2 GetOffset()
     {
         var __mb = __mb_get_offset;
         if (__mb == 0)
@@ -991,7 +1057,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_set_cell_size;
-    public void SetCellSize(Vector2 cellSize)
+    internal void SetCellSize(Vector2 cellSize)
     {
         var __mb = __mb_set_cell_size;
         if (__mb == 0)
@@ -1007,7 +1073,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_get_cell_size;
-    public Vector2 GetCellSize()
+    internal Vector2 GetCellSize()
     {
         var __mb = __mb_get_cell_size;
         if (__mb == 0)
@@ -1022,7 +1088,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_set_cell_shape;
-    public void SetCellShape(AStarGrid2D.CellShape cellShape)
+    internal void SetCellShape(AStarGrid2D.CellShapeEnum cellShape)
     {
         var __mb = __mb_set_cell_shape;
         if (__mb == 0)
@@ -1038,7 +1104,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_get_cell_shape;
-    public AStarGrid2D.CellShape GetCellShape()
+    internal AStarGrid2D.CellShapeEnum GetCellShape()
     {
         var __mb = __mb_get_cell_shape;
         if (__mb == 0)
@@ -1049,7 +1115,7 @@ public unsafe partial class AStarGrid2D : RefCounted
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AStarGrid2D.CellShape)__ret;
+        return (AStarGrid2D.CellShapeEnum)__ret;
     }
 
     private static nint __mb_is_in_bounds;
@@ -1119,7 +1185,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_set_jumping_enabled;
-    public void SetJumpingEnabled(bool enabled)
+    internal void SetJumpingEnabled(bool enabled)
     {
         var __mb = __mb_set_jumping_enabled;
         if (__mb == 0)
@@ -1135,7 +1201,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_is_jumping_enabled;
-    public bool IsJumpingEnabled()
+    internal bool IsJumpingEnabled()
     {
         var __mb = __mb_is_jumping_enabled;
         if (__mb == 0)
@@ -1150,7 +1216,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_set_diagonal_mode;
-    public void SetDiagonalMode(AStarGrid2D.DiagonalMode mode)
+    internal void SetDiagonalMode(AStarGrid2D.DiagonalModeEnum mode)
     {
         var __mb = __mb_set_diagonal_mode;
         if (__mb == 0)
@@ -1166,7 +1232,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_get_diagonal_mode;
-    public AStarGrid2D.DiagonalMode GetDiagonalMode()
+    internal AStarGrid2D.DiagonalModeEnum GetDiagonalMode()
     {
         var __mb = __mb_get_diagonal_mode;
         if (__mb == 0)
@@ -1177,11 +1243,11 @@ public unsafe partial class AStarGrid2D : RefCounted
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AStarGrid2D.DiagonalMode)__ret;
+        return (AStarGrid2D.DiagonalModeEnum)__ret;
     }
 
     private static nint __mb_set_default_compute_heuristic;
-    public void SetDefaultComputeHeuristic(AStarGrid2D.Heuristic heuristic)
+    internal void SetDefaultComputeHeuristic(AStarGrid2D.Heuristic heuristic)
     {
         var __mb = __mb_set_default_compute_heuristic;
         if (__mb == 0)
@@ -1197,7 +1263,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_get_default_compute_heuristic;
-    public AStarGrid2D.Heuristic GetDefaultComputeHeuristic()
+    internal AStarGrid2D.Heuristic GetDefaultComputeHeuristic()
     {
         var __mb = __mb_get_default_compute_heuristic;
         if (__mb == 0)
@@ -1212,7 +1278,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_set_default_estimate_heuristic;
-    public void SetDefaultEstimateHeuristic(AStarGrid2D.Heuristic heuristic)
+    internal void SetDefaultEstimateHeuristic(AStarGrid2D.Heuristic heuristic)
     {
         var __mb = __mb_set_default_estimate_heuristic;
         if (__mb == 0)
@@ -1228,7 +1294,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_get_default_estimate_heuristic;
-    public AStarGrid2D.Heuristic GetDefaultEstimateHeuristic()
+    internal AStarGrid2D.Heuristic GetDefaultEstimateHeuristic()
     {
         var __mb = __mb_get_default_estimate_heuristic;
         if (__mb == 0)
@@ -1455,6 +1521,36 @@ public unsafe partial class AcceptDialog : Window
         ClassRegistry.AttachNew(this, "AcceptDialog");
     }
 
+    public string OkButtonText
+    {
+        get => GetOkButtonText();
+        set => SetOkButtonText(value);
+    }
+
+    public string DialogText
+    {
+        get => GetText();
+        set => SetText(value);
+    }
+
+    public bool DialogHideOnOk
+    {
+        get => GetHideOnOk();
+        set => SetHideOnOk(value);
+    }
+
+    public bool DialogCloseOnEscape
+    {
+        get => GetCloseOnEscape();
+        set => SetCloseOnEscape(value);
+    }
+
+    public bool DialogAutowrap
+    {
+        get => HasAutowrap();
+        set => SetAutowrap(value);
+    }
+
     private static nint __mb_get_ok_button;
     public Button? GetOkButton()
     {
@@ -1486,7 +1582,7 @@ public unsafe partial class AcceptDialog : Window
     }
 
     private static nint __mb_set_hide_on_ok;
-    public void SetHideOnOk(bool enabled)
+    internal void SetHideOnOk(bool enabled)
     {
         var __mb = __mb_set_hide_on_ok;
         if (__mb == 0)
@@ -1502,7 +1598,7 @@ public unsafe partial class AcceptDialog : Window
     }
 
     private static nint __mb_get_hide_on_ok;
-    public bool GetHideOnOk()
+    internal bool GetHideOnOk()
     {
         var __mb = __mb_get_hide_on_ok;
         if (__mb == 0)
@@ -1517,7 +1613,7 @@ public unsafe partial class AcceptDialog : Window
     }
 
     private static nint __mb_set_close_on_escape;
-    public void SetCloseOnEscape(bool enabled)
+    internal void SetCloseOnEscape(bool enabled)
     {
         var __mb = __mb_set_close_on_escape;
         if (__mb == 0)
@@ -1533,7 +1629,7 @@ public unsafe partial class AcceptDialog : Window
     }
 
     private static nint __mb_get_close_on_escape;
-    public bool GetCloseOnEscape()
+    internal bool GetCloseOnEscape()
     {
         var __mb = __mb_get_close_on_escape;
         if (__mb == 0)
@@ -1623,7 +1719,7 @@ public unsafe partial class AcceptDialog : Window
     }
 
     private static nint __mb_set_text;
-    public void SetText(string text)
+    internal void SetText(string text)
     {
         var __mb = __mb_set_text;
         if (__mb == 0)
@@ -1640,7 +1736,7 @@ public unsafe partial class AcceptDialog : Window
     }
 
     private static nint __mb_get_text;
-    public string GetText()
+    internal string GetText()
     {
         var __mb = __mb_get_text;
         if (__mb == 0)
@@ -1655,7 +1751,7 @@ public unsafe partial class AcceptDialog : Window
     }
 
     private static nint __mb_set_autowrap;
-    public void SetAutowrap(bool autowrap)
+    internal void SetAutowrap(bool autowrap)
     {
         var __mb = __mb_set_autowrap;
         if (__mb == 0)
@@ -1671,7 +1767,7 @@ public unsafe partial class AcceptDialog : Window
     }
 
     private static nint __mb_has_autowrap;
-    public bool HasAutowrap()
+    internal bool HasAutowrap()
     {
         var __mb = __mb_has_autowrap;
         if (__mb == 0)
@@ -1686,7 +1782,7 @@ public unsafe partial class AcceptDialog : Window
     }
 
     private static nint __mb_set_ok_button_text;
-    public void SetOkButtonText(string text)
+    internal void SetOkButtonText(string text)
     {
         var __mb = __mb_set_ok_button_text;
         if (__mb == 0)
@@ -1703,7 +1799,7 @@ public unsafe partial class AcceptDialog : Window
     }
 
     private static nint __mb_get_ok_button_text;
-    public string GetOkButtonText()
+    internal string GetOkButtonText()
     {
         var __mb = __mb_get_ok_button_text;
         if (__mb == 0)
@@ -3241,6 +3337,12 @@ public unsafe partial class AimModifier3D : BoneConstraint3D
         ClassRegistry.AttachNew(this, "AimModifier3D");
     }
 
+    public int SettingCount
+    {
+        get => GetSettingCount();
+        set => SetSettingCount(value);
+    }
+
     private static nint __mb_set_forward_axis;
     public void SetForwardAxis(int index, SkeletonModifier3D.BoneAxis axis)
     {
@@ -3395,8 +3497,14 @@ public unsafe partial class AnimatableBody2D : StaticBody2D
         ClassRegistry.AttachNew(this, "AnimatableBody2D");
     }
 
+    public bool SyncToPhysics
+    {
+        get => IsSyncToPhysicsEnabled();
+        set => SetSyncToPhysics(value);
+    }
+
     private static nint __mb_set_sync_to_physics;
-    public void SetSyncToPhysics(bool enable)
+    internal void SetSyncToPhysics(bool enable)
     {
         var __mb = __mb_set_sync_to_physics;
         if (__mb == 0)
@@ -3412,7 +3520,7 @@ public unsafe partial class AnimatableBody2D : StaticBody2D
     }
 
     private static nint __mb_is_sync_to_physics_enabled;
-    public bool IsSyncToPhysicsEnabled()
+    internal bool IsSyncToPhysicsEnabled()
     {
         var __mb = __mb_is_sync_to_physics_enabled;
         if (__mb == 0)
@@ -3436,8 +3544,14 @@ public unsafe partial class AnimatableBody3D : StaticBody3D
         ClassRegistry.AttachNew(this, "AnimatableBody3D");
     }
 
+    public bool SyncToPhysics
+    {
+        get => IsSyncToPhysicsEnabled();
+        set => SetSyncToPhysics(value);
+    }
+
     private static nint __mb_set_sync_to_physics;
-    public void SetSyncToPhysics(bool enable)
+    internal void SetSyncToPhysics(bool enable)
     {
         var __mb = __mb_set_sync_to_physics;
         if (__mb == 0)
@@ -3453,7 +3567,7 @@ public unsafe partial class AnimatableBody3D : StaticBody3D
     }
 
     private static nint __mb_is_sync_to_physics_enabled;
-    public bool IsSyncToPhysicsEnabled()
+    internal bool IsSyncToPhysicsEnabled()
     {
         var __mb = __mb_is_sync_to_physics_enabled;
         if (__mb == 0)
@@ -3477,8 +3591,68 @@ public unsafe partial class AnimatedSprite2D : Node2D
         ClassRegistry.AttachNew(this, "AnimatedSprite2D");
     }
 
+    public SpriteFrames? SpriteFrames
+    {
+        get => GetSpriteFrames();
+        set => SetSpriteFrames(value);
+    }
+
+    public string Animation
+    {
+        get => GetAnimation();
+        set => SetAnimation(value);
+    }
+
+    public string Autoplay
+    {
+        get => GetAutoplay();
+        set => SetAutoplay(value);
+    }
+
+    public int Frame
+    {
+        get => GetFrame();
+        set => SetFrame(value);
+    }
+
+    public float FrameProgress
+    {
+        get => GetFrameProgress();
+        set => SetFrameProgress(value);
+    }
+
+    public float SpeedScale
+    {
+        get => GetSpeedScale();
+        set => SetSpeedScale(value);
+    }
+
+    public bool Centered
+    {
+        get => IsCentered();
+        set => SetCentered(value);
+    }
+
+    public Vector2 Offset
+    {
+        get => GetOffset();
+        set => SetOffset(value);
+    }
+
+    public bool FlipH
+    {
+        get => IsFlippedH();
+        set => SetFlipH(value);
+    }
+
+    public bool FlipV
+    {
+        get => IsFlippedV();
+        set => SetFlipV(value);
+    }
+
     private static nint __mb_set_sprite_frames;
-    public void SetSpriteFrames(SpriteFrames? spriteFrames)
+    internal void SetSpriteFrames(SpriteFrames? spriteFrames)
     {
         var __mb = __mb_set_sprite_frames;
         if (__mb == 0)
@@ -3494,7 +3668,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_get_sprite_frames;
-    public SpriteFrames? GetSpriteFrames()
+    internal SpriteFrames? GetSpriteFrames()
     {
         var __mb = __mb_get_sprite_frames;
         if (__mb == 0)
@@ -3509,7 +3683,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_set_animation;
-    public void SetAnimation(string name)
+    internal void SetAnimation(string name)
     {
         var __mb = __mb_set_animation;
         if (__mb == 0)
@@ -3525,7 +3699,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_get_animation;
-    public string GetAnimation()
+    internal string GetAnimation()
     {
         var __mb = __mb_get_animation;
         if (__mb == 0)
@@ -3540,7 +3714,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_set_autoplay;
-    public void SetAutoplay(string name)
+    internal void SetAutoplay(string name)
     {
         var __mb = __mb_set_autoplay;
         if (__mb == 0)
@@ -3557,7 +3731,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_get_autoplay;
-    public string GetAutoplay()
+    internal string GetAutoplay()
     {
         var __mb = __mb_get_autoplay;
         if (__mb == 0)
@@ -3649,7 +3823,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_set_centered;
-    public void SetCentered(bool centered)
+    internal void SetCentered(bool centered)
     {
         var __mb = __mb_set_centered;
         if (__mb == 0)
@@ -3665,7 +3839,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_is_centered;
-    public bool IsCentered()
+    internal bool IsCentered()
     {
         var __mb = __mb_is_centered;
         if (__mb == 0)
@@ -3680,7 +3854,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_set_offset;
-    public void SetOffset(Vector2 offset)
+    internal void SetOffset(Vector2 offset)
     {
         var __mb = __mb_set_offset;
         if (__mb == 0)
@@ -3696,7 +3870,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_get_offset;
-    public Vector2 GetOffset()
+    internal Vector2 GetOffset()
     {
         var __mb = __mb_get_offset;
         if (__mb == 0)
@@ -3711,7 +3885,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_set_flip_h;
-    public void SetFlipH(bool flipH)
+    internal void SetFlipH(bool flipH)
     {
         var __mb = __mb_set_flip_h;
         if (__mb == 0)
@@ -3727,7 +3901,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_is_flipped_h;
-    public bool IsFlippedH()
+    internal bool IsFlippedH()
     {
         var __mb = __mb_is_flipped_h;
         if (__mb == 0)
@@ -3742,7 +3916,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_set_flip_v;
-    public void SetFlipV(bool flipV)
+    internal void SetFlipV(bool flipV)
     {
         var __mb = __mb_set_flip_v;
         if (__mb == 0)
@@ -3758,7 +3932,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_is_flipped_v;
-    public bool IsFlippedV()
+    internal bool IsFlippedV()
     {
         var __mb = __mb_is_flipped_v;
         if (__mb == 0)
@@ -3773,7 +3947,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_set_frame;
-    public void SetFrame(int frame)
+    internal void SetFrame(int frame)
     {
         var __mb = __mb_set_frame;
         if (__mb == 0)
@@ -3789,7 +3963,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_get_frame;
-    public int GetFrame()
+    internal int GetFrame()
     {
         var __mb = __mb_get_frame;
         if (__mb == 0)
@@ -3804,7 +3978,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_set_frame_progress;
-    public void SetFrameProgress(float progress)
+    internal void SetFrameProgress(float progress)
     {
         var __mb = __mb_set_frame_progress;
         if (__mb == 0)
@@ -3820,7 +3994,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_get_frame_progress;
-    public float GetFrameProgress()
+    internal float GetFrameProgress()
     {
         var __mb = __mb_get_frame_progress;
         if (__mb == 0)
@@ -3853,7 +4027,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_set_speed_scale;
-    public void SetSpeedScale(float speedScale)
+    internal void SetSpeedScale(float speedScale)
     {
         var __mb = __mb_set_speed_scale;
         if (__mb == 0)
@@ -3869,7 +4043,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_get_speed_scale;
-    public float GetSpeedScale()
+    internal float GetSpeedScale()
     {
         var __mb = __mb_get_speed_scale;
         if (__mb == 0)
@@ -3908,8 +4082,44 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
         ClassRegistry.AttachNew(this, "AnimatedSprite3D");
     }
 
+    public SpriteFrames? SpriteFrames
+    {
+        get => GetSpriteFrames();
+        set => SetSpriteFrames(value);
+    }
+
+    public string Animation
+    {
+        get => GetAnimation();
+        set => SetAnimation(value);
+    }
+
+    public string Autoplay
+    {
+        get => GetAutoplay();
+        set => SetAutoplay(value);
+    }
+
+    public int Frame
+    {
+        get => GetFrame();
+        set => SetFrame(value);
+    }
+
+    public float FrameProgress
+    {
+        get => GetFrameProgress();
+        set => SetFrameProgress(value);
+    }
+
+    public float SpeedScale
+    {
+        get => GetSpeedScale();
+        set => SetSpeedScale(value);
+    }
+
     private static nint __mb_set_sprite_frames;
-    public void SetSpriteFrames(SpriteFrames? spriteFrames)
+    internal void SetSpriteFrames(SpriteFrames? spriteFrames)
     {
         var __mb = __mb_set_sprite_frames;
         if (__mb == 0)
@@ -3925,7 +4135,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_get_sprite_frames;
-    public SpriteFrames? GetSpriteFrames()
+    internal SpriteFrames? GetSpriteFrames()
     {
         var __mb = __mb_get_sprite_frames;
         if (__mb == 0)
@@ -3940,7 +4150,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_set_animation;
-    public void SetAnimation(string name)
+    internal void SetAnimation(string name)
     {
         var __mb = __mb_set_animation;
         if (__mb == 0)
@@ -3956,7 +4166,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_get_animation;
-    public string GetAnimation()
+    internal string GetAnimation()
     {
         var __mb = __mb_get_animation;
         if (__mb == 0)
@@ -3971,7 +4181,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_set_autoplay;
-    public void SetAutoplay(string name)
+    internal void SetAutoplay(string name)
     {
         var __mb = __mb_set_autoplay;
         if (__mb == 0)
@@ -3988,7 +4198,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_get_autoplay;
-    public string GetAutoplay()
+    internal string GetAutoplay()
     {
         var __mb = __mb_get_autoplay;
         if (__mb == 0)
@@ -4080,7 +4290,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_set_frame;
-    public void SetFrame(int frame)
+    internal void SetFrame(int frame)
     {
         var __mb = __mb_set_frame;
         if (__mb == 0)
@@ -4096,7 +4306,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_get_frame;
-    public int GetFrame()
+    internal int GetFrame()
     {
         var __mb = __mb_get_frame;
         if (__mb == 0)
@@ -4111,7 +4321,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_set_frame_progress;
-    public void SetFrameProgress(float progress)
+    internal void SetFrameProgress(float progress)
     {
         var __mb = __mb_set_frame_progress;
         if (__mb == 0)
@@ -4127,7 +4337,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_get_frame_progress;
-    public float GetFrameProgress()
+    internal float GetFrameProgress()
     {
         var __mb = __mb_get_frame_progress;
         if (__mb == 0)
@@ -4160,7 +4370,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_set_speed_scale;
-    public void SetSpeedScale(float speedScale)
+    internal void SetSpeedScale(float speedScale)
     {
         var __mb = __mb_set_speed_scale;
         if (__mb == 0)
@@ -4176,7 +4386,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_get_speed_scale;
-    public float GetSpeedScale()
+    internal float GetSpeedScale()
     {
         var __mb = __mb_get_speed_scale;
         if (__mb == 0)
@@ -4215,8 +4425,38 @@ public unsafe partial class AnimatedTexture : Texture2D
         ClassRegistry.AttachNew(this, "AnimatedTexture");
     }
 
+    public int Frames
+    {
+        get => GetFrames();
+        set => SetFrames(value);
+    }
+
+    public int CurrentFrame
+    {
+        get => GetCurrentFrame();
+        set => SetCurrentFrame(value);
+    }
+
+    public bool Pause
+    {
+        get => GetPause();
+        set => SetPause(value);
+    }
+
+    public bool OneShot
+    {
+        get => GetOneShot();
+        set => SetOneShot(value);
+    }
+
+    public float SpeedScale
+    {
+        get => GetSpeedScale();
+        set => SetSpeedScale(value);
+    }
+
     private static nint __mb_set_frames;
-    public void SetFrames(int frames)
+    internal void SetFrames(int frames)
     {
         var __mb = __mb_set_frames;
         if (__mb == 0)
@@ -4232,7 +4472,7 @@ public unsafe partial class AnimatedTexture : Texture2D
     }
 
     private static nint __mb_get_frames;
-    public int GetFrames()
+    internal int GetFrames()
     {
         var __mb = __mb_get_frames;
         if (__mb == 0)
@@ -4247,7 +4487,7 @@ public unsafe partial class AnimatedTexture : Texture2D
     }
 
     private static nint __mb_set_current_frame;
-    public void SetCurrentFrame(int frame)
+    internal void SetCurrentFrame(int frame)
     {
         var __mb = __mb_set_current_frame;
         if (__mb == 0)
@@ -4263,7 +4503,7 @@ public unsafe partial class AnimatedTexture : Texture2D
     }
 
     private static nint __mb_get_current_frame;
-    public int GetCurrentFrame()
+    internal int GetCurrentFrame()
     {
         var __mb = __mb_get_current_frame;
         if (__mb == 0)
@@ -4278,7 +4518,7 @@ public unsafe partial class AnimatedTexture : Texture2D
     }
 
     private static nint __mb_set_pause;
-    public void SetPause(bool pause)
+    internal void SetPause(bool pause)
     {
         var __mb = __mb_set_pause;
         if (__mb == 0)
@@ -4294,7 +4534,7 @@ public unsafe partial class AnimatedTexture : Texture2D
     }
 
     private static nint __mb_get_pause;
-    public bool GetPause()
+    internal bool GetPause()
     {
         var __mb = __mb_get_pause;
         if (__mb == 0)
@@ -4309,7 +4549,7 @@ public unsafe partial class AnimatedTexture : Texture2D
     }
 
     private static nint __mb_set_one_shot;
-    public void SetOneShot(bool oneShot)
+    internal void SetOneShot(bool oneShot)
     {
         var __mb = __mb_set_one_shot;
         if (__mb == 0)
@@ -4325,7 +4565,7 @@ public unsafe partial class AnimatedTexture : Texture2D
     }
 
     private static nint __mb_get_one_shot;
-    public bool GetOneShot()
+    internal bool GetOneShot()
     {
         var __mb = __mb_get_one_shot;
         if (__mb == 0)
@@ -4340,7 +4580,7 @@ public unsafe partial class AnimatedTexture : Texture2D
     }
 
     private static nint __mb_set_speed_scale;
-    public void SetSpeedScale(float scale)
+    internal void SetSpeedScale(float scale)
     {
         var __mb = __mb_set_speed_scale;
         if (__mb == 0)
@@ -4356,7 +4596,7 @@ public unsafe partial class AnimatedTexture : Texture2D
     }
 
     private static nint __mb_get_speed_scale;
-    public float GetSpeedScale()
+    internal float GetSpeedScale()
     {
         var __mb = __mb_get_speed_scale;
         if (__mb == 0)
@@ -4481,7 +4721,7 @@ public unsafe partial class Animation : Resource
         UPDATE_CAPTURE = 2,
     }
 
-    public enum LoopMode : long
+    public enum LoopModeEnum : long
     {
         LOOP_NONE = 0,
         LOOP_LINEAR = 1,
@@ -4501,6 +4741,26 @@ public unsafe partial class Animation : Resource
         FIND_MODE_APPROX = 1,
         FIND_MODE_EXACT = 2,
     }
+
+    public double Length
+    {
+        get => GetLength();
+        set => SetLength(value);
+    }
+
+    public Animation.LoopModeEnum LoopMode
+    {
+        get => GetLoopMode();
+        set => SetLoopMode(value);
+    }
+
+    public float Step
+    {
+        get => GetStep();
+        set => SetStep(value);
+    }
+
+    public bool CaptureIncluded => IsCaptureIncluded();
 
     private static nint __mb_add_track;
     public int AddTrack(Animation.TrackType type, int atPosition)
@@ -5930,7 +6190,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_set_length;
-    public void SetLength(double timeSec)
+    internal void SetLength(double timeSec)
     {
         var __mb = __mb_set_length;
         if (__mb == 0)
@@ -5946,7 +6206,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_get_length;
-    public double GetLength()
+    internal double GetLength()
     {
         var __mb = __mb_get_length;
         if (__mb == 0)
@@ -5961,7 +6221,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_set_loop_mode;
-    public void SetLoopMode(Animation.LoopMode loopMode)
+    internal void SetLoopMode(Animation.LoopModeEnum loopMode)
     {
         var __mb = __mb_set_loop_mode;
         if (__mb == 0)
@@ -5977,7 +6237,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_get_loop_mode;
-    public Animation.LoopMode GetLoopMode()
+    internal Animation.LoopModeEnum GetLoopMode()
     {
         var __mb = __mb_get_loop_mode;
         if (__mb == 0)
@@ -5988,11 +6248,11 @@ public unsafe partial class Animation : Resource
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Animation.LoopMode)__ret;
+        return (Animation.LoopModeEnum)__ret;
     }
 
     private static nint __mb_set_step;
-    public void SetStep(float sizeSec)
+    internal void SetStep(float sizeSec)
     {
         var __mb = __mb_set_step;
         if (__mb == 0)
@@ -6008,7 +6268,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_get_step;
-    public float GetStep()
+    internal float GetStep()
     {
         var __mb = __mb_get_step;
         if (__mb == 0)
@@ -6094,7 +6354,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_is_capture_included;
-    public bool IsCaptureIncluded()
+    internal bool IsCaptureIncluded()
     {
         var __mb = __mb_is_capture_included;
         if (__mb == 0)
@@ -6263,6 +6523,66 @@ public unsafe partial class AnimationMixer : Node
         ANIMATION_CALLBACK_MODE_DISCRETE_FORCE_CONTINUOUS = 2,
     }
 
+    public bool Active
+    {
+        get => IsActive();
+        set => SetActive(value);
+    }
+
+    public bool Deterministic
+    {
+        get => IsDeterministic();
+        set => SetDeterministic(value);
+    }
+
+    public bool ResetOnSave
+    {
+        get => IsResetOnSaveEnabled();
+        set => SetResetOnSaveEnabled(value);
+    }
+
+    public NodePath RootNode
+    {
+        get => GetRootNode();
+        set => SetRootNode(value);
+    }
+
+    public NodePath RootMotionTrack
+    {
+        get => GetRootMotionTrack();
+        set => SetRootMotionTrack(value);
+    }
+
+    public bool RootMotionLocal
+    {
+        get => IsRootMotionLocal();
+        set => SetRootMotionLocal(value);
+    }
+
+    public int AudioMaxPolyphony
+    {
+        get => GetAudioMaxPolyphony();
+        set => SetAudioMaxPolyphony(value);
+    }
+
+    public AnimationMixer.AnimationCallbackModeProcess CallbackModeProcess
+    {
+        get => GetCallbackModeProcess();
+        set => SetCallbackModeProcess(value);
+    }
+
+    public AnimationMixer.AnimationCallbackModeMethod CallbackModeMethod
+    {
+        get => GetCallbackModeMethod();
+        set => SetCallbackModeMethod(value);
+    }
+
+    public AnimationMixer.AnimationCallbackModeDiscrete CallbackModeDiscrete
+    {
+        get => GetCallbackModeDiscrete();
+        set => SetCallbackModeDiscrete(value);
+    }
+
     private static nint __mb_add_animation_library;
     public Error AddAnimationLibrary(string name, AnimationLibrary? library)
     {
@@ -6405,7 +6725,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_set_active;
-    public void SetActive(bool active)
+    internal void SetActive(bool active)
     {
         var __mb = __mb_set_active;
         if (__mb == 0)
@@ -6421,7 +6741,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_is_active;
-    public bool IsActive()
+    internal bool IsActive()
     {
         var __mb = __mb_is_active;
         if (__mb == 0)
@@ -6436,7 +6756,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_set_deterministic;
-    public void SetDeterministic(bool deterministic)
+    internal void SetDeterministic(bool deterministic)
     {
         var __mb = __mb_set_deterministic;
         if (__mb == 0)
@@ -6452,7 +6772,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_is_deterministic;
-    public bool IsDeterministic()
+    internal bool IsDeterministic()
     {
         var __mb = __mb_is_deterministic;
         if (__mb == 0)
@@ -6467,7 +6787,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_set_root_node;
-    public void SetRootNode(NodePath path)
+    internal void SetRootNode(NodePath path)
     {
         var __mb = __mb_set_root_node;
         if (__mb == 0)
@@ -6483,7 +6803,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_get_root_node;
-    public NodePath GetRootNode()
+    internal NodePath GetRootNode()
     {
         var __mb = __mb_get_root_node;
         if (__mb == 0)
@@ -6498,7 +6818,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_set_callback_mode_process;
-    public void SetCallbackModeProcess(AnimationMixer.AnimationCallbackModeProcess mode)
+    internal void SetCallbackModeProcess(AnimationMixer.AnimationCallbackModeProcess mode)
     {
         var __mb = __mb_set_callback_mode_process;
         if (__mb == 0)
@@ -6514,7 +6834,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_get_callback_mode_process;
-    public AnimationMixer.AnimationCallbackModeProcess GetCallbackModeProcess()
+    internal AnimationMixer.AnimationCallbackModeProcess GetCallbackModeProcess()
     {
         var __mb = __mb_get_callback_mode_process;
         if (__mb == 0)
@@ -6529,7 +6849,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_set_callback_mode_method;
-    public void SetCallbackModeMethod(AnimationMixer.AnimationCallbackModeMethod mode)
+    internal void SetCallbackModeMethod(AnimationMixer.AnimationCallbackModeMethod mode)
     {
         var __mb = __mb_set_callback_mode_method;
         if (__mb == 0)
@@ -6545,7 +6865,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_get_callback_mode_method;
-    public AnimationMixer.AnimationCallbackModeMethod GetCallbackModeMethod()
+    internal AnimationMixer.AnimationCallbackModeMethod GetCallbackModeMethod()
     {
         var __mb = __mb_get_callback_mode_method;
         if (__mb == 0)
@@ -6560,7 +6880,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_set_callback_mode_discrete;
-    public void SetCallbackModeDiscrete(AnimationMixer.AnimationCallbackModeDiscrete mode)
+    internal void SetCallbackModeDiscrete(AnimationMixer.AnimationCallbackModeDiscrete mode)
     {
         var __mb = __mb_set_callback_mode_discrete;
         if (__mb == 0)
@@ -6576,7 +6896,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_get_callback_mode_discrete;
-    public AnimationMixer.AnimationCallbackModeDiscrete GetCallbackModeDiscrete()
+    internal AnimationMixer.AnimationCallbackModeDiscrete GetCallbackModeDiscrete()
     {
         var __mb = __mb_get_callback_mode_discrete;
         if (__mb == 0)
@@ -6591,7 +6911,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_set_audio_max_polyphony;
-    public void SetAudioMaxPolyphony(int maxPolyphony)
+    internal void SetAudioMaxPolyphony(int maxPolyphony)
     {
         var __mb = __mb_set_audio_max_polyphony;
         if (__mb == 0)
@@ -6607,7 +6927,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_get_audio_max_polyphony;
-    public int GetAudioMaxPolyphony()
+    internal int GetAudioMaxPolyphony()
     {
         var __mb = __mb_get_audio_max_polyphony;
         if (__mb == 0)
@@ -6622,7 +6942,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_set_root_motion_track;
-    public void SetRootMotionTrack(NodePath path)
+    internal void SetRootMotionTrack(NodePath path)
     {
         var __mb = __mb_set_root_motion_track;
         if (__mb == 0)
@@ -6638,7 +6958,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_get_root_motion_track;
-    public NodePath GetRootMotionTrack()
+    internal NodePath GetRootMotionTrack()
     {
         var __mb = __mb_get_root_motion_track;
         if (__mb == 0)
@@ -6653,7 +6973,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_set_root_motion_local;
-    public void SetRootMotionLocal(bool enabled)
+    internal void SetRootMotionLocal(bool enabled)
     {
         var __mb = __mb_set_root_motion_local;
         if (__mb == 0)
@@ -6669,7 +6989,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_is_root_motion_local;
-    public bool IsRootMotionLocal()
+    internal bool IsRootMotionLocal()
     {
         var __mb = __mb_is_root_motion_local;
         if (__mb == 0)
@@ -6825,7 +7145,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_set_reset_on_save_enabled;
-    public void SetResetOnSaveEnabled(bool enabled)
+    internal void SetResetOnSaveEnabled(bool enabled)
     {
         var __mb = __mb_set_reset_on_save_enabled;
         if (__mb == 0)
@@ -6841,7 +7161,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_is_reset_on_save_enabled;
-    public bool IsResetOnSaveEnabled()
+    internal bool IsResetOnSaveEnabled()
     {
         var __mb = __mb_is_reset_on_save_enabled;
         if (__mb == 0)
@@ -6907,6 +7227,12 @@ public unsafe partial class AnimationNode : Resource
         FILTER_PASS = 1,
         FILTER_STOP = 2,
         FILTER_BLEND = 3,
+    }
+
+    public bool FilterEnabled
+    {
+        get => IsFilterEnabled();
+        set => SetFilterEnabled(value);
     }
 
     private static nint __mb_add_input;
@@ -6984,7 +7310,7 @@ public unsafe partial class AnimationNode : Resource
     }
 
     private static nint __mb_get_input_count;
-    public int GetInputCount()
+    internal int GetInputCount()
     {
         var __mb = __mb_get_input_count;
         if (__mb == 0)
@@ -7054,7 +7380,7 @@ public unsafe partial class AnimationNode : Resource
     }
 
     private static nint __mb_set_filter_enabled;
-    public void SetFilterEnabled(bool enable)
+    internal void SetFilterEnabled(bool enable)
     {
         var __mb = __mb_set_filter_enabled;
         if (__mb == 0)
@@ -7070,7 +7396,7 @@ public unsafe partial class AnimationNode : Resource
     }
 
     private static nint __mb_is_filter_enabled;
-    public bool IsFilterEnabled()
+    internal bool IsFilterEnabled()
     {
         var __mb = __mb_is_filter_enabled;
         if (__mb == 0)
@@ -7325,14 +7651,62 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
         ClassRegistry.AttachNew(this, "AnimationNodeAnimation");
     }
 
-    public enum PlayMode : long
+    public enum PlayModeEnum : long
     {
         PLAY_MODE_FORWARD = 0,
         PLAY_MODE_BACKWARD = 1,
     }
 
+    public string Animation
+    {
+        get => GetAnimation();
+        set => SetAnimation(value);
+    }
+
+    public AnimationNodeAnimation.PlayModeEnum PlayMode
+    {
+        get => GetPlayMode();
+        set => SetPlayMode(value);
+    }
+
+    public bool AdvanceOnStart
+    {
+        get => IsAdvanceOnStart();
+        set => SetAdvanceOnStart(value);
+    }
+
+    public bool UseCustomTimeline
+    {
+        get => IsUsingCustomTimeline();
+        set => SetUseCustomTimeline(value);
+    }
+
+    public double TimelineLength
+    {
+        get => GetTimelineLength();
+        set => SetTimelineLength(value);
+    }
+
+    public bool StretchTimeScale
+    {
+        get => IsStretchingTimeScale();
+        set => SetStretchTimeScale(value);
+    }
+
+    public double StartOffset
+    {
+        get => GetStartOffset();
+        set => SetStartOffset(value);
+    }
+
+    public Animation.LoopModeEnum LoopMode
+    {
+        get => GetLoopMode();
+        set => SetLoopMode(value);
+    }
+
     private static nint __mb_set_animation;
-    public void SetAnimation(string name)
+    internal void SetAnimation(string name)
     {
         var __mb = __mb_set_animation;
         if (__mb == 0)
@@ -7348,7 +7722,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
     }
 
     private static nint __mb_get_animation;
-    public string GetAnimation()
+    internal string GetAnimation()
     {
         var __mb = __mb_get_animation;
         if (__mb == 0)
@@ -7363,7 +7737,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
     }
 
     private static nint __mb_set_play_mode;
-    public void SetPlayMode(AnimationNodeAnimation.PlayMode mode)
+    internal void SetPlayMode(AnimationNodeAnimation.PlayModeEnum mode)
     {
         var __mb = __mb_set_play_mode;
         if (__mb == 0)
@@ -7379,7 +7753,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
     }
 
     private static nint __mb_get_play_mode;
-    public AnimationNodeAnimation.PlayMode GetPlayMode()
+    internal AnimationNodeAnimation.PlayModeEnum GetPlayMode()
     {
         var __mb = __mb_get_play_mode;
         if (__mb == 0)
@@ -7390,11 +7764,11 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AnimationNodeAnimation.PlayMode)__ret;
+        return (AnimationNodeAnimation.PlayModeEnum)__ret;
     }
 
     private static nint __mb_set_advance_on_start;
-    public void SetAdvanceOnStart(bool advanceOnStart)
+    internal void SetAdvanceOnStart(bool advanceOnStart)
     {
         var __mb = __mb_set_advance_on_start;
         if (__mb == 0)
@@ -7410,7 +7784,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
     }
 
     private static nint __mb_is_advance_on_start;
-    public bool IsAdvanceOnStart()
+    internal bool IsAdvanceOnStart()
     {
         var __mb = __mb_is_advance_on_start;
         if (__mb == 0)
@@ -7425,7 +7799,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
     }
 
     private static nint __mb_set_use_custom_timeline;
-    public void SetUseCustomTimeline(bool useCustomTimeline)
+    internal void SetUseCustomTimeline(bool useCustomTimeline)
     {
         var __mb = __mb_set_use_custom_timeline;
         if (__mb == 0)
@@ -7441,7 +7815,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
     }
 
     private static nint __mb_is_using_custom_timeline;
-    public bool IsUsingCustomTimeline()
+    internal bool IsUsingCustomTimeline()
     {
         var __mb = __mb_is_using_custom_timeline;
         if (__mb == 0)
@@ -7456,7 +7830,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
     }
 
     private static nint __mb_set_timeline_length;
-    public void SetTimelineLength(double timelineLength)
+    internal void SetTimelineLength(double timelineLength)
     {
         var __mb = __mb_set_timeline_length;
         if (__mb == 0)
@@ -7472,7 +7846,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
     }
 
     private static nint __mb_get_timeline_length;
-    public double GetTimelineLength()
+    internal double GetTimelineLength()
     {
         var __mb = __mb_get_timeline_length;
         if (__mb == 0)
@@ -7487,7 +7861,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
     }
 
     private static nint __mb_set_stretch_time_scale;
-    public void SetStretchTimeScale(bool stretchTimeScale)
+    internal void SetStretchTimeScale(bool stretchTimeScale)
     {
         var __mb = __mb_set_stretch_time_scale;
         if (__mb == 0)
@@ -7503,7 +7877,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
     }
 
     private static nint __mb_is_stretching_time_scale;
-    public bool IsStretchingTimeScale()
+    internal bool IsStretchingTimeScale()
     {
         var __mb = __mb_is_stretching_time_scale;
         if (__mb == 0)
@@ -7518,7 +7892,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
     }
 
     private static nint __mb_set_start_offset;
-    public void SetStartOffset(double startOffset)
+    internal void SetStartOffset(double startOffset)
     {
         var __mb = __mb_set_start_offset;
         if (__mb == 0)
@@ -7534,7 +7908,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
     }
 
     private static nint __mb_get_start_offset;
-    public double GetStartOffset()
+    internal double GetStartOffset()
     {
         var __mb = __mb_get_start_offset;
         if (__mb == 0)
@@ -7549,7 +7923,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
     }
 
     private static nint __mb_set_loop_mode;
-    public void SetLoopMode(Animation.LoopMode loopMode)
+    internal void SetLoopMode(Animation.LoopModeEnum loopMode)
     {
         var __mb = __mb_set_loop_mode;
         if (__mb == 0)
@@ -7565,7 +7939,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
     }
 
     private static nint __mb_get_loop_mode;
-    public Animation.LoopMode GetLoopMode()
+    internal Animation.LoopModeEnum GetLoopMode()
     {
         var __mb = __mb_get_loop_mode;
         if (__mb == 0)
@@ -7576,7 +7950,7 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Animation.LoopMode)__ret;
+        return (Animation.LoopModeEnum)__ret;
     }
 }
 
@@ -7609,19 +7983,67 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
         ClassRegistry.AttachNew(this, "AnimationNodeBlendSpace1D");
     }
 
-    public enum BlendMode : long
+    public enum BlendModeEnum : long
     {
         BLEND_MODE_INTERPOLATED = 0,
         BLEND_MODE_DISCRETE = 1,
         BLEND_MODE_DISCRETE_CARRY = 2,
     }
 
-    public enum SyncMode : long
+    public enum SyncModeEnum : long
     {
         SYNC_MODE_NONE = 0,
         SYNC_MODE_INDEPENDENT = 1,
         SYNC_MODE_CYCLIC_MUTABLE = 2,
         SYNC_MODE_CYCLIC_CONSTANT = 3,
+    }
+
+    public float MinSpace
+    {
+        get => GetMinSpace();
+        set => SetMinSpace(value);
+    }
+
+    public float MaxSpace
+    {
+        get => GetMaxSpace();
+        set => SetMaxSpace(value);
+    }
+
+    public float Snap
+    {
+        get => GetSnap();
+        set => SetSnap(value);
+    }
+
+    public string ValueLabel
+    {
+        get => GetValueLabel();
+        set => SetValueLabel(value);
+    }
+
+    public AnimationNodeBlendSpace1D.BlendModeEnum BlendMode
+    {
+        get => GetBlendMode();
+        set => SetBlendMode(value);
+    }
+
+    public bool Sync
+    {
+        get => IsUsingSync();
+        set => SetUseSync(value);
+    }
+
+    public AnimationNodeBlendSpace1D.SyncModeEnum SyncMode
+    {
+        get => GetSyncMode();
+        set => SetSyncMode(value);
+    }
+
+    public double CyclicLength
+    {
+        get => GetCyclicLength();
+        set => SetCyclicLength(value);
     }
 
     private static nint __mb_add_blend_point;
@@ -7822,7 +8244,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_set_min_space;
-    public void SetMinSpace(float minSpace)
+    internal void SetMinSpace(float minSpace)
     {
         var __mb = __mb_set_min_space;
         if (__mb == 0)
@@ -7838,7 +8260,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_get_min_space;
-    public float GetMinSpace()
+    internal float GetMinSpace()
     {
         var __mb = __mb_get_min_space;
         if (__mb == 0)
@@ -7853,7 +8275,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_set_max_space;
-    public void SetMaxSpace(float maxSpace)
+    internal void SetMaxSpace(float maxSpace)
     {
         var __mb = __mb_set_max_space;
         if (__mb == 0)
@@ -7869,7 +8291,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_get_max_space;
-    public float GetMaxSpace()
+    internal float GetMaxSpace()
     {
         var __mb = __mb_get_max_space;
         if (__mb == 0)
@@ -7884,7 +8306,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_set_snap;
-    public void SetSnap(float snap)
+    internal void SetSnap(float snap)
     {
         var __mb = __mb_set_snap;
         if (__mb == 0)
@@ -7900,7 +8322,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_get_snap;
-    public float GetSnap()
+    internal float GetSnap()
     {
         var __mb = __mb_get_snap;
         if (__mb == 0)
@@ -7915,7 +8337,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_set_value_label;
-    public void SetValueLabel(string text)
+    internal void SetValueLabel(string text)
     {
         var __mb = __mb_set_value_label;
         if (__mb == 0)
@@ -7932,7 +8354,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_get_value_label;
-    public string GetValueLabel()
+    internal string GetValueLabel()
     {
         var __mb = __mb_get_value_label;
         if (__mb == 0)
@@ -7947,7 +8369,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_set_blend_mode;
-    public void SetBlendMode(AnimationNodeBlendSpace1D.BlendMode mode)
+    internal void SetBlendMode(AnimationNodeBlendSpace1D.BlendModeEnum mode)
     {
         var __mb = __mb_set_blend_mode;
         if (__mb == 0)
@@ -7963,7 +8385,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_get_blend_mode;
-    public AnimationNodeBlendSpace1D.BlendMode GetBlendMode()
+    internal AnimationNodeBlendSpace1D.BlendModeEnum GetBlendMode()
     {
         var __mb = __mb_get_blend_mode;
         if (__mb == 0)
@@ -7974,11 +8396,11 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AnimationNodeBlendSpace1D.BlendMode)__ret;
+        return (AnimationNodeBlendSpace1D.BlendModeEnum)__ret;
     }
 
     private static nint __mb_set_use_sync;
-    public void SetUseSync(bool enable)
+    internal void SetUseSync(bool enable)
     {
         var __mb = __mb_set_use_sync;
         if (__mb == 0)
@@ -7994,7 +8416,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_is_using_sync;
-    public bool IsUsingSync()
+    internal bool IsUsingSync()
     {
         var __mb = __mb_is_using_sync;
         if (__mb == 0)
@@ -8009,7 +8431,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_set_sync_mode;
-    public void SetSyncMode(AnimationNodeBlendSpace1D.SyncMode syncMode)
+    internal void SetSyncMode(AnimationNodeBlendSpace1D.SyncModeEnum syncMode)
     {
         var __mb = __mb_set_sync_mode;
         if (__mb == 0)
@@ -8025,7 +8447,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_get_sync_mode;
-    public AnimationNodeBlendSpace1D.SyncMode GetSyncMode()
+    internal AnimationNodeBlendSpace1D.SyncModeEnum GetSyncMode()
     {
         var __mb = __mb_get_sync_mode;
         if (__mb == 0)
@@ -8036,11 +8458,11 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AnimationNodeBlendSpace1D.SyncMode)__ret;
+        return (AnimationNodeBlendSpace1D.SyncModeEnum)__ret;
     }
 
     private static nint __mb_set_cyclic_length;
-    public void SetCyclicLength(double length)
+    internal void SetCyclicLength(double length)
     {
         var __mb = __mb_set_cyclic_length;
         if (__mb == 0)
@@ -8056,7 +8478,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_get_cyclic_length;
-    public double GetCyclicLength()
+    internal double GetCyclicLength()
     {
         var __mb = __mb_get_cyclic_length;
         if (__mb == 0)
@@ -8080,19 +8502,79 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
         ClassRegistry.AttachNew(this, "AnimationNodeBlendSpace2D");
     }
 
-    public enum BlendMode : long
+    public enum BlendModeEnum : long
     {
         BLEND_MODE_INTERPOLATED = 0,
         BLEND_MODE_DISCRETE = 1,
         BLEND_MODE_DISCRETE_CARRY = 2,
     }
 
-    public enum SyncMode : long
+    public enum SyncModeEnum : long
     {
         SYNC_MODE_NONE = 0,
         SYNC_MODE_INDEPENDENT = 1,
         SYNC_MODE_CYCLIC_MUTABLE = 2,
         SYNC_MODE_CYCLIC_CONSTANT = 3,
+    }
+
+    public bool AutoTriangles
+    {
+        get => GetAutoTriangles();
+        set => SetAutoTriangles(value);
+    }
+
+    public Vector2 MinSpace
+    {
+        get => GetMinSpace();
+        set => SetMinSpace(value);
+    }
+
+    public Vector2 MaxSpace
+    {
+        get => GetMaxSpace();
+        set => SetMaxSpace(value);
+    }
+
+    public Vector2 Snap
+    {
+        get => GetSnap();
+        set => SetSnap(value);
+    }
+
+    public string XLabel
+    {
+        get => GetXLabel();
+        set => SetXLabel(value);
+    }
+
+    public string YLabel
+    {
+        get => GetYLabel();
+        set => SetYLabel(value);
+    }
+
+    public AnimationNodeBlendSpace2D.BlendModeEnum BlendMode
+    {
+        get => GetBlendMode();
+        set => SetBlendMode(value);
+    }
+
+    public bool Sync
+    {
+        get => IsUsingSync();
+        set => SetUseSync(value);
+    }
+
+    public AnimationNodeBlendSpace2D.SyncModeEnum SyncMode
+    {
+        get => GetSyncMode();
+        set => SetSyncMode(value);
+    }
+
+    public double CyclicLength
+    {
+        get => GetCyclicLength();
+        set => SetCyclicLength(value);
     }
 
     private static nint __mb_add_blend_point;
@@ -8366,7 +8848,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_set_min_space;
-    public void SetMinSpace(Vector2 minSpace)
+    internal void SetMinSpace(Vector2 minSpace)
     {
         var __mb = __mb_set_min_space;
         if (__mb == 0)
@@ -8382,7 +8864,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_get_min_space;
-    public Vector2 GetMinSpace()
+    internal Vector2 GetMinSpace()
     {
         var __mb = __mb_get_min_space;
         if (__mb == 0)
@@ -8397,7 +8879,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_set_max_space;
-    public void SetMaxSpace(Vector2 maxSpace)
+    internal void SetMaxSpace(Vector2 maxSpace)
     {
         var __mb = __mb_set_max_space;
         if (__mb == 0)
@@ -8413,7 +8895,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_get_max_space;
-    public Vector2 GetMaxSpace()
+    internal Vector2 GetMaxSpace()
     {
         var __mb = __mb_get_max_space;
         if (__mb == 0)
@@ -8428,7 +8910,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_set_snap;
-    public void SetSnap(Vector2 snap)
+    internal void SetSnap(Vector2 snap)
     {
         var __mb = __mb_set_snap;
         if (__mb == 0)
@@ -8444,7 +8926,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_get_snap;
-    public Vector2 GetSnap()
+    internal Vector2 GetSnap()
     {
         var __mb = __mb_get_snap;
         if (__mb == 0)
@@ -8459,7 +8941,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_set_x_label;
-    public void SetXLabel(string text)
+    internal void SetXLabel(string text)
     {
         var __mb = __mb_set_x_label;
         if (__mb == 0)
@@ -8476,7 +8958,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_get_x_label;
-    public string GetXLabel()
+    internal string GetXLabel()
     {
         var __mb = __mb_get_x_label;
         if (__mb == 0)
@@ -8491,7 +8973,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_set_y_label;
-    public void SetYLabel(string text)
+    internal void SetYLabel(string text)
     {
         var __mb = __mb_set_y_label;
         if (__mb == 0)
@@ -8508,7 +8990,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_get_y_label;
-    public string GetYLabel()
+    internal string GetYLabel()
     {
         var __mb = __mb_get_y_label;
         if (__mb == 0)
@@ -8523,7 +9005,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_set_auto_triangles;
-    public void SetAutoTriangles(bool enable)
+    internal void SetAutoTriangles(bool enable)
     {
         var __mb = __mb_set_auto_triangles;
         if (__mb == 0)
@@ -8539,7 +9021,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_get_auto_triangles;
-    public bool GetAutoTriangles()
+    internal bool GetAutoTriangles()
     {
         var __mb = __mb_get_auto_triangles;
         if (__mb == 0)
@@ -8554,7 +9036,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_set_blend_mode;
-    public void SetBlendMode(AnimationNodeBlendSpace2D.BlendMode mode)
+    internal void SetBlendMode(AnimationNodeBlendSpace2D.BlendModeEnum mode)
     {
         var __mb = __mb_set_blend_mode;
         if (__mb == 0)
@@ -8570,7 +9052,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_get_blend_mode;
-    public AnimationNodeBlendSpace2D.BlendMode GetBlendMode()
+    internal AnimationNodeBlendSpace2D.BlendModeEnum GetBlendMode()
     {
         var __mb = __mb_get_blend_mode;
         if (__mb == 0)
@@ -8581,11 +9063,11 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AnimationNodeBlendSpace2D.BlendMode)__ret;
+        return (AnimationNodeBlendSpace2D.BlendModeEnum)__ret;
     }
 
     private static nint __mb_set_use_sync;
-    public void SetUseSync(bool enable)
+    internal void SetUseSync(bool enable)
     {
         var __mb = __mb_set_use_sync;
         if (__mb == 0)
@@ -8601,7 +9083,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_is_using_sync;
-    public bool IsUsingSync()
+    internal bool IsUsingSync()
     {
         var __mb = __mb_is_using_sync;
         if (__mb == 0)
@@ -8616,7 +9098,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_set_sync_mode;
-    public void SetSyncMode(AnimationNodeBlendSpace2D.SyncMode syncMode)
+    internal void SetSyncMode(AnimationNodeBlendSpace2D.SyncModeEnum syncMode)
     {
         var __mb = __mb_set_sync_mode;
         if (__mb == 0)
@@ -8632,7 +9114,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_get_sync_mode;
-    public AnimationNodeBlendSpace2D.SyncMode GetSyncMode()
+    internal AnimationNodeBlendSpace2D.SyncModeEnum GetSyncMode()
     {
         var __mb = __mb_get_sync_mode;
         if (__mb == 0)
@@ -8643,11 +9125,11 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AnimationNodeBlendSpace2D.SyncMode)__ret;
+        return (AnimationNodeBlendSpace2D.SyncModeEnum)__ret;
     }
 
     private static nint __mb_set_cyclic_length;
-    public void SetCyclicLength(double length)
+    internal void SetCyclicLength(double length)
     {
         var __mb = __mb_set_cyclic_length;
         if (__mb == 0)
@@ -8663,7 +9145,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_get_cyclic_length;
-    public double GetCyclicLength()
+    internal double GetCyclicLength()
     {
         var __mb = __mb_get_cyclic_length;
         if (__mb == 0)
@@ -8685,6 +9167,12 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
     public AnimationNodeBlendTree() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "AnimationNodeBlendTree");
+    }
+
+    public Vector2 GraphOffset
+    {
+        get => GetGraphOffset();
+        set => SetGraphOffset(value);
     }
 
     private static nint __mb_add_node;
@@ -8867,7 +9355,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
     }
 
     private static nint __mb_set_graph_offset;
-    public void SetGraphOffset(Vector2 offset)
+    internal void SetGraphOffset(Vector2 offset)
     {
         var __mb = __mb_set_graph_offset;
         if (__mb == 0)
@@ -8883,7 +9371,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
     }
 
     private static nint __mb_get_graph_offset;
-    public Vector2 GetGraphOffset()
+    internal Vector2 GetGraphOffset()
     {
         var __mb = __mb_get_graph_offset;
         if (__mb == 0)
@@ -8925,14 +9413,74 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
         ONE_SHOT_REQUEST_FADE_OUT = 3,
     }
 
-    public enum MixMode : long
+    public enum MixModeEnum : long
     {
         MIX_MODE_BLEND = 0,
         MIX_MODE_ADD = 1,
     }
 
+    public AnimationNodeOneShot.MixModeEnum MixMode
+    {
+        get => GetMixMode();
+        set => SetMixMode(value);
+    }
+
+    public double FadeinTime
+    {
+        get => GetFadeinTime();
+        set => SetFadeinTime(value);
+    }
+
+    public Curve? FadeinCurve
+    {
+        get => GetFadeinCurve();
+        set => SetFadeinCurve(value);
+    }
+
+    public double FadeoutTime
+    {
+        get => GetFadeoutTime();
+        set => SetFadeoutTime(value);
+    }
+
+    public Curve? FadeoutCurve
+    {
+        get => GetFadeoutCurve();
+        set => SetFadeoutCurve(value);
+    }
+
+    public bool BreakLoopAtEnd
+    {
+        get => IsLoopBrokenAtEnd();
+        set => SetBreakLoopAtEnd(value);
+    }
+
+    public bool AbortOnReset
+    {
+        get => IsAbortedOnReset();
+        set => SetAbortOnReset(value);
+    }
+
+    public bool Autorestart
+    {
+        get => HasAutorestart();
+        set => SetAutorestart(value);
+    }
+
+    public double AutorestartDelay
+    {
+        get => GetAutorestartDelay();
+        set => SetAutorestartDelay(value);
+    }
+
+    public double AutorestartRandomDelay
+    {
+        get => GetAutorestartRandomDelay();
+        set => SetAutorestartRandomDelay(value);
+    }
+
     private static nint __mb_set_fadein_time;
-    public void SetFadeinTime(double time)
+    internal void SetFadeinTime(double time)
     {
         var __mb = __mb_set_fadein_time;
         if (__mb == 0)
@@ -8948,7 +9496,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_get_fadein_time;
-    public double GetFadeinTime()
+    internal double GetFadeinTime()
     {
         var __mb = __mb_get_fadein_time;
         if (__mb == 0)
@@ -8963,7 +9511,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_set_fadein_curve;
-    public void SetFadeinCurve(Curve? curve)
+    internal void SetFadeinCurve(Curve? curve)
     {
         var __mb = __mb_set_fadein_curve;
         if (__mb == 0)
@@ -8979,7 +9527,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_get_fadein_curve;
-    public Curve? GetFadeinCurve()
+    internal Curve? GetFadeinCurve()
     {
         var __mb = __mb_get_fadein_curve;
         if (__mb == 0)
@@ -8994,7 +9542,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_set_fadeout_time;
-    public void SetFadeoutTime(double time)
+    internal void SetFadeoutTime(double time)
     {
         var __mb = __mb_set_fadeout_time;
         if (__mb == 0)
@@ -9010,7 +9558,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_get_fadeout_time;
-    public double GetFadeoutTime()
+    internal double GetFadeoutTime()
     {
         var __mb = __mb_get_fadeout_time;
         if (__mb == 0)
@@ -9025,7 +9573,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_set_fadeout_curve;
-    public void SetFadeoutCurve(Curve? curve)
+    internal void SetFadeoutCurve(Curve? curve)
     {
         var __mb = __mb_set_fadeout_curve;
         if (__mb == 0)
@@ -9041,7 +9589,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_get_fadeout_curve;
-    public Curve? GetFadeoutCurve()
+    internal Curve? GetFadeoutCurve()
     {
         var __mb = __mb_get_fadeout_curve;
         if (__mb == 0)
@@ -9056,7 +9604,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_set_break_loop_at_end;
-    public void SetBreakLoopAtEnd(bool enable)
+    internal void SetBreakLoopAtEnd(bool enable)
     {
         var __mb = __mb_set_break_loop_at_end;
         if (__mb == 0)
@@ -9072,7 +9620,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_is_loop_broken_at_end;
-    public bool IsLoopBrokenAtEnd()
+    internal bool IsLoopBrokenAtEnd()
     {
         var __mb = __mb_is_loop_broken_at_end;
         if (__mb == 0)
@@ -9087,7 +9635,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_set_abort_on_reset;
-    public void SetAbortOnReset(bool enable)
+    internal void SetAbortOnReset(bool enable)
     {
         var __mb = __mb_set_abort_on_reset;
         if (__mb == 0)
@@ -9103,7 +9651,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_is_aborted_on_reset;
-    public bool IsAbortedOnReset()
+    internal bool IsAbortedOnReset()
     {
         var __mb = __mb_is_aborted_on_reset;
         if (__mb == 0)
@@ -9118,7 +9666,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_set_autorestart;
-    public void SetAutorestart(bool active)
+    internal void SetAutorestart(bool active)
     {
         var __mb = __mb_set_autorestart;
         if (__mb == 0)
@@ -9134,7 +9682,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_has_autorestart;
-    public bool HasAutorestart()
+    internal bool HasAutorestart()
     {
         var __mb = __mb_has_autorestart;
         if (__mb == 0)
@@ -9149,7 +9697,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_set_autorestart_delay;
-    public void SetAutorestartDelay(double time)
+    internal void SetAutorestartDelay(double time)
     {
         var __mb = __mb_set_autorestart_delay;
         if (__mb == 0)
@@ -9165,7 +9713,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_get_autorestart_delay;
-    public double GetAutorestartDelay()
+    internal double GetAutorestartDelay()
     {
         var __mb = __mb_get_autorestart_delay;
         if (__mb == 0)
@@ -9180,7 +9728,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_set_autorestart_random_delay;
-    public void SetAutorestartRandomDelay(double time)
+    internal void SetAutorestartRandomDelay(double time)
     {
         var __mb = __mb_set_autorestart_random_delay;
         if (__mb == 0)
@@ -9196,7 +9744,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_get_autorestart_random_delay;
-    public double GetAutorestartRandomDelay()
+    internal double GetAutorestartRandomDelay()
     {
         var __mb = __mb_get_autorestart_random_delay;
         if (__mb == 0)
@@ -9211,7 +9759,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_set_mix_mode;
-    public void SetMixMode(AnimationNodeOneShot.MixMode mode)
+    internal void SetMixMode(AnimationNodeOneShot.MixModeEnum mode)
     {
         var __mb = __mb_set_mix_mode;
         if (__mb == 0)
@@ -9227,7 +9775,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
     }
 
     private static nint __mb_get_mix_mode;
-    public AnimationNodeOneShot.MixMode GetMixMode()
+    internal AnimationNodeOneShot.MixModeEnum GetMixMode()
     {
         var __mb = __mb_get_mix_mode;
         if (__mb == 0)
@@ -9238,7 +9786,7 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AnimationNodeOneShot.MixMode)__ret;
+        return (AnimationNodeOneShot.MixModeEnum)__ret;
     }
 }
 
@@ -9261,11 +9809,29 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
         ClassRegistry.AttachNew(this, "AnimationNodeStateMachine");
     }
 
-    public enum StateMachineType : long
+    public enum StateMachineTypeEnum : long
     {
         STATE_MACHINE_TYPE_ROOT = 0,
         STATE_MACHINE_TYPE_NESTED = 1,
         STATE_MACHINE_TYPE_GROUPED = 2,
+    }
+
+    public AnimationNodeStateMachine.StateMachineTypeEnum StateMachineType
+    {
+        get => GetStateMachineType();
+        set => SetStateMachineType(value);
+    }
+
+    public bool AllowTransitionToSelf
+    {
+        get => IsAllowTransitionToSelf();
+        set => SetAllowTransitionToSelf(value);
+    }
+
+    public bool ResetEnds
+    {
+        get => AreEndsReset();
+        set => SetResetEnds(value);
     }
 
     private static nint __mb_add_node;
@@ -9620,7 +10186,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_set_state_machine_type;
-    public void SetStateMachineType(AnimationNodeStateMachine.StateMachineType stateMachineType)
+    internal void SetStateMachineType(AnimationNodeStateMachine.StateMachineTypeEnum stateMachineType)
     {
         var __mb = __mb_set_state_machine_type;
         if (__mb == 0)
@@ -9636,7 +10202,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_get_state_machine_type;
-    public AnimationNodeStateMachine.StateMachineType GetStateMachineType()
+    internal AnimationNodeStateMachine.StateMachineTypeEnum GetStateMachineType()
     {
         var __mb = __mb_get_state_machine_type;
         if (__mb == 0)
@@ -9647,11 +10213,11 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AnimationNodeStateMachine.StateMachineType)__ret;
+        return (AnimationNodeStateMachine.StateMachineTypeEnum)__ret;
     }
 
     private static nint __mb_set_allow_transition_to_self;
-    public void SetAllowTransitionToSelf(bool enable)
+    internal void SetAllowTransitionToSelf(bool enable)
     {
         var __mb = __mb_set_allow_transition_to_self;
         if (__mb == 0)
@@ -9667,7 +10233,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_is_allow_transition_to_self;
-    public bool IsAllowTransitionToSelf()
+    internal bool IsAllowTransitionToSelf()
     {
         var __mb = __mb_is_allow_transition_to_self;
         if (__mb == 0)
@@ -9682,7 +10248,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_set_reset_ends;
-    public void SetResetEnds(bool enable)
+    internal void SetResetEnds(bool enable)
     {
         var __mb = __mb_set_reset_ends;
         if (__mb == 0)
@@ -9698,7 +10264,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_are_ends_reset;
-    public bool AreEndsReset()
+    internal bool AreEndsReset()
     {
         var __mb = __mb_are_ends_reset;
         if (__mb == 0)
@@ -9944,22 +10510,76 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
         ClassRegistry.AttachNew(this, "AnimationNodeStateMachineTransition");
     }
 
-    public enum SwitchMode : long
+    public enum SwitchModeEnum : long
     {
         SWITCH_MODE_IMMEDIATE = 0,
         SWITCH_MODE_SYNC = 1,
         SWITCH_MODE_AT_END = 2,
     }
 
-    public enum AdvanceMode : long
+    public enum AdvanceModeEnum : long
     {
         ADVANCE_MODE_DISABLED = 0,
         ADVANCE_MODE_ENABLED = 1,
         ADVANCE_MODE_AUTO = 2,
     }
 
+    public float XfadeTime
+    {
+        get => GetXfadeTime();
+        set => SetXfadeTime(value);
+    }
+
+    public Curve? XfadeCurve
+    {
+        get => GetXfadeCurve();
+        set => SetXfadeCurve(value);
+    }
+
+    public bool BreakLoopAtEnd
+    {
+        get => IsLoopBrokenAtEnd();
+        set => SetBreakLoopAtEnd(value);
+    }
+
+    public bool Reset
+    {
+        get => IsReset();
+        set => SetReset(value);
+    }
+
+    public int Priority
+    {
+        get => GetPriority();
+        set => SetPriority(value);
+    }
+
+    public AnimationNodeStateMachineTransition.SwitchModeEnum SwitchMode
+    {
+        get => GetSwitchMode();
+        set => SetSwitchMode(value);
+    }
+
+    public AnimationNodeStateMachineTransition.AdvanceModeEnum AdvanceMode
+    {
+        get => GetAdvanceMode();
+        set => SetAdvanceMode(value);
+    }
+
+    public string AdvanceCondition
+    {
+        get => GetAdvanceCondition();
+        set => SetAdvanceCondition(value);
+    }
+
+    public string AdvanceExpression
+    {
+        get => GetAdvanceExpression();
+        set => SetAdvanceExpression(value);
+    }
+
     private static nint __mb_set_switch_mode;
-    public void SetSwitchMode(AnimationNodeStateMachineTransition.SwitchMode mode)
+    internal void SetSwitchMode(AnimationNodeStateMachineTransition.SwitchModeEnum mode)
     {
         var __mb = __mb_set_switch_mode;
         if (__mb == 0)
@@ -9975,7 +10595,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_get_switch_mode;
-    public AnimationNodeStateMachineTransition.SwitchMode GetSwitchMode()
+    internal AnimationNodeStateMachineTransition.SwitchModeEnum GetSwitchMode()
     {
         var __mb = __mb_get_switch_mode;
         if (__mb == 0)
@@ -9986,11 +10606,11 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AnimationNodeStateMachineTransition.SwitchMode)__ret;
+        return (AnimationNodeStateMachineTransition.SwitchModeEnum)__ret;
     }
 
     private static nint __mb_set_advance_mode;
-    public void SetAdvanceMode(AnimationNodeStateMachineTransition.AdvanceMode mode)
+    internal void SetAdvanceMode(AnimationNodeStateMachineTransition.AdvanceModeEnum mode)
     {
         var __mb = __mb_set_advance_mode;
         if (__mb == 0)
@@ -10006,7 +10626,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_get_advance_mode;
-    public AnimationNodeStateMachineTransition.AdvanceMode GetAdvanceMode()
+    internal AnimationNodeStateMachineTransition.AdvanceModeEnum GetAdvanceMode()
     {
         var __mb = __mb_get_advance_mode;
         if (__mb == 0)
@@ -10017,11 +10637,11 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AnimationNodeStateMachineTransition.AdvanceMode)__ret;
+        return (AnimationNodeStateMachineTransition.AdvanceModeEnum)__ret;
     }
 
     private static nint __mb_set_advance_condition;
-    public void SetAdvanceCondition(string name)
+    internal void SetAdvanceCondition(string name)
     {
         var __mb = __mb_set_advance_condition;
         if (__mb == 0)
@@ -10037,7 +10657,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_get_advance_condition;
-    public string GetAdvanceCondition()
+    internal string GetAdvanceCondition()
     {
         var __mb = __mb_get_advance_condition;
         if (__mb == 0)
@@ -10052,7 +10672,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_set_xfade_time;
-    public void SetXfadeTime(float secs)
+    internal void SetXfadeTime(float secs)
     {
         var __mb = __mb_set_xfade_time;
         if (__mb == 0)
@@ -10068,7 +10688,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_get_xfade_time;
-    public float GetXfadeTime()
+    internal float GetXfadeTime()
     {
         var __mb = __mb_get_xfade_time;
         if (__mb == 0)
@@ -10083,7 +10703,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_set_xfade_curve;
-    public void SetXfadeCurve(Curve? curve)
+    internal void SetXfadeCurve(Curve? curve)
     {
         var __mb = __mb_set_xfade_curve;
         if (__mb == 0)
@@ -10099,7 +10719,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_get_xfade_curve;
-    public Curve? GetXfadeCurve()
+    internal Curve? GetXfadeCurve()
     {
         var __mb = __mb_get_xfade_curve;
         if (__mb == 0)
@@ -10114,7 +10734,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_set_break_loop_at_end;
-    public void SetBreakLoopAtEnd(bool enable)
+    internal void SetBreakLoopAtEnd(bool enable)
     {
         var __mb = __mb_set_break_loop_at_end;
         if (__mb == 0)
@@ -10130,7 +10750,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_is_loop_broken_at_end;
-    public bool IsLoopBrokenAtEnd()
+    internal bool IsLoopBrokenAtEnd()
     {
         var __mb = __mb_is_loop_broken_at_end;
         if (__mb == 0)
@@ -10145,7 +10765,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_set_reset;
-    public void SetReset(bool reset)
+    internal void SetReset(bool reset)
     {
         var __mb = __mb_set_reset;
         if (__mb == 0)
@@ -10161,7 +10781,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_is_reset;
-    public bool IsReset()
+    internal bool IsReset()
     {
         var __mb = __mb_is_reset;
         if (__mb == 0)
@@ -10176,7 +10796,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_set_priority;
-    public void SetPriority(int priority)
+    internal void SetPriority(int priority)
     {
         var __mb = __mb_set_priority;
         if (__mb == 0)
@@ -10192,7 +10812,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_get_priority;
-    public int GetPriority()
+    internal int GetPriority()
     {
         var __mb = __mb_get_priority;
         if (__mb == 0)
@@ -10207,7 +10827,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_set_advance_expression;
-    public void SetAdvanceExpression(string text)
+    internal void SetAdvanceExpression(string text)
     {
         var __mb = __mb_set_advance_expression;
         if (__mb == 0)
@@ -10224,7 +10844,7 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     }
 
     private static nint __mb_get_advance_expression;
-    public string GetAdvanceExpression()
+    internal string GetAdvanceExpression()
     {
         var __mb = __mb_get_advance_expression;
         if (__mb == 0)
@@ -10258,8 +10878,14 @@ public unsafe partial class AnimationNodeSync : AnimationNode
         ClassRegistry.AttachNew(this, "AnimationNodeSync");
     }
 
+    public bool Sync
+    {
+        get => IsUsingSync();
+        set => SetUseSync(value);
+    }
+
     private static nint __mb_set_use_sync;
-    public void SetUseSync(bool enable)
+    internal void SetUseSync(bool enable)
     {
         var __mb = __mb_set_use_sync;
         if (__mb == 0)
@@ -10275,7 +10901,7 @@ public unsafe partial class AnimationNodeSync : AnimationNode
     }
 
     private static nint __mb_is_using_sync;
-    public bool IsUsingSync()
+    internal bool IsUsingSync()
     {
         var __mb = __mb_is_using_sync;
         if (__mb == 0)
@@ -10309,8 +10935,14 @@ public unsafe partial class AnimationNodeTimeSeek : AnimationNode
         ClassRegistry.AttachNew(this, "AnimationNodeTimeSeek");
     }
 
+    public bool ExplicitElapse
+    {
+        get => IsExplicitElapse();
+        set => SetExplicitElapse(value);
+    }
+
     private static nint __mb_set_explicit_elapse;
-    public void SetExplicitElapse(bool enable)
+    internal void SetExplicitElapse(bool enable)
     {
         var __mb = __mb_set_explicit_elapse;
         if (__mb == 0)
@@ -10326,7 +10958,7 @@ public unsafe partial class AnimationNodeTimeSeek : AnimationNode
     }
 
     private static nint __mb_is_explicit_elapse;
-    public bool IsExplicitElapse()
+    internal bool IsExplicitElapse()
     {
         var __mb = __mb_is_explicit_elapse;
         if (__mb == 0)
@@ -10350,8 +10982,32 @@ public unsafe partial class AnimationNodeTransition : AnimationNodeSync
         ClassRegistry.AttachNew(this, "AnimationNodeTransition");
     }
 
+    public double XfadeTime
+    {
+        get => GetXfadeTime();
+        set => SetXfadeTime(value);
+    }
+
+    public Curve? XfadeCurve
+    {
+        get => GetXfadeCurve();
+        set => SetXfadeCurve(value);
+    }
+
+    public bool AllowTransitionToSelf
+    {
+        get => IsAllowTransitionToSelf();
+        set => SetAllowTransitionToSelf(value);
+    }
+
+    public int InputCount
+    {
+        get => GetInputCount();
+        set => SetInputCount(value);
+    }
+
     private static nint __mb_set_input_count;
-    public void SetInputCount(int inputCount)
+    internal void SetInputCount(int inputCount)
     {
         var __mb = __mb_set_input_count;
         if (__mb == 0)
@@ -10475,7 +11131,7 @@ public unsafe partial class AnimationNodeTransition : AnimationNodeSync
     }
 
     private static nint __mb_set_xfade_time;
-    public void SetXfadeTime(double time)
+    internal void SetXfadeTime(double time)
     {
         var __mb = __mb_set_xfade_time;
         if (__mb == 0)
@@ -10491,7 +11147,7 @@ public unsafe partial class AnimationNodeTransition : AnimationNodeSync
     }
 
     private static nint __mb_get_xfade_time;
-    public double GetXfadeTime()
+    internal double GetXfadeTime()
     {
         var __mb = __mb_get_xfade_time;
         if (__mb == 0)
@@ -10506,7 +11162,7 @@ public unsafe partial class AnimationNodeTransition : AnimationNodeSync
     }
 
     private static nint __mb_set_xfade_curve;
-    public void SetXfadeCurve(Curve? curve)
+    internal void SetXfadeCurve(Curve? curve)
     {
         var __mb = __mb_set_xfade_curve;
         if (__mb == 0)
@@ -10522,7 +11178,7 @@ public unsafe partial class AnimationNodeTransition : AnimationNodeSync
     }
 
     private static nint __mb_get_xfade_curve;
-    public Curve? GetXfadeCurve()
+    internal Curve? GetXfadeCurve()
     {
         var __mb = __mb_get_xfade_curve;
         if (__mb == 0)
@@ -10537,7 +11193,7 @@ public unsafe partial class AnimationNodeTransition : AnimationNodeSync
     }
 
     private static nint __mb_set_allow_transition_to_self;
-    public void SetAllowTransitionToSelf(bool enable)
+    internal void SetAllowTransitionToSelf(bool enable)
     {
         var __mb = __mb_set_allow_transition_to_self;
         if (__mb == 0)
@@ -10553,7 +11209,7 @@ public unsafe partial class AnimationNodeTransition : AnimationNodeSync
     }
 
     private static nint __mb_is_allow_transition_to_self;
-    public bool IsAllowTransitionToSelf()
+    internal bool IsAllowTransitionToSelf()
     {
         var __mb = __mb_is_allow_transition_to_self;
         if (__mb == 0)
@@ -10588,6 +11244,70 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     {
         ANIMATION_METHOD_CALL_DEFERRED = 0,
         ANIMATION_METHOD_CALL_IMMEDIATE = 1,
+    }
+
+    public string CurrentAnimation
+    {
+        get => GetCurrentAnimation();
+        set => SetCurrentAnimation(value);
+    }
+
+    public string AssignedAnimation
+    {
+        get => GetAssignedAnimation();
+        set => SetAssignedAnimation(value);
+    }
+
+    public string Autoplay
+    {
+        get => GetAutoplay();
+        set => SetAutoplay(value);
+    }
+
+    public double CurrentAnimationLength => GetCurrentAnimationLength();
+
+    public double CurrentAnimationPosition => GetCurrentAnimationPosition();
+
+    public bool PlaybackAutoCapture
+    {
+        get => IsAutoCapture();
+        set => SetAutoCapture(value);
+    }
+
+    public double PlaybackAutoCaptureDuration
+    {
+        get => GetAutoCaptureDuration();
+        set => SetAutoCaptureDuration(value);
+    }
+
+    public Tween.TransitionType PlaybackAutoCaptureTransitionType
+    {
+        get => GetAutoCaptureTransitionType();
+        set => SetAutoCaptureTransitionType(value);
+    }
+
+    public Tween.EaseType PlaybackAutoCaptureEaseType
+    {
+        get => GetAutoCaptureEaseType();
+        set => SetAutoCaptureEaseType(value);
+    }
+
+    public double PlaybackDefaultBlendTime
+    {
+        get => GetDefaultBlendTime();
+        set => SetDefaultBlendTime(value);
+    }
+
+    public float SpeedScale
+    {
+        get => GetSpeedScale();
+        set => SetSpeedScale(value);
+    }
+
+    public bool MovieQuitOnFinish
+    {
+        get => IsMovieQuitOnFinishEnabled();
+        set => SetMovieQuitOnFinishEnabled(value);
     }
 
     private static nint __mb_animation_set_next;
@@ -10667,7 +11387,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_set_default_blend_time;
-    public void SetDefaultBlendTime(double sec)
+    internal void SetDefaultBlendTime(double sec)
     {
         var __mb = __mb_set_default_blend_time;
         if (__mb == 0)
@@ -10683,7 +11403,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_get_default_blend_time;
-    public double GetDefaultBlendTime()
+    internal double GetDefaultBlendTime()
     {
         var __mb = __mb_get_default_blend_time;
         if (__mb == 0)
@@ -10698,7 +11418,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_set_auto_capture;
-    public void SetAutoCapture(bool autoCapture)
+    internal void SetAutoCapture(bool autoCapture)
     {
         var __mb = __mb_set_auto_capture;
         if (__mb == 0)
@@ -10714,7 +11434,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_is_auto_capture;
-    public bool IsAutoCapture()
+    internal bool IsAutoCapture()
     {
         var __mb = __mb_is_auto_capture;
         if (__mb == 0)
@@ -10729,7 +11449,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_set_auto_capture_duration;
-    public void SetAutoCaptureDuration(double autoCaptureDuration)
+    internal void SetAutoCaptureDuration(double autoCaptureDuration)
     {
         var __mb = __mb_set_auto_capture_duration;
         if (__mb == 0)
@@ -10745,7 +11465,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_get_auto_capture_duration;
-    public double GetAutoCaptureDuration()
+    internal double GetAutoCaptureDuration()
     {
         var __mb = __mb_get_auto_capture_duration;
         if (__mb == 0)
@@ -10760,7 +11480,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_set_auto_capture_transition_type;
-    public void SetAutoCaptureTransitionType(Tween.TransitionType autoCaptureTransitionType)
+    internal void SetAutoCaptureTransitionType(Tween.TransitionType autoCaptureTransitionType)
     {
         var __mb = __mb_set_auto_capture_transition_type;
         if (__mb == 0)
@@ -10776,7 +11496,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_get_auto_capture_transition_type;
-    public Tween.TransitionType GetAutoCaptureTransitionType()
+    internal Tween.TransitionType GetAutoCaptureTransitionType()
     {
         var __mb = __mb_get_auto_capture_transition_type;
         if (__mb == 0)
@@ -10791,7 +11511,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_set_auto_capture_ease_type;
-    public void SetAutoCaptureEaseType(Tween.EaseType autoCaptureEaseType)
+    internal void SetAutoCaptureEaseType(Tween.EaseType autoCaptureEaseType)
     {
         var __mb = __mb_set_auto_capture_ease_type;
         if (__mb == 0)
@@ -10807,7 +11527,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_get_auto_capture_ease_type;
-    public Tween.EaseType GetAutoCaptureEaseType()
+    internal Tween.EaseType GetAutoCaptureEaseType()
     {
         var __mb = __mb_get_auto_capture_ease_type;
         if (__mb == 0)
@@ -11045,7 +11765,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_set_current_animation;
-    public void SetCurrentAnimation(string animation)
+    internal void SetCurrentAnimation(string animation)
     {
         var __mb = __mb_set_current_animation;
         if (__mb == 0)
@@ -11061,7 +11781,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_get_current_animation;
-    public string GetCurrentAnimation()
+    internal string GetCurrentAnimation()
     {
         var __mb = __mb_get_current_animation;
         if (__mb == 0)
@@ -11076,7 +11796,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_set_assigned_animation;
-    public void SetAssignedAnimation(string animation)
+    internal void SetAssignedAnimation(string animation)
     {
         var __mb = __mb_set_assigned_animation;
         if (__mb == 0)
@@ -11092,7 +11812,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_get_assigned_animation;
-    public string GetAssignedAnimation()
+    internal string GetAssignedAnimation()
     {
         var __mb = __mb_get_assigned_animation;
         if (__mb == 0)
@@ -11151,7 +11871,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_set_speed_scale;
-    public void SetSpeedScale(float speed)
+    internal void SetSpeedScale(float speed)
     {
         var __mb = __mb_set_speed_scale;
         if (__mb == 0)
@@ -11167,7 +11887,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_get_speed_scale;
-    public float GetSpeedScale()
+    internal float GetSpeedScale()
     {
         var __mb = __mb_get_speed_scale;
         if (__mb == 0)
@@ -11197,7 +11917,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_set_autoplay;
-    public void SetAutoplay(string name)
+    internal void SetAutoplay(string name)
     {
         var __mb = __mb_set_autoplay;
         if (__mb == 0)
@@ -11213,7 +11933,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_get_autoplay;
-    public string GetAutoplay()
+    internal string GetAutoplay()
     {
         var __mb = __mb_get_autoplay;
         if (__mb == 0)
@@ -11228,7 +11948,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_set_movie_quit_on_finish_enabled;
-    public void SetMovieQuitOnFinishEnabled(bool enabled)
+    internal void SetMovieQuitOnFinishEnabled(bool enabled)
     {
         var __mb = __mb_set_movie_quit_on_finish_enabled;
         if (__mb == 0)
@@ -11244,7 +11964,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_is_movie_quit_on_finish_enabled;
-    public bool IsMovieQuitOnFinishEnabled()
+    internal bool IsMovieQuitOnFinishEnabled()
     {
         var __mb = __mb_is_movie_quit_on_finish_enabled;
         if (__mb == 0)
@@ -11259,7 +11979,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_get_current_animation_position;
-    public double GetCurrentAnimationPosition()
+    internal double GetCurrentAnimationPosition()
     {
         var __mb = __mb_get_current_animation_position;
         if (__mb == 0)
@@ -11274,7 +11994,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_get_current_animation_length;
-    public double GetCurrentAnimationLength()
+    internal double GetCurrentAnimationLength()
     {
         var __mb = __mb_get_current_animation_length;
         if (__mb == 0)
@@ -11522,8 +12242,26 @@ public unsafe partial class AnimationTree : AnimationMixer
         ANIMATION_PROCESS_MANUAL = 2,
     }
 
+    public AnimationRootNode? TreeRoot
+    {
+        get => GetTreeRoot();
+        set => SetTreeRoot(value);
+    }
+
+    public NodePath AdvanceExpressionBaseNode
+    {
+        get => GetAdvanceExpressionBaseNode();
+        set => SetAdvanceExpressionBaseNode(value);
+    }
+
+    public NodePath AnimPlayer
+    {
+        get => GetAnimationPlayer();
+        set => SetAnimationPlayer(value);
+    }
+
     private static nint __mb_set_tree_root;
-    public void SetTreeRoot(AnimationRootNode? animationNode)
+    internal void SetTreeRoot(AnimationRootNode? animationNode)
     {
         var __mb = __mb_set_tree_root;
         if (__mb == 0)
@@ -11539,7 +12277,7 @@ public unsafe partial class AnimationTree : AnimationMixer
     }
 
     private static nint __mb_get_tree_root;
-    public AnimationRootNode? GetTreeRoot()
+    internal AnimationRootNode? GetTreeRoot()
     {
         var __mb = __mb_get_tree_root;
         if (__mb == 0)
@@ -11554,7 +12292,7 @@ public unsafe partial class AnimationTree : AnimationMixer
     }
 
     private static nint __mb_set_advance_expression_base_node;
-    public void SetAdvanceExpressionBaseNode(NodePath path)
+    internal void SetAdvanceExpressionBaseNode(NodePath path)
     {
         var __mb = __mb_set_advance_expression_base_node;
         if (__mb == 0)
@@ -11570,7 +12308,7 @@ public unsafe partial class AnimationTree : AnimationMixer
     }
 
     private static nint __mb_get_advance_expression_base_node;
-    public NodePath GetAdvanceExpressionBaseNode()
+    internal NodePath GetAdvanceExpressionBaseNode()
     {
         var __mb = __mb_get_advance_expression_base_node;
         if (__mb == 0)
@@ -11585,7 +12323,7 @@ public unsafe partial class AnimationTree : AnimationMixer
     }
 
     private static nint __mb_set_animation_player;
-    public void SetAnimationPlayer(NodePath path)
+    internal void SetAnimationPlayer(NodePath path)
     {
         var __mb = __mb_set_animation_player;
         if (__mb == 0)
@@ -11601,7 +12339,7 @@ public unsafe partial class AnimationTree : AnimationMixer
     }
 
     private static nint __mb_get_animation_player;
-    public NodePath GetAnimationPlayer()
+    internal NodePath GetAnimationPlayer()
     {
         var __mb = __mb_get_animation_player;
         if (__mb == 0)
@@ -11665,8 +12403,98 @@ public unsafe partial class Area2D : CollisionObject2D
         SPACE_OVERRIDE_REPLACE_COMBINE = 4,
     }
 
+    public bool Monitoring
+    {
+        get => IsMonitoring();
+        set => SetMonitoring(value);
+    }
+
+    public bool Monitorable
+    {
+        get => IsMonitorable();
+        set => SetMonitorable(value);
+    }
+
+    public int Priority
+    {
+        get => GetPriority();
+        set => SetPriority(value);
+    }
+
+    public Area2D.SpaceOverride GravitySpaceOverride
+    {
+        get => GetGravitySpaceOverrideMode();
+        set => SetGravitySpaceOverrideMode(value);
+    }
+
+    public bool GravityPoint
+    {
+        get => IsGravityAPoint();
+        set => SetGravityIsPoint(value);
+    }
+
+    public float GravityPointUnitDistance
+    {
+        get => GetGravityPointUnitDistance();
+        set => SetGravityPointUnitDistance(value);
+    }
+
+    public Vector2 GravityPointCenter
+    {
+        get => GetGravityPointCenter();
+        set => SetGravityPointCenter(value);
+    }
+
+    public Vector2 GravityDirection
+    {
+        get => GetGravityDirection();
+        set => SetGravityDirection(value);
+    }
+
+    public float Gravity
+    {
+        get => GetGravity();
+        set => SetGravity(value);
+    }
+
+    public Area2D.SpaceOverride LinearDampSpaceOverride
+    {
+        get => GetLinearDampSpaceOverrideMode();
+        set => SetLinearDampSpaceOverrideMode(value);
+    }
+
+    public float LinearDamp
+    {
+        get => GetLinearDamp();
+        set => SetLinearDamp(value);
+    }
+
+    public Area2D.SpaceOverride AngularDampSpaceOverride
+    {
+        get => GetAngularDampSpaceOverrideMode();
+        set => SetAngularDampSpaceOverrideMode(value);
+    }
+
+    public float AngularDamp
+    {
+        get => GetAngularDamp();
+        set => SetAngularDamp(value);
+    }
+
+    public bool AudioBusOverride
+    {
+        get => IsOverridingAudioBus();
+        set => SetAudioBusOverride(value);
+    }
+
+    public string AudioBusName
+    {
+        get => GetAudioBusName();
+        set => SetAudioBusName(value);
+    }
+
     private static nint __mb_set_gravity_space_override_mode;
-    public void SetGravitySpaceOverrideMode(Area2D.SpaceOverride spaceOverrideMode)
+    internal void SetGravitySpaceOverrideMode(Area2D.SpaceOverride spaceOverrideMode)
     {
         var __mb = __mb_set_gravity_space_override_mode;
         if (__mb == 0)
@@ -11682,7 +12510,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_get_gravity_space_override_mode;
-    public Area2D.SpaceOverride GetGravitySpaceOverrideMode()
+    internal Area2D.SpaceOverride GetGravitySpaceOverrideMode()
     {
         var __mb = __mb_get_gravity_space_override_mode;
         if (__mb == 0)
@@ -11697,7 +12525,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_set_gravity_is_point;
-    public void SetGravityIsPoint(bool enable)
+    internal void SetGravityIsPoint(bool enable)
     {
         var __mb = __mb_set_gravity_is_point;
         if (__mb == 0)
@@ -11713,7 +12541,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_is_gravity_a_point;
-    public bool IsGravityAPoint()
+    internal bool IsGravityAPoint()
     {
         var __mb = __mb_is_gravity_a_point;
         if (__mb == 0)
@@ -11728,7 +12556,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_set_gravity_point_unit_distance;
-    public void SetGravityPointUnitDistance(float distanceScale)
+    internal void SetGravityPointUnitDistance(float distanceScale)
     {
         var __mb = __mb_set_gravity_point_unit_distance;
         if (__mb == 0)
@@ -11744,7 +12572,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_get_gravity_point_unit_distance;
-    public float GetGravityPointUnitDistance()
+    internal float GetGravityPointUnitDistance()
     {
         var __mb = __mb_get_gravity_point_unit_distance;
         if (__mb == 0)
@@ -11759,7 +12587,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_set_gravity_point_center;
-    public void SetGravityPointCenter(Vector2 center)
+    internal void SetGravityPointCenter(Vector2 center)
     {
         var __mb = __mb_set_gravity_point_center;
         if (__mb == 0)
@@ -11775,7 +12603,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_get_gravity_point_center;
-    public Vector2 GetGravityPointCenter()
+    internal Vector2 GetGravityPointCenter()
     {
         var __mb = __mb_get_gravity_point_center;
         if (__mb == 0)
@@ -11790,7 +12618,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_set_gravity_direction;
-    public void SetGravityDirection(Vector2 direction)
+    internal void SetGravityDirection(Vector2 direction)
     {
         var __mb = __mb_set_gravity_direction;
         if (__mb == 0)
@@ -11806,7 +12634,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_get_gravity_direction;
-    public Vector2 GetGravityDirection()
+    internal Vector2 GetGravityDirection()
     {
         var __mb = __mb_get_gravity_direction;
         if (__mb == 0)
@@ -11821,7 +12649,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_set_gravity;
-    public void SetGravity(float gravity)
+    internal void SetGravity(float gravity)
     {
         var __mb = __mb_set_gravity;
         if (__mb == 0)
@@ -11837,7 +12665,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_get_gravity;
-    public float GetGravity()
+    internal float GetGravity()
     {
         var __mb = __mb_get_gravity;
         if (__mb == 0)
@@ -11852,7 +12680,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_set_linear_damp_space_override_mode;
-    public void SetLinearDampSpaceOverrideMode(Area2D.SpaceOverride spaceOverrideMode)
+    internal void SetLinearDampSpaceOverrideMode(Area2D.SpaceOverride spaceOverrideMode)
     {
         var __mb = __mb_set_linear_damp_space_override_mode;
         if (__mb == 0)
@@ -11868,7 +12696,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_get_linear_damp_space_override_mode;
-    public Area2D.SpaceOverride GetLinearDampSpaceOverrideMode()
+    internal Area2D.SpaceOverride GetLinearDampSpaceOverrideMode()
     {
         var __mb = __mb_get_linear_damp_space_override_mode;
         if (__mb == 0)
@@ -11883,7 +12711,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_set_angular_damp_space_override_mode;
-    public void SetAngularDampSpaceOverrideMode(Area2D.SpaceOverride spaceOverrideMode)
+    internal void SetAngularDampSpaceOverrideMode(Area2D.SpaceOverride spaceOverrideMode)
     {
         var __mb = __mb_set_angular_damp_space_override_mode;
         if (__mb == 0)
@@ -11899,7 +12727,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_get_angular_damp_space_override_mode;
-    public Area2D.SpaceOverride GetAngularDampSpaceOverrideMode()
+    internal Area2D.SpaceOverride GetAngularDampSpaceOverrideMode()
     {
         var __mb = __mb_get_angular_damp_space_override_mode;
         if (__mb == 0)
@@ -11914,7 +12742,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_set_linear_damp;
-    public void SetLinearDamp(float linearDamp)
+    internal void SetLinearDamp(float linearDamp)
     {
         var __mb = __mb_set_linear_damp;
         if (__mb == 0)
@@ -11930,7 +12758,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_get_linear_damp;
-    public float GetLinearDamp()
+    internal float GetLinearDamp()
     {
         var __mb = __mb_get_linear_damp;
         if (__mb == 0)
@@ -11945,7 +12773,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_set_angular_damp;
-    public void SetAngularDamp(float angularDamp)
+    internal void SetAngularDamp(float angularDamp)
     {
         var __mb = __mb_set_angular_damp;
         if (__mb == 0)
@@ -11961,7 +12789,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_get_angular_damp;
-    public float GetAngularDamp()
+    internal float GetAngularDamp()
     {
         var __mb = __mb_get_angular_damp;
         if (__mb == 0)
@@ -11976,7 +12804,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_set_priority;
-    public void SetPriority(int priority)
+    internal void SetPriority(int priority)
     {
         var __mb = __mb_set_priority;
         if (__mb == 0)
@@ -11992,7 +12820,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_get_priority;
-    public int GetPriority()
+    internal int GetPriority()
     {
         var __mb = __mb_get_priority;
         if (__mb == 0)
@@ -12007,7 +12835,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_set_monitoring;
-    public void SetMonitoring(bool enable)
+    internal void SetMonitoring(bool enable)
     {
         var __mb = __mb_set_monitoring;
         if (__mb == 0)
@@ -12023,7 +12851,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_is_monitoring;
-    public bool IsMonitoring()
+    internal bool IsMonitoring()
     {
         var __mb = __mb_is_monitoring;
         if (__mb == 0)
@@ -12038,7 +12866,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_set_monitorable;
-    public void SetMonitorable(bool enable)
+    internal void SetMonitorable(bool enable)
     {
         var __mb = __mb_set_monitorable;
         if (__mb == 0)
@@ -12054,7 +12882,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_is_monitorable;
-    public bool IsMonitorable()
+    internal bool IsMonitorable()
     {
         var __mb = __mb_is_monitorable;
         if (__mb == 0)
@@ -12165,7 +12993,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_set_audio_bus_name;
-    public void SetAudioBusName(string name)
+    internal void SetAudioBusName(string name)
     {
         var __mb = __mb_set_audio_bus_name;
         if (__mb == 0)
@@ -12181,7 +13009,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_get_audio_bus_name;
-    public string GetAudioBusName()
+    internal string GetAudioBusName()
     {
         var __mb = __mb_get_audio_bus_name;
         if (__mb == 0)
@@ -12196,7 +13024,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_set_audio_bus_override;
-    public void SetAudioBusOverride(bool enable)
+    internal void SetAudioBusOverride(bool enable)
     {
         var __mb = __mb_set_audio_bus_override;
         if (__mb == 0)
@@ -12212,7 +13040,7 @@ public unsafe partial class Area2D : CollisionObject2D
     }
 
     private static nint __mb_is_overriding_audio_bus;
-    public bool IsOverridingAudioBus()
+    internal bool IsOverridingAudioBus()
     {
         var __mb = __mb_is_overriding_audio_bus;
         if (__mb == 0)
@@ -12245,8 +13073,140 @@ public unsafe partial class Area3D : CollisionObject3D
         SPACE_OVERRIDE_REPLACE_COMBINE = 4,
     }
 
+    public bool Monitoring
+    {
+        get => IsMonitoring();
+        set => SetMonitoring(value);
+    }
+
+    public bool Monitorable
+    {
+        get => IsMonitorable();
+        set => SetMonitorable(value);
+    }
+
+    public int Priority
+    {
+        get => GetPriority();
+        set => SetPriority(value);
+    }
+
+    public Area3D.SpaceOverride GravitySpaceOverride
+    {
+        get => GetGravitySpaceOverrideMode();
+        set => SetGravitySpaceOverrideMode(value);
+    }
+
+    public bool GravityPoint
+    {
+        get => IsGravityAPoint();
+        set => SetGravityIsPoint(value);
+    }
+
+    public float GravityPointUnitDistance
+    {
+        get => GetGravityPointUnitDistance();
+        set => SetGravityPointUnitDistance(value);
+    }
+
+    public Vector3 GravityPointCenter
+    {
+        get => GetGravityPointCenter();
+        set => SetGravityPointCenter(value);
+    }
+
+    public Vector3 GravityDirection
+    {
+        get => GetGravityDirection();
+        set => SetGravityDirection(value);
+    }
+
+    public float Gravity
+    {
+        get => GetGravity();
+        set => SetGravity(value);
+    }
+
+    public Area3D.SpaceOverride LinearDampSpaceOverride
+    {
+        get => GetLinearDampSpaceOverrideMode();
+        set => SetLinearDampSpaceOverrideMode(value);
+    }
+
+    public float LinearDamp
+    {
+        get => GetLinearDamp();
+        set => SetLinearDamp(value);
+    }
+
+    public Area3D.SpaceOverride AngularDampSpaceOverride
+    {
+        get => GetAngularDampSpaceOverrideMode();
+        set => SetAngularDampSpaceOverrideMode(value);
+    }
+
+    public float AngularDamp
+    {
+        get => GetAngularDamp();
+        set => SetAngularDamp(value);
+    }
+
+    public float WindForceMagnitude
+    {
+        get => GetWindForceMagnitude();
+        set => SetWindForceMagnitude(value);
+    }
+
+    public float WindAttenuationFactor
+    {
+        get => GetWindAttenuationFactor();
+        set => SetWindAttenuationFactor(value);
+    }
+
+    public NodePath WindSourcePath
+    {
+        get => GetWindSourcePath();
+        set => SetWindSourcePath(value);
+    }
+
+    public bool AudioBusOverride
+    {
+        get => IsOverridingAudioBus();
+        set => SetAudioBusOverride(value);
+    }
+
+    public string AudioBusName
+    {
+        get => GetAudioBusName();
+        set => SetAudioBusName(value);
+    }
+
+    public bool ReverbBusEnabled
+    {
+        get => IsUsingReverbBus();
+        set => SetUseReverbBus(value);
+    }
+
+    public string ReverbBusName
+    {
+        get => GetReverbBusName();
+        set => SetReverbBusName(value);
+    }
+
+    public float ReverbBusAmount
+    {
+        get => GetReverbAmount();
+        set => SetReverbAmount(value);
+    }
+
+    public float ReverbBusUniformity
+    {
+        get => GetReverbUniformity();
+        set => SetReverbUniformity(value);
+    }
+
     private static nint __mb_set_gravity_space_override_mode;
-    public void SetGravitySpaceOverrideMode(Area3D.SpaceOverride spaceOverrideMode)
+    internal void SetGravitySpaceOverrideMode(Area3D.SpaceOverride spaceOverrideMode)
     {
         var __mb = __mb_set_gravity_space_override_mode;
         if (__mb == 0)
@@ -12262,7 +13222,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_gravity_space_override_mode;
-    public Area3D.SpaceOverride GetGravitySpaceOverrideMode()
+    internal Area3D.SpaceOverride GetGravitySpaceOverrideMode()
     {
         var __mb = __mb_get_gravity_space_override_mode;
         if (__mb == 0)
@@ -12277,7 +13237,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_gravity_is_point;
-    public void SetGravityIsPoint(bool enable)
+    internal void SetGravityIsPoint(bool enable)
     {
         var __mb = __mb_set_gravity_is_point;
         if (__mb == 0)
@@ -12293,7 +13253,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_is_gravity_a_point;
-    public bool IsGravityAPoint()
+    internal bool IsGravityAPoint()
     {
         var __mb = __mb_is_gravity_a_point;
         if (__mb == 0)
@@ -12308,7 +13268,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_gravity_point_unit_distance;
-    public void SetGravityPointUnitDistance(float distanceScale)
+    internal void SetGravityPointUnitDistance(float distanceScale)
     {
         var __mb = __mb_set_gravity_point_unit_distance;
         if (__mb == 0)
@@ -12324,7 +13284,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_gravity_point_unit_distance;
-    public float GetGravityPointUnitDistance()
+    internal float GetGravityPointUnitDistance()
     {
         var __mb = __mb_get_gravity_point_unit_distance;
         if (__mb == 0)
@@ -12339,7 +13299,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_gravity_point_center;
-    public void SetGravityPointCenter(Vector3 center)
+    internal void SetGravityPointCenter(Vector3 center)
     {
         var __mb = __mb_set_gravity_point_center;
         if (__mb == 0)
@@ -12355,7 +13315,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_gravity_point_center;
-    public Vector3 GetGravityPointCenter()
+    internal Vector3 GetGravityPointCenter()
     {
         var __mb = __mb_get_gravity_point_center;
         if (__mb == 0)
@@ -12370,7 +13330,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_gravity_direction;
-    public void SetGravityDirection(Vector3 direction)
+    internal void SetGravityDirection(Vector3 direction)
     {
         var __mb = __mb_set_gravity_direction;
         if (__mb == 0)
@@ -12386,7 +13346,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_gravity_direction;
-    public Vector3 GetGravityDirection()
+    internal Vector3 GetGravityDirection()
     {
         var __mb = __mb_get_gravity_direction;
         if (__mb == 0)
@@ -12401,7 +13361,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_gravity;
-    public void SetGravity(float gravity)
+    internal void SetGravity(float gravity)
     {
         var __mb = __mb_set_gravity;
         if (__mb == 0)
@@ -12417,7 +13377,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_gravity;
-    public float GetGravity()
+    internal float GetGravity()
     {
         var __mb = __mb_get_gravity;
         if (__mb == 0)
@@ -12432,7 +13392,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_linear_damp_space_override_mode;
-    public void SetLinearDampSpaceOverrideMode(Area3D.SpaceOverride spaceOverrideMode)
+    internal void SetLinearDampSpaceOverrideMode(Area3D.SpaceOverride spaceOverrideMode)
     {
         var __mb = __mb_set_linear_damp_space_override_mode;
         if (__mb == 0)
@@ -12448,7 +13408,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_linear_damp_space_override_mode;
-    public Area3D.SpaceOverride GetLinearDampSpaceOverrideMode()
+    internal Area3D.SpaceOverride GetLinearDampSpaceOverrideMode()
     {
         var __mb = __mb_get_linear_damp_space_override_mode;
         if (__mb == 0)
@@ -12463,7 +13423,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_angular_damp_space_override_mode;
-    public void SetAngularDampSpaceOverrideMode(Area3D.SpaceOverride spaceOverrideMode)
+    internal void SetAngularDampSpaceOverrideMode(Area3D.SpaceOverride spaceOverrideMode)
     {
         var __mb = __mb_set_angular_damp_space_override_mode;
         if (__mb == 0)
@@ -12479,7 +13439,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_angular_damp_space_override_mode;
-    public Area3D.SpaceOverride GetAngularDampSpaceOverrideMode()
+    internal Area3D.SpaceOverride GetAngularDampSpaceOverrideMode()
     {
         var __mb = __mb_get_angular_damp_space_override_mode;
         if (__mb == 0)
@@ -12494,7 +13454,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_angular_damp;
-    public void SetAngularDamp(float angularDamp)
+    internal void SetAngularDamp(float angularDamp)
     {
         var __mb = __mb_set_angular_damp;
         if (__mb == 0)
@@ -12510,7 +13470,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_angular_damp;
-    public float GetAngularDamp()
+    internal float GetAngularDamp()
     {
         var __mb = __mb_get_angular_damp;
         if (__mb == 0)
@@ -12525,7 +13485,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_linear_damp;
-    public void SetLinearDamp(float linearDamp)
+    internal void SetLinearDamp(float linearDamp)
     {
         var __mb = __mb_set_linear_damp;
         if (__mb == 0)
@@ -12541,7 +13501,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_linear_damp;
-    public float GetLinearDamp()
+    internal float GetLinearDamp()
     {
         var __mb = __mb_get_linear_damp;
         if (__mb == 0)
@@ -12556,7 +13516,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_priority;
-    public void SetPriority(int priority)
+    internal void SetPriority(int priority)
     {
         var __mb = __mb_set_priority;
         if (__mb == 0)
@@ -12572,7 +13532,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_priority;
-    public int GetPriority()
+    internal int GetPriority()
     {
         var __mb = __mb_get_priority;
         if (__mb == 0)
@@ -12587,7 +13547,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_wind_force_magnitude;
-    public void SetWindForceMagnitude(float windForceMagnitude)
+    internal void SetWindForceMagnitude(float windForceMagnitude)
     {
         var __mb = __mb_set_wind_force_magnitude;
         if (__mb == 0)
@@ -12603,7 +13563,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_wind_force_magnitude;
-    public float GetWindForceMagnitude()
+    internal float GetWindForceMagnitude()
     {
         var __mb = __mb_get_wind_force_magnitude;
         if (__mb == 0)
@@ -12618,7 +13578,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_wind_attenuation_factor;
-    public void SetWindAttenuationFactor(float windAttenuationFactor)
+    internal void SetWindAttenuationFactor(float windAttenuationFactor)
     {
         var __mb = __mb_set_wind_attenuation_factor;
         if (__mb == 0)
@@ -12634,7 +13594,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_wind_attenuation_factor;
-    public float GetWindAttenuationFactor()
+    internal float GetWindAttenuationFactor()
     {
         var __mb = __mb_get_wind_attenuation_factor;
         if (__mb == 0)
@@ -12649,7 +13609,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_wind_source_path;
-    public void SetWindSourcePath(NodePath windSourcePath)
+    internal void SetWindSourcePath(NodePath windSourcePath)
     {
         var __mb = __mb_set_wind_source_path;
         if (__mb == 0)
@@ -12665,7 +13625,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_wind_source_path;
-    public NodePath GetWindSourcePath()
+    internal NodePath GetWindSourcePath()
     {
         var __mb = __mb_get_wind_source_path;
         if (__mb == 0)
@@ -12680,7 +13640,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_monitorable;
-    public void SetMonitorable(bool enable)
+    internal void SetMonitorable(bool enable)
     {
         var __mb = __mb_set_monitorable;
         if (__mb == 0)
@@ -12696,7 +13656,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_is_monitorable;
-    public bool IsMonitorable()
+    internal bool IsMonitorable()
     {
         var __mb = __mb_is_monitorable;
         if (__mb == 0)
@@ -12711,7 +13671,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_monitoring;
-    public void SetMonitoring(bool enable)
+    internal void SetMonitoring(bool enable)
     {
         var __mb = __mb_set_monitoring;
         if (__mb == 0)
@@ -12727,7 +13687,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_is_monitoring;
-    public bool IsMonitoring()
+    internal bool IsMonitoring()
     {
         var __mb = __mb_is_monitoring;
         if (__mb == 0)
@@ -12838,7 +13798,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_audio_bus_override;
-    public void SetAudioBusOverride(bool enable)
+    internal void SetAudioBusOverride(bool enable)
     {
         var __mb = __mb_set_audio_bus_override;
         if (__mb == 0)
@@ -12854,7 +13814,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_is_overriding_audio_bus;
-    public bool IsOverridingAudioBus()
+    internal bool IsOverridingAudioBus()
     {
         var __mb = __mb_is_overriding_audio_bus;
         if (__mb == 0)
@@ -12869,7 +13829,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_audio_bus_name;
-    public void SetAudioBusName(string name)
+    internal void SetAudioBusName(string name)
     {
         var __mb = __mb_set_audio_bus_name;
         if (__mb == 0)
@@ -12885,7 +13845,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_audio_bus_name;
-    public string GetAudioBusName()
+    internal string GetAudioBusName()
     {
         var __mb = __mb_get_audio_bus_name;
         if (__mb == 0)
@@ -12900,7 +13860,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_use_reverb_bus;
-    public void SetUseReverbBus(bool enable)
+    internal void SetUseReverbBus(bool enable)
     {
         var __mb = __mb_set_use_reverb_bus;
         if (__mb == 0)
@@ -12916,7 +13876,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_is_using_reverb_bus;
-    public bool IsUsingReverbBus()
+    internal bool IsUsingReverbBus()
     {
         var __mb = __mb_is_using_reverb_bus;
         if (__mb == 0)
@@ -12931,7 +13891,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_reverb_bus_name;
-    public void SetReverbBusName(string name)
+    internal void SetReverbBusName(string name)
     {
         var __mb = __mb_set_reverb_bus_name;
         if (__mb == 0)
@@ -12947,7 +13907,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_reverb_bus_name;
-    public string GetReverbBusName()
+    internal string GetReverbBusName()
     {
         var __mb = __mb_get_reverb_bus_name;
         if (__mb == 0)
@@ -12962,7 +13922,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_reverb_amount;
-    public void SetReverbAmount(float amount)
+    internal void SetReverbAmount(float amount)
     {
         var __mb = __mb_set_reverb_amount;
         if (__mb == 0)
@@ -12978,7 +13938,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_reverb_amount;
-    public float GetReverbAmount()
+    internal float GetReverbAmount()
     {
         var __mb = __mb_get_reverb_amount;
         if (__mb == 0)
@@ -12993,7 +13953,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_set_reverb_uniformity;
-    public void SetReverbUniformity(float amount)
+    internal void SetReverbUniformity(float amount)
     {
         var __mb = __mb_set_reverb_uniformity;
         if (__mb == 0)
@@ -13009,7 +13969,7 @@ public unsafe partial class Area3D : CollisionObject3D
     }
 
     private static nint __mb_get_reverb_uniformity;
-    public float GetReverbUniformity()
+    internal float GetReverbUniformity()
     {
         var __mb = __mb_get_reverb_uniformity;
         if (__mb == 0)
@@ -13033,8 +13993,38 @@ public unsafe partial class AreaLight3D : Light3D
         ClassRegistry.AttachNew(this, "AreaLight3D");
     }
 
+    public float AreaRange
+    {
+        get => GetParam(((Light3D.Param)(4)));
+        set => SetParam(((Light3D.Param)(4)), value);
+    }
+
+    public float AreaAttenuation
+    {
+        get => GetParam(((Light3D.Param)(6)));
+        set => SetParam(((Light3D.Param)(6)), value);
+    }
+
+    public bool AreaNormalizeEnergy
+    {
+        get => IsAreaNormalizingEnergy();
+        set => SetAreaNormalizeEnergy(value);
+    }
+
+    public Vector2 AreaSize
+    {
+        get => GetAreaSize();
+        set => SetAreaSize(value);
+    }
+
+    public Texture2D? AreaTexture
+    {
+        get => GetAreaTexture();
+        set => SetAreaTexture(value);
+    }
+
     private static nint __mb_set_area_texture;
-    public void SetAreaTexture(Texture2D? texture)
+    internal void SetAreaTexture(Texture2D? texture)
     {
         var __mb = __mb_set_area_texture;
         if (__mb == 0)
@@ -13050,7 +14040,7 @@ public unsafe partial class AreaLight3D : Light3D
     }
 
     private static nint __mb_get_area_texture;
-    public Texture2D? GetAreaTexture()
+    internal Texture2D? GetAreaTexture()
     {
         var __mb = __mb_get_area_texture;
         if (__mb == 0)
@@ -13065,7 +14055,7 @@ public unsafe partial class AreaLight3D : Light3D
     }
 
     private static nint __mb_set_area_size;
-    public void SetAreaSize(Vector2 areaSize)
+    internal void SetAreaSize(Vector2 areaSize)
     {
         var __mb = __mb_set_area_size;
         if (__mb == 0)
@@ -13081,7 +14071,7 @@ public unsafe partial class AreaLight3D : Light3D
     }
 
     private static nint __mb_get_area_size;
-    public Vector2 GetAreaSize()
+    internal Vector2 GetAreaSize()
     {
         var __mb = __mb_get_area_size;
         if (__mb == 0)
@@ -13096,7 +14086,7 @@ public unsafe partial class AreaLight3D : Light3D
     }
 
     private static nint __mb_set_area_normalize_energy;
-    public void SetAreaNormalizeEnergy(bool enable)
+    internal void SetAreaNormalizeEnergy(bool enable)
     {
         var __mb = __mb_set_area_normalize_energy;
         if (__mb == 0)
@@ -13112,7 +14102,7 @@ public unsafe partial class AreaLight3D : Light3D
     }
 
     private static nint __mb_is_area_normalizing_energy;
-    public bool IsAreaNormalizingEnergy()
+    internal bool IsAreaNormalizingEnergy()
     {
         var __mb = __mb_is_area_normalizing_energy;
         if (__mb == 0)
@@ -13134,6 +14124,24 @@ public unsafe partial class ArrayMesh : Mesh
     public ArrayMesh() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "ArrayMesh");
+    }
+
+    public Mesh.BlendShapeMode BlendShapeMode
+    {
+        get => GetBlendShapeMode();
+        set => SetBlendShapeMode(value);
+    }
+
+    public Aabb CustomAabb
+    {
+        get => GetCustomAabb();
+        set => SetCustomAabb(value);
+    }
+
+    public ArrayMesh? ShadowMesh
+    {
+        get => GetShadowMesh();
+        set => SetShadowMesh(value);
     }
 
     private static nint __mb_add_blend_shape;
@@ -13217,7 +14225,7 @@ public unsafe partial class ArrayMesh : Mesh
     }
 
     private static nint __mb_set_blend_shape_mode;
-    public void SetBlendShapeMode(Mesh.BlendShapeMode mode)
+    internal void SetBlendShapeMode(Mesh.BlendShapeMode mode)
     {
         var __mb = __mb_set_blend_shape_mode;
         if (__mb == 0)
@@ -13233,7 +14241,7 @@ public unsafe partial class ArrayMesh : Mesh
     }
 
     private static nint __mb_get_blend_shape_mode;
-    public Mesh.BlendShapeMode GetBlendShapeMode()
+    internal Mesh.BlendShapeMode GetBlendShapeMode()
     {
         var __mb = __mb_get_blend_shape_mode;
         if (__mb == 0)
@@ -13462,7 +14470,7 @@ public unsafe partial class ArrayMesh : Mesh
     }
 
     private static nint __mb_set_custom_aabb;
-    public void SetCustomAabb(Aabb aabb)
+    internal void SetCustomAabb(Aabb aabb)
     {
         var __mb = __mb_set_custom_aabb;
         if (__mb == 0)
@@ -13478,7 +14486,7 @@ public unsafe partial class ArrayMesh : Mesh
     }
 
     private static nint __mb_get_custom_aabb;
-    public Aabb GetCustomAabb()
+    internal Aabb GetCustomAabb()
     {
         var __mb = __mb_get_custom_aabb;
         if (__mb == 0)
@@ -13493,7 +14501,7 @@ public unsafe partial class ArrayMesh : Mesh
     }
 
     private static nint __mb_set_shadow_mesh;
-    public void SetShadowMesh(ArrayMesh? mesh)
+    internal void SetShadowMesh(ArrayMesh? mesh)
     {
         var __mb = __mb_set_shadow_mesh;
         if (__mb == 0)
@@ -13509,7 +14517,7 @@ public unsafe partial class ArrayMesh : Mesh
     }
 
     private static nint __mb_get_shadow_mesh;
-    public ArrayMesh? GetShadowMesh()
+    internal ArrayMesh? GetShadowMesh()
     {
         var __mb = __mb_get_shadow_mesh;
         if (__mb == 0)
@@ -13543,7 +14551,7 @@ public unsafe partial class AspectRatioContainer : Container
         ClassRegistry.AttachNew(this, "AspectRatioContainer");
     }
 
-    public enum StretchMode : long
+    public enum StretchModeEnum : long
     {
         STRETCH_WIDTH_CONTROLS_HEIGHT = 0,
         STRETCH_HEIGHT_CONTROLS_WIDTH = 1,
@@ -13558,8 +14566,32 @@ public unsafe partial class AspectRatioContainer : Container
         ALIGNMENT_END = 2,
     }
 
+    public float Ratio
+    {
+        get => GetRatio();
+        set => SetRatio(value);
+    }
+
+    public AspectRatioContainer.StretchModeEnum StretchMode
+    {
+        get => GetStretchMode();
+        set => SetStretchMode(value);
+    }
+
+    public AspectRatioContainer.AlignmentMode AlignmentHorizontal
+    {
+        get => GetAlignmentHorizontal();
+        set => SetAlignmentHorizontal(value);
+    }
+
+    public AspectRatioContainer.AlignmentMode AlignmentVertical
+    {
+        get => GetAlignmentVertical();
+        set => SetAlignmentVertical(value);
+    }
+
     private static nint __mb_set_ratio;
-    public void SetRatio(float ratio)
+    internal void SetRatio(float ratio)
     {
         var __mb = __mb_set_ratio;
         if (__mb == 0)
@@ -13575,7 +14607,7 @@ public unsafe partial class AspectRatioContainer : Container
     }
 
     private static nint __mb_get_ratio;
-    public float GetRatio()
+    internal float GetRatio()
     {
         var __mb = __mb_get_ratio;
         if (__mb == 0)
@@ -13590,7 +14622,7 @@ public unsafe partial class AspectRatioContainer : Container
     }
 
     private static nint __mb_set_stretch_mode;
-    public void SetStretchMode(AspectRatioContainer.StretchMode stretchMode)
+    internal void SetStretchMode(AspectRatioContainer.StretchModeEnum stretchMode)
     {
         var __mb = __mb_set_stretch_mode;
         if (__mb == 0)
@@ -13606,7 +14638,7 @@ public unsafe partial class AspectRatioContainer : Container
     }
 
     private static nint __mb_get_stretch_mode;
-    public AspectRatioContainer.StretchMode GetStretchMode()
+    internal AspectRatioContainer.StretchModeEnum GetStretchMode()
     {
         var __mb = __mb_get_stretch_mode;
         if (__mb == 0)
@@ -13617,11 +14649,11 @@ public unsafe partial class AspectRatioContainer : Container
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AspectRatioContainer.StretchMode)__ret;
+        return (AspectRatioContainer.StretchModeEnum)__ret;
     }
 
     private static nint __mb_set_alignment_horizontal;
-    public void SetAlignmentHorizontal(AspectRatioContainer.AlignmentMode alignmentHorizontal)
+    internal void SetAlignmentHorizontal(AspectRatioContainer.AlignmentMode alignmentHorizontal)
     {
         var __mb = __mb_set_alignment_horizontal;
         if (__mb == 0)
@@ -13637,7 +14669,7 @@ public unsafe partial class AspectRatioContainer : Container
     }
 
     private static nint __mb_get_alignment_horizontal;
-    public AspectRatioContainer.AlignmentMode GetAlignmentHorizontal()
+    internal AspectRatioContainer.AlignmentMode GetAlignmentHorizontal()
     {
         var __mb = __mb_get_alignment_horizontal;
         if (__mb == 0)
@@ -13652,7 +14684,7 @@ public unsafe partial class AspectRatioContainer : Container
     }
 
     private static nint __mb_set_alignment_vertical;
-    public void SetAlignmentVertical(AspectRatioContainer.AlignmentMode alignmentVertical)
+    internal void SetAlignmentVertical(AspectRatioContainer.AlignmentMode alignmentVertical)
     {
         var __mb = __mb_set_alignment_vertical;
         if (__mb == 0)
@@ -13668,7 +14700,7 @@ public unsafe partial class AspectRatioContainer : Container
     }
 
     private static nint __mb_get_alignment_vertical;
-    public AspectRatioContainer.AlignmentMode GetAlignmentVertical()
+    internal AspectRatioContainer.AlignmentMode GetAlignmentVertical()
     {
         var __mb = __mb_get_alignment_vertical;
         if (__mb == 0)
@@ -13692,8 +14724,32 @@ public unsafe partial class AtlasTexture : Texture2D
         ClassRegistry.AttachNew(this, "AtlasTexture");
     }
 
+    public Texture2D? Atlas
+    {
+        get => GetAtlas();
+        set => SetAtlas(value);
+    }
+
+    public Rect2 Region
+    {
+        get => GetRegion();
+        set => SetRegion(value);
+    }
+
+    public Rect2 Margin
+    {
+        get => GetMargin();
+        set => SetMargin(value);
+    }
+
+    public bool FilterClip
+    {
+        get => HasFilterClip();
+        set => SetFilterClip(value);
+    }
+
     private static nint __mb_set_atlas;
-    public void SetAtlas(Texture2D? atlas)
+    internal void SetAtlas(Texture2D? atlas)
     {
         var __mb = __mb_set_atlas;
         if (__mb == 0)
@@ -13709,7 +14765,7 @@ public unsafe partial class AtlasTexture : Texture2D
     }
 
     private static nint __mb_get_atlas;
-    public Texture2D? GetAtlas()
+    internal Texture2D? GetAtlas()
     {
         var __mb = __mb_get_atlas;
         if (__mb == 0)
@@ -13724,7 +14780,7 @@ public unsafe partial class AtlasTexture : Texture2D
     }
 
     private static nint __mb_set_region;
-    public void SetRegion(Rect2 region)
+    internal void SetRegion(Rect2 region)
     {
         var __mb = __mb_set_region;
         if (__mb == 0)
@@ -13740,7 +14796,7 @@ public unsafe partial class AtlasTexture : Texture2D
     }
 
     private static nint __mb_get_region;
-    public Rect2 GetRegion()
+    internal Rect2 GetRegion()
     {
         var __mb = __mb_get_region;
         if (__mb == 0)
@@ -13755,7 +14811,7 @@ public unsafe partial class AtlasTexture : Texture2D
     }
 
     private static nint __mb_set_margin;
-    public void SetMargin(Rect2 margin)
+    internal void SetMargin(Rect2 margin)
     {
         var __mb = __mb_set_margin;
         if (__mb == 0)
@@ -13771,7 +14827,7 @@ public unsafe partial class AtlasTexture : Texture2D
     }
 
     private static nint __mb_get_margin;
-    public Rect2 GetMargin()
+    internal Rect2 GetMargin()
     {
         var __mb = __mb_get_margin;
         if (__mb == 0)
@@ -13786,7 +14842,7 @@ public unsafe partial class AtlasTexture : Texture2D
     }
 
     private static nint __mb_set_filter_clip;
-    public void SetFilterClip(bool enable)
+    internal void SetFilterClip(bool enable)
     {
         var __mb = __mb_set_filter_clip;
         if (__mb == 0)
@@ -13802,7 +14858,7 @@ public unsafe partial class AtlasTexture : Texture2D
     }
 
     private static nint __mb_has_filter_clip;
-    public bool HasFilterClip()
+    internal bool HasFilterClip()
     {
         var __mb = __mb_has_filter_clip;
         if (__mb == 0)
@@ -13861,8 +14917,20 @@ public unsafe partial class AudioEffectAmplify : AudioEffect
         ClassRegistry.AttachNew(this, "AudioEffectAmplify");
     }
 
+    public float VolumeDb
+    {
+        get => GetVolumeDb();
+        set => SetVolumeDb(value);
+    }
+
+    public float VolumeLinear
+    {
+        get => GetVolumeLinear();
+        set => SetVolumeLinear(value);
+    }
+
     private static nint __mb_set_volume_db;
-    public void SetVolumeDb(float volume)
+    internal void SetVolumeDb(float volume)
     {
         var __mb = __mb_set_volume_db;
         if (__mb == 0)
@@ -13878,7 +14946,7 @@ public unsafe partial class AudioEffectAmplify : AudioEffect
     }
 
     private static nint __mb_get_volume_db;
-    public float GetVolumeDb()
+    internal float GetVolumeDb()
     {
         var __mb = __mb_get_volume_db;
         if (__mb == 0)
@@ -13893,7 +14961,7 @@ public unsafe partial class AudioEffectAmplify : AudioEffect
     }
 
     private static nint __mb_set_volume_linear;
-    public void SetVolumeLinear(float volume)
+    internal void SetVolumeLinear(float volume)
     {
         var __mb = __mb_set_volume_linear;
         if (__mb == 0)
@@ -13909,7 +14977,7 @@ public unsafe partial class AudioEffectAmplify : AudioEffect
     }
 
     private static nint __mb_get_volume_linear;
-    public float GetVolumeLinear()
+    internal float GetVolumeLinear()
     {
         var __mb = __mb_get_volume_linear;
         if (__mb == 0)
@@ -13953,6 +15021,12 @@ public unsafe partial class AudioEffectCapture : AudioEffect
         ClassRegistry.AttachNew(this, "AudioEffectCapture");
     }
 
+    public float BufferLength
+    {
+        get => GetBufferLength();
+        set => SetBufferLength(value);
+    }
+
     private static nint __mb_can_get_buffer;
     public bool CanGetBuffer(int frames)
     {
@@ -13985,7 +15059,7 @@ public unsafe partial class AudioEffectCapture : AudioEffect
     }
 
     private static nint __mb_set_buffer_length;
-    public void SetBufferLength(float bufferLengthSeconds)
+    internal void SetBufferLength(float bufferLengthSeconds)
     {
         var __mb = __mb_set_buffer_length;
         if (__mb == 0)
@@ -14001,7 +15075,7 @@ public unsafe partial class AudioEffectCapture : AudioEffect
     }
 
     private static nint __mb_get_buffer_length;
-    public float GetBufferLength()
+    internal float GetBufferLength()
     {
         var __mb = __mb_get_buffer_length;
         if (__mb == 0)
@@ -14085,8 +15159,26 @@ public unsafe partial class AudioEffectChorus : AudioEffect
         ClassRegistry.AttachNew(this, "AudioEffectChorus");
     }
 
+    public int VoiceCount
+    {
+        get => GetVoiceCount();
+        set => SetVoiceCount(value);
+    }
+
+    public float Dry
+    {
+        get => GetDry();
+        set => SetDry(value);
+    }
+
+    public float Wet
+    {
+        get => GetWet();
+        set => SetWet(value);
+    }
+
     private static nint __mb_set_voice_count;
-    public void SetVoiceCount(int voices)
+    internal void SetVoiceCount(int voices)
     {
         var __mb = __mb_set_voice_count;
         if (__mb == 0)
@@ -14102,7 +15194,7 @@ public unsafe partial class AudioEffectChorus : AudioEffect
     }
 
     private static nint __mb_get_voice_count;
-    public int GetVoiceCount()
+    internal int GetVoiceCount()
     {
         var __mb = __mb_get_voice_count;
         if (__mb == 0)
@@ -14333,7 +15425,7 @@ public unsafe partial class AudioEffectChorus : AudioEffect
     }
 
     private static nint __mb_set_wet;
-    public void SetWet(float amount)
+    internal void SetWet(float amount)
     {
         var __mb = __mb_set_wet;
         if (__mb == 0)
@@ -14349,7 +15441,7 @@ public unsafe partial class AudioEffectChorus : AudioEffect
     }
 
     private static nint __mb_get_wet;
-    public float GetWet()
+    internal float GetWet()
     {
         var __mb = __mb_get_wet;
         if (__mb == 0)
@@ -14364,7 +15456,7 @@ public unsafe partial class AudioEffectChorus : AudioEffect
     }
 
     private static nint __mb_set_dry;
-    public void SetDry(float amount)
+    internal void SetDry(float amount)
     {
         var __mb = __mb_set_dry;
         if (__mb == 0)
@@ -14380,7 +15472,7 @@ public unsafe partial class AudioEffectChorus : AudioEffect
     }
 
     private static nint __mb_get_dry;
-    public float GetDry()
+    internal float GetDry()
     {
         var __mb = __mb_get_dry;
         if (__mb == 0)
@@ -14404,8 +15496,50 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
         ClassRegistry.AttachNew(this, "AudioEffectCompressor");
     }
 
+    public float Threshold
+    {
+        get => GetThreshold();
+        set => SetThreshold(value);
+    }
+
+    public float Ratio
+    {
+        get => GetRatio();
+        set => SetRatio(value);
+    }
+
+    public float Gain
+    {
+        get => GetGain();
+        set => SetGain(value);
+    }
+
+    public float AttackUs
+    {
+        get => GetAttackUs();
+        set => SetAttackUs(value);
+    }
+
+    public float ReleaseMs
+    {
+        get => GetReleaseMs();
+        set => SetReleaseMs(value);
+    }
+
+    public float Mix
+    {
+        get => GetMix();
+        set => SetMix(value);
+    }
+
+    public string Sidechain
+    {
+        get => GetSidechain();
+        set => SetSidechain(value);
+    }
+
     private static nint __mb_set_threshold;
-    public void SetThreshold(float threshold)
+    internal void SetThreshold(float threshold)
     {
         var __mb = __mb_set_threshold;
         if (__mb == 0)
@@ -14421,7 +15555,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
     }
 
     private static nint __mb_get_threshold;
-    public float GetThreshold()
+    internal float GetThreshold()
     {
         var __mb = __mb_get_threshold;
         if (__mb == 0)
@@ -14436,7 +15570,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
     }
 
     private static nint __mb_set_ratio;
-    public void SetRatio(float ratio)
+    internal void SetRatio(float ratio)
     {
         var __mb = __mb_set_ratio;
         if (__mb == 0)
@@ -14452,7 +15586,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
     }
 
     private static nint __mb_get_ratio;
-    public float GetRatio()
+    internal float GetRatio()
     {
         var __mb = __mb_get_ratio;
         if (__mb == 0)
@@ -14467,7 +15601,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
     }
 
     private static nint __mb_set_gain;
-    public void SetGain(float gain)
+    internal void SetGain(float gain)
     {
         var __mb = __mb_set_gain;
         if (__mb == 0)
@@ -14483,7 +15617,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
     }
 
     private static nint __mb_get_gain;
-    public float GetGain()
+    internal float GetGain()
     {
         var __mb = __mb_get_gain;
         if (__mb == 0)
@@ -14498,7 +15632,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
     }
 
     private static nint __mb_set_attack_us;
-    public void SetAttackUs(float attackUs)
+    internal void SetAttackUs(float attackUs)
     {
         var __mb = __mb_set_attack_us;
         if (__mb == 0)
@@ -14514,7 +15648,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
     }
 
     private static nint __mb_get_attack_us;
-    public float GetAttackUs()
+    internal float GetAttackUs()
     {
         var __mb = __mb_get_attack_us;
         if (__mb == 0)
@@ -14529,7 +15663,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
     }
 
     private static nint __mb_set_release_ms;
-    public void SetReleaseMs(float releaseMs)
+    internal void SetReleaseMs(float releaseMs)
     {
         var __mb = __mb_set_release_ms;
         if (__mb == 0)
@@ -14545,7 +15679,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
     }
 
     private static nint __mb_get_release_ms;
-    public float GetReleaseMs()
+    internal float GetReleaseMs()
     {
         var __mb = __mb_get_release_ms;
         if (__mb == 0)
@@ -14560,7 +15694,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
     }
 
     private static nint __mb_set_mix;
-    public void SetMix(float mix)
+    internal void SetMix(float mix)
     {
         var __mb = __mb_set_mix;
         if (__mb == 0)
@@ -14576,7 +15710,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
     }
 
     private static nint __mb_get_mix;
-    public float GetMix()
+    internal float GetMix()
     {
         var __mb = __mb_get_mix;
         if (__mb == 0)
@@ -14591,7 +15725,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
     }
 
     private static nint __mb_set_sidechain;
-    public void SetSidechain(string sidechain)
+    internal void SetSidechain(string sidechain)
     {
         var __mb = __mb_set_sidechain;
         if (__mb == 0)
@@ -14607,7 +15741,7 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
     }
 
     private static nint __mb_get_sidechain;
-    public string GetSidechain()
+    internal string GetSidechain()
     {
         var __mb = __mb_get_sidechain;
         if (__mb == 0)
@@ -14631,8 +15765,86 @@ public unsafe partial class AudioEffectDelay : AudioEffect
         ClassRegistry.AttachNew(this, "AudioEffectDelay");
     }
 
+    public float Dry
+    {
+        get => GetDry();
+        set => SetDry(value);
+    }
+
+    public bool Tap1Active
+    {
+        get => IsTap1Active();
+        set => SetTap1Active(value);
+    }
+
+    public float Tap1DelayMs
+    {
+        get => GetTap1DelayMs();
+        set => SetTap1DelayMs(value);
+    }
+
+    public float Tap1LevelDb
+    {
+        get => GetTap1LevelDb();
+        set => SetTap1LevelDb(value);
+    }
+
+    public float Tap1Pan
+    {
+        get => GetTap1Pan();
+        set => SetTap1Pan(value);
+    }
+
+    public bool Tap2Active
+    {
+        get => IsTap2Active();
+        set => SetTap2Active(value);
+    }
+
+    public float Tap2DelayMs
+    {
+        get => GetTap2DelayMs();
+        set => SetTap2DelayMs(value);
+    }
+
+    public float Tap2LevelDb
+    {
+        get => GetTap2LevelDb();
+        set => SetTap2LevelDb(value);
+    }
+
+    public float Tap2Pan
+    {
+        get => GetTap2Pan();
+        set => SetTap2Pan(value);
+    }
+
+    public bool FeedbackActive
+    {
+        get => IsFeedbackActive();
+        set => SetFeedbackActive(value);
+    }
+
+    public float FeedbackDelayMs
+    {
+        get => GetFeedbackDelayMs();
+        set => SetFeedbackDelayMs(value);
+    }
+
+    public float FeedbackLevelDb
+    {
+        get => GetFeedbackLevelDb();
+        set => SetFeedbackLevelDb(value);
+    }
+
+    public float FeedbackLowpass
+    {
+        get => GetFeedbackLowpass();
+        set => SetFeedbackLowpass(value);
+    }
+
     private static nint __mb_set_dry;
-    public void SetDry(float amount)
+    internal void SetDry(float amount)
     {
         var __mb = __mb_set_dry;
         if (__mb == 0)
@@ -14648,7 +15860,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_get_dry;
-    public float GetDry()
+    internal float GetDry()
     {
         var __mb = __mb_get_dry;
         if (__mb == 0)
@@ -14663,7 +15875,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_set_tap1_active;
-    public void SetTap1Active(bool amount)
+    internal void SetTap1Active(bool amount)
     {
         var __mb = __mb_set_tap1_active;
         if (__mb == 0)
@@ -14679,7 +15891,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_is_tap1_active;
-    public bool IsTap1Active()
+    internal bool IsTap1Active()
     {
         var __mb = __mb_is_tap1_active;
         if (__mb == 0)
@@ -14694,7 +15906,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_set_tap1_delay_ms;
-    public void SetTap1DelayMs(float amount)
+    internal void SetTap1DelayMs(float amount)
     {
         var __mb = __mb_set_tap1_delay_ms;
         if (__mb == 0)
@@ -14710,7 +15922,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_get_tap1_delay_ms;
-    public float GetTap1DelayMs()
+    internal float GetTap1DelayMs()
     {
         var __mb = __mb_get_tap1_delay_ms;
         if (__mb == 0)
@@ -14725,7 +15937,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_set_tap1_level_db;
-    public void SetTap1LevelDb(float amount)
+    internal void SetTap1LevelDb(float amount)
     {
         var __mb = __mb_set_tap1_level_db;
         if (__mb == 0)
@@ -14741,7 +15953,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_get_tap1_level_db;
-    public float GetTap1LevelDb()
+    internal float GetTap1LevelDb()
     {
         var __mb = __mb_get_tap1_level_db;
         if (__mb == 0)
@@ -14756,7 +15968,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_set_tap1_pan;
-    public void SetTap1Pan(float amount)
+    internal void SetTap1Pan(float amount)
     {
         var __mb = __mb_set_tap1_pan;
         if (__mb == 0)
@@ -14772,7 +15984,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_get_tap1_pan;
-    public float GetTap1Pan()
+    internal float GetTap1Pan()
     {
         var __mb = __mb_get_tap1_pan;
         if (__mb == 0)
@@ -14787,7 +15999,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_set_tap2_active;
-    public void SetTap2Active(bool amount)
+    internal void SetTap2Active(bool amount)
     {
         var __mb = __mb_set_tap2_active;
         if (__mb == 0)
@@ -14803,7 +16015,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_is_tap2_active;
-    public bool IsTap2Active()
+    internal bool IsTap2Active()
     {
         var __mb = __mb_is_tap2_active;
         if (__mb == 0)
@@ -14818,7 +16030,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_set_tap2_delay_ms;
-    public void SetTap2DelayMs(float amount)
+    internal void SetTap2DelayMs(float amount)
     {
         var __mb = __mb_set_tap2_delay_ms;
         if (__mb == 0)
@@ -14834,7 +16046,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_get_tap2_delay_ms;
-    public float GetTap2DelayMs()
+    internal float GetTap2DelayMs()
     {
         var __mb = __mb_get_tap2_delay_ms;
         if (__mb == 0)
@@ -14849,7 +16061,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_set_tap2_level_db;
-    public void SetTap2LevelDb(float amount)
+    internal void SetTap2LevelDb(float amount)
     {
         var __mb = __mb_set_tap2_level_db;
         if (__mb == 0)
@@ -14865,7 +16077,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_get_tap2_level_db;
-    public float GetTap2LevelDb()
+    internal float GetTap2LevelDb()
     {
         var __mb = __mb_get_tap2_level_db;
         if (__mb == 0)
@@ -14880,7 +16092,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_set_tap2_pan;
-    public void SetTap2Pan(float amount)
+    internal void SetTap2Pan(float amount)
     {
         var __mb = __mb_set_tap2_pan;
         if (__mb == 0)
@@ -14896,7 +16108,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_get_tap2_pan;
-    public float GetTap2Pan()
+    internal float GetTap2Pan()
     {
         var __mb = __mb_get_tap2_pan;
         if (__mb == 0)
@@ -14911,7 +16123,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_set_feedback_active;
-    public void SetFeedbackActive(bool amount)
+    internal void SetFeedbackActive(bool amount)
     {
         var __mb = __mb_set_feedback_active;
         if (__mb == 0)
@@ -14927,7 +16139,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_is_feedback_active;
-    public bool IsFeedbackActive()
+    internal bool IsFeedbackActive()
     {
         var __mb = __mb_is_feedback_active;
         if (__mb == 0)
@@ -14942,7 +16154,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_set_feedback_delay_ms;
-    public void SetFeedbackDelayMs(float amount)
+    internal void SetFeedbackDelayMs(float amount)
     {
         var __mb = __mb_set_feedback_delay_ms;
         if (__mb == 0)
@@ -14958,7 +16170,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_get_feedback_delay_ms;
-    public float GetFeedbackDelayMs()
+    internal float GetFeedbackDelayMs()
     {
         var __mb = __mb_get_feedback_delay_ms;
         if (__mb == 0)
@@ -14973,7 +16185,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_set_feedback_level_db;
-    public void SetFeedbackLevelDb(float amount)
+    internal void SetFeedbackLevelDb(float amount)
     {
         var __mb = __mb_set_feedback_level_db;
         if (__mb == 0)
@@ -14989,7 +16201,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_get_feedback_level_db;
-    public float GetFeedbackLevelDb()
+    internal float GetFeedbackLevelDb()
     {
         var __mb = __mb_get_feedback_level_db;
         if (__mb == 0)
@@ -15004,7 +16216,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_set_feedback_lowpass;
-    public void SetFeedbackLowpass(float amount)
+    internal void SetFeedbackLowpass(float amount)
     {
         var __mb = __mb_set_feedback_lowpass;
         if (__mb == 0)
@@ -15020,7 +16232,7 @@ public unsafe partial class AudioEffectDelay : AudioEffect
     }
 
     private static nint __mb_get_feedback_lowpass;
-    public float GetFeedbackLowpass()
+    internal float GetFeedbackLowpass()
     {
         var __mb = __mb_get_feedback_lowpass;
         if (__mb == 0)
@@ -15044,7 +16256,7 @@ public unsafe partial class AudioEffectDistortion : AudioEffect
         ClassRegistry.AttachNew(this, "AudioEffectDistortion");
     }
 
-    public enum Mode : long
+    public enum ModeEnum : long
     {
         MODE_CLIP = 0,
         MODE_ATAN = 1,
@@ -15053,8 +16265,38 @@ public unsafe partial class AudioEffectDistortion : AudioEffect
         MODE_WAVESHAPE = 4,
     }
 
+    public AudioEffectDistortion.ModeEnum Mode
+    {
+        get => GetMode();
+        set => SetMode(value);
+    }
+
+    public float PreGain
+    {
+        get => GetPreGain();
+        set => SetPreGain(value);
+    }
+
+    public float KeepHfHz
+    {
+        get => GetKeepHfHz();
+        set => SetKeepHfHz(value);
+    }
+
+    public float Drive
+    {
+        get => GetDrive();
+        set => SetDrive(value);
+    }
+
+    public float PostGain
+    {
+        get => GetPostGain();
+        set => SetPostGain(value);
+    }
+
     private static nint __mb_set_mode;
-    public void SetMode(AudioEffectDistortion.Mode mode)
+    internal void SetMode(AudioEffectDistortion.ModeEnum mode)
     {
         var __mb = __mb_set_mode;
         if (__mb == 0)
@@ -15070,7 +16312,7 @@ public unsafe partial class AudioEffectDistortion : AudioEffect
     }
 
     private static nint __mb_get_mode;
-    public AudioEffectDistortion.Mode GetMode()
+    internal AudioEffectDistortion.ModeEnum GetMode()
     {
         var __mb = __mb_get_mode;
         if (__mb == 0)
@@ -15081,11 +16323,11 @@ public unsafe partial class AudioEffectDistortion : AudioEffect
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AudioEffectDistortion.Mode)__ret;
+        return (AudioEffectDistortion.ModeEnum)__ret;
     }
 
     private static nint __mb_set_pre_gain;
-    public void SetPreGain(float preGain)
+    internal void SetPreGain(float preGain)
     {
         var __mb = __mb_set_pre_gain;
         if (__mb == 0)
@@ -15101,7 +16343,7 @@ public unsafe partial class AudioEffectDistortion : AudioEffect
     }
 
     private static nint __mb_get_pre_gain;
-    public float GetPreGain()
+    internal float GetPreGain()
     {
         var __mb = __mb_get_pre_gain;
         if (__mb == 0)
@@ -15116,7 +16358,7 @@ public unsafe partial class AudioEffectDistortion : AudioEffect
     }
 
     private static nint __mb_set_keep_hf_hz;
-    public void SetKeepHfHz(float keepHfHz)
+    internal void SetKeepHfHz(float keepHfHz)
     {
         var __mb = __mb_set_keep_hf_hz;
         if (__mb == 0)
@@ -15132,7 +16374,7 @@ public unsafe partial class AudioEffectDistortion : AudioEffect
     }
 
     private static nint __mb_get_keep_hf_hz;
-    public float GetKeepHfHz()
+    internal float GetKeepHfHz()
     {
         var __mb = __mb_get_keep_hf_hz;
         if (__mb == 0)
@@ -15147,7 +16389,7 @@ public unsafe partial class AudioEffectDistortion : AudioEffect
     }
 
     private static nint __mb_set_drive;
-    public void SetDrive(float drive)
+    internal void SetDrive(float drive)
     {
         var __mb = __mb_set_drive;
         if (__mb == 0)
@@ -15163,7 +16405,7 @@ public unsafe partial class AudioEffectDistortion : AudioEffect
     }
 
     private static nint __mb_get_drive;
-    public float GetDrive()
+    internal float GetDrive()
     {
         var __mb = __mb_get_drive;
         if (__mb == 0)
@@ -15178,7 +16420,7 @@ public unsafe partial class AudioEffectDistortion : AudioEffect
     }
 
     private static nint __mb_set_post_gain;
-    public void SetPostGain(float postGain)
+    internal void SetPostGain(float postGain)
     {
         var __mb = __mb_set_post_gain;
         if (__mb == 0)
@@ -15194,7 +16436,7 @@ public unsafe partial class AudioEffectDistortion : AudioEffect
     }
 
     private static nint __mb_get_post_gain;
-    public float GetPostGain()
+    internal float GetPostGain()
     {
         var __mb = __mb_get_post_gain;
         if (__mb == 0)
@@ -15317,8 +16559,32 @@ public unsafe partial class AudioEffectFilter : AudioEffect
         FILTER_24DB = 3,
     }
 
+    public float CutoffHz
+    {
+        get => GetCutoff();
+        set => SetCutoff(value);
+    }
+
+    public float Resonance
+    {
+        get => GetResonance();
+        set => SetResonance(value);
+    }
+
+    public float Gain
+    {
+        get => GetGain();
+        set => SetGain(value);
+    }
+
+    public AudioEffectFilter.FilterDB Db
+    {
+        get => GetDb();
+        set => SetDb(value);
+    }
+
     private static nint __mb_set_cutoff;
-    public void SetCutoff(float freq)
+    internal void SetCutoff(float freq)
     {
         var __mb = __mb_set_cutoff;
         if (__mb == 0)
@@ -15334,7 +16600,7 @@ public unsafe partial class AudioEffectFilter : AudioEffect
     }
 
     private static nint __mb_get_cutoff;
-    public float GetCutoff()
+    internal float GetCutoff()
     {
         var __mb = __mb_get_cutoff;
         if (__mb == 0)
@@ -15349,7 +16615,7 @@ public unsafe partial class AudioEffectFilter : AudioEffect
     }
 
     private static nint __mb_set_resonance;
-    public void SetResonance(float amount)
+    internal void SetResonance(float amount)
     {
         var __mb = __mb_set_resonance;
         if (__mb == 0)
@@ -15365,7 +16631,7 @@ public unsafe partial class AudioEffectFilter : AudioEffect
     }
 
     private static nint __mb_get_resonance;
-    public float GetResonance()
+    internal float GetResonance()
     {
         var __mb = __mb_get_resonance;
         if (__mb == 0)
@@ -15380,7 +16646,7 @@ public unsafe partial class AudioEffectFilter : AudioEffect
     }
 
     private static nint __mb_set_gain;
-    public void SetGain(float amount)
+    internal void SetGain(float amount)
     {
         var __mb = __mb_set_gain;
         if (__mb == 0)
@@ -15396,7 +16662,7 @@ public unsafe partial class AudioEffectFilter : AudioEffect
     }
 
     private static nint __mb_get_gain;
-    public float GetGain()
+    internal float GetGain()
     {
         var __mb = __mb_get_gain;
         if (__mb == 0)
@@ -15411,7 +16677,7 @@ public unsafe partial class AudioEffectFilter : AudioEffect
     }
 
     private static nint __mb_set_db;
-    public void SetDb(AudioEffectFilter.FilterDB amount)
+    internal void SetDb(AudioEffectFilter.FilterDB amount)
     {
         var __mb = __mb_set_db;
         if (__mb == 0)
@@ -15427,7 +16693,7 @@ public unsafe partial class AudioEffectFilter : AudioEffect
     }
 
     private static nint __mb_get_db;
-    public AudioEffectFilter.FilterDB GetDb()
+    internal AudioEffectFilter.FilterDB GetDb()
     {
         var __mb = __mb_get_db;
         if (__mb == 0)
@@ -15451,8 +16717,26 @@ public unsafe partial class AudioEffectHardLimiter : AudioEffect
         ClassRegistry.AttachNew(this, "AudioEffectHardLimiter");
     }
 
+    public float PreGainDb
+    {
+        get => GetPreGainDb();
+        set => SetPreGainDb(value);
+    }
+
+    public float CeilingDb
+    {
+        get => GetCeilingDb();
+        set => SetCeilingDb(value);
+    }
+
+    public float Release
+    {
+        get => GetRelease();
+        set => SetRelease(value);
+    }
+
     private static nint __mb_set_ceiling_db;
-    public void SetCeilingDb(float ceiling)
+    internal void SetCeilingDb(float ceiling)
     {
         var __mb = __mb_set_ceiling_db;
         if (__mb == 0)
@@ -15468,7 +16752,7 @@ public unsafe partial class AudioEffectHardLimiter : AudioEffect
     }
 
     private static nint __mb_get_ceiling_db;
-    public float GetCeilingDb()
+    internal float GetCeilingDb()
     {
         var __mb = __mb_get_ceiling_db;
         if (__mb == 0)
@@ -15483,7 +16767,7 @@ public unsafe partial class AudioEffectHardLimiter : AudioEffect
     }
 
     private static nint __mb_set_pre_gain_db;
-    public void SetPreGainDb(float preGain)
+    internal void SetPreGainDb(float preGain)
     {
         var __mb = __mb_set_pre_gain_db;
         if (__mb == 0)
@@ -15499,7 +16783,7 @@ public unsafe partial class AudioEffectHardLimiter : AudioEffect
     }
 
     private static nint __mb_get_pre_gain_db;
-    public float GetPreGainDb()
+    internal float GetPreGainDb()
     {
         var __mb = __mb_get_pre_gain_db;
         if (__mb == 0)
@@ -15514,7 +16798,7 @@ public unsafe partial class AudioEffectHardLimiter : AudioEffect
     }
 
     private static nint __mb_set_release;
-    public void SetRelease(float release)
+    internal void SetRelease(float release)
     {
         var __mb = __mb_set_release;
         if (__mb == 0)
@@ -15530,7 +16814,7 @@ public unsafe partial class AudioEffectHardLimiter : AudioEffect
     }
 
     private static nint __mb_get_release;
-    public float GetRelease()
+    internal float GetRelease()
     {
         var __mb = __mb_get_release;
         if (__mb == 0)
@@ -15599,8 +16883,32 @@ public unsafe partial class AudioEffectLimiter : AudioEffect
         ClassRegistry.AttachNew(this, "AudioEffectLimiter");
     }
 
+    public float CeilingDb
+    {
+        get => GetCeilingDb();
+        set => SetCeilingDb(value);
+    }
+
+    public float ThresholdDb
+    {
+        get => GetThresholdDb();
+        set => SetThresholdDb(value);
+    }
+
+    public float SoftClipDb
+    {
+        get => GetSoftClipDb();
+        set => SetSoftClipDb(value);
+    }
+
+    public float SoftClipRatio
+    {
+        get => GetSoftClipRatio();
+        set => SetSoftClipRatio(value);
+    }
+
     private static nint __mb_set_ceiling_db;
-    public void SetCeilingDb(float ceiling)
+    internal void SetCeilingDb(float ceiling)
     {
         var __mb = __mb_set_ceiling_db;
         if (__mb == 0)
@@ -15616,7 +16924,7 @@ public unsafe partial class AudioEffectLimiter : AudioEffect
     }
 
     private static nint __mb_get_ceiling_db;
-    public float GetCeilingDb()
+    internal float GetCeilingDb()
     {
         var __mb = __mb_get_ceiling_db;
         if (__mb == 0)
@@ -15631,7 +16939,7 @@ public unsafe partial class AudioEffectLimiter : AudioEffect
     }
 
     private static nint __mb_set_threshold_db;
-    public void SetThresholdDb(float threshold)
+    internal void SetThresholdDb(float threshold)
     {
         var __mb = __mb_set_threshold_db;
         if (__mb == 0)
@@ -15647,7 +16955,7 @@ public unsafe partial class AudioEffectLimiter : AudioEffect
     }
 
     private static nint __mb_get_threshold_db;
-    public float GetThresholdDb()
+    internal float GetThresholdDb()
     {
         var __mb = __mb_get_threshold_db;
         if (__mb == 0)
@@ -15662,7 +16970,7 @@ public unsafe partial class AudioEffectLimiter : AudioEffect
     }
 
     private static nint __mb_set_soft_clip_db;
-    public void SetSoftClipDb(float softClip)
+    internal void SetSoftClipDb(float softClip)
     {
         var __mb = __mb_set_soft_clip_db;
         if (__mb == 0)
@@ -15678,7 +16986,7 @@ public unsafe partial class AudioEffectLimiter : AudioEffect
     }
 
     private static nint __mb_get_soft_clip_db;
-    public float GetSoftClipDb()
+    internal float GetSoftClipDb()
     {
         var __mb = __mb_get_soft_clip_db;
         if (__mb == 0)
@@ -15693,7 +17001,7 @@ public unsafe partial class AudioEffectLimiter : AudioEffect
     }
 
     private static nint __mb_set_soft_clip_ratio;
-    public void SetSoftClipRatio(float softClip)
+    internal void SetSoftClipRatio(float softClip)
     {
         var __mb = __mb_set_soft_clip_ratio;
         if (__mb == 0)
@@ -15709,7 +17017,7 @@ public unsafe partial class AudioEffectLimiter : AudioEffect
     }
 
     private static nint __mb_get_soft_clip_ratio;
-    public float GetSoftClipRatio()
+    internal float GetSoftClipRatio()
     {
         var __mb = __mb_get_soft_clip_ratio;
         if (__mb == 0)
@@ -15763,8 +17071,14 @@ public unsafe partial class AudioEffectPanner : AudioEffect
         ClassRegistry.AttachNew(this, "AudioEffectPanner");
     }
 
+    public float Pan
+    {
+        get => GetPan();
+        set => SetPan(value);
+    }
+
     private static nint __mb_set_pan;
-    public void SetPan(float cpanume)
+    internal void SetPan(float cpanume)
     {
         var __mb = __mb_set_pan;
         if (__mb == 0)
@@ -15780,7 +17094,7 @@ public unsafe partial class AudioEffectPanner : AudioEffect
     }
 
     private static nint __mb_get_pan;
-    public float GetPan()
+    internal float GetPan()
     {
         var __mb = __mb_get_pan;
         if (__mb == 0)
@@ -15804,8 +17118,38 @@ public unsafe partial class AudioEffectPhaser : AudioEffect
         ClassRegistry.AttachNew(this, "AudioEffectPhaser");
     }
 
+    public float RangeMinHz
+    {
+        get => GetRangeMinHz();
+        set => SetRangeMinHz(value);
+    }
+
+    public float RangeMaxHz
+    {
+        get => GetRangeMaxHz();
+        set => SetRangeMaxHz(value);
+    }
+
+    public float RateHz
+    {
+        get => GetRateHz();
+        set => SetRateHz(value);
+    }
+
+    public float Feedback
+    {
+        get => GetFeedback();
+        set => SetFeedback(value);
+    }
+
+    public float Depth
+    {
+        get => GetDepth();
+        set => SetDepth(value);
+    }
+
     private static nint __mb_set_range_min_hz;
-    public void SetRangeMinHz(float hz)
+    internal void SetRangeMinHz(float hz)
     {
         var __mb = __mb_set_range_min_hz;
         if (__mb == 0)
@@ -15821,7 +17165,7 @@ public unsafe partial class AudioEffectPhaser : AudioEffect
     }
 
     private static nint __mb_get_range_min_hz;
-    public float GetRangeMinHz()
+    internal float GetRangeMinHz()
     {
         var __mb = __mb_get_range_min_hz;
         if (__mb == 0)
@@ -15836,7 +17180,7 @@ public unsafe partial class AudioEffectPhaser : AudioEffect
     }
 
     private static nint __mb_set_range_max_hz;
-    public void SetRangeMaxHz(float hz)
+    internal void SetRangeMaxHz(float hz)
     {
         var __mb = __mb_set_range_max_hz;
         if (__mb == 0)
@@ -15852,7 +17196,7 @@ public unsafe partial class AudioEffectPhaser : AudioEffect
     }
 
     private static nint __mb_get_range_max_hz;
-    public float GetRangeMaxHz()
+    internal float GetRangeMaxHz()
     {
         var __mb = __mb_get_range_max_hz;
         if (__mb == 0)
@@ -15867,7 +17211,7 @@ public unsafe partial class AudioEffectPhaser : AudioEffect
     }
 
     private static nint __mb_set_rate_hz;
-    public void SetRateHz(float hz)
+    internal void SetRateHz(float hz)
     {
         var __mb = __mb_set_rate_hz;
         if (__mb == 0)
@@ -15883,7 +17227,7 @@ public unsafe partial class AudioEffectPhaser : AudioEffect
     }
 
     private static nint __mb_get_rate_hz;
-    public float GetRateHz()
+    internal float GetRateHz()
     {
         var __mb = __mb_get_rate_hz;
         if (__mb == 0)
@@ -15898,7 +17242,7 @@ public unsafe partial class AudioEffectPhaser : AudioEffect
     }
 
     private static nint __mb_set_feedback;
-    public void SetFeedback(float fbk)
+    internal void SetFeedback(float fbk)
     {
         var __mb = __mb_set_feedback;
         if (__mb == 0)
@@ -15914,7 +17258,7 @@ public unsafe partial class AudioEffectPhaser : AudioEffect
     }
 
     private static nint __mb_get_feedback;
-    public float GetFeedback()
+    internal float GetFeedback()
     {
         var __mb = __mb_get_feedback;
         if (__mb == 0)
@@ -15929,7 +17273,7 @@ public unsafe partial class AudioEffectPhaser : AudioEffect
     }
 
     private static nint __mb_set_depth;
-    public void SetDepth(float depth)
+    internal void SetDepth(float depth)
     {
         var __mb = __mb_set_depth;
         if (__mb == 0)
@@ -15945,7 +17289,7 @@ public unsafe partial class AudioEffectPhaser : AudioEffect
     }
 
     private static nint __mb_get_depth;
-    public float GetDepth()
+    internal float GetDepth()
     {
         var __mb = __mb_get_depth;
         if (__mb == 0)
@@ -15979,8 +17323,26 @@ public unsafe partial class AudioEffectPitchShift : AudioEffect
         FFT_SIZE_MAX = 5,
     }
 
+    public float PitchScale
+    {
+        get => GetPitchScale();
+        set => SetPitchScale(value);
+    }
+
+    public int Oversampling
+    {
+        get => GetOversampling();
+        set => SetOversampling(value);
+    }
+
+    public AudioEffectPitchShift.FFTSize FftSize
+    {
+        get => GetFftSize();
+        set => SetFftSize(value);
+    }
+
     private static nint __mb_set_pitch_scale;
-    public void SetPitchScale(float rate)
+    internal void SetPitchScale(float rate)
     {
         var __mb = __mb_set_pitch_scale;
         if (__mb == 0)
@@ -15996,7 +17358,7 @@ public unsafe partial class AudioEffectPitchShift : AudioEffect
     }
 
     private static nint __mb_get_pitch_scale;
-    public float GetPitchScale()
+    internal float GetPitchScale()
     {
         var __mb = __mb_get_pitch_scale;
         if (__mb == 0)
@@ -16011,7 +17373,7 @@ public unsafe partial class AudioEffectPitchShift : AudioEffect
     }
 
     private static nint __mb_set_oversampling;
-    public void SetOversampling(int amount)
+    internal void SetOversampling(int amount)
     {
         var __mb = __mb_set_oversampling;
         if (__mb == 0)
@@ -16027,7 +17389,7 @@ public unsafe partial class AudioEffectPitchShift : AudioEffect
     }
 
     private static nint __mb_get_oversampling;
-    public int GetOversampling()
+    internal int GetOversampling()
     {
         var __mb = __mb_get_oversampling;
         if (__mb == 0)
@@ -16042,7 +17404,7 @@ public unsafe partial class AudioEffectPitchShift : AudioEffect
     }
 
     private static nint __mb_set_fft_size;
-    public void SetFftSize(AudioEffectPitchShift.FFTSize size)
+    internal void SetFftSize(AudioEffectPitchShift.FFTSize size)
     {
         var __mb = __mb_set_fft_size;
         if (__mb == 0)
@@ -16058,7 +17420,7 @@ public unsafe partial class AudioEffectPitchShift : AudioEffect
     }
 
     private static nint __mb_get_fft_size;
-    public AudioEffectPitchShift.FFTSize GetFftSize()
+    internal AudioEffectPitchShift.FFTSize GetFftSize()
     {
         var __mb = __mb_get_fft_size;
         if (__mb == 0)
@@ -16080,6 +17442,12 @@ public unsafe partial class AudioEffectRecord : AudioEffect
     public AudioEffectRecord() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "AudioEffectRecord");
+    }
+
+    public AudioStreamWAV.FormatEnum Format
+    {
+        get => GetFormat();
+        set => SetFormat(value);
     }
 
     private static nint __mb_set_recording_active;
@@ -16114,7 +17482,7 @@ public unsafe partial class AudioEffectRecord : AudioEffect
     }
 
     private static nint __mb_set_format;
-    public void SetFormat(AudioStreamWAV.Format format)
+    internal void SetFormat(AudioStreamWAV.FormatEnum format)
     {
         var __mb = __mb_set_format;
         if (__mb == 0)
@@ -16130,7 +17498,7 @@ public unsafe partial class AudioEffectRecord : AudioEffect
     }
 
     private static nint __mb_get_format;
-    public AudioStreamWAV.Format GetFormat()
+    internal AudioStreamWAV.FormatEnum GetFormat()
     {
         var __mb = __mb_get_format;
         if (__mb == 0)
@@ -16141,7 +17509,7 @@ public unsafe partial class AudioEffectRecord : AudioEffect
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AudioStreamWAV.Format)__ret;
+        return (AudioStreamWAV.FormatEnum)__ret;
     }
 
     private static nint __mb_get_recording;
@@ -16169,8 +17537,56 @@ public unsafe partial class AudioEffectReverb : AudioEffect
         ClassRegistry.AttachNew(this, "AudioEffectReverb");
     }
 
+    public float PredelayMsec
+    {
+        get => GetPredelayMsec();
+        set => SetPredelayMsec(value);
+    }
+
+    public float PredelayFeedback
+    {
+        get => GetPredelayFeedback();
+        set => SetPredelayFeedback(value);
+    }
+
+    public float RoomSize
+    {
+        get => GetRoomSize();
+        set => SetRoomSize(value);
+    }
+
+    public float Damping
+    {
+        get => GetDamping();
+        set => SetDamping(value);
+    }
+
+    public float Spread
+    {
+        get => GetSpread();
+        set => SetSpread(value);
+    }
+
+    public float Hipass
+    {
+        get => GetHpf();
+        set => SetHpf(value);
+    }
+
+    public float Dry
+    {
+        get => GetDry();
+        set => SetDry(value);
+    }
+
+    public float Wet
+    {
+        get => GetWet();
+        set => SetWet(value);
+    }
+
     private static nint __mb_set_predelay_msec;
-    public void SetPredelayMsec(float msec)
+    internal void SetPredelayMsec(float msec)
     {
         var __mb = __mb_set_predelay_msec;
         if (__mb == 0)
@@ -16186,7 +17602,7 @@ public unsafe partial class AudioEffectReverb : AudioEffect
     }
 
     private static nint __mb_get_predelay_msec;
-    public float GetPredelayMsec()
+    internal float GetPredelayMsec()
     {
         var __mb = __mb_get_predelay_msec;
         if (__mb == 0)
@@ -16201,7 +17617,7 @@ public unsafe partial class AudioEffectReverb : AudioEffect
     }
 
     private static nint __mb_set_predelay_feedback;
-    public void SetPredelayFeedback(float feedback)
+    internal void SetPredelayFeedback(float feedback)
     {
         var __mb = __mb_set_predelay_feedback;
         if (__mb == 0)
@@ -16217,7 +17633,7 @@ public unsafe partial class AudioEffectReverb : AudioEffect
     }
 
     private static nint __mb_get_predelay_feedback;
-    public float GetPredelayFeedback()
+    internal float GetPredelayFeedback()
     {
         var __mb = __mb_get_predelay_feedback;
         if (__mb == 0)
@@ -16232,7 +17648,7 @@ public unsafe partial class AudioEffectReverb : AudioEffect
     }
 
     private static nint __mb_set_room_size;
-    public void SetRoomSize(float size)
+    internal void SetRoomSize(float size)
     {
         var __mb = __mb_set_room_size;
         if (__mb == 0)
@@ -16248,7 +17664,7 @@ public unsafe partial class AudioEffectReverb : AudioEffect
     }
 
     private static nint __mb_get_room_size;
-    public float GetRoomSize()
+    internal float GetRoomSize()
     {
         var __mb = __mb_get_room_size;
         if (__mb == 0)
@@ -16263,7 +17679,7 @@ public unsafe partial class AudioEffectReverb : AudioEffect
     }
 
     private static nint __mb_set_damping;
-    public void SetDamping(float amount)
+    internal void SetDamping(float amount)
     {
         var __mb = __mb_set_damping;
         if (__mb == 0)
@@ -16279,7 +17695,7 @@ public unsafe partial class AudioEffectReverb : AudioEffect
     }
 
     private static nint __mb_get_damping;
-    public float GetDamping()
+    internal float GetDamping()
     {
         var __mb = __mb_get_damping;
         if (__mb == 0)
@@ -16294,7 +17710,7 @@ public unsafe partial class AudioEffectReverb : AudioEffect
     }
 
     private static nint __mb_set_spread;
-    public void SetSpread(float amount)
+    internal void SetSpread(float amount)
     {
         var __mb = __mb_set_spread;
         if (__mb == 0)
@@ -16310,7 +17726,7 @@ public unsafe partial class AudioEffectReverb : AudioEffect
     }
 
     private static nint __mb_get_spread;
-    public float GetSpread()
+    internal float GetSpread()
     {
         var __mb = __mb_get_spread;
         if (__mb == 0)
@@ -16325,7 +17741,7 @@ public unsafe partial class AudioEffectReverb : AudioEffect
     }
 
     private static nint __mb_set_dry;
-    public void SetDry(float amount)
+    internal void SetDry(float amount)
     {
         var __mb = __mb_set_dry;
         if (__mb == 0)
@@ -16341,7 +17757,7 @@ public unsafe partial class AudioEffectReverb : AudioEffect
     }
 
     private static nint __mb_get_dry;
-    public float GetDry()
+    internal float GetDry()
     {
         var __mb = __mb_get_dry;
         if (__mb == 0)
@@ -16356,7 +17772,7 @@ public unsafe partial class AudioEffectReverb : AudioEffect
     }
 
     private static nint __mb_set_wet;
-    public void SetWet(float amount)
+    internal void SetWet(float amount)
     {
         var __mb = __mb_set_wet;
         if (__mb == 0)
@@ -16372,7 +17788,7 @@ public unsafe partial class AudioEffectReverb : AudioEffect
     }
 
     private static nint __mb_get_wet;
-    public float GetWet()
+    internal float GetWet()
     {
         var __mb = __mb_get_wet;
         if (__mb == 0)
@@ -16387,7 +17803,7 @@ public unsafe partial class AudioEffectReverb : AudioEffect
     }
 
     private static nint __mb_set_hpf;
-    public void SetHpf(float amount)
+    internal void SetHpf(float amount)
     {
         var __mb = __mb_set_hpf;
         if (__mb == 0)
@@ -16403,7 +17819,7 @@ public unsafe partial class AudioEffectReverb : AudioEffect
     }
 
     private static nint __mb_get_hpf;
-    public float GetHpf()
+    internal float GetHpf()
     {
         var __mb = __mb_get_hpf;
         if (__mb == 0)
@@ -16437,8 +17853,20 @@ public unsafe partial class AudioEffectSpectrumAnalyzer : AudioEffect
         FFT_SIZE_MAX = 5,
     }
 
+    public float BufferLength
+    {
+        get => GetBufferLength();
+        set => SetBufferLength(value);
+    }
+
+    public AudioEffectSpectrumAnalyzer.FFTSize FftSize
+    {
+        get => GetFftSize();
+        set => SetFftSize(value);
+    }
+
     private static nint __mb_set_buffer_length;
-    public void SetBufferLength(float seconds)
+    internal void SetBufferLength(float seconds)
     {
         var __mb = __mb_set_buffer_length;
         if (__mb == 0)
@@ -16454,7 +17882,7 @@ public unsafe partial class AudioEffectSpectrumAnalyzer : AudioEffect
     }
 
     private static nint __mb_get_buffer_length;
-    public float GetBufferLength()
+    internal float GetBufferLength()
     {
         var __mb = __mb_get_buffer_length;
         if (__mb == 0)
@@ -16469,7 +17897,7 @@ public unsafe partial class AudioEffectSpectrumAnalyzer : AudioEffect
     }
 
     private static nint __mb_set_fft_size;
-    public void SetFftSize(AudioEffectSpectrumAnalyzer.FFTSize size)
+    internal void SetFftSize(AudioEffectSpectrumAnalyzer.FFTSize size)
     {
         var __mb = __mb_set_fft_size;
         if (__mb == 0)
@@ -16485,7 +17913,7 @@ public unsafe partial class AudioEffectSpectrumAnalyzer : AudioEffect
     }
 
     private static nint __mb_get_fft_size;
-    public AudioEffectSpectrumAnalyzer.FFTSize GetFftSize()
+    internal AudioEffectSpectrumAnalyzer.FFTSize GetFftSize()
     {
         var __mb = __mb_get_fft_size;
         if (__mb == 0)
@@ -16542,8 +17970,26 @@ public unsafe partial class AudioEffectStereoEnhance : AudioEffect
         ClassRegistry.AttachNew(this, "AudioEffectStereoEnhance");
     }
 
+    public float PanPullout
+    {
+        get => GetPanPullout();
+        set => SetPanPullout(value);
+    }
+
+    public float TimePulloutMs
+    {
+        get => GetTimePullout();
+        set => SetTimePullout(value);
+    }
+
+    public float Surround
+    {
+        get => GetSurround();
+        set => SetSurround(value);
+    }
+
     private static nint __mb_set_pan_pullout;
-    public void SetPanPullout(float amount)
+    internal void SetPanPullout(float amount)
     {
         var __mb = __mb_set_pan_pullout;
         if (__mb == 0)
@@ -16559,7 +18005,7 @@ public unsafe partial class AudioEffectStereoEnhance : AudioEffect
     }
 
     private static nint __mb_get_pan_pullout;
-    public float GetPanPullout()
+    internal float GetPanPullout()
     {
         var __mb = __mb_get_pan_pullout;
         if (__mb == 0)
@@ -16574,7 +18020,7 @@ public unsafe partial class AudioEffectStereoEnhance : AudioEffect
     }
 
     private static nint __mb_set_time_pullout;
-    public void SetTimePullout(float amount)
+    internal void SetTimePullout(float amount)
     {
         var __mb = __mb_set_time_pullout;
         if (__mb == 0)
@@ -16590,7 +18036,7 @@ public unsafe partial class AudioEffectStereoEnhance : AudioEffect
     }
 
     private static nint __mb_get_time_pullout;
-    public float GetTimePullout()
+    internal float GetTimePullout()
     {
         var __mb = __mb_get_time_pullout;
         if (__mb == 0)
@@ -16605,7 +18051,7 @@ public unsafe partial class AudioEffectStereoEnhance : AudioEffect
     }
 
     private static nint __mb_set_surround;
-    public void SetSurround(float amount)
+    internal void SetSurround(float amount)
     {
         var __mb = __mb_set_surround;
         if (__mb == 0)
@@ -16621,7 +18067,7 @@ public unsafe partial class AudioEffectStereoEnhance : AudioEffect
     }
 
     private static nint __mb_get_surround;
-    public float GetSurround()
+    internal float GetSurround()
     {
         var __mb = __mb_get_surround;
         if (__mb == 0)
@@ -16696,11 +18142,17 @@ public unsafe partial class AudioListener3D : Node3D
         ClassRegistry.AttachNew(this, "AudioListener3D");
     }
 
-    public enum DopplerTracking : long
+    public enum DopplerTrackingEnum : long
     {
         DOPPLER_TRACKING_DISABLED = 0,
         DOPPLER_TRACKING_IDLE_STEP = 1,
         DOPPLER_TRACKING_PHYSICS_STEP = 2,
+    }
+
+    public AudioListener3D.DopplerTrackingEnum DopplerTracking
+    {
+        get => GetDopplerTracking();
+        set => SetDopplerTracking(value);
     }
 
     private static nint __mb_make_current;
@@ -16760,7 +18212,7 @@ public unsafe partial class AudioListener3D : Node3D
     }
 
     private static nint __mb_set_doppler_tracking;
-    public void SetDopplerTracking(AudioListener3D.DopplerTracking mode)
+    internal void SetDopplerTracking(AudioListener3D.DopplerTrackingEnum mode)
     {
         var __mb = __mb_set_doppler_tracking;
         if (__mb == 0)
@@ -16776,7 +18228,7 @@ public unsafe partial class AudioListener3D : Node3D
     }
 
     private static nint __mb_get_doppler_tracking;
-    public AudioListener3D.DopplerTracking GetDopplerTracking()
+    internal AudioListener3D.DopplerTrackingEnum GetDopplerTracking()
     {
         var __mb = __mb_get_doppler_tracking;
         if (__mb == 0)
@@ -16787,7 +18239,7 @@ public unsafe partial class AudioListener3D : Node3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AudioListener3D.DopplerTracking)__ret;
+        return (AudioListener3D.DopplerTrackingEnum)__ret;
     }
 }
 
@@ -16839,8 +18291,32 @@ public unsafe partial class AudioServer : GodotObject
         PLAYBACK_TYPE_MAX = 3,
     }
 
+    public int BusCount
+    {
+        get => GetBusCount();
+        set => SetBusCount(value);
+    }
+
+    public string OutputDevice
+    {
+        get => GetOutputDevice();
+        set => SetOutputDevice(value);
+    }
+
+    public string InputDevice
+    {
+        get => GetInputDevice();
+        set => SetInputDevice(value);
+    }
+
+    public float PlaybackSpeedScale
+    {
+        get => GetPlaybackSpeedScale();
+        set => SetPlaybackSpeedScale(value);
+    }
+
     private static nint __mb_set_bus_count;
-    public void SetBusCount(int amount)
+    internal void SetBusCount(int amount)
     {
         var __mb = __mb_set_bus_count;
         if (__mb == 0)
@@ -16856,7 +18332,7 @@ public unsafe partial class AudioServer : GodotObject
     }
 
     private static nint __mb_get_bus_count;
-    public int GetBusCount()
+    internal int GetBusCount()
     {
         var __mb = __mb_get_bus_count;
         if (__mb == 0)
@@ -17408,7 +18884,7 @@ public unsafe partial class AudioServer : GodotObject
     }
 
     private static nint __mb_set_playback_speed_scale;
-    public void SetPlaybackSpeedScale(float scale)
+    internal void SetPlaybackSpeedScale(float scale)
     {
         var __mb = __mb_set_playback_speed_scale;
         if (__mb == 0)
@@ -17424,7 +18900,7 @@ public unsafe partial class AudioServer : GodotObject
     }
 
     private static nint __mb_get_playback_speed_scale;
-    public float GetPlaybackSpeedScale()
+    internal float GetPlaybackSpeedScale()
     {
         var __mb = __mb_get_playback_speed_scale;
         if (__mb == 0)
@@ -17525,7 +19001,7 @@ public unsafe partial class AudioServer : GodotObject
     }
 
     private static nint __mb_get_output_device;
-    public string GetOutputDevice()
+    internal string GetOutputDevice()
     {
         var __mb = __mb_get_output_device;
         if (__mb == 0)
@@ -17540,7 +19016,7 @@ public unsafe partial class AudioServer : GodotObject
     }
 
     private static nint __mb_set_output_device;
-    public void SetOutputDevice(string name)
+    internal void SetOutputDevice(string name)
     {
         var __mb = __mb_set_output_device;
         if (__mb == 0)
@@ -17602,7 +19078,7 @@ public unsafe partial class AudioServer : GodotObject
     }
 
     private static nint __mb_get_input_device;
-    public string GetInputDevice()
+    internal string GetInputDevice()
     {
         var __mb = __mb_get_input_device;
         if (__mb == 0)
@@ -17617,7 +19093,7 @@ public unsafe partial class AudioServer : GodotObject
     }
 
     private static nint __mb_set_input_device;
-    public void SetInputDevice(string name)
+    internal void SetInputDevice(string name)
     {
         var __mb = __mb_set_input_device;
         if (__mb == 0)
@@ -17958,8 +19434,26 @@ public unsafe partial class AudioStreamGenerator : AudioStream
         MIX_RATE_MAX = 3,
     }
 
+    public AudioStreamGenerator.AudioStreamGeneratorMixRate MixRateMode
+    {
+        get => GetMixRateMode();
+        set => SetMixRateMode(value);
+    }
+
+    public float MixRate
+    {
+        get => GetMixRate();
+        set => SetMixRate(value);
+    }
+
+    public float BufferLength
+    {
+        get => GetBufferLength();
+        set => SetBufferLength(value);
+    }
+
     private static nint __mb_set_mix_rate;
-    public void SetMixRate(float hz)
+    internal void SetMixRate(float hz)
     {
         var __mb = __mb_set_mix_rate;
         if (__mb == 0)
@@ -17975,7 +19469,7 @@ public unsafe partial class AudioStreamGenerator : AudioStream
     }
 
     private static nint __mb_get_mix_rate;
-    public float GetMixRate()
+    internal float GetMixRate()
     {
         var __mb = __mb_get_mix_rate;
         if (__mb == 0)
@@ -17990,7 +19484,7 @@ public unsafe partial class AudioStreamGenerator : AudioStream
     }
 
     private static nint __mb_set_mix_rate_mode;
-    public void SetMixRateMode(AudioStreamGenerator.AudioStreamGeneratorMixRate mode)
+    internal void SetMixRateMode(AudioStreamGenerator.AudioStreamGeneratorMixRate mode)
     {
         var __mb = __mb_set_mix_rate_mode;
         if (__mb == 0)
@@ -18006,7 +19500,7 @@ public unsafe partial class AudioStreamGenerator : AudioStream
     }
 
     private static nint __mb_get_mix_rate_mode;
-    public AudioStreamGenerator.AudioStreamGeneratorMixRate GetMixRateMode()
+    internal AudioStreamGenerator.AudioStreamGeneratorMixRate GetMixRateMode()
     {
         var __mb = __mb_get_mix_rate_mode;
         if (__mb == 0)
@@ -18021,7 +19515,7 @@ public unsafe partial class AudioStreamGenerator : AudioStream
     }
 
     private static nint __mb_set_buffer_length;
-    public void SetBufferLength(float seconds)
+    internal void SetBufferLength(float seconds)
     {
         var __mb = __mb_set_buffer_length;
         if (__mb == 0)
@@ -18037,7 +19531,7 @@ public unsafe partial class AudioStreamGenerator : AudioStream
     }
 
     private static nint __mb_get_buffer_length;
-    public float GetBufferLength()
+    internal float GetBufferLength()
     {
         var __mb = __mb_get_buffer_length;
         if (__mb == 0)
@@ -18176,8 +19670,20 @@ public unsafe partial class AudioStreamInteractive : AudioStream
         AUTO_ADVANCE_RETURN_TO_HOLD = 2,
     }
 
+    public int ClipCount
+    {
+        get => GetClipCount();
+        set => SetClipCount(value);
+    }
+
+    public int InitialClip
+    {
+        get => GetInitialClip();
+        set => SetInitialClip(value);
+    }
+
     private static nint __mb_set_clip_count;
-    public void SetClipCount(int clipCount)
+    internal void SetClipCount(int clipCount)
     {
         var __mb = __mb_set_clip_count;
         if (__mb == 0)
@@ -18193,7 +19699,7 @@ public unsafe partial class AudioStreamInteractive : AudioStream
     }
 
     private static nint __mb_get_clip_count;
-    public int GetClipCount()
+    internal int GetClipCount()
     {
         var __mb = __mb_get_clip_count;
         if (__mb == 0)
@@ -18208,7 +19714,7 @@ public unsafe partial class AudioStreamInteractive : AudioStream
     }
 
     private static nint __mb_set_initial_clip;
-    public void SetInitialClip(int clipIndex)
+    internal void SetInitialClip(int clipIndex)
     {
         var __mb = __mb_set_initial_clip;
         if (__mb == 0)
@@ -18224,7 +19730,7 @@ public unsafe partial class AudioStreamInteractive : AudioStream
     }
 
     private static nint __mb_get_initial_clip;
-    public int GetInitialClip()
+    internal int GetInitialClip()
     {
         var __mb = __mb_get_initial_clip;
         if (__mb == 0)
@@ -18602,6 +20108,36 @@ public unsafe partial class AudioStreamMP3 : AudioStream
         ClassRegistry.AttachNew(this, "AudioStreamMP3");
     }
 
+    public double Bpm
+    {
+        get => GetBpm();
+        set => SetBpm(value);
+    }
+
+    public int BeatCount
+    {
+        get => GetBeatCount();
+        set => SetBeatCount(value);
+    }
+
+    public int BarBeats
+    {
+        get => GetBarBeats();
+        set => SetBarBeats(value);
+    }
+
+    public bool Loop
+    {
+        get => HasLoop();
+        set => SetLoop(value);
+    }
+
+    public double LoopOffset
+    {
+        get => GetLoopOffset();
+        set => SetLoopOffset(value);
+    }
+
     private static nint __mb_load_from_file;
     public static AudioStreamMP3? LoadFromFile(string path)
     {
@@ -18622,7 +20158,7 @@ public unsafe partial class AudioStreamMP3 : AudioStream
     }
 
     private static nint __mb_set_loop;
-    public void SetLoop(bool enable)
+    internal void SetLoop(bool enable)
     {
         var __mb = __mb_set_loop;
         if (__mb == 0)
@@ -18638,7 +20174,7 @@ public unsafe partial class AudioStreamMP3 : AudioStream
     }
 
     private static nint __mb_has_loop;
-    public bool HasLoop()
+    internal bool HasLoop()
     {
         var __mb = __mb_has_loop;
         if (__mb == 0)
@@ -18653,7 +20189,7 @@ public unsafe partial class AudioStreamMP3 : AudioStream
     }
 
     private static nint __mb_set_loop_offset;
-    public void SetLoopOffset(double seconds)
+    internal void SetLoopOffset(double seconds)
     {
         var __mb = __mb_set_loop_offset;
         if (__mb == 0)
@@ -18669,7 +20205,7 @@ public unsafe partial class AudioStreamMP3 : AudioStream
     }
 
     private static nint __mb_get_loop_offset;
-    public double GetLoopOffset()
+    internal double GetLoopOffset()
     {
         var __mb = __mb_get_loop_offset;
         if (__mb == 0)
@@ -18684,7 +20220,7 @@ public unsafe partial class AudioStreamMP3 : AudioStream
     }
 
     private static nint __mb_set_bpm;
-    public void SetBpm(double bpm)
+    internal void SetBpm(double bpm)
     {
         var __mb = __mb_set_bpm;
         if (__mb == 0)
@@ -18700,7 +20236,7 @@ public unsafe partial class AudioStreamMP3 : AudioStream
     }
 
     private static nint __mb_get_bpm;
-    public double GetBpm()
+    internal double GetBpm()
     {
         var __mb = __mb_get_bpm;
         if (__mb == 0)
@@ -18715,7 +20251,7 @@ public unsafe partial class AudioStreamMP3 : AudioStream
     }
 
     private static nint __mb_set_beat_count;
-    public void SetBeatCount(int count)
+    internal void SetBeatCount(int count)
     {
         var __mb = __mb_set_beat_count;
         if (__mb == 0)
@@ -18731,7 +20267,7 @@ public unsafe partial class AudioStreamMP3 : AudioStream
     }
 
     private static nint __mb_get_beat_count;
-    public int GetBeatCount()
+    internal int GetBeatCount()
     {
         var __mb = __mb_get_beat_count;
         if (__mb == 0)
@@ -18746,7 +20282,7 @@ public unsafe partial class AudioStreamMP3 : AudioStream
     }
 
     private static nint __mb_set_bar_beats;
-    public void SetBarBeats(int count)
+    internal void SetBarBeats(int count)
     {
         var __mb = __mb_set_bar_beats;
         if (__mb == 0)
@@ -18762,7 +20298,7 @@ public unsafe partial class AudioStreamMP3 : AudioStream
     }
 
     private static nint __mb_get_bar_beats;
-    public int GetBarBeats()
+    internal int GetBarBeats()
     {
         var __mb = __mb_get_bar_beats;
         if (__mb == 0)
@@ -18796,6 +20332,48 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
         ClassRegistry.AttachNew(this, "AudioStreamOggVorbis");
     }
 
+    public OggPacketSequence? PacketSequence
+    {
+        get => GetPacketSequence();
+        set => SetPacketSequence(value);
+    }
+
+    public double Bpm
+    {
+        get => GetBpm();
+        set => SetBpm(value);
+    }
+
+    public int BeatCount
+    {
+        get => GetBeatCount();
+        set => SetBeatCount(value);
+    }
+
+    public int BarBeats
+    {
+        get => GetBarBeats();
+        set => SetBarBeats(value);
+    }
+
+    public Godot.Collections.Dictionary Tags
+    {
+        get => GetTags();
+        set => SetTags(value);
+    }
+
+    public bool Loop
+    {
+        get => HasLoop();
+        set => SetLoop(value);
+    }
+
+    public double LoopOffset
+    {
+        get => GetLoopOffset();
+        set => SetLoopOffset(value);
+    }
+
     private static nint __mb_load_from_file;
     public static AudioStreamOggVorbis? LoadFromFile(string path)
     {
@@ -18816,7 +20394,7 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
     }
 
     private static nint __mb_set_packet_sequence;
-    public void SetPacketSequence(OggPacketSequence? packetSequence)
+    internal void SetPacketSequence(OggPacketSequence? packetSequence)
     {
         var __mb = __mb_set_packet_sequence;
         if (__mb == 0)
@@ -18832,7 +20410,7 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
     }
 
     private static nint __mb_get_packet_sequence;
-    public OggPacketSequence? GetPacketSequence()
+    internal OggPacketSequence? GetPacketSequence()
     {
         var __mb = __mb_get_packet_sequence;
         if (__mb == 0)
@@ -18847,7 +20425,7 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
     }
 
     private static nint __mb_set_loop;
-    public void SetLoop(bool enable)
+    internal void SetLoop(bool enable)
     {
         var __mb = __mb_set_loop;
         if (__mb == 0)
@@ -18863,7 +20441,7 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
     }
 
     private static nint __mb_has_loop;
-    public bool HasLoop()
+    internal bool HasLoop()
     {
         var __mb = __mb_has_loop;
         if (__mb == 0)
@@ -18878,7 +20456,7 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
     }
 
     private static nint __mb_set_loop_offset;
-    public void SetLoopOffset(double seconds)
+    internal void SetLoopOffset(double seconds)
     {
         var __mb = __mb_set_loop_offset;
         if (__mb == 0)
@@ -18894,7 +20472,7 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
     }
 
     private static nint __mb_get_loop_offset;
-    public double GetLoopOffset()
+    internal double GetLoopOffset()
     {
         var __mb = __mb_get_loop_offset;
         if (__mb == 0)
@@ -18909,7 +20487,7 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
     }
 
     private static nint __mb_set_bpm;
-    public void SetBpm(double bpm)
+    internal void SetBpm(double bpm)
     {
         var __mb = __mb_set_bpm;
         if (__mb == 0)
@@ -18925,7 +20503,7 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
     }
 
     private static nint __mb_get_bpm;
-    public double GetBpm()
+    internal double GetBpm()
     {
         var __mb = __mb_get_bpm;
         if (__mb == 0)
@@ -18940,7 +20518,7 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
     }
 
     private static nint __mb_set_beat_count;
-    public void SetBeatCount(int count)
+    internal void SetBeatCount(int count)
     {
         var __mb = __mb_set_beat_count;
         if (__mb == 0)
@@ -18956,7 +20534,7 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
     }
 
     private static nint __mb_get_beat_count;
-    public int GetBeatCount()
+    internal int GetBeatCount()
     {
         var __mb = __mb_get_beat_count;
         if (__mb == 0)
@@ -18971,7 +20549,7 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
     }
 
     private static nint __mb_set_bar_beats;
-    public void SetBarBeats(int count)
+    internal void SetBarBeats(int count)
     {
         var __mb = __mb_set_bar_beats;
         if (__mb == 0)
@@ -18987,7 +20565,7 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
     }
 
     private static nint __mb_get_bar_beats;
-    public int GetBarBeats()
+    internal int GetBarBeats()
     {
         var __mb = __mb_get_bar_beats;
         if (__mb == 0)
@@ -19002,7 +20580,7 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
     }
 
     private static nint __mb_set_tags;
-    public void SetTags(Godot.Collections.Dictionary tags)
+    internal void SetTags(Godot.Collections.Dictionary tags)
     {
         var __mb = __mb_set_tags;
         if (__mb == 0)
@@ -19018,7 +20596,7 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
     }
 
     private static nint __mb_get_tags;
-    public Godot.Collections.Dictionary GetTags()
+    internal Godot.Collections.Dictionary GetTags()
     {
         var __mb = __mb_get_tags;
         if (__mb == 0)
@@ -19455,15 +21033,81 @@ public unsafe partial class AudioStreamPlayer : Node
         ClassRegistry.AttachNew(this, "AudioStreamPlayer");
     }
 
-    public enum MixTarget : long
+    public enum MixTargetEnum : long
     {
         MIX_TARGET_STEREO = 0,
         MIX_TARGET_SURROUND = 1,
         MIX_TARGET_CENTER = 2,
     }
 
+    public AudioStream? Stream
+    {
+        get => GetStream();
+        set => SetStream(value);
+    }
+
+    public float VolumeDb
+    {
+        get => GetVolumeDb();
+        set => SetVolumeDb(value);
+    }
+
+    public float VolumeLinear
+    {
+        get => GetVolumeLinear();
+        set => SetVolumeLinear(value);
+    }
+
+    public float PitchScale
+    {
+        get => GetPitchScale();
+        set => SetPitchScale(value);
+    }
+
+    public bool Playing
+    {
+        get => IsPlaying();
+        set => SetPlaying(value);
+    }
+
+    public bool Autoplay
+    {
+        get => IsAutoplayEnabled();
+        set => SetAutoplay(value);
+    }
+
+    public bool StreamPaused
+    {
+        get => GetStreamPaused();
+        set => SetStreamPaused(value);
+    }
+
+    public AudioStreamPlayer.MixTargetEnum MixTarget
+    {
+        get => GetMixTarget();
+        set => SetMixTarget(value);
+    }
+
+    public int MaxPolyphony
+    {
+        get => GetMaxPolyphony();
+        set => SetMaxPolyphony(value);
+    }
+
+    public string Bus
+    {
+        get => GetBus();
+        set => SetBus(value);
+    }
+
+    public AudioServer.PlaybackType PlaybackType
+    {
+        get => GetPlaybackType();
+        set => SetPlaybackType(value);
+    }
+
     private static nint __mb_set_stream;
-    public void SetStream(AudioStream? stream)
+    internal void SetStream(AudioStream? stream)
     {
         var __mb = __mb_set_stream;
         if (__mb == 0)
@@ -19479,7 +21123,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_get_stream;
-    public AudioStream? GetStream()
+    internal AudioStream? GetStream()
     {
         var __mb = __mb_get_stream;
         if (__mb == 0)
@@ -19494,7 +21138,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_set_volume_db;
-    public void SetVolumeDb(float volumeDb)
+    internal void SetVolumeDb(float volumeDb)
     {
         var __mb = __mb_set_volume_db;
         if (__mb == 0)
@@ -19510,7 +21154,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_get_volume_db;
-    public float GetVolumeDb()
+    internal float GetVolumeDb()
     {
         var __mb = __mb_get_volume_db;
         if (__mb == 0)
@@ -19525,7 +21169,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_set_volume_linear;
-    public void SetVolumeLinear(float volumeLinear)
+    internal void SetVolumeLinear(float volumeLinear)
     {
         var __mb = __mb_set_volume_linear;
         if (__mb == 0)
@@ -19541,7 +21185,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_get_volume_linear;
-    public float GetVolumeLinear()
+    internal float GetVolumeLinear()
     {
         var __mb = __mb_get_volume_linear;
         if (__mb == 0)
@@ -19556,7 +21200,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_set_pitch_scale;
-    public void SetPitchScale(float pitchScale)
+    internal void SetPitchScale(float pitchScale)
     {
         var __mb = __mb_set_pitch_scale;
         if (__mb == 0)
@@ -19572,7 +21216,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_get_pitch_scale;
-    public float GetPitchScale()
+    internal float GetPitchScale()
     {
         var __mb = __mb_get_pitch_scale;
         if (__mb == 0)
@@ -19632,7 +21276,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_is_playing;
-    public bool IsPlaying()
+    internal bool IsPlaying()
     {
         var __mb = __mb_is_playing;
         if (__mb == 0)
@@ -19662,7 +21306,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_set_bus;
-    public void SetBus(string bus)
+    internal void SetBus(string bus)
     {
         var __mb = __mb_set_bus;
         if (__mb == 0)
@@ -19678,7 +21322,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_get_bus;
-    public string GetBus()
+    internal string GetBus()
     {
         var __mb = __mb_get_bus;
         if (__mb == 0)
@@ -19693,7 +21337,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_set_autoplay;
-    public void SetAutoplay(bool enable)
+    internal void SetAutoplay(bool enable)
     {
         var __mb = __mb_set_autoplay;
         if (__mb == 0)
@@ -19709,7 +21353,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_is_autoplay_enabled;
-    public bool IsAutoplayEnabled()
+    internal bool IsAutoplayEnabled()
     {
         var __mb = __mb_is_autoplay_enabled;
         if (__mb == 0)
@@ -19724,7 +21368,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_set_mix_target;
-    public void SetMixTarget(AudioStreamPlayer.MixTarget mixTarget)
+    internal void SetMixTarget(AudioStreamPlayer.MixTargetEnum mixTarget)
     {
         var __mb = __mb_set_mix_target;
         if (__mb == 0)
@@ -19740,7 +21384,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_get_mix_target;
-    public AudioStreamPlayer.MixTarget GetMixTarget()
+    internal AudioStreamPlayer.MixTargetEnum GetMixTarget()
     {
         var __mb = __mb_get_mix_target;
         if (__mb == 0)
@@ -19751,11 +21395,11 @@ public unsafe partial class AudioStreamPlayer : Node
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AudioStreamPlayer.MixTarget)__ret;
+        return (AudioStreamPlayer.MixTargetEnum)__ret;
     }
 
     private static nint __mb_set_playing;
-    public void SetPlaying(bool enable)
+    internal void SetPlaying(bool enable)
     {
         var __mb = __mb_set_playing;
         if (__mb == 0)
@@ -19771,7 +21415,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_set_stream_paused;
-    public void SetStreamPaused(bool pause)
+    internal void SetStreamPaused(bool pause)
     {
         var __mb = __mb_set_stream_paused;
         if (__mb == 0)
@@ -19787,7 +21431,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_get_stream_paused;
-    public bool GetStreamPaused()
+    internal bool GetStreamPaused()
     {
         var __mb = __mb_get_stream_paused;
         if (__mb == 0)
@@ -19802,7 +21446,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_set_max_polyphony;
-    public void SetMaxPolyphony(int maxPolyphony)
+    internal void SetMaxPolyphony(int maxPolyphony)
     {
         var __mb = __mb_set_max_polyphony;
         if (__mb == 0)
@@ -19818,7 +21462,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_get_max_polyphony;
-    public int GetMaxPolyphony()
+    internal int GetMaxPolyphony()
     {
         var __mb = __mb_get_max_polyphony;
         if (__mb == 0)
@@ -19863,7 +21507,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_set_playback_type;
-    public void SetPlaybackType(AudioServer.PlaybackType playbackType)
+    internal void SetPlaybackType(AudioServer.PlaybackType playbackType)
     {
         var __mb = __mb_set_playback_type;
         if (__mb == 0)
@@ -19879,7 +21523,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_get_playback_type;
-    public AudioServer.PlaybackType GetPlaybackType()
+    internal AudioServer.PlaybackType GetPlaybackType()
     {
         var __mb = __mb_get_playback_type;
         if (__mb == 0)
@@ -19903,8 +21547,92 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
         ClassRegistry.AttachNew(this, "AudioStreamPlayer2D");
     }
 
+    public AudioStream? Stream
+    {
+        get => GetStream();
+        set => SetStream(value);
+    }
+
+    public float VolumeDb
+    {
+        get => GetVolumeDb();
+        set => SetVolumeDb(value);
+    }
+
+    public float VolumeLinear
+    {
+        get => GetVolumeLinear();
+        set => SetVolumeLinear(value);
+    }
+
+    public float PitchScale
+    {
+        get => GetPitchScale();
+        set => SetPitchScale(value);
+    }
+
+    public bool Playing
+    {
+        get => IsPlaying();
+        set => SetPlaying(value);
+    }
+
+    public bool Autoplay
+    {
+        get => IsAutoplayEnabled();
+        set => SetAutoplay(value);
+    }
+
+    public bool StreamPaused
+    {
+        get => GetStreamPaused();
+        set => SetStreamPaused(value);
+    }
+
+    public float MaxDistance
+    {
+        get => GetMaxDistance();
+        set => SetMaxDistance(value);
+    }
+
+    public float Attenuation
+    {
+        get => GetAttenuation();
+        set => SetAttenuation(value);
+    }
+
+    public int MaxPolyphony
+    {
+        get => GetMaxPolyphony();
+        set => SetMaxPolyphony(value);
+    }
+
+    public float PanningStrength
+    {
+        get => GetPanningStrength();
+        set => SetPanningStrength(value);
+    }
+
+    public string Bus
+    {
+        get => GetBus();
+        set => SetBus(value);
+    }
+
+    public uint AreaMask
+    {
+        get => GetAreaMask();
+        set => SetAreaMask(value);
+    }
+
+    public AudioServer.PlaybackType PlaybackType
+    {
+        get => GetPlaybackType();
+        set => SetPlaybackType(value);
+    }
+
     private static nint __mb_set_stream;
-    public void SetStream(AudioStream? stream)
+    internal void SetStream(AudioStream? stream)
     {
         var __mb = __mb_set_stream;
         if (__mb == 0)
@@ -19920,7 +21648,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_get_stream;
-    public AudioStream? GetStream()
+    internal AudioStream? GetStream()
     {
         var __mb = __mb_get_stream;
         if (__mb == 0)
@@ -19935,7 +21663,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_set_volume_db;
-    public void SetVolumeDb(float volumeDb)
+    internal void SetVolumeDb(float volumeDb)
     {
         var __mb = __mb_set_volume_db;
         if (__mb == 0)
@@ -19951,7 +21679,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_get_volume_db;
-    public float GetVolumeDb()
+    internal float GetVolumeDb()
     {
         var __mb = __mb_get_volume_db;
         if (__mb == 0)
@@ -19966,7 +21694,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_set_volume_linear;
-    public void SetVolumeLinear(float volumeLinear)
+    internal void SetVolumeLinear(float volumeLinear)
     {
         var __mb = __mb_set_volume_linear;
         if (__mb == 0)
@@ -19982,7 +21710,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_get_volume_linear;
-    public float GetVolumeLinear()
+    internal float GetVolumeLinear()
     {
         var __mb = __mb_get_volume_linear;
         if (__mb == 0)
@@ -19997,7 +21725,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_set_pitch_scale;
-    public void SetPitchScale(float pitchScale)
+    internal void SetPitchScale(float pitchScale)
     {
         var __mb = __mb_set_pitch_scale;
         if (__mb == 0)
@@ -20013,7 +21741,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_get_pitch_scale;
-    public float GetPitchScale()
+    internal float GetPitchScale()
     {
         var __mb = __mb_get_pitch_scale;
         if (__mb == 0)
@@ -20073,7 +21801,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_is_playing;
-    public bool IsPlaying()
+    internal bool IsPlaying()
     {
         var __mb = __mb_is_playing;
         if (__mb == 0)
@@ -20103,7 +21831,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_set_bus;
-    public void SetBus(string bus)
+    internal void SetBus(string bus)
     {
         var __mb = __mb_set_bus;
         if (__mb == 0)
@@ -20119,7 +21847,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_get_bus;
-    public string GetBus()
+    internal string GetBus()
     {
         var __mb = __mb_get_bus;
         if (__mb == 0)
@@ -20134,7 +21862,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_set_autoplay;
-    public void SetAutoplay(bool enable)
+    internal void SetAutoplay(bool enable)
     {
         var __mb = __mb_set_autoplay;
         if (__mb == 0)
@@ -20150,7 +21878,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_is_autoplay_enabled;
-    public bool IsAutoplayEnabled()
+    internal bool IsAutoplayEnabled()
     {
         var __mb = __mb_is_autoplay_enabled;
         if (__mb == 0)
@@ -20165,7 +21893,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_set_playing;
-    public void SetPlaying(bool enable)
+    internal void SetPlaying(bool enable)
     {
         var __mb = __mb_set_playing;
         if (__mb == 0)
@@ -20181,7 +21909,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_set_max_distance;
-    public void SetMaxDistance(float pixels)
+    internal void SetMaxDistance(float pixels)
     {
         var __mb = __mb_set_max_distance;
         if (__mb == 0)
@@ -20197,7 +21925,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_get_max_distance;
-    public float GetMaxDistance()
+    internal float GetMaxDistance()
     {
         var __mb = __mb_get_max_distance;
         if (__mb == 0)
@@ -20212,7 +21940,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_set_attenuation;
-    public void SetAttenuation(float curve)
+    internal void SetAttenuation(float curve)
     {
         var __mb = __mb_set_attenuation;
         if (__mb == 0)
@@ -20228,7 +21956,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_get_attenuation;
-    public float GetAttenuation()
+    internal float GetAttenuation()
     {
         var __mb = __mb_get_attenuation;
         if (__mb == 0)
@@ -20243,7 +21971,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_set_area_mask;
-    public void SetAreaMask(uint mask)
+    internal void SetAreaMask(uint mask)
     {
         var __mb = __mb_set_area_mask;
         if (__mb == 0)
@@ -20259,7 +21987,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_get_area_mask;
-    public uint GetAreaMask()
+    internal uint GetAreaMask()
     {
         var __mb = __mb_get_area_mask;
         if (__mb == 0)
@@ -20274,7 +22002,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_set_stream_paused;
-    public void SetStreamPaused(bool pause)
+    internal void SetStreamPaused(bool pause)
     {
         var __mb = __mb_set_stream_paused;
         if (__mb == 0)
@@ -20290,7 +22018,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_get_stream_paused;
-    public bool GetStreamPaused()
+    internal bool GetStreamPaused()
     {
         var __mb = __mb_get_stream_paused;
         if (__mb == 0)
@@ -20305,7 +22033,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_set_max_polyphony;
-    public void SetMaxPolyphony(int maxPolyphony)
+    internal void SetMaxPolyphony(int maxPolyphony)
     {
         var __mb = __mb_set_max_polyphony;
         if (__mb == 0)
@@ -20321,7 +22049,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_get_max_polyphony;
-    public int GetMaxPolyphony()
+    internal int GetMaxPolyphony()
     {
         var __mb = __mb_get_max_polyphony;
         if (__mb == 0)
@@ -20336,7 +22064,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_set_panning_strength;
-    public void SetPanningStrength(float panningStrength)
+    internal void SetPanningStrength(float panningStrength)
     {
         var __mb = __mb_set_panning_strength;
         if (__mb == 0)
@@ -20352,7 +22080,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_get_panning_strength;
-    public float GetPanningStrength()
+    internal float GetPanningStrength()
     {
         var __mb = __mb_get_panning_strength;
         if (__mb == 0)
@@ -20397,7 +22125,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_set_playback_type;
-    public void SetPlaybackType(AudioServer.PlaybackType playbackType)
+    internal void SetPlaybackType(AudioServer.PlaybackType playbackType)
     {
         var __mb = __mb_set_playback_type;
         if (__mb == 0)
@@ -20413,7 +22141,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_get_playback_type;
-    public AudioServer.PlaybackType GetPlaybackType()
+    internal AudioServer.PlaybackType GetPlaybackType()
     {
         var __mb = __mb_get_playback_type;
         if (__mb == 0)
@@ -20437,7 +22165,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
         ClassRegistry.AttachNew(this, "AudioStreamPlayer3D");
     }
 
-    public enum AttenuationModel : long
+    public enum AttenuationModelEnum : long
     {
         ATTENUATION_INVERSE_DISTANCE = 0,
         ATTENUATION_INVERSE_SQUARE_DISTANCE = 1,
@@ -20445,15 +22173,147 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
         ATTENUATION_DISABLED = 3,
     }
 
-    public enum DopplerTracking : long
+    public enum DopplerTrackingEnum : long
     {
         DOPPLER_TRACKING_DISABLED = 0,
         DOPPLER_TRACKING_IDLE_STEP = 1,
         DOPPLER_TRACKING_PHYSICS_STEP = 2,
     }
 
+    public AudioStream? Stream
+    {
+        get => GetStream();
+        set => SetStream(value);
+    }
+
+    public AudioStreamPlayer3D.AttenuationModelEnum AttenuationModel
+    {
+        get => GetAttenuationModel();
+        set => SetAttenuationModel(value);
+    }
+
+    public float VolumeDb
+    {
+        get => GetVolumeDb();
+        set => SetVolumeDb(value);
+    }
+
+    public float VolumeLinear
+    {
+        get => GetVolumeLinear();
+        set => SetVolumeLinear(value);
+    }
+
+    public float UnitSize
+    {
+        get => GetUnitSize();
+        set => SetUnitSize(value);
+    }
+
+    public float MaxDb
+    {
+        get => GetMaxDb();
+        set => SetMaxDb(value);
+    }
+
+    public float PitchScale
+    {
+        get => GetPitchScale();
+        set => SetPitchScale(value);
+    }
+
+    public bool Playing
+    {
+        get => IsPlaying();
+        set => SetPlaying(value);
+    }
+
+    public bool Autoplay
+    {
+        get => IsAutoplayEnabled();
+        set => SetAutoplay(value);
+    }
+
+    public bool StreamPaused
+    {
+        get => GetStreamPaused();
+        set => SetStreamPaused(value);
+    }
+
+    public float MaxDistance
+    {
+        get => GetMaxDistance();
+        set => SetMaxDistance(value);
+    }
+
+    public int MaxPolyphony
+    {
+        get => GetMaxPolyphony();
+        set => SetMaxPolyphony(value);
+    }
+
+    public float PanningStrength
+    {
+        get => GetPanningStrength();
+        set => SetPanningStrength(value);
+    }
+
+    public string Bus
+    {
+        get => GetBus();
+        set => SetBus(value);
+    }
+
+    public uint AreaMask
+    {
+        get => GetAreaMask();
+        set => SetAreaMask(value);
+    }
+
+    public AudioServer.PlaybackType PlaybackType
+    {
+        get => GetPlaybackType();
+        set => SetPlaybackType(value);
+    }
+
+    public bool EmissionAngleEnabled
+    {
+        get => IsEmissionAngleEnabled();
+        set => SetEmissionAngleEnabled(value);
+    }
+
+    public float EmissionAngleDegrees
+    {
+        get => GetEmissionAngle();
+        set => SetEmissionAngle(value);
+    }
+
+    public float EmissionAngleFilterAttenuationDb
+    {
+        get => GetEmissionAngleFilterAttenuationDb();
+        set => SetEmissionAngleFilterAttenuationDb(value);
+    }
+
+    public float AttenuationFilterCutoffHz
+    {
+        get => GetAttenuationFilterCutoffHz();
+        set => SetAttenuationFilterCutoffHz(value);
+    }
+
+    public float AttenuationFilterDb
+    {
+        get => GetAttenuationFilterDb();
+        set => SetAttenuationFilterDb(value);
+    }
+
+    public AudioStreamPlayer3D.DopplerTrackingEnum DopplerTracking
+    {
+        get => GetDopplerTracking();
+        set => SetDopplerTracking(value);
+    }
+
     private static nint __mb_set_stream;
-    public void SetStream(AudioStream? stream)
+    internal void SetStream(AudioStream? stream)
     {
         var __mb = __mb_set_stream;
         if (__mb == 0)
@@ -20469,7 +22329,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_stream;
-    public AudioStream? GetStream()
+    internal AudioStream? GetStream()
     {
         var __mb = __mb_get_stream;
         if (__mb == 0)
@@ -20484,7 +22344,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_volume_db;
-    public void SetVolumeDb(float volumeDb)
+    internal void SetVolumeDb(float volumeDb)
     {
         var __mb = __mb_set_volume_db;
         if (__mb == 0)
@@ -20500,7 +22360,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_volume_db;
-    public float GetVolumeDb()
+    internal float GetVolumeDb()
     {
         var __mb = __mb_get_volume_db;
         if (__mb == 0)
@@ -20515,7 +22375,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_volume_linear;
-    public void SetVolumeLinear(float volumeLinear)
+    internal void SetVolumeLinear(float volumeLinear)
     {
         var __mb = __mb_set_volume_linear;
         if (__mb == 0)
@@ -20531,7 +22391,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_volume_linear;
-    public float GetVolumeLinear()
+    internal float GetVolumeLinear()
     {
         var __mb = __mb_get_volume_linear;
         if (__mb == 0)
@@ -20546,7 +22406,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_unit_size;
-    public void SetUnitSize(float unitSize)
+    internal void SetUnitSize(float unitSize)
     {
         var __mb = __mb_set_unit_size;
         if (__mb == 0)
@@ -20562,7 +22422,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_unit_size;
-    public float GetUnitSize()
+    internal float GetUnitSize()
     {
         var __mb = __mb_get_unit_size;
         if (__mb == 0)
@@ -20577,7 +22437,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_max_db;
-    public void SetMaxDb(float maxDb)
+    internal void SetMaxDb(float maxDb)
     {
         var __mb = __mb_set_max_db;
         if (__mb == 0)
@@ -20593,7 +22453,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_max_db;
-    public float GetMaxDb()
+    internal float GetMaxDb()
     {
         var __mb = __mb_get_max_db;
         if (__mb == 0)
@@ -20608,7 +22468,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_pitch_scale;
-    public void SetPitchScale(float pitchScale)
+    internal void SetPitchScale(float pitchScale)
     {
         var __mb = __mb_set_pitch_scale;
         if (__mb == 0)
@@ -20624,7 +22484,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_pitch_scale;
-    public float GetPitchScale()
+    internal float GetPitchScale()
     {
         var __mb = __mb_get_pitch_scale;
         if (__mb == 0)
@@ -20684,7 +22544,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_is_playing;
-    public bool IsPlaying()
+    internal bool IsPlaying()
     {
         var __mb = __mb_is_playing;
         if (__mb == 0)
@@ -20714,7 +22574,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_bus;
-    public void SetBus(string bus)
+    internal void SetBus(string bus)
     {
         var __mb = __mb_set_bus;
         if (__mb == 0)
@@ -20730,7 +22590,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_bus;
-    public string GetBus()
+    internal string GetBus()
     {
         var __mb = __mb_get_bus;
         if (__mb == 0)
@@ -20745,7 +22605,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_autoplay;
-    public void SetAutoplay(bool enable)
+    internal void SetAutoplay(bool enable)
     {
         var __mb = __mb_set_autoplay;
         if (__mb == 0)
@@ -20761,7 +22621,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_is_autoplay_enabled;
-    public bool IsAutoplayEnabled()
+    internal bool IsAutoplayEnabled()
     {
         var __mb = __mb_is_autoplay_enabled;
         if (__mb == 0)
@@ -20776,7 +22636,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_playing;
-    public void SetPlaying(bool enable)
+    internal void SetPlaying(bool enable)
     {
         var __mb = __mb_set_playing;
         if (__mb == 0)
@@ -20792,7 +22652,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_max_distance;
-    public void SetMaxDistance(float meters)
+    internal void SetMaxDistance(float meters)
     {
         var __mb = __mb_set_max_distance;
         if (__mb == 0)
@@ -20808,7 +22668,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_max_distance;
-    public float GetMaxDistance()
+    internal float GetMaxDistance()
     {
         var __mb = __mb_get_max_distance;
         if (__mb == 0)
@@ -20823,7 +22683,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_area_mask;
-    public void SetAreaMask(uint mask)
+    internal void SetAreaMask(uint mask)
     {
         var __mb = __mb_set_area_mask;
         if (__mb == 0)
@@ -20839,7 +22699,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_area_mask;
-    public uint GetAreaMask()
+    internal uint GetAreaMask()
     {
         var __mb = __mb_get_area_mask;
         if (__mb == 0)
@@ -20854,7 +22714,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_emission_angle;
-    public void SetEmissionAngle(float degrees)
+    internal void SetEmissionAngle(float degrees)
     {
         var __mb = __mb_set_emission_angle;
         if (__mb == 0)
@@ -20870,7 +22730,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_emission_angle;
-    public float GetEmissionAngle()
+    internal float GetEmissionAngle()
     {
         var __mb = __mb_get_emission_angle;
         if (__mb == 0)
@@ -20885,7 +22745,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_emission_angle_enabled;
-    public void SetEmissionAngleEnabled(bool enabled)
+    internal void SetEmissionAngleEnabled(bool enabled)
     {
         var __mb = __mb_set_emission_angle_enabled;
         if (__mb == 0)
@@ -20901,7 +22761,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_is_emission_angle_enabled;
-    public bool IsEmissionAngleEnabled()
+    internal bool IsEmissionAngleEnabled()
     {
         var __mb = __mb_is_emission_angle_enabled;
         if (__mb == 0)
@@ -20916,7 +22776,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_emission_angle_filter_attenuation_db;
-    public void SetEmissionAngleFilterAttenuationDb(float db)
+    internal void SetEmissionAngleFilterAttenuationDb(float db)
     {
         var __mb = __mb_set_emission_angle_filter_attenuation_db;
         if (__mb == 0)
@@ -20932,7 +22792,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_emission_angle_filter_attenuation_db;
-    public float GetEmissionAngleFilterAttenuationDb()
+    internal float GetEmissionAngleFilterAttenuationDb()
     {
         var __mb = __mb_get_emission_angle_filter_attenuation_db;
         if (__mb == 0)
@@ -20947,7 +22807,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_attenuation_filter_cutoff_hz;
-    public void SetAttenuationFilterCutoffHz(float degrees)
+    internal void SetAttenuationFilterCutoffHz(float degrees)
     {
         var __mb = __mb_set_attenuation_filter_cutoff_hz;
         if (__mb == 0)
@@ -20963,7 +22823,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_attenuation_filter_cutoff_hz;
-    public float GetAttenuationFilterCutoffHz()
+    internal float GetAttenuationFilterCutoffHz()
     {
         var __mb = __mb_get_attenuation_filter_cutoff_hz;
         if (__mb == 0)
@@ -20978,7 +22838,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_attenuation_filter_db;
-    public void SetAttenuationFilterDb(float db)
+    internal void SetAttenuationFilterDb(float db)
     {
         var __mb = __mb_set_attenuation_filter_db;
         if (__mb == 0)
@@ -20994,7 +22854,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_attenuation_filter_db;
-    public float GetAttenuationFilterDb()
+    internal float GetAttenuationFilterDb()
     {
         var __mb = __mb_get_attenuation_filter_db;
         if (__mb == 0)
@@ -21009,7 +22869,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_attenuation_model;
-    public void SetAttenuationModel(AudioStreamPlayer3D.AttenuationModel model)
+    internal void SetAttenuationModel(AudioStreamPlayer3D.AttenuationModelEnum model)
     {
         var __mb = __mb_set_attenuation_model;
         if (__mb == 0)
@@ -21025,7 +22885,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_attenuation_model;
-    public AudioStreamPlayer3D.AttenuationModel GetAttenuationModel()
+    internal AudioStreamPlayer3D.AttenuationModelEnum GetAttenuationModel()
     {
         var __mb = __mb_get_attenuation_model;
         if (__mb == 0)
@@ -21036,11 +22896,11 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AudioStreamPlayer3D.AttenuationModel)__ret;
+        return (AudioStreamPlayer3D.AttenuationModelEnum)__ret;
     }
 
     private static nint __mb_set_doppler_tracking;
-    public void SetDopplerTracking(AudioStreamPlayer3D.DopplerTracking mode)
+    internal void SetDopplerTracking(AudioStreamPlayer3D.DopplerTrackingEnum mode)
     {
         var __mb = __mb_set_doppler_tracking;
         if (__mb == 0)
@@ -21056,7 +22916,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_doppler_tracking;
-    public AudioStreamPlayer3D.DopplerTracking GetDopplerTracking()
+    internal AudioStreamPlayer3D.DopplerTrackingEnum GetDopplerTracking()
     {
         var __mb = __mb_get_doppler_tracking;
         if (__mb == 0)
@@ -21067,11 +22927,11 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AudioStreamPlayer3D.DopplerTracking)__ret;
+        return (AudioStreamPlayer3D.DopplerTrackingEnum)__ret;
     }
 
     private static nint __mb_set_stream_paused;
-    public void SetStreamPaused(bool pause)
+    internal void SetStreamPaused(bool pause)
     {
         var __mb = __mb_set_stream_paused;
         if (__mb == 0)
@@ -21087,7 +22947,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_stream_paused;
-    public bool GetStreamPaused()
+    internal bool GetStreamPaused()
     {
         var __mb = __mb_get_stream_paused;
         if (__mb == 0)
@@ -21102,7 +22962,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_max_polyphony;
-    public void SetMaxPolyphony(int maxPolyphony)
+    internal void SetMaxPolyphony(int maxPolyphony)
     {
         var __mb = __mb_set_max_polyphony;
         if (__mb == 0)
@@ -21118,7 +22978,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_max_polyphony;
-    public int GetMaxPolyphony()
+    internal int GetMaxPolyphony()
     {
         var __mb = __mb_get_max_polyphony;
         if (__mb == 0)
@@ -21133,7 +22993,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_panning_strength;
-    public void SetPanningStrength(float panningStrength)
+    internal void SetPanningStrength(float panningStrength)
     {
         var __mb = __mb_set_panning_strength;
         if (__mb == 0)
@@ -21149,7 +23009,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_panning_strength;
-    public float GetPanningStrength()
+    internal float GetPanningStrength()
     {
         var __mb = __mb_get_panning_strength;
         if (__mb == 0)
@@ -21194,7 +23054,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_set_playback_type;
-    public void SetPlaybackType(AudioServer.PlaybackType playbackType)
+    internal void SetPlaybackType(AudioServer.PlaybackType playbackType)
     {
         var __mb = __mb_set_playback_type;
         if (__mb == 0)
@@ -21210,7 +23070,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_get_playback_type;
-    public AudioServer.PlaybackType GetPlaybackType()
+    internal AudioServer.PlaybackType GetPlaybackType()
     {
         var __mb = __mb_get_playback_type;
         if (__mb == 0)
@@ -21234,8 +23094,416 @@ public unsafe partial class AudioStreamPlaylist : AudioStream
         ClassRegistry.AttachNew(this, "AudioStreamPlaylist");
     }
 
+    public bool Shuffle
+    {
+        get => GetShuffle();
+        set => SetShuffle(value);
+    }
+
+    public bool Loop
+    {
+        get => HasLoop();
+        set => SetLoop(value);
+    }
+
+    public float FadeTime
+    {
+        get => GetFadeTime();
+        set => SetFadeTime(value);
+    }
+
+    public int StreamCount
+    {
+        get => GetStreamCount();
+        set => SetStreamCount(value);
+    }
+
+    public AudioStream? Stream0
+    {
+        get => GetListStream(((int)(0)));
+        set => SetListStream(((int)(0)), value);
+    }
+
+    public AudioStream? Stream1
+    {
+        get => GetListStream(((int)(1)));
+        set => SetListStream(((int)(1)), value);
+    }
+
+    public AudioStream? Stream2
+    {
+        get => GetListStream(((int)(2)));
+        set => SetListStream(((int)(2)), value);
+    }
+
+    public AudioStream? Stream3
+    {
+        get => GetListStream(((int)(3)));
+        set => SetListStream(((int)(3)), value);
+    }
+
+    public AudioStream? Stream4
+    {
+        get => GetListStream(((int)(4)));
+        set => SetListStream(((int)(4)), value);
+    }
+
+    public AudioStream? Stream5
+    {
+        get => GetListStream(((int)(5)));
+        set => SetListStream(((int)(5)), value);
+    }
+
+    public AudioStream? Stream6
+    {
+        get => GetListStream(((int)(6)));
+        set => SetListStream(((int)(6)), value);
+    }
+
+    public AudioStream? Stream7
+    {
+        get => GetListStream(((int)(7)));
+        set => SetListStream(((int)(7)), value);
+    }
+
+    public AudioStream? Stream8
+    {
+        get => GetListStream(((int)(8)));
+        set => SetListStream(((int)(8)), value);
+    }
+
+    public AudioStream? Stream9
+    {
+        get => GetListStream(((int)(9)));
+        set => SetListStream(((int)(9)), value);
+    }
+
+    public AudioStream? Stream10
+    {
+        get => GetListStream(((int)(10)));
+        set => SetListStream(((int)(10)), value);
+    }
+
+    public AudioStream? Stream11
+    {
+        get => GetListStream(((int)(11)));
+        set => SetListStream(((int)(11)), value);
+    }
+
+    public AudioStream? Stream12
+    {
+        get => GetListStream(((int)(12)));
+        set => SetListStream(((int)(12)), value);
+    }
+
+    public AudioStream? Stream13
+    {
+        get => GetListStream(((int)(13)));
+        set => SetListStream(((int)(13)), value);
+    }
+
+    public AudioStream? Stream14
+    {
+        get => GetListStream(((int)(14)));
+        set => SetListStream(((int)(14)), value);
+    }
+
+    public AudioStream? Stream15
+    {
+        get => GetListStream(((int)(15)));
+        set => SetListStream(((int)(15)), value);
+    }
+
+    public AudioStream? Stream16
+    {
+        get => GetListStream(((int)(16)));
+        set => SetListStream(((int)(16)), value);
+    }
+
+    public AudioStream? Stream17
+    {
+        get => GetListStream(((int)(17)));
+        set => SetListStream(((int)(17)), value);
+    }
+
+    public AudioStream? Stream18
+    {
+        get => GetListStream(((int)(18)));
+        set => SetListStream(((int)(18)), value);
+    }
+
+    public AudioStream? Stream19
+    {
+        get => GetListStream(((int)(19)));
+        set => SetListStream(((int)(19)), value);
+    }
+
+    public AudioStream? Stream20
+    {
+        get => GetListStream(((int)(20)));
+        set => SetListStream(((int)(20)), value);
+    }
+
+    public AudioStream? Stream21
+    {
+        get => GetListStream(((int)(21)));
+        set => SetListStream(((int)(21)), value);
+    }
+
+    public AudioStream? Stream22
+    {
+        get => GetListStream(((int)(22)));
+        set => SetListStream(((int)(22)), value);
+    }
+
+    public AudioStream? Stream23
+    {
+        get => GetListStream(((int)(23)));
+        set => SetListStream(((int)(23)), value);
+    }
+
+    public AudioStream? Stream24
+    {
+        get => GetListStream(((int)(24)));
+        set => SetListStream(((int)(24)), value);
+    }
+
+    public AudioStream? Stream25
+    {
+        get => GetListStream(((int)(25)));
+        set => SetListStream(((int)(25)), value);
+    }
+
+    public AudioStream? Stream26
+    {
+        get => GetListStream(((int)(26)));
+        set => SetListStream(((int)(26)), value);
+    }
+
+    public AudioStream? Stream27
+    {
+        get => GetListStream(((int)(27)));
+        set => SetListStream(((int)(27)), value);
+    }
+
+    public AudioStream? Stream28
+    {
+        get => GetListStream(((int)(28)));
+        set => SetListStream(((int)(28)), value);
+    }
+
+    public AudioStream? Stream29
+    {
+        get => GetListStream(((int)(29)));
+        set => SetListStream(((int)(29)), value);
+    }
+
+    public AudioStream? Stream30
+    {
+        get => GetListStream(((int)(30)));
+        set => SetListStream(((int)(30)), value);
+    }
+
+    public AudioStream? Stream31
+    {
+        get => GetListStream(((int)(31)));
+        set => SetListStream(((int)(31)), value);
+    }
+
+    public AudioStream? Stream32
+    {
+        get => GetListStream(((int)(32)));
+        set => SetListStream(((int)(32)), value);
+    }
+
+    public AudioStream? Stream33
+    {
+        get => GetListStream(((int)(33)));
+        set => SetListStream(((int)(33)), value);
+    }
+
+    public AudioStream? Stream34
+    {
+        get => GetListStream(((int)(34)));
+        set => SetListStream(((int)(34)), value);
+    }
+
+    public AudioStream? Stream35
+    {
+        get => GetListStream(((int)(35)));
+        set => SetListStream(((int)(35)), value);
+    }
+
+    public AudioStream? Stream36
+    {
+        get => GetListStream(((int)(36)));
+        set => SetListStream(((int)(36)), value);
+    }
+
+    public AudioStream? Stream37
+    {
+        get => GetListStream(((int)(37)));
+        set => SetListStream(((int)(37)), value);
+    }
+
+    public AudioStream? Stream38
+    {
+        get => GetListStream(((int)(38)));
+        set => SetListStream(((int)(38)), value);
+    }
+
+    public AudioStream? Stream39
+    {
+        get => GetListStream(((int)(39)));
+        set => SetListStream(((int)(39)), value);
+    }
+
+    public AudioStream? Stream40
+    {
+        get => GetListStream(((int)(40)));
+        set => SetListStream(((int)(40)), value);
+    }
+
+    public AudioStream? Stream41
+    {
+        get => GetListStream(((int)(41)));
+        set => SetListStream(((int)(41)), value);
+    }
+
+    public AudioStream? Stream42
+    {
+        get => GetListStream(((int)(42)));
+        set => SetListStream(((int)(42)), value);
+    }
+
+    public AudioStream? Stream43
+    {
+        get => GetListStream(((int)(43)));
+        set => SetListStream(((int)(43)), value);
+    }
+
+    public AudioStream? Stream44
+    {
+        get => GetListStream(((int)(44)));
+        set => SetListStream(((int)(44)), value);
+    }
+
+    public AudioStream? Stream45
+    {
+        get => GetListStream(((int)(45)));
+        set => SetListStream(((int)(45)), value);
+    }
+
+    public AudioStream? Stream46
+    {
+        get => GetListStream(((int)(46)));
+        set => SetListStream(((int)(46)), value);
+    }
+
+    public AudioStream? Stream47
+    {
+        get => GetListStream(((int)(47)));
+        set => SetListStream(((int)(47)), value);
+    }
+
+    public AudioStream? Stream48
+    {
+        get => GetListStream(((int)(48)));
+        set => SetListStream(((int)(48)), value);
+    }
+
+    public AudioStream? Stream49
+    {
+        get => GetListStream(((int)(49)));
+        set => SetListStream(((int)(49)), value);
+    }
+
+    public AudioStream? Stream50
+    {
+        get => GetListStream(((int)(50)));
+        set => SetListStream(((int)(50)), value);
+    }
+
+    public AudioStream? Stream51
+    {
+        get => GetListStream(((int)(51)));
+        set => SetListStream(((int)(51)), value);
+    }
+
+    public AudioStream? Stream52
+    {
+        get => GetListStream(((int)(52)));
+        set => SetListStream(((int)(52)), value);
+    }
+
+    public AudioStream? Stream53
+    {
+        get => GetListStream(((int)(53)));
+        set => SetListStream(((int)(53)), value);
+    }
+
+    public AudioStream? Stream54
+    {
+        get => GetListStream(((int)(54)));
+        set => SetListStream(((int)(54)), value);
+    }
+
+    public AudioStream? Stream55
+    {
+        get => GetListStream(((int)(55)));
+        set => SetListStream(((int)(55)), value);
+    }
+
+    public AudioStream? Stream56
+    {
+        get => GetListStream(((int)(56)));
+        set => SetListStream(((int)(56)), value);
+    }
+
+    public AudioStream? Stream57
+    {
+        get => GetListStream(((int)(57)));
+        set => SetListStream(((int)(57)), value);
+    }
+
+    public AudioStream? Stream58
+    {
+        get => GetListStream(((int)(58)));
+        set => SetListStream(((int)(58)), value);
+    }
+
+    public AudioStream? Stream59
+    {
+        get => GetListStream(((int)(59)));
+        set => SetListStream(((int)(59)), value);
+    }
+
+    public AudioStream? Stream60
+    {
+        get => GetListStream(((int)(60)));
+        set => SetListStream(((int)(60)), value);
+    }
+
+    public AudioStream? Stream61
+    {
+        get => GetListStream(((int)(61)));
+        set => SetListStream(((int)(61)), value);
+    }
+
+    public AudioStream? Stream62
+    {
+        get => GetListStream(((int)(62)));
+        set => SetListStream(((int)(62)), value);
+    }
+
+    public AudioStream? Stream63
+    {
+        get => GetListStream(((int)(63)));
+        set => SetListStream(((int)(63)), value);
+    }
+
     private static nint __mb_set_stream_count;
-    public void SetStreamCount(int streamCount)
+    internal void SetStreamCount(int streamCount)
     {
         var __mb = __mb_set_stream_count;
         if (__mb == 0)
@@ -21251,7 +23519,7 @@ public unsafe partial class AudioStreamPlaylist : AudioStream
     }
 
     private static nint __mb_get_stream_count;
-    public int GetStreamCount()
+    internal int GetStreamCount()
     {
         var __mb = __mb_get_stream_count;
         if (__mb == 0)
@@ -21281,7 +23549,7 @@ public unsafe partial class AudioStreamPlaylist : AudioStream
     }
 
     private static nint __mb_set_list_stream;
-    public void SetListStream(int streamIndex, AudioStream? audioStream)
+    internal void SetListStream(int streamIndex, AudioStream? audioStream)
     {
         var __mb = __mb_set_list_stream;
         if (__mb == 0)
@@ -21299,7 +23567,7 @@ public unsafe partial class AudioStreamPlaylist : AudioStream
     }
 
     private static nint __mb_get_list_stream;
-    public AudioStream? GetListStream(int streamIndex)
+    internal AudioStream? GetListStream(int streamIndex)
     {
         var __mb = __mb_get_list_stream;
         if (__mb == 0)
@@ -21317,7 +23585,7 @@ public unsafe partial class AudioStreamPlaylist : AudioStream
     }
 
     private static nint __mb_set_shuffle;
-    public void SetShuffle(bool shuffle)
+    internal void SetShuffle(bool shuffle)
     {
         var __mb = __mb_set_shuffle;
         if (__mb == 0)
@@ -21333,7 +23601,7 @@ public unsafe partial class AudioStreamPlaylist : AudioStream
     }
 
     private static nint __mb_get_shuffle;
-    public bool GetShuffle()
+    internal bool GetShuffle()
     {
         var __mb = __mb_get_shuffle;
         if (__mb == 0)
@@ -21348,7 +23616,7 @@ public unsafe partial class AudioStreamPlaylist : AudioStream
     }
 
     private static nint __mb_set_fade_time;
-    public void SetFadeTime(float dec)
+    internal void SetFadeTime(float dec)
     {
         var __mb = __mb_set_fade_time;
         if (__mb == 0)
@@ -21364,7 +23632,7 @@ public unsafe partial class AudioStreamPlaylist : AudioStream
     }
 
     private static nint __mb_get_fade_time;
-    public float GetFadeTime()
+    internal float GetFadeTime()
     {
         var __mb = __mb_get_fade_time;
         if (__mb == 0)
@@ -21379,7 +23647,7 @@ public unsafe partial class AudioStreamPlaylist : AudioStream
     }
 
     private static nint __mb_set_loop;
-    public void SetLoop(bool loop)
+    internal void SetLoop(bool loop)
     {
         var __mb = __mb_set_loop;
         if (__mb == 0)
@@ -21395,7 +23663,7 @@ public unsafe partial class AudioStreamPlaylist : AudioStream
     }
 
     private static nint __mb_has_loop;
-    public bool HasLoop()
+    internal bool HasLoop()
     {
         var __mb = __mb_has_loop;
         if (__mb == 0)
@@ -21419,8 +23687,14 @@ public unsafe partial class AudioStreamPolyphonic : AudioStream
         ClassRegistry.AttachNew(this, "AudioStreamPolyphonic");
     }
 
+    public int Polyphony
+    {
+        get => GetPolyphony();
+        set => SetPolyphony(value);
+    }
+
     private static nint __mb_set_polyphony;
-    public void SetPolyphony(int voices)
+    internal void SetPolyphony(int voices)
     {
         var __mb = __mb_set_polyphony;
         if (__mb == 0)
@@ -21436,7 +23710,7 @@ public unsafe partial class AudioStreamPolyphonic : AudioStream
     }
 
     private static nint __mb_get_polyphony;
-    public int GetPolyphony()
+    internal int GetPolyphony()
     {
         var __mb = __mb_get_polyphony;
         if (__mb == 0)
@@ -21460,11 +23734,41 @@ public unsafe partial class AudioStreamRandomizer : AudioStream
         ClassRegistry.AttachNew(this, "AudioStreamRandomizer");
     }
 
-    public enum PlaybackMode : long
+    public enum PlaybackModeEnum : long
     {
         PLAYBACK_RANDOM_NO_REPEATS = 0,
         PLAYBACK_RANDOM = 1,
         PLAYBACK_SEQUENTIAL = 2,
+    }
+
+    public AudioStreamRandomizer.PlaybackModeEnum PlaybackMode
+    {
+        get => GetPlaybackMode();
+        set => SetPlaybackMode(value);
+    }
+
+    public float RandomPitch
+    {
+        get => GetRandomPitch();
+        set => SetRandomPitch(value);
+    }
+
+    public float RandomPitchSemitones
+    {
+        get => GetRandomPitchSemitones();
+        set => SetRandomPitchSemitones(value);
+    }
+
+    public float RandomVolumeOffsetDb
+    {
+        get => GetRandomVolumeOffsetDb();
+        set => SetRandomVolumeOffsetDb(value);
+    }
+
+    public int StreamsCount
+    {
+        get => GetStreamsCount();
+        set => SetStreamsCount(value);
     }
 
     private static nint __mb_add_stream;
@@ -21594,7 +23898,7 @@ public unsafe partial class AudioStreamRandomizer : AudioStream
     }
 
     private static nint __mb_set_streams_count;
-    public void SetStreamsCount(int count)
+    internal void SetStreamsCount(int count)
     {
         var __mb = __mb_set_streams_count;
         if (__mb == 0)
@@ -21610,7 +23914,7 @@ public unsafe partial class AudioStreamRandomizer : AudioStream
     }
 
     private static nint __mb_get_streams_count;
-    public int GetStreamsCount()
+    internal int GetStreamsCount()
     {
         var __mb = __mb_get_streams_count;
         if (__mb == 0)
@@ -21625,7 +23929,7 @@ public unsafe partial class AudioStreamRandomizer : AudioStream
     }
 
     private static nint __mb_set_random_pitch;
-    public void SetRandomPitch(float scale)
+    internal void SetRandomPitch(float scale)
     {
         var __mb = __mb_set_random_pitch;
         if (__mb == 0)
@@ -21641,7 +23945,7 @@ public unsafe partial class AudioStreamRandomizer : AudioStream
     }
 
     private static nint __mb_get_random_pitch;
-    public float GetRandomPitch()
+    internal float GetRandomPitch()
     {
         var __mb = __mb_get_random_pitch;
         if (__mb == 0)
@@ -21656,7 +23960,7 @@ public unsafe partial class AudioStreamRandomizer : AudioStream
     }
 
     private static nint __mb_set_random_pitch_semitones;
-    public void SetRandomPitchSemitones(float semitones)
+    internal void SetRandomPitchSemitones(float semitones)
     {
         var __mb = __mb_set_random_pitch_semitones;
         if (__mb == 0)
@@ -21672,7 +23976,7 @@ public unsafe partial class AudioStreamRandomizer : AudioStream
     }
 
     private static nint __mb_get_random_pitch_semitones;
-    public float GetRandomPitchSemitones()
+    internal float GetRandomPitchSemitones()
     {
         var __mb = __mb_get_random_pitch_semitones;
         if (__mb == 0)
@@ -21687,7 +23991,7 @@ public unsafe partial class AudioStreamRandomizer : AudioStream
     }
 
     private static nint __mb_set_random_volume_offset_db;
-    public void SetRandomVolumeOffsetDb(float dbOffset)
+    internal void SetRandomVolumeOffsetDb(float dbOffset)
     {
         var __mb = __mb_set_random_volume_offset_db;
         if (__mb == 0)
@@ -21703,7 +24007,7 @@ public unsafe partial class AudioStreamRandomizer : AudioStream
     }
 
     private static nint __mb_get_random_volume_offset_db;
-    public float GetRandomVolumeOffsetDb()
+    internal float GetRandomVolumeOffsetDb()
     {
         var __mb = __mb_get_random_volume_offset_db;
         if (__mb == 0)
@@ -21718,7 +24022,7 @@ public unsafe partial class AudioStreamRandomizer : AudioStream
     }
 
     private static nint __mb_set_playback_mode;
-    public void SetPlaybackMode(AudioStreamRandomizer.PlaybackMode mode)
+    internal void SetPlaybackMode(AudioStreamRandomizer.PlaybackModeEnum mode)
     {
         var __mb = __mb_set_playback_mode;
         if (__mb == 0)
@@ -21734,7 +24038,7 @@ public unsafe partial class AudioStreamRandomizer : AudioStream
     }
 
     private static nint __mb_get_playback_mode;
-    public AudioStreamRandomizer.PlaybackMode GetPlaybackMode()
+    internal AudioStreamRandomizer.PlaybackModeEnum GetPlaybackMode()
     {
         var __mb = __mb_get_playback_mode;
         if (__mb == 0)
@@ -21745,7 +24049,7 @@ public unsafe partial class AudioStreamRandomizer : AudioStream
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AudioStreamRandomizer.PlaybackMode)__ret;
+        return (AudioStreamRandomizer.PlaybackModeEnum)__ret;
     }
 }
 
@@ -21758,8 +24062,14 @@ public unsafe partial class AudioStreamSynchronized : AudioStream
         ClassRegistry.AttachNew(this, "AudioStreamSynchronized");
     }
 
+    public int StreamCount
+    {
+        get => GetStreamCount();
+        set => SetStreamCount(value);
+    }
+
     private static nint __mb_set_stream_count;
-    public void SetStreamCount(int streamCount)
+    internal void SetStreamCount(int streamCount)
     {
         var __mb = __mb_set_stream_count;
         if (__mb == 0)
@@ -21775,7 +24085,7 @@ public unsafe partial class AudioStreamSynchronized : AudioStream
     }
 
     private static nint __mb_get_stream_count;
-    public int GetStreamCount()
+    internal int GetStreamCount()
     {
         var __mb = __mb_get_stream_count;
         if (__mb == 0)
@@ -21871,7 +24181,7 @@ public unsafe partial class AudioStreamWAV : AudioStream
         ClassRegistry.AttachNew(this, "AudioStreamWAV");
     }
 
-    public enum Format : long
+    public enum FormatEnum : long
     {
         FORMAT_8_BITS = 0,
         FORMAT_16_BITS = 1,
@@ -21879,12 +24189,54 @@ public unsafe partial class AudioStreamWAV : AudioStream
         FORMAT_QOA = 3,
     }
 
-    public enum LoopMode : long
+    public enum LoopModeEnum : long
     {
         LOOP_DISABLED = 0,
         LOOP_FORWARD = 1,
         LOOP_PINGPONG = 2,
         LOOP_BACKWARD = 3,
+    }
+
+    public AudioStreamWAV.FormatEnum Format
+    {
+        get => GetFormat();
+        set => SetFormat(value);
+    }
+
+    public AudioStreamWAV.LoopModeEnum LoopMode
+    {
+        get => GetLoopMode();
+        set => SetLoopMode(value);
+    }
+
+    public int LoopBegin
+    {
+        get => GetLoopBegin();
+        set => SetLoopBegin(value);
+    }
+
+    public int LoopEnd
+    {
+        get => GetLoopEnd();
+        set => SetLoopEnd(value);
+    }
+
+    public int MixRate
+    {
+        get => GetMixRate();
+        set => SetMixRate(value);
+    }
+
+    public bool Stereo
+    {
+        get => IsStereo();
+        set => SetStereo(value);
+    }
+
+    public Godot.Collections.Dictionary Tags
+    {
+        get => GetTags();
+        set => SetTags(value);
     }
 
     private static nint __mb_load_from_file;
@@ -21909,7 +24261,7 @@ public unsafe partial class AudioStreamWAV : AudioStream
     }
 
     private static nint __mb_set_format;
-    public void SetFormat(AudioStreamWAV.Format format)
+    internal void SetFormat(AudioStreamWAV.FormatEnum format)
     {
         var __mb = __mb_set_format;
         if (__mb == 0)
@@ -21925,7 +24277,7 @@ public unsafe partial class AudioStreamWAV : AudioStream
     }
 
     private static nint __mb_get_format;
-    public AudioStreamWAV.Format GetFormat()
+    internal AudioStreamWAV.FormatEnum GetFormat()
     {
         var __mb = __mb_get_format;
         if (__mb == 0)
@@ -21936,11 +24288,11 @@ public unsafe partial class AudioStreamWAV : AudioStream
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AudioStreamWAV.Format)__ret;
+        return (AudioStreamWAV.FormatEnum)__ret;
     }
 
     private static nint __mb_set_loop_mode;
-    public void SetLoopMode(AudioStreamWAV.LoopMode loopMode)
+    internal void SetLoopMode(AudioStreamWAV.LoopModeEnum loopMode)
     {
         var __mb = __mb_set_loop_mode;
         if (__mb == 0)
@@ -21956,7 +24308,7 @@ public unsafe partial class AudioStreamWAV : AudioStream
     }
 
     private static nint __mb_get_loop_mode;
-    public AudioStreamWAV.LoopMode GetLoopMode()
+    internal AudioStreamWAV.LoopModeEnum GetLoopMode()
     {
         var __mb = __mb_get_loop_mode;
         if (__mb == 0)
@@ -21967,11 +24319,11 @@ public unsafe partial class AudioStreamWAV : AudioStream
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (AudioStreamWAV.LoopMode)__ret;
+        return (AudioStreamWAV.LoopModeEnum)__ret;
     }
 
     private static nint __mb_set_loop_begin;
-    public void SetLoopBegin(int loopBegin)
+    internal void SetLoopBegin(int loopBegin)
     {
         var __mb = __mb_set_loop_begin;
         if (__mb == 0)
@@ -21987,7 +24339,7 @@ public unsafe partial class AudioStreamWAV : AudioStream
     }
 
     private static nint __mb_get_loop_begin;
-    public int GetLoopBegin()
+    internal int GetLoopBegin()
     {
         var __mb = __mb_get_loop_begin;
         if (__mb == 0)
@@ -22002,7 +24354,7 @@ public unsafe partial class AudioStreamWAV : AudioStream
     }
 
     private static nint __mb_set_loop_end;
-    public void SetLoopEnd(int loopEnd)
+    internal void SetLoopEnd(int loopEnd)
     {
         var __mb = __mb_set_loop_end;
         if (__mb == 0)
@@ -22018,7 +24370,7 @@ public unsafe partial class AudioStreamWAV : AudioStream
     }
 
     private static nint __mb_get_loop_end;
-    public int GetLoopEnd()
+    internal int GetLoopEnd()
     {
         var __mb = __mb_get_loop_end;
         if (__mb == 0)
@@ -22033,7 +24385,7 @@ public unsafe partial class AudioStreamWAV : AudioStream
     }
 
     private static nint __mb_set_mix_rate;
-    public void SetMixRate(int mixRate)
+    internal void SetMixRate(int mixRate)
     {
         var __mb = __mb_set_mix_rate;
         if (__mb == 0)
@@ -22049,7 +24401,7 @@ public unsafe partial class AudioStreamWAV : AudioStream
     }
 
     private static nint __mb_get_mix_rate;
-    public int GetMixRate()
+    internal int GetMixRate()
     {
         var __mb = __mb_get_mix_rate;
         if (__mb == 0)
@@ -22064,7 +24416,7 @@ public unsafe partial class AudioStreamWAV : AudioStream
     }
 
     private static nint __mb_set_stereo;
-    public void SetStereo(bool stereo)
+    internal void SetStereo(bool stereo)
     {
         var __mb = __mb_set_stereo;
         if (__mb == 0)
@@ -22080,7 +24432,7 @@ public unsafe partial class AudioStreamWAV : AudioStream
     }
 
     private static nint __mb_is_stereo;
-    public bool IsStereo()
+    internal bool IsStereo()
     {
         var __mb = __mb_is_stereo;
         if (__mb == 0)
@@ -22095,7 +24447,7 @@ public unsafe partial class AudioStreamWAV : AudioStream
     }
 
     private static nint __mb_set_tags;
-    public void SetTags(Godot.Collections.Dictionary tags)
+    internal void SetTags(Godot.Collections.Dictionary tags)
     {
         var __mb = __mb_set_tags;
         if (__mb == 0)
@@ -22111,7 +24463,7 @@ public unsafe partial class AudioStreamWAV : AudioStream
     }
 
     private static nint __mb_get_tags;
-    public Godot.Collections.Dictionary GetTags()
+    internal Godot.Collections.Dictionary GetTags()
     {
         var __mb = __mb_get_tags;
         if (__mb == 0)

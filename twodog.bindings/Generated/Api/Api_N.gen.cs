@@ -1079,6 +1079,186 @@ public unsafe partial class NavigationAgent2D : Node
         ClassRegistry.AttachNew(this, "NavigationAgent2D");
     }
 
+    public Vector2 TargetPosition
+    {
+        get => GetTargetPosition();
+        set => SetTargetPosition(value);
+    }
+
+    public float PathDesiredDistance
+    {
+        get => GetPathDesiredDistance();
+        set => SetPathDesiredDistance(value);
+    }
+
+    public float TargetDesiredDistance
+    {
+        get => GetTargetDesiredDistance();
+        set => SetTargetDesiredDistance(value);
+    }
+
+    public float PathMaxDistance
+    {
+        get => GetPathMaxDistance();
+        set => SetPathMaxDistance(value);
+    }
+
+    public uint NavigationLayers
+    {
+        get => GetNavigationLayers();
+        set => SetNavigationLayers(value);
+    }
+
+    public NavigationPathQueryParameters2D.PathfindingAlgorithmEnum PathfindingAlgorithm
+    {
+        get => GetPathfindingAlgorithm();
+        set => SetPathfindingAlgorithm(value);
+    }
+
+    public NavigationPathQueryParameters2D.PathPostProcessing PathPostprocessing
+    {
+        get => GetPathPostprocessing();
+        set => SetPathPostprocessing(value);
+    }
+
+    public NavigationPathQueryParameters2D.PathMetadataFlags PathMetadataFlags
+    {
+        get => GetPathMetadataFlags();
+        set => SetPathMetadataFlags(value);
+    }
+
+    public bool SimplifyPath
+    {
+        get => GetSimplifyPath();
+        set => SetSimplifyPath(value);
+    }
+
+    public float SimplifyEpsilon
+    {
+        get => GetSimplifyEpsilon();
+        set => SetSimplifyEpsilon(value);
+    }
+
+    public float PathReturnMaxLength
+    {
+        get => GetPathReturnMaxLength();
+        set => SetPathReturnMaxLength(value);
+    }
+
+    public float PathReturnMaxRadius
+    {
+        get => GetPathReturnMaxRadius();
+        set => SetPathReturnMaxRadius(value);
+    }
+
+    public int PathSearchMaxPolygons
+    {
+        get => GetPathSearchMaxPolygons();
+        set => SetPathSearchMaxPolygons(value);
+    }
+
+    public float PathSearchMaxDistance
+    {
+        get => GetPathSearchMaxDistance();
+        set => SetPathSearchMaxDistance(value);
+    }
+
+    public bool AvoidanceEnabled
+    {
+        get => GetAvoidanceEnabled();
+        set => SetAvoidanceEnabled(value);
+    }
+
+    public Vector2 Velocity
+    {
+        get => GetVelocity();
+        set => SetVelocity(value);
+    }
+
+    public float Radius
+    {
+        get => GetRadius();
+        set => SetRadius(value);
+    }
+
+    public float NeighborDistance
+    {
+        get => GetNeighborDistance();
+        set => SetNeighborDistance(value);
+    }
+
+    public int MaxNeighbors
+    {
+        get => GetMaxNeighbors();
+        set => SetMaxNeighbors(value);
+    }
+
+    public float TimeHorizonAgents
+    {
+        get => GetTimeHorizonAgents();
+        set => SetTimeHorizonAgents(value);
+    }
+
+    public float TimeHorizonObstacles
+    {
+        get => GetTimeHorizonObstacles();
+        set => SetTimeHorizonObstacles(value);
+    }
+
+    public float MaxSpeed
+    {
+        get => GetMaxSpeed();
+        set => SetMaxSpeed(value);
+    }
+
+    public uint AvoidanceLayers
+    {
+        get => GetAvoidanceLayers();
+        set => SetAvoidanceLayers(value);
+    }
+
+    public uint AvoidanceMask
+    {
+        get => GetAvoidanceMask();
+        set => SetAvoidanceMask(value);
+    }
+
+    public float AvoidancePriority
+    {
+        get => GetAvoidancePriority();
+        set => SetAvoidancePriority(value);
+    }
+
+    public bool DebugEnabled
+    {
+        get => GetDebugEnabled();
+        set => SetDebugEnabled(value);
+    }
+
+    public bool DebugUseCustom
+    {
+        get => GetDebugUseCustom();
+        set => SetDebugUseCustom(value);
+    }
+
+    public Color DebugPathCustomColor
+    {
+        get => GetDebugPathCustomColor();
+        set => SetDebugPathCustomColor(value);
+    }
+
+    public float DebugPathCustomPointSize
+    {
+        get => GetDebugPathCustomPointSize();
+        set => SetDebugPathCustomPointSize(value);
+    }
+
+    public float DebugPathCustomLineWidth
+    {
+        get => GetDebugPathCustomLineWidth();
+        set => SetDebugPathCustomLineWidth(value);
+    }
+
     private static nint __mb_get_rid;
     public Rid GetRid()
     {
@@ -1095,7 +1275,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_avoidance_enabled;
-    public void SetAvoidanceEnabled(bool enabled)
+    internal void SetAvoidanceEnabled(bool enabled)
     {
         var __mb = __mb_set_avoidance_enabled;
         if (__mb == 0)
@@ -1111,7 +1291,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_avoidance_enabled;
-    public bool GetAvoidanceEnabled()
+    internal bool GetAvoidanceEnabled()
     {
         var __mb = __mb_get_avoidance_enabled;
         if (__mb == 0)
@@ -1126,7 +1306,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_path_desired_distance;
-    public void SetPathDesiredDistance(float desiredDistance)
+    internal void SetPathDesiredDistance(float desiredDistance)
     {
         var __mb = __mb_set_path_desired_distance;
         if (__mb == 0)
@@ -1142,7 +1322,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_path_desired_distance;
-    public float GetPathDesiredDistance()
+    internal float GetPathDesiredDistance()
     {
         var __mb = __mb_get_path_desired_distance;
         if (__mb == 0)
@@ -1157,7 +1337,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_target_desired_distance;
-    public void SetTargetDesiredDistance(float desiredDistance)
+    internal void SetTargetDesiredDistance(float desiredDistance)
     {
         var __mb = __mb_set_target_desired_distance;
         if (__mb == 0)
@@ -1173,7 +1353,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_target_desired_distance;
-    public float GetTargetDesiredDistance()
+    internal float GetTargetDesiredDistance()
     {
         var __mb = __mb_get_target_desired_distance;
         if (__mb == 0)
@@ -1188,7 +1368,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_radius;
-    public void SetRadius(float radius)
+    internal void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -1204,7 +1384,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_radius;
-    public float GetRadius()
+    internal float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -1219,7 +1399,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_neighbor_distance;
-    public void SetNeighborDistance(float neighborDistance)
+    internal void SetNeighborDistance(float neighborDistance)
     {
         var __mb = __mb_set_neighbor_distance;
         if (__mb == 0)
@@ -1235,7 +1415,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_neighbor_distance;
-    public float GetNeighborDistance()
+    internal float GetNeighborDistance()
     {
         var __mb = __mb_get_neighbor_distance;
         if (__mb == 0)
@@ -1250,7 +1430,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_max_neighbors;
-    public void SetMaxNeighbors(int maxNeighbors)
+    internal void SetMaxNeighbors(int maxNeighbors)
     {
         var __mb = __mb_set_max_neighbors;
         if (__mb == 0)
@@ -1266,7 +1446,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_max_neighbors;
-    public int GetMaxNeighbors()
+    internal int GetMaxNeighbors()
     {
         var __mb = __mb_get_max_neighbors;
         if (__mb == 0)
@@ -1281,7 +1461,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_time_horizon_agents;
-    public void SetTimeHorizonAgents(float timeHorizon)
+    internal void SetTimeHorizonAgents(float timeHorizon)
     {
         var __mb = __mb_set_time_horizon_agents;
         if (__mb == 0)
@@ -1297,7 +1477,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_time_horizon_agents;
-    public float GetTimeHorizonAgents()
+    internal float GetTimeHorizonAgents()
     {
         var __mb = __mb_get_time_horizon_agents;
         if (__mb == 0)
@@ -1312,7 +1492,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_time_horizon_obstacles;
-    public void SetTimeHorizonObstacles(float timeHorizon)
+    internal void SetTimeHorizonObstacles(float timeHorizon)
     {
         var __mb = __mb_set_time_horizon_obstacles;
         if (__mb == 0)
@@ -1328,7 +1508,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_time_horizon_obstacles;
-    public float GetTimeHorizonObstacles()
+    internal float GetTimeHorizonObstacles()
     {
         var __mb = __mb_get_time_horizon_obstacles;
         if (__mb == 0)
@@ -1343,7 +1523,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_max_speed;
-    public void SetMaxSpeed(float maxSpeed)
+    internal void SetMaxSpeed(float maxSpeed)
     {
         var __mb = __mb_set_max_speed;
         if (__mb == 0)
@@ -1359,7 +1539,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_max_speed;
-    public float GetMaxSpeed()
+    internal float GetMaxSpeed()
     {
         var __mb = __mb_get_max_speed;
         if (__mb == 0)
@@ -1374,7 +1554,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_path_max_distance;
-    public void SetPathMaxDistance(float maxSpeed)
+    internal void SetPathMaxDistance(float maxSpeed)
     {
         var __mb = __mb_set_path_max_distance;
         if (__mb == 0)
@@ -1390,7 +1570,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_path_max_distance;
-    public float GetPathMaxDistance()
+    internal float GetPathMaxDistance()
     {
         var __mb = __mb_get_path_max_distance;
         if (__mb == 0)
@@ -1405,7 +1585,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_navigation_layers;
-    public void SetNavigationLayers(uint navigationLayers)
+    internal void SetNavigationLayers(uint navigationLayers)
     {
         var __mb = __mb_set_navigation_layers;
         if (__mb == 0)
@@ -1421,7 +1601,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_navigation_layers;
-    public uint GetNavigationLayers()
+    internal uint GetNavigationLayers()
     {
         var __mb = __mb_get_navigation_layers;
         if (__mb == 0)
@@ -1472,7 +1652,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_pathfinding_algorithm;
-    public void SetPathfindingAlgorithm(NavigationPathQueryParameters2D.PathfindingAlgorithm pathfindingAlgorithm)
+    internal void SetPathfindingAlgorithm(NavigationPathQueryParameters2D.PathfindingAlgorithmEnum pathfindingAlgorithm)
     {
         var __mb = __mb_set_pathfinding_algorithm;
         if (__mb == 0)
@@ -1488,7 +1668,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_pathfinding_algorithm;
-    public NavigationPathQueryParameters2D.PathfindingAlgorithm GetPathfindingAlgorithm()
+    internal NavigationPathQueryParameters2D.PathfindingAlgorithmEnum GetPathfindingAlgorithm()
     {
         var __mb = __mb_get_pathfinding_algorithm;
         if (__mb == 0)
@@ -1499,11 +1679,11 @@ public unsafe partial class NavigationAgent2D : Node
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (NavigationPathQueryParameters2D.PathfindingAlgorithm)__ret;
+        return (NavigationPathQueryParameters2D.PathfindingAlgorithmEnum)__ret;
     }
 
     private static nint __mb_set_path_postprocessing;
-    public void SetPathPostprocessing(NavigationPathQueryParameters2D.PathPostProcessing pathPostprocessing)
+    internal void SetPathPostprocessing(NavigationPathQueryParameters2D.PathPostProcessing pathPostprocessing)
     {
         var __mb = __mb_set_path_postprocessing;
         if (__mb == 0)
@@ -1519,7 +1699,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_path_postprocessing;
-    public NavigationPathQueryParameters2D.PathPostProcessing GetPathPostprocessing()
+    internal NavigationPathQueryParameters2D.PathPostProcessing GetPathPostprocessing()
     {
         var __mb = __mb_get_path_postprocessing;
         if (__mb == 0)
@@ -1534,7 +1714,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_path_metadata_flags;
-    public void SetPathMetadataFlags(NavigationPathQueryParameters2D.PathMetadataFlags flags)
+    internal void SetPathMetadataFlags(NavigationPathQueryParameters2D.PathMetadataFlags flags)
     {
         var __mb = __mb_set_path_metadata_flags;
         if (__mb == 0)
@@ -1550,7 +1730,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_path_metadata_flags;
-    public NavigationPathQueryParameters2D.PathMetadataFlags GetPathMetadataFlags()
+    internal NavigationPathQueryParameters2D.PathMetadataFlags GetPathMetadataFlags()
     {
         var __mb = __mb_get_path_metadata_flags;
         if (__mb == 0)
@@ -1596,7 +1776,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_target_position;
-    public void SetTargetPosition(Vector2 position)
+    internal void SetTargetPosition(Vector2 position)
     {
         var __mb = __mb_set_target_position;
         if (__mb == 0)
@@ -1612,7 +1792,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_target_position;
-    public Vector2 GetTargetPosition()
+    internal Vector2 GetTargetPosition()
     {
         var __mb = __mb_get_target_position;
         if (__mb == 0)
@@ -1627,7 +1807,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_simplify_path;
-    public void SetSimplifyPath(bool enabled)
+    internal void SetSimplifyPath(bool enabled)
     {
         var __mb = __mb_set_simplify_path;
         if (__mb == 0)
@@ -1643,7 +1823,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_simplify_path;
-    public bool GetSimplifyPath()
+    internal bool GetSimplifyPath()
     {
         var __mb = __mb_get_simplify_path;
         if (__mb == 0)
@@ -1658,7 +1838,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_simplify_epsilon;
-    public void SetSimplifyEpsilon(float epsilon)
+    internal void SetSimplifyEpsilon(float epsilon)
     {
         var __mb = __mb_set_simplify_epsilon;
         if (__mb == 0)
@@ -1674,7 +1854,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_simplify_epsilon;
-    public float GetSimplifyEpsilon()
+    internal float GetSimplifyEpsilon()
     {
         var __mb = __mb_get_simplify_epsilon;
         if (__mb == 0)
@@ -1689,7 +1869,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_path_return_max_length;
-    public void SetPathReturnMaxLength(float length)
+    internal void SetPathReturnMaxLength(float length)
     {
         var __mb = __mb_set_path_return_max_length;
         if (__mb == 0)
@@ -1705,7 +1885,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_path_return_max_length;
-    public float GetPathReturnMaxLength()
+    internal float GetPathReturnMaxLength()
     {
         var __mb = __mb_get_path_return_max_length;
         if (__mb == 0)
@@ -1720,7 +1900,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_path_return_max_radius;
-    public void SetPathReturnMaxRadius(float radius)
+    internal void SetPathReturnMaxRadius(float radius)
     {
         var __mb = __mb_set_path_return_max_radius;
         if (__mb == 0)
@@ -1736,7 +1916,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_path_return_max_radius;
-    public float GetPathReturnMaxRadius()
+    internal float GetPathReturnMaxRadius()
     {
         var __mb = __mb_get_path_return_max_radius;
         if (__mb == 0)
@@ -1751,7 +1931,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_path_search_max_polygons;
-    public void SetPathSearchMaxPolygons(int maxPolygons)
+    internal void SetPathSearchMaxPolygons(int maxPolygons)
     {
         var __mb = __mb_set_path_search_max_polygons;
         if (__mb == 0)
@@ -1767,7 +1947,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_path_search_max_polygons;
-    public int GetPathSearchMaxPolygons()
+    internal int GetPathSearchMaxPolygons()
     {
         var __mb = __mb_get_path_search_max_polygons;
         if (__mb == 0)
@@ -1782,7 +1962,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_path_search_max_distance;
-    public void SetPathSearchMaxDistance(float distance)
+    internal void SetPathSearchMaxDistance(float distance)
     {
         var __mb = __mb_set_path_search_max_distance;
         if (__mb == 0)
@@ -1798,7 +1978,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_path_search_max_distance;
-    public float GetPathSearchMaxDistance()
+    internal float GetPathSearchMaxDistance()
     {
         var __mb = __mb_get_path_search_max_distance;
         if (__mb == 0)
@@ -1859,7 +2039,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_velocity;
-    public void SetVelocity(Vector2 velocity)
+    internal void SetVelocity(Vector2 velocity)
     {
         var __mb = __mb_set_velocity;
         if (__mb == 0)
@@ -1875,7 +2055,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_velocity;
-    public Vector2 GetVelocity()
+    internal Vector2 GetVelocity()
     {
         var __mb = __mb_get_velocity;
         if (__mb == 0)
@@ -1995,7 +2175,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_avoidance_layers;
-    public void SetAvoidanceLayers(uint layers)
+    internal void SetAvoidanceLayers(uint layers)
     {
         var __mb = __mb_set_avoidance_layers;
         if (__mb == 0)
@@ -2011,7 +2191,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_avoidance_layers;
-    public uint GetAvoidanceLayers()
+    internal uint GetAvoidanceLayers()
     {
         var __mb = __mb_get_avoidance_layers;
         if (__mb == 0)
@@ -2026,7 +2206,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_avoidance_mask;
-    public void SetAvoidanceMask(uint mask)
+    internal void SetAvoidanceMask(uint mask)
     {
         var __mb = __mb_set_avoidance_mask;
         if (__mb == 0)
@@ -2042,7 +2222,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_avoidance_mask;
-    public uint GetAvoidanceMask()
+    internal uint GetAvoidanceMask()
     {
         var __mb = __mb_get_avoidance_mask;
         if (__mb == 0)
@@ -2129,7 +2309,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_avoidance_priority;
-    public void SetAvoidancePriority(float priority)
+    internal void SetAvoidancePriority(float priority)
     {
         var __mb = __mb_set_avoidance_priority;
         if (__mb == 0)
@@ -2145,7 +2325,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_avoidance_priority;
-    public float GetAvoidancePriority()
+    internal float GetAvoidancePriority()
     {
         var __mb = __mb_get_avoidance_priority;
         if (__mb == 0)
@@ -2160,7 +2340,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_debug_enabled;
-    public void SetDebugEnabled(bool enabled)
+    internal void SetDebugEnabled(bool enabled)
     {
         var __mb = __mb_set_debug_enabled;
         if (__mb == 0)
@@ -2176,7 +2356,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_debug_enabled;
-    public bool GetDebugEnabled()
+    internal bool GetDebugEnabled()
     {
         var __mb = __mb_get_debug_enabled;
         if (__mb == 0)
@@ -2191,7 +2371,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_debug_use_custom;
-    public void SetDebugUseCustom(bool enabled)
+    internal void SetDebugUseCustom(bool enabled)
     {
         var __mb = __mb_set_debug_use_custom;
         if (__mb == 0)
@@ -2207,7 +2387,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_debug_use_custom;
-    public bool GetDebugUseCustom()
+    internal bool GetDebugUseCustom()
     {
         var __mb = __mb_get_debug_use_custom;
         if (__mb == 0)
@@ -2222,7 +2402,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_debug_path_custom_color;
-    public void SetDebugPathCustomColor(Color color)
+    internal void SetDebugPathCustomColor(Color color)
     {
         var __mb = __mb_set_debug_path_custom_color;
         if (__mb == 0)
@@ -2238,7 +2418,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_debug_path_custom_color;
-    public Color GetDebugPathCustomColor()
+    internal Color GetDebugPathCustomColor()
     {
         var __mb = __mb_get_debug_path_custom_color;
         if (__mb == 0)
@@ -2253,7 +2433,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_debug_path_custom_point_size;
-    public void SetDebugPathCustomPointSize(float pointSize)
+    internal void SetDebugPathCustomPointSize(float pointSize)
     {
         var __mb = __mb_set_debug_path_custom_point_size;
         if (__mb == 0)
@@ -2269,7 +2449,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_debug_path_custom_point_size;
-    public float GetDebugPathCustomPointSize()
+    internal float GetDebugPathCustomPointSize()
     {
         var __mb = __mb_get_debug_path_custom_point_size;
         if (__mb == 0)
@@ -2284,7 +2464,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_set_debug_path_custom_line_width;
-    public void SetDebugPathCustomLineWidth(float lineWidth)
+    internal void SetDebugPathCustomLineWidth(float lineWidth)
     {
         var __mb = __mb_set_debug_path_custom_line_width;
         if (__mb == 0)
@@ -2300,7 +2480,7 @@ public unsafe partial class NavigationAgent2D : Node
     }
 
     private static nint __mb_get_debug_path_custom_line_width;
-    public float GetDebugPathCustomLineWidth()
+    internal float GetDebugPathCustomLineWidth()
     {
         var __mb = __mb_get_debug_path_custom_line_width;
         if (__mb == 0)
@@ -2324,6 +2504,204 @@ public unsafe partial class NavigationAgent3D : Node
         ClassRegistry.AttachNew(this, "NavigationAgent3D");
     }
 
+    public Vector3 TargetPosition
+    {
+        get => GetTargetPosition();
+        set => SetTargetPosition(value);
+    }
+
+    public float PathDesiredDistance
+    {
+        get => GetPathDesiredDistance();
+        set => SetPathDesiredDistance(value);
+    }
+
+    public float TargetDesiredDistance
+    {
+        get => GetTargetDesiredDistance();
+        set => SetTargetDesiredDistance(value);
+    }
+
+    public float PathHeightOffset
+    {
+        get => GetPathHeightOffset();
+        set => SetPathHeightOffset(value);
+    }
+
+    public float PathMaxDistance
+    {
+        get => GetPathMaxDistance();
+        set => SetPathMaxDistance(value);
+    }
+
+    public uint NavigationLayers
+    {
+        get => GetNavigationLayers();
+        set => SetNavigationLayers(value);
+    }
+
+    public NavigationPathQueryParameters3D.PathfindingAlgorithmEnum PathfindingAlgorithm
+    {
+        get => GetPathfindingAlgorithm();
+        set => SetPathfindingAlgorithm(value);
+    }
+
+    public NavigationPathQueryParameters3D.PathPostProcessing PathPostprocessing
+    {
+        get => GetPathPostprocessing();
+        set => SetPathPostprocessing(value);
+    }
+
+    public NavigationPathQueryParameters3D.PathMetadataFlags PathMetadataFlags
+    {
+        get => GetPathMetadataFlags();
+        set => SetPathMetadataFlags(value);
+    }
+
+    public bool SimplifyPath
+    {
+        get => GetSimplifyPath();
+        set => SetSimplifyPath(value);
+    }
+
+    public float SimplifyEpsilon
+    {
+        get => GetSimplifyEpsilon();
+        set => SetSimplifyEpsilon(value);
+    }
+
+    public float PathReturnMaxLength
+    {
+        get => GetPathReturnMaxLength();
+        set => SetPathReturnMaxLength(value);
+    }
+
+    public float PathReturnMaxRadius
+    {
+        get => GetPathReturnMaxRadius();
+        set => SetPathReturnMaxRadius(value);
+    }
+
+    public int PathSearchMaxPolygons
+    {
+        get => GetPathSearchMaxPolygons();
+        set => SetPathSearchMaxPolygons(value);
+    }
+
+    public float PathSearchMaxDistance
+    {
+        get => GetPathSearchMaxDistance();
+        set => SetPathSearchMaxDistance(value);
+    }
+
+    public bool AvoidanceEnabled
+    {
+        get => GetAvoidanceEnabled();
+        set => SetAvoidanceEnabled(value);
+    }
+
+    public Vector3 Velocity
+    {
+        get => GetVelocity();
+        set => SetVelocity(value);
+    }
+
+    public float Height
+    {
+        get => GetHeight();
+        set => SetHeight(value);
+    }
+
+    public float Radius
+    {
+        get => GetRadius();
+        set => SetRadius(value);
+    }
+
+    public float NeighborDistance
+    {
+        get => GetNeighborDistance();
+        set => SetNeighborDistance(value);
+    }
+
+    public int MaxNeighbors
+    {
+        get => GetMaxNeighbors();
+        set => SetMaxNeighbors(value);
+    }
+
+    public float TimeHorizonAgents
+    {
+        get => GetTimeHorizonAgents();
+        set => SetTimeHorizonAgents(value);
+    }
+
+    public float TimeHorizonObstacles
+    {
+        get => GetTimeHorizonObstacles();
+        set => SetTimeHorizonObstacles(value);
+    }
+
+    public float MaxSpeed
+    {
+        get => GetMaxSpeed();
+        set => SetMaxSpeed(value);
+    }
+
+    public bool Use3dAvoidance
+    {
+        get => GetUse3dAvoidance();
+        set => SetUse3dAvoidance(value);
+    }
+
+    public bool KeepYVelocity
+    {
+        get => GetKeepYVelocity();
+        set => SetKeepYVelocity(value);
+    }
+
+    public uint AvoidanceLayers
+    {
+        get => GetAvoidanceLayers();
+        set => SetAvoidanceLayers(value);
+    }
+
+    public uint AvoidanceMask
+    {
+        get => GetAvoidanceMask();
+        set => SetAvoidanceMask(value);
+    }
+
+    public float AvoidancePriority
+    {
+        get => GetAvoidancePriority();
+        set => SetAvoidancePriority(value);
+    }
+
+    public bool DebugEnabled
+    {
+        get => GetDebugEnabled();
+        set => SetDebugEnabled(value);
+    }
+
+    public bool DebugUseCustom
+    {
+        get => GetDebugUseCustom();
+        set => SetDebugUseCustom(value);
+    }
+
+    public Color DebugPathCustomColor
+    {
+        get => GetDebugPathCustomColor();
+        set => SetDebugPathCustomColor(value);
+    }
+
+    public float DebugPathCustomPointSize
+    {
+        get => GetDebugPathCustomPointSize();
+        set => SetDebugPathCustomPointSize(value);
+    }
+
     private static nint __mb_get_rid;
     public Rid GetRid()
     {
@@ -2340,7 +2718,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_avoidance_enabled;
-    public void SetAvoidanceEnabled(bool enabled)
+    internal void SetAvoidanceEnabled(bool enabled)
     {
         var __mb = __mb_set_avoidance_enabled;
         if (__mb == 0)
@@ -2356,7 +2734,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_avoidance_enabled;
-    public bool GetAvoidanceEnabled()
+    internal bool GetAvoidanceEnabled()
     {
         var __mb = __mb_get_avoidance_enabled;
         if (__mb == 0)
@@ -2371,7 +2749,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_path_desired_distance;
-    public void SetPathDesiredDistance(float desiredDistance)
+    internal void SetPathDesiredDistance(float desiredDistance)
     {
         var __mb = __mb_set_path_desired_distance;
         if (__mb == 0)
@@ -2387,7 +2765,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_path_desired_distance;
-    public float GetPathDesiredDistance()
+    internal float GetPathDesiredDistance()
     {
         var __mb = __mb_get_path_desired_distance;
         if (__mb == 0)
@@ -2402,7 +2780,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_target_desired_distance;
-    public void SetTargetDesiredDistance(float desiredDistance)
+    internal void SetTargetDesiredDistance(float desiredDistance)
     {
         var __mb = __mb_set_target_desired_distance;
         if (__mb == 0)
@@ -2418,7 +2796,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_target_desired_distance;
-    public float GetTargetDesiredDistance()
+    internal float GetTargetDesiredDistance()
     {
         var __mb = __mb_get_target_desired_distance;
         if (__mb == 0)
@@ -2433,7 +2811,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_radius;
-    public void SetRadius(float radius)
+    internal void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -2449,7 +2827,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_radius;
-    public float GetRadius()
+    internal float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -2464,7 +2842,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_height;
-    public void SetHeight(float height)
+    internal void SetHeight(float height)
     {
         var __mb = __mb_set_height;
         if (__mb == 0)
@@ -2480,7 +2858,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_height;
-    public float GetHeight()
+    internal float GetHeight()
     {
         var __mb = __mb_get_height;
         if (__mb == 0)
@@ -2495,7 +2873,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_path_height_offset;
-    public void SetPathHeightOffset(float pathHeightOffset)
+    internal void SetPathHeightOffset(float pathHeightOffset)
     {
         var __mb = __mb_set_path_height_offset;
         if (__mb == 0)
@@ -2511,7 +2889,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_path_height_offset;
-    public float GetPathHeightOffset()
+    internal float GetPathHeightOffset()
     {
         var __mb = __mb_get_path_height_offset;
         if (__mb == 0)
@@ -2526,7 +2904,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_use_3d_avoidance;
-    public void SetUse3dAvoidance(bool enabled)
+    internal void SetUse3dAvoidance(bool enabled)
     {
         var __mb = __mb_set_use_3d_avoidance;
         if (__mb == 0)
@@ -2542,7 +2920,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_use_3d_avoidance;
-    public bool GetUse3dAvoidance()
+    internal bool GetUse3dAvoidance()
     {
         var __mb = __mb_get_use_3d_avoidance;
         if (__mb == 0)
@@ -2557,7 +2935,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_keep_y_velocity;
-    public void SetKeepYVelocity(bool enabled)
+    internal void SetKeepYVelocity(bool enabled)
     {
         var __mb = __mb_set_keep_y_velocity;
         if (__mb == 0)
@@ -2573,7 +2951,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_keep_y_velocity;
-    public bool GetKeepYVelocity()
+    internal bool GetKeepYVelocity()
     {
         var __mb = __mb_get_keep_y_velocity;
         if (__mb == 0)
@@ -2588,7 +2966,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_neighbor_distance;
-    public void SetNeighborDistance(float neighborDistance)
+    internal void SetNeighborDistance(float neighborDistance)
     {
         var __mb = __mb_set_neighbor_distance;
         if (__mb == 0)
@@ -2604,7 +2982,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_neighbor_distance;
-    public float GetNeighborDistance()
+    internal float GetNeighborDistance()
     {
         var __mb = __mb_get_neighbor_distance;
         if (__mb == 0)
@@ -2619,7 +2997,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_max_neighbors;
-    public void SetMaxNeighbors(int maxNeighbors)
+    internal void SetMaxNeighbors(int maxNeighbors)
     {
         var __mb = __mb_set_max_neighbors;
         if (__mb == 0)
@@ -2635,7 +3013,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_max_neighbors;
-    public int GetMaxNeighbors()
+    internal int GetMaxNeighbors()
     {
         var __mb = __mb_get_max_neighbors;
         if (__mb == 0)
@@ -2650,7 +3028,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_time_horizon_agents;
-    public void SetTimeHorizonAgents(float timeHorizon)
+    internal void SetTimeHorizonAgents(float timeHorizon)
     {
         var __mb = __mb_set_time_horizon_agents;
         if (__mb == 0)
@@ -2666,7 +3044,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_time_horizon_agents;
-    public float GetTimeHorizonAgents()
+    internal float GetTimeHorizonAgents()
     {
         var __mb = __mb_get_time_horizon_agents;
         if (__mb == 0)
@@ -2681,7 +3059,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_time_horizon_obstacles;
-    public void SetTimeHorizonObstacles(float timeHorizon)
+    internal void SetTimeHorizonObstacles(float timeHorizon)
     {
         var __mb = __mb_set_time_horizon_obstacles;
         if (__mb == 0)
@@ -2697,7 +3075,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_time_horizon_obstacles;
-    public float GetTimeHorizonObstacles()
+    internal float GetTimeHorizonObstacles()
     {
         var __mb = __mb_get_time_horizon_obstacles;
         if (__mb == 0)
@@ -2712,7 +3090,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_max_speed;
-    public void SetMaxSpeed(float maxSpeed)
+    internal void SetMaxSpeed(float maxSpeed)
     {
         var __mb = __mb_set_max_speed;
         if (__mb == 0)
@@ -2728,7 +3106,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_max_speed;
-    public float GetMaxSpeed()
+    internal float GetMaxSpeed()
     {
         var __mb = __mb_get_max_speed;
         if (__mb == 0)
@@ -2743,7 +3121,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_path_max_distance;
-    public void SetPathMaxDistance(float maxSpeed)
+    internal void SetPathMaxDistance(float maxSpeed)
     {
         var __mb = __mb_set_path_max_distance;
         if (__mb == 0)
@@ -2759,7 +3137,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_path_max_distance;
-    public float GetPathMaxDistance()
+    internal float GetPathMaxDistance()
     {
         var __mb = __mb_get_path_max_distance;
         if (__mb == 0)
@@ -2774,7 +3152,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_navigation_layers;
-    public void SetNavigationLayers(uint navigationLayers)
+    internal void SetNavigationLayers(uint navigationLayers)
     {
         var __mb = __mb_set_navigation_layers;
         if (__mb == 0)
@@ -2790,7 +3168,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_navigation_layers;
-    public uint GetNavigationLayers()
+    internal uint GetNavigationLayers()
     {
         var __mb = __mb_get_navigation_layers;
         if (__mb == 0)
@@ -2841,7 +3219,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_pathfinding_algorithm;
-    public void SetPathfindingAlgorithm(NavigationPathQueryParameters3D.PathfindingAlgorithm pathfindingAlgorithm)
+    internal void SetPathfindingAlgorithm(NavigationPathQueryParameters3D.PathfindingAlgorithmEnum pathfindingAlgorithm)
     {
         var __mb = __mb_set_pathfinding_algorithm;
         if (__mb == 0)
@@ -2857,7 +3235,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_pathfinding_algorithm;
-    public NavigationPathQueryParameters3D.PathfindingAlgorithm GetPathfindingAlgorithm()
+    internal NavigationPathQueryParameters3D.PathfindingAlgorithmEnum GetPathfindingAlgorithm()
     {
         var __mb = __mb_get_pathfinding_algorithm;
         if (__mb == 0)
@@ -2868,11 +3246,11 @@ public unsafe partial class NavigationAgent3D : Node
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (NavigationPathQueryParameters3D.PathfindingAlgorithm)__ret;
+        return (NavigationPathQueryParameters3D.PathfindingAlgorithmEnum)__ret;
     }
 
     private static nint __mb_set_path_postprocessing;
-    public void SetPathPostprocessing(NavigationPathQueryParameters3D.PathPostProcessing pathPostprocessing)
+    internal void SetPathPostprocessing(NavigationPathQueryParameters3D.PathPostProcessing pathPostprocessing)
     {
         var __mb = __mb_set_path_postprocessing;
         if (__mb == 0)
@@ -2888,7 +3266,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_path_postprocessing;
-    public NavigationPathQueryParameters3D.PathPostProcessing GetPathPostprocessing()
+    internal NavigationPathQueryParameters3D.PathPostProcessing GetPathPostprocessing()
     {
         var __mb = __mb_get_path_postprocessing;
         if (__mb == 0)
@@ -2903,7 +3281,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_path_metadata_flags;
-    public void SetPathMetadataFlags(NavigationPathQueryParameters3D.PathMetadataFlags flags)
+    internal void SetPathMetadataFlags(NavigationPathQueryParameters3D.PathMetadataFlags flags)
     {
         var __mb = __mb_set_path_metadata_flags;
         if (__mb == 0)
@@ -2919,7 +3297,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_path_metadata_flags;
-    public NavigationPathQueryParameters3D.PathMetadataFlags GetPathMetadataFlags()
+    internal NavigationPathQueryParameters3D.PathMetadataFlags GetPathMetadataFlags()
     {
         var __mb = __mb_get_path_metadata_flags;
         if (__mb == 0)
@@ -2965,7 +3343,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_target_position;
-    public void SetTargetPosition(Vector3 position)
+    internal void SetTargetPosition(Vector3 position)
     {
         var __mb = __mb_set_target_position;
         if (__mb == 0)
@@ -2981,7 +3359,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_target_position;
-    public Vector3 GetTargetPosition()
+    internal Vector3 GetTargetPosition()
     {
         var __mb = __mb_get_target_position;
         if (__mb == 0)
@@ -2996,7 +3374,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_simplify_path;
-    public void SetSimplifyPath(bool enabled)
+    internal void SetSimplifyPath(bool enabled)
     {
         var __mb = __mb_set_simplify_path;
         if (__mb == 0)
@@ -3012,7 +3390,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_simplify_path;
-    public bool GetSimplifyPath()
+    internal bool GetSimplifyPath()
     {
         var __mb = __mb_get_simplify_path;
         if (__mb == 0)
@@ -3027,7 +3405,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_simplify_epsilon;
-    public void SetSimplifyEpsilon(float epsilon)
+    internal void SetSimplifyEpsilon(float epsilon)
     {
         var __mb = __mb_set_simplify_epsilon;
         if (__mb == 0)
@@ -3043,7 +3421,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_simplify_epsilon;
-    public float GetSimplifyEpsilon()
+    internal float GetSimplifyEpsilon()
     {
         var __mb = __mb_get_simplify_epsilon;
         if (__mb == 0)
@@ -3058,7 +3436,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_path_return_max_length;
-    public void SetPathReturnMaxLength(float length)
+    internal void SetPathReturnMaxLength(float length)
     {
         var __mb = __mb_set_path_return_max_length;
         if (__mb == 0)
@@ -3074,7 +3452,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_path_return_max_length;
-    public float GetPathReturnMaxLength()
+    internal float GetPathReturnMaxLength()
     {
         var __mb = __mb_get_path_return_max_length;
         if (__mb == 0)
@@ -3089,7 +3467,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_path_return_max_radius;
-    public void SetPathReturnMaxRadius(float radius)
+    internal void SetPathReturnMaxRadius(float radius)
     {
         var __mb = __mb_set_path_return_max_radius;
         if (__mb == 0)
@@ -3105,7 +3483,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_path_return_max_radius;
-    public float GetPathReturnMaxRadius()
+    internal float GetPathReturnMaxRadius()
     {
         var __mb = __mb_get_path_return_max_radius;
         if (__mb == 0)
@@ -3120,7 +3498,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_path_search_max_polygons;
-    public void SetPathSearchMaxPolygons(int maxPolygons)
+    internal void SetPathSearchMaxPolygons(int maxPolygons)
     {
         var __mb = __mb_set_path_search_max_polygons;
         if (__mb == 0)
@@ -3136,7 +3514,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_path_search_max_polygons;
-    public int GetPathSearchMaxPolygons()
+    internal int GetPathSearchMaxPolygons()
     {
         var __mb = __mb_get_path_search_max_polygons;
         if (__mb == 0)
@@ -3151,7 +3529,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_path_search_max_distance;
-    public void SetPathSearchMaxDistance(float distance)
+    internal void SetPathSearchMaxDistance(float distance)
     {
         var __mb = __mb_set_path_search_max_distance;
         if (__mb == 0)
@@ -3167,7 +3545,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_path_search_max_distance;
-    public float GetPathSearchMaxDistance()
+    internal float GetPathSearchMaxDistance()
     {
         var __mb = __mb_get_path_search_max_distance;
         if (__mb == 0)
@@ -3228,7 +3606,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_velocity;
-    public void SetVelocity(Vector3 velocity)
+    internal void SetVelocity(Vector3 velocity)
     {
         var __mb = __mb_set_velocity;
         if (__mb == 0)
@@ -3244,7 +3622,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_velocity;
-    public Vector3 GetVelocity()
+    internal Vector3 GetVelocity()
     {
         var __mb = __mb_get_velocity;
         if (__mb == 0)
@@ -3364,7 +3742,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_avoidance_layers;
-    public void SetAvoidanceLayers(uint layers)
+    internal void SetAvoidanceLayers(uint layers)
     {
         var __mb = __mb_set_avoidance_layers;
         if (__mb == 0)
@@ -3380,7 +3758,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_avoidance_layers;
-    public uint GetAvoidanceLayers()
+    internal uint GetAvoidanceLayers()
     {
         var __mb = __mb_get_avoidance_layers;
         if (__mb == 0)
@@ -3395,7 +3773,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_avoidance_mask;
-    public void SetAvoidanceMask(uint mask)
+    internal void SetAvoidanceMask(uint mask)
     {
         var __mb = __mb_set_avoidance_mask;
         if (__mb == 0)
@@ -3411,7 +3789,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_avoidance_mask;
-    public uint GetAvoidanceMask()
+    internal uint GetAvoidanceMask()
     {
         var __mb = __mb_get_avoidance_mask;
         if (__mb == 0)
@@ -3498,7 +3876,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_avoidance_priority;
-    public void SetAvoidancePriority(float priority)
+    internal void SetAvoidancePriority(float priority)
     {
         var __mb = __mb_set_avoidance_priority;
         if (__mb == 0)
@@ -3514,7 +3892,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_avoidance_priority;
-    public float GetAvoidancePriority()
+    internal float GetAvoidancePriority()
     {
         var __mb = __mb_get_avoidance_priority;
         if (__mb == 0)
@@ -3529,7 +3907,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_debug_enabled;
-    public void SetDebugEnabled(bool enabled)
+    internal void SetDebugEnabled(bool enabled)
     {
         var __mb = __mb_set_debug_enabled;
         if (__mb == 0)
@@ -3545,7 +3923,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_debug_enabled;
-    public bool GetDebugEnabled()
+    internal bool GetDebugEnabled()
     {
         var __mb = __mb_get_debug_enabled;
         if (__mb == 0)
@@ -3560,7 +3938,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_debug_use_custom;
-    public void SetDebugUseCustom(bool enabled)
+    internal void SetDebugUseCustom(bool enabled)
     {
         var __mb = __mb_set_debug_use_custom;
         if (__mb == 0)
@@ -3576,7 +3954,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_debug_use_custom;
-    public bool GetDebugUseCustom()
+    internal bool GetDebugUseCustom()
     {
         var __mb = __mb_get_debug_use_custom;
         if (__mb == 0)
@@ -3591,7 +3969,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_debug_path_custom_color;
-    public void SetDebugPathCustomColor(Color color)
+    internal void SetDebugPathCustomColor(Color color)
     {
         var __mb = __mb_set_debug_path_custom_color;
         if (__mb == 0)
@@ -3607,7 +3985,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_debug_path_custom_color;
-    public Color GetDebugPathCustomColor()
+    internal Color GetDebugPathCustomColor()
     {
         var __mb = __mb_get_debug_path_custom_color;
         if (__mb == 0)
@@ -3622,7 +4000,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_set_debug_path_custom_point_size;
-    public void SetDebugPathCustomPointSize(float pointSize)
+    internal void SetDebugPathCustomPointSize(float pointSize)
     {
         var __mb = __mb_set_debug_path_custom_point_size;
         if (__mb == 0)
@@ -3638,7 +4016,7 @@ public unsafe partial class NavigationAgent3D : Node
     }
 
     private static nint __mb_get_debug_path_custom_point_size;
-    public float GetDebugPathCustomPointSize()
+    internal float GetDebugPathCustomPointSize()
     {
         var __mb = __mb_get_debug_path_custom_point_size;
         if (__mb == 0)
@@ -3662,6 +4040,48 @@ public unsafe partial class NavigationLink2D : Node2D
         ClassRegistry.AttachNew(this, "NavigationLink2D");
     }
 
+    public bool Enabled
+    {
+        get => IsEnabled();
+        set => SetEnabled(value);
+    }
+
+    public bool Bidirectional
+    {
+        get => IsBidirectional();
+        set => SetBidirectional(value);
+    }
+
+    public uint NavigationLayers
+    {
+        get => GetNavigationLayers();
+        set => SetNavigationLayers(value);
+    }
+
+    public Vector2 StartPosition
+    {
+        get => GetStartPosition();
+        set => SetStartPosition(value);
+    }
+
+    public Vector2 EndPosition
+    {
+        get => GetEndPosition();
+        set => SetEndPosition(value);
+    }
+
+    public float EnterCost
+    {
+        get => GetEnterCost();
+        set => SetEnterCost(value);
+    }
+
+    public float TravelCost
+    {
+        get => GetTravelCost();
+        set => SetTravelCost(value);
+    }
+
     private static nint __mb_get_rid;
     public Rid GetRid()
     {
@@ -3678,7 +4098,7 @@ public unsafe partial class NavigationLink2D : Node2D
     }
 
     private static nint __mb_set_enabled;
-    public void SetEnabled(bool enabled)
+    internal void SetEnabled(bool enabled)
     {
         var __mb = __mb_set_enabled;
         if (__mb == 0)
@@ -3694,7 +4114,7 @@ public unsafe partial class NavigationLink2D : Node2D
     }
 
     private static nint __mb_is_enabled;
-    public bool IsEnabled()
+    internal bool IsEnabled()
     {
         var __mb = __mb_is_enabled;
         if (__mb == 0)
@@ -3740,7 +4160,7 @@ public unsafe partial class NavigationLink2D : Node2D
     }
 
     private static nint __mb_set_bidirectional;
-    public void SetBidirectional(bool bidirectional)
+    internal void SetBidirectional(bool bidirectional)
     {
         var __mb = __mb_set_bidirectional;
         if (__mb == 0)
@@ -3756,7 +4176,7 @@ public unsafe partial class NavigationLink2D : Node2D
     }
 
     private static nint __mb_is_bidirectional;
-    public bool IsBidirectional()
+    internal bool IsBidirectional()
     {
         var __mb = __mb_is_bidirectional;
         if (__mb == 0)
@@ -3771,7 +4191,7 @@ public unsafe partial class NavigationLink2D : Node2D
     }
 
     private static nint __mb_set_navigation_layers;
-    public void SetNavigationLayers(uint navigationLayers)
+    internal void SetNavigationLayers(uint navigationLayers)
     {
         var __mb = __mb_set_navigation_layers;
         if (__mb == 0)
@@ -3787,7 +4207,7 @@ public unsafe partial class NavigationLink2D : Node2D
     }
 
     private static nint __mb_get_navigation_layers;
-    public uint GetNavigationLayers()
+    internal uint GetNavigationLayers()
     {
         var __mb = __mb_get_navigation_layers;
         if (__mb == 0)
@@ -3838,7 +4258,7 @@ public unsafe partial class NavigationLink2D : Node2D
     }
 
     private static nint __mb_set_start_position;
-    public void SetStartPosition(Vector2 position)
+    internal void SetStartPosition(Vector2 position)
     {
         var __mb = __mb_set_start_position;
         if (__mb == 0)
@@ -3854,7 +4274,7 @@ public unsafe partial class NavigationLink2D : Node2D
     }
 
     private static nint __mb_get_start_position;
-    public Vector2 GetStartPosition()
+    internal Vector2 GetStartPosition()
     {
         var __mb = __mb_get_start_position;
         if (__mb == 0)
@@ -3869,7 +4289,7 @@ public unsafe partial class NavigationLink2D : Node2D
     }
 
     private static nint __mb_set_end_position;
-    public void SetEndPosition(Vector2 position)
+    internal void SetEndPosition(Vector2 position)
     {
         var __mb = __mb_set_end_position;
         if (__mb == 0)
@@ -3885,7 +4305,7 @@ public unsafe partial class NavigationLink2D : Node2D
     }
 
     private static nint __mb_get_end_position;
-    public Vector2 GetEndPosition()
+    internal Vector2 GetEndPosition()
     {
         var __mb = __mb_get_end_position;
         if (__mb == 0)
@@ -3962,7 +4382,7 @@ public unsafe partial class NavigationLink2D : Node2D
     }
 
     private static nint __mb_set_enter_cost;
-    public void SetEnterCost(float enterCost)
+    internal void SetEnterCost(float enterCost)
     {
         var __mb = __mb_set_enter_cost;
         if (__mb == 0)
@@ -3978,7 +4398,7 @@ public unsafe partial class NavigationLink2D : Node2D
     }
 
     private static nint __mb_get_enter_cost;
-    public float GetEnterCost()
+    internal float GetEnterCost()
     {
         var __mb = __mb_get_enter_cost;
         if (__mb == 0)
@@ -3993,7 +4413,7 @@ public unsafe partial class NavigationLink2D : Node2D
     }
 
     private static nint __mb_set_travel_cost;
-    public void SetTravelCost(float travelCost)
+    internal void SetTravelCost(float travelCost)
     {
         var __mb = __mb_set_travel_cost;
         if (__mb == 0)
@@ -4009,7 +4429,7 @@ public unsafe partial class NavigationLink2D : Node2D
     }
 
     private static nint __mb_get_travel_cost;
-    public float GetTravelCost()
+    internal float GetTravelCost()
     {
         var __mb = __mb_get_travel_cost;
         if (__mb == 0)
@@ -4033,6 +4453,48 @@ public unsafe partial class NavigationLink3D : Node3D
         ClassRegistry.AttachNew(this, "NavigationLink3D");
     }
 
+    public bool Enabled
+    {
+        get => IsEnabled();
+        set => SetEnabled(value);
+    }
+
+    public bool Bidirectional
+    {
+        get => IsBidirectional();
+        set => SetBidirectional(value);
+    }
+
+    public uint NavigationLayers
+    {
+        get => GetNavigationLayers();
+        set => SetNavigationLayers(value);
+    }
+
+    public Vector3 StartPosition
+    {
+        get => GetStartPosition();
+        set => SetStartPosition(value);
+    }
+
+    public Vector3 EndPosition
+    {
+        get => GetEndPosition();
+        set => SetEndPosition(value);
+    }
+
+    public float EnterCost
+    {
+        get => GetEnterCost();
+        set => SetEnterCost(value);
+    }
+
+    public float TravelCost
+    {
+        get => GetTravelCost();
+        set => SetTravelCost(value);
+    }
+
     private static nint __mb_get_rid;
     public Rid GetRid()
     {
@@ -4049,7 +4511,7 @@ public unsafe partial class NavigationLink3D : Node3D
     }
 
     private static nint __mb_set_enabled;
-    public void SetEnabled(bool enabled)
+    internal void SetEnabled(bool enabled)
     {
         var __mb = __mb_set_enabled;
         if (__mb == 0)
@@ -4065,7 +4527,7 @@ public unsafe partial class NavigationLink3D : Node3D
     }
 
     private static nint __mb_is_enabled;
-    public bool IsEnabled()
+    internal bool IsEnabled()
     {
         var __mb = __mb_is_enabled;
         if (__mb == 0)
@@ -4111,7 +4573,7 @@ public unsafe partial class NavigationLink3D : Node3D
     }
 
     private static nint __mb_set_bidirectional;
-    public void SetBidirectional(bool bidirectional)
+    internal void SetBidirectional(bool bidirectional)
     {
         var __mb = __mb_set_bidirectional;
         if (__mb == 0)
@@ -4127,7 +4589,7 @@ public unsafe partial class NavigationLink3D : Node3D
     }
 
     private static nint __mb_is_bidirectional;
-    public bool IsBidirectional()
+    internal bool IsBidirectional()
     {
         var __mb = __mb_is_bidirectional;
         if (__mb == 0)
@@ -4142,7 +4604,7 @@ public unsafe partial class NavigationLink3D : Node3D
     }
 
     private static nint __mb_set_navigation_layers;
-    public void SetNavigationLayers(uint navigationLayers)
+    internal void SetNavigationLayers(uint navigationLayers)
     {
         var __mb = __mb_set_navigation_layers;
         if (__mb == 0)
@@ -4158,7 +4620,7 @@ public unsafe partial class NavigationLink3D : Node3D
     }
 
     private static nint __mb_get_navigation_layers;
-    public uint GetNavigationLayers()
+    internal uint GetNavigationLayers()
     {
         var __mb = __mb_get_navigation_layers;
         if (__mb == 0)
@@ -4209,7 +4671,7 @@ public unsafe partial class NavigationLink3D : Node3D
     }
 
     private static nint __mb_set_start_position;
-    public void SetStartPosition(Vector3 position)
+    internal void SetStartPosition(Vector3 position)
     {
         var __mb = __mb_set_start_position;
         if (__mb == 0)
@@ -4225,7 +4687,7 @@ public unsafe partial class NavigationLink3D : Node3D
     }
 
     private static nint __mb_get_start_position;
-    public Vector3 GetStartPosition()
+    internal Vector3 GetStartPosition()
     {
         var __mb = __mb_get_start_position;
         if (__mb == 0)
@@ -4240,7 +4702,7 @@ public unsafe partial class NavigationLink3D : Node3D
     }
 
     private static nint __mb_set_end_position;
-    public void SetEndPosition(Vector3 position)
+    internal void SetEndPosition(Vector3 position)
     {
         var __mb = __mb_set_end_position;
         if (__mb == 0)
@@ -4256,7 +4718,7 @@ public unsafe partial class NavigationLink3D : Node3D
     }
 
     private static nint __mb_get_end_position;
-    public Vector3 GetEndPosition()
+    internal Vector3 GetEndPosition()
     {
         var __mb = __mb_get_end_position;
         if (__mb == 0)
@@ -4333,7 +4795,7 @@ public unsafe partial class NavigationLink3D : Node3D
     }
 
     private static nint __mb_set_enter_cost;
-    public void SetEnterCost(float enterCost)
+    internal void SetEnterCost(float enterCost)
     {
         var __mb = __mb_set_enter_cost;
         if (__mb == 0)
@@ -4349,7 +4811,7 @@ public unsafe partial class NavigationLink3D : Node3D
     }
 
     private static nint __mb_get_enter_cost;
-    public float GetEnterCost()
+    internal float GetEnterCost()
     {
         var __mb = __mb_get_enter_cost;
         if (__mb == 0)
@@ -4364,7 +4826,7 @@ public unsafe partial class NavigationLink3D : Node3D
     }
 
     private static nint __mb_set_travel_cost;
-    public void SetTravelCost(float travelCost)
+    internal void SetTravelCost(float travelCost)
     {
         var __mb = __mb_set_travel_cost;
         if (__mb == 0)
@@ -4380,7 +4842,7 @@ public unsafe partial class NavigationLink3D : Node3D
     }
 
     private static nint __mb_get_travel_cost;
-    public float GetTravelCost()
+    internal float GetTravelCost()
     {
         var __mb = __mb_get_travel_cost;
         if (__mb == 0)
@@ -4404,7 +4866,7 @@ public unsafe partial class NavigationMesh : Resource
         ClassRegistry.AttachNew(this, "NavigationMesh");
     }
 
-    public enum SamplePartitionType : long
+    public enum SamplePartitionTypeEnum : long
     {
         SAMPLE_PARTITION_WATERSHED = 0,
         SAMPLE_PARTITION_MONOTONE = 1,
@@ -4428,8 +4890,152 @@ public unsafe partial class NavigationMesh : Resource
         SOURCE_GEOMETRY_MAX = 3,
     }
 
+    public NavigationMesh.SamplePartitionTypeEnum SamplePartitionType
+    {
+        get => GetSamplePartitionType();
+        set => SetSamplePartitionType(value);
+    }
+
+    public NavigationMesh.ParsedGeometryType GeometryParsedGeometryType
+    {
+        get => GetParsedGeometryType();
+        set => SetParsedGeometryType(value);
+    }
+
+    public uint GeometryCollisionMask
+    {
+        get => GetCollisionMask();
+        set => SetCollisionMask(value);
+    }
+
+    public NavigationMesh.SourceGeometryMode GeometrySourceGeometryMode
+    {
+        get => GetSourceGeometryMode();
+        set => SetSourceGeometryMode(value);
+    }
+
+    public string GeometrySourceGroupName
+    {
+        get => GetSourceGroupName();
+        set => SetSourceGroupName(value);
+    }
+
+    public float CellSize
+    {
+        get => GetCellSize();
+        set => SetCellSize(value);
+    }
+
+    public float CellHeight
+    {
+        get => GetCellHeight();
+        set => SetCellHeight(value);
+    }
+
+    public float BorderSize
+    {
+        get => GetBorderSize();
+        set => SetBorderSize(value);
+    }
+
+    public float AgentHeight
+    {
+        get => GetAgentHeight();
+        set => SetAgentHeight(value);
+    }
+
+    public float AgentRadius
+    {
+        get => GetAgentRadius();
+        set => SetAgentRadius(value);
+    }
+
+    public float AgentMaxClimb
+    {
+        get => GetAgentMaxClimb();
+        set => SetAgentMaxClimb(value);
+    }
+
+    public float AgentMaxSlope
+    {
+        get => GetAgentMaxSlope();
+        set => SetAgentMaxSlope(value);
+    }
+
+    public float RegionMinSize
+    {
+        get => GetRegionMinSize();
+        set => SetRegionMinSize(value);
+    }
+
+    public float RegionMergeSize
+    {
+        get => GetRegionMergeSize();
+        set => SetRegionMergeSize(value);
+    }
+
+    public float EdgeMaxLength
+    {
+        get => GetEdgeMaxLength();
+        set => SetEdgeMaxLength(value);
+    }
+
+    public float EdgeMaxError
+    {
+        get => GetEdgeMaxError();
+        set => SetEdgeMaxError(value);
+    }
+
+    public float VerticesPerPolygon
+    {
+        get => GetVerticesPerPolygon();
+        set => SetVerticesPerPolygon(value);
+    }
+
+    public float DetailSampleDistance
+    {
+        get => GetDetailSampleDistance();
+        set => SetDetailSampleDistance(value);
+    }
+
+    public float DetailSampleMaxError
+    {
+        get => GetDetailSampleMaxError();
+        set => SetDetailSampleMaxError(value);
+    }
+
+    public bool FilterLowHangingObstacles
+    {
+        get => GetFilterLowHangingObstacles();
+        set => SetFilterLowHangingObstacles(value);
+    }
+
+    public bool FilterLedgeSpans
+    {
+        get => GetFilterLedgeSpans();
+        set => SetFilterLedgeSpans(value);
+    }
+
+    public bool FilterWalkableLowHeightSpans
+    {
+        get => GetFilterWalkableLowHeightSpans();
+        set => SetFilterWalkableLowHeightSpans(value);
+    }
+
+    public Aabb FilterBakingAabb
+    {
+        get => GetFilterBakingAabb();
+        set => SetFilterBakingAabb(value);
+    }
+
+    public Vector3 FilterBakingAabbOffset
+    {
+        get => GetFilterBakingAabbOffset();
+        set => SetFilterBakingAabbOffset(value);
+    }
+
     private static nint __mb_set_sample_partition_type;
-    public void SetSamplePartitionType(NavigationMesh.SamplePartitionType samplePartitionType)
+    internal void SetSamplePartitionType(NavigationMesh.SamplePartitionTypeEnum samplePartitionType)
     {
         var __mb = __mb_set_sample_partition_type;
         if (__mb == 0)
@@ -4445,7 +5051,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_sample_partition_type;
-    public NavigationMesh.SamplePartitionType GetSamplePartitionType()
+    internal NavigationMesh.SamplePartitionTypeEnum GetSamplePartitionType()
     {
         var __mb = __mb_get_sample_partition_type;
         if (__mb == 0)
@@ -4456,11 +5062,11 @@ public unsafe partial class NavigationMesh : Resource
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (NavigationMesh.SamplePartitionType)__ret;
+        return (NavigationMesh.SamplePartitionTypeEnum)__ret;
     }
 
     private static nint __mb_set_parsed_geometry_type;
-    public void SetParsedGeometryType(NavigationMesh.ParsedGeometryType geometryType)
+    internal void SetParsedGeometryType(NavigationMesh.ParsedGeometryType geometryType)
     {
         var __mb = __mb_set_parsed_geometry_type;
         if (__mb == 0)
@@ -4476,7 +5082,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_parsed_geometry_type;
-    public NavigationMesh.ParsedGeometryType GetParsedGeometryType()
+    internal NavigationMesh.ParsedGeometryType GetParsedGeometryType()
     {
         var __mb = __mb_get_parsed_geometry_type;
         if (__mb == 0)
@@ -4491,7 +5097,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_collision_mask;
-    public void SetCollisionMask(uint mask)
+    internal void SetCollisionMask(uint mask)
     {
         var __mb = __mb_set_collision_mask;
         if (__mb == 0)
@@ -4507,7 +5113,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_collision_mask;
-    public uint GetCollisionMask()
+    internal uint GetCollisionMask()
     {
         var __mb = __mb_get_collision_mask;
         if (__mb == 0)
@@ -4558,7 +5164,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_source_geometry_mode;
-    public void SetSourceGeometryMode(NavigationMesh.SourceGeometryMode mask)
+    internal void SetSourceGeometryMode(NavigationMesh.SourceGeometryMode mask)
     {
         var __mb = __mb_set_source_geometry_mode;
         if (__mb == 0)
@@ -4574,7 +5180,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_source_geometry_mode;
-    public NavigationMesh.SourceGeometryMode GetSourceGeometryMode()
+    internal NavigationMesh.SourceGeometryMode GetSourceGeometryMode()
     {
         var __mb = __mb_get_source_geometry_mode;
         if (__mb == 0)
@@ -4589,7 +5195,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_source_group_name;
-    public void SetSourceGroupName(string mask)
+    internal void SetSourceGroupName(string mask)
     {
         var __mb = __mb_set_source_group_name;
         if (__mb == 0)
@@ -4605,7 +5211,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_source_group_name;
-    public string GetSourceGroupName()
+    internal string GetSourceGroupName()
     {
         var __mb = __mb_get_source_group_name;
         if (__mb == 0)
@@ -4620,7 +5226,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_cell_size;
-    public void SetCellSize(float cellSize)
+    internal void SetCellSize(float cellSize)
     {
         var __mb = __mb_set_cell_size;
         if (__mb == 0)
@@ -4636,7 +5242,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_cell_size;
-    public float GetCellSize()
+    internal float GetCellSize()
     {
         var __mb = __mb_get_cell_size;
         if (__mb == 0)
@@ -4651,7 +5257,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_cell_height;
-    public void SetCellHeight(float cellHeight)
+    internal void SetCellHeight(float cellHeight)
     {
         var __mb = __mb_set_cell_height;
         if (__mb == 0)
@@ -4667,7 +5273,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_cell_height;
-    public float GetCellHeight()
+    internal float GetCellHeight()
     {
         var __mb = __mb_get_cell_height;
         if (__mb == 0)
@@ -4682,7 +5288,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_border_size;
-    public void SetBorderSize(float borderSize)
+    internal void SetBorderSize(float borderSize)
     {
         var __mb = __mb_set_border_size;
         if (__mb == 0)
@@ -4698,7 +5304,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_border_size;
-    public float GetBorderSize()
+    internal float GetBorderSize()
     {
         var __mb = __mb_get_border_size;
         if (__mb == 0)
@@ -4713,7 +5319,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_agent_height;
-    public void SetAgentHeight(float agentHeight)
+    internal void SetAgentHeight(float agentHeight)
     {
         var __mb = __mb_set_agent_height;
         if (__mb == 0)
@@ -4729,7 +5335,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_agent_height;
-    public float GetAgentHeight()
+    internal float GetAgentHeight()
     {
         var __mb = __mb_get_agent_height;
         if (__mb == 0)
@@ -4744,7 +5350,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_agent_radius;
-    public void SetAgentRadius(float agentRadius)
+    internal void SetAgentRadius(float agentRadius)
     {
         var __mb = __mb_set_agent_radius;
         if (__mb == 0)
@@ -4760,7 +5366,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_agent_radius;
-    public float GetAgentRadius()
+    internal float GetAgentRadius()
     {
         var __mb = __mb_get_agent_radius;
         if (__mb == 0)
@@ -4775,7 +5381,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_agent_max_climb;
-    public void SetAgentMaxClimb(float agentMaxClimb)
+    internal void SetAgentMaxClimb(float agentMaxClimb)
     {
         var __mb = __mb_set_agent_max_climb;
         if (__mb == 0)
@@ -4791,7 +5397,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_agent_max_climb;
-    public float GetAgentMaxClimb()
+    internal float GetAgentMaxClimb()
     {
         var __mb = __mb_get_agent_max_climb;
         if (__mb == 0)
@@ -4806,7 +5412,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_agent_max_slope;
-    public void SetAgentMaxSlope(float agentMaxSlope)
+    internal void SetAgentMaxSlope(float agentMaxSlope)
     {
         var __mb = __mb_set_agent_max_slope;
         if (__mb == 0)
@@ -4822,7 +5428,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_agent_max_slope;
-    public float GetAgentMaxSlope()
+    internal float GetAgentMaxSlope()
     {
         var __mb = __mb_get_agent_max_slope;
         if (__mb == 0)
@@ -4837,7 +5443,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_region_min_size;
-    public void SetRegionMinSize(float regionMinSize)
+    internal void SetRegionMinSize(float regionMinSize)
     {
         var __mb = __mb_set_region_min_size;
         if (__mb == 0)
@@ -4853,7 +5459,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_region_min_size;
-    public float GetRegionMinSize()
+    internal float GetRegionMinSize()
     {
         var __mb = __mb_get_region_min_size;
         if (__mb == 0)
@@ -4868,7 +5474,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_region_merge_size;
-    public void SetRegionMergeSize(float regionMergeSize)
+    internal void SetRegionMergeSize(float regionMergeSize)
     {
         var __mb = __mb_set_region_merge_size;
         if (__mb == 0)
@@ -4884,7 +5490,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_region_merge_size;
-    public float GetRegionMergeSize()
+    internal float GetRegionMergeSize()
     {
         var __mb = __mb_get_region_merge_size;
         if (__mb == 0)
@@ -4899,7 +5505,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_edge_max_length;
-    public void SetEdgeMaxLength(float edgeMaxLength)
+    internal void SetEdgeMaxLength(float edgeMaxLength)
     {
         var __mb = __mb_set_edge_max_length;
         if (__mb == 0)
@@ -4915,7 +5521,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_edge_max_length;
-    public float GetEdgeMaxLength()
+    internal float GetEdgeMaxLength()
     {
         var __mb = __mb_get_edge_max_length;
         if (__mb == 0)
@@ -4930,7 +5536,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_edge_max_error;
-    public void SetEdgeMaxError(float edgeMaxError)
+    internal void SetEdgeMaxError(float edgeMaxError)
     {
         var __mb = __mb_set_edge_max_error;
         if (__mb == 0)
@@ -4946,7 +5552,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_edge_max_error;
-    public float GetEdgeMaxError()
+    internal float GetEdgeMaxError()
     {
         var __mb = __mb_get_edge_max_error;
         if (__mb == 0)
@@ -4961,7 +5567,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_vertices_per_polygon;
-    public void SetVerticesPerPolygon(float verticesPerPolygon)
+    internal void SetVerticesPerPolygon(float verticesPerPolygon)
     {
         var __mb = __mb_set_vertices_per_polygon;
         if (__mb == 0)
@@ -4977,7 +5583,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_vertices_per_polygon;
-    public float GetVerticesPerPolygon()
+    internal float GetVerticesPerPolygon()
     {
         var __mb = __mb_get_vertices_per_polygon;
         if (__mb == 0)
@@ -4992,7 +5598,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_detail_sample_distance;
-    public void SetDetailSampleDistance(float detailSampleDist)
+    internal void SetDetailSampleDistance(float detailSampleDist)
     {
         var __mb = __mb_set_detail_sample_distance;
         if (__mb == 0)
@@ -5008,7 +5614,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_detail_sample_distance;
-    public float GetDetailSampleDistance()
+    internal float GetDetailSampleDistance()
     {
         var __mb = __mb_get_detail_sample_distance;
         if (__mb == 0)
@@ -5023,7 +5629,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_detail_sample_max_error;
-    public void SetDetailSampleMaxError(float detailSampleMaxError)
+    internal void SetDetailSampleMaxError(float detailSampleMaxError)
     {
         var __mb = __mb_set_detail_sample_max_error;
         if (__mb == 0)
@@ -5039,7 +5645,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_detail_sample_max_error;
-    public float GetDetailSampleMaxError()
+    internal float GetDetailSampleMaxError()
     {
         var __mb = __mb_get_detail_sample_max_error;
         if (__mb == 0)
@@ -5054,7 +5660,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_filter_low_hanging_obstacles;
-    public void SetFilterLowHangingObstacles(bool filterLowHangingObstacles)
+    internal void SetFilterLowHangingObstacles(bool filterLowHangingObstacles)
     {
         var __mb = __mb_set_filter_low_hanging_obstacles;
         if (__mb == 0)
@@ -5070,7 +5676,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_filter_low_hanging_obstacles;
-    public bool GetFilterLowHangingObstacles()
+    internal bool GetFilterLowHangingObstacles()
     {
         var __mb = __mb_get_filter_low_hanging_obstacles;
         if (__mb == 0)
@@ -5085,7 +5691,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_filter_ledge_spans;
-    public void SetFilterLedgeSpans(bool filterLedgeSpans)
+    internal void SetFilterLedgeSpans(bool filterLedgeSpans)
     {
         var __mb = __mb_set_filter_ledge_spans;
         if (__mb == 0)
@@ -5101,7 +5707,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_filter_ledge_spans;
-    public bool GetFilterLedgeSpans()
+    internal bool GetFilterLedgeSpans()
     {
         var __mb = __mb_get_filter_ledge_spans;
         if (__mb == 0)
@@ -5116,7 +5722,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_filter_walkable_low_height_spans;
-    public void SetFilterWalkableLowHeightSpans(bool filterWalkableLowHeightSpans)
+    internal void SetFilterWalkableLowHeightSpans(bool filterWalkableLowHeightSpans)
     {
         var __mb = __mb_set_filter_walkable_low_height_spans;
         if (__mb == 0)
@@ -5132,7 +5738,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_filter_walkable_low_height_spans;
-    public bool GetFilterWalkableLowHeightSpans()
+    internal bool GetFilterWalkableLowHeightSpans()
     {
         var __mb = __mb_get_filter_walkable_low_height_spans;
         if (__mb == 0)
@@ -5147,7 +5753,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_filter_baking_aabb;
-    public void SetFilterBakingAabb(Aabb bakingAabb)
+    internal void SetFilterBakingAabb(Aabb bakingAabb)
     {
         var __mb = __mb_set_filter_baking_aabb;
         if (__mb == 0)
@@ -5163,7 +5769,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_filter_baking_aabb;
-    public Aabb GetFilterBakingAabb()
+    internal Aabb GetFilterBakingAabb()
     {
         var __mb = __mb_get_filter_baking_aabb;
         if (__mb == 0)
@@ -5178,7 +5784,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_set_filter_baking_aabb_offset;
-    public void SetFilterBakingAabbOffset(Vector3 bakingAabbOffset)
+    internal void SetFilterBakingAabbOffset(Vector3 bakingAabbOffset)
     {
         var __mb = __mb_set_filter_baking_aabb_offset;
         if (__mb == 0)
@@ -5194,7 +5800,7 @@ public unsafe partial class NavigationMesh : Resource
     }
 
     private static nint __mb_get_filter_baking_aabb_offset;
-    public Vector3 GetFilterBakingAabbOffset()
+    internal Vector3 GetFilterBakingAabbOffset()
     {
         var __mb = __mb_get_filter_baking_aabb_offset;
         if (__mb == 0)
@@ -5322,6 +5928,24 @@ public unsafe partial class NavigationMeshSourceGeometryData2D : Resource
         ClassRegistry.AttachNew(this, "NavigationMeshSourceGeometryData2D");
     }
 
+    public Godot.Collections.Array TraversableOutlines
+    {
+        get => GetTraversableOutlines();
+        set => SetTraversableOutlines(value);
+    }
+
+    public Godot.Collections.Array ObstructionOutlines
+    {
+        get => GetObstructionOutlines();
+        set => SetObstructionOutlines(value);
+    }
+
+    public Godot.Collections.Array ProjectedObstructions
+    {
+        get => GetProjectedObstructions();
+        set => SetProjectedObstructions(value);
+    }
+
     private static nint __mb_clear;
     public void Clear()
     {
@@ -5351,7 +5975,7 @@ public unsafe partial class NavigationMeshSourceGeometryData2D : Resource
     }
 
     private static nint __mb_set_traversable_outlines;
-    public void SetTraversableOutlines(Godot.Collections.Array traversableOutlines)
+    internal void SetTraversableOutlines(Godot.Collections.Array traversableOutlines)
     {
         var __mb = __mb_set_traversable_outlines;
         if (__mb == 0)
@@ -5367,7 +5991,7 @@ public unsafe partial class NavigationMeshSourceGeometryData2D : Resource
     }
 
     private static nint __mb_get_traversable_outlines;
-    public Godot.Collections.Array GetTraversableOutlines()
+    internal Godot.Collections.Array GetTraversableOutlines()
     {
         var __mb = __mb_get_traversable_outlines;
         if (__mb == 0)
@@ -5382,7 +6006,7 @@ public unsafe partial class NavigationMeshSourceGeometryData2D : Resource
     }
 
     private static nint __mb_set_obstruction_outlines;
-    public void SetObstructionOutlines(Godot.Collections.Array obstructionOutlines)
+    internal void SetObstructionOutlines(Godot.Collections.Array obstructionOutlines)
     {
         var __mb = __mb_set_obstruction_outlines;
         if (__mb == 0)
@@ -5398,7 +6022,7 @@ public unsafe partial class NavigationMeshSourceGeometryData2D : Resource
     }
 
     private static nint __mb_get_obstruction_outlines;
-    public Godot.Collections.Array GetObstructionOutlines()
+    internal Godot.Collections.Array GetObstructionOutlines()
     {
         var __mb = __mb_get_obstruction_outlines;
         if (__mb == 0)
@@ -5474,7 +6098,7 @@ public unsafe partial class NavigationMeshSourceGeometryData2D : Resource
     }
 
     private static nint __mb_set_projected_obstructions;
-    public void SetProjectedObstructions(Godot.Collections.Array projectedObstructions)
+    internal void SetProjectedObstructions(Godot.Collections.Array projectedObstructions)
     {
         var __mb = __mb_set_projected_obstructions;
         if (__mb == 0)
@@ -5490,7 +6114,7 @@ public unsafe partial class NavigationMeshSourceGeometryData2D : Resource
     }
 
     private static nint __mb_get_projected_obstructions;
-    public Godot.Collections.Array GetProjectedObstructions()
+    internal Godot.Collections.Array GetProjectedObstructions()
     {
         var __mb = __mb_get_projected_obstructions;
         if (__mb == 0)
@@ -5527,6 +6151,12 @@ public unsafe partial class NavigationMeshSourceGeometryData3D : Resource
     public NavigationMeshSourceGeometryData3D() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "NavigationMeshSourceGeometryData3D");
+    }
+
+    public Godot.Collections.Array ProjectedObstructions
+    {
+        get => GetProjectedObstructions();
+        set => SetProjectedObstructions(value);
     }
 
     private static nint __mb_clear;
@@ -5623,7 +6253,7 @@ public unsafe partial class NavigationMeshSourceGeometryData3D : Resource
     }
 
     private static nint __mb_set_projected_obstructions;
-    public void SetProjectedObstructions(Godot.Collections.Array projectedObstructions)
+    internal void SetProjectedObstructions(Godot.Collections.Array projectedObstructions)
     {
         var __mb = __mb_set_projected_obstructions;
         if (__mb == 0)
@@ -5639,7 +6269,7 @@ public unsafe partial class NavigationMeshSourceGeometryData3D : Resource
     }
 
     private static nint __mb_get_projected_obstructions;
-    public Godot.Collections.Array GetProjectedObstructions()
+    internal Godot.Collections.Array GetProjectedObstructions()
     {
         var __mb = __mb_get_projected_obstructions;
         if (__mb == 0)
@@ -5678,6 +6308,42 @@ public unsafe partial class NavigationObstacle2D : Node2D
         ClassRegistry.AttachNew(this, "NavigationObstacle2D");
     }
 
+    public float Radius
+    {
+        get => GetRadius();
+        set => SetRadius(value);
+    }
+
+    public bool AffectNavigationMesh
+    {
+        get => GetAffectNavigationMesh();
+        set => SetAffectNavigationMesh(value);
+    }
+
+    public bool CarveNavigationMesh
+    {
+        get => GetCarveNavigationMesh();
+        set => SetCarveNavigationMesh(value);
+    }
+
+    public bool AvoidanceEnabled
+    {
+        get => GetAvoidanceEnabled();
+        set => SetAvoidanceEnabled(value);
+    }
+
+    public Vector2 Velocity
+    {
+        get => GetVelocity();
+        set => SetVelocity(value);
+    }
+
+    public uint AvoidanceLayers
+    {
+        get => GetAvoidanceLayers();
+        set => SetAvoidanceLayers(value);
+    }
+
     private static nint __mb_get_rid;
     public Rid GetRid()
     {
@@ -5694,7 +6360,7 @@ public unsafe partial class NavigationObstacle2D : Node2D
     }
 
     private static nint __mb_set_avoidance_enabled;
-    public void SetAvoidanceEnabled(bool enabled)
+    internal void SetAvoidanceEnabled(bool enabled)
     {
         var __mb = __mb_set_avoidance_enabled;
         if (__mb == 0)
@@ -5710,7 +6376,7 @@ public unsafe partial class NavigationObstacle2D : Node2D
     }
 
     private static nint __mb_get_avoidance_enabled;
-    public bool GetAvoidanceEnabled()
+    internal bool GetAvoidanceEnabled()
     {
         var __mb = __mb_get_avoidance_enabled;
         if (__mb == 0)
@@ -5756,7 +6422,7 @@ public unsafe partial class NavigationObstacle2D : Node2D
     }
 
     private static nint __mb_set_radius;
-    public void SetRadius(float radius)
+    internal void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -5772,7 +6438,7 @@ public unsafe partial class NavigationObstacle2D : Node2D
     }
 
     private static nint __mb_get_radius;
-    public float GetRadius()
+    internal float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -5787,7 +6453,7 @@ public unsafe partial class NavigationObstacle2D : Node2D
     }
 
     private static nint __mb_set_velocity;
-    public void SetVelocity(Vector2 velocity)
+    internal void SetVelocity(Vector2 velocity)
     {
         var __mb = __mb_set_velocity;
         if (__mb == 0)
@@ -5803,7 +6469,7 @@ public unsafe partial class NavigationObstacle2D : Node2D
     }
 
     private static nint __mb_get_velocity;
-    public Vector2 GetVelocity()
+    internal Vector2 GetVelocity()
     {
         var __mb = __mb_get_velocity;
         if (__mb == 0)
@@ -5818,7 +6484,7 @@ public unsafe partial class NavigationObstacle2D : Node2D
     }
 
     private static nint __mb_set_avoidance_layers;
-    public void SetAvoidanceLayers(uint layers)
+    internal void SetAvoidanceLayers(uint layers)
     {
         var __mb = __mb_set_avoidance_layers;
         if (__mb == 0)
@@ -5834,7 +6500,7 @@ public unsafe partial class NavigationObstacle2D : Node2D
     }
 
     private static nint __mb_get_avoidance_layers;
-    public uint GetAvoidanceLayers()
+    internal uint GetAvoidanceLayers()
     {
         var __mb = __mb_get_avoidance_layers;
         if (__mb == 0)
@@ -5885,7 +6551,7 @@ public unsafe partial class NavigationObstacle2D : Node2D
     }
 
     private static nint __mb_set_affect_navigation_mesh;
-    public void SetAffectNavigationMesh(bool enabled)
+    internal void SetAffectNavigationMesh(bool enabled)
     {
         var __mb = __mb_set_affect_navigation_mesh;
         if (__mb == 0)
@@ -5901,7 +6567,7 @@ public unsafe partial class NavigationObstacle2D : Node2D
     }
 
     private static nint __mb_get_affect_navigation_mesh;
-    public bool GetAffectNavigationMesh()
+    internal bool GetAffectNavigationMesh()
     {
         var __mb = __mb_get_affect_navigation_mesh;
         if (__mb == 0)
@@ -5916,7 +6582,7 @@ public unsafe partial class NavigationObstacle2D : Node2D
     }
 
     private static nint __mb_set_carve_navigation_mesh;
-    public void SetCarveNavigationMesh(bool enabled)
+    internal void SetCarveNavigationMesh(bool enabled)
     {
         var __mb = __mb_set_carve_navigation_mesh;
         if (__mb == 0)
@@ -5932,7 +6598,7 @@ public unsafe partial class NavigationObstacle2D : Node2D
     }
 
     private static nint __mb_get_carve_navigation_mesh;
-    public bool GetCarveNavigationMesh()
+    internal bool GetCarveNavigationMesh()
     {
         var __mb = __mb_get_carve_navigation_mesh;
         if (__mb == 0)
@@ -5956,6 +6622,54 @@ public unsafe partial class NavigationObstacle3D : Node3D
         ClassRegistry.AttachNew(this, "NavigationObstacle3D");
     }
 
+    public float Radius
+    {
+        get => GetRadius();
+        set => SetRadius(value);
+    }
+
+    public float Height
+    {
+        get => GetHeight();
+        set => SetHeight(value);
+    }
+
+    public bool AffectNavigationMesh
+    {
+        get => GetAffectNavigationMesh();
+        set => SetAffectNavigationMesh(value);
+    }
+
+    public bool CarveNavigationMesh
+    {
+        get => GetCarveNavigationMesh();
+        set => SetCarveNavigationMesh(value);
+    }
+
+    public bool AvoidanceEnabled
+    {
+        get => GetAvoidanceEnabled();
+        set => SetAvoidanceEnabled(value);
+    }
+
+    public Vector3 Velocity
+    {
+        get => GetVelocity();
+        set => SetVelocity(value);
+    }
+
+    public uint AvoidanceLayers
+    {
+        get => GetAvoidanceLayers();
+        set => SetAvoidanceLayers(value);
+    }
+
+    public bool Use3dAvoidance
+    {
+        get => GetUse3dAvoidance();
+        set => SetUse3dAvoidance(value);
+    }
+
     private static nint __mb_get_rid;
     public Rid GetRid()
     {
@@ -5972,7 +6686,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_set_avoidance_enabled;
-    public void SetAvoidanceEnabled(bool enabled)
+    internal void SetAvoidanceEnabled(bool enabled)
     {
         var __mb = __mb_set_avoidance_enabled;
         if (__mb == 0)
@@ -5988,7 +6702,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_get_avoidance_enabled;
-    public bool GetAvoidanceEnabled()
+    internal bool GetAvoidanceEnabled()
     {
         var __mb = __mb_get_avoidance_enabled;
         if (__mb == 0)
@@ -6034,7 +6748,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_set_radius;
-    public void SetRadius(float radius)
+    internal void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -6050,7 +6764,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_get_radius;
-    public float GetRadius()
+    internal float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -6065,7 +6779,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_set_height;
-    public void SetHeight(float height)
+    internal void SetHeight(float height)
     {
         var __mb = __mb_set_height;
         if (__mb == 0)
@@ -6081,7 +6795,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_get_height;
-    public float GetHeight()
+    internal float GetHeight()
     {
         var __mb = __mb_get_height;
         if (__mb == 0)
@@ -6096,7 +6810,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_set_velocity;
-    public void SetVelocity(Vector3 velocity)
+    internal void SetVelocity(Vector3 velocity)
     {
         var __mb = __mb_set_velocity;
         if (__mb == 0)
@@ -6112,7 +6826,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_get_velocity;
-    public Vector3 GetVelocity()
+    internal Vector3 GetVelocity()
     {
         var __mb = __mb_get_velocity;
         if (__mb == 0)
@@ -6127,7 +6841,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_set_avoidance_layers;
-    public void SetAvoidanceLayers(uint layers)
+    internal void SetAvoidanceLayers(uint layers)
     {
         var __mb = __mb_set_avoidance_layers;
         if (__mb == 0)
@@ -6143,7 +6857,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_get_avoidance_layers;
-    public uint GetAvoidanceLayers()
+    internal uint GetAvoidanceLayers()
     {
         var __mb = __mb_get_avoidance_layers;
         if (__mb == 0)
@@ -6194,7 +6908,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_set_use_3d_avoidance;
-    public void SetUse3dAvoidance(bool enabled)
+    internal void SetUse3dAvoidance(bool enabled)
     {
         var __mb = __mb_set_use_3d_avoidance;
         if (__mb == 0)
@@ -6210,7 +6924,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_get_use_3d_avoidance;
-    public bool GetUse3dAvoidance()
+    internal bool GetUse3dAvoidance()
     {
         var __mb = __mb_get_use_3d_avoidance;
         if (__mb == 0)
@@ -6225,7 +6939,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_set_affect_navigation_mesh;
-    public void SetAffectNavigationMesh(bool enabled)
+    internal void SetAffectNavigationMesh(bool enabled)
     {
         var __mb = __mb_set_affect_navigation_mesh;
         if (__mb == 0)
@@ -6241,7 +6955,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_get_affect_navigation_mesh;
-    public bool GetAffectNavigationMesh()
+    internal bool GetAffectNavigationMesh()
     {
         var __mb = __mb_get_affect_navigation_mesh;
         if (__mb == 0)
@@ -6256,7 +6970,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_set_carve_navigation_mesh;
-    public void SetCarveNavigationMesh(bool enabled)
+    internal void SetCarveNavigationMesh(bool enabled)
     {
         var __mb = __mb_set_carve_navigation_mesh;
         if (__mb == 0)
@@ -6272,7 +6986,7 @@ public unsafe partial class NavigationObstacle3D : Node3D
     }
 
     private static nint __mb_get_carve_navigation_mesh;
-    public bool GetCarveNavigationMesh()
+    internal bool GetCarveNavigationMesh()
     {
         var __mb = __mb_get_carve_navigation_mesh;
         if (__mb == 0)
@@ -6296,7 +7010,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
         ClassRegistry.AttachNew(this, "NavigationPathQueryParameters2D");
     }
 
-    public enum PathfindingAlgorithm : long
+    public enum PathfindingAlgorithmEnum : long
     {
         PATHFINDING_ALGORITHM_ASTAR = 0,
     }
@@ -6318,8 +7032,98 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
         PATH_METADATA_INCLUDE_ALL = 7,
     }
 
+    public Rid Map
+    {
+        get => GetMap();
+        set => SetMap(value);
+    }
+
+    public Vector2 StartPosition
+    {
+        get => GetStartPosition();
+        set => SetStartPosition(value);
+    }
+
+    public Vector2 TargetPosition
+    {
+        get => GetTargetPosition();
+        set => SetTargetPosition(value);
+    }
+
+    public uint NavigationLayers
+    {
+        get => GetNavigationLayers();
+        set => SetNavigationLayers(value);
+    }
+
+    public NavigationPathQueryParameters2D.PathfindingAlgorithmEnum PathfindingAlgorithm
+    {
+        get => GetPathfindingAlgorithm();
+        set => SetPathfindingAlgorithm(value);
+    }
+
+    public NavigationPathQueryParameters2D.PathPostProcessing PathPostprocessing
+    {
+        get => GetPathPostprocessing();
+        set => SetPathPostprocessing(value);
+    }
+
+    public NavigationPathQueryParameters2D.PathMetadataFlags MetadataFlags
+    {
+        get => GetMetadataFlags();
+        set => SetMetadataFlags(value);
+    }
+
+    public bool SimplifyPath
+    {
+        get => GetSimplifyPath();
+        set => SetSimplifyPath(value);
+    }
+
+    public float SimplifyEpsilon
+    {
+        get => GetSimplifyEpsilon();
+        set => SetSimplifyEpsilon(value);
+    }
+
+    public Godot.Collections.Array ExcludedRegions
+    {
+        get => GetExcludedRegions();
+        set => SetExcludedRegions(value);
+    }
+
+    public Godot.Collections.Array IncludedRegions
+    {
+        get => GetIncludedRegions();
+        set => SetIncludedRegions(value);
+    }
+
+    public float PathReturnMaxLength
+    {
+        get => GetPathReturnMaxLength();
+        set => SetPathReturnMaxLength(value);
+    }
+
+    public float PathReturnMaxRadius
+    {
+        get => GetPathReturnMaxRadius();
+        set => SetPathReturnMaxRadius(value);
+    }
+
+    public int PathSearchMaxPolygons
+    {
+        get => GetPathSearchMaxPolygons();
+        set => SetPathSearchMaxPolygons(value);
+    }
+
+    public float PathSearchMaxDistance
+    {
+        get => GetPathSearchMaxDistance();
+        set => SetPathSearchMaxDistance(value);
+    }
+
     private static nint __mb_set_pathfinding_algorithm;
-    public void SetPathfindingAlgorithm(NavigationPathQueryParameters2D.PathfindingAlgorithm pathfindingAlgorithm)
+    internal void SetPathfindingAlgorithm(NavigationPathQueryParameters2D.PathfindingAlgorithmEnum pathfindingAlgorithm)
     {
         var __mb = __mb_set_pathfinding_algorithm;
         if (__mb == 0)
@@ -6335,7 +7139,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_pathfinding_algorithm;
-    public NavigationPathQueryParameters2D.PathfindingAlgorithm GetPathfindingAlgorithm()
+    internal NavigationPathQueryParameters2D.PathfindingAlgorithmEnum GetPathfindingAlgorithm()
     {
         var __mb = __mb_get_pathfinding_algorithm;
         if (__mb == 0)
@@ -6346,11 +7150,11 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (NavigationPathQueryParameters2D.PathfindingAlgorithm)__ret;
+        return (NavigationPathQueryParameters2D.PathfindingAlgorithmEnum)__ret;
     }
 
     private static nint __mb_set_path_postprocessing;
-    public void SetPathPostprocessing(NavigationPathQueryParameters2D.PathPostProcessing pathPostprocessing)
+    internal void SetPathPostprocessing(NavigationPathQueryParameters2D.PathPostProcessing pathPostprocessing)
     {
         var __mb = __mb_set_path_postprocessing;
         if (__mb == 0)
@@ -6366,7 +7170,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_path_postprocessing;
-    public NavigationPathQueryParameters2D.PathPostProcessing GetPathPostprocessing()
+    internal NavigationPathQueryParameters2D.PathPostProcessing GetPathPostprocessing()
     {
         var __mb = __mb_get_path_postprocessing;
         if (__mb == 0)
@@ -6381,7 +7185,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_map;
-    public void SetMap(Rid map)
+    internal void SetMap(Rid map)
     {
         var __mb = __mb_set_map;
         if (__mb == 0)
@@ -6397,7 +7201,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_map;
-    public Rid GetMap()
+    internal Rid GetMap()
     {
         var __mb = __mb_get_map;
         if (__mb == 0)
@@ -6412,7 +7216,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_start_position;
-    public void SetStartPosition(Vector2 startPosition)
+    internal void SetStartPosition(Vector2 startPosition)
     {
         var __mb = __mb_set_start_position;
         if (__mb == 0)
@@ -6428,7 +7232,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_start_position;
-    public Vector2 GetStartPosition()
+    internal Vector2 GetStartPosition()
     {
         var __mb = __mb_get_start_position;
         if (__mb == 0)
@@ -6443,7 +7247,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_target_position;
-    public void SetTargetPosition(Vector2 targetPosition)
+    internal void SetTargetPosition(Vector2 targetPosition)
     {
         var __mb = __mb_set_target_position;
         if (__mb == 0)
@@ -6459,7 +7263,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_target_position;
-    public Vector2 GetTargetPosition()
+    internal Vector2 GetTargetPosition()
     {
         var __mb = __mb_get_target_position;
         if (__mb == 0)
@@ -6474,7 +7278,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_navigation_layers;
-    public void SetNavigationLayers(uint navigationLayers)
+    internal void SetNavigationLayers(uint navigationLayers)
     {
         var __mb = __mb_set_navigation_layers;
         if (__mb == 0)
@@ -6490,7 +7294,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_navigation_layers;
-    public uint GetNavigationLayers()
+    internal uint GetNavigationLayers()
     {
         var __mb = __mb_get_navigation_layers;
         if (__mb == 0)
@@ -6505,7 +7309,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_metadata_flags;
-    public void SetMetadataFlags(NavigationPathQueryParameters2D.PathMetadataFlags flags)
+    internal void SetMetadataFlags(NavigationPathQueryParameters2D.PathMetadataFlags flags)
     {
         var __mb = __mb_set_metadata_flags;
         if (__mb == 0)
@@ -6521,7 +7325,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_metadata_flags;
-    public NavigationPathQueryParameters2D.PathMetadataFlags GetMetadataFlags()
+    internal NavigationPathQueryParameters2D.PathMetadataFlags GetMetadataFlags()
     {
         var __mb = __mb_get_metadata_flags;
         if (__mb == 0)
@@ -6536,7 +7340,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_simplify_path;
-    public void SetSimplifyPath(bool enabled)
+    internal void SetSimplifyPath(bool enabled)
     {
         var __mb = __mb_set_simplify_path;
         if (__mb == 0)
@@ -6552,7 +7356,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_simplify_path;
-    public bool GetSimplifyPath()
+    internal bool GetSimplifyPath()
     {
         var __mb = __mb_get_simplify_path;
         if (__mb == 0)
@@ -6567,7 +7371,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_simplify_epsilon;
-    public void SetSimplifyEpsilon(float epsilon)
+    internal void SetSimplifyEpsilon(float epsilon)
     {
         var __mb = __mb_set_simplify_epsilon;
         if (__mb == 0)
@@ -6583,7 +7387,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_simplify_epsilon;
-    public float GetSimplifyEpsilon()
+    internal float GetSimplifyEpsilon()
     {
         var __mb = __mb_get_simplify_epsilon;
         if (__mb == 0)
@@ -6598,7 +7402,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_included_regions;
-    public void SetIncludedRegions(Godot.Collections.Array regions)
+    internal void SetIncludedRegions(Godot.Collections.Array regions)
     {
         var __mb = __mb_set_included_regions;
         if (__mb == 0)
@@ -6614,7 +7418,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_included_regions;
-    public Godot.Collections.Array GetIncludedRegions()
+    internal Godot.Collections.Array GetIncludedRegions()
     {
         var __mb = __mb_get_included_regions;
         if (__mb == 0)
@@ -6629,7 +7433,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_excluded_regions;
-    public void SetExcludedRegions(Godot.Collections.Array regions)
+    internal void SetExcludedRegions(Godot.Collections.Array regions)
     {
         var __mb = __mb_set_excluded_regions;
         if (__mb == 0)
@@ -6645,7 +7449,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_excluded_regions;
-    public Godot.Collections.Array GetExcludedRegions()
+    internal Godot.Collections.Array GetExcludedRegions()
     {
         var __mb = __mb_get_excluded_regions;
         if (__mb == 0)
@@ -6660,7 +7464,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_path_return_max_length;
-    public void SetPathReturnMaxLength(float length)
+    internal void SetPathReturnMaxLength(float length)
     {
         var __mb = __mb_set_path_return_max_length;
         if (__mb == 0)
@@ -6676,7 +7480,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_path_return_max_length;
-    public float GetPathReturnMaxLength()
+    internal float GetPathReturnMaxLength()
     {
         var __mb = __mb_get_path_return_max_length;
         if (__mb == 0)
@@ -6691,7 +7495,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_path_return_max_radius;
-    public void SetPathReturnMaxRadius(float radius)
+    internal void SetPathReturnMaxRadius(float radius)
     {
         var __mb = __mb_set_path_return_max_radius;
         if (__mb == 0)
@@ -6707,7 +7511,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_path_return_max_radius;
-    public float GetPathReturnMaxRadius()
+    internal float GetPathReturnMaxRadius()
     {
         var __mb = __mb_get_path_return_max_radius;
         if (__mb == 0)
@@ -6722,7 +7526,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_path_search_max_polygons;
-    public void SetPathSearchMaxPolygons(int maxPolygons)
+    internal void SetPathSearchMaxPolygons(int maxPolygons)
     {
         var __mb = __mb_set_path_search_max_polygons;
         if (__mb == 0)
@@ -6738,7 +7542,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_path_search_max_polygons;
-    public int GetPathSearchMaxPolygons()
+    internal int GetPathSearchMaxPolygons()
     {
         var __mb = __mb_get_path_search_max_polygons;
         if (__mb == 0)
@@ -6753,7 +7557,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_set_path_search_max_distance;
-    public void SetPathSearchMaxDistance(float distance)
+    internal void SetPathSearchMaxDistance(float distance)
     {
         var __mb = __mb_set_path_search_max_distance;
         if (__mb == 0)
@@ -6769,7 +7573,7 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
     }
 
     private static nint __mb_get_path_search_max_distance;
-    public float GetPathSearchMaxDistance()
+    internal float GetPathSearchMaxDistance()
     {
         var __mb = __mb_get_path_search_max_distance;
         if (__mb == 0)
@@ -6793,7 +7597,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
         ClassRegistry.AttachNew(this, "NavigationPathQueryParameters3D");
     }
 
-    public enum PathfindingAlgorithm : long
+    public enum PathfindingAlgorithmEnum : long
     {
         PATHFINDING_ALGORITHM_ASTAR = 0,
     }
@@ -6815,8 +7619,98 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
         PATH_METADATA_INCLUDE_ALL = 7,
     }
 
+    public Rid Map
+    {
+        get => GetMap();
+        set => SetMap(value);
+    }
+
+    public Vector3 StartPosition
+    {
+        get => GetStartPosition();
+        set => SetStartPosition(value);
+    }
+
+    public Vector3 TargetPosition
+    {
+        get => GetTargetPosition();
+        set => SetTargetPosition(value);
+    }
+
+    public uint NavigationLayers
+    {
+        get => GetNavigationLayers();
+        set => SetNavigationLayers(value);
+    }
+
+    public NavigationPathQueryParameters3D.PathfindingAlgorithmEnum PathfindingAlgorithm
+    {
+        get => GetPathfindingAlgorithm();
+        set => SetPathfindingAlgorithm(value);
+    }
+
+    public NavigationPathQueryParameters3D.PathPostProcessing PathPostprocessing
+    {
+        get => GetPathPostprocessing();
+        set => SetPathPostprocessing(value);
+    }
+
+    public NavigationPathQueryParameters3D.PathMetadataFlags MetadataFlags
+    {
+        get => GetMetadataFlags();
+        set => SetMetadataFlags(value);
+    }
+
+    public bool SimplifyPath
+    {
+        get => GetSimplifyPath();
+        set => SetSimplifyPath(value);
+    }
+
+    public float SimplifyEpsilon
+    {
+        get => GetSimplifyEpsilon();
+        set => SetSimplifyEpsilon(value);
+    }
+
+    public Godot.Collections.Array ExcludedRegions
+    {
+        get => GetExcludedRegions();
+        set => SetExcludedRegions(value);
+    }
+
+    public Godot.Collections.Array IncludedRegions
+    {
+        get => GetIncludedRegions();
+        set => SetIncludedRegions(value);
+    }
+
+    public float PathReturnMaxLength
+    {
+        get => GetPathReturnMaxLength();
+        set => SetPathReturnMaxLength(value);
+    }
+
+    public float PathReturnMaxRadius
+    {
+        get => GetPathReturnMaxRadius();
+        set => SetPathReturnMaxRadius(value);
+    }
+
+    public int PathSearchMaxPolygons
+    {
+        get => GetPathSearchMaxPolygons();
+        set => SetPathSearchMaxPolygons(value);
+    }
+
+    public float PathSearchMaxDistance
+    {
+        get => GetPathSearchMaxDistance();
+        set => SetPathSearchMaxDistance(value);
+    }
+
     private static nint __mb_set_pathfinding_algorithm;
-    public void SetPathfindingAlgorithm(NavigationPathQueryParameters3D.PathfindingAlgorithm pathfindingAlgorithm)
+    internal void SetPathfindingAlgorithm(NavigationPathQueryParameters3D.PathfindingAlgorithmEnum pathfindingAlgorithm)
     {
         var __mb = __mb_set_pathfinding_algorithm;
         if (__mb == 0)
@@ -6832,7 +7726,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_pathfinding_algorithm;
-    public NavigationPathQueryParameters3D.PathfindingAlgorithm GetPathfindingAlgorithm()
+    internal NavigationPathQueryParameters3D.PathfindingAlgorithmEnum GetPathfindingAlgorithm()
     {
         var __mb = __mb_get_pathfinding_algorithm;
         if (__mb == 0)
@@ -6843,11 +7737,11 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (NavigationPathQueryParameters3D.PathfindingAlgorithm)__ret;
+        return (NavigationPathQueryParameters3D.PathfindingAlgorithmEnum)__ret;
     }
 
     private static nint __mb_set_path_postprocessing;
-    public void SetPathPostprocessing(NavigationPathQueryParameters3D.PathPostProcessing pathPostprocessing)
+    internal void SetPathPostprocessing(NavigationPathQueryParameters3D.PathPostProcessing pathPostprocessing)
     {
         var __mb = __mb_set_path_postprocessing;
         if (__mb == 0)
@@ -6863,7 +7757,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_path_postprocessing;
-    public NavigationPathQueryParameters3D.PathPostProcessing GetPathPostprocessing()
+    internal NavigationPathQueryParameters3D.PathPostProcessing GetPathPostprocessing()
     {
         var __mb = __mb_get_path_postprocessing;
         if (__mb == 0)
@@ -6878,7 +7772,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_map;
-    public void SetMap(Rid map)
+    internal void SetMap(Rid map)
     {
         var __mb = __mb_set_map;
         if (__mb == 0)
@@ -6894,7 +7788,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_map;
-    public Rid GetMap()
+    internal Rid GetMap()
     {
         var __mb = __mb_get_map;
         if (__mb == 0)
@@ -6909,7 +7803,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_start_position;
-    public void SetStartPosition(Vector3 startPosition)
+    internal void SetStartPosition(Vector3 startPosition)
     {
         var __mb = __mb_set_start_position;
         if (__mb == 0)
@@ -6925,7 +7819,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_start_position;
-    public Vector3 GetStartPosition()
+    internal Vector3 GetStartPosition()
     {
         var __mb = __mb_get_start_position;
         if (__mb == 0)
@@ -6940,7 +7834,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_target_position;
-    public void SetTargetPosition(Vector3 targetPosition)
+    internal void SetTargetPosition(Vector3 targetPosition)
     {
         var __mb = __mb_set_target_position;
         if (__mb == 0)
@@ -6956,7 +7850,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_target_position;
-    public Vector3 GetTargetPosition()
+    internal Vector3 GetTargetPosition()
     {
         var __mb = __mb_get_target_position;
         if (__mb == 0)
@@ -6971,7 +7865,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_navigation_layers;
-    public void SetNavigationLayers(uint navigationLayers)
+    internal void SetNavigationLayers(uint navigationLayers)
     {
         var __mb = __mb_set_navigation_layers;
         if (__mb == 0)
@@ -6987,7 +7881,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_navigation_layers;
-    public uint GetNavigationLayers()
+    internal uint GetNavigationLayers()
     {
         var __mb = __mb_get_navigation_layers;
         if (__mb == 0)
@@ -7002,7 +7896,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_metadata_flags;
-    public void SetMetadataFlags(NavigationPathQueryParameters3D.PathMetadataFlags flags)
+    internal void SetMetadataFlags(NavigationPathQueryParameters3D.PathMetadataFlags flags)
     {
         var __mb = __mb_set_metadata_flags;
         if (__mb == 0)
@@ -7018,7 +7912,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_metadata_flags;
-    public NavigationPathQueryParameters3D.PathMetadataFlags GetMetadataFlags()
+    internal NavigationPathQueryParameters3D.PathMetadataFlags GetMetadataFlags()
     {
         var __mb = __mb_get_metadata_flags;
         if (__mb == 0)
@@ -7033,7 +7927,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_simplify_path;
-    public void SetSimplifyPath(bool enabled)
+    internal void SetSimplifyPath(bool enabled)
     {
         var __mb = __mb_set_simplify_path;
         if (__mb == 0)
@@ -7049,7 +7943,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_simplify_path;
-    public bool GetSimplifyPath()
+    internal bool GetSimplifyPath()
     {
         var __mb = __mb_get_simplify_path;
         if (__mb == 0)
@@ -7064,7 +7958,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_simplify_epsilon;
-    public void SetSimplifyEpsilon(float epsilon)
+    internal void SetSimplifyEpsilon(float epsilon)
     {
         var __mb = __mb_set_simplify_epsilon;
         if (__mb == 0)
@@ -7080,7 +7974,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_simplify_epsilon;
-    public float GetSimplifyEpsilon()
+    internal float GetSimplifyEpsilon()
     {
         var __mb = __mb_get_simplify_epsilon;
         if (__mb == 0)
@@ -7095,7 +7989,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_included_regions;
-    public void SetIncludedRegions(Godot.Collections.Array regions)
+    internal void SetIncludedRegions(Godot.Collections.Array regions)
     {
         var __mb = __mb_set_included_regions;
         if (__mb == 0)
@@ -7111,7 +8005,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_included_regions;
-    public Godot.Collections.Array GetIncludedRegions()
+    internal Godot.Collections.Array GetIncludedRegions()
     {
         var __mb = __mb_get_included_regions;
         if (__mb == 0)
@@ -7126,7 +8020,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_excluded_regions;
-    public void SetExcludedRegions(Godot.Collections.Array regions)
+    internal void SetExcludedRegions(Godot.Collections.Array regions)
     {
         var __mb = __mb_set_excluded_regions;
         if (__mb == 0)
@@ -7142,7 +8036,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_excluded_regions;
-    public Godot.Collections.Array GetExcludedRegions()
+    internal Godot.Collections.Array GetExcludedRegions()
     {
         var __mb = __mb_get_excluded_regions;
         if (__mb == 0)
@@ -7157,7 +8051,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_path_return_max_length;
-    public void SetPathReturnMaxLength(float length)
+    internal void SetPathReturnMaxLength(float length)
     {
         var __mb = __mb_set_path_return_max_length;
         if (__mb == 0)
@@ -7173,7 +8067,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_path_return_max_length;
-    public float GetPathReturnMaxLength()
+    internal float GetPathReturnMaxLength()
     {
         var __mb = __mb_get_path_return_max_length;
         if (__mb == 0)
@@ -7188,7 +8082,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_path_return_max_radius;
-    public void SetPathReturnMaxRadius(float radius)
+    internal void SetPathReturnMaxRadius(float radius)
     {
         var __mb = __mb_set_path_return_max_radius;
         if (__mb == 0)
@@ -7204,7 +8098,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_path_return_max_radius;
-    public float GetPathReturnMaxRadius()
+    internal float GetPathReturnMaxRadius()
     {
         var __mb = __mb_get_path_return_max_radius;
         if (__mb == 0)
@@ -7219,7 +8113,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_path_search_max_polygons;
-    public void SetPathSearchMaxPolygons(int maxPolygons)
+    internal void SetPathSearchMaxPolygons(int maxPolygons)
     {
         var __mb = __mb_set_path_search_max_polygons;
         if (__mb == 0)
@@ -7235,7 +8129,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_path_search_max_polygons;
-    public int GetPathSearchMaxPolygons()
+    internal int GetPathSearchMaxPolygons()
     {
         var __mb = __mb_get_path_search_max_polygons;
         if (__mb == 0)
@@ -7250,7 +8144,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_set_path_search_max_distance;
-    public void SetPathSearchMaxDistance(float distance)
+    internal void SetPathSearchMaxDistance(float distance)
     {
         var __mb = __mb_set_path_search_max_distance;
         if (__mb == 0)
@@ -7266,7 +8160,7 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
     }
 
     private static nint __mb_get_path_search_max_distance;
-    public float GetPathSearchMaxDistance()
+    internal float GetPathSearchMaxDistance()
     {
         var __mb = __mb_get_path_search_max_distance;
         if (__mb == 0)
@@ -7296,8 +8190,20 @@ public unsafe partial class NavigationPathQueryResult2D : RefCounted
         PATH_SEGMENT_TYPE_LINK = 1,
     }
 
+    public Godot.Collections.Array PathRids
+    {
+        get => GetPathRids();
+        set => SetPathRids(value);
+    }
+
+    public float PathLength
+    {
+        get => GetPathLength();
+        set => SetPathLength(value);
+    }
+
     private static nint __mb_set_path_rids;
-    public void SetPathRids(Godot.Collections.Array pathRids)
+    internal void SetPathRids(Godot.Collections.Array pathRids)
     {
         var __mb = __mb_set_path_rids;
         if (__mb == 0)
@@ -7313,7 +8219,7 @@ public unsafe partial class NavigationPathQueryResult2D : RefCounted
     }
 
     private static nint __mb_get_path_rids;
-    public Godot.Collections.Array GetPathRids()
+    internal Godot.Collections.Array GetPathRids()
     {
         var __mb = __mb_get_path_rids;
         if (__mb == 0)
@@ -7328,7 +8234,7 @@ public unsafe partial class NavigationPathQueryResult2D : RefCounted
     }
 
     private static nint __mb_set_path_length;
-    public void SetPathLength(float length)
+    internal void SetPathLength(float length)
     {
         var __mb = __mb_set_path_length;
         if (__mb == 0)
@@ -7344,7 +8250,7 @@ public unsafe partial class NavigationPathQueryResult2D : RefCounted
     }
 
     private static nint __mb_get_path_length;
-    public float GetPathLength()
+    internal float GetPathLength()
     {
         var __mb = __mb_get_path_length;
         if (__mb == 0)
@@ -7387,8 +8293,20 @@ public unsafe partial class NavigationPathQueryResult3D : RefCounted
         PATH_SEGMENT_TYPE_LINK = 1,
     }
 
+    public Godot.Collections.Array PathRids
+    {
+        get => GetPathRids();
+        set => SetPathRids(value);
+    }
+
+    public float PathLength
+    {
+        get => GetPathLength();
+        set => SetPathLength(value);
+    }
+
     private static nint __mb_set_path_rids;
-    public void SetPathRids(Godot.Collections.Array pathRids)
+    internal void SetPathRids(Godot.Collections.Array pathRids)
     {
         var __mb = __mb_set_path_rids;
         if (__mb == 0)
@@ -7404,7 +8322,7 @@ public unsafe partial class NavigationPathQueryResult3D : RefCounted
     }
 
     private static nint __mb_get_path_rids;
-    public Godot.Collections.Array GetPathRids()
+    internal Godot.Collections.Array GetPathRids()
     {
         var __mb = __mb_get_path_rids;
         if (__mb == 0)
@@ -7419,7 +8337,7 @@ public unsafe partial class NavigationPathQueryResult3D : RefCounted
     }
 
     private static nint __mb_set_path_length;
-    public void SetPathLength(float length)
+    internal void SetPathLength(float length)
     {
         var __mb = __mb_set_path_length;
         if (__mb == 0)
@@ -7435,7 +8353,7 @@ public unsafe partial class NavigationPathQueryResult3D : RefCounted
     }
 
     private static nint __mb_get_path_length;
-    public float GetPathLength()
+    internal float GetPathLength()
     {
         var __mb = __mb_get_path_length;
         if (__mb == 0)
@@ -7472,14 +8390,14 @@ public unsafe partial class NavigationPolygon : Resource
         ClassRegistry.AttachNew(this, "NavigationPolygon");
     }
 
-    public enum SamplePartitionType : long
+    public enum SamplePartitionTypeEnum : long
     {
         SAMPLE_PARTITION_CONVEX_PARTITION = 0,
         SAMPLE_PARTITION_TRIANGULATE = 1,
         SAMPLE_PARTITION_MAX = 2,
     }
 
-    public enum ParsedGeometryType : long
+    public enum ParsedGeometryTypeEnum : long
     {
         PARSED_GEOMETRY_MESH_INSTANCES = 0,
         PARSED_GEOMETRY_STATIC_COLLIDERS = 1,
@@ -7487,12 +8405,72 @@ public unsafe partial class NavigationPolygon : Resource
         PARSED_GEOMETRY_MAX = 3,
     }
 
-    public enum SourceGeometryMode : long
+    public enum SourceGeometryModeEnum : long
     {
         SOURCE_GEOMETRY_ROOT_NODE_CHILDREN = 0,
         SOURCE_GEOMETRY_GROUPS_WITH_CHILDREN = 1,
         SOURCE_GEOMETRY_GROUPS_EXPLICIT = 2,
         SOURCE_GEOMETRY_MAX = 3,
+    }
+
+    public NavigationPolygon.SamplePartitionTypeEnum SamplePartitionType
+    {
+        get => GetSamplePartitionType();
+        set => SetSamplePartitionType(value);
+    }
+
+    public NavigationPolygon.ParsedGeometryTypeEnum ParsedGeometryType
+    {
+        get => GetParsedGeometryType();
+        set => SetParsedGeometryType(value);
+    }
+
+    public uint ParsedCollisionMask
+    {
+        get => GetParsedCollisionMask();
+        set => SetParsedCollisionMask(value);
+    }
+
+    public NavigationPolygon.SourceGeometryModeEnum SourceGeometryMode
+    {
+        get => GetSourceGeometryMode();
+        set => SetSourceGeometryMode(value);
+    }
+
+    public string SourceGeometryGroupName
+    {
+        get => GetSourceGeometryGroupName();
+        set => SetSourceGeometryGroupName(value);
+    }
+
+    public float CellSize
+    {
+        get => GetCellSize();
+        set => SetCellSize(value);
+    }
+
+    public float BorderSize
+    {
+        get => GetBorderSize();
+        set => SetBorderSize(value);
+    }
+
+    public float AgentRadius
+    {
+        get => GetAgentRadius();
+        set => SetAgentRadius(value);
+    }
+
+    public Rect2 BakingRect
+    {
+        get => GetBakingRect();
+        set => SetBakingRect(value);
+    }
+
+    public Vector2 BakingRectOffset
+    {
+        get => GetBakingRectOffset();
+        set => SetBakingRectOffset(value);
     }
 
     private static nint __mb_get_polygon_count;
@@ -7596,7 +8574,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_set_cell_size;
-    public void SetCellSize(float cellSize)
+    internal void SetCellSize(float cellSize)
     {
         var __mb = __mb_set_cell_size;
         if (__mb == 0)
@@ -7612,7 +8590,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_get_cell_size;
-    public float GetCellSize()
+    internal float GetCellSize()
     {
         var __mb = __mb_get_cell_size;
         if (__mb == 0)
@@ -7627,7 +8605,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_set_border_size;
-    public void SetBorderSize(float borderSize)
+    internal void SetBorderSize(float borderSize)
     {
         var __mb = __mb_set_border_size;
         if (__mb == 0)
@@ -7643,7 +8621,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_get_border_size;
-    public float GetBorderSize()
+    internal float GetBorderSize()
     {
         var __mb = __mb_get_border_size;
         if (__mb == 0)
@@ -7658,7 +8636,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_set_sample_partition_type;
-    public void SetSamplePartitionType(NavigationPolygon.SamplePartitionType samplePartitionType)
+    internal void SetSamplePartitionType(NavigationPolygon.SamplePartitionTypeEnum samplePartitionType)
     {
         var __mb = __mb_set_sample_partition_type;
         if (__mb == 0)
@@ -7674,7 +8652,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_get_sample_partition_type;
-    public NavigationPolygon.SamplePartitionType GetSamplePartitionType()
+    internal NavigationPolygon.SamplePartitionTypeEnum GetSamplePartitionType()
     {
         var __mb = __mb_get_sample_partition_type;
         if (__mb == 0)
@@ -7685,11 +8663,11 @@ public unsafe partial class NavigationPolygon : Resource
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (NavigationPolygon.SamplePartitionType)__ret;
+        return (NavigationPolygon.SamplePartitionTypeEnum)__ret;
     }
 
     private static nint __mb_set_parsed_geometry_type;
-    public void SetParsedGeometryType(NavigationPolygon.ParsedGeometryType geometryType)
+    internal void SetParsedGeometryType(NavigationPolygon.ParsedGeometryTypeEnum geometryType)
     {
         var __mb = __mb_set_parsed_geometry_type;
         if (__mb == 0)
@@ -7705,7 +8683,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_get_parsed_geometry_type;
-    public NavigationPolygon.ParsedGeometryType GetParsedGeometryType()
+    internal NavigationPolygon.ParsedGeometryTypeEnum GetParsedGeometryType()
     {
         var __mb = __mb_get_parsed_geometry_type;
         if (__mb == 0)
@@ -7716,11 +8694,11 @@ public unsafe partial class NavigationPolygon : Resource
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (NavigationPolygon.ParsedGeometryType)__ret;
+        return (NavigationPolygon.ParsedGeometryTypeEnum)__ret;
     }
 
     private static nint __mb_set_parsed_collision_mask;
-    public void SetParsedCollisionMask(uint mask)
+    internal void SetParsedCollisionMask(uint mask)
     {
         var __mb = __mb_set_parsed_collision_mask;
         if (__mb == 0)
@@ -7736,7 +8714,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_get_parsed_collision_mask;
-    public uint GetParsedCollisionMask()
+    internal uint GetParsedCollisionMask()
     {
         var __mb = __mb_get_parsed_collision_mask;
         if (__mb == 0)
@@ -7787,7 +8765,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_set_source_geometry_mode;
-    public void SetSourceGeometryMode(NavigationPolygon.SourceGeometryMode geometryMode)
+    internal void SetSourceGeometryMode(NavigationPolygon.SourceGeometryModeEnum geometryMode)
     {
         var __mb = __mb_set_source_geometry_mode;
         if (__mb == 0)
@@ -7803,7 +8781,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_get_source_geometry_mode;
-    public NavigationPolygon.SourceGeometryMode GetSourceGeometryMode()
+    internal NavigationPolygon.SourceGeometryModeEnum GetSourceGeometryMode()
     {
         var __mb = __mb_get_source_geometry_mode;
         if (__mb == 0)
@@ -7814,11 +8792,11 @@ public unsafe partial class NavigationPolygon : Resource
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (NavigationPolygon.SourceGeometryMode)__ret;
+        return (NavigationPolygon.SourceGeometryModeEnum)__ret;
     }
 
     private static nint __mb_set_source_geometry_group_name;
-    public void SetSourceGeometryGroupName(string groupName)
+    internal void SetSourceGeometryGroupName(string groupName)
     {
         var __mb = __mb_set_source_geometry_group_name;
         if (__mb == 0)
@@ -7834,7 +8812,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_get_source_geometry_group_name;
-    public string GetSourceGeometryGroupName()
+    internal string GetSourceGeometryGroupName()
     {
         var __mb = __mb_get_source_geometry_group_name;
         if (__mb == 0)
@@ -7849,7 +8827,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_set_agent_radius;
-    public void SetAgentRadius(float agentRadius)
+    internal void SetAgentRadius(float agentRadius)
     {
         var __mb = __mb_set_agent_radius;
         if (__mb == 0)
@@ -7865,7 +8843,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_get_agent_radius;
-    public float GetAgentRadius()
+    internal float GetAgentRadius()
     {
         var __mb = __mb_get_agent_radius;
         if (__mb == 0)
@@ -7880,7 +8858,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_set_baking_rect;
-    public void SetBakingRect(Rect2 rect)
+    internal void SetBakingRect(Rect2 rect)
     {
         var __mb = __mb_set_baking_rect;
         if (__mb == 0)
@@ -7896,7 +8874,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_get_baking_rect;
-    public Rect2 GetBakingRect()
+    internal Rect2 GetBakingRect()
     {
         var __mb = __mb_get_baking_rect;
         if (__mb == 0)
@@ -7911,7 +8889,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_set_baking_rect_offset;
-    public void SetBakingRectOffset(Vector2 rectOffset)
+    internal void SetBakingRectOffset(Vector2 rectOffset)
     {
         var __mb = __mb_set_baking_rect_offset;
         if (__mb == 0)
@@ -7927,7 +8905,7 @@ public unsafe partial class NavigationPolygon : Resource
     }
 
     private static nint __mb_get_baking_rect_offset;
-    public Vector2 GetBakingRectOffset()
+    internal Vector2 GetBakingRectOffset()
     {
         var __mb = __mb_get_baking_rect_offset;
         if (__mb == 0)
@@ -7964,6 +8942,42 @@ public unsafe partial class NavigationRegion2D : Node2D
         ClassRegistry.AttachNew(this, "NavigationRegion2D");
     }
 
+    public NavigationPolygon? NavigationPolygon
+    {
+        get => GetNavigationPolygon();
+        set => SetNavigationPolygon(value);
+    }
+
+    public bool Enabled
+    {
+        get => IsEnabled();
+        set => SetEnabled(value);
+    }
+
+    public bool UseEdgeConnections
+    {
+        get => GetUseEdgeConnections();
+        set => SetUseEdgeConnections(value);
+    }
+
+    public uint NavigationLayers
+    {
+        get => GetNavigationLayers();
+        set => SetNavigationLayers(value);
+    }
+
+    public float EnterCost
+    {
+        get => GetEnterCost();
+        set => SetEnterCost(value);
+    }
+
+    public float TravelCost
+    {
+        get => GetTravelCost();
+        set => SetTravelCost(value);
+    }
+
     private static nint __mb_get_rid;
     public Rid GetRid()
     {
@@ -7980,7 +8994,7 @@ public unsafe partial class NavigationRegion2D : Node2D
     }
 
     private static nint __mb_set_navigation_polygon;
-    public void SetNavigationPolygon(NavigationPolygon? navigationPolygon)
+    internal void SetNavigationPolygon(NavigationPolygon? navigationPolygon)
     {
         var __mb = __mb_set_navigation_polygon;
         if (__mb == 0)
@@ -7996,7 +9010,7 @@ public unsafe partial class NavigationRegion2D : Node2D
     }
 
     private static nint __mb_get_navigation_polygon;
-    public NavigationPolygon? GetNavigationPolygon()
+    internal NavigationPolygon? GetNavigationPolygon()
     {
         var __mb = __mb_get_navigation_polygon;
         if (__mb == 0)
@@ -8011,7 +9025,7 @@ public unsafe partial class NavigationRegion2D : Node2D
     }
 
     private static nint __mb_set_enabled;
-    public void SetEnabled(bool enabled)
+    internal void SetEnabled(bool enabled)
     {
         var __mb = __mb_set_enabled;
         if (__mb == 0)
@@ -8027,7 +9041,7 @@ public unsafe partial class NavigationRegion2D : Node2D
     }
 
     private static nint __mb_is_enabled;
-    public bool IsEnabled()
+    internal bool IsEnabled()
     {
         var __mb = __mb_is_enabled;
         if (__mb == 0)
@@ -8073,7 +9087,7 @@ public unsafe partial class NavigationRegion2D : Node2D
     }
 
     private static nint __mb_set_use_edge_connections;
-    public void SetUseEdgeConnections(bool enabled)
+    internal void SetUseEdgeConnections(bool enabled)
     {
         var __mb = __mb_set_use_edge_connections;
         if (__mb == 0)
@@ -8089,7 +9103,7 @@ public unsafe partial class NavigationRegion2D : Node2D
     }
 
     private static nint __mb_get_use_edge_connections;
-    public bool GetUseEdgeConnections()
+    internal bool GetUseEdgeConnections()
     {
         var __mb = __mb_get_use_edge_connections;
         if (__mb == 0)
@@ -8104,7 +9118,7 @@ public unsafe partial class NavigationRegion2D : Node2D
     }
 
     private static nint __mb_set_navigation_layers;
-    public void SetNavigationLayers(uint navigationLayers)
+    internal void SetNavigationLayers(uint navigationLayers)
     {
         var __mb = __mb_set_navigation_layers;
         if (__mb == 0)
@@ -8120,7 +9134,7 @@ public unsafe partial class NavigationRegion2D : Node2D
     }
 
     private static nint __mb_get_navigation_layers;
-    public uint GetNavigationLayers()
+    internal uint GetNavigationLayers()
     {
         var __mb = __mb_get_navigation_layers;
         if (__mb == 0)
@@ -8186,7 +9200,7 @@ public unsafe partial class NavigationRegion2D : Node2D
     }
 
     private static nint __mb_set_enter_cost;
-    public void SetEnterCost(float enterCost)
+    internal void SetEnterCost(float enterCost)
     {
         var __mb = __mb_set_enter_cost;
         if (__mb == 0)
@@ -8202,7 +9216,7 @@ public unsafe partial class NavigationRegion2D : Node2D
     }
 
     private static nint __mb_get_enter_cost;
-    public float GetEnterCost()
+    internal float GetEnterCost()
     {
         var __mb = __mb_get_enter_cost;
         if (__mb == 0)
@@ -8217,7 +9231,7 @@ public unsafe partial class NavigationRegion2D : Node2D
     }
 
     private static nint __mb_set_travel_cost;
-    public void SetTravelCost(float travelCost)
+    internal void SetTravelCost(float travelCost)
     {
         var __mb = __mb_set_travel_cost;
         if (__mb == 0)
@@ -8233,7 +9247,7 @@ public unsafe partial class NavigationRegion2D : Node2D
     }
 
     private static nint __mb_get_travel_cost;
-    public float GetTravelCost()
+    internal float GetTravelCost()
     {
         var __mb = __mb_get_travel_cost;
         if (__mb == 0)
@@ -8303,6 +9317,42 @@ public unsafe partial class NavigationRegion3D : Node3D
         ClassRegistry.AttachNew(this, "NavigationRegion3D");
     }
 
+    public NavigationMesh? NavigationMesh
+    {
+        get => GetNavigationMesh();
+        set => SetNavigationMesh(value);
+    }
+
+    public bool Enabled
+    {
+        get => IsEnabled();
+        set => SetEnabled(value);
+    }
+
+    public bool UseEdgeConnections
+    {
+        get => GetUseEdgeConnections();
+        set => SetUseEdgeConnections(value);
+    }
+
+    public uint NavigationLayers
+    {
+        get => GetNavigationLayers();
+        set => SetNavigationLayers(value);
+    }
+
+    public float EnterCost
+    {
+        get => GetEnterCost();
+        set => SetEnterCost(value);
+    }
+
+    public float TravelCost
+    {
+        get => GetTravelCost();
+        set => SetTravelCost(value);
+    }
+
     private static nint __mb_get_rid;
     public Rid GetRid()
     {
@@ -8319,7 +9369,7 @@ public unsafe partial class NavigationRegion3D : Node3D
     }
 
     private static nint __mb_set_navigation_mesh;
-    public void SetNavigationMesh(NavigationMesh? navigationMesh)
+    internal void SetNavigationMesh(NavigationMesh? navigationMesh)
     {
         var __mb = __mb_set_navigation_mesh;
         if (__mb == 0)
@@ -8335,7 +9385,7 @@ public unsafe partial class NavigationRegion3D : Node3D
     }
 
     private static nint __mb_get_navigation_mesh;
-    public NavigationMesh? GetNavigationMesh()
+    internal NavigationMesh? GetNavigationMesh()
     {
         var __mb = __mb_get_navigation_mesh;
         if (__mb == 0)
@@ -8350,7 +9400,7 @@ public unsafe partial class NavigationRegion3D : Node3D
     }
 
     private static nint __mb_set_enabled;
-    public void SetEnabled(bool enabled)
+    internal void SetEnabled(bool enabled)
     {
         var __mb = __mb_set_enabled;
         if (__mb == 0)
@@ -8366,7 +9416,7 @@ public unsafe partial class NavigationRegion3D : Node3D
     }
 
     private static nint __mb_is_enabled;
-    public bool IsEnabled()
+    internal bool IsEnabled()
     {
         var __mb = __mb_is_enabled;
         if (__mb == 0)
@@ -8412,7 +9462,7 @@ public unsafe partial class NavigationRegion3D : Node3D
     }
 
     private static nint __mb_set_use_edge_connections;
-    public void SetUseEdgeConnections(bool enabled)
+    internal void SetUseEdgeConnections(bool enabled)
     {
         var __mb = __mb_set_use_edge_connections;
         if (__mb == 0)
@@ -8428,7 +9478,7 @@ public unsafe partial class NavigationRegion3D : Node3D
     }
 
     private static nint __mb_get_use_edge_connections;
-    public bool GetUseEdgeConnections()
+    internal bool GetUseEdgeConnections()
     {
         var __mb = __mb_get_use_edge_connections;
         if (__mb == 0)
@@ -8443,7 +9493,7 @@ public unsafe partial class NavigationRegion3D : Node3D
     }
 
     private static nint __mb_set_navigation_layers;
-    public void SetNavigationLayers(uint navigationLayers)
+    internal void SetNavigationLayers(uint navigationLayers)
     {
         var __mb = __mb_set_navigation_layers;
         if (__mb == 0)
@@ -8459,7 +9509,7 @@ public unsafe partial class NavigationRegion3D : Node3D
     }
 
     private static nint __mb_get_navigation_layers;
-    public uint GetNavigationLayers()
+    internal uint GetNavigationLayers()
     {
         var __mb = __mb_get_navigation_layers;
         if (__mb == 0)
@@ -8525,7 +9575,7 @@ public unsafe partial class NavigationRegion3D : Node3D
     }
 
     private static nint __mb_set_enter_cost;
-    public void SetEnterCost(float enterCost)
+    internal void SetEnterCost(float enterCost)
     {
         var __mb = __mb_set_enter_cost;
         if (__mb == 0)
@@ -8541,7 +9591,7 @@ public unsafe partial class NavigationRegion3D : Node3D
     }
 
     private static nint __mb_get_enter_cost;
-    public float GetEnterCost()
+    internal float GetEnterCost()
     {
         var __mb = __mb_get_enter_cost;
         if (__mb == 0)
@@ -8556,7 +9606,7 @@ public unsafe partial class NavigationRegion3D : Node3D
     }
 
     private static nint __mb_set_travel_cost;
-    public void SetTravelCost(float travelCost)
+    internal void SetTravelCost(float travelCost)
     {
         var __mb = __mb_set_travel_cost;
         if (__mb == 0)
@@ -8572,7 +9622,7 @@ public unsafe partial class NavigationRegion3D : Node3D
     }
 
     private static nint __mb_get_travel_cost;
-    public float GetTravelCost()
+    internal float GetTravelCost()
     {
         var __mb = __mb_get_travel_cost;
         if (__mb == 0)
@@ -13627,8 +14677,62 @@ public unsafe partial class NinePatchRect : Control
         AXIS_STRETCH_MODE_TILE_FIT = 2,
     }
 
+    public Texture2D? Texture
+    {
+        get => GetTexture();
+        set => SetTexture(value);
+    }
+
+    public bool DrawCenter
+    {
+        get => IsDrawCenterEnabled();
+        set => SetDrawCenter(value);
+    }
+
+    public Rect2 RegionRect
+    {
+        get => GetRegionRect();
+        set => SetRegionRect(value);
+    }
+
+    public int PatchMarginLeft
+    {
+        get => GetPatchMargin(((Side)(0)));
+        set => SetPatchMargin(((Side)(0)), value);
+    }
+
+    public int PatchMarginTop
+    {
+        get => GetPatchMargin(((Side)(1)));
+        set => SetPatchMargin(((Side)(1)), value);
+    }
+
+    public int PatchMarginRight
+    {
+        get => GetPatchMargin(((Side)(2)));
+        set => SetPatchMargin(((Side)(2)), value);
+    }
+
+    public int PatchMarginBottom
+    {
+        get => GetPatchMargin(((Side)(3)));
+        set => SetPatchMargin(((Side)(3)), value);
+    }
+
+    public NinePatchRect.AxisStretchMode AxisStretchHorizontal
+    {
+        get => GetHAxisStretchMode();
+        set => SetHAxisStretchMode(value);
+    }
+
+    public NinePatchRect.AxisStretchMode AxisStretchVertical
+    {
+        get => GetVAxisStretchMode();
+        set => SetVAxisStretchMode(value);
+    }
+
     private static nint __mb_set_texture;
-    public void SetTexture(Texture2D? texture)
+    internal void SetTexture(Texture2D? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -13644,7 +14748,7 @@ public unsafe partial class NinePatchRect : Control
     }
 
     private static nint __mb_get_texture;
-    public Texture2D? GetTexture()
+    internal Texture2D? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -13659,7 +14763,7 @@ public unsafe partial class NinePatchRect : Control
     }
 
     private static nint __mb_set_patch_margin;
-    public void SetPatchMargin(Side margin, int value)
+    internal void SetPatchMargin(Side margin, int value)
     {
         var __mb = __mb_set_patch_margin;
         if (__mb == 0)
@@ -13677,7 +14781,7 @@ public unsafe partial class NinePatchRect : Control
     }
 
     private static nint __mb_get_patch_margin;
-    public int GetPatchMargin(Side margin)
+    internal int GetPatchMargin(Side margin)
     {
         var __mb = __mb_get_patch_margin;
         if (__mb == 0)
@@ -13695,7 +14799,7 @@ public unsafe partial class NinePatchRect : Control
     }
 
     private static nint __mb_set_region_rect;
-    public void SetRegionRect(Rect2 rect)
+    internal void SetRegionRect(Rect2 rect)
     {
         var __mb = __mb_set_region_rect;
         if (__mb == 0)
@@ -13711,7 +14815,7 @@ public unsafe partial class NinePatchRect : Control
     }
 
     private static nint __mb_get_region_rect;
-    public Rect2 GetRegionRect()
+    internal Rect2 GetRegionRect()
     {
         var __mb = __mb_get_region_rect;
         if (__mb == 0)
@@ -13726,7 +14830,7 @@ public unsafe partial class NinePatchRect : Control
     }
 
     private static nint __mb_set_draw_center;
-    public void SetDrawCenter(bool drawCenter)
+    internal void SetDrawCenter(bool drawCenter)
     {
         var __mb = __mb_set_draw_center;
         if (__mb == 0)
@@ -13742,7 +14846,7 @@ public unsafe partial class NinePatchRect : Control
     }
 
     private static nint __mb_is_draw_center_enabled;
-    public bool IsDrawCenterEnabled()
+    internal bool IsDrawCenterEnabled()
     {
         var __mb = __mb_is_draw_center_enabled;
         if (__mb == 0)
@@ -13757,7 +14861,7 @@ public unsafe partial class NinePatchRect : Control
     }
 
     private static nint __mb_set_h_axis_stretch_mode;
-    public void SetHAxisStretchMode(NinePatchRect.AxisStretchMode mode)
+    internal void SetHAxisStretchMode(NinePatchRect.AxisStretchMode mode)
     {
         var __mb = __mb_set_h_axis_stretch_mode;
         if (__mb == 0)
@@ -13773,7 +14877,7 @@ public unsafe partial class NinePatchRect : Control
     }
 
     private static nint __mb_get_h_axis_stretch_mode;
-    public NinePatchRect.AxisStretchMode GetHAxisStretchMode()
+    internal NinePatchRect.AxisStretchMode GetHAxisStretchMode()
     {
         var __mb = __mb_get_h_axis_stretch_mode;
         if (__mb == 0)
@@ -13788,7 +14892,7 @@ public unsafe partial class NinePatchRect : Control
     }
 
     private static nint __mb_set_v_axis_stretch_mode;
-    public void SetVAxisStretchMode(NinePatchRect.AxisStretchMode mode)
+    internal void SetVAxisStretchMode(NinePatchRect.AxisStretchMode mode)
     {
         var __mb = __mb_set_v_axis_stretch_mode;
         if (__mb == 0)
@@ -13804,7 +14908,7 @@ public unsafe partial class NinePatchRect : Control
     }
 
     private static nint __mb_get_v_axis_stretch_mode;
-    public NinePatchRect.AxisStretchMode GetVAxisStretchMode()
+    internal NinePatchRect.AxisStretchMode GetVAxisStretchMode()
     {
         var __mb = __mb_get_v_axis_stretch_mode;
         if (__mb == 0)
@@ -13828,7 +14932,7 @@ public unsafe partial class Node : GodotObject
         ClassRegistry.AttachNew(this, "Node");
     }
 
-    public enum ProcessMode : long
+    public enum ProcessModeEnum : long
     {
         PROCESS_MODE_INHERIT = 0,
         PROCESS_MODE_PAUSABLE = 1,
@@ -13837,7 +14941,7 @@ public unsafe partial class Node : GodotObject
         PROCESS_MODE_DISABLED = 4,
     }
 
-    public enum ProcessThreadGroup : long
+    public enum ProcessThreadGroupEnum : long
     {
         PROCESS_THREAD_GROUP_INHERIT = 0,
         PROCESS_THREAD_GROUP_MAIN_THREAD = 1,
@@ -13845,14 +14949,14 @@ public unsafe partial class Node : GodotObject
     }
 
     [Flags]
-    public enum ProcessThreadMessages : long
+    public enum ProcessThreadMessagesEnum : long
     {
         FLAG_PROCESS_THREAD_MESSAGES = 1,
         FLAG_PROCESS_THREAD_MESSAGES_PHYSICS = 2,
         FLAG_PROCESS_THREAD_MESSAGES_ALL = 3,
     }
 
-    public enum PhysicsInterpolationMode : long
+    public enum PhysicsInterpolationModeEnum : long
     {
         PHYSICS_INTERPOLATION_MODE_INHERIT = 0,
         PHYSICS_INTERPOLATION_MODE_ON = 1,
@@ -13876,11 +14980,91 @@ public unsafe partial class Node : GodotObject
         INTERNAL_MODE_BACK = 2,
     }
 
-    public enum AutoTranslateMode : long
+    public enum AutoTranslateModeEnum : long
     {
         AUTO_TRANSLATE_MODE_INHERIT = 0,
         AUTO_TRANSLATE_MODE_ALWAYS = 1,
         AUTO_TRANSLATE_MODE_DISABLED = 2,
+    }
+
+    public string Name
+    {
+        get => GetName();
+        set => SetName(value);
+    }
+
+    public bool UniqueNameInOwner
+    {
+        get => IsUniqueNameInOwner();
+        set => SetUniqueNameInOwner(value);
+    }
+
+    public string SceneFilePath
+    {
+        get => GetSceneFilePath();
+        set => SetSceneFilePath(value);
+    }
+
+    public Node? Owner
+    {
+        get => GetOwner();
+        set => SetOwner(value);
+    }
+
+    public MultiplayerAPI? Multiplayer => GetMultiplayer();
+
+    public Node.ProcessModeEnum ProcessMode
+    {
+        get => GetProcessMode();
+        set => SetProcessMode(value);
+    }
+
+    public int ProcessPriority
+    {
+        get => GetProcessPriority();
+        set => SetProcessPriority(value);
+    }
+
+    public int ProcessPhysicsPriority
+    {
+        get => GetPhysicsProcessPriority();
+        set => SetPhysicsProcessPriority(value);
+    }
+
+    public Node.ProcessThreadGroupEnum ProcessThreadGroup
+    {
+        get => GetProcessThreadGroup();
+        set => SetProcessThreadGroup(value);
+    }
+
+    public int ProcessThreadGroupOrder
+    {
+        get => GetProcessThreadGroupOrder();
+        set => SetProcessThreadGroupOrder(value);
+    }
+
+    public Node.ProcessThreadMessagesEnum ProcessThreadMessages
+    {
+        get => GetProcessThreadMessages();
+        set => SetProcessThreadMessages(value);
+    }
+
+    public Node.PhysicsInterpolationModeEnum PhysicsInterpolationMode
+    {
+        get => GetPhysicsInterpolationMode();
+        set => SetPhysicsInterpolationMode(value);
+    }
+
+    public Node.AutoTranslateModeEnum AutoTranslateMode
+    {
+        get => GetAutoTranslateMode();
+        set => SetAutoTranslateMode(value);
+    }
+
+    public string EditorDescription
+    {
+        get => GetEditorDescription();
+        set => SetEditorDescription(value);
     }
 
     private static nint __mb_print_orphan_nodes;
@@ -13930,7 +15114,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_set_name;
-    public void SetName(string name)
+    internal void SetName(string name)
     {
         var __mb = __mb_set_name;
         if (__mb == 0)
@@ -13946,7 +15130,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_name;
-    public string GetName()
+    internal string GetName()
     {
         var __mb = __mb_get_name;
         if (__mb == 0)
@@ -14430,7 +15614,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_set_owner;
-    public void SetOwner(Node? owner)
+    internal void SetOwner(Node? owner)
     {
         var __mb = __mb_set_owner;
         if (__mb == 0)
@@ -14446,7 +15630,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_owner;
-    public Node? GetOwner()
+    internal Node? GetOwner()
     {
         var __mb = __mb_get_owner;
         if (__mb == 0)
@@ -14535,7 +15719,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_set_scene_file_path;
-    public void SetSceneFilePath(string sceneFilePath)
+    internal void SetSceneFilePath(string sceneFilePath)
     {
         var __mb = __mb_set_scene_file_path;
         if (__mb == 0)
@@ -14552,7 +15736,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_scene_file_path;
-    public string GetSceneFilePath()
+    internal string GetSceneFilePath()
     {
         var __mb = __mb_get_scene_file_path;
         if (__mb == 0)
@@ -14680,7 +15864,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_set_process_priority;
-    public void SetProcessPriority(int priority)
+    internal void SetProcessPriority(int priority)
     {
         var __mb = __mb_set_process_priority;
         if (__mb == 0)
@@ -14696,7 +15880,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_process_priority;
-    public int GetProcessPriority()
+    internal int GetProcessPriority()
     {
         var __mb = __mb_get_process_priority;
         if (__mb == 0)
@@ -14711,7 +15895,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_set_physics_process_priority;
-    public void SetPhysicsProcessPriority(int priority)
+    internal void SetPhysicsProcessPriority(int priority)
     {
         var __mb = __mb_set_physics_process_priority;
         if (__mb == 0)
@@ -14727,7 +15911,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_physics_process_priority;
-    public int GetPhysicsProcessPriority()
+    internal int GetPhysicsProcessPriority()
     {
         var __mb = __mb_get_physics_process_priority;
         if (__mb == 0)
@@ -14881,7 +16065,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_set_process_mode;
-    public void SetProcessMode(Node.ProcessMode mode)
+    internal void SetProcessMode(Node.ProcessModeEnum mode)
     {
         var __mb = __mb_set_process_mode;
         if (__mb == 0)
@@ -14897,7 +16081,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_process_mode;
-    public Node.ProcessMode GetProcessMode()
+    internal Node.ProcessModeEnum GetProcessMode()
     {
         var __mb = __mb_get_process_mode;
         if (__mb == 0)
@@ -14908,7 +16092,7 @@ public unsafe partial class Node : GodotObject
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Node.ProcessMode)__ret;
+        return (Node.ProcessModeEnum)__ret;
     }
 
     private static nint __mb_can_process;
@@ -14927,7 +16111,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_set_process_thread_group;
-    public void SetProcessThreadGroup(Node.ProcessThreadGroup mode)
+    internal void SetProcessThreadGroup(Node.ProcessThreadGroupEnum mode)
     {
         var __mb = __mb_set_process_thread_group;
         if (__mb == 0)
@@ -14943,7 +16127,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_process_thread_group;
-    public Node.ProcessThreadGroup GetProcessThreadGroup()
+    internal Node.ProcessThreadGroupEnum GetProcessThreadGroup()
     {
         var __mb = __mb_get_process_thread_group;
         if (__mb == 0)
@@ -14954,11 +16138,11 @@ public unsafe partial class Node : GodotObject
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Node.ProcessThreadGroup)__ret;
+        return (Node.ProcessThreadGroupEnum)__ret;
     }
 
     private static nint __mb_set_process_thread_messages;
-    public void SetProcessThreadMessages(Node.ProcessThreadMessages flags)
+    internal void SetProcessThreadMessages(Node.ProcessThreadMessagesEnum flags)
     {
         var __mb = __mb_set_process_thread_messages;
         if (__mb == 0)
@@ -14974,7 +16158,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_process_thread_messages;
-    public Node.ProcessThreadMessages GetProcessThreadMessages()
+    internal Node.ProcessThreadMessagesEnum GetProcessThreadMessages()
     {
         var __mb = __mb_get_process_thread_messages;
         if (__mb == 0)
@@ -14985,11 +16169,11 @@ public unsafe partial class Node : GodotObject
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Node.ProcessThreadMessages)__ret;
+        return (Node.ProcessThreadMessagesEnum)__ret;
     }
 
     private static nint __mb_set_process_thread_group_order;
-    public void SetProcessThreadGroupOrder(int order)
+    internal void SetProcessThreadGroupOrder(int order)
     {
         var __mb = __mb_set_process_thread_group_order;
         if (__mb == 0)
@@ -15005,7 +16189,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_process_thread_group_order;
-    public int GetProcessThreadGroupOrder()
+    internal int GetProcessThreadGroupOrder()
     {
         var __mb = __mb_get_process_thread_group_order;
         if (__mb == 0)
@@ -15141,7 +16325,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_set_physics_interpolation_mode;
-    public void SetPhysicsInterpolationMode(Node.PhysicsInterpolationMode mode)
+    internal void SetPhysicsInterpolationMode(Node.PhysicsInterpolationModeEnum mode)
     {
         var __mb = __mb_set_physics_interpolation_mode;
         if (__mb == 0)
@@ -15157,7 +16341,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_physics_interpolation_mode;
-    public Node.PhysicsInterpolationMode GetPhysicsInterpolationMode()
+    internal Node.PhysicsInterpolationModeEnum GetPhysicsInterpolationMode()
     {
         var __mb = __mb_get_physics_interpolation_mode;
         if (__mb == 0)
@@ -15168,7 +16352,7 @@ public unsafe partial class Node : GodotObject
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Node.PhysicsInterpolationMode)__ret;
+        return (Node.PhysicsInterpolationModeEnum)__ret;
     }
 
     private static nint __mb_is_physics_interpolated;
@@ -15215,7 +16399,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_set_auto_translate_mode;
-    public void SetAutoTranslateMode(Node.AutoTranslateMode mode)
+    internal void SetAutoTranslateMode(Node.AutoTranslateModeEnum mode)
     {
         var __mb = __mb_set_auto_translate_mode;
         if (__mb == 0)
@@ -15231,7 +16415,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_auto_translate_mode;
-    public Node.AutoTranslateMode GetAutoTranslateMode()
+    internal Node.AutoTranslateModeEnum GetAutoTranslateMode()
     {
         var __mb = __mb_get_auto_translate_mode;
         if (__mb == 0)
@@ -15242,7 +16426,7 @@ public unsafe partial class Node : GodotObject
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Node.AutoTranslateMode)__ret;
+        return (Node.AutoTranslateModeEnum)__ret;
     }
 
     private static nint __mb_can_auto_translate;
@@ -15541,7 +16725,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_multiplayer;
-    public MultiplayerAPI? GetMultiplayer()
+    internal MultiplayerAPI? GetMultiplayer()
     {
         var __mb = __mb_get_multiplayer;
         if (__mb == 0)
@@ -15589,7 +16773,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_set_editor_description;
-    public void SetEditorDescription(string editorDescription)
+    internal void SetEditorDescription(string editorDescription)
     {
         var __mb = __mb_set_editor_description;
         if (__mb == 0)
@@ -15606,7 +16790,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_editor_description;
-    public string GetEditorDescription()
+    internal string GetEditorDescription()
     {
         var __mb = __mb_get_editor_description;
         if (__mb == 0)
@@ -15621,7 +16805,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_set_unique_name_in_owner;
-    public void SetUniqueNameInOwner(bool enable)
+    internal void SetUniqueNameInOwner(bool enable)
     {
         var __mb = __mb_set_unique_name_in_owner;
         if (__mb == 0)
@@ -15637,7 +16821,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_is_unique_name_in_owner;
-    public bool IsUniqueNameInOwner()
+    internal bool IsUniqueNameInOwner()
     {
         var __mb = __mb_is_unique_name_in_owner;
         if (__mb == 0)
@@ -15884,8 +17068,80 @@ public unsafe partial class Node2D : CanvasItem
         ClassRegistry.AttachNew(this, "Node2D");
     }
 
+    public Vector2 Position
+    {
+        get => GetPosition();
+        set => SetPosition(value);
+    }
+
+    public float Rotation
+    {
+        get => GetRotation();
+        set => SetRotation(value);
+    }
+
+    public float RotationDegrees
+    {
+        get => GetRotationDegrees();
+        set => SetRotationDegrees(value);
+    }
+
+    public Vector2 Scale
+    {
+        get => GetScale();
+        set => SetScale(value);
+    }
+
+    public float Skew
+    {
+        get => GetSkew();
+        set => SetSkew(value);
+    }
+
+    public Transform2D Transform
+    {
+        get => GetTransform();
+        set => SetTransform(value);
+    }
+
+    public Vector2 GlobalPosition
+    {
+        get => GetGlobalPosition();
+        set => SetGlobalPosition(value);
+    }
+
+    public float GlobalRotation
+    {
+        get => GetGlobalRotation();
+        set => SetGlobalRotation(value);
+    }
+
+    public float GlobalRotationDegrees
+    {
+        get => GetGlobalRotationDegrees();
+        set => SetGlobalRotationDegrees(value);
+    }
+
+    public Vector2 GlobalScale
+    {
+        get => GetGlobalScale();
+        set => SetGlobalScale(value);
+    }
+
+    public float GlobalSkew
+    {
+        get => GetGlobalSkew();
+        set => SetGlobalSkew(value);
+    }
+
+    public Transform2D GlobalTransform
+    {
+        get => GetGlobalTransform();
+        set => SetGlobalTransform(value);
+    }
+
     private static nint __mb_set_position;
-    public void SetPosition(Vector2 position)
+    internal void SetPosition(Vector2 position)
     {
         var __mb = __mb_set_position;
         if (__mb == 0)
@@ -15901,7 +17157,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_set_rotation;
-    public void SetRotation(float radians)
+    internal void SetRotation(float radians)
     {
         var __mb = __mb_set_rotation;
         if (__mb == 0)
@@ -15917,7 +17173,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_set_rotation_degrees;
-    public void SetRotationDegrees(float degrees)
+    internal void SetRotationDegrees(float degrees)
     {
         var __mb = __mb_set_rotation_degrees;
         if (__mb == 0)
@@ -15933,7 +17189,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_set_skew;
-    public void SetSkew(float radians)
+    internal void SetSkew(float radians)
     {
         var __mb = __mb_set_skew;
         if (__mb == 0)
@@ -15949,7 +17205,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_set_scale;
-    public void SetScale(Vector2 scale)
+    internal void SetScale(Vector2 scale)
     {
         var __mb = __mb_set_scale;
         if (__mb == 0)
@@ -15965,7 +17221,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_get_position;
-    public Vector2 GetPosition()
+    internal Vector2 GetPosition()
     {
         var __mb = __mb_get_position;
         if (__mb == 0)
@@ -15980,7 +17236,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_get_rotation;
-    public float GetRotation()
+    internal float GetRotation()
     {
         var __mb = __mb_get_rotation;
         if (__mb == 0)
@@ -15995,7 +17251,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_get_rotation_degrees;
-    public float GetRotationDegrees()
+    internal float GetRotationDegrees()
     {
         var __mb = __mb_get_rotation_degrees;
         if (__mb == 0)
@@ -16010,7 +17266,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_get_skew;
-    public float GetSkew()
+    internal float GetSkew()
     {
         var __mb = __mb_get_skew;
         if (__mb == 0)
@@ -16025,7 +17281,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_get_scale;
-    public Vector2 GetScale()
+    internal Vector2 GetScale()
     {
         var __mb = __mb_get_scale;
         if (__mb == 0)
@@ -16140,7 +17396,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_set_global_position;
-    public void SetGlobalPosition(Vector2 position)
+    internal void SetGlobalPosition(Vector2 position)
     {
         var __mb = __mb_set_global_position;
         if (__mb == 0)
@@ -16156,7 +17412,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_get_global_position;
-    public Vector2 GetGlobalPosition()
+    internal Vector2 GetGlobalPosition()
     {
         var __mb = __mb_get_global_position;
         if (__mb == 0)
@@ -16171,7 +17427,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_set_global_rotation;
-    public void SetGlobalRotation(float radians)
+    internal void SetGlobalRotation(float radians)
     {
         var __mb = __mb_set_global_rotation;
         if (__mb == 0)
@@ -16187,7 +17443,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_set_global_rotation_degrees;
-    public void SetGlobalRotationDegrees(float degrees)
+    internal void SetGlobalRotationDegrees(float degrees)
     {
         var __mb = __mb_set_global_rotation_degrees;
         if (__mb == 0)
@@ -16203,7 +17459,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_get_global_rotation;
-    public float GetGlobalRotation()
+    internal float GetGlobalRotation()
     {
         var __mb = __mb_get_global_rotation;
         if (__mb == 0)
@@ -16218,7 +17474,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_get_global_rotation_degrees;
-    public float GetGlobalRotationDegrees()
+    internal float GetGlobalRotationDegrees()
     {
         var __mb = __mb_get_global_rotation_degrees;
         if (__mb == 0)
@@ -16233,7 +17489,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_set_global_skew;
-    public void SetGlobalSkew(float radians)
+    internal void SetGlobalSkew(float radians)
     {
         var __mb = __mb_set_global_skew;
         if (__mb == 0)
@@ -16249,7 +17505,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_get_global_skew;
-    public float GetGlobalSkew()
+    internal float GetGlobalSkew()
     {
         var __mb = __mb_get_global_skew;
         if (__mb == 0)
@@ -16264,7 +17520,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_set_global_scale;
-    public void SetGlobalScale(Vector2 scale)
+    internal void SetGlobalScale(Vector2 scale)
     {
         var __mb = __mb_set_global_scale;
         if (__mb == 0)
@@ -16280,7 +17536,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_get_global_scale;
-    public Vector2 GetGlobalScale()
+    internal Vector2 GetGlobalScale()
     {
         var __mb = __mb_get_global_scale;
         if (__mb == 0)
@@ -16295,7 +17551,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_set_transform;
-    public void SetTransform(Transform2D xform)
+    internal void SetTransform(Transform2D xform)
     {
         var __mb = __mb_set_transform;
         if (__mb == 0)
@@ -16311,7 +17567,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_set_global_transform;
-    public void SetGlobalTransform(Transform2D xform)
+    internal void SetGlobalTransform(Transform2D xform)
     {
         var __mb = __mb_set_global_transform;
         if (__mb == 0)
@@ -16424,15 +17680,117 @@ public unsafe partial class Node3D : Node
         ClassRegistry.AttachNew(this, "Node3D");
     }
 
-    public enum RotationEditMode : long
+    public enum RotationEditModeEnum : long
     {
         ROTATION_EDIT_MODE_EULER = 0,
         ROTATION_EDIT_MODE_QUATERNION = 1,
         ROTATION_EDIT_MODE_BASIS = 2,
     }
 
+    public Transform3D Transform
+    {
+        get => GetTransform();
+        set => SetTransform(value);
+    }
+
+    public Transform3D GlobalTransform
+    {
+        get => GetGlobalTransform();
+        set => SetGlobalTransform(value);
+    }
+
+    public Vector3 Position
+    {
+        get => GetPosition();
+        set => SetPosition(value);
+    }
+
+    public Vector3 Rotation
+    {
+        get => GetRotation();
+        set => SetRotation(value);
+    }
+
+    public Vector3 RotationDegrees
+    {
+        get => GetRotationDegrees();
+        set => SetRotationDegrees(value);
+    }
+
+    public Quaternion Quaternion
+    {
+        get => GetQuaternion();
+        set => SetQuaternion(value);
+    }
+
+    public Basis Basis
+    {
+        get => GetBasis();
+        set => SetBasis(value);
+    }
+
+    public Vector3 Scale
+    {
+        get => GetScale();
+        set => SetScale(value);
+    }
+
+    public Node3D.RotationEditModeEnum RotationEditMode
+    {
+        get => GetRotationEditMode();
+        set => SetRotationEditMode(value);
+    }
+
+    public EulerOrder RotationOrder
+    {
+        get => GetRotationOrder();
+        set => SetRotationOrder(value);
+    }
+
+    public bool TopLevel
+    {
+        get => IsSetAsTopLevel();
+        set => SetAsTopLevel(value);
+    }
+
+    public Vector3 GlobalPosition
+    {
+        get => GetGlobalPosition();
+        set => SetGlobalPosition(value);
+    }
+
+    public Basis GlobalBasis
+    {
+        get => GetGlobalBasis();
+        set => SetGlobalBasis(value);
+    }
+
+    public Vector3 GlobalRotation
+    {
+        get => GetGlobalRotation();
+        set => SetGlobalRotation(value);
+    }
+
+    public Vector3 GlobalRotationDegrees
+    {
+        get => GetGlobalRotationDegrees();
+        set => SetGlobalRotationDegrees(value);
+    }
+
+    public bool Visible
+    {
+        get => IsVisible();
+        set => SetVisible(value);
+    }
+
+    public NodePath VisibilityParent
+    {
+        get => GetVisibilityParent();
+        set => SetVisibilityParent(value);
+    }
+
     private static nint __mb_set_transform;
-    public void SetTransform(Transform3D local)
+    internal void SetTransform(Transform3D local)
     {
         var __mb = __mb_set_transform;
         if (__mb == 0)
@@ -16448,7 +17806,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_get_transform;
-    public Transform3D GetTransform()
+    internal Transform3D GetTransform()
     {
         var __mb = __mb_get_transform;
         if (__mb == 0)
@@ -16463,7 +17821,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_set_position;
-    public void SetPosition(Vector3 position)
+    internal void SetPosition(Vector3 position)
     {
         var __mb = __mb_set_position;
         if (__mb == 0)
@@ -16479,7 +17837,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_get_position;
-    public Vector3 GetPosition()
+    internal Vector3 GetPosition()
     {
         var __mb = __mb_get_position;
         if (__mb == 0)
@@ -16494,7 +17852,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_set_rotation;
-    public void SetRotation(Vector3 eulerRadians)
+    internal void SetRotation(Vector3 eulerRadians)
     {
         var __mb = __mb_set_rotation;
         if (__mb == 0)
@@ -16510,7 +17868,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_get_rotation;
-    public Vector3 GetRotation()
+    internal Vector3 GetRotation()
     {
         var __mb = __mb_get_rotation;
         if (__mb == 0)
@@ -16525,7 +17883,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_set_rotation_degrees;
-    public void SetRotationDegrees(Vector3 eulerDegrees)
+    internal void SetRotationDegrees(Vector3 eulerDegrees)
     {
         var __mb = __mb_set_rotation_degrees;
         if (__mb == 0)
@@ -16541,7 +17899,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_get_rotation_degrees;
-    public Vector3 GetRotationDegrees()
+    internal Vector3 GetRotationDegrees()
     {
         var __mb = __mb_get_rotation_degrees;
         if (__mb == 0)
@@ -16556,7 +17914,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_set_rotation_order;
-    public void SetRotationOrder(EulerOrder order)
+    internal void SetRotationOrder(EulerOrder order)
     {
         var __mb = __mb_set_rotation_order;
         if (__mb == 0)
@@ -16572,7 +17930,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_get_rotation_order;
-    public EulerOrder GetRotationOrder()
+    internal EulerOrder GetRotationOrder()
     {
         var __mb = __mb_get_rotation_order;
         if (__mb == 0)
@@ -16587,7 +17945,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_set_rotation_edit_mode;
-    public void SetRotationEditMode(Node3D.RotationEditMode editMode)
+    internal void SetRotationEditMode(Node3D.RotationEditModeEnum editMode)
     {
         var __mb = __mb_set_rotation_edit_mode;
         if (__mb == 0)
@@ -16603,7 +17961,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_get_rotation_edit_mode;
-    public Node3D.RotationEditMode GetRotationEditMode()
+    internal Node3D.RotationEditModeEnum GetRotationEditMode()
     {
         var __mb = __mb_get_rotation_edit_mode;
         if (__mb == 0)
@@ -16614,11 +17972,11 @@ public unsafe partial class Node3D : Node
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Node3D.RotationEditMode)__ret;
+        return (Node3D.RotationEditModeEnum)__ret;
     }
 
     private static nint __mb_set_scale;
-    public void SetScale(Vector3 scale)
+    internal void SetScale(Vector3 scale)
     {
         var __mb = __mb_set_scale;
         if (__mb == 0)
@@ -16634,7 +17992,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_get_scale;
-    public Vector3 GetScale()
+    internal Vector3 GetScale()
     {
         var __mb = __mb_get_scale;
         if (__mb == 0)
@@ -16649,7 +18007,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_set_quaternion;
-    public void SetQuaternion(Quaternion quaternion)
+    internal void SetQuaternion(Quaternion quaternion)
     {
         var __mb = __mb_set_quaternion;
         if (__mb == 0)
@@ -16665,7 +18023,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_get_quaternion;
-    public Quaternion GetQuaternion()
+    internal Quaternion GetQuaternion()
     {
         var __mb = __mb_get_quaternion;
         if (__mb == 0)
@@ -16680,7 +18038,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_set_basis;
-    public void SetBasis(Basis basis)
+    internal void SetBasis(Basis basis)
     {
         var __mb = __mb_set_basis;
         if (__mb == 0)
@@ -16696,7 +18054,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_get_basis;
-    public Basis GetBasis()
+    internal Basis GetBasis()
     {
         var __mb = __mb_get_basis;
         if (__mb == 0)
@@ -16711,7 +18069,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_set_global_transform;
-    public void SetGlobalTransform(Transform3D global)
+    internal void SetGlobalTransform(Transform3D global)
     {
         var __mb = __mb_set_global_transform;
         if (__mb == 0)
@@ -16727,7 +18085,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_get_global_transform;
-    public Transform3D GetGlobalTransform()
+    internal Transform3D GetGlobalTransform()
     {
         var __mb = __mb_get_global_transform;
         if (__mb == 0)
@@ -16757,7 +18115,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_set_global_position;
-    public void SetGlobalPosition(Vector3 position)
+    internal void SetGlobalPosition(Vector3 position)
     {
         var __mb = __mb_set_global_position;
         if (__mb == 0)
@@ -16773,7 +18131,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_get_global_position;
-    public Vector3 GetGlobalPosition()
+    internal Vector3 GetGlobalPosition()
     {
         var __mb = __mb_get_global_position;
         if (__mb == 0)
@@ -16788,7 +18146,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_set_global_basis;
-    public void SetGlobalBasis(Basis basis)
+    internal void SetGlobalBasis(Basis basis)
     {
         var __mb = __mb_set_global_basis;
         if (__mb == 0)
@@ -16804,7 +18162,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_get_global_basis;
-    public Basis GetGlobalBasis()
+    internal Basis GetGlobalBasis()
     {
         var __mb = __mb_get_global_basis;
         if (__mb == 0)
@@ -16819,7 +18177,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_set_global_rotation;
-    public void SetGlobalRotation(Vector3 eulerRadians)
+    internal void SetGlobalRotation(Vector3 eulerRadians)
     {
         var __mb = __mb_set_global_rotation;
         if (__mb == 0)
@@ -16835,7 +18193,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_get_global_rotation;
-    public Vector3 GetGlobalRotation()
+    internal Vector3 GetGlobalRotation()
     {
         var __mb = __mb_get_global_rotation;
         if (__mb == 0)
@@ -16850,7 +18208,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_set_global_rotation_degrees;
-    public void SetGlobalRotationDegrees(Vector3 eulerDegrees)
+    internal void SetGlobalRotationDegrees(Vector3 eulerDegrees)
     {
         var __mb = __mb_set_global_rotation_degrees;
         if (__mb == 0)
@@ -16866,7 +18224,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_get_global_rotation_degrees;
-    public Vector3 GetGlobalRotationDegrees()
+    internal Vector3 GetGlobalRotationDegrees()
     {
         var __mb = __mb_get_global_rotation_degrees;
         if (__mb == 0)
@@ -16912,7 +18270,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_set_as_top_level;
-    public void SetAsTopLevel(bool enable)
+    internal void SetAsTopLevel(bool enable)
     {
         var __mb = __mb_set_as_top_level;
         if (__mb == 0)
@@ -16928,7 +18286,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_is_set_as_top_level;
-    public bool IsSetAsTopLevel()
+    internal bool IsSetAsTopLevel()
     {
         var __mb = __mb_is_set_as_top_level;
         if (__mb == 0)
@@ -17002,7 +18360,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_set_visibility_parent;
-    public void SetVisibilityParent(NodePath path)
+    internal void SetVisibilityParent(NodePath path)
     {
         var __mb = __mb_set_visibility_parent;
         if (__mb == 0)
@@ -17018,7 +18376,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_get_visibility_parent;
-    public NodePath GetVisibilityParent()
+    internal NodePath GetVisibilityParent()
     {
         var __mb = __mb_get_visibility_parent;
         if (__mb == 0)
@@ -17123,7 +18481,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_set_visible;
-    public void SetVisible(bool visible)
+    internal void SetVisible(bool visible)
     {
         var __mb = __mb_set_visible;
         if (__mb == 0)
@@ -17139,7 +18497,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_is_visible;
-    public bool IsVisible()
+    internal bool IsVisible()
     {
         var __mb = __mb_is_visible;
         if (__mb == 0)
@@ -17766,8 +19124,80 @@ public unsafe partial class NoiseTexture2D : Texture2D
         ClassRegistry.AttachNew(this, "NoiseTexture2D");
     }
 
+    public int Width
+    {
+        get => GetWidth();
+        set => SetWidth(value);
+    }
+
+    public int Height
+    {
+        get => GetHeight();
+        set => SetHeight(value);
+    }
+
+    public bool GenerateMipmaps
+    {
+        get => IsGeneratingMipmaps();
+        set => SetGenerateMipmaps(value);
+    }
+
+    public Noise? Noise
+    {
+        get => GetNoise();
+        set => SetNoise(value);
+    }
+
+    public Gradient? ColorRamp
+    {
+        get => GetColorRamp();
+        set => SetColorRamp(value);
+    }
+
+    public bool Seamless
+    {
+        get => GetSeamless();
+        set => SetSeamless(value);
+    }
+
+    public bool Invert
+    {
+        get => GetInvert();
+        set => SetInvert(value);
+    }
+
+    public bool In3dSpace
+    {
+        get => IsIn3dSpace();
+        set => SetIn3dSpace(value);
+    }
+
+    public bool AsNormalMap
+    {
+        get => IsNormalMap();
+        set => SetAsNormalMap(value);
+    }
+
+    public bool Normalize
+    {
+        get => IsNormalized();
+        set => SetNormalize(value);
+    }
+
+    public float SeamlessBlendSkirt
+    {
+        get => GetSeamlessBlendSkirt();
+        set => SetSeamlessBlendSkirt(value);
+    }
+
+    public float BumpStrength
+    {
+        get => GetBumpStrength();
+        set => SetBumpStrength(value);
+    }
+
     private static nint __mb_set_width;
-    public void SetWidth(int width)
+    internal void SetWidth(int width)
     {
         var __mb = __mb_set_width;
         if (__mb == 0)
@@ -17783,7 +19213,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_set_height;
-    public void SetHeight(int height)
+    internal void SetHeight(int height)
     {
         var __mb = __mb_set_height;
         if (__mb == 0)
@@ -17799,7 +19229,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_set_generate_mipmaps;
-    public void SetGenerateMipmaps(bool invert)
+    internal void SetGenerateMipmaps(bool invert)
     {
         var __mb = __mb_set_generate_mipmaps;
         if (__mb == 0)
@@ -17815,7 +19245,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_is_generating_mipmaps;
-    public bool IsGeneratingMipmaps()
+    internal bool IsGeneratingMipmaps()
     {
         var __mb = __mb_is_generating_mipmaps;
         if (__mb == 0)
@@ -17830,7 +19260,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_set_noise;
-    public void SetNoise(Noise? noise)
+    internal void SetNoise(Noise? noise)
     {
         var __mb = __mb_set_noise;
         if (__mb == 0)
@@ -17846,7 +19276,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_get_noise;
-    public Noise? GetNoise()
+    internal Noise? GetNoise()
     {
         var __mb = __mb_get_noise;
         if (__mb == 0)
@@ -17861,7 +19291,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_set_color_ramp;
-    public void SetColorRamp(Gradient? gradient)
+    internal void SetColorRamp(Gradient? gradient)
     {
         var __mb = __mb_set_color_ramp;
         if (__mb == 0)
@@ -17877,7 +19307,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_get_color_ramp;
-    public Gradient? GetColorRamp()
+    internal Gradient? GetColorRamp()
     {
         var __mb = __mb_get_color_ramp;
         if (__mb == 0)
@@ -17892,7 +19322,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_set_seamless;
-    public void SetSeamless(bool seamless)
+    internal void SetSeamless(bool seamless)
     {
         var __mb = __mb_set_seamless;
         if (__mb == 0)
@@ -17908,7 +19338,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_get_seamless;
-    public bool GetSeamless()
+    internal bool GetSeamless()
     {
         var __mb = __mb_get_seamless;
         if (__mb == 0)
@@ -17923,7 +19353,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_set_invert;
-    public void SetInvert(bool invert)
+    internal void SetInvert(bool invert)
     {
         var __mb = __mb_set_invert;
         if (__mb == 0)
@@ -17939,7 +19369,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_get_invert;
-    public bool GetInvert()
+    internal bool GetInvert()
     {
         var __mb = __mb_get_invert;
         if (__mb == 0)
@@ -17954,7 +19384,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_set_in_3d_space;
-    public void SetIn3dSpace(bool enable)
+    internal void SetIn3dSpace(bool enable)
     {
         var __mb = __mb_set_in_3d_space;
         if (__mb == 0)
@@ -17970,7 +19400,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_is_in_3d_space;
-    public bool IsIn3dSpace()
+    internal bool IsIn3dSpace()
     {
         var __mb = __mb_is_in_3d_space;
         if (__mb == 0)
@@ -17985,7 +19415,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_set_as_normal_map;
-    public void SetAsNormalMap(bool asNormalMap)
+    internal void SetAsNormalMap(bool asNormalMap)
     {
         var __mb = __mb_set_as_normal_map;
         if (__mb == 0)
@@ -18001,7 +19431,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_is_normal_map;
-    public bool IsNormalMap()
+    internal bool IsNormalMap()
     {
         var __mb = __mb_is_normal_map;
         if (__mb == 0)
@@ -18016,7 +19446,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_set_normalize;
-    public void SetNormalize(bool normalize)
+    internal void SetNormalize(bool normalize)
     {
         var __mb = __mb_set_normalize;
         if (__mb == 0)
@@ -18032,7 +19462,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_is_normalized;
-    public bool IsNormalized()
+    internal bool IsNormalized()
     {
         var __mb = __mb_is_normalized;
         if (__mb == 0)
@@ -18047,7 +19477,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_set_seamless_blend_skirt;
-    public void SetSeamlessBlendSkirt(float seamlessBlendSkirt)
+    internal void SetSeamlessBlendSkirt(float seamlessBlendSkirt)
     {
         var __mb = __mb_set_seamless_blend_skirt;
         if (__mb == 0)
@@ -18063,7 +19493,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_get_seamless_blend_skirt;
-    public float GetSeamlessBlendSkirt()
+    internal float GetSeamlessBlendSkirt()
     {
         var __mb = __mb_get_seamless_blend_skirt;
         if (__mb == 0)
@@ -18078,7 +19508,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_set_bump_strength;
-    public void SetBumpStrength(float bumpStrength)
+    internal void SetBumpStrength(float bumpStrength)
     {
         var __mb = __mb_set_bump_strength;
         if (__mb == 0)
@@ -18094,7 +19524,7 @@ public unsafe partial class NoiseTexture2D : Texture2D
     }
 
     private static nint __mb_get_bump_strength;
-    public float GetBumpStrength()
+    internal float GetBumpStrength()
     {
         var __mb = __mb_get_bump_strength;
         if (__mb == 0)
@@ -18118,8 +19548,62 @@ public unsafe partial class NoiseTexture3D : Texture3D
         ClassRegistry.AttachNew(this, "NoiseTexture3D");
     }
 
+    public int Width
+    {
+        get => GetWidth();
+        set => SetWidth(value);
+    }
+
+    public int Height
+    {
+        get => GetHeight();
+        set => SetHeight(value);
+    }
+
+    public int Depth
+    {
+        get => GetDepth();
+        set => SetDepth(value);
+    }
+
+    public Noise? Noise
+    {
+        get => GetNoise();
+        set => SetNoise(value);
+    }
+
+    public Gradient? ColorRamp
+    {
+        get => GetColorRamp();
+        set => SetColorRamp(value);
+    }
+
+    public bool Seamless
+    {
+        get => GetSeamless();
+        set => SetSeamless(value);
+    }
+
+    public bool Invert
+    {
+        get => GetInvert();
+        set => SetInvert(value);
+    }
+
+    public bool Normalize
+    {
+        get => IsNormalized();
+        set => SetNormalize(value);
+    }
+
+    public float SeamlessBlendSkirt
+    {
+        get => GetSeamlessBlendSkirt();
+        set => SetSeamlessBlendSkirt(value);
+    }
+
     private static nint __mb_set_width;
-    public void SetWidth(int width)
+    internal void SetWidth(int width)
     {
         var __mb = __mb_set_width;
         if (__mb == 0)
@@ -18135,7 +19619,7 @@ public unsafe partial class NoiseTexture3D : Texture3D
     }
 
     private static nint __mb_set_height;
-    public void SetHeight(int height)
+    internal void SetHeight(int height)
     {
         var __mb = __mb_set_height;
         if (__mb == 0)
@@ -18151,7 +19635,7 @@ public unsafe partial class NoiseTexture3D : Texture3D
     }
 
     private static nint __mb_set_depth;
-    public void SetDepth(int depth)
+    internal void SetDepth(int depth)
     {
         var __mb = __mb_set_depth;
         if (__mb == 0)
@@ -18167,7 +19651,7 @@ public unsafe partial class NoiseTexture3D : Texture3D
     }
 
     private static nint __mb_set_noise;
-    public void SetNoise(Noise? noise)
+    internal void SetNoise(Noise? noise)
     {
         var __mb = __mb_set_noise;
         if (__mb == 0)
@@ -18183,7 +19667,7 @@ public unsafe partial class NoiseTexture3D : Texture3D
     }
 
     private static nint __mb_get_noise;
-    public Noise? GetNoise()
+    internal Noise? GetNoise()
     {
         var __mb = __mb_get_noise;
         if (__mb == 0)
@@ -18198,7 +19682,7 @@ public unsafe partial class NoiseTexture3D : Texture3D
     }
 
     private static nint __mb_set_color_ramp;
-    public void SetColorRamp(Gradient? gradient)
+    internal void SetColorRamp(Gradient? gradient)
     {
         var __mb = __mb_set_color_ramp;
         if (__mb == 0)
@@ -18214,7 +19698,7 @@ public unsafe partial class NoiseTexture3D : Texture3D
     }
 
     private static nint __mb_get_color_ramp;
-    public Gradient? GetColorRamp()
+    internal Gradient? GetColorRamp()
     {
         var __mb = __mb_get_color_ramp;
         if (__mb == 0)
@@ -18229,7 +19713,7 @@ public unsafe partial class NoiseTexture3D : Texture3D
     }
 
     private static nint __mb_set_seamless;
-    public void SetSeamless(bool seamless)
+    internal void SetSeamless(bool seamless)
     {
         var __mb = __mb_set_seamless;
         if (__mb == 0)
@@ -18245,7 +19729,7 @@ public unsafe partial class NoiseTexture3D : Texture3D
     }
 
     private static nint __mb_get_seamless;
-    public bool GetSeamless()
+    internal bool GetSeamless()
     {
         var __mb = __mb_get_seamless;
         if (__mb == 0)
@@ -18260,7 +19744,7 @@ public unsafe partial class NoiseTexture3D : Texture3D
     }
 
     private static nint __mb_set_invert;
-    public void SetInvert(bool invert)
+    internal void SetInvert(bool invert)
     {
         var __mb = __mb_set_invert;
         if (__mb == 0)
@@ -18276,7 +19760,7 @@ public unsafe partial class NoiseTexture3D : Texture3D
     }
 
     private static nint __mb_get_invert;
-    public bool GetInvert()
+    internal bool GetInvert()
     {
         var __mb = __mb_get_invert;
         if (__mb == 0)
@@ -18291,7 +19775,7 @@ public unsafe partial class NoiseTexture3D : Texture3D
     }
 
     private static nint __mb_set_normalize;
-    public void SetNormalize(bool normalize)
+    internal void SetNormalize(bool normalize)
     {
         var __mb = __mb_set_normalize;
         if (__mb == 0)
@@ -18307,7 +19791,7 @@ public unsafe partial class NoiseTexture3D : Texture3D
     }
 
     private static nint __mb_is_normalized;
-    public bool IsNormalized()
+    internal bool IsNormalized()
     {
         var __mb = __mb_is_normalized;
         if (__mb == 0)
@@ -18322,7 +19806,7 @@ public unsafe partial class NoiseTexture3D : Texture3D
     }
 
     private static nint __mb_set_seamless_blend_skirt;
-    public void SetSeamlessBlendSkirt(float seamlessBlendSkirt)
+    internal void SetSeamlessBlendSkirt(float seamlessBlendSkirt)
     {
         var __mb = __mb_set_seamless_blend_skirt;
         if (__mb == 0)
@@ -18338,7 +19822,7 @@ public unsafe partial class NoiseTexture3D : Texture3D
     }
 
     private static nint __mb_get_seamless_blend_skirt;
-    public float GetSeamlessBlendSkirt()
+    internal float GetSeamlessBlendSkirt()
     {
         var __mb = __mb_get_seamless_blend_skirt;
         if (__mb == 0)

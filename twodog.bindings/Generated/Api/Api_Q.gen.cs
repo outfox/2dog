@@ -29,8 +29,14 @@ public unsafe partial class QuadOccluder3D : Occluder3D
         ClassRegistry.AttachNew(this, "QuadOccluder3D");
     }
 
+    public Vector2 Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
     private static nint __mb_set_size;
-    public void SetSize(Vector2 size)
+    internal void SetSize(Vector2 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -46,7 +52,7 @@ public unsafe partial class QuadOccluder3D : Occluder3D
     }
 
     private static nint __mb_get_size;
-    public Vector2 GetSize()
+    internal Vector2 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)

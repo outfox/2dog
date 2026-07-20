@@ -39,7 +39,7 @@ public unsafe partial class WebRTCDataChannel : PacketPeer
 {
     internal WebRTCDataChannel(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public enum WriteMode : long
+    public enum WriteModeEnum : long
     {
         WRITE_MODE_TEXT = 0,
         WRITE_MODE_BINARY = 1,
@@ -51,6 +51,12 @@ public unsafe partial class WebRTCDataChannel : PacketPeer
         STATE_OPEN = 1,
         STATE_CLOSING = 2,
         STATE_CLOSED = 3,
+    }
+
+    public WebRTCDataChannel.WriteModeEnum WriteMode
+    {
+        get => GetWriteMode();
+        set => SetWriteMode(value);
     }
 
     private static nint __mb_poll;
@@ -97,7 +103,7 @@ public unsafe partial class WebRTCDataChannel : PacketPeer
     }
 
     private static nint __mb_set_write_mode;
-    public void SetWriteMode(WebRTCDataChannel.WriteMode writeMode)
+    internal void SetWriteMode(WebRTCDataChannel.WriteModeEnum writeMode)
     {
         var __mb = __mb_set_write_mode;
         if (__mb == 0)
@@ -113,7 +119,7 @@ public unsafe partial class WebRTCDataChannel : PacketPeer
     }
 
     private static nint __mb_get_write_mode;
-    public WebRTCDataChannel.WriteMode GetWriteMode()
+    internal WebRTCDataChannel.WriteModeEnum GetWriteMode()
     {
         var __mb = __mb_get_write_mode;
         if (__mb == 0)
@@ -124,7 +130,7 @@ public unsafe partial class WebRTCDataChannel : PacketPeer
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (WebRTCDataChannel.WriteMode)__ret;
+        return (WebRTCDataChannel.WriteModeEnum)__ret;
     }
 
     private static nint __mb_get_ready_state;
@@ -280,9 +286,9 @@ public unsafe partial class WebRTCDataChannelExtension : WebRTCDataChannel
 
     public virtual void _Close() { }
 
-    public virtual void _SetWriteMode(WebRTCDataChannel.WriteMode writeMode) { }
+    public virtual void _SetWriteMode(WebRTCDataChannel.WriteModeEnum writeMode) { }
 
-    public virtual WebRTCDataChannel.WriteMode _GetWriteMode() => default!;
+    public virtual WebRTCDataChannel.WriteModeEnum _GetWriteMode() => default!;
 
     public virtual bool _WasStringPacket() => default!;
 
@@ -350,7 +356,7 @@ public unsafe partial class WebRTCDataChannelExtension : WebRTCDataChannel
         if (__vsn_set_write_mode == 0) __vsn_set_write_mode = StringNames.Get("_set_write_mode").Opaque;
         if (nameSn == __vsn_set_write_mode)
         {
-            _SetWriteMode((WebRTCDataChannel.WriteMode)(*(long*)args[0]));
+            _SetWriteMode((WebRTCDataChannel.WriteModeEnum)(*(long*)args[0]));
             return true;
         }
         if (__vsn_get_write_mode == 0) __vsn_get_write_mode = StringNames.Get("_get_write_mode").Opaque;
@@ -934,6 +940,30 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
         ClassRegistry.AttachNew(this, "WebSocketMultiplayerPeer");
     }
 
+    public int InboundBufferSize
+    {
+        get => GetInboundBufferSize();
+        set => SetInboundBufferSize(value);
+    }
+
+    public int OutboundBufferSize
+    {
+        get => GetOutboundBufferSize();
+        set => SetOutboundBufferSize(value);
+    }
+
+    public float HandshakeTimeout
+    {
+        get => GetHandshakeTimeout();
+        set => SetHandshakeTimeout(value);
+    }
+
+    public int MaxQueuedPackets
+    {
+        get => GetMaxQueuedPackets();
+        set => SetMaxQueuedPackets(value);
+    }
+
     private static nint __mb_create_client;
     public Error CreateClient(string url, TLSOptions? tlsClientOptions)
     {
@@ -1033,7 +1063,7 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
     }
 
     private static nint __mb_get_inbound_buffer_size;
-    public int GetInboundBufferSize()
+    internal int GetInboundBufferSize()
     {
         var __mb = __mb_get_inbound_buffer_size;
         if (__mb == 0)
@@ -1048,7 +1078,7 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
     }
 
     private static nint __mb_set_inbound_buffer_size;
-    public void SetInboundBufferSize(int bufferSize)
+    internal void SetInboundBufferSize(int bufferSize)
     {
         var __mb = __mb_set_inbound_buffer_size;
         if (__mb == 0)
@@ -1064,7 +1094,7 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
     }
 
     private static nint __mb_get_outbound_buffer_size;
-    public int GetOutboundBufferSize()
+    internal int GetOutboundBufferSize()
     {
         var __mb = __mb_get_outbound_buffer_size;
         if (__mb == 0)
@@ -1079,7 +1109,7 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
     }
 
     private static nint __mb_set_outbound_buffer_size;
-    public void SetOutboundBufferSize(int bufferSize)
+    internal void SetOutboundBufferSize(int bufferSize)
     {
         var __mb = __mb_set_outbound_buffer_size;
         if (__mb == 0)
@@ -1095,7 +1125,7 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
     }
 
     private static nint __mb_get_handshake_timeout;
-    public float GetHandshakeTimeout()
+    internal float GetHandshakeTimeout()
     {
         var __mb = __mb_get_handshake_timeout;
         if (__mb == 0)
@@ -1110,7 +1140,7 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
     }
 
     private static nint __mb_set_handshake_timeout;
-    public void SetHandshakeTimeout(float timeout)
+    internal void SetHandshakeTimeout(float timeout)
     {
         var __mb = __mb_set_handshake_timeout;
         if (__mb == 0)
@@ -1126,7 +1156,7 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
     }
 
     private static nint __mb_set_max_queued_packets;
-    public void SetMaxQueuedPackets(int maxQueuedPackets)
+    internal void SetMaxQueuedPackets(int maxQueuedPackets)
     {
         var __mb = __mb_set_max_queued_packets;
         if (__mb == 0)
@@ -1142,7 +1172,7 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
     }
 
     private static nint __mb_get_max_queued_packets;
-    public int GetMaxQueuedPackets()
+    internal int GetMaxQueuedPackets()
     {
         var __mb = __mb_get_max_queued_packets;
         if (__mb == 0)
@@ -1178,6 +1208,30 @@ public unsafe partial class WebSocketPeer : PacketPeer
         STATE_OPEN = 1,
         STATE_CLOSING = 2,
         STATE_CLOSED = 3,
+    }
+
+    public int InboundBufferSize
+    {
+        get => GetInboundBufferSize();
+        set => SetInboundBufferSize(value);
+    }
+
+    public int OutboundBufferSize
+    {
+        get => GetOutboundBufferSize();
+        set => SetOutboundBufferSize(value);
+    }
+
+    public int MaxQueuedPackets
+    {
+        get => GetMaxQueuedPackets();
+        set => SetMaxQueuedPackets(value);
+    }
+
+    public double HeartbeatInterval
+    {
+        get => GetHeartbeatInterval();
+        set => SetHeartbeatInterval(value);
     }
 
     private static nint __mb_connect_to_url;
@@ -1422,7 +1476,7 @@ public unsafe partial class WebSocketPeer : PacketPeer
     }
 
     private static nint __mb_get_inbound_buffer_size;
-    public int GetInboundBufferSize()
+    internal int GetInboundBufferSize()
     {
         var __mb = __mb_get_inbound_buffer_size;
         if (__mb == 0)
@@ -1437,7 +1491,7 @@ public unsafe partial class WebSocketPeer : PacketPeer
     }
 
     private static nint __mb_set_inbound_buffer_size;
-    public void SetInboundBufferSize(int bufferSize)
+    internal void SetInboundBufferSize(int bufferSize)
     {
         var __mb = __mb_set_inbound_buffer_size;
         if (__mb == 0)
@@ -1453,7 +1507,7 @@ public unsafe partial class WebSocketPeer : PacketPeer
     }
 
     private static nint __mb_get_outbound_buffer_size;
-    public int GetOutboundBufferSize()
+    internal int GetOutboundBufferSize()
     {
         var __mb = __mb_get_outbound_buffer_size;
         if (__mb == 0)
@@ -1468,7 +1522,7 @@ public unsafe partial class WebSocketPeer : PacketPeer
     }
 
     private static nint __mb_set_outbound_buffer_size;
-    public void SetOutboundBufferSize(int bufferSize)
+    internal void SetOutboundBufferSize(int bufferSize)
     {
         var __mb = __mb_set_outbound_buffer_size;
         if (__mb == 0)
@@ -1484,7 +1538,7 @@ public unsafe partial class WebSocketPeer : PacketPeer
     }
 
     private static nint __mb_set_max_queued_packets;
-    public void SetMaxQueuedPackets(int bufferSize)
+    internal void SetMaxQueuedPackets(int bufferSize)
     {
         var __mb = __mb_set_max_queued_packets;
         if (__mb == 0)
@@ -1500,7 +1554,7 @@ public unsafe partial class WebSocketPeer : PacketPeer
     }
 
     private static nint __mb_get_max_queued_packets;
-    public int GetMaxQueuedPackets()
+    internal int GetMaxQueuedPackets()
     {
         var __mb = __mb_get_max_queued_packets;
         if (__mb == 0)
@@ -1515,7 +1569,7 @@ public unsafe partial class WebSocketPeer : PacketPeer
     }
 
     private static nint __mb_set_heartbeat_interval;
-    public void SetHeartbeatInterval(double interval)
+    internal void SetHeartbeatInterval(double interval)
     {
         var __mb = __mb_set_heartbeat_interval;
         if (__mb == 0)
@@ -1531,7 +1585,7 @@ public unsafe partial class WebSocketPeer : PacketPeer
     }
 
     private static nint __mb_get_heartbeat_interval;
-    public double GetHeartbeatInterval()
+    internal double GetHeartbeatInterval()
     {
         var __mb = __mb_get_heartbeat_interval;
         if (__mb == 0)
@@ -1558,6 +1612,36 @@ public unsafe partial class WebXRInterface : XRInterface
         TARGET_RAY_MODE_SCREEN = 3,
     }
 
+    public string SessionMode
+    {
+        get => GetSessionMode();
+        set => SetSessionMode(value);
+    }
+
+    public string RequiredFeatures
+    {
+        get => GetRequiredFeatures();
+        set => SetRequiredFeatures(value);
+    }
+
+    public string OptionalFeatures
+    {
+        get => GetOptionalFeatures();
+        set => SetOptionalFeatures(value);
+    }
+
+    public string RequestedReferenceSpaceTypes
+    {
+        get => GetRequestedReferenceSpaceTypes();
+        set => SetRequestedReferenceSpaceTypes(value);
+    }
+
+    public string ReferenceSpaceType => GetReferenceSpaceType();
+
+    public string EnabledFeatures => GetEnabledFeatures();
+
+    public string VisibilityState => GetVisibilityState();
+
     private static nint __mb_is_session_supported;
     public void IsSessionSupported(string sessionMode)
     {
@@ -1576,7 +1660,7 @@ public unsafe partial class WebXRInterface : XRInterface
     }
 
     private static nint __mb_set_session_mode;
-    public void SetSessionMode(string sessionMode)
+    internal void SetSessionMode(string sessionMode)
     {
         var __mb = __mb_set_session_mode;
         if (__mb == 0)
@@ -1593,7 +1677,7 @@ public unsafe partial class WebXRInterface : XRInterface
     }
 
     private static nint __mb_get_session_mode;
-    public string GetSessionMode()
+    internal string GetSessionMode()
     {
         var __mb = __mb_get_session_mode;
         if (__mb == 0)
@@ -1608,7 +1692,7 @@ public unsafe partial class WebXRInterface : XRInterface
     }
 
     private static nint __mb_set_required_features;
-    public void SetRequiredFeatures(string requiredFeatures)
+    internal void SetRequiredFeatures(string requiredFeatures)
     {
         var __mb = __mb_set_required_features;
         if (__mb == 0)
@@ -1625,7 +1709,7 @@ public unsafe partial class WebXRInterface : XRInterface
     }
 
     private static nint __mb_get_required_features;
-    public string GetRequiredFeatures()
+    internal string GetRequiredFeatures()
     {
         var __mb = __mb_get_required_features;
         if (__mb == 0)
@@ -1640,7 +1724,7 @@ public unsafe partial class WebXRInterface : XRInterface
     }
 
     private static nint __mb_set_optional_features;
-    public void SetOptionalFeatures(string optionalFeatures)
+    internal void SetOptionalFeatures(string optionalFeatures)
     {
         var __mb = __mb_set_optional_features;
         if (__mb == 0)
@@ -1657,7 +1741,7 @@ public unsafe partial class WebXRInterface : XRInterface
     }
 
     private static nint __mb_get_optional_features;
-    public string GetOptionalFeatures()
+    internal string GetOptionalFeatures()
     {
         var __mb = __mb_get_optional_features;
         if (__mb == 0)
@@ -1672,7 +1756,7 @@ public unsafe partial class WebXRInterface : XRInterface
     }
 
     private static nint __mb_get_reference_space_type;
-    public string GetReferenceSpaceType()
+    internal string GetReferenceSpaceType()
     {
         var __mb = __mb_get_reference_space_type;
         if (__mb == 0)
@@ -1687,7 +1771,7 @@ public unsafe partial class WebXRInterface : XRInterface
     }
 
     private static nint __mb_get_enabled_features;
-    public string GetEnabledFeatures()
+    internal string GetEnabledFeatures()
     {
         var __mb = __mb_get_enabled_features;
         if (__mb == 0)
@@ -1702,7 +1786,7 @@ public unsafe partial class WebXRInterface : XRInterface
     }
 
     private static nint __mb_set_requested_reference_space_types;
-    public void SetRequestedReferenceSpaceTypes(string requestedReferenceSpaceTypes)
+    internal void SetRequestedReferenceSpaceTypes(string requestedReferenceSpaceTypes)
     {
         var __mb = __mb_set_requested_reference_space_types;
         if (__mb == 0)
@@ -1719,7 +1803,7 @@ public unsafe partial class WebXRInterface : XRInterface
     }
 
     private static nint __mb_get_requested_reference_space_types;
-    public string GetRequestedReferenceSpaceTypes()
+    internal string GetRequestedReferenceSpaceTypes()
     {
         var __mb = __mb_get_requested_reference_space_types;
         if (__mb == 0)
@@ -1788,7 +1872,7 @@ public unsafe partial class WebXRInterface : XRInterface
     }
 
     private static nint __mb_get_visibility_state;
-    public string GetVisibilityState()
+    internal string GetVisibilityState()
     {
         var __mb = __mb_get_visibility_state;
         if (__mb == 0)
@@ -1858,7 +1942,7 @@ public unsafe partial class Window : Viewport
         ClassRegistry.AttachNew(this, "Window");
     }
 
-    public enum Mode : long
+    public enum ModeEnum : long
     {
         MODE_WINDOWED = 0,
         MODE_MINIMIZED = 1,
@@ -1885,14 +1969,14 @@ public unsafe partial class Window : Viewport
         FLAG_MAX = 13,
     }
 
-    public enum ContentScaleMode : long
+    public enum ContentScaleModeEnum : long
     {
         CONTENT_SCALE_MODE_DISABLED = 0,
         CONTENT_SCALE_MODE_CANVAS_ITEMS = 1,
         CONTENT_SCALE_MODE_VIEWPORT = 2,
     }
 
-    public enum ContentScaleAspect : long
+    public enum ContentScaleAspectEnum : long
     {
         CONTENT_SCALE_ASPECT_IGNORE = 0,
         CONTENT_SCALE_ASPECT_KEEP = 1,
@@ -1901,7 +1985,7 @@ public unsafe partial class Window : Viewport
         CONTENT_SCALE_ASPECT_EXPAND = 4,
     }
 
-    public enum ContentScaleStretch : long
+    public enum ContentScaleStretchEnum : long
     {
         CONTENT_SCALE_STRETCH_FRACTIONAL = 0,
         CONTENT_SCALE_STRETCH_INTEGER = 1,
@@ -1928,8 +2012,248 @@ public unsafe partial class Window : Viewport
         WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_KEYBOARD_FOCUS = 5,
     }
 
+    public Window.ModeEnum Mode
+    {
+        get => GetMode();
+        set => SetMode(value);
+    }
+
+    public string Title
+    {
+        get => GetTitle();
+        set => SetTitle(value);
+    }
+
+    public Window.WindowInitialPosition InitialPosition
+    {
+        get => GetInitialPosition();
+        set => SetInitialPosition(value);
+    }
+
+    public Vector2I Position
+    {
+        get => GetPosition();
+        set => SetPosition(value);
+    }
+
+    public Vector2I Size
+    {
+        get => GetSize();
+        set => SetSize(value);
+    }
+
+    public int CurrentScreen
+    {
+        get => GetCurrentScreen();
+        set => SetCurrentScreen(value);
+    }
+
+    public Rect2I NonclientArea
+    {
+        get => GetNonclientArea();
+        set => SetNonclientArea(value);
+    }
+
+    public bool Visible
+    {
+        get => IsVisible();
+        set => SetVisible(value);
+    }
+
+    public bool WrapControls
+    {
+        get => IsWrappingControls();
+        set => SetWrapControls(value);
+    }
+
+    public bool Transient
+    {
+        get => IsTransient();
+        set => SetTransient(value);
+    }
+
+    public bool TransientToFocused
+    {
+        get => IsTransientToFocused();
+        set => SetTransientToFocused(value);
+    }
+
+    public bool Exclusive
+    {
+        get => IsExclusive();
+        set => SetExclusive(value);
+    }
+
+    public bool Unresizable
+    {
+        get => GetFlag(((Window.Flags)(0)));
+        set => SetFlag(((Window.Flags)(0)), value);
+    }
+
+    public bool Borderless
+    {
+        get => GetFlag(((Window.Flags)(1)));
+        set => SetFlag(((Window.Flags)(1)), value);
+    }
+
+    public bool AlwaysOnTop
+    {
+        get => GetFlag(((Window.Flags)(2)));
+        set => SetFlag(((Window.Flags)(2)), value);
+    }
+
+    public bool Transparent
+    {
+        get => GetFlag(((Window.Flags)(3)));
+        set => SetFlag(((Window.Flags)(3)), value);
+    }
+
+    public bool Unfocusable
+    {
+        get => GetFlag(((Window.Flags)(4)));
+        set => SetFlag(((Window.Flags)(4)), value);
+    }
+
+    public bool PopupWindow
+    {
+        get => GetFlag(((Window.Flags)(5)));
+        set => SetFlag(((Window.Flags)(5)), value);
+    }
+
+    public bool ExtendToTitle
+    {
+        get => GetFlag(((Window.Flags)(6)));
+        set => SetFlag(((Window.Flags)(6)), value);
+    }
+
+    public bool MousePassthrough
+    {
+        get => GetFlag(((Window.Flags)(7)));
+        set => SetFlag(((Window.Flags)(7)), value);
+    }
+
+    public bool SharpCorners
+    {
+        get => GetFlag(((Window.Flags)(8)));
+        set => SetFlag(((Window.Flags)(8)), value);
+    }
+
+    public bool ExcludeFromCapture
+    {
+        get => GetFlag(((Window.Flags)(9)));
+        set => SetFlag(((Window.Flags)(9)), value);
+    }
+
+    public bool PopupWmHint
+    {
+        get => GetFlag(((Window.Flags)(10)));
+        set => SetFlag(((Window.Flags)(10)), value);
+    }
+
+    public bool MinimizeDisabled
+    {
+        get => GetFlag(((Window.Flags)(11)));
+        set => SetFlag(((Window.Flags)(11)), value);
+    }
+
+    public bool MaximizeDisabled
+    {
+        get => GetFlag(((Window.Flags)(12)));
+        set => SetFlag(((Window.Flags)(12)), value);
+    }
+
+    public bool ForceNative
+    {
+        get => GetForceNative();
+        set => SetForceNative(value);
+    }
+
+    public Vector2I MinSize
+    {
+        get => GetMinSize();
+        set => SetMinSize(value);
+    }
+
+    public Vector2I MaxSize
+    {
+        get => GetMaxSize();
+        set => SetMaxSize(value);
+    }
+
+    public bool KeepTitleVisible
+    {
+        get => GetKeepTitleVisible();
+        set => SetKeepTitleVisible(value);
+    }
+
+    public Vector2I ContentScaleSize
+    {
+        get => GetContentScaleSize();
+        set => SetContentScaleSize(value);
+    }
+
+    public Window.ContentScaleModeEnum ContentScaleMode
+    {
+        get => GetContentScaleMode();
+        set => SetContentScaleMode(value);
+    }
+
+    public Window.ContentScaleAspectEnum ContentScaleAspect
+    {
+        get => GetContentScaleAspect();
+        set => SetContentScaleAspect(value);
+    }
+
+    public Window.ContentScaleStretchEnum ContentScaleStretch
+    {
+        get => GetContentScaleStretch();
+        set => SetContentScaleStretch(value);
+    }
+
+    public float ContentScaleFactor
+    {
+        get => GetContentScaleFactor();
+        set => SetContentScaleFactor(value);
+    }
+
+    public bool HdrOutputRequested
+    {
+        get => IsHdrOutputRequested();
+        set => SetHdrOutputRequested(value);
+    }
+
+    public bool AutoTranslate
+    {
+        get => IsAutoTranslating();
+        set => SetAutoTranslate(value);
+    }
+
+    public string AccessibilityName
+    {
+        get => GetAccessibilityName();
+        set => SetAccessibilityName(value);
+    }
+
+    public string AccessibilityDescription
+    {
+        get => GetAccessibilityDescription();
+        set => SetAccessibilityDescription(value);
+    }
+
+    public Theme? Theme
+    {
+        get => GetTheme();
+        set => SetTheme(value);
+    }
+
+    public string ThemeTypeVariation
+    {
+        get => GetThemeTypeVariation();
+        set => SetThemeTypeVariation(value);
+    }
+
     private static nint __mb_set_title;
-    public void SetTitle(string title)
+    internal void SetTitle(string title)
     {
         var __mb = __mb_set_title;
         if (__mb == 0)
@@ -1946,7 +2270,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_title;
-    public string GetTitle()
+    internal string GetTitle()
     {
         var __mb = __mb_get_title;
         if (__mb == 0)
@@ -1961,7 +2285,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_initial_position;
-    public void SetInitialPosition(Window.WindowInitialPosition initialPosition)
+    internal void SetInitialPosition(Window.WindowInitialPosition initialPosition)
     {
         var __mb = __mb_set_initial_position;
         if (__mb == 0)
@@ -1977,7 +2301,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_initial_position;
-    public Window.WindowInitialPosition GetInitialPosition()
+    internal Window.WindowInitialPosition GetInitialPosition()
     {
         var __mb = __mb_get_initial_position;
         if (__mb == 0)
@@ -1992,7 +2316,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_current_screen;
-    public void SetCurrentScreen(int index)
+    internal void SetCurrentScreen(int index)
     {
         var __mb = __mb_set_current_screen;
         if (__mb == 0)
@@ -2008,7 +2332,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_current_screen;
-    public int GetCurrentScreen()
+    internal int GetCurrentScreen()
     {
         var __mb = __mb_get_current_screen;
         if (__mb == 0)
@@ -2023,7 +2347,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_position;
-    public void SetPosition(Vector2I position)
+    internal void SetPosition(Vector2I position)
     {
         var __mb = __mb_set_position;
         if (__mb == 0)
@@ -2039,7 +2363,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_position;
-    public Vector2I GetPosition()
+    internal Vector2I GetPosition()
     {
         var __mb = __mb_get_position;
         if (__mb == 0)
@@ -2067,7 +2391,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_size;
-    public void SetSize(Vector2I size)
+    internal void SetSize(Vector2I size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -2083,7 +2407,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_size;
-    public Vector2I GetSize()
+    internal Vector2I GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -2141,7 +2465,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_max_size;
-    public void SetMaxSize(Vector2I maxSize)
+    internal void SetMaxSize(Vector2I maxSize)
     {
         var __mb = __mb_set_max_size;
         if (__mb == 0)
@@ -2157,7 +2481,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_max_size;
-    public Vector2I GetMaxSize()
+    internal Vector2I GetMaxSize()
     {
         var __mb = __mb_get_max_size;
         if (__mb == 0)
@@ -2172,7 +2496,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_min_size;
-    public void SetMinSize(Vector2I minSize)
+    internal void SetMinSize(Vector2I minSize)
     {
         var __mb = __mb_set_min_size;
         if (__mb == 0)
@@ -2188,7 +2512,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_min_size;
-    public Vector2I GetMinSize()
+    internal Vector2I GetMinSize()
     {
         var __mb = __mb_get_min_size;
         if (__mb == 0)
@@ -2203,7 +2527,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_mode;
-    public void SetMode(Window.Mode mode)
+    internal void SetMode(Window.ModeEnum mode)
     {
         var __mb = __mb_set_mode;
         if (__mb == 0)
@@ -2219,7 +2543,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_mode;
-    public Window.Mode GetMode()
+    internal Window.ModeEnum GetMode()
     {
         var __mb = __mb_get_mode;
         if (__mb == 0)
@@ -2230,11 +2554,11 @@ public unsafe partial class Window : Viewport
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Window.Mode)__ret;
+        return (Window.ModeEnum)__ret;
     }
 
     private static nint __mb_set_flag;
-    public void SetFlag(Window.Flags flag, bool enabled)
+    internal void SetFlag(Window.Flags flag, bool enabled)
     {
         var __mb = __mb_set_flag;
         if (__mb == 0)
@@ -2252,7 +2576,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_flag;
-    public bool GetFlag(Window.Flags flag)
+    internal bool GetFlag(Window.Flags flag)
     {
         var __mb = __mb_get_flag;
         if (__mb == 0)
@@ -2270,7 +2594,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_hdr_output_requested;
-    public void SetHdrOutputRequested(bool requested)
+    internal void SetHdrOutputRequested(bool requested)
     {
         var __mb = __mb_set_hdr_output_requested;
         if (__mb == 0)
@@ -2286,7 +2610,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_is_hdr_output_requested;
-    public bool IsHdrOutputRequested()
+    internal bool IsHdrOutputRequested()
     {
         var __mb = __mb_is_hdr_output_requested;
         if (__mb == 0)
@@ -2389,7 +2713,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_visible;
-    public void SetVisible(bool visible)
+    internal void SetVisible(bool visible)
     {
         var __mb = __mb_set_visible;
         if (__mb == 0)
@@ -2405,7 +2729,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_is_visible;
-    public bool IsVisible()
+    internal bool IsVisible()
     {
         var __mb = __mb_is_visible;
         if (__mb == 0)
@@ -2446,7 +2770,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_transient;
-    public void SetTransient(bool transient)
+    internal void SetTransient(bool transient)
     {
         var __mb = __mb_set_transient;
         if (__mb == 0)
@@ -2462,7 +2786,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_is_transient;
-    public bool IsTransient()
+    internal bool IsTransient()
     {
         var __mb = __mb_is_transient;
         if (__mb == 0)
@@ -2477,7 +2801,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_transient_to_focused;
-    public void SetTransientToFocused(bool enable)
+    internal void SetTransientToFocused(bool enable)
     {
         var __mb = __mb_set_transient_to_focused;
         if (__mb == 0)
@@ -2493,7 +2817,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_is_transient_to_focused;
-    public bool IsTransientToFocused()
+    internal bool IsTransientToFocused()
     {
         var __mb = __mb_is_transient_to_focused;
         if (__mb == 0)
@@ -2508,7 +2832,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_exclusive;
-    public void SetExclusive(bool exclusive)
+    internal void SetExclusive(bool exclusive)
     {
         var __mb = __mb_set_exclusive;
         if (__mb == 0)
@@ -2524,7 +2848,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_is_exclusive;
-    public bool IsExclusive()
+    internal bool IsExclusive()
     {
         var __mb = __mb_is_exclusive;
         if (__mb == 0)
@@ -2689,7 +3013,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_force_native;
-    public void SetForceNative(bool forceNative)
+    internal void SetForceNative(bool forceNative)
     {
         var __mb = __mb_set_force_native;
         if (__mb == 0)
@@ -2705,7 +3029,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_force_native;
-    public bool GetForceNative()
+    internal bool GetForceNative()
     {
         var __mb = __mb_get_force_native;
         if (__mb == 0)
@@ -2720,7 +3044,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_content_scale_size;
-    public void SetContentScaleSize(Vector2I size)
+    internal void SetContentScaleSize(Vector2I size)
     {
         var __mb = __mb_set_content_scale_size;
         if (__mb == 0)
@@ -2736,7 +3060,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_content_scale_size;
-    public Vector2I GetContentScaleSize()
+    internal Vector2I GetContentScaleSize()
     {
         var __mb = __mb_get_content_scale_size;
         if (__mb == 0)
@@ -2751,7 +3075,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_content_scale_mode;
-    public void SetContentScaleMode(Window.ContentScaleMode mode)
+    internal void SetContentScaleMode(Window.ContentScaleModeEnum mode)
     {
         var __mb = __mb_set_content_scale_mode;
         if (__mb == 0)
@@ -2767,7 +3091,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_content_scale_mode;
-    public Window.ContentScaleMode GetContentScaleMode()
+    internal Window.ContentScaleModeEnum GetContentScaleMode()
     {
         var __mb = __mb_get_content_scale_mode;
         if (__mb == 0)
@@ -2778,11 +3102,11 @@ public unsafe partial class Window : Viewport
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Window.ContentScaleMode)__ret;
+        return (Window.ContentScaleModeEnum)__ret;
     }
 
     private static nint __mb_set_content_scale_aspect;
-    public void SetContentScaleAspect(Window.ContentScaleAspect aspect)
+    internal void SetContentScaleAspect(Window.ContentScaleAspectEnum aspect)
     {
         var __mb = __mb_set_content_scale_aspect;
         if (__mb == 0)
@@ -2798,7 +3122,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_content_scale_aspect;
-    public Window.ContentScaleAspect GetContentScaleAspect()
+    internal Window.ContentScaleAspectEnum GetContentScaleAspect()
     {
         var __mb = __mb_get_content_scale_aspect;
         if (__mb == 0)
@@ -2809,11 +3133,11 @@ public unsafe partial class Window : Viewport
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Window.ContentScaleAspect)__ret;
+        return (Window.ContentScaleAspectEnum)__ret;
     }
 
     private static nint __mb_set_content_scale_stretch;
-    public void SetContentScaleStretch(Window.ContentScaleStretch stretch)
+    internal void SetContentScaleStretch(Window.ContentScaleStretchEnum stretch)
     {
         var __mb = __mb_set_content_scale_stretch;
         if (__mb == 0)
@@ -2829,7 +3153,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_content_scale_stretch;
-    public Window.ContentScaleStretch GetContentScaleStretch()
+    internal Window.ContentScaleStretchEnum GetContentScaleStretch()
     {
         var __mb = __mb_get_content_scale_stretch;
         if (__mb == 0)
@@ -2840,11 +3164,11 @@ public unsafe partial class Window : Viewport
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Window.ContentScaleStretch)__ret;
+        return (Window.ContentScaleStretchEnum)__ret;
     }
 
     private static nint __mb_set_nonclient_area;
-    public void SetNonclientArea(Rect2I area)
+    internal void SetNonclientArea(Rect2I area)
     {
         var __mb = __mb_set_nonclient_area;
         if (__mb == 0)
@@ -2860,7 +3184,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_nonclient_area;
-    public Rect2I GetNonclientArea()
+    internal Rect2I GetNonclientArea()
     {
         var __mb = __mb_get_nonclient_area;
         if (__mb == 0)
@@ -2875,7 +3199,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_keep_title_visible;
-    public void SetKeepTitleVisible(bool titleVisible)
+    internal void SetKeepTitleVisible(bool titleVisible)
     {
         var __mb = __mb_set_keep_title_visible;
         if (__mb == 0)
@@ -2891,7 +3215,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_keep_title_visible;
-    public bool GetKeepTitleVisible()
+    internal bool GetKeepTitleVisible()
     {
         var __mb = __mb_get_keep_title_visible;
         if (__mb == 0)
@@ -2906,7 +3230,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_content_scale_factor;
-    public void SetContentScaleFactor(float factor)
+    internal void SetContentScaleFactor(float factor)
     {
         var __mb = __mb_set_content_scale_factor;
         if (__mb == 0)
@@ -2922,7 +3246,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_content_scale_factor;
-    public float GetContentScaleFactor()
+    internal float GetContentScaleFactor()
     {
         var __mb = __mb_get_content_scale_factor;
         if (__mb == 0)
@@ -2937,7 +3261,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_wrap_controls;
-    public void SetWrapControls(bool enable)
+    internal void SetWrapControls(bool enable)
     {
         var __mb = __mb_set_wrap_controls;
         if (__mb == 0)
@@ -2953,7 +3277,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_is_wrapping_controls;
-    public bool IsWrappingControls()
+    internal bool IsWrappingControls()
     {
         var __mb = __mb_is_wrapping_controls;
         if (__mb == 0)
@@ -2981,7 +3305,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_theme;
-    public void SetTheme(Theme? theme)
+    internal void SetTheme(Theme? theme)
     {
         var __mb = __mb_set_theme;
         if (__mb == 0)
@@ -2997,7 +3321,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_theme;
-    public Theme? GetTheme()
+    internal Theme? GetTheme()
     {
         var __mb = __mb_get_theme;
         if (__mb == 0)
@@ -3012,7 +3336,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_theme_type_variation;
-    public void SetThemeTypeVariation(string themeType)
+    internal void SetThemeTypeVariation(string themeType)
     {
         var __mb = __mb_set_theme_type_variation;
         if (__mb == 0)
@@ -3028,7 +3352,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_theme_type_variation;
-    public string GetThemeTypeVariation()
+    internal string GetThemeTypeVariation()
     {
         var __mb = __mb_get_theme_type_variation;
         if (__mb == 0)
@@ -3681,7 +4005,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_accessibility_name;
-    public void SetAccessibilityName(string name)
+    internal void SetAccessibilityName(string name)
     {
         var __mb = __mb_set_accessibility_name;
         if (__mb == 0)
@@ -3698,7 +4022,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_accessibility_name;
-    public string GetAccessibilityName()
+    internal string GetAccessibilityName()
     {
         var __mb = __mb_get_accessibility_name;
         if (__mb == 0)
@@ -3713,7 +4037,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_accessibility_description;
-    public void SetAccessibilityDescription(string description)
+    internal void SetAccessibilityDescription(string description)
     {
         var __mb = __mb_set_accessibility_description;
         if (__mb == 0)
@@ -3730,7 +4054,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_accessibility_description;
-    public string GetAccessibilityDescription()
+    internal string GetAccessibilityDescription()
     {
         var __mb = __mb_get_accessibility_description;
         if (__mb == 0)
@@ -3806,7 +4130,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_set_auto_translate;
-    public void SetAutoTranslate(bool enable)
+    internal void SetAutoTranslate(bool enable)
     {
         var __mb = __mb_set_auto_translate;
         if (__mb == 0)
@@ -3822,7 +4146,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_is_auto_translating;
-    public bool IsAutoTranslating()
+    internal bool IsAutoTranslating()
     {
         var __mb = __mb_is_auto_translating;
         if (__mb == 0)
@@ -4192,8 +4516,16 @@ public unsafe partial class World2D : Resource
         ClassRegistry.AttachNew(this, "World2D");
     }
 
+    public Rid Canvas => GetCanvas();
+
+    public Rid NavigationMap => GetNavigationMap();
+
+    public Rid Space => GetSpace();
+
+    public PhysicsDirectSpaceState2D? DirectSpaceState => GetDirectSpaceState();
+
     private static nint __mb_get_canvas;
-    public Rid GetCanvas()
+    internal Rid GetCanvas()
     {
         var __mb = __mb_get_canvas;
         if (__mb == 0)
@@ -4208,7 +4540,7 @@ public unsafe partial class World2D : Resource
     }
 
     private static nint __mb_get_navigation_map;
-    public Rid GetNavigationMap()
+    internal Rid GetNavigationMap()
     {
         var __mb = __mb_get_navigation_map;
         if (__mb == 0)
@@ -4223,7 +4555,7 @@ public unsafe partial class World2D : Resource
     }
 
     private static nint __mb_get_space;
-    public Rid GetSpace()
+    internal Rid GetSpace()
     {
         var __mb = __mb_get_space;
         if (__mb == 0)
@@ -4238,7 +4570,7 @@ public unsafe partial class World2D : Resource
     }
 
     private static nint __mb_get_direct_space_state;
-    public PhysicsDirectSpaceState2D? GetDirectSpaceState()
+    internal PhysicsDirectSpaceState2D? GetDirectSpaceState()
     {
         var __mb = __mb_get_direct_space_state;
         if (__mb == 0)
@@ -4262,8 +4594,34 @@ public unsafe partial class World3D : Resource
         ClassRegistry.AttachNew(this, "World3D");
     }
 
+    public Environment? Environment
+    {
+        get => GetEnvironment();
+        set => SetEnvironment(value);
+    }
+
+    public Environment? FallbackEnvironment
+    {
+        get => GetFallbackEnvironment();
+        set => SetFallbackEnvironment(value);
+    }
+
+    public CameraAttributes? CameraAttributes
+    {
+        get => GetCameraAttributes();
+        set => SetCameraAttributes(value);
+    }
+
+    public Rid Space => GetSpace();
+
+    public Rid NavigationMap => GetNavigationMap();
+
+    public Rid Scenario => GetScenario();
+
+    public PhysicsDirectSpaceState3D? DirectSpaceState => GetDirectSpaceState();
+
     private static nint __mb_get_space;
-    public Rid GetSpace()
+    internal Rid GetSpace()
     {
         var __mb = __mb_get_space;
         if (__mb == 0)
@@ -4278,7 +4636,7 @@ public unsafe partial class World3D : Resource
     }
 
     private static nint __mb_get_navigation_map;
-    public Rid GetNavigationMap()
+    internal Rid GetNavigationMap()
     {
         var __mb = __mb_get_navigation_map;
         if (__mb == 0)
@@ -4293,7 +4651,7 @@ public unsafe partial class World3D : Resource
     }
 
     private static nint __mb_get_scenario;
-    public Rid GetScenario()
+    internal Rid GetScenario()
     {
         var __mb = __mb_get_scenario;
         if (__mb == 0)
@@ -4308,7 +4666,7 @@ public unsafe partial class World3D : Resource
     }
 
     private static nint __mb_set_environment;
-    public void SetEnvironment(Environment? env)
+    internal void SetEnvironment(Environment? env)
     {
         var __mb = __mb_set_environment;
         if (__mb == 0)
@@ -4324,7 +4682,7 @@ public unsafe partial class World3D : Resource
     }
 
     private static nint __mb_get_environment;
-    public Environment? GetEnvironment()
+    internal Environment? GetEnvironment()
     {
         var __mb = __mb_get_environment;
         if (__mb == 0)
@@ -4339,7 +4697,7 @@ public unsafe partial class World3D : Resource
     }
 
     private static nint __mb_set_fallback_environment;
-    public void SetFallbackEnvironment(Environment? env)
+    internal void SetFallbackEnvironment(Environment? env)
     {
         var __mb = __mb_set_fallback_environment;
         if (__mb == 0)
@@ -4355,7 +4713,7 @@ public unsafe partial class World3D : Resource
     }
 
     private static nint __mb_get_fallback_environment;
-    public Environment? GetFallbackEnvironment()
+    internal Environment? GetFallbackEnvironment()
     {
         var __mb = __mb_get_fallback_environment;
         if (__mb == 0)
@@ -4370,7 +4728,7 @@ public unsafe partial class World3D : Resource
     }
 
     private static nint __mb_set_camera_attributes;
-    public void SetCameraAttributes(CameraAttributes? attributes)
+    internal void SetCameraAttributes(CameraAttributes? attributes)
     {
         var __mb = __mb_set_camera_attributes;
         if (__mb == 0)
@@ -4386,7 +4744,7 @@ public unsafe partial class World3D : Resource
     }
 
     private static nint __mb_get_camera_attributes;
-    public CameraAttributes? GetCameraAttributes()
+    internal CameraAttributes? GetCameraAttributes()
     {
         var __mb = __mb_get_camera_attributes;
         if (__mb == 0)
@@ -4401,7 +4759,7 @@ public unsafe partial class World3D : Resource
     }
 
     private static nint __mb_get_direct_space_state;
-    public PhysicsDirectSpaceState3D? GetDirectSpaceState()
+    internal PhysicsDirectSpaceState3D? GetDirectSpaceState()
     {
         var __mb = __mb_get_direct_space_state;
         if (__mb == 0)
@@ -4425,8 +4783,20 @@ public unsafe partial class WorldBoundaryShape2D : Shape2D
         ClassRegistry.AttachNew(this, "WorldBoundaryShape2D");
     }
 
+    public Vector2 Normal
+    {
+        get => GetNormal();
+        set => SetNormal(value);
+    }
+
+    public float Distance
+    {
+        get => GetDistance();
+        set => SetDistance(value);
+    }
+
     private static nint __mb_set_normal;
-    public void SetNormal(Vector2 normal)
+    internal void SetNormal(Vector2 normal)
     {
         var __mb = __mb_set_normal;
         if (__mb == 0)
@@ -4442,7 +4812,7 @@ public unsafe partial class WorldBoundaryShape2D : Shape2D
     }
 
     private static nint __mb_get_normal;
-    public Vector2 GetNormal()
+    internal Vector2 GetNormal()
     {
         var __mb = __mb_get_normal;
         if (__mb == 0)
@@ -4457,7 +4827,7 @@ public unsafe partial class WorldBoundaryShape2D : Shape2D
     }
 
     private static nint __mb_set_distance;
-    public void SetDistance(float distance)
+    internal void SetDistance(float distance)
     {
         var __mb = __mb_set_distance;
         if (__mb == 0)
@@ -4473,7 +4843,7 @@ public unsafe partial class WorldBoundaryShape2D : Shape2D
     }
 
     private static nint __mb_get_distance;
-    public float GetDistance()
+    internal float GetDistance()
     {
         var __mb = __mb_get_distance;
         if (__mb == 0)
@@ -4497,8 +4867,14 @@ public unsafe partial class WorldBoundaryShape3D : Shape3D
         ClassRegistry.AttachNew(this, "WorldBoundaryShape3D");
     }
 
+    public Plane Plane
+    {
+        get => GetPlane();
+        set => SetPlane(value);
+    }
+
     private static nint __mb_set_plane;
-    public void SetPlane(Plane plane)
+    internal void SetPlane(Plane plane)
     {
         var __mb = __mb_set_plane;
         if (__mb == 0)
@@ -4514,7 +4890,7 @@ public unsafe partial class WorldBoundaryShape3D : Shape3D
     }
 
     private static nint __mb_get_plane;
-    public Plane GetPlane()
+    internal Plane GetPlane()
     {
         var __mb = __mb_get_plane;
         if (__mb == 0)
@@ -4538,8 +4914,26 @@ public unsafe partial class WorldEnvironment : Node
         ClassRegistry.AttachNew(this, "WorldEnvironment");
     }
 
+    public Environment? Environment
+    {
+        get => GetEnvironment();
+        set => SetEnvironment(value);
+    }
+
+    public CameraAttributes? CameraAttributes
+    {
+        get => GetCameraAttributes();
+        set => SetCameraAttributes(value);
+    }
+
+    public Compositor? Compositor
+    {
+        get => GetCompositor();
+        set => SetCompositor(value);
+    }
+
     private static nint __mb_set_environment;
-    public void SetEnvironment(Environment? env)
+    internal void SetEnvironment(Environment? env)
     {
         var __mb = __mb_set_environment;
         if (__mb == 0)
@@ -4555,7 +4949,7 @@ public unsafe partial class WorldEnvironment : Node
     }
 
     private static nint __mb_get_environment;
-    public Environment? GetEnvironment()
+    internal Environment? GetEnvironment()
     {
         var __mb = __mb_get_environment;
         if (__mb == 0)
@@ -4570,7 +4964,7 @@ public unsafe partial class WorldEnvironment : Node
     }
 
     private static nint __mb_set_camera_attributes;
-    public void SetCameraAttributes(CameraAttributes? cameraAttributes)
+    internal void SetCameraAttributes(CameraAttributes? cameraAttributes)
     {
         var __mb = __mb_set_camera_attributes;
         if (__mb == 0)
@@ -4586,7 +4980,7 @@ public unsafe partial class WorldEnvironment : Node
     }
 
     private static nint __mb_get_camera_attributes;
-    public CameraAttributes? GetCameraAttributes()
+    internal CameraAttributes? GetCameraAttributes()
     {
         var __mb = __mb_get_camera_attributes;
         if (__mb == 0)
@@ -4601,7 +4995,7 @@ public unsafe partial class WorldEnvironment : Node
     }
 
     private static nint __mb_set_compositor;
-    public void SetCompositor(Compositor? compositor)
+    internal void SetCompositor(Compositor? compositor)
     {
         var __mb = __mb_set_compositor;
         if (__mb == 0)
@@ -4617,7 +5011,7 @@ public unsafe partial class WorldEnvironment : Node
     }
 
     private static nint __mb_get_compositor;
-    public Compositor? GetCompositor()
+    internal Compositor? GetCompositor()
     {
         var __mb = __mb_get_compositor;
         if (__mb == 0)

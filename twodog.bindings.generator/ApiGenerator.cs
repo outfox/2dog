@@ -45,10 +45,17 @@ public static class ApiGenerator
 
     private sealed record VirtualInfo(string GdName, string CsName, TypeRef Ret, List<(string name, TypeRef type)> Args);
 
+    private sealed record PropInfo(string CsName, string GetterCs, string? SetterCs, string? IndexCast, TypeRef Type, string? SetterCast);
+
     private static Dictionary<string, ClassInfo> _classes = [];
     private static Dictionary<string, string> _enumMap = [];   // godot ref ("Error", "Node.InternalMode") -> cs name
+    private static Dictionary<string, JsonElement> _classJson = [];
+    private static Dictionary<string, Dictionary<string, JsonElement>> _methodsByClass = [];
+    private static Dictionary<string, List<PropInfo>> _propsByClass = [];
+    private static readonly HashSet<(string cls, string method)> _internalAccessors = [];
+    private static readonly Dictionary<(string cls, string enumName), string> _enumRenames = [];
     private static readonly SortedDictionary<string, string> _virtualNameMap = []; // gd virtual name -> cs stub name
-    private static int _emitted, _skipped, _virtualsEmitted, _virtualsSkipped;
+    private static int _emitted, _skipped, _virtualsEmitted, _virtualsSkipped, _propsEmitted, _propsSkipped;
 
     public static void Run(string apiJsonPath, string outDir)
     {
@@ -57,6 +64,8 @@ public static class ApiGenerator
 
         // ---- collect classes ----
         _classes = [];
+        _classJson = [];
+        _methodsByClass = [];
         foreach (var c in root.GetProperty("classes").EnumerateArray())
         {
             var gd = c.GetProperty("name").GetString()!;
@@ -66,6 +75,14 @@ public static class ApiGenerator
             _classes[gd] = new ClassInfo(gd, cs, baseCs,
                 c.GetProperty("is_refcounted").GetBoolean(),
                 c.GetProperty("is_instantiable").GetBoolean());
+            _classJson[gd] = c;
+            var methods = new Dictionary<string, JsonElement>();
+            if (c.TryGetProperty("methods", out var ms))
+            {
+                foreach (var m in ms.EnumerateArray())
+                    methods[m.GetProperty("name").GetString()!] = m;
+            }
+            _methodsByClass[gd] = methods;
         }
 
         // ---- enum name map ----
@@ -85,6 +102,16 @@ public static class ApiGenerator
                 _enumMap[$"{owner.GdName}.{en}"] = $"{owner.CsName}.{en}";
             }
         }
+
+        // ---- properties: enum renames first (before any Map() call), then
+        //      full resolution against getter/setter signatures ----
+        _propsByClass = [];
+        _internalAccessors.Clear();
+        _enumRenames.Clear();
+        _propsEmitted = 0;
+        _propsSkipped = 0;
+        PrescanEnumRenames();
+        ResolveProperties();
 
         // ---- singleton map: type -> registered name ----
         var singletons = new Dictionary<string, string>();
@@ -162,6 +189,7 @@ public static class ApiGenerator
         Write(outDir, "GeneratedVirtualNames.gen.cs", sbVirt);
 
         Console.WriteLine($"Generated typed API: {_classes.Count} classes, {_emitted} methods emitted, {_skipped} skipped (unsupported types), " +
+                          $"{_propsEmitted} properties ({_propsSkipped} skipped, {_enumRenames.Count} enum renames), " +
                           $"{_virtualsEmitted} virtual stubs ({_virtualsSkipped} skipped), into {outDir}");
     }
 
@@ -203,10 +231,11 @@ public static class ApiGenerator
             foreach (var e in enums.EnumerateArray())
             {
                 sb.AppendLine();
-                EmitEnum(sb, e, indent: "    ", nested: true);
-                used.Add(e.GetProperty("name").GetString()!);
+                used.Add(EmitEnum(sb, e, indent: "    ", nested: true, ownerGd: info.GdName));
             }
         }
+
+        EmitProperties(sb, info, used);
 
         var virtuals = new List<VirtualInfo>();
         if (c.TryGetProperty("methods", out var methods))
@@ -223,10 +252,12 @@ public static class ApiGenerator
 
     // ------------------------------------------------------------- enums --
 
-    private static void EmitEnum(StringBuilder sb, JsonElement e, string indent, bool nested)
+    private static string EmitEnum(StringBuilder sb, JsonElement e, string indent, bool nested, string? ownerGd = null)
     {
         var gd = e.GetProperty("name").GetString()!;
-        var cs = nested ? gd : gd.Replace(".", "");
+        var cs = nested
+            ? ownerGd is not null && _enumRenames.TryGetValue((ownerGd, gd), out var renamed) ? renamed : gd
+            : gd.Replace(".", "");
         var flags = e.TryGetProperty("is_bitfield", out var bf) && bf.GetBoolean();
         if (flags) sb.AppendLine($"{indent}[Flags]");
         sb.AppendLine($"{indent}public enum {cs} : long");
@@ -234,6 +265,7 @@ public static class ApiGenerator
         foreach (var v in e.GetProperty("values").EnumerateArray())
             sb.AppendLine($"{indent}    {v.GetProperty("name").GetString()} = {v.GetProperty("value").GetInt64()},");
         sb.AppendLine($"{indent}}}");
+        return cs;
     }
 
     // ----------------------------------------------------------- methods --
@@ -279,10 +311,15 @@ public static class ApiGenerator
         var mbField = $"__mb_{gdName}";
         _emitted++;
 
+        // GodotSharp compat: property accessor methods are hidden from the
+        // public surface (the property is the API); internal keeps them
+        // callable by generated property bodies across the class hierarchy.
+        var visibility = _internalAccessors.Contains((info.GdName, gdName)) ? "internal" : "public";
+
         sb.AppendLine();
         sb.AppendLine($"    private static nint {mbField};");
         var paramList = string.Join(", ", args.Select(a => $"{ParamType(a.type)} {a.name}"));
-        sb.AppendLine($"    public {(isStatic ? "static " : "")}{RetType(ret)} {csName}({paramList})");
+        sb.AppendLine($"    {visibility} {(isStatic ? "static " : "")}{RetType(ret)} {csName}({paramList})");
         sb.AppendLine("    {");
         sb.AppendLine($"        var __mb = {mbField};");
         sb.AppendLine("        if (__mb == 0)");
@@ -394,6 +431,147 @@ public static class ApiGenerator
     }
 
     private static string GdOf(string cs) => cs == "GodotObject" ? "Object" : cs;
+
+    // -------------------------------------------------------- properties --
+
+    private static string PropCsName(string gdPropName) => Pascal(gdPropName.Replace('/', '_'));
+
+    /// <summary>
+    /// GodotSharp compat: a nested enum whose name collides with a property of
+    /// the same class gets an "Enum" suffix (Node.ProcessMode property vs
+    /// Node.ProcessModeEnum). Must run before ANY Map() call resolves enum refs.
+    /// </summary>
+    private static void PrescanEnumRenames()
+    {
+        foreach (var (gd, c) in _classJson)
+        {
+            if (!c.TryGetProperty("enums", out var enums) || !c.TryGetProperty("properties", out var props)) continue;
+            var propNames = props.EnumerateArray()
+                .Select(p => PropCsName(p.GetProperty("name").GetString()!))
+                .ToHashSet();
+            foreach (var e in enums.EnumerateArray())
+            {
+                var en = e.GetProperty("name").GetString()!;
+                if (!propNames.Contains(en)) continue;
+                _enumRenames[(gd, en)] = en + "Enum";
+                _enumMap[$"{gd}.{en}"] = $"{_classes[gd].CsName}.{en}Enum";
+            }
+        }
+    }
+
+    /// <summary>Finds the class in the inheritance chain that declares a method.</summary>
+    private static (string cls, JsonElement m)? ResolveMethod(string startClass, string methodName)
+    {
+        for (var cls = startClass; !string.IsNullOrEmpty(cls); cls = _classJson[cls].TryGetProperty("inherits", out var i) ? i.GetString()! : "")
+        {
+            if (_methodsByClass.TryGetValue(cls, out var methods) && methods.TryGetValue(methodName, out var m))
+                return (cls, m);
+            if (!_classJson.ContainsKey(cls)) break;
+        }
+        return null;
+    }
+
+    private static void ResolveProperties()
+    {
+        foreach (var (gd, c) in _classJson)
+        {
+            var list = new List<PropInfo>();
+            _propsByClass[gd] = list;
+            if (!c.TryGetProperty("properties", out var props)) continue;
+
+            foreach (var p in props.EnumerateArray())
+            {
+                var csName = PropCsName(p.GetProperty("name").GetString()!);
+                if (ReservedMembers.Contains(csName)) { _propsSkipped++; continue; }
+
+                var getterName = p.TryGetProperty("getter", out var g) ? g.GetString() : null;
+                if (string.IsNullOrEmpty(getterName)) { _propsSkipped++; continue; }
+                // Accessors whose Pascal name is reserved (GetType, ToString...)
+                // are never emitted, so properties depending on them can't be either.
+                if (ReservedMembers.Contains(Pascal(getterName))) { _propsSkipped++; continue; }
+                var getter = ResolveMethod(gd, getterName);
+                if (getter is null) { _propsSkipped++; continue; }
+
+                long? index = p.TryGetProperty("index", out var ix) ? ix.GetInt64() : null;
+                var (getterCls, getterEl) = getter.Value;
+                var getterArgs = getterEl.TryGetProperty("arguments", out var ga) ? ga.GetArrayLength() : 0;
+                if (getterArgs != (index.HasValue ? 1 : 0)) { _propsSkipped++; continue; }
+
+                var type = getterEl.TryGetProperty("return_value", out var rv)
+                    ? Map(rv.GetProperty("type").GetString()!, rv.TryGetProperty("meta", out var rm) ? rm.GetString() : null)
+                    : null;
+                if (type is null || type.Kind == "void") { _propsSkipped++; continue; }
+
+                string? indexCast = null;
+                if (index.HasValue)
+                {
+                    var idxType = Map(ga[0].GetProperty("type").GetString()!,
+                        ga[0].TryGetProperty("meta", out var im) ? im.GetString() : null);
+                    if (idxType is null) { _propsSkipped++; continue; }
+                    indexCast = $"(({idxType.Cs})({index.Value}))";
+                }
+
+                string? setterCs = null;
+                string? setterCast = null;
+                var setterName = p.TryGetProperty("setter", out var s) ? s.GetString() : null;
+                if (!string.IsNullOrEmpty(setterName) && ResolveMethod(gd, setterName) is { } setter)
+                {
+                    var (setterCls, setterEl) = setter;
+                    var sa = setterEl.TryGetProperty("arguments", out var sargs) ? sargs : default;
+                    var setterArgCount = sa.ValueKind == JsonValueKind.Array ? sa.GetArrayLength() : 0;
+                    if (setterArgCount == (index.HasValue ? 2 : 1))
+                    {
+                        var valueType = Map(sa[setterArgCount - 1].GetProperty("type").GetString()!,
+                            sa[setterArgCount - 1].TryGetProperty("meta", out var vm) ? vm.GetString() : null);
+                        if (valueType is not null)
+                        {
+                            if (valueType.Cs == type.Cs)
+                            {
+                                setterCs = Pascal(setterName!);
+                            }
+                            else if (valueType.Kind is "int" or "enum" && type.Kind is "int" or "enum")
+                            {
+                                setterCs = Pascal(setterName!);
+                                setterCast = $"({valueType.Cs})";
+                            }
+                            // else: type mismatch beyond numeric/enum - emit read-only.
+                        }
+                    }
+                    if (setterCs is not null) _internalAccessors.Add((setterCls, setterName!));
+                }
+
+                _internalAccessors.Add((getterCls, getterName!));
+                list.Add(new PropInfo(csName, Pascal(getterName!), setterCs, indexCast, type, setterCast));
+            }
+        }
+    }
+
+    private static void EmitProperties(StringBuilder sb, ClassInfo info, HashSet<string> used)
+    {
+        foreach (var pi in _propsByClass[info.GdName])
+        {
+            if (!used.Add(pi.CsName)) { _propsSkipped++; continue; }
+            _propsEmitted++;
+
+            var getCall = pi.IndexCast is null ? $"{pi.GetterCs}()" : $"{pi.GetterCs}({pi.IndexCast})";
+            sb.AppendLine();
+            if (pi.SetterCs is null)
+            {
+                sb.AppendLine($"    public {RetType(pi.Type)} {pi.CsName} => {getCall};");
+                continue;
+            }
+
+            var valueExpr = pi.SetterCast is null ? "value" : $"{pi.SetterCast}value";
+            var setCall = pi.IndexCast is null
+                ? $"{pi.SetterCs}({valueExpr})"
+                : $"{pi.SetterCs}({pi.IndexCast}, {valueExpr})";
+            sb.AppendLine($"    public {RetType(pi.Type)} {pi.CsName}");
+            sb.AppendLine("    {");
+            sb.AppendLine($"        get => {getCall};");
+            sb.AppendLine($"        set => {setCall};");
+            sb.AppendLine("    }");
+        }
+    }
 
     // ---------------------------------------------------------- virtuals --
 

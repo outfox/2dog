@@ -180,18 +180,18 @@ internal static unsafe class Program
         Check(loop is SceneTree, $"GetMainLoop() materialized as most-derived type ({loop?.GetType().Name})");
 
         var tree = (SceneTree)loop!;
-        var rootTyped = tree.GetRoot();
-        Check(rootTyped is not null && rootTyped.NativePtr == root, "typed SceneTree.GetRoot() is identity-equal with the raw-ptrcall root");
+        var rootTyped = tree.Root;
+        Check(rootTyped is not null && rootTyped.NativePtr == root, "typed SceneTree.Root is identity-equal with the raw-ptrcall root");
 
         var child = new Node();
-        child.SetName("typed_child");
+        child.Name = "typed_child";
         rootTyped!.AddChild(child, false, Node.InternalMode.INTERNAL_MODE_DISABLED);
-        Check(child.GetName() == "typed_child", $"typed SetName/GetName roundtrip (StringName return) = \"{child.GetName()}\"");
+        Check(child.Name == "typed_child", $"typed Name property roundtrip (StringName return) = \"{child.Name}\"");
         Check(rootTyped.GetChildCount(false) == childCount + 1, "typed AddChild seen by typed GetChildCount");
 
         var node2d = new Node2D();
-        node2d.SetPosition(new Vector2(3.5f, -4.25f));
-        var pos = node2d.GetPosition();
+        node2d.Position = new Vector2(3.5f, -4.25f);
+        var pos = node2d.Position;
         Check(pos.X == 3.5f && pos.Y == -4.25f, $"Vector2 arg/return roundtrip through generated ptrcall = {pos}");
         node2d.Free();
         Check(!node2d.IsValid, "typed Free() invalidates the wrapper (ObjectID check)");
