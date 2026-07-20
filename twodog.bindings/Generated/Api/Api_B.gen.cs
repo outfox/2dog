@@ -185,6 +185,38 @@ public unsafe partial class BaseButton : Control
         set => SetShortcutInTooltip(value);
     }
 
+    public delegate void PressedEventHandler();
+
+    public event PressedEventHandler Pressed
+    {
+        add => Connect("pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PressedEventHandler)__d)()));
+        remove => Disconnect("pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PressedEventHandler)__d)()));
+    }
+
+    public delegate void ButtonUpEventHandler();
+
+    public event ButtonUpEventHandler ButtonUp
+    {
+        add => Connect("button_up", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ButtonUpEventHandler)__d)()));
+        remove => Disconnect("button_up", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ButtonUpEventHandler)__d)()));
+    }
+
+    public delegate void ButtonDownEventHandler();
+
+    public event ButtonDownEventHandler ButtonDown
+    {
+        add => Connect("button_down", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ButtonDownEventHandler)__d)()));
+        remove => Disconnect("button_down", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ButtonDownEventHandler)__d)()));
+    }
+
+    public delegate void ToggledEventHandler(bool toggledOn);
+
+    public event ToggledEventHandler Toggled
+    {
+        add => Connect("toggled", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ToggledEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("toggled", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ToggledEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_set_pressed;
     internal void SetPressed(bool pressed)
     {
@@ -5003,6 +5035,22 @@ public unsafe partial class BoneMap : Resource
         set => SetProfile(value);
     }
 
+    public delegate void BoneMapUpdatedEventHandler();
+
+    public event BoneMapUpdatedEventHandler BoneMapUpdated
+    {
+        add => Connect("bone_map_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BoneMapUpdatedEventHandler)__d)()));
+        remove => Disconnect("bone_map_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BoneMapUpdatedEventHandler)__d)()));
+    }
+
+    public delegate void ProfileUpdatedEventHandler();
+
+    public event ProfileUpdatedEventHandler ProfileUpdated
+    {
+        add => Connect("profile_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ProfileUpdatedEventHandler)__d)()));
+        remove => Disconnect("profile_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ProfileUpdatedEventHandler)__d)()));
+    }
+
     private static nint __mb_get_profile;
     internal SkeletonProfile? GetProfile()
     {
@@ -6592,6 +6640,14 @@ public unsafe partial class ButtonGroup : Resource
     {
         get => IsAllowUnpress();
         set => SetAllowUnpress(value);
+    }
+
+    public delegate void PressedEventHandler(BaseButton? button);
+
+    public event PressedEventHandler Pressed
+    {
+        add => Connect("pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PressedEventHandler)__d)((BaseButton?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PressedEventHandler)__d)((BaseButton?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
     }
 
     private static nint __mb_get_pressed_button;

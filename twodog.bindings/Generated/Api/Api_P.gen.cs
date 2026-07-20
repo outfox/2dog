@@ -2588,6 +2588,14 @@ public unsafe partial class ParticleProcessMaterial : Material
         set => SetSubEmitterKeepVelocity(value);
     }
 
+    public delegate void EmissionShapeChangedEventHandler();
+
+    public event EmissionShapeChangedEventHandler EmissionShapeChanged
+    {
+        add => Connect("emission_shape_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EmissionShapeChangedEventHandler)__d)()));
+        remove => Disconnect("emission_shape_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EmissionShapeChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_direction;
     internal void SetDirection(Vector3 degrees)
     {
@@ -4478,6 +4486,22 @@ public unsafe partial class Path3D : Node3D
     {
         get => GetDebugCustomColor();
         set => SetDebugCustomColor(value);
+    }
+
+    public delegate void CurveChangedEventHandler();
+
+    public event CurveChangedEventHandler CurveChanged
+    {
+        add => Connect("curve_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CurveChangedEventHandler)__d)()));
+        remove => Disconnect("curve_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CurveChangedEventHandler)__d)()));
+    }
+
+    public delegate void DebugColorChangedEventHandler();
+
+    public event DebugColorChangedEventHandler DebugColorChanged
+    {
+        add => Connect("debug_color_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DebugColorChangedEventHandler)__d)()));
+        remove => Disconnect("debug_color_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DebugColorChangedEventHandler)__d)()));
     }
 
     private static nint __mb_set_curve;
@@ -23423,6 +23447,14 @@ public unsafe partial class Popup : Window
     {
         ClassRegistry.AttachNew(this, "Popup");
     }
+
+    public delegate void PopupHideEventHandler();
+
+    public event PopupHideEventHandler PopupHide
+    {
+        add => Connect("popup_hide", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PopupHideEventHandler)__d)()));
+        remove => Disconnect("popup_hide", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PopupHideEventHandler)__d)()));
+    }
 }
 
 public unsafe partial class PopupMenu : Popup
@@ -23516,6 +23548,38 @@ public unsafe partial class PopupMenu : Popup
     {
         get => GetItemCount();
         set => SetItemCount(value);
+    }
+
+    public delegate void IdPressedEventHandler(long id);
+
+    public event IdPressedEventHandler IdPressed
+    {
+        add => Connect("id_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((IdPressedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("id_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((IdPressedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void IdFocusedEventHandler(long id);
+
+    public event IdFocusedEventHandler IdFocused
+    {
+        add => Connect("id_focused", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((IdFocusedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("id_focused", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((IdFocusedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void IndexPressedEventHandler(long index);
+
+    public event IndexPressedEventHandler IndexPressed
+    {
+        add => Connect("index_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((IndexPressedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("index_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((IndexPressedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void MenuChangedEventHandler();
+
+    public event MenuChangedEventHandler MenuChanged
+    {
+        add => Connect("menu_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MenuChangedEventHandler)__d)()));
+        remove => Disconnect("menu_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MenuChangedEventHandler)__d)()));
     }
 
     private static nint __mb_activate_item_by_event;
@@ -26644,6 +26708,14 @@ public static unsafe partial class ProjectSettings
         _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("ProjectSettings");
 
     public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
+
+    public delegate void SettingsChangedEventHandler();
+
+    public static event SettingsChangedEventHandler SettingsChanged
+    {
+        add => Singleton.Connect("settings_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SettingsChangedEventHandler)__d)()));
+        remove => Singleton.Disconnect("settings_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SettingsChangedEventHandler)__d)()));
+    }
 
     private static nint __mb_has_setting;
     public static bool HasSetting(string name)

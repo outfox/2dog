@@ -1109,6 +1109,14 @@ public unsafe partial class VideoStreamPlayer : Control
         set => SetBus(value);
     }
 
+    public delegate void FinishedEventHandler();
+
+    public event FinishedEventHandler Finished
+    {
+        add => Connect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+        remove => Disconnect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_stream;
     internal void SetStream(VideoStream? stream)
     {
@@ -2031,6 +2039,22 @@ public unsafe partial class Viewport : Node
     {
         get => GetOversamplingOverride();
         set => SetOversamplingOverride(value);
+    }
+
+    public delegate void SizeChangedEventHandler();
+
+    public event SizeChangedEventHandler SizeChanged
+    {
+        add => Connect("size_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SizeChangedEventHandler)__d)()));
+        remove => Disconnect("size_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SizeChangedEventHandler)__d)()));
+    }
+
+    public delegate void GuiFocusChangedEventHandler(Control? node);
+
+    public event GuiFocusChangedEventHandler GuiFocusChanged
+    {
+        add => Connect("gui_focus_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GuiFocusChangedEventHandler)__d)((Control?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("gui_focus_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GuiFocusChangedEventHandler)__d)((Control?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
     }
 
     private static nint __mb_set_world_2d;
@@ -4181,6 +4205,46 @@ public unsafe partial class VirtualJoystick : Control
         set => SetVisibilityMode(value);
     }
 
+    public delegate void PressedEventHandler();
+
+    public event PressedEventHandler Pressed
+    {
+        add => Connect("pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PressedEventHandler)__d)()));
+        remove => Disconnect("pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PressedEventHandler)__d)()));
+    }
+
+    public delegate void TappedEventHandler();
+
+    public event TappedEventHandler Tapped
+    {
+        add => Connect("tapped", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TappedEventHandler)__d)()));
+        remove => Disconnect("tapped", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TappedEventHandler)__d)()));
+    }
+
+    public delegate void ReleasedEventHandler(Vector2 inputVector);
+
+    public event ReleasedEventHandler Released
+    {
+        add => Connect("released", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ReleasedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("released", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ReleasedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void FlickedEventHandler(Vector2 inputVector);
+
+    public event FlickedEventHandler Flicked
+    {
+        add => Connect("flicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FlickedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("flicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FlickedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void FlickCanceledEventHandler();
+
+    public event FlickCanceledEventHandler FlickCanceled
+    {
+        add => Connect("flick_canceled", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FlickCanceledEventHandler)__d)()));
+        remove => Disconnect("flick_canceled", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FlickCanceledEventHandler)__d)()));
+    }
+
     private static nint __mb_set_joystick_mode;
     internal void SetJoystickMode(VirtualJoystick.JoystickModeEnum mode)
     {
@@ -4726,6 +4790,22 @@ public unsafe partial class VisibleOnScreenNotifier2D : Node2D
         set => SetShowRect(value);
     }
 
+    public delegate void ScreenEnteredEventHandler();
+
+    public event ScreenEnteredEventHandler ScreenEntered
+    {
+        add => Connect("screen_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScreenEnteredEventHandler)__d)()));
+        remove => Disconnect("screen_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScreenEnteredEventHandler)__d)()));
+    }
+
+    public delegate void ScreenExitedEventHandler();
+
+    public event ScreenExitedEventHandler ScreenExited
+    {
+        add => Connect("screen_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScreenExitedEventHandler)__d)()));
+        remove => Disconnect("screen_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScreenExitedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_rect;
     internal void SetRect(Rect2 rect)
     {
@@ -4817,6 +4897,22 @@ public unsafe partial class VisibleOnScreenNotifier3D : VisualInstance3D
     {
         get => GetAabb();
         set => SetAabb(value);
+    }
+
+    public delegate void ScreenEnteredEventHandler();
+
+    public event ScreenEnteredEventHandler ScreenEntered
+    {
+        add => Connect("screen_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScreenEnteredEventHandler)__d)()));
+        remove => Disconnect("screen_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScreenEnteredEventHandler)__d)()));
+    }
+
+    public delegate void ScreenExitedEventHandler();
+
+    public event ScreenExitedEventHandler ScreenExited
+    {
+        add => Connect("screen_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScreenExitedEventHandler)__d)()));
+        remove => Disconnect("screen_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScreenExitedEventHandler)__d)()));
     }
 
     private static nint __mb_set_aabb;
@@ -8272,6 +8368,14 @@ public unsafe partial class VisualShaderNodeInput : VisualShaderNode
     {
         get => GetInputName();
         set => SetInputName(value);
+    }
+
+    public delegate void InputTypeChangedEventHandler();
+
+    public event InputTypeChangedEventHandler InputTypeChanged
+    {
+        add => Connect("input_type_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InputTypeChangedEventHandler)__d)()));
+        remove => Disconnect("input_type_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InputTypeChangedEventHandler)__d)()));
     }
 
     private static nint __mb_set_input_name;

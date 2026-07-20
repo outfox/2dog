@@ -3104,6 +3104,14 @@ public static unsafe partial class Input
         set => SetIgnoreJoypadOnUnfocusedApplication(value);
     }
 
+    public delegate void JoyConnectionChangedEventHandler(long device, bool connected);
+
+    public static event JoyConnectionChangedEventHandler JoyConnectionChanged
+    {
+        add => Singleton.Connect("joy_connection_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((JoyConnectionChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        remove => Singleton.Disconnect("joy_connection_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((JoyConnectionChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+    }
+
     private static nint __mb_is_anything_pressed;
     public static bool IsAnythingPressed()
     {
@@ -7214,6 +7222,14 @@ public static unsafe partial class InputMap
 
     public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
+    public delegate void ProjectSettingsLoadedEventHandler();
+
+    public static event ProjectSettingsLoadedEventHandler ProjectSettingsLoaded
+    {
+        add => Singleton.Connect("project_settings_loaded", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ProjectSettingsLoadedEventHandler)__d)()));
+        remove => Singleton.Disconnect("project_settings_loaded", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ProjectSettingsLoadedEventHandler)__d)()));
+    }
+
     private static nint __mb_has_action;
     public static bool HasAction(string action)
     {
@@ -7665,6 +7681,46 @@ public unsafe partial class ItemList : Control
     {
         get => GetFixedIconSize();
         set => SetFixedIconSize(value);
+    }
+
+    public delegate void ItemSelectedEventHandler(long index);
+
+    public event ItemSelectedEventHandler ItemSelected
+    {
+        add => Connect("item_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemSelectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("item_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemSelectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void EmptyClickedEventHandler(Vector2 atPosition, long mouseButtonIndex);
+
+    public event EmptyClickedEventHandler EmptyClicked
+    {
+        add => Connect("empty_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EmptyClickedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("empty_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EmptyClickedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+    }
+
+    public delegate void ItemClickedEventHandler(long index, Vector2 atPosition, long mouseButtonIndex);
+
+    public event ItemClickedEventHandler ItemClicked
+    {
+        add => Connect("item_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemClickedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[1]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])))));
+        remove => Disconnect("item_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemClickedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[1]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])))));
+    }
+
+    public delegate void MultiSelectedEventHandler(long index, bool selected);
+
+    public event MultiSelectedEventHandler MultiSelected
+    {
+        add => Connect("multi_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MultiSelectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("multi_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MultiSelectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void ItemActivatedEventHandler(long index);
+
+    public event ItemActivatedEventHandler ItemActivated
+    {
+        add => Connect("item_activated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemActivatedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("item_activated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemActivatedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
     }
 
     private static nint __mb_add_item;

@@ -1100,6 +1100,38 @@ public unsafe partial class EditorDebuggerSession : RefCounted
 {
     internal EditorDebuggerSession(nint ptr, bool rc) : base(ptr, rc) { }
 
+    public delegate void StartedEventHandler();
+
+    public event StartedEventHandler Started
+    {
+        add => Connect("started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StartedEventHandler)__d)()));
+        remove => Disconnect("started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StartedEventHandler)__d)()));
+    }
+
+    public delegate void StoppedEventHandler();
+
+    public event StoppedEventHandler Stopped
+    {
+        add => Connect("stopped", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StoppedEventHandler)__d)()));
+        remove => Disconnect("stopped", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StoppedEventHandler)__d)()));
+    }
+
+    public delegate void BreakedEventHandler(bool canDebug);
+
+    public event BreakedEventHandler Breaked
+    {
+        add => Connect("breaked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BreakedEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("breaked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BreakedEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void ContinuedEventHandler();
+
+    public event ContinuedEventHandler Continued
+    {
+        add => Connect("continued", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ContinuedEventHandler)__d)()));
+        remove => Disconnect("continued", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ContinuedEventHandler)__d)()));
+    }
+
     private static nint __mb_send_message;
     public void SendMessage(string message, Godot.Collections.Array data)
     {
@@ -1344,6 +1376,22 @@ public unsafe partial class EditorDock : MarginContainer
     {
         get => GetAvailableLayouts();
         set => SetAvailableLayouts(value);
+    }
+
+    public delegate void OpenedEventHandler();
+
+    public event OpenedEventHandler Opened
+    {
+        add => Connect("opened", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((OpenedEventHandler)__d)()));
+        remove => Disconnect("opened", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((OpenedEventHandler)__d)()));
+    }
+
+    public delegate void ClosedEventHandler();
+
+    public event ClosedEventHandler Closed
+    {
+        add => Connect("closed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ClosedEventHandler)__d)()));
+        remove => Disconnect("closed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ClosedEventHandler)__d)()));
     }
 
     private static nint __mb_open;
@@ -4152,6 +4200,30 @@ public unsafe partial class EditorFileSystem : Node
 {
     internal EditorFileSystem(nint ptr, bool rc) : base(ptr, rc) { }
 
+    public delegate void FilesystemChangedEventHandler();
+
+    public event FilesystemChangedEventHandler FilesystemChanged
+    {
+        add => Connect("filesystem_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FilesystemChangedEventHandler)__d)()));
+        remove => Disconnect("filesystem_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FilesystemChangedEventHandler)__d)()));
+    }
+
+    public delegate void ScriptClassesUpdatedEventHandler();
+
+    public event ScriptClassesUpdatedEventHandler ScriptClassesUpdated
+    {
+        add => Connect("script_classes_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScriptClassesUpdatedEventHandler)__d)()));
+        remove => Disconnect("script_classes_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScriptClassesUpdatedEventHandler)__d)()));
+    }
+
+    public delegate void SourcesChangedEventHandler(bool exist);
+
+    public event SourcesChangedEventHandler SourcesChanged
+    {
+        add => Connect("sources_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SourcesChangedEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("sources_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SourcesChangedEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_get_filesystem;
     public EditorFileSystemDirectory? GetFilesystem()
     {
@@ -4751,6 +4823,78 @@ public unsafe partial class EditorInspector : ScrollContainer
     public EditorInspector() : this(0, false)
     {
         ClassRegistry.AttachNew(this, "EditorInspector");
+    }
+
+    public delegate void PropertySelectedEventHandler(string property);
+
+    public event PropertySelectedEventHandler PropertySelected
+    {
+        add => Connect("property_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertySelectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("property_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertySelectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void PropertyKeyedEventHandler(string property, Variant value, bool advance);
+
+    public event PropertyKeyedEventHandler PropertyKeyed
+    {
+        add => Connect("property_keyed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyKeyedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), new Variant(Variants.NewCopy(*((NativeVariant**)__a)[1])), Variants.ToBool(*((NativeVariant**)__a)[2]))));
+        remove => Disconnect("property_keyed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyKeyedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), new Variant(Variants.NewCopy(*((NativeVariant**)__a)[1])), Variants.ToBool(*((NativeVariant**)__a)[2]))));
+    }
+
+    public delegate void PropertyDeletedEventHandler(string property);
+
+    public event PropertyDeletedEventHandler PropertyDeleted
+    {
+        add => Connect("property_deleted", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyDeletedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("property_deleted", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyDeletedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void ResourceSelectedEventHandler(Resource? resource, string path);
+
+    public event ResourceSelectedEventHandler ResourceSelected
+    {
+        add => Connect("resource_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResourceSelectedEventHandler)__d)((Resource?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("resource_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResourceSelectedEventHandler)__d)((Resource?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void ObjectIdSelectedEventHandler(long id);
+
+    public event ObjectIdSelectedEventHandler ObjectIdSelected
+    {
+        add => Connect("object_id_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ObjectIdSelectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("object_id_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ObjectIdSelectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void PropertyEditedEventHandler(string property);
+
+    public event PropertyEditedEventHandler PropertyEdited
+    {
+        add => Connect("property_edited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyEditedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("property_edited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyEditedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void PropertyToggledEventHandler(string property, bool @checked);
+
+    public event PropertyToggledEventHandler PropertyToggled
+    {
+        add => Connect("property_toggled", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyToggledEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("property_toggled", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyToggledEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void EditedObjectChangedEventHandler();
+
+    public event EditedObjectChangedEventHandler EditedObjectChanged
+    {
+        add => Connect("edited_object_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EditedObjectChangedEventHandler)__d)()));
+        remove => Disconnect("edited_object_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EditedObjectChangedEventHandler)__d)()));
+    }
+
+    public delegate void RestartRequestedEventHandler();
+
+    public event RestartRequestedEventHandler RestartRequested
+    {
+        add => Connect("restart_requested", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RestartRequestedEventHandler)__d)()));
+        remove => Disconnect("restart_requested", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RestartRequestedEventHandler)__d)()));
     }
 
     private static nint __mb_edit;
@@ -6930,6 +7074,54 @@ public unsafe partial class EditorPlugin : Node
         Custom = 2,
     }
 
+    public delegate void SceneChangedEventHandler(Node? sceneRoot);
+
+    public event SceneChangedEventHandler SceneChanged
+    {
+        add => Connect("scene_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SceneChangedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("scene_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SceneChangedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void SceneClosedEventHandler(string filepath);
+
+    public event SceneClosedEventHandler SceneClosed
+    {
+        add => Connect("scene_closed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SceneClosedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("scene_closed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SceneClosedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void MainScreenChangedEventHandler(string screenName);
+
+    public event MainScreenChangedEventHandler MainScreenChanged
+    {
+        add => Connect("main_screen_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MainScreenChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("main_screen_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MainScreenChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void ResourceSavedEventHandler(Resource? resource);
+
+    public event ResourceSavedEventHandler ResourceSaved
+    {
+        add => Connect("resource_saved", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResourceSavedEventHandler)__d)((Resource?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("resource_saved", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResourceSavedEventHandler)__d)((Resource?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void SceneSavedEventHandler(string filepath);
+
+    public event SceneSavedEventHandler SceneSaved
+    {
+        add => Connect("scene_saved", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SceneSavedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("scene_saved", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SceneSavedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void ProjectSettingsChangedEventHandler();
+
+    public event ProjectSettingsChangedEventHandler ProjectSettingsChanged
+    {
+        add => Connect("project_settings_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ProjectSettingsChangedEventHandler)__d)()));
+        remove => Disconnect("project_settings_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ProjectSettingsChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_add_dock;
     public void AddDock(EditorDock? dock)
     {
@@ -8069,6 +8261,102 @@ public unsafe partial class EditorProperty : Container
         set => SetNameSplitRatio(value);
     }
 
+    public delegate void PropertyChangedEventHandler(string property, Variant value, string field, bool changing);
+
+    public event PropertyChangedEventHandler PropertyChanged
+    {
+        add => Connect("property_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), new Variant(Variants.NewCopy(*((NativeVariant**)__a)[1])), Variants.ToManagedString(*((NativeVariant**)__a)[2]), Variants.ToBool(*((NativeVariant**)__a)[3]))));
+        remove => Disconnect("property_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), new Variant(Variants.NewCopy(*((NativeVariant**)__a)[1])), Variants.ToManagedString(*((NativeVariant**)__a)[2]), Variants.ToBool(*((NativeVariant**)__a)[3]))));
+    }
+
+    public delegate void PropertyKeyedEventHandler(string property);
+
+    public event PropertyKeyedEventHandler PropertyKeyed
+    {
+        add => Connect("property_keyed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyKeyedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("property_keyed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyKeyedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void PropertyDeletedEventHandler(string property);
+
+    public event PropertyDeletedEventHandler PropertyDeleted
+    {
+        add => Connect("property_deleted", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyDeletedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("property_deleted", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyDeletedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void PropertyKeyedWithValueEventHandler(string property, Variant value);
+
+    public event PropertyKeyedWithValueEventHandler PropertyKeyedWithValue
+    {
+        add => Connect("property_keyed_with_value", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyKeyedWithValueEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), new Variant(Variants.NewCopy(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("property_keyed_with_value", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyKeyedWithValueEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), new Variant(Variants.NewCopy(*((NativeVariant**)__a)[1])))));
+    }
+
+    public delegate void PropertyCheckedEventHandler(string property, bool @checked);
+
+    public event PropertyCheckedEventHandler PropertyChecked
+    {
+        add => Connect("property_checked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyCheckedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("property_checked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyCheckedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void PropertyOverriddenEventHandler();
+
+    public event PropertyOverriddenEventHandler PropertyOverridden
+    {
+        add => Connect("property_overridden", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyOverriddenEventHandler)__d)()));
+        remove => Disconnect("property_overridden", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyOverriddenEventHandler)__d)()));
+    }
+
+    public delegate void PropertyFavoritedEventHandler(string property, bool favorited);
+
+    public event PropertyFavoritedEventHandler PropertyFavorited
+    {
+        add => Connect("property_favorited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyFavoritedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("property_favorited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyFavoritedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void PropertyPinnedEventHandler(string property, bool pinned);
+
+    public event PropertyPinnedEventHandler PropertyPinned
+    {
+        add => Connect("property_pinned", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyPinnedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("property_pinned", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyPinnedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void PropertyCanRevertChangedEventHandler(string property, bool canRevert);
+
+    public event PropertyCanRevertChangedEventHandler PropertyCanRevertChanged
+    {
+        add => Connect("property_can_revert_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyCanRevertChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("property_can_revert_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyCanRevertChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void ResourceSelectedEventHandler(string path, Resource? resource);
+
+    public event ResourceSelectedEventHandler ResourceSelected
+    {
+        add => Connect("resource_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResourceSelectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), (Resource?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false))));
+        remove => Disconnect("resource_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResourceSelectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), (Resource?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false))));
+    }
+
+    public delegate void ObjectIdSelectedEventHandler(string property, long id);
+
+    public event ObjectIdSelectedEventHandler ObjectIdSelected
+    {
+        add => Connect("object_id_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ObjectIdSelectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("object_id_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ObjectIdSelectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+    }
+
+    public delegate void SelectedEventHandler(string path, long focusableIdx);
+
+    public event SelectedEventHandler Selected
+    {
+        add => Connect("selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SelectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SelectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+    }
+
     private static nint __mb_set_label;
     internal void SetLabel(string text)
     {
@@ -8718,6 +9006,22 @@ public unsafe partial class EditorResourcePicker : HBoxContainer
         set => SetToggleMode(value);
     }
 
+    public delegate void ResourceSelectedEventHandler(Resource? resource, bool inspect);
+
+    public event ResourceSelectedEventHandler ResourceSelected
+    {
+        add => Connect("resource_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResourceSelectedEventHandler)__d)((Resource?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("resource_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResourceSelectedEventHandler)__d)((Resource?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void ResourceChangedEventHandler(Resource? resource);
+
+    public event ResourceChangedEventHandler ResourceChanged
+    {
+        add => Connect("resource_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResourceChangedEventHandler)__d)((Resource?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("resource_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResourceChangedEventHandler)__d)((Resource?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
     private static nint __mb_set_base_type;
     internal void SetBaseType(string baseType)
     {
@@ -8902,6 +9206,14 @@ public unsafe partial class EditorResourcePicker : HBoxContainer
 public unsafe partial class EditorResourcePreview : Node
 {
     internal EditorResourcePreview(nint ptr, bool rc) : base(ptr, rc) { }
+
+    public delegate void PreviewInvalidatedEventHandler(string path);
+
+    public event PreviewInvalidatedEventHandler PreviewInvalidated
+    {
+        add => Connect("preview_invalidated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PreviewInvalidatedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("preview_invalidated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PreviewInvalidatedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
 
     private static nint __mb_queue_resource_preview;
     public void QueueResourcePreview(string path, GodotObject? receiver, string receiverFunc, Variant userdata)
@@ -9539,6 +9851,14 @@ public unsafe partial class EditorSelection : GodotObject
         ClassRegistry.AttachNew(this, "EditorSelection");
     }
 
+    public delegate void SelectionChangedEventHandler();
+
+    public event SelectionChangedEventHandler SelectionChanged
+    {
+        add => Connect("selection_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SelectionChangedEventHandler)__d)()));
+        remove => Disconnect("selection_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SelectionChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_clear;
     public void Clear()
     {
@@ -9637,6 +9957,14 @@ public unsafe partial class EditorSettings : Resource
     public EditorSettings() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "EditorSettings");
+    }
+
+    public delegate void SettingsChangedEventHandler();
+
+    public event SettingsChangedEventHandler SettingsChanged
+    {
+        add => Connect("settings_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SettingsChangedEventHandler)__d)()));
+        remove => Disconnect("settings_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SettingsChangedEventHandler)__d)()));
     }
 
     private static nint __mb_has_setting;
@@ -10104,6 +10432,46 @@ public unsafe partial class EditorSpinSlider : Range
         set => SetDeferredDragModeEnabled(value);
     }
 
+    public delegate void GrabbedEventHandler();
+
+    public event GrabbedEventHandler Grabbed
+    {
+        add => Connect("grabbed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GrabbedEventHandler)__d)()));
+        remove => Disconnect("grabbed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GrabbedEventHandler)__d)()));
+    }
+
+    public delegate void UngrabbedEventHandler();
+
+    public event UngrabbedEventHandler Ungrabbed
+    {
+        add => Connect("ungrabbed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((UngrabbedEventHandler)__d)()));
+        remove => Disconnect("ungrabbed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((UngrabbedEventHandler)__d)()));
+    }
+
+    public delegate void UpdownPressedEventHandler();
+
+    public event UpdownPressedEventHandler UpdownPressed
+    {
+        add => Connect("updown_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((UpdownPressedEventHandler)__d)()));
+        remove => Disconnect("updown_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((UpdownPressedEventHandler)__d)()));
+    }
+
+    public delegate void ValueFocusEnteredEventHandler();
+
+    public event ValueFocusEnteredEventHandler ValueFocusEntered
+    {
+        add => Connect("value_focus_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ValueFocusEnteredEventHandler)__d)()));
+        remove => Disconnect("value_focus_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ValueFocusEnteredEventHandler)__d)()));
+    }
+
+    public delegate void ValueFocusExitedEventHandler();
+
+    public event ValueFocusExitedEventHandler ValueFocusExited
+    {
+        add => Connect("value_focus_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ValueFocusExitedEventHandler)__d)()));
+        remove => Disconnect("value_focus_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ValueFocusExitedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_label;
     internal void SetLabel(string label)
     {
@@ -10466,6 +10834,22 @@ public unsafe partial class EditorUndoRedoManager : GodotObject
         GlobalHistory = 0,
         RemoteHistory = -9,
         InvalidHistory = -99,
+    }
+
+    public delegate void HistoryChangedEventHandler();
+
+    public event HistoryChangedEventHandler HistoryChanged
+    {
+        add => Connect("history_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((HistoryChangedEventHandler)__d)()));
+        remove => Disconnect("history_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((HistoryChangedEventHandler)__d)()));
+    }
+
+    public delegate void VersionChangedEventHandler();
+
+    public event VersionChangedEventHandler VersionChanged
+    {
+        add => Connect("version_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VersionChangedEventHandler)__d)()));
+        remove => Disconnect("version_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VersionChangedEventHandler)__d)()));
     }
 
     private static nint __mb_create_action;

@@ -1785,6 +1785,30 @@ public unsafe partial class AcceptDialog : Window
         set => SetAutowrap(value);
     }
 
+    public delegate void ConfirmedEventHandler();
+
+    public event ConfirmedEventHandler Confirmed
+    {
+        add => Connect("confirmed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConfirmedEventHandler)__d)()));
+        remove => Disconnect("confirmed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConfirmedEventHandler)__d)()));
+    }
+
+    public delegate void CanceledEventHandler();
+
+    public event CanceledEventHandler Canceled
+    {
+        add => Connect("canceled", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CanceledEventHandler)__d)()));
+        remove => Disconnect("canceled", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CanceledEventHandler)__d)()));
+    }
+
+    public delegate void CustomActionEventHandler(string action);
+
+    public event CustomActionEventHandler CustomAction
+    {
+        add => Connect("custom_action", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CustomActionEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("custom_action", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CustomActionEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_get_ok_button;
     public Button? GetOkButton()
     {
@@ -3907,6 +3931,46 @@ public unsafe partial class AnimatedSprite2D : Node2D
         set => SetFlipV(value);
     }
 
+    public delegate void SpriteFramesChangedEventHandler();
+
+    public event SpriteFramesChangedEventHandler SpriteFramesChanged
+    {
+        add => Connect("sprite_frames_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SpriteFramesChangedEventHandler)__d)()));
+        remove => Disconnect("sprite_frames_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SpriteFramesChangedEventHandler)__d)()));
+    }
+
+    public delegate void AnimationChangedEventHandler();
+
+    public event AnimationChangedEventHandler AnimationChanged
+    {
+        add => Connect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)()));
+        remove => Disconnect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)()));
+    }
+
+    public delegate void FrameChangedEventHandler();
+
+    public event FrameChangedEventHandler FrameChanged
+    {
+        add => Connect("frame_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FrameChangedEventHandler)__d)()));
+        remove => Disconnect("frame_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FrameChangedEventHandler)__d)()));
+    }
+
+    public delegate void AnimationLoopedEventHandler();
+
+    public event AnimationLoopedEventHandler AnimationLooped
+    {
+        add => Connect("animation_looped", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationLoopedEventHandler)__d)()));
+        remove => Disconnect("animation_looped", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationLoopedEventHandler)__d)()));
+    }
+
+    public delegate void AnimationFinishedEventHandler();
+
+    public event AnimationFinishedEventHandler AnimationFinished
+    {
+        add => Connect("animation_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationFinishedEventHandler)__d)()));
+        remove => Disconnect("animation_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationFinishedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_sprite_frames;
     internal void SetSpriteFrames(SpriteFrames? spriteFrames)
     {
@@ -4372,6 +4436,46 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     {
         get => GetSpeedScale();
         set => SetSpeedScale(value);
+    }
+
+    public delegate void SpriteFramesChangedEventHandler();
+
+    public event SpriteFramesChangedEventHandler SpriteFramesChanged
+    {
+        add => Connect("sprite_frames_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SpriteFramesChangedEventHandler)__d)()));
+        remove => Disconnect("sprite_frames_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SpriteFramesChangedEventHandler)__d)()));
+    }
+
+    public delegate void AnimationChangedEventHandler();
+
+    public event AnimationChangedEventHandler AnimationChanged
+    {
+        add => Connect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)()));
+        remove => Disconnect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)()));
+    }
+
+    public delegate void FrameChangedEventHandler();
+
+    public event FrameChangedEventHandler FrameChanged
+    {
+        add => Connect("frame_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FrameChangedEventHandler)__d)()));
+        remove => Disconnect("frame_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FrameChangedEventHandler)__d)()));
+    }
+
+    public delegate void AnimationLoopedEventHandler();
+
+    public event AnimationLoopedEventHandler AnimationLooped
+    {
+        add => Connect("animation_looped", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationLoopedEventHandler)__d)()));
+        remove => Disconnect("animation_looped", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationLoopedEventHandler)__d)()));
+    }
+
+    public delegate void AnimationFinishedEventHandler();
+
+    public event AnimationFinishedEventHandler AnimationFinished
+    {
+        add => Connect("animation_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationFinishedEventHandler)__d)()));
+        remove => Disconnect("animation_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationFinishedEventHandler)__d)()));
     }
 
     private static nint __mb_set_sprite_frames;
@@ -6649,6 +6753,38 @@ public unsafe partial class AnimationLibrary : Resource
         ClassRegistry.AttachNew(this, "AnimationLibrary");
     }
 
+    public delegate void AnimationAddedEventHandler(string animName);
+
+    public event AnimationAddedEventHandler AnimationAdded
+    {
+        add => Connect("animation_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("animation_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void AnimationRemovedEventHandler(string animName);
+
+    public event AnimationRemovedEventHandler AnimationRemoved
+    {
+        add => Connect("animation_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("animation_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void AnimationRenamedEventHandler(string oldName, string newName);
+
+    public event AnimationRenamedEventHandler AnimationRenamed
+    {
+        add => Connect("animation_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationRenamedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("animation_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationRenamedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void AnimationChangedEventHandler(string animName);
+
+    public event AnimationChangedEventHandler AnimationChanged
+    {
+        add => Connect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_add_animation;
     public Error AddAnimation(string name, Animation? animation)
     {
@@ -6852,6 +6988,62 @@ public unsafe partial class AnimationMixer : Node
     {
         get => GetCallbackModeDiscrete();
         set => SetCallbackModeDiscrete(value);
+    }
+
+    public delegate void AnimationListChangedEventHandler();
+
+    public event AnimationListChangedEventHandler AnimationListChanged
+    {
+        add => Connect("animation_list_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationListChangedEventHandler)__d)()));
+        remove => Disconnect("animation_list_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationListChangedEventHandler)__d)()));
+    }
+
+    public delegate void AnimationLibrariesUpdatedEventHandler();
+
+    public event AnimationLibrariesUpdatedEventHandler AnimationLibrariesUpdated
+    {
+        add => Connect("animation_libraries_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationLibrariesUpdatedEventHandler)__d)()));
+        remove => Disconnect("animation_libraries_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationLibrariesUpdatedEventHandler)__d)()));
+    }
+
+    public delegate void AnimationFinishedEventHandler(string animName);
+
+    public event AnimationFinishedEventHandler AnimationFinished
+    {
+        add => Connect("animation_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationFinishedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("animation_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationFinishedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void AnimationStartedEventHandler(string animName);
+
+    public event AnimationStartedEventHandler AnimationStarted
+    {
+        add => Connect("animation_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationStartedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("animation_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationStartedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void CachesClearedEventHandler();
+
+    public event CachesClearedEventHandler CachesCleared
+    {
+        add => Connect("caches_cleared", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CachesClearedEventHandler)__d)()));
+        remove => Disconnect("caches_cleared", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CachesClearedEventHandler)__d)()));
+    }
+
+    public delegate void MixerAppliedEventHandler();
+
+    public event MixerAppliedEventHandler MixerApplied
+    {
+        add => Connect("mixer_applied", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MixerAppliedEventHandler)__d)()));
+        remove => Disconnect("mixer_applied", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MixerAppliedEventHandler)__d)()));
+    }
+
+    public delegate void MixerUpdatedEventHandler();
+
+    public event MixerUpdatedEventHandler MixerUpdated
+    {
+        add => Connect("mixer_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MixerUpdatedEventHandler)__d)()));
+        remove => Disconnect("mixer_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MixerUpdatedEventHandler)__d)()));
     }
 
     private static nint __mb_add_animation_library;
@@ -7519,6 +7711,38 @@ public unsafe partial class AnimationNode : Resource
     {
         get => IsFilterEnabled();
         set => SetFilterEnabled(value);
+    }
+
+    public delegate void TreeChangedEventHandler();
+
+    public event TreeChangedEventHandler TreeChanged
+    {
+        add => Connect("tree_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TreeChangedEventHandler)__d)()));
+        remove => Disconnect("tree_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TreeChangedEventHandler)__d)()));
+    }
+
+    public delegate void NodeUpdatedEventHandler(long objectId);
+
+    public event NodeUpdatedEventHandler NodeUpdated
+    {
+        add => Connect("node_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeUpdatedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("node_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeUpdatedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void AnimationNodeRenamedEventHandler(long objectId, string oldName, string newName);
+
+    public event AnimationNodeRenamedEventHandler AnimationNodeRenamed
+    {
+        add => Connect("animation_node_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationNodeRenamedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToManagedString(*((NativeVariant**)__a)[1]), Variants.ToManagedString(*((NativeVariant**)__a)[2]))));
+        remove => Disconnect("animation_node_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationNodeRenamedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToManagedString(*((NativeVariant**)__a)[1]), Variants.ToManagedString(*((NativeVariant**)__a)[2]))));
+    }
+
+    public delegate void AnimationNodeRemovedEventHandler(long objectId, string nodeName);
+
+    public event AnimationNodeRemovedEventHandler AnimationNodeRemoved
+    {
+        add => Connect("animation_node_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationNodeRemovedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("animation_node_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationNodeRemovedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
     }
 
     private static nint __mb_add_input;
@@ -8863,6 +9087,14 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
         set => SetCyclicLength(value);
     }
 
+    public delegate void TrianglesUpdatedEventHandler();
+
+    public event TrianglesUpdatedEventHandler TrianglesUpdated
+    {
+        add => Connect("triangles_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrianglesUpdatedEventHandler)__d)()));
+        remove => Disconnect("triangles_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrianglesUpdatedEventHandler)__d)()));
+    }
+
     private static nint __mb_add_blend_point;
     public void AddBlendPoint(AnimationRootNode? node, Vector2 pos, int atIndex = unchecked((int)(-1)), string name = "")
     {
@@ -9459,6 +9691,14 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
     {
         get => GetGraphOffset();
         set => SetGraphOffset(value);
+    }
+
+    public delegate void NodeChangedEventHandler(string nodeName);
+
+    public event NodeChangedEventHandler NodeChanged
+    {
+        add => Connect("node_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("node_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
     }
 
     private static nint __mb_add_node;
@@ -10629,6 +10869,22 @@ public unsafe partial class AnimationNodeStateMachinePlayback : Resource
         ClassRegistry.AttachNew(this, "AnimationNodeStateMachinePlayback");
     }
 
+    public delegate void StateStartedEventHandler(string state);
+
+    public event StateStartedEventHandler StateStarted
+    {
+        add => Connect("state_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StateStartedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("state_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StateStartedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void StateFinishedEventHandler(string state);
+
+    public event StateFinishedEventHandler StateFinished
+    {
+        add => Connect("state_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StateFinishedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("state_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StateFinishedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_travel;
     public void Travel(string toNode, bool resetOnTeleport = true)
     {
@@ -10917,6 +11173,14 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
     {
         get => GetAdvanceExpression();
         set => SetAdvanceExpression(value);
+    }
+
+    public delegate void AdvanceConditionChangedEventHandler();
+
+    public event AdvanceConditionChangedEventHandler AdvanceConditionChanged
+    {
+        add => Connect("advance_condition_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AdvanceConditionChangedEventHandler)__d)()));
+        remove => Disconnect("advance_condition_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AdvanceConditionChangedEventHandler)__d)()));
     }
 
     private static nint __mb_set_switch_mode;
@@ -11649,6 +11913,22 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     {
         get => IsMovieQuitOnFinishEnabled();
         set => SetMovieQuitOnFinishEnabled(value);
+    }
+
+    public delegate void CurrentAnimationChangedEventHandler(string animName);
+
+    public event CurrentAnimationChangedEventHandler CurrentAnimationChanged
+    {
+        add => Connect("current_animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CurrentAnimationChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("current_animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CurrentAnimationChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void AnimationChangedEventHandler(string oldName, string newName);
+
+    public event AnimationChangedEventHandler AnimationChanged
+    {
+        add => Connect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("animation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
     }
 
     private static nint __mb_animation_set_next;
@@ -12601,6 +12881,14 @@ public unsafe partial class AnimationTree : AnimationMixer
         set => SetAnimationPlayer(value);
     }
 
+    public delegate void AnimationPlayerChangedEventHandler();
+
+    public event AnimationPlayerChangedEventHandler AnimationPlayerChanged
+    {
+        add => Connect("animation_player_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationPlayerChangedEventHandler)__d)()));
+        remove => Disconnect("animation_player_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AnimationPlayerChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_tree_root;
     internal void SetTreeRoot(AnimationRootNode? animationNode)
     {
@@ -12832,6 +13120,70 @@ public unsafe partial class Area2D : CollisionObject2D
     {
         get => GetAudioBusName();
         set => SetAudioBusName(value);
+    }
+
+    public delegate void BodyShapeEnteredEventHandler(Rid bodyRid, Node2D? body, long bodyShapeIndex, long localShapeIndex);
+
+    public event BodyShapeEnteredEventHandler BodyShapeEntered
+    {
+        add => Connect("body_shape_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeEnteredEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("body_shape_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeEnteredEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+    }
+
+    public delegate void BodyShapeExitedEventHandler(Rid bodyRid, Node2D? body, long bodyShapeIndex, long localShapeIndex);
+
+    public event BodyShapeExitedEventHandler BodyShapeExited
+    {
+        add => Connect("body_shape_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeExitedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("body_shape_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeExitedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+    }
+
+    public delegate void BodyEnteredEventHandler(Node2D? body);
+
+    public event BodyEnteredEventHandler BodyEntered
+    {
+        add => Connect("body_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyEnteredEventHandler)__d)((Node2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("body_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyEnteredEventHandler)__d)((Node2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void BodyExitedEventHandler(Node2D? body);
+
+    public event BodyExitedEventHandler BodyExited
+    {
+        add => Connect("body_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyExitedEventHandler)__d)((Node2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("body_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyExitedEventHandler)__d)((Node2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void AreaShapeEnteredEventHandler(Rid areaRid, Area2D? area, long areaShapeIndex, long localShapeIndex);
+
+    public event AreaShapeEnteredEventHandler AreaShapeEntered
+    {
+        add => Connect("area_shape_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaShapeEnteredEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Area2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("area_shape_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaShapeEnteredEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Area2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+    }
+
+    public delegate void AreaShapeExitedEventHandler(Rid areaRid, Area2D? area, long areaShapeIndex, long localShapeIndex);
+
+    public event AreaShapeExitedEventHandler AreaShapeExited
+    {
+        add => Connect("area_shape_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaShapeExitedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Area2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("area_shape_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaShapeExitedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Area2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+    }
+
+    public delegate void AreaEnteredEventHandler(Area2D? area);
+
+    public event AreaEnteredEventHandler AreaEntered
+    {
+        add => Connect("area_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaEnteredEventHandler)__d)((Area2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("area_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaEnteredEventHandler)__d)((Area2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void AreaExitedEventHandler(Area2D? area);
+
+    public event AreaExitedEventHandler AreaExited
+    {
+        add => Connect("area_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaExitedEventHandler)__d)((Area2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("area_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaExitedEventHandler)__d)((Area2D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
     }
 
     private static nint __mb_set_gravity_space_override_mode;
@@ -13544,6 +13896,70 @@ public unsafe partial class Area3D : CollisionObject3D
     {
         get => GetReverbUniformity();
         set => SetReverbUniformity(value);
+    }
+
+    public delegate void BodyShapeEnteredEventHandler(Rid bodyRid, Node3D? body, long bodyShapeIndex, long localShapeIndex);
+
+    public event BodyShapeEnteredEventHandler BodyShapeEntered
+    {
+        add => Connect("body_shape_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeEnteredEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("body_shape_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeEnteredEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+    }
+
+    public delegate void BodyShapeExitedEventHandler(Rid bodyRid, Node3D? body, long bodyShapeIndex, long localShapeIndex);
+
+    public event BodyShapeExitedEventHandler BodyShapeExited
+    {
+        add => Connect("body_shape_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeExitedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("body_shape_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeExitedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+    }
+
+    public delegate void BodyEnteredEventHandler(Node3D? body);
+
+    public event BodyEnteredEventHandler BodyEntered
+    {
+        add => Connect("body_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyEnteredEventHandler)__d)((Node3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("body_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyEnteredEventHandler)__d)((Node3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void BodyExitedEventHandler(Node3D? body);
+
+    public event BodyExitedEventHandler BodyExited
+    {
+        add => Connect("body_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyExitedEventHandler)__d)((Node3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("body_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyExitedEventHandler)__d)((Node3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void AreaShapeEnteredEventHandler(Rid areaRid, Area3D? area, long areaShapeIndex, long localShapeIndex);
+
+    public event AreaShapeEnteredEventHandler AreaShapeEntered
+    {
+        add => Connect("area_shape_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaShapeEnteredEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Area3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("area_shape_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaShapeEnteredEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Area3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+    }
+
+    public delegate void AreaShapeExitedEventHandler(Rid areaRid, Area3D? area, long areaShapeIndex, long localShapeIndex);
+
+    public event AreaShapeExitedEventHandler AreaShapeExited
+    {
+        add => Connect("area_shape_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaShapeExitedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Area3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("area_shape_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaShapeExitedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Area3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+    }
+
+    public delegate void AreaEnteredEventHandler(Area3D? area);
+
+    public event AreaEnteredEventHandler AreaEntered
+    {
+        add => Connect("area_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaEnteredEventHandler)__d)((Area3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("area_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaEnteredEventHandler)__d)((Area3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void AreaExitedEventHandler(Area3D? area);
+
+    public event AreaExitedEventHandler AreaExited
+    {
+        add => Connect("area_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaExitedEventHandler)__d)((Area3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("area_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AreaExitedEventHandler)__d)((Area3D?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
     }
 
     private static nint __mb_set_gravity_space_override_mode;
@@ -18800,6 +19216,22 @@ public static unsafe partial class AudioServer
         set => SetPlaybackSpeedScale(value);
     }
 
+    public delegate void BusLayoutChangedEventHandler();
+
+    public static event BusLayoutChangedEventHandler BusLayoutChanged
+    {
+        add => Singleton.Connect("bus_layout_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BusLayoutChangedEventHandler)__d)()));
+        remove => Singleton.Disconnect("bus_layout_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BusLayoutChangedEventHandler)__d)()));
+    }
+
+    public delegate void BusRenamedEventHandler(long busIndex, string oldName, string newName);
+
+    public static event BusRenamedEventHandler BusRenamed
+    {
+        add => Singleton.Connect("bus_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BusRenamedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToManagedString(*((NativeVariant**)__a)[1]), Variants.ToManagedString(*((NativeVariant**)__a)[2]))));
+        remove => Singleton.Disconnect("bus_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BusRenamedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToManagedString(*((NativeVariant**)__a)[1]), Variants.ToManagedString(*((NativeVariant**)__a)[2]))));
+    }
+
     private static nint __mb_set_bus_count;
     internal static void SetBusCount(int amount)
     {
@@ -19779,6 +20211,14 @@ public unsafe partial class AudioStream : Resource
     public AudioStream() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "AudioStream");
+    }
+
+    public delegate void ParameterListChangedEventHandler();
+
+    public event ParameterListChangedEventHandler ParameterListChanged
+    {
+        add => Connect("parameter_list_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ParameterListChangedEventHandler)__d)()));
+        remove => Disconnect("parameter_list_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ParameterListChangedEventHandler)__d)()));
     }
 
     private static nint __mb_get_length;
@@ -21769,6 +22209,14 @@ public unsafe partial class AudioStreamPlayer : Node
         set => SetPlaybackType(value);
     }
 
+    public delegate void FinishedEventHandler();
+
+    public event FinishedEventHandler Finished
+    {
+        add => Connect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+        remove => Disconnect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_stream;
     internal void SetStream(AudioStream? stream)
     {
@@ -22292,6 +22740,14 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     {
         get => GetPlaybackType();
         set => SetPlaybackType(value);
+    }
+
+    public delegate void FinishedEventHandler();
+
+    public event FinishedEventHandler Finished
+    {
+        add => Connect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+        remove => Disconnect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
     }
 
     private static nint __mb_set_stream;
@@ -22973,6 +23429,14 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     {
         get => GetDopplerTracking();
         set => SetDopplerTracking(value);
+    }
+
+    public delegate void FinishedEventHandler();
+
+    public event FinishedEventHandler Finished
+    {
+        add => Connect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+        remove => Disconnect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
     }
 
     private static nint __mb_set_stream;

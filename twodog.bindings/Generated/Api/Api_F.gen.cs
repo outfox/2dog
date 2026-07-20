@@ -2373,6 +2373,30 @@ public unsafe partial class FileDialog : ConfirmationDialog
         set => SetCurrentPath(value);
     }
 
+    public delegate void FileSelectedEventHandler(string path);
+
+    public event FileSelectedEventHandler FileSelected
+    {
+        add => Connect("file_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FileSelectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("file_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FileSelectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void DirSelectedEventHandler(string dir);
+
+    public event DirSelectedEventHandler DirSelected
+    {
+        add => Connect("dir_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DirSelectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("dir_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DirSelectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void FilenameFilterChangedEventHandler(string filter);
+
+    public event FilenameFilterChangedEventHandler FilenameFilterChanged
+    {
+        add => Connect("filename_filter_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FilenameFilterChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("filename_filter_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FilenameFilterChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_clear_filters;
     public void ClearFilters()
     {
@@ -3184,6 +3208,78 @@ public unsafe partial class FileSystemDock : EditorDock
 {
     internal FileSystemDock(nint ptr, bool rc) : base(ptr, rc) { }
 
+    public delegate void InheritEventHandler(string file);
+
+    public event InheritEventHandler Inherit
+    {
+        add => Connect("inherit", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InheritEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("inherit", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InheritEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void ResourceRemovedEventHandler(Resource? resource);
+
+    public event ResourceRemovedEventHandler ResourceRemoved
+    {
+        add => Connect("resource_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResourceRemovedEventHandler)__d)((Resource?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("resource_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResourceRemovedEventHandler)__d)((Resource?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void FileRemovedEventHandler(string file);
+
+    public event FileRemovedEventHandler FileRemoved
+    {
+        add => Connect("file_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FileRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("file_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FileRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void FolderRemovedEventHandler(string folder);
+
+    public event FolderRemovedEventHandler FolderRemoved
+    {
+        add => Connect("folder_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FolderRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("folder_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FolderRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void FilesMovedEventHandler(string oldFile, string newFile);
+
+    public event FilesMovedEventHandler FilesMoved
+    {
+        add => Connect("files_moved", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FilesMovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("files_moved", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FilesMovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void FolderMovedEventHandler(string oldFolder, string newFolder);
+
+    public event FolderMovedEventHandler FolderMoved
+    {
+        add => Connect("folder_moved", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FolderMovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("folder_moved", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FolderMovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void FolderColorChangedEventHandler();
+
+    public event FolderColorChangedEventHandler FolderColorChanged
+    {
+        add => Connect("folder_color_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FolderColorChangedEventHandler)__d)()));
+        remove => Disconnect("folder_color_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FolderColorChangedEventHandler)__d)()));
+    }
+
+    public delegate void SelectionChangedEventHandler();
+
+    public event SelectionChangedEventHandler SelectionChanged
+    {
+        add => Connect("selection_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SelectionChangedEventHandler)__d)()));
+        remove => Disconnect("selection_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SelectionChangedEventHandler)__d)()));
+    }
+
+    public delegate void DisplayModeChangedEventHandler();
+
+    public event DisplayModeChangedEventHandler DisplayModeChanged
+    {
+        add => Connect("display_mode_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DisplayModeChangedEventHandler)__d)()));
+        remove => Disconnect("display_mode_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DisplayModeChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_navigate_to_path;
     public void NavigateToPath(string path)
     {
@@ -3838,6 +3934,14 @@ public unsafe partial class FoldableContainer : Container
         set => SetLanguage(value);
     }
 
+    public delegate void FoldingChangedEventHandler(bool isFolded);
+
+    public event FoldingChangedEventHandler FoldingChanged
+    {
+        add => Connect("folding_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FoldingChangedEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("folding_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FoldingChangedEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_fold;
     public void Fold()
     {
@@ -4160,6 +4264,14 @@ public unsafe partial class FoldableGroup : Resource
     {
         get => IsAllowFoldingAll();
         set => SetAllowFoldingAll(value);
+    }
+
+    public delegate void ExpandedEventHandler(FoldableContainer? container);
+
+    public event ExpandedEventHandler Expanded
+    {
+        add => Connect("expanded", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ExpandedEventHandler)__d)((FoldableContainer?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("expanded", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ExpandedEventHandler)__d)((FoldableContainer?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
     }
 
     private static nint __mb_get_expanded_container;

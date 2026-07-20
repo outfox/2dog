@@ -2311,6 +2311,14 @@ public static unsafe partial class DisplayServer
         Boundary = 3,
     }
 
+    public delegate void OrientationChangedEventHandler(long orientation);
+
+    public static event OrientationChangedEventHandler OrientationChanged
+    {
+        add => Singleton.Connect("orientation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((OrientationChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Singleton.Disconnect("orientation_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((OrientationChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
     private static nint __mb_has_feature;
     public static bool HasFeature(DisplayServer.Feature feature)
     {

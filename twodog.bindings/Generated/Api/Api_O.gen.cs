@@ -3599,6 +3599,14 @@ public unsafe partial class OpenXRAnchorTracker : OpenXRSpatialEntityTracker
         set => SetUuid(value);
     }
 
+    public delegate void UuidChangedEventHandler();
+
+    public event UuidChangedEventHandler UuidChanged
+    {
+        add => Connect("uuid_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((UuidChangedEventHandler)__d)()));
+        remove => Disconnect("uuid_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((UuidChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_has_uuid;
     public bool HasUuid()
     {
@@ -3721,6 +3729,14 @@ public unsafe partial class OpenXRBindingModifierEditor : PanelContainer
     public OpenXRBindingModifierEditor() : this(0, false)
     {
         ClassRegistry.AttachNew(this, "OpenXRBindingModifierEditor");
+    }
+
+    public delegate void BindingModifierRemovedEventHandler(GodotObject? bindingModifierEditor);
+
+    public event BindingModifierRemovedEventHandler BindingModifierRemoved
+    {
+        add => Connect("binding_modifier_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BindingModifierRemovedEventHandler)__d)((GodotObject?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("binding_modifier_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BindingModifierRemovedEventHandler)__d)((GodotObject?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
     }
 
     private static nint __mb_get_binding_modifier;
@@ -5771,6 +5787,14 @@ public unsafe partial class OpenXRFutureResult : RefCounted
         Cancelled = 2,
     }
 
+    public delegate void CompletedEventHandler(OpenXRFutureResult? result);
+
+    public event CompletedEventHandler Completed
+    {
+        add => Connect("completed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CompletedEventHandler)__d)((OpenXRFutureResult?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("completed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CompletedEventHandler)__d)((OpenXRFutureResult?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
     private static nint __mb_get_status;
     public OpenXRFutureResult.ResultStatus GetStatus()
     {
@@ -6965,6 +6989,102 @@ public unsafe partial class OpenXRInterface : XRInterface
         set => SetVrsStrength(value);
     }
 
+    public delegate void SessionBegunEventHandler();
+
+    public event SessionBegunEventHandler SessionBegun
+    {
+        add => Connect("session_begun", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionBegunEventHandler)__d)()));
+        remove => Disconnect("session_begun", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionBegunEventHandler)__d)()));
+    }
+
+    public delegate void SessionStoppingEventHandler();
+
+    public event SessionStoppingEventHandler SessionStopping
+    {
+        add => Connect("session_stopping", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionStoppingEventHandler)__d)()));
+        remove => Disconnect("session_stopping", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionStoppingEventHandler)__d)()));
+    }
+
+    public delegate void SessionSynchronizedEventHandler();
+
+    public event SessionSynchronizedEventHandler SessionSynchronized
+    {
+        add => Connect("session_synchronized", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionSynchronizedEventHandler)__d)()));
+        remove => Disconnect("session_synchronized", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionSynchronizedEventHandler)__d)()));
+    }
+
+    public delegate void SessionFocussedEventHandler();
+
+    public event SessionFocussedEventHandler SessionFocussed
+    {
+        add => Connect("session_focussed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionFocussedEventHandler)__d)()));
+        remove => Disconnect("session_focussed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionFocussedEventHandler)__d)()));
+    }
+
+    public delegate void SessionVisibleEventHandler();
+
+    public event SessionVisibleEventHandler SessionVisible
+    {
+        add => Connect("session_visible", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionVisibleEventHandler)__d)()));
+        remove => Disconnect("session_visible", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionVisibleEventHandler)__d)()));
+    }
+
+    public delegate void SessionLossPendingEventHandler();
+
+    public event SessionLossPendingEventHandler SessionLossPending
+    {
+        add => Connect("session_loss_pending", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionLossPendingEventHandler)__d)()));
+        remove => Disconnect("session_loss_pending", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionLossPendingEventHandler)__d)()));
+    }
+
+    public delegate void InstanceExitingEventHandler();
+
+    public event InstanceExitingEventHandler InstanceExiting
+    {
+        add => Connect("instance_exiting", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InstanceExitingEventHandler)__d)()));
+        remove => Disconnect("instance_exiting", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InstanceExitingEventHandler)__d)()));
+    }
+
+    public delegate void PoseRecenteredEventHandler();
+
+    public event PoseRecenteredEventHandler PoseRecentered
+    {
+        add => Connect("pose_recentered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PoseRecenteredEventHandler)__d)()));
+        remove => Disconnect("pose_recentered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PoseRecenteredEventHandler)__d)()));
+    }
+
+    public delegate void RefreshRateChangedEventHandler(double refreshRate);
+
+    public event RefreshRateChangedEventHandler RefreshRateChanged
+    {
+        add => Connect("refresh_rate_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RefreshRateChangedEventHandler)__d)((double)Variants.ToFloat(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("refresh_rate_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RefreshRateChangedEventHandler)__d)((double)Variants.ToFloat(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void CpuLevelChangedEventHandler(long subDomain, long fromLevel, long toLevel);
+
+    public event CpuLevelChangedEventHandler CpuLevelChanged
+    {
+        add => Connect("cpu_level_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CpuLevelChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])))));
+        remove => Disconnect("cpu_level_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CpuLevelChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])))));
+    }
+
+    public delegate void GpuLevelChangedEventHandler(long subDomain, long fromLevel, long toLevel);
+
+    public event GpuLevelChangedEventHandler GpuLevelChanged
+    {
+        add => Connect("gpu_level_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GpuLevelChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])))));
+        remove => Disconnect("gpu_level_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GpuLevelChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])))));
+    }
+
+    public delegate void UserPresenceChangedEventHandler(bool isUserPresent);
+
+    public event UserPresenceChangedEventHandler UserPresenceChanged
+    {
+        add => Connect("user_presence_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((UserPresenceChangedEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("user_presence_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((UserPresenceChangedEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_get_session_state;
     public OpenXRInterface.SessionState GetSessionState()
     {
@@ -7741,6 +7861,14 @@ public unsafe partial class OpenXRPlaneTracker : OpenXRSpatialEntityTracker
         set => SetPlaneLabel(value);
     }
 
+    public delegate void MeshChangedEventHandler();
+
+    public event MeshChangedEventHandler MeshChanged
+    {
+        add => Connect("mesh_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MeshChangedEventHandler)__d)()));
+        remove => Disconnect("mesh_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MeshChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_bounds_size;
     internal void SetBoundsSize(Vector2 boundsSize)
     {
@@ -7934,6 +8062,14 @@ public unsafe partial class OpenXRRenderModel : Node3D
         set => SetRenderModel(value);
     }
 
+    public delegate void RenderModelTopLevelPathChangedEventHandler();
+
+    public event RenderModelTopLevelPathChangedEventHandler RenderModelTopLevelPathChanged
+    {
+        add => Connect("render_model_top_level_path_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RenderModelTopLevelPathChangedEventHandler)__d)()));
+        remove => Disconnect("render_model_top_level_path_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RenderModelTopLevelPathChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_get_top_level_path;
     public string GetTopLevelPath()
     {
@@ -7988,6 +8124,30 @@ public unsafe partial class OpenXRRenderModelExtension : OpenXRExtensionWrapper
     public OpenXRRenderModelExtension() : this(0, false)
     {
         ClassRegistry.AttachNew(this, "OpenXRRenderModelExtension");
+    }
+
+    public delegate void RenderModelAddedEventHandler(Rid renderModel);
+
+    public event RenderModelAddedEventHandler RenderModelAdded
+    {
+        add => Connect("render_model_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RenderModelAddedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("render_model_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RenderModelAddedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void RenderModelRemovedEventHandler(Rid renderModel);
+
+    public event RenderModelRemovedEventHandler RenderModelRemoved
+    {
+        add => Connect("render_model_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RenderModelRemovedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("render_model_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RenderModelRemovedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void RenderModelTopLevelPathChangedEventHandler(Rid renderModel);
+
+    public event RenderModelTopLevelPathChangedEventHandler RenderModelTopLevelPathChanged
+    {
+        add => Connect("render_model_top_level_path_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RenderModelTopLevelPathChangedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("render_model_top_level_path_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RenderModelTopLevelPathChangedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]))));
     }
 
     private static nint __mb_is_active;
@@ -8250,6 +8410,22 @@ public unsafe partial class OpenXRRenderModelManager : Node3D
     {
         get => GetMakeLocalToPose();
         set => SetMakeLocalToPose(value);
+    }
+
+    public delegate void RenderModelAddedEventHandler(OpenXRRenderModel? renderModel);
+
+    public event RenderModelAddedEventHandler RenderModelAdded
+    {
+        add => Connect("render_model_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RenderModelAddedEventHandler)__d)((OpenXRRenderModel?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("render_model_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RenderModelAddedEventHandler)__d)((OpenXRRenderModel?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void RenderModelRemovedEventHandler(OpenXRRenderModel? renderModel);
+
+    public event RenderModelRemovedEventHandler RenderModelRemoved
+    {
+        add => Connect("render_model_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RenderModelRemovedEventHandler)__d)((OpenXRRenderModel?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("render_model_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RenderModelRemovedEventHandler)__d)((OpenXRRenderModel?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
     }
 
     private static nint __mb_get_tracker;
@@ -9613,6 +9789,14 @@ public unsafe partial class OpenXRSpatialEntityExtension : OpenXRExtensionWrappe
         Persistence = 1000763000,
     }
 
+    public delegate void SpatialDiscoveryRecommendedEventHandler(Rid spatialContext);
+
+    public event SpatialDiscoveryRecommendedEventHandler SpatialDiscoveryRecommended
+    {
+        add => Connect("spatial_discovery_recommended", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SpatialDiscoveryRecommendedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("spatial_discovery_recommended", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SpatialDiscoveryRecommendedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_supports_capability;
     public bool SupportsCapability(OpenXRSpatialEntityExtension.Capability capability)
     {
@@ -10154,6 +10338,22 @@ public unsafe partial class OpenXRSpatialEntityTracker : XRPositionalTracker
         set => SetSpatialTrackingState(value);
     }
 
+    public delegate void NextChangedEventHandler();
+
+    public event NextChangedEventHandler NextChanged
+    {
+        add => Connect("next_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NextChangedEventHandler)__d)()));
+        remove => Disconnect("next_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NextChangedEventHandler)__d)()));
+    }
+
+    public delegate void SpatialTrackingStateChangedEventHandler(long spatialTrackingState);
+
+    public event SpatialTrackingStateChangedEventHandler SpatialTrackingStateChanged
+    {
+        add => Connect("spatial_tracking_state_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SpatialTrackingStateChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("spatial_tracking_state_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SpatialTrackingStateChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
     private static nint __mb_set_spatial_context;
     public void SetSpatialContext(Rid spatialContext)
     {
@@ -10691,6 +10891,22 @@ public unsafe partial class OptionButton : Button
     {
         get => GetItemCount();
         set => SetItemCount(value);
+    }
+
+    public delegate void ItemSelectedEventHandler(long index);
+
+    public event ItemSelectedEventHandler ItemSelected
+    {
+        add => Connect("item_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemSelectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("item_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemSelectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void ItemFocusedEventHandler(long index);
+
+    public event ItemFocusedEventHandler ItemFocused
+    {
+        add => Connect("item_focused", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemFocusedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("item_focused", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemFocusedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
     }
 
     private static nint __mb_add_item;

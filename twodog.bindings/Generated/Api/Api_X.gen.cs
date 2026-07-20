@@ -855,6 +855,46 @@ public unsafe partial class XRController3D : XRNode3D
         ClassRegistry.AttachNew(this, "XRController3D");
     }
 
+    public delegate void ButtonPressedEventHandler(string actionName);
+
+    public event ButtonPressedEventHandler ButtonPressed
+    {
+        add => Connect("button_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ButtonPressedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("button_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ButtonPressedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void ButtonReleasedEventHandler(string actionName);
+
+    public event ButtonReleasedEventHandler ButtonReleased
+    {
+        add => Connect("button_released", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ButtonReleasedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("button_released", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ButtonReleasedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void InputFloatChangedEventHandler(string actionName, double value);
+
+    public event InputFloatChangedEventHandler InputFloatChanged
+    {
+        add => Connect("input_float_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InputFloatChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), (double)Variants.ToFloat(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("input_float_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InputFloatChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), (double)Variants.ToFloat(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void InputVector2ChangedEventHandler(string actionName, Vector2 value);
+
+    public event InputVector2ChangedEventHandler InputVector2Changed
+    {
+        add => Connect("input_vector2_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InputVector2ChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[1]))));
+        remove => Disconnect("input_vector2_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InputVector2ChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void ProfileChangedEventHandler(string role);
+
+    public event ProfileChangedEventHandler ProfileChanged
+    {
+        add => Connect("profile_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ProfileChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("profile_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ProfileChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_is_button_pressed;
     public bool IsButtonPressed(string name)
     {
@@ -1747,6 +1787,14 @@ public unsafe partial class XRInterface : RefCounted
         set => SetAnchorDetectionIsEnabled(value);
     }
 
+    public delegate void PlayAreaChangedEventHandler(long mode);
+
+    public event PlayAreaChangedEventHandler PlayAreaChanged
+    {
+        add => Connect("play_area_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PlayAreaChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("play_area_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PlayAreaChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
     private static nint __mb_get_name;
     public string GetName()
     {
@@ -2622,6 +2670,14 @@ public unsafe partial class XRNode3D : Node3D
         set => SetShowWhenTracked(value);
     }
 
+    public delegate void TrackingChangedEventHandler(bool tracking);
+
+    public event TrackingChangedEventHandler TrackingChanged
+    {
+        add => Connect("tracking_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackingChangedEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("tracking_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackingChangedEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_set_tracker;
     internal void SetTracker(string trackerName)
     {
@@ -3153,6 +3209,62 @@ public unsafe partial class XRPositionalTracker : XRTracker
         set => SetTrackerHand(value);
     }
 
+    public delegate void PoseChangedEventHandler(XRPose? pose);
+
+    public event PoseChangedEventHandler PoseChanged
+    {
+        add => Connect("pose_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PoseChangedEventHandler)__d)((XRPose?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("pose_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PoseChangedEventHandler)__d)((XRPose?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void PoseLostTrackingEventHandler(XRPose? pose);
+
+    public event PoseLostTrackingEventHandler PoseLostTracking
+    {
+        add => Connect("pose_lost_tracking", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PoseLostTrackingEventHandler)__d)((XRPose?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("pose_lost_tracking", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PoseLostTrackingEventHandler)__d)((XRPose?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void ButtonPressedEventHandler(string actionName);
+
+    public event ButtonPressedEventHandler ButtonPressed
+    {
+        add => Connect("button_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ButtonPressedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("button_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ButtonPressedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void ButtonReleasedEventHandler(string actionName);
+
+    public event ButtonReleasedEventHandler ButtonReleased
+    {
+        add => Connect("button_released", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ButtonReleasedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("button_released", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ButtonReleasedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void InputFloatChangedEventHandler(string actionName, double value);
+
+    public event InputFloatChangedEventHandler InputFloatChanged
+    {
+        add => Connect("input_float_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InputFloatChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), (double)Variants.ToFloat(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("input_float_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InputFloatChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), (double)Variants.ToFloat(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void InputVector2ChangedEventHandler(string actionName, Vector2 vector);
+
+    public event InputVector2ChangedEventHandler InputVector2Changed
+    {
+        add => Connect("input_vector2_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InputVector2ChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[1]))));
+        remove => Disconnect("input_vector2_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InputVector2ChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void ProfileChangedEventHandler(string role);
+
+    public event ProfileChangedEventHandler ProfileChanged
+    {
+        add => Connect("profile_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ProfileChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("profile_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ProfileChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_get_tracker_profile;
     internal string GetTrackerProfile()
     {
@@ -3381,6 +3493,62 @@ public static unsafe partial class XRServer
     {
         get => GetPrimaryInterface();
         set => SetPrimaryInterface(value);
+    }
+
+    public delegate void ReferenceFrameChangedEventHandler();
+
+    public static event ReferenceFrameChangedEventHandler ReferenceFrameChanged
+    {
+        add => Singleton.Connect("reference_frame_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ReferenceFrameChangedEventHandler)__d)()));
+        remove => Singleton.Disconnect("reference_frame_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ReferenceFrameChangedEventHandler)__d)()));
+    }
+
+    public delegate void InterfaceAddedEventHandler(string interfaceName);
+
+    public static event InterfaceAddedEventHandler InterfaceAdded
+    {
+        add => Singleton.Connect("interface_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Singleton.Disconnect("interface_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void InterfaceRemovedEventHandler(string interfaceName);
+
+    public static event InterfaceRemovedEventHandler InterfaceRemoved
+    {
+        add => Singleton.Connect("interface_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Singleton.Disconnect("interface_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void TrackerAddedEventHandler(string trackerName, long type);
+
+    public static event TrackerAddedEventHandler TrackerAdded
+    {
+        add => Singleton.Connect("tracker_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Singleton.Disconnect("tracker_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+    }
+
+    public delegate void TrackerUpdatedEventHandler(string trackerName, long type);
+
+    public static event TrackerUpdatedEventHandler TrackerUpdated
+    {
+        add => Singleton.Connect("tracker_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerUpdatedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Singleton.Disconnect("tracker_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerUpdatedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+    }
+
+    public delegate void TrackerRemovedEventHandler(string trackerName, long type);
+
+    public static event TrackerRemovedEventHandler TrackerRemoved
+    {
+        add => Singleton.Connect("tracker_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Singleton.Disconnect("tracker_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TrackerRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+    }
+
+    public delegate void WorldOriginChangedEventHandler();
+
+    public static event WorldOriginChangedEventHandler WorldOriginChanged
+    {
+        add => Singleton.Connect("world_origin_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((WorldOriginChangedEventHandler)__d)()));
+        remove => Singleton.Disconnect("world_origin_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((WorldOriginChangedEventHandler)__d)()));
     }
 
     private static nint __mb_get_world_scale;

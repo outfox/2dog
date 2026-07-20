@@ -486,6 +486,14 @@ public unsafe partial class CPUParticles2D : Node2D
         set => SetParamCurve(((CPUParticles2D.Parameter)(11)), value);
     }
 
+    public delegate void FinishedEventHandler();
+
+    public event FinishedEventHandler Finished
+    {
+        add => Connect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+        remove => Disconnect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_emitting;
     internal void SetEmitting(bool emitting)
     {
@@ -2220,6 +2228,14 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     {
         get => GetParamCurve(((CPUParticles3D.Parameter)(11)));
         set => SetParamCurve(((CPUParticles3D.Parameter)(11)), value);
+    }
+
+    public delegate void FinishedEventHandler();
+
+    public event FinishedEventHandler Finished
+    {
+        add => Connect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+        remove => Disconnect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
     }
 
     private static nint __mb_set_emitting;
@@ -8495,6 +8511,22 @@ public unsafe partial class CameraFeed : RefCounted
 
     public Godot.Collections.Array Formats => GetFormats();
 
+    public delegate void FrameChangedEventHandler();
+
+    public event FrameChangedEventHandler FrameChanged
+    {
+        add => Connect("frame_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FrameChangedEventHandler)__d)()));
+        remove => Disconnect("frame_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FrameChangedEventHandler)__d)()));
+    }
+
+    public delegate void FormatChangedEventHandler();
+
+    public event FormatChangedEventHandler FormatChanged
+    {
+        add => Connect("format_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FormatChangedEventHandler)__d)()));
+        remove => Disconnect("format_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FormatChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_get_id;
     public int GetId()
     {
@@ -8817,6 +8849,30 @@ public static unsafe partial class CameraServer
     {
         get => IsMonitoringFeeds();
         set => SetMonitoringFeeds(value);
+    }
+
+    public delegate void CameraFeedAddedEventHandler(long id);
+
+    public static event CameraFeedAddedEventHandler CameraFeedAdded
+    {
+        add => Singleton.Connect("camera_feed_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CameraFeedAddedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Singleton.Disconnect("camera_feed_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CameraFeedAddedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void CameraFeedRemovedEventHandler(long id);
+
+    public static event CameraFeedRemovedEventHandler CameraFeedRemoved
+    {
+        add => Singleton.Connect("camera_feed_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CameraFeedRemovedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Singleton.Disconnect("camera_feed_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CameraFeedRemovedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void CameraFeedsUpdatedEventHandler();
+
+    public static event CameraFeedsUpdatedEventHandler CameraFeedsUpdated
+    {
+        add => Singleton.Connect("camera_feeds_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CameraFeedsUpdatedEventHandler)__d)()));
+        remove => Singleton.Disconnect("camera_feeds_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CameraFeedsUpdatedEventHandler)__d)()));
     }
 
     private static nint __mb_set_monitoring_feeds;
@@ -9308,6 +9364,38 @@ public unsafe partial class CanvasItem : Node
     {
         get => GetUseParentMaterial();
         set => SetUseParentMaterial(value);
+    }
+
+    public delegate void DrawEventHandler();
+
+    public event DrawEventHandler Draw
+    {
+        add => Connect("draw", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DrawEventHandler)__d)()));
+        remove => Disconnect("draw", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DrawEventHandler)__d)()));
+    }
+
+    public delegate void VisibilityChangedEventHandler();
+
+    public event VisibilityChangedEventHandler VisibilityChanged
+    {
+        add => Connect("visibility_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VisibilityChangedEventHandler)__d)()));
+        remove => Disconnect("visibility_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VisibilityChangedEventHandler)__d)()));
+    }
+
+    public delegate void HiddenEventHandler();
+
+    public event HiddenEventHandler Hidden
+    {
+        add => Connect("hidden", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((HiddenEventHandler)__d)()));
+        remove => Disconnect("hidden", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((HiddenEventHandler)__d)()));
+    }
+
+    public delegate void ItemRectChangedEventHandler();
+
+    public event ItemRectChangedEventHandler ItemRectChanged
+    {
+        add => Connect("item_rect_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemRectChangedEventHandler)__d)()));
+        remove => Disconnect("item_rect_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemRectChangedEventHandler)__d)()));
     }
 
     private static nint __mb_get_canvas_item;
@@ -11401,6 +11489,14 @@ public unsafe partial class CanvasLayer : Node
     {
         get => GetFollowViewportScale();
         set => SetFollowViewportScale(value);
+    }
+
+    public delegate void VisibilityChangedEventHandler();
+
+    public event VisibilityChangedEventHandler VisibilityChanged
+    {
+        add => Connect("visibility_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VisibilityChangedEventHandler)__d)()));
+        remove => Disconnect("visibility_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VisibilityChangedEventHandler)__d)()));
     }
 
     private static nint __mb_set_layer;
@@ -15889,6 +15985,46 @@ public unsafe partial class CodeEdit : TextEdit
         set => SetAutoBraceCompletionPairs(value);
     }
 
+    public delegate void BreakpointToggledEventHandler(long line);
+
+    public event BreakpointToggledEventHandler BreakpointToggled
+    {
+        add => Connect("breakpoint_toggled", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BreakpointToggledEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("breakpoint_toggled", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BreakpointToggledEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void CodeCompletionRequestedEventHandler();
+
+    public event CodeCompletionRequestedEventHandler CodeCompletionRequested
+    {
+        add => Connect("code_completion_requested", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CodeCompletionRequestedEventHandler)__d)()));
+        remove => Disconnect("code_completion_requested", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CodeCompletionRequestedEventHandler)__d)()));
+    }
+
+    public delegate void SymbolLookupEventHandler(string symbol, long line, long column);
+
+    public event SymbolLookupEventHandler SymbolLookup
+    {
+        add => Connect("symbol_lookup", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SymbolLookupEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])))));
+        remove => Disconnect("symbol_lookup", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SymbolLookupEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])))));
+    }
+
+    public delegate void SymbolValidateEventHandler(string symbol);
+
+    public event SymbolValidateEventHandler SymbolValidate
+    {
+        add => Connect("symbol_validate", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SymbolValidateEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("symbol_validate", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SymbolValidateEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void SymbolHoveredEventHandler(string symbol, long line, long column);
+
+    public event SymbolHoveredEventHandler SymbolHovered
+    {
+        add => Connect("symbol_hovered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SymbolHoveredEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])))));
+        remove => Disconnect("symbol_hovered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SymbolHoveredEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])))));
+    }
+
     private static nint __mb_set_indent_size;
     internal void SetIndentSize(int size)
     {
@@ -18310,6 +18446,46 @@ public unsafe partial class CollisionObject2D : Node2D
         set => SetPickable(value);
     }
 
+    public delegate void InputEventEventHandler(Node? viewport, InputEvent? @event, long shapeIdx);
+
+    public event InputEventEventHandler InputEvent
+    {
+        add => Connect("input_event", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InputEventEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), (InputEvent?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])))));
+        remove => Disconnect("input_event", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InputEventEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), (InputEvent?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])))));
+    }
+
+    public delegate void MouseEnteredEventHandler();
+
+    public event MouseEnteredEventHandler MouseEntered
+    {
+        add => Connect("mouse_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseEnteredEventHandler)__d)()));
+        remove => Disconnect("mouse_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseEnteredEventHandler)__d)()));
+    }
+
+    public delegate void MouseExitedEventHandler();
+
+    public event MouseExitedEventHandler MouseExited
+    {
+        add => Connect("mouse_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseExitedEventHandler)__d)()));
+        remove => Disconnect("mouse_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseExitedEventHandler)__d)()));
+    }
+
+    public delegate void MouseShapeEnteredEventHandler(long shapeIdx);
+
+    public event MouseShapeEnteredEventHandler MouseShapeEntered
+    {
+        add => Connect("mouse_shape_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseShapeEnteredEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("mouse_shape_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseShapeEnteredEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void MouseShapeExitedEventHandler(long shapeIdx);
+
+    public event MouseShapeExitedEventHandler MouseShapeExited
+    {
+        add => Connect("mouse_shape_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseShapeExitedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("mouse_shape_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseShapeExitedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
     private static nint __mb_get_rid;
     public Rid GetRid()
     {
@@ -19024,6 +19200,30 @@ public unsafe partial class CollisionObject3D : Node3D
     {
         get => GetCaptureInputOnDrag();
         set => SetCaptureInputOnDrag(value);
+    }
+
+    public delegate void InputEventEventHandler(Node? camera, InputEvent? @event, Vector3 eventPosition, Vector3 normal, long shapeIdx);
+
+    public event InputEventEventHandler InputEvent
+    {
+        add => Connect("input_event", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InputEventEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), (InputEvent?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), Variants.ToStruct<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR3, *((NativeVariant**)__a)[2]), Variants.ToStruct<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR3, *((NativeVariant**)__a)[3]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[4])))));
+        remove => Disconnect("input_event", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InputEventEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), (InputEvent?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), Variants.ToStruct<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR3, *((NativeVariant**)__a)[2]), Variants.ToStruct<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR3, *((NativeVariant**)__a)[3]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[4])))));
+    }
+
+    public delegate void MouseEnteredEventHandler();
+
+    public event MouseEnteredEventHandler MouseEntered
+    {
+        add => Connect("mouse_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseEnteredEventHandler)__d)()));
+        remove => Disconnect("mouse_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseEnteredEventHandler)__d)()));
+    }
+
+    public delegate void MouseExitedEventHandler();
+
+    public event MouseExitedEventHandler MouseExited
+    {
+        add => Connect("mouse_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseExitedEventHandler)__d)()));
+        remove => Disconnect("mouse_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseExitedEventHandler)__d)()));
     }
 
     private static nint __mb_set_collision_layer;
@@ -20640,6 +20840,30 @@ public unsafe partial class ColorPicker : VBoxContainer
         set => SetPresetsVisible(value);
     }
 
+    public delegate void ColorChangedEventHandler(Color color);
+
+    public event ColorChangedEventHandler ColorChanged
+    {
+        add => Connect("color_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ColorChangedEventHandler)__d)(Variants.ToStruct<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_COLOR, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("color_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ColorChangedEventHandler)__d)(Variants.ToStruct<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_COLOR, *((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void PresetAddedEventHandler(Color color);
+
+    public event PresetAddedEventHandler PresetAdded
+    {
+        add => Connect("preset_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PresetAddedEventHandler)__d)(Variants.ToStruct<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_COLOR, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("preset_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PresetAddedEventHandler)__d)(Variants.ToStruct<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_COLOR, *((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void PresetRemovedEventHandler(Color color);
+
+    public event PresetRemovedEventHandler PresetRemoved
+    {
+        add => Connect("preset_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PresetRemovedEventHandler)__d)(Variants.ToStruct<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_COLOR, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("preset_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PresetRemovedEventHandler)__d)(Variants.ToStruct<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_COLOR, *((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_set_pick_color;
     internal void SetPickColor(Color color)
     {
@@ -21132,6 +21356,30 @@ public unsafe partial class ColorPickerButton : Button
     {
         get => IsEditingIntensity();
         set => SetEditIntensity(value);
+    }
+
+    public delegate void ColorChangedEventHandler(Color color);
+
+    public event ColorChangedEventHandler ColorChanged
+    {
+        add => Connect("color_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ColorChangedEventHandler)__d)(Variants.ToStruct<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_COLOR, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("color_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ColorChangedEventHandler)__d)(Variants.ToStruct<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_COLOR, *((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void PopupClosedEventHandler();
+
+    public event PopupClosedEventHandler PopupClosed
+    {
+        add => Connect("popup_closed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PopupClosedEventHandler)__d)()));
+        remove => Disconnect("popup_closed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PopupClosedEventHandler)__d)()));
+    }
+
+    public delegate void PickerCreatedEventHandler();
+
+    public event PickerCreatedEventHandler PickerCreated
+    {
+        add => Connect("picker_created", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PickerCreatedEventHandler)__d)()));
+        remove => Disconnect("picker_created", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PickerCreatedEventHandler)__d)()));
     }
 
     private static nint __mb_set_pick_color;
@@ -22459,6 +22707,22 @@ public unsafe partial class Container : Control
         set => SetAccessibilityRegion(value);
     }
 
+    public delegate void PreSortChildrenEventHandler();
+
+    public event PreSortChildrenEventHandler PreSortChildren
+    {
+        add => Connect("pre_sort_children", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PreSortChildrenEventHandler)__d)()));
+        remove => Disconnect("pre_sort_children", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PreSortChildrenEventHandler)__d)()));
+    }
+
+    public delegate void SortChildrenEventHandler();
+
+    public event SortChildrenEventHandler SortChildren
+    {
+        add => Connect("sort_children", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SortChildrenEventHandler)__d)()));
+        remove => Disconnect("sort_children", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SortChildrenEventHandler)__d)()));
+    }
+
     private static nint __mb_queue_sort;
     public void QueueSort()
     {
@@ -23012,6 +23276,86 @@ public unsafe partial class Control : CanvasItem
     {
         get => GetThemeTypeVariation();
         set => SetThemeTypeVariation(value);
+    }
+
+    public delegate void ResizedEventHandler();
+
+    public event ResizedEventHandler Resized
+    {
+        add => Connect("resized", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResizedEventHandler)__d)()));
+        remove => Disconnect("resized", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResizedEventHandler)__d)()));
+    }
+
+    public delegate void GuiInputEventHandler(InputEvent? @event);
+
+    public event GuiInputEventHandler GuiInput
+    {
+        add => Connect("gui_input", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GuiInputEventHandler)__d)((InputEvent?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("gui_input", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GuiInputEventHandler)__d)((InputEvent?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void MouseEnteredEventHandler();
+
+    public event MouseEnteredEventHandler MouseEntered
+    {
+        add => Connect("mouse_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseEnteredEventHandler)__d)()));
+        remove => Disconnect("mouse_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseEnteredEventHandler)__d)()));
+    }
+
+    public delegate void MouseExitedEventHandler();
+
+    public event MouseExitedEventHandler MouseExited
+    {
+        add => Connect("mouse_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseExitedEventHandler)__d)()));
+        remove => Disconnect("mouse_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseExitedEventHandler)__d)()));
+    }
+
+    public delegate void FocusEnteredEventHandler();
+
+    public event FocusEnteredEventHandler FocusEntered
+    {
+        add => Connect("focus_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FocusEnteredEventHandler)__d)()));
+        remove => Disconnect("focus_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FocusEnteredEventHandler)__d)()));
+    }
+
+    public delegate void FocusExitedEventHandler();
+
+    public event FocusExitedEventHandler FocusExited
+    {
+        add => Connect("focus_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FocusExitedEventHandler)__d)()));
+        remove => Disconnect("focus_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FocusExitedEventHandler)__d)()));
+    }
+
+    public delegate void SizeFlagsChangedEventHandler();
+
+    public event SizeFlagsChangedEventHandler SizeFlagsChanged
+    {
+        add => Connect("size_flags_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SizeFlagsChangedEventHandler)__d)()));
+        remove => Disconnect("size_flags_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SizeFlagsChangedEventHandler)__d)()));
+    }
+
+    public delegate void MaximumSizeChangedEventHandler();
+
+    public event MaximumSizeChangedEventHandler MaximumSizeChanged
+    {
+        add => Connect("maximum_size_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MaximumSizeChangedEventHandler)__d)()));
+        remove => Disconnect("maximum_size_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MaximumSizeChangedEventHandler)__d)()));
+    }
+
+    public delegate void MinimumSizeChangedEventHandler();
+
+    public event MinimumSizeChangedEventHandler MinimumSizeChanged
+    {
+        add => Connect("minimum_size_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MinimumSizeChangedEventHandler)__d)()));
+        remove => Disconnect("minimum_size_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MinimumSizeChangedEventHandler)__d)()));
+    }
+
+    public delegate void ThemeChangedEventHandler();
+
+    public event ThemeChangedEventHandler ThemeChanged
+    {
+        add => Connect("theme_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ThemeChangedEventHandler)__d)()));
+        remove => Disconnect("theme_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ThemeChangedEventHandler)__d)()));
     }
 
     private static nint __mb_accept_event;
@@ -27411,6 +27755,22 @@ public unsafe partial class Curve : Resource
     {
         get => GetPointCount();
         set => SetPointCount(value);
+    }
+
+    public delegate void RangeChangedEventHandler();
+
+    public event RangeChangedEventHandler RangeChanged
+    {
+        add => Connect("range_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RangeChangedEventHandler)__d)()));
+        remove => Disconnect("range_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RangeChangedEventHandler)__d)()));
+    }
+
+    public delegate void DomainChangedEventHandler();
+
+    public event DomainChangedEventHandler DomainChanged
+    {
+        add => Connect("domain_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DomainChangedEventHandler)__d)()));
+        remove => Disconnect("domain_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DomainChangedEventHandler)__d)()));
     }
 
     private static nint __mb_get_point_count;

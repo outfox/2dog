@@ -59,6 +59,21 @@ public static class ApiGenerator
 
     private static string PackedOpIndex(string gd) => $"GdExtensionInterface.{gd}OperatorIndex";
 
+    // cs type -> GDExtensionVariantType constant suffix, for variant coercion
+    // in signal trampolines.
+    private static readonly Dictionary<string, string> VariantTypeOfCs = new()
+    {
+        ["Vector2"] = "VECTOR2", ["Vector2I"] = "VECTOR2I", ["Rect2"] = "RECT2", ["Rect2I"] = "RECT2I",
+        ["Vector3"] = "VECTOR3", ["Vector3I"] = "VECTOR3I", ["Transform2D"] = "TRANSFORM2D",
+        ["Vector4"] = "VECTOR4", ["Vector4I"] = "VECTOR4I", ["Plane"] = "PLANE", ["Quaternion"] = "QUATERNION",
+        ["Aabb"] = "AABB", ["Basis"] = "BASIS", ["Transform3D"] = "TRANSFORM3D", ["Projection"] = "PROJECTION",
+        ["Color"] = "COLOR", ["Rid"] = "RID",
+        ["Godot.Collections.Array"] = "ARRAY", ["Godot.Collections.Dictionary"] = "DICTIONARY", ["NodePath"] = "NODE_PATH",
+    };
+
+    private static string VtOf(string cs) =>
+        $"GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_{VariantTypeOfCs[cs]}";
+
     private sealed record VirtualInfo(string GdName, string CsName, TypeRef Ret, List<(string name, TypeRef type)> Args);
 
     private sealed record PropInfo(string CsName, string GetterCs, string? SetterCs, string? IndexCast, TypeRef Type, string? SetterCast);
@@ -72,7 +87,8 @@ public static class ApiGenerator
     private static readonly Dictionary<(string cls, string enumName), string> _enumRenames = [];
     private static readonly SortedDictionary<string, string> _virtualNameMap = []; // gd virtual name -> cs stub name
     private static readonly HashSet<string> _staticSingletons = [];
-    private static int _emitted, _skipped, _virtualsEmitted, _virtualsSkipped, _propsEmitted, _propsSkipped;
+    private static int _emitted, _skipped, _virtualsEmitted, _virtualsSkipped, _propsEmitted, _propsSkipped,
+        _signalsEmitted, _signalsSkipped;
 
     public static void Run(string apiJsonPath, string outDir)
     {
@@ -246,6 +262,7 @@ public static class ApiGenerator
 
         Console.WriteLine($"Generated typed API: {_classes.Count} classes, {_emitted} methods emitted, {_skipped} skipped (unsupported types), " +
                           $"{_propsEmitted} properties ({_propsSkipped} skipped, {_enumRenames.Count} enum renames), " +
+                          $"{_signalsEmitted} signal events ({_signalsSkipped} skipped), " +
                           $"{_virtualsEmitted} virtual stubs ({_virtualsSkipped} skipped), into {outDir}");
     }
 
@@ -308,6 +325,7 @@ public static class ApiGenerator
         }
 
         EmitProperties(sb, info, used, isStaticSingleton);
+        EmitSignals(sb, c, used, isStaticSingleton);
 
         var virtuals = new List<VirtualInfo>();
         if (c.TryGetProperty("methods", out var methods))
@@ -320,6 +338,78 @@ public static class ApiGenerator
 
         sb.AppendLine("}");
         sb.AppendLine();
+    }
+
+    // ----------------------------------------------------------- signals --
+
+    /// <summary>Decode expression from a borrowed signal-arg variant.</summary>
+    private static string? FromVariantExpr(TypeRef t, string v) => t.Kind switch
+    {
+        "bool" => $"Variants.ToBool({v})",
+        "int" => $"unchecked(({t.Cs})Variants.ToInt({v}))",
+        "enum" => $"({t.Cs})Variants.ToInt({v})",
+        "float" => $"({t.Cs})Variants.ToFloat({v})",
+        "string" or "stringname" => $"Variants.ToManagedString({v})",
+        "class" => $"({t.Cs}?)InstanceBindings.GetOrCreate(Variants.ToObject({v}), adoptRef: false)",
+        "variant" => $"new Variant(Variants.NewCopy({v}))",
+        "math" => $"Variants.ToStruct<{t.Cs}>({VtOf(t.Cs)}, {v})",
+        "builtinref" => $"new {t.Cs}(Variants.ToStruct<ulong>({VtOf(t.Cs)}, {v}))",
+        _ => null, // packed / opaque16 signal args: not yet
+    };
+
+    /// <summary>
+    /// GodotSharp-style signal events: a typed XEventHandler delegate plus an
+    /// event whose add/remove Connect/Disconnect through a custom callable
+    /// keyed on the handler delegate (equality makes -= match +=).
+    /// </summary>
+    private static void EmitSignals(StringBuilder sb, JsonElement c, HashSet<string> used, bool staticClass)
+    {
+        if (!c.TryGetProperty("signals", out var signals)) return;
+
+        foreach (var s in signals.EnumerateArray())
+        {
+            var gd = s.GetProperty("name").GetString()!;
+            var p = Pascal(gd);
+            var delegateName = p + "EventHandler";
+            if (ReservedMembers.Contains(p) || used.Contains(p) || used.Contains(delegateName))
+            {
+                _signalsSkipped++;
+                continue;
+            }
+
+            var args = new List<(string name, TypeRef type)>();
+            var supported = true;
+            if (s.TryGetProperty("arguments", out var sargs))
+            {
+                foreach (var a in sargs.EnumerateArray())
+                {
+                    var t = Map(a.GetProperty("type").GetString()!, a.TryGetProperty("meta", out var am) ? am.GetString() : null);
+                    if (t is null || FromVariantExpr(t, "_") is null) { supported = false; break; }
+                    args.Add((Camel(a.GetProperty("name").GetString()!), t));
+                }
+            }
+            if (!supported) { _signalsSkipped++; continue; }
+
+            used.Add(p);
+            used.Add(delegateName);
+            _signalsEmitted++;
+
+            var paramList = string.Join(", ", args.Select(a => $"{ParamType(a.type)} {a.name}"));
+            var decodes = string.Join(", ", args.Select((a, i) =>
+                FromVariantExpr(a.type, $"*((NativeVariant**)__a)[{i}]")));
+            var trampoline = $"static (__d, __a, __n) => (({delegateName})__d)({decodes})";
+            var target = staticClass ? "Singleton." : "";
+            var mod = staticClass ? "static " : "";
+
+            sb.AppendLine();
+            sb.AppendLine($"    public delegate void {delegateName}({paramList});");
+            sb.AppendLine();
+            sb.AppendLine($"    public {mod}event {delegateName} {p}");
+            sb.AppendLine("    {");
+            sb.AppendLine($"        add => {target}Connect(\"{gd}\", Callable.FromSignalHandler(value, {trampoline}));");
+            sb.AppendLine($"        remove => {target}Disconnect(\"{gd}\", Callable.FromSignalHandler(value, {trampoline}));");
+            sb.AppendLine("    }");
+        }
     }
 
     // ------------------------------------------------------------- enums --

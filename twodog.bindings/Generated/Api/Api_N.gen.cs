@@ -1655,6 +1655,54 @@ public unsafe partial class NavigationAgent2D : Node
         set => SetDebugPathCustomLineWidth(value);
     }
 
+    public delegate void PathChangedEventHandler();
+
+    public event PathChangedEventHandler PathChanged
+    {
+        add => Connect("path_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PathChangedEventHandler)__d)()));
+        remove => Disconnect("path_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PathChangedEventHandler)__d)()));
+    }
+
+    public delegate void TargetReachedEventHandler();
+
+    public event TargetReachedEventHandler TargetReached
+    {
+        add => Connect("target_reached", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TargetReachedEventHandler)__d)()));
+        remove => Disconnect("target_reached", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TargetReachedEventHandler)__d)()));
+    }
+
+    public delegate void WaypointReachedEventHandler(Godot.Collections.Dictionary details);
+
+    public event WaypointReachedEventHandler WaypointReached
+    {
+        add => Connect("waypoint_reached", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((WaypointReachedEventHandler)__d)(new Godot.Collections.Dictionary(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_DICTIONARY, *((NativeVariant**)__a)[0])))));
+        remove => Disconnect("waypoint_reached", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((WaypointReachedEventHandler)__d)(new Godot.Collections.Dictionary(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_DICTIONARY, *((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void LinkReachedEventHandler(Godot.Collections.Dictionary details);
+
+    public event LinkReachedEventHandler LinkReached
+    {
+        add => Connect("link_reached", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((LinkReachedEventHandler)__d)(new Godot.Collections.Dictionary(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_DICTIONARY, *((NativeVariant**)__a)[0])))));
+        remove => Disconnect("link_reached", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((LinkReachedEventHandler)__d)(new Godot.Collections.Dictionary(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_DICTIONARY, *((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void NavigationFinishedEventHandler();
+
+    public event NavigationFinishedEventHandler NavigationFinished
+    {
+        add => Connect("navigation_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NavigationFinishedEventHandler)__d)()));
+        remove => Disconnect("navigation_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NavigationFinishedEventHandler)__d)()));
+    }
+
+    public delegate void VelocityComputedEventHandler(Vector2 safeVelocity);
+
+    public event VelocityComputedEventHandler VelocityComputed
+    {
+        add => Connect("velocity_computed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VelocityComputedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("velocity_computed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VelocityComputedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_get_rid;
     public Rid GetRid()
     {
@@ -3111,6 +3159,54 @@ public unsafe partial class NavigationAgent3D : Node
     {
         get => GetDebugPathCustomPointSize();
         set => SetDebugPathCustomPointSize(value);
+    }
+
+    public delegate void PathChangedEventHandler();
+
+    public event PathChangedEventHandler PathChanged
+    {
+        add => Connect("path_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PathChangedEventHandler)__d)()));
+        remove => Disconnect("path_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PathChangedEventHandler)__d)()));
+    }
+
+    public delegate void TargetReachedEventHandler();
+
+    public event TargetReachedEventHandler TargetReached
+    {
+        add => Connect("target_reached", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TargetReachedEventHandler)__d)()));
+        remove => Disconnect("target_reached", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TargetReachedEventHandler)__d)()));
+    }
+
+    public delegate void WaypointReachedEventHandler(Godot.Collections.Dictionary details);
+
+    public event WaypointReachedEventHandler WaypointReached
+    {
+        add => Connect("waypoint_reached", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((WaypointReachedEventHandler)__d)(new Godot.Collections.Dictionary(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_DICTIONARY, *((NativeVariant**)__a)[0])))));
+        remove => Disconnect("waypoint_reached", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((WaypointReachedEventHandler)__d)(new Godot.Collections.Dictionary(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_DICTIONARY, *((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void LinkReachedEventHandler(Godot.Collections.Dictionary details);
+
+    public event LinkReachedEventHandler LinkReached
+    {
+        add => Connect("link_reached", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((LinkReachedEventHandler)__d)(new Godot.Collections.Dictionary(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_DICTIONARY, *((NativeVariant**)__a)[0])))));
+        remove => Disconnect("link_reached", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((LinkReachedEventHandler)__d)(new Godot.Collections.Dictionary(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_DICTIONARY, *((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void NavigationFinishedEventHandler();
+
+    public event NavigationFinishedEventHandler NavigationFinished
+    {
+        add => Connect("navigation_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NavigationFinishedEventHandler)__d)()));
+        remove => Disconnect("navigation_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NavigationFinishedEventHandler)__d)()));
+    }
+
+    public delegate void VelocityComputedEventHandler(Vector3 safeVelocity);
+
+    public event VelocityComputedEventHandler VelocityComputed
+    {
+        add => Connect("velocity_computed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VelocityComputedEventHandler)__d)(Variants.ToStruct<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR3, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("velocity_computed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VelocityComputedEventHandler)__d)(Variants.ToStruct<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR3, *((NativeVariant**)__a)[0]))));
     }
 
     private static nint __mb_get_rid;
@@ -10157,6 +10253,22 @@ public unsafe partial class NavigationRegion2D : Node2D
         set => SetTravelCost(value);
     }
 
+    public delegate void NavigationPolygonChangedEventHandler();
+
+    public event NavigationPolygonChangedEventHandler NavigationPolygonChanged
+    {
+        add => Connect("navigation_polygon_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NavigationPolygonChangedEventHandler)__d)()));
+        remove => Disconnect("navigation_polygon_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NavigationPolygonChangedEventHandler)__d)()));
+    }
+
+    public delegate void BakeFinishedEventHandler();
+
+    public event BakeFinishedEventHandler BakeFinished
+    {
+        add => Connect("bake_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BakeFinishedEventHandler)__d)()));
+        remove => Disconnect("bake_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BakeFinishedEventHandler)__d)()));
+    }
+
     private static nint __mb_get_rid;
     public Rid GetRid()
     {
@@ -10532,6 +10644,22 @@ public unsafe partial class NavigationRegion3D : Node3D
         set => SetTravelCost(value);
     }
 
+    public delegate void NavigationMeshChangedEventHandler();
+
+    public event NavigationMeshChangedEventHandler NavigationMeshChanged
+    {
+        add => Connect("navigation_mesh_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NavigationMeshChangedEventHandler)__d)()));
+        remove => Disconnect("navigation_mesh_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NavigationMeshChangedEventHandler)__d)()));
+    }
+
+    public delegate void BakeFinishedEventHandler();
+
+    public event BakeFinishedEventHandler BakeFinished
+    {
+        add => Connect("bake_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BakeFinishedEventHandler)__d)()));
+        remove => Disconnect("bake_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BakeFinishedEventHandler)__d)()));
+    }
+
     private static nint __mb_get_rid;
     public Rid GetRid()
     {
@@ -10883,6 +11011,30 @@ public static unsafe partial class NavigationServer2D
         EdgeConnectionCount = 7,
         EdgeFreeCount = 8,
         ObstacleCount = 9,
+    }
+
+    public delegate void MapChangedEventHandler(Rid map);
+
+    public static event MapChangedEventHandler MapChanged
+    {
+        add => Singleton.Connect("map_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MapChangedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]))));
+        remove => Singleton.Disconnect("map_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MapChangedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void NavigationDebugChangedEventHandler();
+
+    public static event NavigationDebugChangedEventHandler NavigationDebugChanged
+    {
+        add => Singleton.Connect("navigation_debug_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NavigationDebugChangedEventHandler)__d)()));
+        remove => Singleton.Disconnect("navigation_debug_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NavigationDebugChangedEventHandler)__d)()));
+    }
+
+    public delegate void AvoidanceDebugChangedEventHandler();
+
+    public static event AvoidanceDebugChangedEventHandler AvoidanceDebugChanged
+    {
+        add => Singleton.Connect("avoidance_debug_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AvoidanceDebugChangedEventHandler)__d)()));
+        remove => Singleton.Disconnect("avoidance_debug_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AvoidanceDebugChangedEventHandler)__d)()));
     }
 
     private static nint __mb_get_maps;
@@ -13431,6 +13583,30 @@ public static unsafe partial class NavigationServer3D
         EdgeConnectionCount = 7,
         EdgeFreeCount = 8,
         ObstacleCount = 9,
+    }
+
+    public delegate void MapChangedEventHandler(Rid map);
+
+    public static event MapChangedEventHandler MapChanged
+    {
+        add => Singleton.Connect("map_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MapChangedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]))));
+        remove => Singleton.Disconnect("map_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MapChangedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void NavigationDebugChangedEventHandler();
+
+    public static event NavigationDebugChangedEventHandler NavigationDebugChanged
+    {
+        add => Singleton.Connect("navigation_debug_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NavigationDebugChangedEventHandler)__d)()));
+        remove => Singleton.Disconnect("navigation_debug_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NavigationDebugChangedEventHandler)__d)()));
+    }
+
+    public delegate void AvoidanceDebugChangedEventHandler();
+
+    public static event AvoidanceDebugChangedEventHandler AvoidanceDebugChanged
+    {
+        add => Singleton.Connect("avoidance_debug_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AvoidanceDebugChangedEventHandler)__d)()));
+        remove => Singleton.Disconnect("avoidance_debug_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AvoidanceDebugChangedEventHandler)__d)()));
     }
 
     private static nint __mb_get_maps;
@@ -16350,6 +16526,14 @@ public unsafe partial class NinePatchRect : Control
         set => SetVAxisStretchMode(value);
     }
 
+    public delegate void TextureChangedEventHandler();
+
+    public event TextureChangedEventHandler TextureChanged
+    {
+        add => Connect("texture_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextureChangedEventHandler)__d)()));
+        remove => Disconnect("texture_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextureChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_texture;
     internal void SetTexture(Texture2D? texture)
     {
@@ -16684,6 +16868,94 @@ public unsafe partial class Node : GodotObject
     {
         get => GetEditorDescription();
         set => SetEditorDescription(value);
+    }
+
+    public delegate void ReadyEventHandler();
+
+    public event ReadyEventHandler Ready
+    {
+        add => Connect("ready", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ReadyEventHandler)__d)()));
+        remove => Disconnect("ready", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ReadyEventHandler)__d)()));
+    }
+
+    public delegate void RenamedEventHandler();
+
+    public event RenamedEventHandler Renamed
+    {
+        add => Connect("renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RenamedEventHandler)__d)()));
+        remove => Disconnect("renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RenamedEventHandler)__d)()));
+    }
+
+    public delegate void TreeEnteredEventHandler();
+
+    public event TreeEnteredEventHandler TreeEntered
+    {
+        add => Connect("tree_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TreeEnteredEventHandler)__d)()));
+        remove => Disconnect("tree_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TreeEnteredEventHandler)__d)()));
+    }
+
+    public delegate void TreeExitingEventHandler();
+
+    public event TreeExitingEventHandler TreeExiting
+    {
+        add => Connect("tree_exiting", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TreeExitingEventHandler)__d)()));
+        remove => Disconnect("tree_exiting", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TreeExitingEventHandler)__d)()));
+    }
+
+    public delegate void TreeExitedEventHandler();
+
+    public event TreeExitedEventHandler TreeExited
+    {
+        add => Connect("tree_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TreeExitedEventHandler)__d)()));
+        remove => Disconnect("tree_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TreeExitedEventHandler)__d)()));
+    }
+
+    public delegate void ChildEnteredTreeEventHandler(Node? node);
+
+    public event ChildEnteredTreeEventHandler ChildEnteredTree
+    {
+        add => Connect("child_entered_tree", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChildEnteredTreeEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("child_entered_tree", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChildEnteredTreeEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void ChildExitingTreeEventHandler(Node? node);
+
+    public event ChildExitingTreeEventHandler ChildExitingTree
+    {
+        add => Connect("child_exiting_tree", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChildExitingTreeEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("child_exiting_tree", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChildExitingTreeEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void ChildOrderChangedEventHandler();
+
+    public event ChildOrderChangedEventHandler ChildOrderChanged
+    {
+        add => Connect("child_order_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChildOrderChangedEventHandler)__d)()));
+        remove => Disconnect("child_order_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChildOrderChangedEventHandler)__d)()));
+    }
+
+    public delegate void ReplacingByEventHandler(Node? node);
+
+    public event ReplacingByEventHandler ReplacingBy
+    {
+        add => Connect("replacing_by", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ReplacingByEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("replacing_by", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ReplacingByEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void EditorDescriptionChangedEventHandler(Node? node);
+
+    public event EditorDescriptionChangedEventHandler EditorDescriptionChanged
+    {
+        add => Connect("editor_description_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EditorDescriptionChangedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("editor_description_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EditorDescriptionChangedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void EditorStateChangedEventHandler();
+
+    public event EditorStateChangedEventHandler EditorStateChanged
+    {
+        add => Connect("editor_state_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EditorStateChangedEventHandler)__d)()));
+        remove => Disconnect("editor_state_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EditorStateChangedEventHandler)__d)()));
     }
 
     private static nint __mb_print_orphan_nodes;
@@ -19562,6 +19834,14 @@ public unsafe partial class Node3D : Node
     {
         get => GetVisibilityParent();
         set => SetVisibilityParent(value);
+    }
+
+    public delegate void VisibilityChangedEventHandler();
+
+    public event VisibilityChangedEventHandler VisibilityChanged
+    {
+        add => Connect("visibility_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VisibilityChangedEventHandler)__d)()));
+        remove => Disconnect("visibility_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VisibilityChangedEventHandler)__d)()));
     }
 
     private static nint __mb_set_transform;

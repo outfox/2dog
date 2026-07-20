@@ -67,6 +67,22 @@ public unsafe partial class SceneMultiplayer : MultiplayerAPI
         set => SetMaxDeltaPacketSize(value);
     }
 
+    public delegate void PeerAuthenticatingEventHandler(long id);
+
+    public event PeerAuthenticatingEventHandler PeerAuthenticating
+    {
+        add => Connect("peer_authenticating", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PeerAuthenticatingEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("peer_authenticating", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PeerAuthenticatingEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void PeerAuthenticationFailedEventHandler(long id);
+
+    public event PeerAuthenticationFailedEventHandler PeerAuthenticationFailed
+    {
+        add => Connect("peer_authentication_failed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PeerAuthenticationFailedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("peer_authentication_failed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PeerAuthenticationFailedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
     private static nint __mb_set_root_path;
     internal void SetRootPath(NodePath path)
     {
@@ -1170,6 +1186,78 @@ public unsafe partial class SceneTree : MainLoop
         set => SetPhysicsInterpolationEnabled(value);
     }
 
+    public delegate void TreeChangedEventHandler();
+
+    public event TreeChangedEventHandler TreeChanged
+    {
+        add => Connect("tree_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TreeChangedEventHandler)__d)()));
+        remove => Disconnect("tree_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TreeChangedEventHandler)__d)()));
+    }
+
+    public delegate void SceneChangedEventHandler();
+
+    public event SceneChangedEventHandler SceneChanged
+    {
+        add => Connect("scene_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SceneChangedEventHandler)__d)()));
+        remove => Disconnect("scene_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SceneChangedEventHandler)__d)()));
+    }
+
+    public delegate void TreeProcessModeChangedEventHandler();
+
+    public event TreeProcessModeChangedEventHandler TreeProcessModeChanged
+    {
+        add => Connect("tree_process_mode_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TreeProcessModeChangedEventHandler)__d)()));
+        remove => Disconnect("tree_process_mode_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TreeProcessModeChangedEventHandler)__d)()));
+    }
+
+    public delegate void NodeAddedEventHandler(Node? node);
+
+    public event NodeAddedEventHandler NodeAdded
+    {
+        add => Connect("node_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeAddedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("node_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeAddedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void NodeRemovedEventHandler(Node? node);
+
+    public event NodeRemovedEventHandler NodeRemoved
+    {
+        add => Connect("node_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeRemovedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("node_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeRemovedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void NodeRenamedEventHandler(Node? node);
+
+    public event NodeRenamedEventHandler NodeRenamed
+    {
+        add => Connect("node_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeRenamedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("node_renamed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeRenamedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void NodeConfigurationWarningChangedEventHandler(Node? node);
+
+    public event NodeConfigurationWarningChangedEventHandler NodeConfigurationWarningChanged
+    {
+        add => Connect("node_configuration_warning_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeConfigurationWarningChangedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("node_configuration_warning_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeConfigurationWarningChangedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void ProcessFrameEventHandler();
+
+    public event ProcessFrameEventHandler ProcessFrame
+    {
+        add => Connect("process_frame", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ProcessFrameEventHandler)__d)()));
+        remove => Disconnect("process_frame", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ProcessFrameEventHandler)__d)()));
+    }
+
+    public delegate void PhysicsFrameEventHandler();
+
+    public event PhysicsFrameEventHandler PhysicsFrame
+    {
+        add => Connect("physics_frame", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PhysicsFrameEventHandler)__d)()));
+        remove => Disconnect("physics_frame", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PhysicsFrameEventHandler)__d)()));
+    }
+
     private static nint __mb_get_root;
     internal Window? GetRoot()
     {
@@ -1997,6 +2085,14 @@ public unsafe partial class SceneTreeTimer : RefCounted
         set => SetTimeLeft(value);
     }
 
+    public delegate void TimeoutEventHandler();
+
+    public event TimeoutEventHandler Timeout
+    {
+        add => Connect("timeout", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TimeoutEventHandler)__d)()));
+        remove => Disconnect("timeout", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TimeoutEventHandler)__d)()));
+    }
+
     private static nint __mb_set_time_left;
     internal void SetTimeLeft(double time)
     {
@@ -2647,6 +2743,14 @@ public unsafe partial class ScriptCreateDialog : ConfirmationDialog
         ClassRegistry.AttachNew(this, "ScriptCreateDialog");
     }
 
+    public delegate void ScriptCreatedEventHandler(Script? script);
+
+    public event ScriptCreatedEventHandler ScriptCreated
+    {
+        add => Connect("script_created", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScriptCreatedEventHandler)__d)((Script?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("script_created", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScriptCreatedEventHandler)__d)((Script?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
     private static nint __mb_config;
     public void Config(string inherits, string path, bool builtInEnabled = true, bool loadEnabled = true)
     {
@@ -2675,6 +2779,22 @@ public unsafe partial class ScriptCreateDialog : ConfirmationDialog
 public unsafe partial class ScriptEditor : PanelContainer
 {
     internal ScriptEditor(nint ptr, bool rc) : base(ptr, rc) { }
+
+    public delegate void EditorScriptChangedEventHandler(Script? script);
+
+    public event EditorScriptChangedEventHandler EditorScriptChanged
+    {
+        add => Connect("editor_script_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EditorScriptChangedEventHandler)__d)((Script?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("editor_script_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EditorScriptChangedEventHandler)__d)((Script?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void ScriptCloseEventHandler(Script? script);
+
+    public event ScriptCloseEventHandler ScriptClose
+    {
+        add => Connect("script_close", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScriptCloseEventHandler)__d)((Script?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("script_close", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScriptCloseEventHandler)__d)((Script?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
 
     private static nint __mb_get_current_editor;
     public ScriptEditorBase? GetCurrentEditor()
@@ -2932,6 +3052,86 @@ public unsafe partial class ScriptEditor : PanelContainer
 public unsafe partial class ScriptEditorBase : VBoxContainer
 {
     internal ScriptEditorBase(nint ptr, bool rc) : base(ptr, rc) { }
+
+    public delegate void NameChangedEventHandler();
+
+    public event NameChangedEventHandler NameChanged
+    {
+        add => Connect("name_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NameChangedEventHandler)__d)()));
+        remove => Disconnect("name_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NameChangedEventHandler)__d)()));
+    }
+
+    public delegate void EditedScriptChangedEventHandler();
+
+    public event EditedScriptChangedEventHandler EditedScriptChanged
+    {
+        add => Connect("edited_script_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EditedScriptChangedEventHandler)__d)()));
+        remove => Disconnect("edited_script_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EditedScriptChangedEventHandler)__d)()));
+    }
+
+    public delegate void SearchInFilesRequestedEventHandler(string text);
+
+    public event SearchInFilesRequestedEventHandler SearchInFilesRequested
+    {
+        add => Connect("search_in_files_requested", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SearchInFilesRequestedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("search_in_files_requested", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SearchInFilesRequestedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void RequestSaveHistoryEventHandler();
+
+    public event RequestSaveHistoryEventHandler RequestSaveHistory
+    {
+        add => Connect("request_save_history", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RequestSaveHistoryEventHandler)__d)()));
+        remove => Disconnect("request_save_history", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RequestSaveHistoryEventHandler)__d)()));
+    }
+
+    public delegate void RequestHelpEventHandler(string topic);
+
+    public event RequestHelpEventHandler RequestHelp
+    {
+        add => Connect("request_help", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RequestHelpEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("request_help", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RequestHelpEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void RequestOpenScriptAtLineEventHandler(GodotObject? script, long line);
+
+    public event RequestOpenScriptAtLineEventHandler RequestOpenScriptAtLine
+    {
+        add => Connect("request_open_script_at_line", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RequestOpenScriptAtLineEventHandler)__d)((GodotObject?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("request_open_script_at_line", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RequestOpenScriptAtLineEventHandler)__d)((GodotObject?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+    }
+
+    public delegate void GoToHelpEventHandler(string what);
+
+    public event GoToHelpEventHandler GoToHelp
+    {
+        add => Connect("go_to_help", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GoToHelpEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("go_to_help", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GoToHelpEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void RequestSavePreviousStateEventHandler(Godot.Collections.Dictionary state);
+
+    public event RequestSavePreviousStateEventHandler RequestSavePreviousState
+    {
+        add => Connect("request_save_previous_state", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RequestSavePreviousStateEventHandler)__d)(new Godot.Collections.Dictionary(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_DICTIONARY, *((NativeVariant**)__a)[0])))));
+        remove => Disconnect("request_save_previous_state", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RequestSavePreviousStateEventHandler)__d)(new Godot.Collections.Dictionary(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_DICTIONARY, *((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void ReplaceInFilesRequestedEventHandler(string text);
+
+    public event ReplaceInFilesRequestedEventHandler ReplaceInFilesRequested
+    {
+        add => Connect("replace_in_files_requested", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ReplaceInFilesRequestedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("replace_in_files_requested", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ReplaceInFilesRequestedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void GoToMethodEventHandler(GodotObject? script, string method);
+
+    public event GoToMethodEventHandler GoToMethod
+    {
+        add => Connect("go_to_method", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GoToMethodEventHandler)__d)((GodotObject?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("go_to_method", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GoToMethodEventHandler)__d)((GodotObject?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+    }
 
     private static nint __mb_add_syntax_highlighter;
     public void AddSyntaxHighlighter(EditorSyntaxHighlighter? highlighter)
@@ -3655,6 +3855,14 @@ public unsafe partial class ScrollBar : Range
         set => SetCustomStep(value);
     }
 
+    public delegate void ScrollingEventHandler();
+
+    public event ScrollingEventHandler Scrolling
+    {
+        add => Connect("scrolling", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScrollingEventHandler)__d)()));
+        remove => Disconnect("scrolling", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScrollingEventHandler)__d)()));
+    }
+
     private static nint __mb_set_custom_step;
     internal void SetCustomStep(float step)
     {
@@ -3784,6 +3992,22 @@ public unsafe partial class ScrollContainer : Container
     {
         get => IsScrollHintTiled();
         set => SetTileScrollHint(value);
+    }
+
+    public delegate void ScrollStartedEventHandler();
+
+    public event ScrollStartedEventHandler ScrollStarted
+    {
+        add => Connect("scroll_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScrollStartedEventHandler)__d)()));
+        remove => Disconnect("scroll_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScrollStartedEventHandler)__d)()));
+    }
+
+    public delegate void ScrollEndedEventHandler();
+
+    public event ScrollEndedEventHandler ScrollEnded
+    {
+        add => Connect("scroll_ended", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScrollEndedEventHandler)__d)()));
+        remove => Disconnect("scroll_ended", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScrollEndedEventHandler)__d)()));
     }
 
     private static nint __mb_set_h_scroll;
@@ -6558,6 +6782,14 @@ public unsafe partial class Skeleton2D : Node2D
         ClassRegistry.AttachNew(this, "Skeleton2D");
     }
 
+    public delegate void BoneSetupChangedEventHandler();
+
+    public event BoneSetupChangedEventHandler BoneSetupChanged
+    {
+        add => Connect("bone_setup_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BoneSetupChangedEventHandler)__d)()));
+        remove => Disconnect("bone_setup_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BoneSetupChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_get_bone_count;
     public int GetBoneCount()
     {
@@ -6734,6 +6966,54 @@ public unsafe partial class Skeleton3D : Node3D
     {
         get => GetAnimatePhysicalBones();
         set => SetAnimatePhysicalBones(value);
+    }
+
+    public delegate void RestUpdatedEventHandler();
+
+    public event RestUpdatedEventHandler RestUpdated
+    {
+        add => Connect("rest_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RestUpdatedEventHandler)__d)()));
+        remove => Disconnect("rest_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RestUpdatedEventHandler)__d)()));
+    }
+
+    public delegate void PoseUpdatedEventHandler();
+
+    public event PoseUpdatedEventHandler PoseUpdated
+    {
+        add => Connect("pose_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PoseUpdatedEventHandler)__d)()));
+        remove => Disconnect("pose_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PoseUpdatedEventHandler)__d)()));
+    }
+
+    public delegate void SkeletonUpdatedEventHandler();
+
+    public event SkeletonUpdatedEventHandler SkeletonUpdated
+    {
+        add => Connect("skeleton_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SkeletonUpdatedEventHandler)__d)()));
+        remove => Disconnect("skeleton_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SkeletonUpdatedEventHandler)__d)()));
+    }
+
+    public delegate void BoneEnabledChangedEventHandler(long boneIdx);
+
+    public event BoneEnabledChangedEventHandler BoneEnabledChanged
+    {
+        add => Connect("bone_enabled_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BoneEnabledChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("bone_enabled_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BoneEnabledChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void BoneListChangedEventHandler();
+
+    public event BoneListChangedEventHandler BoneListChanged
+    {
+        add => Connect("bone_list_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BoneListChangedEventHandler)__d)()));
+        remove => Disconnect("bone_list_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BoneListChangedEventHandler)__d)()));
+    }
+
+    public delegate void ShowRestOnlyChangedEventHandler();
+
+    public event ShowRestOnlyChangedEventHandler ShowRestOnlyChanged
+    {
+        add => Connect("show_rest_only_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ShowRestOnlyChangedEventHandler)__d)()));
+        remove => Disconnect("show_rest_only_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ShowRestOnlyChangedEventHandler)__d)()));
     }
 
     private static nint __mb_add_bone;
@@ -10625,6 +10905,14 @@ public unsafe partial class SkeletonModifier3D : Node3D
         set => SetInfluence(value);
     }
 
+    public delegate void ModificationProcessedEventHandler();
+
+    public event ModificationProcessedEventHandler ModificationProcessed
+    {
+        add => Connect("modification_processed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ModificationProcessedEventHandler)__d)()));
+        remove => Disconnect("modification_processed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ModificationProcessedEventHandler)__d)()));
+    }
+
     private static nint __mb_get_skeleton;
     public Skeleton3D? GetSkeleton()
     {
@@ -10783,6 +11071,14 @@ public unsafe partial class SkeletonProfile : Resource
     {
         get => GetBoneSize();
         set => SetBoneSize(value);
+    }
+
+    public delegate void ProfileUpdatedEventHandler();
+
+    public event ProfileUpdatedEventHandler ProfileUpdated
+    {
+        add => Connect("profile_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ProfileUpdatedEventHandler)__d)()));
+        remove => Disconnect("profile_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ProfileUpdatedEventHandler)__d)()));
     }
 
     private static nint __mb_set_root_bone;
@@ -11713,6 +12009,22 @@ public unsafe partial class Slider : Range
     {
         get => GetTicksPosition();
         set => SetTicksPosition(value);
+    }
+
+    public delegate void DragStartedEventHandler();
+
+    public event DragStartedEventHandler DragStarted
+    {
+        add => Connect("drag_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DragStartedEventHandler)__d)()));
+        remove => Disconnect("drag_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DragStartedEventHandler)__d)()));
+    }
+
+    public delegate void DragEndedEventHandler(bool valueChanged);
+
+    public event DragEndedEventHandler DragEnded
+    {
+        add => Connect("drag_ended", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DragEndedEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("drag_ended", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DragEndedEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
     }
 
     private static nint __mb_set_ticks;
@@ -13598,6 +13910,30 @@ public unsafe partial class SplitContainer : Container
     {
         get => GetSplitOffset();
         set => SetSplitOffset(value);
+    }
+
+    public delegate void DraggedEventHandler(long offset);
+
+    public event DraggedEventHandler Dragged
+    {
+        add => Connect("dragged", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DraggedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("dragged", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DraggedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void DragStartedEventHandler();
+
+    public event DragStartedEventHandler DragStarted
+    {
+        add => Connect("drag_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DragStartedEventHandler)__d)()));
+        remove => Disconnect("drag_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DragStartedEventHandler)__d)()));
+    }
+
+    public delegate void DragEndedEventHandler();
+
+    public event DragEndedEventHandler DragEnded
+    {
+        add => Connect("drag_ended", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DragEndedEventHandler)__d)()));
+        remove => Disconnect("drag_ended", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DragEndedEventHandler)__d)()));
     }
 
     private static nint __mb_set_split_offsets;
@@ -16324,6 +16660,22 @@ public unsafe partial class Sprite2D : Node2D
         set => SetRegionFilterClipEnabled(value);
     }
 
+    public delegate void FrameChangedEventHandler();
+
+    public event FrameChangedEventHandler FrameChanged
+    {
+        add => Connect("frame_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FrameChangedEventHandler)__d)()));
+        remove => Disconnect("frame_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FrameChangedEventHandler)__d)()));
+    }
+
+    public delegate void TextureChangedEventHandler();
+
+    public event TextureChangedEventHandler TextureChanged
+    {
+        add => Connect("texture_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextureChangedEventHandler)__d)()));
+        remove => Disconnect("texture_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextureChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_texture;
     internal void SetTexture(Texture2D? texture)
     {
@@ -16779,6 +17131,22 @@ public unsafe partial class Sprite3D : SpriteBase3D
     {
         get => GetRegionRect();
         set => SetRegionRect(value);
+    }
+
+    public delegate void FrameChangedEventHandler();
+
+    public event FrameChangedEventHandler FrameChanged
+    {
+        add => Connect("frame_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FrameChangedEventHandler)__d)()));
+        remove => Disconnect("frame_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FrameChangedEventHandler)__d)()));
+    }
+
+    public delegate void TextureChangedEventHandler();
+
+    public event TextureChangedEventHandler TextureChanged
+    {
+        add => Connect("texture_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextureChangedEventHandler)__d)()));
+        remove => Disconnect("texture_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextureChangedEventHandler)__d)()));
     }
 
     private static nint __mb_set_texture;
@@ -18294,6 +18662,14 @@ public unsafe partial class StatusIndicator : Node
     {
         get => IsVisible();
         set => SetVisible(value);
+    }
+
+    public delegate void PressedEventHandler(long mouseButton, Vector2I mousePosition);
+
+    public event PressedEventHandler Pressed
+    {
+        add => Connect("pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PressedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToStruct<Vector2I>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2I, *((NativeVariant**)__a)[1]))));
+        remove => Disconnect("pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PressedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), Variants.ToStruct<Vector2I>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2I, *((NativeVariant**)__a)[1]))));
     }
 
     private static nint __mb_set_tooltip;

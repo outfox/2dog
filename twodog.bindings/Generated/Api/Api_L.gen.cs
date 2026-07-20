@@ -6586,6 +6586,38 @@ public unsafe partial class LineEdit : Control
         set => SetRightIconScale(value);
     }
 
+    public delegate void TextChangedEventHandler(string newText);
+
+    public event TextChangedEventHandler TextChanged
+    {
+        add => Connect("text_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("text_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextChangedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void TextChangeRejectedEventHandler(string rejectedSubstring);
+
+    public event TextChangeRejectedEventHandler TextChangeRejected
+    {
+        add => Connect("text_change_rejected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextChangeRejectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("text_change_rejected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextChangeRejectedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void TextSubmittedEventHandler(string newText);
+
+    public event TextSubmittedEventHandler TextSubmitted
+    {
+        add => Connect("text_submitted", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextSubmittedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("text_submitted", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextSubmittedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void EditingToggledEventHandler(bool toggledOn);
+
+    public event EditingToggledEventHandler EditingToggled
+    {
+        add => Connect("editing_toggled", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EditingToggledEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("editing_toggled", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EditingToggledEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_has_ime_text;
     public bool HasImeText()
     {

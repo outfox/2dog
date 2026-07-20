@@ -620,6 +620,14 @@ public static unsafe partial class JavaScriptBridge
 
     public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
+    public delegate void PwaUpdateAvailableEventHandler();
+
+    public static event PwaUpdateAvailableEventHandler PwaUpdateAvailable
+    {
+        add => Singleton.Connect("pwa_update_available", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PwaUpdateAvailableEventHandler)__d)()));
+        remove => Singleton.Disconnect("pwa_update_available", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PwaUpdateAvailableEventHandler)__d)()));
+    }
+
     private static nint __mb_eval;
     public static Variant Eval(string code, bool useGlobalExecutionContext = false)
     {

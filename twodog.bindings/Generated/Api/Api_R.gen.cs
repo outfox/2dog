@@ -5509,6 +5509,22 @@ public unsafe partial class Range : Control
         set => SetAllowLesser(value);
     }
 
+    public delegate void ValueChangedEventHandler(double value);
+
+    public event ValueChangedEventHandler ValueChanged
+    {
+        add => Connect("value_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ValueChangedEventHandler)__d)((double)Variants.ToFloat(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("value_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ValueChangedEventHandler)__d)((double)Variants.ToFloat(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void ChangedEventHandler();
+
+    public event ChangedEventHandler Changed
+    {
+        add => Connect("changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChangedEventHandler)__d)()));
+        remove => Disconnect("changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_get_value;
     internal double GetValue()
     {
@@ -14079,6 +14095,22 @@ public static unsafe partial class RenderingServer
     {
         get => IsRenderLoopEnabled();
         set => SetRenderLoopEnabled(value);
+    }
+
+    public delegate void FramePreDrawEventHandler();
+
+    public static event FramePreDrawEventHandler FramePreDraw
+    {
+        add => Singleton.Connect("frame_pre_draw", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FramePreDrawEventHandler)__d)()));
+        remove => Singleton.Disconnect("frame_pre_draw", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FramePreDrawEventHandler)__d)()));
+    }
+
+    public delegate void FramePostDrawEventHandler();
+
+    public static event FramePostDrawEventHandler FramePostDraw
+    {
+        add => Singleton.Connect("frame_post_draw", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FramePostDrawEventHandler)__d)()));
+        remove => Singleton.Disconnect("frame_post_draw", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FramePostDrawEventHandler)__d)()));
     }
 
     private static nint __mb_texture_2d_create;
@@ -24203,6 +24235,22 @@ public unsafe partial class Resource : RefCounted
         set => SetSceneUniqueId(value);
     }
 
+    public delegate void ChangedEventHandler();
+
+    public event ChangedEventHandler Changed
+    {
+        add => Connect("changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChangedEventHandler)__d)()));
+        remove => Disconnect("changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChangedEventHandler)__d)()));
+    }
+
+    public delegate void SetupLocalToSceneRequestedEventHandler();
+
+    public event SetupLocalToSceneRequestedEventHandler SetupLocalToSceneRequested
+    {
+        add => Connect("setup_local_to_scene_requested", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SetupLocalToSceneRequestedEventHandler)__d)()));
+        remove => Disconnect("setup_local_to_scene_requested", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SetupLocalToSceneRequestedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_path;
     internal void SetPath(string path)
     {
@@ -26489,6 +26537,38 @@ public unsafe partial class RichTextLabel : Control
     {
         get => GetStructuredTextBidiOverrideOptions();
         set => SetStructuredTextBidiOverrideOptions(value);
+    }
+
+    public delegate void MetaClickedEventHandler(Variant meta);
+
+    public event MetaClickedEventHandler MetaClicked
+    {
+        add => Connect("meta_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MetaClickedEventHandler)__d)(new Variant(Variants.NewCopy(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("meta_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MetaClickedEventHandler)__d)(new Variant(Variants.NewCopy(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void MetaHoverStartedEventHandler(Variant meta);
+
+    public event MetaHoverStartedEventHandler MetaHoverStarted
+    {
+        add => Connect("meta_hover_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MetaHoverStartedEventHandler)__d)(new Variant(Variants.NewCopy(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("meta_hover_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MetaHoverStartedEventHandler)__d)(new Variant(Variants.NewCopy(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void MetaHoverEndedEventHandler(Variant meta);
+
+    public event MetaHoverEndedEventHandler MetaHoverEnded
+    {
+        add => Connect("meta_hover_ended", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MetaHoverEndedEventHandler)__d)(new Variant(Variants.NewCopy(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("meta_hover_ended", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MetaHoverEndedEventHandler)__d)(new Variant(Variants.NewCopy(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void FinishedEventHandler();
+
+    public event FinishedEventHandler Finished
+    {
+        add => Connect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+        remove => Disconnect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
     }
 
     private static nint __mb_get_parsed_text;
@@ -28925,6 +29005,46 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
         set => SetConstantTorque(value);
     }
 
+    public delegate void BodyShapeEnteredEventHandler(Rid bodyRid, Node? body, long bodyShapeIndex, long localShapeIndex);
+
+    public event BodyShapeEnteredEventHandler BodyShapeEntered
+    {
+        add => Connect("body_shape_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeEnteredEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("body_shape_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeEnteredEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+    }
+
+    public delegate void BodyShapeExitedEventHandler(Rid bodyRid, Node? body, long bodyShapeIndex, long localShapeIndex);
+
+    public event BodyShapeExitedEventHandler BodyShapeExited
+    {
+        add => Connect("body_shape_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeExitedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("body_shape_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeExitedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+    }
+
+    public delegate void BodyEnteredEventHandler(Node? body);
+
+    public event BodyEnteredEventHandler BodyEntered
+    {
+        add => Connect("body_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyEnteredEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("body_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyEnteredEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void BodyExitedEventHandler(Node? body);
+
+    public event BodyExitedEventHandler BodyExited
+    {
+        add => Connect("body_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyExitedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("body_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyExitedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void SleepingStateChangedEventHandler();
+
+    public event SleepingStateChangedEventHandler SleepingStateChanged
+    {
+        add => Connect("sleeping_state_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SleepingStateChangedEventHandler)__d)()));
+        remove => Disconnect("sleeping_state_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SleepingStateChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_mass;
     internal void SetMass(float mass)
     {
@@ -30013,6 +30133,46 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     {
         get => GetConstantTorque();
         set => SetConstantTorque(value);
+    }
+
+    public delegate void BodyShapeEnteredEventHandler(Rid bodyRid, Node? body, long bodyShapeIndex, long localShapeIndex);
+
+    public event BodyShapeEnteredEventHandler BodyShapeEntered
+    {
+        add => Connect("body_shape_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeEnteredEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("body_shape_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeEnteredEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+    }
+
+    public delegate void BodyShapeExitedEventHandler(Rid bodyRid, Node? body, long bodyShapeIndex, long localShapeIndex);
+
+    public event BodyShapeExitedEventHandler BodyShapeExited
+    {
+        add => Connect("body_shape_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeExitedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("body_shape_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyShapeExitedEventHandler)__d)(Variants.ToStruct<Rid>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RID, *((NativeVariant**)__a)[0]), (Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[1]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+    }
+
+    public delegate void BodyEnteredEventHandler(Node? body);
+
+    public event BodyEnteredEventHandler BodyEntered
+    {
+        add => Connect("body_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyEnteredEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("body_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyEnteredEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void BodyExitedEventHandler(Node? body);
+
+    public event BodyExitedEventHandler BodyExited
+    {
+        add => Connect("body_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyExitedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("body_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BodyExitedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void SleepingStateChangedEventHandler();
+
+    public event SleepingStateChangedEventHandler SleepingStateChanged
+    {
+        add => Connect("sleeping_state_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SleepingStateChangedEventHandler)__d)()));
+        remove => Disconnect("sleeping_state_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SleepingStateChangedEventHandler)__d)()));
     }
 
     private static nint __mb_set_mass;

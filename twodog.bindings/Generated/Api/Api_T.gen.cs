@@ -334,6 +334,70 @@ public unsafe partial class TabBar : Control
         set => SetTabCount(value);
     }
 
+    public delegate void TabSelectedEventHandler(long tab);
+
+    public event TabSelectedEventHandler TabSelected
+    {
+        add => Connect("tab_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabSelectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("tab_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabSelectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void TabChangedEventHandler(long tab);
+
+    public event TabChangedEventHandler TabChanged
+    {
+        add => Connect("tab_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("tab_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void TabClickedEventHandler(long tab);
+
+    public event TabClickedEventHandler TabClicked
+    {
+        add => Connect("tab_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabClickedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("tab_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabClickedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void TabRmbClickedEventHandler(long tab);
+
+    public event TabRmbClickedEventHandler TabRmbClicked
+    {
+        add => Connect("tab_rmb_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabRmbClickedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("tab_rmb_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabRmbClickedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void TabClosePressedEventHandler(long tab);
+
+    public event TabClosePressedEventHandler TabClosePressed
+    {
+        add => Connect("tab_close_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabClosePressedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("tab_close_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabClosePressedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void TabButtonPressedEventHandler(long tab);
+
+    public event TabButtonPressedEventHandler TabButtonPressed
+    {
+        add => Connect("tab_button_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabButtonPressedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("tab_button_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabButtonPressedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void TabHoveredEventHandler(long tab);
+
+    public event TabHoveredEventHandler TabHovered
+    {
+        add => Connect("tab_hovered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabHoveredEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("tab_hovered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabHoveredEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void ActiveTabRearrangedEventHandler(long idxTo);
+
+    public event ActiveTabRearrangedEventHandler ActiveTabRearranged
+    {
+        add => Connect("active_tab_rearranged", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ActiveTabRearrangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("active_tab_rearranged", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ActiveTabRearrangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
     private static nint __mb_set_tab_count;
     internal void SetTabCount(int count)
     {
@@ -1411,6 +1475,62 @@ public unsafe partial class TabContainer : Container
     {
         get => GetDeselectEnabled();
         set => SetDeselectEnabled(value);
+    }
+
+    public delegate void ActiveTabRearrangedEventHandler(long idxTo);
+
+    public event ActiveTabRearrangedEventHandler ActiveTabRearranged
+    {
+        add => Connect("active_tab_rearranged", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ActiveTabRearrangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("active_tab_rearranged", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ActiveTabRearrangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void TabChangedEventHandler(long tab);
+
+    public event TabChangedEventHandler TabChanged
+    {
+        add => Connect("tab_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("tab_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void TabClickedEventHandler(long tab);
+
+    public event TabClickedEventHandler TabClicked
+    {
+        add => Connect("tab_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabClickedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("tab_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabClickedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void TabHoveredEventHandler(long tab);
+
+    public event TabHoveredEventHandler TabHovered
+    {
+        add => Connect("tab_hovered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabHoveredEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("tab_hovered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabHoveredEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void TabSelectedEventHandler(long tab);
+
+    public event TabSelectedEventHandler TabSelected
+    {
+        add => Connect("tab_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabSelectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("tab_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabSelectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void TabButtonPressedEventHandler(long tab);
+
+    public event TabButtonPressedEventHandler TabButtonPressed
+    {
+        add => Connect("tab_button_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabButtonPressedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("tab_button_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TabButtonPressedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void PrePopupPressedEventHandler();
+
+    public event PrePopupPressedEventHandler PrePopupPressed
+    {
+        add => Connect("pre_popup_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PrePopupPressedEventHandler)__d)()));
+        remove => Disconnect("pre_popup_pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PrePopupPressedEventHandler)__d)()));
     }
 
     private static nint __mb_get_tab_count;
@@ -2619,6 +2739,62 @@ public unsafe partial class TextEdit : Control
     {
         get => GetStructuredTextBidiOverrideOptions();
         set => SetStructuredTextBidiOverrideOptions(value);
+    }
+
+    public delegate void TextSetEventHandler();
+
+    public event TextSetEventHandler TextSet
+    {
+        add => Connect("text_set", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextSetEventHandler)__d)()));
+        remove => Disconnect("text_set", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextSetEventHandler)__d)()));
+    }
+
+    public delegate void TextChangedEventHandler();
+
+    public event TextChangedEventHandler TextChanged
+    {
+        add => Connect("text_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextChangedEventHandler)__d)()));
+        remove => Disconnect("text_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextChangedEventHandler)__d)()));
+    }
+
+    public delegate void LinesEditedFromEventHandler(long fromLine, long toLine);
+
+    public event LinesEditedFromEventHandler LinesEditedFrom
+    {
+        add => Connect("lines_edited_from", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((LinesEditedFromEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("lines_edited_from", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((LinesEditedFromEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+    }
+
+    public delegate void CaretChangedEventHandler();
+
+    public event CaretChangedEventHandler CaretChanged
+    {
+        add => Connect("caret_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CaretChangedEventHandler)__d)()));
+        remove => Disconnect("caret_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CaretChangedEventHandler)__d)()));
+    }
+
+    public delegate void GutterClickedEventHandler(long line, long gutter);
+
+    public event GutterClickedEventHandler GutterClicked
+    {
+        add => Connect("gutter_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GutterClickedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("gutter_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GutterClickedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+    }
+
+    public delegate void GutterAddedEventHandler();
+
+    public event GutterAddedEventHandler GutterAdded
+    {
+        add => Connect("gutter_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GutterAddedEventHandler)__d)()));
+        remove => Disconnect("gutter_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GutterAddedEventHandler)__d)()));
+    }
+
+    public delegate void GutterRemovedEventHandler();
+
+    public event GutterRemovedEventHandler GutterRemoved
+    {
+        add => Connect("gutter_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GutterRemovedEventHandler)__d)()));
+        remove => Disconnect("gutter_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GutterRemovedEventHandler)__d)()));
     }
 
     private static nint __mb_has_ime_text;
@@ -16360,6 +16536,22 @@ public static unsafe partial class TextServerManager
 
     public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
+    public delegate void InterfaceAddedEventHandler(string interfaceName);
+
+    public static event InterfaceAddedEventHandler InterfaceAdded
+    {
+        add => Singleton.Connect("interface_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Singleton.Disconnect("interface_added", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceAddedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void InterfaceRemovedEventHandler(string interfaceName);
+
+    public static event InterfaceRemovedEventHandler InterfaceRemoved
+    {
+        add => Singleton.Connect("interface_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Singleton.Disconnect("interface_removed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((InterfaceRemovedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_add_interface;
     public static void AddInterface(TextServer? @interface)
     {
@@ -19847,6 +20039,14 @@ public static unsafe partial class ThemeDB
         set => SetFallbackStylebox(value);
     }
 
+    public delegate void FallbackChangedEventHandler();
+
+    public static event FallbackChangedEventHandler FallbackChanged
+    {
+        add => Singleton.Connect("fallback_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FallbackChangedEventHandler)__d)()));
+        remove => Singleton.Disconnect("fallback_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FallbackChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_get_default_theme;
     public static Theme? GetDefaultTheme()
     {
@@ -20234,6 +20434,14 @@ public unsafe partial class TileData : GodotObject
     {
         get => GetProbability();
         set => SetProbability(value);
+    }
+
+    public delegate void ChangedEventHandler();
+
+    public event ChangedEventHandler Changed
+    {
+        add => Connect("changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChangedEventHandler)__d)()));
+        remove => Disconnect("changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChangedEventHandler)__d)()));
     }
 
     private static nint __mb_set_flip_h;
@@ -21232,6 +21440,14 @@ public unsafe partial class TileMap : Node2D
     {
         get => GetNavigationVisibilityMode();
         set => SetNavigationVisibilityMode(value);
+    }
+
+    public delegate void ChangedEventHandler();
+
+    public event ChangedEventHandler Changed
+    {
+        add => Connect("changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChangedEventHandler)__d)()));
+        remove => Disconnect("changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChangedEventHandler)__d)()));
     }
 
     private static nint __mb_set_navigation_map;
@@ -22456,6 +22672,14 @@ public unsafe partial class TileMapLayer : Node2D
     {
         get => GetNavigationVisibilityMode();
         set => SetNavigationVisibilityMode(value);
+    }
+
+    public delegate void ChangedEventHandler();
+
+    public event ChangedEventHandler Changed
+    {
+        add => Connect("changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChangedEventHandler)__d)()));
+        remove => Disconnect("changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChangedEventHandler)__d)()));
     }
 
     private static nint __mb_set_cell;
@@ -26815,6 +27039,14 @@ public unsafe partial class Timer : Node
 
     public double TimeLeft => GetTimeLeft();
 
+    public delegate void TimeoutEventHandler();
+
+    public event TimeoutEventHandler Timeout
+    {
+        add => Connect("timeout", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TimeoutEventHandler)__d)()));
+        remove => Disconnect("timeout", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TimeoutEventHandler)__d)()));
+    }
+
     private static nint __mb_set_wait_time;
     internal void SetWaitTime(double timeSec)
     {
@@ -27286,6 +27518,22 @@ public unsafe partial class TouchScreenButton : Node2D
     {
         get => GetVisibilityMode();
         set => SetVisibilityMode(value);
+    }
+
+    public delegate void PressedEventHandler();
+
+    public event PressedEventHandler Pressed
+    {
+        add => Connect("pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PressedEventHandler)__d)()));
+        remove => Disconnect("pressed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PressedEventHandler)__d)()));
+    }
+
+    public delegate void ReleasedEventHandler();
+
+    public event ReleasedEventHandler Released
+    {
+        add => Connect("released", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ReleasedEventHandler)__d)()));
+        remove => Disconnect("released", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ReleasedEventHandler)__d)()));
     }
 
     private static nint __mb_set_texture_normal;
@@ -29203,6 +29451,126 @@ public unsafe partial class Tree : Control
     {
         get => IsScrollHintTiled();
         set => SetTileScrollHint(value);
+    }
+
+    public delegate void ItemSelectedEventHandler();
+
+    public event ItemSelectedEventHandler ItemSelected
+    {
+        add => Connect("item_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemSelectedEventHandler)__d)()));
+        remove => Disconnect("item_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemSelectedEventHandler)__d)()));
+    }
+
+    public delegate void CellSelectedEventHandler();
+
+    public event CellSelectedEventHandler CellSelected
+    {
+        add => Connect("cell_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CellSelectedEventHandler)__d)()));
+        remove => Disconnect("cell_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CellSelectedEventHandler)__d)()));
+    }
+
+    public delegate void MultiSelectedEventHandler(TreeItem? item, long column, bool selected);
+
+    public event MultiSelectedEventHandler MultiSelected
+    {
+        add => Connect("multi_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MultiSelectedEventHandler)__d)((TreeItem?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToBool(*((NativeVariant**)__a)[2]))));
+        remove => Disconnect("multi_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MultiSelectedEventHandler)__d)((TreeItem?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToBool(*((NativeVariant**)__a)[2]))));
+    }
+
+    public delegate void ItemMouseSelectedEventHandler(Vector2 mousePosition, long mouseButtonIndex);
+
+    public event ItemMouseSelectedEventHandler ItemMouseSelected
+    {
+        add => Connect("item_mouse_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemMouseSelectedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("item_mouse_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemMouseSelectedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+    }
+
+    public delegate void EmptyClickedEventHandler(Vector2 clickPosition, long mouseButtonIndex);
+
+    public event EmptyClickedEventHandler EmptyClicked
+    {
+        add => Connect("empty_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EmptyClickedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("empty_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EmptyClickedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+    }
+
+    public delegate void ItemEditedEventHandler();
+
+    public event ItemEditedEventHandler ItemEdited
+    {
+        add => Connect("item_edited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemEditedEventHandler)__d)()));
+        remove => Disconnect("item_edited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemEditedEventHandler)__d)()));
+    }
+
+    public delegate void CustomItemClickedEventHandler(long mouseButtonIndex);
+
+    public event CustomItemClickedEventHandler CustomItemClicked
+    {
+        add => Connect("custom_item_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CustomItemClickedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("custom_item_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CustomItemClickedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void ItemIconDoubleClickedEventHandler();
+
+    public event ItemIconDoubleClickedEventHandler ItemIconDoubleClicked
+    {
+        add => Connect("item_icon_double_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemIconDoubleClickedEventHandler)__d)()));
+        remove => Disconnect("item_icon_double_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemIconDoubleClickedEventHandler)__d)()));
+    }
+
+    public delegate void ItemCollapsedEventHandler(TreeItem? item);
+
+    public event ItemCollapsedEventHandler ItemCollapsed
+    {
+        add => Connect("item_collapsed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemCollapsedEventHandler)__d)((TreeItem?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("item_collapsed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemCollapsedEventHandler)__d)((TreeItem?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void CheckPropagatedToItemEventHandler(TreeItem? item, long column);
+
+    public event CheckPropagatedToItemEventHandler CheckPropagatedToItem
+    {
+        add => Connect("check_propagated_to_item", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CheckPropagatedToItemEventHandler)__d)((TreeItem?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("check_propagated_to_item", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CheckPropagatedToItemEventHandler)__d)((TreeItem?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+    }
+
+    public delegate void ButtonClickedEventHandler(TreeItem? item, long column, long id, long mouseButtonIndex);
+
+    public event ButtonClickedEventHandler ButtonClicked
+    {
+        add => Connect("button_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ButtonClickedEventHandler)__d)((TreeItem?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("button_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ButtonClickedEventHandler)__d)((TreeItem?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[2])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+    }
+
+    public delegate void CustomPopupEditedEventHandler(bool arrowClicked);
+
+    public event CustomPopupEditedEventHandler CustomPopupEdited
+    {
+        add => Connect("custom_popup_edited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CustomPopupEditedEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("custom_popup_edited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CustomPopupEditedEventHandler)__d)(Variants.ToBool(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void ItemActivatedEventHandler();
+
+    public event ItemActivatedEventHandler ItemActivated
+    {
+        add => Connect("item_activated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemActivatedEventHandler)__d)()));
+        remove => Disconnect("item_activated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ItemActivatedEventHandler)__d)()));
+    }
+
+    public delegate void ColumnTitleClickedEventHandler(long column, long mouseButtonIndex);
+
+    public event ColumnTitleClickedEventHandler ColumnTitleClicked
+    {
+        add => Connect("column_title_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ColumnTitleClickedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+        remove => Disconnect("column_title_clicked", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ColumnTitleClickedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])))));
+    }
+
+    public delegate void NothingSelectedEventHandler();
+
+    public event NothingSelectedEventHandler NothingSelected
+    {
+        add => Connect("nothing_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NothingSelectedEventHandler)__d)()));
+        remove => Disconnect("nothing_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NothingSelectedEventHandler)__d)()));
     }
 
     private static nint __mb_clear;
@@ -33099,6 +33467,30 @@ public unsafe partial class Tween : RefCounted
         OutIn = 3,
     }
 
+    public delegate void StepFinishedEventHandler(long idx);
+
+    public event StepFinishedEventHandler StepFinished
+    {
+        add => Connect("step_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StepFinishedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("step_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((StepFinishedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void LoopFinishedEventHandler(long loopCount);
+
+    public event LoopFinishedEventHandler LoopFinished
+    {
+        add => Connect("loop_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((LoopFinishedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("loop_finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((LoopFinishedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void FinishedEventHandler();
+
+    public event FinishedEventHandler Finished
+    {
+        add => Connect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+        remove => Disconnect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+    }
+
     private static nint __mb_tween_property;
     public PropertyTweener? TweenProperty(GodotObject? @object, NodePath property, Variant finalVal, double duration)
     {
@@ -33573,6 +33965,14 @@ public unsafe partial class Tween : RefCounted
 public unsafe partial class Tweener : RefCounted
 {
     internal Tweener(nint ptr, bool rc) : base(ptr, rc) { }
+
+    public delegate void FinishedEventHandler();
+
+    public event FinishedEventHandler Finished
+    {
+        add => Connect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+        remove => Disconnect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+    }
 }
 
 public unsafe partial class TwoBoneIK3D : IKModifier3D

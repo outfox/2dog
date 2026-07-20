@@ -622,6 +622,30 @@ public unsafe partial class WebRTCPeerConnection : RefCounted
         Closed = 5,
     }
 
+    public delegate void SessionDescriptionCreatedEventHandler(string type, string sdp);
+
+    public event SessionDescriptionCreatedEventHandler SessionDescriptionCreated
+    {
+        add => Connect("session_description_created", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionDescriptionCreatedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("session_description_created", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionDescriptionCreatedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void IceCandidateCreatedEventHandler(string media, long index, string name);
+
+    public event IceCandidateCreatedEventHandler IceCandidateCreated
+    {
+        add => Connect("ice_candidate_created", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((IceCandidateCreatedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToManagedString(*((NativeVariant**)__a)[2]))));
+        remove => Disconnect("ice_candidate_created", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((IceCandidateCreatedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToManagedString(*((NativeVariant**)__a)[2]))));
+    }
+
+    public delegate void DataChannelReceivedEventHandler(WebRTCDataChannel? channel);
+
+    public event DataChannelReceivedEventHandler DataChannelReceived
+    {
+        add => Connect("data_channel_received", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DataChannelReceivedEventHandler)__d)((WebRTCDataChannel?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("data_channel_received", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DataChannelReceivedEventHandler)__d)((WebRTCDataChannel?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
     private static nint __mb_set_default_extension;
     public static void SetDefaultExtension(string extensionClass)
     {
@@ -1815,6 +1839,110 @@ public unsafe partial class WebXRInterface : XRInterface
 
     public string VisibilityState => GetVisibilityState();
 
+    public delegate void SessionSupportedEventHandler(string sessionMode, bool supported);
+
+    public event SessionSupportedEventHandler SessionSupported
+    {
+        add => Connect("session_supported", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionSupportedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("session_supported", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionSupportedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void SessionStartedEventHandler();
+
+    public event SessionStartedEventHandler SessionStarted
+    {
+        add => Connect("session_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionStartedEventHandler)__d)()));
+        remove => Disconnect("session_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionStartedEventHandler)__d)()));
+    }
+
+    public delegate void SessionEndedEventHandler();
+
+    public event SessionEndedEventHandler SessionEnded
+    {
+        add => Connect("session_ended", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionEndedEventHandler)__d)()));
+        remove => Disconnect("session_ended", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionEndedEventHandler)__d)()));
+    }
+
+    public delegate void SessionFailedEventHandler(string message);
+
+    public event SessionFailedEventHandler SessionFailed
+    {
+        add => Connect("session_failed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionFailedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("session_failed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SessionFailedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void SelectstartEventHandler(long inputSourceId);
+
+    public event SelectstartEventHandler Selectstart
+    {
+        add => Connect("selectstart", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SelectstartEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("selectstart", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SelectstartEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void SelectEventHandler(long inputSourceId);
+
+    public event SelectEventHandler Select
+    {
+        add => Connect("select", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SelectEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("select", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SelectEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void SelectendEventHandler(long inputSourceId);
+
+    public event SelectendEventHandler Selectend
+    {
+        add => Connect("selectend", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SelectendEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("selectend", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SelectendEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void SqueezestartEventHandler(long inputSourceId);
+
+    public event SqueezestartEventHandler Squeezestart
+    {
+        add => Connect("squeezestart", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SqueezestartEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("squeezestart", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SqueezestartEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void SqueezeEventHandler(long inputSourceId);
+
+    public event SqueezeEventHandler Squeeze
+    {
+        add => Connect("squeeze", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SqueezeEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("squeeze", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SqueezeEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void SqueezeendEventHandler(long inputSourceId);
+
+    public event SqueezeendEventHandler Squeezeend
+    {
+        add => Connect("squeezeend", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SqueezeendEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("squeezeend", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SqueezeendEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void VisibilityStateChangedEventHandler();
+
+    public event VisibilityStateChangedEventHandler VisibilityStateChanged
+    {
+        add => Connect("visibility_state_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VisibilityStateChangedEventHandler)__d)()));
+        remove => Disconnect("visibility_state_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VisibilityStateChangedEventHandler)__d)()));
+    }
+
+    public delegate void ReferenceSpaceResetEventHandler();
+
+    public event ReferenceSpaceResetEventHandler ReferenceSpaceReset
+    {
+        add => Connect("reference_space_reset", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ReferenceSpaceResetEventHandler)__d)()));
+        remove => Disconnect("reference_space_reset", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ReferenceSpaceResetEventHandler)__d)()));
+    }
+
+    public delegate void DisplayRefreshRateChangedEventHandler();
+
+    public event DisplayRefreshRateChangedEventHandler DisplayRefreshRateChanged
+    {
+        add => Connect("display_refresh_rate_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DisplayRefreshRateChangedEventHandler)__d)()));
+        remove => Disconnect("display_refresh_rate_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DisplayRefreshRateChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_is_session_supported;
     public void IsSessionSupported(string sessionMode)
     {
@@ -2429,6 +2557,126 @@ public unsafe partial class Window : Viewport
     {
         get => GetThemeTypeVariation();
         set => SetThemeTypeVariation(value);
+    }
+
+    public delegate void WindowInputEventHandler(InputEvent? @event);
+
+    public event WindowInputEventHandler WindowInput
+    {
+        add => Connect("window_input", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((WindowInputEventHandler)__d)((InputEvent?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("window_input", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((WindowInputEventHandler)__d)((InputEvent?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void NonclientWindowInputEventHandler(InputEvent? @event);
+
+    public event NonclientWindowInputEventHandler NonclientWindowInput
+    {
+        add => Connect("nonclient_window_input", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NonclientWindowInputEventHandler)__d)((InputEvent?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("nonclient_window_input", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NonclientWindowInputEventHandler)__d)((InputEvent?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void MouseEnteredEventHandler();
+
+    public event MouseEnteredEventHandler MouseEntered
+    {
+        add => Connect("mouse_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseEnteredEventHandler)__d)()));
+        remove => Disconnect("mouse_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseEnteredEventHandler)__d)()));
+    }
+
+    public delegate void MouseExitedEventHandler();
+
+    public event MouseExitedEventHandler MouseExited
+    {
+        add => Connect("mouse_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseExitedEventHandler)__d)()));
+        remove => Disconnect("mouse_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((MouseExitedEventHandler)__d)()));
+    }
+
+    public delegate void FocusEnteredEventHandler();
+
+    public event FocusEnteredEventHandler FocusEntered
+    {
+        add => Connect("focus_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FocusEnteredEventHandler)__d)()));
+        remove => Disconnect("focus_entered", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FocusEnteredEventHandler)__d)()));
+    }
+
+    public delegate void FocusExitedEventHandler();
+
+    public event FocusExitedEventHandler FocusExited
+    {
+        add => Connect("focus_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FocusExitedEventHandler)__d)()));
+        remove => Disconnect("focus_exited", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FocusExitedEventHandler)__d)()));
+    }
+
+    public delegate void CloseRequestedEventHandler();
+
+    public event CloseRequestedEventHandler CloseRequested
+    {
+        add => Connect("close_requested", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CloseRequestedEventHandler)__d)()));
+        remove => Disconnect("close_requested", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CloseRequestedEventHandler)__d)()));
+    }
+
+    public delegate void GoBackRequestedEventHandler();
+
+    public event GoBackRequestedEventHandler GoBackRequested
+    {
+        add => Connect("go_back_requested", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GoBackRequestedEventHandler)__d)()));
+        remove => Disconnect("go_back_requested", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GoBackRequestedEventHandler)__d)()));
+    }
+
+    public delegate void VisibilityChangedEventHandler();
+
+    public event VisibilityChangedEventHandler VisibilityChanged
+    {
+        add => Connect("visibility_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VisibilityChangedEventHandler)__d)()));
+        remove => Disconnect("visibility_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VisibilityChangedEventHandler)__d)()));
+    }
+
+    public delegate void AboutToPopupEventHandler();
+
+    public event AboutToPopupEventHandler AboutToPopup
+    {
+        add => Connect("about_to_popup", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AboutToPopupEventHandler)__d)()));
+        remove => Disconnect("about_to_popup", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AboutToPopupEventHandler)__d)()));
+    }
+
+    public delegate void ThemeChangedEventHandler();
+
+    public event ThemeChangedEventHandler ThemeChanged
+    {
+        add => Connect("theme_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ThemeChangedEventHandler)__d)()));
+        remove => Disconnect("theme_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ThemeChangedEventHandler)__d)()));
+    }
+
+    public delegate void DpiChangedEventHandler();
+
+    public event DpiChangedEventHandler DpiChanged
+    {
+        add => Connect("dpi_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DpiChangedEventHandler)__d)()));
+        remove => Disconnect("dpi_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DpiChangedEventHandler)__d)()));
+    }
+
+    public delegate void TitlebarChangedEventHandler();
+
+    public event TitlebarChangedEventHandler TitlebarChanged
+    {
+        add => Connect("titlebar_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TitlebarChangedEventHandler)__d)()));
+        remove => Disconnect("titlebar_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TitlebarChangedEventHandler)__d)()));
+    }
+
+    public delegate void TitleChangedEventHandler();
+
+    public event TitleChangedEventHandler TitleChanged
+    {
+        add => Connect("title_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TitleChangedEventHandler)__d)()));
+        remove => Disconnect("title_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TitleChangedEventHandler)__d)()));
+    }
+
+    public delegate void OutputMaxLinearValueChangedEventHandler(double outputMaxLinearValue);
+
+    public event OutputMaxLinearValueChangedEventHandler OutputMaxLinearValueChanged
+    {
+        add => Connect("output_max_linear_value_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((OutputMaxLinearValueChangedEventHandler)__d)((double)Variants.ToFloat(*((NativeVariant**)__a)[0]))));
+        remove => Disconnect("output_max_linear_value_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((OutputMaxLinearValueChangedEventHandler)__d)((double)Variants.ToFloat(*((NativeVariant**)__a)[0]))));
     }
 
     private static nint __mb_set_title;

@@ -76,6 +76,30 @@ public static unsafe partial class GDExtensionManager
         NeedsRestart = 4,
     }
 
+    public delegate void ExtensionsReloadedEventHandler();
+
+    public static event ExtensionsReloadedEventHandler ExtensionsReloaded
+    {
+        add => Singleton.Connect("extensions_reloaded", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ExtensionsReloadedEventHandler)__d)()));
+        remove => Singleton.Disconnect("extensions_reloaded", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ExtensionsReloadedEventHandler)__d)()));
+    }
+
+    public delegate void ExtensionLoadedEventHandler(GDExtension? extension);
+
+    public static event ExtensionLoadedEventHandler ExtensionLoaded
+    {
+        add => Singleton.Connect("extension_loaded", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ExtensionLoadedEventHandler)__d)((GDExtension?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Singleton.Disconnect("extension_loaded", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ExtensionLoadedEventHandler)__d)((GDExtension?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void ExtensionUnloadingEventHandler(GDExtension? extension);
+
+    public static event ExtensionUnloadingEventHandler ExtensionUnloading
+    {
+        add => Singleton.Connect("extension_unloading", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ExtensionUnloadingEventHandler)__d)((GDExtension?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Singleton.Disconnect("extension_unloading", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ExtensionUnloadingEventHandler)__d)((GDExtension?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
     private static nint __mb_load_extension;
     public static GDExtensionManager.LoadStatus LoadExtension(string path)
     {
@@ -7671,6 +7695,14 @@ public unsafe partial class GPUParticles2D : Node2D
         set => SetProcessMaterial(value);
     }
 
+    public delegate void FinishedEventHandler();
+
+    public event FinishedEventHandler Finished
+    {
+        add => Connect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+        remove => Disconnect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_emitting;
     internal void SetEmitting(bool emitting)
     {
@@ -8792,6 +8824,14 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     {
         get => GetSkin();
         set => SetSkin(value);
+    }
+
+    public delegate void FinishedEventHandler();
+
+    public event FinishedEventHandler Finished
+    {
+        add => Connect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
+        remove => Disconnect("finished", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FinishedEventHandler)__d)()));
     }
 
     private static nint __mb_set_emitting;
@@ -13529,6 +13569,158 @@ public unsafe partial class GraphEdit : Control
         set => SetShowArrangeButton(value);
     }
 
+    public delegate void ConnectionRequestEventHandler(string fromNode, long fromPort, string toNode, long toPort);
+
+    public event ConnectionRequestEventHandler ConnectionRequest
+    {
+        add => Connect("connection_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionRequestEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToManagedString(*((NativeVariant**)__a)[2]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("connection_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionRequestEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToManagedString(*((NativeVariant**)__a)[2]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+    }
+
+    public delegate void DisconnectionRequestEventHandler(string fromNode, long fromPort, string toNode, long toPort);
+
+    public event DisconnectionRequestEventHandler DisconnectionRequest
+    {
+        add => Connect("disconnection_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DisconnectionRequestEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToManagedString(*((NativeVariant**)__a)[2]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+        remove => Disconnect("disconnection_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DisconnectionRequestEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToManagedString(*((NativeVariant**)__a)[2]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[3])))));
+    }
+
+    public delegate void ConnectionToEmptyEventHandler(string fromNode, long fromPort, Vector2 releasePosition);
+
+    public event ConnectionToEmptyEventHandler ConnectionToEmpty
+    {
+        add => Connect("connection_to_empty", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionToEmptyEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[2]))));
+        remove => Disconnect("connection_to_empty", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionToEmptyEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[2]))));
+    }
+
+    public delegate void ConnectionFromEmptyEventHandler(string toNode, long toPort, Vector2 releasePosition);
+
+    public event ConnectionFromEmptyEventHandler ConnectionFromEmpty
+    {
+        add => Connect("connection_from_empty", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionFromEmptyEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[2]))));
+        remove => Disconnect("connection_from_empty", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionFromEmptyEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[2]))));
+    }
+
+    public delegate void ConnectionDragStartedEventHandler(string fromNode, long fromPort, bool isOutput);
+
+    public event ConnectionDragStartedEventHandler ConnectionDragStarted
+    {
+        add => Connect("connection_drag_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionDragStartedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToBool(*((NativeVariant**)__a)[2]))));
+        remove => Disconnect("connection_drag_started", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionDragStartedEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[1])), Variants.ToBool(*((NativeVariant**)__a)[2]))));
+    }
+
+    public delegate void ConnectionDragEndedEventHandler();
+
+    public event ConnectionDragEndedEventHandler ConnectionDragEnded
+    {
+        add => Connect("connection_drag_ended", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionDragEndedEventHandler)__d)()));
+        remove => Disconnect("connection_drag_ended", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionDragEndedEventHandler)__d)()));
+    }
+
+    public delegate void CopyNodesRequestEventHandler();
+
+    public event CopyNodesRequestEventHandler CopyNodesRequest
+    {
+        add => Connect("copy_nodes_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CopyNodesRequestEventHandler)__d)()));
+        remove => Disconnect("copy_nodes_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CopyNodesRequestEventHandler)__d)()));
+    }
+
+    public delegate void CutNodesRequestEventHandler();
+
+    public event CutNodesRequestEventHandler CutNodesRequest
+    {
+        add => Connect("cut_nodes_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CutNodesRequestEventHandler)__d)()));
+        remove => Disconnect("cut_nodes_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CutNodesRequestEventHandler)__d)()));
+    }
+
+    public delegate void PasteNodesRequestEventHandler();
+
+    public event PasteNodesRequestEventHandler PasteNodesRequest
+    {
+        add => Connect("paste_nodes_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PasteNodesRequestEventHandler)__d)()));
+        remove => Disconnect("paste_nodes_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PasteNodesRequestEventHandler)__d)()));
+    }
+
+    public delegate void DuplicateNodesRequestEventHandler();
+
+    public event DuplicateNodesRequestEventHandler DuplicateNodesRequest
+    {
+        add => Connect("duplicate_nodes_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DuplicateNodesRequestEventHandler)__d)()));
+        remove => Disconnect("duplicate_nodes_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DuplicateNodesRequestEventHandler)__d)()));
+    }
+
+    public delegate void DeleteNodesRequestEventHandler(Godot.Collections.Array nodes);
+
+    public event DeleteNodesRequestEventHandler DeleteNodesRequest
+    {
+        add => Connect("delete_nodes_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DeleteNodesRequestEventHandler)__d)(new Godot.Collections.Array(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_ARRAY, *((NativeVariant**)__a)[0])))));
+        remove => Disconnect("delete_nodes_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DeleteNodesRequestEventHandler)__d)(new Godot.Collections.Array(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_ARRAY, *((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void NodeSelectedEventHandler(Node? node);
+
+    public event NodeSelectedEventHandler NodeSelected
+    {
+        add => Connect("node_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeSelectedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("node_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeSelectedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void NodeDeselectedEventHandler(Node? node);
+
+    public event NodeDeselectedEventHandler NodeDeselected
+    {
+        add => Connect("node_deselected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeDeselectedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("node_deselected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeDeselectedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void FrameRectChangedEventHandler(GraphFrame? frame, Rect2 newRect);
+
+    public event FrameRectChangedEventHandler FrameRectChanged
+    {
+        add => Connect("frame_rect_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FrameRectChangedEventHandler)__d)((GraphFrame?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), Variants.ToStruct<Rect2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RECT2, *((NativeVariant**)__a)[1]))));
+        remove => Disconnect("frame_rect_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((FrameRectChangedEventHandler)__d)((GraphFrame?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false), Variants.ToStruct<Rect2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_RECT2, *((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void PopupRequestEventHandler(Vector2 atPosition);
+
+    public event PopupRequestEventHandler PopupRequest
+    {
+        add => Connect("popup_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PopupRequestEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("popup_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PopupRequestEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void BeginNodeMoveEventHandler();
+
+    public event BeginNodeMoveEventHandler BeginNodeMove
+    {
+        add => Connect("begin_node_move", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BeginNodeMoveEventHandler)__d)()));
+        remove => Disconnect("begin_node_move", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((BeginNodeMoveEventHandler)__d)()));
+    }
+
+    public delegate void EndNodeMoveEventHandler();
+
+    public event EndNodeMoveEventHandler EndNodeMove
+    {
+        add => Connect("end_node_move", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EndNodeMoveEventHandler)__d)()));
+        remove => Disconnect("end_node_move", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((EndNodeMoveEventHandler)__d)()));
+    }
+
+    public delegate void GraphElementsLinkedToFrameRequestEventHandler(Godot.Collections.Array elements, string frame);
+
+    public event GraphElementsLinkedToFrameRequestEventHandler GraphElementsLinkedToFrameRequest
+    {
+        add => Connect("graph_elements_linked_to_frame_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GraphElementsLinkedToFrameRequestEventHandler)__d)(new Godot.Collections.Array(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_ARRAY, *((NativeVariant**)__a)[0])), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("graph_elements_linked_to_frame_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((GraphElementsLinkedToFrameRequestEventHandler)__d)(new Godot.Collections.Array(Variants.ToStruct<ulong>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_ARRAY, *((NativeVariant**)__a)[0])), Variants.ToManagedString(*((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void ScrollOffsetChangedEventHandler(Vector2 offset);
+
+    public event ScrollOffsetChangedEventHandler ScrollOffsetChanged
+    {
+        add => Connect("scroll_offset_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScrollOffsetChangedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("scroll_offset_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScrollOffsetChangedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]))));
+    }
+
     private static nint __mb_connect_node;
     public Error ConnectNode(string fromNode, int fromPort, string toNode, int toPort, bool keepAlive = false)
     {
@@ -14844,6 +15036,70 @@ public unsafe partial class GraphElement : Container
         set => SetScalingMenus(value);
     }
 
+    public delegate void NodeSelectedEventHandler();
+
+    public event NodeSelectedEventHandler NodeSelected
+    {
+        add => Connect("node_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeSelectedEventHandler)__d)()));
+        remove => Disconnect("node_selected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeSelectedEventHandler)__d)()));
+    }
+
+    public delegate void NodeDeselectedEventHandler();
+
+    public event NodeDeselectedEventHandler NodeDeselected
+    {
+        add => Connect("node_deselected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeDeselectedEventHandler)__d)()));
+        remove => Disconnect("node_deselected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((NodeDeselectedEventHandler)__d)()));
+    }
+
+    public delegate void RaiseRequestEventHandler();
+
+    public event RaiseRequestEventHandler RaiseRequest
+    {
+        add => Connect("raise_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RaiseRequestEventHandler)__d)()));
+        remove => Disconnect("raise_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((RaiseRequestEventHandler)__d)()));
+    }
+
+    public delegate void DeleteRequestEventHandler();
+
+    public event DeleteRequestEventHandler DeleteRequest
+    {
+        add => Connect("delete_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DeleteRequestEventHandler)__d)()));
+        remove => Disconnect("delete_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DeleteRequestEventHandler)__d)()));
+    }
+
+    public delegate void ResizeRequestEventHandler(Vector2 newSize);
+
+    public event ResizeRequestEventHandler ResizeRequest
+    {
+        add => Connect("resize_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResizeRequestEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("resize_request", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResizeRequestEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void ResizeEndEventHandler(Vector2 newSize);
+
+    public event ResizeEndEventHandler ResizeEnd
+    {
+        add => Connect("resize_end", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResizeEndEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("resize_end", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ResizeEndEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void DraggedEventHandler(Vector2 from, Vector2 to);
+
+    public event DraggedEventHandler Dragged
+    {
+        add => Connect("dragged", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DraggedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[1]))));
+        remove => Disconnect("dragged", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DraggedEventHandler)__d)(Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[0]), Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, *((NativeVariant**)__a)[1]))));
+    }
+
+    public delegate void PositionOffsetChangedEventHandler();
+
+    public event PositionOffsetChangedEventHandler PositionOffsetChanged
+    {
+        add => Connect("position_offset_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PositionOffsetChangedEventHandler)__d)()));
+        remove => Disconnect("position_offset_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PositionOffsetChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_resizable;
     internal void SetResizable(bool resizable)
     {
@@ -15076,6 +15332,14 @@ public unsafe partial class GraphFrame : GraphElement
         set => SetTintColor(value);
     }
 
+    public delegate void AutoshrinkChangedEventHandler();
+
+    public event AutoshrinkChangedEventHandler AutoshrinkChanged
+    {
+        add => Connect("autoshrink_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AutoshrinkChangedEventHandler)__d)()));
+        remove => Disconnect("autoshrink_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AutoshrinkChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_title;
     internal void SetTitle(string title)
     {
@@ -15304,6 +15568,22 @@ public unsafe partial class GraphNode : GraphElement
     {
         get => GetSlotsFocusMode();
         set => SetSlotsFocusMode(value);
+    }
+
+    public delegate void SlotUpdatedEventHandler(long slotIndex);
+
+    public event SlotUpdatedEventHandler SlotUpdated
+    {
+        add => Connect("slot_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SlotUpdatedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("slot_updated", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SlotUpdatedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void SlotSizesChangedEventHandler();
+
+    public event SlotSizesChangedEventHandler SlotSizesChanged
+    {
+        add => Connect("slot_sizes_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SlotSizesChangedEventHandler)__d)()));
+        remove => Disconnect("slot_sizes_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SlotSizesChangedEventHandler)__d)()));
     }
 
     private static nint __mb_set_title;
@@ -16203,6 +16483,22 @@ public unsafe partial class GridMap : Node3D
     {
         get => IsBakingNavigation();
         set => SetBakeNavigation(value);
+    }
+
+    public delegate void CellSizeChangedEventHandler(Vector3 cellSize);
+
+    public event CellSizeChangedEventHandler CellSizeChanged
+    {
+        add => Connect("cell_size_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CellSizeChangedEventHandler)__d)(Variants.ToStruct<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR3, *((NativeVariant**)__a)[0]))));
+        remove => Disconnect("cell_size_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((CellSizeChangedEventHandler)__d)(Variants.ToStruct<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR3, *((NativeVariant**)__a)[0]))));
+    }
+
+    public delegate void ChangedEventHandler();
+
+    public event ChangedEventHandler Changed
+    {
+        add => Connect("changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChangedEventHandler)__d)()));
+        remove => Disconnect("changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ChangedEventHandler)__d)()));
     }
 
     private static nint __mb_set_collision_layer;
@@ -17351,6 +17647,22 @@ public unsafe partial class GodotObject
         OneShot = 4,
         ReferenceCounted = 8,
         AppendSourceObject = 16,
+    }
+
+    public delegate void ScriptChangedEventHandler();
+
+    public event ScriptChangedEventHandler ScriptChanged
+    {
+        add => Connect("script_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScriptChangedEventHandler)__d)()));
+        remove => Disconnect("script_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ScriptChangedEventHandler)__d)()));
+    }
+
+    public delegate void PropertyListChangedEventHandler();
+
+    public event PropertyListChangedEventHandler PropertyListChanged
+    {
+        add => Connect("property_list_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyListChangedEventHandler)__d)()));
+        remove => Disconnect("property_list_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PropertyListChangedEventHandler)__d)()));
     }
 
     private static nint __mb_get_class;

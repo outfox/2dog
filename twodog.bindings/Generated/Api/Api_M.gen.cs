@@ -19,6 +19,14 @@ public unsafe partial class MainLoop : GodotObject
         ClassRegistry.AttachNew(this, "MainLoop");
     }
 
+    public delegate void OnRequestPermissionsResultEventHandler(string permission, bool granted);
+
+    public event OnRequestPermissionsResultEventHandler OnRequestPermissionsResult
+    {
+        add => Connect("on_request_permissions_result", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((OnRequestPermissionsResultEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+        remove => Disconnect("on_request_permissions_result", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((OnRequestPermissionsResultEventHandler)__d)(Variants.ToManagedString(*((NativeVariant**)__a)[0]), Variants.ToBool(*((NativeVariant**)__a)[1]))));
+    }
+
     public virtual void _Initialize() { }
 
     public virtual bool _PhysicsProcess(double delta) => default!;
@@ -909,6 +917,14 @@ public unsafe partial class MenuButton : Button
     {
         get => GetItemCount();
         set => SetItemCount(value);
+    }
+
+    public delegate void AboutToPopupEventHandler();
+
+    public event AboutToPopupEventHandler AboutToPopup
+    {
+        add => Connect("about_to_popup", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AboutToPopupEventHandler)__d)()));
+        remove => Disconnect("about_to_popup", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((AboutToPopupEventHandler)__d)()));
     }
 
     private static nint __mb_get_popup;
@@ -2648,6 +2664,14 @@ public unsafe partial class MeshInstance2D : Node2D
     {
         get => GetTexture();
         set => SetTexture(value);
+    }
+
+    public delegate void TextureChangedEventHandler();
+
+    public event TextureChangedEventHandler TextureChanged
+    {
+        add => Connect("texture_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextureChangedEventHandler)__d)()));
+        remove => Disconnect("texture_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextureChangedEventHandler)__d)()));
     }
 
     private static nint __mb_set_mesh;
@@ -5093,6 +5117,14 @@ public unsafe partial class MultiMeshInstance2D : Node2D
         set => SetTexture(value);
     }
 
+    public delegate void TextureChangedEventHandler();
+
+    public event TextureChangedEventHandler TextureChanged
+    {
+        add => Connect("texture_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextureChangedEventHandler)__d)()));
+        remove => Disconnect("texture_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((TextureChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_set_multimesh;
     internal void SetMultimesh(MultiMesh? multimesh)
     {
@@ -5218,6 +5250,46 @@ public unsafe partial class MultiplayerAPI : RefCounted
     {
         get => GetMultiplayerPeer();
         set => SetMultiplayerPeer(value);
+    }
+
+    public delegate void PeerConnectedEventHandler(long id);
+
+    public event PeerConnectedEventHandler PeerConnected
+    {
+        add => Connect("peer_connected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PeerConnectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("peer_connected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PeerConnectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void PeerDisconnectedEventHandler(long id);
+
+    public event PeerDisconnectedEventHandler PeerDisconnected
+    {
+        add => Connect("peer_disconnected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PeerDisconnectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("peer_disconnected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PeerDisconnectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void ConnectedToServerEventHandler();
+
+    public event ConnectedToServerEventHandler ConnectedToServer
+    {
+        add => Connect("connected_to_server", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectedToServerEventHandler)__d)()));
+        remove => Disconnect("connected_to_server", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectedToServerEventHandler)__d)()));
+    }
+
+    public delegate void ConnectionFailedEventHandler();
+
+    public event ConnectionFailedEventHandler ConnectionFailed
+    {
+        add => Connect("connection_failed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionFailedEventHandler)__d)()));
+        remove => Disconnect("connection_failed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ConnectionFailedEventHandler)__d)()));
+    }
+
+    public delegate void ServerDisconnectedEventHandler();
+
+    public event ServerDisconnectedEventHandler ServerDisconnected
+    {
+        add => Connect("server_disconnected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ServerDisconnectedEventHandler)__d)()));
+        remove => Disconnect("server_disconnected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((ServerDisconnectedEventHandler)__d)()));
     }
 
     private static nint __mb_has_multiplayer_peer;
@@ -5556,6 +5628,22 @@ public unsafe partial class MultiplayerPeer : PacketPeer
     {
         get => GetTransferChannel();
         set => SetTransferChannel(value);
+    }
+
+    public delegate void PeerConnectedEventHandler(long id);
+
+    public event PeerConnectedEventHandler PeerConnected
+    {
+        add => Connect("peer_connected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PeerConnectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("peer_connected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PeerConnectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+    }
+
+    public delegate void PeerDisconnectedEventHandler(long id);
+
+    public event PeerDisconnectedEventHandler PeerDisconnected
+    {
+        add => Connect("peer_disconnected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PeerDisconnectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("peer_disconnected", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((PeerDisconnectedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
     }
 
     private static nint __mb_set_transfer_channel;
@@ -6049,6 +6137,22 @@ public unsafe partial class MultiplayerSpawner : Node
         set => SetSpawnFunction(value);
     }
 
+    public delegate void DespawnedEventHandler(Node? node);
+
+    public event DespawnedEventHandler Despawned
+    {
+        add => Connect("despawned", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DespawnedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("despawned", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DespawnedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
+    public delegate void SpawnedEventHandler(Node? node);
+
+    public event SpawnedEventHandler Spawned
+    {
+        add => Connect("spawned", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SpawnedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+        remove => Disconnect("spawned", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SpawnedEventHandler)__d)((Node?)InstanceBindings.GetOrCreate(Variants.ToObject(*((NativeVariant**)__a)[0]), adoptRef: false))));
+    }
+
     private static nint __mb_add_spawnable_scene;
     public void AddSpawnableScene(string path)
     {
@@ -6274,6 +6378,30 @@ public unsafe partial class MultiplayerSynchronizer : Node
     {
         get => IsVisibilityPublic();
         set => SetVisibilityPublic(value);
+    }
+
+    public delegate void SynchronizedEventHandler();
+
+    public event SynchronizedEventHandler Synchronized
+    {
+        add => Connect("synchronized", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SynchronizedEventHandler)__d)()));
+        remove => Disconnect("synchronized", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((SynchronizedEventHandler)__d)()));
+    }
+
+    public delegate void DeltaSynchronizedEventHandler();
+
+    public event DeltaSynchronizedEventHandler DeltaSynchronized
+    {
+        add => Connect("delta_synchronized", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DeltaSynchronizedEventHandler)__d)()));
+        remove => Disconnect("delta_synchronized", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((DeltaSynchronizedEventHandler)__d)()));
+    }
+
+    public delegate void VisibilityChangedEventHandler(long forPeer);
+
+    public event VisibilityChangedEventHandler VisibilityChanged
+    {
+        add => Connect("visibility_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VisibilityChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
+        remove => Disconnect("visibility_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VisibilityChangedEventHandler)__d)(unchecked((long)Variants.ToInt(*((NativeVariant**)__a)[0])))));
     }
 
     private static nint __mb_set_root_path;

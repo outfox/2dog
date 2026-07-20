@@ -915,6 +915,14 @@ public unsafe partial class UndoRedo : GodotObject
         set => SetMaxSteps(value);
     }
 
+    public delegate void VersionChangedEventHandler();
+
+    public event VersionChangedEventHandler VersionChanged
+    {
+        add => Connect("version_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VersionChangedEventHandler)__d)()));
+        remove => Disconnect("version_changed", Callable.FromSignalHandler(value, static (__d, __a, __n) => ((VersionChangedEventHandler)__d)()));
+    }
+
     private static nint __mb_create_action;
     public void CreateAction(string name, UndoRedo.MergeMode mergeMode = (UndoRedo.MergeMode)(0), bool backwardUndoOps = false)
     {
