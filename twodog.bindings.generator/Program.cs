@@ -9,9 +9,16 @@
 using System.Text;
 using System.Text.Json;
 
+if (args.Length == 3 && args[0] == "api")
+{
+    twodog.bindings.generator.ApiGenerator.Run(args[1], args[2]);
+    return 0;
+}
+
 if (args.Length != 2)
 {
     Console.Error.WriteLine("usage: twodog.bindings.generator <gdextension_interface.json> <output.gen.cs>");
+    Console.Error.WriteLine("       twodog.bindings.generator api <extension_api.json> <output-dir>");
     return 1;
 }
 

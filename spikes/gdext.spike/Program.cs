@@ -10,6 +10,7 @@
 // fork-only methods (GodotInstance.*) are called hash-free via variant_call.
 
 using System.Runtime.InteropServices;
+using Godot;
 using Godot.NativeInterop;
 
 namespace GdextSpike;
@@ -80,6 +81,8 @@ internal static unsafe class Program
 
         Check(instance != 0, "libgodot_create_godot_instance returned an instance");
         Check(GdExtensionHost.Loaded, $"all {161} interface procs resolved (missing: {GdExtensionHost.MissingProcsDisplay})");
+        MathLayout.Validate();
+        Check(true, "math struct layouts match the engine's float_64 tables");
 
         // Core classes are resolvable from here on.
         _mbGodotInstanceStart = MethodBinds.Resolve("GodotInstance", "start", 2240911060);
@@ -168,6 +171,38 @@ internal static unsafe class Program
         Check(GdExtensionInterface.ObjectGetInstanceFromId(rcId) == 0,
             $"collected wrapper released its ref; RefCounted died on Drain() (released={DisposalQueue.Released})");
         Check(InstanceBindings.FreedBindings >= 1, "binding free callback fired on RefCounted death");
+
+        // -- generated typed API (phase 2): 1036 classes from extension_api.json --
+        var engineSingletonTyped = Godot.Engine.Singleton;
+        Check(engineSingletonTyped.NativePtr == engineSingleton, "typed Engine.Singleton wraps the same native pointer");
+
+        var loop = engineSingletonTyped.GetMainLoop();
+        Check(loop is SceneTree, $"GetMainLoop() materialized as most-derived type ({loop?.GetType().Name})");
+
+        var tree = (SceneTree)loop!;
+        var rootTyped = tree.GetRoot();
+        Check(rootTyped is not null && rootTyped.NativePtr == root, "typed SceneTree.GetRoot() is identity-equal with the raw-ptrcall root");
+
+        var child = new Node();
+        child.SetName("typed_child");
+        rootTyped!.AddChild(child, false, Node.InternalMode.INTERNAL_MODE_DISABLED);
+        Check(child.GetName() == "typed_child", $"typed SetName/GetName roundtrip (StringName return) = \"{child.GetName()}\"");
+        Check(rootTyped.GetChildCount(false) == childCount + 1, "typed AddChild seen by typed GetChildCount");
+
+        var node2d = new Node2D();
+        node2d.SetPosition(new Vector2(3.5f, -4.25f));
+        var pos = node2d.GetPosition();
+        Check(pos.X == 3.5f && pos.Y == -4.25f, $"Vector2 arg/return roundtrip through generated ptrcall = {pos}");
+        node2d.Free();
+        Check(!node2d.IsValid, "typed Free() invalidates the wrapper (ObjectID check)");
+
+        using (var res = new RefCounted())
+        {
+            Check(res.GetReferenceCount() == 1, $"new RefCounted() adopts construct3's refcount (rc == {res.GetReferenceCount()})");
+        }
+        var releasedBefore = DisposalQueue.Released;
+        DisposalQueue.Drain();
+        Check(DisposalQueue.Released == releasedBefore + 1, "disposed RefCounted released through the drain (no leak)");
 
         UtilityPrint($"[spike] engine-side goodbye after {frames} iterations");
 

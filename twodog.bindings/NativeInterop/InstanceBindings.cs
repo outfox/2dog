@@ -46,13 +46,72 @@ public static unsafe class InstanceBindings
         return (nint)p;
     }
 
+    /// <summary>Constructs a bare engine object of the given class (no binding yet).</summary>
+    public static nint ConstructRaw(string godotClass)
+    {
+        var sn = StringNames.Get(godotClass).Opaque;
+        return GdExtensionInterface.ClassdbConstructObject3((nint)(&sn));
+    }
+
+    public static nint GetSingletonPtr(string singletonName)
+    {
+        var sn = StringNames.Get(singletonName).Opaque;
+        return GdExtensionInterface.GlobalGetSingleton((nint)(&sn));
+    }
+
+    /// <summary>
+    /// Binds a wrapper the managed side just constructed (generated public
+    /// ctors) to its freshly created engine object. For RefCounted classes the
+    /// wrapper takes first ownership via init_ref.
+    /// </summary>
+    public static void Attach(GodotObject wrapper)
+    {
+        if (wrapper.NativePtr == 0) throw new InvalidOperationException($"Engine refused to construct {wrapper.GetType().Name} (editor-only class in a template build?).");
+        lock (Gate)
+        {
+            var slot = (BindingSlot*)GdExtensionInterface.ObjectGetInstanceBinding(wrapper.NativePtr, GdExtensionHost.Library, Callbacks);
+            GCHandle.FromIntPtr(slot->Handle).Free();
+            slot->Handle = GCHandle.ToIntPtr(GCHandle.Alloc(wrapper, GCHandleType.Weak));
+            slot->Strong = 0;
+            // No init_ref here: classdb_construct_object3 already established
+            // refcount=1 owned by the caller (ClassDB::_instantiate_internal
+            // with p_with_refcount=true) - the wrapper adopts that reference.
+            if (wrapper.IsRefCounted) RecomputeStrength(slot);
+        }
+    }
+
+    private static nint _mbGetClass;
+
+    /// <summary>Reads the object's actual class name (Object.get_class ptrcall).</summary>
+    public static string ReadClassName(nint objectPtr)
+    {
+        if (_mbGetClass == 0) _mbGetClass = MethodBinds.Resolve("Object", "get_class", 201670096);
+        ulong str = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(_mbGetClass, objectPtr, 0, (nint)(&str));
+        return NativeString.ReadAndDestroy(ref str);
+    }
+
+    /// <summary>
+    /// Registry-driven wrap: resolves the object's actual class so the wrapper
+    /// comes out as the most-derived generated type. Fork-only classes not in
+    /// extension_api.json fall back to a plain non-refcounted GodotObject.
+    /// </summary>
+    public static GodotObject? GetOrCreate(nint objectPtr, bool adoptRef)
+    {
+        if (objectPtr == 0) return null;
+        var className = ReadClassName(objectPtr);
+        return ApiRegistry.Entries.TryGetValue(className, out var entry)
+            ? GetOrCreate(objectPtr, entry.RefCounted, adoptRef, entry.Factory)
+            : GetOrCreate(objectPtr, refCounted: false, adoptRef: false);
+    }
+
     /// <summary>
     /// Returns the managed wrapper for an engine object, creating one if needed.
     /// <paramref name="adoptRef"/> is true when the caller received a transferred
     /// reference (ptrcall object returns): a new wrapper adopts it as its owned
     /// ref; an existing wrapper releases the surplus.
     /// </summary>
-    public static GodotObject? GetOrCreate(nint objectPtr, bool refCounted, bool adoptRef)
+    public static GodotObject? GetOrCreate(nint objectPtr, bool refCounted, bool adoptRef, Func<nint, bool, GodotObject>? factory = null)
     {
         if (objectPtr == 0) return null;
 
@@ -77,7 +136,7 @@ public static unsafe class InstanceBindings
             // reference. Reference() re-enters ReferenceCallback on this thread
             // (Gate is reentrant) and may reflip the slot's handle; a stale
             // local GCHandle from before that call must never be touched again.
-            var wrapper = new GodotObject(objectPtr, refCounted);
+            var wrapper = factory?.Invoke(objectPtr, refCounted) ?? new GodotObject(objectPtr, refCounted);
             GCHandle.FromIntPtr(slot->Handle).Free();
             slot->Handle = GCHandle.ToIntPtr(GCHandle.Alloc(wrapper, GCHandleType.Weak));
             slot->Strong = 0;
@@ -153,10 +212,12 @@ public static unsafe class InstanceBindings
 
             if (count == 1 && slot->Strong == 1) Reflip(slot, handle, strong: false);
 
-            // Return value gates death at count==0: allow it only when no live
-            // managed wrapper remains (with the owned-ref protocol, a live
-            // wrapper implies count >= 1, so this is a belt-and-braces guard).
-            return handle.Target is null ? (byte)1 : (byte)0;
+            // Return value gates death at count==0: block it only while a live,
+            // still-attached wrapper exists (with the owned-ref protocol that
+            // implies count >= 1, so this is a belt-and-braces guard). A
+            // disposed husk (NativePtr == 0) that is still rooted managed-side
+            // must NOT block death - its owned ref was already released.
+            return handle.Target is GodotObject { NativePtr: not 0 } ? (byte)0 : (byte)1;
         }
     }
 

@@ -8,7 +8,7 @@ namespace Godot;
 /// one engine reference, released via the DisposalQueue when the wrapper is
 /// collected or disposed). Typed subclasses arrive with the generated API.
 /// </summary>
-public unsafe class GodotObject : IDisposable
+public unsafe partial class GodotObject : IDisposable
 {
     /// <summary>Raw engine object pointer; 0 once released or freed.</summary>
     public nint NativePtr { get; private set; }

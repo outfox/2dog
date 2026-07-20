@@ -58,4 +58,31 @@ public static unsafe class StringNames
             return sn;
         }
     }
+
+    /// <summary>
+    /// Reads an OWNED native StringName (e.g. a ptrcall return) into a managed
+    /// string and destroys it. Conversion goes through Variant (STRING_NAME ->
+    /// STRING), the supported coercion path.
+    /// </summary>
+    public static string ReadAndDestroy(ref ulong opaque)
+    {
+        var fromSn = (delegate* unmanaged<nint, nint, void>)GdExtensionInterface.GetVariantFromTypeConstructor(
+            (int)GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME);
+        NativeVariant v;
+        fixed (ulong* p = &opaque)
+        {
+            fromSn((nint)(&v), (nint)p);
+        }
+        var result = Variants.ToManagedString(in v);
+        Variants.Destroy(ref v);
+
+        var dtor = (delegate* unmanaged<nint, void>)GdExtensionInterface.VariantGetPtrDestructor(
+            (int)GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME);
+        fixed (ulong* p = &opaque)
+        {
+            dtor((nint)p);
+        }
+        opaque = 0;
+        return result;
+    }
 }

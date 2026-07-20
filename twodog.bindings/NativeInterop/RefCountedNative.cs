@@ -7,13 +7,19 @@ namespace Godot.NativeInterop;
 /// </summary>
 public static unsafe class RefCountedNative
 {
+    private static nint _mbInitRef;
     private static nint _mbReference;
     private static nint _mbUnreference;
     private static nint _mbGetReferenceCount;
 
+    private static nint MbInitRef => _mbInitRef != 0 ? _mbInitRef : _mbInitRef = MethodBinds.Resolve("RefCounted", "init_ref", 2240911060);
+
     private static nint MbReference => _mbReference != 0 ? _mbReference : _mbReference = MethodBinds.Resolve("RefCounted", "reference", 2240911060);
     private static nint MbUnreference => _mbUnreference != 0 ? _mbUnreference : _mbUnreference = MethodBinds.Resolve("RefCounted", "unreference", 2240911060);
     private static nint MbGetReferenceCount => _mbGetReferenceCount != 0 ? _mbGetReferenceCount : _mbGetReferenceCount = MethodBinds.Resolve("RefCounted", "get_reference_count", 3905245786);
+
+    /// <summary>Initializes the refcount of a freshly constructed object to 1 (first ownership).</summary>
+    public static bool InitRef(nint refCounted) => MethodBinds.CallRet<byte>(MbInitRef, refCounted) != 0;
 
     /// <summary>Increments the refcount. Returns false only on overflow/dead object.</summary>
     public static bool Reference(nint refCounted) => MethodBinds.CallRet<byte>(MbReference, refCounted) != 0;
