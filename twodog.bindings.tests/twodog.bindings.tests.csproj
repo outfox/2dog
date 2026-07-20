@@ -16,6 +16,9 @@
 
     <ItemGroup>
         <ProjectReference Include="..\twodog.bindings\twodog.bindings.csproj"/>
+        <ProjectReference Include="..\twodog.generators\twodog.generators.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
     <ItemGroup>

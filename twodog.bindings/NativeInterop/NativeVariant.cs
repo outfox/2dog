@@ -88,6 +88,23 @@ public static unsafe class Variants
         return v;
     }
 
+    /// <summary>Creates a variant from a raw type-pointer (ptrcall arg slot).</summary>
+    public static NativeVariant FromTypePointer(GDExtensionVariantType type, nint valuePtr)
+    {
+        NativeVariant v;
+        From(type)((nint)(&v), valuePtr);
+        return v;
+    }
+
+    /// <summary>Writes a variant's coerced value into a raw type-pointer (ptrcall ret slot).</summary>
+    public static void ToTypePointer(GDExtensionVariantType type, in NativeVariant v, nint valuePtr)
+    {
+        fixed (NativeVariant* p = &v)
+        {
+            To(type)(valuePtr, (nint)p);
+        }
+    }
+
     /// <summary>Owned deep copy of a (possibly borrowed) variant.</summary>
     public static NativeVariant NewCopy(in NativeVariant source)
     {

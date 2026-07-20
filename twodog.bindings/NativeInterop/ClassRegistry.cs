@@ -120,6 +120,15 @@ public static unsafe class ClassRegistry
 
             ByType[type] = info;
             ByClassSn[snClass] = info;
+
+            // Source-generated member registration ([Export]/[Signal]): the
+            // generator emits a static __BindMembers(MemberRegistry) into the
+            // user's partial class. Declared-only: each class in a user
+            // hierarchy registers its own members.
+            var bind = type.GetMethod("__BindMembers",
+                BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly,
+                [typeof(MemberRegistry)]);
+            bind?.Invoke(null, [new MemberRegistry(info)]);
         }
     }
 

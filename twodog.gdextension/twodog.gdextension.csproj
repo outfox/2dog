@@ -21,6 +21,18 @@
 
     <ItemGroup>
         <ProjectReference Include="../twodog.bindings/twodog.bindings.csproj"/>
+        <!-- Build ordering only; the generator ships as an analyzer asset below. -->
+        <ProjectReference Include="../twodog.generators/twodog.generators.csproj"
+                          ReferenceOutputAssembly="false"
+                          PrivateAssets="all"/>
+    </ItemGroup>
+
+    <!-- Ship the [Export]/[Signal] source generator to consumers. -->
+    <ItemGroup>
+        <None Include="../twodog.generators/bin/$(Configuration)/netstandard2.0/twodog.generators.dll"
+              Pack="true"
+              PackagePath="analyzers/dotnet/cs/"
+              Visible="false"/>
     </ItemGroup>
 
     <ItemGroup>
