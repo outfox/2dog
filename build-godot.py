@@ -351,13 +351,16 @@ def build_editor(args, platform_config: PlatformConfig):
     """Build Godot executable."""
     console.print("\n[bold yellow]┌── Building Godot Editor ──┐[/bold yellow]")
     task_desc = f"Building Godot Editor (mono={args.mono})"
+    # gdext (non-mono) builds get their own suffix so both flavors coexist
+    # in godot/bin (mono library builds carry no .mono infix).
+    exe_suffix = "executable" if args.mono == "yes" else "gdext_executable"
     cmd = [
         "scons",
         f"platform={platform_config.godot_platform}",
         f"arch={platform_config.godot_arch}",
         "target=editor",
         f"module_mono_enabled={args.mono}",
-        "extra_suffix=executable",
+        f"extra_suffix={exe_suffix}",
         "d3d12=no",
         f"dev_build={args.dev_build}",
         f"scu_build={args.scu_build}",
@@ -487,6 +490,7 @@ def build_libgodot(args, platform_config: PlatformConfig):
             f"arch={platform_config.godot_arch}, dev_build={use_dev_build})"
         )
 
+        lib_suffix = "shared_library" if args.mono == "yes" else "gdext_shared_library"
         cmd = [
             "scons",
             f"platform={platform_config.godot_platform}",
@@ -495,7 +499,7 @@ def build_libgodot(args, platform_config: PlatformConfig):
             f"module_mono_enabled={args.mono}",
             "d3d12=no",
             "library_type=shared_library",
-            "extra_suffix=shared_library",
+            f"extra_suffix={lib_suffix}",
             f"dev_build={use_dev_build}",
             f"scu_build={args.scu_build}",
             f"debug_symbols={args.debug_symbols}",

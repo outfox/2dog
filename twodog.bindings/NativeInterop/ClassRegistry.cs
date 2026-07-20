@@ -51,15 +51,42 @@ public static unsafe class ClassRegistry
         lock (Gate) return ByType.TryGetValue(type, out info!);
     }
 
+    private static readonly List<Action> Pending = [];
+    private static bool _flushHooked;
+
     /// <summary>
     /// Registers <typeparamref name="T"/> as an extension class named after the
     /// C# type, parented to its base type's class. Idempotent per type.
+    /// May be called before the engine starts: registration is queued and
+    /// flushed automatically at SCENE-level initialization (when engine base
+    /// classes exist in ClassDB).
     /// </summary>
     public static void Register<T>() where T : GodotObject, new()
     {
         var type = typeof(T);
         lock (Gate)
         {
+            if (!GdExtensionHost.SceneLevelInitialized)
+            {
+                if (!_flushHooked)
+                {
+                    _flushHooked = true;
+                    GdExtensionHost.LevelInitialized += level =>
+                    {
+                        if (level != GDExtensionInitializationLevel.GDEXTENSION_INITIALIZATION_SCENE) return;
+                        List<Action> pending;
+                        lock (Gate)
+                        {
+                            pending = [.. Pending];
+                            Pending.Clear();
+                        }
+                        foreach (var register in pending) register();
+                    };
+                }
+                Pending.Add(Register<T>);
+                return;
+            }
+
             if (ByType.ContainsKey(type)) return;
 
             var (parentName, baseEngineClass, refCounted) = ResolveParent(type);

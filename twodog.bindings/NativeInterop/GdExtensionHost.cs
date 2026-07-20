@@ -25,6 +25,9 @@ public static unsafe class GdExtensionHost
     public static event Action<GDExtensionInitializationLevel>? LevelInitialized;
     public static event Action<GDExtensionInitializationLevel>? LevelDeinitialized;
 
+    /// <summary>True once SCENE-level initialization ran (scene classes exist in ClassDB).</summary>
+    public static bool SceneLevelInitialized { get; private set; }
+
     /// <summary>Function-pointer form of <see cref="InitCallback"/> for passing to libgodot.</summary>
     public static nint InitCallbackPointer =>
         (nint)(delegate* unmanaged<nint, nint, GDExtensionInitialization*, byte>)&InitCallback;
@@ -49,8 +52,12 @@ public static unsafe class GdExtensionHost
     }
 
     [UnmanagedCallersOnly]
-    private static void OnInitialize(nint userdata, int level) =>
+    private static void OnInitialize(nint userdata, int level)
+    {
+        if ((GDExtensionInitializationLevel)level == GDExtensionInitializationLevel.GDEXTENSION_INITIALIZATION_SCENE)
+            SceneLevelInitialized = true;
         LevelInitialized?.Invoke((GDExtensionInitializationLevel)level);
+    }
 
     [UnmanagedCallersOnly]
     private static void OnDeinitialize(nint userdata, int level) =>

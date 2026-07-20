@@ -5,19 +5,23 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <RootNamespace>Godot</RootNamespace>
-        <AssemblyName>twodog.bindings</AssemblyName>
+        <RootNamespace>twodog</RootNamespace>
+        <AssemblyName>twodog.gdextension</AssemblyName>
 
         <IsPackable>true</IsPackable>
-        <PackageId>2dog.bindings</PackageId>
+        <PackageId>2dog.gdextension</PackageId>
         <Version>$(TwoDogVersion)</Version>
         <Authors>Moritz Voss</Authors>
-        <Description>GodotSharp-compatible C# bindings for Godot Engine over the GDExtension interface. Generated from extension_api.json - no mono module, no GodotSharp. Part of the 2dog.gdextension stack; usable standalone against any libgodot host.</Description>
+        <Description>Host layer for the GDExtension-based 2dog stack: start and pump Godot's MainLoop from your C# application, no mono module required. Drop-in alternative to 2dog.engine - swap the package reference, keep your code. Pair with a 2dog.gdextension.[rid] natives package.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
         <PackageIcon>icon.png</PackageIcon>
         <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
     </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../twodog.bindings/twodog.bindings.csproj"/>
+    </ItemGroup>
 
     <ItemGroup>
         <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
