@@ -14,9 +14,9 @@ public unsafe partial class NativeMenu : GodotObject
 {
     internal NativeMenu(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NativeMenu() : this(InstanceBindings.ConstructRaw("NativeMenu"), false)
+    public NativeMenu() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NativeMenu");
     }
 
     private static NativeMenu? _singleton;
@@ -987,9 +987,9 @@ public unsafe partial class NavigationAgent2D : Node
 {
     internal NavigationAgent2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationAgent2D() : this(InstanceBindings.ConstructRaw("NavigationAgent2D"), false)
+    public NavigationAgent2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationAgent2D");
     }
 
     private static nint __mb_get_rid;
@@ -2232,9 +2232,9 @@ public unsafe partial class NavigationAgent3D : Node
 {
     internal NavigationAgent3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationAgent3D() : this(InstanceBindings.ConstructRaw("NavigationAgent3D"), false)
+    public NavigationAgent3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationAgent3D");
     }
 
     private static nint __mb_get_rid;
@@ -3570,9 +3570,9 @@ public unsafe partial class NavigationLink2D : Node2D
 {
     internal NavigationLink2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationLink2D() : this(InstanceBindings.ConstructRaw("NavigationLink2D"), false)
+    public NavigationLink2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationLink2D");
     }
 
     private static nint __mb_get_rid;
@@ -3941,9 +3941,9 @@ public unsafe partial class NavigationLink3D : Node3D
 {
     internal NavigationLink3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationLink3D() : this(InstanceBindings.ConstructRaw("NavigationLink3D"), false)
+    public NavigationLink3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationLink3D");
     }
 
     private static nint __mb_get_rid;
@@ -4312,9 +4312,9 @@ public unsafe partial class NavigationMesh : Resource
 {
     internal NavigationMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationMesh() : this(InstanceBindings.ConstructRaw("NavigationMesh"), true)
+    public NavigationMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationMesh");
     }
 
     public enum SamplePartitionType : long
@@ -5183,9 +5183,9 @@ public unsafe partial class NavigationMeshGenerator : GodotObject
 {
     internal NavigationMeshGenerator(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationMeshGenerator() : this(InstanceBindings.ConstructRaw("NavigationMeshGenerator"), false)
+    public NavigationMeshGenerator() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationMeshGenerator");
     }
 
     private static NavigationMeshGenerator? _singleton;
@@ -5230,9 +5230,9 @@ public unsafe partial class NavigationMeshSourceGeometryData2D : Resource
 {
     internal NavigationMeshSourceGeometryData2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationMeshSourceGeometryData2D() : this(InstanceBindings.ConstructRaw("NavigationMeshSourceGeometryData2D"), true)
+    public NavigationMeshSourceGeometryData2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationMeshSourceGeometryData2D");
     }
 
     private static nint __mb_clear;
@@ -5312,9 +5312,9 @@ public unsafe partial class NavigationMeshSourceGeometryData3D : Resource
 {
     internal NavigationMeshSourceGeometryData3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationMeshSourceGeometryData3D() : this(InstanceBindings.ConstructRaw("NavigationMeshSourceGeometryData3D"), true)
+    public NavigationMeshSourceGeometryData3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationMeshSourceGeometryData3D");
     }
 
     private static nint __mb_clear;
@@ -5412,9 +5412,9 @@ public unsafe partial class NavigationObstacle2D : Node2D
 {
     internal NavigationObstacle2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationObstacle2D() : this(InstanceBindings.ConstructRaw("NavigationObstacle2D"), false)
+    public NavigationObstacle2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationObstacle2D");
     }
 
     private static nint __mb_get_rid;
@@ -5690,9 +5690,9 @@ public unsafe partial class NavigationObstacle3D : Node3D
 {
     internal NavigationObstacle3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationObstacle3D() : this(InstanceBindings.ConstructRaw("NavigationObstacle3D"), false)
+    public NavigationObstacle3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationObstacle3D");
     }
 
     private static nint __mb_get_rid;
@@ -6030,9 +6030,9 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
 {
     internal NavigationPathQueryParameters2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationPathQueryParameters2D() : this(InstanceBindings.ConstructRaw("NavigationPathQueryParameters2D"), true)
+    public NavigationPathQueryParameters2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationPathQueryParameters2D");
     }
 
     public enum PathfindingAlgorithm : long
@@ -6465,9 +6465,9 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
 {
     internal NavigationPathQueryParameters3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationPathQueryParameters3D() : this(InstanceBindings.ConstructRaw("NavigationPathQueryParameters3D"), true)
+    public NavigationPathQueryParameters3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationPathQueryParameters3D");
     }
 
     public enum PathfindingAlgorithm : long
@@ -6900,9 +6900,9 @@ public unsafe partial class NavigationPathQueryResult2D : RefCounted
 {
     internal NavigationPathQueryResult2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationPathQueryResult2D() : this(InstanceBindings.ConstructRaw("NavigationPathQueryResult2D"), true)
+    public NavigationPathQueryResult2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationPathQueryResult2D");
     }
 
     public enum PathSegmentType : long
@@ -6960,9 +6960,9 @@ public unsafe partial class NavigationPathQueryResult3D : RefCounted
 {
     internal NavigationPathQueryResult3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationPathQueryResult3D() : this(InstanceBindings.ConstructRaw("NavigationPathQueryResult3D"), true)
+    public NavigationPathQueryResult3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationPathQueryResult3D");
     }
 
     public enum PathSegmentType : long
@@ -7020,9 +7020,9 @@ public unsafe partial class NavigationPolygon : Resource
 {
     internal NavigationPolygon(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationPolygon() : this(InstanceBindings.ConstructRaw("NavigationPolygon"), true)
+    public NavigationPolygon() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationPolygon");
     }
 
     public enum SamplePartitionType : long
@@ -7512,9 +7512,9 @@ public unsafe partial class NavigationRegion2D : Node2D
 {
     internal NavigationRegion2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationRegion2D() : this(InstanceBindings.ConstructRaw("NavigationRegion2D"), false)
+    public NavigationRegion2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationRegion2D");
     }
 
     private static nint __mb_get_rid;
@@ -7851,9 +7851,9 @@ public unsafe partial class NavigationRegion3D : Node3D
 {
     internal NavigationRegion3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationRegion3D() : this(InstanceBindings.ConstructRaw("NavigationRegion3D"), false)
+    public NavigationRegion3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationRegion3D");
     }
 
     private static nint __mb_get_rid;
@@ -10399,9 +10399,9 @@ public unsafe partial class NavigationServer2DManager : GodotObject
 {
     internal NavigationServer2DManager(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationServer2DManager() : this(InstanceBindings.ConstructRaw("NavigationServer2DManager"), false)
+    public NavigationServer2DManager() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationServer2DManager");
     }
 
     private static NavigationServer2DManager? _singleton;
@@ -12962,9 +12962,9 @@ public unsafe partial class NavigationServer3DManager : GodotObject
 {
     internal NavigationServer3DManager(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NavigationServer3DManager() : this(InstanceBindings.ConstructRaw("NavigationServer3DManager"), false)
+    public NavigationServer3DManager() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NavigationServer3DManager");
     }
 
     private static NavigationServer3DManager? _singleton;
@@ -12994,9 +12994,9 @@ public unsafe partial class NinePatchRect : Control
 {
     internal NinePatchRect(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NinePatchRect() : this(InstanceBindings.ConstructRaw("NinePatchRect"), false)
+    public NinePatchRect() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NinePatchRect");
     }
 
     public enum AxisStretchMode : long
@@ -13202,9 +13202,9 @@ public unsafe partial class Node : GodotObject
 {
     internal Node(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Node() : this(InstanceBindings.ConstructRaw("Node"), false)
+    public Node() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Node");
     }
 
     public enum ProcessMode : long
@@ -14868,15 +14868,111 @@ public unsafe partial class Node : GodotObject
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
+
+    public virtual void _Process(double delta) { }
+
+    public virtual void _PhysicsProcess(double delta) { }
+
+    public virtual void _EnterTree() { }
+
+    public virtual void _ExitTree() { }
+
+    public virtual void _Ready() { }
+
+    public virtual void _Input(InputEvent? @event) { }
+
+    public virtual void _ShortcutInput(InputEvent? @event) { }
+
+    public virtual void _UnhandledInput(InputEvent? @event) { }
+
+    public virtual void _UnhandledKeyInput(InputEvent? @event) { }
+
+    public virtual Rid _GetFocusedAccessibilityElement() => default!;
+
+    private static ulong __vsn_process;
+    private static ulong __vsn_physics_process;
+    private static ulong __vsn_enter_tree;
+    private static ulong __vsn_exit_tree;
+    private static ulong __vsn_ready;
+    private static ulong __vsn_input;
+    private static ulong __vsn_shortcut_input;
+    private static ulong __vsn_unhandled_input;
+    private static ulong __vsn_unhandled_key_input;
+    private static ulong __vsn_get_focused_accessibility_element;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_process == 0) __vsn_process = StringNames.Get("_process").Opaque;
+        if (nameSn == __vsn_process)
+        {
+            _Process(*(double*)args[0]);
+            return true;
+        }
+        if (__vsn_physics_process == 0) __vsn_physics_process = StringNames.Get("_physics_process").Opaque;
+        if (nameSn == __vsn_physics_process)
+        {
+            _PhysicsProcess(*(double*)args[0]);
+            return true;
+        }
+        if (__vsn_enter_tree == 0) __vsn_enter_tree = StringNames.Get("_enter_tree").Opaque;
+        if (nameSn == __vsn_enter_tree)
+        {
+            _EnterTree();
+            return true;
+        }
+        if (__vsn_exit_tree == 0) __vsn_exit_tree = StringNames.Get("_exit_tree").Opaque;
+        if (nameSn == __vsn_exit_tree)
+        {
+            _ExitTree();
+            return true;
+        }
+        if (__vsn_ready == 0) __vsn_ready = StringNames.Get("_ready").Opaque;
+        if (nameSn == __vsn_ready)
+        {
+            _Ready();
+            return true;
+        }
+        if (__vsn_input == 0) __vsn_input = StringNames.Get("_input").Opaque;
+        if (nameSn == __vsn_input)
+        {
+            _Input((InputEvent?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_shortcut_input == 0) __vsn_shortcut_input = StringNames.Get("_shortcut_input").Opaque;
+        if (nameSn == __vsn_shortcut_input)
+        {
+            _ShortcutInput((InputEvent?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_unhandled_input == 0) __vsn_unhandled_input = StringNames.Get("_unhandled_input").Opaque;
+        if (nameSn == __vsn_unhandled_input)
+        {
+            _UnhandledInput((InputEvent?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_unhandled_key_input == 0) __vsn_unhandled_key_input = StringNames.Get("_unhandled_key_input").Opaque;
+        if (nameSn == __vsn_unhandled_key_input)
+        {
+            _UnhandledKeyInput((InputEvent?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_get_focused_accessibility_element == 0) __vsn_get_focused_accessibility_element = StringNames.Get("_get_focused_accessibility_element").Opaque;
+        if (nameSn == __vsn_get_focused_accessibility_element)
+        {
+            *(Rid*)ret = _GetFocusedAccessibilityElement();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class Node2D : CanvasItem
 {
     internal Node2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Node2D() : this(InstanceBindings.ConstructRaw("Node2D"), false)
+    public Node2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Node2D");
     }
 
     private static nint __mb_set_position;
@@ -15414,9 +15510,9 @@ public unsafe partial class Node3D : Node
 {
     internal Node3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Node3D() : this(InstanceBindings.ConstructRaw("Node3D"), false)
+    public Node3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Node3D");
     }
 
     public enum RotationEditMode : long
@@ -16656,9 +16752,9 @@ public unsafe partial class NoiseTexture2D : Texture2D
 {
     internal NoiseTexture2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NoiseTexture2D() : this(InstanceBindings.ConstructRaw("NoiseTexture2D"), true)
+    public NoiseTexture2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NoiseTexture2D");
     }
 
     private static nint __mb_set_width;
@@ -17008,9 +17104,9 @@ public unsafe partial class NoiseTexture3D : Texture3D
 {
     internal NoiseTexture3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public NoiseTexture3D() : this(InstanceBindings.ConstructRaw("NoiseTexture3D"), true)
+    public NoiseTexture3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "NoiseTexture3D");
     }
 
     private static nint __mb_set_width;

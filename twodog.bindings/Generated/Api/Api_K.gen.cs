@@ -14,9 +14,9 @@ public unsafe partial class KinematicCollision2D : RefCounted
 {
     internal KinematicCollision2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public KinematicCollision2D() : this(InstanceBindings.ConstructRaw("KinematicCollision2D"), true)
+    public KinematicCollision2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "KinematicCollision2D");
     }
 
     private static nint __mb_get_position;
@@ -222,9 +222,9 @@ public unsafe partial class KinematicCollision3D : RefCounted
 {
     internal KinematicCollision3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public KinematicCollision3D() : this(InstanceBindings.ConstructRaw("KinematicCollision3D"), true)
+    public KinematicCollision3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "KinematicCollision3D");
     }
 
     private static nint __mb_get_travel;

@@ -43,9 +43,12 @@ public static class ApiGenerator
         public static readonly TypeRef Void = new("void", "void");
     }
 
+    private sealed record VirtualInfo(string GdName, string CsName, TypeRef Ret, List<(string name, TypeRef type)> Args);
+
     private static Dictionary<string, ClassInfo> _classes = [];
     private static Dictionary<string, string> _enumMap = [];   // godot ref ("Error", "Node.InternalMode") -> cs name
-    private static int _emitted, _skipped;
+    private static readonly SortedDictionary<string, string> _virtualNameMap = []; // gd virtual name -> cs stub name
+    private static int _emitted, _skipped, _virtualsEmitted, _virtualsSkipped;
 
     public static void Run(string apiJsonPath, string outDir)
     {
@@ -97,6 +100,9 @@ public static class ApiGenerator
         // ---- classes, chunked by first letter ----
         _emitted = 0;
         _skipped = 0;
+        _virtualsEmitted = 0;
+        _virtualsSkipped = 0;
+        _virtualNameMap.Clear();
         var chunks = new Dictionary<char, StringBuilder>();
         foreach (var c in root.GetProperty("classes").EnumerateArray())
         {
@@ -131,7 +137,32 @@ public static class ApiGenerator
         sbReg.AppendLine("}");
         Write(outDir, "ApiRegistry.gen.cs", sbReg);
 
-        Console.WriteLine($"Generated typed API: {_classes.Count} classes, {_emitted} methods emitted, {_skipped} skipped (unsupported types), into {outDir}");
+        // ---- global virtual-name map (gd name -> generated stub name) ----
+        var sbVirt = NewFile();
+        sbVirt.AppendLine("public static class GeneratedVirtualNames");
+        sbVirt.AppendLine("{");
+        sbVirt.AppendLine($"    public static readonly Dictionary<string, string> Map = new({_virtualNameMap.Count + 64});");
+        sbVirt.AppendLine();
+        var virtChunks = _virtualNameMap.Chunk(250).ToList();
+        sbVirt.AppendLine("    static GeneratedVirtualNames()");
+        sbVirt.AppendLine("    {");
+        for (var i = 0; i < virtChunks.Count; i++)
+            sbVirt.AppendLine($"        Init{i}();");
+        sbVirt.AppendLine("    }");
+        for (var i = 0; i < virtChunks.Count; i++)
+        {
+            sbVirt.AppendLine();
+            sbVirt.AppendLine($"    private static void Init{i}()");
+            sbVirt.AppendLine("    {");
+            foreach (var kv in virtChunks[i])
+                sbVirt.AppendLine($"        Map[\"{kv.Key}\"] = \"{kv.Value}\";");
+            sbVirt.AppendLine("    }");
+        }
+        sbVirt.AppendLine("}");
+        Write(outDir, "GeneratedVirtualNames.gen.cs", sbVirt);
+
+        Console.WriteLine($"Generated typed API: {_classes.Count} classes, {_emitted} methods emitted, {_skipped} skipped (unsupported types), " +
+                          $"{_virtualsEmitted} virtual stubs ({_virtualsSkipped} skipped), into {outDir}");
     }
 
     // ------------------------------------------------------------- class --
@@ -152,9 +183,9 @@ public static class ApiGenerator
             if (info.Instantiable)
             {
                 sb.AppendLine();
-                sb.AppendLine($"    public {info.CsName}() : this(InstanceBindings.ConstructRaw(\"{info.GdName}\"), {Bool(info.RefCounted)})");
+                sb.AppendLine($"    public {info.CsName}() : this(0, {Bool(info.RefCounted)})");
                 sb.AppendLine("    {");
-                sb.AppendLine("        InstanceBindings.Attach(this);");
+                sb.AppendLine($"        ClassRegistry.AttachNew(this, \"{info.GdName}\");");
                 sb.AppendLine("    }");
             }
         }
@@ -177,11 +208,14 @@ public static class ApiGenerator
             }
         }
 
+        var virtuals = new List<VirtualInfo>();
         if (c.TryGetProperty("methods", out var methods))
         {
             foreach (var m in methods.EnumerateArray())
-                EmitMethod(sb, m, info, used);
+                EmitMethod(sb, m, info, used, virtuals, isObject);
         }
+
+        EmitVirtuals(sb, virtuals);
 
         sb.AppendLine("}");
         sb.AppendLine();
@@ -204,13 +238,21 @@ public static class ApiGenerator
 
     // ----------------------------------------------------------- methods --
 
-    private static void EmitMethod(StringBuilder sb, JsonElement m, ClassInfo info, HashSet<string> used)
+    private static void EmitMethod(StringBuilder sb, JsonElement m, ClassInfo info, HashSet<string> used,
+        List<VirtualInfo> virtuals, bool isObject)
     {
         var gdName = m.GetProperty("name").GetString()!;
-        if ((m.TryGetProperty("is_virtual", out var v) && v.GetBoolean()) ||
-            (m.TryGetProperty("is_vararg", out var va) && va.GetBoolean()))
+        if (m.TryGetProperty("is_vararg", out var va) && va.GetBoolean())
         {
-            return; // virtuals arrive in phase 3; varargs need variant calls
+            return; // varargs need variant calls
+        }
+        if (m.TryGetProperty("is_virtual", out var v) && v.GetBoolean())
+        {
+            // Object's virtuals (_get/_set/_get_property_list...) are all
+            // Variant-typed and the handwritten GodotObject roots the
+            // __CallVirtual chain - skip them there.
+            if (!isObject) CollectVirtual(m, gdName, used, virtuals);
+            return;
         }
 
         var csName = Pascal(gdName);
@@ -338,6 +380,118 @@ public static class ApiGenerator
     }
 
     private static string GdOf(string cs) => cs == "GodotObject" ? "Object" : cs;
+
+    // ---------------------------------------------------------- virtuals --
+
+    private static void CollectVirtual(JsonElement m, string gdName, HashSet<string> used, List<VirtualInfo> virtuals)
+    {
+        var ret = m.TryGetProperty("return_value", out var rv)
+            ? Map(rv.GetProperty("type").GetString()!, rv.TryGetProperty("meta", out var rm) ? rm.GetString() : null)
+            : TypeRef.Void;
+        if (ret is null) { _virtualsSkipped++; return; }
+
+        var args = new List<(string name, TypeRef type)>();
+        if (m.TryGetProperty("arguments", out var margs))
+        {
+            foreach (var a in margs.EnumerateArray())
+            {
+                var t = Map(a.GetProperty("type").GetString()!, a.TryGetProperty("meta", out var am) ? am.GetString() : null);
+                if (t is null) { _virtualsSkipped++; return; }
+                args.Add((Camel(a.GetProperty("name").GetString()!), t));
+            }
+        }
+
+        var csName = VirtualCsName(gdName);
+        if (ReservedMembers.Contains(csName) || !used.Add(csName)) { _virtualsSkipped++; return; }
+
+        virtuals.Add(new VirtualInfo(gdName, csName, ret, args));
+        _virtualNameMap[gdName] = csName;
+        _virtualsEmitted++;
+    }
+
+    private static string VirtualCsName(string gdName) =>
+        "_" + Pascal(gdName.TrimStart('_'));
+
+    private static void EmitVirtuals(StringBuilder sb, List<VirtualInfo> virtuals)
+    {
+        if (virtuals.Count == 0) return;
+
+        // No-op stubs users override GodotSharp-style; the engine only calls
+        // in when ClassRegistry reported the virtual as overridden.
+        foreach (var vi in virtuals)
+        {
+            var paramList = string.Join(", ", vi.Args.Select(a => $"{ParamType(a.type)} {a.name}"));
+            sb.AppendLine();
+            sb.AppendLine($"    public virtual {RetType(vi.Ret)} {vi.CsName}({paramList}){(vi.Ret.Kind == "void" ? " { }" : " => default!;")}");
+        }
+
+        sb.AppendLine();
+        foreach (var vi in virtuals)
+            sb.AppendLine($"    private static ulong __vsn{vi.GdName};");
+
+        sb.AppendLine();
+        sb.AppendLine("    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)");
+        sb.AppendLine("    {");
+        foreach (var vi in virtuals)
+        {
+            var vsn = $"__vsn{vi.GdName}";
+            sb.AppendLine($"        if ({vsn} == 0) {vsn} = StringNames.Get(\"{vi.GdName}\").Opaque;");
+            sb.AppendLine($"        if (nameSn == {vsn})");
+            sb.AppendLine("        {");
+
+            var argExprs = vi.Args.Select((a, i) => a.type.Kind switch
+            {
+                "bool" => $"*(byte*)args[{i}] != 0",
+                "int" => $"unchecked(({a.type.Cs})(*(long*)args[{i}]))",
+                "float" => a.type.Cs == "float" ? $"(float)(*(double*)args[{i}])" : $"*(double*)args[{i}]",
+                "enum" => $"({a.type.Cs})(*(long*)args[{i}])",
+                "string" => $"NativeString.Read(*(ulong*)args[{i}])",
+                "stringname" => $"StringNames.Read(*(ulong*)args[{i}])",
+                "math" => $"*({a.type.Cs}*)args[{i}]",
+                "class" => $"({a.type.Cs}?)InstanceBindings.GetOrCreate(*(nint*)args[{i}], adoptRef: false)",
+                _ => throw new InvalidOperationException(a.type.Kind),
+            }).ToList();
+            var call = $"{vi.CsName}({string.Join(", ", argExprs)})";
+
+            switch (vi.Ret.Kind)
+            {
+                case "void":
+                    sb.AppendLine($"            {call};");
+                    break;
+                case "bool":
+                    sb.AppendLine($"            *(byte*)ret = {call} ? (byte)1 : (byte)0;");
+                    break;
+                case "int":
+                    sb.AppendLine($"            *(long*)ret = unchecked((long){call});");
+                    break;
+                case "float":
+                    sb.AppendLine($"            *(double*)ret = {call};");
+                    break;
+                case "enum":
+                    sb.AppendLine($"            *(long*)ret = (long){call};");
+                    break;
+                case "math":
+                    sb.AppendLine($"            *({vi.Ret.Cs}*)ret = {call};");
+                    break;
+                case "class":
+                    sb.AppendLine($"            *(nint*)ret = {call}?.NativePtr ?? 0;");
+                    break;
+                case "string":
+                    // Ownership transfers: the engine destructs the ret slot
+                    // after copying out of it.
+                    sb.AppendLine($"            *(ulong*)ret = NativeString.Create({call} ?? \"\");");
+                    break;
+                case "stringname":
+                    sb.AppendLine($"            *(ulong*)ret = StringNames.CreateOwned({call} ?? \"\");");
+                    break;
+            }
+
+            sb.AppendLine("            return true;");
+            sb.AppendLine("        }");
+        }
+        sb.AppendLine("        return base.__CallVirtual(nameSn, args, ret);");
+        sb.AppendLine("    }");
+    }
 
     // -------------------------------------------------------- type mapping --
 

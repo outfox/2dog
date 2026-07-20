@@ -14,9 +14,9 @@ public unsafe partial class ORMMaterial3D : BaseMaterial3D
 {
     internal ORMMaterial3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ORMMaterial3D() : this(InstanceBindings.ConstructRaw("ORMMaterial3D"), true)
+    public ORMMaterial3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ORMMaterial3D");
     }
 }
 
@@ -24,9 +24,9 @@ public unsafe partial class OS : GodotObject
 {
     internal OS(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OS() : this(InstanceBindings.ConstructRaw("OS"), false)
+    public OS() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OS");
     }
 
     private static OS? _singleton;
@@ -1148,9 +1148,9 @@ public unsafe partial class OccluderInstance3D : VisualInstance3D
 {
     internal OccluderInstance3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OccluderInstance3D() : this(InstanceBindings.ConstructRaw("OccluderInstance3D"), false)
+    public OccluderInstance3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OccluderInstance3D");
     }
 
     private static nint __mb_set_bake_mask;
@@ -1287,9 +1287,9 @@ public unsafe partial class OccluderPolygon2D : Resource
 {
     internal OccluderPolygon2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OccluderPolygon2D() : this(InstanceBindings.ConstructRaw("OccluderPolygon2D"), true)
+    public OccluderPolygon2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OccluderPolygon2D");
     }
 
     public enum CullMode : long
@@ -1366,9 +1366,9 @@ public unsafe partial class OfflineMultiplayerPeer : MultiplayerPeer
 {
     internal OfflineMultiplayerPeer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OfflineMultiplayerPeer() : this(InstanceBindings.ConstructRaw("OfflineMultiplayerPeer"), true)
+    public OfflineMultiplayerPeer() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OfflineMultiplayerPeer");
     }
 }
 
@@ -1376,9 +1376,9 @@ public unsafe partial class OggPacketSequence : Resource
 {
     internal OggPacketSequence(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OggPacketSequence() : this(InstanceBindings.ConstructRaw("OggPacketSequence"), true)
+    public OggPacketSequence() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OggPacketSequence");
     }
 
     private static nint __mb_set_sampling_rate;
@@ -1432,9 +1432,9 @@ public unsafe partial class OggPacketSequencePlayback : RefCounted
 {
     internal OggPacketSequencePlayback(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OggPacketSequencePlayback() : this(InstanceBindings.ConstructRaw("OggPacketSequencePlayback"), true)
+    public OggPacketSequencePlayback() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OggPacketSequencePlayback");
     }
 }
 
@@ -1442,9 +1442,9 @@ public unsafe partial class OmniLight3D : Light3D
 {
     internal OmniLight3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OmniLight3D() : this(InstanceBindings.ConstructRaw("OmniLight3D"), false)
+    public OmniLight3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OmniLight3D");
     }
 
     public enum ShadowMode : long
@@ -1489,9 +1489,9 @@ public unsafe partial class OpenXRAPIExtension : RefCounted
 {
     internal OpenXRAPIExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRAPIExtension() : this(InstanceBindings.ConstructRaw("OpenXRAPIExtension"), true)
+    public OpenXRAPIExtension() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRAPIExtension");
     }
 
     public enum OpenXRAlphaBlendModeSupport : long
@@ -2279,9 +2279,9 @@ public unsafe partial class OpenXRAction : Resource
 {
     internal OpenXRAction(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRAction() : this(InstanceBindings.ConstructRaw("OpenXRAction"), true)
+    public OpenXRAction() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRAction");
     }
 
     public enum ActionType : long
@@ -2360,9 +2360,9 @@ public unsafe partial class OpenXRActionBindingModifier : OpenXRBindingModifier
 {
     internal OpenXRActionBindingModifier(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRActionBindingModifier() : this(InstanceBindings.ConstructRaw("OpenXRActionBindingModifier"), true)
+    public OpenXRActionBindingModifier() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRActionBindingModifier");
     }
 }
 
@@ -2370,9 +2370,9 @@ public unsafe partial class OpenXRActionMap : Resource
 {
     internal OpenXRActionMap(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRActionMap() : this(InstanceBindings.ConstructRaw("OpenXRActionMap"), true)
+    public OpenXRActionMap() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRActionMap");
     }
 
     private static nint __mb_get_action_set_count;
@@ -2561,9 +2561,9 @@ public unsafe partial class OpenXRActionSet : Resource
 {
     internal OpenXRActionSet(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRActionSet() : this(InstanceBindings.ConstructRaw("OpenXRActionSet"), true)
+    public OpenXRActionSet() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRActionSet");
     }
 
     private static nint __mb_set_localized_name;
@@ -2681,9 +2681,9 @@ public unsafe partial class OpenXRAnalogThresholdModifier : OpenXRActionBindingM
 {
     internal OpenXRAnalogThresholdModifier(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRAnalogThresholdModifier() : this(InstanceBindings.ConstructRaw("OpenXRAnalogThresholdModifier"), true)
+    public OpenXRAnalogThresholdModifier() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRAnalogThresholdModifier");
     }
 
     private static nint __mb_set_on_threshold;
@@ -2815,9 +2815,9 @@ public unsafe partial class OpenXRAnchorTracker : OpenXRSpatialEntityTracker
 {
     internal OpenXRAnchorTracker(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRAnchorTracker() : this(InstanceBindings.ConstructRaw("OpenXRAnchorTracker"), true)
+    public OpenXRAnchorTracker() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRAnchorTracker");
     }
 
     private static nint __mb_has_uuid;
@@ -2872,9 +2872,9 @@ public unsafe partial class OpenXRAndroidThreadSettingsExtension : OpenXRExtensi
 {
     internal OpenXRAndroidThreadSettingsExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRAndroidThreadSettingsExtension() : this(InstanceBindings.ConstructRaw("OpenXRAndroidThreadSettingsExtension"), false)
+    public OpenXRAndroidThreadSettingsExtension() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRAndroidThreadSettingsExtension");
     }
 
     public enum ThreadType : long
@@ -2909,15 +2909,30 @@ public unsafe partial class OpenXRAndroidThreadSettingsExtension : OpenXRExtensi
 public unsafe partial class OpenXRBindingModifier : Resource
 {
     internal OpenXRBindingModifier(nint ptr, bool rc) : base(ptr, rc) { }
+
+    public virtual string _GetDescription() => default!;
+
+    private static ulong __vsn_get_description;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_description == 0) __vsn_get_description = StringNames.Get("_get_description").Opaque;
+        if (nameSn == __vsn_get_description)
+        {
+            *(ulong*)ret = NativeString.Create(_GetDescription() ?? "");
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class OpenXRBindingModifierEditor : PanelContainer
 {
     internal OpenXRBindingModifierEditor(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRBindingModifierEditor() : this(InstanceBindings.ConstructRaw("OpenXRBindingModifierEditor"), false)
+    public OpenXRBindingModifierEditor() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRBindingModifierEditor");
     }
 
     private static nint __mb_get_binding_modifier;
@@ -3642,9 +3657,9 @@ public unsafe partial class OpenXRCompositionLayerCylinder : OpenXRCompositionLa
 {
     internal OpenXRCompositionLayerCylinder(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRCompositionLayerCylinder() : this(InstanceBindings.ConstructRaw("OpenXRCompositionLayerCylinder"), false)
+    public OpenXRCompositionLayerCylinder() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRCompositionLayerCylinder");
     }
 
     private static nint __mb_set_radius;
@@ -3776,9 +3791,9 @@ public unsafe partial class OpenXRCompositionLayerEquirect : OpenXRCompositionLa
 {
     internal OpenXRCompositionLayerEquirect(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRCompositionLayerEquirect() : this(InstanceBindings.ConstructRaw("OpenXRCompositionLayerEquirect"), false)
+    public OpenXRCompositionLayerEquirect() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRCompositionLayerEquirect");
     }
 
     private static nint __mb_set_radius;
@@ -3941,9 +3956,9 @@ public unsafe partial class OpenXRCompositionLayerQuad : OpenXRCompositionLayer
 {
     internal OpenXRCompositionLayerQuad(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRCompositionLayerQuad() : this(InstanceBindings.ConstructRaw("OpenXRCompositionLayerQuad"), false)
+    public OpenXRCompositionLayerQuad() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRCompositionLayerQuad");
     }
 
     private static nint __mb_set_quad_size;
@@ -3982,9 +3997,9 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
 {
     internal OpenXRDpadBindingModifier(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRDpadBindingModifier() : this(InstanceBindings.ConstructRaw("OpenXRDpadBindingModifier"), true)
+    public OpenXRDpadBindingModifier() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRDpadBindingModifier");
     }
 
     private static nint __mb_set_action_set;
@@ -4272,9 +4287,9 @@ public unsafe partial class OpenXRExtensionWrapper : GodotObject
 {
     internal OpenXRExtensionWrapper(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRExtensionWrapper() : this(InstanceBindings.ConstructRaw("OpenXRExtensionWrapper"), false)
+    public OpenXRExtensionWrapper() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRExtensionWrapper");
     }
 
     private static nint __mb_get_openxr_api;
@@ -4304,15 +4319,246 @@ public unsafe partial class OpenXRExtensionWrapper : GodotObject
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
+
+    public virtual void _PrepareViewConfiguration(int viewCount) { }
+
+    public virtual void _PrintViewConfigurationInfo(int view) { }
+
+    public virtual int _GetCompositionLayerCount() => default!;
+
+    public virtual ulong _GetCompositionLayer(int index) => default!;
+
+    public virtual int _GetCompositionLayerOrder(int index) => default!;
+
+    public virtual void _OnRegisterMetadata(OpenXRInteractionProfileMetadata? interactionProfileMetadata) { }
+
+    public virtual void _OnBeforeInstanceCreated() { }
+
+    public virtual void _OnInstanceCreated(ulong instance) { }
+
+    public virtual void _OnInstanceDestroyed() { }
+
+    public virtual void _OnSessionCreated(ulong session) { }
+
+    public virtual void _OnProcess() { }
+
+    public virtual void _OnSyncActions() { }
+
+    public virtual void _OnPreRender() { }
+
+    public virtual void _OnMainSwapchainsCreated() { }
+
+    public virtual void _OnPreDrawViewport(Rid viewport) { }
+
+    public virtual void _OnPostDrawViewport(Rid viewport) { }
+
+    public virtual void _OnSessionDestroyed() { }
+
+    public virtual void _OnStateIdle() { }
+
+    public virtual void _OnStateReady() { }
+
+    public virtual void _OnStateSynchronized() { }
+
+    public virtual void _OnStateVisible() { }
+
+    public virtual void _OnStateFocused() { }
+
+    public virtual void _OnStateStopping() { }
+
+    public virtual void _OnStateLossPending() { }
+
+    public virtual void _OnStateExiting() { }
+
+    private static ulong __vsn_prepare_view_configuration;
+    private static ulong __vsn_print_view_configuration_info;
+    private static ulong __vsn_get_composition_layer_count;
+    private static ulong __vsn_get_composition_layer;
+    private static ulong __vsn_get_composition_layer_order;
+    private static ulong __vsn_on_register_metadata;
+    private static ulong __vsn_on_before_instance_created;
+    private static ulong __vsn_on_instance_created;
+    private static ulong __vsn_on_instance_destroyed;
+    private static ulong __vsn_on_session_created;
+    private static ulong __vsn_on_process;
+    private static ulong __vsn_on_sync_actions;
+    private static ulong __vsn_on_pre_render;
+    private static ulong __vsn_on_main_swapchains_created;
+    private static ulong __vsn_on_pre_draw_viewport;
+    private static ulong __vsn_on_post_draw_viewport;
+    private static ulong __vsn_on_session_destroyed;
+    private static ulong __vsn_on_state_idle;
+    private static ulong __vsn_on_state_ready;
+    private static ulong __vsn_on_state_synchronized;
+    private static ulong __vsn_on_state_visible;
+    private static ulong __vsn_on_state_focused;
+    private static ulong __vsn_on_state_stopping;
+    private static ulong __vsn_on_state_loss_pending;
+    private static ulong __vsn_on_state_exiting;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_prepare_view_configuration == 0) __vsn_prepare_view_configuration = StringNames.Get("_prepare_view_configuration").Opaque;
+        if (nameSn == __vsn_prepare_view_configuration)
+        {
+            _PrepareViewConfiguration(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_print_view_configuration_info == 0) __vsn_print_view_configuration_info = StringNames.Get("_print_view_configuration_info").Opaque;
+        if (nameSn == __vsn_print_view_configuration_info)
+        {
+            _PrintViewConfigurationInfo(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_composition_layer_count == 0) __vsn_get_composition_layer_count = StringNames.Get("_get_composition_layer_count").Opaque;
+        if (nameSn == __vsn_get_composition_layer_count)
+        {
+            *(long*)ret = unchecked((long)_GetCompositionLayerCount());
+            return true;
+        }
+        if (__vsn_get_composition_layer == 0) __vsn_get_composition_layer = StringNames.Get("_get_composition_layer").Opaque;
+        if (nameSn == __vsn_get_composition_layer)
+        {
+            *(long*)ret = unchecked((long)_GetCompositionLayer(unchecked((int)(*(long*)args[0]))));
+            return true;
+        }
+        if (__vsn_get_composition_layer_order == 0) __vsn_get_composition_layer_order = StringNames.Get("_get_composition_layer_order").Opaque;
+        if (nameSn == __vsn_get_composition_layer_order)
+        {
+            *(long*)ret = unchecked((long)_GetCompositionLayerOrder(unchecked((int)(*(long*)args[0]))));
+            return true;
+        }
+        if (__vsn_on_register_metadata == 0) __vsn_on_register_metadata = StringNames.Get("_on_register_metadata").Opaque;
+        if (nameSn == __vsn_on_register_metadata)
+        {
+            _OnRegisterMetadata((OpenXRInteractionProfileMetadata?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_on_before_instance_created == 0) __vsn_on_before_instance_created = StringNames.Get("_on_before_instance_created").Opaque;
+        if (nameSn == __vsn_on_before_instance_created)
+        {
+            _OnBeforeInstanceCreated();
+            return true;
+        }
+        if (__vsn_on_instance_created == 0) __vsn_on_instance_created = StringNames.Get("_on_instance_created").Opaque;
+        if (nameSn == __vsn_on_instance_created)
+        {
+            _OnInstanceCreated(unchecked((ulong)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_on_instance_destroyed == 0) __vsn_on_instance_destroyed = StringNames.Get("_on_instance_destroyed").Opaque;
+        if (nameSn == __vsn_on_instance_destroyed)
+        {
+            _OnInstanceDestroyed();
+            return true;
+        }
+        if (__vsn_on_session_created == 0) __vsn_on_session_created = StringNames.Get("_on_session_created").Opaque;
+        if (nameSn == __vsn_on_session_created)
+        {
+            _OnSessionCreated(unchecked((ulong)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_on_process == 0) __vsn_on_process = StringNames.Get("_on_process").Opaque;
+        if (nameSn == __vsn_on_process)
+        {
+            _OnProcess();
+            return true;
+        }
+        if (__vsn_on_sync_actions == 0) __vsn_on_sync_actions = StringNames.Get("_on_sync_actions").Opaque;
+        if (nameSn == __vsn_on_sync_actions)
+        {
+            _OnSyncActions();
+            return true;
+        }
+        if (__vsn_on_pre_render == 0) __vsn_on_pre_render = StringNames.Get("_on_pre_render").Opaque;
+        if (nameSn == __vsn_on_pre_render)
+        {
+            _OnPreRender();
+            return true;
+        }
+        if (__vsn_on_main_swapchains_created == 0) __vsn_on_main_swapchains_created = StringNames.Get("_on_main_swapchains_created").Opaque;
+        if (nameSn == __vsn_on_main_swapchains_created)
+        {
+            _OnMainSwapchainsCreated();
+            return true;
+        }
+        if (__vsn_on_pre_draw_viewport == 0) __vsn_on_pre_draw_viewport = StringNames.Get("_on_pre_draw_viewport").Opaque;
+        if (nameSn == __vsn_on_pre_draw_viewport)
+        {
+            _OnPreDrawViewport(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_on_post_draw_viewport == 0) __vsn_on_post_draw_viewport = StringNames.Get("_on_post_draw_viewport").Opaque;
+        if (nameSn == __vsn_on_post_draw_viewport)
+        {
+            _OnPostDrawViewport(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_on_session_destroyed == 0) __vsn_on_session_destroyed = StringNames.Get("_on_session_destroyed").Opaque;
+        if (nameSn == __vsn_on_session_destroyed)
+        {
+            _OnSessionDestroyed();
+            return true;
+        }
+        if (__vsn_on_state_idle == 0) __vsn_on_state_idle = StringNames.Get("_on_state_idle").Opaque;
+        if (nameSn == __vsn_on_state_idle)
+        {
+            _OnStateIdle();
+            return true;
+        }
+        if (__vsn_on_state_ready == 0) __vsn_on_state_ready = StringNames.Get("_on_state_ready").Opaque;
+        if (nameSn == __vsn_on_state_ready)
+        {
+            _OnStateReady();
+            return true;
+        }
+        if (__vsn_on_state_synchronized == 0) __vsn_on_state_synchronized = StringNames.Get("_on_state_synchronized").Opaque;
+        if (nameSn == __vsn_on_state_synchronized)
+        {
+            _OnStateSynchronized();
+            return true;
+        }
+        if (__vsn_on_state_visible == 0) __vsn_on_state_visible = StringNames.Get("_on_state_visible").Opaque;
+        if (nameSn == __vsn_on_state_visible)
+        {
+            _OnStateVisible();
+            return true;
+        }
+        if (__vsn_on_state_focused == 0) __vsn_on_state_focused = StringNames.Get("_on_state_focused").Opaque;
+        if (nameSn == __vsn_on_state_focused)
+        {
+            _OnStateFocused();
+            return true;
+        }
+        if (__vsn_on_state_stopping == 0) __vsn_on_state_stopping = StringNames.Get("_on_state_stopping").Opaque;
+        if (nameSn == __vsn_on_state_stopping)
+        {
+            _OnStateStopping();
+            return true;
+        }
+        if (__vsn_on_state_loss_pending == 0) __vsn_on_state_loss_pending = StringNames.Get("_on_state_loss_pending").Opaque;
+        if (nameSn == __vsn_on_state_loss_pending)
+        {
+            _OnStateLossPending();
+            return true;
+        }
+        if (__vsn_on_state_exiting == 0) __vsn_on_state_exiting = StringNames.Get("_on_state_exiting").Opaque;
+        if (nameSn == __vsn_on_state_exiting)
+        {
+            _OnStateExiting();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class OpenXRExtensionWrapperExtension : OpenXRExtensionWrapper
 {
     internal OpenXRExtensionWrapperExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRExtensionWrapperExtension() : this(InstanceBindings.ConstructRaw("OpenXRExtensionWrapperExtension"), false)
+    public OpenXRExtensionWrapperExtension() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRExtensionWrapperExtension");
     }
 }
 
@@ -4320,9 +4566,9 @@ public unsafe partial class OpenXRFrameSynthesisExtension : OpenXRExtensionWrapp
 {
     internal OpenXRFrameSynthesisExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRFrameSynthesisExtension() : this(InstanceBindings.ConstructRaw("OpenXRFrameSynthesisExtension"), false)
+    public OpenXRFrameSynthesisExtension() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRFrameSynthesisExtension");
     }
 
     private static nint __mb_is_available;
@@ -4420,9 +4666,9 @@ public unsafe partial class OpenXRFutureExtension : OpenXRExtensionWrapper
 {
     internal OpenXRFutureExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRFutureExtension() : this(InstanceBindings.ConstructRaw("OpenXRFutureExtension"), false)
+    public OpenXRFutureExtension() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRFutureExtension");
     }
 
     private static nint __mb_is_active;
@@ -4516,9 +4762,9 @@ public unsafe partial class OpenXRHand : Node3D
 {
     internal OpenXRHand(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRHand() : this(InstanceBindings.ConstructRaw("OpenXRHand"), false)
+    public OpenXRHand() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRHand");
     }
 
     public enum Hands : long
@@ -4683,9 +4929,9 @@ public unsafe partial class OpenXRHapticVibration : OpenXRHapticBase
 {
     internal OpenXRHapticVibration(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRHapticVibration() : this(InstanceBindings.ConstructRaw("OpenXRHapticVibration"), true)
+    public OpenXRHapticVibration() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRHapticVibration");
     }
 
     private static nint __mb_set_duration;
@@ -4786,9 +5032,9 @@ public unsafe partial class OpenXRIPBinding : Resource
 {
     internal OpenXRIPBinding(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRIPBinding() : this(InstanceBindings.ConstructRaw("OpenXRIPBinding"), true)
+    public OpenXRIPBinding() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRIPBinding");
     }
 
     private static nint __mb_set_action;
@@ -4960,9 +5206,9 @@ public unsafe partial class OpenXRIPBindingModifier : OpenXRBindingModifier
 {
     internal OpenXRIPBindingModifier(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRIPBindingModifier() : this(InstanceBindings.ConstructRaw("OpenXRIPBindingModifier"), true)
+    public OpenXRIPBindingModifier() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRIPBindingModifier");
     }
 }
 
@@ -4970,9 +5216,9 @@ public unsafe partial class OpenXRInteractionProfile : Resource
 {
     internal OpenXRInteractionProfile(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRInteractionProfile() : this(InstanceBindings.ConstructRaw("OpenXRInteractionProfile"), true)
+    public OpenXRInteractionProfile() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRInteractionProfile");
     }
 
     private static nint __mb_set_interaction_profile_path;
@@ -5078,9 +5324,9 @@ public unsafe partial class OpenXRInteractionProfileEditor : OpenXRInteractionPr
 {
     internal OpenXRInteractionProfileEditor(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRInteractionProfileEditor() : this(InstanceBindings.ConstructRaw("OpenXRInteractionProfileEditor"), false)
+    public OpenXRInteractionProfileEditor() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRInteractionProfileEditor");
     }
 }
 
@@ -5111,9 +5357,9 @@ public unsafe partial class OpenXRInteractionProfileMetadata : GodotObject
 {
     internal OpenXRInteractionProfileMetadata(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRInteractionProfileMetadata() : this(InstanceBindings.ConstructRaw("OpenXRInteractionProfileMetadata"), false)
+    public OpenXRInteractionProfileMetadata() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRInteractionProfileMetadata");
     }
 
     private static nint __mb_register_profile_rename;
@@ -5238,9 +5484,9 @@ public unsafe partial class OpenXRInterface : XRInterface
 {
     internal OpenXRInterface(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRInterface() : this(InstanceBindings.ConstructRaw("OpenXRInterface"), true)
+    public OpenXRInterface() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRInterface");
     }
 
     public enum SessionState : long
@@ -5914,9 +6160,9 @@ public unsafe partial class OpenXRMarkerTracker : OpenXRSpatialEntityTracker
 {
     internal OpenXRMarkerTracker(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRMarkerTracker() : this(InstanceBindings.ConstructRaw("OpenXRMarkerTracker"), true)
+    public OpenXRMarkerTracker() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRMarkerTracker");
     }
 
     private static nint __mb_set_bounds_size;
@@ -6017,9 +6263,9 @@ public unsafe partial class OpenXRPlaneTracker : OpenXRSpatialEntityTracker
 {
     internal OpenXRPlaneTracker(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRPlaneTracker() : this(InstanceBindings.ConstructRaw("OpenXRPlaneTracker"), true)
+    public OpenXRPlaneTracker() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRPlaneTracker");
     }
 
     private static nint __mb_set_bounds_size;
@@ -6182,9 +6428,9 @@ public unsafe partial class OpenXRRenderModel : Node3D
 {
     internal OpenXRRenderModel(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRRenderModel() : this(InstanceBindings.ConstructRaw("OpenXRRenderModel"), false)
+    public OpenXRRenderModel() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRRenderModel");
     }
 
     private static nint __mb_get_top_level_path;
@@ -6238,9 +6484,9 @@ public unsafe partial class OpenXRRenderModelExtension : OpenXRExtensionWrapper
 {
     internal OpenXRRenderModelExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRRenderModelExtension() : this(InstanceBindings.ConstructRaw("OpenXRRenderModelExtension"), false)
+    public OpenXRRenderModelExtension() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRRenderModelExtension");
     }
 
     private static nint __mb_is_active;
@@ -6447,9 +6693,9 @@ public unsafe partial class OpenXRRenderModelManager : Node3D
 {
     internal OpenXRRenderModelManager(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRRenderModelManager() : this(InstanceBindings.ConstructRaw("OpenXRRenderModelManager"), false)
+    public OpenXRRenderModelManager() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRRenderModelManager");
     }
 
     public enum RenderModelTracker : long
@@ -6528,9 +6774,9 @@ public unsafe partial class OpenXRSpatialAnchorCapability : OpenXRExtensionWrapp
 {
     internal OpenXRSpatialAnchorCapability(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialAnchorCapability() : this(InstanceBindings.ConstructRaw("OpenXRSpatialAnchorCapability"), false)
+    public OpenXRSpatialAnchorCapability() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialAnchorCapability");
     }
 
     public enum PersistenceScope : long
@@ -6664,9 +6910,9 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationAnchor : OpenXRS
 {
     internal OpenXRSpatialCapabilityConfigurationAnchor(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialCapabilityConfigurationAnchor() : this(InstanceBindings.ConstructRaw("OpenXRSpatialCapabilityConfigurationAnchor"), true)
+    public OpenXRSpatialCapabilityConfigurationAnchor() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialCapabilityConfigurationAnchor");
     }
 }
 
@@ -6674,9 +6920,9 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationAprilTag : OpenX
 {
     internal OpenXRSpatialCapabilityConfigurationAprilTag(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialCapabilityConfigurationAprilTag() : this(InstanceBindings.ConstructRaw("OpenXRSpatialCapabilityConfigurationAprilTag"), true)
+    public OpenXRSpatialCapabilityConfigurationAprilTag() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialCapabilityConfigurationAprilTag");
     }
 
     public enum AprilTagDict : long
@@ -6723,9 +6969,9 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationAruco : OpenXRSp
 {
     internal OpenXRSpatialCapabilityConfigurationAruco(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialCapabilityConfigurationAruco() : this(InstanceBindings.ConstructRaw("OpenXRSpatialCapabilityConfigurationAruco"), true)
+    public OpenXRSpatialCapabilityConfigurationAruco() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialCapabilityConfigurationAruco");
     }
 
     public enum ArucoDict : long
@@ -6784,9 +7030,9 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationBaseHeader : Ref
 {
     internal OpenXRSpatialCapabilityConfigurationBaseHeader(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialCapabilityConfigurationBaseHeader() : this(InstanceBindings.ConstructRaw("OpenXRSpatialCapabilityConfigurationBaseHeader"), true)
+    public OpenXRSpatialCapabilityConfigurationBaseHeader() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialCapabilityConfigurationBaseHeader");
     }
 
     private static nint __mb_has_valid_configuration;
@@ -6818,15 +7064,39 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationBaseHeader : Ref
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
+
+    public virtual bool _HasValidConfiguration() => default!;
+
+    public virtual ulong _GetConfiguration() => default!;
+
+    private static ulong __vsn_has_valid_configuration;
+    private static ulong __vsn_get_configuration;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_has_valid_configuration == 0) __vsn_has_valid_configuration = StringNames.Get("_has_valid_configuration").Opaque;
+        if (nameSn == __vsn_has_valid_configuration)
+        {
+            *(byte*)ret = _HasValidConfiguration() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_configuration == 0) __vsn_get_configuration = StringNames.Get("_get_configuration").Opaque;
+        if (nameSn == __vsn_get_configuration)
+        {
+            *(long*)ret = unchecked((long)_GetConfiguration());
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class OpenXRSpatialCapabilityConfigurationMicroQrCode : OpenXRSpatialCapabilityConfigurationBaseHeader
 {
     internal OpenXRSpatialCapabilityConfigurationMicroQrCode(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialCapabilityConfigurationMicroQrCode() : this(InstanceBindings.ConstructRaw("OpenXRSpatialCapabilityConfigurationMicroQrCode"), true)
+    public OpenXRSpatialCapabilityConfigurationMicroQrCode() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialCapabilityConfigurationMicroQrCode");
     }
 }
 
@@ -6834,9 +7104,9 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationPlaneTracking : 
 {
     internal OpenXRSpatialCapabilityConfigurationPlaneTracking(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialCapabilityConfigurationPlaneTracking() : this(InstanceBindings.ConstructRaw("OpenXRSpatialCapabilityConfigurationPlaneTracking"), true)
+    public OpenXRSpatialCapabilityConfigurationPlaneTracking() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialCapabilityConfigurationPlaneTracking");
     }
 
     private static nint __mb_supports_mesh_2d;
@@ -6889,9 +7159,9 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationQrCode : OpenXRS
 {
     internal OpenXRSpatialCapabilityConfigurationQrCode(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialCapabilityConfigurationQrCode() : this(InstanceBindings.ConstructRaw("OpenXRSpatialCapabilityConfigurationQrCode"), true)
+    public OpenXRSpatialCapabilityConfigurationQrCode() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialCapabilityConfigurationQrCode");
     }
 }
 
@@ -6899,9 +7169,9 @@ public unsafe partial class OpenXRSpatialComponentAnchorList : OpenXRSpatialComp
 {
     internal OpenXRSpatialComponentAnchorList(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialComponentAnchorList() : this(InstanceBindings.ConstructRaw("OpenXRSpatialComponentAnchorList"), true)
+    public OpenXRSpatialComponentAnchorList() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialComponentAnchorList");
     }
 
     private static nint __mb_get_entity_pose;
@@ -6927,9 +7197,9 @@ public unsafe partial class OpenXRSpatialComponentBounded2DList : OpenXRSpatialC
 {
     internal OpenXRSpatialComponentBounded2DList(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialComponentBounded2DList() : this(InstanceBindings.ConstructRaw("OpenXRSpatialComponentBounded2DList"), true)
+    public OpenXRSpatialComponentBounded2DList() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialComponentBounded2DList");
     }
 
     private static nint __mb_get_center_pose;
@@ -6973,9 +7243,9 @@ public unsafe partial class OpenXRSpatialComponentBounded3DList : OpenXRSpatialC
 {
     internal OpenXRSpatialComponentBounded3DList(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialComponentBounded3DList() : this(InstanceBindings.ConstructRaw("OpenXRSpatialComponentBounded3DList"), true)
+    public OpenXRSpatialComponentBounded3DList() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialComponentBounded3DList");
     }
 
     private static nint __mb_get_center_pose;
@@ -7019,9 +7289,9 @@ public unsafe partial class OpenXRSpatialComponentData : RefCounted
 {
     internal OpenXRSpatialComponentData(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialComponentData() : this(InstanceBindings.ConstructRaw("OpenXRSpatialComponentData"), true)
+    public OpenXRSpatialComponentData() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialComponentData");
     }
 
     private static nint __mb_set_capacity;
@@ -7054,15 +7324,48 @@ public unsafe partial class OpenXRSpatialComponentData : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((long)__ret);
     }
+
+    public virtual void _SetCapacity(uint capacity) { }
+
+    public virtual ulong _GetComponentType() => default!;
+
+    public virtual ulong _GetStructureData(ulong next) => default!;
+
+    private static ulong __vsn_set_capacity;
+    private static ulong __vsn_get_component_type;
+    private static ulong __vsn_get_structure_data;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_set_capacity == 0) __vsn_set_capacity = StringNames.Get("_set_capacity").Opaque;
+        if (nameSn == __vsn_set_capacity)
+        {
+            _SetCapacity(unchecked((uint)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_component_type == 0) __vsn_get_component_type = StringNames.Get("_get_component_type").Opaque;
+        if (nameSn == __vsn_get_component_type)
+        {
+            *(long*)ret = unchecked((long)_GetComponentType());
+            return true;
+        }
+        if (__vsn_get_structure_data == 0) __vsn_get_structure_data = StringNames.Get("_get_structure_data").Opaque;
+        if (nameSn == __vsn_get_structure_data)
+        {
+            *(long*)ret = unchecked((long)_GetStructureData(unchecked((ulong)(*(long*)args[0]))));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class OpenXRSpatialComponentMarkerList : OpenXRSpatialComponentData
 {
     internal OpenXRSpatialComponentMarkerList(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialComponentMarkerList() : this(InstanceBindings.ConstructRaw("OpenXRSpatialComponentMarkerList"), true)
+    public OpenXRSpatialComponentMarkerList() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialComponentMarkerList");
     }
 
     public enum MarkerType : long
@@ -7116,9 +7419,9 @@ public unsafe partial class OpenXRSpatialComponentMesh2DList : OpenXRSpatialComp
 {
     internal OpenXRSpatialComponentMesh2DList(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialComponentMesh2DList() : this(InstanceBindings.ConstructRaw("OpenXRSpatialComponentMesh2DList"), true)
+    public OpenXRSpatialComponentMesh2DList() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialComponentMesh2DList");
     }
 
     private static nint __mb_get_transform;
@@ -7144,9 +7447,9 @@ public unsafe partial class OpenXRSpatialComponentMesh3DList : OpenXRSpatialComp
 {
     internal OpenXRSpatialComponentMesh3DList(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialComponentMesh3DList() : this(InstanceBindings.ConstructRaw("OpenXRSpatialComponentMesh3DList"), true)
+    public OpenXRSpatialComponentMesh3DList() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialComponentMesh3DList");
     }
 
     private static nint __mb_get_transform;
@@ -7190,9 +7493,9 @@ public unsafe partial class OpenXRSpatialComponentParentList : OpenXRSpatialComp
 {
     internal OpenXRSpatialComponentParentList(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialComponentParentList() : this(InstanceBindings.ConstructRaw("OpenXRSpatialComponentParentList"), true)
+    public OpenXRSpatialComponentParentList() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialComponentParentList");
     }
 
     private static nint __mb_get_parent;
@@ -7218,9 +7521,9 @@ public unsafe partial class OpenXRSpatialComponentPersistenceList : OpenXRSpatia
 {
     internal OpenXRSpatialComponentPersistenceList(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialComponentPersistenceList() : this(InstanceBindings.ConstructRaw("OpenXRSpatialComponentPersistenceList"), true)
+    public OpenXRSpatialComponentPersistenceList() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialComponentPersistenceList");
     }
 
     private static nint __mb_get_persistent_uuid;
@@ -7264,9 +7567,9 @@ public unsafe partial class OpenXRSpatialComponentPlaneAlignmentList : OpenXRSpa
 {
     internal OpenXRSpatialComponentPlaneAlignmentList(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialComponentPlaneAlignmentList() : this(InstanceBindings.ConstructRaw("OpenXRSpatialComponentPlaneAlignmentList"), true)
+    public OpenXRSpatialComponentPlaneAlignmentList() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialComponentPlaneAlignmentList");
     }
 
     public enum PlaneAlignment : long
@@ -7300,9 +7603,9 @@ public unsafe partial class OpenXRSpatialComponentPlaneSemanticLabelList : OpenX
 {
     internal OpenXRSpatialComponentPlaneSemanticLabelList(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialComponentPlaneSemanticLabelList() : this(InstanceBindings.ConstructRaw("OpenXRSpatialComponentPlaneSemanticLabelList"), true)
+    public OpenXRSpatialComponentPlaneSemanticLabelList() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialComponentPlaneSemanticLabelList");
     }
 
     public enum PlaneSemanticLabel : long
@@ -7337,9 +7640,9 @@ public unsafe partial class OpenXRSpatialComponentPolygon2DList : OpenXRSpatialC
 {
     internal OpenXRSpatialComponentPolygon2DList(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialComponentPolygon2DList() : this(InstanceBindings.ConstructRaw("OpenXRSpatialComponentPolygon2DList"), true)
+    public OpenXRSpatialComponentPolygon2DList() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialComponentPolygon2DList");
     }
 
     private static nint __mb_get_transform;
@@ -7365,9 +7668,9 @@ public unsafe partial class OpenXRSpatialContextPersistenceConfig : OpenXRStruct
 {
     internal OpenXRSpatialContextPersistenceConfig(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialContextPersistenceConfig() : this(InstanceBindings.ConstructRaw("OpenXRSpatialContextPersistenceConfig"), true)
+    public OpenXRSpatialContextPersistenceConfig() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialContextPersistenceConfig");
     }
 
     private static nint __mb_add_persistence_context;
@@ -7407,9 +7710,9 @@ public unsafe partial class OpenXRSpatialEntityExtension : OpenXRExtensionWrappe
 {
     internal OpenXRSpatialEntityExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialEntityExtension() : this(InstanceBindings.ConstructRaw("OpenXRSpatialEntityExtension"), false)
+    public OpenXRSpatialEntityExtension() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialEntityExtension");
     }
 
     public enum Capability : long
@@ -7716,9 +8019,9 @@ public unsafe partial class OpenXRSpatialEntityTracker : XRPositionalTracker
 {
     internal OpenXRSpatialEntityTracker(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialEntityTracker() : this(InstanceBindings.ConstructRaw("OpenXRSpatialEntityTracker"), true)
+    public OpenXRSpatialEntityTracker() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialEntityTracker");
     }
 
     public enum EntityTrackingState : long
@@ -7873,9 +8176,9 @@ public unsafe partial class OpenXRSpatialMarkerTrackingCapability : OpenXRExtens
 {
     internal OpenXRSpatialMarkerTrackingCapability(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialMarkerTrackingCapability() : this(InstanceBindings.ConstructRaw("OpenXRSpatialMarkerTrackingCapability"), false)
+    public OpenXRSpatialMarkerTrackingCapability() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialMarkerTrackingCapability");
     }
 
     private static nint __mb_is_qrcode_supported;
@@ -7943,9 +8246,9 @@ public unsafe partial class OpenXRSpatialPlaneTrackingCapability : OpenXRExtensi
 {
     internal OpenXRSpatialPlaneTrackingCapability(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialPlaneTrackingCapability() : this(InstanceBindings.ConstructRaw("OpenXRSpatialPlaneTrackingCapability"), false)
+    public OpenXRSpatialPlaneTrackingCapability() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialPlaneTrackingCapability");
     }
 
     private static nint __mb_is_supported;
@@ -7968,9 +8271,9 @@ public unsafe partial class OpenXRSpatialQueryResultData : OpenXRSpatialComponen
 {
     internal OpenXRSpatialQueryResultData(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRSpatialQueryResultData() : this(InstanceBindings.ConstructRaw("OpenXRSpatialQueryResultData"), true)
+    public OpenXRSpatialQueryResultData() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRSpatialQueryResultData");
     }
 
     private static nint __mb_get_capacity;
@@ -8029,9 +8332,9 @@ public unsafe partial class OpenXRStructureBase : RefCounted
 {
     internal OpenXRStructureBase(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRStructureBase() : this(InstanceBindings.ConstructRaw("OpenXRStructureBase"), true)
+    public OpenXRStructureBase() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRStructureBase");
     }
 
     private static nint __mb_get_structure_type;
@@ -8079,15 +8382,30 @@ public unsafe partial class OpenXRStructureBase : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (OpenXRStructureBase?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
+
+    public virtual ulong _GetHeader(ulong next) => default!;
+
+    private static ulong __vsn_get_header;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_header == 0) __vsn_get_header = StringNames.Get("_get_header").Opaque;
+        if (nameSn == __vsn_get_header)
+        {
+            *(long*)ret = unchecked((long)_GetHeader(unchecked((ulong)(*(long*)args[0]))));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class OpenXRVisibilityMask : VisualInstance3D
 {
     internal OpenXRVisibilityMask(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OpenXRVisibilityMask() : this(InstanceBindings.ConstructRaw("OpenXRVisibilityMask"), false)
+    public OpenXRVisibilityMask() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OpenXRVisibilityMask");
     }
 }
 
@@ -8095,9 +8413,9 @@ public unsafe partial class OptimizedTranslation : Translation
 {
     internal OptimizedTranslation(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OptimizedTranslation() : this(InstanceBindings.ConstructRaw("OptimizedTranslation"), true)
+    public OptimizedTranslation() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OptimizedTranslation");
     }
 
     private static nint __mb_generate;
@@ -8123,9 +8441,9 @@ public unsafe partial class OptionButton : Button
 {
     internal OptionButton(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public OptionButton() : this(InstanceBindings.ConstructRaw("OptionButton"), false)
+    public OptionButton() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "OptionButton");
     }
 
     private static nint __mb_add_item;

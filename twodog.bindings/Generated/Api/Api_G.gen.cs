@@ -14,9 +14,9 @@ public unsafe partial class GDExtension : Resource
 {
     internal GDExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GDExtension() : this(InstanceBindings.ConstructRaw("GDExtension"), true)
+    public GDExtension() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GDExtension");
     }
 
     public enum InitializationLevel : long
@@ -174,9 +174,9 @@ public unsafe partial class GDScript : Script
 {
     internal GDScript(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GDScript() : this(InstanceBindings.ConstructRaw("GDScript"), true)
+    public GDScript() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GDScript");
     }
 }
 
@@ -184,9 +184,9 @@ public unsafe partial class GDScriptLanguageProtocol : JSONRPC
 {
     internal GDScriptLanguageProtocol(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GDScriptLanguageProtocol() : this(InstanceBindings.ConstructRaw("GDScriptLanguageProtocol"), false)
+    public GDScriptLanguageProtocol() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GDScriptLanguageProtocol");
     }
 
     private static GDScriptLanguageProtocol? _singleton;
@@ -288,9 +288,9 @@ public unsafe partial class GDScriptSyntaxHighlighter : EditorSyntaxHighlighter
 {
     internal GDScriptSyntaxHighlighter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GDScriptSyntaxHighlighter() : this(InstanceBindings.ConstructRaw("GDScriptSyntaxHighlighter"), true)
+    public GDScriptSyntaxHighlighter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GDScriptSyntaxHighlighter");
     }
 }
 
@@ -298,9 +298,9 @@ public unsafe partial class GDScriptTextDocument : RefCounted
 {
     internal GDScriptTextDocument(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GDScriptTextDocument() : this(InstanceBindings.ConstructRaw("GDScriptTextDocument"), true)
+    public GDScriptTextDocument() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GDScriptTextDocument");
     }
 
     private static nint __mb_show_native_symbol_in_editor;
@@ -325,9 +325,9 @@ public unsafe partial class GDScriptWorkspace : RefCounted
 {
     internal GDScriptWorkspace(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GDScriptWorkspace() : this(InstanceBindings.ConstructRaw("GDScriptWorkspace"), true)
+    public GDScriptWorkspace() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GDScriptWorkspace");
     }
 
     private static nint __mb_get_file_path;
@@ -431,9 +431,9 @@ public unsafe partial class GLTFAccessor : Resource
 {
     internal GLTFAccessor(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFAccessor() : this(InstanceBindings.ConstructRaw("GLTFAccessor"), true)
+    public GLTFAccessor() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFAccessor");
     }
 
     public enum GLTFAccessorType : long
@@ -856,9 +856,9 @@ public unsafe partial class GLTFAnimation : Resource
 {
     internal GLTFAnimation(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFAnimation() : this(InstanceBindings.ConstructRaw("GLTFAnimation"), true)
+    public GLTFAnimation() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFAnimation");
     }
 
     private static nint __mb_get_original_name;
@@ -929,9 +929,9 @@ public unsafe partial class GLTFBufferView : Resource
 {
     internal GLTFBufferView(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFBufferView() : this(InstanceBindings.ConstructRaw("GLTFBufferView"), true)
+    public GLTFBufferView() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFBufferView");
     }
 
     private static nint __mb_get_buffer;
@@ -1125,9 +1125,9 @@ public unsafe partial class GLTFCamera : Resource
 {
     internal GLTFCamera(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFCamera() : this(InstanceBindings.ConstructRaw("GLTFCamera"), true)
+    public GLTFCamera() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFCamera");
     }
 
     private static nint __mb_from_node;
@@ -1323,9 +1323,9 @@ public unsafe partial class GLTFDocument : Resource
 {
     internal GLTFDocument(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFDocument() : this(InstanceBindings.ConstructRaw("GLTFDocument"), true)
+    public GLTFDocument() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFDocument");
     }
 
     public enum RootNodeMode : long
@@ -1729,9 +1729,114 @@ public unsafe partial class GLTFDocumentExtension : Resource
 {
     internal GLTFDocumentExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFDocumentExtension() : this(InstanceBindings.ConstructRaw("GLTFDocumentExtension"), true)
+    public GLTFDocumentExtension() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFDocumentExtension");
+    }
+
+    public virtual string _GetImageFileExtension() => default!;
+
+    public virtual Error _ImportPostParse(GLTFState? state) => default!;
+
+    public virtual Error _ImportPreGenerate(GLTFState? state) => default!;
+
+    public virtual Node3D? _GenerateSceneNode(GLTFState? state, GLTFNode? gltfNode, Node? sceneParent) => default!;
+
+    public virtual Error _ImportPost(GLTFState? state, Node? root) => default!;
+
+    public virtual Error _ExportPreflight(GLTFState? state, Node? root) => default!;
+
+    public virtual void _ConvertSceneNode(GLTFState? state, GLTFNode? gltfNode, Node? sceneNode) { }
+
+    public virtual Error _ExportPostConvert(GLTFState? state, Node? root) => default!;
+
+    public virtual Error _ExportPreserialize(GLTFState? state) => default!;
+
+    public virtual Error _SaveImageAtPath(GLTFState? state, Image? image, string filePath, string imageFormat, float lossyQuality) => default!;
+
+    public virtual Error _ExportPost(GLTFState? state) => default!;
+
+    private static ulong __vsn_get_image_file_extension;
+    private static ulong __vsn_import_post_parse;
+    private static ulong __vsn_import_pre_generate;
+    private static ulong __vsn_generate_scene_node;
+    private static ulong __vsn_import_post;
+    private static ulong __vsn_export_preflight;
+    private static ulong __vsn_convert_scene_node;
+    private static ulong __vsn_export_post_convert;
+    private static ulong __vsn_export_preserialize;
+    private static ulong __vsn_save_image_at_path;
+    private static ulong __vsn_export_post;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_image_file_extension == 0) __vsn_get_image_file_extension = StringNames.Get("_get_image_file_extension").Opaque;
+        if (nameSn == __vsn_get_image_file_extension)
+        {
+            *(ulong*)ret = NativeString.Create(_GetImageFileExtension() ?? "");
+            return true;
+        }
+        if (__vsn_import_post_parse == 0) __vsn_import_post_parse = StringNames.Get("_import_post_parse").Opaque;
+        if (nameSn == __vsn_import_post_parse)
+        {
+            *(long*)ret = (long)_ImportPostParse((GLTFState?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_import_pre_generate == 0) __vsn_import_pre_generate = StringNames.Get("_import_pre_generate").Opaque;
+        if (nameSn == __vsn_import_pre_generate)
+        {
+            *(long*)ret = (long)_ImportPreGenerate((GLTFState?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_generate_scene_node == 0) __vsn_generate_scene_node = StringNames.Get("_generate_scene_node").Opaque;
+        if (nameSn == __vsn_generate_scene_node)
+        {
+            *(nint*)ret = _GenerateSceneNode((GLTFState?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (GLTFNode?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false), (Node?)InstanceBindings.GetOrCreate(*(nint*)args[2], adoptRef: false))?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_import_post == 0) __vsn_import_post = StringNames.Get("_import_post").Opaque;
+        if (nameSn == __vsn_import_post)
+        {
+            *(long*)ret = (long)_ImportPost((GLTFState?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (Node?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false));
+            return true;
+        }
+        if (__vsn_export_preflight == 0) __vsn_export_preflight = StringNames.Get("_export_preflight").Opaque;
+        if (nameSn == __vsn_export_preflight)
+        {
+            *(long*)ret = (long)_ExportPreflight((GLTFState?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (Node?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false));
+            return true;
+        }
+        if (__vsn_convert_scene_node == 0) __vsn_convert_scene_node = StringNames.Get("_convert_scene_node").Opaque;
+        if (nameSn == __vsn_convert_scene_node)
+        {
+            _ConvertSceneNode((GLTFState?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (GLTFNode?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false), (Node?)InstanceBindings.GetOrCreate(*(nint*)args[2], adoptRef: false));
+            return true;
+        }
+        if (__vsn_export_post_convert == 0) __vsn_export_post_convert = StringNames.Get("_export_post_convert").Opaque;
+        if (nameSn == __vsn_export_post_convert)
+        {
+            *(long*)ret = (long)_ExportPostConvert((GLTFState?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (Node?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false));
+            return true;
+        }
+        if (__vsn_export_preserialize == 0) __vsn_export_preserialize = StringNames.Get("_export_preserialize").Opaque;
+        if (nameSn == __vsn_export_preserialize)
+        {
+            *(long*)ret = (long)_ExportPreserialize((GLTFState?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_save_image_at_path == 0) __vsn_save_image_at_path = StringNames.Get("_save_image_at_path").Opaque;
+        if (nameSn == __vsn_save_image_at_path)
+        {
+            *(long*)ret = (long)_SaveImageAtPath((GLTFState?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (Image?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false), NativeString.Read(*(ulong*)args[2]), NativeString.Read(*(ulong*)args[3]), (float)(*(double*)args[4]));
+            return true;
+        }
+        if (__vsn_export_post == 0) __vsn_export_post = StringNames.Get("_export_post").Opaque;
+        if (nameSn == __vsn_export_post)
+        {
+            *(long*)ret = (long)_ExportPost((GLTFState?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -1739,9 +1844,9 @@ public unsafe partial class GLTFDocumentExtensionConvertImporterMesh : GLTFDocum
 {
     internal GLTFDocumentExtensionConvertImporterMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFDocumentExtensionConvertImporterMesh() : this(InstanceBindings.ConstructRaw("GLTFDocumentExtensionConvertImporterMesh"), true)
+    public GLTFDocumentExtensionConvertImporterMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFDocumentExtensionConvertImporterMesh");
     }
 }
 
@@ -1749,9 +1854,9 @@ public unsafe partial class GLTFLight : Resource
 {
     internal GLTFLight(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFLight() : this(InstanceBindings.ConstructRaw("GLTFLight"), true)
+    public GLTFLight() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFLight");
     }
 
     private static nint __mb_from_node;
@@ -1979,9 +2084,9 @@ public unsafe partial class GLTFMesh : Resource
 {
     internal GLTFMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFMesh() : this(InstanceBindings.ConstructRaw("GLTFMesh"), true)
+    public GLTFMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFMesh");
     }
 
     private static nint __mb_get_original_name;
@@ -2052,9 +2157,9 @@ public unsafe partial class GLTFNode : Resource
 {
     internal GLTFNode(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFNode() : this(InstanceBindings.ConstructRaw("GLTFNode"), true)
+    public GLTFNode() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFNode");
     }
 
     private static nint __mb_get_original_name;
@@ -2482,9 +2587,9 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
 {
     internal GLTFObjectModelProperty(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFObjectModelProperty() : this(InstanceBindings.ConstructRaw("GLTFObjectModelProperty"), true)
+    public GLTFObjectModelProperty() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFObjectModelProperty");
     }
 
     public enum GLTFObjectModelType : long
@@ -2694,9 +2799,9 @@ public unsafe partial class GLTFPhysicsBody : Resource
 {
     internal GLTFPhysicsBody(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFPhysicsBody() : this(InstanceBindings.ConstructRaw("GLTFPhysicsBody"), true)
+    public GLTFPhysicsBody() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFPhysicsBody");
     }
 
     private static nint __mb_from_node;
@@ -2986,9 +3091,9 @@ public unsafe partial class GLTFPhysicsShape : Resource
 {
     internal GLTFPhysicsShape(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFPhysicsShape() : this(InstanceBindings.ConstructRaw("GLTFPhysicsShape"), true)
+    public GLTFPhysicsShape() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFPhysicsShape");
     }
 
     private static nint __mb_from_node;
@@ -3286,9 +3391,9 @@ public unsafe partial class GLTFSkeleton : Resource
 {
     internal GLTFSkeleton(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFSkeleton() : this(InstanceBindings.ConstructRaw("GLTFSkeleton"), true)
+    public GLTFSkeleton() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFSkeleton");
     }
 
     private static nint __mb_get_godot_skeleton;
@@ -3344,9 +3449,9 @@ public unsafe partial class GLTFSkin : Resource
 {
     internal GLTFSkin(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFSkin() : this(InstanceBindings.ConstructRaw("GLTFSkin"), true)
+    public GLTFSkin() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFSkin");
     }
 
     private static nint __mb_get_skin_root;
@@ -3447,9 +3552,9 @@ public unsafe partial class GLTFSpecGloss : Resource
 {
     internal GLTFSpecGloss(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFSpecGloss() : this(InstanceBindings.ConstructRaw("GLTFSpecGloss"), true)
+    public GLTFSpecGloss() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFSpecGloss");
     }
 
     private static nint __mb_get_diffuse_img;
@@ -3612,9 +3717,9 @@ public unsafe partial class GLTFState : Resource
 {
     internal GLTFState(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFState() : this(InstanceBindings.ConstructRaw("GLTFState"), true)
+    public GLTFState() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFState");
     }
 
     public enum HandleBinaryImageMode : long
@@ -4119,9 +4224,9 @@ public unsafe partial class GLTFTexture : Resource
 {
     internal GLTFTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFTexture() : this(InstanceBindings.ConstructRaw("GLTFTexture"), true)
+    public GLTFTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFTexture");
     }
 
     private static nint __mb_get_src_image;
@@ -4191,9 +4296,9 @@ public unsafe partial class GLTFTextureSampler : Resource
 {
     internal GLTFTextureSampler(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GLTFTextureSampler() : this(InstanceBindings.ConstructRaw("GLTFTextureSampler"), true)
+    public GLTFTextureSampler() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GLTFTextureSampler");
     }
 
     private static nint __mb_get_mag_filter;
@@ -4325,9 +4430,9 @@ public unsafe partial class GPUParticles2D : Node2D
 {
     internal GPUParticles2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GPUParticles2D() : this(InstanceBindings.ConstructRaw("GPUParticles2D"), false)
+    public GPUParticles2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GPUParticles2D");
     }
 
     public enum DrawOrder : long
@@ -5215,9 +5320,9 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
 {
     internal GPUParticles3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GPUParticles3D() : this(InstanceBindings.ConstructRaw("GPUParticles3D"), false)
+    public GPUParticles3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GPUParticles3D");
     }
 
     public enum DrawOrder : long
@@ -6342,9 +6447,9 @@ public unsafe partial class GPUParticlesAttractorBox3D : GPUParticlesAttractor3D
 {
     internal GPUParticlesAttractorBox3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GPUParticlesAttractorBox3D() : this(InstanceBindings.ConstructRaw("GPUParticlesAttractorBox3D"), false)
+    public GPUParticlesAttractorBox3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GPUParticlesAttractorBox3D");
     }
 
     private static nint __mb_set_size;
@@ -6383,9 +6488,9 @@ public unsafe partial class GPUParticlesAttractorSphere3D : GPUParticlesAttracto
 {
     internal GPUParticlesAttractorSphere3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GPUParticlesAttractorSphere3D() : this(InstanceBindings.ConstructRaw("GPUParticlesAttractorSphere3D"), false)
+    public GPUParticlesAttractorSphere3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GPUParticlesAttractorSphere3D");
     }
 
     private static nint __mb_set_radius;
@@ -6424,9 +6529,9 @@ public unsafe partial class GPUParticlesAttractorVectorField3D : GPUParticlesAtt
 {
     internal GPUParticlesAttractorVectorField3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GPUParticlesAttractorVectorField3D() : this(InstanceBindings.ConstructRaw("GPUParticlesAttractorVectorField3D"), false)
+    public GPUParticlesAttractorVectorField3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GPUParticlesAttractorVectorField3D");
     }
 
     private static nint __mb_set_size;
@@ -6532,9 +6637,9 @@ public unsafe partial class GPUParticlesCollisionBox3D : GPUParticlesCollision3D
 {
     internal GPUParticlesCollisionBox3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GPUParticlesCollisionBox3D() : this(InstanceBindings.ConstructRaw("GPUParticlesCollisionBox3D"), false)
+    public GPUParticlesCollisionBox3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GPUParticlesCollisionBox3D");
     }
 
     private static nint __mb_set_size;
@@ -6573,9 +6678,9 @@ public unsafe partial class GPUParticlesCollisionHeightField3D : GPUParticlesCol
 {
     internal GPUParticlesCollisionHeightField3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GPUParticlesCollisionHeightField3D() : this(InstanceBindings.ConstructRaw("GPUParticlesCollisionHeightField3D"), false)
+    public GPUParticlesCollisionHeightField3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GPUParticlesCollisionHeightField3D");
     }
 
     public enum Resolution : long
@@ -6791,9 +6896,9 @@ public unsafe partial class GPUParticlesCollisionSDF3D : GPUParticlesCollision3D
 {
     internal GPUParticlesCollisionSDF3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GPUParticlesCollisionSDF3D() : this(InstanceBindings.ConstructRaw("GPUParticlesCollisionSDF3D"), false)
+    public GPUParticlesCollisionSDF3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GPUParticlesCollisionSDF3D");
     }
 
     public enum Resolution : long
@@ -7003,9 +7108,9 @@ public unsafe partial class GPUParticlesCollisionSphere3D : GPUParticlesCollisio
 {
     internal GPUParticlesCollisionSphere3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GPUParticlesCollisionSphere3D() : this(InstanceBindings.ConstructRaw("GPUParticlesCollisionSphere3D"), false)
+    public GPUParticlesCollisionSphere3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GPUParticlesCollisionSphere3D");
     }
 
     private static nint __mb_set_radius;
@@ -7044,9 +7149,9 @@ public unsafe partial class Generic6DOFJoint3D : Joint3D
 {
     internal Generic6DOFJoint3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Generic6DOFJoint3D() : this(InstanceBindings.ConstructRaw("Generic6DOFJoint3D"), false)
+    public Generic6DOFJoint3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Generic6DOFJoint3D");
     }
 
     public enum Param : long
@@ -7308,9 +7413,9 @@ public unsafe partial class Geometry2D : GodotObject
 {
     internal Geometry2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Geometry2D() : this(InstanceBindings.ConstructRaw("Geometry2D"), false)
+    public Geometry2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Geometry2D");
     }
 
     private static Geometry2D? _singleton;
@@ -7459,9 +7564,9 @@ public unsafe partial class Geometry3D : GodotObject
 {
     internal Geometry3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Geometry3D() : this(InstanceBindings.ConstructRaw("Geometry3D"), false)
+    public Geometry3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Geometry3D");
     }
 
     private static Geometry3D? _singleton;
@@ -7540,9 +7645,9 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
 {
     internal GeometryInstance3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GeometryInstance3D() : this(InstanceBindings.ConstructRaw("GeometryInstance3D"), false)
+    public GeometryInstance3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GeometryInstance3D");
     }
 
     public enum ShadowCastingSetting : long
@@ -8179,9 +8284,9 @@ public unsafe partial class Gradient : Resource
 {
     internal Gradient(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Gradient() : this(InstanceBindings.ConstructRaw("Gradient"), true)
+    public Gradient() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Gradient");
     }
 
     public enum InterpolationMode : long
@@ -8417,9 +8522,9 @@ public unsafe partial class GradientTexture1D : Texture2D
 {
     internal GradientTexture1D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GradientTexture1D() : this(InstanceBindings.ConstructRaw("GradientTexture1D"), true)
+    public GradientTexture1D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GradientTexture1D");
     }
 
     private static nint __mb_set_gradient;
@@ -8505,9 +8610,9 @@ public unsafe partial class GradientTexture2D : Texture2D
 {
     internal GradientTexture2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GradientTexture2D() : this(InstanceBindings.ConstructRaw("GradientTexture2D"), true)
+    public GradientTexture2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GradientTexture2D");
     }
 
     public enum Fill : long
@@ -8748,9 +8853,9 @@ public unsafe partial class GraphEdit : Control
 {
     internal GraphEdit(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GraphEdit() : this(InstanceBindings.ConstructRaw("GraphEdit"), false)
+    public GraphEdit() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GraphEdit");
     }
 
     public enum PanningScheme : long
@@ -9835,15 +9940,48 @@ public unsafe partial class GraphEdit : Control
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
+
+    public virtual bool _IsInInputHotzone(GodotObject? inNode, int inPort, Vector2 mousePosition) => default!;
+
+    public virtual bool _IsInOutputHotzone(GodotObject? inNode, int inPort, Vector2 mousePosition) => default!;
+
+    public virtual bool _IsNodeHoverValid(string fromNode, int fromPort, string toNode, int toPort) => default!;
+
+    private static ulong __vsn_is_in_input_hotzone;
+    private static ulong __vsn_is_in_output_hotzone;
+    private static ulong __vsn_is_node_hover_valid;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_is_in_input_hotzone == 0) __vsn_is_in_input_hotzone = StringNames.Get("_is_in_input_hotzone").Opaque;
+        if (nameSn == __vsn_is_in_input_hotzone)
+        {
+            *(byte*)ret = _IsInInputHotzone((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), unchecked((int)(*(long*)args[1])), *(Vector2*)args[2]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_is_in_output_hotzone == 0) __vsn_is_in_output_hotzone = StringNames.Get("_is_in_output_hotzone").Opaque;
+        if (nameSn == __vsn_is_in_output_hotzone)
+        {
+            *(byte*)ret = _IsInOutputHotzone((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), unchecked((int)(*(long*)args[1])), *(Vector2*)args[2]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_is_node_hover_valid == 0) __vsn_is_node_hover_valid = StringNames.Get("_is_node_hover_valid").Opaque;
+        if (nameSn == __vsn_is_node_hover_valid)
+        {
+            *(byte*)ret = _IsNodeHoverValid(StringNames.Read(*(ulong*)args[0]), unchecked((int)(*(long*)args[1])), StringNames.Read(*(ulong*)args[2]), unchecked((int)(*(long*)args[3]))) ? (byte)1 : (byte)0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class GraphElement : Container
 {
     internal GraphElement(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GraphElement() : this(InstanceBindings.ConstructRaw("GraphElement"), false)
+    public GraphElement() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GraphElement");
     }
 
     private static nint __mb_set_resizable;
@@ -10037,9 +10175,9 @@ public unsafe partial class GraphFrame : GraphElement
 {
     internal GraphFrame(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GraphFrame() : this(InstanceBindings.ConstructRaw("GraphFrame"), false)
+    public GraphFrame() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GraphFrame");
     }
 
     private static nint __mb_set_title;
@@ -10249,9 +10387,9 @@ public unsafe partial class GraphNode : GraphElement
 {
     internal GraphNode(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GraphNode() : this(InstanceBindings.ConstructRaw("GraphNode"), false)
+    public GraphNode() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GraphNode");
     }
 
     private static nint __mb_set_title;
@@ -10923,15 +11061,30 @@ public unsafe partial class GraphNode : GraphElement
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
+
+    public virtual void _DrawPort(int slotIndex, Vector2I position, bool left, Color color) { }
+
+    private static ulong __vsn_draw_port;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_draw_port == 0) __vsn_draw_port = StringNames.Get("_draw_port").Opaque;
+        if (nameSn == __vsn_draw_port)
+        {
+            _DrawPort(unchecked((int)(*(long*)args[0])), *(Vector2I*)args[1], *(byte*)args[2] != 0, *(Color*)args[3]);
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class GridContainer : Container
 {
     internal GridContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GridContainer() : this(InstanceBindings.ConstructRaw("GridContainer"), false)
+    public GridContainer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GridContainer");
     }
 
     private static nint __mb_set_columns;
@@ -10970,9 +11123,9 @@ public unsafe partial class GridMap : Node3D
 {
     internal GridMap(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GridMap() : this(InstanceBindings.ConstructRaw("GridMap"), false)
+    public GridMap() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GridMap");
     }
 
     public enum DebugVisibilityMode : long
@@ -11735,9 +11888,9 @@ public unsafe partial class GridMapEditorPlugin : EditorPlugin
 {
     internal GridMapEditorPlugin(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GridMapEditorPlugin() : this(InstanceBindings.ConstructRaw("GridMapEditorPlugin"), false)
+    public GridMapEditorPlugin() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GridMapEditorPlugin");
     }
 
     private static nint __mb_get_current_grid_map;
@@ -11852,9 +12005,9 @@ public unsafe partial class GrooveJoint2D : Joint2D
 {
     internal GrooveJoint2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public GrooveJoint2D() : this(InstanceBindings.ConstructRaw("GrooveJoint2D"), false)
+    public GrooveJoint2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "GrooveJoint2D");
     }
 
     private static nint __mb_set_length;

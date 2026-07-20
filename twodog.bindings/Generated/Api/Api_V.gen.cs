@@ -14,9 +14,9 @@ public unsafe partial class VBoxContainer : BoxContainer
 {
     internal VBoxContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VBoxContainer() : this(InstanceBindings.ConstructRaw("VBoxContainer"), false)
+    public VBoxContainer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VBoxContainer");
     }
 }
 
@@ -24,9 +24,9 @@ public unsafe partial class VFlowContainer : FlowContainer
 {
     internal VFlowContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VFlowContainer() : this(InstanceBindings.ConstructRaw("VFlowContainer"), false)
+    public VFlowContainer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VFlowContainer");
     }
 }
 
@@ -34,9 +34,9 @@ public unsafe partial class VScrollBar : ScrollBar
 {
     internal VScrollBar(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VScrollBar() : this(InstanceBindings.ConstructRaw("VScrollBar"), false)
+    public VScrollBar() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VScrollBar");
     }
 }
 
@@ -44,9 +44,9 @@ public unsafe partial class VSeparator : Separator
 {
     internal VSeparator(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VSeparator() : this(InstanceBindings.ConstructRaw("VSeparator"), false)
+    public VSeparator() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VSeparator");
     }
 }
 
@@ -54,9 +54,9 @@ public unsafe partial class VSlider : Slider
 {
     internal VSlider(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VSlider() : this(InstanceBindings.ConstructRaw("VSlider"), false)
+    public VSlider() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VSlider");
     }
 }
 
@@ -64,9 +64,9 @@ public unsafe partial class VSplitContainer : SplitContainer
 {
     internal VSplitContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VSplitContainer() : this(InstanceBindings.ConstructRaw("VSplitContainer"), false)
+    public VSplitContainer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VSplitContainer");
     }
 }
 
@@ -74,9 +74,9 @@ public unsafe partial class VehicleBody3D : RigidBody3D
 {
     internal VehicleBody3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VehicleBody3D() : this(InstanceBindings.ConstructRaw("VehicleBody3D"), false)
+    public VehicleBody3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VehicleBody3D");
     }
 
     private static nint __mb_set_engine_force;
@@ -177,9 +177,9 @@ public unsafe partial class VehicleWheel3D : Node3D
 {
     internal VehicleWheel3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VehicleWheel3D() : this(InstanceBindings.ConstructRaw("VehicleWheel3D"), false)
+    public VehicleWheel3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VehicleWheel3D");
     }
 
     private static nint __mb_set_radius;
@@ -711,9 +711,9 @@ public unsafe partial class VideoStream : Resource
 {
     internal VideoStream(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VideoStream() : this(InstanceBindings.ConstructRaw("VideoStream"), true)
+    public VideoStream() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VideoStream");
     }
 
     private static nint __mb_set_file;
@@ -747,15 +747,153 @@ public unsafe partial class VideoStream : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
+
+    public virtual VideoStreamPlayback? _InstantiatePlayback() => default!;
+
+    private static ulong __vsn_instantiate_playback;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_instantiate_playback == 0) __vsn_instantiate_playback = StringNames.Get("_instantiate_playback").Opaque;
+        if (nameSn == __vsn_instantiate_playback)
+        {
+            *(nint*)ret = _InstantiatePlayback()?.NativePtr ?? 0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class VideoStreamPlayback : Resource
 {
     internal VideoStreamPlayback(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VideoStreamPlayback() : this(InstanceBindings.ConstructRaw("VideoStreamPlayback"), true)
+    public VideoStreamPlayback() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VideoStreamPlayback");
+    }
+
+    public virtual void _Stop() { }
+
+    public virtual void _Play() { }
+
+    public virtual bool _IsPlaying() => default!;
+
+    public virtual void _SetPaused(bool paused) { }
+
+    public virtual bool _IsPaused() => default!;
+
+    public virtual double _GetLength() => default!;
+
+    public virtual double _GetPlaybackPosition() => default!;
+
+    public virtual void _Seek(double time) { }
+
+    public virtual void _SetAudioTrack(int idx) { }
+
+    public virtual Texture2D? _GetTexture() => default!;
+
+    public virtual void _Update(double delta) { }
+
+    public virtual int _GetChannels() => default!;
+
+    public virtual int _GetMixRate() => default!;
+
+    private static ulong __vsn_stop;
+    private static ulong __vsn_play;
+    private static ulong __vsn_is_playing;
+    private static ulong __vsn_set_paused;
+    private static ulong __vsn_is_paused;
+    private static ulong __vsn_get_length;
+    private static ulong __vsn_get_playback_position;
+    private static ulong __vsn_seek;
+    private static ulong __vsn_set_audio_track;
+    private static ulong __vsn_get_texture;
+    private static ulong __vsn_update;
+    private static ulong __vsn_get_channels;
+    private static ulong __vsn_get_mix_rate;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_stop == 0) __vsn_stop = StringNames.Get("_stop").Opaque;
+        if (nameSn == __vsn_stop)
+        {
+            _Stop();
+            return true;
+        }
+        if (__vsn_play == 0) __vsn_play = StringNames.Get("_play").Opaque;
+        if (nameSn == __vsn_play)
+        {
+            _Play();
+            return true;
+        }
+        if (__vsn_is_playing == 0) __vsn_is_playing = StringNames.Get("_is_playing").Opaque;
+        if (nameSn == __vsn_is_playing)
+        {
+            *(byte*)ret = _IsPlaying() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_set_paused == 0) __vsn_set_paused = StringNames.Get("_set_paused").Opaque;
+        if (nameSn == __vsn_set_paused)
+        {
+            _SetPaused(*(byte*)args[0] != 0);
+            return true;
+        }
+        if (__vsn_is_paused == 0) __vsn_is_paused = StringNames.Get("_is_paused").Opaque;
+        if (nameSn == __vsn_is_paused)
+        {
+            *(byte*)ret = _IsPaused() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_length == 0) __vsn_get_length = StringNames.Get("_get_length").Opaque;
+        if (nameSn == __vsn_get_length)
+        {
+            *(double*)ret = _GetLength();
+            return true;
+        }
+        if (__vsn_get_playback_position == 0) __vsn_get_playback_position = StringNames.Get("_get_playback_position").Opaque;
+        if (nameSn == __vsn_get_playback_position)
+        {
+            *(double*)ret = _GetPlaybackPosition();
+            return true;
+        }
+        if (__vsn_seek == 0) __vsn_seek = StringNames.Get("_seek").Opaque;
+        if (nameSn == __vsn_seek)
+        {
+            _Seek(*(double*)args[0]);
+            return true;
+        }
+        if (__vsn_set_audio_track == 0) __vsn_set_audio_track = StringNames.Get("_set_audio_track").Opaque;
+        if (nameSn == __vsn_set_audio_track)
+        {
+            _SetAudioTrack(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_texture == 0) __vsn_get_texture = StringNames.Get("_get_texture").Opaque;
+        if (nameSn == __vsn_get_texture)
+        {
+            *(nint*)ret = _GetTexture()?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_update == 0) __vsn_update = StringNames.Get("_update").Opaque;
+        if (nameSn == __vsn_update)
+        {
+            _Update(*(double*)args[0]);
+            return true;
+        }
+        if (__vsn_get_channels == 0) __vsn_get_channels = StringNames.Get("_get_channels").Opaque;
+        if (nameSn == __vsn_get_channels)
+        {
+            *(long*)ret = unchecked((long)_GetChannels());
+            return true;
+        }
+        if (__vsn_get_mix_rate == 0) __vsn_get_mix_rate = StringNames.Get("_get_mix_rate").Opaque;
+        if (nameSn == __vsn_get_mix_rate)
+        {
+            *(long*)ret = unchecked((long)_GetMixRate());
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -763,9 +901,9 @@ public unsafe partial class VideoStreamPlayer : Control
 {
     internal VideoStreamPlayer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VideoStreamPlayer() : this(InstanceBindings.ConstructRaw("VideoStreamPlayer"), false)
+    public VideoStreamPlayer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VideoStreamPlayer");
     }
 
     private static nint __mb_set_stream;
@@ -1231,9 +1369,9 @@ public unsafe partial class VideoStreamTheora : VideoStream
 {
     internal VideoStreamTheora(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VideoStreamTheora() : this(InstanceBindings.ConstructRaw("VideoStreamTheora"), true)
+    public VideoStreamTheora() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VideoStreamTheora");
     }
 }
 
@@ -3379,9 +3517,9 @@ public unsafe partial class ViewportTexture : Texture2D
 {
     internal ViewportTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ViewportTexture() : this(InstanceBindings.ConstructRaw("ViewportTexture"), true)
+    public ViewportTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ViewportTexture");
     }
 }
 
@@ -3389,9 +3527,9 @@ public unsafe partial class VirtualJoystick : Control
 {
     internal VirtualJoystick(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VirtualJoystick() : this(InstanceBindings.ConstructRaw("VirtualJoystick"), false)
+    public VirtualJoystick() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VirtualJoystick");
     }
 
     public enum JoystickMode : long
@@ -3753,9 +3891,9 @@ public unsafe partial class VisibleOnScreenEnabler2D : VisibleOnScreenNotifier2D
 {
     internal VisibleOnScreenEnabler2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisibleOnScreenEnabler2D() : this(InstanceBindings.ConstructRaw("VisibleOnScreenEnabler2D"), false)
+    public VisibleOnScreenEnabler2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisibleOnScreenEnabler2D");
     }
 
     public enum EnableMode : long
@@ -3801,9 +3939,9 @@ public unsafe partial class VisibleOnScreenEnabler3D : VisibleOnScreenNotifier3D
 {
     internal VisibleOnScreenEnabler3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisibleOnScreenEnabler3D() : this(InstanceBindings.ConstructRaw("VisibleOnScreenEnabler3D"), false)
+    public VisibleOnScreenEnabler3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisibleOnScreenEnabler3D");
     }
 
     public enum EnableMode : long
@@ -3849,9 +3987,9 @@ public unsafe partial class VisibleOnScreenNotifier2D : Node2D
 {
     internal VisibleOnScreenNotifier2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisibleOnScreenNotifier2D() : this(InstanceBindings.ConstructRaw("VisibleOnScreenNotifier2D"), false)
+    public VisibleOnScreenNotifier2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisibleOnScreenNotifier2D");
     }
 
     private static nint __mb_set_rect;
@@ -3936,9 +4074,9 @@ public unsafe partial class VisibleOnScreenNotifier3D : VisualInstance3D
 {
     internal VisibleOnScreenNotifier3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisibleOnScreenNotifier3D() : this(InstanceBindings.ConstructRaw("VisibleOnScreenNotifier3D"), false)
+    public VisibleOnScreenNotifier3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisibleOnScreenNotifier3D");
     }
 
     private static nint __mb_set_aabb;
@@ -3977,9 +4115,9 @@ public unsafe partial class VisualInstance3D : Node3D
 {
     internal VisualInstance3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualInstance3D() : this(InstanceBindings.ConstructRaw("VisualInstance3D"), false)
+    public VisualInstance3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualInstance3D");
     }
 
     private static nint __mb_set_base;
@@ -4171,15 +4309,30 @@ public unsafe partial class VisualInstance3D : Node3D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
+
+    public virtual Aabb _GetAabb() => default!;
+
+    private static ulong __vsn_get_aabb;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_aabb == 0) __vsn_get_aabb = StringNames.Get("_get_aabb").Opaque;
+        if (nameSn == __vsn_get_aabb)
+        {
+            *(Aabb*)ret = _GetAabb();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class VisualShader : Shader
 {
     internal VisualShader(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShader() : this(InstanceBindings.ConstructRaw("VisualShader"), true)
+    public VisualShader() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShader");
     }
 
     public enum Type : long
@@ -4757,9 +4910,9 @@ public unsafe partial class VisualShaderNodeBillboard : VisualShaderNode
 {
     internal VisualShaderNodeBillboard(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeBillboard() : this(InstanceBindings.ConstructRaw("VisualShaderNodeBillboard"), true)
+    public VisualShaderNodeBillboard() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeBillboard");
     }
 
     public enum BillboardType : long
@@ -4838,9 +4991,9 @@ public unsafe partial class VisualShaderNodeBooleanConstant : VisualShaderNodeCo
 {
     internal VisualShaderNodeBooleanConstant(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeBooleanConstant() : this(InstanceBindings.ConstructRaw("VisualShaderNodeBooleanConstant"), true)
+    public VisualShaderNodeBooleanConstant() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeBooleanConstant");
     }
 
     private static nint __mb_set_constant;
@@ -4879,9 +5032,9 @@ public unsafe partial class VisualShaderNodeBooleanParameter : VisualShaderNodeP
 {
     internal VisualShaderNodeBooleanParameter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeBooleanParameter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeBooleanParameter"), true)
+    public VisualShaderNodeBooleanParameter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeBooleanParameter");
     }
 
     private static nint __mb_set_default_value_enabled;
@@ -4951,9 +5104,9 @@ public unsafe partial class VisualShaderNodeClamp : VisualShaderNode
 {
     internal VisualShaderNodeClamp(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeClamp() : this(InstanceBindings.ConstructRaw("VisualShaderNodeClamp"), true)
+    public VisualShaderNodeClamp() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeClamp");
     }
 
     public enum OpType : long
@@ -5003,9 +5156,9 @@ public unsafe partial class VisualShaderNodeColorConstant : VisualShaderNodeCons
 {
     internal VisualShaderNodeColorConstant(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeColorConstant() : this(InstanceBindings.ConstructRaw("VisualShaderNodeColorConstant"), true)
+    public VisualShaderNodeColorConstant() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeColorConstant");
     }
 
     private static nint __mb_set_constant;
@@ -5044,9 +5197,9 @@ public unsafe partial class VisualShaderNodeColorFunc : VisualShaderNode
 {
     internal VisualShaderNodeColorFunc(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeColorFunc() : this(InstanceBindings.ConstructRaw("VisualShaderNodeColorFunc"), true)
+    public VisualShaderNodeColorFunc() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeColorFunc");
     }
 
     public enum Function : long
@@ -5096,9 +5249,9 @@ public unsafe partial class VisualShaderNodeColorOp : VisualShaderNode
 {
     internal VisualShaderNodeColorOp(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeColorOp() : this(InstanceBindings.ConstructRaw("VisualShaderNodeColorOp"), true)
+    public VisualShaderNodeColorOp() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeColorOp");
     }
 
     public enum Operator : long
@@ -5151,9 +5304,9 @@ public unsafe partial class VisualShaderNodeColorParameter : VisualShaderNodePar
 {
     internal VisualShaderNodeColorParameter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeColorParameter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeColorParameter"), true)
+    public VisualShaderNodeColorParameter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeColorParameter");
     }
 
     private static nint __mb_set_default_value_enabled;
@@ -5223,9 +5376,9 @@ public unsafe partial class VisualShaderNodeComment : VisualShaderNodeFrame
 {
     internal VisualShaderNodeComment(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeComment() : this(InstanceBindings.ConstructRaw("VisualShaderNodeComment"), true)
+    public VisualShaderNodeComment() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeComment");
     }
 
     private static nint __mb_set_description;
@@ -5265,9 +5418,9 @@ public unsafe partial class VisualShaderNodeCompare : VisualShaderNode
 {
     internal VisualShaderNodeCompare(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeCompare() : this(InstanceBindings.ConstructRaw("VisualShaderNodeCompare"), true)
+    public VisualShaderNodeCompare() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeCompare");
     }
 
     public enum ComparisonType : long
@@ -5404,9 +5557,9 @@ public unsafe partial class VisualShaderNodeCubemap : VisualShaderNode
 {
     internal VisualShaderNodeCubemap(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeCubemap() : this(InstanceBindings.ConstructRaw("VisualShaderNodeCubemap"), true)
+    public VisualShaderNodeCubemap() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeCubemap");
     }
 
     public enum Source : long
@@ -5522,9 +5675,9 @@ public unsafe partial class VisualShaderNodeCubemapParameter : VisualShaderNodeT
 {
     internal VisualShaderNodeCubemapParameter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeCubemapParameter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeCubemapParameter"), true)
+    public VisualShaderNodeCubemapParameter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeCubemapParameter");
     }
 }
 
@@ -5532,9 +5685,9 @@ public unsafe partial class VisualShaderNodeCurveTexture : VisualShaderNodeResiz
 {
     internal VisualShaderNodeCurveTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeCurveTexture() : this(InstanceBindings.ConstructRaw("VisualShaderNodeCurveTexture"), true)
+    public VisualShaderNodeCurveTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeCurveTexture");
     }
 
     private static nint __mb_set_texture;
@@ -5573,9 +5726,9 @@ public unsafe partial class VisualShaderNodeCurveXYZTexture : VisualShaderNodeRe
 {
     internal VisualShaderNodeCurveXYZTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeCurveXYZTexture() : this(InstanceBindings.ConstructRaw("VisualShaderNodeCurveXYZTexture"), true)
+    public VisualShaderNodeCurveXYZTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeCurveXYZTexture");
     }
 
     private static nint __mb_set_texture;
@@ -5614,9 +5767,9 @@ public unsafe partial class VisualShaderNodeCustom : VisualShaderNode
 {
     internal VisualShaderNodeCustom(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeCustom() : this(InstanceBindings.ConstructRaw("VisualShaderNodeCustom"), true)
+    public VisualShaderNodeCustom() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeCustom");
     }
 
     private static nint __mb_get_option_index;
@@ -5636,15 +5789,183 @@ public unsafe partial class VisualShaderNodeCustom : VisualShaderNode
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
+
+    public virtual string _GetName() => default!;
+
+    public virtual string _GetDescription() => default!;
+
+    public virtual string _GetCategory() => default!;
+
+    public virtual VisualShaderNode.PortType _GetReturnIconType() => default!;
+
+    public virtual int _GetInputPortCount() => default!;
+
+    public virtual VisualShaderNode.PortType _GetInputPortType(int port) => default!;
+
+    public virtual string _GetInputPortName(int port) => default!;
+
+    public virtual int _GetDefaultInputPort(VisualShaderNode.PortType type) => default!;
+
+    public virtual int _GetOutputPortCount() => default!;
+
+    public virtual VisualShaderNode.PortType _GetOutputPortType(int port) => default!;
+
+    public virtual string _GetOutputPortName(int port) => default!;
+
+    public virtual int _GetPropertyCount() => default!;
+
+    public virtual string _GetPropertyName(int index) => default!;
+
+    public virtual int _GetPropertyDefaultIndex(int index) => default!;
+
+    public virtual string _GetFuncCode(Shader.Mode mode, VisualShader.Type type) => default!;
+
+    public virtual string _GetGlobalCode(Shader.Mode mode) => default!;
+
+    public virtual bool _IsHighend() => default!;
+
+    public virtual bool _IsAvailable(Shader.Mode mode, VisualShader.Type type) => default!;
+
+    private static ulong __vsn_get_name;
+    private static ulong __vsn_get_description;
+    private static ulong __vsn_get_category;
+    private static ulong __vsn_get_return_icon_type;
+    private static ulong __vsn_get_input_port_count;
+    private static ulong __vsn_get_input_port_type;
+    private static ulong __vsn_get_input_port_name;
+    private static ulong __vsn_get_default_input_port;
+    private static ulong __vsn_get_output_port_count;
+    private static ulong __vsn_get_output_port_type;
+    private static ulong __vsn_get_output_port_name;
+    private static ulong __vsn_get_property_count;
+    private static ulong __vsn_get_property_name;
+    private static ulong __vsn_get_property_default_index;
+    private static ulong __vsn_get_func_code;
+    private static ulong __vsn_get_global_code;
+    private static ulong __vsn_is_highend;
+    private static ulong __vsn_is_available;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_name == 0) __vsn_get_name = StringNames.Get("_get_name").Opaque;
+        if (nameSn == __vsn_get_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetName() ?? "");
+            return true;
+        }
+        if (__vsn_get_description == 0) __vsn_get_description = StringNames.Get("_get_description").Opaque;
+        if (nameSn == __vsn_get_description)
+        {
+            *(ulong*)ret = NativeString.Create(_GetDescription() ?? "");
+            return true;
+        }
+        if (__vsn_get_category == 0) __vsn_get_category = StringNames.Get("_get_category").Opaque;
+        if (nameSn == __vsn_get_category)
+        {
+            *(ulong*)ret = NativeString.Create(_GetCategory() ?? "");
+            return true;
+        }
+        if (__vsn_get_return_icon_type == 0) __vsn_get_return_icon_type = StringNames.Get("_get_return_icon_type").Opaque;
+        if (nameSn == __vsn_get_return_icon_type)
+        {
+            *(long*)ret = (long)_GetReturnIconType();
+            return true;
+        }
+        if (__vsn_get_input_port_count == 0) __vsn_get_input_port_count = StringNames.Get("_get_input_port_count").Opaque;
+        if (nameSn == __vsn_get_input_port_count)
+        {
+            *(long*)ret = unchecked((long)_GetInputPortCount());
+            return true;
+        }
+        if (__vsn_get_input_port_type == 0) __vsn_get_input_port_type = StringNames.Get("_get_input_port_type").Opaque;
+        if (nameSn == __vsn_get_input_port_type)
+        {
+            *(long*)ret = (long)_GetInputPortType(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_input_port_name == 0) __vsn_get_input_port_name = StringNames.Get("_get_input_port_name").Opaque;
+        if (nameSn == __vsn_get_input_port_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetInputPortName(unchecked((int)(*(long*)args[0]))) ?? "");
+            return true;
+        }
+        if (__vsn_get_default_input_port == 0) __vsn_get_default_input_port = StringNames.Get("_get_default_input_port").Opaque;
+        if (nameSn == __vsn_get_default_input_port)
+        {
+            *(long*)ret = unchecked((long)_GetDefaultInputPort((VisualShaderNode.PortType)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_output_port_count == 0) __vsn_get_output_port_count = StringNames.Get("_get_output_port_count").Opaque;
+        if (nameSn == __vsn_get_output_port_count)
+        {
+            *(long*)ret = unchecked((long)_GetOutputPortCount());
+            return true;
+        }
+        if (__vsn_get_output_port_type == 0) __vsn_get_output_port_type = StringNames.Get("_get_output_port_type").Opaque;
+        if (nameSn == __vsn_get_output_port_type)
+        {
+            *(long*)ret = (long)_GetOutputPortType(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_output_port_name == 0) __vsn_get_output_port_name = StringNames.Get("_get_output_port_name").Opaque;
+        if (nameSn == __vsn_get_output_port_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetOutputPortName(unchecked((int)(*(long*)args[0]))) ?? "");
+            return true;
+        }
+        if (__vsn_get_property_count == 0) __vsn_get_property_count = StringNames.Get("_get_property_count").Opaque;
+        if (nameSn == __vsn_get_property_count)
+        {
+            *(long*)ret = unchecked((long)_GetPropertyCount());
+            return true;
+        }
+        if (__vsn_get_property_name == 0) __vsn_get_property_name = StringNames.Get("_get_property_name").Opaque;
+        if (nameSn == __vsn_get_property_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetPropertyName(unchecked((int)(*(long*)args[0]))) ?? "");
+            return true;
+        }
+        if (__vsn_get_property_default_index == 0) __vsn_get_property_default_index = StringNames.Get("_get_property_default_index").Opaque;
+        if (nameSn == __vsn_get_property_default_index)
+        {
+            *(long*)ret = unchecked((long)_GetPropertyDefaultIndex(unchecked((int)(*(long*)args[0]))));
+            return true;
+        }
+        if (__vsn_get_func_code == 0) __vsn_get_func_code = StringNames.Get("_get_func_code").Opaque;
+        if (nameSn == __vsn_get_func_code)
+        {
+            *(ulong*)ret = NativeString.Create(_GetFuncCode((Shader.Mode)(*(long*)args[0]), (VisualShader.Type)(*(long*)args[1])) ?? "");
+            return true;
+        }
+        if (__vsn_get_global_code == 0) __vsn_get_global_code = StringNames.Get("_get_global_code").Opaque;
+        if (nameSn == __vsn_get_global_code)
+        {
+            *(ulong*)ret = NativeString.Create(_GetGlobalCode((Shader.Mode)(*(long*)args[0])) ?? "");
+            return true;
+        }
+        if (__vsn_is_highend == 0) __vsn_is_highend = StringNames.Get("_is_highend").Opaque;
+        if (nameSn == __vsn_is_highend)
+        {
+            *(byte*)ret = _IsHighend() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_is_available == 0) __vsn_is_available = StringNames.Get("_is_available").Opaque;
+        if (nameSn == __vsn_is_available)
+        {
+            *(byte*)ret = _IsAvailable((Shader.Mode)(*(long*)args[0]), (VisualShader.Type)(*(long*)args[1])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class VisualShaderNodeDerivativeFunc : VisualShaderNode
 {
     internal VisualShaderNodeDerivativeFunc(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeDerivativeFunc() : this(InstanceBindings.ConstructRaw("VisualShaderNodeDerivativeFunc"), true)
+    public VisualShaderNodeDerivativeFunc() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeDerivativeFunc");
     }
 
     public enum OpType : long
@@ -5770,9 +6091,9 @@ public unsafe partial class VisualShaderNodeDeterminant : VisualShaderNode
 {
     internal VisualShaderNodeDeterminant(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeDeterminant() : this(InstanceBindings.ConstructRaw("VisualShaderNodeDeterminant"), true)
+    public VisualShaderNodeDeterminant() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeDeterminant");
     }
 }
 
@@ -5780,9 +6101,9 @@ public unsafe partial class VisualShaderNodeDistanceFade : VisualShaderNode
 {
     internal VisualShaderNodeDistanceFade(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeDistanceFade() : this(InstanceBindings.ConstructRaw("VisualShaderNodeDistanceFade"), true)
+    public VisualShaderNodeDistanceFade() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeDistanceFade");
     }
 }
 
@@ -5790,9 +6111,9 @@ public unsafe partial class VisualShaderNodeDotProduct : VisualShaderNode
 {
     internal VisualShaderNodeDotProduct(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeDotProduct() : this(InstanceBindings.ConstructRaw("VisualShaderNodeDotProduct"), true)
+    public VisualShaderNodeDotProduct() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeDotProduct");
     }
 }
 
@@ -5800,9 +6121,9 @@ public unsafe partial class VisualShaderNodeExpression : VisualShaderNodeGroupBa
 {
     internal VisualShaderNodeExpression(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeExpression() : this(InstanceBindings.ConstructRaw("VisualShaderNodeExpression"), true)
+    public VisualShaderNodeExpression() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeExpression");
     }
 
     private static nint __mb_set_expression;
@@ -5842,9 +6163,9 @@ public unsafe partial class VisualShaderNodeFaceForward : VisualShaderNodeVector
 {
     internal VisualShaderNodeFaceForward(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeFaceForward() : this(InstanceBindings.ConstructRaw("VisualShaderNodeFaceForward"), true)
+    public VisualShaderNodeFaceForward() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeFaceForward");
     }
 }
 
@@ -5852,9 +6173,9 @@ public unsafe partial class VisualShaderNodeFloatConstant : VisualShaderNodeCons
 {
     internal VisualShaderNodeFloatConstant(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeFloatConstant() : this(InstanceBindings.ConstructRaw("VisualShaderNodeFloatConstant"), true)
+    public VisualShaderNodeFloatConstant() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeFloatConstant");
     }
 
     private static nint __mb_set_constant;
@@ -5893,9 +6214,9 @@ public unsafe partial class VisualShaderNodeFloatFunc : VisualShaderNode
 {
     internal VisualShaderNodeFloatFunc(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeFloatFunc() : this(InstanceBindings.ConstructRaw("VisualShaderNodeFloatFunc"), true)
+    public VisualShaderNodeFloatFunc() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeFloatFunc");
     }
 
     public enum Function : long
@@ -5971,9 +6292,9 @@ public unsafe partial class VisualShaderNodeFloatOp : VisualShaderNode
 {
     internal VisualShaderNodeFloatOp(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeFloatOp() : this(InstanceBindings.ConstructRaw("VisualShaderNodeFloatOp"), true)
+    public VisualShaderNodeFloatOp() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeFloatOp");
     }
 
     public enum Operator : long
@@ -6027,9 +6348,9 @@ public unsafe partial class VisualShaderNodeFloatParameter : VisualShaderNodePar
 {
     internal VisualShaderNodeFloatParameter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeFloatParameter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeFloatParameter"), true)
+    public VisualShaderNodeFloatParameter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeFloatParameter");
     }
 
     public enum Hint : long
@@ -6231,9 +6552,9 @@ public unsafe partial class VisualShaderNodeFrame : VisualShaderNodeResizableBas
 {
     internal VisualShaderNodeFrame(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeFrame() : this(InstanceBindings.ConstructRaw("VisualShaderNodeFrame"), true)
+    public VisualShaderNodeFrame() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeFrame");
     }
 
     private static nint __mb_set_title;
@@ -6398,9 +6719,9 @@ public unsafe partial class VisualShaderNodeFresnel : VisualShaderNode
 {
     internal VisualShaderNodeFresnel(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeFresnel() : this(InstanceBindings.ConstructRaw("VisualShaderNodeFresnel"), true)
+    public VisualShaderNodeFresnel() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeFresnel");
     }
 }
 
@@ -6408,9 +6729,9 @@ public unsafe partial class VisualShaderNodeGlobalExpression : VisualShaderNodeE
 {
     internal VisualShaderNodeGlobalExpression(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeGlobalExpression() : this(InstanceBindings.ConstructRaw("VisualShaderNodeGlobalExpression"), true)
+    public VisualShaderNodeGlobalExpression() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeGlobalExpression");
     }
 }
 
@@ -6776,9 +7097,9 @@ public unsafe partial class VisualShaderNodeIf : VisualShaderNode
 {
     internal VisualShaderNodeIf(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeIf() : this(InstanceBindings.ConstructRaw("VisualShaderNodeIf"), true)
+    public VisualShaderNodeIf() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeIf");
     }
 }
 
@@ -6786,9 +7107,9 @@ public unsafe partial class VisualShaderNodeInput : VisualShaderNode
 {
     internal VisualShaderNodeInput(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeInput() : this(InstanceBindings.ConstructRaw("VisualShaderNodeInput"), true)
+    public VisualShaderNodeInput() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeInput");
     }
 
     private static nint __mb_set_input_name;
@@ -6843,9 +7164,9 @@ public unsafe partial class VisualShaderNodeIntConstant : VisualShaderNodeConsta
 {
     internal VisualShaderNodeIntConstant(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeIntConstant() : this(InstanceBindings.ConstructRaw("VisualShaderNodeIntConstant"), true)
+    public VisualShaderNodeIntConstant() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeIntConstant");
     }
 
     private static nint __mb_set_constant;
@@ -6884,9 +7205,9 @@ public unsafe partial class VisualShaderNodeIntFunc : VisualShaderNode
 {
     internal VisualShaderNodeIntFunc(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeIntFunc() : this(InstanceBindings.ConstructRaw("VisualShaderNodeIntFunc"), true)
+    public VisualShaderNodeIntFunc() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeIntFunc");
     }
 
     public enum Function : long
@@ -6934,9 +7255,9 @@ public unsafe partial class VisualShaderNodeIntOp : VisualShaderNode
 {
     internal VisualShaderNodeIntOp(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeIntOp() : this(InstanceBindings.ConstructRaw("VisualShaderNodeIntOp"), true)
+    public VisualShaderNodeIntOp() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeIntOp");
     }
 
     public enum Operator : long
@@ -6992,9 +7313,9 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
 {
     internal VisualShaderNodeIntParameter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeIntParameter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeIntParameter"), true)
+    public VisualShaderNodeIntParameter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeIntParameter");
     }
 
     public enum Hint : long
@@ -7197,9 +7518,9 @@ public unsafe partial class VisualShaderNodeIs : VisualShaderNode
 {
     internal VisualShaderNodeIs(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeIs() : this(InstanceBindings.ConstructRaw("VisualShaderNodeIs"), true)
+    public VisualShaderNodeIs() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeIs");
     }
 
     public enum Function : long
@@ -7245,9 +7566,9 @@ public unsafe partial class VisualShaderNodeLinearSceneDepth : VisualShaderNode
 {
     internal VisualShaderNodeLinearSceneDepth(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeLinearSceneDepth() : this(InstanceBindings.ConstructRaw("VisualShaderNodeLinearSceneDepth"), true)
+    public VisualShaderNodeLinearSceneDepth() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeLinearSceneDepth");
     }
 }
 
@@ -7255,9 +7576,9 @@ public unsafe partial class VisualShaderNodeMix : VisualShaderNode
 {
     internal VisualShaderNodeMix(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeMix() : this(InstanceBindings.ConstructRaw("VisualShaderNodeMix"), true)
+    public VisualShaderNodeMix() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeMix");
     }
 
     public enum OpType : long
@@ -7308,9 +7629,9 @@ public unsafe partial class VisualShaderNodeMultiplyAdd : VisualShaderNode
 {
     internal VisualShaderNodeMultiplyAdd(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeMultiplyAdd() : this(InstanceBindings.ConstructRaw("VisualShaderNodeMultiplyAdd"), true)
+    public VisualShaderNodeMultiplyAdd() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeMultiplyAdd");
     }
 
     public enum OpType : long
@@ -7358,9 +7679,9 @@ public unsafe partial class VisualShaderNodeOuterProduct : VisualShaderNode
 {
     internal VisualShaderNodeOuterProduct(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeOuterProduct() : this(InstanceBindings.ConstructRaw("VisualShaderNodeOuterProduct"), true)
+    public VisualShaderNodeOuterProduct() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeOuterProduct");
     }
 }
 
@@ -7481,9 +7802,9 @@ public unsafe partial class VisualShaderNodeParameterRef : VisualShaderNode
 {
     internal VisualShaderNodeParameterRef(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeParameterRef() : this(InstanceBindings.ConstructRaw("VisualShaderNodeParameterRef"), true)
+    public VisualShaderNodeParameterRef() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeParameterRef");
     }
 
     private static nint __mb_set_parameter_name;
@@ -7523,9 +7844,9 @@ public unsafe partial class VisualShaderNodeParticleAccelerator : VisualShaderNo
 {
     internal VisualShaderNodeParticleAccelerator(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeParticleAccelerator() : this(InstanceBindings.ConstructRaw("VisualShaderNodeParticleAccelerator"), true)
+    public VisualShaderNodeParticleAccelerator() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeParticleAccelerator");
     }
 
     public enum Mode : long
@@ -7572,9 +7893,9 @@ public unsafe partial class VisualShaderNodeParticleBoxEmitter : VisualShaderNod
 {
     internal VisualShaderNodeParticleBoxEmitter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeParticleBoxEmitter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeParticleBoxEmitter"), true)
+    public VisualShaderNodeParticleBoxEmitter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeParticleBoxEmitter");
     }
 }
 
@@ -7582,9 +7903,9 @@ public unsafe partial class VisualShaderNodeParticleConeVelocity : VisualShaderN
 {
     internal VisualShaderNodeParticleConeVelocity(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeParticleConeVelocity() : this(InstanceBindings.ConstructRaw("VisualShaderNodeParticleConeVelocity"), true)
+    public VisualShaderNodeParticleConeVelocity() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeParticleConeVelocity");
     }
 }
 
@@ -7592,9 +7913,9 @@ public unsafe partial class VisualShaderNodeParticleEmit : VisualShaderNode
 {
     internal VisualShaderNodeParticleEmit(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeParticleEmit() : this(InstanceBindings.ConstructRaw("VisualShaderNodeParticleEmit"), true)
+    public VisualShaderNodeParticleEmit() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeParticleEmit");
     }
 
     public enum EmitFlags : long
@@ -7678,9 +7999,9 @@ public unsafe partial class VisualShaderNodeParticleMeshEmitter : VisualShaderNo
 {
     internal VisualShaderNodeParticleMeshEmitter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeParticleMeshEmitter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeParticleMeshEmitter"), true)
+    public VisualShaderNodeParticleMeshEmitter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeParticleMeshEmitter");
     }
 
     private static nint __mb_set_mesh;
@@ -7781,9 +8102,9 @@ public unsafe partial class VisualShaderNodeParticleMultiplyByAxisAngle : Visual
 {
     internal VisualShaderNodeParticleMultiplyByAxisAngle(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeParticleMultiplyByAxisAngle() : this(InstanceBindings.ConstructRaw("VisualShaderNodeParticleMultiplyByAxisAngle"), true)
+    public VisualShaderNodeParticleMultiplyByAxisAngle() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeParticleMultiplyByAxisAngle");
     }
 
     private static nint __mb_set_degrees_mode;
@@ -7822,9 +8143,9 @@ public unsafe partial class VisualShaderNodeParticleOutput : VisualShaderNodeOut
 {
     internal VisualShaderNodeParticleOutput(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeParticleOutput() : this(InstanceBindings.ConstructRaw("VisualShaderNodeParticleOutput"), true)
+    public VisualShaderNodeParticleOutput() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeParticleOutput");
     }
 }
 
@@ -7832,9 +8153,9 @@ public unsafe partial class VisualShaderNodeParticleRandomness : VisualShaderNod
 {
     internal VisualShaderNodeParticleRandomness(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeParticleRandomness() : this(InstanceBindings.ConstructRaw("VisualShaderNodeParticleRandomness"), true)
+    public VisualShaderNodeParticleRandomness() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeParticleRandomness");
     }
 
     public enum OpType : long
@@ -7882,9 +8203,9 @@ public unsafe partial class VisualShaderNodeParticleRingEmitter : VisualShaderNo
 {
     internal VisualShaderNodeParticleRingEmitter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeParticleRingEmitter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeParticleRingEmitter"), true)
+    public VisualShaderNodeParticleRingEmitter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeParticleRingEmitter");
     }
 }
 
@@ -7892,9 +8213,9 @@ public unsafe partial class VisualShaderNodeParticleSphereEmitter : VisualShader
 {
     internal VisualShaderNodeParticleSphereEmitter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeParticleSphereEmitter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeParticleSphereEmitter"), true)
+    public VisualShaderNodeParticleSphereEmitter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeParticleSphereEmitter");
     }
 }
 
@@ -7902,9 +8223,9 @@ public unsafe partial class VisualShaderNodeProximityFade : VisualShaderNode
 {
     internal VisualShaderNodeProximityFade(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeProximityFade() : this(InstanceBindings.ConstructRaw("VisualShaderNodeProximityFade"), true)
+    public VisualShaderNodeProximityFade() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeProximityFade");
     }
 }
 
@@ -7912,9 +8233,9 @@ public unsafe partial class VisualShaderNodeRandomRange : VisualShaderNode
 {
     internal VisualShaderNodeRandomRange(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeRandomRange() : this(InstanceBindings.ConstructRaw("VisualShaderNodeRandomRange"), true)
+    public VisualShaderNodeRandomRange() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeRandomRange");
     }
 }
 
@@ -7922,9 +8243,9 @@ public unsafe partial class VisualShaderNodeRemap : VisualShaderNode
 {
     internal VisualShaderNodeRemap(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeRemap() : this(InstanceBindings.ConstructRaw("VisualShaderNodeRemap"), true)
+    public VisualShaderNodeRemap() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeRemap");
     }
 
     public enum OpType : long
@@ -7975,9 +8296,9 @@ public unsafe partial class VisualShaderNodeReroute : VisualShaderNode
 {
     internal VisualShaderNodeReroute(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeReroute() : this(InstanceBindings.ConstructRaw("VisualShaderNodeReroute"), true)
+    public VisualShaderNodeReroute() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeReroute");
     }
 
     private static nint __mb_get_port_type;
@@ -8036,9 +8357,9 @@ public unsafe partial class VisualShaderNodeRotationByAxis : VisualShaderNode
 {
     internal VisualShaderNodeRotationByAxis(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeRotationByAxis() : this(InstanceBindings.ConstructRaw("VisualShaderNodeRotationByAxis"), true)
+    public VisualShaderNodeRotationByAxis() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeRotationByAxis");
     }
 }
 
@@ -8046,9 +8367,9 @@ public unsafe partial class VisualShaderNodeSDFRaymarch : VisualShaderNode
 {
     internal VisualShaderNodeSDFRaymarch(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeSDFRaymarch() : this(InstanceBindings.ConstructRaw("VisualShaderNodeSDFRaymarch"), true)
+    public VisualShaderNodeSDFRaymarch() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeSDFRaymarch");
     }
 }
 
@@ -8056,9 +8377,9 @@ public unsafe partial class VisualShaderNodeSDFToScreenUV : VisualShaderNode
 {
     internal VisualShaderNodeSDFToScreenUV(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeSDFToScreenUV() : this(InstanceBindings.ConstructRaw("VisualShaderNodeSDFToScreenUV"), true)
+    public VisualShaderNodeSDFToScreenUV() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeSDFToScreenUV");
     }
 }
 
@@ -8109,9 +8430,9 @@ public unsafe partial class VisualShaderNodeScreenNormalWorldSpace : VisualShade
 {
     internal VisualShaderNodeScreenNormalWorldSpace(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeScreenNormalWorldSpace() : this(InstanceBindings.ConstructRaw("VisualShaderNodeScreenNormalWorldSpace"), true)
+    public VisualShaderNodeScreenNormalWorldSpace() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeScreenNormalWorldSpace");
     }
 }
 
@@ -8119,9 +8440,9 @@ public unsafe partial class VisualShaderNodeScreenUVToSDF : VisualShaderNode
 {
     internal VisualShaderNodeScreenUVToSDF(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeScreenUVToSDF() : this(InstanceBindings.ConstructRaw("VisualShaderNodeScreenUVToSDF"), true)
+    public VisualShaderNodeScreenUVToSDF() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeScreenUVToSDF");
     }
 }
 
@@ -8129,9 +8450,9 @@ public unsafe partial class VisualShaderNodeSmoothStep : VisualShaderNode
 {
     internal VisualShaderNodeSmoothStep(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeSmoothStep() : this(InstanceBindings.ConstructRaw("VisualShaderNodeSmoothStep"), true)
+    public VisualShaderNodeSmoothStep() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeSmoothStep");
     }
 
     public enum OpType : long
@@ -8182,9 +8503,9 @@ public unsafe partial class VisualShaderNodeStep : VisualShaderNode
 {
     internal VisualShaderNodeStep(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeStep() : this(InstanceBindings.ConstructRaw("VisualShaderNodeStep"), true)
+    public VisualShaderNodeStep() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeStep");
     }
 
     public enum OpType : long
@@ -8235,9 +8556,9 @@ public unsafe partial class VisualShaderNodeSwitch : VisualShaderNode
 {
     internal VisualShaderNodeSwitch(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeSwitch() : this(InstanceBindings.ConstructRaw("VisualShaderNodeSwitch"), true)
+    public VisualShaderNodeSwitch() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeSwitch");
     }
 
     public enum OpType : long
@@ -8289,9 +8610,9 @@ public unsafe partial class VisualShaderNodeTexture : VisualShaderNode
 {
     internal VisualShaderNodeTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTexture() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTexture"), true)
+    public VisualShaderNodeTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTexture");
     }
 
     public enum Source : long
@@ -8413,9 +8734,9 @@ public unsafe partial class VisualShaderNodeTexture2DArray : VisualShaderNodeSam
 {
     internal VisualShaderNodeTexture2DArray(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTexture2DArray() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTexture2DArray"), true)
+    public VisualShaderNodeTexture2DArray() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTexture2DArray");
     }
 
     private static nint __mb_set_texture_array;
@@ -8454,9 +8775,9 @@ public unsafe partial class VisualShaderNodeTexture2DArrayParameter : VisualShad
 {
     internal VisualShaderNodeTexture2DArrayParameter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTexture2DArrayParameter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTexture2DArrayParameter"), true)
+    public VisualShaderNodeTexture2DArrayParameter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTexture2DArrayParameter");
     }
 }
 
@@ -8464,9 +8785,9 @@ public unsafe partial class VisualShaderNodeTexture2DParameter : VisualShaderNod
 {
     internal VisualShaderNodeTexture2DParameter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTexture2DParameter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTexture2DParameter"), true)
+    public VisualShaderNodeTexture2DParameter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTexture2DParameter");
     }
 }
 
@@ -8474,9 +8795,9 @@ public unsafe partial class VisualShaderNodeTexture3D : VisualShaderNodeSample3D
 {
     internal VisualShaderNodeTexture3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTexture3D() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTexture3D"), true)
+    public VisualShaderNodeTexture3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTexture3D");
     }
 
     private static nint __mb_set_texture;
@@ -8515,9 +8836,9 @@ public unsafe partial class VisualShaderNodeTexture3DParameter : VisualShaderNod
 {
     internal VisualShaderNodeTexture3DParameter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTexture3DParameter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTexture3DParameter"), true)
+    public VisualShaderNodeTexture3DParameter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTexture3DParameter");
     }
 }
 
@@ -8731,9 +9052,9 @@ public unsafe partial class VisualShaderNodeTextureParameterTriplanar : VisualSh
 {
     internal VisualShaderNodeTextureParameterTriplanar(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTextureParameterTriplanar() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTextureParameterTriplanar"), true)
+    public VisualShaderNodeTextureParameterTriplanar() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTextureParameterTriplanar");
     }
 }
 
@@ -8741,9 +9062,9 @@ public unsafe partial class VisualShaderNodeTextureSDF : VisualShaderNode
 {
     internal VisualShaderNodeTextureSDF(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTextureSDF() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTextureSDF"), true)
+    public VisualShaderNodeTextureSDF() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTextureSDF");
     }
 }
 
@@ -8751,9 +9072,9 @@ public unsafe partial class VisualShaderNodeTextureSDFNormal : VisualShaderNode
 {
     internal VisualShaderNodeTextureSDFNormal(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTextureSDFNormal() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTextureSDFNormal"), true)
+    public VisualShaderNodeTextureSDFNormal() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTextureSDFNormal");
     }
 }
 
@@ -8761,9 +9082,9 @@ public unsafe partial class VisualShaderNodeTransformCompose : VisualShaderNode
 {
     internal VisualShaderNodeTransformCompose(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTransformCompose() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTransformCompose"), true)
+    public VisualShaderNodeTransformCompose() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTransformCompose");
     }
 }
 
@@ -8771,9 +9092,9 @@ public unsafe partial class VisualShaderNodeTransformConstant : VisualShaderNode
 {
     internal VisualShaderNodeTransformConstant(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTransformConstant() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTransformConstant"), true)
+    public VisualShaderNodeTransformConstant() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTransformConstant");
     }
 
     private static nint __mb_set_constant;
@@ -8812,9 +9133,9 @@ public unsafe partial class VisualShaderNodeTransformDecompose : VisualShaderNod
 {
     internal VisualShaderNodeTransformDecompose(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTransformDecompose() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTransformDecompose"), true)
+    public VisualShaderNodeTransformDecompose() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTransformDecompose");
     }
 }
 
@@ -8822,9 +9143,9 @@ public unsafe partial class VisualShaderNodeTransformFunc : VisualShaderNode
 {
     internal VisualShaderNodeTransformFunc(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTransformFunc() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTransformFunc"), true)
+    public VisualShaderNodeTransformFunc() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTransformFunc");
     }
 
     public enum Function : long
@@ -8870,9 +9191,9 @@ public unsafe partial class VisualShaderNodeTransformOp : VisualShaderNode
 {
     internal VisualShaderNodeTransformOp(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTransformOp() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTransformOp"), true)
+    public VisualShaderNodeTransformOp() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTransformOp");
     }
 
     public enum Operator : long
@@ -8925,9 +9246,9 @@ public unsafe partial class VisualShaderNodeTransformParameter : VisualShaderNod
 {
     internal VisualShaderNodeTransformParameter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTransformParameter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTransformParameter"), true)
+    public VisualShaderNodeTransformParameter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTransformParameter");
     }
 
     private static nint __mb_set_default_value_enabled;
@@ -8997,9 +9318,9 @@ public unsafe partial class VisualShaderNodeTransformVecMult : VisualShaderNode
 {
     internal VisualShaderNodeTransformVecMult(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeTransformVecMult() : this(InstanceBindings.ConstructRaw("VisualShaderNodeTransformVecMult"), true)
+    public VisualShaderNodeTransformVecMult() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeTransformVecMult");
     }
 
     public enum Operator : long
@@ -9047,9 +9368,9 @@ public unsafe partial class VisualShaderNodeUIntConstant : VisualShaderNodeConst
 {
     internal VisualShaderNodeUIntConstant(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeUIntConstant() : this(InstanceBindings.ConstructRaw("VisualShaderNodeUIntConstant"), true)
+    public VisualShaderNodeUIntConstant() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeUIntConstant");
     }
 
     private static nint __mb_set_constant;
@@ -9088,9 +9409,9 @@ public unsafe partial class VisualShaderNodeUIntFunc : VisualShaderNode
 {
     internal VisualShaderNodeUIntFunc(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeUIntFunc() : this(InstanceBindings.ConstructRaw("VisualShaderNodeUIntFunc"), true)
+    public VisualShaderNodeUIntFunc() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeUIntFunc");
     }
 
     public enum Function : long
@@ -9136,9 +9457,9 @@ public unsafe partial class VisualShaderNodeUIntOp : VisualShaderNode
 {
     internal VisualShaderNodeUIntOp(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeUIntOp() : this(InstanceBindings.ConstructRaw("VisualShaderNodeUIntOp"), true)
+    public VisualShaderNodeUIntOp() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeUIntOp");
     }
 
     public enum Operator : long
@@ -9194,9 +9515,9 @@ public unsafe partial class VisualShaderNodeUIntParameter : VisualShaderNodePara
 {
     internal VisualShaderNodeUIntParameter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeUIntParameter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeUIntParameter"), true)
+    public VisualShaderNodeUIntParameter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeUIntParameter");
     }
 
     private static nint __mb_set_default_value_enabled;
@@ -9266,9 +9587,9 @@ public unsafe partial class VisualShaderNodeUVFunc : VisualShaderNode
 {
     internal VisualShaderNodeUVFunc(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeUVFunc() : this(InstanceBindings.ConstructRaw("VisualShaderNodeUVFunc"), true)
+    public VisualShaderNodeUVFunc() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeUVFunc");
     }
 
     public enum Function : long
@@ -9314,9 +9635,9 @@ public unsafe partial class VisualShaderNodeUVPolarCoord : VisualShaderNode
 {
     internal VisualShaderNodeUVPolarCoord(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeUVPolarCoord() : this(InstanceBindings.ConstructRaw("VisualShaderNodeUVPolarCoord"), true)
+    public VisualShaderNodeUVPolarCoord() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeUVPolarCoord");
     }
 }
 
@@ -9392,9 +9713,9 @@ public unsafe partial class VisualShaderNodeVaryingGetter : VisualShaderNodeVary
 {
     internal VisualShaderNodeVaryingGetter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeVaryingGetter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeVaryingGetter"), true)
+    public VisualShaderNodeVaryingGetter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeVaryingGetter");
     }
 }
 
@@ -9402,9 +9723,9 @@ public unsafe partial class VisualShaderNodeVaryingSetter : VisualShaderNodeVary
 {
     internal VisualShaderNodeVaryingSetter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeVaryingSetter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeVaryingSetter"), true)
+    public VisualShaderNodeVaryingSetter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeVaryingSetter");
     }
 }
 
@@ -9412,9 +9733,9 @@ public unsafe partial class VisualShaderNodeVec2Constant : VisualShaderNodeConst
 {
     internal VisualShaderNodeVec2Constant(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeVec2Constant() : this(InstanceBindings.ConstructRaw("VisualShaderNodeVec2Constant"), true)
+    public VisualShaderNodeVec2Constant() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeVec2Constant");
     }
 
     private static nint __mb_set_constant;
@@ -9453,9 +9774,9 @@ public unsafe partial class VisualShaderNodeVec2Parameter : VisualShaderNodePara
 {
     internal VisualShaderNodeVec2Parameter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeVec2Parameter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeVec2Parameter"), true)
+    public VisualShaderNodeVec2Parameter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeVec2Parameter");
     }
 
     private static nint __mb_set_default_value_enabled;
@@ -9525,9 +9846,9 @@ public unsafe partial class VisualShaderNodeVec3Constant : VisualShaderNodeConst
 {
     internal VisualShaderNodeVec3Constant(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeVec3Constant() : this(InstanceBindings.ConstructRaw("VisualShaderNodeVec3Constant"), true)
+    public VisualShaderNodeVec3Constant() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeVec3Constant");
     }
 
     private static nint __mb_set_constant;
@@ -9566,9 +9887,9 @@ public unsafe partial class VisualShaderNodeVec3Parameter : VisualShaderNodePara
 {
     internal VisualShaderNodeVec3Parameter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeVec3Parameter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeVec3Parameter"), true)
+    public VisualShaderNodeVec3Parameter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeVec3Parameter");
     }
 
     private static nint __mb_set_default_value_enabled;
@@ -9638,9 +9959,9 @@ public unsafe partial class VisualShaderNodeVec4Constant : VisualShaderNodeConst
 {
     internal VisualShaderNodeVec4Constant(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeVec4Constant() : this(InstanceBindings.ConstructRaw("VisualShaderNodeVec4Constant"), true)
+    public VisualShaderNodeVec4Constant() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeVec4Constant");
     }
 
     private static nint __mb_set_constant;
@@ -9679,9 +10000,9 @@ public unsafe partial class VisualShaderNodeVec4Parameter : VisualShaderNodePara
 {
     internal VisualShaderNodeVec4Parameter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeVec4Parameter() : this(InstanceBindings.ConstructRaw("VisualShaderNodeVec4Parameter"), true)
+    public VisualShaderNodeVec4Parameter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeVec4Parameter");
     }
 
     private static nint __mb_set_default_value_enabled;
@@ -9795,9 +10116,9 @@ public unsafe partial class VisualShaderNodeVectorCompose : VisualShaderNodeVect
 {
     internal VisualShaderNodeVectorCompose(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeVectorCompose() : this(InstanceBindings.ConstructRaw("VisualShaderNodeVectorCompose"), true)
+    public VisualShaderNodeVectorCompose() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeVectorCompose");
     }
 }
 
@@ -9805,9 +10126,9 @@ public unsafe partial class VisualShaderNodeVectorDecompose : VisualShaderNodeVe
 {
     internal VisualShaderNodeVectorDecompose(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeVectorDecompose() : this(InstanceBindings.ConstructRaw("VisualShaderNodeVectorDecompose"), true)
+    public VisualShaderNodeVectorDecompose() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeVectorDecompose");
     }
 }
 
@@ -9815,9 +10136,9 @@ public unsafe partial class VisualShaderNodeVectorDistance : VisualShaderNodeVec
 {
     internal VisualShaderNodeVectorDistance(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeVectorDistance() : this(InstanceBindings.ConstructRaw("VisualShaderNodeVectorDistance"), true)
+    public VisualShaderNodeVectorDistance() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeVectorDistance");
     }
 }
 
@@ -9825,9 +10146,9 @@ public unsafe partial class VisualShaderNodeVectorFunc : VisualShaderNodeVectorB
 {
     internal VisualShaderNodeVectorFunc(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeVectorFunc() : this(InstanceBindings.ConstructRaw("VisualShaderNodeVectorFunc"), true)
+    public VisualShaderNodeVectorFunc() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeVectorFunc");
     }
 
     public enum Function : long
@@ -9904,9 +10225,9 @@ public unsafe partial class VisualShaderNodeVectorLen : VisualShaderNodeVectorBa
 {
     internal VisualShaderNodeVectorLen(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeVectorLen() : this(InstanceBindings.ConstructRaw("VisualShaderNodeVectorLen"), true)
+    public VisualShaderNodeVectorLen() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeVectorLen");
     }
 }
 
@@ -9914,9 +10235,9 @@ public unsafe partial class VisualShaderNodeVectorOp : VisualShaderNodeVectorBas
 {
     internal VisualShaderNodeVectorOp(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeVectorOp() : this(InstanceBindings.ConstructRaw("VisualShaderNodeVectorOp"), true)
+    public VisualShaderNodeVectorOp() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeVectorOp");
     }
 
     public enum Operator : long
@@ -9972,9 +10293,9 @@ public unsafe partial class VisualShaderNodeVectorRefract : VisualShaderNodeVect
 {
     internal VisualShaderNodeVectorRefract(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeVectorRefract() : this(InstanceBindings.ConstructRaw("VisualShaderNodeVectorRefract"), true)
+    public VisualShaderNodeVectorRefract() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeVectorRefract");
     }
 }
 
@@ -9982,9 +10303,9 @@ public unsafe partial class VisualShaderNodeWorldPositionFromDepth : VisualShade
 {
     internal VisualShaderNodeWorldPositionFromDepth(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VisualShaderNodeWorldPositionFromDepth() : this(InstanceBindings.ConstructRaw("VisualShaderNodeWorldPositionFromDepth"), true)
+    public VisualShaderNodeWorldPositionFromDepth() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VisualShaderNodeWorldPositionFromDepth");
     }
 }
 
@@ -9992,9 +10313,9 @@ public unsafe partial class VoxelGI : VisualInstance3D
 {
     internal VoxelGI(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VoxelGI() : this(InstanceBindings.ConstructRaw("VoxelGI"), false)
+    public VoxelGI() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VoxelGI");
     }
 
     public enum Subdiv : long
@@ -10166,9 +10487,9 @@ public unsafe partial class VoxelGIData : Resource
 {
     internal VoxelGIData(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public VoxelGIData() : this(InstanceBindings.ConstructRaw("VoxelGIData"), true)
+    public VoxelGIData() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "VoxelGIData");
     }
 
     private static nint __mb_get_bounds;

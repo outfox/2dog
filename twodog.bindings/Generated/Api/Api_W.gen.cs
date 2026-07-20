@@ -14,9 +14,9 @@ public unsafe partial class WeakRef : RefCounted
 {
     internal WeakRef(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public WeakRef() : this(InstanceBindings.ConstructRaw("WeakRef"), true)
+    public WeakRef() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "WeakRef");
     }
 }
 
@@ -252,9 +252,159 @@ public unsafe partial class WebRTCDataChannelExtension : WebRTCDataChannel
 {
     internal WebRTCDataChannelExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public WebRTCDataChannelExtension() : this(InstanceBindings.ConstructRaw("WebRTCDataChannelExtension"), true)
+    public WebRTCDataChannelExtension() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "WebRTCDataChannelExtension");
+    }
+
+    public virtual int _GetAvailablePacketCount() => default!;
+
+    public virtual int _GetMaxPacketSize() => default!;
+
+    public virtual Error _Poll() => default!;
+
+    public virtual void _Close() { }
+
+    public virtual void _SetWriteMode(WebRTCDataChannel.WriteMode writeMode) { }
+
+    public virtual WebRTCDataChannel.WriteMode _GetWriteMode() => default!;
+
+    public virtual bool _WasStringPacket() => default!;
+
+    public virtual WebRTCDataChannel.ChannelState _GetReadyState() => default!;
+
+    public virtual string _GetLabel() => default!;
+
+    public virtual bool _IsOrdered() => default!;
+
+    public virtual int _GetId() => default!;
+
+    public virtual int _GetMaxPacketLifeTime() => default!;
+
+    public virtual int _GetMaxRetransmits() => default!;
+
+    public virtual string _GetProtocol() => default!;
+
+    public virtual bool _IsNegotiated() => default!;
+
+    public virtual int _GetBufferedAmount() => default!;
+
+    private static ulong __vsn_get_available_packet_count;
+    private static ulong __vsn_get_max_packet_size;
+    private static ulong __vsn_poll;
+    private static ulong __vsn_close;
+    private static ulong __vsn_set_write_mode;
+    private static ulong __vsn_get_write_mode;
+    private static ulong __vsn_was_string_packet;
+    private static ulong __vsn_get_ready_state;
+    private static ulong __vsn_get_label;
+    private static ulong __vsn_is_ordered;
+    private static ulong __vsn_get_id;
+    private static ulong __vsn_get_max_packet_life_time;
+    private static ulong __vsn_get_max_retransmits;
+    private static ulong __vsn_get_protocol;
+    private static ulong __vsn_is_negotiated;
+    private static ulong __vsn_get_buffered_amount;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_available_packet_count == 0) __vsn_get_available_packet_count = StringNames.Get("_get_available_packet_count").Opaque;
+        if (nameSn == __vsn_get_available_packet_count)
+        {
+            *(long*)ret = unchecked((long)_GetAvailablePacketCount());
+            return true;
+        }
+        if (__vsn_get_max_packet_size == 0) __vsn_get_max_packet_size = StringNames.Get("_get_max_packet_size").Opaque;
+        if (nameSn == __vsn_get_max_packet_size)
+        {
+            *(long*)ret = unchecked((long)_GetMaxPacketSize());
+            return true;
+        }
+        if (__vsn_poll == 0) __vsn_poll = StringNames.Get("_poll").Opaque;
+        if (nameSn == __vsn_poll)
+        {
+            *(long*)ret = (long)_Poll();
+            return true;
+        }
+        if (__vsn_close == 0) __vsn_close = StringNames.Get("_close").Opaque;
+        if (nameSn == __vsn_close)
+        {
+            _Close();
+            return true;
+        }
+        if (__vsn_set_write_mode == 0) __vsn_set_write_mode = StringNames.Get("_set_write_mode").Opaque;
+        if (nameSn == __vsn_set_write_mode)
+        {
+            _SetWriteMode((WebRTCDataChannel.WriteMode)(*(long*)args[0]));
+            return true;
+        }
+        if (__vsn_get_write_mode == 0) __vsn_get_write_mode = StringNames.Get("_get_write_mode").Opaque;
+        if (nameSn == __vsn_get_write_mode)
+        {
+            *(long*)ret = (long)_GetWriteMode();
+            return true;
+        }
+        if (__vsn_was_string_packet == 0) __vsn_was_string_packet = StringNames.Get("_was_string_packet").Opaque;
+        if (nameSn == __vsn_was_string_packet)
+        {
+            *(byte*)ret = _WasStringPacket() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_ready_state == 0) __vsn_get_ready_state = StringNames.Get("_get_ready_state").Opaque;
+        if (nameSn == __vsn_get_ready_state)
+        {
+            *(long*)ret = (long)_GetReadyState();
+            return true;
+        }
+        if (__vsn_get_label == 0) __vsn_get_label = StringNames.Get("_get_label").Opaque;
+        if (nameSn == __vsn_get_label)
+        {
+            *(ulong*)ret = NativeString.Create(_GetLabel() ?? "");
+            return true;
+        }
+        if (__vsn_is_ordered == 0) __vsn_is_ordered = StringNames.Get("_is_ordered").Opaque;
+        if (nameSn == __vsn_is_ordered)
+        {
+            *(byte*)ret = _IsOrdered() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_id == 0) __vsn_get_id = StringNames.Get("_get_id").Opaque;
+        if (nameSn == __vsn_get_id)
+        {
+            *(long*)ret = unchecked((long)_GetId());
+            return true;
+        }
+        if (__vsn_get_max_packet_life_time == 0) __vsn_get_max_packet_life_time = StringNames.Get("_get_max_packet_life_time").Opaque;
+        if (nameSn == __vsn_get_max_packet_life_time)
+        {
+            *(long*)ret = unchecked((long)_GetMaxPacketLifeTime());
+            return true;
+        }
+        if (__vsn_get_max_retransmits == 0) __vsn_get_max_retransmits = StringNames.Get("_get_max_retransmits").Opaque;
+        if (nameSn == __vsn_get_max_retransmits)
+        {
+            *(long*)ret = unchecked((long)_GetMaxRetransmits());
+            return true;
+        }
+        if (__vsn_get_protocol == 0) __vsn_get_protocol = StringNames.Get("_get_protocol").Opaque;
+        if (nameSn == __vsn_get_protocol)
+        {
+            *(ulong*)ret = NativeString.Create(_GetProtocol() ?? "");
+            return true;
+        }
+        if (__vsn_is_negotiated == 0) __vsn_is_negotiated = StringNames.Get("_is_negotiated").Opaque;
+        if (nameSn == __vsn_is_negotiated)
+        {
+            *(byte*)ret = _IsNegotiated() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_buffered_amount == 0) __vsn_get_buffered_amount = StringNames.Get("_get_buffered_amount").Opaque;
+        if (nameSn == __vsn_get_buffered_amount)
+        {
+            *(long*)ret = unchecked((long)_GetBufferedAmount());
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -262,9 +412,9 @@ public unsafe partial class WebRTCMultiplayerPeer : MultiplayerPeer
 {
     internal WebRTCMultiplayerPeer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public WebRTCMultiplayerPeer() : this(InstanceBindings.ConstructRaw("WebRTCMultiplayerPeer"), true)
+    public WebRTCMultiplayerPeer() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "WebRTCMultiplayerPeer");
     }
 
     private static nint __mb_add_peer;
@@ -328,9 +478,9 @@ public unsafe partial class WebRTCPeerConnection : RefCounted
 {
     internal WebRTCPeerConnection(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public WebRTCPeerConnection() : this(InstanceBindings.ConstructRaw("WebRTCPeerConnection"), true)
+    public WebRTCPeerConnection() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "WebRTCPeerConnection");
     }
 
     public enum ConnectionState : long
@@ -537,9 +687,96 @@ public unsafe partial class WebRTCPeerConnectionExtension : WebRTCPeerConnection
 {
     internal WebRTCPeerConnectionExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public WebRTCPeerConnectionExtension() : this(InstanceBindings.ConstructRaw("WebRTCPeerConnectionExtension"), true)
+    public WebRTCPeerConnectionExtension() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "WebRTCPeerConnectionExtension");
+    }
+
+    public virtual WebRTCPeerConnection.ConnectionState _GetConnectionState() => default!;
+
+    public virtual WebRTCPeerConnection.GatheringState _GetGatheringState() => default!;
+
+    public virtual WebRTCPeerConnection.SignalingState _GetSignalingState() => default!;
+
+    public virtual Error _CreateOffer() => default!;
+
+    public virtual Error _SetRemoteDescription(string type, string sdp) => default!;
+
+    public virtual Error _SetLocalDescription(string type, string sdp) => default!;
+
+    public virtual Error _AddIceCandidate(string sdpMidName, int sdpMlineIndex, string sdpName) => default!;
+
+    public virtual Error _Poll() => default!;
+
+    public virtual void _Close() { }
+
+    private static ulong __vsn_get_connection_state;
+    private static ulong __vsn_get_gathering_state;
+    private static ulong __vsn_get_signaling_state;
+    private static ulong __vsn_create_offer;
+    private static ulong __vsn_set_remote_description;
+    private static ulong __vsn_set_local_description;
+    private static ulong __vsn_add_ice_candidate;
+    private static ulong __vsn_poll;
+    private static ulong __vsn_close;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_connection_state == 0) __vsn_get_connection_state = StringNames.Get("_get_connection_state").Opaque;
+        if (nameSn == __vsn_get_connection_state)
+        {
+            *(long*)ret = (long)_GetConnectionState();
+            return true;
+        }
+        if (__vsn_get_gathering_state == 0) __vsn_get_gathering_state = StringNames.Get("_get_gathering_state").Opaque;
+        if (nameSn == __vsn_get_gathering_state)
+        {
+            *(long*)ret = (long)_GetGatheringState();
+            return true;
+        }
+        if (__vsn_get_signaling_state == 0) __vsn_get_signaling_state = StringNames.Get("_get_signaling_state").Opaque;
+        if (nameSn == __vsn_get_signaling_state)
+        {
+            *(long*)ret = (long)_GetSignalingState();
+            return true;
+        }
+        if (__vsn_create_offer == 0) __vsn_create_offer = StringNames.Get("_create_offer").Opaque;
+        if (nameSn == __vsn_create_offer)
+        {
+            *(long*)ret = (long)_CreateOffer();
+            return true;
+        }
+        if (__vsn_set_remote_description == 0) __vsn_set_remote_description = StringNames.Get("_set_remote_description").Opaque;
+        if (nameSn == __vsn_set_remote_description)
+        {
+            *(long*)ret = (long)_SetRemoteDescription(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1]));
+            return true;
+        }
+        if (__vsn_set_local_description == 0) __vsn_set_local_description = StringNames.Get("_set_local_description").Opaque;
+        if (nameSn == __vsn_set_local_description)
+        {
+            *(long*)ret = (long)_SetLocalDescription(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1]));
+            return true;
+        }
+        if (__vsn_add_ice_candidate == 0) __vsn_add_ice_candidate = StringNames.Get("_add_ice_candidate").Opaque;
+        if (nameSn == __vsn_add_ice_candidate)
+        {
+            *(long*)ret = (long)_AddIceCandidate(NativeString.Read(*(ulong*)args[0]), unchecked((int)(*(long*)args[1])), NativeString.Read(*(ulong*)args[2]));
+            return true;
+        }
+        if (__vsn_poll == 0) __vsn_poll = StringNames.Get("_poll").Opaque;
+        if (nameSn == __vsn_poll)
+        {
+            *(long*)ret = (long)_Poll();
+            return true;
+        }
+        if (__vsn_close == 0) __vsn_close = StringNames.Get("_close").Opaque;
+        if (nameSn == __vsn_close)
+        {
+            _Close();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -547,9 +784,9 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
 {
     internal WebSocketMultiplayerPeer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public WebSocketMultiplayerPeer() : this(InstanceBindings.ConstructRaw("WebSocketMultiplayerPeer"), true)
+    public WebSocketMultiplayerPeer() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "WebSocketMultiplayerPeer");
     }
 
     private static nint __mb_create_client;
@@ -779,9 +1016,9 @@ public unsafe partial class WebSocketPeer : PacketPeer
 {
     internal WebSocketPeer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public WebSocketPeer() : this(InstanceBindings.ConstructRaw("WebSocketPeer"), true)
+    public WebSocketPeer() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "WebSocketPeer");
     }
 
     public enum WriteMode : long
@@ -1456,9 +1693,9 @@ public unsafe partial class Window : Viewport
 {
     internal Window(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Window() : this(InstanceBindings.ConstructRaw("Window"), false)
+    public Window() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Window");
     }
 
     public enum Mode : long
@@ -3643,6 +3880,21 @@ public unsafe partial class Window : Viewport
         __args[2] = (nint)(&__a2);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
+
+    public virtual Vector2 _GetContentsMinimumSize() => default!;
+
+    private static ulong __vsn_get_contents_minimum_size;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_contents_minimum_size == 0) __vsn_get_contents_minimum_size = StringNames.Get("_get_contents_minimum_size").Opaque;
+        if (nameSn == __vsn_get_contents_minimum_size)
+        {
+            *(Vector2*)ret = _GetContentsMinimumSize();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class WorkerThreadPool : GodotObject
@@ -3775,9 +4027,9 @@ public unsafe partial class World2D : Resource
 {
     internal World2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public World2D() : this(InstanceBindings.ConstructRaw("World2D"), true)
+    public World2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "World2D");
     }
 
     private static nint __mb_get_canvas;
@@ -3845,9 +4097,9 @@ public unsafe partial class World3D : Resource
 {
     internal World3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public World3D() : this(InstanceBindings.ConstructRaw("World3D"), true)
+    public World3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "World3D");
     }
 
     private static nint __mb_get_space;
@@ -4008,9 +4260,9 @@ public unsafe partial class WorldBoundaryShape2D : Shape2D
 {
     internal WorldBoundaryShape2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public WorldBoundaryShape2D() : this(InstanceBindings.ConstructRaw("WorldBoundaryShape2D"), true)
+    public WorldBoundaryShape2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "WorldBoundaryShape2D");
     }
 
     private static nint __mb_set_normal;
@@ -4080,9 +4332,9 @@ public unsafe partial class WorldBoundaryShape3D : Shape3D
 {
     internal WorldBoundaryShape3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public WorldBoundaryShape3D() : this(InstanceBindings.ConstructRaw("WorldBoundaryShape3D"), true)
+    public WorldBoundaryShape3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "WorldBoundaryShape3D");
     }
 
     private static nint __mb_set_plane;
@@ -4121,9 +4373,9 @@ public unsafe partial class WorldEnvironment : Node
 {
     internal WorldEnvironment(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public WorldEnvironment() : this(InstanceBindings.ConstructRaw("WorldEnvironment"), false)
+    public WorldEnvironment() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "WorldEnvironment");
     }
 
     private static nint __mb_set_environment;

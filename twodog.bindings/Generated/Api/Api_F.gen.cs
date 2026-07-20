@@ -14,9 +14,9 @@ public unsafe partial class FABRIK3D : IterateIK3D
 {
     internal FABRIK3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public FABRIK3D() : this(InstanceBindings.ConstructRaw("FABRIK3D"), false)
+    public FABRIK3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "FABRIK3D");
     }
 }
 
@@ -24,9 +24,9 @@ public unsafe partial class FBXDocument : GLTFDocument
 {
     internal FBXDocument(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public FBXDocument() : this(InstanceBindings.ConstructRaw("FBXDocument"), true)
+    public FBXDocument() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "FBXDocument");
     }
 }
 
@@ -34,9 +34,9 @@ public unsafe partial class FBXState : GLTFState
 {
     internal FBXState(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public FBXState() : this(InstanceBindings.ConstructRaw("FBXState"), true)
+    public FBXState() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "FBXState");
     }
 
     private static nint __mb_get_allow_geometry_helper_nodes;
@@ -75,9 +75,9 @@ public unsafe partial class FastNoiseLite : Noise
 {
     internal FastNoiseLite(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public FastNoiseLite() : this(InstanceBindings.ConstructRaw("FastNoiseLite"), true)
+    public FastNoiseLite() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "FastNoiseLite");
     }
 
     public enum NoiseType : long
@@ -1835,9 +1835,9 @@ public unsafe partial class FileDialog : ConfirmationDialog
 {
     internal FileDialog(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public FileDialog() : this(InstanceBindings.ConstructRaw("FileDialog"), false)
+    public FileDialog() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "FileDialog");
     }
 
     public enum FileMode : long
@@ -2538,9 +2538,9 @@ public unsafe partial class FlowContainer : Container
 {
     internal FlowContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public FlowContainer() : this(InstanceBindings.ConstructRaw("FlowContainer"), false)
+    public FlowContainer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "FlowContainer");
     }
 
     public enum AlignmentMode : long
@@ -2702,9 +2702,9 @@ public unsafe partial class FogMaterial : Material
 {
     internal FogMaterial(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public FogMaterial() : this(InstanceBindings.ConstructRaw("FogMaterial"), true)
+    public FogMaterial() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "FogMaterial");
     }
 
     private static nint __mb_set_density;
@@ -2898,9 +2898,9 @@ public unsafe partial class FogVolume : VisualInstance3D
 {
     internal FogVolume(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public FogVolume() : this(InstanceBindings.ConstructRaw("FogVolume"), false)
+    public FogVolume() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "FogVolume");
     }
 
     private static nint __mb_set_size;
@@ -3001,9 +3001,9 @@ public unsafe partial class FoldableContainer : Container
 {
     internal FoldableContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public FoldableContainer() : this(InstanceBindings.ConstructRaw("FoldableContainer"), false)
+    public FoldableContainer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "FoldableContainer");
     }
 
     public enum TitlePosition : long
@@ -3325,9 +3325,9 @@ public unsafe partial class FoldableGroup : Resource
 {
     internal FoldableGroup(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public FoldableGroup() : this(InstanceBindings.ConstructRaw("FoldableGroup"), true)
+    public FoldableGroup() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "FoldableGroup");
     }
 
     private static nint __mb_get_expanded_container;
@@ -4010,9 +4010,9 @@ public unsafe partial class FontFile : Font
 {
     internal FontFile(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public FontFile() : this(InstanceBindings.ConstructRaw("FontFile"), true)
+    public FontFile() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "FontFile");
     }
 
     private static nint __mb_load_bitmap_font;
@@ -5703,9 +5703,9 @@ public unsafe partial class FontVariation : Font
 {
     internal FontVariation(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public FontVariation() : this(InstanceBindings.ConstructRaw("FontVariation"), true)
+    public FontVariation() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "FontVariation");
     }
 
     private static nint __mb_set_base_font;
@@ -5917,9 +5917,9 @@ public unsafe partial class FramebufferCacheRD : GodotObject
 {
     internal FramebufferCacheRD(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public FramebufferCacheRD() : this(InstanceBindings.ConstructRaw("FramebufferCacheRD"), false)
+    public FramebufferCacheRD() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "FramebufferCacheRD");
     }
 }
 

@@ -14,9 +14,9 @@ public unsafe partial class ZIPPacker : RefCounted
 {
     internal ZIPPacker(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ZIPPacker() : this(InstanceBindings.ConstructRaw("ZIPPacker"), true)
+    public ZIPPacker() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ZIPPacker");
     }
 
     public enum ZipAppend : long
@@ -167,9 +167,9 @@ public unsafe partial class ZIPReader : RefCounted
 {
     internal ZIPReader(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ZIPReader() : this(InstanceBindings.ConstructRaw("ZIPReader"), true)
+    public ZIPReader() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ZIPReader");
     }
 
     private static nint __mb_open;

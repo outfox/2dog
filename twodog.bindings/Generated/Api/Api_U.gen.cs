@@ -14,9 +14,9 @@ public unsafe partial class UDPServer : RefCounted
 {
     internal UDPServer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public UDPServer() : this(InstanceBindings.ConstructRaw("UDPServer"), true)
+    public UDPServer() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "UDPServer");
     }
 
     private static nint __mb_listen;
@@ -164,9 +164,9 @@ public unsafe partial class UDSServer : SocketServer
 {
     internal UDSServer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public UDSServer() : this(InstanceBindings.ConstructRaw("UDSServer"), true)
+    public UDSServer() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "UDSServer");
     }
 
     private static nint __mb_listen;
@@ -208,9 +208,9 @@ public unsafe partial class UPNP : RefCounted
 {
     internal UPNP(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public UPNP() : this(InstanceBindings.ConstructRaw("UPNP"), true)
+    public UPNP() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "UPNP");
     }
 
     public enum UPNPResult : long
@@ -543,9 +543,9 @@ public unsafe partial class UPNPDevice : RefCounted
 {
     internal UPNPDevice(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public UPNPDevice() : this(InstanceBindings.ConstructRaw("UPNPDevice"), true)
+    public UPNPDevice() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "UPNPDevice");
     }
 
     public enum IGDStatus : long
@@ -837,9 +837,9 @@ public unsafe partial class UndoRedo : GodotObject
 {
     internal UndoRedo(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public UndoRedo() : this(InstanceBindings.ConstructRaw("UndoRedo"), false)
+    public UndoRedo() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "UndoRedo");
     }
 
     public enum MergeMode : long
@@ -1149,9 +1149,9 @@ public unsafe partial class UniformSetCacheRD : GodotObject
 {
     internal UniformSetCacheRD(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public UniformSetCacheRD() : this(InstanceBindings.ConstructRaw("UniformSetCacheRD"), false)
+    public UniformSetCacheRD() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "UniformSetCacheRD");
     }
 }
 

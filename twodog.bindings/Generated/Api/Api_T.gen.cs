@@ -14,9 +14,9 @@ public unsafe partial class TCPServer : SocketServer
 {
     internal TCPServer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TCPServer() : this(InstanceBindings.ConstructRaw("TCPServer"), true)
+    public TCPServer() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TCPServer");
     }
 
     private static nint __mb_listen;
@@ -229,9 +229,9 @@ public unsafe partial class TabBar : Control
 {
     internal TabBar(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TabBar() : this(InstanceBindings.ConstructRaw("TabBar"), false)
+    public TabBar() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TabBar");
     }
 
     public enum AlignmentMode : long
@@ -1209,9 +1209,9 @@ public unsafe partial class TabContainer : Container
 {
     internal TabContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TabContainer() : this(InstanceBindings.ConstructRaw("TabContainer"), false)
+    public TabContainer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TabContainer");
     }
 
     public enum TabPosition : long
@@ -2027,9 +2027,9 @@ public unsafe partial class TextEdit : Control
 {
     internal TextEdit(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TextEdit() : this(InstanceBindings.ConstructRaw("TextEdit"), false)
+    public TextEdit() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TextEdit");
     }
 
     public enum MenuItems : long
@@ -6084,15 +6084,75 @@ public unsafe partial class TextEdit : Control
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
+
+    public virtual void _HandleUnicodeInput(int unicodeChar, int caretIndex) { }
+
+    public virtual void _Backspace(int caretIndex) { }
+
+    public virtual void _Cut(int caretIndex) { }
+
+    public virtual void _Copy(int caretIndex) { }
+
+    public virtual void _Paste(int caretIndex) { }
+
+    public virtual void _PastePrimaryClipboard(int caretIndex) { }
+
+    private static ulong __vsn_handle_unicode_input;
+    private static ulong __vsn_backspace;
+    private static ulong __vsn_cut;
+    private static ulong __vsn_copy;
+    private static ulong __vsn_paste;
+    private static ulong __vsn_paste_primary_clipboard;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_handle_unicode_input == 0) __vsn_handle_unicode_input = StringNames.Get("_handle_unicode_input").Opaque;
+        if (nameSn == __vsn_handle_unicode_input)
+        {
+            _HandleUnicodeInput(unchecked((int)(*(long*)args[0])), unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_backspace == 0) __vsn_backspace = StringNames.Get("_backspace").Opaque;
+        if (nameSn == __vsn_backspace)
+        {
+            _Backspace(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_cut == 0) __vsn_cut = StringNames.Get("_cut").Opaque;
+        if (nameSn == __vsn_cut)
+        {
+            _Cut(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_copy == 0) __vsn_copy = StringNames.Get("_copy").Opaque;
+        if (nameSn == __vsn_copy)
+        {
+            _Copy(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_paste == 0) __vsn_paste = StringNames.Get("_paste").Opaque;
+        if (nameSn == __vsn_paste)
+        {
+            _Paste(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_paste_primary_clipboard == 0) __vsn_paste_primary_clipboard = StringNames.Get("_paste_primary_clipboard").Opaque;
+        if (nameSn == __vsn_paste_primary_clipboard)
+        {
+            _PastePrimaryClipboard(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class TextLine : RefCounted
 {
     internal TextLine(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TextLine() : this(InstanceBindings.ConstructRaw("TextLine"), true)
+    public TextLine() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TextLine");
     }
 
     private static nint __mb_clear;
@@ -6592,9 +6652,9 @@ public unsafe partial class TextMesh : PrimitiveMesh
 {
     internal TextMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TextMesh() : this(InstanceBindings.ConstructRaw("TextMesh"), true)
+    public TextMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TextMesh");
     }
 
     private static nint __mb_set_horizontal_alignment;
@@ -7131,9 +7191,9 @@ public unsafe partial class TextParagraph : RefCounted
 {
     internal TextParagraph(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TextParagraph() : this(InstanceBindings.ConstructRaw("TextParagraph"), true)
+    public TextParagraph() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TextParagraph");
     }
 
     private static nint __mb_clear;
@@ -11992,9 +12052,9 @@ public unsafe partial class TextServerAdvanced : TextServerExtension
 {
     internal TextServerAdvanced(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TextServerAdvanced() : this(InstanceBindings.ConstructRaw("TextServerAdvanced"), true)
+    public TextServerAdvanced() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TextServerAdvanced");
     }
 }
 
@@ -12002,9 +12062,9 @@ public unsafe partial class TextServerDummy : TextServerExtension
 {
     internal TextServerDummy(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TextServerDummy() : this(InstanceBindings.ConstructRaw("TextServerDummy"), true)
+    public TextServerDummy() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TextServerDummy");
     }
 }
 
@@ -12012,9 +12072,1797 @@ public unsafe partial class TextServerExtension : TextServer
 {
     internal TextServerExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TextServerExtension() : this(InstanceBindings.ConstructRaw("TextServerExtension"), true)
+    public TextServerExtension() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TextServerExtension");
+    }
+
+    public virtual bool _HasFeature(TextServer.Feature feature) => default!;
+
+    public virtual string _GetName() => default!;
+
+    public virtual long _GetFeatures() => default!;
+
+    public virtual void _FreeRid(Rid rid) { }
+
+    public virtual bool _Has(Rid rid) => default!;
+
+    public virtual bool _LoadSupportData(string filename) => default!;
+
+    public virtual string _GetSupportDataFilename() => default!;
+
+    public virtual string _GetSupportDataInfo() => default!;
+
+    public virtual bool _SaveSupportData(string filename) => default!;
+
+    public virtual bool _IsLocaleUsingSupportData(string locale) => default!;
+
+    public virtual bool _IsLocaleRightToLeft(string locale) => default!;
+
+    public virtual long _NameToTag(string name) => default!;
+
+    public virtual string _TagToName(long tag) => default!;
+
+    public virtual Rid _CreateFont() => default!;
+
+    public virtual Rid _CreateFontLinkedVariation(Rid fontRid) => default!;
+
+    public virtual void _FontSetFaceIndex(Rid fontRid, long faceIndex) { }
+
+    public virtual long _FontGetFaceIndex(Rid fontRid) => default!;
+
+    public virtual long _FontGetFaceCount(Rid fontRid) => default!;
+
+    public virtual void _FontSetStyle(Rid fontRid, TextServer.FontStyle style) { }
+
+    public virtual TextServer.FontStyle _FontGetStyle(Rid fontRid) => default!;
+
+    public virtual void _FontSetName(Rid fontRid, string name) { }
+
+    public virtual string _FontGetName(Rid fontRid) => default!;
+
+    public virtual void _FontSetStyleName(Rid fontRid, string nameStyle) { }
+
+    public virtual string _FontGetStyleName(Rid fontRid) => default!;
+
+    public virtual void _FontSetWeight(Rid fontRid, long weight) { }
+
+    public virtual long _FontGetWeight(Rid fontRid) => default!;
+
+    public virtual void _FontSetStretch(Rid fontRid, long stretch) { }
+
+    public virtual long _FontGetStretch(Rid fontRid) => default!;
+
+    public virtual void _FontSetAntialiasing(Rid fontRid, TextServer.FontAntialiasing antialiasing) { }
+
+    public virtual TextServer.FontAntialiasing _FontGetAntialiasing(Rid fontRid) => default!;
+
+    public virtual void _FontSetDisableEmbeddedBitmaps(Rid fontRid, bool disableEmbeddedBitmaps) { }
+
+    public virtual bool _FontGetDisableEmbeddedBitmaps(Rid fontRid) => default!;
+
+    public virtual void _FontSetGenerateMipmaps(Rid fontRid, bool generateMipmaps) { }
+
+    public virtual bool _FontGetGenerateMipmaps(Rid fontRid) => default!;
+
+    public virtual void _FontSetMultichannelSignedDistanceField(Rid fontRid, bool msdf) { }
+
+    public virtual bool _FontIsMultichannelSignedDistanceField(Rid fontRid) => default!;
+
+    public virtual void _FontSetMsdfPixelRange(Rid fontRid, long msdfPixelRange) { }
+
+    public virtual long _FontGetMsdfPixelRange(Rid fontRid) => default!;
+
+    public virtual void _FontSetMsdfSize(Rid fontRid, long msdfSize) { }
+
+    public virtual long _FontGetMsdfSize(Rid fontRid) => default!;
+
+    public virtual void _FontSetFixedSize(Rid fontRid, long fixedSize) { }
+
+    public virtual long _FontGetFixedSize(Rid fontRid) => default!;
+
+    public virtual void _FontSetFixedSizeScaleMode(Rid fontRid, TextServer.FixedSizeScaleMode fixedSizeScaleMode) { }
+
+    public virtual TextServer.FixedSizeScaleMode _FontGetFixedSizeScaleMode(Rid fontRid) => default!;
+
+    public virtual void _FontSetAllowSystemFallback(Rid fontRid, bool allowSystemFallback) { }
+
+    public virtual bool _FontIsAllowSystemFallback(Rid fontRid) => default!;
+
+    public virtual void _FontClearSystemFallbackCache() { }
+
+    public virtual void _FontSetForceAutohinter(Rid fontRid, bool forceAutohinter) { }
+
+    public virtual bool _FontIsForceAutohinter(Rid fontRid) => default!;
+
+    public virtual void _FontSetModulateColorGlyphs(Rid fontRid, bool modulate) { }
+
+    public virtual bool _FontIsModulateColorGlyphs(Rid fontRid) => default!;
+
+    public virtual long _FontGetPaletteCount(Rid fontRid) => default!;
+
+    public virtual string _FontGetPaletteName(Rid fontRid, long index) => default!;
+
+    public virtual long _FontGetUsedPalette(Rid fontRid) => default!;
+
+    public virtual void _FontSetUsedPalette(Rid fontRid, long index) { }
+
+    public virtual void _FontSetHinting(Rid fontRid, TextServer.Hinting hinting) { }
+
+    public virtual TextServer.Hinting _FontGetHinting(Rid fontRid) => default!;
+
+    public virtual void _FontSetSubpixelPositioning(Rid fontRid, TextServer.SubpixelPositioning subpixelPositioning) { }
+
+    public virtual TextServer.SubpixelPositioning _FontGetSubpixelPositioning(Rid fontRid) => default!;
+
+    public virtual void _FontSetKeepRoundingRemainders(Rid fontRid, bool keepRoundingRemainders) { }
+
+    public virtual bool _FontGetKeepRoundingRemainders(Rid fontRid) => default!;
+
+    public virtual void _FontSetEmbolden(Rid fontRid, double strength) { }
+
+    public virtual double _FontGetEmbolden(Rid fontRid) => default!;
+
+    public virtual void _FontSetSpacing(Rid fontRid, TextServer.SpacingType spacing, long value) { }
+
+    public virtual long _FontGetSpacing(Rid fontRid, TextServer.SpacingType spacing) => default!;
+
+    public virtual void _FontSetBaselineOffset(Rid fontRid, double baselineOffset) { }
+
+    public virtual double _FontGetBaselineOffset(Rid fontRid) => default!;
+
+    public virtual void _FontSetTransform(Rid fontRid, Transform2D transform) { }
+
+    public virtual Transform2D _FontGetTransform(Rid fontRid) => default!;
+
+    public virtual void _FontSetOversampling(Rid fontRid, double oversampling) { }
+
+    public virtual double _FontGetOversampling(Rid fontRid) => default!;
+
+    public virtual void _FontClearSizeCache(Rid fontRid) { }
+
+    public virtual void _FontRemoveSizeCache(Rid fontRid, Vector2I size) { }
+
+    public virtual void _FontSetAscent(Rid fontRid, long size, double ascent) { }
+
+    public virtual double _FontGetAscent(Rid fontRid, long size) => default!;
+
+    public virtual void _FontSetDescent(Rid fontRid, long size, double descent) { }
+
+    public virtual double _FontGetDescent(Rid fontRid, long size) => default!;
+
+    public virtual void _FontSetUnderlinePosition(Rid fontRid, long size, double underlinePosition) { }
+
+    public virtual double _FontGetUnderlinePosition(Rid fontRid, long size) => default!;
+
+    public virtual void _FontSetUnderlineThickness(Rid fontRid, long size, double underlineThickness) { }
+
+    public virtual double _FontGetUnderlineThickness(Rid fontRid, long size) => default!;
+
+    public virtual void _FontSetScale(Rid fontRid, long size, double scale) { }
+
+    public virtual double _FontGetScale(Rid fontRid, long size) => default!;
+
+    public virtual long _FontGetTextureCount(Rid fontRid, Vector2I size) => default!;
+
+    public virtual void _FontClearTextures(Rid fontRid, Vector2I size) { }
+
+    public virtual void _FontRemoveTexture(Rid fontRid, Vector2I size, long textureIndex) { }
+
+    public virtual void _FontSetTextureImage(Rid fontRid, Vector2I size, long textureIndex, Image? image) { }
+
+    public virtual Image? _FontGetTextureImage(Rid fontRid, Vector2I size, long textureIndex) => default!;
+
+    public virtual void _FontClearGlyphs(Rid fontRid, Vector2I size) { }
+
+    public virtual void _FontRemoveGlyph(Rid fontRid, Vector2I size, long glyph) { }
+
+    public virtual Vector2 _FontGetGlyphAdvance(Rid fontRid, long size, long glyph) => default!;
+
+    public virtual void _FontSetGlyphAdvance(Rid fontRid, long size, long glyph, Vector2 advance) { }
+
+    public virtual Vector2 _FontGetGlyphOffset(Rid fontRid, Vector2I size, long glyph) => default!;
+
+    public virtual void _FontSetGlyphOffset(Rid fontRid, Vector2I size, long glyph, Vector2 offset) { }
+
+    public virtual Vector2 _FontGetGlyphSize(Rid fontRid, Vector2I size, long glyph) => default!;
+
+    public virtual void _FontSetGlyphSize(Rid fontRid, Vector2I size, long glyph, Vector2 glSize) { }
+
+    public virtual Rect2 _FontGetGlyphUvRect(Rid fontRid, Vector2I size, long glyph) => default!;
+
+    public virtual void _FontSetGlyphUvRect(Rid fontRid, Vector2I size, long glyph, Rect2 uvRect) { }
+
+    public virtual long _FontGetGlyphTextureIdx(Rid fontRid, Vector2I size, long glyph) => default!;
+
+    public virtual void _FontSetGlyphTextureIdx(Rid fontRid, Vector2I size, long glyph, long textureIdx) { }
+
+    public virtual Rid _FontGetGlyphTextureRid(Rid fontRid, Vector2I size, long glyph) => default!;
+
+    public virtual Vector2 _FontGetGlyphTextureSize(Rid fontRid, Vector2I size, long glyph) => default!;
+
+    public virtual void _FontClearKerningMap(Rid fontRid, long size) { }
+
+    public virtual void _FontRemoveKerning(Rid fontRid, long size, Vector2I glyphPair) { }
+
+    public virtual void _FontSetKerning(Rid fontRid, long size, Vector2I glyphPair, Vector2 kerning) { }
+
+    public virtual Vector2 _FontGetKerning(Rid fontRid, long size, Vector2I glyphPair) => default!;
+
+    public virtual long _FontGetGlyphIndex(Rid fontRid, long size, long @char, long variationSelector) => default!;
+
+    public virtual long _FontGetCharFromGlyphIndex(Rid fontRid, long size, long glyphIndex) => default!;
+
+    public virtual bool _FontHasChar(Rid fontRid, long @char) => default!;
+
+    public virtual string _FontGetSupportedChars(Rid fontRid) => default!;
+
+    public virtual void _FontRenderRange(Rid fontRid, Vector2I size, long start, long end) { }
+
+    public virtual void _FontRenderGlyph(Rid fontRid, Vector2I size, long index) { }
+
+    public virtual void _FontDrawGlyph(Rid fontRid, Rid canvas, long size, Vector2 pos, long index, Color color, float oversampling) { }
+
+    public virtual void _FontDrawGlyphOutline(Rid fontRid, Rid canvas, long size, long outlineSize, Vector2 pos, long index, Color color, float oversampling) { }
+
+    public virtual bool _FontIsLanguageSupported(Rid fontRid, string language) => default!;
+
+    public virtual void _FontSetLanguageSupportOverride(Rid fontRid, string language, bool supported) { }
+
+    public virtual bool _FontGetLanguageSupportOverride(Rid fontRid, string language) => default!;
+
+    public virtual void _FontRemoveLanguageSupportOverride(Rid fontRid, string language) { }
+
+    public virtual bool _FontIsScriptSupported(Rid fontRid, string script) => default!;
+
+    public virtual void _FontSetScriptSupportOverride(Rid fontRid, string script, bool supported) { }
+
+    public virtual bool _FontGetScriptSupportOverride(Rid fontRid, string script) => default!;
+
+    public virtual void _FontRemoveScriptSupportOverride(Rid fontRid, string script) { }
+
+    public virtual double _FontGetGlobalOversampling() => default!;
+
+    public virtual void _FontSetGlobalOversampling(double oversampling) { }
+
+    public virtual void _ReferenceOversamplingLevel(double oversampling) { }
+
+    public virtual void _UnreferenceOversamplingLevel(double oversampling) { }
+
+    public virtual Vector2 _GetHexCodeBoxSize(long size, long index) => default!;
+
+    public virtual void _DrawHexCodeBox(Rid canvas, long size, Vector2 pos, long index, Color color) { }
+
+    public virtual Rid _CreateShapedText(TextServer.Direction direction, TextServer.Orientation orientation) => default!;
+
+    public virtual void _ShapedTextClear(Rid shaped) { }
+
+    public virtual Rid _ShapedTextDuplicate(Rid shaped) => default!;
+
+    public virtual void _ShapedTextSetDirection(Rid shaped, TextServer.Direction direction) { }
+
+    public virtual TextServer.Direction _ShapedTextGetDirection(Rid shaped) => default!;
+
+    public virtual TextServer.Direction _ShapedTextGetInferredDirection(Rid shaped) => default!;
+
+    public virtual void _ShapedTextSetCustomPunctuation(Rid shaped, string punct) { }
+
+    public virtual string _ShapedTextGetCustomPunctuation(Rid shaped) => default!;
+
+    public virtual void _ShapedTextSetCustomEllipsis(Rid shaped, long @char) { }
+
+    public virtual long _ShapedTextGetCustomEllipsis(Rid shaped) => default!;
+
+    public virtual void _ShapedTextSetOrientation(Rid shaped, TextServer.Orientation orientation) { }
+
+    public virtual TextServer.Orientation _ShapedTextGetOrientation(Rid shaped) => default!;
+
+    public virtual void _ShapedTextSetPreserveInvalid(Rid shaped, bool enabled) { }
+
+    public virtual bool _ShapedTextGetPreserveInvalid(Rid shaped) => default!;
+
+    public virtual void _ShapedTextSetPreserveControl(Rid shaped, bool enabled) { }
+
+    public virtual bool _ShapedTextGetPreserveControl(Rid shaped) => default!;
+
+    public virtual void _ShapedTextSetSpacing(Rid shaped, TextServer.SpacingType spacing, long value) { }
+
+    public virtual long _ShapedTextGetSpacing(Rid shaped, TextServer.SpacingType spacing) => default!;
+
+    public virtual string _ShapedGetText(Rid shaped) => default!;
+
+    public virtual long _ShapedGetSpanCount(Rid shaped) => default!;
+
+    public virtual string _ShapedGetSpanText(Rid shaped, long index) => default!;
+
+    public virtual long _ShapedGetRunCount(Rid shaped) => default!;
+
+    public virtual string _ShapedGetRunText(Rid shaped, long index) => default!;
+
+    public virtual Vector2I _ShapedGetRunRange(Rid shaped, long index) => default!;
+
+    public virtual Vector2I _ShapedGetRunGlyphRange(Rid shaped, long index) => default!;
+
+    public virtual Rid _ShapedGetRunFontRid(Rid shaped, long index) => default!;
+
+    public virtual int _ShapedGetRunFontSize(Rid shaped, long index) => default!;
+
+    public virtual string _ShapedGetRunLanguage(Rid shaped, long index) => default!;
+
+    public virtual TextServer.Direction _ShapedGetRunDirection(Rid shaped, long index) => default!;
+
+    public virtual Rid _ShapedTextSubstr(Rid shaped, long start, long length) => default!;
+
+    public virtual Rid _ShapedTextGetParent(Rid shaped) => default!;
+
+    public virtual double _ShapedTextFitToWidth(Rid shaped, double width, TextServer.JustificationFlag justificationFlags) => default!;
+
+    public virtual bool _ShapedTextShape(Rid shaped) => default!;
+
+    public virtual bool _ShapedTextUpdateBreaks(Rid shaped) => default!;
+
+    public virtual bool _ShapedTextUpdateJustificationOps(Rid shaped) => default!;
+
+    public virtual bool _ShapedTextIsReady(Rid shaped) => default!;
+
+    public virtual long _ShapedTextGetGlyphCount(Rid shaped) => default!;
+
+    public virtual Vector2I _ShapedTextGetRange(Rid shaped) => default!;
+
+    public virtual long _ShapedTextGetTrimPos(Rid shaped) => default!;
+
+    public virtual long _ShapedTextGetEllipsisPos(Rid shaped) => default!;
+
+    public virtual long _ShapedTextGetEllipsisGlyphCount(Rid shaped) => default!;
+
+    public virtual void _ShapedTextOverrunTrimToWidth(Rid shaped, double width, TextServer.TextOverrunFlag trimFlags) { }
+
+    public virtual Vector2 _ShapedTextGetSize(Rid shaped) => default!;
+
+    public virtual double _ShapedTextGetAscent(Rid shaped) => default!;
+
+    public virtual double _ShapedTextGetDescent(Rid shaped) => default!;
+
+    public virtual double _ShapedTextGetWidth(Rid shaped) => default!;
+
+    public virtual double _ShapedTextGetUnderlinePosition(Rid shaped) => default!;
+
+    public virtual double _ShapedTextGetUnderlineThickness(Rid shaped) => default!;
+
+    public virtual long _ShapedTextGetDominantDirectionInRange(Rid shaped, long start, long end) => default!;
+
+    public virtual long _ShapedTextHitTestGrapheme(Rid shaped, double coord) => default!;
+
+    public virtual long _ShapedTextHitTestPosition(Rid shaped, double coord) => default!;
+
+    public virtual void _ShapedTextDraw(Rid shaped, Rid canvas, Vector2 pos, double clipL, double clipR, Color color, float oversampling) { }
+
+    public virtual void _ShapedTextDrawOutline(Rid shaped, Rid canvas, Vector2 pos, double clipL, double clipR, long outlineSize, Color color, float oversampling) { }
+
+    public virtual Vector2 _ShapedTextGetGraphemeBounds(Rid shaped, long pos) => default!;
+
+    public virtual long _ShapedTextNextGraphemePos(Rid shaped, long pos) => default!;
+
+    public virtual long _ShapedTextPrevGraphemePos(Rid shaped, long pos) => default!;
+
+    public virtual long _ShapedTextNextCharacterPos(Rid shaped, long pos) => default!;
+
+    public virtual long _ShapedTextPrevCharacterPos(Rid shaped, long pos) => default!;
+
+    public virtual long _ShapedTextClosestCharacterPos(Rid shaped, long pos) => default!;
+
+    public virtual string _FormatNumber(string number, string language) => default!;
+
+    public virtual string _ParseNumber(string number, string language) => default!;
+
+    public virtual string _PercentSign(string language) => default!;
+
+    public virtual string _StripDiacritics(string @string) => default!;
+
+    public virtual bool _IsValidIdentifier(string @string) => default!;
+
+    public virtual bool _IsValidLetter(ulong unicode) => default!;
+
+    public virtual bool _SpoofCheck(string @string) => default!;
+
+    public virtual string _StringToUpper(string @string, string language) => default!;
+
+    public virtual string _StringToLower(string @string, string language) => default!;
+
+    public virtual string _StringToTitle(string @string, string language) => default!;
+
+    public virtual void _Cleanup() { }
+
+    private static ulong __vsn_has_feature;
+    private static ulong __vsn_get_name;
+    private static ulong __vsn_get_features;
+    private static ulong __vsn_free_rid;
+    private static ulong __vsn_has;
+    private static ulong __vsn_load_support_data;
+    private static ulong __vsn_get_support_data_filename;
+    private static ulong __vsn_get_support_data_info;
+    private static ulong __vsn_save_support_data;
+    private static ulong __vsn_is_locale_using_support_data;
+    private static ulong __vsn_is_locale_right_to_left;
+    private static ulong __vsn_name_to_tag;
+    private static ulong __vsn_tag_to_name;
+    private static ulong __vsn_create_font;
+    private static ulong __vsn_create_font_linked_variation;
+    private static ulong __vsn_font_set_face_index;
+    private static ulong __vsn_font_get_face_index;
+    private static ulong __vsn_font_get_face_count;
+    private static ulong __vsn_font_set_style;
+    private static ulong __vsn_font_get_style;
+    private static ulong __vsn_font_set_name;
+    private static ulong __vsn_font_get_name;
+    private static ulong __vsn_font_set_style_name;
+    private static ulong __vsn_font_get_style_name;
+    private static ulong __vsn_font_set_weight;
+    private static ulong __vsn_font_get_weight;
+    private static ulong __vsn_font_set_stretch;
+    private static ulong __vsn_font_get_stretch;
+    private static ulong __vsn_font_set_antialiasing;
+    private static ulong __vsn_font_get_antialiasing;
+    private static ulong __vsn_font_set_disable_embedded_bitmaps;
+    private static ulong __vsn_font_get_disable_embedded_bitmaps;
+    private static ulong __vsn_font_set_generate_mipmaps;
+    private static ulong __vsn_font_get_generate_mipmaps;
+    private static ulong __vsn_font_set_multichannel_signed_distance_field;
+    private static ulong __vsn_font_is_multichannel_signed_distance_field;
+    private static ulong __vsn_font_set_msdf_pixel_range;
+    private static ulong __vsn_font_get_msdf_pixel_range;
+    private static ulong __vsn_font_set_msdf_size;
+    private static ulong __vsn_font_get_msdf_size;
+    private static ulong __vsn_font_set_fixed_size;
+    private static ulong __vsn_font_get_fixed_size;
+    private static ulong __vsn_font_set_fixed_size_scale_mode;
+    private static ulong __vsn_font_get_fixed_size_scale_mode;
+    private static ulong __vsn_font_set_allow_system_fallback;
+    private static ulong __vsn_font_is_allow_system_fallback;
+    private static ulong __vsn_font_clear_system_fallback_cache;
+    private static ulong __vsn_font_set_force_autohinter;
+    private static ulong __vsn_font_is_force_autohinter;
+    private static ulong __vsn_font_set_modulate_color_glyphs;
+    private static ulong __vsn_font_is_modulate_color_glyphs;
+    private static ulong __vsn_font_get_palette_count;
+    private static ulong __vsn_font_get_palette_name;
+    private static ulong __vsn_font_get_used_palette;
+    private static ulong __vsn_font_set_used_palette;
+    private static ulong __vsn_font_set_hinting;
+    private static ulong __vsn_font_get_hinting;
+    private static ulong __vsn_font_set_subpixel_positioning;
+    private static ulong __vsn_font_get_subpixel_positioning;
+    private static ulong __vsn_font_set_keep_rounding_remainders;
+    private static ulong __vsn_font_get_keep_rounding_remainders;
+    private static ulong __vsn_font_set_embolden;
+    private static ulong __vsn_font_get_embolden;
+    private static ulong __vsn_font_set_spacing;
+    private static ulong __vsn_font_get_spacing;
+    private static ulong __vsn_font_set_baseline_offset;
+    private static ulong __vsn_font_get_baseline_offset;
+    private static ulong __vsn_font_set_transform;
+    private static ulong __vsn_font_get_transform;
+    private static ulong __vsn_font_set_oversampling;
+    private static ulong __vsn_font_get_oversampling;
+    private static ulong __vsn_font_clear_size_cache;
+    private static ulong __vsn_font_remove_size_cache;
+    private static ulong __vsn_font_set_ascent;
+    private static ulong __vsn_font_get_ascent;
+    private static ulong __vsn_font_set_descent;
+    private static ulong __vsn_font_get_descent;
+    private static ulong __vsn_font_set_underline_position;
+    private static ulong __vsn_font_get_underline_position;
+    private static ulong __vsn_font_set_underline_thickness;
+    private static ulong __vsn_font_get_underline_thickness;
+    private static ulong __vsn_font_set_scale;
+    private static ulong __vsn_font_get_scale;
+    private static ulong __vsn_font_get_texture_count;
+    private static ulong __vsn_font_clear_textures;
+    private static ulong __vsn_font_remove_texture;
+    private static ulong __vsn_font_set_texture_image;
+    private static ulong __vsn_font_get_texture_image;
+    private static ulong __vsn_font_clear_glyphs;
+    private static ulong __vsn_font_remove_glyph;
+    private static ulong __vsn_font_get_glyph_advance;
+    private static ulong __vsn_font_set_glyph_advance;
+    private static ulong __vsn_font_get_glyph_offset;
+    private static ulong __vsn_font_set_glyph_offset;
+    private static ulong __vsn_font_get_glyph_size;
+    private static ulong __vsn_font_set_glyph_size;
+    private static ulong __vsn_font_get_glyph_uv_rect;
+    private static ulong __vsn_font_set_glyph_uv_rect;
+    private static ulong __vsn_font_get_glyph_texture_idx;
+    private static ulong __vsn_font_set_glyph_texture_idx;
+    private static ulong __vsn_font_get_glyph_texture_rid;
+    private static ulong __vsn_font_get_glyph_texture_size;
+    private static ulong __vsn_font_clear_kerning_map;
+    private static ulong __vsn_font_remove_kerning;
+    private static ulong __vsn_font_set_kerning;
+    private static ulong __vsn_font_get_kerning;
+    private static ulong __vsn_font_get_glyph_index;
+    private static ulong __vsn_font_get_char_from_glyph_index;
+    private static ulong __vsn_font_has_char;
+    private static ulong __vsn_font_get_supported_chars;
+    private static ulong __vsn_font_render_range;
+    private static ulong __vsn_font_render_glyph;
+    private static ulong __vsn_font_draw_glyph;
+    private static ulong __vsn_font_draw_glyph_outline;
+    private static ulong __vsn_font_is_language_supported;
+    private static ulong __vsn_font_set_language_support_override;
+    private static ulong __vsn_font_get_language_support_override;
+    private static ulong __vsn_font_remove_language_support_override;
+    private static ulong __vsn_font_is_script_supported;
+    private static ulong __vsn_font_set_script_support_override;
+    private static ulong __vsn_font_get_script_support_override;
+    private static ulong __vsn_font_remove_script_support_override;
+    private static ulong __vsn_font_get_global_oversampling;
+    private static ulong __vsn_font_set_global_oversampling;
+    private static ulong __vsn_reference_oversampling_level;
+    private static ulong __vsn_unreference_oversampling_level;
+    private static ulong __vsn_get_hex_code_box_size;
+    private static ulong __vsn_draw_hex_code_box;
+    private static ulong __vsn_create_shaped_text;
+    private static ulong __vsn_shaped_text_clear;
+    private static ulong __vsn_shaped_text_duplicate;
+    private static ulong __vsn_shaped_text_set_direction;
+    private static ulong __vsn_shaped_text_get_direction;
+    private static ulong __vsn_shaped_text_get_inferred_direction;
+    private static ulong __vsn_shaped_text_set_custom_punctuation;
+    private static ulong __vsn_shaped_text_get_custom_punctuation;
+    private static ulong __vsn_shaped_text_set_custom_ellipsis;
+    private static ulong __vsn_shaped_text_get_custom_ellipsis;
+    private static ulong __vsn_shaped_text_set_orientation;
+    private static ulong __vsn_shaped_text_get_orientation;
+    private static ulong __vsn_shaped_text_set_preserve_invalid;
+    private static ulong __vsn_shaped_text_get_preserve_invalid;
+    private static ulong __vsn_shaped_text_set_preserve_control;
+    private static ulong __vsn_shaped_text_get_preserve_control;
+    private static ulong __vsn_shaped_text_set_spacing;
+    private static ulong __vsn_shaped_text_get_spacing;
+    private static ulong __vsn_shaped_get_text;
+    private static ulong __vsn_shaped_get_span_count;
+    private static ulong __vsn_shaped_get_span_text;
+    private static ulong __vsn_shaped_get_run_count;
+    private static ulong __vsn_shaped_get_run_text;
+    private static ulong __vsn_shaped_get_run_range;
+    private static ulong __vsn_shaped_get_run_glyph_range;
+    private static ulong __vsn_shaped_get_run_font_rid;
+    private static ulong __vsn_shaped_get_run_font_size;
+    private static ulong __vsn_shaped_get_run_language;
+    private static ulong __vsn_shaped_get_run_direction;
+    private static ulong __vsn_shaped_text_substr;
+    private static ulong __vsn_shaped_text_get_parent;
+    private static ulong __vsn_shaped_text_fit_to_width;
+    private static ulong __vsn_shaped_text_shape;
+    private static ulong __vsn_shaped_text_update_breaks;
+    private static ulong __vsn_shaped_text_update_justification_ops;
+    private static ulong __vsn_shaped_text_is_ready;
+    private static ulong __vsn_shaped_text_get_glyph_count;
+    private static ulong __vsn_shaped_text_get_range;
+    private static ulong __vsn_shaped_text_get_trim_pos;
+    private static ulong __vsn_shaped_text_get_ellipsis_pos;
+    private static ulong __vsn_shaped_text_get_ellipsis_glyph_count;
+    private static ulong __vsn_shaped_text_overrun_trim_to_width;
+    private static ulong __vsn_shaped_text_get_size;
+    private static ulong __vsn_shaped_text_get_ascent;
+    private static ulong __vsn_shaped_text_get_descent;
+    private static ulong __vsn_shaped_text_get_width;
+    private static ulong __vsn_shaped_text_get_underline_position;
+    private static ulong __vsn_shaped_text_get_underline_thickness;
+    private static ulong __vsn_shaped_text_get_dominant_direction_in_range;
+    private static ulong __vsn_shaped_text_hit_test_grapheme;
+    private static ulong __vsn_shaped_text_hit_test_position;
+    private static ulong __vsn_shaped_text_draw;
+    private static ulong __vsn_shaped_text_draw_outline;
+    private static ulong __vsn_shaped_text_get_grapheme_bounds;
+    private static ulong __vsn_shaped_text_next_grapheme_pos;
+    private static ulong __vsn_shaped_text_prev_grapheme_pos;
+    private static ulong __vsn_shaped_text_next_character_pos;
+    private static ulong __vsn_shaped_text_prev_character_pos;
+    private static ulong __vsn_shaped_text_closest_character_pos;
+    private static ulong __vsn_format_number;
+    private static ulong __vsn_parse_number;
+    private static ulong __vsn_percent_sign;
+    private static ulong __vsn_strip_diacritics;
+    private static ulong __vsn_is_valid_identifier;
+    private static ulong __vsn_is_valid_letter;
+    private static ulong __vsn_spoof_check;
+    private static ulong __vsn_string_to_upper;
+    private static ulong __vsn_string_to_lower;
+    private static ulong __vsn_string_to_title;
+    private static ulong __vsn_cleanup;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_has_feature == 0) __vsn_has_feature = StringNames.Get("_has_feature").Opaque;
+        if (nameSn == __vsn_has_feature)
+        {
+            *(byte*)ret = _HasFeature((TextServer.Feature)(*(long*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_name == 0) __vsn_get_name = StringNames.Get("_get_name").Opaque;
+        if (nameSn == __vsn_get_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetName() ?? "");
+            return true;
+        }
+        if (__vsn_get_features == 0) __vsn_get_features = StringNames.Get("_get_features").Opaque;
+        if (nameSn == __vsn_get_features)
+        {
+            *(long*)ret = unchecked((long)_GetFeatures());
+            return true;
+        }
+        if (__vsn_free_rid == 0) __vsn_free_rid = StringNames.Get("_free_rid").Opaque;
+        if (nameSn == __vsn_free_rid)
+        {
+            _FreeRid(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_has == 0) __vsn_has = StringNames.Get("_has").Opaque;
+        if (nameSn == __vsn_has)
+        {
+            *(byte*)ret = _Has(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_load_support_data == 0) __vsn_load_support_data = StringNames.Get("_load_support_data").Opaque;
+        if (nameSn == __vsn_load_support_data)
+        {
+            *(byte*)ret = _LoadSupportData(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_support_data_filename == 0) __vsn_get_support_data_filename = StringNames.Get("_get_support_data_filename").Opaque;
+        if (nameSn == __vsn_get_support_data_filename)
+        {
+            *(ulong*)ret = NativeString.Create(_GetSupportDataFilename() ?? "");
+            return true;
+        }
+        if (__vsn_get_support_data_info == 0) __vsn_get_support_data_info = StringNames.Get("_get_support_data_info").Opaque;
+        if (nameSn == __vsn_get_support_data_info)
+        {
+            *(ulong*)ret = NativeString.Create(_GetSupportDataInfo() ?? "");
+            return true;
+        }
+        if (__vsn_save_support_data == 0) __vsn_save_support_data = StringNames.Get("_save_support_data").Opaque;
+        if (nameSn == __vsn_save_support_data)
+        {
+            *(byte*)ret = _SaveSupportData(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_is_locale_using_support_data == 0) __vsn_is_locale_using_support_data = StringNames.Get("_is_locale_using_support_data").Opaque;
+        if (nameSn == __vsn_is_locale_using_support_data)
+        {
+            *(byte*)ret = _IsLocaleUsingSupportData(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_is_locale_right_to_left == 0) __vsn_is_locale_right_to_left = StringNames.Get("_is_locale_right_to_left").Opaque;
+        if (nameSn == __vsn_is_locale_right_to_left)
+        {
+            *(byte*)ret = _IsLocaleRightToLeft(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_name_to_tag == 0) __vsn_name_to_tag = StringNames.Get("_name_to_tag").Opaque;
+        if (nameSn == __vsn_name_to_tag)
+        {
+            *(long*)ret = unchecked((long)_NameToTag(NativeString.Read(*(ulong*)args[0])));
+            return true;
+        }
+        if (__vsn_tag_to_name == 0) __vsn_tag_to_name = StringNames.Get("_tag_to_name").Opaque;
+        if (nameSn == __vsn_tag_to_name)
+        {
+            *(ulong*)ret = NativeString.Create(_TagToName(unchecked((long)(*(long*)args[0]))) ?? "");
+            return true;
+        }
+        if (__vsn_create_font == 0) __vsn_create_font = StringNames.Get("_create_font").Opaque;
+        if (nameSn == __vsn_create_font)
+        {
+            *(Rid*)ret = _CreateFont();
+            return true;
+        }
+        if (__vsn_create_font_linked_variation == 0) __vsn_create_font_linked_variation = StringNames.Get("_create_font_linked_variation").Opaque;
+        if (nameSn == __vsn_create_font_linked_variation)
+        {
+            *(Rid*)ret = _CreateFontLinkedVariation(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_font_set_face_index == 0) __vsn_font_set_face_index = StringNames.Get("_font_set_face_index").Opaque;
+        if (nameSn == __vsn_font_set_face_index)
+        {
+            _FontSetFaceIndex(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_font_get_face_index == 0) __vsn_font_get_face_index = StringNames.Get("_font_get_face_index").Opaque;
+        if (nameSn == __vsn_font_get_face_index)
+        {
+            *(long*)ret = unchecked((long)_FontGetFaceIndex(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_font_get_face_count == 0) __vsn_font_get_face_count = StringNames.Get("_font_get_face_count").Opaque;
+        if (nameSn == __vsn_font_get_face_count)
+        {
+            *(long*)ret = unchecked((long)_FontGetFaceCount(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_font_set_style == 0) __vsn_font_set_style = StringNames.Get("_font_set_style").Opaque;
+        if (nameSn == __vsn_font_set_style)
+        {
+            _FontSetStyle(*(Rid*)args[0], (TextServer.FontStyle)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_font_get_style == 0) __vsn_font_get_style = StringNames.Get("_font_get_style").Opaque;
+        if (nameSn == __vsn_font_get_style)
+        {
+            *(long*)ret = (long)_FontGetStyle(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_font_set_name == 0) __vsn_font_set_name = StringNames.Get("_font_set_name").Opaque;
+        if (nameSn == __vsn_font_set_name)
+        {
+            _FontSetName(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]));
+            return true;
+        }
+        if (__vsn_font_get_name == 0) __vsn_font_get_name = StringNames.Get("_font_get_name").Opaque;
+        if (nameSn == __vsn_font_get_name)
+        {
+            *(ulong*)ret = NativeString.Create(_FontGetName(*(Rid*)args[0]) ?? "");
+            return true;
+        }
+        if (__vsn_font_set_style_name == 0) __vsn_font_set_style_name = StringNames.Get("_font_set_style_name").Opaque;
+        if (nameSn == __vsn_font_set_style_name)
+        {
+            _FontSetStyleName(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]));
+            return true;
+        }
+        if (__vsn_font_get_style_name == 0) __vsn_font_get_style_name = StringNames.Get("_font_get_style_name").Opaque;
+        if (nameSn == __vsn_font_get_style_name)
+        {
+            *(ulong*)ret = NativeString.Create(_FontGetStyleName(*(Rid*)args[0]) ?? "");
+            return true;
+        }
+        if (__vsn_font_set_weight == 0) __vsn_font_set_weight = StringNames.Get("_font_set_weight").Opaque;
+        if (nameSn == __vsn_font_set_weight)
+        {
+            _FontSetWeight(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_font_get_weight == 0) __vsn_font_get_weight = StringNames.Get("_font_get_weight").Opaque;
+        if (nameSn == __vsn_font_get_weight)
+        {
+            *(long*)ret = unchecked((long)_FontGetWeight(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_font_set_stretch == 0) __vsn_font_set_stretch = StringNames.Get("_font_set_stretch").Opaque;
+        if (nameSn == __vsn_font_set_stretch)
+        {
+            _FontSetStretch(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_font_get_stretch == 0) __vsn_font_get_stretch = StringNames.Get("_font_get_stretch").Opaque;
+        if (nameSn == __vsn_font_get_stretch)
+        {
+            *(long*)ret = unchecked((long)_FontGetStretch(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_font_set_antialiasing == 0) __vsn_font_set_antialiasing = StringNames.Get("_font_set_antialiasing").Opaque;
+        if (nameSn == __vsn_font_set_antialiasing)
+        {
+            _FontSetAntialiasing(*(Rid*)args[0], (TextServer.FontAntialiasing)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_font_get_antialiasing == 0) __vsn_font_get_antialiasing = StringNames.Get("_font_get_antialiasing").Opaque;
+        if (nameSn == __vsn_font_get_antialiasing)
+        {
+            *(long*)ret = (long)_FontGetAntialiasing(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_font_set_disable_embedded_bitmaps == 0) __vsn_font_set_disable_embedded_bitmaps = StringNames.Get("_font_set_disable_embedded_bitmaps").Opaque;
+        if (nameSn == __vsn_font_set_disable_embedded_bitmaps)
+        {
+            _FontSetDisableEmbeddedBitmaps(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_font_get_disable_embedded_bitmaps == 0) __vsn_font_get_disable_embedded_bitmaps = StringNames.Get("_font_get_disable_embedded_bitmaps").Opaque;
+        if (nameSn == __vsn_font_get_disable_embedded_bitmaps)
+        {
+            *(byte*)ret = _FontGetDisableEmbeddedBitmaps(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_font_set_generate_mipmaps == 0) __vsn_font_set_generate_mipmaps = StringNames.Get("_font_set_generate_mipmaps").Opaque;
+        if (nameSn == __vsn_font_set_generate_mipmaps)
+        {
+            _FontSetGenerateMipmaps(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_font_get_generate_mipmaps == 0) __vsn_font_get_generate_mipmaps = StringNames.Get("_font_get_generate_mipmaps").Opaque;
+        if (nameSn == __vsn_font_get_generate_mipmaps)
+        {
+            *(byte*)ret = _FontGetGenerateMipmaps(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_font_set_multichannel_signed_distance_field == 0) __vsn_font_set_multichannel_signed_distance_field = StringNames.Get("_font_set_multichannel_signed_distance_field").Opaque;
+        if (nameSn == __vsn_font_set_multichannel_signed_distance_field)
+        {
+            _FontSetMultichannelSignedDistanceField(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_font_is_multichannel_signed_distance_field == 0) __vsn_font_is_multichannel_signed_distance_field = StringNames.Get("_font_is_multichannel_signed_distance_field").Opaque;
+        if (nameSn == __vsn_font_is_multichannel_signed_distance_field)
+        {
+            *(byte*)ret = _FontIsMultichannelSignedDistanceField(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_font_set_msdf_pixel_range == 0) __vsn_font_set_msdf_pixel_range = StringNames.Get("_font_set_msdf_pixel_range").Opaque;
+        if (nameSn == __vsn_font_set_msdf_pixel_range)
+        {
+            _FontSetMsdfPixelRange(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_font_get_msdf_pixel_range == 0) __vsn_font_get_msdf_pixel_range = StringNames.Get("_font_get_msdf_pixel_range").Opaque;
+        if (nameSn == __vsn_font_get_msdf_pixel_range)
+        {
+            *(long*)ret = unchecked((long)_FontGetMsdfPixelRange(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_font_set_msdf_size == 0) __vsn_font_set_msdf_size = StringNames.Get("_font_set_msdf_size").Opaque;
+        if (nameSn == __vsn_font_set_msdf_size)
+        {
+            _FontSetMsdfSize(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_font_get_msdf_size == 0) __vsn_font_get_msdf_size = StringNames.Get("_font_get_msdf_size").Opaque;
+        if (nameSn == __vsn_font_get_msdf_size)
+        {
+            *(long*)ret = unchecked((long)_FontGetMsdfSize(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_font_set_fixed_size == 0) __vsn_font_set_fixed_size = StringNames.Get("_font_set_fixed_size").Opaque;
+        if (nameSn == __vsn_font_set_fixed_size)
+        {
+            _FontSetFixedSize(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_font_get_fixed_size == 0) __vsn_font_get_fixed_size = StringNames.Get("_font_get_fixed_size").Opaque;
+        if (nameSn == __vsn_font_get_fixed_size)
+        {
+            *(long*)ret = unchecked((long)_FontGetFixedSize(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_font_set_fixed_size_scale_mode == 0) __vsn_font_set_fixed_size_scale_mode = StringNames.Get("_font_set_fixed_size_scale_mode").Opaque;
+        if (nameSn == __vsn_font_set_fixed_size_scale_mode)
+        {
+            _FontSetFixedSizeScaleMode(*(Rid*)args[0], (TextServer.FixedSizeScaleMode)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_font_get_fixed_size_scale_mode == 0) __vsn_font_get_fixed_size_scale_mode = StringNames.Get("_font_get_fixed_size_scale_mode").Opaque;
+        if (nameSn == __vsn_font_get_fixed_size_scale_mode)
+        {
+            *(long*)ret = (long)_FontGetFixedSizeScaleMode(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_font_set_allow_system_fallback == 0) __vsn_font_set_allow_system_fallback = StringNames.Get("_font_set_allow_system_fallback").Opaque;
+        if (nameSn == __vsn_font_set_allow_system_fallback)
+        {
+            _FontSetAllowSystemFallback(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_font_is_allow_system_fallback == 0) __vsn_font_is_allow_system_fallback = StringNames.Get("_font_is_allow_system_fallback").Opaque;
+        if (nameSn == __vsn_font_is_allow_system_fallback)
+        {
+            *(byte*)ret = _FontIsAllowSystemFallback(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_font_clear_system_fallback_cache == 0) __vsn_font_clear_system_fallback_cache = StringNames.Get("_font_clear_system_fallback_cache").Opaque;
+        if (nameSn == __vsn_font_clear_system_fallback_cache)
+        {
+            _FontClearSystemFallbackCache();
+            return true;
+        }
+        if (__vsn_font_set_force_autohinter == 0) __vsn_font_set_force_autohinter = StringNames.Get("_font_set_force_autohinter").Opaque;
+        if (nameSn == __vsn_font_set_force_autohinter)
+        {
+            _FontSetForceAutohinter(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_font_is_force_autohinter == 0) __vsn_font_is_force_autohinter = StringNames.Get("_font_is_force_autohinter").Opaque;
+        if (nameSn == __vsn_font_is_force_autohinter)
+        {
+            *(byte*)ret = _FontIsForceAutohinter(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_font_set_modulate_color_glyphs == 0) __vsn_font_set_modulate_color_glyphs = StringNames.Get("_font_set_modulate_color_glyphs").Opaque;
+        if (nameSn == __vsn_font_set_modulate_color_glyphs)
+        {
+            _FontSetModulateColorGlyphs(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_font_is_modulate_color_glyphs == 0) __vsn_font_is_modulate_color_glyphs = StringNames.Get("_font_is_modulate_color_glyphs").Opaque;
+        if (nameSn == __vsn_font_is_modulate_color_glyphs)
+        {
+            *(byte*)ret = _FontIsModulateColorGlyphs(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_font_get_palette_count == 0) __vsn_font_get_palette_count = StringNames.Get("_font_get_palette_count").Opaque;
+        if (nameSn == __vsn_font_get_palette_count)
+        {
+            *(long*)ret = unchecked((long)_FontGetPaletteCount(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_font_get_palette_name == 0) __vsn_font_get_palette_name = StringNames.Get("_font_get_palette_name").Opaque;
+        if (nameSn == __vsn_font_get_palette_name)
+        {
+            *(ulong*)ret = NativeString.Create(_FontGetPaletteName(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))) ?? "");
+            return true;
+        }
+        if (__vsn_font_get_used_palette == 0) __vsn_font_get_used_palette = StringNames.Get("_font_get_used_palette").Opaque;
+        if (nameSn == __vsn_font_get_used_palette)
+        {
+            *(long*)ret = unchecked((long)_FontGetUsedPalette(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_font_set_used_palette == 0) __vsn_font_set_used_palette = StringNames.Get("_font_set_used_palette").Opaque;
+        if (nameSn == __vsn_font_set_used_palette)
+        {
+            _FontSetUsedPalette(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_font_set_hinting == 0) __vsn_font_set_hinting = StringNames.Get("_font_set_hinting").Opaque;
+        if (nameSn == __vsn_font_set_hinting)
+        {
+            _FontSetHinting(*(Rid*)args[0], (TextServer.Hinting)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_font_get_hinting == 0) __vsn_font_get_hinting = StringNames.Get("_font_get_hinting").Opaque;
+        if (nameSn == __vsn_font_get_hinting)
+        {
+            *(long*)ret = (long)_FontGetHinting(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_font_set_subpixel_positioning == 0) __vsn_font_set_subpixel_positioning = StringNames.Get("_font_set_subpixel_positioning").Opaque;
+        if (nameSn == __vsn_font_set_subpixel_positioning)
+        {
+            _FontSetSubpixelPositioning(*(Rid*)args[0], (TextServer.SubpixelPositioning)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_font_get_subpixel_positioning == 0) __vsn_font_get_subpixel_positioning = StringNames.Get("_font_get_subpixel_positioning").Opaque;
+        if (nameSn == __vsn_font_get_subpixel_positioning)
+        {
+            *(long*)ret = (long)_FontGetSubpixelPositioning(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_font_set_keep_rounding_remainders == 0) __vsn_font_set_keep_rounding_remainders = StringNames.Get("_font_set_keep_rounding_remainders").Opaque;
+        if (nameSn == __vsn_font_set_keep_rounding_remainders)
+        {
+            _FontSetKeepRoundingRemainders(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_font_get_keep_rounding_remainders == 0) __vsn_font_get_keep_rounding_remainders = StringNames.Get("_font_get_keep_rounding_remainders").Opaque;
+        if (nameSn == __vsn_font_get_keep_rounding_remainders)
+        {
+            *(byte*)ret = _FontGetKeepRoundingRemainders(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_font_set_embolden == 0) __vsn_font_set_embolden = StringNames.Get("_font_set_embolden").Opaque;
+        if (nameSn == __vsn_font_set_embolden)
+        {
+            _FontSetEmbolden(*(Rid*)args[0], *(double*)args[1]);
+            return true;
+        }
+        if (__vsn_font_get_embolden == 0) __vsn_font_get_embolden = StringNames.Get("_font_get_embolden").Opaque;
+        if (nameSn == __vsn_font_get_embolden)
+        {
+            *(double*)ret = _FontGetEmbolden(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_font_set_spacing == 0) __vsn_font_set_spacing = StringNames.Get("_font_set_spacing").Opaque;
+        if (nameSn == __vsn_font_set_spacing)
+        {
+            _FontSetSpacing(*(Rid*)args[0], (TextServer.SpacingType)(*(long*)args[1]), unchecked((long)(*(long*)args[2])));
+            return true;
+        }
+        if (__vsn_font_get_spacing == 0) __vsn_font_get_spacing = StringNames.Get("_font_get_spacing").Opaque;
+        if (nameSn == __vsn_font_get_spacing)
+        {
+            *(long*)ret = unchecked((long)_FontGetSpacing(*(Rid*)args[0], (TextServer.SpacingType)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_font_set_baseline_offset == 0) __vsn_font_set_baseline_offset = StringNames.Get("_font_set_baseline_offset").Opaque;
+        if (nameSn == __vsn_font_set_baseline_offset)
+        {
+            _FontSetBaselineOffset(*(Rid*)args[0], *(double*)args[1]);
+            return true;
+        }
+        if (__vsn_font_get_baseline_offset == 0) __vsn_font_get_baseline_offset = StringNames.Get("_font_get_baseline_offset").Opaque;
+        if (nameSn == __vsn_font_get_baseline_offset)
+        {
+            *(double*)ret = _FontGetBaselineOffset(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_font_set_transform == 0) __vsn_font_set_transform = StringNames.Get("_font_set_transform").Opaque;
+        if (nameSn == __vsn_font_set_transform)
+        {
+            _FontSetTransform(*(Rid*)args[0], *(Transform2D*)args[1]);
+            return true;
+        }
+        if (__vsn_font_get_transform == 0) __vsn_font_get_transform = StringNames.Get("_font_get_transform").Opaque;
+        if (nameSn == __vsn_font_get_transform)
+        {
+            *(Transform2D*)ret = _FontGetTransform(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_font_set_oversampling == 0) __vsn_font_set_oversampling = StringNames.Get("_font_set_oversampling").Opaque;
+        if (nameSn == __vsn_font_set_oversampling)
+        {
+            _FontSetOversampling(*(Rid*)args[0], *(double*)args[1]);
+            return true;
+        }
+        if (__vsn_font_get_oversampling == 0) __vsn_font_get_oversampling = StringNames.Get("_font_get_oversampling").Opaque;
+        if (nameSn == __vsn_font_get_oversampling)
+        {
+            *(double*)ret = _FontGetOversampling(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_font_clear_size_cache == 0) __vsn_font_clear_size_cache = StringNames.Get("_font_clear_size_cache").Opaque;
+        if (nameSn == __vsn_font_clear_size_cache)
+        {
+            _FontClearSizeCache(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_font_remove_size_cache == 0) __vsn_font_remove_size_cache = StringNames.Get("_font_remove_size_cache").Opaque;
+        if (nameSn == __vsn_font_remove_size_cache)
+        {
+            _FontRemoveSizeCache(*(Rid*)args[0], *(Vector2I*)args[1]);
+            return true;
+        }
+        if (__vsn_font_set_ascent == 0) __vsn_font_set_ascent = StringNames.Get("_font_set_ascent").Opaque;
+        if (nameSn == __vsn_font_set_ascent)
+        {
+            _FontSetAscent(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), *(double*)args[2]);
+            return true;
+        }
+        if (__vsn_font_get_ascent == 0) __vsn_font_get_ascent = StringNames.Get("_font_get_ascent").Opaque;
+        if (nameSn == __vsn_font_get_ascent)
+        {
+            *(double*)ret = _FontGetAscent(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_font_set_descent == 0) __vsn_font_set_descent = StringNames.Get("_font_set_descent").Opaque;
+        if (nameSn == __vsn_font_set_descent)
+        {
+            _FontSetDescent(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), *(double*)args[2]);
+            return true;
+        }
+        if (__vsn_font_get_descent == 0) __vsn_font_get_descent = StringNames.Get("_font_get_descent").Opaque;
+        if (nameSn == __vsn_font_get_descent)
+        {
+            *(double*)ret = _FontGetDescent(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_font_set_underline_position == 0) __vsn_font_set_underline_position = StringNames.Get("_font_set_underline_position").Opaque;
+        if (nameSn == __vsn_font_set_underline_position)
+        {
+            _FontSetUnderlinePosition(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), *(double*)args[2]);
+            return true;
+        }
+        if (__vsn_font_get_underline_position == 0) __vsn_font_get_underline_position = StringNames.Get("_font_get_underline_position").Opaque;
+        if (nameSn == __vsn_font_get_underline_position)
+        {
+            *(double*)ret = _FontGetUnderlinePosition(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_font_set_underline_thickness == 0) __vsn_font_set_underline_thickness = StringNames.Get("_font_set_underline_thickness").Opaque;
+        if (nameSn == __vsn_font_set_underline_thickness)
+        {
+            _FontSetUnderlineThickness(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), *(double*)args[2]);
+            return true;
+        }
+        if (__vsn_font_get_underline_thickness == 0) __vsn_font_get_underline_thickness = StringNames.Get("_font_get_underline_thickness").Opaque;
+        if (nameSn == __vsn_font_get_underline_thickness)
+        {
+            *(double*)ret = _FontGetUnderlineThickness(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_font_set_scale == 0) __vsn_font_set_scale = StringNames.Get("_font_set_scale").Opaque;
+        if (nameSn == __vsn_font_set_scale)
+        {
+            _FontSetScale(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), *(double*)args[2]);
+            return true;
+        }
+        if (__vsn_font_get_scale == 0) __vsn_font_get_scale = StringNames.Get("_font_get_scale").Opaque;
+        if (nameSn == __vsn_font_get_scale)
+        {
+            *(double*)ret = _FontGetScale(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_font_get_texture_count == 0) __vsn_font_get_texture_count = StringNames.Get("_font_get_texture_count").Opaque;
+        if (nameSn == __vsn_font_get_texture_count)
+        {
+            *(long*)ret = unchecked((long)_FontGetTextureCount(*(Rid*)args[0], *(Vector2I*)args[1]));
+            return true;
+        }
+        if (__vsn_font_clear_textures == 0) __vsn_font_clear_textures = StringNames.Get("_font_clear_textures").Opaque;
+        if (nameSn == __vsn_font_clear_textures)
+        {
+            _FontClearTextures(*(Rid*)args[0], *(Vector2I*)args[1]);
+            return true;
+        }
+        if (__vsn_font_remove_texture == 0) __vsn_font_remove_texture = StringNames.Get("_font_remove_texture").Opaque;
+        if (nameSn == __vsn_font_remove_texture)
+        {
+            _FontRemoveTexture(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])));
+            return true;
+        }
+        if (__vsn_font_set_texture_image == 0) __vsn_font_set_texture_image = StringNames.Get("_font_set_texture_image").Opaque;
+        if (nameSn == __vsn_font_set_texture_image)
+        {
+            _FontSetTextureImage(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])), (Image?)InstanceBindings.GetOrCreate(*(nint*)args[3], adoptRef: false));
+            return true;
+        }
+        if (__vsn_font_get_texture_image == 0) __vsn_font_get_texture_image = StringNames.Get("_font_get_texture_image").Opaque;
+        if (nameSn == __vsn_font_get_texture_image)
+        {
+            *(nint*)ret = _FontGetTextureImage(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])))?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_font_clear_glyphs == 0) __vsn_font_clear_glyphs = StringNames.Get("_font_clear_glyphs").Opaque;
+        if (nameSn == __vsn_font_clear_glyphs)
+        {
+            _FontClearGlyphs(*(Rid*)args[0], *(Vector2I*)args[1]);
+            return true;
+        }
+        if (__vsn_font_remove_glyph == 0) __vsn_font_remove_glyph = StringNames.Get("_font_remove_glyph").Opaque;
+        if (nameSn == __vsn_font_remove_glyph)
+        {
+            _FontRemoveGlyph(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])));
+            return true;
+        }
+        if (__vsn_font_get_glyph_advance == 0) __vsn_font_get_glyph_advance = StringNames.Get("_font_get_glyph_advance").Opaque;
+        if (nameSn == __vsn_font_get_glyph_advance)
+        {
+            *(Vector2*)ret = _FontGetGlyphAdvance(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), unchecked((long)(*(long*)args[2])));
+            return true;
+        }
+        if (__vsn_font_set_glyph_advance == 0) __vsn_font_set_glyph_advance = StringNames.Get("_font_set_glyph_advance").Opaque;
+        if (nameSn == __vsn_font_set_glyph_advance)
+        {
+            _FontSetGlyphAdvance(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), unchecked((long)(*(long*)args[2])), *(Vector2*)args[3]);
+            return true;
+        }
+        if (__vsn_font_get_glyph_offset == 0) __vsn_font_get_glyph_offset = StringNames.Get("_font_get_glyph_offset").Opaque;
+        if (nameSn == __vsn_font_get_glyph_offset)
+        {
+            *(Vector2*)ret = _FontGetGlyphOffset(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])));
+            return true;
+        }
+        if (__vsn_font_set_glyph_offset == 0) __vsn_font_set_glyph_offset = StringNames.Get("_font_set_glyph_offset").Opaque;
+        if (nameSn == __vsn_font_set_glyph_offset)
+        {
+            _FontSetGlyphOffset(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])), *(Vector2*)args[3]);
+            return true;
+        }
+        if (__vsn_font_get_glyph_size == 0) __vsn_font_get_glyph_size = StringNames.Get("_font_get_glyph_size").Opaque;
+        if (nameSn == __vsn_font_get_glyph_size)
+        {
+            *(Vector2*)ret = _FontGetGlyphSize(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])));
+            return true;
+        }
+        if (__vsn_font_set_glyph_size == 0) __vsn_font_set_glyph_size = StringNames.Get("_font_set_glyph_size").Opaque;
+        if (nameSn == __vsn_font_set_glyph_size)
+        {
+            _FontSetGlyphSize(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])), *(Vector2*)args[3]);
+            return true;
+        }
+        if (__vsn_font_get_glyph_uv_rect == 0) __vsn_font_get_glyph_uv_rect = StringNames.Get("_font_get_glyph_uv_rect").Opaque;
+        if (nameSn == __vsn_font_get_glyph_uv_rect)
+        {
+            *(Rect2*)ret = _FontGetGlyphUvRect(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])));
+            return true;
+        }
+        if (__vsn_font_set_glyph_uv_rect == 0) __vsn_font_set_glyph_uv_rect = StringNames.Get("_font_set_glyph_uv_rect").Opaque;
+        if (nameSn == __vsn_font_set_glyph_uv_rect)
+        {
+            _FontSetGlyphUvRect(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])), *(Rect2*)args[3]);
+            return true;
+        }
+        if (__vsn_font_get_glyph_texture_idx == 0) __vsn_font_get_glyph_texture_idx = StringNames.Get("_font_get_glyph_texture_idx").Opaque;
+        if (nameSn == __vsn_font_get_glyph_texture_idx)
+        {
+            *(long*)ret = unchecked((long)_FontGetGlyphTextureIdx(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2]))));
+            return true;
+        }
+        if (__vsn_font_set_glyph_texture_idx == 0) __vsn_font_set_glyph_texture_idx = StringNames.Get("_font_set_glyph_texture_idx").Opaque;
+        if (nameSn == __vsn_font_set_glyph_texture_idx)
+        {
+            _FontSetGlyphTextureIdx(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])), unchecked((long)(*(long*)args[3])));
+            return true;
+        }
+        if (__vsn_font_get_glyph_texture_rid == 0) __vsn_font_get_glyph_texture_rid = StringNames.Get("_font_get_glyph_texture_rid").Opaque;
+        if (nameSn == __vsn_font_get_glyph_texture_rid)
+        {
+            *(Rid*)ret = _FontGetGlyphTextureRid(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])));
+            return true;
+        }
+        if (__vsn_font_get_glyph_texture_size == 0) __vsn_font_get_glyph_texture_size = StringNames.Get("_font_get_glyph_texture_size").Opaque;
+        if (nameSn == __vsn_font_get_glyph_texture_size)
+        {
+            *(Vector2*)ret = _FontGetGlyphTextureSize(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])));
+            return true;
+        }
+        if (__vsn_font_clear_kerning_map == 0) __vsn_font_clear_kerning_map = StringNames.Get("_font_clear_kerning_map").Opaque;
+        if (nameSn == __vsn_font_clear_kerning_map)
+        {
+            _FontClearKerningMap(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_font_remove_kerning == 0) __vsn_font_remove_kerning = StringNames.Get("_font_remove_kerning").Opaque;
+        if (nameSn == __vsn_font_remove_kerning)
+        {
+            _FontRemoveKerning(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), *(Vector2I*)args[2]);
+            return true;
+        }
+        if (__vsn_font_set_kerning == 0) __vsn_font_set_kerning = StringNames.Get("_font_set_kerning").Opaque;
+        if (nameSn == __vsn_font_set_kerning)
+        {
+            _FontSetKerning(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), *(Vector2I*)args[2], *(Vector2*)args[3]);
+            return true;
+        }
+        if (__vsn_font_get_kerning == 0) __vsn_font_get_kerning = StringNames.Get("_font_get_kerning").Opaque;
+        if (nameSn == __vsn_font_get_kerning)
+        {
+            *(Vector2*)ret = _FontGetKerning(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), *(Vector2I*)args[2]);
+            return true;
+        }
+        if (__vsn_font_get_glyph_index == 0) __vsn_font_get_glyph_index = StringNames.Get("_font_get_glyph_index").Opaque;
+        if (nameSn == __vsn_font_get_glyph_index)
+        {
+            *(long*)ret = unchecked((long)_FontGetGlyphIndex(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), unchecked((long)(*(long*)args[2])), unchecked((long)(*(long*)args[3]))));
+            return true;
+        }
+        if (__vsn_font_get_char_from_glyph_index == 0) __vsn_font_get_char_from_glyph_index = StringNames.Get("_font_get_char_from_glyph_index").Opaque;
+        if (nameSn == __vsn_font_get_char_from_glyph_index)
+        {
+            *(long*)ret = unchecked((long)_FontGetCharFromGlyphIndex(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), unchecked((long)(*(long*)args[2]))));
+            return true;
+        }
+        if (__vsn_font_has_char == 0) __vsn_font_has_char = StringNames.Get("_font_has_char").Opaque;
+        if (nameSn == __vsn_font_has_char)
+        {
+            *(byte*)ret = _FontHasChar(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_font_get_supported_chars == 0) __vsn_font_get_supported_chars = StringNames.Get("_font_get_supported_chars").Opaque;
+        if (nameSn == __vsn_font_get_supported_chars)
+        {
+            *(ulong*)ret = NativeString.Create(_FontGetSupportedChars(*(Rid*)args[0]) ?? "");
+            return true;
+        }
+        if (__vsn_font_render_range == 0) __vsn_font_render_range = StringNames.Get("_font_render_range").Opaque;
+        if (nameSn == __vsn_font_render_range)
+        {
+            _FontRenderRange(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])), unchecked((long)(*(long*)args[3])));
+            return true;
+        }
+        if (__vsn_font_render_glyph == 0) __vsn_font_render_glyph = StringNames.Get("_font_render_glyph").Opaque;
+        if (nameSn == __vsn_font_render_glyph)
+        {
+            _FontRenderGlyph(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])));
+            return true;
+        }
+        if (__vsn_font_draw_glyph == 0) __vsn_font_draw_glyph = StringNames.Get("_font_draw_glyph").Opaque;
+        if (nameSn == __vsn_font_draw_glyph)
+        {
+            _FontDrawGlyph(*(Rid*)args[0], *(Rid*)args[1], unchecked((long)(*(long*)args[2])), *(Vector2*)args[3], unchecked((long)(*(long*)args[4])), *(Color*)args[5], (float)(*(double*)args[6]));
+            return true;
+        }
+        if (__vsn_font_draw_glyph_outline == 0) __vsn_font_draw_glyph_outline = StringNames.Get("_font_draw_glyph_outline").Opaque;
+        if (nameSn == __vsn_font_draw_glyph_outline)
+        {
+            _FontDrawGlyphOutline(*(Rid*)args[0], *(Rid*)args[1], unchecked((long)(*(long*)args[2])), unchecked((long)(*(long*)args[3])), *(Vector2*)args[4], unchecked((long)(*(long*)args[5])), *(Color*)args[6], (float)(*(double*)args[7]));
+            return true;
+        }
+        if (__vsn_font_is_language_supported == 0) __vsn_font_is_language_supported = StringNames.Get("_font_is_language_supported").Opaque;
+        if (nameSn == __vsn_font_is_language_supported)
+        {
+            *(byte*)ret = _FontIsLanguageSupported(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_font_set_language_support_override == 0) __vsn_font_set_language_support_override = StringNames.Get("_font_set_language_support_override").Opaque;
+        if (nameSn == __vsn_font_set_language_support_override)
+        {
+            _FontSetLanguageSupportOverride(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]), *(byte*)args[2] != 0);
+            return true;
+        }
+        if (__vsn_font_get_language_support_override == 0) __vsn_font_get_language_support_override = StringNames.Get("_font_get_language_support_override").Opaque;
+        if (nameSn == __vsn_font_get_language_support_override)
+        {
+            *(byte*)ret = _FontGetLanguageSupportOverride(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_font_remove_language_support_override == 0) __vsn_font_remove_language_support_override = StringNames.Get("_font_remove_language_support_override").Opaque;
+        if (nameSn == __vsn_font_remove_language_support_override)
+        {
+            _FontRemoveLanguageSupportOverride(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]));
+            return true;
+        }
+        if (__vsn_font_is_script_supported == 0) __vsn_font_is_script_supported = StringNames.Get("_font_is_script_supported").Opaque;
+        if (nameSn == __vsn_font_is_script_supported)
+        {
+            *(byte*)ret = _FontIsScriptSupported(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_font_set_script_support_override == 0) __vsn_font_set_script_support_override = StringNames.Get("_font_set_script_support_override").Opaque;
+        if (nameSn == __vsn_font_set_script_support_override)
+        {
+            _FontSetScriptSupportOverride(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]), *(byte*)args[2] != 0);
+            return true;
+        }
+        if (__vsn_font_get_script_support_override == 0) __vsn_font_get_script_support_override = StringNames.Get("_font_get_script_support_override").Opaque;
+        if (nameSn == __vsn_font_get_script_support_override)
+        {
+            *(byte*)ret = _FontGetScriptSupportOverride(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_font_remove_script_support_override == 0) __vsn_font_remove_script_support_override = StringNames.Get("_font_remove_script_support_override").Opaque;
+        if (nameSn == __vsn_font_remove_script_support_override)
+        {
+            _FontRemoveScriptSupportOverride(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]));
+            return true;
+        }
+        if (__vsn_font_get_global_oversampling == 0) __vsn_font_get_global_oversampling = StringNames.Get("_font_get_global_oversampling").Opaque;
+        if (nameSn == __vsn_font_get_global_oversampling)
+        {
+            *(double*)ret = _FontGetGlobalOversampling();
+            return true;
+        }
+        if (__vsn_font_set_global_oversampling == 0) __vsn_font_set_global_oversampling = StringNames.Get("_font_set_global_oversampling").Opaque;
+        if (nameSn == __vsn_font_set_global_oversampling)
+        {
+            _FontSetGlobalOversampling(*(double*)args[0]);
+            return true;
+        }
+        if (__vsn_reference_oversampling_level == 0) __vsn_reference_oversampling_level = StringNames.Get("_reference_oversampling_level").Opaque;
+        if (nameSn == __vsn_reference_oversampling_level)
+        {
+            _ReferenceOversamplingLevel(*(double*)args[0]);
+            return true;
+        }
+        if (__vsn_unreference_oversampling_level == 0) __vsn_unreference_oversampling_level = StringNames.Get("_unreference_oversampling_level").Opaque;
+        if (nameSn == __vsn_unreference_oversampling_level)
+        {
+            _UnreferenceOversamplingLevel(*(double*)args[0]);
+            return true;
+        }
+        if (__vsn_get_hex_code_box_size == 0) __vsn_get_hex_code_box_size = StringNames.Get("_get_hex_code_box_size").Opaque;
+        if (nameSn == __vsn_get_hex_code_box_size)
+        {
+            *(Vector2*)ret = _GetHexCodeBoxSize(unchecked((long)(*(long*)args[0])), unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_draw_hex_code_box == 0) __vsn_draw_hex_code_box = StringNames.Get("_draw_hex_code_box").Opaque;
+        if (nameSn == __vsn_draw_hex_code_box)
+        {
+            _DrawHexCodeBox(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), *(Vector2*)args[2], unchecked((long)(*(long*)args[3])), *(Color*)args[4]);
+            return true;
+        }
+        if (__vsn_create_shaped_text == 0) __vsn_create_shaped_text = StringNames.Get("_create_shaped_text").Opaque;
+        if (nameSn == __vsn_create_shaped_text)
+        {
+            *(Rid*)ret = _CreateShapedText((TextServer.Direction)(*(long*)args[0]), (TextServer.Orientation)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_shaped_text_clear == 0) __vsn_shaped_text_clear = StringNames.Get("_shaped_text_clear").Opaque;
+        if (nameSn == __vsn_shaped_text_clear)
+        {
+            _ShapedTextClear(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shaped_text_duplicate == 0) __vsn_shaped_text_duplicate = StringNames.Get("_shaped_text_duplicate").Opaque;
+        if (nameSn == __vsn_shaped_text_duplicate)
+        {
+            *(Rid*)ret = _ShapedTextDuplicate(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shaped_text_set_direction == 0) __vsn_shaped_text_set_direction = StringNames.Get("_shaped_text_set_direction").Opaque;
+        if (nameSn == __vsn_shaped_text_set_direction)
+        {
+            _ShapedTextSetDirection(*(Rid*)args[0], (TextServer.Direction)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_shaped_text_get_direction == 0) __vsn_shaped_text_get_direction = StringNames.Get("_shaped_text_get_direction").Opaque;
+        if (nameSn == __vsn_shaped_text_get_direction)
+        {
+            *(long*)ret = (long)_ShapedTextGetDirection(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shaped_text_get_inferred_direction == 0) __vsn_shaped_text_get_inferred_direction = StringNames.Get("_shaped_text_get_inferred_direction").Opaque;
+        if (nameSn == __vsn_shaped_text_get_inferred_direction)
+        {
+            *(long*)ret = (long)_ShapedTextGetInferredDirection(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shaped_text_set_custom_punctuation == 0) __vsn_shaped_text_set_custom_punctuation = StringNames.Get("_shaped_text_set_custom_punctuation").Opaque;
+        if (nameSn == __vsn_shaped_text_set_custom_punctuation)
+        {
+            _ShapedTextSetCustomPunctuation(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]));
+            return true;
+        }
+        if (__vsn_shaped_text_get_custom_punctuation == 0) __vsn_shaped_text_get_custom_punctuation = StringNames.Get("_shaped_text_get_custom_punctuation").Opaque;
+        if (nameSn == __vsn_shaped_text_get_custom_punctuation)
+        {
+            *(ulong*)ret = NativeString.Create(_ShapedTextGetCustomPunctuation(*(Rid*)args[0]) ?? "");
+            return true;
+        }
+        if (__vsn_shaped_text_set_custom_ellipsis == 0) __vsn_shaped_text_set_custom_ellipsis = StringNames.Get("_shaped_text_set_custom_ellipsis").Opaque;
+        if (nameSn == __vsn_shaped_text_set_custom_ellipsis)
+        {
+            _ShapedTextSetCustomEllipsis(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_shaped_text_get_custom_ellipsis == 0) __vsn_shaped_text_get_custom_ellipsis = StringNames.Get("_shaped_text_get_custom_ellipsis").Opaque;
+        if (nameSn == __vsn_shaped_text_get_custom_ellipsis)
+        {
+            *(long*)ret = unchecked((long)_ShapedTextGetCustomEllipsis(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_shaped_text_set_orientation == 0) __vsn_shaped_text_set_orientation = StringNames.Get("_shaped_text_set_orientation").Opaque;
+        if (nameSn == __vsn_shaped_text_set_orientation)
+        {
+            _ShapedTextSetOrientation(*(Rid*)args[0], (TextServer.Orientation)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_shaped_text_get_orientation == 0) __vsn_shaped_text_get_orientation = StringNames.Get("_shaped_text_get_orientation").Opaque;
+        if (nameSn == __vsn_shaped_text_get_orientation)
+        {
+            *(long*)ret = (long)_ShapedTextGetOrientation(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shaped_text_set_preserve_invalid == 0) __vsn_shaped_text_set_preserve_invalid = StringNames.Get("_shaped_text_set_preserve_invalid").Opaque;
+        if (nameSn == __vsn_shaped_text_set_preserve_invalid)
+        {
+            _ShapedTextSetPreserveInvalid(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_shaped_text_get_preserve_invalid == 0) __vsn_shaped_text_get_preserve_invalid = StringNames.Get("_shaped_text_get_preserve_invalid").Opaque;
+        if (nameSn == __vsn_shaped_text_get_preserve_invalid)
+        {
+            *(byte*)ret = _ShapedTextGetPreserveInvalid(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_shaped_text_set_preserve_control == 0) __vsn_shaped_text_set_preserve_control = StringNames.Get("_shaped_text_set_preserve_control").Opaque;
+        if (nameSn == __vsn_shaped_text_set_preserve_control)
+        {
+            _ShapedTextSetPreserveControl(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_shaped_text_get_preserve_control == 0) __vsn_shaped_text_get_preserve_control = StringNames.Get("_shaped_text_get_preserve_control").Opaque;
+        if (nameSn == __vsn_shaped_text_get_preserve_control)
+        {
+            *(byte*)ret = _ShapedTextGetPreserveControl(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_shaped_text_set_spacing == 0) __vsn_shaped_text_set_spacing = StringNames.Get("_shaped_text_set_spacing").Opaque;
+        if (nameSn == __vsn_shaped_text_set_spacing)
+        {
+            _ShapedTextSetSpacing(*(Rid*)args[0], (TextServer.SpacingType)(*(long*)args[1]), unchecked((long)(*(long*)args[2])));
+            return true;
+        }
+        if (__vsn_shaped_text_get_spacing == 0) __vsn_shaped_text_get_spacing = StringNames.Get("_shaped_text_get_spacing").Opaque;
+        if (nameSn == __vsn_shaped_text_get_spacing)
+        {
+            *(long*)ret = unchecked((long)_ShapedTextGetSpacing(*(Rid*)args[0], (TextServer.SpacingType)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_shaped_get_text == 0) __vsn_shaped_get_text = StringNames.Get("_shaped_get_text").Opaque;
+        if (nameSn == __vsn_shaped_get_text)
+        {
+            *(ulong*)ret = NativeString.Create(_ShapedGetText(*(Rid*)args[0]) ?? "");
+            return true;
+        }
+        if (__vsn_shaped_get_span_count == 0) __vsn_shaped_get_span_count = StringNames.Get("_shaped_get_span_count").Opaque;
+        if (nameSn == __vsn_shaped_get_span_count)
+        {
+            *(long*)ret = unchecked((long)_ShapedGetSpanCount(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_shaped_get_span_text == 0) __vsn_shaped_get_span_text = StringNames.Get("_shaped_get_span_text").Opaque;
+        if (nameSn == __vsn_shaped_get_span_text)
+        {
+            *(ulong*)ret = NativeString.Create(_ShapedGetSpanText(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))) ?? "");
+            return true;
+        }
+        if (__vsn_shaped_get_run_count == 0) __vsn_shaped_get_run_count = StringNames.Get("_shaped_get_run_count").Opaque;
+        if (nameSn == __vsn_shaped_get_run_count)
+        {
+            *(long*)ret = unchecked((long)_ShapedGetRunCount(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_shaped_get_run_text == 0) __vsn_shaped_get_run_text = StringNames.Get("_shaped_get_run_text").Opaque;
+        if (nameSn == __vsn_shaped_get_run_text)
+        {
+            *(ulong*)ret = NativeString.Create(_ShapedGetRunText(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))) ?? "");
+            return true;
+        }
+        if (__vsn_shaped_get_run_range == 0) __vsn_shaped_get_run_range = StringNames.Get("_shaped_get_run_range").Opaque;
+        if (nameSn == __vsn_shaped_get_run_range)
+        {
+            *(Vector2I*)ret = _ShapedGetRunRange(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_shaped_get_run_glyph_range == 0) __vsn_shaped_get_run_glyph_range = StringNames.Get("_shaped_get_run_glyph_range").Opaque;
+        if (nameSn == __vsn_shaped_get_run_glyph_range)
+        {
+            *(Vector2I*)ret = _ShapedGetRunGlyphRange(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_shaped_get_run_font_rid == 0) __vsn_shaped_get_run_font_rid = StringNames.Get("_shaped_get_run_font_rid").Opaque;
+        if (nameSn == __vsn_shaped_get_run_font_rid)
+        {
+            *(Rid*)ret = _ShapedGetRunFontRid(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_shaped_get_run_font_size == 0) __vsn_shaped_get_run_font_size = StringNames.Get("_shaped_get_run_font_size").Opaque;
+        if (nameSn == __vsn_shaped_get_run_font_size)
+        {
+            *(long*)ret = unchecked((long)_ShapedGetRunFontSize(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))));
+            return true;
+        }
+        if (__vsn_shaped_get_run_language == 0) __vsn_shaped_get_run_language = StringNames.Get("_shaped_get_run_language").Opaque;
+        if (nameSn == __vsn_shaped_get_run_language)
+        {
+            *(ulong*)ret = NativeString.Create(_ShapedGetRunLanguage(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))) ?? "");
+            return true;
+        }
+        if (__vsn_shaped_get_run_direction == 0) __vsn_shaped_get_run_direction = StringNames.Get("_shaped_get_run_direction").Opaque;
+        if (nameSn == __vsn_shaped_get_run_direction)
+        {
+            *(long*)ret = (long)_ShapedGetRunDirection(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_shaped_text_substr == 0) __vsn_shaped_text_substr = StringNames.Get("_shaped_text_substr").Opaque;
+        if (nameSn == __vsn_shaped_text_substr)
+        {
+            *(Rid*)ret = _ShapedTextSubstr(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), unchecked((long)(*(long*)args[2])));
+            return true;
+        }
+        if (__vsn_shaped_text_get_parent == 0) __vsn_shaped_text_get_parent = StringNames.Get("_shaped_text_get_parent").Opaque;
+        if (nameSn == __vsn_shaped_text_get_parent)
+        {
+            *(Rid*)ret = _ShapedTextGetParent(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shaped_text_fit_to_width == 0) __vsn_shaped_text_fit_to_width = StringNames.Get("_shaped_text_fit_to_width").Opaque;
+        if (nameSn == __vsn_shaped_text_fit_to_width)
+        {
+            *(double*)ret = _ShapedTextFitToWidth(*(Rid*)args[0], *(double*)args[1], (TextServer.JustificationFlag)(*(long*)args[2]));
+            return true;
+        }
+        if (__vsn_shaped_text_shape == 0) __vsn_shaped_text_shape = StringNames.Get("_shaped_text_shape").Opaque;
+        if (nameSn == __vsn_shaped_text_shape)
+        {
+            *(byte*)ret = _ShapedTextShape(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_shaped_text_update_breaks == 0) __vsn_shaped_text_update_breaks = StringNames.Get("_shaped_text_update_breaks").Opaque;
+        if (nameSn == __vsn_shaped_text_update_breaks)
+        {
+            *(byte*)ret = _ShapedTextUpdateBreaks(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_shaped_text_update_justification_ops == 0) __vsn_shaped_text_update_justification_ops = StringNames.Get("_shaped_text_update_justification_ops").Opaque;
+        if (nameSn == __vsn_shaped_text_update_justification_ops)
+        {
+            *(byte*)ret = _ShapedTextUpdateJustificationOps(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_shaped_text_is_ready == 0) __vsn_shaped_text_is_ready = StringNames.Get("_shaped_text_is_ready").Opaque;
+        if (nameSn == __vsn_shaped_text_is_ready)
+        {
+            *(byte*)ret = _ShapedTextIsReady(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_shaped_text_get_glyph_count == 0) __vsn_shaped_text_get_glyph_count = StringNames.Get("_shaped_text_get_glyph_count").Opaque;
+        if (nameSn == __vsn_shaped_text_get_glyph_count)
+        {
+            *(long*)ret = unchecked((long)_ShapedTextGetGlyphCount(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_shaped_text_get_range == 0) __vsn_shaped_text_get_range = StringNames.Get("_shaped_text_get_range").Opaque;
+        if (nameSn == __vsn_shaped_text_get_range)
+        {
+            *(Vector2I*)ret = _ShapedTextGetRange(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shaped_text_get_trim_pos == 0) __vsn_shaped_text_get_trim_pos = StringNames.Get("_shaped_text_get_trim_pos").Opaque;
+        if (nameSn == __vsn_shaped_text_get_trim_pos)
+        {
+            *(long*)ret = unchecked((long)_ShapedTextGetTrimPos(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_shaped_text_get_ellipsis_pos == 0) __vsn_shaped_text_get_ellipsis_pos = StringNames.Get("_shaped_text_get_ellipsis_pos").Opaque;
+        if (nameSn == __vsn_shaped_text_get_ellipsis_pos)
+        {
+            *(long*)ret = unchecked((long)_ShapedTextGetEllipsisPos(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_shaped_text_get_ellipsis_glyph_count == 0) __vsn_shaped_text_get_ellipsis_glyph_count = StringNames.Get("_shaped_text_get_ellipsis_glyph_count").Opaque;
+        if (nameSn == __vsn_shaped_text_get_ellipsis_glyph_count)
+        {
+            *(long*)ret = unchecked((long)_ShapedTextGetEllipsisGlyphCount(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_shaped_text_overrun_trim_to_width == 0) __vsn_shaped_text_overrun_trim_to_width = StringNames.Get("_shaped_text_overrun_trim_to_width").Opaque;
+        if (nameSn == __vsn_shaped_text_overrun_trim_to_width)
+        {
+            _ShapedTextOverrunTrimToWidth(*(Rid*)args[0], *(double*)args[1], (TextServer.TextOverrunFlag)(*(long*)args[2]));
+            return true;
+        }
+        if (__vsn_shaped_text_get_size == 0) __vsn_shaped_text_get_size = StringNames.Get("_shaped_text_get_size").Opaque;
+        if (nameSn == __vsn_shaped_text_get_size)
+        {
+            *(Vector2*)ret = _ShapedTextGetSize(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shaped_text_get_ascent == 0) __vsn_shaped_text_get_ascent = StringNames.Get("_shaped_text_get_ascent").Opaque;
+        if (nameSn == __vsn_shaped_text_get_ascent)
+        {
+            *(double*)ret = _ShapedTextGetAscent(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shaped_text_get_descent == 0) __vsn_shaped_text_get_descent = StringNames.Get("_shaped_text_get_descent").Opaque;
+        if (nameSn == __vsn_shaped_text_get_descent)
+        {
+            *(double*)ret = _ShapedTextGetDescent(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shaped_text_get_width == 0) __vsn_shaped_text_get_width = StringNames.Get("_shaped_text_get_width").Opaque;
+        if (nameSn == __vsn_shaped_text_get_width)
+        {
+            *(double*)ret = _ShapedTextGetWidth(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shaped_text_get_underline_position == 0) __vsn_shaped_text_get_underline_position = StringNames.Get("_shaped_text_get_underline_position").Opaque;
+        if (nameSn == __vsn_shaped_text_get_underline_position)
+        {
+            *(double*)ret = _ShapedTextGetUnderlinePosition(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shaped_text_get_underline_thickness == 0) __vsn_shaped_text_get_underline_thickness = StringNames.Get("_shaped_text_get_underline_thickness").Opaque;
+        if (nameSn == __vsn_shaped_text_get_underline_thickness)
+        {
+            *(double*)ret = _ShapedTextGetUnderlineThickness(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shaped_text_get_dominant_direction_in_range == 0) __vsn_shaped_text_get_dominant_direction_in_range = StringNames.Get("_shaped_text_get_dominant_direction_in_range").Opaque;
+        if (nameSn == __vsn_shaped_text_get_dominant_direction_in_range)
+        {
+            *(long*)ret = unchecked((long)_ShapedTextGetDominantDirectionInRange(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), unchecked((long)(*(long*)args[2]))));
+            return true;
+        }
+        if (__vsn_shaped_text_hit_test_grapheme == 0) __vsn_shaped_text_hit_test_grapheme = StringNames.Get("_shaped_text_hit_test_grapheme").Opaque;
+        if (nameSn == __vsn_shaped_text_hit_test_grapheme)
+        {
+            *(long*)ret = unchecked((long)_ShapedTextHitTestGrapheme(*(Rid*)args[0], *(double*)args[1]));
+            return true;
+        }
+        if (__vsn_shaped_text_hit_test_position == 0) __vsn_shaped_text_hit_test_position = StringNames.Get("_shaped_text_hit_test_position").Opaque;
+        if (nameSn == __vsn_shaped_text_hit_test_position)
+        {
+            *(long*)ret = unchecked((long)_ShapedTextHitTestPosition(*(Rid*)args[0], *(double*)args[1]));
+            return true;
+        }
+        if (__vsn_shaped_text_draw == 0) __vsn_shaped_text_draw = StringNames.Get("_shaped_text_draw").Opaque;
+        if (nameSn == __vsn_shaped_text_draw)
+        {
+            _ShapedTextDraw(*(Rid*)args[0], *(Rid*)args[1], *(Vector2*)args[2], *(double*)args[3], *(double*)args[4], *(Color*)args[5], (float)(*(double*)args[6]));
+            return true;
+        }
+        if (__vsn_shaped_text_draw_outline == 0) __vsn_shaped_text_draw_outline = StringNames.Get("_shaped_text_draw_outline").Opaque;
+        if (nameSn == __vsn_shaped_text_draw_outline)
+        {
+            _ShapedTextDrawOutline(*(Rid*)args[0], *(Rid*)args[1], *(Vector2*)args[2], *(double*)args[3], *(double*)args[4], unchecked((long)(*(long*)args[5])), *(Color*)args[6], (float)(*(double*)args[7]));
+            return true;
+        }
+        if (__vsn_shaped_text_get_grapheme_bounds == 0) __vsn_shaped_text_get_grapheme_bounds = StringNames.Get("_shaped_text_get_grapheme_bounds").Opaque;
+        if (nameSn == __vsn_shaped_text_get_grapheme_bounds)
+        {
+            *(Vector2*)ret = _ShapedTextGetGraphemeBounds(*(Rid*)args[0], unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_shaped_text_next_grapheme_pos == 0) __vsn_shaped_text_next_grapheme_pos = StringNames.Get("_shaped_text_next_grapheme_pos").Opaque;
+        if (nameSn == __vsn_shaped_text_next_grapheme_pos)
+        {
+            *(long*)ret = unchecked((long)_ShapedTextNextGraphemePos(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))));
+            return true;
+        }
+        if (__vsn_shaped_text_prev_grapheme_pos == 0) __vsn_shaped_text_prev_grapheme_pos = StringNames.Get("_shaped_text_prev_grapheme_pos").Opaque;
+        if (nameSn == __vsn_shaped_text_prev_grapheme_pos)
+        {
+            *(long*)ret = unchecked((long)_ShapedTextPrevGraphemePos(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))));
+            return true;
+        }
+        if (__vsn_shaped_text_next_character_pos == 0) __vsn_shaped_text_next_character_pos = StringNames.Get("_shaped_text_next_character_pos").Opaque;
+        if (nameSn == __vsn_shaped_text_next_character_pos)
+        {
+            *(long*)ret = unchecked((long)_ShapedTextNextCharacterPos(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))));
+            return true;
+        }
+        if (__vsn_shaped_text_prev_character_pos == 0) __vsn_shaped_text_prev_character_pos = StringNames.Get("_shaped_text_prev_character_pos").Opaque;
+        if (nameSn == __vsn_shaped_text_prev_character_pos)
+        {
+            *(long*)ret = unchecked((long)_ShapedTextPrevCharacterPos(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))));
+            return true;
+        }
+        if (__vsn_shaped_text_closest_character_pos == 0) __vsn_shaped_text_closest_character_pos = StringNames.Get("_shaped_text_closest_character_pos").Opaque;
+        if (nameSn == __vsn_shaped_text_closest_character_pos)
+        {
+            *(long*)ret = unchecked((long)_ShapedTextClosestCharacterPos(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))));
+            return true;
+        }
+        if (__vsn_format_number == 0) __vsn_format_number = StringNames.Get("_format_number").Opaque;
+        if (nameSn == __vsn_format_number)
+        {
+            *(ulong*)ret = NativeString.Create(_FormatNumber(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1])) ?? "");
+            return true;
+        }
+        if (__vsn_parse_number == 0) __vsn_parse_number = StringNames.Get("_parse_number").Opaque;
+        if (nameSn == __vsn_parse_number)
+        {
+            *(ulong*)ret = NativeString.Create(_ParseNumber(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1])) ?? "");
+            return true;
+        }
+        if (__vsn_percent_sign == 0) __vsn_percent_sign = StringNames.Get("_percent_sign").Opaque;
+        if (nameSn == __vsn_percent_sign)
+        {
+            *(ulong*)ret = NativeString.Create(_PercentSign(NativeString.Read(*(ulong*)args[0])) ?? "");
+            return true;
+        }
+        if (__vsn_strip_diacritics == 0) __vsn_strip_diacritics = StringNames.Get("_strip_diacritics").Opaque;
+        if (nameSn == __vsn_strip_diacritics)
+        {
+            *(ulong*)ret = NativeString.Create(_StripDiacritics(NativeString.Read(*(ulong*)args[0])) ?? "");
+            return true;
+        }
+        if (__vsn_is_valid_identifier == 0) __vsn_is_valid_identifier = StringNames.Get("_is_valid_identifier").Opaque;
+        if (nameSn == __vsn_is_valid_identifier)
+        {
+            *(byte*)ret = _IsValidIdentifier(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_is_valid_letter == 0) __vsn_is_valid_letter = StringNames.Get("_is_valid_letter").Opaque;
+        if (nameSn == __vsn_is_valid_letter)
+        {
+            *(byte*)ret = _IsValidLetter(unchecked((ulong)(*(long*)args[0]))) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_spoof_check == 0) __vsn_spoof_check = StringNames.Get("_spoof_check").Opaque;
+        if (nameSn == __vsn_spoof_check)
+        {
+            *(byte*)ret = _SpoofCheck(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_string_to_upper == 0) __vsn_string_to_upper = StringNames.Get("_string_to_upper").Opaque;
+        if (nameSn == __vsn_string_to_upper)
+        {
+            *(ulong*)ret = NativeString.Create(_StringToUpper(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1])) ?? "");
+            return true;
+        }
+        if (__vsn_string_to_lower == 0) __vsn_string_to_lower = StringNames.Get("_string_to_lower").Opaque;
+        if (nameSn == __vsn_string_to_lower)
+        {
+            *(ulong*)ret = NativeString.Create(_StringToLower(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1])) ?? "");
+            return true;
+        }
+        if (__vsn_string_to_title == 0) __vsn_string_to_title = StringNames.Get("_string_to_title").Opaque;
+        if (nameSn == __vsn_string_to_title)
+        {
+            *(ulong*)ret = NativeString.Create(_StringToTitle(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1])) ?? "");
+            return true;
+        }
+        if (__vsn_cleanup == 0) __vsn_cleanup = StringNames.Get("_cleanup").Opaque;
+        if (nameSn == __vsn_cleanup)
+        {
+            _Cleanup();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -12022,9 +13870,9 @@ public unsafe partial class TextServerManager : GodotObject
 {
     internal TextServerManager(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TextServerManager() : this(InstanceBindings.ConstructRaw("TextServerManager"), false)
+    public TextServerManager() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TextServerManager");
     }
 
     private static TextServerManager? _singleton;
@@ -12150,9 +13998,9 @@ public unsafe partial class Texture : Resource
 {
     internal Texture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Texture() : this(InstanceBindings.ConstructRaw("Texture"), true)
+    public Texture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Texture");
     }
 }
 
@@ -12160,9 +14008,9 @@ public unsafe partial class Texture2D : Texture
 {
     internal Texture2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Texture2D() : this(InstanceBindings.ConstructRaw("Texture2D"), true)
+    public Texture2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Texture2D");
     }
 
     private static nint __mb_get_format;
@@ -12371,15 +14219,120 @@ public unsafe partial class Texture2D : Texture
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (Resource?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
+
+    public virtual Image? _GetImage() => default!;
+
+    public virtual Image.Format _GetFormat() => default!;
+
+    public virtual int _GetMipmapCount() => default!;
+
+    public virtual int _GetWidth() => default!;
+
+    public virtual int _GetHeight() => default!;
+
+    public virtual bool _IsPixelOpaque(int x, int y) => default!;
+
+    public virtual bool _HasAlpha() => default!;
+
+    public virtual bool _HasMipmaps() => default!;
+
+    public virtual void _Draw(Rid toCanvasItem, Vector2 pos, Color modulate, bool transpose) { }
+
+    public virtual void _DrawRect(Rid toCanvasItem, Rect2 rect, bool tile, Color modulate, bool transpose) { }
+
+    public virtual void _DrawRectRegion(Rid toCanvasItem, Rect2 rect, Rect2 srcRect, Color modulate, bool transpose, bool clipUv) { }
+
+    private static ulong __vsn_get_image;
+    private static ulong __vsn_get_format;
+    private static ulong __vsn_get_mipmap_count;
+    private static ulong __vsn_get_width;
+    private static ulong __vsn_get_height;
+    private static ulong __vsn_is_pixel_opaque;
+    private static ulong __vsn_has_alpha;
+    private static ulong __vsn_has_mipmaps;
+    private static ulong __vsn_draw;
+    private static ulong __vsn_draw_rect;
+    private static ulong __vsn_draw_rect_region;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_image == 0) __vsn_get_image = StringNames.Get("_get_image").Opaque;
+        if (nameSn == __vsn_get_image)
+        {
+            *(nint*)ret = _GetImage()?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_get_format == 0) __vsn_get_format = StringNames.Get("_get_format").Opaque;
+        if (nameSn == __vsn_get_format)
+        {
+            *(long*)ret = (long)_GetFormat();
+            return true;
+        }
+        if (__vsn_get_mipmap_count == 0) __vsn_get_mipmap_count = StringNames.Get("_get_mipmap_count").Opaque;
+        if (nameSn == __vsn_get_mipmap_count)
+        {
+            *(long*)ret = unchecked((long)_GetMipmapCount());
+            return true;
+        }
+        if (__vsn_get_width == 0) __vsn_get_width = StringNames.Get("_get_width").Opaque;
+        if (nameSn == __vsn_get_width)
+        {
+            *(long*)ret = unchecked((long)_GetWidth());
+            return true;
+        }
+        if (__vsn_get_height == 0) __vsn_get_height = StringNames.Get("_get_height").Opaque;
+        if (nameSn == __vsn_get_height)
+        {
+            *(long*)ret = unchecked((long)_GetHeight());
+            return true;
+        }
+        if (__vsn_is_pixel_opaque == 0) __vsn_is_pixel_opaque = StringNames.Get("_is_pixel_opaque").Opaque;
+        if (nameSn == __vsn_is_pixel_opaque)
+        {
+            *(byte*)ret = _IsPixelOpaque(unchecked((int)(*(long*)args[0])), unchecked((int)(*(long*)args[1]))) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_has_alpha == 0) __vsn_has_alpha = StringNames.Get("_has_alpha").Opaque;
+        if (nameSn == __vsn_has_alpha)
+        {
+            *(byte*)ret = _HasAlpha() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_has_mipmaps == 0) __vsn_has_mipmaps = StringNames.Get("_has_mipmaps").Opaque;
+        if (nameSn == __vsn_has_mipmaps)
+        {
+            *(byte*)ret = _HasMipmaps() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_draw == 0) __vsn_draw = StringNames.Get("_draw").Opaque;
+        if (nameSn == __vsn_draw)
+        {
+            _Draw(*(Rid*)args[0], *(Vector2*)args[1], *(Color*)args[2], *(byte*)args[3] != 0);
+            return true;
+        }
+        if (__vsn_draw_rect == 0) __vsn_draw_rect = StringNames.Get("_draw_rect").Opaque;
+        if (nameSn == __vsn_draw_rect)
+        {
+            _DrawRect(*(Rid*)args[0], *(Rect2*)args[1], *(byte*)args[2] != 0, *(Color*)args[3], *(byte*)args[4] != 0);
+            return true;
+        }
+        if (__vsn_draw_rect_region == 0) __vsn_draw_rect_region = StringNames.Get("_draw_rect_region").Opaque;
+        if (nameSn == __vsn_draw_rect_region)
+        {
+            _DrawRectRegion(*(Rid*)args[0], *(Rect2*)args[1], *(Rect2*)args[2], *(Color*)args[3], *(byte*)args[4] != 0, *(byte*)args[5] != 0);
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class Texture2DArray : ImageTextureLayered
 {
     internal Texture2DArray(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Texture2DArray() : this(InstanceBindings.ConstructRaw("Texture2DArray"), true)
+    public Texture2DArray() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Texture2DArray");
     }
 
     private static nint __mb_create_placeholder;
@@ -12402,9 +14355,9 @@ public unsafe partial class Texture2DArrayRD : TextureLayeredRD
 {
     internal Texture2DArrayRD(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Texture2DArrayRD() : this(InstanceBindings.ConstructRaw("Texture2DArrayRD"), true)
+    public Texture2DArrayRD() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Texture2DArrayRD");
     }
 }
 
@@ -12412,9 +14365,9 @@ public unsafe partial class Texture2DRD : Texture2D
 {
     internal Texture2DRD(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Texture2DRD() : this(InstanceBindings.ConstructRaw("Texture2DRD"), true)
+    public Texture2DRD() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Texture2DRD");
     }
 
     private static nint __mb_set_texture_rd_rid;
@@ -12453,9 +14406,9 @@ public unsafe partial class Texture3D : Texture
 {
     internal Texture3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Texture3D() : this(InstanceBindings.ConstructRaw("Texture3D"), true)
+    public Texture3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Texture3D");
     }
 
     private static nint __mb_get_format;
@@ -12547,15 +14500,66 @@ public unsafe partial class Texture3D : Texture
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (Resource?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
+
+    public virtual Image.Format _GetFormat() => default!;
+
+    public virtual int _GetWidth() => default!;
+
+    public virtual int _GetHeight() => default!;
+
+    public virtual int _GetDepth() => default!;
+
+    public virtual bool _HasMipmaps() => default!;
+
+    private static ulong __vsn_get_format;
+    private static ulong __vsn_get_width;
+    private static ulong __vsn_get_height;
+    private static ulong __vsn_get_depth;
+    private static ulong __vsn_has_mipmaps;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_format == 0) __vsn_get_format = StringNames.Get("_get_format").Opaque;
+        if (nameSn == __vsn_get_format)
+        {
+            *(long*)ret = (long)_GetFormat();
+            return true;
+        }
+        if (__vsn_get_width == 0) __vsn_get_width = StringNames.Get("_get_width").Opaque;
+        if (nameSn == __vsn_get_width)
+        {
+            *(long*)ret = unchecked((long)_GetWidth());
+            return true;
+        }
+        if (__vsn_get_height == 0) __vsn_get_height = StringNames.Get("_get_height").Opaque;
+        if (nameSn == __vsn_get_height)
+        {
+            *(long*)ret = unchecked((long)_GetHeight());
+            return true;
+        }
+        if (__vsn_get_depth == 0) __vsn_get_depth = StringNames.Get("_get_depth").Opaque;
+        if (nameSn == __vsn_get_depth)
+        {
+            *(long*)ret = unchecked((long)_GetDepth());
+            return true;
+        }
+        if (__vsn_has_mipmaps == 0) __vsn_has_mipmaps = StringNames.Get("_has_mipmaps").Opaque;
+        if (nameSn == __vsn_has_mipmaps)
+        {
+            *(byte*)ret = _HasMipmaps() ? (byte)1 : (byte)0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class Texture3DRD : Texture3D
 {
     internal Texture3DRD(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Texture3DRD() : this(InstanceBindings.ConstructRaw("Texture3DRD"), true)
+    public Texture3DRD() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Texture3DRD");
     }
 
     private static nint __mb_set_texture_rd_rid;
@@ -12594,9 +14598,9 @@ public unsafe partial class TextureButton : BaseButton
 {
     internal TextureButton(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TextureButton() : this(InstanceBindings.ConstructRaw("TextureButton"), false)
+    public TextureButton() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TextureButton");
     }
 
     public enum StretchMode : long
@@ -12925,9 +14929,9 @@ public unsafe partial class TextureCubemapArrayRD : TextureLayeredRD
 {
     internal TextureCubemapArrayRD(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TextureCubemapArrayRD() : this(InstanceBindings.ConstructRaw("TextureCubemapArrayRD"), true)
+    public TextureCubemapArrayRD() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TextureCubemapArrayRD");
     }
 }
 
@@ -12935,9 +14939,9 @@ public unsafe partial class TextureCubemapRD : TextureLayeredRD
 {
     internal TextureCubemapRD(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TextureCubemapRD() : this(InstanceBindings.ConstructRaw("TextureCubemapRD"), true)
+    public TextureCubemapRD() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TextureCubemapRD");
     }
 }
 
@@ -12945,9 +14949,9 @@ public unsafe partial class TextureLayered : Texture
 {
     internal TextureLayered(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TextureLayered() : this(InstanceBindings.ConstructRaw("TextureLayered"), true)
+    public TextureLayered() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TextureLayered");
     }
 
     public enum LayeredType : long
@@ -13064,6 +15068,75 @@ public unsafe partial class TextureLayered : Texture
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
+
+    public virtual Image.Format _GetFormat() => default!;
+
+    public virtual uint _GetLayeredType() => default!;
+
+    public virtual int _GetWidth() => default!;
+
+    public virtual int _GetHeight() => default!;
+
+    public virtual int _GetLayers() => default!;
+
+    public virtual bool _HasMipmaps() => default!;
+
+    public virtual Image? _GetLayerData(int layerIndex) => default!;
+
+    private static ulong __vsn_get_format;
+    private static ulong __vsn_get_layered_type;
+    private static ulong __vsn_get_width;
+    private static ulong __vsn_get_height;
+    private static ulong __vsn_get_layers;
+    private static ulong __vsn_has_mipmaps;
+    private static ulong __vsn_get_layer_data;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_format == 0) __vsn_get_format = StringNames.Get("_get_format").Opaque;
+        if (nameSn == __vsn_get_format)
+        {
+            *(long*)ret = (long)_GetFormat();
+            return true;
+        }
+        if (__vsn_get_layered_type == 0) __vsn_get_layered_type = StringNames.Get("_get_layered_type").Opaque;
+        if (nameSn == __vsn_get_layered_type)
+        {
+            *(long*)ret = unchecked((long)_GetLayeredType());
+            return true;
+        }
+        if (__vsn_get_width == 0) __vsn_get_width = StringNames.Get("_get_width").Opaque;
+        if (nameSn == __vsn_get_width)
+        {
+            *(long*)ret = unchecked((long)_GetWidth());
+            return true;
+        }
+        if (__vsn_get_height == 0) __vsn_get_height = StringNames.Get("_get_height").Opaque;
+        if (nameSn == __vsn_get_height)
+        {
+            *(long*)ret = unchecked((long)_GetHeight());
+            return true;
+        }
+        if (__vsn_get_layers == 0) __vsn_get_layers = StringNames.Get("_get_layers").Opaque;
+        if (nameSn == __vsn_get_layers)
+        {
+            *(long*)ret = unchecked((long)_GetLayers());
+            return true;
+        }
+        if (__vsn_has_mipmaps == 0) __vsn_has_mipmaps = StringNames.Get("_has_mipmaps").Opaque;
+        if (nameSn == __vsn_has_mipmaps)
+        {
+            *(byte*)ret = _HasMipmaps() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_layer_data == 0) __vsn_get_layer_data = StringNames.Get("_get_layer_data").Opaque;
+        if (nameSn == __vsn_get_layer_data)
+        {
+            *(nint*)ret = _GetLayerData(unchecked((int)(*(long*)args[0])))?.NativePtr ?? 0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class TextureLayeredRD : TextureLayered
@@ -13106,9 +15179,9 @@ public unsafe partial class TextureProgressBar : Range
 {
     internal TextureProgressBar(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TextureProgressBar() : this(InstanceBindings.ConstructRaw("TextureProgressBar"), false)
+    public TextureProgressBar() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TextureProgressBar");
     }
 
     public enum FillMode : long
@@ -13537,9 +15610,9 @@ public unsafe partial class TextureRect : Control
 {
     internal TextureRect(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TextureRect() : this(InstanceBindings.ConstructRaw("TextureRect"), false)
+    public TextureRect() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TextureRect");
     }
 
     public enum ExpandMode : long
@@ -13723,9 +15796,9 @@ public unsafe partial class Theme : Resource
 {
     internal Theme(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Theme() : this(InstanceBindings.ConstructRaw("Theme"), true)
+    public Theme() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Theme");
     }
 
     public enum DataType : long
@@ -14685,9 +16758,9 @@ public unsafe partial class ThemeDB : GodotObject
 {
     internal ThemeDB(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ThemeDB() : this(InstanceBindings.ConstructRaw("ThemeDB"), false)
+    public ThemeDB() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ThemeDB");
     }
 
     private static ThemeDB? _singleton;
@@ -14883,9 +16956,9 @@ public unsafe partial class Thread : RefCounted
 {
     internal Thread(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Thread() : this(InstanceBindings.ConstructRaw("Thread"), true)
+    public Thread() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Thread");
     }
 
     public enum Priority : long
@@ -14976,9 +17049,9 @@ public unsafe partial class TileData : GodotObject
 {
     internal TileData(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TileData() : this(InstanceBindings.ConstructRaw("TileData"), false)
+    public TileData() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TileData");
     }
 
     private static nint __mb_set_flip_h;
@@ -15822,9 +17895,9 @@ public unsafe partial class TileMap : Node2D
 {
     internal TileMap(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TileMap() : this(InstanceBindings.ConstructRaw("TileMap"), false)
+    public TileMap() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TileMap");
     }
 
     public enum VisibilityMode : long
@@ -16810,15 +18883,39 @@ public unsafe partial class TileMap : Node2D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
+
+    public virtual bool _UseTileDataRuntimeUpdate(int layer, Vector2I coords) => default!;
+
+    public virtual void _TileDataRuntimeUpdate(int layer, Vector2I coords, TileData? tileData) { }
+
+    private static ulong __vsn_use_tile_data_runtime_update;
+    private static ulong __vsn_tile_data_runtime_update;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_use_tile_data_runtime_update == 0) __vsn_use_tile_data_runtime_update = StringNames.Get("_use_tile_data_runtime_update").Opaque;
+        if (nameSn == __vsn_use_tile_data_runtime_update)
+        {
+            *(byte*)ret = _UseTileDataRuntimeUpdate(unchecked((int)(*(long*)args[0])), *(Vector2I*)args[1]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_tile_data_runtime_update == 0) __vsn_tile_data_runtime_update = StringNames.Get("_tile_data_runtime_update").Opaque;
+        if (nameSn == __vsn_tile_data_runtime_update)
+        {
+            _TileDataRuntimeUpdate(unchecked((int)(*(long*)args[0])), *(Vector2I*)args[1], (TileData?)InstanceBindings.GetOrCreate(*(nint*)args[2], adoptRef: false));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class TileMapLayer : Node2D
 {
     internal TileMapLayer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TileMapLayer() : this(InstanceBindings.ConstructRaw("TileMapLayer"), false)
+    public TileMapLayer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TileMapLayer");
     }
 
     public enum DebugVisibilityMode : long
@@ -17593,15 +19690,39 @@ public unsafe partial class TileMapLayer : Node2D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (TileMapLayer.DebugVisibilityMode)__ret;
     }
+
+    public virtual bool _UseTileDataRuntimeUpdate(Vector2I coords) => default!;
+
+    public virtual void _TileDataRuntimeUpdate(Vector2I coords, TileData? tileData) { }
+
+    private static ulong __vsn_use_tile_data_runtime_update;
+    private static ulong __vsn_tile_data_runtime_update;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_use_tile_data_runtime_update == 0) __vsn_use_tile_data_runtime_update = StringNames.Get("_use_tile_data_runtime_update").Opaque;
+        if (nameSn == __vsn_use_tile_data_runtime_update)
+        {
+            *(byte*)ret = _UseTileDataRuntimeUpdate(*(Vector2I*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_tile_data_runtime_update == 0) __vsn_tile_data_runtime_update = StringNames.Get("_tile_data_runtime_update").Opaque;
+        if (nameSn == __vsn_tile_data_runtime_update)
+        {
+            _TileDataRuntimeUpdate(*(Vector2I*)args[0], (TileData?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class TileMapPattern : Resource
 {
     internal TileMapPattern(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TileMapPattern() : this(InstanceBindings.ConstructRaw("TileMapPattern"), true)
+    public TileMapPattern() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TileMapPattern");
     }
 
     private static nint __mb_set_cell;
@@ -17767,9 +19888,9 @@ public unsafe partial class TileSet : Resource
 {
     internal TileSet(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TileSet() : this(InstanceBindings.ConstructRaw("TileSet"), true)
+    public TileSet() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TileSet");
     }
 
     public enum TileShape : long
@@ -19349,9 +21470,9 @@ public unsafe partial class TileSetAtlasSource : TileSetSource
 {
     internal TileSetAtlasSource(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TileSetAtlasSource() : this(InstanceBindings.ConstructRaw("TileSetAtlasSource"), true)
+    public TileSetAtlasSource() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TileSetAtlasSource");
     }
 
     public enum TileAnimationMode : long
@@ -20071,9 +22192,9 @@ public unsafe partial class TileSetScenesCollectionSource : TileSetSource
 {
     internal TileSetScenesCollectionSource(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TileSetScenesCollectionSource() : this(InstanceBindings.ConstructRaw("TileSetScenesCollectionSource"), true)
+    public TileSetScenesCollectionSource() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TileSetScenesCollectionSource");
     }
 
     private static nint __mb_get_scene_tiles_count;
@@ -20387,9 +22508,9 @@ public unsafe partial class Time : GodotObject
 {
     internal Time(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Time() : this(InstanceBindings.ConstructRaw("Time"), false)
+    public Time() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Time");
     }
 
     private static Time? _singleton;
@@ -20621,9 +22742,9 @@ public unsafe partial class Timer : Node
 {
     internal Timer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Timer() : this(InstanceBindings.ConstructRaw("Timer"), false)
+    public Timer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Timer");
     }
 
     public enum TimerProcessCallback : long
@@ -20882,9 +23003,9 @@ public unsafe partial class TorusMesh : PrimitiveMesh
 {
     internal TorusMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TorusMesh() : this(InstanceBindings.ConstructRaw("TorusMesh"), true)
+    public TorusMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TorusMesh");
     }
 
     private static nint __mb_set_inner_radius;
@@ -21016,9 +23137,9 @@ public unsafe partial class TouchScreenButton : Node2D
 {
     internal TouchScreenButton(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TouchScreenButton() : this(InstanceBindings.ConstructRaw("TouchScreenButton"), false)
+    public TouchScreenButton() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TouchScreenButton");
     }
 
     public enum VisibilityMode : long
@@ -21327,9 +23448,9 @@ public unsafe partial class Translation : Resource
 {
     internal Translation(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Translation() : this(InstanceBindings.ConstructRaw("Translation"), true)
+    public Translation() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Translation");
     }
 
     private static nint __mb_set_locale;
@@ -21492,15 +23613,39 @@ public unsafe partial class Translation : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
+
+    public virtual string _GetPluralMessage(string srcMessage, string srcPluralMessage, int n, string context) => default!;
+
+    public virtual string _GetMessage(string srcMessage, string context) => default!;
+
+    private static ulong __vsn_get_plural_message;
+    private static ulong __vsn_get_message;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_plural_message == 0) __vsn_get_plural_message = StringNames.Get("_get_plural_message").Opaque;
+        if (nameSn == __vsn_get_plural_message)
+        {
+            *(ulong*)ret = StringNames.CreateOwned(_GetPluralMessage(StringNames.Read(*(ulong*)args[0]), StringNames.Read(*(ulong*)args[1]), unchecked((int)(*(long*)args[2])), StringNames.Read(*(ulong*)args[3])) ?? "");
+            return true;
+        }
+        if (__vsn_get_message == 0) __vsn_get_message = StringNames.Get("_get_message").Opaque;
+        if (nameSn == __vsn_get_message)
+        {
+            *(ulong*)ret = StringNames.CreateOwned(_GetMessage(StringNames.Read(*(ulong*)args[0]), StringNames.Read(*(ulong*)args[1])) ?? "");
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class TranslationDomain : RefCounted
 {
     internal TranslationDomain(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TranslationDomain() : this(InstanceBindings.ConstructRaw("TranslationDomain"), true)
+    public TranslationDomain() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TranslationDomain");
     }
 
     private static nint __mb_get_translation_object;
@@ -22017,9 +24162,9 @@ public unsafe partial class TranslationServer : GodotObject
 {
     internal TranslationServer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TranslationServer() : this(InstanceBindings.ConstructRaw("TranslationServer"), false)
+    public TranslationServer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TranslationServer");
     }
 
     private static TranslationServer? _singleton;
@@ -22539,9 +24684,9 @@ public unsafe partial class Tree : Control
 {
     internal Tree(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Tree() : this(InstanceBindings.ConstructRaw("Tree"), false)
+    public Tree() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Tree");
     }
 
     public enum SelectMode : long
@@ -25830,9 +27975,9 @@ public unsafe partial class TriangleMesh : RefCounted
 {
     internal TriangleMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TriangleMesh() : this(InstanceBindings.ConstructRaw("TriangleMesh"), true)
+    public TriangleMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TriangleMesh");
     }
 }
 
@@ -25840,9 +27985,9 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
 {
     internal TubeTrailMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TubeTrailMesh() : this(InstanceBindings.ConstructRaw("TubeTrailMesh"), true)
+    public TubeTrailMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TubeTrailMesh");
     }
 
     private static nint __mb_set_radius;
@@ -26098,9 +28243,9 @@ public unsafe partial class Tween : RefCounted
 {
     internal Tween(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Tween() : this(InstanceBindings.ConstructRaw("Tween"), true)
+    public Tween() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Tween");
     }
 
     public enum TweenProcessMode : long
@@ -26508,9 +28653,9 @@ public unsafe partial class TwoBoneIK3D : IKModifier3D
 {
     internal TwoBoneIK3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public TwoBoneIK3D() : this(InstanceBindings.ConstructRaw("TwoBoneIK3D"), false)
+    public TwoBoneIK3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "TwoBoneIK3D");
     }
 
     private static nint __mb_set_root_bone_name;

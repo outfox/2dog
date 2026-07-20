@@ -60,22 +60,44 @@ public static unsafe class StringNames
     }
 
     /// <summary>
-    /// Reads an OWNED native StringName (e.g. a ptrcall return) into a managed
-    /// string and destroys it. Conversion goes through Variant (STRING_NAME ->
-    /// STRING), the supported coercion path.
+    /// Creates an OWNED (non-static, non-cached) StringName whose ownership
+    /// transfers to the caller - e.g. written into an engine-destructed
+    /// virtual-call return slot.
     /// </summary>
-    public static string ReadAndDestroy(ref ulong opaque)
+    public static ulong CreateOwned(string name)
+    {
+        var bytes = System.Text.Encoding.UTF8.GetBytes(name);
+        ulong opaque = 0;
+        fixed (byte* p = bytes)
+        {
+            GdExtensionInterface.StringNameNewWithUtf8CharsAndLen((nint)(&opaque), (nint)p, bytes.Length);
+        }
+        return opaque;
+    }
+
+    /// <summary>
+    /// Reads a BORROWED native StringName's text without touching its
+    /// ownership. Conversion goes through Variant (STRING_NAME -> STRING),
+    /// the supported coercion path.
+    /// </summary>
+    public static string Read(ulong opaque)
     {
         var fromSn = (delegate* unmanaged<nint, nint, void>)GdExtensionInterface.GetVariantFromTypeConstructor(
             (int)GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME);
         NativeVariant v;
-        fixed (ulong* p = &opaque)
-        {
-            fromSn((nint)(&v), (nint)p);
-        }
+        fromSn((nint)(&v), (nint)(&opaque));
         var result = Variants.ToManagedString(in v);
         Variants.Destroy(ref v);
+        return result;
+    }
 
+    /// <summary>
+    /// Reads an OWNED native StringName (e.g. a ptrcall return) into a managed
+    /// string and destroys it.
+    /// </summary>
+    public static string ReadAndDestroy(ref ulong opaque)
+    {
+        var result = Read(opaque);
         var dtor = (delegate* unmanaged<nint, void>)GdExtensionInterface.VariantGetPtrDestructor(
             (int)GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME);
         fixed (ulong* p = &opaque)

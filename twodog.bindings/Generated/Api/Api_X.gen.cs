@@ -14,9 +14,9 @@ public unsafe partial class X509Certificate : Resource
 {
     internal X509Certificate(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public X509Certificate() : this(InstanceBindings.ConstructRaw("X509Certificate"), true)
+    public X509Certificate() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "X509Certificate");
     }
 
     private static nint __mb_save;
@@ -96,9 +96,9 @@ public unsafe partial class XMLParser : RefCounted
 {
     internal XMLParser(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XMLParser() : this(InstanceBindings.ConstructRaw("XMLParser"), true)
+    public XMLParser() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XMLParser");
     }
 
     public enum NodeType : long
@@ -380,9 +380,9 @@ public unsafe partial class XRAnchor3D : XRNode3D
 {
     internal XRAnchor3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRAnchor3D() : this(InstanceBindings.ConstructRaw("XRAnchor3D"), false)
+    public XRAnchor3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRAnchor3D");
     }
 
     private static nint __mb_get_size;
@@ -420,9 +420,9 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
 {
     internal XRBodyModifier3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRBodyModifier3D() : this(InstanceBindings.ConstructRaw("XRBodyModifier3D"), false)
+    public XRBodyModifier3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRBodyModifier3D");
     }
 
     [Flags]
@@ -538,9 +538,9 @@ public unsafe partial class XRBodyTracker : XRPositionalTracker
 {
     internal XRBodyTracker(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRBodyTracker() : this(InstanceBindings.ConstructRaw("XRBodyTracker"), true)
+    public XRBodyTracker() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRBodyTracker");
     }
 
     [Flags]
@@ -791,9 +791,9 @@ public unsafe partial class XRCamera3D : Camera3D
 {
     internal XRCamera3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRCamera3D() : this(InstanceBindings.ConstructRaw("XRCamera3D"), false)
+    public XRCamera3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRCamera3D");
     }
 }
 
@@ -801,9 +801,9 @@ public unsafe partial class XRController3D : XRNode3D
 {
     internal XRController3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRController3D() : this(InstanceBindings.ConstructRaw("XRController3D"), false)
+    public XRController3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRController3D");
     }
 
     private static nint __mb_is_button_pressed;
@@ -880,9 +880,9 @@ public unsafe partial class XRControllerTracker : XRPositionalTracker
 {
     internal XRControllerTracker(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRControllerTracker() : this(InstanceBindings.ConstructRaw("XRControllerTracker"), true)
+    public XRControllerTracker() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRControllerTracker");
     }
 }
 
@@ -890,9 +890,9 @@ public unsafe partial class XRFaceModifier3D : Node3D
 {
     internal XRFaceModifier3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRFaceModifier3D() : this(InstanceBindings.ConstructRaw("XRFaceModifier3D"), false)
+    public XRFaceModifier3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRFaceModifier3D");
     }
 
     private static nint __mb_set_face_tracker;
@@ -931,9 +931,9 @@ public unsafe partial class XRFaceTracker : XRTracker
 {
     internal XRFaceTracker(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRFaceTracker() : this(InstanceBindings.ConstructRaw("XRFaceTracker"), true)
+    public XRFaceTracker() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRFaceTracker");
     }
 
     public enum BlendShapeEntry : long
@@ -1125,9 +1125,9 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
 {
     internal XRHandModifier3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRHandModifier3D() : this(InstanceBindings.ConstructRaw("XRHandModifier3D"), false)
+    public XRHandModifier3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRHandModifier3D");
     }
 
     public enum BoneUpdate : long
@@ -1204,9 +1204,9 @@ public unsafe partial class XRHandTracker : XRPositionalTracker
 {
     internal XRHandTracker(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRHandTracker() : this(InstanceBindings.ConstructRaw("XRHandTracker"), true)
+    public XRHandTracker() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRHandTracker");
     }
 
     public enum HandTrackingSource : long
@@ -1964,9 +1964,9 @@ public unsafe partial class XRInterfaceExtension : XRInterface
 {
     internal XRInterfaceExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRInterfaceExtension() : this(InstanceBindings.ConstructRaw("XRInterfaceExtension"), true)
+    public XRInterfaceExtension() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRInterfaceExtension");
     }
 
     private static nint __mb_get_color_texture;
@@ -2067,15 +2067,264 @@ public unsafe partial class XRInterfaceExtension : XRInterface
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
+
+    public virtual string _GetName() => default!;
+
+    public virtual uint _GetCapabilities() => default!;
+
+    public virtual bool _IsInitialized() => default!;
+
+    public virtual bool _Initialize() => default!;
+
+    public virtual void _Uninitialize() { }
+
+    public virtual bool _SupportsPlayAreaMode(XRInterface.PlayAreaMode mode) => default!;
+
+    public virtual XRInterface.PlayAreaMode _GetPlayAreaMode() => default!;
+
+    public virtual bool _SetPlayAreaMode(XRInterface.PlayAreaMode mode) => default!;
+
+    public virtual Vector2 _GetRenderTargetSize() => default!;
+
+    public virtual uint _GetViewCount() => default!;
+
+    public virtual Transform3D _GetCameraTransform() => default!;
+
+    public virtual Transform3D _GetTransformForView(uint view, Transform3D camTransform) => default!;
+
+    public virtual Rid _GetVrsTexture() => default!;
+
+    public virtual XRInterface.VRSTextureFormat _GetVrsTextureFormat() => default!;
+
+    public virtual void _Process() { }
+
+    public virtual void _PreRender() { }
+
+    public virtual bool _PreDrawViewport(Rid renderTarget) => default!;
+
+    public virtual void _PostDrawViewport(Rid renderTarget, Rect2 screenRect) { }
+
+    public virtual void _EndFrame() { }
+
+    public virtual XRInterface.TrackingStatus _GetTrackingStatus() => default!;
+
+    public virtual void _TriggerHapticPulse(string actionName, string trackerName, double frequency, double amplitude, double durationSec, double delaySec) { }
+
+    public virtual bool _GetAnchorDetectionIsEnabled() => default!;
+
+    public virtual void _SetAnchorDetectionIsEnabled(bool enabled) { }
+
+    public virtual int _GetCameraFeedId() => default!;
+
+    public virtual Rid _GetColorTexture() => default!;
+
+    public virtual Rid _GetDepthTexture() => default!;
+
+    public virtual Rid _GetVelocityTexture() => default!;
+
+    private static ulong __vsn_get_name;
+    private static ulong __vsn_get_capabilities;
+    private static ulong __vsn_is_initialized;
+    private static ulong __vsn_initialize;
+    private static ulong __vsn_uninitialize;
+    private static ulong __vsn_supports_play_area_mode;
+    private static ulong __vsn_get_play_area_mode;
+    private static ulong __vsn_set_play_area_mode;
+    private static ulong __vsn_get_render_target_size;
+    private static ulong __vsn_get_view_count;
+    private static ulong __vsn_get_camera_transform;
+    private static ulong __vsn_get_transform_for_view;
+    private static ulong __vsn_get_vrs_texture;
+    private static ulong __vsn_get_vrs_texture_format;
+    private static ulong __vsn_process;
+    private static ulong __vsn_pre_render;
+    private static ulong __vsn_pre_draw_viewport;
+    private static ulong __vsn_post_draw_viewport;
+    private static ulong __vsn_end_frame;
+    private static ulong __vsn_get_tracking_status;
+    private static ulong __vsn_trigger_haptic_pulse;
+    private static ulong __vsn_get_anchor_detection_is_enabled;
+    private static ulong __vsn_set_anchor_detection_is_enabled;
+    private static ulong __vsn_get_camera_feed_id;
+    private static ulong __vsn_get_color_texture;
+    private static ulong __vsn_get_depth_texture;
+    private static ulong __vsn_get_velocity_texture;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_name == 0) __vsn_get_name = StringNames.Get("_get_name").Opaque;
+        if (nameSn == __vsn_get_name)
+        {
+            *(ulong*)ret = StringNames.CreateOwned(_GetName() ?? "");
+            return true;
+        }
+        if (__vsn_get_capabilities == 0) __vsn_get_capabilities = StringNames.Get("_get_capabilities").Opaque;
+        if (nameSn == __vsn_get_capabilities)
+        {
+            *(long*)ret = unchecked((long)_GetCapabilities());
+            return true;
+        }
+        if (__vsn_is_initialized == 0) __vsn_is_initialized = StringNames.Get("_is_initialized").Opaque;
+        if (nameSn == __vsn_is_initialized)
+        {
+            *(byte*)ret = _IsInitialized() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_initialize == 0) __vsn_initialize = StringNames.Get("_initialize").Opaque;
+        if (nameSn == __vsn_initialize)
+        {
+            *(byte*)ret = _Initialize() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_uninitialize == 0) __vsn_uninitialize = StringNames.Get("_uninitialize").Opaque;
+        if (nameSn == __vsn_uninitialize)
+        {
+            _Uninitialize();
+            return true;
+        }
+        if (__vsn_supports_play_area_mode == 0) __vsn_supports_play_area_mode = StringNames.Get("_supports_play_area_mode").Opaque;
+        if (nameSn == __vsn_supports_play_area_mode)
+        {
+            *(byte*)ret = _SupportsPlayAreaMode((XRInterface.PlayAreaMode)(*(long*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_play_area_mode == 0) __vsn_get_play_area_mode = StringNames.Get("_get_play_area_mode").Opaque;
+        if (nameSn == __vsn_get_play_area_mode)
+        {
+            *(long*)ret = (long)_GetPlayAreaMode();
+            return true;
+        }
+        if (__vsn_set_play_area_mode == 0) __vsn_set_play_area_mode = StringNames.Get("_set_play_area_mode").Opaque;
+        if (nameSn == __vsn_set_play_area_mode)
+        {
+            *(byte*)ret = _SetPlayAreaMode((XRInterface.PlayAreaMode)(*(long*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_render_target_size == 0) __vsn_get_render_target_size = StringNames.Get("_get_render_target_size").Opaque;
+        if (nameSn == __vsn_get_render_target_size)
+        {
+            *(Vector2*)ret = _GetRenderTargetSize();
+            return true;
+        }
+        if (__vsn_get_view_count == 0) __vsn_get_view_count = StringNames.Get("_get_view_count").Opaque;
+        if (nameSn == __vsn_get_view_count)
+        {
+            *(long*)ret = unchecked((long)_GetViewCount());
+            return true;
+        }
+        if (__vsn_get_camera_transform == 0) __vsn_get_camera_transform = StringNames.Get("_get_camera_transform").Opaque;
+        if (nameSn == __vsn_get_camera_transform)
+        {
+            *(Transform3D*)ret = _GetCameraTransform();
+            return true;
+        }
+        if (__vsn_get_transform_for_view == 0) __vsn_get_transform_for_view = StringNames.Get("_get_transform_for_view").Opaque;
+        if (nameSn == __vsn_get_transform_for_view)
+        {
+            *(Transform3D*)ret = _GetTransformForView(unchecked((uint)(*(long*)args[0])), *(Transform3D*)args[1]);
+            return true;
+        }
+        if (__vsn_get_vrs_texture == 0) __vsn_get_vrs_texture = StringNames.Get("_get_vrs_texture").Opaque;
+        if (nameSn == __vsn_get_vrs_texture)
+        {
+            *(Rid*)ret = _GetVrsTexture();
+            return true;
+        }
+        if (__vsn_get_vrs_texture_format == 0) __vsn_get_vrs_texture_format = StringNames.Get("_get_vrs_texture_format").Opaque;
+        if (nameSn == __vsn_get_vrs_texture_format)
+        {
+            *(long*)ret = (long)_GetVrsTextureFormat();
+            return true;
+        }
+        if (__vsn_process == 0) __vsn_process = StringNames.Get("_process").Opaque;
+        if (nameSn == __vsn_process)
+        {
+            _Process();
+            return true;
+        }
+        if (__vsn_pre_render == 0) __vsn_pre_render = StringNames.Get("_pre_render").Opaque;
+        if (nameSn == __vsn_pre_render)
+        {
+            _PreRender();
+            return true;
+        }
+        if (__vsn_pre_draw_viewport == 0) __vsn_pre_draw_viewport = StringNames.Get("_pre_draw_viewport").Opaque;
+        if (nameSn == __vsn_pre_draw_viewport)
+        {
+            *(byte*)ret = _PreDrawViewport(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_post_draw_viewport == 0) __vsn_post_draw_viewport = StringNames.Get("_post_draw_viewport").Opaque;
+        if (nameSn == __vsn_post_draw_viewport)
+        {
+            _PostDrawViewport(*(Rid*)args[0], *(Rect2*)args[1]);
+            return true;
+        }
+        if (__vsn_end_frame == 0) __vsn_end_frame = StringNames.Get("_end_frame").Opaque;
+        if (nameSn == __vsn_end_frame)
+        {
+            _EndFrame();
+            return true;
+        }
+        if (__vsn_get_tracking_status == 0) __vsn_get_tracking_status = StringNames.Get("_get_tracking_status").Opaque;
+        if (nameSn == __vsn_get_tracking_status)
+        {
+            *(long*)ret = (long)_GetTrackingStatus();
+            return true;
+        }
+        if (__vsn_trigger_haptic_pulse == 0) __vsn_trigger_haptic_pulse = StringNames.Get("_trigger_haptic_pulse").Opaque;
+        if (nameSn == __vsn_trigger_haptic_pulse)
+        {
+            _TriggerHapticPulse(NativeString.Read(*(ulong*)args[0]), StringNames.Read(*(ulong*)args[1]), *(double*)args[2], *(double*)args[3], *(double*)args[4], *(double*)args[5]);
+            return true;
+        }
+        if (__vsn_get_anchor_detection_is_enabled == 0) __vsn_get_anchor_detection_is_enabled = StringNames.Get("_get_anchor_detection_is_enabled").Opaque;
+        if (nameSn == __vsn_get_anchor_detection_is_enabled)
+        {
+            *(byte*)ret = _GetAnchorDetectionIsEnabled() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_set_anchor_detection_is_enabled == 0) __vsn_set_anchor_detection_is_enabled = StringNames.Get("_set_anchor_detection_is_enabled").Opaque;
+        if (nameSn == __vsn_set_anchor_detection_is_enabled)
+        {
+            _SetAnchorDetectionIsEnabled(*(byte*)args[0] != 0);
+            return true;
+        }
+        if (__vsn_get_camera_feed_id == 0) __vsn_get_camera_feed_id = StringNames.Get("_get_camera_feed_id").Opaque;
+        if (nameSn == __vsn_get_camera_feed_id)
+        {
+            *(long*)ret = unchecked((long)_GetCameraFeedId());
+            return true;
+        }
+        if (__vsn_get_color_texture == 0) __vsn_get_color_texture = StringNames.Get("_get_color_texture").Opaque;
+        if (nameSn == __vsn_get_color_texture)
+        {
+            *(Rid*)ret = _GetColorTexture();
+            return true;
+        }
+        if (__vsn_get_depth_texture == 0) __vsn_get_depth_texture = StringNames.Get("_get_depth_texture").Opaque;
+        if (nameSn == __vsn_get_depth_texture)
+        {
+            *(Rid*)ret = _GetDepthTexture();
+            return true;
+        }
+        if (__vsn_get_velocity_texture == 0) __vsn_get_velocity_texture = StringNames.Get("_get_velocity_texture").Opaque;
+        if (nameSn == __vsn_get_velocity_texture)
+        {
+            *(Rid*)ret = _GetVelocityTexture();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class XRNode3D : Node3D
 {
     internal XRNode3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRNode3D() : this(InstanceBindings.ConstructRaw("XRNode3D"), false)
+    public XRNode3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRNode3D");
     }
 
     private static nint __mb_set_tracker;
@@ -2246,9 +2495,9 @@ public unsafe partial class XROrigin3D : Node3D
 {
     internal XROrigin3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XROrigin3D() : this(InstanceBindings.ConstructRaw("XROrigin3D"), false)
+    public XROrigin3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XROrigin3D");
     }
 
     private static nint __mb_set_world_scale;
@@ -2318,9 +2567,9 @@ public unsafe partial class XRPose : RefCounted
 {
     internal XRPose(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRPose() : this(InstanceBindings.ConstructRaw("XRPose"), true)
+    public XRPose() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRPose");
     }
 
     public enum TrackingConfidence : long
@@ -2536,9 +2785,9 @@ public unsafe partial class XRPositionalTracker : XRTracker
 {
     internal XRPositionalTracker(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRPositionalTracker() : this(InstanceBindings.ConstructRaw("XRPositionalTracker"), true)
+    public XRPositionalTracker() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRPositionalTracker");
     }
 
     public enum TrackerHand : long
@@ -2693,9 +2942,9 @@ public unsafe partial class XRServer : GodotObject
 {
     internal XRServer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRServer() : this(InstanceBindings.ConstructRaw("XRServer"), false)
+    public XRServer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRServer");
     }
 
     private static XRServer? _singleton;
@@ -3145,9 +3394,9 @@ public unsafe partial class XRVRS : GodotObject
 {
     internal XRVRS(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public XRVRS() : this(InstanceBindings.ConstructRaw("XRVRS"), false)
+    public XRVRS() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "XRVRS");
     }
 
     private static nint __mb_get_vrs_min_radius;

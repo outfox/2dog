@@ -14,9 +14,9 @@ public unsafe partial class Label : Control
 {
     internal Label(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Label() : this(InstanceBindings.ConstructRaw("Label"), false)
+    public Label() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Label");
     }
 
     private static nint __mb_set_horizontal_alignment;
@@ -729,9 +729,9 @@ public unsafe partial class Label3D : GeometryInstance3D
 {
     internal Label3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Label3D() : this(InstanceBindings.ConstructRaw("Label3D"), false)
+    public Label3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Label3D");
     }
 
     public enum DrawFlags : long
@@ -1677,9 +1677,9 @@ public unsafe partial class LabelSettings : Resource
 {
     internal LabelSettings(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public LabelSettings() : this(InstanceBindings.ConstructRaw("LabelSettings"), true)
+    public LabelSettings() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "LabelSettings");
     }
 
     private static nint __mb_set_line_spacing;
@@ -3377,9 +3377,9 @@ public unsafe partial class LightOccluder2D : Node2D
 {
     internal LightOccluder2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public LightOccluder2D() : this(InstanceBindings.ConstructRaw("LightOccluder2D"), false)
+    public LightOccluder2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "LightOccluder2D");
     }
 
     private static nint __mb_set_occluder_polygon;
@@ -3480,9 +3480,9 @@ public unsafe partial class LightmapGI : VisualInstance3D
 {
     internal LightmapGI(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public LightmapGI() : this(InstanceBindings.ConstructRaw("LightmapGI"), false)
+    public LightmapGI() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "LightmapGI");
     }
 
     public enum BakeQuality : long
@@ -4213,9 +4213,9 @@ public unsafe partial class LightmapGIData : Resource
 {
     internal LightmapGIData(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public LightmapGIData() : this(InstanceBindings.ConstructRaw("LightmapGIData"), true)
+    public LightmapGIData() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "LightmapGIData");
     }
 
     public enum ShadowmaskMode : long
@@ -4320,9 +4320,9 @@ public unsafe partial class LightmapProbe : Node3D
 {
     internal LightmapProbe(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public LightmapProbe() : this(InstanceBindings.ConstructRaw("LightmapProbe"), false)
+    public LightmapProbe() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "LightmapProbe");
     }
 }
 
@@ -4335,9 +4335,9 @@ public unsafe partial class LightmapperRD : Lightmapper
 {
     internal LightmapperRD(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public LightmapperRD() : this(InstanceBindings.ConstructRaw("LightmapperRD"), true)
+    public LightmapperRD() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "LightmapperRD");
     }
 }
 
@@ -4345,9 +4345,9 @@ public unsafe partial class LimitAngularVelocityModifier3D : SkeletonModifier3D
 {
     internal LimitAngularVelocityModifier3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public LimitAngularVelocityModifier3D() : this(InstanceBindings.ConstructRaw("LimitAngularVelocityModifier3D"), false)
+    public LimitAngularVelocityModifier3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "LimitAngularVelocityModifier3D");
     }
 
     private static nint __mb_set_root_bone_name;
@@ -4620,9 +4620,9 @@ public unsafe partial class Line2D : Node2D
 {
     internal Line2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Line2D() : this(InstanceBindings.ConstructRaw("Line2D"), false)
+    public Line2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Line2D");
     }
 
     public enum LineJointMode : long
@@ -5152,9 +5152,9 @@ public unsafe partial class LineEdit : Control
 {
     internal LineEdit(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public LineEdit() : this(InstanceBindings.ConstructRaw("LineEdit"), false)
+    public LineEdit() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "LineEdit");
     }
 
     public enum MenuItems : long
@@ -6683,9 +6683,9 @@ public unsafe partial class LinkButton : BaseButton
 {
     internal LinkButton(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public LinkButton() : this(InstanceBindings.ConstructRaw("LinkButton"), false)
+    public LinkButton() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "LinkButton");
     }
 
     public enum UnderlineMode : long
@@ -6952,9 +6952,9 @@ public unsafe partial class Logger : RefCounted
 {
     internal Logger(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Logger() : this(InstanceBindings.ConstructRaw("Logger"), true)
+    public Logger() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Logger");
     }
 
     public enum ErrorType : long
@@ -6964,15 +6964,30 @@ public unsafe partial class Logger : RefCounted
         ERROR_TYPE_SCRIPT = 2,
         ERROR_TYPE_SHADER = 3,
     }
+
+    public virtual void _LogMessage(string message, bool error) { }
+
+    private static ulong __vsn_log_message;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_log_message == 0) __vsn_log_message = StringNames.Get("_log_message").Opaque;
+        if (nameSn == __vsn_log_message)
+        {
+            _LogMessage(NativeString.Read(*(ulong*)args[0]), *(byte*)args[1] != 0);
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class LookAtModifier3D : SkeletonModifier3D
 {
     internal LookAtModifier3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public LookAtModifier3D() : this(InstanceBindings.ConstructRaw("LookAtModifier3D"), false)
+    public LookAtModifier3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "LookAtModifier3D");
     }
 
     public enum OriginFrom : long

@@ -14,9 +14,9 @@ public unsafe partial class JNISingleton : GodotObject
 {
     internal JNISingleton(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public JNISingleton() : this(InstanceBindings.ConstructRaw("JNISingleton"), false)
+    public JNISingleton() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "JNISingleton");
     }
 
     private static nint __mb_has_java_method;
@@ -42,9 +42,9 @@ public unsafe partial class JSON : Resource
 {
     internal JSON(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public JSON() : this(InstanceBindings.ConstructRaw("JSON"), true)
+    public JSON() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "JSON");
     }
 
     private static nint __mb_parse;
@@ -118,9 +118,9 @@ public unsafe partial class JSONRPC : GodotObject
 {
     internal JSONRPC(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public JSONRPC() : this(InstanceBindings.ConstructRaw("JSONRPC"), false)
+    public JSONRPC() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "JSONRPC");
     }
 
     public enum ErrorCode : long
@@ -156,9 +156,9 @@ public unsafe partial class JacobianIK3D : IterateIK3D
 {
     internal JacobianIK3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public JacobianIK3D() : this(InstanceBindings.ConstructRaw("JacobianIK3D"), false)
+    public JacobianIK3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "JacobianIK3D");
     }
 }
 
@@ -166,9 +166,9 @@ public unsafe partial class JavaClass : RefCounted
 {
     internal JavaClass(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public JavaClass() : this(InstanceBindings.ConstructRaw("JavaClass"), true)
+    public JavaClass() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "JavaClass");
     }
 
     private static nint __mb_get_java_class_name;
@@ -224,9 +224,9 @@ public unsafe partial class JavaClassWrapper : GodotObject
 {
     internal JavaClassWrapper(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public JavaClassWrapper() : this(InstanceBindings.ConstructRaw("JavaClassWrapper"), false)
+    public JavaClassWrapper() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "JavaClassWrapper");
     }
 
     private static JavaClassWrapper? _singleton;
@@ -271,9 +271,9 @@ public unsafe partial class JavaObject : RefCounted
 {
     internal JavaObject(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public JavaObject() : this(InstanceBindings.ConstructRaw("JavaObject"), true)
+    public JavaObject() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "JavaObject");
     }
 
     private static nint __mb_get_java_class;
@@ -571,9 +571,9 @@ public unsafe partial class JointLimitation3D : Resource
 {
     internal JointLimitation3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public JointLimitation3D() : this(InstanceBindings.ConstructRaw("JointLimitation3D"), true)
+    public JointLimitation3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "JointLimitation3D");
     }
 }
 
@@ -581,9 +581,9 @@ public unsafe partial class JointLimitationCone3D : JointLimitation3D
 {
     internal JointLimitationCone3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public JointLimitationCone3D() : this(InstanceBindings.ConstructRaw("JointLimitationCone3D"), true)
+    public JointLimitationCone3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "JointLimitationCone3D");
     }
 
     private static nint __mb_set_angle;

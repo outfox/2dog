@@ -14,9 +14,9 @@ public unsafe partial class ENetConnection : RefCounted
 {
     internal ENetConnection(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ENetConnection() : this(InstanceBindings.ConstructRaw("ENetConnection"), true)
+    public ENetConnection() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ENetConnection");
     }
 
     public enum CompressionMode : long
@@ -307,9 +307,9 @@ public unsafe partial class ENetMultiplayerPeer : MultiplayerPeer
 {
     internal ENetMultiplayerPeer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ENetMultiplayerPeer() : this(InstanceBindings.ConstructRaw("ENetMultiplayerPeer"), true)
+    public ENetMultiplayerPeer() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ENetMultiplayerPeer");
     }
 
     private static nint __mb_create_server;
@@ -735,9 +735,9 @@ public unsafe partial class EditorCommandPalette : ConfirmationDialog
 {
     internal EditorCommandPalette(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorCommandPalette() : this(InstanceBindings.ConstructRaw("EditorCommandPalette"), false)
+    public EditorCommandPalette() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorCommandPalette");
     }
 
     private static nint __mb_remove_command;
@@ -762,9 +762,9 @@ public unsafe partial class EditorContextMenuPlugin : RefCounted
 {
     internal EditorContextMenuPlugin(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorContextMenuPlugin() : this(InstanceBindings.ConstructRaw("EditorContextMenuPlugin"), true)
+    public EditorContextMenuPlugin() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorContextMenuPlugin");
     }
 
     public enum ContextMenuSlot : long
@@ -826,9 +826,9 @@ public unsafe partial class EditorDebuggerPlugin : RefCounted
 {
     internal EditorDebuggerPlugin(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorDebuggerPlugin() : this(InstanceBindings.ConstructRaw("EditorDebuggerPlugin"), true)
+    public EditorDebuggerPlugin() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorDebuggerPlugin");
     }
 
     private static nint __mb_get_session;
@@ -847,6 +847,57 @@ public unsafe partial class EditorDebuggerPlugin : RefCounted
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (EditorDebuggerSession?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    public virtual void _SetupSession(int sessionId) { }
+
+    public virtual bool _HasCapture(string capture) => default!;
+
+    public virtual void _GotoScriptLine(Script? script, int line) { }
+
+    public virtual void _BreakpointsClearedInTree() { }
+
+    public virtual void _BreakpointSetInTree(Script? script, int line, bool enabled) { }
+
+    private static ulong __vsn_setup_session;
+    private static ulong __vsn_has_capture;
+    private static ulong __vsn_goto_script_line;
+    private static ulong __vsn_breakpoints_cleared_in_tree;
+    private static ulong __vsn_breakpoint_set_in_tree;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_setup_session == 0) __vsn_setup_session = StringNames.Get("_setup_session").Opaque;
+        if (nameSn == __vsn_setup_session)
+        {
+            _SetupSession(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_has_capture == 0) __vsn_has_capture = StringNames.Get("_has_capture").Opaque;
+        if (nameSn == __vsn_has_capture)
+        {
+            *(byte*)ret = _HasCapture(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_goto_script_line == 0) __vsn_goto_script_line = StringNames.Get("_goto_script_line").Opaque;
+        if (nameSn == __vsn_goto_script_line)
+        {
+            _GotoScriptLine((Script?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_breakpoints_cleared_in_tree == 0) __vsn_breakpoints_cleared_in_tree = StringNames.Get("_breakpoints_cleared_in_tree").Opaque;
+        if (nameSn == __vsn_breakpoints_cleared_in_tree)
+        {
+            _BreakpointsClearedInTree();
+            return true;
+        }
+        if (__vsn_breakpoint_set_in_tree == 0) __vsn_breakpoint_set_in_tree = StringNames.Get("_breakpoint_set_in_tree").Opaque;
+        if (nameSn == __vsn_breakpoint_set_in_tree)
+        {
+            _BreakpointSetInTree((Script?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), unchecked((int)(*(long*)args[1])), *(byte*)args[2] != 0);
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -957,9 +1008,9 @@ public unsafe partial class EditorDock : MarginContainer
 {
     internal EditorDock(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorDock() : this(InstanceBindings.ConstructRaw("EditorDock"), false)
+    public EditorDock() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorDock");
     }
 
     [Flags]
@@ -1400,6 +1451,39 @@ public unsafe partial class EditorDock : MarginContainer
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (EditorDock.DockLayout)__ret;
     }
+
+    public virtual void _UpdateLayout(int layout) { }
+
+    public virtual void _SaveLayoutToConfig(ConfigFile? config, string section) { }
+
+    public virtual void _LoadLayoutFromConfig(ConfigFile? config, string section) { }
+
+    private static ulong __vsn_update_layout;
+    private static ulong __vsn_save_layout_to_config;
+    private static ulong __vsn_load_layout_from_config;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_update_layout == 0) __vsn_update_layout = StringNames.Get("_update_layout").Opaque;
+        if (nameSn == __vsn_update_layout)
+        {
+            _UpdateLayout(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_save_layout_to_config == 0) __vsn_save_layout_to_config = StringNames.Get("_save_layout_to_config").Opaque;
+        if (nameSn == __vsn_save_layout_to_config)
+        {
+            _SaveLayoutToConfig((ConfigFile?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1]));
+            return true;
+        }
+        if (__vsn_load_layout_from_config == 0) __vsn_load_layout_from_config = StringNames.Get("_load_layout_from_config").Opaque;
+        if (nameSn == __vsn_load_layout_from_config)
+        {
+            _LoadLayoutFromConfig((ConfigFile?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1]));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class EditorExportPlatform : RefCounted
@@ -1655,9 +1739,9 @@ public unsafe partial class EditorExportPlatformAndroid : EditorExportPlatform
 {
     internal EditorExportPlatformAndroid(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorExportPlatformAndroid() : this(InstanceBindings.ConstructRaw("EditorExportPlatformAndroid"), true)
+    public EditorExportPlatformAndroid() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorExportPlatformAndroid");
     }
 }
 
@@ -1670,9 +1754,9 @@ public unsafe partial class EditorExportPlatformExtension : EditorExportPlatform
 {
     internal EditorExportPlatformExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorExportPlatformExtension() : this(InstanceBindings.ConstructRaw("EditorExportPlatformExtension"), true)
+    public EditorExportPlatformExtension() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorExportPlatformExtension");
     }
 
     private static nint __mb_set_config_error;
@@ -1737,15 +1821,246 @@ public unsafe partial class EditorExportPlatformExtension : EditorExportPlatform
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
+
+    public virtual bool _IsExecutable(string path) => default!;
+
+    public virtual bool _ShouldUpdateExportOptions() => default!;
+
+    public virtual bool _GetExportOptionVisibility(EditorExportPreset? preset, string option) => default!;
+
+    public virtual string _GetExportOptionWarning(EditorExportPreset? preset, string option) => default!;
+
+    public virtual string _GetOsName() => default!;
+
+    public virtual string _GetName() => default!;
+
+    public virtual Texture2D? _GetLogo() => default!;
+
+    public virtual bool _PollExport() => default!;
+
+    public virtual int _GetOptionsCount() => default!;
+
+    public virtual string _GetOptionsTooltip() => default!;
+
+    public virtual Texture2D? _GetOptionIcon(int device) => default!;
+
+    public virtual string _GetOptionLabel(int device) => default!;
+
+    public virtual string _GetOptionTooltip(int device) => default!;
+
+    public virtual string _GetDeviceArchitecture(int device) => default!;
+
+    public virtual void _Cleanup() { }
+
+    public virtual Error _Run(EditorExportPreset? preset, int device, EditorExportPlatform.DebugFlags debugFlags) => default!;
+
+    public virtual Texture2D? _GetRunIcon() => default!;
+
+    public virtual bool _CanExport(EditorExportPreset? preset, bool debug) => default!;
+
+    public virtual bool _HasValidExportConfiguration(EditorExportPreset? preset, bool debug) => default!;
+
+    public virtual bool _HasValidProjectConfiguration(EditorExportPreset? preset) => default!;
+
+    public virtual Error _ExportProject(EditorExportPreset? preset, bool debug, string path, EditorExportPlatform.DebugFlags flags) => default!;
+
+    public virtual Error _ExportPack(EditorExportPreset? preset, bool debug, string path, EditorExportPlatform.DebugFlags flags) => default!;
+
+    public virtual Error _ExportZip(EditorExportPreset? preset, bool debug, string path, EditorExportPlatform.DebugFlags flags) => default!;
+
+    public virtual string _GetDebugProtocol() => default!;
+
+    public virtual void _Initialize() { }
+
+    private static ulong __vsn_is_executable;
+    private static ulong __vsn_should_update_export_options;
+    private static ulong __vsn_get_export_option_visibility;
+    private static ulong __vsn_get_export_option_warning;
+    private static ulong __vsn_get_os_name;
+    private static ulong __vsn_get_name;
+    private static ulong __vsn_get_logo;
+    private static ulong __vsn_poll_export;
+    private static ulong __vsn_get_options_count;
+    private static ulong __vsn_get_options_tooltip;
+    private static ulong __vsn_get_option_icon;
+    private static ulong __vsn_get_option_label;
+    private static ulong __vsn_get_option_tooltip;
+    private static ulong __vsn_get_device_architecture;
+    private static ulong __vsn_cleanup;
+    private static ulong __vsn_run;
+    private static ulong __vsn_get_run_icon;
+    private static ulong __vsn_can_export;
+    private static ulong __vsn_has_valid_export_configuration;
+    private static ulong __vsn_has_valid_project_configuration;
+    private static ulong __vsn_export_project;
+    private static ulong __vsn_export_pack;
+    private static ulong __vsn_export_zip;
+    private static ulong __vsn_get_debug_protocol;
+    private static ulong __vsn_initialize;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_is_executable == 0) __vsn_is_executable = StringNames.Get("_is_executable").Opaque;
+        if (nameSn == __vsn_is_executable)
+        {
+            *(byte*)ret = _IsExecutable(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_should_update_export_options == 0) __vsn_should_update_export_options = StringNames.Get("_should_update_export_options").Opaque;
+        if (nameSn == __vsn_should_update_export_options)
+        {
+            *(byte*)ret = _ShouldUpdateExportOptions() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_export_option_visibility == 0) __vsn_get_export_option_visibility = StringNames.Get("_get_export_option_visibility").Opaque;
+        if (nameSn == __vsn_get_export_option_visibility)
+        {
+            *(byte*)ret = _GetExportOptionVisibility((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_export_option_warning == 0) __vsn_get_export_option_warning = StringNames.Get("_get_export_option_warning").Opaque;
+        if (nameSn == __vsn_get_export_option_warning)
+        {
+            *(ulong*)ret = NativeString.Create(_GetExportOptionWarning((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), StringNames.Read(*(ulong*)args[1])) ?? "");
+            return true;
+        }
+        if (__vsn_get_os_name == 0) __vsn_get_os_name = StringNames.Get("_get_os_name").Opaque;
+        if (nameSn == __vsn_get_os_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetOsName() ?? "");
+            return true;
+        }
+        if (__vsn_get_name == 0) __vsn_get_name = StringNames.Get("_get_name").Opaque;
+        if (nameSn == __vsn_get_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetName() ?? "");
+            return true;
+        }
+        if (__vsn_get_logo == 0) __vsn_get_logo = StringNames.Get("_get_logo").Opaque;
+        if (nameSn == __vsn_get_logo)
+        {
+            *(nint*)ret = _GetLogo()?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_poll_export == 0) __vsn_poll_export = StringNames.Get("_poll_export").Opaque;
+        if (nameSn == __vsn_poll_export)
+        {
+            *(byte*)ret = _PollExport() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_options_count == 0) __vsn_get_options_count = StringNames.Get("_get_options_count").Opaque;
+        if (nameSn == __vsn_get_options_count)
+        {
+            *(long*)ret = unchecked((long)_GetOptionsCount());
+            return true;
+        }
+        if (__vsn_get_options_tooltip == 0) __vsn_get_options_tooltip = StringNames.Get("_get_options_tooltip").Opaque;
+        if (nameSn == __vsn_get_options_tooltip)
+        {
+            *(ulong*)ret = NativeString.Create(_GetOptionsTooltip() ?? "");
+            return true;
+        }
+        if (__vsn_get_option_icon == 0) __vsn_get_option_icon = StringNames.Get("_get_option_icon").Opaque;
+        if (nameSn == __vsn_get_option_icon)
+        {
+            *(nint*)ret = _GetOptionIcon(unchecked((int)(*(long*)args[0])))?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_get_option_label == 0) __vsn_get_option_label = StringNames.Get("_get_option_label").Opaque;
+        if (nameSn == __vsn_get_option_label)
+        {
+            *(ulong*)ret = NativeString.Create(_GetOptionLabel(unchecked((int)(*(long*)args[0]))) ?? "");
+            return true;
+        }
+        if (__vsn_get_option_tooltip == 0) __vsn_get_option_tooltip = StringNames.Get("_get_option_tooltip").Opaque;
+        if (nameSn == __vsn_get_option_tooltip)
+        {
+            *(ulong*)ret = NativeString.Create(_GetOptionTooltip(unchecked((int)(*(long*)args[0]))) ?? "");
+            return true;
+        }
+        if (__vsn_get_device_architecture == 0) __vsn_get_device_architecture = StringNames.Get("_get_device_architecture").Opaque;
+        if (nameSn == __vsn_get_device_architecture)
+        {
+            *(ulong*)ret = NativeString.Create(_GetDeviceArchitecture(unchecked((int)(*(long*)args[0]))) ?? "");
+            return true;
+        }
+        if (__vsn_cleanup == 0) __vsn_cleanup = StringNames.Get("_cleanup").Opaque;
+        if (nameSn == __vsn_cleanup)
+        {
+            _Cleanup();
+            return true;
+        }
+        if (__vsn_run == 0) __vsn_run = StringNames.Get("_run").Opaque;
+        if (nameSn == __vsn_run)
+        {
+            *(long*)ret = (long)_Run((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), unchecked((int)(*(long*)args[1])), (EditorExportPlatform.DebugFlags)(*(long*)args[2]));
+            return true;
+        }
+        if (__vsn_get_run_icon == 0) __vsn_get_run_icon = StringNames.Get("_get_run_icon").Opaque;
+        if (nameSn == __vsn_get_run_icon)
+        {
+            *(nint*)ret = _GetRunIcon()?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_can_export == 0) __vsn_can_export = StringNames.Get("_can_export").Opaque;
+        if (nameSn == __vsn_can_export)
+        {
+            *(byte*)ret = _CanExport((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_has_valid_export_configuration == 0) __vsn_has_valid_export_configuration = StringNames.Get("_has_valid_export_configuration").Opaque;
+        if (nameSn == __vsn_has_valid_export_configuration)
+        {
+            *(byte*)ret = _HasValidExportConfiguration((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_has_valid_project_configuration == 0) __vsn_has_valid_project_configuration = StringNames.Get("_has_valid_project_configuration").Opaque;
+        if (nameSn == __vsn_has_valid_project_configuration)
+        {
+            *(byte*)ret = _HasValidProjectConfiguration((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false)) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_export_project == 0) __vsn_export_project = StringNames.Get("_export_project").Opaque;
+        if (nameSn == __vsn_export_project)
+        {
+            *(long*)ret = (long)_ExportProject((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0, NativeString.Read(*(ulong*)args[2]), (EditorExportPlatform.DebugFlags)(*(long*)args[3]));
+            return true;
+        }
+        if (__vsn_export_pack == 0) __vsn_export_pack = StringNames.Get("_export_pack").Opaque;
+        if (nameSn == __vsn_export_pack)
+        {
+            *(long*)ret = (long)_ExportPack((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0, NativeString.Read(*(ulong*)args[2]), (EditorExportPlatform.DebugFlags)(*(long*)args[3]));
+            return true;
+        }
+        if (__vsn_export_zip == 0) __vsn_export_zip = StringNames.Get("_export_zip").Opaque;
+        if (nameSn == __vsn_export_zip)
+        {
+            *(long*)ret = (long)_ExportZip((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0, NativeString.Read(*(ulong*)args[2]), (EditorExportPlatform.DebugFlags)(*(long*)args[3]));
+            return true;
+        }
+        if (__vsn_get_debug_protocol == 0) __vsn_get_debug_protocol = StringNames.Get("_get_debug_protocol").Opaque;
+        if (nameSn == __vsn_get_debug_protocol)
+        {
+            *(ulong*)ret = NativeString.Create(_GetDebugProtocol() ?? "");
+            return true;
+        }
+        if (__vsn_initialize == 0) __vsn_initialize = StringNames.Get("_initialize").Opaque;
+        if (nameSn == __vsn_initialize)
+        {
+            _Initialize();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class EditorExportPlatformIOS : EditorExportPlatformAppleEmbedded
 {
     internal EditorExportPlatformIOS(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorExportPlatformIOS() : this(InstanceBindings.ConstructRaw("EditorExportPlatformIOS"), true)
+    public EditorExportPlatformIOS() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorExportPlatformIOS");
     }
 }
 
@@ -1753,9 +2068,9 @@ public unsafe partial class EditorExportPlatformLinuxBSD : EditorExportPlatformP
 {
     internal EditorExportPlatformLinuxBSD(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorExportPlatformLinuxBSD() : this(InstanceBindings.ConstructRaw("EditorExportPlatformLinuxBSD"), true)
+    public EditorExportPlatformLinuxBSD() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorExportPlatformLinuxBSD");
     }
 }
 
@@ -1763,9 +2078,9 @@ public unsafe partial class EditorExportPlatformMacOS : EditorExportPlatform
 {
     internal EditorExportPlatformMacOS(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorExportPlatformMacOS() : this(InstanceBindings.ConstructRaw("EditorExportPlatformMacOS"), true)
+    public EditorExportPlatformMacOS() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorExportPlatformMacOS");
     }
 }
 
@@ -1778,9 +2093,9 @@ public unsafe partial class EditorExportPlatformVisionOS : EditorExportPlatformA
 {
     internal EditorExportPlatformVisionOS(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorExportPlatformVisionOS() : this(InstanceBindings.ConstructRaw("EditorExportPlatformVisionOS"), true)
+    public EditorExportPlatformVisionOS() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorExportPlatformVisionOS");
     }
 }
 
@@ -1788,9 +2103,9 @@ public unsafe partial class EditorExportPlatformWeb : EditorExportPlatform
 {
     internal EditorExportPlatformWeb(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorExportPlatformWeb() : this(InstanceBindings.ConstructRaw("EditorExportPlatformWeb"), true)
+    public EditorExportPlatformWeb() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorExportPlatformWeb");
     }
 }
 
@@ -1798,9 +2113,9 @@ public unsafe partial class EditorExportPlatformWindows : EditorExportPlatformPC
 {
     internal EditorExportPlatformWindows(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorExportPlatformWindows() : this(InstanceBindings.ConstructRaw("EditorExportPlatformWindows"), true)
+    public EditorExportPlatformWindows() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorExportPlatformWindows");
     }
 }
 
@@ -1808,9 +2123,9 @@ public unsafe partial class EditorExportPlugin : RefCounted
 {
     internal EditorExportPlugin(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorExportPlugin() : this(InstanceBindings.ConstructRaw("EditorExportPlugin"), true)
+    public EditorExportPlugin() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorExportPlugin");
     }
 
     private static nint __mb_add_apple_embedded_platform_project_static_lib;
@@ -2109,6 +2424,147 @@ public unsafe partial class EditorExportPlugin : RefCounted
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (EditorExportPlatform?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    public virtual void _ExportEnd() { }
+
+    public virtual void _EndGenerateAppleEmbeddedProject(string path, bool willBuildArchive) { }
+
+    public virtual Resource? _CustomizeResource(Resource? resource, string path) => default!;
+
+    public virtual Node? _CustomizeScene(Node? scene, string path) => default!;
+
+    public virtual ulong _GetCustomizationConfigurationHash() => default!;
+
+    public virtual void _EndCustomizeScenes() { }
+
+    public virtual void _EndCustomizeResources() { }
+
+    public virtual bool _ShouldUpdateExportOptions(EditorExportPlatform? platform) => default!;
+
+    public virtual bool _GetExportOptionVisibility(EditorExportPlatform? platform, string option) => default!;
+
+    public virtual string _GetExportOptionWarning(EditorExportPlatform? platform, string option) => default!;
+
+    public virtual string _GetName() => default!;
+
+    public virtual bool _SupportsPlatform(EditorExportPlatform? platform) => default!;
+
+    public virtual string _GetAndroidManifestActivityElementContents(EditorExportPlatform? platform, bool debug) => default!;
+
+    public virtual string _GetAndroidManifestApplicationElementContents(EditorExportPlatform? platform, bool debug) => default!;
+
+    public virtual string _GetAndroidManifestElementContents(EditorExportPlatform? platform, bool debug) => default!;
+
+    private static ulong __vsn_export_end;
+    private static ulong __vsn_end_generate_apple_embedded_project;
+    private static ulong __vsn_customize_resource;
+    private static ulong __vsn_customize_scene;
+    private static ulong __vsn_get_customization_configuration_hash;
+    private static ulong __vsn_end_customize_scenes;
+    private static ulong __vsn_end_customize_resources;
+    private static ulong __vsn_should_update_export_options;
+    private static ulong __vsn_get_export_option_visibility;
+    private static ulong __vsn_get_export_option_warning;
+    private static ulong __vsn_get_name;
+    private static ulong __vsn_supports_platform;
+    private static ulong __vsn_get_android_manifest_activity_element_contents;
+    private static ulong __vsn_get_android_manifest_application_element_contents;
+    private static ulong __vsn_get_android_manifest_element_contents;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_export_end == 0) __vsn_export_end = StringNames.Get("_export_end").Opaque;
+        if (nameSn == __vsn_export_end)
+        {
+            _ExportEnd();
+            return true;
+        }
+        if (__vsn_end_generate_apple_embedded_project == 0) __vsn_end_generate_apple_embedded_project = StringNames.Get("_end_generate_apple_embedded_project").Opaque;
+        if (nameSn == __vsn_end_generate_apple_embedded_project)
+        {
+            _EndGenerateAppleEmbeddedProject(NativeString.Read(*(ulong*)args[0]), *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_customize_resource == 0) __vsn_customize_resource = StringNames.Get("_customize_resource").Opaque;
+        if (nameSn == __vsn_customize_resource)
+        {
+            *(nint*)ret = _CustomizeResource((Resource?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1]))?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_customize_scene == 0) __vsn_customize_scene = StringNames.Get("_customize_scene").Opaque;
+        if (nameSn == __vsn_customize_scene)
+        {
+            *(nint*)ret = _CustomizeScene((Node?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1]))?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_get_customization_configuration_hash == 0) __vsn_get_customization_configuration_hash = StringNames.Get("_get_customization_configuration_hash").Opaque;
+        if (nameSn == __vsn_get_customization_configuration_hash)
+        {
+            *(long*)ret = unchecked((long)_GetCustomizationConfigurationHash());
+            return true;
+        }
+        if (__vsn_end_customize_scenes == 0) __vsn_end_customize_scenes = StringNames.Get("_end_customize_scenes").Opaque;
+        if (nameSn == __vsn_end_customize_scenes)
+        {
+            _EndCustomizeScenes();
+            return true;
+        }
+        if (__vsn_end_customize_resources == 0) __vsn_end_customize_resources = StringNames.Get("_end_customize_resources").Opaque;
+        if (nameSn == __vsn_end_customize_resources)
+        {
+            _EndCustomizeResources();
+            return true;
+        }
+        if (__vsn_should_update_export_options == 0) __vsn_should_update_export_options = StringNames.Get("_should_update_export_options").Opaque;
+        if (nameSn == __vsn_should_update_export_options)
+        {
+            *(byte*)ret = _ShouldUpdateExportOptions((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false)) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_export_option_visibility == 0) __vsn_get_export_option_visibility = StringNames.Get("_get_export_option_visibility").Opaque;
+        if (nameSn == __vsn_get_export_option_visibility)
+        {
+            *(byte*)ret = _GetExportOptionVisibility((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_export_option_warning == 0) __vsn_get_export_option_warning = StringNames.Get("_get_export_option_warning").Opaque;
+        if (nameSn == __vsn_get_export_option_warning)
+        {
+            *(ulong*)ret = NativeString.Create(_GetExportOptionWarning((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1])) ?? "");
+            return true;
+        }
+        if (__vsn_get_name == 0) __vsn_get_name = StringNames.Get("_get_name").Opaque;
+        if (nameSn == __vsn_get_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetName() ?? "");
+            return true;
+        }
+        if (__vsn_supports_platform == 0) __vsn_supports_platform = StringNames.Get("_supports_platform").Opaque;
+        if (nameSn == __vsn_supports_platform)
+        {
+            *(byte*)ret = _SupportsPlatform((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false)) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_android_manifest_activity_element_contents == 0) __vsn_get_android_manifest_activity_element_contents = StringNames.Get("_get_android_manifest_activity_element_contents").Opaque;
+        if (nameSn == __vsn_get_android_manifest_activity_element_contents)
+        {
+            *(ulong*)ret = NativeString.Create(_GetAndroidManifestActivityElementContents((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0) ?? "");
+            return true;
+        }
+        if (__vsn_get_android_manifest_application_element_contents == 0) __vsn_get_android_manifest_application_element_contents = StringNames.Get("_get_android_manifest_application_element_contents").Opaque;
+        if (nameSn == __vsn_get_android_manifest_application_element_contents)
+        {
+            *(ulong*)ret = NativeString.Create(_GetAndroidManifestApplicationElementContents((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0) ?? "");
+            return true;
+        }
+        if (__vsn_get_android_manifest_element_contents == 0) __vsn_get_android_manifest_element_contents = StringNames.Get("_get_android_manifest_element_contents").Opaque;
+        if (nameSn == __vsn_get_android_manifest_element_contents)
+        {
+            *(ulong*)ret = NativeString.Create(_GetAndroidManifestElementContents((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0) ?? "");
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -2463,9 +2919,9 @@ public unsafe partial class EditorFeatureProfile : RefCounted
 {
     internal EditorFeatureProfile(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorFeatureProfile() : this(InstanceBindings.ConstructRaw("EditorFeatureProfile"), true)
+    public EditorFeatureProfile() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorFeatureProfile");
     }
 
     public enum Feature : long
@@ -2693,9 +3149,9 @@ public unsafe partial class EditorFileDialog : FileDialog
 {
     internal EditorFileDialog(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorFileDialog() : this(InstanceBindings.ConstructRaw("EditorFileDialog"), false)
+    public EditorFileDialog() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorFileDialog");
     }
 
     private static nint __mb_add_side_menu;
@@ -2899,9 +3355,9 @@ public unsafe partial class EditorFileSystemDirectory : GodotObject
 {
     internal EditorFileSystemDirectory(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorFileSystemDirectory() : this(InstanceBindings.ConstructRaw("EditorFileSystemDirectory"), false)
+    public EditorFileSystemDirectory() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorFileSystemDirectory");
     }
 
     private static nint __mb_get_subdir_count;
@@ -3148,9 +3604,33 @@ public unsafe partial class EditorFileSystemImportFormatSupportQuery : RefCounte
 {
     internal EditorFileSystemImportFormatSupportQuery(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorFileSystemImportFormatSupportQuery() : this(InstanceBindings.ConstructRaw("EditorFileSystemImportFormatSupportQuery"), true)
+    public EditorFileSystemImportFormatSupportQuery() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorFileSystemImportFormatSupportQuery");
+    }
+
+    public virtual bool _IsActive() => default!;
+
+    public virtual bool _Query() => default!;
+
+    private static ulong __vsn_is_active;
+    private static ulong __vsn_query;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_is_active == 0) __vsn_is_active = StringNames.Get("_is_active").Opaque;
+        if (nameSn == __vsn_is_active)
+        {
+            *(byte*)ret = _IsActive() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_query == 0) __vsn_query = StringNames.Get("_query").Opaque;
+        if (nameSn == __vsn_query)
+        {
+            *(byte*)ret = _Query() ? (byte)1 : (byte)0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -3158,9 +3638,105 @@ public unsafe partial class EditorImportPlugin : ResourceImporter
 {
     internal EditorImportPlugin(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorImportPlugin() : this(InstanceBindings.ConstructRaw("EditorImportPlugin"), true)
+    public EditorImportPlugin() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorImportPlugin");
+    }
+
+    public virtual string _GetImporterName() => default!;
+
+    public virtual string _GetVisibleName() => default!;
+
+    public virtual int _GetPresetCount() => default!;
+
+    public virtual string _GetPresetName(int presetIndex) => default!;
+
+    public virtual string _GetSaveExtension() => default!;
+
+    public virtual string _GetResourceType() => default!;
+
+    public virtual float _GetPriority() => default!;
+
+    public virtual int _GetImportOrder() => default!;
+
+    public virtual int _GetFormatVersion() => default!;
+
+    public virtual bool _CanImportThreaded() => default!;
+
+    private static ulong __vsn_get_importer_name;
+    private static ulong __vsn_get_visible_name;
+    private static ulong __vsn_get_preset_count;
+    private static ulong __vsn_get_preset_name;
+    private static ulong __vsn_get_save_extension;
+    private static ulong __vsn_get_resource_type;
+    private static ulong __vsn_get_priority;
+    private static ulong __vsn_get_import_order;
+    private static ulong __vsn_get_format_version;
+    private static ulong __vsn_can_import_threaded;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_importer_name == 0) __vsn_get_importer_name = StringNames.Get("_get_importer_name").Opaque;
+        if (nameSn == __vsn_get_importer_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetImporterName() ?? "");
+            return true;
+        }
+        if (__vsn_get_visible_name == 0) __vsn_get_visible_name = StringNames.Get("_get_visible_name").Opaque;
+        if (nameSn == __vsn_get_visible_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetVisibleName() ?? "");
+            return true;
+        }
+        if (__vsn_get_preset_count == 0) __vsn_get_preset_count = StringNames.Get("_get_preset_count").Opaque;
+        if (nameSn == __vsn_get_preset_count)
+        {
+            *(long*)ret = unchecked((long)_GetPresetCount());
+            return true;
+        }
+        if (__vsn_get_preset_name == 0) __vsn_get_preset_name = StringNames.Get("_get_preset_name").Opaque;
+        if (nameSn == __vsn_get_preset_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetPresetName(unchecked((int)(*(long*)args[0]))) ?? "");
+            return true;
+        }
+        if (__vsn_get_save_extension == 0) __vsn_get_save_extension = StringNames.Get("_get_save_extension").Opaque;
+        if (nameSn == __vsn_get_save_extension)
+        {
+            *(ulong*)ret = NativeString.Create(_GetSaveExtension() ?? "");
+            return true;
+        }
+        if (__vsn_get_resource_type == 0) __vsn_get_resource_type = StringNames.Get("_get_resource_type").Opaque;
+        if (nameSn == __vsn_get_resource_type)
+        {
+            *(ulong*)ret = NativeString.Create(_GetResourceType() ?? "");
+            return true;
+        }
+        if (__vsn_get_priority == 0) __vsn_get_priority = StringNames.Get("_get_priority").Opaque;
+        if (nameSn == __vsn_get_priority)
+        {
+            *(double*)ret = _GetPriority();
+            return true;
+        }
+        if (__vsn_get_import_order == 0) __vsn_get_import_order = StringNames.Get("_get_import_order").Opaque;
+        if (nameSn == __vsn_get_import_order)
+        {
+            *(long*)ret = unchecked((long)_GetImportOrder());
+            return true;
+        }
+        if (__vsn_get_format_version == 0) __vsn_get_format_version = StringNames.Get("_get_format_version").Opaque;
+        if (nameSn == __vsn_get_format_version)
+        {
+            *(long*)ret = unchecked((long)_GetFormatVersion());
+            return true;
+        }
+        if (__vsn_can_import_threaded == 0) __vsn_can_import_threaded = StringNames.Get("_can_import_threaded").Opaque;
+        if (nameSn == __vsn_can_import_threaded)
+        {
+            *(byte*)ret = _CanImportThreaded() ? (byte)1 : (byte)0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -3168,9 +3744,9 @@ public unsafe partial class EditorInspector : ScrollContainer
 {
     internal EditorInspector(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorInspector() : this(InstanceBindings.ConstructRaw("EditorInspector"), false)
+    public EditorInspector() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorInspector");
     }
 
     private static nint __mb_edit;
@@ -3313,9 +3889,9 @@ public unsafe partial class EditorInspectorPlugin : RefCounted
 {
     internal EditorInspectorPlugin(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorInspectorPlugin() : this(InstanceBindings.ConstructRaw("EditorInspectorPlugin"), true)
+    public EditorInspectorPlugin() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorInspectorPlugin");
     }
 
     private static nint __mb_add_custom_control;
@@ -3356,6 +3932,66 @@ public unsafe partial class EditorInspectorPlugin : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a3);
+    }
+
+    public virtual bool _CanHandle(GodotObject? @object) => default!;
+
+    public virtual void _ParseBegin(GodotObject? @object) { }
+
+    public virtual void _ParseCategory(GodotObject? @object, string category) { }
+
+    public virtual void _ParseGroup(GodotObject? @object, string group) { }
+
+    public virtual bool _ParseProperty(GodotObject? @object, VariantType type, string name, PropertyHint hintType, string hintString, PropertyUsageFlags usageFlags, bool wide) => default!;
+
+    public virtual void _ParseEnd(GodotObject? @object) { }
+
+    private static ulong __vsn_can_handle;
+    private static ulong __vsn_parse_begin;
+    private static ulong __vsn_parse_category;
+    private static ulong __vsn_parse_group;
+    private static ulong __vsn_parse_property;
+    private static ulong __vsn_parse_end;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_can_handle == 0) __vsn_can_handle = StringNames.Get("_can_handle").Opaque;
+        if (nameSn == __vsn_can_handle)
+        {
+            *(byte*)ret = _CanHandle((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false)) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_parse_begin == 0) __vsn_parse_begin = StringNames.Get("_parse_begin").Opaque;
+        if (nameSn == __vsn_parse_begin)
+        {
+            _ParseBegin((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_parse_category == 0) __vsn_parse_category = StringNames.Get("_parse_category").Opaque;
+        if (nameSn == __vsn_parse_category)
+        {
+            _ParseCategory((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1]));
+            return true;
+        }
+        if (__vsn_parse_group == 0) __vsn_parse_group = StringNames.Get("_parse_group").Opaque;
+        if (nameSn == __vsn_parse_group)
+        {
+            _ParseGroup((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1]));
+            return true;
+        }
+        if (__vsn_parse_property == 0) __vsn_parse_property = StringNames.Get("_parse_property").Opaque;
+        if (nameSn == __vsn_parse_property)
+        {
+            *(byte*)ret = _ParseProperty((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (VariantType)(*(long*)args[1]), NativeString.Read(*(ulong*)args[2]), (PropertyHint)(*(long*)args[3]), NativeString.Read(*(ulong*)args[4]), (PropertyUsageFlags)(*(long*)args[5]), *(byte*)args[6] != 0) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_parse_end == 0) __vsn_parse_end = StringNames.Get("_parse_end").Opaque;
+        if (nameSn == __vsn_parse_end)
+        {
+            _ParseEnd((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -4344,9 +4980,9 @@ public unsafe partial class EditorNode3DGizmo : Node3DGizmo
 {
     internal EditorNode3DGizmo(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorNode3DGizmo() : this(InstanceBindings.ConstructRaw("EditorNode3DGizmo"), true)
+    public EditorNode3DGizmo() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorNode3DGizmo");
     }
 
     private static nint __mb_add_mesh;
@@ -4499,15 +5135,93 @@ public unsafe partial class EditorNode3DGizmo : Node3DGizmo
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
+
+    public virtual void _Redraw() { }
+
+    public virtual string _GetHandleName(int id, bool secondary) => default!;
+
+    public virtual bool _IsHandleHighlighted(int id, bool secondary) => default!;
+
+    public virtual void _BeginHandleAction(int id, bool secondary) { }
+
+    public virtual void _SetHandle(int id, bool secondary, Camera3D? camera, Vector2 point) { }
+
+    public virtual int _SubgizmosIntersectRay(Camera3D? camera, Vector2 point) => default!;
+
+    public virtual void _SetSubgizmoTransform(int id, Transform3D transform) { }
+
+    public virtual Transform3D _GetSubgizmoTransform(int id) => default!;
+
+    private static ulong __vsn_redraw;
+    private static ulong __vsn_get_handle_name;
+    private static ulong __vsn_is_handle_highlighted;
+    private static ulong __vsn_begin_handle_action;
+    private static ulong __vsn_set_handle;
+    private static ulong __vsn_subgizmos_intersect_ray;
+    private static ulong __vsn_set_subgizmo_transform;
+    private static ulong __vsn_get_subgizmo_transform;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_redraw == 0) __vsn_redraw = StringNames.Get("_redraw").Opaque;
+        if (nameSn == __vsn_redraw)
+        {
+            _Redraw();
+            return true;
+        }
+        if (__vsn_get_handle_name == 0) __vsn_get_handle_name = StringNames.Get("_get_handle_name").Opaque;
+        if (nameSn == __vsn_get_handle_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetHandleName(unchecked((int)(*(long*)args[0])), *(byte*)args[1] != 0) ?? "");
+            return true;
+        }
+        if (__vsn_is_handle_highlighted == 0) __vsn_is_handle_highlighted = StringNames.Get("_is_handle_highlighted").Opaque;
+        if (nameSn == __vsn_is_handle_highlighted)
+        {
+            *(byte*)ret = _IsHandleHighlighted(unchecked((int)(*(long*)args[0])), *(byte*)args[1] != 0) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_begin_handle_action == 0) __vsn_begin_handle_action = StringNames.Get("_begin_handle_action").Opaque;
+        if (nameSn == __vsn_begin_handle_action)
+        {
+            _BeginHandleAction(unchecked((int)(*(long*)args[0])), *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_set_handle == 0) __vsn_set_handle = StringNames.Get("_set_handle").Opaque;
+        if (nameSn == __vsn_set_handle)
+        {
+            _SetHandle(unchecked((int)(*(long*)args[0])), *(byte*)args[1] != 0, (Camera3D?)InstanceBindings.GetOrCreate(*(nint*)args[2], adoptRef: false), *(Vector2*)args[3]);
+            return true;
+        }
+        if (__vsn_subgizmos_intersect_ray == 0) __vsn_subgizmos_intersect_ray = StringNames.Get("_subgizmos_intersect_ray").Opaque;
+        if (nameSn == __vsn_subgizmos_intersect_ray)
+        {
+            *(long*)ret = unchecked((long)_SubgizmosIntersectRay((Camera3D?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(Vector2*)args[1]));
+            return true;
+        }
+        if (__vsn_set_subgizmo_transform == 0) __vsn_set_subgizmo_transform = StringNames.Get("_set_subgizmo_transform").Opaque;
+        if (nameSn == __vsn_set_subgizmo_transform)
+        {
+            _SetSubgizmoTransform(unchecked((int)(*(long*)args[0])), *(Transform3D*)args[1]);
+            return true;
+        }
+        if (__vsn_get_subgizmo_transform == 0) __vsn_get_subgizmo_transform = StringNames.Get("_get_subgizmo_transform").Opaque;
+        if (nameSn == __vsn_get_subgizmo_transform)
+        {
+            *(Transform3D*)ret = _GetSubgizmoTransform(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class EditorNode3DGizmoPlugin : Resource
 {
     internal EditorNode3DGizmoPlugin(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorNode3DGizmoPlugin() : this(InstanceBindings.ConstructRaw("EditorNode3DGizmoPlugin"), true)
+    public EditorNode3DGizmoPlugin() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorNode3DGizmoPlugin");
     }
 
     private static nint __mb_create_material;
@@ -4618,15 +5332,156 @@ public unsafe partial class EditorNode3DGizmoPlugin : Resource
         NativeString.Destroy(ref __a0);
         return (StandardMaterial3D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
+
+    public virtual bool _HasGizmo(Node3D? forNode3d) => default!;
+
+    public virtual EditorNode3DGizmo? _CreateGizmo(Node3D? forNode3d) => default!;
+
+    public virtual string _GetGizmoName() => default!;
+
+    public virtual int _GetPriority() => default!;
+
+    public virtual bool _CanBeHidden() => default!;
+
+    public virtual bool _IsSelectableWhenHidden() => default!;
+
+    public virtual bool _CanCommitHandleOnClick() => default!;
+
+    public virtual void _Redraw(EditorNode3DGizmo? gizmo) { }
+
+    public virtual string _GetHandleName(EditorNode3DGizmo? gizmo, int handleId, bool secondary) => default!;
+
+    public virtual bool _IsHandleHighlighted(EditorNode3DGizmo? gizmo, int handleId, bool secondary) => default!;
+
+    public virtual void _BeginHandleAction(EditorNode3DGizmo? gizmo, int handleId, bool secondary) { }
+
+    public virtual void _SetHandle(EditorNode3DGizmo? gizmo, int handleId, bool secondary, Camera3D? camera, Vector2 screenPos) { }
+
+    public virtual int _SubgizmosIntersectRay(EditorNode3DGizmo? gizmo, Camera3D? camera, Vector2 screenPos) => default!;
+
+    public virtual Transform3D _GetSubgizmoTransform(EditorNode3DGizmo? gizmo, int subgizmoId) => default!;
+
+    public virtual void _SetSubgizmoTransform(EditorNode3DGizmo? gizmo, int subgizmoId, Transform3D transform) { }
+
+    private static ulong __vsn_has_gizmo;
+    private static ulong __vsn_create_gizmo;
+    private static ulong __vsn_get_gizmo_name;
+    private static ulong __vsn_get_priority;
+    private static ulong __vsn_can_be_hidden;
+    private static ulong __vsn_is_selectable_when_hidden;
+    private static ulong __vsn_can_commit_handle_on_click;
+    private static ulong __vsn_redraw;
+    private static ulong __vsn_get_handle_name;
+    private static ulong __vsn_is_handle_highlighted;
+    private static ulong __vsn_begin_handle_action;
+    private static ulong __vsn_set_handle;
+    private static ulong __vsn_subgizmos_intersect_ray;
+    private static ulong __vsn_get_subgizmo_transform;
+    private static ulong __vsn_set_subgizmo_transform;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_has_gizmo == 0) __vsn_has_gizmo = StringNames.Get("_has_gizmo").Opaque;
+        if (nameSn == __vsn_has_gizmo)
+        {
+            *(byte*)ret = _HasGizmo((Node3D?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false)) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_create_gizmo == 0) __vsn_create_gizmo = StringNames.Get("_create_gizmo").Opaque;
+        if (nameSn == __vsn_create_gizmo)
+        {
+            *(nint*)ret = _CreateGizmo((Node3D?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false))?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_get_gizmo_name == 0) __vsn_get_gizmo_name = StringNames.Get("_get_gizmo_name").Opaque;
+        if (nameSn == __vsn_get_gizmo_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetGizmoName() ?? "");
+            return true;
+        }
+        if (__vsn_get_priority == 0) __vsn_get_priority = StringNames.Get("_get_priority").Opaque;
+        if (nameSn == __vsn_get_priority)
+        {
+            *(long*)ret = unchecked((long)_GetPriority());
+            return true;
+        }
+        if (__vsn_can_be_hidden == 0) __vsn_can_be_hidden = StringNames.Get("_can_be_hidden").Opaque;
+        if (nameSn == __vsn_can_be_hidden)
+        {
+            *(byte*)ret = _CanBeHidden() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_is_selectable_when_hidden == 0) __vsn_is_selectable_when_hidden = StringNames.Get("_is_selectable_when_hidden").Opaque;
+        if (nameSn == __vsn_is_selectable_when_hidden)
+        {
+            *(byte*)ret = _IsSelectableWhenHidden() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_can_commit_handle_on_click == 0) __vsn_can_commit_handle_on_click = StringNames.Get("_can_commit_handle_on_click").Opaque;
+        if (nameSn == __vsn_can_commit_handle_on_click)
+        {
+            *(byte*)ret = _CanCommitHandleOnClick() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_redraw == 0) __vsn_redraw = StringNames.Get("_redraw").Opaque;
+        if (nameSn == __vsn_redraw)
+        {
+            _Redraw((EditorNode3DGizmo?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_get_handle_name == 0) __vsn_get_handle_name = StringNames.Get("_get_handle_name").Opaque;
+        if (nameSn == __vsn_get_handle_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetHandleName((EditorNode3DGizmo?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), unchecked((int)(*(long*)args[1])), *(byte*)args[2] != 0) ?? "");
+            return true;
+        }
+        if (__vsn_is_handle_highlighted == 0) __vsn_is_handle_highlighted = StringNames.Get("_is_handle_highlighted").Opaque;
+        if (nameSn == __vsn_is_handle_highlighted)
+        {
+            *(byte*)ret = _IsHandleHighlighted((EditorNode3DGizmo?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), unchecked((int)(*(long*)args[1])), *(byte*)args[2] != 0) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_begin_handle_action == 0) __vsn_begin_handle_action = StringNames.Get("_begin_handle_action").Opaque;
+        if (nameSn == __vsn_begin_handle_action)
+        {
+            _BeginHandleAction((EditorNode3DGizmo?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), unchecked((int)(*(long*)args[1])), *(byte*)args[2] != 0);
+            return true;
+        }
+        if (__vsn_set_handle == 0) __vsn_set_handle = StringNames.Get("_set_handle").Opaque;
+        if (nameSn == __vsn_set_handle)
+        {
+            _SetHandle((EditorNode3DGizmo?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), unchecked((int)(*(long*)args[1])), *(byte*)args[2] != 0, (Camera3D?)InstanceBindings.GetOrCreate(*(nint*)args[3], adoptRef: false), *(Vector2*)args[4]);
+            return true;
+        }
+        if (__vsn_subgizmos_intersect_ray == 0) __vsn_subgizmos_intersect_ray = StringNames.Get("_subgizmos_intersect_ray").Opaque;
+        if (nameSn == __vsn_subgizmos_intersect_ray)
+        {
+            *(long*)ret = unchecked((long)_SubgizmosIntersectRay((EditorNode3DGizmo?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (Camera3D?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false), *(Vector2*)args[2]));
+            return true;
+        }
+        if (__vsn_get_subgizmo_transform == 0) __vsn_get_subgizmo_transform = StringNames.Get("_get_subgizmo_transform").Opaque;
+        if (nameSn == __vsn_get_subgizmo_transform)
+        {
+            *(Transform3D*)ret = _GetSubgizmoTransform((EditorNode3DGizmo?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_set_subgizmo_transform == 0) __vsn_set_subgizmo_transform = StringNames.Get("_set_subgizmo_transform").Opaque;
+        if (nameSn == __vsn_set_subgizmo_transform)
+        {
+            _SetSubgizmoTransform((EditorNode3DGizmo?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), unchecked((int)(*(long*)args[1])), *(Transform3D*)args[2]);
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class EditorPaths : GodotObject
 {
     internal EditorPaths(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorPaths() : this(InstanceBindings.ConstructRaw("EditorPaths"), false)
+    public EditorPaths() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorPaths");
     }
 
     private static nint __mb_get_data_dir;
@@ -4724,9 +5579,9 @@ public unsafe partial class EditorPlugin : Node
 {
     internal EditorPlugin(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorPlugin() : this(InstanceBindings.ConstructRaw("EditorPlugin"), false)
+    public EditorPlugin() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorPlugin");
     }
 
     public enum CustomControlContainer : long
@@ -5559,15 +6414,210 @@ public unsafe partial class EditorPlugin : Node
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
+
+    public virtual bool _ForwardCanvasGuiInput(InputEvent? @event) => default!;
+
+    public virtual void _ForwardCanvasDrawOverViewport(Control? viewportControl) { }
+
+    public virtual void _ForwardCanvasForceDrawOverViewport(Control? viewportControl) { }
+
+    public virtual int _Forward3dGuiInput(Camera3D? viewportCamera, InputEvent? @event) => default!;
+
+    public virtual void _Forward3dDrawOverViewport(Control? viewportControl) { }
+
+    public virtual void _Forward3dForceDrawOverViewport(Control? viewportControl) { }
+
+    public virtual string _GetPluginName() => default!;
+
+    public virtual Texture2D? _GetPluginIcon() => default!;
+
+    public virtual bool _HasMainScreen() => default!;
+
+    public virtual void _MakeVisible(bool visible) { }
+
+    public virtual void _Edit(GodotObject? @object) { }
+
+    public virtual bool _Handles(GodotObject? @object) => default!;
+
+    public virtual void _Clear() { }
+
+    public virtual string _GetUnsavedStatus(string forScene) => default!;
+
+    public virtual void _SaveExternalData() { }
+
+    public virtual void _ApplyChanges() { }
+
+    public virtual void _SetWindowLayout(ConfigFile? configuration) { }
+
+    public virtual void _GetWindowLayout(ConfigFile? configuration) { }
+
+    public virtual bool _Build() => default!;
+
+    public virtual void _EnablePlugin() { }
+
+    public virtual void _DisablePlugin() { }
+
+    private static ulong __vsn_forward_canvas_gui_input;
+    private static ulong __vsn_forward_canvas_draw_over_viewport;
+    private static ulong __vsn_forward_canvas_force_draw_over_viewport;
+    private static ulong __vsn_forward_3d_gui_input;
+    private static ulong __vsn_forward_3d_draw_over_viewport;
+    private static ulong __vsn_forward_3d_force_draw_over_viewport;
+    private static ulong __vsn_get_plugin_name;
+    private static ulong __vsn_get_plugin_icon;
+    private static ulong __vsn_has_main_screen;
+    private static ulong __vsn_make_visible;
+    private static ulong __vsn_edit;
+    private static ulong __vsn_handles;
+    private static ulong __vsn_clear;
+    private static ulong __vsn_get_unsaved_status;
+    private static ulong __vsn_save_external_data;
+    private static ulong __vsn_apply_changes;
+    private static ulong __vsn_set_window_layout;
+    private static ulong __vsn_get_window_layout;
+    private static ulong __vsn_build;
+    private static ulong __vsn_enable_plugin;
+    private static ulong __vsn_disable_plugin;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_forward_canvas_gui_input == 0) __vsn_forward_canvas_gui_input = StringNames.Get("_forward_canvas_gui_input").Opaque;
+        if (nameSn == __vsn_forward_canvas_gui_input)
+        {
+            *(byte*)ret = _ForwardCanvasGuiInput((InputEvent?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false)) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_forward_canvas_draw_over_viewport == 0) __vsn_forward_canvas_draw_over_viewport = StringNames.Get("_forward_canvas_draw_over_viewport").Opaque;
+        if (nameSn == __vsn_forward_canvas_draw_over_viewport)
+        {
+            _ForwardCanvasDrawOverViewport((Control?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_forward_canvas_force_draw_over_viewport == 0) __vsn_forward_canvas_force_draw_over_viewport = StringNames.Get("_forward_canvas_force_draw_over_viewport").Opaque;
+        if (nameSn == __vsn_forward_canvas_force_draw_over_viewport)
+        {
+            _ForwardCanvasForceDrawOverViewport((Control?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_forward_3d_gui_input == 0) __vsn_forward_3d_gui_input = StringNames.Get("_forward_3d_gui_input").Opaque;
+        if (nameSn == __vsn_forward_3d_gui_input)
+        {
+            *(long*)ret = unchecked((long)_Forward3dGuiInput((Camera3D?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (InputEvent?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false)));
+            return true;
+        }
+        if (__vsn_forward_3d_draw_over_viewport == 0) __vsn_forward_3d_draw_over_viewport = StringNames.Get("_forward_3d_draw_over_viewport").Opaque;
+        if (nameSn == __vsn_forward_3d_draw_over_viewport)
+        {
+            _Forward3dDrawOverViewport((Control?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_forward_3d_force_draw_over_viewport == 0) __vsn_forward_3d_force_draw_over_viewport = StringNames.Get("_forward_3d_force_draw_over_viewport").Opaque;
+        if (nameSn == __vsn_forward_3d_force_draw_over_viewport)
+        {
+            _Forward3dForceDrawOverViewport((Control?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_get_plugin_name == 0) __vsn_get_plugin_name = StringNames.Get("_get_plugin_name").Opaque;
+        if (nameSn == __vsn_get_plugin_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetPluginName() ?? "");
+            return true;
+        }
+        if (__vsn_get_plugin_icon == 0) __vsn_get_plugin_icon = StringNames.Get("_get_plugin_icon").Opaque;
+        if (nameSn == __vsn_get_plugin_icon)
+        {
+            *(nint*)ret = _GetPluginIcon()?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_has_main_screen == 0) __vsn_has_main_screen = StringNames.Get("_has_main_screen").Opaque;
+        if (nameSn == __vsn_has_main_screen)
+        {
+            *(byte*)ret = _HasMainScreen() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_make_visible == 0) __vsn_make_visible = StringNames.Get("_make_visible").Opaque;
+        if (nameSn == __vsn_make_visible)
+        {
+            _MakeVisible(*(byte*)args[0] != 0);
+            return true;
+        }
+        if (__vsn_edit == 0) __vsn_edit = StringNames.Get("_edit").Opaque;
+        if (nameSn == __vsn_edit)
+        {
+            _Edit((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_handles == 0) __vsn_handles = StringNames.Get("_handles").Opaque;
+        if (nameSn == __vsn_handles)
+        {
+            *(byte*)ret = _Handles((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false)) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_clear == 0) __vsn_clear = StringNames.Get("_clear").Opaque;
+        if (nameSn == __vsn_clear)
+        {
+            _Clear();
+            return true;
+        }
+        if (__vsn_get_unsaved_status == 0) __vsn_get_unsaved_status = StringNames.Get("_get_unsaved_status").Opaque;
+        if (nameSn == __vsn_get_unsaved_status)
+        {
+            *(ulong*)ret = NativeString.Create(_GetUnsavedStatus(NativeString.Read(*(ulong*)args[0])) ?? "");
+            return true;
+        }
+        if (__vsn_save_external_data == 0) __vsn_save_external_data = StringNames.Get("_save_external_data").Opaque;
+        if (nameSn == __vsn_save_external_data)
+        {
+            _SaveExternalData();
+            return true;
+        }
+        if (__vsn_apply_changes == 0) __vsn_apply_changes = StringNames.Get("_apply_changes").Opaque;
+        if (nameSn == __vsn_apply_changes)
+        {
+            _ApplyChanges();
+            return true;
+        }
+        if (__vsn_set_window_layout == 0) __vsn_set_window_layout = StringNames.Get("_set_window_layout").Opaque;
+        if (nameSn == __vsn_set_window_layout)
+        {
+            _SetWindowLayout((ConfigFile?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_get_window_layout == 0) __vsn_get_window_layout = StringNames.Get("_get_window_layout").Opaque;
+        if (nameSn == __vsn_get_window_layout)
+        {
+            _GetWindowLayout((ConfigFile?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_build == 0) __vsn_build = StringNames.Get("_build").Opaque;
+        if (nameSn == __vsn_build)
+        {
+            *(byte*)ret = _Build() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_enable_plugin == 0) __vsn_enable_plugin = StringNames.Get("_enable_plugin").Opaque;
+        if (nameSn == __vsn_enable_plugin)
+        {
+            _EnablePlugin();
+            return true;
+        }
+        if (__vsn_disable_plugin == 0) __vsn_disable_plugin = StringNames.Get("_disable_plugin").Opaque;
+        if (nameSn == __vsn_disable_plugin)
+        {
+            _DisablePlugin();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class EditorProperty : Container
 {
     internal EditorProperty(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorProperty() : this(InstanceBindings.ConstructRaw("EditorProperty"), false)
+    public EditorProperty() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorProperty");
     }
 
     private static nint __mb_set_label;
@@ -6095,15 +7145,72 @@ public unsafe partial class EditorProperty : Container
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
+
+    public virtual void _UpdateProperty() { }
+
+    public virtual void _SetReadOnly(bool readOnly) { }
+
+    private static ulong __vsn_update_property;
+    private static ulong __vsn_set_read_only;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_update_property == 0) __vsn_update_property = StringNames.Get("_update_property").Opaque;
+        if (nameSn == __vsn_update_property)
+        {
+            _UpdateProperty();
+            return true;
+        }
+        if (__vsn_set_read_only == 0) __vsn_set_read_only = StringNames.Get("_set_read_only").Opaque;
+        if (nameSn == __vsn_set_read_only)
+        {
+            _SetReadOnly(*(byte*)args[0] != 0);
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class EditorResourceConversionPlugin : RefCounted
 {
     internal EditorResourceConversionPlugin(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorResourceConversionPlugin() : this(InstanceBindings.ConstructRaw("EditorResourceConversionPlugin"), true)
+    public EditorResourceConversionPlugin() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorResourceConversionPlugin");
+    }
+
+    public virtual string _ConvertsTo() => default!;
+
+    public virtual bool _Handles(Resource? resource) => default!;
+
+    public virtual Resource? _Convert(Resource? resource) => default!;
+
+    private static ulong __vsn_converts_to;
+    private static ulong __vsn_handles;
+    private static ulong __vsn_convert;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_converts_to == 0) __vsn_converts_to = StringNames.Get("_converts_to").Opaque;
+        if (nameSn == __vsn_converts_to)
+        {
+            *(ulong*)ret = NativeString.Create(_ConvertsTo() ?? "");
+            return true;
+        }
+        if (__vsn_handles == 0) __vsn_handles = StringNames.Get("_handles").Opaque;
+        if (nameSn == __vsn_handles)
+        {
+            *(byte*)ret = _Handles((Resource?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false)) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_convert == 0) __vsn_convert = StringNames.Get("_convert").Opaque;
+        if (nameSn == __vsn_convert)
+        {
+            *(nint*)ret = _Convert((Resource?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false))?.NativePtr ?? 0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -6111,9 +7218,9 @@ public unsafe partial class EditorResourcePicker : HBoxContainer
 {
     internal EditorResourcePicker(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorResourcePicker() : this(InstanceBindings.ConstructRaw("EditorResourcePicker"), false)
+    public EditorResourcePicker() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorResourcePicker");
     }
 
     private static nint __mb_set_base_type;
@@ -6256,6 +7363,30 @@ public unsafe partial class EditorResourcePicker : HBoxContainer
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
+
+    public virtual void _SetCreateOptions(GodotObject? menuNode) { }
+
+    public virtual bool _HandleMenuSelected(int id) => default!;
+
+    private static ulong __vsn_set_create_options;
+    private static ulong __vsn_handle_menu_selected;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_set_create_options == 0) __vsn_set_create_options = StringNames.Get("_set_create_options").Opaque;
+        if (nameSn == __vsn_set_create_options)
+        {
+            _SetCreateOptions((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_handle_menu_selected == 0) __vsn_handle_menu_selected = StringNames.Get("_handle_menu_selected").Opaque;
+        if (nameSn == __vsn_handle_menu_selected)
+        {
+            *(byte*)ret = _HandleMenuSelected(unchecked((int)(*(long*)args[0]))) ? (byte)1 : (byte)0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class EditorResourcePreview : Node
@@ -6316,9 +7447,9 @@ public unsafe partial class EditorResourcePreviewGenerator : RefCounted
 {
     internal EditorResourcePreviewGenerator(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorResourcePreviewGenerator() : this(InstanceBindings.ConstructRaw("EditorResourcePreviewGenerator"), true)
+    public EditorResourcePreviewGenerator() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorResourcePreviewGenerator");
     }
 
     private static nint __mb_request_draw_and_wait;
@@ -6336,15 +7467,48 @@ public unsafe partial class EditorResourcePreviewGenerator : RefCounted
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
+
+    public virtual bool _Handles(string type) => default!;
+
+    public virtual bool _GenerateSmallPreviewAutomatically() => default!;
+
+    public virtual bool _CanGenerateSmallPreview() => default!;
+
+    private static ulong __vsn_handles;
+    private static ulong __vsn_generate_small_preview_automatically;
+    private static ulong __vsn_can_generate_small_preview;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_handles == 0) __vsn_handles = StringNames.Get("_handles").Opaque;
+        if (nameSn == __vsn_handles)
+        {
+            *(byte*)ret = _Handles(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_generate_small_preview_automatically == 0) __vsn_generate_small_preview_automatically = StringNames.Get("_generate_small_preview_automatically").Opaque;
+        if (nameSn == __vsn_generate_small_preview_automatically)
+        {
+            *(byte*)ret = _GenerateSmallPreviewAutomatically() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_can_generate_small_preview == 0) __vsn_can_generate_small_preview = StringNames.Get("_can_generate_small_preview").Opaque;
+        if (nameSn == __vsn_can_generate_small_preview)
+        {
+            *(byte*)ret = _CanGenerateSmallPreview() ? (byte)1 : (byte)0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class EditorResourceTooltipPlugin : RefCounted
 {
     internal EditorResourceTooltipPlugin(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorResourceTooltipPlugin() : this(InstanceBindings.ConstructRaw("EditorResourceTooltipPlugin"), true)
+    public EditorResourceTooltipPlugin() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorResourceTooltipPlugin");
     }
 
     private static nint __mb_request_thumbnail;
@@ -6365,15 +7529,30 @@ public unsafe partial class EditorResourceTooltipPlugin : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
+
+    public virtual bool _Handles(string type) => default!;
+
+    private static ulong __vsn_handles;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_handles == 0) __vsn_handles = StringNames.Get("_handles").Opaque;
+        if (nameSn == __vsn_handles)
+        {
+            *(byte*)ret = _Handles(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class EditorSceneFormatImporter : RefCounted
 {
     internal EditorSceneFormatImporter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorSceneFormatImporter() : this(InstanceBindings.ConstructRaw("EditorSceneFormatImporter"), true)
+    public EditorSceneFormatImporter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorSceneFormatImporter");
     }
 
     [Flags]
@@ -6387,15 +7566,30 @@ public unsafe partial class EditorSceneFormatImporter : RefCounted
         IMPORT_DISCARD_MESHES_AND_MATERIALS = 32,
         IMPORT_FORCE_DISABLE_MESH_COMPRESSION = 64,
     }
+
+    public virtual void _GetImportOptions(string path) { }
+
+    private static ulong __vsn_get_import_options;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_import_options == 0) __vsn_get_import_options = StringNames.Get("_get_import_options").Opaque;
+        if (nameSn == __vsn_get_import_options)
+        {
+            _GetImportOptions(NativeString.Read(*(ulong*)args[0]));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class EditorSceneFormatImporterBlend : EditorSceneFormatImporter
 {
     internal EditorSceneFormatImporterBlend(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorSceneFormatImporterBlend() : this(InstanceBindings.ConstructRaw("EditorSceneFormatImporterBlend"), true)
+    public EditorSceneFormatImporterBlend() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorSceneFormatImporterBlend");
     }
 }
 
@@ -6403,9 +7597,9 @@ public unsafe partial class EditorSceneFormatImporterFBX2GLTF : EditorSceneForma
 {
     internal EditorSceneFormatImporterFBX2GLTF(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorSceneFormatImporterFBX2GLTF() : this(InstanceBindings.ConstructRaw("EditorSceneFormatImporterFBX2GLTF"), true)
+    public EditorSceneFormatImporterFBX2GLTF() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorSceneFormatImporterFBX2GLTF");
     }
 }
 
@@ -6413,9 +7607,9 @@ public unsafe partial class EditorSceneFormatImporterGLTF : EditorSceneFormatImp
 {
     internal EditorSceneFormatImporterGLTF(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorSceneFormatImporterGLTF() : this(InstanceBindings.ConstructRaw("EditorSceneFormatImporterGLTF"), true)
+    public EditorSceneFormatImporterGLTF() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorSceneFormatImporterGLTF");
     }
 }
 
@@ -6423,9 +7617,9 @@ public unsafe partial class EditorSceneFormatImporterUFBX : EditorSceneFormatImp
 {
     internal EditorSceneFormatImporterUFBX(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorSceneFormatImporterUFBX() : this(InstanceBindings.ConstructRaw("EditorSceneFormatImporterUFBX"), true)
+    public EditorSceneFormatImporterUFBX() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorSceneFormatImporterUFBX");
     }
 }
 
@@ -6433,9 +7627,9 @@ public unsafe partial class EditorScenePostImport : RefCounted
 {
     internal EditorScenePostImport(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorScenePostImport() : this(InstanceBindings.ConstructRaw("EditorScenePostImport"), true)
+    public EditorScenePostImport() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorScenePostImport");
     }
 
     private static nint __mb_get_source_file;
@@ -6452,15 +7646,30 @@ public unsafe partial class EditorScenePostImport : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
+
+    public virtual GodotObject? _PostImport(Node? scene) => default!;
+
+    private static ulong __vsn_post_import;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_post_import == 0) __vsn_post_import = StringNames.Get("_post_import").Opaque;
+        if (nameSn == __vsn_post_import)
+        {
+            *(nint*)ret = _PostImport((Node?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false))?.NativePtr ?? 0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class EditorScenePostImportPlugin : RefCounted
 {
     internal EditorScenePostImportPlugin(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorScenePostImportPlugin() : this(InstanceBindings.ConstructRaw("EditorScenePostImportPlugin"), true)
+    public EditorScenePostImportPlugin() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorScenePostImportPlugin");
     }
 
     public enum InternalImportCategory : long
@@ -6474,15 +7683,66 @@ public unsafe partial class EditorScenePostImportPlugin : RefCounted
         INTERNAL_IMPORT_CATEGORY_SKELETON_3D_NODE = 6,
         INTERNAL_IMPORT_CATEGORY_MAX = 7,
     }
+
+    public virtual void _GetInternalImportOptions(int category) { }
+
+    public virtual void _InternalProcess(int category, Node? baseNode, Node? node, Resource? resource) { }
+
+    public virtual void _GetImportOptions(string path) { }
+
+    public virtual void _PreProcess(Node? scene) { }
+
+    public virtual void _PostProcess(Node? scene) { }
+
+    private static ulong __vsn_get_internal_import_options;
+    private static ulong __vsn_internal_process;
+    private static ulong __vsn_get_import_options;
+    private static ulong __vsn_pre_process;
+    private static ulong __vsn_post_process;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_internal_import_options == 0) __vsn_get_internal_import_options = StringNames.Get("_get_internal_import_options").Opaque;
+        if (nameSn == __vsn_get_internal_import_options)
+        {
+            _GetInternalImportOptions(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_internal_process == 0) __vsn_internal_process = StringNames.Get("_internal_process").Opaque;
+        if (nameSn == __vsn_internal_process)
+        {
+            _InternalProcess(unchecked((int)(*(long*)args[0])), (Node?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false), (Node?)InstanceBindings.GetOrCreate(*(nint*)args[2], adoptRef: false), (Resource?)InstanceBindings.GetOrCreate(*(nint*)args[3], adoptRef: false));
+            return true;
+        }
+        if (__vsn_get_import_options == 0) __vsn_get_import_options = StringNames.Get("_get_import_options").Opaque;
+        if (nameSn == __vsn_get_import_options)
+        {
+            _GetImportOptions(NativeString.Read(*(ulong*)args[0]));
+            return true;
+        }
+        if (__vsn_pre_process == 0) __vsn_pre_process = StringNames.Get("_pre_process").Opaque;
+        if (nameSn == __vsn_pre_process)
+        {
+            _PreProcess((Node?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_post_process == 0) __vsn_post_process = StringNames.Get("_post_process").Opaque;
+        if (nameSn == __vsn_post_process)
+        {
+            _PostProcess((Node?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class EditorScript : RefCounted
 {
     internal EditorScript(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorScript() : this(InstanceBindings.ConstructRaw("EditorScript"), true)
+    public EditorScript() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorScript");
     }
 
     private static nint __mb_add_root_node;
@@ -6530,15 +7790,30 @@ public unsafe partial class EditorScript : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (EditorInterface?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
+
+    public virtual void _Run() { }
+
+    private static ulong __vsn_run;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_run == 0) __vsn_run = StringNames.Get("_run").Opaque;
+        if (nameSn == __vsn_run)
+        {
+            _Run();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class EditorScriptPicker : EditorResourcePicker
 {
     internal EditorScriptPicker(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorScriptPicker() : this(InstanceBindings.ConstructRaw("EditorScriptPicker"), false)
+    public EditorScriptPicker() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorScriptPicker");
     }
 
     private static nint __mb_set_script_owner;
@@ -6577,9 +7852,9 @@ public unsafe partial class EditorSelection : GodotObject
 {
     internal EditorSelection(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorSelection() : this(InstanceBindings.ConstructRaw("EditorSelection"), false)
+    public EditorSelection() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorSelection");
     }
 
     private static nint __mb_clear;
@@ -6632,9 +7907,9 @@ public unsafe partial class EditorSettings : Resource
 {
     internal EditorSettings(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorSettings() : this(InstanceBindings.ConstructRaw("EditorSettings"), true)
+    public EditorSettings() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorSettings");
     }
 
     private static nint __mb_has_setting;
@@ -6809,9 +8084,9 @@ public unsafe partial class EditorSpinSlider : Range
 {
     internal EditorSpinSlider(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorSpinSlider() : this(InstanceBindings.ConstructRaw("EditorSpinSlider"), false)
+    public EditorSpinSlider() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorSpinSlider");
     }
 
     public enum ControlState : long
@@ -7076,9 +8351,33 @@ public unsafe partial class EditorSyntaxHighlighter : SyntaxHighlighter
 {
     internal EditorSyntaxHighlighter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorSyntaxHighlighter() : this(InstanceBindings.ConstructRaw("EditorSyntaxHighlighter"), true)
+    public EditorSyntaxHighlighter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorSyntaxHighlighter");
+    }
+
+    public virtual string _GetName() => default!;
+
+    public virtual EditorSyntaxHighlighter? _Create() => default!;
+
+    private static ulong __vsn_get_name;
+    private static ulong __vsn_create;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_name == 0) __vsn_get_name = StringNames.Get("_get_name").Opaque;
+        if (nameSn == __vsn_get_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetName() ?? "");
+            return true;
+        }
+        if (__vsn_create == 0) __vsn_create = StringNames.Get("_create").Opaque;
+        if (nameSn == __vsn_create)
+        {
+            *(nint*)ret = _Create()?.NativePtr ?? 0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -7120,9 +8419,9 @@ public unsafe partial class EditorTranslationParserPlugin : RefCounted
 {
     internal EditorTranslationParserPlugin(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorTranslationParserPlugin() : this(InstanceBindings.ConstructRaw("EditorTranslationParserPlugin"), true)
+    public EditorTranslationParserPlugin() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorTranslationParserPlugin");
     }
 }
 
@@ -7297,9 +8596,9 @@ public unsafe partial class EditorVCSInterface : GodotObject
 {
     internal EditorVCSInterface(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EditorVCSInterface() : this(InstanceBindings.ConstructRaw("EditorVCSInterface"), false)
+    public EditorVCSInterface() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EditorVCSInterface");
     }
 
     public enum ChangeType : long
@@ -7335,15 +8634,183 @@ public unsafe partial class EditorVCSInterface : GodotObject
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
+
+    public virtual bool _Initialize(string projectPath) => default!;
+
+    public virtual void _SetCredentials(string username, string password, string sshPublicKeyPath, string sshPrivateKeyPath, string sshPassphrase) { }
+
+    public virtual void _StageFile(string filePath) { }
+
+    public virtual void _UnstageFile(string filePath) { }
+
+    public virtual void _DiscardFile(string filePath) { }
+
+    public virtual void _Commit(string msg, bool amend) { }
+
+    public virtual bool _AllowAmends() => default!;
+
+    public virtual bool _ShutDown() => default!;
+
+    public virtual string _GetVcsName() => default!;
+
+    public virtual void _CreateBranch(string branchName) { }
+
+    public virtual void _RemoveBranch(string branchName) { }
+
+    public virtual void _CreateRemote(string remoteName, string remoteUrl) { }
+
+    public virtual void _RemoveRemote(string remoteName) { }
+
+    public virtual string _GetCurrentBranchName() => default!;
+
+    public virtual bool _CheckoutBranch(string branchName) => default!;
+
+    public virtual void _Pull(string remote) { }
+
+    public virtual void _Push(string remote, bool force) { }
+
+    public virtual void _Fetch(string remote) { }
+
+    private static ulong __vsn_initialize;
+    private static ulong __vsn_set_credentials;
+    private static ulong __vsn_stage_file;
+    private static ulong __vsn_unstage_file;
+    private static ulong __vsn_discard_file;
+    private static ulong __vsn_commit;
+    private static ulong __vsn_allow_amends;
+    private static ulong __vsn_shut_down;
+    private static ulong __vsn_get_vcs_name;
+    private static ulong __vsn_create_branch;
+    private static ulong __vsn_remove_branch;
+    private static ulong __vsn_create_remote;
+    private static ulong __vsn_remove_remote;
+    private static ulong __vsn_get_current_branch_name;
+    private static ulong __vsn_checkout_branch;
+    private static ulong __vsn_pull;
+    private static ulong __vsn_push;
+    private static ulong __vsn_fetch;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_initialize == 0) __vsn_initialize = StringNames.Get("_initialize").Opaque;
+        if (nameSn == __vsn_initialize)
+        {
+            *(byte*)ret = _Initialize(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_set_credentials == 0) __vsn_set_credentials = StringNames.Get("_set_credentials").Opaque;
+        if (nameSn == __vsn_set_credentials)
+        {
+            _SetCredentials(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1]), NativeString.Read(*(ulong*)args[2]), NativeString.Read(*(ulong*)args[3]), NativeString.Read(*(ulong*)args[4]));
+            return true;
+        }
+        if (__vsn_stage_file == 0) __vsn_stage_file = StringNames.Get("_stage_file").Opaque;
+        if (nameSn == __vsn_stage_file)
+        {
+            _StageFile(NativeString.Read(*(ulong*)args[0]));
+            return true;
+        }
+        if (__vsn_unstage_file == 0) __vsn_unstage_file = StringNames.Get("_unstage_file").Opaque;
+        if (nameSn == __vsn_unstage_file)
+        {
+            _UnstageFile(NativeString.Read(*(ulong*)args[0]));
+            return true;
+        }
+        if (__vsn_discard_file == 0) __vsn_discard_file = StringNames.Get("_discard_file").Opaque;
+        if (nameSn == __vsn_discard_file)
+        {
+            _DiscardFile(NativeString.Read(*(ulong*)args[0]));
+            return true;
+        }
+        if (__vsn_commit == 0) __vsn_commit = StringNames.Get("_commit").Opaque;
+        if (nameSn == __vsn_commit)
+        {
+            _Commit(NativeString.Read(*(ulong*)args[0]), *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_allow_amends == 0) __vsn_allow_amends = StringNames.Get("_allow_amends").Opaque;
+        if (nameSn == __vsn_allow_amends)
+        {
+            *(byte*)ret = _AllowAmends() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_shut_down == 0) __vsn_shut_down = StringNames.Get("_shut_down").Opaque;
+        if (nameSn == __vsn_shut_down)
+        {
+            *(byte*)ret = _ShutDown() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_vcs_name == 0) __vsn_get_vcs_name = StringNames.Get("_get_vcs_name").Opaque;
+        if (nameSn == __vsn_get_vcs_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetVcsName() ?? "");
+            return true;
+        }
+        if (__vsn_create_branch == 0) __vsn_create_branch = StringNames.Get("_create_branch").Opaque;
+        if (nameSn == __vsn_create_branch)
+        {
+            _CreateBranch(NativeString.Read(*(ulong*)args[0]));
+            return true;
+        }
+        if (__vsn_remove_branch == 0) __vsn_remove_branch = StringNames.Get("_remove_branch").Opaque;
+        if (nameSn == __vsn_remove_branch)
+        {
+            _RemoveBranch(NativeString.Read(*(ulong*)args[0]));
+            return true;
+        }
+        if (__vsn_create_remote == 0) __vsn_create_remote = StringNames.Get("_create_remote").Opaque;
+        if (nameSn == __vsn_create_remote)
+        {
+            _CreateRemote(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1]));
+            return true;
+        }
+        if (__vsn_remove_remote == 0) __vsn_remove_remote = StringNames.Get("_remove_remote").Opaque;
+        if (nameSn == __vsn_remove_remote)
+        {
+            _RemoveRemote(NativeString.Read(*(ulong*)args[0]));
+            return true;
+        }
+        if (__vsn_get_current_branch_name == 0) __vsn_get_current_branch_name = StringNames.Get("_get_current_branch_name").Opaque;
+        if (nameSn == __vsn_get_current_branch_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetCurrentBranchName() ?? "");
+            return true;
+        }
+        if (__vsn_checkout_branch == 0) __vsn_checkout_branch = StringNames.Get("_checkout_branch").Opaque;
+        if (nameSn == __vsn_checkout_branch)
+        {
+            *(byte*)ret = _CheckoutBranch(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_pull == 0) __vsn_pull = StringNames.Get("_pull").Opaque;
+        if (nameSn == __vsn_pull)
+        {
+            _Pull(NativeString.Read(*(ulong*)args[0]));
+            return true;
+        }
+        if (__vsn_push == 0) __vsn_push = StringNames.Get("_push").Opaque;
+        if (nameSn == __vsn_push)
+        {
+            _Push(NativeString.Read(*(ulong*)args[0]), *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_fetch == 0) __vsn_fetch = StringNames.Get("_fetch").Opaque;
+        if (nameSn == __vsn_fetch)
+        {
+            _Fetch(NativeString.Read(*(ulong*)args[0]));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class EncodedObjectAsID : RefCounted
 {
     internal EncodedObjectAsID(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EncodedObjectAsID() : this(InstanceBindings.ConstructRaw("EncodedObjectAsID"), true)
+    public EncodedObjectAsID() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EncodedObjectAsID");
     }
 
     private static nint __mb_set_object_id;
@@ -7382,9 +8849,9 @@ public unsafe partial class Engine : GodotObject
 {
     internal Engine(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Engine() : this(InstanceBindings.ConstructRaw("Engine"), false)
+    public Engine() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Engine");
     }
 
     private static Engine? _singleton;
@@ -7931,9 +9398,9 @@ public unsafe partial class EngineDebugger : GodotObject
 {
     internal EngineDebugger(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EngineDebugger() : this(InstanceBindings.ConstructRaw("EngineDebugger"), false)
+    public EngineDebugger() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EngineDebugger");
     }
 
     private static EngineDebugger? _singleton;
@@ -8260,9 +9727,24 @@ public unsafe partial class EngineProfiler : RefCounted
 {
     internal EngineProfiler(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public EngineProfiler() : this(InstanceBindings.ConstructRaw("EngineProfiler"), true)
+    public EngineProfiler() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "EngineProfiler");
+    }
+
+    public virtual void _Tick(double frameTime, double processTime, double physicsTime, double physicsFrameTime) { }
+
+    private static ulong __vsn_tick;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_tick == 0) __vsn_tick = StringNames.Get("_tick").Opaque;
+        if (nameSn == __vsn_tick)
+        {
+            _Tick(*(double*)args[0], *(double*)args[1], *(double*)args[2], *(double*)args[3]);
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -8270,9 +9752,9 @@ public unsafe partial class Environment : Resource
 {
     internal Environment(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Environment() : this(InstanceBindings.ConstructRaw("Environment"), true)
+    public Environment() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Environment");
     }
 
     public enum BGMode : long
@@ -11256,9 +12738,9 @@ public unsafe partial class Expression : RefCounted
 {
     internal Expression(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Expression() : this(InstanceBindings.ConstructRaw("Expression"), true)
+    public Expression() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Expression");
     }
 
     private static nint __mb_has_execute_failed;
@@ -11296,9 +12778,9 @@ public unsafe partial class ExternalTexture : Texture2D
 {
     internal ExternalTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ExternalTexture() : this(InstanceBindings.ConstructRaw("ExternalTexture"), true)
+    public ExternalTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ExternalTexture");
     }
 
     private static nint __mb_set_size;

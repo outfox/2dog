@@ -14,9 +14,9 @@ public unsafe partial class AESContext : RefCounted
 {
     internal AESContext(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AESContext() : this(InstanceBindings.ConstructRaw("AESContext"), true)
+    public AESContext() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AESContext");
     }
 
     public enum Mode : long
@@ -46,9 +46,9 @@ public unsafe partial class AStar2D : RefCounted
 {
     internal AStar2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AStar2D() : this(InstanceBindings.ConstructRaw("AStar2D"), true)
+    public AStar2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AStar2D");
     }
 
     private static nint __mb_get_available_point_id;
@@ -417,15 +417,48 @@ public unsafe partial class AStar2D : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
+
+    public virtual bool _FilterNeighbor(long fromId, long neighborId) => default!;
+
+    public virtual float _EstimateCost(long fromId, long endId) => default!;
+
+    public virtual float _ComputeCost(long fromId, long toId) => default!;
+
+    private static ulong __vsn_filter_neighbor;
+    private static ulong __vsn_estimate_cost;
+    private static ulong __vsn_compute_cost;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_filter_neighbor == 0) __vsn_filter_neighbor = StringNames.Get("_filter_neighbor").Opaque;
+        if (nameSn == __vsn_filter_neighbor)
+        {
+            *(byte*)ret = _FilterNeighbor(unchecked((long)(*(long*)args[0])), unchecked((long)(*(long*)args[1]))) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_estimate_cost == 0) __vsn_estimate_cost = StringNames.Get("_estimate_cost").Opaque;
+        if (nameSn == __vsn_estimate_cost)
+        {
+            *(double*)ret = _EstimateCost(unchecked((long)(*(long*)args[0])), unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_compute_cost == 0) __vsn_compute_cost = StringNames.Get("_compute_cost").Opaque;
+        if (nameSn == __vsn_compute_cost)
+        {
+            *(double*)ret = _ComputeCost(unchecked((long)(*(long*)args[0])), unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class AStar3D : RefCounted
 {
     internal AStar3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AStar3D() : this(InstanceBindings.ConstructRaw("AStar3D"), true)
+    public AStar3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AStar3D");
     }
 
     private static nint __mb_get_available_point_id;
@@ -794,15 +827,48 @@ public unsafe partial class AStar3D : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
+
+    public virtual bool _FilterNeighbor(long fromId, long neighborId) => default!;
+
+    public virtual float _EstimateCost(long fromId, long endId) => default!;
+
+    public virtual float _ComputeCost(long fromId, long toId) => default!;
+
+    private static ulong __vsn_filter_neighbor;
+    private static ulong __vsn_estimate_cost;
+    private static ulong __vsn_compute_cost;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_filter_neighbor == 0) __vsn_filter_neighbor = StringNames.Get("_filter_neighbor").Opaque;
+        if (nameSn == __vsn_filter_neighbor)
+        {
+            *(byte*)ret = _FilterNeighbor(unchecked((long)(*(long*)args[0])), unchecked((long)(*(long*)args[1]))) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_estimate_cost == 0) __vsn_estimate_cost = StringNames.Get("_estimate_cost").Opaque;
+        if (nameSn == __vsn_estimate_cost)
+        {
+            *(double*)ret = _EstimateCost(unchecked((long)(*(long*)args[0])), unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_compute_cost == 0) __vsn_compute_cost = StringNames.Get("_compute_cost").Opaque;
+        if (nameSn == __vsn_compute_cost)
+        {
+            *(double*)ret = _ComputeCost(unchecked((long)(*(long*)args[0])), unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class AStarGrid2D : RefCounted
 {
     internal AStarGrid2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AStarGrid2D() : this(InstanceBindings.ConstructRaw("AStarGrid2D"), true)
+    public AStarGrid2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AStarGrid2D");
     }
 
     public enum Heuristic : long
@@ -1314,15 +1380,39 @@ public unsafe partial class AStarGrid2D : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
+
+    public virtual float _EstimateCost(Vector2I fromId, Vector2I endId) => default!;
+
+    public virtual float _ComputeCost(Vector2I fromId, Vector2I toId) => default!;
+
+    private static ulong __vsn_estimate_cost;
+    private static ulong __vsn_compute_cost;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_estimate_cost == 0) __vsn_estimate_cost = StringNames.Get("_estimate_cost").Opaque;
+        if (nameSn == __vsn_estimate_cost)
+        {
+            *(double*)ret = _EstimateCost(*(Vector2I*)args[0], *(Vector2I*)args[1]);
+            return true;
+        }
+        if (__vsn_compute_cost == 0) __vsn_compute_cost = StringNames.Get("_compute_cost").Opaque;
+        if (nameSn == __vsn_compute_cost)
+        {
+            *(double*)ret = _ComputeCost(*(Vector2I*)args[0], *(Vector2I*)args[1]);
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class AcceptDialog : Window
 {
     internal AcceptDialog(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AcceptDialog() : this(InstanceBindings.ConstructRaw("AcceptDialog"), false)
+    public AcceptDialog() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AcceptDialog");
     }
 
     private static nint __mb_get_ok_button;
@@ -3070,9 +3160,9 @@ public unsafe partial class AimModifier3D : BoneConstraint3D
 {
     internal AimModifier3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AimModifier3D() : this(InstanceBindings.ConstructRaw("AimModifier3D"), false)
+    public AimModifier3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AimModifier3D");
     }
 
     private static nint __mb_set_forward_axis;
@@ -3224,9 +3314,9 @@ public unsafe partial class AnimatableBody2D : StaticBody2D
 {
     internal AnimatableBody2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimatableBody2D() : this(InstanceBindings.ConstructRaw("AnimatableBody2D"), false)
+    public AnimatableBody2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimatableBody2D");
     }
 
     private static nint __mb_set_sync_to_physics;
@@ -3265,9 +3355,9 @@ public unsafe partial class AnimatableBody3D : StaticBody3D
 {
     internal AnimatableBody3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimatableBody3D() : this(InstanceBindings.ConstructRaw("AnimatableBody3D"), false)
+    public AnimatableBody3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimatableBody3D");
     }
 
     private static nint __mb_set_sync_to_physics;
@@ -3306,9 +3396,9 @@ public unsafe partial class AnimatedSprite2D : Node2D
 {
     internal AnimatedSprite2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimatedSprite2D() : this(InstanceBindings.ConstructRaw("AnimatedSprite2D"), false)
+    public AnimatedSprite2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimatedSprite2D");
     }
 
     private static nint __mb_set_sprite_frames;
@@ -3737,9 +3827,9 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
 {
     internal AnimatedSprite3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimatedSprite3D() : this(InstanceBindings.ConstructRaw("AnimatedSprite3D"), false)
+    public AnimatedSprite3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimatedSprite3D");
     }
 
     private static nint __mb_set_sprite_frames;
@@ -4044,9 +4134,9 @@ public unsafe partial class AnimatedTexture : Texture2D
 {
     internal AnimatedTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimatedTexture() : this(InstanceBindings.ConstructRaw("AnimatedTexture"), true)
+    public AnimatedTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimatedTexture");
     }
 
     private static nint __mb_set_frames;
@@ -4281,9 +4371,9 @@ public unsafe partial class Animation : Resource
 {
     internal Animation(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Animation() : this(InstanceBindings.ConstructRaw("Animation"), true)
+    public Animation() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Animation");
     }
 
     public enum TrackType : long
@@ -5785,9 +5875,9 @@ public unsafe partial class AnimationLibrary : Resource
 {
     internal AnimationLibrary(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationLibrary() : this(InstanceBindings.ConstructRaw("AnimationLibrary"), true)
+    public AnimationLibrary() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationLibrary");
     }
 
     private static nint __mb_add_animation;
@@ -6476,9 +6566,9 @@ public unsafe partial class AnimationNode : Resource
 {
     internal AnimationNode(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNode() : this(InstanceBindings.ConstructRaw("AnimationNode"), true)
+    public AnimationNode() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNode");
     }
 
     public enum FilterAction : long
@@ -6751,15 +6841,66 @@ public unsafe partial class AnimationNode : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (double)__ret;
     }
+
+    public virtual AnimationNode? _GetChildByName(string name) => default!;
+
+    public virtual bool _IsParameterReadOnly(string parameter) => default!;
+
+    public virtual double _Process(double time, bool seek, bool isExternalSeeking, bool testOnly) => default!;
+
+    public virtual string _GetCaption() => default!;
+
+    public virtual bool _HasFilter() => default!;
+
+    private static ulong __vsn_get_child_by_name;
+    private static ulong __vsn_is_parameter_read_only;
+    private static ulong __vsn_process;
+    private static ulong __vsn_get_caption;
+    private static ulong __vsn_has_filter;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_child_by_name == 0) __vsn_get_child_by_name = StringNames.Get("_get_child_by_name").Opaque;
+        if (nameSn == __vsn_get_child_by_name)
+        {
+            *(nint*)ret = _GetChildByName(StringNames.Read(*(ulong*)args[0]))?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_is_parameter_read_only == 0) __vsn_is_parameter_read_only = StringNames.Get("_is_parameter_read_only").Opaque;
+        if (nameSn == __vsn_is_parameter_read_only)
+        {
+            *(byte*)ret = _IsParameterReadOnly(StringNames.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_process == 0) __vsn_process = StringNames.Get("_process").Opaque;
+        if (nameSn == __vsn_process)
+        {
+            *(double*)ret = _Process(*(double*)args[0], *(byte*)args[1] != 0, *(byte*)args[2] != 0, *(byte*)args[3] != 0);
+            return true;
+        }
+        if (__vsn_get_caption == 0) __vsn_get_caption = StringNames.Get("_get_caption").Opaque;
+        if (nameSn == __vsn_get_caption)
+        {
+            *(ulong*)ret = NativeString.Create(_GetCaption() ?? "");
+            return true;
+        }
+        if (__vsn_has_filter == 0) __vsn_has_filter = StringNames.Get("_has_filter").Opaque;
+        if (nameSn == __vsn_has_filter)
+        {
+            *(byte*)ret = _HasFilter() ? (byte)1 : (byte)0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class AnimationNodeAdd2 : AnimationNodeSync
 {
     internal AnimationNodeAdd2(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeAdd2() : this(InstanceBindings.ConstructRaw("AnimationNodeAdd2"), true)
+    public AnimationNodeAdd2() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeAdd2");
     }
 }
 
@@ -6767,9 +6908,9 @@ public unsafe partial class AnimationNodeAdd3 : AnimationNodeSync
 {
     internal AnimationNodeAdd3(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeAdd3() : this(InstanceBindings.ConstructRaw("AnimationNodeAdd3"), true)
+    public AnimationNodeAdd3() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeAdd3");
     }
 }
 
@@ -6777,9 +6918,9 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
 {
     internal AnimationNodeAnimation(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeAnimation() : this(InstanceBindings.ConstructRaw("AnimationNodeAnimation"), true)
+    public AnimationNodeAnimation() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeAnimation");
     }
 
     public enum PlayMode : long
@@ -7041,9 +7182,9 @@ public unsafe partial class AnimationNodeBlend2 : AnimationNodeSync
 {
     internal AnimationNodeBlend2(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeBlend2() : this(InstanceBindings.ConstructRaw("AnimationNodeBlend2"), true)
+    public AnimationNodeBlend2() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeBlend2");
     }
 }
 
@@ -7051,9 +7192,9 @@ public unsafe partial class AnimationNodeBlend3 : AnimationNodeSync
 {
     internal AnimationNodeBlend3(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeBlend3() : this(InstanceBindings.ConstructRaw("AnimationNodeBlend3"), true)
+    public AnimationNodeBlend3() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeBlend3");
     }
 }
 
@@ -7061,9 +7202,9 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
 {
     internal AnimationNodeBlendSpace1D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeBlendSpace1D() : this(InstanceBindings.ConstructRaw("AnimationNodeBlendSpace1D"), true)
+    public AnimationNodeBlendSpace1D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeBlendSpace1D");
     }
 
     public enum BlendMode : long
@@ -7532,9 +7673,9 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
 {
     internal AnimationNodeBlendSpace2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeBlendSpace2D() : this(InstanceBindings.ConstructRaw("AnimationNodeBlendSpace2D"), true)
+    public AnimationNodeBlendSpace2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeBlendSpace2D");
     }
 
     public enum BlendMode : long
@@ -8139,9 +8280,9 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
 {
     internal AnimationNodeBlendTree(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeBlendTree() : this(InstanceBindings.ConstructRaw("AnimationNodeBlendTree"), true)
+    public AnimationNodeBlendTree() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeBlendTree");
     }
 
     private static nint __mb_add_node;
@@ -8344,9 +8485,9 @@ public unsafe partial class AnimationNodeExtension : AnimationNode
 {
     internal AnimationNodeExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeExtension() : this(InstanceBindings.ConstructRaw("AnimationNodeExtension"), true)
+    public AnimationNodeExtension() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeExtension");
     }
 }
 
@@ -8354,9 +8495,9 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
 {
     internal AnimationNodeOneShot(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeOneShot() : this(InstanceBindings.ConstructRaw("AnimationNodeOneShot"), true)
+    public AnimationNodeOneShot() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeOneShot");
     }
 
     public enum OneShotRequest : long
@@ -8688,9 +8829,9 @@ public unsafe partial class AnimationNodeOutput : AnimationNode
 {
     internal AnimationNodeOutput(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeOutput() : this(InstanceBindings.ConstructRaw("AnimationNodeOutput"), true)
+    public AnimationNodeOutput() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeOutput");
     }
 }
 
@@ -8698,9 +8839,9 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
 {
     internal AnimationNodeStateMachine(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeStateMachine() : this(InstanceBindings.ConstructRaw("AnimationNodeStateMachine"), true)
+    public AnimationNodeStateMachine() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeStateMachine");
     }
 
     public enum StateMachineType : long
@@ -9144,9 +9285,9 @@ public unsafe partial class AnimationNodeStateMachinePlayback : Resource
 {
     internal AnimationNodeStateMachinePlayback(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeStateMachinePlayback() : this(InstanceBindings.ConstructRaw("AnimationNodeStateMachinePlayback"), true)
+    public AnimationNodeStateMachinePlayback() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeStateMachinePlayback");
     }
 
     private static nint __mb_travel;
@@ -9351,9 +9492,9 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
 {
     internal AnimationNodeStateMachineTransition(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeStateMachineTransition() : this(InstanceBindings.ConstructRaw("AnimationNodeStateMachineTransition"), true)
+    public AnimationNodeStateMachineTransition() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeStateMachineTransition");
     }
 
     public enum SwitchMode : long
@@ -9655,9 +9796,9 @@ public unsafe partial class AnimationNodeSub2 : AnimationNodeSync
 {
     internal AnimationNodeSub2(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeSub2() : this(InstanceBindings.ConstructRaw("AnimationNodeSub2"), true)
+    public AnimationNodeSub2() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeSub2");
     }
 }
 
@@ -9665,9 +9806,9 @@ public unsafe partial class AnimationNodeSync : AnimationNode
 {
     internal AnimationNodeSync(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeSync() : this(InstanceBindings.ConstructRaw("AnimationNodeSync"), true)
+    public AnimationNodeSync() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeSync");
     }
 
     private static nint __mb_set_use_sync;
@@ -9706,9 +9847,9 @@ public unsafe partial class AnimationNodeTimeScale : AnimationNode
 {
     internal AnimationNodeTimeScale(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeTimeScale() : this(InstanceBindings.ConstructRaw("AnimationNodeTimeScale"), true)
+    public AnimationNodeTimeScale() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeTimeScale");
     }
 }
 
@@ -9716,9 +9857,9 @@ public unsafe partial class AnimationNodeTimeSeek : AnimationNode
 {
     internal AnimationNodeTimeSeek(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeTimeSeek() : this(InstanceBindings.ConstructRaw("AnimationNodeTimeSeek"), true)
+    public AnimationNodeTimeSeek() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeTimeSeek");
     }
 
     private static nint __mb_set_explicit_elapse;
@@ -9757,9 +9898,9 @@ public unsafe partial class AnimationNodeTransition : AnimationNodeSync
 {
     internal AnimationNodeTransition(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationNodeTransition() : this(InstanceBindings.ConstructRaw("AnimationNodeTransition"), true)
+    public AnimationNodeTransition() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationNodeTransition");
     }
 
     private static nint __mb_set_input_count;
@@ -9984,9 +10125,9 @@ public unsafe partial class AnimationPlayer : AnimationMixer
 {
     internal AnimationPlayer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationPlayer() : this(InstanceBindings.ConstructRaw("AnimationPlayer"), false)
+    public AnimationPlayer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationPlayer");
     }
 
     public enum AnimationProcessCallback : long
@@ -10866,9 +11007,9 @@ public unsafe partial class AnimationRootNode : AnimationNode
 {
     internal AnimationRootNode(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationRootNode() : this(InstanceBindings.ConstructRaw("AnimationRootNode"), true)
+    public AnimationRootNode() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationRootNode");
     }
 }
 
@@ -10876,9 +11017,9 @@ public unsafe partial class AnimationTree : AnimationMixer
 {
     internal AnimationTree(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AnimationTree() : this(InstanceBindings.ConstructRaw("AnimationTree"), false)
+    public AnimationTree() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AnimationTree");
     }
 
     public enum AnimationProcessCallback : long
@@ -10955,9 +11096,9 @@ public unsafe partial class Area2D : CollisionObject2D
 {
     internal Area2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Area2D() : this(InstanceBindings.ConstructRaw("Area2D"), false)
+    public Area2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Area2D");
     }
 
     public enum SpaceOverride : long
@@ -11505,9 +11646,9 @@ public unsafe partial class Area3D : CollisionObject3D
 {
     internal Area3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Area3D() : this(InstanceBindings.ConstructRaw("Area3D"), false)
+    public Area3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Area3D");
     }
 
     public enum SpaceOverride : long
@@ -12241,9 +12382,9 @@ public unsafe partial class AreaLight3D : Light3D
 {
     internal AreaLight3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AreaLight3D() : this(InstanceBindings.ConstructRaw("AreaLight3D"), false)
+    public AreaLight3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AreaLight3D");
     }
 
     private static nint __mb_set_area_texture;
@@ -12344,9 +12485,9 @@ public unsafe partial class ArrayMesh : Mesh
 {
     internal ArrayMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ArrayMesh() : this(InstanceBindings.ConstructRaw("ArrayMesh"), true)
+    public ArrayMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ArrayMesh");
     }
 
     private static nint __mb_add_blend_shape;
@@ -12717,9 +12858,9 @@ public unsafe partial class ArrayOccluder3D : Occluder3D
 {
     internal ArrayOccluder3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ArrayOccluder3D() : this(InstanceBindings.ConstructRaw("ArrayOccluder3D"), true)
+    public ArrayOccluder3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ArrayOccluder3D");
     }
 }
 
@@ -12727,9 +12868,9 @@ public unsafe partial class AspectRatioContainer : Container
 {
     internal AspectRatioContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AspectRatioContainer() : this(InstanceBindings.ConstructRaw("AspectRatioContainer"), false)
+    public AspectRatioContainer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AspectRatioContainer");
     }
 
     public enum StretchMode : long
@@ -12876,9 +13017,9 @@ public unsafe partial class AtlasTexture : Texture2D
 {
     internal AtlasTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AtlasTexture() : this(InstanceBindings.ConstructRaw("AtlasTexture"), true)
+    public AtlasTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AtlasTexture");
     }
 
     private static nint __mb_set_atlas;
@@ -13010,9 +13151,9 @@ public unsafe partial class AudioBusLayout : Resource
 {
     internal AudioBusLayout(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioBusLayout() : this(InstanceBindings.ConstructRaw("AudioBusLayout"), true)
+    public AudioBusLayout() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioBusLayout");
     }
 }
 
@@ -13020,9 +13161,24 @@ public unsafe partial class AudioEffect : Resource
 {
     internal AudioEffect(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffect() : this(InstanceBindings.ConstructRaw("AudioEffect"), true)
+    public AudioEffect() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffect");
+    }
+
+    public virtual AudioEffectInstance? _Instantiate() => default!;
+
+    private static ulong __vsn_instantiate;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_instantiate == 0) __vsn_instantiate = StringNames.Get("_instantiate").Opaque;
+        if (nameSn == __vsn_instantiate)
+        {
+            *(nint*)ret = _Instantiate()?.NativePtr ?? 0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -13030,9 +13186,9 @@ public unsafe partial class AudioEffectAmplify : AudioEffect
 {
     internal AudioEffectAmplify(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectAmplify() : this(InstanceBindings.ConstructRaw("AudioEffectAmplify"), true)
+    public AudioEffectAmplify() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectAmplify");
     }
 
     private static nint __mb_set_volume_db;
@@ -13102,9 +13258,9 @@ public unsafe partial class AudioEffectBandLimitFilter : AudioEffectFilter
 {
     internal AudioEffectBandLimitFilter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectBandLimitFilter() : this(InstanceBindings.ConstructRaw("AudioEffectBandLimitFilter"), true)
+    public AudioEffectBandLimitFilter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectBandLimitFilter");
     }
 }
 
@@ -13112,9 +13268,9 @@ public unsafe partial class AudioEffectBandPassFilter : AudioEffectFilter
 {
     internal AudioEffectBandPassFilter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectBandPassFilter() : this(InstanceBindings.ConstructRaw("AudioEffectBandPassFilter"), true)
+    public AudioEffectBandPassFilter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectBandPassFilter");
     }
 }
 
@@ -13122,9 +13278,9 @@ public unsafe partial class AudioEffectCapture : AudioEffect
 {
     internal AudioEffectCapture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectCapture() : this(InstanceBindings.ConstructRaw("AudioEffectCapture"), true)
+    public AudioEffectCapture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectCapture");
     }
 
     private static nint __mb_can_get_buffer;
@@ -13254,9 +13410,9 @@ public unsafe partial class AudioEffectChorus : AudioEffect
 {
     internal AudioEffectChorus(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectChorus() : this(InstanceBindings.ConstructRaw("AudioEffectChorus"), true)
+    public AudioEffectChorus() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectChorus");
     }
 
     private static nint __mb_set_voice_count;
@@ -13573,9 +13729,9 @@ public unsafe partial class AudioEffectCompressor : AudioEffect
 {
     internal AudioEffectCompressor(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectCompressor() : this(InstanceBindings.ConstructRaw("AudioEffectCompressor"), true)
+    public AudioEffectCompressor() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectCompressor");
     }
 
     private static nint __mb_set_threshold;
@@ -13800,9 +13956,9 @@ public unsafe partial class AudioEffectDelay : AudioEffect
 {
     internal AudioEffectDelay(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectDelay() : this(InstanceBindings.ConstructRaw("AudioEffectDelay"), true)
+    public AudioEffectDelay() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectDelay");
     }
 
     private static nint __mb_set_dry;
@@ -14213,9 +14369,9 @@ public unsafe partial class AudioEffectDistortion : AudioEffect
 {
     internal AudioEffectDistortion(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectDistortion() : this(InstanceBindings.ConstructRaw("AudioEffectDistortion"), true)
+    public AudioEffectDistortion() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectDistortion");
     }
 
     public enum Mode : long
@@ -14387,9 +14543,9 @@ public unsafe partial class AudioEffectEQ : AudioEffect
 {
     internal AudioEffectEQ(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectEQ() : this(InstanceBindings.ConstructRaw("AudioEffectEQ"), true)
+    public AudioEffectEQ() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectEQ");
     }
 
     private static nint __mb_set_band_gain_db;
@@ -14448,9 +14604,9 @@ public unsafe partial class AudioEffectEQ10 : AudioEffectEQ
 {
     internal AudioEffectEQ10(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectEQ10() : this(InstanceBindings.ConstructRaw("AudioEffectEQ10"), true)
+    public AudioEffectEQ10() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectEQ10");
     }
 }
 
@@ -14458,9 +14614,9 @@ public unsafe partial class AudioEffectEQ21 : AudioEffectEQ
 {
     internal AudioEffectEQ21(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectEQ21() : this(InstanceBindings.ConstructRaw("AudioEffectEQ21"), true)
+    public AudioEffectEQ21() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectEQ21");
     }
 }
 
@@ -14468,9 +14624,9 @@ public unsafe partial class AudioEffectEQ6 : AudioEffectEQ
 {
     internal AudioEffectEQ6(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectEQ6() : this(InstanceBindings.ConstructRaw("AudioEffectEQ6"), true)
+    public AudioEffectEQ6() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectEQ6");
     }
 }
 
@@ -14478,9 +14634,9 @@ public unsafe partial class AudioEffectFilter : AudioEffect
 {
     internal AudioEffectFilter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectFilter() : this(InstanceBindings.ConstructRaw("AudioEffectFilter"), true)
+    public AudioEffectFilter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectFilter");
     }
 
     public enum FilterDB : long
@@ -14620,9 +14776,9 @@ public unsafe partial class AudioEffectHardLimiter : AudioEffect
 {
     internal AudioEffectHardLimiter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectHardLimiter() : this(InstanceBindings.ConstructRaw("AudioEffectHardLimiter"), true)
+    public AudioEffectHardLimiter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectHardLimiter");
     }
 
     private static nint __mb_set_ceiling_db;
@@ -14723,9 +14879,9 @@ public unsafe partial class AudioEffectHighPassFilter : AudioEffectFilter
 {
     internal AudioEffectHighPassFilter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectHighPassFilter() : this(InstanceBindings.ConstructRaw("AudioEffectHighPassFilter"), true)
+    public AudioEffectHighPassFilter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectHighPassFilter");
     }
 }
 
@@ -14733,9 +14889,9 @@ public unsafe partial class AudioEffectHighShelfFilter : AudioEffectFilter
 {
     internal AudioEffectHighShelfFilter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectHighShelfFilter() : this(InstanceBindings.ConstructRaw("AudioEffectHighShelfFilter"), true)
+    public AudioEffectHighShelfFilter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectHighShelfFilter");
     }
 }
 
@@ -14743,9 +14899,24 @@ public unsafe partial class AudioEffectInstance : RefCounted
 {
     internal AudioEffectInstance(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectInstance() : this(InstanceBindings.ConstructRaw("AudioEffectInstance"), true)
+    public AudioEffectInstance() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectInstance");
+    }
+
+    public virtual bool _ProcessSilence() => default!;
+
+    private static ulong __vsn_process_silence;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_process_silence == 0) __vsn_process_silence = StringNames.Get("_process_silence").Opaque;
+        if (nameSn == __vsn_process_silence)
+        {
+            *(byte*)ret = _ProcessSilence() ? (byte)1 : (byte)0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -14753,9 +14924,9 @@ public unsafe partial class AudioEffectLimiter : AudioEffect
 {
     internal AudioEffectLimiter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectLimiter() : this(InstanceBindings.ConstructRaw("AudioEffectLimiter"), true)
+    public AudioEffectLimiter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectLimiter");
     }
 
     private static nint __mb_set_ceiling_db;
@@ -14887,9 +15058,9 @@ public unsafe partial class AudioEffectLowPassFilter : AudioEffectFilter
 {
     internal AudioEffectLowPassFilter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectLowPassFilter() : this(InstanceBindings.ConstructRaw("AudioEffectLowPassFilter"), true)
+    public AudioEffectLowPassFilter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectLowPassFilter");
     }
 }
 
@@ -14897,9 +15068,9 @@ public unsafe partial class AudioEffectLowShelfFilter : AudioEffectFilter
 {
     internal AudioEffectLowShelfFilter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectLowShelfFilter() : this(InstanceBindings.ConstructRaw("AudioEffectLowShelfFilter"), true)
+    public AudioEffectLowShelfFilter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectLowShelfFilter");
     }
 }
 
@@ -14907,9 +15078,9 @@ public unsafe partial class AudioEffectNotchFilter : AudioEffectFilter
 {
     internal AudioEffectNotchFilter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectNotchFilter() : this(InstanceBindings.ConstructRaw("AudioEffectNotchFilter"), true)
+    public AudioEffectNotchFilter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectNotchFilter");
     }
 }
 
@@ -14917,9 +15088,9 @@ public unsafe partial class AudioEffectPanner : AudioEffect
 {
     internal AudioEffectPanner(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectPanner() : this(InstanceBindings.ConstructRaw("AudioEffectPanner"), true)
+    public AudioEffectPanner() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectPanner");
     }
 
     private static nint __mb_set_pan;
@@ -14958,9 +15129,9 @@ public unsafe partial class AudioEffectPhaser : AudioEffect
 {
     internal AudioEffectPhaser(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectPhaser() : this(InstanceBindings.ConstructRaw("AudioEffectPhaser"), true)
+    public AudioEffectPhaser() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectPhaser");
     }
 
     private static nint __mb_set_range_min_hz;
@@ -15123,9 +15294,9 @@ public unsafe partial class AudioEffectPitchShift : AudioEffect
 {
     internal AudioEffectPitchShift(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectPitchShift() : this(InstanceBindings.ConstructRaw("AudioEffectPitchShift"), true)
+    public AudioEffectPitchShift() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectPitchShift");
     }
 
     public enum FFTSize : long
@@ -15236,9 +15407,9 @@ public unsafe partial class AudioEffectRecord : AudioEffect
 {
     internal AudioEffectRecord(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectRecord() : this(InstanceBindings.ConstructRaw("AudioEffectRecord"), true)
+    public AudioEffectRecord() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectRecord");
     }
 
     private static nint __mb_set_recording_active;
@@ -15323,9 +15494,9 @@ public unsafe partial class AudioEffectReverb : AudioEffect
 {
     internal AudioEffectReverb(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectReverb() : this(InstanceBindings.ConstructRaw("AudioEffectReverb"), true)
+    public AudioEffectReverb() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectReverb");
     }
 
     private static nint __mb_set_predelay_msec;
@@ -15581,9 +15752,9 @@ public unsafe partial class AudioEffectSpectrumAnalyzer : AudioEffect
 {
     internal AudioEffectSpectrumAnalyzer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectSpectrumAnalyzer() : this(InstanceBindings.ConstructRaw("AudioEffectSpectrumAnalyzer"), true)
+    public AudioEffectSpectrumAnalyzer() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectSpectrumAnalyzer");
     }
 
     public enum FFTSize : long
@@ -15696,9 +15867,9 @@ public unsafe partial class AudioEffectStereoEnhance : AudioEffect
 {
     internal AudioEffectStereoEnhance(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioEffectStereoEnhance() : this(InstanceBindings.ConstructRaw("AudioEffectStereoEnhance"), true)
+    public AudioEffectStereoEnhance() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioEffectStereoEnhance");
     }
 
     private static nint __mb_set_pan_pullout;
@@ -15799,9 +15970,9 @@ public unsafe partial class AudioListener2D : Node2D
 {
     internal AudioListener2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioListener2D() : this(InstanceBindings.ConstructRaw("AudioListener2D"), false)
+    public AudioListener2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioListener2D");
     }
 
     private static nint __mb_make_current;
@@ -15850,9 +16021,9 @@ public unsafe partial class AudioListener3D : Node3D
 {
     internal AudioListener3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioListener3D() : this(InstanceBindings.ConstructRaw("AudioListener3D"), false)
+    public AudioListener3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioListener3D");
     }
 
     public enum DopplerTracking : long
@@ -15954,9 +16125,9 @@ public unsafe partial class AudioSample : RefCounted
 {
     internal AudioSample(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioSample() : this(InstanceBindings.ConstructRaw("AudioSample"), true)
+    public AudioSample() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioSample");
     }
 }
 
@@ -15964,9 +16135,9 @@ public unsafe partial class AudioSamplePlayback : RefCounted
 {
     internal AudioSamplePlayback(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioSamplePlayback() : this(InstanceBindings.ConstructRaw("AudioSamplePlayback"), true)
+    public AudioSamplePlayback() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioSamplePlayback");
     }
 }
 
@@ -15974,9 +16145,9 @@ public unsafe partial class AudioServer : GodotObject
 {
     internal AudioServer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioServer() : this(InstanceBindings.ConstructRaw("AudioServer"), false)
+    public AudioServer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioServer");
     }
 
     private static AudioServer? _singleton;
@@ -16926,9 +17097,9 @@ public unsafe partial class AudioStream : Resource
 {
     internal AudioStream(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStream() : this(InstanceBindings.ConstructRaw("AudioStream"), true)
+    public AudioStream() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStream");
     }
 
     private static nint __mb_get_length;
@@ -17020,15 +17191,93 @@ public unsafe partial class AudioStream : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
+
+    public virtual AudioStreamPlayback? _InstantiatePlayback() => default!;
+
+    public virtual string _GetStreamName() => default!;
+
+    public virtual double _GetLength() => default!;
+
+    public virtual bool _IsMonophonic() => default!;
+
+    public virtual double _GetBpm() => default!;
+
+    public virtual int _GetBeatCount() => default!;
+
+    public virtual bool _HasLoop() => default!;
+
+    public virtual int _GetBarBeats() => default!;
+
+    private static ulong __vsn_instantiate_playback;
+    private static ulong __vsn_get_stream_name;
+    private static ulong __vsn_get_length;
+    private static ulong __vsn_is_monophonic;
+    private static ulong __vsn_get_bpm;
+    private static ulong __vsn_get_beat_count;
+    private static ulong __vsn_has_loop;
+    private static ulong __vsn_get_bar_beats;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_instantiate_playback == 0) __vsn_instantiate_playback = StringNames.Get("_instantiate_playback").Opaque;
+        if (nameSn == __vsn_instantiate_playback)
+        {
+            *(nint*)ret = _InstantiatePlayback()?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_get_stream_name == 0) __vsn_get_stream_name = StringNames.Get("_get_stream_name").Opaque;
+        if (nameSn == __vsn_get_stream_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetStreamName() ?? "");
+            return true;
+        }
+        if (__vsn_get_length == 0) __vsn_get_length = StringNames.Get("_get_length").Opaque;
+        if (nameSn == __vsn_get_length)
+        {
+            *(double*)ret = _GetLength();
+            return true;
+        }
+        if (__vsn_is_monophonic == 0) __vsn_is_monophonic = StringNames.Get("_is_monophonic").Opaque;
+        if (nameSn == __vsn_is_monophonic)
+        {
+            *(byte*)ret = _IsMonophonic() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_bpm == 0) __vsn_get_bpm = StringNames.Get("_get_bpm").Opaque;
+        if (nameSn == __vsn_get_bpm)
+        {
+            *(double*)ret = _GetBpm();
+            return true;
+        }
+        if (__vsn_get_beat_count == 0) __vsn_get_beat_count = StringNames.Get("_get_beat_count").Opaque;
+        if (nameSn == __vsn_get_beat_count)
+        {
+            *(long*)ret = unchecked((long)_GetBeatCount());
+            return true;
+        }
+        if (__vsn_has_loop == 0) __vsn_has_loop = StringNames.Get("_has_loop").Opaque;
+        if (nameSn == __vsn_has_loop)
+        {
+            *(byte*)ret = _HasLoop() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_bar_beats == 0) __vsn_get_bar_beats = StringNames.Get("_get_bar_beats").Opaque;
+        if (nameSn == __vsn_get_bar_beats)
+        {
+            *(long*)ret = unchecked((long)_GetBarBeats());
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class AudioStreamGenerator : AudioStream
 {
     internal AudioStreamGenerator(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamGenerator() : this(InstanceBindings.ConstructRaw("AudioStreamGenerator"), true)
+    public AudioStreamGenerator() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamGenerator");
     }
 
     public enum AudioStreamGeneratorMixRate : long
@@ -17221,9 +17470,9 @@ public unsafe partial class AudioStreamInteractive : AudioStream
 {
     internal AudioStreamInteractive(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamInteractive() : this(InstanceBindings.ConstructRaw("AudioStreamInteractive"), true)
+    public AudioStreamInteractive() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamInteractive");
     }
 
     public enum TransitionFromTime : long
@@ -17678,9 +17927,9 @@ public unsafe partial class AudioStreamMP3 : AudioStream
 {
     internal AudioStreamMP3(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamMP3() : this(InstanceBindings.ConstructRaw("AudioStreamMP3"), true)
+    public AudioStreamMP3() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamMP3");
     }
 
     private static nint __mb_load_from_file;
@@ -17862,9 +18111,9 @@ public unsafe partial class AudioStreamMicrophone : AudioStream
 {
     internal AudioStreamMicrophone(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamMicrophone() : this(InstanceBindings.ConstructRaw("AudioStreamMicrophone"), true)
+    public AudioStreamMicrophone() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamMicrophone");
     }
 }
 
@@ -17872,9 +18121,9 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
 {
     internal AudioStreamOggVorbis(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamOggVorbis() : this(InstanceBindings.ConstructRaw("AudioStreamOggVorbis"), true)
+    public AudioStreamOggVorbis() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamOggVorbis");
     }
 
     private static nint __mb_load_from_file;
@@ -18087,9 +18336,9 @@ public unsafe partial class AudioStreamPlayback : RefCounted
 {
     internal AudioStreamPlayback(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamPlayback() : this(InstanceBindings.ConstructRaw("AudioStreamPlayback"), true)
+    public AudioStreamPlayback() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamPlayback");
     }
 
     private static nint __mb_set_sample_playback;
@@ -18212,6 +18461,75 @@ public unsafe partial class AudioStreamPlayback : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
+
+    public virtual void _Start(double fromPos) { }
+
+    public virtual void _Stop() { }
+
+    public virtual bool _IsPlaying() => default!;
+
+    public virtual int _GetLoopCount() => default!;
+
+    public virtual double _GetPlaybackPosition() => default!;
+
+    public virtual void _Seek(double position) { }
+
+    public virtual void _TagUsedStreams() { }
+
+    private static ulong __vsn_start;
+    private static ulong __vsn_stop;
+    private static ulong __vsn_is_playing;
+    private static ulong __vsn_get_loop_count;
+    private static ulong __vsn_get_playback_position;
+    private static ulong __vsn_seek;
+    private static ulong __vsn_tag_used_streams;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_start == 0) __vsn_start = StringNames.Get("_start").Opaque;
+        if (nameSn == __vsn_start)
+        {
+            _Start(*(double*)args[0]);
+            return true;
+        }
+        if (__vsn_stop == 0) __vsn_stop = StringNames.Get("_stop").Opaque;
+        if (nameSn == __vsn_stop)
+        {
+            _Stop();
+            return true;
+        }
+        if (__vsn_is_playing == 0) __vsn_is_playing = StringNames.Get("_is_playing").Opaque;
+        if (nameSn == __vsn_is_playing)
+        {
+            *(byte*)ret = _IsPlaying() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_loop_count == 0) __vsn_get_loop_count = StringNames.Get("_get_loop_count").Opaque;
+        if (nameSn == __vsn_get_loop_count)
+        {
+            *(long*)ret = unchecked((long)_GetLoopCount());
+            return true;
+        }
+        if (__vsn_get_playback_position == 0) __vsn_get_playback_position = StringNames.Get("_get_playback_position").Opaque;
+        if (nameSn == __vsn_get_playback_position)
+        {
+            *(double*)ret = _GetPlaybackPosition();
+            return true;
+        }
+        if (__vsn_seek == 0) __vsn_seek = StringNames.Get("_seek").Opaque;
+        if (nameSn == __vsn_seek)
+        {
+            _Seek(*(double*)args[0]);
+            return true;
+        }
+        if (__vsn_tag_used_streams == 0) __vsn_tag_used_streams = StringNames.Get("_tag_used_streams").Opaque;
+        if (nameSn == __vsn_tag_used_streams)
+        {
+            _TagUsedStreams();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class AudioStreamPlaybackInteractive : AudioStreamPlayback
@@ -18270,9 +18588,9 @@ public unsafe partial class AudioStreamPlaybackOggVorbis : AudioStreamPlaybackRe
 {
     internal AudioStreamPlaybackOggVorbis(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamPlaybackOggVorbis() : this(InstanceBindings.ConstructRaw("AudioStreamPlaybackOggVorbis"), true)
+    public AudioStreamPlaybackOggVorbis() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamPlaybackOggVorbis");
     }
 }
 
@@ -18388,9 +18706,9 @@ public unsafe partial class AudioStreamPlaybackResampled : AudioStreamPlayback
 {
     internal AudioStreamPlaybackResampled(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamPlaybackResampled() : this(InstanceBindings.ConstructRaw("AudioStreamPlaybackResampled"), true)
+    public AudioStreamPlaybackResampled() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamPlaybackResampled");
     }
 
     private static nint __mb_begin_resample;
@@ -18405,6 +18723,21 @@ public unsafe partial class AudioStreamPlaybackResampled : AudioStreamPlayback
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
+
+    public virtual float _GetStreamSamplingRate() => default!;
+
+    private static ulong __vsn_get_stream_sampling_rate;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_stream_sampling_rate == 0) __vsn_get_stream_sampling_rate = StringNames.Get("_get_stream_sampling_rate").Opaque;
+        if (nameSn == __vsn_get_stream_sampling_rate)
+        {
+            *(double*)ret = _GetStreamSamplingRate();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class AudioStreamPlaybackSynchronized : AudioStreamPlayback
@@ -18416,9 +18749,9 @@ public unsafe partial class AudioStreamPlayer : Node
 {
     internal AudioStreamPlayer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamPlayer() : this(InstanceBindings.ConstructRaw("AudioStreamPlayer"), false)
+    public AudioStreamPlayer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamPlayer");
     }
 
     public enum MixTarget : long
@@ -18864,9 +19197,9 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
 {
     internal AudioStreamPlayer2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamPlayer2D() : this(InstanceBindings.ConstructRaw("AudioStreamPlayer2D"), false)
+    public AudioStreamPlayer2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamPlayer2D");
     }
 
     private static nint __mb_set_stream;
@@ -19398,9 +19731,9 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
 {
     internal AudioStreamPlayer3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamPlayer3D() : this(InstanceBindings.ConstructRaw("AudioStreamPlayer3D"), false)
+    public AudioStreamPlayer3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamPlayer3D");
     }
 
     public enum AttenuationModel : long
@@ -20195,9 +20528,9 @@ public unsafe partial class AudioStreamPlaylist : AudioStream
 {
     internal AudioStreamPlaylist(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamPlaylist() : this(InstanceBindings.ConstructRaw("AudioStreamPlaylist"), true)
+    public AudioStreamPlaylist() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamPlaylist");
     }
 
     private static nint __mb_set_stream_count;
@@ -20380,9 +20713,9 @@ public unsafe partial class AudioStreamPolyphonic : AudioStream
 {
     internal AudioStreamPolyphonic(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamPolyphonic() : this(InstanceBindings.ConstructRaw("AudioStreamPolyphonic"), true)
+    public AudioStreamPolyphonic() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamPolyphonic");
     }
 
     private static nint __mb_set_polyphony;
@@ -20421,9 +20754,9 @@ public unsafe partial class AudioStreamRandomizer : AudioStream
 {
     internal AudioStreamRandomizer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamRandomizer() : this(InstanceBindings.ConstructRaw("AudioStreamRandomizer"), true)
+    public AudioStreamRandomizer() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamRandomizer");
     }
 
     public enum PlaybackMode : long
@@ -20719,9 +21052,9 @@ public unsafe partial class AudioStreamSynchronized : AudioStream
 {
     internal AudioStreamSynchronized(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamSynchronized() : this(InstanceBindings.ConstructRaw("AudioStreamSynchronized"), true)
+    public AudioStreamSynchronized() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamSynchronized");
     }
 
     private static nint __mb_set_stream_count;
@@ -20832,9 +21165,9 @@ public unsafe partial class AudioStreamWAV : AudioStream
 {
     internal AudioStreamWAV(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AudioStreamWAV() : this(InstanceBindings.ConstructRaw("AudioStreamWAV"), true)
+    public AudioStreamWAV() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AudioStreamWAV");
     }
 
     public enum Format : long
@@ -21063,9 +21396,9 @@ public unsafe partial class AwaitTweener : Tweener
 {
     internal AwaitTweener(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public AwaitTweener() : this(InstanceBindings.ConstructRaw("AwaitTweener"), true)
+    public AwaitTweener() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "AwaitTweener");
     }
 
     private static nint __mb_set_timeout;

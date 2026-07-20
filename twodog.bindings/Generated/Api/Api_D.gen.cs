@@ -14,9 +14,9 @@ public unsafe partial class DPITexture : Texture2D
 {
     internal DPITexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public DPITexture() : this(InstanceBindings.ConstructRaw("DPITexture"), true)
+    public DPITexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "DPITexture");
     }
 
     private static nint __mb_set_source;
@@ -211,9 +211,9 @@ public unsafe partial class DTLSServer : RefCounted
 {
     internal DTLSServer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public DTLSServer() : this(InstanceBindings.ConstructRaw("DTLSServer"), true)
+    public DTLSServer() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "DTLSServer");
     }
 
     private static nint __mb_setup;
@@ -257,9 +257,9 @@ public unsafe partial class DampedSpringJoint2D : Joint2D
 {
     internal DampedSpringJoint2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public DampedSpringJoint2D() : this(InstanceBindings.ConstructRaw("DampedSpringJoint2D"), false)
+    public DampedSpringJoint2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "DampedSpringJoint2D");
     }
 
     private static nint __mb_set_length;
@@ -391,9 +391,9 @@ public unsafe partial class Decal : VisualInstance3D
 {
     internal Decal(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Decal() : this(InstanceBindings.ConstructRaw("Decal"), false)
+    public Decal() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Decal");
     }
 
     public enum DecalTexture : long
@@ -1483,9 +1483,9 @@ public unsafe partial class DirectionalLight2D : Light2D
 {
     internal DirectionalLight2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public DirectionalLight2D() : this(InstanceBindings.ConstructRaw("DirectionalLight2D"), false)
+    public DirectionalLight2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "DirectionalLight2D");
     }
 
     private static nint __mb_set_max_distance;
@@ -1524,9 +1524,9 @@ public unsafe partial class DirectionalLight3D : Light3D
 {
     internal DirectionalLight3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public DirectionalLight3D() : this(InstanceBindings.ConstructRaw("DirectionalLight3D"), false)
+    public DirectionalLight3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "DirectionalLight3D");
     }
 
     public enum ShadowMode : long
@@ -6382,9 +6382,9 @@ public unsafe partial class DrawableTexture2D : Texture2D
 {
     internal DrawableTexture2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public DrawableTexture2D() : this(InstanceBindings.ConstructRaw("DrawableTexture2D"), true)
+    public DrawableTexture2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "DrawableTexture2D");
     }
 
     public enum DrawableFormat : long

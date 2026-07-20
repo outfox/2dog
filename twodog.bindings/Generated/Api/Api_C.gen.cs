@@ -14,9 +14,9 @@ public unsafe partial class CCDIK3D : IterateIK3D
 {
     internal CCDIK3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CCDIK3D() : this(InstanceBindings.ConstructRaw("CCDIK3D"), false)
+    public CCDIK3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CCDIK3D");
     }
 }
 
@@ -24,9 +24,9 @@ public unsafe partial class CPUParticles2D : Node2D
 {
     internal CPUParticles2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CPUParticles2D() : this(InstanceBindings.ConstructRaw("CPUParticles2D"), false)
+    public CPUParticles2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CPUParticles2D");
     }
 
     public enum DrawOrder : long
@@ -1201,9 +1201,9 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
 {
     internal CPUParticles3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CPUParticles3D() : this(InstanceBindings.ConstructRaw("CPUParticles3D"), false)
+    public CPUParticles3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CPUParticles3D");
     }
 
     public enum DrawOrder : long
@@ -2580,9 +2580,9 @@ public unsafe partial class CSGBox3D : CSGPrimitive3D
 {
     internal CSGBox3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CSGBox3D() : this(InstanceBindings.ConstructRaw("CSGBox3D"), false)
+    public CSGBox3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CSGBox3D");
     }
 
     private static nint __mb_set_size;
@@ -2652,9 +2652,9 @@ public unsafe partial class CSGCombiner3D : CSGShape3D
 {
     internal CSGCombiner3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CSGCombiner3D() : this(InstanceBindings.ConstructRaw("CSGCombiner3D"), false)
+    public CSGCombiner3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CSGCombiner3D");
     }
 }
 
@@ -2662,9 +2662,9 @@ public unsafe partial class CSGCylinder3D : CSGPrimitive3D
 {
     internal CSGCylinder3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CSGCylinder3D() : this(InstanceBindings.ConstructRaw("CSGCylinder3D"), false)
+    public CSGCylinder3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CSGCylinder3D");
     }
 
     private static nint __mb_set_radius;
@@ -2858,9 +2858,9 @@ public unsafe partial class CSGMesh3D : CSGPrimitive3D
 {
     internal CSGMesh3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CSGMesh3D() : this(InstanceBindings.ConstructRaw("CSGMesh3D"), false)
+    public CSGMesh3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CSGMesh3D");
     }
 
     private static nint __mb_set_mesh;
@@ -2930,9 +2930,9 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
 {
     internal CSGPolygon3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CSGPolygon3D() : this(InstanceBindings.ConstructRaw("CSGPolygon3D"), false)
+    public CSGPolygon3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CSGPolygon3D");
     }
 
     public enum Mode : long
@@ -3869,9 +3869,9 @@ public unsafe partial class CSGSphere3D : CSGPrimitive3D
 {
     internal CSGSphere3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CSGSphere3D() : this(InstanceBindings.ConstructRaw("CSGSphere3D"), false)
+    public CSGSphere3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CSGSphere3D");
     }
 
     private static nint __mb_set_radius;
@@ -4034,9 +4034,9 @@ public unsafe partial class CSGTorus3D : CSGPrimitive3D
 {
     internal CSGTorus3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CSGTorus3D() : this(InstanceBindings.ConstructRaw("CSGTorus3D"), false)
+    public CSGTorus3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CSGTorus3D");
     }
 
     private static nint __mb_set_inner_radius;
@@ -4230,9 +4230,9 @@ public unsafe partial class CallbackTweener : Tweener
 {
     internal CallbackTweener(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CallbackTweener() : this(InstanceBindings.ConstructRaw("CallbackTweener"), true)
+    public CallbackTweener() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CallbackTweener");
     }
 
     private static nint __mb_set_delay;
@@ -4258,9 +4258,9 @@ public unsafe partial class Camera2D : Node2D
 {
     internal Camera2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Camera2D() : this(InstanceBindings.ConstructRaw("Camera2D"), false)
+    public Camera2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Camera2D");
     }
 
     public enum AnchorMode : long
@@ -5084,9 +5084,9 @@ public unsafe partial class Camera3D : Node3D
 {
     internal Camera3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Camera3D() : this(InstanceBindings.ConstructRaw("Camera3D"), false)
+    public Camera3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Camera3D");
     }
 
     public enum ProjectionType : long
@@ -5894,9 +5894,9 @@ public unsafe partial class CameraAttributes : Resource
 {
     internal CameraAttributes(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CameraAttributes() : this(InstanceBindings.ConstructRaw("CameraAttributes"), true)
+    public CameraAttributes() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CameraAttributes");
     }
 
     private static nint __mb_set_exposure_multiplier;
@@ -6059,9 +6059,9 @@ public unsafe partial class CameraAttributesPhysical : CameraAttributes
 {
     internal CameraAttributesPhysical(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CameraAttributesPhysical() : this(InstanceBindings.ConstructRaw("CameraAttributesPhysical"), true)
+    public CameraAttributesPhysical() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CameraAttributesPhysical");
     }
 
     private static nint __mb_set_aperture;
@@ -6332,9 +6332,9 @@ public unsafe partial class CameraAttributesPractical : CameraAttributes
 {
     internal CameraAttributesPractical(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CameraAttributesPractical() : this(InstanceBindings.ConstructRaw("CameraAttributesPractical"), true)
+    public CameraAttributesPractical() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CameraAttributesPractical");
     }
 
     private static nint __mb_set_dof_blur_far_enabled;
@@ -6621,9 +6621,9 @@ public unsafe partial class CameraFeed : RefCounted
 {
     internal CameraFeed(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CameraFeed() : this(InstanceBindings.ConstructRaw("CameraFeed"), true)
+    public CameraFeed() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CameraFeed");
     }
 
     public enum FeedDataType : long
@@ -6882,15 +6882,39 @@ public unsafe partial class CameraFeed : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (CameraFeed.FeedDataType)__ret;
     }
+
+    public virtual bool _ActivateFeed() => default!;
+
+    public virtual void _DeactivateFeed() { }
+
+    private static ulong __vsn_activate_feed;
+    private static ulong __vsn_deactivate_feed;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_activate_feed == 0) __vsn_activate_feed = StringNames.Get("_activate_feed").Opaque;
+        if (nameSn == __vsn_activate_feed)
+        {
+            *(byte*)ret = _ActivateFeed() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_deactivate_feed == 0) __vsn_deactivate_feed = StringNames.Get("_deactivate_feed").Opaque;
+        if (nameSn == __vsn_deactivate_feed)
+        {
+            _DeactivateFeed();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class CameraServer : GodotObject
 {
     internal CameraServer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CameraServer() : this(InstanceBindings.ConstructRaw("CameraServer"), false)
+    public CameraServer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CameraServer");
     }
 
     private static CameraServer? _singleton;
@@ -7005,9 +7029,9 @@ public unsafe partial class CameraTexture : Texture2D
 {
     internal CameraTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CameraTexture() : this(InstanceBindings.ConstructRaw("CameraTexture"), true)
+    public CameraTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CameraTexture");
     }
 
     private static nint __mb_set_camera_feed_id;
@@ -7108,9 +7132,9 @@ public unsafe partial class CanvasGroup : Node2D
 {
     internal CanvasGroup(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CanvasGroup() : this(InstanceBindings.ConstructRaw("CanvasGroup"), false)
+    public CanvasGroup() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CanvasGroup");
     }
 
     private static nint __mb_set_fit_margin;
@@ -8809,15 +8833,30 @@ public unsafe partial class CanvasItem : Node
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (CanvasItem.OversamplingWithScale)__ret;
     }
+
+    public virtual void _Draw() { }
+
+    private static ulong __vsn_draw;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_draw == 0) __vsn_draw = StringNames.Get("_draw").Opaque;
+        if (nameSn == __vsn_draw)
+        {
+            _Draw();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class CanvasItemMaterial : Material
 {
     internal CanvasItemMaterial(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CanvasItemMaterial() : this(InstanceBindings.ConstructRaw("CanvasItemMaterial"), true)
+    public CanvasItemMaterial() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CanvasItemMaterial");
     }
 
     public enum BlendMode : long
@@ -9027,9 +9066,9 @@ public unsafe partial class CanvasLayer : Node
 {
     internal CanvasLayer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CanvasLayer() : this(InstanceBindings.ConstructRaw("CanvasLayer"), false)
+    public CanvasLayer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CanvasLayer");
     }
 
     private static nint __mb_set_layer;
@@ -9372,9 +9411,9 @@ public unsafe partial class CanvasModulate : Node2D
 {
     internal CanvasModulate(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CanvasModulate() : this(InstanceBindings.ConstructRaw("CanvasModulate"), false)
+    public CanvasModulate() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CanvasModulate");
     }
 
     private static nint __mb_set_color;
@@ -9413,9 +9452,9 @@ public unsafe partial class CanvasTexture : Texture2D
 {
     internal CanvasTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CanvasTexture() : this(InstanceBindings.ConstructRaw("CanvasTexture"), true)
+    public CanvasTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CanvasTexture");
     }
 
     private static nint __mb_set_diffuse_texture;
@@ -9640,9 +9679,9 @@ public unsafe partial class CapsuleMesh : PrimitiveMesh
 {
     internal CapsuleMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CapsuleMesh() : this(InstanceBindings.ConstructRaw("CapsuleMesh"), true)
+    public CapsuleMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CapsuleMesh");
     }
 
     private static nint __mb_set_radius;
@@ -9774,9 +9813,9 @@ public unsafe partial class CapsuleShape2D : Shape2D
 {
     internal CapsuleShape2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CapsuleShape2D() : this(InstanceBindings.ConstructRaw("CapsuleShape2D"), true)
+    public CapsuleShape2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CapsuleShape2D");
     }
 
     private static nint __mb_set_radius;
@@ -9877,9 +9916,9 @@ public unsafe partial class CapsuleShape3D : Shape3D
 {
     internal CapsuleShape3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CapsuleShape3D() : this(InstanceBindings.ConstructRaw("CapsuleShape3D"), true)
+    public CapsuleShape3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CapsuleShape3D");
     }
 
     private static nint __mb_set_radius;
@@ -9980,9 +10019,9 @@ public unsafe partial class CenterContainer : Container
 {
     internal CenterContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CenterContainer() : this(InstanceBindings.ConstructRaw("CenterContainer"), false)
+    public CenterContainer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CenterContainer");
     }
 
     private static nint __mb_set_use_top_left;
@@ -10338,9 +10377,9 @@ public unsafe partial class CharFXTransform : RefCounted
 {
     internal CharFXTransform(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CharFXTransform() : this(InstanceBindings.ConstructRaw("CharFXTransform"), true)
+    public CharFXTransform() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CharFXTransform");
     }
 
     private static nint __mb_get_transform;
@@ -10720,9 +10759,9 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
 {
     internal CharacterBody2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CharacterBody2D() : this(InstanceBindings.ConstructRaw("CharacterBody2D"), false)
+    public CharacterBody2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CharacterBody2D");
     }
 
     public enum MotionMode : long
@@ -11482,9 +11521,9 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
 {
     internal CharacterBody3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CharacterBody3D() : this(InstanceBindings.ConstructRaw("CharacterBody3D"), false)
+    public CharacterBody3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CharacterBody3D");
     }
 
     public enum MotionMode : long
@@ -12259,9 +12298,9 @@ public unsafe partial class CheckBox : Button
 {
     internal CheckBox(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CheckBox() : this(InstanceBindings.ConstructRaw("CheckBox"), false)
+    public CheckBox() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CheckBox");
     }
 }
 
@@ -12269,9 +12308,9 @@ public unsafe partial class CheckButton : Button
 {
     internal CheckButton(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CheckButton() : this(InstanceBindings.ConstructRaw("CheckButton"), false)
+    public CheckButton() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CheckButton");
     }
 }
 
@@ -12279,9 +12318,9 @@ public unsafe partial class CircleShape2D : Shape2D
 {
     internal CircleShape2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CircleShape2D() : this(InstanceBindings.ConstructRaw("CircleShape2D"), true)
+    public CircleShape2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CircleShape2D");
     }
 
     private static nint __mb_set_radius;
@@ -12320,9 +12359,9 @@ public unsafe partial class ClassDB : GodotObject
 {
     internal ClassDB(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ClassDB() : this(InstanceBindings.ConstructRaw("ClassDB"), false)
+    public ClassDB() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ClassDB");
     }
 
     private static ClassDB? _singleton;
@@ -12662,9 +12701,9 @@ public unsafe partial class CodeEdit : TextEdit
 {
     internal CodeEdit(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CodeEdit() : this(InstanceBindings.ConstructRaw("CodeEdit"), false)
+    public CodeEdit() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CodeEdit");
     }
 
     public enum CodeCompletionKind : long
@@ -14219,15 +14258,39 @@ public unsafe partial class CodeEdit : TextEdit
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
+
+    public virtual void _ConfirmCodeCompletion(bool replace) { }
+
+    public virtual void _RequestCodeCompletion(bool force) { }
+
+    private static ulong __vsn_confirm_code_completion;
+    private static ulong __vsn_request_code_completion;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_confirm_code_completion == 0) __vsn_confirm_code_completion = StringNames.Get("_confirm_code_completion").Opaque;
+        if (nameSn == __vsn_confirm_code_completion)
+        {
+            _ConfirmCodeCompletion(*(byte*)args[0] != 0);
+            return true;
+        }
+        if (__vsn_request_code_completion == 0) __vsn_request_code_completion = StringNames.Get("_request_code_completion").Opaque;
+        if (nameSn == __vsn_request_code_completion)
+        {
+            _RequestCodeCompletion(*(byte*)args[0] != 0);
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class CodeHighlighter : SyntaxHighlighter
 {
     internal CodeHighlighter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CodeHighlighter() : this(InstanceBindings.ConstructRaw("CodeHighlighter"), true)
+    public CodeHighlighter() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CodeHighlighter");
     }
 
     private static nint __mb_add_keyword_color;
@@ -15214,6 +15277,57 @@ public unsafe partial class CollisionObject2D : Node2D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
+
+    public virtual void _InputEvent(Viewport? viewport, InputEvent? @event, int shapeIdx) { }
+
+    public virtual void _MouseEnter() { }
+
+    public virtual void _MouseExit() { }
+
+    public virtual void _MouseShapeEnter(int shapeIdx) { }
+
+    public virtual void _MouseShapeExit(int shapeIdx) { }
+
+    private static ulong __vsn_input_event;
+    private static ulong __vsn_mouse_enter;
+    private static ulong __vsn_mouse_exit;
+    private static ulong __vsn_mouse_shape_enter;
+    private static ulong __vsn_mouse_shape_exit;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_input_event == 0) __vsn_input_event = StringNames.Get("_input_event").Opaque;
+        if (nameSn == __vsn_input_event)
+        {
+            _InputEvent((Viewport?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (InputEvent?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false), unchecked((int)(*(long*)args[2])));
+            return true;
+        }
+        if (__vsn_mouse_enter == 0) __vsn_mouse_enter = StringNames.Get("_mouse_enter").Opaque;
+        if (nameSn == __vsn_mouse_enter)
+        {
+            _MouseEnter();
+            return true;
+        }
+        if (__vsn_mouse_exit == 0) __vsn_mouse_exit = StringNames.Get("_mouse_exit").Opaque;
+        if (nameSn == __vsn_mouse_exit)
+        {
+            _MouseExit();
+            return true;
+        }
+        if (__vsn_mouse_shape_enter == 0) __vsn_mouse_shape_enter = StringNames.Get("_mouse_shape_enter").Opaque;
+        if (nameSn == __vsn_mouse_shape_enter)
+        {
+            _MouseShapeEnter(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_mouse_shape_exit == 0) __vsn_mouse_shape_exit = StringNames.Get("_mouse_shape_exit").Opaque;
+        if (nameSn == __vsn_mouse_shape_exit)
+        {
+            _MouseShapeExit(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class CollisionObject3D : Node3D
@@ -15751,15 +15865,48 @@ public unsafe partial class CollisionObject3D : Node3D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
+
+    public virtual void _InputEvent(Camera3D? camera, InputEvent? @event, Vector3 eventPosition, Vector3 normal, int shapeIdx) { }
+
+    public virtual void _MouseEnter() { }
+
+    public virtual void _MouseExit() { }
+
+    private static ulong __vsn_input_event;
+    private static ulong __vsn_mouse_enter;
+    private static ulong __vsn_mouse_exit;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_input_event == 0) __vsn_input_event = StringNames.Get("_input_event").Opaque;
+        if (nameSn == __vsn_input_event)
+        {
+            _InputEvent((Camera3D?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (InputEvent?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false), *(Vector3*)args[2], *(Vector3*)args[3], unchecked((int)(*(long*)args[4])));
+            return true;
+        }
+        if (__vsn_mouse_enter == 0) __vsn_mouse_enter = StringNames.Get("_mouse_enter").Opaque;
+        if (nameSn == __vsn_mouse_enter)
+        {
+            _MouseEnter();
+            return true;
+        }
+        if (__vsn_mouse_exit == 0) __vsn_mouse_exit = StringNames.Get("_mouse_exit").Opaque;
+        if (nameSn == __vsn_mouse_exit)
+        {
+            _MouseExit();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class CollisionPolygon2D : Node2D
 {
     internal CollisionPolygon2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CollisionPolygon2D() : this(InstanceBindings.ConstructRaw("CollisionPolygon2D"), false)
+    public CollisionPolygon2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CollisionPolygon2D");
     }
 
     public enum BuildMode : long
@@ -15928,9 +16075,9 @@ public unsafe partial class CollisionPolygon3D : Node3D
 {
     internal CollisionPolygon3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CollisionPolygon3D() : this(InstanceBindings.ConstructRaw("CollisionPolygon3D"), false)
+    public CollisionPolygon3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CollisionPolygon3D");
     }
 
     private static nint __mb_set_depth;
@@ -16093,9 +16240,9 @@ public unsafe partial class CollisionShape2D : Node2D
 {
     internal CollisionShape2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CollisionShape2D() : this(InstanceBindings.ConstructRaw("CollisionShape2D"), false)
+    public CollisionShape2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CollisionShape2D");
     }
 
     private static nint __mb_set_shape;
@@ -16289,9 +16436,9 @@ public unsafe partial class CollisionShape3D : Node3D
 {
     internal CollisionShape3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CollisionShape3D() : this(InstanceBindings.ConstructRaw("CollisionShape3D"), false)
+    public CollisionShape3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CollisionShape3D");
     }
 
     private static nint __mb_resource_changed;
@@ -16452,9 +16599,9 @@ public unsafe partial class ColorPalette : Resource
 {
     internal ColorPalette(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ColorPalette() : this(InstanceBindings.ConstructRaw("ColorPalette"), true)
+    public ColorPalette() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ColorPalette");
     }
 }
 
@@ -16462,9 +16609,9 @@ public unsafe partial class ColorPicker : VBoxContainer
 {
     internal ColorPicker(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ColorPicker() : this(InstanceBindings.ConstructRaw("ColorPicker"), false)
+    public ColorPicker() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ColorPicker");
     }
 
     public enum ColorModeType : long
@@ -16928,9 +17075,9 @@ public unsafe partial class ColorPickerButton : Button
 {
     internal ColorPickerButton(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ColorPickerButton() : this(InstanceBindings.ConstructRaw("ColorPickerButton"), false)
+    public ColorPickerButton() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ColorPickerButton");
     }
 
     private static nint __mb_set_pick_color;
@@ -17061,9 +17208,9 @@ public unsafe partial class ColorRect : Control
 {
     internal ColorRect(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ColorRect() : this(InstanceBindings.ConstructRaw("ColorRect"), false)
+    public ColorRect() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ColorRect");
     }
 
     private static nint __mb_set_color;
@@ -17102,9 +17249,9 @@ public unsafe partial class Compositor : Resource
 {
     internal Compositor(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Compositor() : this(InstanceBindings.ConstructRaw("Compositor"), true)
+    public Compositor() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Compositor");
     }
 }
 
@@ -17112,9 +17259,9 @@ public unsafe partial class CompositorEffect : Resource
 {
     internal CompositorEffect(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CompositorEffect() : this(InstanceBindings.ConstructRaw("CompositorEffect"), true)
+    public CompositorEffect() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CompositorEffect");
     }
 
     public enum EffectCallbackType : long
@@ -17343,15 +17490,30 @@ public unsafe partial class CompositorEffect : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
+
+    public virtual void _RenderCallback(int effectCallbackType, RenderData? renderData) { }
+
+    private static ulong __vsn_render_callback;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_render_callback == 0) __vsn_render_callback = StringNames.Get("_render_callback").Opaque;
+        if (nameSn == __vsn_render_callback)
+        {
+            _RenderCallback(unchecked((int)(*(long*)args[0])), (RenderData?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class CompressedCubemap : CompressedTextureLayered
 {
     internal CompressedCubemap(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CompressedCubemap() : this(InstanceBindings.ConstructRaw("CompressedCubemap"), true)
+    public CompressedCubemap() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CompressedCubemap");
     }
 }
 
@@ -17359,9 +17521,9 @@ public unsafe partial class CompressedCubemapArray : CompressedTextureLayered
 {
     internal CompressedCubemapArray(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CompressedCubemapArray() : this(InstanceBindings.ConstructRaw("CompressedCubemapArray"), true)
+    public CompressedCubemapArray() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CompressedCubemapArray");
     }
 }
 
@@ -17369,9 +17531,9 @@ public unsafe partial class CompressedTexture2D : Texture2D
 {
     internal CompressedTexture2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CompressedTexture2D() : this(InstanceBindings.ConstructRaw("CompressedTexture2D"), true)
+    public CompressedTexture2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CompressedTexture2D");
     }
 
     private static nint __mb_load;
@@ -17413,9 +17575,9 @@ public unsafe partial class CompressedTexture2DArray : CompressedTextureLayered
 {
     internal CompressedTexture2DArray(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CompressedTexture2DArray() : this(InstanceBindings.ConstructRaw("CompressedTexture2DArray"), true)
+    public CompressedTexture2DArray() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CompressedTexture2DArray");
     }
 }
 
@@ -17423,9 +17585,9 @@ public unsafe partial class CompressedTexture3D : Texture3D
 {
     internal CompressedTexture3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CompressedTexture3D() : this(InstanceBindings.ConstructRaw("CompressedTexture3D"), true)
+    public CompressedTexture3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CompressedTexture3D");
     }
 
     private static nint __mb_load;
@@ -17506,9 +17668,9 @@ public unsafe partial class ConcavePolygonShape2D : Shape2D
 {
     internal ConcavePolygonShape2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ConcavePolygonShape2D() : this(InstanceBindings.ConstructRaw("ConcavePolygonShape2D"), true)
+    public ConcavePolygonShape2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ConcavePolygonShape2D");
     }
 }
 
@@ -17516,9 +17678,9 @@ public unsafe partial class ConcavePolygonShape3D : Shape3D
 {
     internal ConcavePolygonShape3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ConcavePolygonShape3D() : this(InstanceBindings.ConstructRaw("ConcavePolygonShape3D"), true)
+    public ConcavePolygonShape3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ConcavePolygonShape3D");
     }
 
     private static nint __mb_set_backface_collision_enabled;
@@ -17557,9 +17719,9 @@ public unsafe partial class ConeTwistJoint3D : Joint3D
 {
     internal ConeTwistJoint3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ConeTwistJoint3D() : this(InstanceBindings.ConstructRaw("ConeTwistJoint3D"), false)
+    public ConeTwistJoint3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ConeTwistJoint3D");
     }
 
     public enum Param : long
@@ -17613,9 +17775,9 @@ public unsafe partial class ConfigFile : RefCounted
 {
     internal ConfigFile(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ConfigFile() : this(InstanceBindings.ConstructRaw("ConfigFile"), true)
+    public ConfigFile() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ConfigFile");
     }
 
     private static nint __mb_has_section;
@@ -17830,9 +17992,9 @@ public unsafe partial class ConfirmationDialog : AcceptDialog
 {
     internal ConfirmationDialog(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ConfirmationDialog() : this(InstanceBindings.ConstructRaw("ConfirmationDialog"), false)
+    public ConfirmationDialog() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ConfirmationDialog");
     }
 
     private static nint __mb_get_cancel_button;
@@ -17887,9 +18049,9 @@ public unsafe partial class Container : Control
 {
     internal Container(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Container() : this(InstanceBindings.ConstructRaw("Container"), false)
+    public Container() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Container");
     }
 
     private static nint __mb_queue_sort;
@@ -17959,9 +18121,9 @@ public unsafe partial class Control : CanvasItem
 {
     internal Control(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Control() : this(InstanceBindings.ConstructRaw("Control"), false)
+    public Control() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Control");
     }
 
     public enum FocusMode : long
@@ -20746,15 +20908,111 @@ public unsafe partial class Control : CanvasItem
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
+
+    public virtual bool _HasPoint(Vector2 point) => default!;
+
+    public virtual Vector2 _GetMaximumSize() => default!;
+
+    public virtual Vector2 _GetMinimumSize() => default!;
+
+    public virtual string _GetTooltip(Vector2 atPosition) => default!;
+
+    public virtual Node.AutoTranslateMode _GetTooltipAutoTranslateModeAt(Vector2 atPosition) => default!;
+
+    public virtual GodotObject? _MakeCustomTooltip(string forText) => default!;
+
+    public virtual int _GetCursorShape(Vector2 atPosition) => default!;
+
+    public virtual string _AccessibilityGetContextualInfo() => default!;
+
+    public virtual string _GetAccessibilityContainerName(Node? node) => default!;
+
+    public virtual void _GuiInput(InputEvent? @event) { }
+
+    private static ulong __vsn_has_point;
+    private static ulong __vsn_get_maximum_size;
+    private static ulong __vsn_get_minimum_size;
+    private static ulong __vsn_get_tooltip;
+    private static ulong __vsn_get_tooltip_auto_translate_mode_at;
+    private static ulong __vsn_make_custom_tooltip;
+    private static ulong __vsn_get_cursor_shape;
+    private static ulong __vsn_accessibility_get_contextual_info;
+    private static ulong __vsn_get_accessibility_container_name;
+    private static ulong __vsn_gui_input;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_has_point == 0) __vsn_has_point = StringNames.Get("_has_point").Opaque;
+        if (nameSn == __vsn_has_point)
+        {
+            *(byte*)ret = _HasPoint(*(Vector2*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_maximum_size == 0) __vsn_get_maximum_size = StringNames.Get("_get_maximum_size").Opaque;
+        if (nameSn == __vsn_get_maximum_size)
+        {
+            *(Vector2*)ret = _GetMaximumSize();
+            return true;
+        }
+        if (__vsn_get_minimum_size == 0) __vsn_get_minimum_size = StringNames.Get("_get_minimum_size").Opaque;
+        if (nameSn == __vsn_get_minimum_size)
+        {
+            *(Vector2*)ret = _GetMinimumSize();
+            return true;
+        }
+        if (__vsn_get_tooltip == 0) __vsn_get_tooltip = StringNames.Get("_get_tooltip").Opaque;
+        if (nameSn == __vsn_get_tooltip)
+        {
+            *(ulong*)ret = NativeString.Create(_GetTooltip(*(Vector2*)args[0]) ?? "");
+            return true;
+        }
+        if (__vsn_get_tooltip_auto_translate_mode_at == 0) __vsn_get_tooltip_auto_translate_mode_at = StringNames.Get("_get_tooltip_auto_translate_mode_at").Opaque;
+        if (nameSn == __vsn_get_tooltip_auto_translate_mode_at)
+        {
+            *(long*)ret = (long)_GetTooltipAutoTranslateModeAt(*(Vector2*)args[0]);
+            return true;
+        }
+        if (__vsn_make_custom_tooltip == 0) __vsn_make_custom_tooltip = StringNames.Get("_make_custom_tooltip").Opaque;
+        if (nameSn == __vsn_make_custom_tooltip)
+        {
+            *(nint*)ret = _MakeCustomTooltip(NativeString.Read(*(ulong*)args[0]))?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_get_cursor_shape == 0) __vsn_get_cursor_shape = StringNames.Get("_get_cursor_shape").Opaque;
+        if (nameSn == __vsn_get_cursor_shape)
+        {
+            *(long*)ret = unchecked((long)_GetCursorShape(*(Vector2*)args[0]));
+            return true;
+        }
+        if (__vsn_accessibility_get_contextual_info == 0) __vsn_accessibility_get_contextual_info = StringNames.Get("_accessibility_get_contextual_info").Opaque;
+        if (nameSn == __vsn_accessibility_get_contextual_info)
+        {
+            *(ulong*)ret = NativeString.Create(_AccessibilityGetContextualInfo() ?? "");
+            return true;
+        }
+        if (__vsn_get_accessibility_container_name == 0) __vsn_get_accessibility_container_name = StringNames.Get("_get_accessibility_container_name").Opaque;
+        if (nameSn == __vsn_get_accessibility_container_name)
+        {
+            *(ulong*)ret = NativeString.Create(_GetAccessibilityContainerName((Node?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false)) ?? "");
+            return true;
+        }
+        if (__vsn_gui_input == 0) __vsn_gui_input = StringNames.Get("_gui_input").Opaque;
+        if (nameSn == __vsn_gui_input)
+        {
+            _GuiInput((InputEvent?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class ConvertTransformModifier3D : BoneConstraint3D
 {
     internal ConvertTransformModifier3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ConvertTransformModifier3D() : this(InstanceBindings.ConstructRaw("ConvertTransformModifier3D"), false)
+    public ConvertTransformModifier3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ConvertTransformModifier3D");
     }
 
     public enum TransformMode : long
@@ -21057,9 +21315,9 @@ public unsafe partial class ConvexPolygonShape2D : Shape2D
 {
     internal ConvexPolygonShape2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ConvexPolygonShape2D() : this(InstanceBindings.ConstructRaw("ConvexPolygonShape2D"), true)
+    public ConvexPolygonShape2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ConvexPolygonShape2D");
     }
 }
 
@@ -21067,9 +21325,9 @@ public unsafe partial class ConvexPolygonShape3D : Shape3D
 {
     internal ConvexPolygonShape3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ConvexPolygonShape3D() : this(InstanceBindings.ConstructRaw("ConvexPolygonShape3D"), true)
+    public ConvexPolygonShape3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ConvexPolygonShape3D");
     }
 }
 
@@ -21077,9 +21335,9 @@ public unsafe partial class CopyTransformModifier3D : BoneConstraint3D
 {
     internal CopyTransformModifier3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CopyTransformModifier3D() : this(InstanceBindings.ConstructRaw("CopyTransformModifier3D"), false)
+    public CopyTransformModifier3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CopyTransformModifier3D");
     }
 
     [Flags]
@@ -21609,9 +21867,9 @@ public unsafe partial class Crypto : RefCounted
 {
     internal Crypto(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Crypto() : this(InstanceBindings.ConstructRaw("Crypto"), true)
+    public Crypto() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Crypto");
     }
 
     private static nint __mb_generate_rsa;
@@ -21664,9 +21922,9 @@ public unsafe partial class CryptoKey : Resource
 {
     internal CryptoKey(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CryptoKey() : this(InstanceBindings.ConstructRaw("CryptoKey"), true)
+    public CryptoKey() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CryptoKey");
     }
 
     private static nint __mb_save;
@@ -21770,9 +22028,9 @@ public unsafe partial class Cubemap : ImageTextureLayered
 {
     internal Cubemap(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Cubemap() : this(InstanceBindings.ConstructRaw("Cubemap"), true)
+    public Cubemap() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Cubemap");
     }
 
     private static nint __mb_create_placeholder;
@@ -21795,9 +22053,9 @@ public unsafe partial class CubemapArray : ImageTextureLayered
 {
     internal CubemapArray(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CubemapArray() : this(InstanceBindings.ConstructRaw("CubemapArray"), true)
+    public CubemapArray() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CubemapArray");
     }
 
     private static nint __mb_create_placeholder;
@@ -21820,9 +22078,9 @@ public unsafe partial class Curve : Resource
 {
     internal Curve(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Curve() : this(InstanceBindings.ConstructRaw("Curve"), true)
+    public Curve() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Curve");
     }
 
     public enum TangentMode : long
@@ -22370,9 +22628,9 @@ public unsafe partial class Curve2D : Resource
 {
     internal Curve2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Curve2D() : this(InstanceBindings.ConstructRaw("Curve2D"), true)
+    public Curve2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Curve2D");
     }
 
     private static nint __mb_get_point_count;
@@ -22730,9 +22988,9 @@ public unsafe partial class Curve3D : Resource
 {
     internal Curve3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Curve3D() : this(InstanceBindings.ConstructRaw("Curve3D"), true)
+    public Curve3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Curve3D");
     }
 
     private static nint __mb_get_point_count;
@@ -23210,9 +23468,9 @@ public unsafe partial class CurveTexture : Texture2D
 {
     internal CurveTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CurveTexture() : this(InstanceBindings.ConstructRaw("CurveTexture"), true)
+    public CurveTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CurveTexture");
     }
 
     public enum TextureMode : long
@@ -23304,9 +23562,9 @@ public unsafe partial class CurveXYZTexture : Texture2D
 {
     internal CurveXYZTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CurveXYZTexture() : this(InstanceBindings.ConstructRaw("CurveXYZTexture"), true)
+    public CurveXYZTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CurveXYZTexture");
     }
 
     private static nint __mb_set_width;
@@ -23423,9 +23681,9 @@ public unsafe partial class CylinderMesh : PrimitiveMesh
 {
     internal CylinderMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CylinderMesh() : this(InstanceBindings.ConstructRaw("CylinderMesh"), true)
+    public CylinderMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CylinderMesh");
     }
 
     private static nint __mb_set_top_radius;
@@ -23650,9 +23908,9 @@ public unsafe partial class CylinderShape3D : Shape3D
 {
     internal CylinderShape3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public CylinderShape3D() : this(InstanceBindings.ConstructRaw("CylinderShape3D"), true)
+    public CylinderShape3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "CylinderShape3D");
     }
 
     private static nint __mb_set_radius;

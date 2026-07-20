@@ -11,9 +11,9 @@ namespace Godot;
 public unsafe partial class GodotObject : IDisposable
 {
     /// <summary>Raw engine object pointer; 0 once released or freed.</summary>
-    public nint NativePtr { get; private set; }
+    public nint NativePtr { get; internal set; }
 
-    public ulong InstanceId { get; }
+    public ulong InstanceId { get; internal set; }
 
     public bool IsRefCounted { get; }
 
@@ -21,8 +21,19 @@ public unsafe partial class GodotObject : IDisposable
     {
         NativePtr = nativePtr;
         IsRefCounted = isRefCounted;
-        InstanceId = GdExtensionInterface.ObjectGetInstanceId(nativePtr);
+        // Generated public ctors pass 0 and let AttachNew construct the native
+        // side (needed so registered user classes construct as their own
+        // extension class, resolved from the most-derived runtime type).
+        InstanceId = nativePtr != 0 ? GdExtensionInterface.ObjectGetInstanceId(nativePtr) : 0;
     }
+
+    /// <summary>
+    /// Engine-virtual dispatch chain. Generated classes override this with
+    /// checks for their own declared virtuals (interned StringName payload
+    /// comparison) and fall through to base. Called only for virtuals the
+    /// registry reported as overridden.
+    /// </summary>
+    internal virtual bool __CallVirtual(ulong nameSn, nint* args, nint ret) => false;
 
     /// <summary>True while the engine object exists (ObjectID-validated, never dangles).</summary>
     public bool IsValid => NativePtr != 0 && GdExtensionInterface.ObjectGetInstanceFromId(InstanceId) != 0;

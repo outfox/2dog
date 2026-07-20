@@ -14,9 +14,51 @@ public unsafe partial class MainLoop : GodotObject
 {
     internal MainLoop(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MainLoop() : this(InstanceBindings.ConstructRaw("MainLoop"), false)
+    public MainLoop() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MainLoop");
+    }
+
+    public virtual void _Initialize() { }
+
+    public virtual bool _PhysicsProcess(double delta) => default!;
+
+    public virtual bool _Process(double delta) => default!;
+
+    public virtual void _Finalize() { }
+
+    private static ulong __vsn_initialize;
+    private static ulong __vsn_physics_process;
+    private static ulong __vsn_process;
+    private static ulong __vsn_finalize;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_initialize == 0) __vsn_initialize = StringNames.Get("_initialize").Opaque;
+        if (nameSn == __vsn_initialize)
+        {
+            _Initialize();
+            return true;
+        }
+        if (__vsn_physics_process == 0) __vsn_physics_process = StringNames.Get("_physics_process").Opaque;
+        if (nameSn == __vsn_physics_process)
+        {
+            *(byte*)ret = _PhysicsProcess(*(double*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_process == 0) __vsn_process = StringNames.Get("_process").Opaque;
+        if (nameSn == __vsn_process)
+        {
+            *(byte*)ret = _Process(*(double*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_finalize == 0) __vsn_finalize = StringNames.Get("_finalize").Opaque;
+        if (nameSn == __vsn_finalize)
+        {
+            _Finalize();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -24,9 +66,9 @@ public unsafe partial class MarginContainer : Container
 {
     internal MarginContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MarginContainer() : this(InstanceBindings.ConstructRaw("MarginContainer"), false)
+    public MarginContainer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MarginContainer");
     }
 }
 
@@ -34,9 +76,9 @@ public unsafe partial class Marker2D : Node2D
 {
     internal Marker2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Marker2D() : this(InstanceBindings.ConstructRaw("Marker2D"), false)
+    public Marker2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Marker2D");
     }
 
     private static nint __mb_set_gizmo_extents;
@@ -75,9 +117,9 @@ public unsafe partial class Marker3D : Node3D
 {
     internal Marker3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Marker3D() : this(InstanceBindings.ConstructRaw("Marker3D"), false)
+    public Marker3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Marker3D");
     }
 
     private static nint __mb_set_gizmo_extents;
@@ -116,9 +158,9 @@ public unsafe partial class Marshalls : GodotObject
 {
     internal Marshalls(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Marshalls() : this(InstanceBindings.ConstructRaw("Marshalls"), false)
+    public Marshalls() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Marshalls");
     }
 
     private static Marshalls? _singleton;
@@ -167,9 +209,9 @@ public unsafe partial class Material : Resource
 {
     internal Material(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Material() : this(InstanceBindings.ConstructRaw("Material"), true)
+    public Material() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Material");
     }
 
     private static nint __mb_set_next_pass;
@@ -261,15 +303,57 @@ public unsafe partial class Material : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (Resource?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
+
+    public virtual Rid _GetShaderRid() => default!;
+
+    public virtual Shader.Mode _GetShaderMode() => default!;
+
+    public virtual bool _CanDoNextPass() => default!;
+
+    public virtual bool _CanUseRenderPriority() => default!;
+
+    private static ulong __vsn_get_shader_rid;
+    private static ulong __vsn_get_shader_mode;
+    private static ulong __vsn_can_do_next_pass;
+    private static ulong __vsn_can_use_render_priority;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_shader_rid == 0) __vsn_get_shader_rid = StringNames.Get("_get_shader_rid").Opaque;
+        if (nameSn == __vsn_get_shader_rid)
+        {
+            *(Rid*)ret = _GetShaderRid();
+            return true;
+        }
+        if (__vsn_get_shader_mode == 0) __vsn_get_shader_mode = StringNames.Get("_get_shader_mode").Opaque;
+        if (nameSn == __vsn_get_shader_mode)
+        {
+            *(long*)ret = (long)_GetShaderMode();
+            return true;
+        }
+        if (__vsn_can_do_next_pass == 0) __vsn_can_do_next_pass = StringNames.Get("_can_do_next_pass").Opaque;
+        if (nameSn == __vsn_can_do_next_pass)
+        {
+            *(byte*)ret = _CanDoNextPass() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_can_use_render_priority == 0) __vsn_can_use_render_priority = StringNames.Get("_can_use_render_priority").Opaque;
+        if (nameSn == __vsn_can_use_render_priority)
+        {
+            *(byte*)ret = _CanUseRenderPriority() ? (byte)1 : (byte)0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class MenuBar : Control
 {
     internal MenuBar(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MenuBar() : this(InstanceBindings.ConstructRaw("MenuBar"), false)
+    public MenuBar() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MenuBar");
     }
 
     private static nint __mb_set_switch_on_hover;
@@ -674,9 +758,9 @@ public unsafe partial class MenuButton : Button
 {
     internal MenuButton(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MenuButton() : this(InstanceBindings.ConstructRaw("MenuButton"), false)
+    public MenuButton() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MenuButton");
     }
 
     private static nint __mb_get_popup;
@@ -790,9 +874,9 @@ public unsafe partial class Mesh : Resource
 {
     internal Mesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Mesh() : this(InstanceBindings.ConstructRaw("Mesh"), true)
+    public Mesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Mesh");
     }
 
     public enum PrimitiveType : long
@@ -1052,15 +1136,120 @@ public unsafe partial class Mesh : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (TriangleMesh?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
+
+    public virtual int _GetSurfaceCount() => default!;
+
+    public virtual int _SurfaceGetArrayLen(int index) => default!;
+
+    public virtual int _SurfaceGetArrayIndexLen(int index) => default!;
+
+    public virtual uint _SurfaceGetFormat(int index) => default!;
+
+    public virtual uint _SurfaceGetPrimitiveType(int index) => default!;
+
+    public virtual void _SurfaceSetMaterial(int index, Material? material) { }
+
+    public virtual Material? _SurfaceGetMaterial(int index) => default!;
+
+    public virtual int _GetBlendShapeCount() => default!;
+
+    public virtual string _GetBlendShapeName(int index) => default!;
+
+    public virtual void _SetBlendShapeName(int index, string name) { }
+
+    public virtual Aabb _GetAabb() => default!;
+
+    private static ulong __vsn_get_surface_count;
+    private static ulong __vsn_surface_get_array_len;
+    private static ulong __vsn_surface_get_array_index_len;
+    private static ulong __vsn_surface_get_format;
+    private static ulong __vsn_surface_get_primitive_type;
+    private static ulong __vsn_surface_set_material;
+    private static ulong __vsn_surface_get_material;
+    private static ulong __vsn_get_blend_shape_count;
+    private static ulong __vsn_get_blend_shape_name;
+    private static ulong __vsn_set_blend_shape_name;
+    private static ulong __vsn_get_aabb;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_surface_count == 0) __vsn_get_surface_count = StringNames.Get("_get_surface_count").Opaque;
+        if (nameSn == __vsn_get_surface_count)
+        {
+            *(long*)ret = unchecked((long)_GetSurfaceCount());
+            return true;
+        }
+        if (__vsn_surface_get_array_len == 0) __vsn_surface_get_array_len = StringNames.Get("_surface_get_array_len").Opaque;
+        if (nameSn == __vsn_surface_get_array_len)
+        {
+            *(long*)ret = unchecked((long)_SurfaceGetArrayLen(unchecked((int)(*(long*)args[0]))));
+            return true;
+        }
+        if (__vsn_surface_get_array_index_len == 0) __vsn_surface_get_array_index_len = StringNames.Get("_surface_get_array_index_len").Opaque;
+        if (nameSn == __vsn_surface_get_array_index_len)
+        {
+            *(long*)ret = unchecked((long)_SurfaceGetArrayIndexLen(unchecked((int)(*(long*)args[0]))));
+            return true;
+        }
+        if (__vsn_surface_get_format == 0) __vsn_surface_get_format = StringNames.Get("_surface_get_format").Opaque;
+        if (nameSn == __vsn_surface_get_format)
+        {
+            *(long*)ret = unchecked((long)_SurfaceGetFormat(unchecked((int)(*(long*)args[0]))));
+            return true;
+        }
+        if (__vsn_surface_get_primitive_type == 0) __vsn_surface_get_primitive_type = StringNames.Get("_surface_get_primitive_type").Opaque;
+        if (nameSn == __vsn_surface_get_primitive_type)
+        {
+            *(long*)ret = unchecked((long)_SurfaceGetPrimitiveType(unchecked((int)(*(long*)args[0]))));
+            return true;
+        }
+        if (__vsn_surface_set_material == 0) __vsn_surface_set_material = StringNames.Get("_surface_set_material").Opaque;
+        if (nameSn == __vsn_surface_set_material)
+        {
+            _SurfaceSetMaterial(unchecked((int)(*(long*)args[0])), (Material?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false));
+            return true;
+        }
+        if (__vsn_surface_get_material == 0) __vsn_surface_get_material = StringNames.Get("_surface_get_material").Opaque;
+        if (nameSn == __vsn_surface_get_material)
+        {
+            *(nint*)ret = _SurfaceGetMaterial(unchecked((int)(*(long*)args[0])))?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_get_blend_shape_count == 0) __vsn_get_blend_shape_count = StringNames.Get("_get_blend_shape_count").Opaque;
+        if (nameSn == __vsn_get_blend_shape_count)
+        {
+            *(long*)ret = unchecked((long)_GetBlendShapeCount());
+            return true;
+        }
+        if (__vsn_get_blend_shape_name == 0) __vsn_get_blend_shape_name = StringNames.Get("_get_blend_shape_name").Opaque;
+        if (nameSn == __vsn_get_blend_shape_name)
+        {
+            *(ulong*)ret = StringNames.CreateOwned(_GetBlendShapeName(unchecked((int)(*(long*)args[0]))) ?? "");
+            return true;
+        }
+        if (__vsn_set_blend_shape_name == 0) __vsn_set_blend_shape_name = StringNames.Get("_set_blend_shape_name").Opaque;
+        if (nameSn == __vsn_set_blend_shape_name)
+        {
+            _SetBlendShapeName(unchecked((int)(*(long*)args[0])), StringNames.Read(*(ulong*)args[1]));
+            return true;
+        }
+        if (__vsn_get_aabb == 0) __vsn_get_aabb = StringNames.Get("_get_aabb").Opaque;
+        if (nameSn == __vsn_get_aabb)
+        {
+            *(Aabb*)ret = _GetAabb();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class MeshConvexDecompositionSettings : RefCounted
 {
     internal MeshConvexDecompositionSettings(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MeshConvexDecompositionSettings() : this(InstanceBindings.ConstructRaw("MeshConvexDecompositionSettings"), true)
+    public MeshConvexDecompositionSettings() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MeshConvexDecompositionSettings");
     }
 
     public enum Mode : long
@@ -1477,9 +1666,9 @@ public unsafe partial class MeshDataTool : RefCounted
 {
     internal MeshDataTool(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MeshDataTool() : this(InstanceBindings.ConstructRaw("MeshDataTool"), true)
+    public MeshDataTool() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MeshDataTool");
     }
 
     private static nint __mb_clear;
@@ -1925,9 +2114,9 @@ public unsafe partial class MeshInstance2D : Node2D
 {
     internal MeshInstance2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MeshInstance2D() : this(InstanceBindings.ConstructRaw("MeshInstance2D"), false)
+    public MeshInstance2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MeshInstance2D");
     }
 
     private static nint __mb_set_mesh;
@@ -1997,9 +2186,9 @@ public unsafe partial class MeshInstance3D : GeometryInstance3D
 {
     internal MeshInstance3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MeshInstance3D() : this(InstanceBindings.ConstructRaw("MeshInstance3D"), false)
+    public MeshInstance3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MeshInstance3D");
     }
 
     private static nint __mb_set_mesh;
@@ -2318,9 +2507,9 @@ public unsafe partial class MeshLibrary : Resource
 {
     internal MeshLibrary(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MeshLibrary() : this(InstanceBindings.ConstructRaw("MeshLibrary"), true)
+    public MeshLibrary() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MeshLibrary");
     }
 
     private static nint __mb_create_item;
@@ -2711,9 +2900,9 @@ public unsafe partial class MeshTexture : Texture2D
 {
     internal MeshTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MeshTexture() : this(InstanceBindings.ConstructRaw("MeshTexture"), true)
+    public MeshTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MeshTexture");
     }
 
     private static nint __mb_set_mesh;
@@ -2814,9 +3003,9 @@ public unsafe partial class MethodTweener : Tweener
 {
     internal MethodTweener(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MethodTweener() : this(InstanceBindings.ConstructRaw("MethodTweener"), true)
+    public MethodTweener() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MethodTweener");
     }
 
     private static nint __mb_set_delay;
@@ -2878,9 +3067,9 @@ public unsafe partial class MissingNode : Node
 {
     internal MissingNode(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MissingNode() : this(InstanceBindings.ConstructRaw("MissingNode"), false)
+    public MissingNode() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MissingNode");
     }
 
     private static nint __mb_set_original_class;
@@ -3014,9 +3203,9 @@ public unsafe partial class MissingResource : Resource
 {
     internal MissingResource(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MissingResource() : this(InstanceBindings.ConstructRaw("MissingResource"), true)
+    public MissingResource() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MissingResource");
     }
 
     private static nint __mb_set_original_class;
@@ -3087,9 +3276,9 @@ public unsafe partial class MobileVRInterface : XRInterface
 {
     internal MobileVRInterface(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MobileVRInterface() : this(InstanceBindings.ConstructRaw("MobileVRInterface"), true)
+    public MobileVRInterface() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MobileVRInterface");
     }
 
     private static nint __mb_set_eye_height;
@@ -3407,9 +3596,9 @@ public unsafe partial class ModifierBoneTarget3D : SkeletonModifier3D
 {
     internal ModifierBoneTarget3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ModifierBoneTarget3D() : this(InstanceBindings.ConstructRaw("ModifierBoneTarget3D"), false)
+    public ModifierBoneTarget3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ModifierBoneTarget3D");
     }
 
     private static nint __mb_set_bone_name;
@@ -3480,9 +3669,9 @@ public unsafe partial class MovieWriter : GodotObject
 {
     internal MovieWriter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MovieWriter() : this(InstanceBindings.ConstructRaw("MovieWriter"), false)
+    public MovieWriter() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MovieWriter");
     }
 
     private static nint __mb_add_writer;
@@ -3500,15 +3689,66 @@ public unsafe partial class MovieWriter : GodotObject
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, 0);
     }
+
+    public virtual uint _GetAudioMixRate() => default!;
+
+    public virtual AudioServer.SpeakerMode _GetAudioSpeakerMode() => default!;
+
+    public virtual bool _HandlesFile(string path) => default!;
+
+    public virtual Error _WriteBegin(Vector2I movieSize, uint fps, string basePath) => default!;
+
+    public virtual void _WriteEnd() { }
+
+    private static ulong __vsn_get_audio_mix_rate;
+    private static ulong __vsn_get_audio_speaker_mode;
+    private static ulong __vsn_handles_file;
+    private static ulong __vsn_write_begin;
+    private static ulong __vsn_write_end;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_audio_mix_rate == 0) __vsn_get_audio_mix_rate = StringNames.Get("_get_audio_mix_rate").Opaque;
+        if (nameSn == __vsn_get_audio_mix_rate)
+        {
+            *(long*)ret = unchecked((long)_GetAudioMixRate());
+            return true;
+        }
+        if (__vsn_get_audio_speaker_mode == 0) __vsn_get_audio_speaker_mode = StringNames.Get("_get_audio_speaker_mode").Opaque;
+        if (nameSn == __vsn_get_audio_speaker_mode)
+        {
+            *(long*)ret = (long)_GetAudioSpeakerMode();
+            return true;
+        }
+        if (__vsn_handles_file == 0) __vsn_handles_file = StringNames.Get("_handles_file").Opaque;
+        if (nameSn == __vsn_handles_file)
+        {
+            *(byte*)ret = _HandlesFile(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_write_begin == 0) __vsn_write_begin = StringNames.Get("_write_begin").Opaque;
+        if (nameSn == __vsn_write_begin)
+        {
+            *(long*)ret = (long)_WriteBegin(*(Vector2I*)args[0], unchecked((uint)(*(long*)args[1])), NativeString.Read(*(ulong*)args[2]));
+            return true;
+        }
+        if (__vsn_write_end == 0) __vsn_write_end = StringNames.Get("_write_end").Opaque;
+        if (nameSn == __vsn_write_end)
+        {
+            _WriteEnd();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class MultiMesh : Resource
 {
     internal MultiMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MultiMesh() : this(InstanceBindings.ConstructRaw("MultiMesh"), true)
+    public MultiMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MultiMesh");
     }
 
     public enum TransformFormat : long
@@ -3964,9 +4204,9 @@ public unsafe partial class MultiMeshInstance2D : Node2D
 {
     internal MultiMeshInstance2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MultiMeshInstance2D() : this(InstanceBindings.ConstructRaw("MultiMeshInstance2D"), false)
+    public MultiMeshInstance2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MultiMeshInstance2D");
     }
 
     private static nint __mb_set_multimesh;
@@ -4036,9 +4276,9 @@ public unsafe partial class MultiMeshInstance3D : GeometryInstance3D
 {
     internal MultiMeshInstance3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MultiMeshInstance3D() : this(InstanceBindings.ConstructRaw("MultiMeshInstance3D"), false)
+    public MultiMeshInstance3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MultiMeshInstance3D");
     }
 
     private static nint __mb_set_multimesh;
@@ -4241,9 +4481,60 @@ public unsafe partial class MultiplayerAPIExtension : MultiplayerAPI
 {
     internal MultiplayerAPIExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MultiplayerAPIExtension() : this(InstanceBindings.ConstructRaw("MultiplayerAPIExtension"), true)
+    public MultiplayerAPIExtension() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MultiplayerAPIExtension");
+    }
+
+    public virtual Error _Poll() => default!;
+
+    public virtual void _SetMultiplayerPeer(MultiplayerPeer? multiplayerPeer) { }
+
+    public virtual MultiplayerPeer? _GetMultiplayerPeer() => default!;
+
+    public virtual int _GetUniqueId() => default!;
+
+    public virtual int _GetRemoteSenderId() => default!;
+
+    private static ulong __vsn_poll;
+    private static ulong __vsn_set_multiplayer_peer;
+    private static ulong __vsn_get_multiplayer_peer;
+    private static ulong __vsn_get_unique_id;
+    private static ulong __vsn_get_remote_sender_id;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_poll == 0) __vsn_poll = StringNames.Get("_poll").Opaque;
+        if (nameSn == __vsn_poll)
+        {
+            *(long*)ret = (long)_Poll();
+            return true;
+        }
+        if (__vsn_set_multiplayer_peer == 0) __vsn_set_multiplayer_peer = StringNames.Get("_set_multiplayer_peer").Opaque;
+        if (nameSn == __vsn_set_multiplayer_peer)
+        {
+            _SetMultiplayerPeer((MultiplayerPeer?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_get_multiplayer_peer == 0) __vsn_get_multiplayer_peer = StringNames.Get("_get_multiplayer_peer").Opaque;
+        if (nameSn == __vsn_get_multiplayer_peer)
+        {
+            *(nint*)ret = _GetMultiplayerPeer()?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_get_unique_id == 0) __vsn_get_unique_id = StringNames.Get("_get_unique_id").Opaque;
+        if (nameSn == __vsn_get_unique_id)
+        {
+            *(long*)ret = unchecked((long)_GetUniqueId());
+            return true;
+        }
+        if (__vsn_get_remote_sender_id == 0) __vsn_get_remote_sender_id = StringNames.Get("_get_remote_sender_id").Opaque;
+        if (nameSn == __vsn_get_remote_sender_id)
+        {
+            *(long*)ret = unchecked((long)_GetRemoteSenderId());
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -4528,9 +4819,186 @@ public unsafe partial class MultiplayerPeerExtension : MultiplayerPeer
 {
     internal MultiplayerPeerExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MultiplayerPeerExtension() : this(InstanceBindings.ConstructRaw("MultiplayerPeerExtension"), true)
+    public MultiplayerPeerExtension() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MultiplayerPeerExtension");
+    }
+
+    public virtual int _GetAvailablePacketCount() => default!;
+
+    public virtual int _GetMaxPacketSize() => default!;
+
+    public virtual int _GetPacketChannel() => default!;
+
+    public virtual MultiplayerPeer.TransferMode _GetPacketMode() => default!;
+
+    public virtual void _SetTransferChannel(int channel) { }
+
+    public virtual int _GetTransferChannel() => default!;
+
+    public virtual void _SetTransferMode(MultiplayerPeer.TransferMode mode) { }
+
+    public virtual MultiplayerPeer.TransferMode _GetTransferMode() => default!;
+
+    public virtual void _SetTargetPeer(int peer) { }
+
+    public virtual int _GetPacketPeer() => default!;
+
+    public virtual bool _IsServer() => default!;
+
+    public virtual void _Poll() { }
+
+    public virtual void _Close() { }
+
+    public virtual void _DisconnectPeer(int peer, bool force) { }
+
+    public virtual int _GetUniqueId() => default!;
+
+    public virtual void _SetRefuseNewConnections(bool enable) { }
+
+    public virtual bool _IsRefusingNewConnections() => default!;
+
+    public virtual bool _IsServerRelaySupported() => default!;
+
+    public virtual MultiplayerPeer.ConnectionStatus _GetConnectionStatus() => default!;
+
+    private static ulong __vsn_get_available_packet_count;
+    private static ulong __vsn_get_max_packet_size;
+    private static ulong __vsn_get_packet_channel;
+    private static ulong __vsn_get_packet_mode;
+    private static ulong __vsn_set_transfer_channel;
+    private static ulong __vsn_get_transfer_channel;
+    private static ulong __vsn_set_transfer_mode;
+    private static ulong __vsn_get_transfer_mode;
+    private static ulong __vsn_set_target_peer;
+    private static ulong __vsn_get_packet_peer;
+    private static ulong __vsn_is_server;
+    private static ulong __vsn_poll;
+    private static ulong __vsn_close;
+    private static ulong __vsn_disconnect_peer;
+    private static ulong __vsn_get_unique_id;
+    private static ulong __vsn_set_refuse_new_connections;
+    private static ulong __vsn_is_refusing_new_connections;
+    private static ulong __vsn_is_server_relay_supported;
+    private static ulong __vsn_get_connection_status;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_available_packet_count == 0) __vsn_get_available_packet_count = StringNames.Get("_get_available_packet_count").Opaque;
+        if (nameSn == __vsn_get_available_packet_count)
+        {
+            *(long*)ret = unchecked((long)_GetAvailablePacketCount());
+            return true;
+        }
+        if (__vsn_get_max_packet_size == 0) __vsn_get_max_packet_size = StringNames.Get("_get_max_packet_size").Opaque;
+        if (nameSn == __vsn_get_max_packet_size)
+        {
+            *(long*)ret = unchecked((long)_GetMaxPacketSize());
+            return true;
+        }
+        if (__vsn_get_packet_channel == 0) __vsn_get_packet_channel = StringNames.Get("_get_packet_channel").Opaque;
+        if (nameSn == __vsn_get_packet_channel)
+        {
+            *(long*)ret = unchecked((long)_GetPacketChannel());
+            return true;
+        }
+        if (__vsn_get_packet_mode == 0) __vsn_get_packet_mode = StringNames.Get("_get_packet_mode").Opaque;
+        if (nameSn == __vsn_get_packet_mode)
+        {
+            *(long*)ret = (long)_GetPacketMode();
+            return true;
+        }
+        if (__vsn_set_transfer_channel == 0) __vsn_set_transfer_channel = StringNames.Get("_set_transfer_channel").Opaque;
+        if (nameSn == __vsn_set_transfer_channel)
+        {
+            _SetTransferChannel(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_transfer_channel == 0) __vsn_get_transfer_channel = StringNames.Get("_get_transfer_channel").Opaque;
+        if (nameSn == __vsn_get_transfer_channel)
+        {
+            *(long*)ret = unchecked((long)_GetTransferChannel());
+            return true;
+        }
+        if (__vsn_set_transfer_mode == 0) __vsn_set_transfer_mode = StringNames.Get("_set_transfer_mode").Opaque;
+        if (nameSn == __vsn_set_transfer_mode)
+        {
+            _SetTransferMode((MultiplayerPeer.TransferMode)(*(long*)args[0]));
+            return true;
+        }
+        if (__vsn_get_transfer_mode == 0) __vsn_get_transfer_mode = StringNames.Get("_get_transfer_mode").Opaque;
+        if (nameSn == __vsn_get_transfer_mode)
+        {
+            *(long*)ret = (long)_GetTransferMode();
+            return true;
+        }
+        if (__vsn_set_target_peer == 0) __vsn_set_target_peer = StringNames.Get("_set_target_peer").Opaque;
+        if (nameSn == __vsn_set_target_peer)
+        {
+            _SetTargetPeer(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_packet_peer == 0) __vsn_get_packet_peer = StringNames.Get("_get_packet_peer").Opaque;
+        if (nameSn == __vsn_get_packet_peer)
+        {
+            *(long*)ret = unchecked((long)_GetPacketPeer());
+            return true;
+        }
+        if (__vsn_is_server == 0) __vsn_is_server = StringNames.Get("_is_server").Opaque;
+        if (nameSn == __vsn_is_server)
+        {
+            *(byte*)ret = _IsServer() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_poll == 0) __vsn_poll = StringNames.Get("_poll").Opaque;
+        if (nameSn == __vsn_poll)
+        {
+            _Poll();
+            return true;
+        }
+        if (__vsn_close == 0) __vsn_close = StringNames.Get("_close").Opaque;
+        if (nameSn == __vsn_close)
+        {
+            _Close();
+            return true;
+        }
+        if (__vsn_disconnect_peer == 0) __vsn_disconnect_peer = StringNames.Get("_disconnect_peer").Opaque;
+        if (nameSn == __vsn_disconnect_peer)
+        {
+            _DisconnectPeer(unchecked((int)(*(long*)args[0])), *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_get_unique_id == 0) __vsn_get_unique_id = StringNames.Get("_get_unique_id").Opaque;
+        if (nameSn == __vsn_get_unique_id)
+        {
+            *(long*)ret = unchecked((long)_GetUniqueId());
+            return true;
+        }
+        if (__vsn_set_refuse_new_connections == 0) __vsn_set_refuse_new_connections = StringNames.Get("_set_refuse_new_connections").Opaque;
+        if (nameSn == __vsn_set_refuse_new_connections)
+        {
+            _SetRefuseNewConnections(*(byte*)args[0] != 0);
+            return true;
+        }
+        if (__vsn_is_refusing_new_connections == 0) __vsn_is_refusing_new_connections = StringNames.Get("_is_refusing_new_connections").Opaque;
+        if (nameSn == __vsn_is_refusing_new_connections)
+        {
+            *(byte*)ret = _IsRefusingNewConnections() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_is_server_relay_supported == 0) __vsn_is_server_relay_supported = StringNames.Get("_is_server_relay_supported").Opaque;
+        if (nameSn == __vsn_is_server_relay_supported)
+        {
+            *(byte*)ret = _IsServerRelaySupported() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_connection_status == 0) __vsn_get_connection_status = StringNames.Get("_get_connection_status").Opaque;
+        if (nameSn == __vsn_get_connection_status)
+        {
+            *(long*)ret = (long)_GetConnectionStatus();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -4538,9 +5006,9 @@ public unsafe partial class MultiplayerSpawner : Node
 {
     internal MultiplayerSpawner(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MultiplayerSpawner() : this(InstanceBindings.ConstructRaw("MultiplayerSpawner"), false)
+    public MultiplayerSpawner() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MultiplayerSpawner");
     }
 
     private static nint __mb_add_spawnable_scene;
@@ -4642,9 +5110,9 @@ public unsafe partial class MultiplayerSynchronizer : Node
 {
     internal MultiplayerSynchronizer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public MultiplayerSynchronizer() : this(InstanceBindings.ConstructRaw("MultiplayerSynchronizer"), false)
+    public MultiplayerSynchronizer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "MultiplayerSynchronizer");
     }
 
     public enum VisibilityUpdateMode : long
@@ -4866,9 +5334,9 @@ public unsafe partial class Mutex : RefCounted
 {
     internal Mutex(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Mutex() : this(InstanceBindings.ConstructRaw("Mutex"), true)
+    public Mutex() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Mutex");
     }
 
     private static nint __mb_lock;

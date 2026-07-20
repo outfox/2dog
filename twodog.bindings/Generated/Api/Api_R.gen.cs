@@ -14,9 +14,9 @@ public unsafe partial class RDAccelerationStructureGeometry : RefCounted
 {
     internal RDAccelerationStructureGeometry(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDAccelerationStructureGeometry() : this(InstanceBindings.ConstructRaw("RDAccelerationStructureGeometry"), true)
+    public RDAccelerationStructureGeometry() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDAccelerationStructureGeometry");
     }
 
     private static nint __mb_set_flags;
@@ -303,9 +303,9 @@ public unsafe partial class RDAccelerationStructureInstance : RefCounted
 {
     internal RDAccelerationStructureInstance(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDAccelerationStructureInstance() : this(InstanceBindings.ConstructRaw("RDAccelerationStructureInstance"), true)
+    public RDAccelerationStructureInstance() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDAccelerationStructureInstance");
     }
 
     private static nint __mb_set_transform;
@@ -499,9 +499,9 @@ public unsafe partial class RDAttachmentFormat : RefCounted
 {
     internal RDAttachmentFormat(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDAttachmentFormat() : this(InstanceBindings.ConstructRaw("RDAttachmentFormat"), true)
+    public RDAttachmentFormat() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDAttachmentFormat");
     }
 
     private static nint __mb_set_format;
@@ -602,9 +602,9 @@ public unsafe partial class RDFramebufferPass : RefCounted
 {
     internal RDFramebufferPass(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDFramebufferPass() : this(InstanceBindings.ConstructRaw("RDFramebufferPass"), true)
+    public RDFramebufferPass() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDFramebufferPass");
     }
 
     private static nint __mb_set_depth_attachment;
@@ -643,9 +643,9 @@ public unsafe partial class RDHitGroup : RefCounted
 {
     internal RDHitGroup(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDHitGroup() : this(InstanceBindings.ConstructRaw("RDHitGroup"), true)
+    public RDHitGroup() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDHitGroup");
     }
 
     private static nint __mb_set_closest_hit_shader;
@@ -746,9 +746,9 @@ public unsafe partial class RDPipelineColorBlendState : RefCounted
 {
     internal RDPipelineColorBlendState(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDPipelineColorBlendState() : this(InstanceBindings.ConstructRaw("RDPipelineColorBlendState"), true)
+    public RDPipelineColorBlendState() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDPipelineColorBlendState");
     }
 
     private static nint __mb_set_enable_logic_op;
@@ -849,9 +849,9 @@ public unsafe partial class RDPipelineColorBlendStateAttachment : RefCounted
 {
     internal RDPipelineColorBlendStateAttachment(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDPipelineColorBlendStateAttachment() : this(InstanceBindings.ConstructRaw("RDPipelineColorBlendStateAttachment"), true)
+    public RDPipelineColorBlendStateAttachment() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDPipelineColorBlendStateAttachment");
     }
 
     private static nint __mb_set_as_mix;
@@ -1213,9 +1213,9 @@ public unsafe partial class RDPipelineDepthStencilState : RefCounted
 {
     internal RDPipelineDepthStencilState(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDPipelineDepthStencilState() : this(InstanceBindings.ConstructRaw("RDPipelineDepthStencilState"), true)
+    public RDPipelineDepthStencilState() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDPipelineDepthStencilState");
     }
 
     private static nint __mb_set_enable_depth_test;
@@ -1874,9 +1874,9 @@ public unsafe partial class RDPipelineMultisampleState : RefCounted
 {
     internal RDPipelineMultisampleState(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDPipelineMultisampleState() : this(InstanceBindings.ConstructRaw("RDPipelineMultisampleState"), true)
+    public RDPipelineMultisampleState() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDPipelineMultisampleState");
     }
 
     private static nint __mb_set_sample_count;
@@ -2039,9 +2039,9 @@ public unsafe partial class RDPipelineRasterizationState : RefCounted
 {
     internal RDPipelineRasterizationState(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDPipelineRasterizationState() : this(InstanceBindings.ConstructRaw("RDPipelineRasterizationState"), true)
+    public RDPipelineRasterizationState() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDPipelineRasterizationState");
     }
 
     private static nint __mb_set_enable_depth_clamp;
@@ -2390,9 +2390,9 @@ public unsafe partial class RDPipelineShader : RefCounted
 {
     internal RDPipelineShader(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDPipelineShader() : this(InstanceBindings.ConstructRaw("RDPipelineShader"), true)
+    public RDPipelineShader() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDPipelineShader");
     }
 
     private static nint __mb_set_shader;
@@ -2431,9 +2431,9 @@ public unsafe partial class RDPipelineSpecializationConstant : RefCounted
 {
     internal RDPipelineSpecializationConstant(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDPipelineSpecializationConstant() : this(InstanceBindings.ConstructRaw("RDPipelineSpecializationConstant"), true)
+    public RDPipelineSpecializationConstant() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDPipelineSpecializationConstant");
     }
 
     private static nint __mb_set_constant_id;
@@ -2472,9 +2472,9 @@ public unsafe partial class RDSamplerState : RefCounted
 {
     internal RDSamplerState(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDSamplerState() : this(InstanceBindings.ConstructRaw("RDSamplerState"), true)
+    public RDSamplerState() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDSamplerState");
     }
 
     private static nint __mb_set_mag_filter;
@@ -2947,9 +2947,9 @@ public unsafe partial class RDShaderFile : Resource
 {
     internal RDShaderFile(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDShaderFile() : this(InstanceBindings.ConstructRaw("RDShaderFile"), true)
+    public RDShaderFile() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDShaderFile");
     }
 
     private static nint __mb_set_bytecode;
@@ -3025,9 +3025,9 @@ public unsafe partial class RDShaderSPIRV : Resource
 {
     internal RDShaderSPIRV(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDShaderSPIRV() : this(InstanceBindings.ConstructRaw("RDShaderSPIRV"), true)
+    public RDShaderSPIRV() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDShaderSPIRV");
     }
 
     private static nint __mb_set_stage_compile_error;
@@ -3072,9 +3072,9 @@ public unsafe partial class RDShaderSource : RefCounted
 {
     internal RDShaderSource(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDShaderSource() : this(InstanceBindings.ConstructRaw("RDShaderSource"), true)
+    public RDShaderSource() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDShaderSource");
     }
 
     private static nint __mb_set_stage_source;
@@ -3150,9 +3150,9 @@ public unsafe partial class RDTextureFormat : RefCounted
 {
     internal RDTextureFormat(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDTextureFormat() : this(InstanceBindings.ConstructRaw("RDTextureFormat"), true)
+    public RDTextureFormat() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDTextureFormat");
     }
 
     private static nint __mb_set_format;
@@ -3533,9 +3533,9 @@ public unsafe partial class RDTextureView : RefCounted
 {
     internal RDTextureView(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDTextureView() : this(InstanceBindings.ConstructRaw("RDTextureView"), true)
+    public RDTextureView() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDTextureView");
     }
 
     private static nint __mb_set_format_override;
@@ -3698,9 +3698,9 @@ public unsafe partial class RDUniform : RefCounted
 {
     internal RDUniform(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDUniform() : this(InstanceBindings.ConstructRaw("RDUniform"), true)
+    public RDUniform() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDUniform");
     }
 
     private static nint __mb_set_uniform_type;
@@ -3799,9 +3799,9 @@ public unsafe partial class RDVertexAttribute : RefCounted
 {
     internal RDVertexAttribute(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RDVertexAttribute() : this(InstanceBindings.ConstructRaw("RDVertexAttribute"), true)
+    public RDVertexAttribute() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RDVertexAttribute");
     }
 
     private static nint __mb_set_binding;
@@ -3995,9 +3995,9 @@ public unsafe partial class RandomNumberGenerator : RefCounted
 {
     internal RandomNumberGenerator(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RandomNumberGenerator() : this(InstanceBindings.ConstructRaw("RandomNumberGenerator"), true)
+    public RandomNumberGenerator() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RandomNumberGenerator");
     }
 
     private static nint __mb_set_seed;
@@ -4170,9 +4170,9 @@ public unsafe partial class Range : Control
 {
     internal Range(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Range() : this(InstanceBindings.ConstructRaw("Range"), false)
+    public Range() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Range");
     }
 
     private static nint __mb_get_value;
@@ -4529,15 +4529,30 @@ public unsafe partial class Range : Control
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
+
+    public virtual void _ValueChanged(double newValue) { }
+
+    private static ulong __vsn_value_changed;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_value_changed == 0) __vsn_value_changed = StringNames.Get("_value_changed").Opaque;
+        if (nameSn == __vsn_value_changed)
+        {
+            _ValueChanged(*(double*)args[0]);
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class RayCast2D : Node2D
 {
     internal RayCast2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RayCast2D() : this(InstanceBindings.ConstructRaw("RayCast2D"), false)
+    public RayCast2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RayCast2D");
     }
 
     private static nint __mb_set_enabled;
@@ -4978,9 +4993,9 @@ public unsafe partial class RayCast3D : Node3D
 {
     internal RayCast3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RayCast3D() : this(InstanceBindings.ConstructRaw("RayCast3D"), false)
+    public RayCast3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RayCast3D");
     }
 
     private static nint __mb_set_enabled;
@@ -5529,9 +5544,9 @@ public unsafe partial class RectangleShape2D : Shape2D
 {
     internal RectangleShape2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RectangleShape2D() : this(InstanceBindings.ConstructRaw("RectangleShape2D"), true)
+    public RectangleShape2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RectangleShape2D");
     }
 
     private static nint __mb_set_size;
@@ -5570,9 +5585,9 @@ public unsafe partial class RefCounted : GodotObject
 {
     internal RefCounted(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RefCounted() : this(InstanceBindings.ConstructRaw("RefCounted"), true)
+    public RefCounted() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RefCounted");
     }
 
     private static nint __mb_init_ref;
@@ -5640,9 +5655,9 @@ public unsafe partial class ReferenceRect : Control
 {
     internal ReferenceRect(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ReferenceRect() : this(InstanceBindings.ConstructRaw("ReferenceRect"), false)
+    public ReferenceRect() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ReferenceRect");
     }
 
     private static nint __mb_get_border_color;
@@ -5743,9 +5758,9 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
 {
     internal ReflectionProbe(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ReflectionProbe() : this(InstanceBindings.ConstructRaw("ReflectionProbe"), false)
+    public ReflectionProbe() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ReflectionProbe");
     }
 
     public enum UpdateMode : long
@@ -6231,9 +6246,9 @@ public unsafe partial class RegEx : RefCounted
 {
     internal RegEx(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RegEx() : this(InstanceBindings.ConstructRaw("RegEx"), true)
+    public RegEx() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RegEx");
     }
 
     private static nint __mb_create_from_string;
@@ -6377,9 +6392,9 @@ public unsafe partial class RegExMatch : RefCounted
 {
     internal RegExMatch(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RegExMatch() : this(InstanceBindings.ConstructRaw("RegExMatch"), true)
+    public RegExMatch() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RegExMatch");
     }
 
     private static nint __mb_get_subject;
@@ -6417,9 +6432,9 @@ public unsafe partial class RemoteTransform2D : Node2D
 {
     internal RemoteTransform2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RemoteTransform2D() : this(InstanceBindings.ConstructRaw("RemoteTransform2D"), false)
+    public RemoteTransform2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RemoteTransform2D");
     }
 
     private static nint __mb_force_update_cache;
@@ -6564,9 +6579,9 @@ public unsafe partial class RemoteTransform3D : Node3D
 {
     internal RemoteTransform3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RemoteTransform3D() : this(InstanceBindings.ConstructRaw("RemoteTransform3D"), false)
+    public RemoteTransform3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RemoteTransform3D");
     }
 
     private static nint __mb_force_update_cache;
@@ -6776,9 +6791,51 @@ public unsafe partial class RenderDataExtension : RenderData
 {
     internal RenderDataExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RenderDataExtension() : this(InstanceBindings.ConstructRaw("RenderDataExtension"), false)
+    public RenderDataExtension() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RenderDataExtension");
+    }
+
+    public virtual RenderSceneBuffers? _GetRenderSceneBuffers() => default!;
+
+    public virtual RenderSceneData? _GetRenderSceneData() => default!;
+
+    public virtual Rid _GetEnvironment() => default!;
+
+    public virtual Rid _GetCameraAttributes() => default!;
+
+    private static ulong __vsn_get_render_scene_buffers;
+    private static ulong __vsn_get_render_scene_data;
+    private static ulong __vsn_get_environment;
+    private static ulong __vsn_get_camera_attributes;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_render_scene_buffers == 0) __vsn_get_render_scene_buffers = StringNames.Get("_get_render_scene_buffers").Opaque;
+        if (nameSn == __vsn_get_render_scene_buffers)
+        {
+            *(nint*)ret = _GetRenderSceneBuffers()?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_get_render_scene_data == 0) __vsn_get_render_scene_data = StringNames.Get("_get_render_scene_data").Opaque;
+        if (nameSn == __vsn_get_render_scene_data)
+        {
+            *(nint*)ret = _GetRenderSceneData()?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_get_environment == 0) __vsn_get_environment = StringNames.Get("_get_environment").Opaque;
+        if (nameSn == __vsn_get_environment)
+        {
+            *(Rid*)ret = _GetEnvironment();
+            return true;
+        }
+        if (__vsn_get_camera_attributes == 0) __vsn_get_camera_attributes = StringNames.Get("_get_camera_attributes").Opaque;
+        if (nameSn == __vsn_get_camera_attributes)
+        {
+            *(Rid*)ret = _GetCameraAttributes();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -6786,9 +6843,9 @@ public unsafe partial class RenderDataRD : RenderData
 {
     internal RenderDataRD(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RenderDataRD() : this(InstanceBindings.ConstructRaw("RenderDataRD"), false)
+    public RenderDataRD() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RenderDataRD");
     }
 }
 
@@ -6817,9 +6874,9 @@ public unsafe partial class RenderSceneBuffersConfiguration : RefCounted
 {
     internal RenderSceneBuffersConfiguration(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RenderSceneBuffersConfiguration() : this(InstanceBindings.ConstructRaw("RenderSceneBuffersConfiguration"), true)
+    public RenderSceneBuffersConfiguration() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RenderSceneBuffersConfiguration");
     }
 
     private static nint __mb_get_render_target;
@@ -7137,9 +7194,60 @@ public unsafe partial class RenderSceneBuffersExtension : RenderSceneBuffers
 {
     internal RenderSceneBuffersExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RenderSceneBuffersExtension() : this(InstanceBindings.ConstructRaw("RenderSceneBuffersExtension"), true)
+    public RenderSceneBuffersExtension() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RenderSceneBuffersExtension");
+    }
+
+    public virtual void _Configure(RenderSceneBuffersConfiguration? config) { }
+
+    public virtual void _SetFsrSharpness(float fsrSharpness) { }
+
+    public virtual void _SetTextureMipmapBias(float textureMipmapBias) { }
+
+    public virtual void _SetAnisotropicFilteringLevel(int anisotropicFilteringLevel) { }
+
+    public virtual void _SetUseDebanding(bool useDebanding) { }
+
+    private static ulong __vsn_configure;
+    private static ulong __vsn_set_fsr_sharpness;
+    private static ulong __vsn_set_texture_mipmap_bias;
+    private static ulong __vsn_set_anisotropic_filtering_level;
+    private static ulong __vsn_set_use_debanding;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_configure == 0) __vsn_configure = StringNames.Get("_configure").Opaque;
+        if (nameSn == __vsn_configure)
+        {
+            _Configure((RenderSceneBuffersConfiguration?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        if (__vsn_set_fsr_sharpness == 0) __vsn_set_fsr_sharpness = StringNames.Get("_set_fsr_sharpness").Opaque;
+        if (nameSn == __vsn_set_fsr_sharpness)
+        {
+            _SetFsrSharpness((float)(*(double*)args[0]));
+            return true;
+        }
+        if (__vsn_set_texture_mipmap_bias == 0) __vsn_set_texture_mipmap_bias = StringNames.Get("_set_texture_mipmap_bias").Opaque;
+        if (nameSn == __vsn_set_texture_mipmap_bias)
+        {
+            _SetTextureMipmapBias((float)(*(double*)args[0]));
+            return true;
+        }
+        if (__vsn_set_anisotropic_filtering_level == 0) __vsn_set_anisotropic_filtering_level = StringNames.Get("_set_anisotropic_filtering_level").Opaque;
+        if (nameSn == __vsn_set_anisotropic_filtering_level)
+        {
+            _SetAnisotropicFilteringLevel(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_set_use_debanding == 0) __vsn_set_use_debanding = StringNames.Get("_set_use_debanding").Opaque;
+        if (nameSn == __vsn_set_use_debanding)
+        {
+            _SetUseDebanding(*(byte*)args[0] != 0);
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -7147,9 +7255,9 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
 {
     internal RenderSceneBuffersRD(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RenderSceneBuffersRD() : this(InstanceBindings.ConstructRaw("RenderSceneBuffersRD"), true)
+    public RenderSceneBuffersRD() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RenderSceneBuffersRD");
     }
 
     private static nint __mb_has_texture;
@@ -7779,9 +7887,69 @@ public unsafe partial class RenderSceneDataExtension : RenderSceneData
 {
     internal RenderSceneDataExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RenderSceneDataExtension() : this(InstanceBindings.ConstructRaw("RenderSceneDataExtension"), false)
+    public RenderSceneDataExtension() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RenderSceneDataExtension");
+    }
+
+    public virtual Transform3D _GetCamTransform() => default!;
+
+    public virtual Projection _GetCamProjection() => default!;
+
+    public virtual uint _GetViewCount() => default!;
+
+    public virtual Vector3 _GetViewEyeOffset(uint view) => default!;
+
+    public virtual Projection _GetViewProjection(uint view) => default!;
+
+    public virtual Rid _GetUniformBuffer() => default!;
+
+    private static ulong __vsn_get_cam_transform;
+    private static ulong __vsn_get_cam_projection;
+    private static ulong __vsn_get_view_count;
+    private static ulong __vsn_get_view_eye_offset;
+    private static ulong __vsn_get_view_projection;
+    private static ulong __vsn_get_uniform_buffer;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_cam_transform == 0) __vsn_get_cam_transform = StringNames.Get("_get_cam_transform").Opaque;
+        if (nameSn == __vsn_get_cam_transform)
+        {
+            *(Transform3D*)ret = _GetCamTransform();
+            return true;
+        }
+        if (__vsn_get_cam_projection == 0) __vsn_get_cam_projection = StringNames.Get("_get_cam_projection").Opaque;
+        if (nameSn == __vsn_get_cam_projection)
+        {
+            *(Projection*)ret = _GetCamProjection();
+            return true;
+        }
+        if (__vsn_get_view_count == 0) __vsn_get_view_count = StringNames.Get("_get_view_count").Opaque;
+        if (nameSn == __vsn_get_view_count)
+        {
+            *(long*)ret = unchecked((long)_GetViewCount());
+            return true;
+        }
+        if (__vsn_get_view_eye_offset == 0) __vsn_get_view_eye_offset = StringNames.Get("_get_view_eye_offset").Opaque;
+        if (nameSn == __vsn_get_view_eye_offset)
+        {
+            *(Vector3*)ret = _GetViewEyeOffset(unchecked((uint)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_view_projection == 0) __vsn_get_view_projection = StringNames.Get("_get_view_projection").Opaque;
+        if (nameSn == __vsn_get_view_projection)
+        {
+            *(Projection*)ret = _GetViewProjection(unchecked((uint)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_uniform_buffer == 0) __vsn_get_uniform_buffer = StringNames.Get("_get_uniform_buffer").Opaque;
+        if (nameSn == __vsn_get_uniform_buffer)
+        {
+            *(Rid*)ret = _GetUniformBuffer();
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -7789,9 +7957,9 @@ public unsafe partial class RenderSceneDataRD : RenderSceneData
 {
     internal RenderSceneDataRD(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RenderSceneDataRD() : this(InstanceBindings.ConstructRaw("RenderSceneDataRD"), false)
+    public RenderSceneDataRD() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RenderSceneDataRD");
     }
 }
 
@@ -19976,9 +20144,9 @@ public unsafe partial class Resource : RefCounted
 {
     internal Resource(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Resource() : this(InstanceBindings.ConstructRaw("Resource"), true)
+    public Resource() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Resource");
     }
 
     public enum DeepDuplicateMode : long
@@ -20340,15 +20508,57 @@ public unsafe partial class Resource : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
+
+    public virtual void _SetupLocalToScene() { }
+
+    public virtual Rid _GetRid() => default!;
+
+    public virtual void _ResetState() { }
+
+    public virtual void _SetPathCache(string path) { }
+
+    private static ulong __vsn_setup_local_to_scene;
+    private static ulong __vsn_get_rid;
+    private static ulong __vsn_reset_state;
+    private static ulong __vsn_set_path_cache;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_setup_local_to_scene == 0) __vsn_setup_local_to_scene = StringNames.Get("_setup_local_to_scene").Opaque;
+        if (nameSn == __vsn_setup_local_to_scene)
+        {
+            _SetupLocalToScene();
+            return true;
+        }
+        if (__vsn_get_rid == 0) __vsn_get_rid = StringNames.Get("_get_rid").Opaque;
+        if (nameSn == __vsn_get_rid)
+        {
+            *(Rid*)ret = _GetRid();
+            return true;
+        }
+        if (__vsn_reset_state == 0) __vsn_reset_state = StringNames.Get("_reset_state").Opaque;
+        if (nameSn == __vsn_reset_state)
+        {
+            _ResetState();
+            return true;
+        }
+        if (__vsn_set_path_cache == 0) __vsn_set_path_cache = StringNames.Get("_set_path_cache").Opaque;
+        if (nameSn == __vsn_set_path_cache)
+        {
+            _SetPathCache(NativeString.Read(*(ulong*)args[0]));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class ResourceFormatLoader : RefCounted
 {
     internal ResourceFormatLoader(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceFormatLoader() : this(InstanceBindings.ConstructRaw("ResourceFormatLoader"), true)
+    public ResourceFormatLoader() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceFormatLoader");
     }
 
     public enum CacheMode : long
@@ -20359,15 +20569,117 @@ public unsafe partial class ResourceFormatLoader : RefCounted
         CACHE_MODE_IGNORE_DEEP = 3,
         CACHE_MODE_REPLACE_DEEP = 4,
     }
+
+    public virtual bool _RecognizePath(string path, string type) => default!;
+
+    public virtual bool _HandlesType(string type) => default!;
+
+    public virtual string _GetResourceType(string path) => default!;
+
+    public virtual string _GetResourceScriptClass(string path) => default!;
+
+    public virtual long _GetResourceUid(string path) => default!;
+
+    public virtual bool _Exists(string path) => default!;
+
+    private static ulong __vsn_recognize_path;
+    private static ulong __vsn_handles_type;
+    private static ulong __vsn_get_resource_type;
+    private static ulong __vsn_get_resource_script_class;
+    private static ulong __vsn_get_resource_uid;
+    private static ulong __vsn_exists;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_recognize_path == 0) __vsn_recognize_path = StringNames.Get("_recognize_path").Opaque;
+        if (nameSn == __vsn_recognize_path)
+        {
+            *(byte*)ret = _RecognizePath(NativeString.Read(*(ulong*)args[0]), StringNames.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_handles_type == 0) __vsn_handles_type = StringNames.Get("_handles_type").Opaque;
+        if (nameSn == __vsn_handles_type)
+        {
+            *(byte*)ret = _HandlesType(StringNames.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_resource_type == 0) __vsn_get_resource_type = StringNames.Get("_get_resource_type").Opaque;
+        if (nameSn == __vsn_get_resource_type)
+        {
+            *(ulong*)ret = NativeString.Create(_GetResourceType(NativeString.Read(*(ulong*)args[0])) ?? "");
+            return true;
+        }
+        if (__vsn_get_resource_script_class == 0) __vsn_get_resource_script_class = StringNames.Get("_get_resource_script_class").Opaque;
+        if (nameSn == __vsn_get_resource_script_class)
+        {
+            *(ulong*)ret = NativeString.Create(_GetResourceScriptClass(NativeString.Read(*(ulong*)args[0])) ?? "");
+            return true;
+        }
+        if (__vsn_get_resource_uid == 0) __vsn_get_resource_uid = StringNames.Get("_get_resource_uid").Opaque;
+        if (nameSn == __vsn_get_resource_uid)
+        {
+            *(long*)ret = unchecked((long)_GetResourceUid(NativeString.Read(*(ulong*)args[0])));
+            return true;
+        }
+        if (__vsn_exists == 0) __vsn_exists = StringNames.Get("_exists").Opaque;
+        if (nameSn == __vsn_exists)
+        {
+            *(byte*)ret = _Exists(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class ResourceFormatSaver : RefCounted
 {
     internal ResourceFormatSaver(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceFormatSaver() : this(InstanceBindings.ConstructRaw("ResourceFormatSaver"), true)
+    public ResourceFormatSaver() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceFormatSaver");
+    }
+
+    public virtual Error _Save(Resource? resource, string path, uint flags) => default!;
+
+    public virtual Error _SetUid(string path, long uid) => default!;
+
+    public virtual bool _Recognize(Resource? resource) => default!;
+
+    public virtual bool _RecognizePath(Resource? resource, string path) => default!;
+
+    private static ulong __vsn_save;
+    private static ulong __vsn_set_uid;
+    private static ulong __vsn_recognize;
+    private static ulong __vsn_recognize_path;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_save == 0) __vsn_save = StringNames.Get("_save").Opaque;
+        if (nameSn == __vsn_save)
+        {
+            *(long*)ret = (long)_Save((Resource?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1]), unchecked((uint)(*(long*)args[2])));
+            return true;
+        }
+        if (__vsn_set_uid == 0) __vsn_set_uid = StringNames.Get("_set_uid").Opaque;
+        if (nameSn == __vsn_set_uid)
+        {
+            *(long*)ret = (long)_SetUid(NativeString.Read(*(ulong*)args[0]), unchecked((long)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_recognize == 0) __vsn_recognize = StringNames.Get("_recognize").Opaque;
+        if (nameSn == __vsn_recognize)
+        {
+            *(byte*)ret = _Recognize((Resource?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false)) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_recognize_path == 0) __vsn_recognize_path = StringNames.Get("_recognize_path").Opaque;
+        if (nameSn == __vsn_recognize_path)
+        {
+            *(byte*)ret = _RecognizePath((Resource?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -20386,9 +20698,9 @@ public unsafe partial class ResourceImporterBMFont : ResourceImporter
 {
     internal ResourceImporterBMFont(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterBMFont() : this(InstanceBindings.ConstructRaw("ResourceImporterBMFont"), true)
+    public ResourceImporterBMFont() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterBMFont");
     }
 }
 
@@ -20396,9 +20708,9 @@ public unsafe partial class ResourceImporterBitMap : ResourceImporter
 {
     internal ResourceImporterBitMap(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterBitMap() : this(InstanceBindings.ConstructRaw("ResourceImporterBitMap"), true)
+    public ResourceImporterBitMap() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterBitMap");
     }
 }
 
@@ -20406,9 +20718,9 @@ public unsafe partial class ResourceImporterCSVTranslation : ResourceImporter
 {
     internal ResourceImporterCSVTranslation(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterCSVTranslation() : this(InstanceBindings.ConstructRaw("ResourceImporterCSVTranslation"), true)
+    public ResourceImporterCSVTranslation() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterCSVTranslation");
     }
 }
 
@@ -20416,9 +20728,9 @@ public unsafe partial class ResourceImporterDynamicFont : ResourceImporter
 {
     internal ResourceImporterDynamicFont(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterDynamicFont() : this(InstanceBindings.ConstructRaw("ResourceImporterDynamicFont"), true)
+    public ResourceImporterDynamicFont() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterDynamicFont");
     }
 }
 
@@ -20426,9 +20738,9 @@ public unsafe partial class ResourceImporterImage : ResourceImporter
 {
     internal ResourceImporterImage(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterImage() : this(InstanceBindings.ConstructRaw("ResourceImporterImage"), true)
+    public ResourceImporterImage() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterImage");
     }
 }
 
@@ -20436,9 +20748,9 @@ public unsafe partial class ResourceImporterImageFont : ResourceImporter
 {
     internal ResourceImporterImageFont(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterImageFont() : this(InstanceBindings.ConstructRaw("ResourceImporterImageFont"), true)
+    public ResourceImporterImageFont() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterImageFont");
     }
 }
 
@@ -20446,9 +20758,9 @@ public unsafe partial class ResourceImporterLayeredTexture : ResourceImporter
 {
     internal ResourceImporterLayeredTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterLayeredTexture() : this(InstanceBindings.ConstructRaw("ResourceImporterLayeredTexture"), true)
+    public ResourceImporterLayeredTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterLayeredTexture");
     }
 }
 
@@ -20456,9 +20768,9 @@ public unsafe partial class ResourceImporterMP3 : ResourceImporter
 {
     internal ResourceImporterMP3(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterMP3() : this(InstanceBindings.ConstructRaw("ResourceImporterMP3"), true)
+    public ResourceImporterMP3() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterMP3");
     }
 }
 
@@ -20466,9 +20778,9 @@ public unsafe partial class ResourceImporterOBJ : ResourceImporter
 {
     internal ResourceImporterOBJ(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterOBJ() : this(InstanceBindings.ConstructRaw("ResourceImporterOBJ"), true)
+    public ResourceImporterOBJ() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterOBJ");
     }
 }
 
@@ -20476,9 +20788,9 @@ public unsafe partial class ResourceImporterOggVorbis : ResourceImporter
 {
     internal ResourceImporterOggVorbis(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterOggVorbis() : this(InstanceBindings.ConstructRaw("ResourceImporterOggVorbis"), true)
+    public ResourceImporterOggVorbis() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterOggVorbis");
     }
 
     private static nint __mb_load_from_file;
@@ -20505,9 +20817,9 @@ public unsafe partial class ResourceImporterSVG : ResourceImporter
 {
     internal ResourceImporterSVG(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterSVG() : this(InstanceBindings.ConstructRaw("ResourceImporterSVG"), true)
+    public ResourceImporterSVG() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterSVG");
     }
 }
 
@@ -20515,9 +20827,9 @@ public unsafe partial class ResourceImporterScene : ResourceImporter
 {
     internal ResourceImporterScene(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterScene() : this(InstanceBindings.ConstructRaw("ResourceImporterScene"), true)
+    public ResourceImporterScene() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterScene");
     }
 }
 
@@ -20525,9 +20837,9 @@ public unsafe partial class ResourceImporterShaderFile : ResourceImporter
 {
     internal ResourceImporterShaderFile(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterShaderFile() : this(InstanceBindings.ConstructRaw("ResourceImporterShaderFile"), true)
+    public ResourceImporterShaderFile() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterShaderFile");
     }
 }
 
@@ -20535,9 +20847,9 @@ public unsafe partial class ResourceImporterTexture : ResourceImporter
 {
     internal ResourceImporterTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterTexture() : this(InstanceBindings.ConstructRaw("ResourceImporterTexture"), true)
+    public ResourceImporterTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterTexture");
     }
 }
 
@@ -20545,9 +20857,9 @@ public unsafe partial class ResourceImporterTextureAtlas : ResourceImporter
 {
     internal ResourceImporterTextureAtlas(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterTextureAtlas() : this(InstanceBindings.ConstructRaw("ResourceImporterTextureAtlas"), true)
+    public ResourceImporterTextureAtlas() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterTextureAtlas");
     }
 }
 
@@ -20555,9 +20867,9 @@ public unsafe partial class ResourceImporterWAV : ResourceImporter
 {
     internal ResourceImporterWAV(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceImporterWAV() : this(InstanceBindings.ConstructRaw("ResourceImporterWAV"), true)
+    public ResourceImporterWAV() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceImporterWAV");
     }
 }
 
@@ -20565,9 +20877,9 @@ public unsafe partial class ResourceLoader : GodotObject
 {
     internal ResourceLoader(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceLoader() : this(InstanceBindings.ConstructRaw("ResourceLoader"), false)
+    public ResourceLoader() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceLoader");
     }
 
     private static ResourceLoader? _singleton;
@@ -20793,9 +21105,9 @@ public unsafe partial class ResourcePreloader : Node
 {
     internal ResourcePreloader(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourcePreloader() : this(InstanceBindings.ConstructRaw("ResourcePreloader"), false)
+    public ResourcePreloader() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourcePreloader");
     }
 
     private static nint __mb_add_resource;
@@ -20891,9 +21203,9 @@ public unsafe partial class ResourceSaver : GodotObject
 {
     internal ResourceSaver(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ResourceSaver() : this(InstanceBindings.ConstructRaw("ResourceSaver"), false)
+    public ResourceSaver() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ResourceSaver");
     }
 
     private static ResourceSaver? _singleton;
@@ -21242,9 +21554,9 @@ public unsafe partial class RetargetModifier3D : SkeletonModifier3D
 {
     internal RetargetModifier3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RetargetModifier3D() : this(InstanceBindings.ConstructRaw("RetargetModifier3D"), false)
+    public RetargetModifier3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RetargetModifier3D");
     }
 
     [Flags]
@@ -21447,9 +21759,9 @@ public unsafe partial class RibbonTrailMesh : PrimitiveMesh
 {
     internal RibbonTrailMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RibbonTrailMesh() : this(InstanceBindings.ConstructRaw("RibbonTrailMesh"), true)
+    public RibbonTrailMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RibbonTrailMesh");
     }
 
     public enum Shape : long
@@ -21649,9 +21961,24 @@ public unsafe partial class RichTextEffect : Resource
 {
     internal RichTextEffect(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RichTextEffect() : this(InstanceBindings.ConstructRaw("RichTextEffect"), true)
+    public RichTextEffect() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RichTextEffect");
+    }
+
+    public virtual bool _ProcessCustomFx(CharFXTransform? charFx) => default!;
+
+    private static ulong __vsn_process_custom_fx;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_process_custom_fx == 0) __vsn_process_custom_fx = StringNames.Get("_process_custom_fx").Opaque;
+        if (nameSn == __vsn_process_custom_fx)
+        {
+            *(byte*)ret = _ProcessCustomFx((CharFXTransform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false)) ? (byte)1 : (byte)0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -21659,9 +21986,9 @@ public unsafe partial class RichTextLabel : Control
 {
     internal RichTextLabel(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RichTextLabel() : this(InstanceBindings.ConstructRaw("RichTextLabel"), false)
+    public RichTextLabel() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RichTextLabel");
     }
 
     public enum ListType : long
@@ -23697,9 +24024,9 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
 {
     internal RigidBody2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RigidBody2D() : this(InstanceBindings.ConstructRaw("RigidBody2D"), false)
+    public RigidBody2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RigidBody2D");
     }
 
     public enum FreezeMode : long
@@ -24620,15 +24947,30 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (RigidBody2D.FreezeMode)__ret;
     }
+
+    public virtual void _IntegrateForces(PhysicsDirectBodyState2D? state) { }
+
+    private static ulong __vsn_integrate_forces;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_integrate_forces == 0) __vsn_integrate_forces = StringNames.Get("_integrate_forces").Opaque;
+        if (nameSn == __vsn_integrate_forces)
+        {
+            _IntegrateForces((PhysicsDirectBodyState2D?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class RigidBody3D : PhysicsBody3D
 {
     internal RigidBody3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RigidBody3D() : this(InstanceBindings.ConstructRaw("RigidBody3D"), false)
+    public RigidBody3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RigidBody3D");
     }
 
     public enum FreezeMode : long
@@ -25557,15 +25899,30 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (RigidBody3D.FreezeMode)__ret;
     }
+
+    public virtual void _IntegrateForces(PhysicsDirectBodyState3D? state) { }
+
+    private static ulong __vsn_integrate_forces;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_integrate_forces == 0) __vsn_integrate_forces = StringNames.Get("_integrate_forces").Opaque;
+        if (nameSn == __vsn_integrate_forces)
+        {
+            _IntegrateForces((PhysicsDirectBodyState3D?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class RootMotionView : VisualInstance3D
 {
     internal RootMotionView(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public RootMotionView() : this(InstanceBindings.ConstructRaw("RootMotionView"), false)
+    public RootMotionView() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "RootMotionView");
     }
 
     private static nint __mb_set_color;

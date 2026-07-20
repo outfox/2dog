@@ -14,9 +14,9 @@ public unsafe partial class HBoxContainer : BoxContainer
 {
     internal HBoxContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public HBoxContainer() : this(InstanceBindings.ConstructRaw("HBoxContainer"), false)
+    public HBoxContainer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "HBoxContainer");
     }
 }
 
@@ -24,9 +24,9 @@ public unsafe partial class HFlowContainer : FlowContainer
 {
     internal HFlowContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public HFlowContainer() : this(InstanceBindings.ConstructRaw("HFlowContainer"), false)
+    public HFlowContainer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "HFlowContainer");
     }
 }
 
@@ -34,9 +34,9 @@ public unsafe partial class HMACContext : RefCounted
 {
     internal HMACContext(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public HMACContext() : this(InstanceBindings.ConstructRaw("HMACContext"), true)
+    public HMACContext() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "HMACContext");
     }
 }
 
@@ -44,9 +44,9 @@ public unsafe partial class HScrollBar : ScrollBar
 {
     internal HScrollBar(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public HScrollBar() : this(InstanceBindings.ConstructRaw("HScrollBar"), false)
+    public HScrollBar() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "HScrollBar");
     }
 }
 
@@ -54,9 +54,9 @@ public unsafe partial class HSeparator : Separator
 {
     internal HSeparator(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public HSeparator() : this(InstanceBindings.ConstructRaw("HSeparator"), false)
+    public HSeparator() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "HSeparator");
     }
 }
 
@@ -64,9 +64,9 @@ public unsafe partial class HSlider : Slider
 {
     internal HSlider(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public HSlider() : this(InstanceBindings.ConstructRaw("HSlider"), false)
+    public HSlider() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "HSlider");
     }
 }
 
@@ -74,9 +74,9 @@ public unsafe partial class HSplitContainer : SplitContainer
 {
     internal HSplitContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public HSplitContainer() : this(InstanceBindings.ConstructRaw("HSplitContainer"), false)
+    public HSplitContainer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "HSplitContainer");
     }
 }
 
@@ -84,9 +84,9 @@ public unsafe partial class HTTPClient : RefCounted
 {
     internal HTTPClient(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public HTTPClient() : this(InstanceBindings.ConstructRaw("HTTPClient"), true)
+    public HTTPClient() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "HTTPClient");
     }
 
     public enum Method : long
@@ -444,9 +444,9 @@ public unsafe partial class HTTPRequest : Node
 {
     internal HTTPRequest(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public HTTPRequest() : this(InstanceBindings.ConstructRaw("HTTPRequest"), false)
+    public HTTPRequest() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "HTTPRequest");
     }
 
     public enum Result : long
@@ -802,9 +802,9 @@ public unsafe partial class HashingContext : RefCounted
 {
     internal HashingContext(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public HashingContext() : this(InstanceBindings.ConstructRaw("HashingContext"), true)
+    public HashingContext() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "HashingContext");
     }
 
     public enum HashType : long
@@ -837,9 +837,9 @@ public unsafe partial class HeightMapShape3D : Shape3D
 {
     internal HeightMapShape3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public HeightMapShape3D() : this(InstanceBindings.ConstructRaw("HeightMapShape3D"), true)
+    public HeightMapShape3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "HeightMapShape3D");
     }
 
     private static nint __mb_set_map_width;
@@ -959,9 +959,9 @@ public unsafe partial class HingeJoint3D : Joint3D
 {
     internal HingeJoint3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public HingeJoint3D() : this(InstanceBindings.ConstructRaw("HingeJoint3D"), false)
+    public HingeJoint3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "HingeJoint3D");
     }
 
     public enum Param : long

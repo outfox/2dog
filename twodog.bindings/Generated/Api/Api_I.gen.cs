@@ -242,9 +242,9 @@ public unsafe partial class Image : Resource
 {
     internal Image(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Image() : this(InstanceBindings.ConstructRaw("Image"), true)
+    public Image() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Image");
     }
 
     public enum Format : long
@@ -1370,9 +1370,9 @@ public unsafe partial class ImageFormatLoaderExtension : ImageFormatLoader
 {
     internal ImageFormatLoaderExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ImageFormatLoaderExtension() : this(InstanceBindings.ConstructRaw("ImageFormatLoaderExtension"), true)
+    public ImageFormatLoaderExtension() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ImageFormatLoaderExtension");
     }
 
     private static nint __mb_add_format_loader;
@@ -1400,15 +1400,30 @@ public unsafe partial class ImageFormatLoaderExtension : ImageFormatLoader
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
+
+    public virtual Error _LoadImage(Image? image, FileAccess? fileaccess, ImageFormatLoader.LoaderFlags flags, float scale) => default!;
+
+    private static ulong __vsn_load_image;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_load_image == 0) __vsn_load_image = StringNames.Get("_load_image").Opaque;
+        if (nameSn == __vsn_load_image)
+        {
+            *(long*)ret = (long)_LoadImage((Image?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (FileAccess?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false), (ImageFormatLoader.LoaderFlags)(*(long*)args[2]), (float)(*(double*)args[3]));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class ImageTexture : Texture2D
 {
     internal ImageTexture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ImageTexture() : this(InstanceBindings.ConstructRaw("ImageTexture"), true)
+    public ImageTexture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ImageTexture");
     }
 
     private static nint __mb_create_from_image;
@@ -1482,9 +1497,9 @@ public unsafe partial class ImageTexture3D : Texture3D
 {
     internal ImageTexture3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ImageTexture3D() : this(InstanceBindings.ConstructRaw("ImageTexture3D"), true)
+    public ImageTexture3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ImageTexture3D");
     }
 }
 
@@ -1515,9 +1530,9 @@ public unsafe partial class ImmediateMesh : Mesh
 {
     internal ImmediateMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ImmediateMesh() : this(InstanceBindings.ConstructRaw("ImmediateMesh"), true)
+    public ImmediateMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ImmediateMesh");
     }
 
     private static nint __mb_surface_begin;
@@ -1681,9 +1696,9 @@ public unsafe partial class ImporterMesh : Resource
 {
     internal ImporterMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ImporterMesh() : this(InstanceBindings.ConstructRaw("ImporterMesh"), true)
+    public ImporterMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ImporterMesh");
     }
 
     private static nint __mb_add_blend_shape;
@@ -2014,9 +2029,9 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
 {
     internal ImporterMeshInstance3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ImporterMeshInstance3D() : this(InstanceBindings.ConstructRaw("ImporterMeshInstance3D"), false)
+    public ImporterMeshInstance3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ImporterMeshInstance3D");
     }
 
     private static nint __mb_set_mesh;
@@ -3881,9 +3896,9 @@ public unsafe partial class InputEventAction : InputEvent
 {
     internal InputEventAction(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public InputEventAction() : this(InstanceBindings.ConstructRaw("InputEventAction"), true)
+    public InputEventAction() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "InputEventAction");
     }
 
     private static nint __mb_set_action;
@@ -4072,9 +4087,9 @@ public unsafe partial class InputEventJoypadButton : InputEvent
 {
     internal InputEventJoypadButton(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public InputEventJoypadButton() : this(InstanceBindings.ConstructRaw("InputEventJoypadButton"), true)
+    public InputEventJoypadButton() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "InputEventJoypadButton");
     }
 
     private static nint __mb_set_button_index;
@@ -4160,9 +4175,9 @@ public unsafe partial class InputEventJoypadMotion : InputEvent
 {
     internal InputEventJoypadMotion(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public InputEventJoypadMotion() : this(InstanceBindings.ConstructRaw("InputEventJoypadMotion"), true)
+    public InputEventJoypadMotion() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "InputEventJoypadMotion");
     }
 
     private static nint __mb_set_axis;
@@ -4232,9 +4247,9 @@ public unsafe partial class InputEventKey : InputEventWithModifiers
 {
     internal InputEventKey(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public InputEventKey() : this(InstanceBindings.ConstructRaw("InputEventKey"), true)
+    public InputEventKey() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "InputEventKey");
     }
 
     private static nint __mb_set_pressed;
@@ -4534,9 +4549,9 @@ public unsafe partial class InputEventMIDI : InputEvent
 {
     internal InputEventMIDI(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public InputEventMIDI() : this(InstanceBindings.ConstructRaw("InputEventMIDI"), true)
+    public InputEventMIDI() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "InputEventMIDI");
     }
 
     private static nint __mb_set_channel;
@@ -4792,9 +4807,9 @@ public unsafe partial class InputEventMagnifyGesture : InputEventGesture
 {
     internal InputEventMagnifyGesture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public InputEventMagnifyGesture() : this(InstanceBindings.ConstructRaw("InputEventMagnifyGesture"), true)
+    public InputEventMagnifyGesture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "InputEventMagnifyGesture");
     }
 
     private static nint __mb_set_factor;
@@ -4931,9 +4946,9 @@ public unsafe partial class InputEventMouseButton : InputEventMouse
 {
     internal InputEventMouseButton(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public InputEventMouseButton() : this(InstanceBindings.ConstructRaw("InputEventMouseButton"), true)
+    public InputEventMouseButton() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "InputEventMouseButton");
     }
 
     private static nint __mb_set_factor;
@@ -5066,9 +5081,9 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
 {
     internal InputEventMouseMotion(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public InputEventMouseMotion() : this(InstanceBindings.ConstructRaw("InputEventMouseMotion"), true)
+    public InputEventMouseMotion() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "InputEventMouseMotion");
     }
 
     private static nint __mb_set_tilt;
@@ -5293,9 +5308,9 @@ public unsafe partial class InputEventPanGesture : InputEventGesture
 {
     internal InputEventPanGesture(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public InputEventPanGesture() : this(InstanceBindings.ConstructRaw("InputEventPanGesture"), true)
+    public InputEventPanGesture() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "InputEventPanGesture");
     }
 
     private static nint __mb_set_delta;
@@ -5334,9 +5349,9 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
 {
     internal InputEventScreenDrag(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public InputEventScreenDrag() : this(InstanceBindings.ConstructRaw("InputEventScreenDrag"), true)
+    public InputEventScreenDrag() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "InputEventScreenDrag");
     }
 
     private static nint __mb_set_index;
@@ -5623,9 +5638,9 @@ public unsafe partial class InputEventScreenTouch : InputEventFromWindow
 {
     internal InputEventScreenTouch(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public InputEventScreenTouch() : this(InstanceBindings.ConstructRaw("InputEventScreenTouch"), true)
+    public InputEventScreenTouch() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "InputEventScreenTouch");
     }
 
     private static nint __mb_set_index;
@@ -5758,9 +5773,9 @@ public unsafe partial class InputEventShortcut : InputEvent
 {
     internal InputEventShortcut(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public InputEventShortcut() : this(InstanceBindings.ConstructRaw("InputEventShortcut"), true)
+    public InputEventShortcut() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "InputEventShortcut");
     }
 
     private static nint __mb_set_shortcut;
@@ -5989,9 +6004,9 @@ public unsafe partial class InputMap : GodotObject
 {
     internal InputMap(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public InputMap() : this(InstanceBindings.ConstructRaw("InputMap"), false)
+    public InputMap() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "InputMap");
     }
 
     private static InputMap? _singleton;
@@ -6255,9 +6270,9 @@ public unsafe partial class IntervalTweener : Tweener
 {
     internal IntervalTweener(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public IntervalTweener() : this(InstanceBindings.ConstructRaw("IntervalTweener"), true)
+    public IntervalTweener() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "IntervalTweener");
     }
 }
 
@@ -6265,9 +6280,9 @@ public unsafe partial class ItemList : Control
 {
     internal ItemList(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ItemList() : this(InstanceBindings.ConstructRaw("ItemList"), false)
+    public ItemList() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ItemList");
     }
 
     public enum IconMode : long

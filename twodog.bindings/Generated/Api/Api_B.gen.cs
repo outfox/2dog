@@ -14,9 +14,9 @@ public unsafe partial class BackBufferCopy : Node2D
 {
     internal BackBufferCopy(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public BackBufferCopy() : this(InstanceBindings.ConstructRaw("BackBufferCopy"), false)
+    public BackBufferCopy() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "BackBufferCopy");
     }
 
     public enum CopyMode : long
@@ -93,9 +93,9 @@ public unsafe partial class BaseButton : Control
 {
     internal BaseButton(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public BaseButton() : this(InstanceBindings.ConstructRaw("BaseButton"), false)
+    public BaseButton() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "BaseButton");
     }
 
     public enum DrawMode : long
@@ -467,6 +467,30 @@ public unsafe partial class BaseButton : Control
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (ButtonGroup?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    public virtual void _Pressed() { }
+
+    public virtual void _Toggled(bool toggledOn) { }
+
+    private static ulong __vsn_pressed;
+    private static ulong __vsn_toggled;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_pressed == 0) __vsn_pressed = StringNames.Get("_pressed").Opaque;
+        if (nameSn == __vsn_pressed)
+        {
+            _Pressed();
+            return true;
+        }
+        if (__vsn_toggled == 0) __vsn_toggled = StringNames.Get("_toggled").Opaque;
+        if (nameSn == __vsn_toggled)
+        {
+            _Toggled(*(byte*)args[0] != 0);
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -3096,9 +3120,9 @@ public unsafe partial class BitMap : Resource
 {
     internal BitMap(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public BitMap() : this(InstanceBindings.ConstructRaw("BitMap"), true)
+    public BitMap() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "BitMap");
     }
 
     private static nint __mb_create;
@@ -3313,9 +3337,9 @@ public unsafe partial class BlitMaterial : Material
 {
     internal BlitMaterial(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public BlitMaterial() : this(InstanceBindings.ConstructRaw("BlitMaterial"), true)
+    public BlitMaterial() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "BlitMaterial");
     }
 
     public enum BlendMode : long
@@ -3363,9 +3387,9 @@ public unsafe partial class Bone2D : Node2D
 {
     internal Bone2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Bone2D() : this(InstanceBindings.ConstructRaw("Bone2D"), false)
+    public Bone2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Bone2D");
     }
 
     private static nint __mb_set_rest;
@@ -3540,9 +3564,9 @@ public unsafe partial class BoneAttachment3D : Node3D
 {
     internal BoneAttachment3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public BoneAttachment3D() : this(InstanceBindings.ConstructRaw("BoneAttachment3D"), false)
+    public BoneAttachment3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "BoneAttachment3D");
     }
 
     private static nint __mb_get_skeleton;
@@ -3703,9 +3727,9 @@ public unsafe partial class BoneConstraint3D : SkeletonModifier3D
 {
     internal BoneConstraint3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public BoneConstraint3D() : this(InstanceBindings.ConstructRaw("BoneConstraint3D"), false)
+    public BoneConstraint3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "BoneConstraint3D");
     }
 
     public enum ReferenceType : long
@@ -3981,9 +4005,9 @@ public unsafe partial class BoneMap : Resource
 {
     internal BoneMap(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public BoneMap() : this(InstanceBindings.ConstructRaw("BoneMap"), true)
+    public BoneMap() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "BoneMap");
     }
 
     private static nint __mb_get_profile;
@@ -4076,9 +4100,9 @@ public unsafe partial class BoneTwistDisperser3D : SkeletonModifier3D
 {
     internal BoneTwistDisperser3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public BoneTwistDisperser3D() : this(InstanceBindings.ConstructRaw("BoneTwistDisperser3D"), false)
+    public BoneTwistDisperser3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "BoneTwistDisperser3D");
     }
 
     public enum DisperseMode : long
@@ -4700,9 +4724,9 @@ public unsafe partial class BoxContainer : Container
 {
     internal BoxContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public BoxContainer() : this(InstanceBindings.ConstructRaw("BoxContainer"), false)
+    public BoxContainer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "BoxContainer");
     }
 
     public enum AlignmentMode : long
@@ -4797,9 +4821,9 @@ public unsafe partial class BoxMesh : PrimitiveMesh
 {
     internal BoxMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public BoxMesh() : this(InstanceBindings.ConstructRaw("BoxMesh"), true)
+    public BoxMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "BoxMesh");
     }
 
     private static nint __mb_set_size;
@@ -4931,9 +4955,9 @@ public unsafe partial class BoxOccluder3D : Occluder3D
 {
     internal BoxOccluder3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public BoxOccluder3D() : this(InstanceBindings.ConstructRaw("BoxOccluder3D"), true)
+    public BoxOccluder3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "BoxOccluder3D");
     }
 
     private static nint __mb_set_size;
@@ -4972,9 +4996,9 @@ public unsafe partial class BoxShape3D : Shape3D
 {
     internal BoxShape3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public BoxShape3D() : this(InstanceBindings.ConstructRaw("BoxShape3D"), true)
+    public BoxShape3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "BoxShape3D");
     }
 
     private static nint __mb_set_size;
@@ -5013,9 +5037,9 @@ public unsafe partial class Button : BaseButton
 {
     internal Button(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Button() : this(InstanceBindings.ConstructRaw("Button"), false)
+    public Button() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Button");
     }
 
     private static nint __mb_set_text;
@@ -5428,9 +5452,9 @@ public unsafe partial class ButtonGroup : Resource
 {
     internal ButtonGroup(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ButtonGroup() : this(InstanceBindings.ConstructRaw("ButtonGroup"), true)
+    public ButtonGroup() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ButtonGroup");
     }
 
     private static nint __mb_get_pressed_button;

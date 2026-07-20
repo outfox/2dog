@@ -14,9 +14,9 @@ public unsafe partial class QuadMesh : PlaneMesh
 {
     internal QuadMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public QuadMesh() : this(InstanceBindings.ConstructRaw("QuadMesh"), true)
+    public QuadMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "QuadMesh");
     }
 }
 
@@ -24,9 +24,9 @@ public unsafe partial class QuadOccluder3D : Occluder3D
 {
     internal QuadOccluder3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public QuadOccluder3D() : this(InstanceBindings.ConstructRaw("QuadOccluder3D"), true)
+    public QuadOccluder3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "QuadOccluder3D");
     }
 
     private static nint __mb_set_size;

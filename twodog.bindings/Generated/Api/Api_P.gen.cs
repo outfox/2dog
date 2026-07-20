@@ -14,9 +14,9 @@ public unsafe partial class PCKPacker : RefCounted
 {
     internal PCKPacker(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PCKPacker() : this(InstanceBindings.ConstructRaw("PCKPacker"), true)
+    public PCKPacker() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PCKPacker");
     }
 
     private static nint __mb_pck_start;
@@ -111,9 +111,9 @@ public unsafe partial class PackedDataContainer : Resource
 {
     internal PackedDataContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PackedDataContainer() : this(InstanceBindings.ConstructRaw("PackedDataContainer"), true)
+    public PackedDataContainer() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PackedDataContainer");
     }
 
     private static nint __mb_size;
@@ -156,9 +156,9 @@ public unsafe partial class PackedScene : Resource
 {
     internal PackedScene(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PackedScene() : this(InstanceBindings.ConstructRaw("PackedScene"), true)
+    public PackedScene() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PackedScene");
     }
 
     public enum GenEditState : long
@@ -306,9 +306,9 @@ public unsafe partial class PacketPeerDTLS : PacketPeer
 {
     internal PacketPeerDTLS(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PacketPeerDTLS() : this(InstanceBindings.ConstructRaw("PacketPeerDTLS"), true)
+    public PacketPeerDTLS() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PacketPeerDTLS");
     }
 
     public enum Status : long
@@ -389,9 +389,33 @@ public unsafe partial class PacketPeerExtension : PacketPeer
 {
     internal PacketPeerExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PacketPeerExtension() : this(InstanceBindings.ConstructRaw("PacketPeerExtension"), true)
+    public PacketPeerExtension() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PacketPeerExtension");
+    }
+
+    public virtual int _GetAvailablePacketCount() => default!;
+
+    public virtual int _GetMaxPacketSize() => default!;
+
+    private static ulong __vsn_get_available_packet_count;
+    private static ulong __vsn_get_max_packet_size;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_available_packet_count == 0) __vsn_get_available_packet_count = StringNames.Get("_get_available_packet_count").Opaque;
+        if (nameSn == __vsn_get_available_packet_count)
+        {
+            *(long*)ret = unchecked((long)_GetAvailablePacketCount());
+            return true;
+        }
+        if (__vsn_get_max_packet_size == 0) __vsn_get_max_packet_size = StringNames.Get("_get_max_packet_size").Opaque;
+        if (nameSn == __vsn_get_max_packet_size)
+        {
+            *(long*)ret = unchecked((long)_GetMaxPacketSize());
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -399,9 +423,9 @@ public unsafe partial class PacketPeerStream : PacketPeer
 {
     internal PacketPeerStream(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PacketPeerStream() : this(InstanceBindings.ConstructRaw("PacketPeerStream"), true)
+    public PacketPeerStream() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PacketPeerStream");
     }
 
     private static nint __mb_set_stream_peer;
@@ -502,9 +526,9 @@ public unsafe partial class PacketPeerUDP : PacketPeer
 {
     internal PacketPeerUDP(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PacketPeerUDP() : this(InstanceBindings.ConstructRaw("PacketPeerUDP"), true)
+    public PacketPeerUDP() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PacketPeerUDP");
     }
 
     private static nint __mb_bind;
@@ -740,9 +764,9 @@ public unsafe partial class Panel : Control
 {
     internal Panel(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Panel() : this(InstanceBindings.ConstructRaw("Panel"), false)
+    public Panel() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Panel");
     }
 }
 
@@ -750,9 +774,9 @@ public unsafe partial class PanelContainer : Container
 {
     internal PanelContainer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PanelContainer() : this(InstanceBindings.ConstructRaw("PanelContainer"), false)
+    public PanelContainer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PanelContainer");
     }
 }
 
@@ -760,9 +784,9 @@ public unsafe partial class PanoramaSkyMaterial : Material
 {
     internal PanoramaSkyMaterial(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PanoramaSkyMaterial() : this(InstanceBindings.ConstructRaw("PanoramaSkyMaterial"), true)
+    public PanoramaSkyMaterial() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PanoramaSkyMaterial");
     }
 
     private static nint __mb_set_panorama;
@@ -863,9 +887,9 @@ public unsafe partial class Parallax2D : Node2D
 {
     internal Parallax2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Parallax2D() : this(InstanceBindings.ConstructRaw("Parallax2D"), false)
+    public Parallax2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Parallax2D");
     }
 
     private static nint __mb_set_scroll_scale;
@@ -1183,9 +1207,9 @@ public unsafe partial class ParallaxBackground : CanvasLayer
 {
     internal ParallaxBackground(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ParallaxBackground() : this(InstanceBindings.ConstructRaw("ParallaxBackground"), false)
+    public ParallaxBackground() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ParallaxBackground");
     }
 
     private static nint __mb_set_scroll_offset;
@@ -1379,9 +1403,9 @@ public unsafe partial class ParallaxLayer : Node2D
 {
     internal ParallaxLayer(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ParallaxLayer() : this(InstanceBindings.ConstructRaw("ParallaxLayer"), false)
+    public ParallaxLayer() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ParallaxLayer");
     }
 
     private static nint __mb_set_motion_scale;
@@ -1482,9 +1506,9 @@ public unsafe partial class ParticleProcessMaterial : Material
 {
     internal ParticleProcessMaterial(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ParticleProcessMaterial() : this(InstanceBindings.ConstructRaw("ParticleProcessMaterial"), true)
+    public ParticleProcessMaterial() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ParticleProcessMaterial");
     }
 
     public enum Parameter : long
@@ -3378,9 +3402,9 @@ public unsafe partial class Path2D : Node2D
 {
     internal Path2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Path2D() : this(InstanceBindings.ConstructRaw("Path2D"), false)
+    public Path2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Path2D");
     }
 
     private static nint __mb_set_curve;
@@ -3419,9 +3443,9 @@ public unsafe partial class Path3D : Node3D
 {
     internal Path3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Path3D() : this(InstanceBindings.ConstructRaw("Path3D"), false)
+    public Path3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Path3D");
     }
 
     private static nint __mb_set_curve;
@@ -3491,9 +3515,9 @@ public unsafe partial class PathFollow2D : Node2D
 {
     internal PathFollow2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PathFollow2D() : this(InstanceBindings.ConstructRaw("PathFollow2D"), false)
+    public PathFollow2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PathFollow2D");
     }
 
     private static nint __mb_set_progress;
@@ -3718,9 +3742,9 @@ public unsafe partial class PathFollow3D : Node3D
 {
     internal PathFollow3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PathFollow3D() : this(InstanceBindings.ConstructRaw("PathFollow3D"), false)
+    public PathFollow3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PathFollow3D");
     }
 
     public enum RotationMode : long
@@ -4036,9 +4060,9 @@ public unsafe partial class Performance : GodotObject
 {
     internal Performance(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Performance() : this(InstanceBindings.ConstructRaw("Performance"), false)
+    public Performance() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Performance");
     }
 
     private static Performance? _singleton;
@@ -4188,9 +4212,9 @@ public unsafe partial class PhysicalBone2D : RigidBody2D
 {
     internal PhysicalBone2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicalBone2D() : this(InstanceBindings.ConstructRaw("PhysicalBone2D"), false)
+    public PhysicalBone2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicalBone2D");
     }
 
     private static nint __mb_get_joint;
@@ -4352,9 +4376,9 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
 {
     internal PhysicalBone3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicalBone3D() : this(InstanceBindings.ConstructRaw("PhysicalBone3D"), false)
+    public PhysicalBone3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicalBone3D");
     }
 
     public enum DampMode : long
@@ -4947,15 +4971,30 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
+
+    public virtual void _IntegrateForces(PhysicsDirectBodyState3D? state) { }
+
+    private static ulong __vsn_integrate_forces;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_integrate_forces == 0) __vsn_integrate_forces = StringNames.Get("_integrate_forces").Opaque;
+        if (nameSn == __vsn_integrate_forces)
+        {
+            _IntegrateForces((PhysicsDirectBodyState3D?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class PhysicalBoneSimulator3D : SkeletonModifier3D
 {
     internal PhysicalBoneSimulator3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicalBoneSimulator3D() : this(InstanceBindings.ConstructRaw("PhysicalBoneSimulator3D"), false)
+    public PhysicalBoneSimulator3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicalBoneSimulator3D");
     }
 
     private static nint __mb_is_simulating_physics;
@@ -5023,9 +5062,9 @@ public unsafe partial class PhysicalSkyMaterial : Material
 {
     internal PhysicalSkyMaterial(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicalSkyMaterial() : this(InstanceBindings.ConstructRaw("PhysicalSkyMaterial"), true)
+    public PhysicalSkyMaterial() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicalSkyMaterial");
     }
 
     private static nint __mb_set_rayleigh_coefficient;
@@ -6400,9 +6439,447 @@ public unsafe partial class PhysicsDirectBodyState2DExtension : PhysicsDirectBod
 {
     internal PhysicsDirectBodyState2DExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsDirectBodyState2DExtension() : this(InstanceBindings.ConstructRaw("PhysicsDirectBodyState2DExtension"), false)
+    public PhysicsDirectBodyState2DExtension() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsDirectBodyState2DExtension");
+    }
+
+    public virtual Vector2 _GetTotalGravity() => default!;
+
+    public virtual float _GetTotalLinearDamp() => default!;
+
+    public virtual float _GetTotalAngularDamp() => default!;
+
+    public virtual Vector2 _GetCenterOfMass() => default!;
+
+    public virtual Vector2 _GetCenterOfMassLocal() => default!;
+
+    public virtual float _GetInverseMass() => default!;
+
+    public virtual float _GetInverseInertia() => default!;
+
+    public virtual void _SetLinearVelocity(Vector2 velocity) { }
+
+    public virtual Vector2 _GetLinearVelocity() => default!;
+
+    public virtual void _SetAngularVelocity(float velocity) { }
+
+    public virtual float _GetAngularVelocity() => default!;
+
+    public virtual void _SetTransform(Transform2D transform) { }
+
+    public virtual Transform2D _GetTransform() => default!;
+
+    public virtual Vector2 _GetVelocityAtLocalPosition(Vector2 localPosition) => default!;
+
+    public virtual void _ApplyCentralImpulse(Vector2 impulse) { }
+
+    public virtual void _ApplyImpulse(Vector2 impulse, Vector2 position) { }
+
+    public virtual void _ApplyTorqueImpulse(float impulse) { }
+
+    public virtual void _ApplyCentralForce(Vector2 force) { }
+
+    public virtual void _ApplyForce(Vector2 force, Vector2 position) { }
+
+    public virtual void _ApplyTorque(float torque) { }
+
+    public virtual void _AddConstantCentralForce(Vector2 force) { }
+
+    public virtual void _AddConstantForce(Vector2 force, Vector2 position) { }
+
+    public virtual void _AddConstantTorque(float torque) { }
+
+    public virtual void _SetConstantForce(Vector2 force) { }
+
+    public virtual Vector2 _GetConstantForce() => default!;
+
+    public virtual void _SetConstantTorque(float torque) { }
+
+    public virtual float _GetConstantTorque() => default!;
+
+    public virtual void _SetSleepState(bool enabled) { }
+
+    public virtual bool _IsSleeping() => default!;
+
+    public virtual void _SetCollisionLayer(uint layer) { }
+
+    public virtual uint _GetCollisionLayer() => default!;
+
+    public virtual void _SetCollisionMask(uint mask) { }
+
+    public virtual uint _GetCollisionMask() => default!;
+
+    public virtual int _GetContactCount() => default!;
+
+    public virtual Vector2 _GetContactLocalPosition(int contactIdx) => default!;
+
+    public virtual Vector2 _GetContactLocalNormal(int contactIdx) => default!;
+
+    public virtual int _GetContactLocalShape(int contactIdx) => default!;
+
+    public virtual Vector2 _GetContactLocalVelocityAtPosition(int contactIdx) => default!;
+
+    public virtual Rid _GetContactCollider(int contactIdx) => default!;
+
+    public virtual Vector2 _GetContactColliderPosition(int contactIdx) => default!;
+
+    public virtual ulong _GetContactColliderId(int contactIdx) => default!;
+
+    public virtual GodotObject? _GetContactColliderObject(int contactIdx) => default!;
+
+    public virtual int _GetContactColliderShape(int contactIdx) => default!;
+
+    public virtual Vector2 _GetContactColliderVelocityAtPosition(int contactIdx) => default!;
+
+    public virtual Vector2 _GetContactImpulse(int contactIdx) => default!;
+
+    public virtual float _GetStep() => default!;
+
+    public virtual void _IntegrateForces() { }
+
+    public virtual PhysicsDirectSpaceState2D? _GetSpaceState() => default!;
+
+    private static ulong __vsn_get_total_gravity;
+    private static ulong __vsn_get_total_linear_damp;
+    private static ulong __vsn_get_total_angular_damp;
+    private static ulong __vsn_get_center_of_mass;
+    private static ulong __vsn_get_center_of_mass_local;
+    private static ulong __vsn_get_inverse_mass;
+    private static ulong __vsn_get_inverse_inertia;
+    private static ulong __vsn_set_linear_velocity;
+    private static ulong __vsn_get_linear_velocity;
+    private static ulong __vsn_set_angular_velocity;
+    private static ulong __vsn_get_angular_velocity;
+    private static ulong __vsn_set_transform;
+    private static ulong __vsn_get_transform;
+    private static ulong __vsn_get_velocity_at_local_position;
+    private static ulong __vsn_apply_central_impulse;
+    private static ulong __vsn_apply_impulse;
+    private static ulong __vsn_apply_torque_impulse;
+    private static ulong __vsn_apply_central_force;
+    private static ulong __vsn_apply_force;
+    private static ulong __vsn_apply_torque;
+    private static ulong __vsn_add_constant_central_force;
+    private static ulong __vsn_add_constant_force;
+    private static ulong __vsn_add_constant_torque;
+    private static ulong __vsn_set_constant_force;
+    private static ulong __vsn_get_constant_force;
+    private static ulong __vsn_set_constant_torque;
+    private static ulong __vsn_get_constant_torque;
+    private static ulong __vsn_set_sleep_state;
+    private static ulong __vsn_is_sleeping;
+    private static ulong __vsn_set_collision_layer;
+    private static ulong __vsn_get_collision_layer;
+    private static ulong __vsn_set_collision_mask;
+    private static ulong __vsn_get_collision_mask;
+    private static ulong __vsn_get_contact_count;
+    private static ulong __vsn_get_contact_local_position;
+    private static ulong __vsn_get_contact_local_normal;
+    private static ulong __vsn_get_contact_local_shape;
+    private static ulong __vsn_get_contact_local_velocity_at_position;
+    private static ulong __vsn_get_contact_collider;
+    private static ulong __vsn_get_contact_collider_position;
+    private static ulong __vsn_get_contact_collider_id;
+    private static ulong __vsn_get_contact_collider_object;
+    private static ulong __vsn_get_contact_collider_shape;
+    private static ulong __vsn_get_contact_collider_velocity_at_position;
+    private static ulong __vsn_get_contact_impulse;
+    private static ulong __vsn_get_step;
+    private static ulong __vsn_integrate_forces;
+    private static ulong __vsn_get_space_state;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_total_gravity == 0) __vsn_get_total_gravity = StringNames.Get("_get_total_gravity").Opaque;
+        if (nameSn == __vsn_get_total_gravity)
+        {
+            *(Vector2*)ret = _GetTotalGravity();
+            return true;
+        }
+        if (__vsn_get_total_linear_damp == 0) __vsn_get_total_linear_damp = StringNames.Get("_get_total_linear_damp").Opaque;
+        if (nameSn == __vsn_get_total_linear_damp)
+        {
+            *(double*)ret = _GetTotalLinearDamp();
+            return true;
+        }
+        if (__vsn_get_total_angular_damp == 0) __vsn_get_total_angular_damp = StringNames.Get("_get_total_angular_damp").Opaque;
+        if (nameSn == __vsn_get_total_angular_damp)
+        {
+            *(double*)ret = _GetTotalAngularDamp();
+            return true;
+        }
+        if (__vsn_get_center_of_mass == 0) __vsn_get_center_of_mass = StringNames.Get("_get_center_of_mass").Opaque;
+        if (nameSn == __vsn_get_center_of_mass)
+        {
+            *(Vector2*)ret = _GetCenterOfMass();
+            return true;
+        }
+        if (__vsn_get_center_of_mass_local == 0) __vsn_get_center_of_mass_local = StringNames.Get("_get_center_of_mass_local").Opaque;
+        if (nameSn == __vsn_get_center_of_mass_local)
+        {
+            *(Vector2*)ret = _GetCenterOfMassLocal();
+            return true;
+        }
+        if (__vsn_get_inverse_mass == 0) __vsn_get_inverse_mass = StringNames.Get("_get_inverse_mass").Opaque;
+        if (nameSn == __vsn_get_inverse_mass)
+        {
+            *(double*)ret = _GetInverseMass();
+            return true;
+        }
+        if (__vsn_get_inverse_inertia == 0) __vsn_get_inverse_inertia = StringNames.Get("_get_inverse_inertia").Opaque;
+        if (nameSn == __vsn_get_inverse_inertia)
+        {
+            *(double*)ret = _GetInverseInertia();
+            return true;
+        }
+        if (__vsn_set_linear_velocity == 0) __vsn_set_linear_velocity = StringNames.Get("_set_linear_velocity").Opaque;
+        if (nameSn == __vsn_set_linear_velocity)
+        {
+            _SetLinearVelocity(*(Vector2*)args[0]);
+            return true;
+        }
+        if (__vsn_get_linear_velocity == 0) __vsn_get_linear_velocity = StringNames.Get("_get_linear_velocity").Opaque;
+        if (nameSn == __vsn_get_linear_velocity)
+        {
+            *(Vector2*)ret = _GetLinearVelocity();
+            return true;
+        }
+        if (__vsn_set_angular_velocity == 0) __vsn_set_angular_velocity = StringNames.Get("_set_angular_velocity").Opaque;
+        if (nameSn == __vsn_set_angular_velocity)
+        {
+            _SetAngularVelocity((float)(*(double*)args[0]));
+            return true;
+        }
+        if (__vsn_get_angular_velocity == 0) __vsn_get_angular_velocity = StringNames.Get("_get_angular_velocity").Opaque;
+        if (nameSn == __vsn_get_angular_velocity)
+        {
+            *(double*)ret = _GetAngularVelocity();
+            return true;
+        }
+        if (__vsn_set_transform == 0) __vsn_set_transform = StringNames.Get("_set_transform").Opaque;
+        if (nameSn == __vsn_set_transform)
+        {
+            _SetTransform(*(Transform2D*)args[0]);
+            return true;
+        }
+        if (__vsn_get_transform == 0) __vsn_get_transform = StringNames.Get("_get_transform").Opaque;
+        if (nameSn == __vsn_get_transform)
+        {
+            *(Transform2D*)ret = _GetTransform();
+            return true;
+        }
+        if (__vsn_get_velocity_at_local_position == 0) __vsn_get_velocity_at_local_position = StringNames.Get("_get_velocity_at_local_position").Opaque;
+        if (nameSn == __vsn_get_velocity_at_local_position)
+        {
+            *(Vector2*)ret = _GetVelocityAtLocalPosition(*(Vector2*)args[0]);
+            return true;
+        }
+        if (__vsn_apply_central_impulse == 0) __vsn_apply_central_impulse = StringNames.Get("_apply_central_impulse").Opaque;
+        if (nameSn == __vsn_apply_central_impulse)
+        {
+            _ApplyCentralImpulse(*(Vector2*)args[0]);
+            return true;
+        }
+        if (__vsn_apply_impulse == 0) __vsn_apply_impulse = StringNames.Get("_apply_impulse").Opaque;
+        if (nameSn == __vsn_apply_impulse)
+        {
+            _ApplyImpulse(*(Vector2*)args[0], *(Vector2*)args[1]);
+            return true;
+        }
+        if (__vsn_apply_torque_impulse == 0) __vsn_apply_torque_impulse = StringNames.Get("_apply_torque_impulse").Opaque;
+        if (nameSn == __vsn_apply_torque_impulse)
+        {
+            _ApplyTorqueImpulse((float)(*(double*)args[0]));
+            return true;
+        }
+        if (__vsn_apply_central_force == 0) __vsn_apply_central_force = StringNames.Get("_apply_central_force").Opaque;
+        if (nameSn == __vsn_apply_central_force)
+        {
+            _ApplyCentralForce(*(Vector2*)args[0]);
+            return true;
+        }
+        if (__vsn_apply_force == 0) __vsn_apply_force = StringNames.Get("_apply_force").Opaque;
+        if (nameSn == __vsn_apply_force)
+        {
+            _ApplyForce(*(Vector2*)args[0], *(Vector2*)args[1]);
+            return true;
+        }
+        if (__vsn_apply_torque == 0) __vsn_apply_torque = StringNames.Get("_apply_torque").Opaque;
+        if (nameSn == __vsn_apply_torque)
+        {
+            _ApplyTorque((float)(*(double*)args[0]));
+            return true;
+        }
+        if (__vsn_add_constant_central_force == 0) __vsn_add_constant_central_force = StringNames.Get("_add_constant_central_force").Opaque;
+        if (nameSn == __vsn_add_constant_central_force)
+        {
+            _AddConstantCentralForce(*(Vector2*)args[0]);
+            return true;
+        }
+        if (__vsn_add_constant_force == 0) __vsn_add_constant_force = StringNames.Get("_add_constant_force").Opaque;
+        if (nameSn == __vsn_add_constant_force)
+        {
+            _AddConstantForce(*(Vector2*)args[0], *(Vector2*)args[1]);
+            return true;
+        }
+        if (__vsn_add_constant_torque == 0) __vsn_add_constant_torque = StringNames.Get("_add_constant_torque").Opaque;
+        if (nameSn == __vsn_add_constant_torque)
+        {
+            _AddConstantTorque((float)(*(double*)args[0]));
+            return true;
+        }
+        if (__vsn_set_constant_force == 0) __vsn_set_constant_force = StringNames.Get("_set_constant_force").Opaque;
+        if (nameSn == __vsn_set_constant_force)
+        {
+            _SetConstantForce(*(Vector2*)args[0]);
+            return true;
+        }
+        if (__vsn_get_constant_force == 0) __vsn_get_constant_force = StringNames.Get("_get_constant_force").Opaque;
+        if (nameSn == __vsn_get_constant_force)
+        {
+            *(Vector2*)ret = _GetConstantForce();
+            return true;
+        }
+        if (__vsn_set_constant_torque == 0) __vsn_set_constant_torque = StringNames.Get("_set_constant_torque").Opaque;
+        if (nameSn == __vsn_set_constant_torque)
+        {
+            _SetConstantTorque((float)(*(double*)args[0]));
+            return true;
+        }
+        if (__vsn_get_constant_torque == 0) __vsn_get_constant_torque = StringNames.Get("_get_constant_torque").Opaque;
+        if (nameSn == __vsn_get_constant_torque)
+        {
+            *(double*)ret = _GetConstantTorque();
+            return true;
+        }
+        if (__vsn_set_sleep_state == 0) __vsn_set_sleep_state = StringNames.Get("_set_sleep_state").Opaque;
+        if (nameSn == __vsn_set_sleep_state)
+        {
+            _SetSleepState(*(byte*)args[0] != 0);
+            return true;
+        }
+        if (__vsn_is_sleeping == 0) __vsn_is_sleeping = StringNames.Get("_is_sleeping").Opaque;
+        if (nameSn == __vsn_is_sleeping)
+        {
+            *(byte*)ret = _IsSleeping() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_set_collision_layer == 0) __vsn_set_collision_layer = StringNames.Get("_set_collision_layer").Opaque;
+        if (nameSn == __vsn_set_collision_layer)
+        {
+            _SetCollisionLayer(unchecked((uint)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_collision_layer == 0) __vsn_get_collision_layer = StringNames.Get("_get_collision_layer").Opaque;
+        if (nameSn == __vsn_get_collision_layer)
+        {
+            *(long*)ret = unchecked((long)_GetCollisionLayer());
+            return true;
+        }
+        if (__vsn_set_collision_mask == 0) __vsn_set_collision_mask = StringNames.Get("_set_collision_mask").Opaque;
+        if (nameSn == __vsn_set_collision_mask)
+        {
+            _SetCollisionMask(unchecked((uint)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_collision_mask == 0) __vsn_get_collision_mask = StringNames.Get("_get_collision_mask").Opaque;
+        if (nameSn == __vsn_get_collision_mask)
+        {
+            *(long*)ret = unchecked((long)_GetCollisionMask());
+            return true;
+        }
+        if (__vsn_get_contact_count == 0) __vsn_get_contact_count = StringNames.Get("_get_contact_count").Opaque;
+        if (nameSn == __vsn_get_contact_count)
+        {
+            *(long*)ret = unchecked((long)_GetContactCount());
+            return true;
+        }
+        if (__vsn_get_contact_local_position == 0) __vsn_get_contact_local_position = StringNames.Get("_get_contact_local_position").Opaque;
+        if (nameSn == __vsn_get_contact_local_position)
+        {
+            *(Vector2*)ret = _GetContactLocalPosition(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_contact_local_normal == 0) __vsn_get_contact_local_normal = StringNames.Get("_get_contact_local_normal").Opaque;
+        if (nameSn == __vsn_get_contact_local_normal)
+        {
+            *(Vector2*)ret = _GetContactLocalNormal(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_contact_local_shape == 0) __vsn_get_contact_local_shape = StringNames.Get("_get_contact_local_shape").Opaque;
+        if (nameSn == __vsn_get_contact_local_shape)
+        {
+            *(long*)ret = unchecked((long)_GetContactLocalShape(unchecked((int)(*(long*)args[0]))));
+            return true;
+        }
+        if (__vsn_get_contact_local_velocity_at_position == 0) __vsn_get_contact_local_velocity_at_position = StringNames.Get("_get_contact_local_velocity_at_position").Opaque;
+        if (nameSn == __vsn_get_contact_local_velocity_at_position)
+        {
+            *(Vector2*)ret = _GetContactLocalVelocityAtPosition(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_contact_collider == 0) __vsn_get_contact_collider = StringNames.Get("_get_contact_collider").Opaque;
+        if (nameSn == __vsn_get_contact_collider)
+        {
+            *(Rid*)ret = _GetContactCollider(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_contact_collider_position == 0) __vsn_get_contact_collider_position = StringNames.Get("_get_contact_collider_position").Opaque;
+        if (nameSn == __vsn_get_contact_collider_position)
+        {
+            *(Vector2*)ret = _GetContactColliderPosition(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_contact_collider_id == 0) __vsn_get_contact_collider_id = StringNames.Get("_get_contact_collider_id").Opaque;
+        if (nameSn == __vsn_get_contact_collider_id)
+        {
+            *(long*)ret = unchecked((long)_GetContactColliderId(unchecked((int)(*(long*)args[0]))));
+            return true;
+        }
+        if (__vsn_get_contact_collider_object == 0) __vsn_get_contact_collider_object = StringNames.Get("_get_contact_collider_object").Opaque;
+        if (nameSn == __vsn_get_contact_collider_object)
+        {
+            *(nint*)ret = _GetContactColliderObject(unchecked((int)(*(long*)args[0])))?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_get_contact_collider_shape == 0) __vsn_get_contact_collider_shape = StringNames.Get("_get_contact_collider_shape").Opaque;
+        if (nameSn == __vsn_get_contact_collider_shape)
+        {
+            *(long*)ret = unchecked((long)_GetContactColliderShape(unchecked((int)(*(long*)args[0]))));
+            return true;
+        }
+        if (__vsn_get_contact_collider_velocity_at_position == 0) __vsn_get_contact_collider_velocity_at_position = StringNames.Get("_get_contact_collider_velocity_at_position").Opaque;
+        if (nameSn == __vsn_get_contact_collider_velocity_at_position)
+        {
+            *(Vector2*)ret = _GetContactColliderVelocityAtPosition(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_contact_impulse == 0) __vsn_get_contact_impulse = StringNames.Get("_get_contact_impulse").Opaque;
+        if (nameSn == __vsn_get_contact_impulse)
+        {
+            *(Vector2*)ret = _GetContactImpulse(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_step == 0) __vsn_get_step = StringNames.Get("_get_step").Opaque;
+        if (nameSn == __vsn_get_step)
+        {
+            *(double*)ret = _GetStep();
+            return true;
+        }
+        if (__vsn_integrate_forces == 0) __vsn_integrate_forces = StringNames.Get("_integrate_forces").Opaque;
+        if (nameSn == __vsn_integrate_forces)
+        {
+            _IntegrateForces();
+            return true;
+        }
+        if (__vsn_get_space_state == 0) __vsn_get_space_state = StringNames.Get("_get_space_state").Opaque;
+        if (nameSn == __vsn_get_space_state)
+        {
+            *(nint*)ret = _GetSpaceState()?.NativePtr ?? 0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -7222,9 +7699,465 @@ public unsafe partial class PhysicsDirectBodyState3DExtension : PhysicsDirectBod
 {
     internal PhysicsDirectBodyState3DExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsDirectBodyState3DExtension() : this(InstanceBindings.ConstructRaw("PhysicsDirectBodyState3DExtension"), false)
+    public PhysicsDirectBodyState3DExtension() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsDirectBodyState3DExtension");
+    }
+
+    public virtual Vector3 _GetTotalGravity() => default!;
+
+    public virtual float _GetTotalLinearDamp() => default!;
+
+    public virtual float _GetTotalAngularDamp() => default!;
+
+    public virtual Vector3 _GetCenterOfMass() => default!;
+
+    public virtual Vector3 _GetCenterOfMassLocal() => default!;
+
+    public virtual Basis _GetPrincipalInertiaAxes() => default!;
+
+    public virtual float _GetInverseMass() => default!;
+
+    public virtual Vector3 _GetInverseInertia() => default!;
+
+    public virtual Basis _GetInverseInertiaTensor() => default!;
+
+    public virtual void _SetLinearVelocity(Vector3 velocity) { }
+
+    public virtual Vector3 _GetLinearVelocity() => default!;
+
+    public virtual void _SetAngularVelocity(Vector3 velocity) { }
+
+    public virtual Vector3 _GetAngularVelocity() => default!;
+
+    public virtual void _SetTransform(Transform3D transform) { }
+
+    public virtual Transform3D _GetTransform() => default!;
+
+    public virtual Vector3 _GetVelocityAtLocalPosition(Vector3 localPosition) => default!;
+
+    public virtual void _ApplyCentralImpulse(Vector3 impulse) { }
+
+    public virtual void _ApplyImpulse(Vector3 impulse, Vector3 position) { }
+
+    public virtual void _ApplyTorqueImpulse(Vector3 impulse) { }
+
+    public virtual void _ApplyCentralForce(Vector3 force) { }
+
+    public virtual void _ApplyForce(Vector3 force, Vector3 position) { }
+
+    public virtual void _ApplyTorque(Vector3 torque) { }
+
+    public virtual void _AddConstantCentralForce(Vector3 force) { }
+
+    public virtual void _AddConstantForce(Vector3 force, Vector3 position) { }
+
+    public virtual void _AddConstantTorque(Vector3 torque) { }
+
+    public virtual void _SetConstantForce(Vector3 force) { }
+
+    public virtual Vector3 _GetConstantForce() => default!;
+
+    public virtual void _SetConstantTorque(Vector3 torque) { }
+
+    public virtual Vector3 _GetConstantTorque() => default!;
+
+    public virtual void _SetSleepState(bool enabled) { }
+
+    public virtual bool _IsSleeping() => default!;
+
+    public virtual void _SetCollisionLayer(uint layer) { }
+
+    public virtual uint _GetCollisionLayer() => default!;
+
+    public virtual void _SetCollisionMask(uint mask) { }
+
+    public virtual uint _GetCollisionMask() => default!;
+
+    public virtual int _GetContactCount() => default!;
+
+    public virtual Vector3 _GetContactLocalPosition(int contactIdx) => default!;
+
+    public virtual Vector3 _GetContactLocalNormal(int contactIdx) => default!;
+
+    public virtual Vector3 _GetContactImpulse(int contactIdx) => default!;
+
+    public virtual int _GetContactLocalShape(int contactIdx) => default!;
+
+    public virtual Vector3 _GetContactLocalVelocityAtPosition(int contactIdx) => default!;
+
+    public virtual Rid _GetContactCollider(int contactIdx) => default!;
+
+    public virtual Vector3 _GetContactColliderPosition(int contactIdx) => default!;
+
+    public virtual ulong _GetContactColliderId(int contactIdx) => default!;
+
+    public virtual GodotObject? _GetContactColliderObject(int contactIdx) => default!;
+
+    public virtual int _GetContactColliderShape(int contactIdx) => default!;
+
+    public virtual Vector3 _GetContactColliderVelocityAtPosition(int contactIdx) => default!;
+
+    public virtual float _GetStep() => default!;
+
+    public virtual void _IntegrateForces() { }
+
+    public virtual PhysicsDirectSpaceState3D? _GetSpaceState() => default!;
+
+    private static ulong __vsn_get_total_gravity;
+    private static ulong __vsn_get_total_linear_damp;
+    private static ulong __vsn_get_total_angular_damp;
+    private static ulong __vsn_get_center_of_mass;
+    private static ulong __vsn_get_center_of_mass_local;
+    private static ulong __vsn_get_principal_inertia_axes;
+    private static ulong __vsn_get_inverse_mass;
+    private static ulong __vsn_get_inverse_inertia;
+    private static ulong __vsn_get_inverse_inertia_tensor;
+    private static ulong __vsn_set_linear_velocity;
+    private static ulong __vsn_get_linear_velocity;
+    private static ulong __vsn_set_angular_velocity;
+    private static ulong __vsn_get_angular_velocity;
+    private static ulong __vsn_set_transform;
+    private static ulong __vsn_get_transform;
+    private static ulong __vsn_get_velocity_at_local_position;
+    private static ulong __vsn_apply_central_impulse;
+    private static ulong __vsn_apply_impulse;
+    private static ulong __vsn_apply_torque_impulse;
+    private static ulong __vsn_apply_central_force;
+    private static ulong __vsn_apply_force;
+    private static ulong __vsn_apply_torque;
+    private static ulong __vsn_add_constant_central_force;
+    private static ulong __vsn_add_constant_force;
+    private static ulong __vsn_add_constant_torque;
+    private static ulong __vsn_set_constant_force;
+    private static ulong __vsn_get_constant_force;
+    private static ulong __vsn_set_constant_torque;
+    private static ulong __vsn_get_constant_torque;
+    private static ulong __vsn_set_sleep_state;
+    private static ulong __vsn_is_sleeping;
+    private static ulong __vsn_set_collision_layer;
+    private static ulong __vsn_get_collision_layer;
+    private static ulong __vsn_set_collision_mask;
+    private static ulong __vsn_get_collision_mask;
+    private static ulong __vsn_get_contact_count;
+    private static ulong __vsn_get_contact_local_position;
+    private static ulong __vsn_get_contact_local_normal;
+    private static ulong __vsn_get_contact_impulse;
+    private static ulong __vsn_get_contact_local_shape;
+    private static ulong __vsn_get_contact_local_velocity_at_position;
+    private static ulong __vsn_get_contact_collider;
+    private static ulong __vsn_get_contact_collider_position;
+    private static ulong __vsn_get_contact_collider_id;
+    private static ulong __vsn_get_contact_collider_object;
+    private static ulong __vsn_get_contact_collider_shape;
+    private static ulong __vsn_get_contact_collider_velocity_at_position;
+    private static ulong __vsn_get_step;
+    private static ulong __vsn_integrate_forces;
+    private static ulong __vsn_get_space_state;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_total_gravity == 0) __vsn_get_total_gravity = StringNames.Get("_get_total_gravity").Opaque;
+        if (nameSn == __vsn_get_total_gravity)
+        {
+            *(Vector3*)ret = _GetTotalGravity();
+            return true;
+        }
+        if (__vsn_get_total_linear_damp == 0) __vsn_get_total_linear_damp = StringNames.Get("_get_total_linear_damp").Opaque;
+        if (nameSn == __vsn_get_total_linear_damp)
+        {
+            *(double*)ret = _GetTotalLinearDamp();
+            return true;
+        }
+        if (__vsn_get_total_angular_damp == 0) __vsn_get_total_angular_damp = StringNames.Get("_get_total_angular_damp").Opaque;
+        if (nameSn == __vsn_get_total_angular_damp)
+        {
+            *(double*)ret = _GetTotalAngularDamp();
+            return true;
+        }
+        if (__vsn_get_center_of_mass == 0) __vsn_get_center_of_mass = StringNames.Get("_get_center_of_mass").Opaque;
+        if (nameSn == __vsn_get_center_of_mass)
+        {
+            *(Vector3*)ret = _GetCenterOfMass();
+            return true;
+        }
+        if (__vsn_get_center_of_mass_local == 0) __vsn_get_center_of_mass_local = StringNames.Get("_get_center_of_mass_local").Opaque;
+        if (nameSn == __vsn_get_center_of_mass_local)
+        {
+            *(Vector3*)ret = _GetCenterOfMassLocal();
+            return true;
+        }
+        if (__vsn_get_principal_inertia_axes == 0) __vsn_get_principal_inertia_axes = StringNames.Get("_get_principal_inertia_axes").Opaque;
+        if (nameSn == __vsn_get_principal_inertia_axes)
+        {
+            *(Basis*)ret = _GetPrincipalInertiaAxes();
+            return true;
+        }
+        if (__vsn_get_inverse_mass == 0) __vsn_get_inverse_mass = StringNames.Get("_get_inverse_mass").Opaque;
+        if (nameSn == __vsn_get_inverse_mass)
+        {
+            *(double*)ret = _GetInverseMass();
+            return true;
+        }
+        if (__vsn_get_inverse_inertia == 0) __vsn_get_inverse_inertia = StringNames.Get("_get_inverse_inertia").Opaque;
+        if (nameSn == __vsn_get_inverse_inertia)
+        {
+            *(Vector3*)ret = _GetInverseInertia();
+            return true;
+        }
+        if (__vsn_get_inverse_inertia_tensor == 0) __vsn_get_inverse_inertia_tensor = StringNames.Get("_get_inverse_inertia_tensor").Opaque;
+        if (nameSn == __vsn_get_inverse_inertia_tensor)
+        {
+            *(Basis*)ret = _GetInverseInertiaTensor();
+            return true;
+        }
+        if (__vsn_set_linear_velocity == 0) __vsn_set_linear_velocity = StringNames.Get("_set_linear_velocity").Opaque;
+        if (nameSn == __vsn_set_linear_velocity)
+        {
+            _SetLinearVelocity(*(Vector3*)args[0]);
+            return true;
+        }
+        if (__vsn_get_linear_velocity == 0) __vsn_get_linear_velocity = StringNames.Get("_get_linear_velocity").Opaque;
+        if (nameSn == __vsn_get_linear_velocity)
+        {
+            *(Vector3*)ret = _GetLinearVelocity();
+            return true;
+        }
+        if (__vsn_set_angular_velocity == 0) __vsn_set_angular_velocity = StringNames.Get("_set_angular_velocity").Opaque;
+        if (nameSn == __vsn_set_angular_velocity)
+        {
+            _SetAngularVelocity(*(Vector3*)args[0]);
+            return true;
+        }
+        if (__vsn_get_angular_velocity == 0) __vsn_get_angular_velocity = StringNames.Get("_get_angular_velocity").Opaque;
+        if (nameSn == __vsn_get_angular_velocity)
+        {
+            *(Vector3*)ret = _GetAngularVelocity();
+            return true;
+        }
+        if (__vsn_set_transform == 0) __vsn_set_transform = StringNames.Get("_set_transform").Opaque;
+        if (nameSn == __vsn_set_transform)
+        {
+            _SetTransform(*(Transform3D*)args[0]);
+            return true;
+        }
+        if (__vsn_get_transform == 0) __vsn_get_transform = StringNames.Get("_get_transform").Opaque;
+        if (nameSn == __vsn_get_transform)
+        {
+            *(Transform3D*)ret = _GetTransform();
+            return true;
+        }
+        if (__vsn_get_velocity_at_local_position == 0) __vsn_get_velocity_at_local_position = StringNames.Get("_get_velocity_at_local_position").Opaque;
+        if (nameSn == __vsn_get_velocity_at_local_position)
+        {
+            *(Vector3*)ret = _GetVelocityAtLocalPosition(*(Vector3*)args[0]);
+            return true;
+        }
+        if (__vsn_apply_central_impulse == 0) __vsn_apply_central_impulse = StringNames.Get("_apply_central_impulse").Opaque;
+        if (nameSn == __vsn_apply_central_impulse)
+        {
+            _ApplyCentralImpulse(*(Vector3*)args[0]);
+            return true;
+        }
+        if (__vsn_apply_impulse == 0) __vsn_apply_impulse = StringNames.Get("_apply_impulse").Opaque;
+        if (nameSn == __vsn_apply_impulse)
+        {
+            _ApplyImpulse(*(Vector3*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_apply_torque_impulse == 0) __vsn_apply_torque_impulse = StringNames.Get("_apply_torque_impulse").Opaque;
+        if (nameSn == __vsn_apply_torque_impulse)
+        {
+            _ApplyTorqueImpulse(*(Vector3*)args[0]);
+            return true;
+        }
+        if (__vsn_apply_central_force == 0) __vsn_apply_central_force = StringNames.Get("_apply_central_force").Opaque;
+        if (nameSn == __vsn_apply_central_force)
+        {
+            _ApplyCentralForce(*(Vector3*)args[0]);
+            return true;
+        }
+        if (__vsn_apply_force == 0) __vsn_apply_force = StringNames.Get("_apply_force").Opaque;
+        if (nameSn == __vsn_apply_force)
+        {
+            _ApplyForce(*(Vector3*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_apply_torque == 0) __vsn_apply_torque = StringNames.Get("_apply_torque").Opaque;
+        if (nameSn == __vsn_apply_torque)
+        {
+            _ApplyTorque(*(Vector3*)args[0]);
+            return true;
+        }
+        if (__vsn_add_constant_central_force == 0) __vsn_add_constant_central_force = StringNames.Get("_add_constant_central_force").Opaque;
+        if (nameSn == __vsn_add_constant_central_force)
+        {
+            _AddConstantCentralForce(*(Vector3*)args[0]);
+            return true;
+        }
+        if (__vsn_add_constant_force == 0) __vsn_add_constant_force = StringNames.Get("_add_constant_force").Opaque;
+        if (nameSn == __vsn_add_constant_force)
+        {
+            _AddConstantForce(*(Vector3*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_add_constant_torque == 0) __vsn_add_constant_torque = StringNames.Get("_add_constant_torque").Opaque;
+        if (nameSn == __vsn_add_constant_torque)
+        {
+            _AddConstantTorque(*(Vector3*)args[0]);
+            return true;
+        }
+        if (__vsn_set_constant_force == 0) __vsn_set_constant_force = StringNames.Get("_set_constant_force").Opaque;
+        if (nameSn == __vsn_set_constant_force)
+        {
+            _SetConstantForce(*(Vector3*)args[0]);
+            return true;
+        }
+        if (__vsn_get_constant_force == 0) __vsn_get_constant_force = StringNames.Get("_get_constant_force").Opaque;
+        if (nameSn == __vsn_get_constant_force)
+        {
+            *(Vector3*)ret = _GetConstantForce();
+            return true;
+        }
+        if (__vsn_set_constant_torque == 0) __vsn_set_constant_torque = StringNames.Get("_set_constant_torque").Opaque;
+        if (nameSn == __vsn_set_constant_torque)
+        {
+            _SetConstantTorque(*(Vector3*)args[0]);
+            return true;
+        }
+        if (__vsn_get_constant_torque == 0) __vsn_get_constant_torque = StringNames.Get("_get_constant_torque").Opaque;
+        if (nameSn == __vsn_get_constant_torque)
+        {
+            *(Vector3*)ret = _GetConstantTorque();
+            return true;
+        }
+        if (__vsn_set_sleep_state == 0) __vsn_set_sleep_state = StringNames.Get("_set_sleep_state").Opaque;
+        if (nameSn == __vsn_set_sleep_state)
+        {
+            _SetSleepState(*(byte*)args[0] != 0);
+            return true;
+        }
+        if (__vsn_is_sleeping == 0) __vsn_is_sleeping = StringNames.Get("_is_sleeping").Opaque;
+        if (nameSn == __vsn_is_sleeping)
+        {
+            *(byte*)ret = _IsSleeping() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_set_collision_layer == 0) __vsn_set_collision_layer = StringNames.Get("_set_collision_layer").Opaque;
+        if (nameSn == __vsn_set_collision_layer)
+        {
+            _SetCollisionLayer(unchecked((uint)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_collision_layer == 0) __vsn_get_collision_layer = StringNames.Get("_get_collision_layer").Opaque;
+        if (nameSn == __vsn_get_collision_layer)
+        {
+            *(long*)ret = unchecked((long)_GetCollisionLayer());
+            return true;
+        }
+        if (__vsn_set_collision_mask == 0) __vsn_set_collision_mask = StringNames.Get("_set_collision_mask").Opaque;
+        if (nameSn == __vsn_set_collision_mask)
+        {
+            _SetCollisionMask(unchecked((uint)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_collision_mask == 0) __vsn_get_collision_mask = StringNames.Get("_get_collision_mask").Opaque;
+        if (nameSn == __vsn_get_collision_mask)
+        {
+            *(long*)ret = unchecked((long)_GetCollisionMask());
+            return true;
+        }
+        if (__vsn_get_contact_count == 0) __vsn_get_contact_count = StringNames.Get("_get_contact_count").Opaque;
+        if (nameSn == __vsn_get_contact_count)
+        {
+            *(long*)ret = unchecked((long)_GetContactCount());
+            return true;
+        }
+        if (__vsn_get_contact_local_position == 0) __vsn_get_contact_local_position = StringNames.Get("_get_contact_local_position").Opaque;
+        if (nameSn == __vsn_get_contact_local_position)
+        {
+            *(Vector3*)ret = _GetContactLocalPosition(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_contact_local_normal == 0) __vsn_get_contact_local_normal = StringNames.Get("_get_contact_local_normal").Opaque;
+        if (nameSn == __vsn_get_contact_local_normal)
+        {
+            *(Vector3*)ret = _GetContactLocalNormal(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_contact_impulse == 0) __vsn_get_contact_impulse = StringNames.Get("_get_contact_impulse").Opaque;
+        if (nameSn == __vsn_get_contact_impulse)
+        {
+            *(Vector3*)ret = _GetContactImpulse(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_contact_local_shape == 0) __vsn_get_contact_local_shape = StringNames.Get("_get_contact_local_shape").Opaque;
+        if (nameSn == __vsn_get_contact_local_shape)
+        {
+            *(long*)ret = unchecked((long)_GetContactLocalShape(unchecked((int)(*(long*)args[0]))));
+            return true;
+        }
+        if (__vsn_get_contact_local_velocity_at_position == 0) __vsn_get_contact_local_velocity_at_position = StringNames.Get("_get_contact_local_velocity_at_position").Opaque;
+        if (nameSn == __vsn_get_contact_local_velocity_at_position)
+        {
+            *(Vector3*)ret = _GetContactLocalVelocityAtPosition(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_contact_collider == 0) __vsn_get_contact_collider = StringNames.Get("_get_contact_collider").Opaque;
+        if (nameSn == __vsn_get_contact_collider)
+        {
+            *(Rid*)ret = _GetContactCollider(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_contact_collider_position == 0) __vsn_get_contact_collider_position = StringNames.Get("_get_contact_collider_position").Opaque;
+        if (nameSn == __vsn_get_contact_collider_position)
+        {
+            *(Vector3*)ret = _GetContactColliderPosition(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_contact_collider_id == 0) __vsn_get_contact_collider_id = StringNames.Get("_get_contact_collider_id").Opaque;
+        if (nameSn == __vsn_get_contact_collider_id)
+        {
+            *(long*)ret = unchecked((long)_GetContactColliderId(unchecked((int)(*(long*)args[0]))));
+            return true;
+        }
+        if (__vsn_get_contact_collider_object == 0) __vsn_get_contact_collider_object = StringNames.Get("_get_contact_collider_object").Opaque;
+        if (nameSn == __vsn_get_contact_collider_object)
+        {
+            *(nint*)ret = _GetContactColliderObject(unchecked((int)(*(long*)args[0])))?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_get_contact_collider_shape == 0) __vsn_get_contact_collider_shape = StringNames.Get("_get_contact_collider_shape").Opaque;
+        if (nameSn == __vsn_get_contact_collider_shape)
+        {
+            *(long*)ret = unchecked((long)_GetContactColliderShape(unchecked((int)(*(long*)args[0]))));
+            return true;
+        }
+        if (__vsn_get_contact_collider_velocity_at_position == 0) __vsn_get_contact_collider_velocity_at_position = StringNames.Get("_get_contact_collider_velocity_at_position").Opaque;
+        if (nameSn == __vsn_get_contact_collider_velocity_at_position)
+        {
+            *(Vector3*)ret = _GetContactColliderVelocityAtPosition(unchecked((int)(*(long*)args[0])));
+            return true;
+        }
+        if (__vsn_get_step == 0) __vsn_get_step = StringNames.Get("_get_step").Opaque;
+        if (nameSn == __vsn_get_step)
+        {
+            *(double*)ret = _GetStep();
+            return true;
+        }
+        if (__vsn_integrate_forces == 0) __vsn_integrate_forces = StringNames.Get("_integrate_forces").Opaque;
+        if (nameSn == __vsn_integrate_forces)
+        {
+            _IntegrateForces();
+            return true;
+        }
+        if (__vsn_get_space_state == 0) __vsn_get_space_state = StringNames.Get("_get_space_state").Opaque;
+        if (nameSn == __vsn_get_space_state)
+        {
+            *(nint*)ret = _GetSpaceState()?.NativePtr ?? 0;
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -7237,9 +8170,9 @@ public unsafe partial class PhysicsDirectSpaceState2DExtension : PhysicsDirectSp
 {
     internal PhysicsDirectSpaceState2DExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsDirectSpaceState2DExtension() : this(InstanceBindings.ConstructRaw("PhysicsDirectSpaceState2DExtension"), false)
+    public PhysicsDirectSpaceState2DExtension() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsDirectSpaceState2DExtension");
     }
 
     private static nint __mb_is_body_excluded_from_query;
@@ -7270,9 +8203,9 @@ public unsafe partial class PhysicsDirectSpaceState3DExtension : PhysicsDirectSp
 {
     internal PhysicsDirectSpaceState3DExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsDirectSpaceState3DExtension() : this(InstanceBindings.ConstructRaw("PhysicsDirectSpaceState3DExtension"), false)
+    public PhysicsDirectSpaceState3DExtension() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsDirectSpaceState3DExtension");
     }
 
     private static nint __mb_is_body_excluded_from_query;
@@ -7292,15 +8225,30 @@ public unsafe partial class PhysicsDirectSpaceState3DExtension : PhysicsDirectSp
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
+
+    public virtual Vector3 _GetClosestPointToObjectVolume(Rid @object, Vector3 point) => default!;
+
+    private static ulong __vsn_get_closest_point_to_object_volume;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_closest_point_to_object_volume == 0) __vsn_get_closest_point_to_object_volume = StringNames.Get("_get_closest_point_to_object_volume").Opaque;
+        if (nameSn == __vsn_get_closest_point_to_object_volume)
+        {
+            *(Vector3*)ret = _GetClosestPointToObjectVolume(*(Rid*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class PhysicsMaterial : Resource
 {
     internal PhysicsMaterial(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsMaterial() : this(InstanceBindings.ConstructRaw("PhysicsMaterial"), true)
+    public PhysicsMaterial() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsMaterial");
     }
 
     private static nint __mb_set_friction;
@@ -7432,9 +8380,9 @@ public unsafe partial class PhysicsPointQueryParameters2D : RefCounted
 {
     internal PhysicsPointQueryParameters2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsPointQueryParameters2D() : this(InstanceBindings.ConstructRaw("PhysicsPointQueryParameters2D"), true)
+    public PhysicsPointQueryParameters2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsPointQueryParameters2D");
     }
 
     private static nint __mb_set_position;
@@ -7597,9 +8545,9 @@ public unsafe partial class PhysicsPointQueryParameters3D : RefCounted
 {
     internal PhysicsPointQueryParameters3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsPointQueryParameters3D() : this(InstanceBindings.ConstructRaw("PhysicsPointQueryParameters3D"), true)
+    public PhysicsPointQueryParameters3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsPointQueryParameters3D");
     }
 
     private static nint __mb_set_position;
@@ -7731,9 +8679,9 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
 {
     internal PhysicsRayQueryParameters2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsRayQueryParameters2D() : this(InstanceBindings.ConstructRaw("PhysicsRayQueryParameters2D"), true)
+    public PhysicsRayQueryParameters2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsRayQueryParameters2D");
     }
 
     private static nint __mb_set_from;
@@ -7927,9 +8875,9 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
 {
     internal PhysicsRayQueryParameters3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsRayQueryParameters3D() : this(InstanceBindings.ConstructRaw("PhysicsRayQueryParameters3D"), true)
+    public PhysicsRayQueryParameters3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsRayQueryParameters3D");
     }
 
     private static nint __mb_set_from;
@@ -10265,9 +11213,9 @@ public unsafe partial class PhysicsServer2DExtension : PhysicsServer2D
 {
     internal PhysicsServer2DExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsServer2DExtension() : this(InstanceBindings.ConstructRaw("PhysicsServer2DExtension"), false)
+    public PhysicsServer2DExtension() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsServer2DExtension");
     }
 
     private static nint __mb_body_test_motion_is_excluding_body;
@@ -10305,15 +11253,1110 @@ public unsafe partial class PhysicsServer2DExtension : PhysicsServer2D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
+
+    public virtual Rid _WorldBoundaryShapeCreate() => default!;
+
+    public virtual Rid _SeparationRayShapeCreate() => default!;
+
+    public virtual Rid _SegmentShapeCreate() => default!;
+
+    public virtual Rid _CircleShapeCreate() => default!;
+
+    public virtual Rid _RectangleShapeCreate() => default!;
+
+    public virtual Rid _CapsuleShapeCreate() => default!;
+
+    public virtual Rid _ConvexPolygonShapeCreate() => default!;
+
+    public virtual Rid _ConcavePolygonShapeCreate() => default!;
+
+    public virtual void _ShapeSetCustomSolverBias(Rid shape, float bias) { }
+
+    public virtual PhysicsServer2D.ShapeType _ShapeGetType(Rid shape) => default!;
+
+    public virtual float _ShapeGetCustomSolverBias(Rid shape) => default!;
+
+    public virtual Rid _SpaceCreate() => default!;
+
+    public virtual void _SpaceSetActive(Rid space, bool active) { }
+
+    public virtual bool _SpaceIsActive(Rid space) => default!;
+
+    public virtual void _SpaceSetParam(Rid space, PhysicsServer2D.SpaceParameter param, float value) { }
+
+    public virtual float _SpaceGetParam(Rid space, PhysicsServer2D.SpaceParameter param) => default!;
+
+    public virtual PhysicsDirectSpaceState2D? _SpaceGetDirectState(Rid space) => default!;
+
+    public virtual void _SpaceSetDebugContacts(Rid space, int maxContacts) { }
+
+    public virtual int _SpaceGetContactCount(Rid space) => default!;
+
+    public virtual Rid _AreaCreate() => default!;
+
+    public virtual void _AreaSetSpace(Rid area, Rid space) { }
+
+    public virtual Rid _AreaGetSpace(Rid area) => default!;
+
+    public virtual void _AreaAddShape(Rid area, Rid shape, Transform2D transform, bool disabled) { }
+
+    public virtual void _AreaSetShape(Rid area, int shapeIdx, Rid shape) { }
+
+    public virtual void _AreaSetShapeTransform(Rid area, int shapeIdx, Transform2D transform) { }
+
+    public virtual void _AreaSetShapeDisabled(Rid area, int shapeIdx, bool disabled) { }
+
+    public virtual int _AreaGetShapeCount(Rid area) => default!;
+
+    public virtual Rid _AreaGetShape(Rid area, int shapeIdx) => default!;
+
+    public virtual Transform2D _AreaGetShapeTransform(Rid area, int shapeIdx) => default!;
+
+    public virtual void _AreaRemoveShape(Rid area, int shapeIdx) { }
+
+    public virtual void _AreaClearShapes(Rid area) { }
+
+    public virtual void _AreaAttachObjectInstanceId(Rid area, ulong id) { }
+
+    public virtual ulong _AreaGetObjectInstanceId(Rid area) => default!;
+
+    public virtual void _AreaAttachCanvasInstanceId(Rid area, ulong id) { }
+
+    public virtual ulong _AreaGetCanvasInstanceId(Rid area) => default!;
+
+    public virtual void _AreaSetTransform(Rid area, Transform2D transform) { }
+
+    public virtual Transform2D _AreaGetTransform(Rid area) => default!;
+
+    public virtual void _AreaSetCollisionLayer(Rid area, uint layer) { }
+
+    public virtual uint _AreaGetCollisionLayer(Rid area) => default!;
+
+    public virtual void _AreaSetCollisionMask(Rid area, uint mask) { }
+
+    public virtual uint _AreaGetCollisionMask(Rid area) => default!;
+
+    public virtual void _AreaSetMonitorable(Rid area, bool monitorable) { }
+
+    public virtual void _AreaSetPickable(Rid area, bool pickable) { }
+
+    public virtual Rid _BodyCreate() => default!;
+
+    public virtual void _BodySetSpace(Rid body, Rid space) { }
+
+    public virtual Rid _BodyGetSpace(Rid body) => default!;
+
+    public virtual void _BodySetMode(Rid body, PhysicsServer2D.BodyMode mode) { }
+
+    public virtual PhysicsServer2D.BodyMode _BodyGetMode(Rid body) => default!;
+
+    public virtual void _BodyAddShape(Rid body, Rid shape, Transform2D transform, bool disabled) { }
+
+    public virtual void _BodySetShape(Rid body, int shapeIdx, Rid shape) { }
+
+    public virtual void _BodySetShapeTransform(Rid body, int shapeIdx, Transform2D transform) { }
+
+    public virtual int _BodyGetShapeCount(Rid body) => default!;
+
+    public virtual Rid _BodyGetShape(Rid body, int shapeIdx) => default!;
+
+    public virtual Transform2D _BodyGetShapeTransform(Rid body, int shapeIdx) => default!;
+
+    public virtual void _BodySetShapeDisabled(Rid body, int shapeIdx, bool disabled) { }
+
+    public virtual void _BodySetShapeAsOneWayCollision(Rid body, int shapeIdx, bool enable, float margin, Vector2 direction) { }
+
+    public virtual void _BodyRemoveShape(Rid body, int shapeIdx) { }
+
+    public virtual void _BodyClearShapes(Rid body) { }
+
+    public virtual void _BodyAttachObjectInstanceId(Rid body, ulong id) { }
+
+    public virtual ulong _BodyGetObjectInstanceId(Rid body) => default!;
+
+    public virtual void _BodyAttachCanvasInstanceId(Rid body, ulong id) { }
+
+    public virtual ulong _BodyGetCanvasInstanceId(Rid body) => default!;
+
+    public virtual void _BodySetContinuousCollisionDetectionMode(Rid body, PhysicsServer2D.CCDMode mode) { }
+
+    public virtual PhysicsServer2D.CCDMode _BodyGetContinuousCollisionDetectionMode(Rid body) => default!;
+
+    public virtual void _BodySetCollisionLayer(Rid body, uint layer) { }
+
+    public virtual uint _BodyGetCollisionLayer(Rid body) => default!;
+
+    public virtual void _BodySetCollisionMask(Rid body, uint mask) { }
+
+    public virtual uint _BodyGetCollisionMask(Rid body) => default!;
+
+    public virtual void _BodySetCollisionPriority(Rid body, float priority) { }
+
+    public virtual float _BodyGetCollisionPriority(Rid body) => default!;
+
+    public virtual void _BodyResetMassProperties(Rid body) { }
+
+    public virtual void _BodyApplyCentralImpulse(Rid body, Vector2 impulse) { }
+
+    public virtual void _BodyApplyTorqueImpulse(Rid body, float impulse) { }
+
+    public virtual void _BodyApplyImpulse(Rid body, Vector2 impulse, Vector2 position) { }
+
+    public virtual void _BodyApplyCentralForce(Rid body, Vector2 force) { }
+
+    public virtual void _BodyApplyForce(Rid body, Vector2 force, Vector2 position) { }
+
+    public virtual void _BodyApplyTorque(Rid body, float torque) { }
+
+    public virtual void _BodyAddConstantCentralForce(Rid body, Vector2 force) { }
+
+    public virtual void _BodyAddConstantForce(Rid body, Vector2 force, Vector2 position) { }
+
+    public virtual void _BodyAddConstantTorque(Rid body, float torque) { }
+
+    public virtual void _BodySetConstantForce(Rid body, Vector2 force) { }
+
+    public virtual Vector2 _BodyGetConstantForce(Rid body) => default!;
+
+    public virtual void _BodySetConstantTorque(Rid body, float torque) { }
+
+    public virtual float _BodyGetConstantTorque(Rid body) => default!;
+
+    public virtual void _BodySetAxisVelocity(Rid body, Vector2 axisVelocity) { }
+
+    public virtual void _BodyAddCollisionException(Rid body, Rid exceptedBody) { }
+
+    public virtual void _BodyRemoveCollisionException(Rid body, Rid exceptedBody) { }
+
+    public virtual void _BodySetMaxContactsReported(Rid body, int amount) { }
+
+    public virtual int _BodyGetMaxContactsReported(Rid body) => default!;
+
+    public virtual void _BodySetContactsReportedDepthThreshold(Rid body, float threshold) { }
+
+    public virtual float _BodyGetContactsReportedDepthThreshold(Rid body) => default!;
+
+    public virtual void _BodySetOmitForceIntegration(Rid body, bool enable) { }
+
+    public virtual bool _BodyIsOmittingForceIntegration(Rid body) => default!;
+
+    public virtual void _BodySetPickable(Rid body, bool pickable) { }
+
+    public virtual PhysicsDirectBodyState2D? _BodyGetDirectState(Rid body) => default!;
+
+    public virtual Rid _JointCreate() => default!;
+
+    public virtual void _JointClear(Rid joint) { }
+
+    public virtual void _JointSetParam(Rid joint, PhysicsServer2D.JointParam param, float value) { }
+
+    public virtual float _JointGetParam(Rid joint, PhysicsServer2D.JointParam param) => default!;
+
+    public virtual void _JointDisableCollisionsBetweenBodies(Rid joint, bool disable) { }
+
+    public virtual bool _JointIsDisabledCollisionsBetweenBodies(Rid joint) => default!;
+
+    public virtual void _JointMakePin(Rid joint, Vector2 anchor, Rid bodyA, Rid bodyB) { }
+
+    public virtual void _JointMakeGroove(Rid joint, Vector2 aGroove1, Vector2 aGroove2, Vector2 bAnchor, Rid bodyA, Rid bodyB) { }
+
+    public virtual void _JointMakeDampedSpring(Rid joint, Vector2 anchorA, Vector2 anchorB, Rid bodyA, Rid bodyB) { }
+
+    public virtual void _PinJointSetFlag(Rid joint, PhysicsServer2D.PinJointFlag flag, bool enabled) { }
+
+    public virtual bool _PinJointGetFlag(Rid joint, PhysicsServer2D.PinJointFlag flag) => default!;
+
+    public virtual void _PinJointSetParam(Rid joint, PhysicsServer2D.PinJointParam param, float value) { }
+
+    public virtual float _PinJointGetParam(Rid joint, PhysicsServer2D.PinJointParam param) => default!;
+
+    public virtual void _DampedSpringJointSetParam(Rid joint, PhysicsServer2D.DampedSpringParam param, float value) { }
+
+    public virtual float _DampedSpringJointGetParam(Rid joint, PhysicsServer2D.DampedSpringParam param) => default!;
+
+    public virtual PhysicsServer2D.JointType _JointGetType(Rid joint) => default!;
+
+    public virtual void _FreeRid(Rid rid) { }
+
+    public virtual void _SetActive(bool active) { }
+
+    public virtual void _Init() { }
+
+    public virtual void _Step(float step) { }
+
+    public virtual void _Sync() { }
+
+    public virtual void _FlushQueries() { }
+
+    public virtual void _EndSync() { }
+
+    public virtual void _Finish() { }
+
+    public virtual bool _IsFlushingQueries() => default!;
+
+    public virtual int _GetProcessInfo(PhysicsServer2D.ProcessInfo processInfo) => default!;
+
+    private static ulong __vsn_world_boundary_shape_create;
+    private static ulong __vsn_separation_ray_shape_create;
+    private static ulong __vsn_segment_shape_create;
+    private static ulong __vsn_circle_shape_create;
+    private static ulong __vsn_rectangle_shape_create;
+    private static ulong __vsn_capsule_shape_create;
+    private static ulong __vsn_convex_polygon_shape_create;
+    private static ulong __vsn_concave_polygon_shape_create;
+    private static ulong __vsn_shape_set_custom_solver_bias;
+    private static ulong __vsn_shape_get_type;
+    private static ulong __vsn_shape_get_custom_solver_bias;
+    private static ulong __vsn_space_create;
+    private static ulong __vsn_space_set_active;
+    private static ulong __vsn_space_is_active;
+    private static ulong __vsn_space_set_param;
+    private static ulong __vsn_space_get_param;
+    private static ulong __vsn_space_get_direct_state;
+    private static ulong __vsn_space_set_debug_contacts;
+    private static ulong __vsn_space_get_contact_count;
+    private static ulong __vsn_area_create;
+    private static ulong __vsn_area_set_space;
+    private static ulong __vsn_area_get_space;
+    private static ulong __vsn_area_add_shape;
+    private static ulong __vsn_area_set_shape;
+    private static ulong __vsn_area_set_shape_transform;
+    private static ulong __vsn_area_set_shape_disabled;
+    private static ulong __vsn_area_get_shape_count;
+    private static ulong __vsn_area_get_shape;
+    private static ulong __vsn_area_get_shape_transform;
+    private static ulong __vsn_area_remove_shape;
+    private static ulong __vsn_area_clear_shapes;
+    private static ulong __vsn_area_attach_object_instance_id;
+    private static ulong __vsn_area_get_object_instance_id;
+    private static ulong __vsn_area_attach_canvas_instance_id;
+    private static ulong __vsn_area_get_canvas_instance_id;
+    private static ulong __vsn_area_set_transform;
+    private static ulong __vsn_area_get_transform;
+    private static ulong __vsn_area_set_collision_layer;
+    private static ulong __vsn_area_get_collision_layer;
+    private static ulong __vsn_area_set_collision_mask;
+    private static ulong __vsn_area_get_collision_mask;
+    private static ulong __vsn_area_set_monitorable;
+    private static ulong __vsn_area_set_pickable;
+    private static ulong __vsn_body_create;
+    private static ulong __vsn_body_set_space;
+    private static ulong __vsn_body_get_space;
+    private static ulong __vsn_body_set_mode;
+    private static ulong __vsn_body_get_mode;
+    private static ulong __vsn_body_add_shape;
+    private static ulong __vsn_body_set_shape;
+    private static ulong __vsn_body_set_shape_transform;
+    private static ulong __vsn_body_get_shape_count;
+    private static ulong __vsn_body_get_shape;
+    private static ulong __vsn_body_get_shape_transform;
+    private static ulong __vsn_body_set_shape_disabled;
+    private static ulong __vsn_body_set_shape_as_one_way_collision;
+    private static ulong __vsn_body_remove_shape;
+    private static ulong __vsn_body_clear_shapes;
+    private static ulong __vsn_body_attach_object_instance_id;
+    private static ulong __vsn_body_get_object_instance_id;
+    private static ulong __vsn_body_attach_canvas_instance_id;
+    private static ulong __vsn_body_get_canvas_instance_id;
+    private static ulong __vsn_body_set_continuous_collision_detection_mode;
+    private static ulong __vsn_body_get_continuous_collision_detection_mode;
+    private static ulong __vsn_body_set_collision_layer;
+    private static ulong __vsn_body_get_collision_layer;
+    private static ulong __vsn_body_set_collision_mask;
+    private static ulong __vsn_body_get_collision_mask;
+    private static ulong __vsn_body_set_collision_priority;
+    private static ulong __vsn_body_get_collision_priority;
+    private static ulong __vsn_body_reset_mass_properties;
+    private static ulong __vsn_body_apply_central_impulse;
+    private static ulong __vsn_body_apply_torque_impulse;
+    private static ulong __vsn_body_apply_impulse;
+    private static ulong __vsn_body_apply_central_force;
+    private static ulong __vsn_body_apply_force;
+    private static ulong __vsn_body_apply_torque;
+    private static ulong __vsn_body_add_constant_central_force;
+    private static ulong __vsn_body_add_constant_force;
+    private static ulong __vsn_body_add_constant_torque;
+    private static ulong __vsn_body_set_constant_force;
+    private static ulong __vsn_body_get_constant_force;
+    private static ulong __vsn_body_set_constant_torque;
+    private static ulong __vsn_body_get_constant_torque;
+    private static ulong __vsn_body_set_axis_velocity;
+    private static ulong __vsn_body_add_collision_exception;
+    private static ulong __vsn_body_remove_collision_exception;
+    private static ulong __vsn_body_set_max_contacts_reported;
+    private static ulong __vsn_body_get_max_contacts_reported;
+    private static ulong __vsn_body_set_contacts_reported_depth_threshold;
+    private static ulong __vsn_body_get_contacts_reported_depth_threshold;
+    private static ulong __vsn_body_set_omit_force_integration;
+    private static ulong __vsn_body_is_omitting_force_integration;
+    private static ulong __vsn_body_set_pickable;
+    private static ulong __vsn_body_get_direct_state;
+    private static ulong __vsn_joint_create;
+    private static ulong __vsn_joint_clear;
+    private static ulong __vsn_joint_set_param;
+    private static ulong __vsn_joint_get_param;
+    private static ulong __vsn_joint_disable_collisions_between_bodies;
+    private static ulong __vsn_joint_is_disabled_collisions_between_bodies;
+    private static ulong __vsn_joint_make_pin;
+    private static ulong __vsn_joint_make_groove;
+    private static ulong __vsn_joint_make_damped_spring;
+    private static ulong __vsn_pin_joint_set_flag;
+    private static ulong __vsn_pin_joint_get_flag;
+    private static ulong __vsn_pin_joint_set_param;
+    private static ulong __vsn_pin_joint_get_param;
+    private static ulong __vsn_damped_spring_joint_set_param;
+    private static ulong __vsn_damped_spring_joint_get_param;
+    private static ulong __vsn_joint_get_type;
+    private static ulong __vsn_free_rid;
+    private static ulong __vsn_set_active;
+    private static ulong __vsn_init;
+    private static ulong __vsn_step;
+    private static ulong __vsn_sync;
+    private static ulong __vsn_flush_queries;
+    private static ulong __vsn_end_sync;
+    private static ulong __vsn_finish;
+    private static ulong __vsn_is_flushing_queries;
+    private static ulong __vsn_get_process_info;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_world_boundary_shape_create == 0) __vsn_world_boundary_shape_create = StringNames.Get("_world_boundary_shape_create").Opaque;
+        if (nameSn == __vsn_world_boundary_shape_create)
+        {
+            *(Rid*)ret = _WorldBoundaryShapeCreate();
+            return true;
+        }
+        if (__vsn_separation_ray_shape_create == 0) __vsn_separation_ray_shape_create = StringNames.Get("_separation_ray_shape_create").Opaque;
+        if (nameSn == __vsn_separation_ray_shape_create)
+        {
+            *(Rid*)ret = _SeparationRayShapeCreate();
+            return true;
+        }
+        if (__vsn_segment_shape_create == 0) __vsn_segment_shape_create = StringNames.Get("_segment_shape_create").Opaque;
+        if (nameSn == __vsn_segment_shape_create)
+        {
+            *(Rid*)ret = _SegmentShapeCreate();
+            return true;
+        }
+        if (__vsn_circle_shape_create == 0) __vsn_circle_shape_create = StringNames.Get("_circle_shape_create").Opaque;
+        if (nameSn == __vsn_circle_shape_create)
+        {
+            *(Rid*)ret = _CircleShapeCreate();
+            return true;
+        }
+        if (__vsn_rectangle_shape_create == 0) __vsn_rectangle_shape_create = StringNames.Get("_rectangle_shape_create").Opaque;
+        if (nameSn == __vsn_rectangle_shape_create)
+        {
+            *(Rid*)ret = _RectangleShapeCreate();
+            return true;
+        }
+        if (__vsn_capsule_shape_create == 0) __vsn_capsule_shape_create = StringNames.Get("_capsule_shape_create").Opaque;
+        if (nameSn == __vsn_capsule_shape_create)
+        {
+            *(Rid*)ret = _CapsuleShapeCreate();
+            return true;
+        }
+        if (__vsn_convex_polygon_shape_create == 0) __vsn_convex_polygon_shape_create = StringNames.Get("_convex_polygon_shape_create").Opaque;
+        if (nameSn == __vsn_convex_polygon_shape_create)
+        {
+            *(Rid*)ret = _ConvexPolygonShapeCreate();
+            return true;
+        }
+        if (__vsn_concave_polygon_shape_create == 0) __vsn_concave_polygon_shape_create = StringNames.Get("_concave_polygon_shape_create").Opaque;
+        if (nameSn == __vsn_concave_polygon_shape_create)
+        {
+            *(Rid*)ret = _ConcavePolygonShapeCreate();
+            return true;
+        }
+        if (__vsn_shape_set_custom_solver_bias == 0) __vsn_shape_set_custom_solver_bias = StringNames.Get("_shape_set_custom_solver_bias").Opaque;
+        if (nameSn == __vsn_shape_set_custom_solver_bias)
+        {
+            _ShapeSetCustomSolverBias(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_shape_get_type == 0) __vsn_shape_get_type = StringNames.Get("_shape_get_type").Opaque;
+        if (nameSn == __vsn_shape_get_type)
+        {
+            *(long*)ret = (long)_ShapeGetType(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shape_get_custom_solver_bias == 0) __vsn_shape_get_custom_solver_bias = StringNames.Get("_shape_get_custom_solver_bias").Opaque;
+        if (nameSn == __vsn_shape_get_custom_solver_bias)
+        {
+            *(double*)ret = _ShapeGetCustomSolverBias(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_space_create == 0) __vsn_space_create = StringNames.Get("_space_create").Opaque;
+        if (nameSn == __vsn_space_create)
+        {
+            *(Rid*)ret = _SpaceCreate();
+            return true;
+        }
+        if (__vsn_space_set_active == 0) __vsn_space_set_active = StringNames.Get("_space_set_active").Opaque;
+        if (nameSn == __vsn_space_set_active)
+        {
+            _SpaceSetActive(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_space_is_active == 0) __vsn_space_is_active = StringNames.Get("_space_is_active").Opaque;
+        if (nameSn == __vsn_space_is_active)
+        {
+            *(byte*)ret = _SpaceIsActive(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_space_set_param == 0) __vsn_space_set_param = StringNames.Get("_space_set_param").Opaque;
+        if (nameSn == __vsn_space_set_param)
+        {
+            _SpaceSetParam(*(Rid*)args[0], (PhysicsServer2D.SpaceParameter)(*(long*)args[1]), (float)(*(double*)args[2]));
+            return true;
+        }
+        if (__vsn_space_get_param == 0) __vsn_space_get_param = StringNames.Get("_space_get_param").Opaque;
+        if (nameSn == __vsn_space_get_param)
+        {
+            *(double*)ret = _SpaceGetParam(*(Rid*)args[0], (PhysicsServer2D.SpaceParameter)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_space_get_direct_state == 0) __vsn_space_get_direct_state = StringNames.Get("_space_get_direct_state").Opaque;
+        if (nameSn == __vsn_space_get_direct_state)
+        {
+            *(nint*)ret = _SpaceGetDirectState(*(Rid*)args[0])?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_space_set_debug_contacts == 0) __vsn_space_set_debug_contacts = StringNames.Get("_space_set_debug_contacts").Opaque;
+        if (nameSn == __vsn_space_set_debug_contacts)
+        {
+            _SpaceSetDebugContacts(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_space_get_contact_count == 0) __vsn_space_get_contact_count = StringNames.Get("_space_get_contact_count").Opaque;
+        if (nameSn == __vsn_space_get_contact_count)
+        {
+            *(long*)ret = unchecked((long)_SpaceGetContactCount(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_area_create == 0) __vsn_area_create = StringNames.Get("_area_create").Opaque;
+        if (nameSn == __vsn_area_create)
+        {
+            *(Rid*)ret = _AreaCreate();
+            return true;
+        }
+        if (__vsn_area_set_space == 0) __vsn_area_set_space = StringNames.Get("_area_set_space").Opaque;
+        if (nameSn == __vsn_area_set_space)
+        {
+            _AreaSetSpace(*(Rid*)args[0], *(Rid*)args[1]);
+            return true;
+        }
+        if (__vsn_area_get_space == 0) __vsn_area_get_space = StringNames.Get("_area_get_space").Opaque;
+        if (nameSn == __vsn_area_get_space)
+        {
+            *(Rid*)ret = _AreaGetSpace(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_area_add_shape == 0) __vsn_area_add_shape = StringNames.Get("_area_add_shape").Opaque;
+        if (nameSn == __vsn_area_add_shape)
+        {
+            _AreaAddShape(*(Rid*)args[0], *(Rid*)args[1], *(Transform2D*)args[2], *(byte*)args[3] != 0);
+            return true;
+        }
+        if (__vsn_area_set_shape == 0) __vsn_area_set_shape = StringNames.Get("_area_set_shape").Opaque;
+        if (nameSn == __vsn_area_set_shape)
+        {
+            _AreaSetShape(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(Rid*)args[2]);
+            return true;
+        }
+        if (__vsn_area_set_shape_transform == 0) __vsn_area_set_shape_transform = StringNames.Get("_area_set_shape_transform").Opaque;
+        if (nameSn == __vsn_area_set_shape_transform)
+        {
+            _AreaSetShapeTransform(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(Transform2D*)args[2]);
+            return true;
+        }
+        if (__vsn_area_set_shape_disabled == 0) __vsn_area_set_shape_disabled = StringNames.Get("_area_set_shape_disabled").Opaque;
+        if (nameSn == __vsn_area_set_shape_disabled)
+        {
+            _AreaSetShapeDisabled(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(byte*)args[2] != 0);
+            return true;
+        }
+        if (__vsn_area_get_shape_count == 0) __vsn_area_get_shape_count = StringNames.Get("_area_get_shape_count").Opaque;
+        if (nameSn == __vsn_area_get_shape_count)
+        {
+            *(long*)ret = unchecked((long)_AreaGetShapeCount(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_area_get_shape == 0) __vsn_area_get_shape = StringNames.Get("_area_get_shape").Opaque;
+        if (nameSn == __vsn_area_get_shape)
+        {
+            *(Rid*)ret = _AreaGetShape(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_area_get_shape_transform == 0) __vsn_area_get_shape_transform = StringNames.Get("_area_get_shape_transform").Opaque;
+        if (nameSn == __vsn_area_get_shape_transform)
+        {
+            *(Transform2D*)ret = _AreaGetShapeTransform(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_area_remove_shape == 0) __vsn_area_remove_shape = StringNames.Get("_area_remove_shape").Opaque;
+        if (nameSn == __vsn_area_remove_shape)
+        {
+            _AreaRemoveShape(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_area_clear_shapes == 0) __vsn_area_clear_shapes = StringNames.Get("_area_clear_shapes").Opaque;
+        if (nameSn == __vsn_area_clear_shapes)
+        {
+            _AreaClearShapes(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_area_attach_object_instance_id == 0) __vsn_area_attach_object_instance_id = StringNames.Get("_area_attach_object_instance_id").Opaque;
+        if (nameSn == __vsn_area_attach_object_instance_id)
+        {
+            _AreaAttachObjectInstanceId(*(Rid*)args[0], unchecked((ulong)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_area_get_object_instance_id == 0) __vsn_area_get_object_instance_id = StringNames.Get("_area_get_object_instance_id").Opaque;
+        if (nameSn == __vsn_area_get_object_instance_id)
+        {
+            *(long*)ret = unchecked((long)_AreaGetObjectInstanceId(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_area_attach_canvas_instance_id == 0) __vsn_area_attach_canvas_instance_id = StringNames.Get("_area_attach_canvas_instance_id").Opaque;
+        if (nameSn == __vsn_area_attach_canvas_instance_id)
+        {
+            _AreaAttachCanvasInstanceId(*(Rid*)args[0], unchecked((ulong)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_area_get_canvas_instance_id == 0) __vsn_area_get_canvas_instance_id = StringNames.Get("_area_get_canvas_instance_id").Opaque;
+        if (nameSn == __vsn_area_get_canvas_instance_id)
+        {
+            *(long*)ret = unchecked((long)_AreaGetCanvasInstanceId(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_area_set_transform == 0) __vsn_area_set_transform = StringNames.Get("_area_set_transform").Opaque;
+        if (nameSn == __vsn_area_set_transform)
+        {
+            _AreaSetTransform(*(Rid*)args[0], *(Transform2D*)args[1]);
+            return true;
+        }
+        if (__vsn_area_get_transform == 0) __vsn_area_get_transform = StringNames.Get("_area_get_transform").Opaque;
+        if (nameSn == __vsn_area_get_transform)
+        {
+            *(Transform2D*)ret = _AreaGetTransform(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_area_set_collision_layer == 0) __vsn_area_set_collision_layer = StringNames.Get("_area_set_collision_layer").Opaque;
+        if (nameSn == __vsn_area_set_collision_layer)
+        {
+            _AreaSetCollisionLayer(*(Rid*)args[0], unchecked((uint)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_area_get_collision_layer == 0) __vsn_area_get_collision_layer = StringNames.Get("_area_get_collision_layer").Opaque;
+        if (nameSn == __vsn_area_get_collision_layer)
+        {
+            *(long*)ret = unchecked((long)_AreaGetCollisionLayer(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_area_set_collision_mask == 0) __vsn_area_set_collision_mask = StringNames.Get("_area_set_collision_mask").Opaque;
+        if (nameSn == __vsn_area_set_collision_mask)
+        {
+            _AreaSetCollisionMask(*(Rid*)args[0], unchecked((uint)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_area_get_collision_mask == 0) __vsn_area_get_collision_mask = StringNames.Get("_area_get_collision_mask").Opaque;
+        if (nameSn == __vsn_area_get_collision_mask)
+        {
+            *(long*)ret = unchecked((long)_AreaGetCollisionMask(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_area_set_monitorable == 0) __vsn_area_set_monitorable = StringNames.Get("_area_set_monitorable").Opaque;
+        if (nameSn == __vsn_area_set_monitorable)
+        {
+            _AreaSetMonitorable(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_area_set_pickable == 0) __vsn_area_set_pickable = StringNames.Get("_area_set_pickable").Opaque;
+        if (nameSn == __vsn_area_set_pickable)
+        {
+            _AreaSetPickable(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_body_create == 0) __vsn_body_create = StringNames.Get("_body_create").Opaque;
+        if (nameSn == __vsn_body_create)
+        {
+            *(Rid*)ret = _BodyCreate();
+            return true;
+        }
+        if (__vsn_body_set_space == 0) __vsn_body_set_space = StringNames.Get("_body_set_space").Opaque;
+        if (nameSn == __vsn_body_set_space)
+        {
+            _BodySetSpace(*(Rid*)args[0], *(Rid*)args[1]);
+            return true;
+        }
+        if (__vsn_body_get_space == 0) __vsn_body_get_space = StringNames.Get("_body_get_space").Opaque;
+        if (nameSn == __vsn_body_get_space)
+        {
+            *(Rid*)ret = _BodyGetSpace(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_set_mode == 0) __vsn_body_set_mode = StringNames.Get("_body_set_mode").Opaque;
+        if (nameSn == __vsn_body_set_mode)
+        {
+            _BodySetMode(*(Rid*)args[0], (PhysicsServer2D.BodyMode)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_body_get_mode == 0) __vsn_body_get_mode = StringNames.Get("_body_get_mode").Opaque;
+        if (nameSn == __vsn_body_get_mode)
+        {
+            *(long*)ret = (long)_BodyGetMode(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_add_shape == 0) __vsn_body_add_shape = StringNames.Get("_body_add_shape").Opaque;
+        if (nameSn == __vsn_body_add_shape)
+        {
+            _BodyAddShape(*(Rid*)args[0], *(Rid*)args[1], *(Transform2D*)args[2], *(byte*)args[3] != 0);
+            return true;
+        }
+        if (__vsn_body_set_shape == 0) __vsn_body_set_shape = StringNames.Get("_body_set_shape").Opaque;
+        if (nameSn == __vsn_body_set_shape)
+        {
+            _BodySetShape(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(Rid*)args[2]);
+            return true;
+        }
+        if (__vsn_body_set_shape_transform == 0) __vsn_body_set_shape_transform = StringNames.Get("_body_set_shape_transform").Opaque;
+        if (nameSn == __vsn_body_set_shape_transform)
+        {
+            _BodySetShapeTransform(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(Transform2D*)args[2]);
+            return true;
+        }
+        if (__vsn_body_get_shape_count == 0) __vsn_body_get_shape_count = StringNames.Get("_body_get_shape_count").Opaque;
+        if (nameSn == __vsn_body_get_shape_count)
+        {
+            *(long*)ret = unchecked((long)_BodyGetShapeCount(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_body_get_shape == 0) __vsn_body_get_shape = StringNames.Get("_body_get_shape").Opaque;
+        if (nameSn == __vsn_body_get_shape)
+        {
+            *(Rid*)ret = _BodyGetShape(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_get_shape_transform == 0) __vsn_body_get_shape_transform = StringNames.Get("_body_get_shape_transform").Opaque;
+        if (nameSn == __vsn_body_get_shape_transform)
+        {
+            *(Transform2D*)ret = _BodyGetShapeTransform(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_set_shape_disabled == 0) __vsn_body_set_shape_disabled = StringNames.Get("_body_set_shape_disabled").Opaque;
+        if (nameSn == __vsn_body_set_shape_disabled)
+        {
+            _BodySetShapeDisabled(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(byte*)args[2] != 0);
+            return true;
+        }
+        if (__vsn_body_set_shape_as_one_way_collision == 0) __vsn_body_set_shape_as_one_way_collision = StringNames.Get("_body_set_shape_as_one_way_collision").Opaque;
+        if (nameSn == __vsn_body_set_shape_as_one_way_collision)
+        {
+            _BodySetShapeAsOneWayCollision(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(byte*)args[2] != 0, (float)(*(double*)args[3]), *(Vector2*)args[4]);
+            return true;
+        }
+        if (__vsn_body_remove_shape == 0) __vsn_body_remove_shape = StringNames.Get("_body_remove_shape").Opaque;
+        if (nameSn == __vsn_body_remove_shape)
+        {
+            _BodyRemoveShape(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_clear_shapes == 0) __vsn_body_clear_shapes = StringNames.Get("_body_clear_shapes").Opaque;
+        if (nameSn == __vsn_body_clear_shapes)
+        {
+            _BodyClearShapes(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_attach_object_instance_id == 0) __vsn_body_attach_object_instance_id = StringNames.Get("_body_attach_object_instance_id").Opaque;
+        if (nameSn == __vsn_body_attach_object_instance_id)
+        {
+            _BodyAttachObjectInstanceId(*(Rid*)args[0], unchecked((ulong)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_get_object_instance_id == 0) __vsn_body_get_object_instance_id = StringNames.Get("_body_get_object_instance_id").Opaque;
+        if (nameSn == __vsn_body_get_object_instance_id)
+        {
+            *(long*)ret = unchecked((long)_BodyGetObjectInstanceId(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_body_attach_canvas_instance_id == 0) __vsn_body_attach_canvas_instance_id = StringNames.Get("_body_attach_canvas_instance_id").Opaque;
+        if (nameSn == __vsn_body_attach_canvas_instance_id)
+        {
+            _BodyAttachCanvasInstanceId(*(Rid*)args[0], unchecked((ulong)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_get_canvas_instance_id == 0) __vsn_body_get_canvas_instance_id = StringNames.Get("_body_get_canvas_instance_id").Opaque;
+        if (nameSn == __vsn_body_get_canvas_instance_id)
+        {
+            *(long*)ret = unchecked((long)_BodyGetCanvasInstanceId(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_body_set_continuous_collision_detection_mode == 0) __vsn_body_set_continuous_collision_detection_mode = StringNames.Get("_body_set_continuous_collision_detection_mode").Opaque;
+        if (nameSn == __vsn_body_set_continuous_collision_detection_mode)
+        {
+            _BodySetContinuousCollisionDetectionMode(*(Rid*)args[0], (PhysicsServer2D.CCDMode)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_body_get_continuous_collision_detection_mode == 0) __vsn_body_get_continuous_collision_detection_mode = StringNames.Get("_body_get_continuous_collision_detection_mode").Opaque;
+        if (nameSn == __vsn_body_get_continuous_collision_detection_mode)
+        {
+            *(long*)ret = (long)_BodyGetContinuousCollisionDetectionMode(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_set_collision_layer == 0) __vsn_body_set_collision_layer = StringNames.Get("_body_set_collision_layer").Opaque;
+        if (nameSn == __vsn_body_set_collision_layer)
+        {
+            _BodySetCollisionLayer(*(Rid*)args[0], unchecked((uint)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_get_collision_layer == 0) __vsn_body_get_collision_layer = StringNames.Get("_body_get_collision_layer").Opaque;
+        if (nameSn == __vsn_body_get_collision_layer)
+        {
+            *(long*)ret = unchecked((long)_BodyGetCollisionLayer(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_body_set_collision_mask == 0) __vsn_body_set_collision_mask = StringNames.Get("_body_set_collision_mask").Opaque;
+        if (nameSn == __vsn_body_set_collision_mask)
+        {
+            _BodySetCollisionMask(*(Rid*)args[0], unchecked((uint)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_get_collision_mask == 0) __vsn_body_get_collision_mask = StringNames.Get("_body_get_collision_mask").Opaque;
+        if (nameSn == __vsn_body_get_collision_mask)
+        {
+            *(long*)ret = unchecked((long)_BodyGetCollisionMask(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_body_set_collision_priority == 0) __vsn_body_set_collision_priority = StringNames.Get("_body_set_collision_priority").Opaque;
+        if (nameSn == __vsn_body_set_collision_priority)
+        {
+            _BodySetCollisionPriority(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_body_get_collision_priority == 0) __vsn_body_get_collision_priority = StringNames.Get("_body_get_collision_priority").Opaque;
+        if (nameSn == __vsn_body_get_collision_priority)
+        {
+            *(double*)ret = _BodyGetCollisionPriority(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_reset_mass_properties == 0) __vsn_body_reset_mass_properties = StringNames.Get("_body_reset_mass_properties").Opaque;
+        if (nameSn == __vsn_body_reset_mass_properties)
+        {
+            _BodyResetMassProperties(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_apply_central_impulse == 0) __vsn_body_apply_central_impulse = StringNames.Get("_body_apply_central_impulse").Opaque;
+        if (nameSn == __vsn_body_apply_central_impulse)
+        {
+            _BodyApplyCentralImpulse(*(Rid*)args[0], *(Vector2*)args[1]);
+            return true;
+        }
+        if (__vsn_body_apply_torque_impulse == 0) __vsn_body_apply_torque_impulse = StringNames.Get("_body_apply_torque_impulse").Opaque;
+        if (nameSn == __vsn_body_apply_torque_impulse)
+        {
+            _BodyApplyTorqueImpulse(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_body_apply_impulse == 0) __vsn_body_apply_impulse = StringNames.Get("_body_apply_impulse").Opaque;
+        if (nameSn == __vsn_body_apply_impulse)
+        {
+            _BodyApplyImpulse(*(Rid*)args[0], *(Vector2*)args[1], *(Vector2*)args[2]);
+            return true;
+        }
+        if (__vsn_body_apply_central_force == 0) __vsn_body_apply_central_force = StringNames.Get("_body_apply_central_force").Opaque;
+        if (nameSn == __vsn_body_apply_central_force)
+        {
+            _BodyApplyCentralForce(*(Rid*)args[0], *(Vector2*)args[1]);
+            return true;
+        }
+        if (__vsn_body_apply_force == 0) __vsn_body_apply_force = StringNames.Get("_body_apply_force").Opaque;
+        if (nameSn == __vsn_body_apply_force)
+        {
+            _BodyApplyForce(*(Rid*)args[0], *(Vector2*)args[1], *(Vector2*)args[2]);
+            return true;
+        }
+        if (__vsn_body_apply_torque == 0) __vsn_body_apply_torque = StringNames.Get("_body_apply_torque").Opaque;
+        if (nameSn == __vsn_body_apply_torque)
+        {
+            _BodyApplyTorque(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_body_add_constant_central_force == 0) __vsn_body_add_constant_central_force = StringNames.Get("_body_add_constant_central_force").Opaque;
+        if (nameSn == __vsn_body_add_constant_central_force)
+        {
+            _BodyAddConstantCentralForce(*(Rid*)args[0], *(Vector2*)args[1]);
+            return true;
+        }
+        if (__vsn_body_add_constant_force == 0) __vsn_body_add_constant_force = StringNames.Get("_body_add_constant_force").Opaque;
+        if (nameSn == __vsn_body_add_constant_force)
+        {
+            _BodyAddConstantForce(*(Rid*)args[0], *(Vector2*)args[1], *(Vector2*)args[2]);
+            return true;
+        }
+        if (__vsn_body_add_constant_torque == 0) __vsn_body_add_constant_torque = StringNames.Get("_body_add_constant_torque").Opaque;
+        if (nameSn == __vsn_body_add_constant_torque)
+        {
+            _BodyAddConstantTorque(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_body_set_constant_force == 0) __vsn_body_set_constant_force = StringNames.Get("_body_set_constant_force").Opaque;
+        if (nameSn == __vsn_body_set_constant_force)
+        {
+            _BodySetConstantForce(*(Rid*)args[0], *(Vector2*)args[1]);
+            return true;
+        }
+        if (__vsn_body_get_constant_force == 0) __vsn_body_get_constant_force = StringNames.Get("_body_get_constant_force").Opaque;
+        if (nameSn == __vsn_body_get_constant_force)
+        {
+            *(Vector2*)ret = _BodyGetConstantForce(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_set_constant_torque == 0) __vsn_body_set_constant_torque = StringNames.Get("_body_set_constant_torque").Opaque;
+        if (nameSn == __vsn_body_set_constant_torque)
+        {
+            _BodySetConstantTorque(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_body_get_constant_torque == 0) __vsn_body_get_constant_torque = StringNames.Get("_body_get_constant_torque").Opaque;
+        if (nameSn == __vsn_body_get_constant_torque)
+        {
+            *(double*)ret = _BodyGetConstantTorque(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_set_axis_velocity == 0) __vsn_body_set_axis_velocity = StringNames.Get("_body_set_axis_velocity").Opaque;
+        if (nameSn == __vsn_body_set_axis_velocity)
+        {
+            _BodySetAxisVelocity(*(Rid*)args[0], *(Vector2*)args[1]);
+            return true;
+        }
+        if (__vsn_body_add_collision_exception == 0) __vsn_body_add_collision_exception = StringNames.Get("_body_add_collision_exception").Opaque;
+        if (nameSn == __vsn_body_add_collision_exception)
+        {
+            _BodyAddCollisionException(*(Rid*)args[0], *(Rid*)args[1]);
+            return true;
+        }
+        if (__vsn_body_remove_collision_exception == 0) __vsn_body_remove_collision_exception = StringNames.Get("_body_remove_collision_exception").Opaque;
+        if (nameSn == __vsn_body_remove_collision_exception)
+        {
+            _BodyRemoveCollisionException(*(Rid*)args[0], *(Rid*)args[1]);
+            return true;
+        }
+        if (__vsn_body_set_max_contacts_reported == 0) __vsn_body_set_max_contacts_reported = StringNames.Get("_body_set_max_contacts_reported").Opaque;
+        if (nameSn == __vsn_body_set_max_contacts_reported)
+        {
+            _BodySetMaxContactsReported(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_get_max_contacts_reported == 0) __vsn_body_get_max_contacts_reported = StringNames.Get("_body_get_max_contacts_reported").Opaque;
+        if (nameSn == __vsn_body_get_max_contacts_reported)
+        {
+            *(long*)ret = unchecked((long)_BodyGetMaxContactsReported(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_body_set_contacts_reported_depth_threshold == 0) __vsn_body_set_contacts_reported_depth_threshold = StringNames.Get("_body_set_contacts_reported_depth_threshold").Opaque;
+        if (nameSn == __vsn_body_set_contacts_reported_depth_threshold)
+        {
+            _BodySetContactsReportedDepthThreshold(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_body_get_contacts_reported_depth_threshold == 0) __vsn_body_get_contacts_reported_depth_threshold = StringNames.Get("_body_get_contacts_reported_depth_threshold").Opaque;
+        if (nameSn == __vsn_body_get_contacts_reported_depth_threshold)
+        {
+            *(double*)ret = _BodyGetContactsReportedDepthThreshold(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_set_omit_force_integration == 0) __vsn_body_set_omit_force_integration = StringNames.Get("_body_set_omit_force_integration").Opaque;
+        if (nameSn == __vsn_body_set_omit_force_integration)
+        {
+            _BodySetOmitForceIntegration(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_body_is_omitting_force_integration == 0) __vsn_body_is_omitting_force_integration = StringNames.Get("_body_is_omitting_force_integration").Opaque;
+        if (nameSn == __vsn_body_is_omitting_force_integration)
+        {
+            *(byte*)ret = _BodyIsOmittingForceIntegration(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_body_set_pickable == 0) __vsn_body_set_pickable = StringNames.Get("_body_set_pickable").Opaque;
+        if (nameSn == __vsn_body_set_pickable)
+        {
+            _BodySetPickable(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_body_get_direct_state == 0) __vsn_body_get_direct_state = StringNames.Get("_body_get_direct_state").Opaque;
+        if (nameSn == __vsn_body_get_direct_state)
+        {
+            *(nint*)ret = _BodyGetDirectState(*(Rid*)args[0])?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_joint_create == 0) __vsn_joint_create = StringNames.Get("_joint_create").Opaque;
+        if (nameSn == __vsn_joint_create)
+        {
+            *(Rid*)ret = _JointCreate();
+            return true;
+        }
+        if (__vsn_joint_clear == 0) __vsn_joint_clear = StringNames.Get("_joint_clear").Opaque;
+        if (nameSn == __vsn_joint_clear)
+        {
+            _JointClear(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_joint_set_param == 0) __vsn_joint_set_param = StringNames.Get("_joint_set_param").Opaque;
+        if (nameSn == __vsn_joint_set_param)
+        {
+            _JointSetParam(*(Rid*)args[0], (PhysicsServer2D.JointParam)(*(long*)args[1]), (float)(*(double*)args[2]));
+            return true;
+        }
+        if (__vsn_joint_get_param == 0) __vsn_joint_get_param = StringNames.Get("_joint_get_param").Opaque;
+        if (nameSn == __vsn_joint_get_param)
+        {
+            *(double*)ret = _JointGetParam(*(Rid*)args[0], (PhysicsServer2D.JointParam)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_joint_disable_collisions_between_bodies == 0) __vsn_joint_disable_collisions_between_bodies = StringNames.Get("_joint_disable_collisions_between_bodies").Opaque;
+        if (nameSn == __vsn_joint_disable_collisions_between_bodies)
+        {
+            _JointDisableCollisionsBetweenBodies(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_joint_is_disabled_collisions_between_bodies == 0) __vsn_joint_is_disabled_collisions_between_bodies = StringNames.Get("_joint_is_disabled_collisions_between_bodies").Opaque;
+        if (nameSn == __vsn_joint_is_disabled_collisions_between_bodies)
+        {
+            *(byte*)ret = _JointIsDisabledCollisionsBetweenBodies(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_joint_make_pin == 0) __vsn_joint_make_pin = StringNames.Get("_joint_make_pin").Opaque;
+        if (nameSn == __vsn_joint_make_pin)
+        {
+            _JointMakePin(*(Rid*)args[0], *(Vector2*)args[1], *(Rid*)args[2], *(Rid*)args[3]);
+            return true;
+        }
+        if (__vsn_joint_make_groove == 0) __vsn_joint_make_groove = StringNames.Get("_joint_make_groove").Opaque;
+        if (nameSn == __vsn_joint_make_groove)
+        {
+            _JointMakeGroove(*(Rid*)args[0], *(Vector2*)args[1], *(Vector2*)args[2], *(Vector2*)args[3], *(Rid*)args[4], *(Rid*)args[5]);
+            return true;
+        }
+        if (__vsn_joint_make_damped_spring == 0) __vsn_joint_make_damped_spring = StringNames.Get("_joint_make_damped_spring").Opaque;
+        if (nameSn == __vsn_joint_make_damped_spring)
+        {
+            _JointMakeDampedSpring(*(Rid*)args[0], *(Vector2*)args[1], *(Vector2*)args[2], *(Rid*)args[3], *(Rid*)args[4]);
+            return true;
+        }
+        if (__vsn_pin_joint_set_flag == 0) __vsn_pin_joint_set_flag = StringNames.Get("_pin_joint_set_flag").Opaque;
+        if (nameSn == __vsn_pin_joint_set_flag)
+        {
+            _PinJointSetFlag(*(Rid*)args[0], (PhysicsServer2D.PinJointFlag)(*(long*)args[1]), *(byte*)args[2] != 0);
+            return true;
+        }
+        if (__vsn_pin_joint_get_flag == 0) __vsn_pin_joint_get_flag = StringNames.Get("_pin_joint_get_flag").Opaque;
+        if (nameSn == __vsn_pin_joint_get_flag)
+        {
+            *(byte*)ret = _PinJointGetFlag(*(Rid*)args[0], (PhysicsServer2D.PinJointFlag)(*(long*)args[1])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_pin_joint_set_param == 0) __vsn_pin_joint_set_param = StringNames.Get("_pin_joint_set_param").Opaque;
+        if (nameSn == __vsn_pin_joint_set_param)
+        {
+            _PinJointSetParam(*(Rid*)args[0], (PhysicsServer2D.PinJointParam)(*(long*)args[1]), (float)(*(double*)args[2]));
+            return true;
+        }
+        if (__vsn_pin_joint_get_param == 0) __vsn_pin_joint_get_param = StringNames.Get("_pin_joint_get_param").Opaque;
+        if (nameSn == __vsn_pin_joint_get_param)
+        {
+            *(double*)ret = _PinJointGetParam(*(Rid*)args[0], (PhysicsServer2D.PinJointParam)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_damped_spring_joint_set_param == 0) __vsn_damped_spring_joint_set_param = StringNames.Get("_damped_spring_joint_set_param").Opaque;
+        if (nameSn == __vsn_damped_spring_joint_set_param)
+        {
+            _DampedSpringJointSetParam(*(Rid*)args[0], (PhysicsServer2D.DampedSpringParam)(*(long*)args[1]), (float)(*(double*)args[2]));
+            return true;
+        }
+        if (__vsn_damped_spring_joint_get_param == 0) __vsn_damped_spring_joint_get_param = StringNames.Get("_damped_spring_joint_get_param").Opaque;
+        if (nameSn == __vsn_damped_spring_joint_get_param)
+        {
+            *(double*)ret = _DampedSpringJointGetParam(*(Rid*)args[0], (PhysicsServer2D.DampedSpringParam)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_joint_get_type == 0) __vsn_joint_get_type = StringNames.Get("_joint_get_type").Opaque;
+        if (nameSn == __vsn_joint_get_type)
+        {
+            *(long*)ret = (long)_JointGetType(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_free_rid == 0) __vsn_free_rid = StringNames.Get("_free_rid").Opaque;
+        if (nameSn == __vsn_free_rid)
+        {
+            _FreeRid(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_set_active == 0) __vsn_set_active = StringNames.Get("_set_active").Opaque;
+        if (nameSn == __vsn_set_active)
+        {
+            _SetActive(*(byte*)args[0] != 0);
+            return true;
+        }
+        if (__vsn_init == 0) __vsn_init = StringNames.Get("_init").Opaque;
+        if (nameSn == __vsn_init)
+        {
+            _Init();
+            return true;
+        }
+        if (__vsn_step == 0) __vsn_step = StringNames.Get("_step").Opaque;
+        if (nameSn == __vsn_step)
+        {
+            _Step((float)(*(double*)args[0]));
+            return true;
+        }
+        if (__vsn_sync == 0) __vsn_sync = StringNames.Get("_sync").Opaque;
+        if (nameSn == __vsn_sync)
+        {
+            _Sync();
+            return true;
+        }
+        if (__vsn_flush_queries == 0) __vsn_flush_queries = StringNames.Get("_flush_queries").Opaque;
+        if (nameSn == __vsn_flush_queries)
+        {
+            _FlushQueries();
+            return true;
+        }
+        if (__vsn_end_sync == 0) __vsn_end_sync = StringNames.Get("_end_sync").Opaque;
+        if (nameSn == __vsn_end_sync)
+        {
+            _EndSync();
+            return true;
+        }
+        if (__vsn_finish == 0) __vsn_finish = StringNames.Get("_finish").Opaque;
+        if (nameSn == __vsn_finish)
+        {
+            _Finish();
+            return true;
+        }
+        if (__vsn_is_flushing_queries == 0) __vsn_is_flushing_queries = StringNames.Get("_is_flushing_queries").Opaque;
+        if (nameSn == __vsn_is_flushing_queries)
+        {
+            *(byte*)ret = _IsFlushingQueries() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_process_info == 0) __vsn_get_process_info = StringNames.Get("_get_process_info").Opaque;
+        if (nameSn == __vsn_get_process_info)
+        {
+            *(long*)ret = unchecked((long)_GetProcessInfo((PhysicsServer2D.ProcessInfo)(*(long*)args[0])));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class PhysicsServer2DManager : GodotObject
 {
     internal PhysicsServer2DManager(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsServer2DManager() : this(InstanceBindings.ConstructRaw("PhysicsServer2DManager"), false)
+    public PhysicsServer2DManager() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsServer2DManager");
     }
 
     private static PhysicsServer2DManager? _singleton;
@@ -13450,9 +15493,9 @@ public unsafe partial class PhysicsServer3DExtension : PhysicsServer3D
 {
     internal PhysicsServer3DExtension(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsServer3DExtension() : this(InstanceBindings.ConstructRaw("PhysicsServer3DExtension"), false)
+    public PhysicsServer3DExtension() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsServer3DExtension");
     }
 
     private static nint __mb_body_test_motion_is_excluding_body;
@@ -13490,15 +15533,1569 @@ public unsafe partial class PhysicsServer3DExtension : PhysicsServer3D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
+
+    public virtual Rid _WorldBoundaryShapeCreate() => default!;
+
+    public virtual Rid _SeparationRayShapeCreate() => default!;
+
+    public virtual Rid _SphereShapeCreate() => default!;
+
+    public virtual Rid _BoxShapeCreate() => default!;
+
+    public virtual Rid _CapsuleShapeCreate() => default!;
+
+    public virtual Rid _CylinderShapeCreate() => default!;
+
+    public virtual Rid _ConvexPolygonShapeCreate() => default!;
+
+    public virtual Rid _ConcavePolygonShapeCreate() => default!;
+
+    public virtual Rid _HeightmapShapeCreate() => default!;
+
+    public virtual Rid _CustomShapeCreate() => default!;
+
+    public virtual void _ShapeSetCustomSolverBias(Rid shape, float bias) { }
+
+    public virtual void _ShapeSetMargin(Rid shape, float margin) { }
+
+    public virtual float _ShapeGetMargin(Rid shape) => default!;
+
+    public virtual PhysicsServer3D.ShapeType _ShapeGetType(Rid shape) => default!;
+
+    public virtual float _ShapeGetCustomSolverBias(Rid shape) => default!;
+
+    public virtual Rid _SpaceCreate() => default!;
+
+    public virtual void _SpaceSetActive(Rid space, bool active) { }
+
+    public virtual bool _SpaceIsActive(Rid space) => default!;
+
+    public virtual void _SpaceSetParam(Rid space, PhysicsServer3D.SpaceParameter param, float value) { }
+
+    public virtual float _SpaceGetParam(Rid space, PhysicsServer3D.SpaceParameter param) => default!;
+
+    public virtual PhysicsDirectSpaceState3D? _SpaceGetDirectState(Rid space) => default!;
+
+    public virtual void _SpaceSetDebugContacts(Rid space, int maxContacts) { }
+
+    public virtual int _SpaceGetContactCount(Rid space) => default!;
+
+    public virtual Rid _AreaCreate() => default!;
+
+    public virtual void _AreaSetSpace(Rid area, Rid space) { }
+
+    public virtual Rid _AreaGetSpace(Rid area) => default!;
+
+    public virtual void _AreaAddShape(Rid area, Rid shape, Transform3D transform, bool disabled) { }
+
+    public virtual void _AreaSetShape(Rid area, int shapeIdx, Rid shape) { }
+
+    public virtual void _AreaSetShapeTransform(Rid area, int shapeIdx, Transform3D transform) { }
+
+    public virtual void _AreaSetShapeDisabled(Rid area, int shapeIdx, bool disabled) { }
+
+    public virtual int _AreaGetShapeCount(Rid area) => default!;
+
+    public virtual Rid _AreaGetShape(Rid area, int shapeIdx) => default!;
+
+    public virtual Transform3D _AreaGetShapeTransform(Rid area, int shapeIdx) => default!;
+
+    public virtual void _AreaRemoveShape(Rid area, int shapeIdx) { }
+
+    public virtual void _AreaClearShapes(Rid area) { }
+
+    public virtual void _AreaAttachObjectInstanceId(Rid area, ulong id) { }
+
+    public virtual ulong _AreaGetObjectInstanceId(Rid area) => default!;
+
+    public virtual void _AreaSetTransform(Rid area, Transform3D transform) { }
+
+    public virtual Transform3D _AreaGetTransform(Rid area) => default!;
+
+    public virtual void _AreaSetCollisionLayer(Rid area, uint layer) { }
+
+    public virtual uint _AreaGetCollisionLayer(Rid area) => default!;
+
+    public virtual void _AreaSetCollisionMask(Rid area, uint mask) { }
+
+    public virtual uint _AreaGetCollisionMask(Rid area) => default!;
+
+    public virtual void _AreaSetMonitorable(Rid area, bool monitorable) { }
+
+    public virtual void _AreaSetRayPickable(Rid area, bool enable) { }
+
+    public virtual Rid _BodyCreate() => default!;
+
+    public virtual void _BodySetSpace(Rid body, Rid space) { }
+
+    public virtual Rid _BodyGetSpace(Rid body) => default!;
+
+    public virtual void _BodySetMode(Rid body, PhysicsServer3D.BodyMode mode) { }
+
+    public virtual PhysicsServer3D.BodyMode _BodyGetMode(Rid body) => default!;
+
+    public virtual void _BodyAddShape(Rid body, Rid shape, Transform3D transform, bool disabled) { }
+
+    public virtual void _BodySetShape(Rid body, int shapeIdx, Rid shape) { }
+
+    public virtual void _BodySetShapeTransform(Rid body, int shapeIdx, Transform3D transform) { }
+
+    public virtual void _BodySetShapeDisabled(Rid body, int shapeIdx, bool disabled) { }
+
+    public virtual int _BodyGetShapeCount(Rid body) => default!;
+
+    public virtual Rid _BodyGetShape(Rid body, int shapeIdx) => default!;
+
+    public virtual Transform3D _BodyGetShapeTransform(Rid body, int shapeIdx) => default!;
+
+    public virtual void _BodyRemoveShape(Rid body, int shapeIdx) { }
+
+    public virtual void _BodyClearShapes(Rid body) { }
+
+    public virtual void _BodyAttachObjectInstanceId(Rid body, ulong id) { }
+
+    public virtual ulong _BodyGetObjectInstanceId(Rid body) => default!;
+
+    public virtual void _BodySetEnableContinuousCollisionDetection(Rid body, bool enable) { }
+
+    public virtual bool _BodyIsContinuousCollisionDetectionEnabled(Rid body) => default!;
+
+    public virtual void _BodySetCollisionLayer(Rid body, uint layer) { }
+
+    public virtual uint _BodyGetCollisionLayer(Rid body) => default!;
+
+    public virtual void _BodySetCollisionMask(Rid body, uint mask) { }
+
+    public virtual uint _BodyGetCollisionMask(Rid body) => default!;
+
+    public virtual void _BodySetCollisionPriority(Rid body, float priority) { }
+
+    public virtual float _BodyGetCollisionPriority(Rid body) => default!;
+
+    public virtual void _BodySetUserFlags(Rid body, uint flags) { }
+
+    public virtual uint _BodyGetUserFlags(Rid body) => default!;
+
+    public virtual void _BodyResetMassProperties(Rid body) { }
+
+    public virtual void _BodyApplyCentralImpulse(Rid body, Vector3 impulse) { }
+
+    public virtual void _BodyApplyImpulse(Rid body, Vector3 impulse, Vector3 position) { }
+
+    public virtual void _BodyApplyTorqueImpulse(Rid body, Vector3 impulse) { }
+
+    public virtual void _BodyApplyCentralForce(Rid body, Vector3 force) { }
+
+    public virtual void _BodyApplyForce(Rid body, Vector3 force, Vector3 position) { }
+
+    public virtual void _BodyApplyTorque(Rid body, Vector3 torque) { }
+
+    public virtual void _BodyAddConstantCentralForce(Rid body, Vector3 force) { }
+
+    public virtual void _BodyAddConstantForce(Rid body, Vector3 force, Vector3 position) { }
+
+    public virtual void _BodyAddConstantTorque(Rid body, Vector3 torque) { }
+
+    public virtual void _BodySetConstantForce(Rid body, Vector3 force) { }
+
+    public virtual Vector3 _BodyGetConstantForce(Rid body) => default!;
+
+    public virtual void _BodySetConstantTorque(Rid body, Vector3 torque) { }
+
+    public virtual Vector3 _BodyGetConstantTorque(Rid body) => default!;
+
+    public virtual void _BodySetAxisVelocity(Rid body, Vector3 axisVelocity) { }
+
+    public virtual void _BodySetAxisLock(Rid body, PhysicsServer3D.BodyAxis axis, bool @lock) { }
+
+    public virtual bool _BodyIsAxisLocked(Rid body, PhysicsServer3D.BodyAxis axis) => default!;
+
+    public virtual void _BodyAddCollisionException(Rid body, Rid exceptedBody) { }
+
+    public virtual void _BodyRemoveCollisionException(Rid body, Rid exceptedBody) { }
+
+    public virtual void _BodySetMaxContactsReported(Rid body, int amount) { }
+
+    public virtual int _BodyGetMaxContactsReported(Rid body) => default!;
+
+    public virtual void _BodySetContactsReportedDepthThreshold(Rid body, float threshold) { }
+
+    public virtual float _BodyGetContactsReportedDepthThreshold(Rid body) => default!;
+
+    public virtual void _BodySetOmitForceIntegration(Rid body, bool enable) { }
+
+    public virtual bool _BodyIsOmittingForceIntegration(Rid body) => default!;
+
+    public virtual void _BodySetRayPickable(Rid body, bool enable) { }
+
+    public virtual PhysicsDirectBodyState3D? _BodyGetDirectState(Rid body) => default!;
+
+    public virtual Rid _SoftBodyCreate() => default!;
+
+    public virtual void _SoftBodyUpdateRenderingServer(Rid body, PhysicsServer3DRenderingServerHandler? renderingServerHandler) { }
+
+    public virtual void _SoftBodySetSpace(Rid body, Rid space) { }
+
+    public virtual Rid _SoftBodyGetSpace(Rid body) => default!;
+
+    public virtual void _SoftBodySetRayPickable(Rid body, bool enable) { }
+
+    public virtual void _SoftBodySetCollisionLayer(Rid body, uint layer) { }
+
+    public virtual uint _SoftBodyGetCollisionLayer(Rid body) => default!;
+
+    public virtual void _SoftBodySetCollisionMask(Rid body, uint mask) { }
+
+    public virtual uint _SoftBodyGetCollisionMask(Rid body) => default!;
+
+    public virtual void _SoftBodyAddCollisionException(Rid body, Rid bodyB) { }
+
+    public virtual void _SoftBodyRemoveCollisionException(Rid body, Rid bodyB) { }
+
+    public virtual void _SoftBodySetTransform(Rid body, Transform3D transform) { }
+
+    public virtual void _SoftBodySetSimulationPrecision(Rid body, int simulationPrecision) { }
+
+    public virtual int _SoftBodyGetSimulationPrecision(Rid body) => default!;
+
+    public virtual void _SoftBodySetTotalMass(Rid body, float totalMass) { }
+
+    public virtual float _SoftBodyGetTotalMass(Rid body) => default!;
+
+    public virtual void _SoftBodySetLinearStiffness(Rid body, float linearStiffness) { }
+
+    public virtual float _SoftBodyGetLinearStiffness(Rid body) => default!;
+
+    public virtual void _SoftBodySetShrinkingFactor(Rid body, float shrinkingFactor) { }
+
+    public virtual float _SoftBodyGetShrinkingFactor(Rid body) => default!;
+
+    public virtual void _SoftBodySetPressureCoefficient(Rid body, float pressureCoefficient) { }
+
+    public virtual float _SoftBodyGetPressureCoefficient(Rid body) => default!;
+
+    public virtual void _SoftBodySetDampingCoefficient(Rid body, float dampingCoefficient) { }
+
+    public virtual float _SoftBodyGetDampingCoefficient(Rid body) => default!;
+
+    public virtual void _SoftBodySetDragCoefficient(Rid body, float dragCoefficient) { }
+
+    public virtual float _SoftBodyGetDragCoefficient(Rid body) => default!;
+
+    public virtual void _SoftBodySetMesh(Rid body, Rid mesh) { }
+
+    public virtual Aabb _SoftBodyGetBounds(Rid body) => default!;
+
+    public virtual void _SoftBodyMovePoint(Rid body, int pointIndex, Vector3 globalPosition) { }
+
+    public virtual Vector3 _SoftBodyGetPointGlobalPosition(Rid body, int pointIndex) => default!;
+
+    public virtual void _SoftBodyRemoveAllPinnedPoints(Rid body) { }
+
+    public virtual void _SoftBodyPinPoint(Rid body, int pointIndex, bool pin) { }
+
+    public virtual bool _SoftBodyIsPointPinned(Rid body, int pointIndex) => default!;
+
+    public virtual void _SoftBodyApplyPointImpulse(Rid body, int pointIndex, Vector3 impulse) { }
+
+    public virtual void _SoftBodyApplyPointForce(Rid body, int pointIndex, Vector3 force) { }
+
+    public virtual void _SoftBodyApplyCentralImpulse(Rid body, Vector3 impulse) { }
+
+    public virtual void _SoftBodyApplyCentralForce(Rid body, Vector3 force) { }
+
+    public virtual Rid _JointCreate() => default!;
+
+    public virtual void _JointClear(Rid joint) { }
+
+    public virtual void _JointMakePin(Rid joint, Rid bodyA, Vector3 localA, Rid bodyB, Vector3 localB) { }
+
+    public virtual void _PinJointSetParam(Rid joint, PhysicsServer3D.PinJointParam param, float value) { }
+
+    public virtual float _PinJointGetParam(Rid joint, PhysicsServer3D.PinJointParam param) => default!;
+
+    public virtual void _PinJointSetLocalA(Rid joint, Vector3 localA) { }
+
+    public virtual Vector3 _PinJointGetLocalA(Rid joint) => default!;
+
+    public virtual void _PinJointSetLocalB(Rid joint, Vector3 localB) { }
+
+    public virtual Vector3 _PinJointGetLocalB(Rid joint) => default!;
+
+    public virtual void _JointMakeHinge(Rid joint, Rid bodyA, Transform3D hingeA, Rid bodyB, Transform3D hingeB) { }
+
+    public virtual void _JointMakeHingeSimple(Rid joint, Rid bodyA, Vector3 pivotA, Vector3 axisA, Rid bodyB, Vector3 pivotB, Vector3 axisB) { }
+
+    public virtual void _HingeJointSetParam(Rid joint, PhysicsServer3D.HingeJointParam param, float value) { }
+
+    public virtual float _HingeJointGetParam(Rid joint, PhysicsServer3D.HingeJointParam param) => default!;
+
+    public virtual void _HingeJointSetFlag(Rid joint, PhysicsServer3D.HingeJointFlag flag, bool enabled) { }
+
+    public virtual bool _HingeJointGetFlag(Rid joint, PhysicsServer3D.HingeJointFlag flag) => default!;
+
+    public virtual void _JointMakeSlider(Rid joint, Rid bodyA, Transform3D localRefA, Rid bodyB, Transform3D localRefB) { }
+
+    public virtual void _SliderJointSetParam(Rid joint, PhysicsServer3D.SliderJointParam param, float value) { }
+
+    public virtual float _SliderJointGetParam(Rid joint, PhysicsServer3D.SliderJointParam param) => default!;
+
+    public virtual void _JointMakeConeTwist(Rid joint, Rid bodyA, Transform3D localRefA, Rid bodyB, Transform3D localRefB) { }
+
+    public virtual void _ConeTwistJointSetParam(Rid joint, PhysicsServer3D.ConeTwistJointParam param, float value) { }
+
+    public virtual float _ConeTwistJointGetParam(Rid joint, PhysicsServer3D.ConeTwistJointParam param) => default!;
+
+    public virtual void _JointMakeGeneric6dof(Rid joint, Rid bodyA, Transform3D localRefA, Rid bodyB, Transform3D localRefB) { }
+
+    public virtual PhysicsServer3D.JointType _JointGetType(Rid joint) => default!;
+
+    public virtual void _JointSetSolverPriority(Rid joint, int priority) { }
+
+    public virtual int _JointGetSolverPriority(Rid joint) => default!;
+
+    public virtual void _JointDisableCollisionsBetweenBodies(Rid joint, bool disable) { }
+
+    public virtual bool _JointIsDisabledCollisionsBetweenBodies(Rid joint) => default!;
+
+    public virtual void _FreeRid(Rid rid) { }
+
+    public virtual void _SetActive(bool active) { }
+
+    public virtual void _Init() { }
+
+    public virtual void _Step(float step) { }
+
+    public virtual void _Sync() { }
+
+    public virtual void _FlushQueries() { }
+
+    public virtual void _EndSync() { }
+
+    public virtual void _Finish() { }
+
+    public virtual bool _IsFlushingQueries() => default!;
+
+    public virtual int _GetProcessInfo(PhysicsServer3D.ProcessInfo processInfo) => default!;
+
+    private static ulong __vsn_world_boundary_shape_create;
+    private static ulong __vsn_separation_ray_shape_create;
+    private static ulong __vsn_sphere_shape_create;
+    private static ulong __vsn_box_shape_create;
+    private static ulong __vsn_capsule_shape_create;
+    private static ulong __vsn_cylinder_shape_create;
+    private static ulong __vsn_convex_polygon_shape_create;
+    private static ulong __vsn_concave_polygon_shape_create;
+    private static ulong __vsn_heightmap_shape_create;
+    private static ulong __vsn_custom_shape_create;
+    private static ulong __vsn_shape_set_custom_solver_bias;
+    private static ulong __vsn_shape_set_margin;
+    private static ulong __vsn_shape_get_margin;
+    private static ulong __vsn_shape_get_type;
+    private static ulong __vsn_shape_get_custom_solver_bias;
+    private static ulong __vsn_space_create;
+    private static ulong __vsn_space_set_active;
+    private static ulong __vsn_space_is_active;
+    private static ulong __vsn_space_set_param;
+    private static ulong __vsn_space_get_param;
+    private static ulong __vsn_space_get_direct_state;
+    private static ulong __vsn_space_set_debug_contacts;
+    private static ulong __vsn_space_get_contact_count;
+    private static ulong __vsn_area_create;
+    private static ulong __vsn_area_set_space;
+    private static ulong __vsn_area_get_space;
+    private static ulong __vsn_area_add_shape;
+    private static ulong __vsn_area_set_shape;
+    private static ulong __vsn_area_set_shape_transform;
+    private static ulong __vsn_area_set_shape_disabled;
+    private static ulong __vsn_area_get_shape_count;
+    private static ulong __vsn_area_get_shape;
+    private static ulong __vsn_area_get_shape_transform;
+    private static ulong __vsn_area_remove_shape;
+    private static ulong __vsn_area_clear_shapes;
+    private static ulong __vsn_area_attach_object_instance_id;
+    private static ulong __vsn_area_get_object_instance_id;
+    private static ulong __vsn_area_set_transform;
+    private static ulong __vsn_area_get_transform;
+    private static ulong __vsn_area_set_collision_layer;
+    private static ulong __vsn_area_get_collision_layer;
+    private static ulong __vsn_area_set_collision_mask;
+    private static ulong __vsn_area_get_collision_mask;
+    private static ulong __vsn_area_set_monitorable;
+    private static ulong __vsn_area_set_ray_pickable;
+    private static ulong __vsn_body_create;
+    private static ulong __vsn_body_set_space;
+    private static ulong __vsn_body_get_space;
+    private static ulong __vsn_body_set_mode;
+    private static ulong __vsn_body_get_mode;
+    private static ulong __vsn_body_add_shape;
+    private static ulong __vsn_body_set_shape;
+    private static ulong __vsn_body_set_shape_transform;
+    private static ulong __vsn_body_set_shape_disabled;
+    private static ulong __vsn_body_get_shape_count;
+    private static ulong __vsn_body_get_shape;
+    private static ulong __vsn_body_get_shape_transform;
+    private static ulong __vsn_body_remove_shape;
+    private static ulong __vsn_body_clear_shapes;
+    private static ulong __vsn_body_attach_object_instance_id;
+    private static ulong __vsn_body_get_object_instance_id;
+    private static ulong __vsn_body_set_enable_continuous_collision_detection;
+    private static ulong __vsn_body_is_continuous_collision_detection_enabled;
+    private static ulong __vsn_body_set_collision_layer;
+    private static ulong __vsn_body_get_collision_layer;
+    private static ulong __vsn_body_set_collision_mask;
+    private static ulong __vsn_body_get_collision_mask;
+    private static ulong __vsn_body_set_collision_priority;
+    private static ulong __vsn_body_get_collision_priority;
+    private static ulong __vsn_body_set_user_flags;
+    private static ulong __vsn_body_get_user_flags;
+    private static ulong __vsn_body_reset_mass_properties;
+    private static ulong __vsn_body_apply_central_impulse;
+    private static ulong __vsn_body_apply_impulse;
+    private static ulong __vsn_body_apply_torque_impulse;
+    private static ulong __vsn_body_apply_central_force;
+    private static ulong __vsn_body_apply_force;
+    private static ulong __vsn_body_apply_torque;
+    private static ulong __vsn_body_add_constant_central_force;
+    private static ulong __vsn_body_add_constant_force;
+    private static ulong __vsn_body_add_constant_torque;
+    private static ulong __vsn_body_set_constant_force;
+    private static ulong __vsn_body_get_constant_force;
+    private static ulong __vsn_body_set_constant_torque;
+    private static ulong __vsn_body_get_constant_torque;
+    private static ulong __vsn_body_set_axis_velocity;
+    private static ulong __vsn_body_set_axis_lock;
+    private static ulong __vsn_body_is_axis_locked;
+    private static ulong __vsn_body_add_collision_exception;
+    private static ulong __vsn_body_remove_collision_exception;
+    private static ulong __vsn_body_set_max_contacts_reported;
+    private static ulong __vsn_body_get_max_contacts_reported;
+    private static ulong __vsn_body_set_contacts_reported_depth_threshold;
+    private static ulong __vsn_body_get_contacts_reported_depth_threshold;
+    private static ulong __vsn_body_set_omit_force_integration;
+    private static ulong __vsn_body_is_omitting_force_integration;
+    private static ulong __vsn_body_set_ray_pickable;
+    private static ulong __vsn_body_get_direct_state;
+    private static ulong __vsn_soft_body_create;
+    private static ulong __vsn_soft_body_update_rendering_server;
+    private static ulong __vsn_soft_body_set_space;
+    private static ulong __vsn_soft_body_get_space;
+    private static ulong __vsn_soft_body_set_ray_pickable;
+    private static ulong __vsn_soft_body_set_collision_layer;
+    private static ulong __vsn_soft_body_get_collision_layer;
+    private static ulong __vsn_soft_body_set_collision_mask;
+    private static ulong __vsn_soft_body_get_collision_mask;
+    private static ulong __vsn_soft_body_add_collision_exception;
+    private static ulong __vsn_soft_body_remove_collision_exception;
+    private static ulong __vsn_soft_body_set_transform;
+    private static ulong __vsn_soft_body_set_simulation_precision;
+    private static ulong __vsn_soft_body_get_simulation_precision;
+    private static ulong __vsn_soft_body_set_total_mass;
+    private static ulong __vsn_soft_body_get_total_mass;
+    private static ulong __vsn_soft_body_set_linear_stiffness;
+    private static ulong __vsn_soft_body_get_linear_stiffness;
+    private static ulong __vsn_soft_body_set_shrinking_factor;
+    private static ulong __vsn_soft_body_get_shrinking_factor;
+    private static ulong __vsn_soft_body_set_pressure_coefficient;
+    private static ulong __vsn_soft_body_get_pressure_coefficient;
+    private static ulong __vsn_soft_body_set_damping_coefficient;
+    private static ulong __vsn_soft_body_get_damping_coefficient;
+    private static ulong __vsn_soft_body_set_drag_coefficient;
+    private static ulong __vsn_soft_body_get_drag_coefficient;
+    private static ulong __vsn_soft_body_set_mesh;
+    private static ulong __vsn_soft_body_get_bounds;
+    private static ulong __vsn_soft_body_move_point;
+    private static ulong __vsn_soft_body_get_point_global_position;
+    private static ulong __vsn_soft_body_remove_all_pinned_points;
+    private static ulong __vsn_soft_body_pin_point;
+    private static ulong __vsn_soft_body_is_point_pinned;
+    private static ulong __vsn_soft_body_apply_point_impulse;
+    private static ulong __vsn_soft_body_apply_point_force;
+    private static ulong __vsn_soft_body_apply_central_impulse;
+    private static ulong __vsn_soft_body_apply_central_force;
+    private static ulong __vsn_joint_create;
+    private static ulong __vsn_joint_clear;
+    private static ulong __vsn_joint_make_pin;
+    private static ulong __vsn_pin_joint_set_param;
+    private static ulong __vsn_pin_joint_get_param;
+    private static ulong __vsn_pin_joint_set_local_a;
+    private static ulong __vsn_pin_joint_get_local_a;
+    private static ulong __vsn_pin_joint_set_local_b;
+    private static ulong __vsn_pin_joint_get_local_b;
+    private static ulong __vsn_joint_make_hinge;
+    private static ulong __vsn_joint_make_hinge_simple;
+    private static ulong __vsn_hinge_joint_set_param;
+    private static ulong __vsn_hinge_joint_get_param;
+    private static ulong __vsn_hinge_joint_set_flag;
+    private static ulong __vsn_hinge_joint_get_flag;
+    private static ulong __vsn_joint_make_slider;
+    private static ulong __vsn_slider_joint_set_param;
+    private static ulong __vsn_slider_joint_get_param;
+    private static ulong __vsn_joint_make_cone_twist;
+    private static ulong __vsn_cone_twist_joint_set_param;
+    private static ulong __vsn_cone_twist_joint_get_param;
+    private static ulong __vsn_joint_make_generic_6dof;
+    private static ulong __vsn_joint_get_type;
+    private static ulong __vsn_joint_set_solver_priority;
+    private static ulong __vsn_joint_get_solver_priority;
+    private static ulong __vsn_joint_disable_collisions_between_bodies;
+    private static ulong __vsn_joint_is_disabled_collisions_between_bodies;
+    private static ulong __vsn_free_rid;
+    private static ulong __vsn_set_active;
+    private static ulong __vsn_init;
+    private static ulong __vsn_step;
+    private static ulong __vsn_sync;
+    private static ulong __vsn_flush_queries;
+    private static ulong __vsn_end_sync;
+    private static ulong __vsn_finish;
+    private static ulong __vsn_is_flushing_queries;
+    private static ulong __vsn_get_process_info;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_world_boundary_shape_create == 0) __vsn_world_boundary_shape_create = StringNames.Get("_world_boundary_shape_create").Opaque;
+        if (nameSn == __vsn_world_boundary_shape_create)
+        {
+            *(Rid*)ret = _WorldBoundaryShapeCreate();
+            return true;
+        }
+        if (__vsn_separation_ray_shape_create == 0) __vsn_separation_ray_shape_create = StringNames.Get("_separation_ray_shape_create").Opaque;
+        if (nameSn == __vsn_separation_ray_shape_create)
+        {
+            *(Rid*)ret = _SeparationRayShapeCreate();
+            return true;
+        }
+        if (__vsn_sphere_shape_create == 0) __vsn_sphere_shape_create = StringNames.Get("_sphere_shape_create").Opaque;
+        if (nameSn == __vsn_sphere_shape_create)
+        {
+            *(Rid*)ret = _SphereShapeCreate();
+            return true;
+        }
+        if (__vsn_box_shape_create == 0) __vsn_box_shape_create = StringNames.Get("_box_shape_create").Opaque;
+        if (nameSn == __vsn_box_shape_create)
+        {
+            *(Rid*)ret = _BoxShapeCreate();
+            return true;
+        }
+        if (__vsn_capsule_shape_create == 0) __vsn_capsule_shape_create = StringNames.Get("_capsule_shape_create").Opaque;
+        if (nameSn == __vsn_capsule_shape_create)
+        {
+            *(Rid*)ret = _CapsuleShapeCreate();
+            return true;
+        }
+        if (__vsn_cylinder_shape_create == 0) __vsn_cylinder_shape_create = StringNames.Get("_cylinder_shape_create").Opaque;
+        if (nameSn == __vsn_cylinder_shape_create)
+        {
+            *(Rid*)ret = _CylinderShapeCreate();
+            return true;
+        }
+        if (__vsn_convex_polygon_shape_create == 0) __vsn_convex_polygon_shape_create = StringNames.Get("_convex_polygon_shape_create").Opaque;
+        if (nameSn == __vsn_convex_polygon_shape_create)
+        {
+            *(Rid*)ret = _ConvexPolygonShapeCreate();
+            return true;
+        }
+        if (__vsn_concave_polygon_shape_create == 0) __vsn_concave_polygon_shape_create = StringNames.Get("_concave_polygon_shape_create").Opaque;
+        if (nameSn == __vsn_concave_polygon_shape_create)
+        {
+            *(Rid*)ret = _ConcavePolygonShapeCreate();
+            return true;
+        }
+        if (__vsn_heightmap_shape_create == 0) __vsn_heightmap_shape_create = StringNames.Get("_heightmap_shape_create").Opaque;
+        if (nameSn == __vsn_heightmap_shape_create)
+        {
+            *(Rid*)ret = _HeightmapShapeCreate();
+            return true;
+        }
+        if (__vsn_custom_shape_create == 0) __vsn_custom_shape_create = StringNames.Get("_custom_shape_create").Opaque;
+        if (nameSn == __vsn_custom_shape_create)
+        {
+            *(Rid*)ret = _CustomShapeCreate();
+            return true;
+        }
+        if (__vsn_shape_set_custom_solver_bias == 0) __vsn_shape_set_custom_solver_bias = StringNames.Get("_shape_set_custom_solver_bias").Opaque;
+        if (nameSn == __vsn_shape_set_custom_solver_bias)
+        {
+            _ShapeSetCustomSolverBias(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_shape_set_margin == 0) __vsn_shape_set_margin = StringNames.Get("_shape_set_margin").Opaque;
+        if (nameSn == __vsn_shape_set_margin)
+        {
+            _ShapeSetMargin(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_shape_get_margin == 0) __vsn_shape_get_margin = StringNames.Get("_shape_get_margin").Opaque;
+        if (nameSn == __vsn_shape_get_margin)
+        {
+            *(double*)ret = _ShapeGetMargin(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shape_get_type == 0) __vsn_shape_get_type = StringNames.Get("_shape_get_type").Opaque;
+        if (nameSn == __vsn_shape_get_type)
+        {
+            *(long*)ret = (long)_ShapeGetType(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shape_get_custom_solver_bias == 0) __vsn_shape_get_custom_solver_bias = StringNames.Get("_shape_get_custom_solver_bias").Opaque;
+        if (nameSn == __vsn_shape_get_custom_solver_bias)
+        {
+            *(double*)ret = _ShapeGetCustomSolverBias(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_space_create == 0) __vsn_space_create = StringNames.Get("_space_create").Opaque;
+        if (nameSn == __vsn_space_create)
+        {
+            *(Rid*)ret = _SpaceCreate();
+            return true;
+        }
+        if (__vsn_space_set_active == 0) __vsn_space_set_active = StringNames.Get("_space_set_active").Opaque;
+        if (nameSn == __vsn_space_set_active)
+        {
+            _SpaceSetActive(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_space_is_active == 0) __vsn_space_is_active = StringNames.Get("_space_is_active").Opaque;
+        if (nameSn == __vsn_space_is_active)
+        {
+            *(byte*)ret = _SpaceIsActive(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_space_set_param == 0) __vsn_space_set_param = StringNames.Get("_space_set_param").Opaque;
+        if (nameSn == __vsn_space_set_param)
+        {
+            _SpaceSetParam(*(Rid*)args[0], (PhysicsServer3D.SpaceParameter)(*(long*)args[1]), (float)(*(double*)args[2]));
+            return true;
+        }
+        if (__vsn_space_get_param == 0) __vsn_space_get_param = StringNames.Get("_space_get_param").Opaque;
+        if (nameSn == __vsn_space_get_param)
+        {
+            *(double*)ret = _SpaceGetParam(*(Rid*)args[0], (PhysicsServer3D.SpaceParameter)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_space_get_direct_state == 0) __vsn_space_get_direct_state = StringNames.Get("_space_get_direct_state").Opaque;
+        if (nameSn == __vsn_space_get_direct_state)
+        {
+            *(nint*)ret = _SpaceGetDirectState(*(Rid*)args[0])?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_space_set_debug_contacts == 0) __vsn_space_set_debug_contacts = StringNames.Get("_space_set_debug_contacts").Opaque;
+        if (nameSn == __vsn_space_set_debug_contacts)
+        {
+            _SpaceSetDebugContacts(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_space_get_contact_count == 0) __vsn_space_get_contact_count = StringNames.Get("_space_get_contact_count").Opaque;
+        if (nameSn == __vsn_space_get_contact_count)
+        {
+            *(long*)ret = unchecked((long)_SpaceGetContactCount(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_area_create == 0) __vsn_area_create = StringNames.Get("_area_create").Opaque;
+        if (nameSn == __vsn_area_create)
+        {
+            *(Rid*)ret = _AreaCreate();
+            return true;
+        }
+        if (__vsn_area_set_space == 0) __vsn_area_set_space = StringNames.Get("_area_set_space").Opaque;
+        if (nameSn == __vsn_area_set_space)
+        {
+            _AreaSetSpace(*(Rid*)args[0], *(Rid*)args[1]);
+            return true;
+        }
+        if (__vsn_area_get_space == 0) __vsn_area_get_space = StringNames.Get("_area_get_space").Opaque;
+        if (nameSn == __vsn_area_get_space)
+        {
+            *(Rid*)ret = _AreaGetSpace(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_area_add_shape == 0) __vsn_area_add_shape = StringNames.Get("_area_add_shape").Opaque;
+        if (nameSn == __vsn_area_add_shape)
+        {
+            _AreaAddShape(*(Rid*)args[0], *(Rid*)args[1], *(Transform3D*)args[2], *(byte*)args[3] != 0);
+            return true;
+        }
+        if (__vsn_area_set_shape == 0) __vsn_area_set_shape = StringNames.Get("_area_set_shape").Opaque;
+        if (nameSn == __vsn_area_set_shape)
+        {
+            _AreaSetShape(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(Rid*)args[2]);
+            return true;
+        }
+        if (__vsn_area_set_shape_transform == 0) __vsn_area_set_shape_transform = StringNames.Get("_area_set_shape_transform").Opaque;
+        if (nameSn == __vsn_area_set_shape_transform)
+        {
+            _AreaSetShapeTransform(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(Transform3D*)args[2]);
+            return true;
+        }
+        if (__vsn_area_set_shape_disabled == 0) __vsn_area_set_shape_disabled = StringNames.Get("_area_set_shape_disabled").Opaque;
+        if (nameSn == __vsn_area_set_shape_disabled)
+        {
+            _AreaSetShapeDisabled(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(byte*)args[2] != 0);
+            return true;
+        }
+        if (__vsn_area_get_shape_count == 0) __vsn_area_get_shape_count = StringNames.Get("_area_get_shape_count").Opaque;
+        if (nameSn == __vsn_area_get_shape_count)
+        {
+            *(long*)ret = unchecked((long)_AreaGetShapeCount(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_area_get_shape == 0) __vsn_area_get_shape = StringNames.Get("_area_get_shape").Opaque;
+        if (nameSn == __vsn_area_get_shape)
+        {
+            *(Rid*)ret = _AreaGetShape(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_area_get_shape_transform == 0) __vsn_area_get_shape_transform = StringNames.Get("_area_get_shape_transform").Opaque;
+        if (nameSn == __vsn_area_get_shape_transform)
+        {
+            *(Transform3D*)ret = _AreaGetShapeTransform(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_area_remove_shape == 0) __vsn_area_remove_shape = StringNames.Get("_area_remove_shape").Opaque;
+        if (nameSn == __vsn_area_remove_shape)
+        {
+            _AreaRemoveShape(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_area_clear_shapes == 0) __vsn_area_clear_shapes = StringNames.Get("_area_clear_shapes").Opaque;
+        if (nameSn == __vsn_area_clear_shapes)
+        {
+            _AreaClearShapes(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_area_attach_object_instance_id == 0) __vsn_area_attach_object_instance_id = StringNames.Get("_area_attach_object_instance_id").Opaque;
+        if (nameSn == __vsn_area_attach_object_instance_id)
+        {
+            _AreaAttachObjectInstanceId(*(Rid*)args[0], unchecked((ulong)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_area_get_object_instance_id == 0) __vsn_area_get_object_instance_id = StringNames.Get("_area_get_object_instance_id").Opaque;
+        if (nameSn == __vsn_area_get_object_instance_id)
+        {
+            *(long*)ret = unchecked((long)_AreaGetObjectInstanceId(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_area_set_transform == 0) __vsn_area_set_transform = StringNames.Get("_area_set_transform").Opaque;
+        if (nameSn == __vsn_area_set_transform)
+        {
+            _AreaSetTransform(*(Rid*)args[0], *(Transform3D*)args[1]);
+            return true;
+        }
+        if (__vsn_area_get_transform == 0) __vsn_area_get_transform = StringNames.Get("_area_get_transform").Opaque;
+        if (nameSn == __vsn_area_get_transform)
+        {
+            *(Transform3D*)ret = _AreaGetTransform(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_area_set_collision_layer == 0) __vsn_area_set_collision_layer = StringNames.Get("_area_set_collision_layer").Opaque;
+        if (nameSn == __vsn_area_set_collision_layer)
+        {
+            _AreaSetCollisionLayer(*(Rid*)args[0], unchecked((uint)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_area_get_collision_layer == 0) __vsn_area_get_collision_layer = StringNames.Get("_area_get_collision_layer").Opaque;
+        if (nameSn == __vsn_area_get_collision_layer)
+        {
+            *(long*)ret = unchecked((long)_AreaGetCollisionLayer(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_area_set_collision_mask == 0) __vsn_area_set_collision_mask = StringNames.Get("_area_set_collision_mask").Opaque;
+        if (nameSn == __vsn_area_set_collision_mask)
+        {
+            _AreaSetCollisionMask(*(Rid*)args[0], unchecked((uint)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_area_get_collision_mask == 0) __vsn_area_get_collision_mask = StringNames.Get("_area_get_collision_mask").Opaque;
+        if (nameSn == __vsn_area_get_collision_mask)
+        {
+            *(long*)ret = unchecked((long)_AreaGetCollisionMask(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_area_set_monitorable == 0) __vsn_area_set_monitorable = StringNames.Get("_area_set_monitorable").Opaque;
+        if (nameSn == __vsn_area_set_monitorable)
+        {
+            _AreaSetMonitorable(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_area_set_ray_pickable == 0) __vsn_area_set_ray_pickable = StringNames.Get("_area_set_ray_pickable").Opaque;
+        if (nameSn == __vsn_area_set_ray_pickable)
+        {
+            _AreaSetRayPickable(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_body_create == 0) __vsn_body_create = StringNames.Get("_body_create").Opaque;
+        if (nameSn == __vsn_body_create)
+        {
+            *(Rid*)ret = _BodyCreate();
+            return true;
+        }
+        if (__vsn_body_set_space == 0) __vsn_body_set_space = StringNames.Get("_body_set_space").Opaque;
+        if (nameSn == __vsn_body_set_space)
+        {
+            _BodySetSpace(*(Rid*)args[0], *(Rid*)args[1]);
+            return true;
+        }
+        if (__vsn_body_get_space == 0) __vsn_body_get_space = StringNames.Get("_body_get_space").Opaque;
+        if (nameSn == __vsn_body_get_space)
+        {
+            *(Rid*)ret = _BodyGetSpace(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_set_mode == 0) __vsn_body_set_mode = StringNames.Get("_body_set_mode").Opaque;
+        if (nameSn == __vsn_body_set_mode)
+        {
+            _BodySetMode(*(Rid*)args[0], (PhysicsServer3D.BodyMode)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_body_get_mode == 0) __vsn_body_get_mode = StringNames.Get("_body_get_mode").Opaque;
+        if (nameSn == __vsn_body_get_mode)
+        {
+            *(long*)ret = (long)_BodyGetMode(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_add_shape == 0) __vsn_body_add_shape = StringNames.Get("_body_add_shape").Opaque;
+        if (nameSn == __vsn_body_add_shape)
+        {
+            _BodyAddShape(*(Rid*)args[0], *(Rid*)args[1], *(Transform3D*)args[2], *(byte*)args[3] != 0);
+            return true;
+        }
+        if (__vsn_body_set_shape == 0) __vsn_body_set_shape = StringNames.Get("_body_set_shape").Opaque;
+        if (nameSn == __vsn_body_set_shape)
+        {
+            _BodySetShape(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(Rid*)args[2]);
+            return true;
+        }
+        if (__vsn_body_set_shape_transform == 0) __vsn_body_set_shape_transform = StringNames.Get("_body_set_shape_transform").Opaque;
+        if (nameSn == __vsn_body_set_shape_transform)
+        {
+            _BodySetShapeTransform(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(Transform3D*)args[2]);
+            return true;
+        }
+        if (__vsn_body_set_shape_disabled == 0) __vsn_body_set_shape_disabled = StringNames.Get("_body_set_shape_disabled").Opaque;
+        if (nameSn == __vsn_body_set_shape_disabled)
+        {
+            _BodySetShapeDisabled(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(byte*)args[2] != 0);
+            return true;
+        }
+        if (__vsn_body_get_shape_count == 0) __vsn_body_get_shape_count = StringNames.Get("_body_get_shape_count").Opaque;
+        if (nameSn == __vsn_body_get_shape_count)
+        {
+            *(long*)ret = unchecked((long)_BodyGetShapeCount(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_body_get_shape == 0) __vsn_body_get_shape = StringNames.Get("_body_get_shape").Opaque;
+        if (nameSn == __vsn_body_get_shape)
+        {
+            *(Rid*)ret = _BodyGetShape(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_get_shape_transform == 0) __vsn_body_get_shape_transform = StringNames.Get("_body_get_shape_transform").Opaque;
+        if (nameSn == __vsn_body_get_shape_transform)
+        {
+            *(Transform3D*)ret = _BodyGetShapeTransform(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_remove_shape == 0) __vsn_body_remove_shape = StringNames.Get("_body_remove_shape").Opaque;
+        if (nameSn == __vsn_body_remove_shape)
+        {
+            _BodyRemoveShape(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_clear_shapes == 0) __vsn_body_clear_shapes = StringNames.Get("_body_clear_shapes").Opaque;
+        if (nameSn == __vsn_body_clear_shapes)
+        {
+            _BodyClearShapes(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_attach_object_instance_id == 0) __vsn_body_attach_object_instance_id = StringNames.Get("_body_attach_object_instance_id").Opaque;
+        if (nameSn == __vsn_body_attach_object_instance_id)
+        {
+            _BodyAttachObjectInstanceId(*(Rid*)args[0], unchecked((ulong)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_get_object_instance_id == 0) __vsn_body_get_object_instance_id = StringNames.Get("_body_get_object_instance_id").Opaque;
+        if (nameSn == __vsn_body_get_object_instance_id)
+        {
+            *(long*)ret = unchecked((long)_BodyGetObjectInstanceId(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_body_set_enable_continuous_collision_detection == 0) __vsn_body_set_enable_continuous_collision_detection = StringNames.Get("_body_set_enable_continuous_collision_detection").Opaque;
+        if (nameSn == __vsn_body_set_enable_continuous_collision_detection)
+        {
+            _BodySetEnableContinuousCollisionDetection(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_body_is_continuous_collision_detection_enabled == 0) __vsn_body_is_continuous_collision_detection_enabled = StringNames.Get("_body_is_continuous_collision_detection_enabled").Opaque;
+        if (nameSn == __vsn_body_is_continuous_collision_detection_enabled)
+        {
+            *(byte*)ret = _BodyIsContinuousCollisionDetectionEnabled(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_body_set_collision_layer == 0) __vsn_body_set_collision_layer = StringNames.Get("_body_set_collision_layer").Opaque;
+        if (nameSn == __vsn_body_set_collision_layer)
+        {
+            _BodySetCollisionLayer(*(Rid*)args[0], unchecked((uint)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_get_collision_layer == 0) __vsn_body_get_collision_layer = StringNames.Get("_body_get_collision_layer").Opaque;
+        if (nameSn == __vsn_body_get_collision_layer)
+        {
+            *(long*)ret = unchecked((long)_BodyGetCollisionLayer(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_body_set_collision_mask == 0) __vsn_body_set_collision_mask = StringNames.Get("_body_set_collision_mask").Opaque;
+        if (nameSn == __vsn_body_set_collision_mask)
+        {
+            _BodySetCollisionMask(*(Rid*)args[0], unchecked((uint)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_get_collision_mask == 0) __vsn_body_get_collision_mask = StringNames.Get("_body_get_collision_mask").Opaque;
+        if (nameSn == __vsn_body_get_collision_mask)
+        {
+            *(long*)ret = unchecked((long)_BodyGetCollisionMask(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_body_set_collision_priority == 0) __vsn_body_set_collision_priority = StringNames.Get("_body_set_collision_priority").Opaque;
+        if (nameSn == __vsn_body_set_collision_priority)
+        {
+            _BodySetCollisionPriority(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_body_get_collision_priority == 0) __vsn_body_get_collision_priority = StringNames.Get("_body_get_collision_priority").Opaque;
+        if (nameSn == __vsn_body_get_collision_priority)
+        {
+            *(double*)ret = _BodyGetCollisionPriority(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_set_user_flags == 0) __vsn_body_set_user_flags = StringNames.Get("_body_set_user_flags").Opaque;
+        if (nameSn == __vsn_body_set_user_flags)
+        {
+            _BodySetUserFlags(*(Rid*)args[0], unchecked((uint)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_get_user_flags == 0) __vsn_body_get_user_flags = StringNames.Get("_body_get_user_flags").Opaque;
+        if (nameSn == __vsn_body_get_user_flags)
+        {
+            *(long*)ret = unchecked((long)_BodyGetUserFlags(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_body_reset_mass_properties == 0) __vsn_body_reset_mass_properties = StringNames.Get("_body_reset_mass_properties").Opaque;
+        if (nameSn == __vsn_body_reset_mass_properties)
+        {
+            _BodyResetMassProperties(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_apply_central_impulse == 0) __vsn_body_apply_central_impulse = StringNames.Get("_body_apply_central_impulse").Opaque;
+        if (nameSn == __vsn_body_apply_central_impulse)
+        {
+            _BodyApplyCentralImpulse(*(Rid*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_body_apply_impulse == 0) __vsn_body_apply_impulse = StringNames.Get("_body_apply_impulse").Opaque;
+        if (nameSn == __vsn_body_apply_impulse)
+        {
+            _BodyApplyImpulse(*(Rid*)args[0], *(Vector3*)args[1], *(Vector3*)args[2]);
+            return true;
+        }
+        if (__vsn_body_apply_torque_impulse == 0) __vsn_body_apply_torque_impulse = StringNames.Get("_body_apply_torque_impulse").Opaque;
+        if (nameSn == __vsn_body_apply_torque_impulse)
+        {
+            _BodyApplyTorqueImpulse(*(Rid*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_body_apply_central_force == 0) __vsn_body_apply_central_force = StringNames.Get("_body_apply_central_force").Opaque;
+        if (nameSn == __vsn_body_apply_central_force)
+        {
+            _BodyApplyCentralForce(*(Rid*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_body_apply_force == 0) __vsn_body_apply_force = StringNames.Get("_body_apply_force").Opaque;
+        if (nameSn == __vsn_body_apply_force)
+        {
+            _BodyApplyForce(*(Rid*)args[0], *(Vector3*)args[1], *(Vector3*)args[2]);
+            return true;
+        }
+        if (__vsn_body_apply_torque == 0) __vsn_body_apply_torque = StringNames.Get("_body_apply_torque").Opaque;
+        if (nameSn == __vsn_body_apply_torque)
+        {
+            _BodyApplyTorque(*(Rid*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_body_add_constant_central_force == 0) __vsn_body_add_constant_central_force = StringNames.Get("_body_add_constant_central_force").Opaque;
+        if (nameSn == __vsn_body_add_constant_central_force)
+        {
+            _BodyAddConstantCentralForce(*(Rid*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_body_add_constant_force == 0) __vsn_body_add_constant_force = StringNames.Get("_body_add_constant_force").Opaque;
+        if (nameSn == __vsn_body_add_constant_force)
+        {
+            _BodyAddConstantForce(*(Rid*)args[0], *(Vector3*)args[1], *(Vector3*)args[2]);
+            return true;
+        }
+        if (__vsn_body_add_constant_torque == 0) __vsn_body_add_constant_torque = StringNames.Get("_body_add_constant_torque").Opaque;
+        if (nameSn == __vsn_body_add_constant_torque)
+        {
+            _BodyAddConstantTorque(*(Rid*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_body_set_constant_force == 0) __vsn_body_set_constant_force = StringNames.Get("_body_set_constant_force").Opaque;
+        if (nameSn == __vsn_body_set_constant_force)
+        {
+            _BodySetConstantForce(*(Rid*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_body_get_constant_force == 0) __vsn_body_get_constant_force = StringNames.Get("_body_get_constant_force").Opaque;
+        if (nameSn == __vsn_body_get_constant_force)
+        {
+            *(Vector3*)ret = _BodyGetConstantForce(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_set_constant_torque == 0) __vsn_body_set_constant_torque = StringNames.Get("_body_set_constant_torque").Opaque;
+        if (nameSn == __vsn_body_set_constant_torque)
+        {
+            _BodySetConstantTorque(*(Rid*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_body_get_constant_torque == 0) __vsn_body_get_constant_torque = StringNames.Get("_body_get_constant_torque").Opaque;
+        if (nameSn == __vsn_body_get_constant_torque)
+        {
+            *(Vector3*)ret = _BodyGetConstantTorque(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_set_axis_velocity == 0) __vsn_body_set_axis_velocity = StringNames.Get("_body_set_axis_velocity").Opaque;
+        if (nameSn == __vsn_body_set_axis_velocity)
+        {
+            _BodySetAxisVelocity(*(Rid*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_body_set_axis_lock == 0) __vsn_body_set_axis_lock = StringNames.Get("_body_set_axis_lock").Opaque;
+        if (nameSn == __vsn_body_set_axis_lock)
+        {
+            _BodySetAxisLock(*(Rid*)args[0], (PhysicsServer3D.BodyAxis)(*(long*)args[1]), *(byte*)args[2] != 0);
+            return true;
+        }
+        if (__vsn_body_is_axis_locked == 0) __vsn_body_is_axis_locked = StringNames.Get("_body_is_axis_locked").Opaque;
+        if (nameSn == __vsn_body_is_axis_locked)
+        {
+            *(byte*)ret = _BodyIsAxisLocked(*(Rid*)args[0], (PhysicsServer3D.BodyAxis)(*(long*)args[1])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_body_add_collision_exception == 0) __vsn_body_add_collision_exception = StringNames.Get("_body_add_collision_exception").Opaque;
+        if (nameSn == __vsn_body_add_collision_exception)
+        {
+            _BodyAddCollisionException(*(Rid*)args[0], *(Rid*)args[1]);
+            return true;
+        }
+        if (__vsn_body_remove_collision_exception == 0) __vsn_body_remove_collision_exception = StringNames.Get("_body_remove_collision_exception").Opaque;
+        if (nameSn == __vsn_body_remove_collision_exception)
+        {
+            _BodyRemoveCollisionException(*(Rid*)args[0], *(Rid*)args[1]);
+            return true;
+        }
+        if (__vsn_body_set_max_contacts_reported == 0) __vsn_body_set_max_contacts_reported = StringNames.Get("_body_set_max_contacts_reported").Opaque;
+        if (nameSn == __vsn_body_set_max_contacts_reported)
+        {
+            _BodySetMaxContactsReported(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_body_get_max_contacts_reported == 0) __vsn_body_get_max_contacts_reported = StringNames.Get("_body_get_max_contacts_reported").Opaque;
+        if (nameSn == __vsn_body_get_max_contacts_reported)
+        {
+            *(long*)ret = unchecked((long)_BodyGetMaxContactsReported(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_body_set_contacts_reported_depth_threshold == 0) __vsn_body_set_contacts_reported_depth_threshold = StringNames.Get("_body_set_contacts_reported_depth_threshold").Opaque;
+        if (nameSn == __vsn_body_set_contacts_reported_depth_threshold)
+        {
+            _BodySetContactsReportedDepthThreshold(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_body_get_contacts_reported_depth_threshold == 0) __vsn_body_get_contacts_reported_depth_threshold = StringNames.Get("_body_get_contacts_reported_depth_threshold").Opaque;
+        if (nameSn == __vsn_body_get_contacts_reported_depth_threshold)
+        {
+            *(double*)ret = _BodyGetContactsReportedDepthThreshold(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_body_set_omit_force_integration == 0) __vsn_body_set_omit_force_integration = StringNames.Get("_body_set_omit_force_integration").Opaque;
+        if (nameSn == __vsn_body_set_omit_force_integration)
+        {
+            _BodySetOmitForceIntegration(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_body_is_omitting_force_integration == 0) __vsn_body_is_omitting_force_integration = StringNames.Get("_body_is_omitting_force_integration").Opaque;
+        if (nameSn == __vsn_body_is_omitting_force_integration)
+        {
+            *(byte*)ret = _BodyIsOmittingForceIntegration(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_body_set_ray_pickable == 0) __vsn_body_set_ray_pickable = StringNames.Get("_body_set_ray_pickable").Opaque;
+        if (nameSn == __vsn_body_set_ray_pickable)
+        {
+            _BodySetRayPickable(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_body_get_direct_state == 0) __vsn_body_get_direct_state = StringNames.Get("_body_get_direct_state").Opaque;
+        if (nameSn == __vsn_body_get_direct_state)
+        {
+            *(nint*)ret = _BodyGetDirectState(*(Rid*)args[0])?.NativePtr ?? 0;
+            return true;
+        }
+        if (__vsn_soft_body_create == 0) __vsn_soft_body_create = StringNames.Get("_soft_body_create").Opaque;
+        if (nameSn == __vsn_soft_body_create)
+        {
+            *(Rid*)ret = _SoftBodyCreate();
+            return true;
+        }
+        if (__vsn_soft_body_update_rendering_server == 0) __vsn_soft_body_update_rendering_server = StringNames.Get("_soft_body_update_rendering_server").Opaque;
+        if (nameSn == __vsn_soft_body_update_rendering_server)
+        {
+            _SoftBodyUpdateRenderingServer(*(Rid*)args[0], (PhysicsServer3DRenderingServerHandler?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false));
+            return true;
+        }
+        if (__vsn_soft_body_set_space == 0) __vsn_soft_body_set_space = StringNames.Get("_soft_body_set_space").Opaque;
+        if (nameSn == __vsn_soft_body_set_space)
+        {
+            _SoftBodySetSpace(*(Rid*)args[0], *(Rid*)args[1]);
+            return true;
+        }
+        if (__vsn_soft_body_get_space == 0) __vsn_soft_body_get_space = StringNames.Get("_soft_body_get_space").Opaque;
+        if (nameSn == __vsn_soft_body_get_space)
+        {
+            *(Rid*)ret = _SoftBodyGetSpace(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_soft_body_set_ray_pickable == 0) __vsn_soft_body_set_ray_pickable = StringNames.Get("_soft_body_set_ray_pickable").Opaque;
+        if (nameSn == __vsn_soft_body_set_ray_pickable)
+        {
+            _SoftBodySetRayPickable(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_soft_body_set_collision_layer == 0) __vsn_soft_body_set_collision_layer = StringNames.Get("_soft_body_set_collision_layer").Opaque;
+        if (nameSn == __vsn_soft_body_set_collision_layer)
+        {
+            _SoftBodySetCollisionLayer(*(Rid*)args[0], unchecked((uint)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_soft_body_get_collision_layer == 0) __vsn_soft_body_get_collision_layer = StringNames.Get("_soft_body_get_collision_layer").Opaque;
+        if (nameSn == __vsn_soft_body_get_collision_layer)
+        {
+            *(long*)ret = unchecked((long)_SoftBodyGetCollisionLayer(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_soft_body_set_collision_mask == 0) __vsn_soft_body_set_collision_mask = StringNames.Get("_soft_body_set_collision_mask").Opaque;
+        if (nameSn == __vsn_soft_body_set_collision_mask)
+        {
+            _SoftBodySetCollisionMask(*(Rid*)args[0], unchecked((uint)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_soft_body_get_collision_mask == 0) __vsn_soft_body_get_collision_mask = StringNames.Get("_soft_body_get_collision_mask").Opaque;
+        if (nameSn == __vsn_soft_body_get_collision_mask)
+        {
+            *(long*)ret = unchecked((long)_SoftBodyGetCollisionMask(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_soft_body_add_collision_exception == 0) __vsn_soft_body_add_collision_exception = StringNames.Get("_soft_body_add_collision_exception").Opaque;
+        if (nameSn == __vsn_soft_body_add_collision_exception)
+        {
+            _SoftBodyAddCollisionException(*(Rid*)args[0], *(Rid*)args[1]);
+            return true;
+        }
+        if (__vsn_soft_body_remove_collision_exception == 0) __vsn_soft_body_remove_collision_exception = StringNames.Get("_soft_body_remove_collision_exception").Opaque;
+        if (nameSn == __vsn_soft_body_remove_collision_exception)
+        {
+            _SoftBodyRemoveCollisionException(*(Rid*)args[0], *(Rid*)args[1]);
+            return true;
+        }
+        if (__vsn_soft_body_set_transform == 0) __vsn_soft_body_set_transform = StringNames.Get("_soft_body_set_transform").Opaque;
+        if (nameSn == __vsn_soft_body_set_transform)
+        {
+            _SoftBodySetTransform(*(Rid*)args[0], *(Transform3D*)args[1]);
+            return true;
+        }
+        if (__vsn_soft_body_set_simulation_precision == 0) __vsn_soft_body_set_simulation_precision = StringNames.Get("_soft_body_set_simulation_precision").Opaque;
+        if (nameSn == __vsn_soft_body_set_simulation_precision)
+        {
+            _SoftBodySetSimulationPrecision(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_soft_body_get_simulation_precision == 0) __vsn_soft_body_get_simulation_precision = StringNames.Get("_soft_body_get_simulation_precision").Opaque;
+        if (nameSn == __vsn_soft_body_get_simulation_precision)
+        {
+            *(long*)ret = unchecked((long)_SoftBodyGetSimulationPrecision(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_soft_body_set_total_mass == 0) __vsn_soft_body_set_total_mass = StringNames.Get("_soft_body_set_total_mass").Opaque;
+        if (nameSn == __vsn_soft_body_set_total_mass)
+        {
+            _SoftBodySetTotalMass(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_soft_body_get_total_mass == 0) __vsn_soft_body_get_total_mass = StringNames.Get("_soft_body_get_total_mass").Opaque;
+        if (nameSn == __vsn_soft_body_get_total_mass)
+        {
+            *(double*)ret = _SoftBodyGetTotalMass(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_soft_body_set_linear_stiffness == 0) __vsn_soft_body_set_linear_stiffness = StringNames.Get("_soft_body_set_linear_stiffness").Opaque;
+        if (nameSn == __vsn_soft_body_set_linear_stiffness)
+        {
+            _SoftBodySetLinearStiffness(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_soft_body_get_linear_stiffness == 0) __vsn_soft_body_get_linear_stiffness = StringNames.Get("_soft_body_get_linear_stiffness").Opaque;
+        if (nameSn == __vsn_soft_body_get_linear_stiffness)
+        {
+            *(double*)ret = _SoftBodyGetLinearStiffness(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_soft_body_set_shrinking_factor == 0) __vsn_soft_body_set_shrinking_factor = StringNames.Get("_soft_body_set_shrinking_factor").Opaque;
+        if (nameSn == __vsn_soft_body_set_shrinking_factor)
+        {
+            _SoftBodySetShrinkingFactor(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_soft_body_get_shrinking_factor == 0) __vsn_soft_body_get_shrinking_factor = StringNames.Get("_soft_body_get_shrinking_factor").Opaque;
+        if (nameSn == __vsn_soft_body_get_shrinking_factor)
+        {
+            *(double*)ret = _SoftBodyGetShrinkingFactor(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_soft_body_set_pressure_coefficient == 0) __vsn_soft_body_set_pressure_coefficient = StringNames.Get("_soft_body_set_pressure_coefficient").Opaque;
+        if (nameSn == __vsn_soft_body_set_pressure_coefficient)
+        {
+            _SoftBodySetPressureCoefficient(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_soft_body_get_pressure_coefficient == 0) __vsn_soft_body_get_pressure_coefficient = StringNames.Get("_soft_body_get_pressure_coefficient").Opaque;
+        if (nameSn == __vsn_soft_body_get_pressure_coefficient)
+        {
+            *(double*)ret = _SoftBodyGetPressureCoefficient(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_soft_body_set_damping_coefficient == 0) __vsn_soft_body_set_damping_coefficient = StringNames.Get("_soft_body_set_damping_coefficient").Opaque;
+        if (nameSn == __vsn_soft_body_set_damping_coefficient)
+        {
+            _SoftBodySetDampingCoefficient(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_soft_body_get_damping_coefficient == 0) __vsn_soft_body_get_damping_coefficient = StringNames.Get("_soft_body_get_damping_coefficient").Opaque;
+        if (nameSn == __vsn_soft_body_get_damping_coefficient)
+        {
+            *(double*)ret = _SoftBodyGetDampingCoefficient(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_soft_body_set_drag_coefficient == 0) __vsn_soft_body_set_drag_coefficient = StringNames.Get("_soft_body_set_drag_coefficient").Opaque;
+        if (nameSn == __vsn_soft_body_set_drag_coefficient)
+        {
+            _SoftBodySetDragCoefficient(*(Rid*)args[0], (float)(*(double*)args[1]));
+            return true;
+        }
+        if (__vsn_soft_body_get_drag_coefficient == 0) __vsn_soft_body_get_drag_coefficient = StringNames.Get("_soft_body_get_drag_coefficient").Opaque;
+        if (nameSn == __vsn_soft_body_get_drag_coefficient)
+        {
+            *(double*)ret = _SoftBodyGetDragCoefficient(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_soft_body_set_mesh == 0) __vsn_soft_body_set_mesh = StringNames.Get("_soft_body_set_mesh").Opaque;
+        if (nameSn == __vsn_soft_body_set_mesh)
+        {
+            _SoftBodySetMesh(*(Rid*)args[0], *(Rid*)args[1]);
+            return true;
+        }
+        if (__vsn_soft_body_get_bounds == 0) __vsn_soft_body_get_bounds = StringNames.Get("_soft_body_get_bounds").Opaque;
+        if (nameSn == __vsn_soft_body_get_bounds)
+        {
+            *(Aabb*)ret = _SoftBodyGetBounds(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_soft_body_move_point == 0) __vsn_soft_body_move_point = StringNames.Get("_soft_body_move_point").Opaque;
+        if (nameSn == __vsn_soft_body_move_point)
+        {
+            _SoftBodyMovePoint(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(Vector3*)args[2]);
+            return true;
+        }
+        if (__vsn_soft_body_get_point_global_position == 0) __vsn_soft_body_get_point_global_position = StringNames.Get("_soft_body_get_point_global_position").Opaque;
+        if (nameSn == __vsn_soft_body_get_point_global_position)
+        {
+            *(Vector3*)ret = _SoftBodyGetPointGlobalPosition(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_soft_body_remove_all_pinned_points == 0) __vsn_soft_body_remove_all_pinned_points = StringNames.Get("_soft_body_remove_all_pinned_points").Opaque;
+        if (nameSn == __vsn_soft_body_remove_all_pinned_points)
+        {
+            _SoftBodyRemoveAllPinnedPoints(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_soft_body_pin_point == 0) __vsn_soft_body_pin_point = StringNames.Get("_soft_body_pin_point").Opaque;
+        if (nameSn == __vsn_soft_body_pin_point)
+        {
+            _SoftBodyPinPoint(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(byte*)args[2] != 0);
+            return true;
+        }
+        if (__vsn_soft_body_is_point_pinned == 0) __vsn_soft_body_is_point_pinned = StringNames.Get("_soft_body_is_point_pinned").Opaque;
+        if (nameSn == __vsn_soft_body_is_point_pinned)
+        {
+            *(byte*)ret = _SoftBodyIsPointPinned(*(Rid*)args[0], unchecked((int)(*(long*)args[1]))) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_soft_body_apply_point_impulse == 0) __vsn_soft_body_apply_point_impulse = StringNames.Get("_soft_body_apply_point_impulse").Opaque;
+        if (nameSn == __vsn_soft_body_apply_point_impulse)
+        {
+            _SoftBodyApplyPointImpulse(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(Vector3*)args[2]);
+            return true;
+        }
+        if (__vsn_soft_body_apply_point_force == 0) __vsn_soft_body_apply_point_force = StringNames.Get("_soft_body_apply_point_force").Opaque;
+        if (nameSn == __vsn_soft_body_apply_point_force)
+        {
+            _SoftBodyApplyPointForce(*(Rid*)args[0], unchecked((int)(*(long*)args[1])), *(Vector3*)args[2]);
+            return true;
+        }
+        if (__vsn_soft_body_apply_central_impulse == 0) __vsn_soft_body_apply_central_impulse = StringNames.Get("_soft_body_apply_central_impulse").Opaque;
+        if (nameSn == __vsn_soft_body_apply_central_impulse)
+        {
+            _SoftBodyApplyCentralImpulse(*(Rid*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_soft_body_apply_central_force == 0) __vsn_soft_body_apply_central_force = StringNames.Get("_soft_body_apply_central_force").Opaque;
+        if (nameSn == __vsn_soft_body_apply_central_force)
+        {
+            _SoftBodyApplyCentralForce(*(Rid*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_joint_create == 0) __vsn_joint_create = StringNames.Get("_joint_create").Opaque;
+        if (nameSn == __vsn_joint_create)
+        {
+            *(Rid*)ret = _JointCreate();
+            return true;
+        }
+        if (__vsn_joint_clear == 0) __vsn_joint_clear = StringNames.Get("_joint_clear").Opaque;
+        if (nameSn == __vsn_joint_clear)
+        {
+            _JointClear(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_joint_make_pin == 0) __vsn_joint_make_pin = StringNames.Get("_joint_make_pin").Opaque;
+        if (nameSn == __vsn_joint_make_pin)
+        {
+            _JointMakePin(*(Rid*)args[0], *(Rid*)args[1], *(Vector3*)args[2], *(Rid*)args[3], *(Vector3*)args[4]);
+            return true;
+        }
+        if (__vsn_pin_joint_set_param == 0) __vsn_pin_joint_set_param = StringNames.Get("_pin_joint_set_param").Opaque;
+        if (nameSn == __vsn_pin_joint_set_param)
+        {
+            _PinJointSetParam(*(Rid*)args[0], (PhysicsServer3D.PinJointParam)(*(long*)args[1]), (float)(*(double*)args[2]));
+            return true;
+        }
+        if (__vsn_pin_joint_get_param == 0) __vsn_pin_joint_get_param = StringNames.Get("_pin_joint_get_param").Opaque;
+        if (nameSn == __vsn_pin_joint_get_param)
+        {
+            *(double*)ret = _PinJointGetParam(*(Rid*)args[0], (PhysicsServer3D.PinJointParam)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_pin_joint_set_local_a == 0) __vsn_pin_joint_set_local_a = StringNames.Get("_pin_joint_set_local_a").Opaque;
+        if (nameSn == __vsn_pin_joint_set_local_a)
+        {
+            _PinJointSetLocalA(*(Rid*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_pin_joint_get_local_a == 0) __vsn_pin_joint_get_local_a = StringNames.Get("_pin_joint_get_local_a").Opaque;
+        if (nameSn == __vsn_pin_joint_get_local_a)
+        {
+            *(Vector3*)ret = _PinJointGetLocalA(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_pin_joint_set_local_b == 0) __vsn_pin_joint_set_local_b = StringNames.Get("_pin_joint_set_local_b").Opaque;
+        if (nameSn == __vsn_pin_joint_set_local_b)
+        {
+            _PinJointSetLocalB(*(Rid*)args[0], *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_pin_joint_get_local_b == 0) __vsn_pin_joint_get_local_b = StringNames.Get("_pin_joint_get_local_b").Opaque;
+        if (nameSn == __vsn_pin_joint_get_local_b)
+        {
+            *(Vector3*)ret = _PinJointGetLocalB(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_joint_make_hinge == 0) __vsn_joint_make_hinge = StringNames.Get("_joint_make_hinge").Opaque;
+        if (nameSn == __vsn_joint_make_hinge)
+        {
+            _JointMakeHinge(*(Rid*)args[0], *(Rid*)args[1], *(Transform3D*)args[2], *(Rid*)args[3], *(Transform3D*)args[4]);
+            return true;
+        }
+        if (__vsn_joint_make_hinge_simple == 0) __vsn_joint_make_hinge_simple = StringNames.Get("_joint_make_hinge_simple").Opaque;
+        if (nameSn == __vsn_joint_make_hinge_simple)
+        {
+            _JointMakeHingeSimple(*(Rid*)args[0], *(Rid*)args[1], *(Vector3*)args[2], *(Vector3*)args[3], *(Rid*)args[4], *(Vector3*)args[5], *(Vector3*)args[6]);
+            return true;
+        }
+        if (__vsn_hinge_joint_set_param == 0) __vsn_hinge_joint_set_param = StringNames.Get("_hinge_joint_set_param").Opaque;
+        if (nameSn == __vsn_hinge_joint_set_param)
+        {
+            _HingeJointSetParam(*(Rid*)args[0], (PhysicsServer3D.HingeJointParam)(*(long*)args[1]), (float)(*(double*)args[2]));
+            return true;
+        }
+        if (__vsn_hinge_joint_get_param == 0) __vsn_hinge_joint_get_param = StringNames.Get("_hinge_joint_get_param").Opaque;
+        if (nameSn == __vsn_hinge_joint_get_param)
+        {
+            *(double*)ret = _HingeJointGetParam(*(Rid*)args[0], (PhysicsServer3D.HingeJointParam)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_hinge_joint_set_flag == 0) __vsn_hinge_joint_set_flag = StringNames.Get("_hinge_joint_set_flag").Opaque;
+        if (nameSn == __vsn_hinge_joint_set_flag)
+        {
+            _HingeJointSetFlag(*(Rid*)args[0], (PhysicsServer3D.HingeJointFlag)(*(long*)args[1]), *(byte*)args[2] != 0);
+            return true;
+        }
+        if (__vsn_hinge_joint_get_flag == 0) __vsn_hinge_joint_get_flag = StringNames.Get("_hinge_joint_get_flag").Opaque;
+        if (nameSn == __vsn_hinge_joint_get_flag)
+        {
+            *(byte*)ret = _HingeJointGetFlag(*(Rid*)args[0], (PhysicsServer3D.HingeJointFlag)(*(long*)args[1])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_joint_make_slider == 0) __vsn_joint_make_slider = StringNames.Get("_joint_make_slider").Opaque;
+        if (nameSn == __vsn_joint_make_slider)
+        {
+            _JointMakeSlider(*(Rid*)args[0], *(Rid*)args[1], *(Transform3D*)args[2], *(Rid*)args[3], *(Transform3D*)args[4]);
+            return true;
+        }
+        if (__vsn_slider_joint_set_param == 0) __vsn_slider_joint_set_param = StringNames.Get("_slider_joint_set_param").Opaque;
+        if (nameSn == __vsn_slider_joint_set_param)
+        {
+            _SliderJointSetParam(*(Rid*)args[0], (PhysicsServer3D.SliderJointParam)(*(long*)args[1]), (float)(*(double*)args[2]));
+            return true;
+        }
+        if (__vsn_slider_joint_get_param == 0) __vsn_slider_joint_get_param = StringNames.Get("_slider_joint_get_param").Opaque;
+        if (nameSn == __vsn_slider_joint_get_param)
+        {
+            *(double*)ret = _SliderJointGetParam(*(Rid*)args[0], (PhysicsServer3D.SliderJointParam)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_joint_make_cone_twist == 0) __vsn_joint_make_cone_twist = StringNames.Get("_joint_make_cone_twist").Opaque;
+        if (nameSn == __vsn_joint_make_cone_twist)
+        {
+            _JointMakeConeTwist(*(Rid*)args[0], *(Rid*)args[1], *(Transform3D*)args[2], *(Rid*)args[3], *(Transform3D*)args[4]);
+            return true;
+        }
+        if (__vsn_cone_twist_joint_set_param == 0) __vsn_cone_twist_joint_set_param = StringNames.Get("_cone_twist_joint_set_param").Opaque;
+        if (nameSn == __vsn_cone_twist_joint_set_param)
+        {
+            _ConeTwistJointSetParam(*(Rid*)args[0], (PhysicsServer3D.ConeTwistJointParam)(*(long*)args[1]), (float)(*(double*)args[2]));
+            return true;
+        }
+        if (__vsn_cone_twist_joint_get_param == 0) __vsn_cone_twist_joint_get_param = StringNames.Get("_cone_twist_joint_get_param").Opaque;
+        if (nameSn == __vsn_cone_twist_joint_get_param)
+        {
+            *(double*)ret = _ConeTwistJointGetParam(*(Rid*)args[0], (PhysicsServer3D.ConeTwistJointParam)(*(long*)args[1]));
+            return true;
+        }
+        if (__vsn_joint_make_generic_6dof == 0) __vsn_joint_make_generic_6dof = StringNames.Get("_joint_make_generic_6dof").Opaque;
+        if (nameSn == __vsn_joint_make_generic_6dof)
+        {
+            _JointMakeGeneric6dof(*(Rid*)args[0], *(Rid*)args[1], *(Transform3D*)args[2], *(Rid*)args[3], *(Transform3D*)args[4]);
+            return true;
+        }
+        if (__vsn_joint_get_type == 0) __vsn_joint_get_type = StringNames.Get("_joint_get_type").Opaque;
+        if (nameSn == __vsn_joint_get_type)
+        {
+            *(long*)ret = (long)_JointGetType(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_joint_set_solver_priority == 0) __vsn_joint_set_solver_priority = StringNames.Get("_joint_set_solver_priority").Opaque;
+        if (nameSn == __vsn_joint_set_solver_priority)
+        {
+            _JointSetSolverPriority(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_joint_get_solver_priority == 0) __vsn_joint_get_solver_priority = StringNames.Get("_joint_get_solver_priority").Opaque;
+        if (nameSn == __vsn_joint_get_solver_priority)
+        {
+            *(long*)ret = unchecked((long)_JointGetSolverPriority(*(Rid*)args[0]));
+            return true;
+        }
+        if (__vsn_joint_disable_collisions_between_bodies == 0) __vsn_joint_disable_collisions_between_bodies = StringNames.Get("_joint_disable_collisions_between_bodies").Opaque;
+        if (nameSn == __vsn_joint_disable_collisions_between_bodies)
+        {
+            _JointDisableCollisionsBetweenBodies(*(Rid*)args[0], *(byte*)args[1] != 0);
+            return true;
+        }
+        if (__vsn_joint_is_disabled_collisions_between_bodies == 0) __vsn_joint_is_disabled_collisions_between_bodies = StringNames.Get("_joint_is_disabled_collisions_between_bodies").Opaque;
+        if (nameSn == __vsn_joint_is_disabled_collisions_between_bodies)
+        {
+            *(byte*)ret = _JointIsDisabledCollisionsBetweenBodies(*(Rid*)args[0]) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_free_rid == 0) __vsn_free_rid = StringNames.Get("_free_rid").Opaque;
+        if (nameSn == __vsn_free_rid)
+        {
+            _FreeRid(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_set_active == 0) __vsn_set_active = StringNames.Get("_set_active").Opaque;
+        if (nameSn == __vsn_set_active)
+        {
+            _SetActive(*(byte*)args[0] != 0);
+            return true;
+        }
+        if (__vsn_init == 0) __vsn_init = StringNames.Get("_init").Opaque;
+        if (nameSn == __vsn_init)
+        {
+            _Init();
+            return true;
+        }
+        if (__vsn_step == 0) __vsn_step = StringNames.Get("_step").Opaque;
+        if (nameSn == __vsn_step)
+        {
+            _Step((float)(*(double*)args[0]));
+            return true;
+        }
+        if (__vsn_sync == 0) __vsn_sync = StringNames.Get("_sync").Opaque;
+        if (nameSn == __vsn_sync)
+        {
+            _Sync();
+            return true;
+        }
+        if (__vsn_flush_queries == 0) __vsn_flush_queries = StringNames.Get("_flush_queries").Opaque;
+        if (nameSn == __vsn_flush_queries)
+        {
+            _FlushQueries();
+            return true;
+        }
+        if (__vsn_end_sync == 0) __vsn_end_sync = StringNames.Get("_end_sync").Opaque;
+        if (nameSn == __vsn_end_sync)
+        {
+            _EndSync();
+            return true;
+        }
+        if (__vsn_finish == 0) __vsn_finish = StringNames.Get("_finish").Opaque;
+        if (nameSn == __vsn_finish)
+        {
+            _Finish();
+            return true;
+        }
+        if (__vsn_is_flushing_queries == 0) __vsn_is_flushing_queries = StringNames.Get("_is_flushing_queries").Opaque;
+        if (nameSn == __vsn_is_flushing_queries)
+        {
+            *(byte*)ret = _IsFlushingQueries() ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_process_info == 0) __vsn_get_process_info = StringNames.Get("_get_process_info").Opaque;
+        if (nameSn == __vsn_get_process_info)
+        {
+            *(long*)ret = unchecked((long)_GetProcessInfo((PhysicsServer3D.ProcessInfo)(*(long*)args[0])));
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class PhysicsServer3DManager : GodotObject
 {
     internal PhysicsServer3DManager(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsServer3DManager() : this(InstanceBindings.ConstructRaw("PhysicsServer3DManager"), false)
+    public PhysicsServer3DManager() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsServer3DManager");
     }
 
     private static PhysicsServer3DManager? _singleton;
@@ -13528,9 +17125,9 @@ public unsafe partial class PhysicsServer3DRenderingServerHandler : GodotObject
 {
     internal PhysicsServer3DRenderingServerHandler(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsServer3DRenderingServerHandler() : this(InstanceBindings.ConstructRaw("PhysicsServer3DRenderingServerHandler"), false)
+    public PhysicsServer3DRenderingServerHandler() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsServer3DRenderingServerHandler");
     }
 
     private static nint __mb_set_vertex;
@@ -13584,15 +17181,48 @@ public unsafe partial class PhysicsServer3DRenderingServerHandler : GodotObject
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
+
+    public virtual void _SetVertex(int vertexId, Vector3 vertex) { }
+
+    public virtual void _SetNormal(int vertexId, Vector3 normal) { }
+
+    public virtual void _SetAabb(Aabb aabb) { }
+
+    private static ulong __vsn_set_vertex;
+    private static ulong __vsn_set_normal;
+    private static ulong __vsn_set_aabb;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_set_vertex == 0) __vsn_set_vertex = StringNames.Get("_set_vertex").Opaque;
+        if (nameSn == __vsn_set_vertex)
+        {
+            _SetVertex(unchecked((int)(*(long*)args[0])), *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_set_normal == 0) __vsn_set_normal = StringNames.Get("_set_normal").Opaque;
+        if (nameSn == __vsn_set_normal)
+        {
+            _SetNormal(unchecked((int)(*(long*)args[0])), *(Vector3*)args[1]);
+            return true;
+        }
+        if (__vsn_set_aabb == 0) __vsn_set_aabb = StringNames.Get("_set_aabb").Opaque;
+        if (nameSn == __vsn_set_aabb)
+        {
+            _SetAabb(*(Aabb*)args[0]);
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
+    }
 }
 
 public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
 {
     internal PhysicsShapeQueryParameters2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsShapeQueryParameters2D() : this(InstanceBindings.ConstructRaw("PhysicsShapeQueryParameters2D"), true)
+    public PhysicsShapeQueryParameters2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsShapeQueryParameters2D");
     }
 
     private static nint __mb_set_shape;
@@ -13848,9 +17478,9 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
 {
     internal PhysicsShapeQueryParameters3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsShapeQueryParameters3D() : this(InstanceBindings.ConstructRaw("PhysicsShapeQueryParameters3D"), true)
+    public PhysicsShapeQueryParameters3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsShapeQueryParameters3D");
     }
 
     private static nint __mb_set_shape;
@@ -14106,9 +17736,9 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
 {
     internal PhysicsTestMotionParameters2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsTestMotionParameters2D() : this(InstanceBindings.ConstructRaw("PhysicsTestMotionParameters2D"), true)
+    public PhysicsTestMotionParameters2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsTestMotionParameters2D");
     }
 
     private static nint __mb_get_from;
@@ -14271,9 +17901,9 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
 {
     internal PhysicsTestMotionParameters3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsTestMotionParameters3D() : this(InstanceBindings.ConstructRaw("PhysicsTestMotionParameters3D"), true)
+    public PhysicsTestMotionParameters3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsTestMotionParameters3D");
     }
 
     private static nint __mb_get_from;
@@ -14467,9 +18097,9 @@ public unsafe partial class PhysicsTestMotionResult2D : RefCounted
 {
     internal PhysicsTestMotionResult2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsTestMotionResult2D() : this(InstanceBindings.ConstructRaw("PhysicsTestMotionResult2D"), true)
+    public PhysicsTestMotionResult2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsTestMotionResult2D");
     }
 
     private static nint __mb_get_travel;
@@ -14672,9 +18302,9 @@ public unsafe partial class PhysicsTestMotionResult3D : RefCounted
 {
     internal PhysicsTestMotionResult3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PhysicsTestMotionResult3D() : this(InstanceBindings.ConstructRaw("PhysicsTestMotionResult3D"), true)
+    public PhysicsTestMotionResult3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PhysicsTestMotionResult3D");
     }
 
     private static nint __mb_get_travel;
@@ -14919,9 +18549,9 @@ public unsafe partial class PinJoint2D : Joint2D
 {
     internal PinJoint2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PinJoint2D() : this(InstanceBindings.ConstructRaw("PinJoint2D"), false)
+    public PinJoint2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PinJoint2D");
     }
 
     private static nint __mb_set_softness;
@@ -15115,9 +18745,9 @@ public unsafe partial class PinJoint3D : Joint3D
 {
     internal PinJoint3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PinJoint3D() : this(InstanceBindings.ConstructRaw("PinJoint3D"), false)
+    public PinJoint3D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PinJoint3D");
     }
 
     public enum Param : long
@@ -15168,9 +18798,9 @@ public unsafe partial class PlaceholderCubemap : PlaceholderTextureLayered
 {
     internal PlaceholderCubemap(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PlaceholderCubemap() : this(InstanceBindings.ConstructRaw("PlaceholderCubemap"), true)
+    public PlaceholderCubemap() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PlaceholderCubemap");
     }
 }
 
@@ -15178,9 +18808,9 @@ public unsafe partial class PlaceholderCubemapArray : PlaceholderTextureLayered
 {
     internal PlaceholderCubemapArray(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PlaceholderCubemapArray() : this(InstanceBindings.ConstructRaw("PlaceholderCubemapArray"), true)
+    public PlaceholderCubemapArray() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PlaceholderCubemapArray");
     }
 }
 
@@ -15188,9 +18818,9 @@ public unsafe partial class PlaceholderMaterial : Material
 {
     internal PlaceholderMaterial(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PlaceholderMaterial() : this(InstanceBindings.ConstructRaw("PlaceholderMaterial"), true)
+    public PlaceholderMaterial() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PlaceholderMaterial");
     }
 }
 
@@ -15198,9 +18828,9 @@ public unsafe partial class PlaceholderMesh : Mesh
 {
     internal PlaceholderMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PlaceholderMesh() : this(InstanceBindings.ConstructRaw("PlaceholderMesh"), true)
+    public PlaceholderMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PlaceholderMesh");
     }
 
     private static nint __mb_set_aabb;
@@ -15224,9 +18854,9 @@ public unsafe partial class PlaceholderTexture2D : Texture2D
 {
     internal PlaceholderTexture2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PlaceholderTexture2D() : this(InstanceBindings.ConstructRaw("PlaceholderTexture2D"), true)
+    public PlaceholderTexture2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PlaceholderTexture2D");
     }
 
     private static nint __mb_set_size;
@@ -15250,9 +18880,9 @@ public unsafe partial class PlaceholderTexture2DArray : PlaceholderTextureLayere
 {
     internal PlaceholderTexture2DArray(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PlaceholderTexture2DArray() : this(InstanceBindings.ConstructRaw("PlaceholderTexture2DArray"), true)
+    public PlaceholderTexture2DArray() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PlaceholderTexture2DArray");
     }
 }
 
@@ -15260,9 +18890,9 @@ public unsafe partial class PlaceholderTexture3D : Texture3D
 {
     internal PlaceholderTexture3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PlaceholderTexture3D() : this(InstanceBindings.ConstructRaw("PlaceholderTexture3D"), true)
+    public PlaceholderTexture3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PlaceholderTexture3D");
     }
 
     private static nint __mb_set_size;
@@ -15353,9 +18983,9 @@ public unsafe partial class PlaneMesh : PrimitiveMesh
 {
     internal PlaneMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PlaneMesh() : this(InstanceBindings.ConstructRaw("PlaneMesh"), true)
+    public PlaneMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PlaneMesh");
     }
 
     public enum Orientation : long
@@ -15525,9 +19155,9 @@ public unsafe partial class PointLight2D : Light2D
 {
     internal PointLight2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PointLight2D() : this(InstanceBindings.ConstructRaw("PointLight2D"), false)
+    public PointLight2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PointLight2D");
     }
 
     private static nint __mb_set_texture;
@@ -15628,9 +19258,9 @@ public unsafe partial class PointMesh : PrimitiveMesh
 {
     internal PointMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PointMesh() : this(InstanceBindings.ConstructRaw("PointMesh"), true)
+    public PointMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PointMesh");
     }
 }
 
@@ -15638,9 +19268,9 @@ public unsafe partial class Polygon2D : Node2D
 {
     internal Polygon2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Polygon2D() : this(InstanceBindings.ConstructRaw("Polygon2D"), false)
+    public Polygon2D() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Polygon2D");
     }
 
     private static nint __mb_set_color;
@@ -16002,9 +19632,9 @@ public unsafe partial class PolygonOccluder3D : Occluder3D
 {
     internal PolygonOccluder3D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PolygonOccluder3D() : this(InstanceBindings.ConstructRaw("PolygonOccluder3D"), true)
+    public PolygonOccluder3D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PolygonOccluder3D");
     }
 }
 
@@ -16012,9 +19642,9 @@ public unsafe partial class PolygonPathFinder : Resource
 {
     internal PolygonPathFinder(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PolygonPathFinder() : this(InstanceBindings.ConstructRaw("PolygonPathFinder"), true)
+    public PolygonPathFinder() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PolygonPathFinder");
     }
 
     private static nint __mb_get_closest_point;
@@ -16109,9 +19739,9 @@ public unsafe partial class Popup : Window
 {
     internal Popup(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public Popup() : this(InstanceBindings.ConstructRaw("Popup"), false)
+    public Popup() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "Popup");
     }
 }
 
@@ -16119,9 +19749,9 @@ public unsafe partial class PopupMenu : Popup
 {
     internal PopupMenu(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PopupMenu() : this(InstanceBindings.ConstructRaw("PopupMenu"), false)
+    public PopupMenu() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PopupMenu");
     }
 
     private static nint __mb_activate_item_by_event;
@@ -17907,9 +21537,9 @@ public unsafe partial class PopupPanel : Popup
 {
     internal PopupPanel(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PopupPanel() : this(InstanceBindings.ConstructRaw("PopupPanel"), false)
+    public PopupPanel() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PopupPanel");
     }
 }
 
@@ -17917,9 +21547,9 @@ public unsafe partial class PortableCompressedTexture2D : Texture2D
 {
     internal PortableCompressedTexture2D(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PortableCompressedTexture2D() : this(InstanceBindings.ConstructRaw("PortableCompressedTexture2D"), true)
+    public PortableCompressedTexture2D() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PortableCompressedTexture2D");
     }
 
     public enum CompressionMode : long
@@ -18086,9 +21716,9 @@ public unsafe partial class PrimitiveMesh : Mesh
 {
     internal PrimitiveMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PrimitiveMesh() : this(InstanceBindings.ConstructRaw("PrimitiveMesh"), true)
+    public PrimitiveMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PrimitiveMesh");
     }
 
     private static nint __mb_set_material;
@@ -18264,9 +21894,9 @@ public unsafe partial class PrismMesh : PrimitiveMesh
 {
     internal PrismMesh(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PrismMesh() : this(InstanceBindings.ConstructRaw("PrismMesh"), true)
+    public PrismMesh() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PrismMesh");
     }
 
     private static nint __mb_set_left_to_right;
@@ -18429,9 +22059,9 @@ public unsafe partial class ProceduralSkyMaterial : Material
 {
     internal ProceduralSkyMaterial(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ProceduralSkyMaterial() : this(InstanceBindings.ConstructRaw("ProceduralSkyMaterial"), true)
+    public ProceduralSkyMaterial() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ProceduralSkyMaterial");
     }
 
     private static nint __mb_set_sky_top_color;
@@ -18873,9 +22503,9 @@ public unsafe partial class ProgressBar : Range
 {
     internal ProgressBar(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ProgressBar() : this(InstanceBindings.ConstructRaw("ProgressBar"), false)
+    public ProgressBar() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ProgressBar");
     }
 
     public enum FillMode : long
@@ -19015,9 +22645,9 @@ public unsafe partial class ProjectSettings : GodotObject
 {
     internal ProjectSettings(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public ProjectSettings() : this(InstanceBindings.ConstructRaw("ProjectSettings"), false)
+    public ProjectSettings() : this(0, false)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "ProjectSettings");
     }
 
     private static ProjectSettings? _singleton;
@@ -19273,9 +22903,9 @@ public unsafe partial class PropertyTweener : Tweener
 {
     internal PropertyTweener(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public PropertyTweener() : this(InstanceBindings.ConstructRaw("PropertyTweener"), true)
+    public PropertyTweener() : this(0, true)
     {
-        InstanceBindings.Attach(this);
+        ClassRegistry.AttachNew(this, "PropertyTweener");
     }
 
     private static nint __mb_from_current;

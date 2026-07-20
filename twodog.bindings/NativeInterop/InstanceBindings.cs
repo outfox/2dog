@@ -80,6 +80,22 @@ public static unsafe class InstanceBindings
         }
     }
 
+    /// <summary>
+    /// Installs a weak binding on an extension instance so GetOrCreate resolves
+    /// the same managed object. The strong owner is the GDExtension instance
+    /// handle (ClassRegistry), not the binding.
+    /// </summary>
+    internal static void InstallWeakBinding(GodotObject wrapper)
+    {
+        lock (Gate)
+        {
+            var slot = (BindingSlot*)GdExtensionInterface.ObjectGetInstanceBinding(wrapper.NativePtr, GdExtensionHost.Library, Callbacks);
+            GCHandle.FromIntPtr(slot->Handle).Free();
+            slot->Handle = GCHandle.ToIntPtr(GCHandle.Alloc(wrapper, GCHandleType.Weak));
+            slot->Strong = 0;
+        }
+    }
+
     private static nint _mbGetClass;
 
     /// <summary>Reads the object's actual class name (Object.get_class ptrcall).</summary>
