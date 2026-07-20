@@ -159,6 +159,16 @@ internal static unsafe class Program
         Check(_readyCalled, "_ready() virtual dispatched into C#");
         Check(_processCalls >= 60, $"_process() virtual dispatched {_processCalls} times (last delta = {_lastDelta:F4}s)");
 
+        // -- RefCounted lifetime: the strong/weak GCHandle flip protocol --
+        var rcId = RefCountedLifetimeChecks(classDb);
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+        DisposalQueue.Drain();
+        Check(GdExtensionInterface.ObjectGetInstanceFromId(rcId) == 0,
+            $"collected wrapper released its ref; RefCounted died on Drain() (released={DisposalQueue.Released})");
+        Check(InstanceBindings.FreedBindings >= 1, "binding free callback fired on RefCounted death");
+
         UtilityPrint($"[spike] engine-side goodbye after {frames} iterations");
 
         // -- teardown: the tree owns spike_node; destroying the instance must fire free_instance --
@@ -173,6 +183,37 @@ internal static unsafe class Program
         }
         Console.WriteLine($"[spike] FAIL - {_failures}/{_checks} checks failed.");
         return 1;
+    }
+
+    /// <summary>
+    /// Exercises the RefCounted wrapper protocol; NoInlining so the wrapper is
+    /// provably unrooted when the caller runs GC. Returns the instance id for
+    /// the post-collection death check.
+    /// </summary>
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+    private static ulong RefCountedLifetimeChecks(nint classDb)
+    {
+        // ClassDB.instantiate returns a Variant that holds one engine ref.
+        NativeVariant rcVariant;
+        var snRefCounted = StringNames.Get("RefCounted").Opaque;
+        MethodBinds.Call(_mbClassDbInstantiate, classDb, [(nint)(&snRefCounted)], &rcVariant);
+        var rcPtr = Variants.ToObject(in rcVariant); // borrowed while the variant lives
+
+        // Wrapping a borrowed pointer takes the wrapper's own reference.
+        var wrapper = InstanceBindings.GetOrCreate(rcPtr, refCounted: true, adoptRef: false)!;
+        var rc = RefCountedNative.GetReferenceCount(rcPtr);
+        Check(rc == 2, $"rc == 2 while variant + wrapper hold refs (got {rc})");
+        Check(InstanceBindings.DebugIsStrong(rcPtr) == true, "binding handle STRONG while the engine holds a ref");
+
+        Variants.Destroy(ref rcVariant); // engine-side unref fires the reference callback
+        rc = RefCountedNative.GetReferenceCount(rcPtr);
+        Check(rc == 1, $"rc == 1 after variant destroyed (got {rc})");
+        Check(InstanceBindings.DebugIsStrong(rcPtr) == false, "binding handle flipped WEAK on the 2->1 edge");
+
+        var again = InstanceBindings.GetOrCreate(rcPtr, refCounted: true, adoptRef: false);
+        Check(ReferenceEquals(wrapper, again), "re-wrapping the same pointer returns the same managed instance");
+        Check(wrapper.IsValid, "wrapper.IsValid (ObjectID-validated)");
+        return wrapper.InstanceId;
     }
 
     // ------------------------------------------------- extension class --
