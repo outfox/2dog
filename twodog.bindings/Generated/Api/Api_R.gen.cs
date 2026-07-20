@@ -715,10 +715,162 @@ public unsafe partial class RDFramebufferPass : RefCounted
         ClassRegistry.AttachNew(this, "RDFramebufferPass");
     }
 
+    public int[] ColorAttachments
+    {
+        get => GetColorAttachments();
+        set => SetColorAttachments(value);
+    }
+
+    public int[] InputAttachments
+    {
+        get => GetInputAttachments();
+        set => SetInputAttachments(value);
+    }
+
+    public int[] ResolveAttachments
+    {
+        get => GetResolveAttachments();
+        set => SetResolveAttachments(value);
+    }
+
+    public int[] PreserveAttachments
+    {
+        get => GetPreserveAttachments();
+        set => SetPreserveAttachments(value);
+    }
+
     public int DepthAttachment
     {
         get => GetDepthAttachment();
         set => SetDepthAttachment(value);
+    }
+
+    private static nint __mb_set_color_attachments;
+    internal void SetColorAttachments(int[] pMember)
+    {
+        var __mb = __mb_set_color_attachments;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RDFramebufferPass", "set_color_attachments", 3614634198);
+            if (__mb == 0) throw new MissingMethodException("RDFramebufferPass.set_color_attachments is not available in this engine build.");
+            __mb_set_color_attachments = __mb;
+        }
+        var __a0 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, pMember);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_color_attachments;
+    internal int[] GetColorAttachments()
+    {
+        var __mb = __mb_get_color_attachments;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RDFramebufferPass", "get_color_attachments", 1930428628);
+            if (__mb == 0) throw new MissingMethodException("RDFramebufferPass.get_color_attachments is not available in this engine build.");
+            __mb_get_color_attachments = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_set_input_attachments;
+    internal void SetInputAttachments(int[] pMember)
+    {
+        var __mb = __mb_set_input_attachments;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RDFramebufferPass", "set_input_attachments", 3614634198);
+            if (__mb == 0) throw new MissingMethodException("RDFramebufferPass.set_input_attachments is not available in this engine build.");
+            __mb_set_input_attachments = __mb;
+        }
+        var __a0 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, pMember);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_input_attachments;
+    internal int[] GetInputAttachments()
+    {
+        var __mb = __mb_get_input_attachments;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RDFramebufferPass", "get_input_attachments", 1930428628);
+            if (__mb == 0) throw new MissingMethodException("RDFramebufferPass.get_input_attachments is not available in this engine build.");
+            __mb_get_input_attachments = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_set_resolve_attachments;
+    internal void SetResolveAttachments(int[] pMember)
+    {
+        var __mb = __mb_set_resolve_attachments;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RDFramebufferPass", "set_resolve_attachments", 3614634198);
+            if (__mb == 0) throw new MissingMethodException("RDFramebufferPass.set_resolve_attachments is not available in this engine build.");
+            __mb_set_resolve_attachments = __mb;
+        }
+        var __a0 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, pMember);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_resolve_attachments;
+    internal int[] GetResolveAttachments()
+    {
+        var __mb = __mb_get_resolve_attachments;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RDFramebufferPass", "get_resolve_attachments", 1930428628);
+            if (__mb == 0) throw new MissingMethodException("RDFramebufferPass.get_resolve_attachments is not available in this engine build.");
+            __mb_get_resolve_attachments = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_set_preserve_attachments;
+    internal void SetPreserveAttachments(int[] pMember)
+    {
+        var __mb = __mb_set_preserve_attachments;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RDFramebufferPass", "set_preserve_attachments", 3614634198);
+            if (__mb == 0) throw new MissingMethodException("RDFramebufferPass.set_preserve_attachments is not available in this engine build.");
+            __mb_set_preserve_attachments = __mb;
+        }
+        var __a0 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, pMember);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_preserve_attachments;
+    internal int[] GetPreserveAttachments()
+    {
+        var __mb = __mb_get_preserve_attachments;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RDFramebufferPass", "get_preserve_attachments", 1930428628);
+            if (__mb == 0) throw new MissingMethodException("RDFramebufferPass.get_preserve_attachments is not available in this engine build.");
+            __mb_get_preserve_attachments = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_depth_attachment;
@@ -3739,6 +3891,66 @@ public unsafe partial class RDShaderSPIRV : Resource
         ClassRegistry.AttachNew(this, "RDShaderSPIRV");
     }
 
+    public byte[] BytecodeVertex
+    {
+        get => GetStageBytecode(((RenderingDevice.ShaderStage)(0)));
+        set => SetStageBytecode(((RenderingDevice.ShaderStage)(0)), value);
+    }
+
+    public byte[] BytecodeFragment
+    {
+        get => GetStageBytecode(((RenderingDevice.ShaderStage)(1)));
+        set => SetStageBytecode(((RenderingDevice.ShaderStage)(1)), value);
+    }
+
+    public byte[] BytecodeTesselationControl
+    {
+        get => GetStageBytecode(((RenderingDevice.ShaderStage)(2)));
+        set => SetStageBytecode(((RenderingDevice.ShaderStage)(2)), value);
+    }
+
+    public byte[] BytecodeTesselationEvaluation
+    {
+        get => GetStageBytecode(((RenderingDevice.ShaderStage)(3)));
+        set => SetStageBytecode(((RenderingDevice.ShaderStage)(3)), value);
+    }
+
+    public byte[] BytecodeCompute
+    {
+        get => GetStageBytecode(((RenderingDevice.ShaderStage)(4)));
+        set => SetStageBytecode(((RenderingDevice.ShaderStage)(4)), value);
+    }
+
+    public byte[] BytecodeRaygen
+    {
+        get => GetStageBytecode(((RenderingDevice.ShaderStage)(5)));
+        set => SetStageBytecode(((RenderingDevice.ShaderStage)(5)), value);
+    }
+
+    public byte[] BytecodeAnyHit
+    {
+        get => GetStageBytecode(((RenderingDevice.ShaderStage)(6)));
+        set => SetStageBytecode(((RenderingDevice.ShaderStage)(6)), value);
+    }
+
+    public byte[] BytecodeClosestHit
+    {
+        get => GetStageBytecode(((RenderingDevice.ShaderStage)(7)));
+        set => SetStageBytecode(((RenderingDevice.ShaderStage)(7)), value);
+    }
+
+    public byte[] BytecodeMiss
+    {
+        get => GetStageBytecode(((RenderingDevice.ShaderStage)(8)));
+        set => SetStageBytecode(((RenderingDevice.ShaderStage)(8)), value);
+    }
+
+    public byte[] BytecodeIntersection
+    {
+        get => GetStageBytecode(((RenderingDevice.ShaderStage)(9)));
+        set => SetStageBytecode(((RenderingDevice.ShaderStage)(9)), value);
+    }
+
     public string CompileErrorVertex
     {
         get => GetStageCompileError(((RenderingDevice.ShaderStage)(0)));
@@ -3797,6 +4009,43 @@ public unsafe partial class RDShaderSPIRV : Resource
     {
         get => GetStageCompileError(((RenderingDevice.ShaderStage)(9)));
         set => SetStageCompileError(((RenderingDevice.ShaderStage)(9)), value);
+    }
+
+    private static nint __mb_set_stage_bytecode;
+    internal void SetStageBytecode(RenderingDevice.ShaderStage stage, byte[] bytecode)
+    {
+        var __mb = __mb_set_stage_bytecode;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RDShaderSPIRV", "set_stage_bytecode", 3514097977);
+            if (__mb == 0) throw new MissingMethodException("RDShaderSPIRV.set_stage_bytecode is not available in this engine build.");
+            __mb_set_stage_bytecode = __mb;
+        }
+        long __a0 = (long)stage;
+        var __a1 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, bytecode);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a1);
+    }
+
+    private static nint __mb_get_stage_bytecode;
+    internal byte[] GetStageBytecode(RenderingDevice.ShaderStage stage)
+    {
+        var __mb = __mb_get_stage_bytecode;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RDShaderSPIRV", "get_stage_bytecode", 3816765404);
+            if (__mb == 0) throw new MissingMethodException("RDShaderSPIRV.get_stage_bytecode is not available in this engine build.");
+            __mb_get_stage_bytecode = __mb;
+        }
+        long __a0 = (long)stage;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_stage_compile_error;
@@ -5156,6 +5405,25 @@ public unsafe partial class RandomNumberGenerator : RefCounted
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_rand_weighted;
+    public long RandWeighted(float[] weights)
+    {
+        var __mb = __mb_rand_weighted;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RandomNumberGenerator", "rand_weighted", 4189642986);
+            if (__mb == 0) throw new MissingMethodException("RandomNumberGenerator.rand_weighted is not available in this engine build.");
+            __mb_rand_weighted = __mb;
+        }
+        var __a0 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, weights);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a0);
+        return unchecked((long)__ret);
     }
 
     private static nint __mb_randomize;
@@ -7691,6 +7959,21 @@ public unsafe partial class RegEx : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
+
+    private static nint __mb_get_names;
+    public string[] GetNames()
+    {
+        var __mb = __mb_get_names;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RegEx", "get_names", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("RegEx.get_names is not available in this engine build.");
+            __mb_get_names = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
 }
 
 public unsafe partial class RegExMatch : RefCounted
@@ -7705,6 +7988,8 @@ public unsafe partial class RegExMatch : RefCounted
     public string Subject => GetSubject();
 
     public Godot.Collections.Dictionary Names => GetNames();
+
+    public string[] Strings => GetStrings();
 
     private static nint __mb_get_subject;
     internal string GetSubject()
@@ -7749,6 +8034,21 @@ public unsafe partial class RegExMatch : RefCounted
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_get_strings;
+    internal string[] GetStrings()
+    {
+        var __mb = __mb_get_strings;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RegExMatch", "get_strings", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("RegExMatch.get_strings is not available in this engine build.");
+            __mb_get_strings = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_get_string;
@@ -10370,6 +10670,71 @@ public unsafe partial class RenderingDevice : GodotObject
         return __ret;
     }
 
+    private static nint __mb_texture_update;
+    public Error TextureUpdate(Rid texture, uint layer, byte[] data)
+    {
+        var __mb = __mb_texture_update;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "texture_update", 1349464008);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.texture_update is not available in this engine build.");
+            __mb_texture_update = __mb;
+        }
+        var __a0 = texture;
+        long __a1 = unchecked((long)layer);
+        var __a2 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a2);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_texture_get_data;
+    public byte[] TextureGetData(Rid texture, uint layer)
+    {
+        var __mb = __mb_texture_get_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "texture_get_data", 1859412099);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.texture_get_data is not available in this engine build.");
+            __mb_texture_get_data = __mb;
+        }
+        var __a0 = texture;
+        long __a1 = unchecked((long)layer);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_texture_get_data_async;
+    public Error TextureGetDataAsync(Rid texture, uint layer, Callable callback)
+    {
+        var __mb = __mb_texture_get_data_async;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "texture_get_data_async", 498832090);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.texture_get_data_async is not available in this engine build.");
+            __mb_texture_get_data_async = __mb;
+        }
+        var __a0 = texture;
+        long __a1 = unchecked((long)layer);
+        var __a2 = callback.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Error)__ret;
+    }
+
     private static nint __mb_texture_is_format_supported_for_usage;
     public bool TextureIsFormatSupportedForUsage(RenderingDevice.DataFormat format, RenderingDevice.TextureUsageBits usageFlags)
     {
@@ -10802,6 +11167,29 @@ public unsafe partial class RenderingDevice : GodotObject
         return __ret != 0;
     }
 
+    private static nint __mb_vertex_buffer_create;
+    public Rid VertexBufferCreate(uint sizeBytes, byte[] data, RenderingDevice.BufferCreationBits creationBits = (RenderingDevice.BufferCreationBits)(0))
+    {
+        var __mb = __mb_vertex_buffer_create;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "vertex_buffer_create", 2089548973);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.vertex_buffer_create is not available in this engine build.");
+            __mb_vertex_buffer_create = __mb;
+        }
+        long __a0 = unchecked((long)sizeBytes);
+        var __a1 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        long __a2 = (long)creationBits;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        var __ret = default(Rid);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a1);
+        return __ret;
+    }
+
     private static nint __mb_vertex_format_create;
     public long VertexFormatCreate(Godot.Collections.Array vertexDescriptions)
     {
@@ -10818,6 +11206,58 @@ public unsafe partial class RenderingDevice : GodotObject
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((long)__ret);
+    }
+
+    private static nint __mb_vertex_array_create;
+    public Rid VertexArrayCreate(uint vertexCount, long vertexFormat, Godot.Collections.Array srcBuffers, long[] offsets)
+    {
+        var __mb = __mb_vertex_array_create;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "vertex_array_create", 3799816279);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.vertex_array_create is not available in this engine build.");
+            __mb_vertex_array_create = __mb;
+        }
+        long __a0 = unchecked((long)vertexCount);
+        long __a1 = unchecked((long)vertexFormat);
+        ulong __a2 = srcBuffers.Native;
+        var __a3 = Packed.CreatePod<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, offsets);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        var __ret = default(Rid);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, ref __a3);
+        return __ret;
+    }
+
+    private static nint __mb_index_buffer_create;
+    public Rid IndexBufferCreate(uint sizeIndices, RenderingDevice.IndexBufferFormat format, byte[] data, bool useRestartIndices = false, RenderingDevice.BufferCreationBits creationBits = (RenderingDevice.BufferCreationBits)(0))
+    {
+        var __mb = __mb_index_buffer_create;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "index_buffer_create", 2368684885);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.index_buffer_create is not available in this engine build.");
+            __mb_index_buffer_create = __mb;
+        }
+        long __a0 = unchecked((long)sizeIndices);
+        long __a1 = (long)format;
+        var __a2 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        byte __a3 = useRestartIndices ? (byte)1 : (byte)0;
+        long __a4 = (long)creationBits;
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        var __ret = default(Rid);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a2);
+        return __ret;
     }
 
     private static nint __mb_index_array_create;
@@ -10862,6 +11302,27 @@ public unsafe partial class RenderingDevice : GodotObject
         return (RDShaderSPIRV?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_shader_compile_binary_from_spirv;
+    public byte[] ShaderCompileBinaryFromSpirv(RDShaderSPIRV? spirvData, string name = "")
+    {
+        var __mb = __mb_shader_compile_binary_from_spirv;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "shader_compile_binary_from_spirv", 134910450);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.shader_compile_binary_from_spirv is not available in this engine build.");
+            __mb_shader_compile_binary_from_spirv = __mb;
+        }
+        nint __a0 = spirvData?.NativePtr ?? 0;
+        ulong __a1 = NativeString.Create(name);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a1);
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_shader_create_from_spirv;
     public Rid ShaderCreateFromSpirv(RDShaderSPIRV? spirvData, string name = "")
     {
@@ -10880,6 +11341,27 @@ public unsafe partial class RenderingDevice : GodotObject
         var __ret = default(Rid);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a1);
+        return __ret;
+    }
+
+    private static nint __mb_shader_create_from_bytecode;
+    public Rid ShaderCreateFromBytecode(byte[] binaryData, Rid placeholderRid = default)
+    {
+        var __mb = __mb_shader_create_from_bytecode;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "shader_create_from_bytecode", 1687031350);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.shader_create_from_bytecode is not available in this engine build.");
+            __mb_shader_create_from_bytecode = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, binaryData);
+        var __a1 = placeholderRid;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        var __ret = default(Rid);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
         return __ret;
     }
 
@@ -10914,6 +11396,77 @@ public unsafe partial class RenderingDevice : GodotObject
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
+    }
+
+    private static nint __mb_uniform_buffer_create;
+    public Rid UniformBufferCreate(uint sizeBytes, byte[] data, RenderingDevice.BufferCreationBits creationBits = (RenderingDevice.BufferCreationBits)(0))
+    {
+        var __mb = __mb_uniform_buffer_create;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "uniform_buffer_create", 2089548973);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.uniform_buffer_create is not available in this engine build.");
+            __mb_uniform_buffer_create = __mb;
+        }
+        long __a0 = unchecked((long)sizeBytes);
+        var __a1 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        long __a2 = (long)creationBits;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        var __ret = default(Rid);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a1);
+        return __ret;
+    }
+
+    private static nint __mb_storage_buffer_create;
+    public Rid StorageBufferCreate(uint sizeBytes, byte[] data, RenderingDevice.StorageBufferUsage usage = (RenderingDevice.StorageBufferUsage)(0), RenderingDevice.BufferCreationBits creationBits = (RenderingDevice.BufferCreationBits)(0))
+    {
+        var __mb = __mb_storage_buffer_create;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "storage_buffer_create", 1609052553);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.storage_buffer_create is not available in this engine build.");
+            __mb_storage_buffer_create = __mb;
+        }
+        long __a0 = unchecked((long)sizeBytes);
+        var __a1 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        long __a2 = (long)usage;
+        long __a3 = (long)creationBits;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        var __ret = default(Rid);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a1);
+        return __ret;
+    }
+
+    private static nint __mb_texture_buffer_create;
+    public Rid TextureBufferCreate(uint sizeBytes, RenderingDevice.DataFormat format, byte[] data)
+    {
+        var __mb = __mb_texture_buffer_create;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "texture_buffer_create", 1470338698);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.texture_buffer_create is not available in this engine build.");
+            __mb_texture_buffer_create = __mb;
+        }
+        long __a0 = unchecked((long)sizeBytes);
+        long __a1 = (long)format;
+        var __a2 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        var __ret = default(Rid);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a2);
+        return __ret;
     }
 
     private static nint __mb_uniform_set_create;
@@ -10982,6 +11535,31 @@ public unsafe partial class RenderingDevice : GodotObject
         return (Error)__ret;
     }
 
+    private static nint __mb_buffer_update;
+    public Error BufferUpdate(Rid buffer, uint offset, uint sizeBytes, byte[] data)
+    {
+        var __mb = __mb_buffer_update;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "buffer_update", 3454956949);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.buffer_update is not available in this engine build.");
+            __mb_buffer_update = __mb;
+        }
+        var __a0 = buffer;
+        long __a1 = unchecked((long)offset);
+        long __a2 = unchecked((long)sizeBytes);
+        var __a3 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a3);
+        return (Error)__ret;
+    }
+
     private static nint __mb_buffer_clear;
     public Error BufferClear(Rid buffer, uint offset, uint sizeBytes)
     {
@@ -10999,6 +11577,52 @@ public unsafe partial class RenderingDevice : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Error)__ret;
+    }
+
+    private static nint __mb_buffer_get_data;
+    public byte[] BufferGetData(Rid buffer, uint offsetBytes = unchecked((uint)(0)), uint sizeBytes = unchecked((uint)(0)))
+    {
+        var __mb = __mb_buffer_get_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "buffer_get_data", 3101830688);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.buffer_get_data is not available in this engine build.");
+            __mb_buffer_get_data = __mb;
+        }
+        var __a0 = buffer;
+        long __a1 = unchecked((long)offsetBytes);
+        long __a2 = unchecked((long)sizeBytes);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_buffer_get_data_async;
+    public Error BufferGetDataAsync(Rid buffer, Callable callback, uint offsetBytes = unchecked((uint)(0)), uint sizeBytes = unchecked((uint)(0)))
+    {
+        var __mb = __mb_buffer_get_data_async;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "buffer_get_data_async", 2370287848);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.buffer_get_data_async is not available in this engine build.");
+            __mb_buffer_get_data_async = __mb;
+        }
+        var __a0 = buffer;
+        var __a1 = callback.Native;
+        long __a2 = unchecked((long)offsetBytes);
+        long __a3 = unchecked((long)sizeBytes);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
@@ -11316,6 +11940,31 @@ public unsafe partial class RenderingDevice : GodotObject
         return (Error)__ret;
     }
 
+    private static nint __mb_hit_sbt_range_update;
+    public Error HitSbtRangeUpdate(Rid hitSbt, long range, uint offset, int[] hitGroupIndices)
+    {
+        var __mb = __mb_hit_sbt_range_update;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "hit_sbt_range_update", 1332346675);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.hit_sbt_range_update is not available in this engine build.");
+            __mb_hit_sbt_range_update = __mb;
+        }
+        var __a0 = hitSbt;
+        long __a1 = unchecked((long)range);
+        long __a2 = unchecked((long)offset);
+        var __a3 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, hitGroupIndices);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a3);
+        return (Error)__ret;
+    }
+
     private static nint __mb_screen_get_width;
     public int ScreenGetWidth(int screen = unchecked((int)(0)))
     {
@@ -11388,6 +12037,76 @@ public unsafe partial class RenderingDevice : GodotObject
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((long)__ret);
+    }
+
+    private static nint __mb_draw_list_begin;
+    public long DrawListBegin(Rid framebuffer, RenderingDevice.DrawFlags drawFlags, Color[] clearColorValues, float clearDepthValue = 1.0f, uint clearStencilValue = unchecked((uint)(0)), Rect2 region = default, uint breadcrumb = unchecked((uint)(0)))
+    {
+        var __mb = __mb_draw_list_begin;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "draw_list_begin", 1317926357);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.draw_list_begin is not available in this engine build.");
+            __mb_draw_list_begin = __mb;
+        }
+        var __a0 = framebuffer;
+        long __a1 = (long)drawFlags;
+        var __a2 = Packed.CreatePod<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, clearColorValues);
+        double __a3 = clearDepthValue;
+        long __a4 = unchecked((long)clearStencilValue);
+        var __a5 = region;
+        long __a6 = unchecked((long)breadcrumb);
+        var __args = stackalloc nint[7];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, ref __a2);
+        return unchecked((long)__ret);
+    }
+
+    private static nint __mb_draw_list_begin_split;
+    public long[] DrawListBeginSplit(Rid framebuffer, uint splits, RenderingDevice.InitialAction initialColorAction, RenderingDevice.FinalAction finalColorAction, RenderingDevice.InitialAction initialDepthAction, RenderingDevice.FinalAction finalDepthAction, Color[] clearColorValues, float clearDepth, uint clearStencil, Rect2 region, Godot.Collections.Array storageTextures)
+    {
+        var __mb = __mb_draw_list_begin_split;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "draw_list_begin_split", 2406300660);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.draw_list_begin_split is not available in this engine build.");
+            __mb_draw_list_begin_split = __mb;
+        }
+        var __a0 = framebuffer;
+        long __a1 = unchecked((long)splits);
+        long __a2 = (long)initialColorAction;
+        long __a3 = (long)finalColorAction;
+        long __a4 = (long)initialDepthAction;
+        long __a5 = (long)finalDepthAction;
+        var __a6 = Packed.CreatePod<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, clearColorValues);
+        double __a7 = clearDepth;
+        long __a8 = unchecked((long)clearStencil);
+        var __a9 = region;
+        ulong __a10 = storageTextures.Native;
+        var __args = stackalloc nint[11];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        __args[7] = (nint)(&__a7);
+        __args[8] = (nint)(&__a8);
+        __args[9] = (nint)(&__a9);
+        __args[10] = (nint)(&__a10);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, ref __a6);
+        return Packed.ToPodArray<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_draw_list_set_blend_constants;
@@ -11464,6 +12183,31 @@ public unsafe partial class RenderingDevice : GodotObject
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_draw_list_bind_vertex_buffers_format;
+    public void DrawListBindVertexBuffersFormat(long drawList, long vertexFormat, uint vertexCount, Godot.Collections.Array vertexBuffers, long[] offsets)
+    {
+        var __mb = __mb_draw_list_bind_vertex_buffers_format;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "draw_list_bind_vertex_buffers_format", 2008628980);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.draw_list_bind_vertex_buffers_format is not available in this engine build.");
+            __mb_draw_list_bind_vertex_buffers_format = __mb;
+        }
+        long __a0 = unchecked((long)drawList);
+        long __a1 = unchecked((long)vertexFormat);
+        long __a2 = unchecked((long)vertexCount);
+        ulong __a3 = vertexBuffers.Native;
+        var __a4 = Packed.CreatePod<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, offsets);
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, ref __a4);
+    }
+
     private static nint __mb_draw_list_bind_index_array;
     public void DrawListBindIndexArray(long drawList, Rid indexArray)
     {
@@ -11480,6 +12224,27 @@ public unsafe partial class RenderingDevice : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_draw_list_set_push_constant;
+    public void DrawListSetPushConstant(long drawList, byte[] buffer, uint sizeBytes)
+    {
+        var __mb = __mb_draw_list_set_push_constant;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "draw_list_set_push_constant", 2772371345);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.draw_list_set_push_constant is not available in this engine build.");
+            __mb_draw_list_set_push_constant = __mb;
+        }
+        long __a0 = unchecked((long)drawList);
+        var __a1 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        long __a2 = unchecked((long)sizeBytes);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a1);
     }
 
     private static nint __mb_draw_list_draw;
@@ -11579,6 +12344,24 @@ public unsafe partial class RenderingDevice : GodotObject
         return unchecked((long)__ret);
     }
 
+    private static nint __mb_draw_list_switch_to_next_pass_split;
+    public long[] DrawListSwitchToNextPassSplit(uint splits)
+    {
+        var __mb = __mb_draw_list_switch_to_next_pass_split;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "draw_list_switch_to_next_pass_split", 2865087369);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.draw_list_switch_to_next_pass_split is not available in this engine build.");
+            __mb_draw_list_switch_to_next_pass_split = __mb;
+        }
+        long __a0 = unchecked((long)splits);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_draw_list_end;
     public void DrawListEnd()
     {
@@ -11623,6 +12406,27 @@ public unsafe partial class RenderingDevice : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_compute_list_set_push_constant;
+    public void ComputeListSetPushConstant(long computeList, byte[] buffer, uint sizeBytes)
+    {
+        var __mb = __mb_compute_list_set_push_constant;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "compute_list_set_push_constant", 2772371345);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.compute_list_set_push_constant is not available in this engine build.");
+            __mb_compute_list_set_push_constant = __mb;
+        }
+        long __a0 = unchecked((long)computeList);
+        var __a1 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        long __a2 = unchecked((long)sizeBytes);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a1);
     }
 
     private static nint __mb_compute_list_bind_uniform_set;
@@ -11747,6 +12551,27 @@ public unsafe partial class RenderingDevice : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_raytracing_list_set_push_constant;
+    public void RaytracingListSetPushConstant(long raytracingList, byte[] buffer, uint sizeBytes)
+    {
+        var __mb = __mb_raytracing_list_set_push_constant;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingDevice", "raytracing_list_set_push_constant", 2772371345);
+            if (__mb == 0) throw new MissingMethodException("RenderingDevice.raytracing_list_set_push_constant is not available in this engine build.");
+            __mb_raytracing_list_set_push_constant = __mb;
+        }
+        long __a0 = unchecked((long)raytracingList);
+        var __a1 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        long __a2 = unchecked((long)sizeBytes);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a1);
     }
 
     private static nint __mb_raytracing_list_bind_uniform_set;
@@ -14507,6 +15332,98 @@ public static unsafe partial class RenderingServer
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
+    private static nint __mb_mesh_surface_update_vertex_region;
+    public static void MeshSurfaceUpdateVertexRegion(Rid mesh, int surface, int offset, byte[] data)
+    {
+        var __mb = __mb_mesh_surface_update_vertex_region;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "mesh_surface_update_vertex_region", 2900195149);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.mesh_surface_update_vertex_region is not available in this engine build.");
+            __mb_mesh_surface_update_vertex_region = __mb;
+        }
+        var __a0 = mesh;
+        long __a1 = unchecked((long)surface);
+        long __a2 = unchecked((long)offset);
+        var __a3 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a3);
+    }
+
+    private static nint __mb_mesh_surface_update_attribute_region;
+    public static void MeshSurfaceUpdateAttributeRegion(Rid mesh, int surface, int offset, byte[] data)
+    {
+        var __mb = __mb_mesh_surface_update_attribute_region;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "mesh_surface_update_attribute_region", 2900195149);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.mesh_surface_update_attribute_region is not available in this engine build.");
+            __mb_mesh_surface_update_attribute_region = __mb;
+        }
+        var __a0 = mesh;
+        long __a1 = unchecked((long)surface);
+        long __a2 = unchecked((long)offset);
+        var __a3 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a3);
+    }
+
+    private static nint __mb_mesh_surface_update_skin_region;
+    public static void MeshSurfaceUpdateSkinRegion(Rid mesh, int surface, int offset, byte[] data)
+    {
+        var __mb = __mb_mesh_surface_update_skin_region;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "mesh_surface_update_skin_region", 2900195149);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.mesh_surface_update_skin_region is not available in this engine build.");
+            __mb_mesh_surface_update_skin_region = __mb;
+        }
+        var __a0 = mesh;
+        long __a1 = unchecked((long)surface);
+        long __a2 = unchecked((long)offset);
+        var __a3 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a3);
+    }
+
+    private static nint __mb_mesh_surface_update_index_region;
+    public static void MeshSurfaceUpdateIndexRegion(Rid mesh, int surface, int offset, byte[] data)
+    {
+        var __mb = __mb_mesh_surface_update_index_region;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "mesh_surface_update_index_region", 2900195149);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.mesh_surface_update_index_region is not available in this engine build.");
+            __mb_mesh_surface_update_index_region = __mb;
+        }
+        var __a0 = mesh;
+        long __a1 = unchecked((long)surface);
+        long __a2 = unchecked((long)offset);
+        var __a3 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a3);
+    }
+
     private static nint __mb_mesh_set_shadow_mesh;
     public static void MeshSetShadowMesh(Rid mesh, Rid shadowMesh)
     {
@@ -14870,6 +15787,25 @@ public static unsafe partial class RenderingServer
         return unchecked((int)__ret);
     }
 
+    private static nint __mb_multimesh_set_buffer;
+    public static void MultimeshSetBuffer(Rid multimesh, float[] buffer)
+    {
+        var __mb = __mb_multimesh_set_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "multimesh_set_buffer", 2960552364);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.multimesh_set_buffer is not available in this engine build.");
+            __mb_multimesh_set_buffer = __mb;
+        }
+        var __a0 = multimesh;
+        var __a1 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, buffer);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a1);
+    }
+
     private static nint __mb_multimesh_get_command_buffer_rd_rid;
     public static Rid MultimeshGetCommandBufferRdRid(Rid multimesh)
     {
@@ -14904,6 +15840,46 @@ public static unsafe partial class RenderingServer
         var __ret = default(Rid);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_multimesh_get_buffer;
+    public static float[] MultimeshGetBuffer(Rid multimesh)
+    {
+        var __mb = __mb_multimesh_get_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "multimesh_get_buffer", 3964669176);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.multimesh_get_buffer is not available in this engine build.");
+            __mb_multimesh_get_buffer = __mb;
+        }
+        var __a0 = multimesh;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_multimesh_set_buffer_interpolated;
+    public static void MultimeshSetBufferInterpolated(Rid multimesh, float[] buffer, float[] bufferPrevious)
+    {
+        var __mb = __mb_multimesh_set_buffer_interpolated;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "multimesh_set_buffer_interpolated", 659844711);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.multimesh_set_buffer_interpolated is not available in this engine build.");
+            __mb_multimesh_set_buffer_interpolated = __mb;
+        }
+        var __a0 = multimesh;
+        var __a1 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, buffer);
+        var __a2 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, bufferPrevious);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a1);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a2);
     }
 
     private static nint __mb_multimesh_set_physics_interpolated;
@@ -16118,6 +17094,40 @@ public static unsafe partial class RenderingServer
         return __ret;
     }
 
+    private static nint __mb_voxel_gi_allocate_data;
+    public static void VoxelGiAllocateData(Rid voxelGi, Transform3D toCellXform, Aabb aabb, Vector3I octreeSize, byte[] octreeCells, byte[] dataCells, byte[] distanceField, int[] levelCounts)
+    {
+        var __mb = __mb_voxel_gi_allocate_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "voxel_gi_allocate_data", 4108223027);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.voxel_gi_allocate_data is not available in this engine build.");
+            __mb_voxel_gi_allocate_data = __mb;
+        }
+        var __a0 = voxelGi;
+        var __a1 = toCellXform;
+        var __a2 = aabb;
+        var __a3 = octreeSize;
+        var __a4 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, octreeCells);
+        var __a5 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, dataCells);
+        var __a6 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, distanceField);
+        var __a7 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, levelCounts);
+        var __args = stackalloc nint[8];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        __args[7] = (nint)(&__a7);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a4);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a5);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a6);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a7);
+    }
+
     private static nint __mb_voxel_gi_get_octree_size;
     public static Vector3I VoxelGiGetOctreeSize(Rid voxelGi)
     {
@@ -16134,6 +17144,78 @@ public static unsafe partial class RenderingServer
         var __ret = default(Vector3I);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_voxel_gi_get_octree_cells;
+    public static byte[] VoxelGiGetOctreeCells(Rid voxelGi)
+    {
+        var __mb = __mb_voxel_gi_get_octree_cells;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "voxel_gi_get_octree_cells", 3348040486);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.voxel_gi_get_octree_cells is not available in this engine build.");
+            __mb_voxel_gi_get_octree_cells = __mb;
+        }
+        var __a0 = voxelGi;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_voxel_gi_get_data_cells;
+    public static byte[] VoxelGiGetDataCells(Rid voxelGi)
+    {
+        var __mb = __mb_voxel_gi_get_data_cells;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "voxel_gi_get_data_cells", 3348040486);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.voxel_gi_get_data_cells is not available in this engine build.");
+            __mb_voxel_gi_get_data_cells = __mb;
+        }
+        var __a0 = voxelGi;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_voxel_gi_get_distance_field;
+    public static byte[] VoxelGiGetDistanceField(Rid voxelGi)
+    {
+        var __mb = __mb_voxel_gi_get_distance_field;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "voxel_gi_get_distance_field", 3348040486);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.voxel_gi_get_distance_field is not available in this engine build.");
+            __mb_voxel_gi_get_distance_field = __mb;
+        }
+        var __a0 = voxelGi;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_voxel_gi_get_level_counts;
+    public static int[] VoxelGiGetLevelCounts(Rid voxelGi)
+    {
+        var __mb = __mb_voxel_gi_get_level_counts;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "voxel_gi_get_level_counts", 788230395);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.voxel_gi_get_level_counts is not available in this engine build.");
+            __mb_voxel_gi_get_level_counts = __mb;
+        }
+        var __a0 = voxelGi;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_voxel_gi_get_to_cell_xform;
@@ -16383,6 +17465,106 @@ public static unsafe partial class RenderingServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_lightmap_set_probe_capture_data;
+    public static void LightmapSetProbeCaptureData(Rid lightmap, Vector3[] points, Color[] pointSh, int[] tetrahedra, int[] bspTree)
+    {
+        var __mb = __mb_lightmap_set_probe_capture_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "lightmap_set_probe_capture_data", 3217845880);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.lightmap_set_probe_capture_data is not available in this engine build.");
+            __mb_lightmap_set_probe_capture_data = __mb;
+        }
+        var __a0 = lightmap;
+        var __a1 = Packed.CreatePod<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, points);
+        var __a2 = Packed.CreatePod<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, pointSh);
+        var __a3 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, tetrahedra);
+        var __a4 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, bspTree);
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, ref __a1);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, ref __a2);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a3);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a4);
+    }
+
+    private static nint __mb_lightmap_get_probe_capture_points;
+    public static Vector3[] LightmapGetProbeCapturePoints(Rid lightmap)
+    {
+        var __mb = __mb_lightmap_get_probe_capture_points;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "lightmap_get_probe_capture_points", 808965560);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.lightmap_get_probe_capture_points is not available in this engine build.");
+            __mb_lightmap_get_probe_capture_points = __mb;
+        }
+        var __a0 = lightmap;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_lightmap_get_probe_capture_sh;
+    public static Color[] LightmapGetProbeCaptureSh(Rid lightmap)
+    {
+        var __mb = __mb_lightmap_get_probe_capture_sh;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "lightmap_get_probe_capture_sh", 1569415609);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.lightmap_get_probe_capture_sh is not available in this engine build.");
+            __mb_lightmap_get_probe_capture_sh = __mb;
+        }
+        var __a0 = lightmap;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_lightmap_get_probe_capture_tetrahedra;
+    public static int[] LightmapGetProbeCaptureTetrahedra(Rid lightmap)
+    {
+        var __mb = __mb_lightmap_get_probe_capture_tetrahedra;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "lightmap_get_probe_capture_tetrahedra", 788230395);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.lightmap_get_probe_capture_tetrahedra is not available in this engine build.");
+            __mb_lightmap_get_probe_capture_tetrahedra = __mb;
+        }
+        var __a0 = lightmap;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_lightmap_get_probe_capture_bsp_tree;
+    public static int[] LightmapGetProbeCaptureBspTree(Rid lightmap)
+    {
+        var __mb = __mb_lightmap_get_probe_capture_bsp_tree;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "lightmap_get_probe_capture_bsp_tree", 788230395);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.lightmap_get_probe_capture_bsp_tree is not available in this engine build.");
+            __mb_lightmap_get_probe_capture_bsp_tree = __mb;
+        }
+        var __a0 = lightmap;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_lightmap_set_baked_exposure_normalization;
@@ -17405,6 +18587,26 @@ public static unsafe partial class RenderingServer
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
+    private static nint __mb_visibility_notifier_set_callbacks;
+    public static void VisibilityNotifierSetCallbacks(Rid notifier, Callable enterCallable, Callable exitCallable)
+    {
+        var __mb = __mb_visibility_notifier_set_callbacks;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "visibility_notifier_set_callbacks", 2689735388);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.visibility_notifier_set_callbacks is not available in this engine build.");
+            __mb_visibility_notifier_set_callbacks = __mb;
+        }
+        var __a0 = notifier;
+        var __a1 = enterCallable.Native;
+        var __a2 = exitCallable.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
     private static nint __mb_occluder_create;
     public static Rid OccluderCreate()
     {
@@ -17418,6 +18620,28 @@ public static unsafe partial class RenderingServer
         var __ret = default(Rid);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_occluder_set_mesh;
+    public static void OccluderSetMesh(Rid occluder, Vector3[] vertices, int[] indices)
+    {
+        var __mb = __mb_occluder_set_mesh;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "occluder_set_mesh", 3854404263);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.occluder_set_mesh is not available in this engine build.");
+            __mb_occluder_set_mesh = __mb;
+        }
+        var __a0 = occluder;
+        var __a1 = Packed.CreatePod<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, vertices);
+        var __a2 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, indices);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, ref __a1);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a2);
     }
 
     private static nint __mb_camera_create;
@@ -18706,6 +19930,26 @@ public static unsafe partial class RenderingServer
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
+    private static nint __mb_compositor_effect_set_callback;
+    public static void CompositorEffectSetCallback(Rid effect, RenderingServer.CompositorEffectCallbackType callbackType, Callable callback)
+    {
+        var __mb = __mb_compositor_effect_set_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "compositor_effect_set_callback", 487412485);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.compositor_effect_set_callback is not available in this engine build.");
+            __mb_compositor_effect_set_callback = __mb;
+        }
+        var __a0 = effect;
+        long __a1 = (long)callbackType;
+        var __a2 = callback.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
     private static nint __mb_compositor_effect_set_flag;
     public static void CompositorEffectSetFlag(Rid effect, RenderingServer.CompositorEffectFlags flag, bool set)
     {
@@ -18944,6 +20188,47 @@ public static unsafe partial class RenderingServer
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_environment_set_glow;
+    public static void EnvironmentSetGlow(Rid env, bool enable, float[] levels, float intensity, float strength, float mix, float bloomThreshold, RenderingServer.EnvironmentGlowBlendMode blendMode, float hdrBleedThreshold, float hdrBleedScale, float hdrLuminanceCap, float glowMapStrength, Rid glowMap)
+    {
+        var __mb = __mb_environment_set_glow;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "environment_set_glow", 2421724940);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.environment_set_glow is not available in this engine build.");
+            __mb_environment_set_glow = __mb;
+        }
+        var __a0 = env;
+        byte __a1 = enable ? (byte)1 : (byte)0;
+        var __a2 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, levels);
+        double __a3 = intensity;
+        double __a4 = strength;
+        double __a5 = mix;
+        double __a6 = bloomThreshold;
+        long __a7 = (long)blendMode;
+        double __a8 = hdrBleedThreshold;
+        double __a9 = hdrBleedScale;
+        double __a10 = hdrLuminanceCap;
+        double __a11 = glowMapStrength;
+        var __a12 = glowMap;
+        var __args = stackalloc nint[13];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        __args[7] = (nint)(&__a7);
+        __args[8] = (nint)(&__a8);
+        __args[9] = (nint)(&__a9);
+        __args[10] = (nint)(&__a10);
+        __args[11] = (nint)(&__a11);
+        __args[12] = (nint)(&__a12);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a2);
     }
 
     private static nint __mb_environment_set_tonemap;
@@ -20225,6 +21510,68 @@ public static unsafe partial class RenderingServer
         return new Godot.Collections.Array(__ret);
     }
 
+    private static nint __mb_instances_cull_aabb;
+    public static long[] InstancesCullAabb(Aabb aabb, Rid scenario = default)
+    {
+        var __mb = __mb_instances_cull_aabb;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "instances_cull_aabb", 2570105777);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.instances_cull_aabb is not available in this engine build.");
+            __mb_instances_cull_aabb = __mb;
+        }
+        var __a0 = aabb;
+        var __a1 = scenario;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_instances_cull_ray;
+    public static long[] InstancesCullRay(Vector3 from, Vector3 to, Rid scenario = default)
+    {
+        var __mb = __mb_instances_cull_ray;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "instances_cull_ray", 2208759584);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.instances_cull_ray is not available in this engine build.");
+            __mb_instances_cull_ray = __mb;
+        }
+        var __a0 = from;
+        var __a1 = to;
+        var __a2 = scenario;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_instances_cull_convex;
+    public static long[] InstancesCullConvex(Godot.Collections.Array convex, Rid scenario = default)
+    {
+        var __mb = __mb_instances_cull_convex;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "instances_cull_convex", 2488539944);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.instances_cull_convex is not available in this engine build.");
+            __mb_instances_cull_convex = __mb;
+        }
+        ulong __a0 = convex.Native;
+        var __a1 = scenario;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_bake_render_uv2;
     public static Godot.Collections.Array BakeRenderUv2(Rid @base, Godot.Collections.Array materialOverrides, Vector2I imageSize)
     {
@@ -20756,6 +22103,58 @@ public static unsafe partial class RenderingServer
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
+    private static nint __mb_canvas_item_add_polyline;
+    public static void CanvasItemAddPolyline(Rid item, Vector2[] points, Color[] colors, float width = -1.0f, bool antialiased = false)
+    {
+        var __mb = __mb_canvas_item_add_polyline;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "canvas_item_add_polyline", 3098767073);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.canvas_item_add_polyline is not available in this engine build.");
+            __mb_canvas_item_add_polyline = __mb;
+        }
+        var __a0 = item;
+        var __a1 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, points);
+        var __a2 = Packed.CreatePod<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, colors);
+        double __a3 = width;
+        byte __a4 = antialiased ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a1);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, ref __a2);
+    }
+
+    private static nint __mb_canvas_item_add_multiline;
+    public static void CanvasItemAddMultiline(Rid item, Vector2[] points, Color[] colors, float width = -1.0f, bool antialiased = false)
+    {
+        var __mb = __mb_canvas_item_add_multiline;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "canvas_item_add_multiline", 3098767073);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.canvas_item_add_multiline is not available in this engine build.");
+            __mb_canvas_item_add_multiline = __mb;
+        }
+        var __a0 = item;
+        var __a1 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, points);
+        var __a2 = Packed.CreatePod<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, colors);
+        double __a3 = width;
+        byte __a4 = antialiased ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a1);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, ref __a2);
+    }
+
     private static nint __mb_canvas_item_add_rect;
     public static void CanvasItemAddRect(Rid item, Rect2 rect, Color color, bool antialiased = false)
     {
@@ -20968,6 +22367,98 @@ public static unsafe partial class RenderingServer
         __args[8] = (nint)(&__a8);
         __args[9] = (nint)(&__a9);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_canvas_item_add_primitive;
+    public static void CanvasItemAddPrimitive(Rid item, Vector2[] points, Color[] colors, Vector2[] uvs, Rid texture)
+    {
+        var __mb = __mb_canvas_item_add_primitive;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "canvas_item_add_primitive", 3731601077);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.canvas_item_add_primitive is not available in this engine build.");
+            __mb_canvas_item_add_primitive = __mb;
+        }
+        var __a0 = item;
+        var __a1 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, points);
+        var __a2 = Packed.CreatePod<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, colors);
+        var __a3 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, uvs);
+        var __a4 = texture;
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a1);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, ref __a2);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a3);
+    }
+
+    private static nint __mb_canvas_item_add_polygon;
+    public static void CanvasItemAddPolygon(Rid item, Vector2[] points, Color[] colors, Vector2[] uvs, Rid texture = default)
+    {
+        var __mb = __mb_canvas_item_add_polygon;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "canvas_item_add_polygon", 3580000528);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.canvas_item_add_polygon is not available in this engine build.");
+            __mb_canvas_item_add_polygon = __mb;
+        }
+        var __a0 = item;
+        var __a1 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, points);
+        var __a2 = Packed.CreatePod<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, colors);
+        var __a3 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, uvs);
+        var __a4 = texture;
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a1);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, ref __a2);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a3);
+    }
+
+    private static nint __mb_canvas_item_add_triangle_array;
+    public static void CanvasItemAddTriangleArray(Rid item, int[] indices, Vector2[] points, Color[] colors, Vector2[] uvs, int[] bones, float[] weights, Rid texture = default, int count = unchecked((int)(-1)))
+    {
+        var __mb = __mb_canvas_item_add_triangle_array;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "canvas_item_add_triangle_array", 660261329);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.canvas_item_add_triangle_array is not available in this engine build.");
+            __mb_canvas_item_add_triangle_array = __mb;
+        }
+        var __a0 = item;
+        var __a1 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, indices);
+        var __a2 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, points);
+        var __a3 = Packed.CreatePod<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, colors);
+        var __a4 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, uvs);
+        var __a5 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, bones);
+        var __a6 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, weights);
+        var __a7 = texture;
+        long __a8 = unchecked((long)count);
+        var __args = stackalloc nint[9];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        __args[7] = (nint)(&__a7);
+        __args[8] = (nint)(&__a8);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a1);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a2);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, ref __a3);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a4);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a5);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a6);
     }
 
     private static nint __mb_canvas_item_add_mesh;
@@ -21332,6 +22823,30 @@ public static unsafe partial class RenderingServer
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_canvas_item_set_visibility_notifier;
+    public static void CanvasItemSetVisibilityNotifier(Rid item, bool enable, Rect2 area, Callable enterCallable, Callable exitCallable)
+    {
+        var __mb = __mb_canvas_item_set_visibility_notifier;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "canvas_item_set_visibility_notifier", 3568945579);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.canvas_item_set_visibility_notifier is not available in this engine build.");
+            __mb_canvas_item_set_visibility_notifier = __mb;
+        }
+        var __a0 = item;
+        byte __a1 = enable ? (byte)1 : (byte)0;
+        var __a2 = area;
+        var __a3 = enterCallable.Native;
+        var __a4 = exitCallable.Native;
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_canvas_group_mode;
@@ -21981,6 +23496,27 @@ public static unsafe partial class RenderingServer
         return __ret;
     }
 
+    private static nint __mb_canvas_occluder_polygon_set_shape;
+    public static void CanvasOccluderPolygonSetShape(Rid occluderPolygon, Vector2[] shape, bool closed)
+    {
+        var __mb = __mb_canvas_occluder_polygon_set_shape;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "canvas_occluder_polygon_set_shape", 2103882027);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.canvas_occluder_polygon_set_shape is not available in this engine build.");
+            __mb_canvas_occluder_polygon_set_shape = __mb;
+        }
+        var __a0 = occluderPolygon;
+        var __a1 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, shape);
+        byte __a2 = closed ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a1);
+    }
+
     private static nint __mb_canvas_occluder_polygon_set_cull_mode;
     public static void CanvasOccluderPolygonSetCullMode(Rid occluderPolygon, RenderingServer.CanvasOccluderPolygonCullMode mode)
     {
@@ -22149,6 +23685,22 @@ public static unsafe partial class RenderingServer
             __mb_free_rid = __mb;
         }
         var __a0 = rid;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_request_frame_drawn_callback;
+    public static void RequestFrameDrawnCallback(Callable callable)
+    {
+        var __mb = __mb_request_frame_drawn_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "request_frame_drawn_callback", 1611583062);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.request_frame_drawn_callback is not available in this engine build.");
+            __mb_request_frame_drawn_callback = __mb;
+        }
+        var __a0 = callable.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
@@ -22574,6 +24126,22 @@ public static unsafe partial class RenderingServer
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_call_on_render_thread;
+    public static void CallOnRenderThread(Callable callable)
+    {
+        var __mb = __mb_call_on_render_thread;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RenderingServer", "call_on_render_thread", 1611583062);
+            if (__mb == 0) throw new MissingMethodException("RenderingServer.call_on_render_thread is not available in this engine build.");
+            __mb_call_on_render_thread = __mb;
+        }
+        var __a0 = callable.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_feature;
@@ -23049,6 +24617,8 @@ public unsafe partial class ResourceFormatLoader : RefCounted
         ReplaceDeep = 4,
     }
 
+    public virtual string[] _GetRecognizedExtensions() => default!;
+
     public virtual bool _RecognizePath(string path, string type) => default!;
 
     public virtual bool _HandlesType(string type) => default!;
@@ -23059,17 +24629,30 @@ public unsafe partial class ResourceFormatLoader : RefCounted
 
     public virtual long _GetResourceUid(string path) => default!;
 
+    public virtual string[] _GetDependencies(string path, bool addTypes) => default!;
+
     public virtual bool _Exists(string path) => default!;
 
+    public virtual string[] _GetClassesUsed(string path) => default!;
+
+    private static ulong __vsn_get_recognized_extensions;
     private static ulong __vsn_recognize_path;
     private static ulong __vsn_handles_type;
     private static ulong __vsn_get_resource_type;
     private static ulong __vsn_get_resource_script_class;
     private static ulong __vsn_get_resource_uid;
+    private static ulong __vsn_get_dependencies;
     private static ulong __vsn_exists;
+    private static ulong __vsn_get_classes_used;
 
     internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
     {
+        if (__vsn_get_recognized_extensions == 0) __vsn_get_recognized_extensions = StringNames.Get("_get_recognized_extensions").Opaque;
+        if (nameSn == __vsn_get_recognized_extensions)
+        {
+            *(Opaque16*)ret = Packed.CreateStrings(_GetRecognizedExtensions() ?? []);
+            return true;
+        }
         if (__vsn_recognize_path == 0) __vsn_recognize_path = StringNames.Get("_recognize_path").Opaque;
         if (nameSn == __vsn_recognize_path)
         {
@@ -23100,10 +24683,22 @@ public unsafe partial class ResourceFormatLoader : RefCounted
             *(long*)ret = unchecked((long)_GetResourceUid(NativeString.Read(*(ulong*)args[0])));
             return true;
         }
+        if (__vsn_get_dependencies == 0) __vsn_get_dependencies = StringNames.Get("_get_dependencies").Opaque;
+        if (nameSn == __vsn_get_dependencies)
+        {
+            *(Opaque16*)ret = Packed.CreateStrings(_GetDependencies(NativeString.Read(*(ulong*)args[0]), *(byte*)args[1] != 0) ?? []);
+            return true;
+        }
         if (__vsn_exists == 0) __vsn_exists = StringNames.Get("_exists").Opaque;
         if (nameSn == __vsn_exists)
         {
             *(byte*)ret = _Exists(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_get_classes_used == 0) __vsn_get_classes_used = StringNames.Get("_get_classes_used").Opaque;
+        if (nameSn == __vsn_get_classes_used)
+        {
+            *(Opaque16*)ret = Packed.CreateStrings(_GetClassesUsed(NativeString.Read(*(ulong*)args[0])) ?? []);
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);
@@ -23125,11 +24720,14 @@ public unsafe partial class ResourceFormatSaver : RefCounted
 
     public virtual bool _Recognize(Resource? resource) => default!;
 
+    public virtual string[] _GetRecognizedExtensions(Resource? resource) => default!;
+
     public virtual bool _RecognizePath(Resource? resource, string path) => default!;
 
     private static ulong __vsn_save;
     private static ulong __vsn_set_uid;
     private static ulong __vsn_recognize;
+    private static ulong __vsn_get_recognized_extensions;
     private static ulong __vsn_recognize_path;
 
     internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
@@ -23152,6 +24750,12 @@ public unsafe partial class ResourceFormatSaver : RefCounted
             *(byte*)ret = _Recognize((Resource?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false)) ? (byte)1 : (byte)0;
             return true;
         }
+        if (__vsn_get_recognized_extensions == 0) __vsn_get_recognized_extensions = StringNames.Get("_get_recognized_extensions").Opaque;
+        if (nameSn == __vsn_get_recognized_extensions)
+        {
+            *(Opaque16*)ret = Packed.CreateStrings(_GetRecognizedExtensions((Resource?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false)) ?? []);
+            return true;
+        }
         if (__vsn_recognize_path == 0) __vsn_recognize_path = StringNames.Get("_recognize_path").Opaque;
         if (nameSn == __vsn_recognize_path)
         {
@@ -23170,6 +24774,21 @@ public unsafe partial class ResourceImporter : RefCounted
     {
         Default = 0,
         Scene = 100,
+    }
+
+    public virtual string[] _GetBuildDependencies(string path) => default!;
+
+    private static ulong __vsn_get_build_dependencies;
+
+    internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
+    {
+        if (__vsn_get_build_dependencies == 0) __vsn_get_build_dependencies = StringNames.Get("_get_build_dependencies").Opaque;
+        if (nameSn == __vsn_get_build_dependencies)
+        {
+            *(Opaque16*)ret = Packed.CreateStrings(_GetBuildDependencies(NativeString.Read(*(ulong*)args[0])) ?? []);
+            return true;
+        }
+        return base.__CallVirtual(nameSn, args, ret);
     }
 }
 
@@ -23270,6 +24889,25 @@ public unsafe partial class ResourceImporterOggVorbis : ResourceImporter
     public ResourceImporterOggVorbis() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "ResourceImporterOggVorbis");
+    }
+
+    private static nint __mb_load_from_buffer;
+    public static AudioStreamOggVorbis? LoadFromBuffer(byte[] streamData)
+    {
+        var __mb = __mb_load_from_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ResourceImporterOggVorbis", "load_from_buffer", 354904730);
+            if (__mb == 0) throw new MissingMethodException("ResourceImporterOggVorbis.load_from_buffer is not available in this engine build.");
+            __mb_load_from_buffer = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, streamData);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        return (AudioStreamOggVorbis?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_load_from_file;
@@ -23468,6 +25106,25 @@ public static unsafe partial class ResourceLoader
         return (Resource?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_get_recognized_extensions_for_type;
+    public static string[] GetRecognizedExtensionsForType(string type)
+    {
+        var __mb = __mb_get_recognized_extensions_for_type;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ResourceLoader", "get_recognized_extensions_for_type", 3538744774);
+            if (__mb == 0) throw new MissingMethodException("ResourceLoader.get_recognized_extensions_for_type is not available in this engine build.");
+            __mb_get_recognized_extensions_for_type = __mb;
+        }
+        ulong __a0 = NativeString.Create(type);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_add_resource_format_loader;
     public static void AddResourceFormatLoader(ResourceFormatLoader? formatLoader, bool atFront = false)
     {
@@ -23516,6 +25173,25 @@ public static unsafe partial class ResourceLoader
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_dependencies;
+    public static string[] GetDependencies(string path)
+    {
+        var __mb = __mb_get_dependencies;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ResourceLoader", "get_dependencies", 3538744774);
+            if (__mb == 0) throw new MissingMethodException("ResourceLoader.get_dependencies is not available in this engine build.");
+            __mb_get_dependencies = __mb;
+        }
+        ulong __a0 = NativeString.Create(path);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_has_cached;
@@ -23595,6 +25271,25 @@ public static unsafe partial class ResourceLoader
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((long)__ret);
+    }
+
+    private static nint __mb_list_directory;
+    public static string[] ListDirectory(string directoryPath)
+    {
+        var __mb = __mb_list_directory;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ResourceLoader", "list_directory", 3538744774);
+            if (__mb == 0) throw new MissingMethodException("ResourceLoader.list_directory is not available in this engine build.");
+            __mb_list_directory = __mb;
+        }
+        ulong __a0 = NativeString.Create(directoryPath);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToStringArray(ref __ret);
     }
 }
 
@@ -23694,6 +25389,21 @@ public unsafe partial class ResourcePreloader : Node
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (Resource?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
+
+    private static nint __mb_get_resource_list;
+    public string[] GetResourceList()
+    {
+        var __mb = __mb_get_resource_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ResourcePreloader", "get_resource_list", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("ResourcePreloader.get_resource_list is not available in this engine build.");
+            __mb_get_resource_list = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
 }
 
 public static unsafe partial class ResourceSaver
@@ -23760,6 +25470,24 @@ public static unsafe partial class ResourceSaver
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
+    }
+
+    private static nint __mb_get_recognized_extensions;
+    public static string[] GetRecognizedExtensions(Resource? type)
+    {
+        var __mb = __mb_get_recognized_extensions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ResourceSaver", "get_recognized_extensions", 4223597960);
+            if (__mb == 0) throw new MissingMethodException("ResourceSaver.get_recognized_extensions is not available in this engine build.");
+            __mb_get_recognized_extensions = __mb;
+        }
+        nint __a0 = type?.NativePtr ?? 0;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_add_resource_format_saver;
@@ -24667,6 +26395,12 @@ public unsafe partial class RichTextLabel : Control
         set => SetJustificationFlags(value);
     }
 
+    public float[] TabStops
+    {
+        get => GetTabStops();
+        set => SetTabStops(value);
+    }
+
     public Godot.Collections.Array CustomEffects
     {
         get => GetEffects();
@@ -25107,6 +26841,34 @@ public unsafe partial class RichTextLabel : Control
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_push_paragraph;
+    public void PushParagraph(HorizontalAlignment alignment, Control.TextDirection baseDirection, string language, TextServer.StructuredTextParser stParser, TextServer.JustificationFlag justificationFlags, float[] tabStops)
+    {
+        var __mb = __mb_push_paragraph;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RichTextLabel", "push_paragraph", 3089306873);
+            if (__mb == 0) throw new MissingMethodException("RichTextLabel.push_paragraph is not available in this engine build.");
+            __mb_push_paragraph = __mb;
+        }
+        long __a0 = (long)alignment;
+        long __a1 = (long)baseDirection;
+        ulong __a2 = NativeString.Create(language);
+        long __a3 = (long)stParser;
+        long __a4 = (long)justificationFlags;
+        var __a5 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, tabStops);
+        var __args = stackalloc nint[6];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a2);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a5);
     }
 
     private static nint __mb_push_indent;
@@ -25740,6 +27502,38 @@ public unsafe partial class RichTextLabel : Control
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (TextServer.JustificationFlag)__ret;
+    }
+
+    private static nint __mb_set_tab_stops;
+    internal void SetTabStops(float[] tabStops)
+    {
+        var __mb = __mb_set_tab_stops;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RichTextLabel", "set_tab_stops", 2899603908);
+            if (__mb == 0) throw new MissingMethodException("RichTextLabel.set_tab_stops is not available in this engine build.");
+            __mb_set_tab_stops = __mb;
+        }
+        var __a0 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, tabStops);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_tab_stops;
+    internal float[] GetTabStops()
+    {
+        var __mb = __mb_get_tab_stops;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RichTextLabel", "get_tab_stops", 675695659);
+            if (__mb == 0) throw new MissingMethodException("RichTextLabel.get_tab_stops is not available in this engine build.");
+            __mb_get_tab_stops = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_autowrap_mode;
@@ -26831,6 +28625,25 @@ public unsafe partial class RichTextLabel : Control
         double __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
+    }
+
+    private static nint __mb_parse_expressions_for_values;
+    public Godot.Collections.Dictionary ParseExpressionsForValues(string[] expressions)
+    {
+        var __mb = __mb_parse_expressions_for_values;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("RichTextLabel", "parse_expressions_for_values", 1522900837);
+            if (__mb == 0) throw new MissingMethodException("RichTextLabel.parse_expressions_for_values is not available in this engine build.");
+            __mb_parse_expressions_for_values = __mb;
+        }
+        var __a0 = Packed.CreateStrings(expressions);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_set_effects;

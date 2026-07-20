@@ -967,6 +967,38 @@ public unsafe partial class UndoRedo : GodotObject
         return __ret != 0;
     }
 
+    private static nint __mb_add_do_method;
+    public void AddDoMethod(Callable callable)
+    {
+        var __mb = __mb_add_do_method;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("UndoRedo", "add_do_method", 1611583062);
+            if (__mb == 0) throw new MissingMethodException("UndoRedo.add_do_method is not available in this engine build.");
+            __mb_add_do_method = __mb;
+        }
+        var __a0 = callable.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_add_undo_method;
+    public void AddUndoMethod(Callable callable)
+    {
+        var __mb = __mb_add_undo_method;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("UndoRedo", "add_undo_method", 1611583062);
+            if (__mb == 0) throw new MissingMethodException("UndoRedo.add_undo_method is not available in this engine build.");
+            __mb_add_undo_method = __mb;
+        }
+        var __a0 = callable.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_add_do_property;
     public void AddDoProperty(GodotObject? @object, string property, Variant value)
     {

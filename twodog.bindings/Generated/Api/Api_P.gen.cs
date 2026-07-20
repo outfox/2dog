@@ -69,6 +69,30 @@ public unsafe partial class PCKPacker : RefCounted
         return (Error)__ret;
     }
 
+    private static nint __mb_add_file_from_buffer;
+    public Error AddFileFromBuffer(string targetPath, byte[] data, bool encrypt = false)
+    {
+        var __mb = __mb_add_file_from_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PCKPacker", "add_file_from_buffer", 1131482346);
+            if (__mb == 0) throw new MissingMethodException("PCKPacker.add_file_from_buffer is not available in this engine build.");
+            __mb_add_file_from_buffer = __mb;
+        }
+        ulong __a0 = NativeString.Create(targetPath);
+        var __a1 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        byte __a2 = encrypt ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a1);
+        return (Error)__ret;
+    }
+
     private static nint __mb_add_file_removal;
     public Error AddFileRemoval(string targetPath)
     {
@@ -299,6 +323,40 @@ public unsafe partial class PacketPeer : RefCounted
         __args[1] = (nint)(&__a1);
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Error)__ret;
+    }
+
+    private static nint __mb_get_packet;
+    public byte[] GetPacket()
+    {
+        var __mb = __mb_get_packet;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PacketPeer", "get_packet", 2115431945);
+            if (__mb == 0) throw new MissingMethodException("PacketPeer.get_packet is not available in this engine build.");
+            __mb_get_packet = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_put_packet;
+    public Error PutPacket(byte[] buffer)
+    {
+        var __mb = __mb_put_packet;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PacketPeer", "put_packet", 680677267);
+            if (__mb == 0) throw new MissingMethodException("PacketPeer.put_packet is not available in this engine build.");
+            __mb_put_packet = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
         return (Error)__ret;
     }
 
@@ -5225,6 +5283,28 @@ public static unsafe partial class Performance
         return (double)__ret;
     }
 
+    private static nint __mb_add_custom_monitor;
+    public static void AddCustomMonitor(string id, Callable callable, Godot.Collections.Array arguments, Performance.MonitorType type = (Performance.MonitorType)(0))
+    {
+        var __mb = __mb_add_custom_monitor;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Performance", "add_custom_monitor", 3655788610);
+            if (__mb == 0) throw new MissingMethodException("Performance.add_custom_monitor is not available in this engine build.");
+            __mb_add_custom_monitor = __mb;
+        }
+        ulong __a0 = StringNames.Get(id).Opaque;
+        var __a1 = callable.Native;
+        ulong __a2 = arguments.Native;
+        long __a3 = (long)type;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
     private static nint __mb_remove_custom_monitor;
     public static void RemoveCustomMonitor(string id)
     {
@@ -5305,6 +5385,21 @@ public static unsafe partial class Performance
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_custom_monitor_types;
+    public static int[] GetCustomMonitorTypes()
+    {
+        var __mb = __mb_get_custom_monitor_types;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Performance", "get_custom_monitor_types", 969006518);
+            if (__mb == 0) throw new MissingMethodException("Performance.get_custom_monitor_types is not available in this engine build.");
+            __mb_get_custom_monitor_types = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 }
 
@@ -9736,6 +9831,24 @@ public unsafe partial class PhysicsDirectSpaceState2D : GodotObject
         return new Godot.Collections.Array(__ret);
     }
 
+    private static nint __mb_cast_motion;
+    public float[] CastMotion(PhysicsShapeQueryParameters2D? parameters)
+    {
+        var __mb = __mb_cast_motion;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsDirectSpaceState2D", "cast_motion", 711275086);
+            if (__mb == 0) throw new MissingMethodException("PhysicsDirectSpaceState2D.cast_motion is not available in this engine build.");
+            __mb_cast_motion = __mb;
+        }
+        nint __a0 = parameters?.NativePtr ?? 0;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_collide_shape;
     public Godot.Collections.Array CollideShape(PhysicsShapeQueryParameters2D? parameters, int maxResults = unchecked((int)(32)))
     {
@@ -9863,6 +9976,24 @@ public unsafe partial class PhysicsDirectSpaceState3D : GodotObject
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_cast_motion;
+    public float[] CastMotion(PhysicsShapeQueryParameters3D? parameters)
+    {
+        var __mb = __mb_cast_motion;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsDirectSpaceState3D", "cast_motion", 1778757334);
+            if (__mb == 0) throw new MissingMethodException("PhysicsDirectSpaceState3D.cast_motion is not available in this engine build.");
+            __mb_cast_motion = __mb;
+        }
+        nint __a0 = parameters?.NativePtr ?? 0;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_collide_shape;
@@ -12033,6 +12164,42 @@ public unsafe partial class PhysicsServer2D : GodotObject
         return unchecked((ulong)__ret);
     }
 
+    private static nint __mb_area_set_monitor_callback;
+    public void AreaSetMonitorCallback(Rid area, Callable callback)
+    {
+        var __mb = __mb_area_set_monitor_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer2D", "area_set_monitor_callback", 3379118538);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer2D.area_set_monitor_callback is not available in this engine build.");
+            __mb_area_set_monitor_callback = __mb;
+        }
+        var __a0 = area;
+        var __a1 = callback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_area_set_area_monitor_callback;
+    public void AreaSetAreaMonitorCallback(Rid area, Callable callback)
+    {
+        var __mb = __mb_area_set_area_monitor_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer2D", "area_set_area_monitor_callback", 3379118538);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer2D.area_set_area_monitor_callback is not available in this engine build.");
+            __mb_area_set_area_monitor_callback = __mb;
+        }
+        var __a0 = area;
+        var __a1 = callback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_area_set_monitorable;
     public void AreaSetMonitorable(Rid area, bool monitorable)
     {
@@ -13014,6 +13181,44 @@ public unsafe partial class PhysicsServer2D : GodotObject
         return __ret != 0;
     }
 
+    private static nint __mb_body_set_state_sync_callback;
+    public void BodySetStateSyncCallback(Rid body, Callable callable)
+    {
+        var __mb = __mb_body_set_state_sync_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer2D", "body_set_state_sync_callback", 3379118538);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer2D.body_set_state_sync_callback is not available in this engine build.");
+            __mb_body_set_state_sync_callback = __mb;
+        }
+        var __a0 = body;
+        var __a1 = callable.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_body_set_force_integration_callback;
+    public void BodySetForceIntegrationCallback(Rid body, Callable callable, Variant userdata = default)
+    {
+        var __mb = __mb_body_set_force_integration_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer2D", "body_set_force_integration_callback", 3059434249);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer2D.body_set_force_integration_callback is not available in this engine build.");
+            __mb_body_set_force_integration_callback = __mb;
+        }
+        var __a0 = body;
+        var __a1 = callable.Native;
+        var __a2 = userdata.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_body_test_motion;
     public bool BodyTestMotion(Rid body, PhysicsTestMotionParameters2D? parameters, PhysicsTestMotionResult2D? result = null)
     {
@@ -13503,6 +13708,8 @@ public unsafe partial class PhysicsServer2DExtension : PhysicsServer2D
 
     public virtual void _SpaceSetDebugContacts(Rid space, int maxContacts) { }
 
+    public virtual Vector2[] _SpaceGetContacts(Rid space) => default!;
+
     public virtual int _SpaceGetContactCount(Rid space) => default!;
 
     public virtual Rid _AreaCreate() => default!;
@@ -13727,6 +13934,7 @@ public unsafe partial class PhysicsServer2DExtension : PhysicsServer2D
     private static ulong __vsn_space_get_param;
     private static ulong __vsn_space_get_direct_state;
     private static ulong __vsn_space_set_debug_contacts;
+    private static ulong __vsn_space_get_contacts;
     private static ulong __vsn_space_get_contact_count;
     private static ulong __vsn_area_create;
     private static ulong __vsn_area_set_space;
@@ -13939,6 +14147,12 @@ public unsafe partial class PhysicsServer2DExtension : PhysicsServer2D
         if (nameSn == __vsn_space_set_debug_contacts)
         {
             _SpaceSetDebugContacts(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_space_get_contacts == 0) __vsn_space_get_contacts = StringNames.Get("_space_get_contacts").Opaque;
+        if (nameSn == __vsn_space_get_contacts)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, _SpaceGetContacts(*(Rid*)args[0]) ?? []);
             return true;
         }
         if (__vsn_space_get_contact_count == 0) __vsn_space_get_contact_count = StringNames.Get("_space_get_contact_count").Opaque;
@@ -14571,6 +14785,25 @@ public static unsafe partial class PhysicsServer2DManager
         _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("PhysicsServer2DManager");
 
     public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
+
+    private static nint __mb_register_server;
+    public static void RegisterServer(string name, Callable createCallback)
+    {
+        var __mb = __mb_register_server;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer2DManager", "register_server", 2137474292);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer2DManager.register_server is not available in this engine build.");
+            __mb_register_server = __mb;
+        }
+        ulong __a0 = NativeString.Create(name);
+        var __a1 = createCallback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
+    }
 
     private static nint __mb_set_default_server;
     public static void SetDefaultServer(string name, int priority)
@@ -15581,6 +15814,42 @@ public unsafe partial class PhysicsServer3D : GodotObject
         return unchecked((ulong)__ret);
     }
 
+    private static nint __mb_area_set_monitor_callback;
+    public void AreaSetMonitorCallback(Rid area, Callable callback)
+    {
+        var __mb = __mb_area_set_monitor_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer3D", "area_set_monitor_callback", 3379118538);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer3D.area_set_monitor_callback is not available in this engine build.");
+            __mb_area_set_monitor_callback = __mb;
+        }
+        var __a0 = area;
+        var __a1 = callback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_area_set_area_monitor_callback;
+    public void AreaSetAreaMonitorCallback(Rid area, Callable callback)
+    {
+        var __mb = __mb_area_set_area_monitor_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer3D", "area_set_area_monitor_callback", 3379118538);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer3D.area_set_area_monitor_callback is not available in this engine build.");
+            __mb_area_set_area_monitor_callback = __mb;
+        }
+        var __a0 = area;
+        var __a1 = callback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_area_set_monitorable;
     public void AreaSetMonitorable(Rid area, bool monitorable)
     {
@@ -16558,6 +16827,44 @@ public unsafe partial class PhysicsServer3D : GodotObject
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_body_set_state_sync_callback;
+    public void BodySetStateSyncCallback(Rid body, Callable callable)
+    {
+        var __mb = __mb_body_set_state_sync_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer3D", "body_set_state_sync_callback", 3379118538);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer3D.body_set_state_sync_callback is not available in this engine build.");
+            __mb_body_set_state_sync_callback = __mb;
+        }
+        var __a0 = body;
+        var __a1 = callable.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_body_set_force_integration_callback;
+    public void BodySetForceIntegrationCallback(Rid body, Callable callable, Variant userdata = default)
+    {
+        var __mb = __mb_body_set_force_integration_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer3D", "body_set_force_integration_callback", 3059434249);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer3D.body_set_force_integration_callback is not available in this engine build.");
+            __mb_body_set_force_integration_callback = __mb;
+        }
+        var __a0 = body;
+        var __a1 = callable.Native;
+        var __a2 = userdata.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_body_set_ray_pickable;
@@ -17984,6 +18291,8 @@ public unsafe partial class PhysicsServer3DExtension : PhysicsServer3D
 
     public virtual void _SpaceSetDebugContacts(Rid space, int maxContacts) { }
 
+    public virtual Vector3[] _SpaceGetContacts(Rid space) => default!;
+
     public virtual int _SpaceGetContactCount(Rid space) => default!;
 
     public virtual Rid _AreaCreate() => default!;
@@ -18306,6 +18615,7 @@ public unsafe partial class PhysicsServer3DExtension : PhysicsServer3D
     private static ulong __vsn_space_get_param;
     private static ulong __vsn_space_get_direct_state;
     private static ulong __vsn_space_set_debug_contacts;
+    private static ulong __vsn_space_get_contacts;
     private static ulong __vsn_space_get_contact_count;
     private static ulong __vsn_area_create;
     private static ulong __vsn_area_set_space;
@@ -18589,6 +18899,12 @@ public unsafe partial class PhysicsServer3DExtension : PhysicsServer3D
         if (nameSn == __vsn_space_set_debug_contacts)
         {
             _SpaceSetDebugContacts(*(Rid*)args[0], unchecked((int)(*(long*)args[1])));
+            return true;
+        }
+        if (__vsn_space_get_contacts == 0) __vsn_space_get_contacts = StringNames.Get("_space_get_contacts").Opaque;
+        if (nameSn == __vsn_space_get_contacts)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, _SpaceGetContacts(*(Rid*)args[0]) ?? []);
             return true;
         }
         if (__vsn_space_get_contact_count == 0) __vsn_space_get_contact_count = StringNames.Get("_space_get_contact_count").Opaque;
@@ -19503,6 +19819,25 @@ public static unsafe partial class PhysicsServer3DManager
         _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("PhysicsServer3DManager");
 
     public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
+
+    private static nint __mb_register_server;
+    public static void RegisterServer(string name, Callable createCallback)
+    {
+        var __mb = __mb_register_server;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer3DManager", "register_server", 2137474292);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer3DManager.register_server is not available in this engine build.");
+            __mb_register_server = __mb;
+        }
+        ulong __a0 = NativeString.Create(name);
+        var __a1 = createCallback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
+    }
 
     private static nint __mb_set_default_server;
     public static void SetDefaultServer(string name, int priority)
@@ -22240,6 +22575,24 @@ public unsafe partial class Polygon2D : Node2D
         set => SetInvertBorder(value);
     }
 
+    public Vector2[] Polygon
+    {
+        get => GetPolygon();
+        set => SetPolygon(value);
+    }
+
+    public Vector2[] Uv
+    {
+        get => GetUv();
+        set => SetUv(value);
+    }
+
+    public Color[] VertexColors
+    {
+        get => GetVertexColors();
+        set => SetVertexColors(value);
+    }
+
     public Godot.Collections.Array Polygons
     {
         get => GetPolygons();
@@ -22250,6 +22603,70 @@ public unsafe partial class Polygon2D : Node2D
     {
         get => GetInternalVertexCount();
         set => SetInternalVertexCount(value);
+    }
+
+    private static nint __mb_set_polygon;
+    internal void SetPolygon(Vector2[] polygon)
+    {
+        var __mb = __mb_set_polygon;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Polygon2D", "set_polygon", 1509147220);
+            if (__mb == 0) throw new MissingMethodException("Polygon2D.set_polygon is not available in this engine build.");
+            __mb_set_polygon = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, polygon);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_polygon;
+    internal Vector2[] GetPolygon()
+    {
+        var __mb = __mb_get_polygon;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Polygon2D", "get_polygon", 2961356807);
+            if (__mb == 0) throw new MissingMethodException("Polygon2D.get_polygon is not available in this engine build.");
+            __mb_get_polygon = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_set_uv;
+    internal void SetUv(Vector2[] uv)
+    {
+        var __mb = __mb_set_uv;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Polygon2D", "set_uv", 1509147220);
+            if (__mb == 0) throw new MissingMethodException("Polygon2D.set_uv is not available in this engine build.");
+            __mb_set_uv = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, uv);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_uv;
+    internal Vector2[] GetUv()
+    {
+        var __mb = __mb_get_uv;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Polygon2D", "get_uv", 2961356807);
+            if (__mb == 0) throw new MissingMethodException("Polygon2D.get_uv is not available in this engine build.");
+            __mb_get_uv = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_color;
@@ -22312,6 +22729,38 @@ public unsafe partial class Polygon2D : Node2D
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_vertex_colors;
+    internal void SetVertexColors(Color[] vertexColors)
+    {
+        var __mb = __mb_set_vertex_colors;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Polygon2D", "set_vertex_colors", 3546319833);
+            if (__mb == 0) throw new MissingMethodException("Polygon2D.set_vertex_colors is not available in this engine build.");
+            __mb_set_vertex_colors = __mb;
+        }
+        var __a0 = Packed.CreatePod<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, vertexColors);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_vertex_colors;
+    internal Color[] GetVertexColors()
+    {
+        var __mb = __mb_get_vertex_colors;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Polygon2D", "get_vertex_colors", 1392750486);
+            if (__mb == 0) throw new MissingMethodException("Polygon2D.get_vertex_colors is not available in this engine build.");
+            __mb_get_vertex_colors = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_texture;
@@ -22562,6 +23011,25 @@ public unsafe partial class Polygon2D : Node2D
         return __ret;
     }
 
+    private static nint __mb_add_bone;
+    public void AddBone(NodePath path, float[] weights)
+    {
+        var __mb = __mb_add_bone;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Polygon2D", "add_bone", 703042815);
+            if (__mb == 0) throw new MissingMethodException("Polygon2D.add_bone is not available in this engine build.");
+            __mb_add_bone = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __a1 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, weights);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a1);
+    }
+
     private static nint __mb_get_bone_count;
     public int GetBoneCount()
     {
@@ -22593,6 +23061,24 @@ public unsafe partial class Polygon2D : Node2D
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return new NodePath(__ret);
+    }
+
+    private static nint __mb_get_bone_weights;
+    public float[] GetBoneWeights(int index)
+    {
+        var __mb = __mb_get_bone_weights;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Polygon2D", "get_bone_weights", 1542882410);
+            if (__mb == 0) throw new MissingMethodException("Polygon2D.get_bone_weights is not available in this engine build.");
+            __mb_get_bone_weights = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_erase_bone;
@@ -22640,6 +23126,25 @@ public unsafe partial class Polygon2D : Node2D
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_bone_weights;
+    public void SetBoneWeights(int index, float[] weights)
+    {
+        var __mb = __mb_set_bone_weights;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Polygon2D", "set_bone_weights", 1345852415);
+            if (__mb == 0) throw new MissingMethodException("Polygon2D.set_bone_weights is not available in this engine build.");
+            __mb_set_bone_weights = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        var __a1 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, weights);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a1);
     }
 
     private static nint __mb_set_skeleton;
@@ -22713,6 +23218,44 @@ public unsafe partial class PolygonOccluder3D : Occluder3D
     {
         ClassRegistry.AttachNew(this, "PolygonOccluder3D");
     }
+
+    public Vector2[] Polygon
+    {
+        get => GetPolygon();
+        set => SetPolygon(value);
+    }
+
+    private static nint __mb_set_polygon;
+    internal void SetPolygon(Vector2[] polygon)
+    {
+        var __mb = __mb_set_polygon;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PolygonOccluder3D", "set_polygon", 1509147220);
+            if (__mb == 0) throw new MissingMethodException("PolygonOccluder3D.set_polygon is not available in this engine build.");
+            __mb_set_polygon = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, polygon);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_polygon;
+    internal Vector2[] GetPolygon()
+    {
+        var __mb = __mb_get_polygon;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PolygonOccluder3D", "get_polygon", 2961356807);
+            if (__mb == 0) throw new MissingMethodException("PolygonOccluder3D.get_polygon is not available in this engine build.");
+            __mb_get_polygon = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
+    }
 }
 
 public unsafe partial class PolygonPathFinder : Resource
@@ -22722,6 +23265,66 @@ public unsafe partial class PolygonPathFinder : Resource
     public PolygonPathFinder() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "PolygonPathFinder");
+    }
+
+    private static nint __mb_setup;
+    public void Setup(Vector2[] points, int[] connections)
+    {
+        var __mb = __mb_setup;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PolygonPathFinder", "setup", 3251786936);
+            if (__mb == 0) throw new MissingMethodException("PolygonPathFinder.setup is not available in this engine build.");
+            __mb_setup = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, points);
+        var __a1 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, connections);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a1);
+    }
+
+    private static nint __mb_find_path;
+    public Vector2[] FindPath(Vector2 from, Vector2 to)
+    {
+        var __mb = __mb_find_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PolygonPathFinder", "find_path", 1562168077);
+            if (__mb == 0) throw new MissingMethodException("PolygonPathFinder.find_path is not available in this engine build.");
+            __mb_find_path = __mb;
+        }
+        var __a0 = from;
+        var __a1 = to;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_get_intersections;
+    public Vector2[] GetIntersections(Vector2 from, Vector2 to)
+    {
+        var __mb = __mb_get_intersections;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PolygonPathFinder", "get_intersections", 3932192302);
+            if (__mb == 0) throw new MissingMethodException("PolygonPathFinder.get_intersections is not available in this engine build.");
+            __mb_get_intersections = __mb;
+        }
+        var __a0 = from;
+        var __a1 = to;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_closest_point;
@@ -26134,6 +26737,27 @@ public static unsafe partial class ProjectSettings
         return new Godot.Collections.Array(__ret);
     }
 
+    private static nint __mb_get_setting_with_override_and_custom_features;
+    public static Variant GetSettingWithOverrideAndCustomFeatures(string name, string[] features)
+    {
+        var __mb = __mb_get_setting_with_override_and_custom_features;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ProjectSettings", "get_setting_with_override_and_custom_features", 2434817427);
+            if (__mb == 0) throw new MissingMethodException("ProjectSettings.get_setting_with_override_and_custom_features is not available in this engine build.");
+            __mb_get_setting_with_override_and_custom_features = __mb;
+        }
+        ulong __a0 = StringNames.Get(name).Opaque;
+        var __a1 = Packed.CreateStrings(features);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a1);
+        return new Variant(__ret);
+    }
+
     private static nint __mb_set_order;
     public static void SetOrder(string name, int position)
     {
@@ -26376,6 +27000,21 @@ public static unsafe partial class ProjectSettings
         return (Error)__ret;
     }
 
+    private static nint __mb_get_changed_settings;
+    public static string[] GetChangedSettings()
+    {
+        var __mb = __mb_get_changed_settings;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ProjectSettings", "get_changed_settings", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("ProjectSettings.get_changed_settings is not available in this engine build.");
+            __mb_get_changed_settings = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_check_changed_settings_in_group;
     public static bool CheckChangedSettingsInGroup(string settingPrefix)
     {
@@ -26482,6 +27121,24 @@ public unsafe partial class PropertyTweener : Tweener
             __mb_set_ease = __mb;
         }
         long __a0 = (long)ease;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (PropertyTweener?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_set_custom_interpolator;
+    public PropertyTweener? SetCustomInterpolator(Callable interpolatorMethod)
+    {
+        var __mb = __mb_set_custom_interpolator;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PropertyTweener", "set_custom_interpolator", 3174170268);
+            if (__mb == 0) throw new MissingMethodException("PropertyTweener.set_custom_interpolator is not available in this engine build.");
+            __mb_set_custom_interpolator = __mb;
+        }
+        var __a0 = interpolatorMethod.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;

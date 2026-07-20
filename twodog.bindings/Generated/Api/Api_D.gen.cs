@@ -1112,6 +1112,74 @@ public unsafe partial class DirAccess : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
 
+    private static nint __mb_get_files;
+    public string[] GetFiles()
+    {
+        var __mb = __mb_get_files;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DirAccess", "get_files", 2981934095);
+            if (__mb == 0) throw new MissingMethodException("DirAccess.get_files is not available in this engine build.");
+            __mb_get_files = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_get_files_at;
+    public static string[] GetFilesAt(string path)
+    {
+        var __mb = __mb_get_files_at;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DirAccess", "get_files_at", 3538744774);
+            if (__mb == 0) throw new MissingMethodException("DirAccess.get_files_at is not available in this engine build.");
+            __mb_get_files_at = __mb;
+        }
+        ulong __a0 = NativeString.Create(path);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_get_directories;
+    public string[] GetDirectories()
+    {
+        var __mb = __mb_get_directories;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DirAccess", "get_directories", 2981934095);
+            if (__mb == 0) throw new MissingMethodException("DirAccess.get_directories is not available in this engine build.");
+            __mb_get_directories = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_get_directories_at;
+    public static string[] GetDirectoriesAt(string path)
+    {
+        var __mb = __mb_get_directories_at;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DirAccess", "get_directories_at", 3538744774);
+            if (__mb == 0) throw new MissingMethodException("DirAccess.get_directories_at is not available in this engine build.");
+            __mb_get_directories_at = __mb;
+        }
+        ulong __a0 = NativeString.Create(path);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_get_drive_count;
     public static int GetDriveCount()
     {
@@ -2276,6 +2344,45 @@ public static unsafe partial class DisplayServer
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
+    private static nint __mb_help_set_search_callbacks;
+    public static void HelpSetSearchCallbacks(Callable searchCallback, Callable actionCallback)
+    {
+        var __mb = __mb_help_set_search_callbacks;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "help_set_search_callbacks", 1687350599);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.help_set_search_callbacks is not available in this engine build.");
+            __mb_help_set_search_callbacks = __mb;
+        }
+        var __a0 = searchCallback.Native;
+        var __a1 = actionCallback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_global_menu_set_popup_callbacks;
+    public static void GlobalMenuSetPopupCallbacks(string menuRoot, Callable openCallback, Callable closeCallback)
+    {
+        var __mb = __mb_global_menu_set_popup_callbacks;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_popup_callbacks", 3893727526);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_popup_callbacks is not available in this engine build.");
+            __mb_global_menu_set_popup_callbacks = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        var __a1 = openCallback.Native;
+        var __a2 = closeCallback.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
+    }
+
     private static nint __mb_global_menu_add_submenu_item;
     public static int GlobalMenuAddSubmenuItem(string menuRoot, string label, string submenu, int index = unchecked((int)(-1)))
     {
@@ -2300,6 +2407,240 @@ public static unsafe partial class DisplayServer
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         NativeString.Destroy(ref __a2);
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_global_menu_add_item;
+    public static int GlobalMenuAddItem(string menuRoot, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
+    {
+        var __mb = __mb_global_menu_add_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_item", 3616842746);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_item is not available in this engine build.");
+            __mb_global_menu_add_item = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        ulong __a1 = NativeString.Create(label);
+        var __a2 = callback.Native;
+        var __a3 = keyCallback.Native;
+        var __a4 = tag.Native;
+        long __a5 = (long)accelerator;
+        long __a6 = unchecked((long)index);
+        var __args = stackalloc nint[7];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a1);
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_global_menu_add_check_item;
+    public static int GlobalMenuAddCheckItem(string menuRoot, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
+    {
+        var __mb = __mb_global_menu_add_check_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_check_item", 3616842746);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_check_item is not available in this engine build.");
+            __mb_global_menu_add_check_item = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        ulong __a1 = NativeString.Create(label);
+        var __a2 = callback.Native;
+        var __a3 = keyCallback.Native;
+        var __a4 = tag.Native;
+        long __a5 = (long)accelerator;
+        long __a6 = unchecked((long)index);
+        var __args = stackalloc nint[7];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a1);
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_global_menu_add_icon_item;
+    public static int GlobalMenuAddIconItem(string menuRoot, Texture2D? icon, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
+    {
+        var __mb = __mb_global_menu_add_icon_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_icon_item", 3867083847);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_icon_item is not available in this engine build.");
+            __mb_global_menu_add_icon_item = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        nint __a1 = icon?.NativePtr ?? 0;
+        ulong __a2 = NativeString.Create(label);
+        var __a3 = callback.Native;
+        var __a4 = keyCallback.Native;
+        var __a5 = tag.Native;
+        long __a6 = (long)accelerator;
+        long __a7 = unchecked((long)index);
+        var __args = stackalloc nint[8];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        __args[7] = (nint)(&__a7);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a2);
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_global_menu_add_icon_check_item;
+    public static int GlobalMenuAddIconCheckItem(string menuRoot, Texture2D? icon, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
+    {
+        var __mb = __mb_global_menu_add_icon_check_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_icon_check_item", 3867083847);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_icon_check_item is not available in this engine build.");
+            __mb_global_menu_add_icon_check_item = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        nint __a1 = icon?.NativePtr ?? 0;
+        ulong __a2 = NativeString.Create(label);
+        var __a3 = callback.Native;
+        var __a4 = keyCallback.Native;
+        var __a5 = tag.Native;
+        long __a6 = (long)accelerator;
+        long __a7 = unchecked((long)index);
+        var __args = stackalloc nint[8];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        __args[7] = (nint)(&__a7);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a2);
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_global_menu_add_radio_check_item;
+    public static int GlobalMenuAddRadioCheckItem(string menuRoot, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
+    {
+        var __mb = __mb_global_menu_add_radio_check_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_radio_check_item", 3616842746);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_radio_check_item is not available in this engine build.");
+            __mb_global_menu_add_radio_check_item = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        ulong __a1 = NativeString.Create(label);
+        var __a2 = callback.Native;
+        var __a3 = keyCallback.Native;
+        var __a4 = tag.Native;
+        long __a5 = (long)accelerator;
+        long __a6 = unchecked((long)index);
+        var __args = stackalloc nint[7];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a1);
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_global_menu_add_icon_radio_check_item;
+    public static int GlobalMenuAddIconRadioCheckItem(string menuRoot, Texture2D? icon, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
+    {
+        var __mb = __mb_global_menu_add_icon_radio_check_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_icon_radio_check_item", 3867083847);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_icon_radio_check_item is not available in this engine build.");
+            __mb_global_menu_add_icon_radio_check_item = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        nint __a1 = icon?.NativePtr ?? 0;
+        ulong __a2 = NativeString.Create(label);
+        var __a3 = callback.Native;
+        var __a4 = keyCallback.Native;
+        var __a5 = tag.Native;
+        long __a6 = (long)accelerator;
+        long __a7 = unchecked((long)index);
+        var __args = stackalloc nint[8];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        __args[7] = (nint)(&__a7);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a2);
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_global_menu_add_multistate_item;
+    public static int GlobalMenuAddMultistateItem(string menuRoot, string label, int maxStates, int defaultState, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
+    {
+        var __mb = __mb_global_menu_add_multistate_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_multistate_item", 3297554655);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_multistate_item is not available in this engine build.");
+            __mb_global_menu_add_multistate_item = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        ulong __a1 = NativeString.Create(label);
+        long __a2 = unchecked((long)maxStates);
+        long __a3 = unchecked((long)defaultState);
+        var __a4 = callback.Native;
+        var __a5 = keyCallback.Native;
+        var __a6 = tag.Native;
+        long __a7 = (long)accelerator;
+        long __a8 = unchecked((long)index);
+        var __args = stackalloc nint[9];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        __args[7] = (nint)(&__a7);
+        __args[8] = (nint)(&__a8);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a1);
         return unchecked((int)__ret);
     }
 
@@ -2428,6 +2769,48 @@ public static unsafe partial class DisplayServer
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
+    }
+
+    private static nint __mb_global_menu_get_item_callback;
+    public static Callable GlobalMenuGetItemCallback(string menuRoot, int idx)
+    {
+        var __mb = __mb_global_menu_get_item_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_callback", 748666903);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_callback is not available in this engine build.");
+            __mb_global_menu_get_item_callback = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        long __a1 = unchecked((long)idx);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return new Callable(__ret);
+    }
+
+    private static nint __mb_global_menu_get_item_key_callback;
+    public static Callable GlobalMenuGetItemKeyCallback(string menuRoot, int idx)
+    {
+        var __mb = __mb_global_menu_get_item_key_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_key_callback", 748666903);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_key_callback is not available in this engine build.");
+            __mb_global_menu_get_item_key_callback = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        long __a1 = unchecked((long)idx);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return new Callable(__ret);
     }
 
     private static nint __mb_global_menu_get_item_tag;
@@ -2716,6 +3099,69 @@ public static unsafe partial class DisplayServer
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         byte __a2 = checkable ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
+    }
+
+    private static nint __mb_global_menu_set_item_callback;
+    public static void GlobalMenuSetItemCallback(string menuRoot, int idx, Callable callback)
+    {
+        var __mb = __mb_global_menu_set_item_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_callback", 3809915389);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_callback is not available in this engine build.");
+            __mb_global_menu_set_item_callback = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        long __a1 = unchecked((long)idx);
+        var __a2 = callback.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
+    }
+
+    private static nint __mb_global_menu_set_item_hover_callbacks;
+    public static void GlobalMenuSetItemHoverCallbacks(string menuRoot, int idx, Callable callback)
+    {
+        var __mb = __mb_global_menu_set_item_hover_callbacks;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_hover_callbacks", 3809915389);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_hover_callbacks is not available in this engine build.");
+            __mb_global_menu_set_item_hover_callbacks = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        long __a1 = unchecked((long)idx);
+        var __a2 = callback.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
+    }
+
+    private static nint __mb_global_menu_set_item_key_callback;
+    public static void GlobalMenuSetItemKeyCallback(string menuRoot, int idx, Callable keyCallback)
+    {
+        var __mb = __mb_global_menu_set_item_key_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_key_callback", 3809915389);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_key_callback is not available in this engine build.");
+            __mb_global_menu_set_item_key_callback = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        long __a1 = unchecked((long)idx);
+        var __a2 = keyCallback.Native;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -3073,6 +3519,25 @@ public static unsafe partial class DisplayServer
         return new Godot.Collections.Array(__ret);
     }
 
+    private static nint __mb_tts_get_voices_for_language;
+    public static string[] TtsGetVoicesForLanguage(string language)
+    {
+        var __mb = __mb_tts_get_voices_for_language;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "tts_get_voices_for_language", 4291131558);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.tts_get_voices_for_language is not available in this engine build.");
+            __mb_tts_get_voices_for_language = __mb;
+        }
+        ulong __a0 = NativeString.Create(language);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_tts_speak;
     public static void TtsSpeak(string text, string voice, int volume = unchecked((int)(50)), float pitch = 1.0f, float rate = 1.0f, long utteranceId = unchecked((long)(0)), bool interrupt = false)
     {
@@ -3142,6 +3607,24 @@ public static unsafe partial class DisplayServer
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
     }
 
+    private static nint __mb_tts_set_utterance_callback;
+    public static void TtsSetUtteranceCallback(DisplayServer.TTSUtteranceEvent @event, Callable callable)
+    {
+        var __mb = __mb_tts_set_utterance_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "tts_set_utterance_callback", 109679083);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.tts_set_utterance_callback is not available in this engine build.");
+            __mb_tts_set_utterance_callback = __mb;
+        }
+        long __a0 = (long)@event;
+        var __a1 = callable.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
     private static nint __mb_is_dark_mode_supported;
     public static bool IsDarkModeSupported()
     {
@@ -3200,6 +3683,22 @@ public static unsafe partial class DisplayServer
         var __ret = default(Color);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_set_system_theme_change_callback;
+    public static void SetSystemThemeChangeCallback(Callable callable)
+    {
+        var __mb = __mb_set_system_theme_change_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "set_system_theme_change_callback", 1611583062);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.set_system_theme_change_callback is not available in this engine build.");
+            __mb_set_system_theme_change_callback = __mb;
+        }
+        var __a0 = callable.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_mouse_set_mode;
@@ -3740,6 +4239,21 @@ public static unsafe partial class DisplayServer
         return __ret != 0;
     }
 
+    private static nint __mb_get_window_list;
+    public static int[] GetWindowList()
+    {
+        var __mb = __mb_get_window_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "get_window_list", 1930428628);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.get_window_list is not available in this engine build.");
+            __mb_get_window_list = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_get_window_at_screen_position;
     public static int GetWindowAtScreenPosition(Vector2I position)
     {
@@ -3869,6 +4383,25 @@ public static unsafe partial class DisplayServer
         return __ret;
     }
 
+    private static nint __mb_window_set_mouse_passthrough;
+    public static void WindowSetMousePassthrough(Vector2[] region, int windowId = unchecked((int)(0)))
+    {
+        var __mb = __mb_window_set_mouse_passthrough;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "window_set_mouse_passthrough", 1993637420);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_mouse_passthrough is not available in this engine build.");
+            __mb_window_set_mouse_passthrough = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, region);
+        long __a1 = unchecked((long)windowId);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
+    }
+
     private static nint __mb_window_get_current_screen;
     public static int WindowGetCurrentScreen(int windowId = unchecked((int)(0)))
     {
@@ -3988,6 +4521,96 @@ public static unsafe partial class DisplayServer
             __mb_window_set_size = __mb;
         }
         var __a0 = size;
+        long __a1 = unchecked((long)windowId);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_window_set_rect_changed_callback;
+    public static void WindowSetRectChangedCallback(Callable callback, int windowId = unchecked((int)(0)))
+    {
+        var __mb = __mb_window_set_rect_changed_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "window_set_rect_changed_callback", 1091192925);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_rect_changed_callback is not available in this engine build.");
+            __mb_window_set_rect_changed_callback = __mb;
+        }
+        var __a0 = callback.Native;
+        long __a1 = unchecked((long)windowId);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_window_set_window_event_callback;
+    public static void WindowSetWindowEventCallback(Callable callback, int windowId = unchecked((int)(0)))
+    {
+        var __mb = __mb_window_set_window_event_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "window_set_window_event_callback", 1091192925);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_window_event_callback is not available in this engine build.");
+            __mb_window_set_window_event_callback = __mb;
+        }
+        var __a0 = callback.Native;
+        long __a1 = unchecked((long)windowId);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_window_set_input_event_callback;
+    public static void WindowSetInputEventCallback(Callable callback, int windowId = unchecked((int)(0)))
+    {
+        var __mb = __mb_window_set_input_event_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "window_set_input_event_callback", 1091192925);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_input_event_callback is not available in this engine build.");
+            __mb_window_set_input_event_callback = __mb;
+        }
+        var __a0 = callback.Native;
+        long __a1 = unchecked((long)windowId);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_window_set_input_text_callback;
+    public static void WindowSetInputTextCallback(Callable callback, int windowId = unchecked((int)(0)))
+    {
+        var __mb = __mb_window_set_input_text_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "window_set_input_text_callback", 1091192925);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_input_text_callback is not available in this engine build.");
+            __mb_window_set_input_text_callback = __mb;
+        }
+        var __a0 = callback.Native;
+        long __a1 = unchecked((long)windowId);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_window_set_drop_files_callback;
+    public static void WindowSetDropFilesCallback(Callable callback, int windowId = unchecked((int)(0)))
+    {
+        var __mb = __mb_window_set_drop_files_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "window_set_drop_files_callback", 1091192925);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_drop_files_callback is not available in this engine build.");
+            __mb_window_set_drop_files_callback = __mb;
+        }
+        var __a0 = callback.Native;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
@@ -5412,6 +6035,26 @@ public static unsafe partial class DisplayServer
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
+    private static nint __mb_accessibility_update_add_action;
+    public static void AccessibilityUpdateAddAction(Rid id, DisplayServer.AccessibilityAction action, Callable callable)
+    {
+        var __mb = __mb_accessibility_update_add_action;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_add_action", 2898696987);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_add_action is not available in this engine build.");
+            __mb_accessibility_update_add_action = __mb;
+        }
+        var __a0 = id;
+        long __a1 = (long)action;
+        var __a2 = callable.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
     private static nint __mb_accessibility_update_add_custom_action;
     public static void AccessibilityUpdateAddCustomAction(Rid id, int actionId, string actionDescription)
     {
@@ -6228,6 +6871,22 @@ public static unsafe partial class DisplayServer
         return __ret != 0;
     }
 
+    private static nint __mb_set_hardware_keyboard_connection_change_callback;
+    public static void SetHardwareKeyboardConnectionChangeCallback(Callable callable)
+    {
+        var __mb = __mb_set_hardware_keyboard_connection_change_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "set_hardware_keyboard_connection_change_callback", 1611583062);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.set_hardware_keyboard_connection_change_callback is not available in this engine build.");
+            __mb_set_hardware_keyboard_connection_change_callback = __mb;
+        }
+        var __a0 = callable.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
     private static nint __mb_cursor_set_shape;
     public static void CursorSetShape(DisplayServer.CursorShape shape)
     {
@@ -6308,6 +6967,137 @@ public static unsafe partial class DisplayServer
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_dialog_show;
+    public static Error DialogShow(string title, string description, string[] buttons, Callable callback)
+    {
+        var __mb = __mb_dialog_show;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "dialog_show", 4115553226);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.dialog_show is not available in this engine build.");
+            __mb_dialog_show = __mb;
+        }
+        ulong __a0 = NativeString.Create(title);
+        ulong __a1 = NativeString.Create(description);
+        var __a2 = Packed.CreateStrings(buttons);
+        var __a3 = callback.Native;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a1);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a2);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_dialog_input_text;
+    public static Error DialogInputText(string title, string description, string existingText, Callable callback)
+    {
+        var __mb = __mb_dialog_input_text;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "dialog_input_text", 3088703427);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.dialog_input_text is not available in this engine build.");
+            __mb_dialog_input_text = __mb;
+        }
+        ulong __a0 = NativeString.Create(title);
+        ulong __a1 = NativeString.Create(description);
+        ulong __a2 = NativeString.Create(existingText);
+        var __a3 = callback.Native;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a1);
+        NativeString.Destroy(ref __a2);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_file_dialog_show;
+    public static Error FileDialogShow(string title, string currentDirectory, string filename, bool showHidden, DisplayServer.FileDialogMode mode, string[] filters, Callable callback, int parentWindowId = unchecked((int)(0)))
+    {
+        var __mb = __mb_file_dialog_show;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "file_dialog_show", 1386825884);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.file_dialog_show is not available in this engine build.");
+            __mb_file_dialog_show = __mb;
+        }
+        ulong __a0 = NativeString.Create(title);
+        ulong __a1 = NativeString.Create(currentDirectory);
+        ulong __a2 = NativeString.Create(filename);
+        byte __a3 = showHidden ? (byte)1 : (byte)0;
+        long __a4 = (long)mode;
+        var __a5 = Packed.CreateStrings(filters);
+        var __a6 = callback.Native;
+        long __a7 = unchecked((long)parentWindowId);
+        var __args = stackalloc nint[8];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        __args[7] = (nint)(&__a7);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a1);
+        NativeString.Destroy(ref __a2);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a5);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_file_dialog_with_options_show;
+    public static Error FileDialogWithOptionsShow(string title, string currentDirectory, string root, string filename, bool showHidden, DisplayServer.FileDialogMode mode, string[] filters, Godot.Collections.Array options, Callable callback, int parentWindowId = unchecked((int)(0)))
+    {
+        var __mb = __mb_file_dialog_with_options_show;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "file_dialog_with_options_show", 1448789813);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.file_dialog_with_options_show is not available in this engine build.");
+            __mb_file_dialog_with_options_show = __mb;
+        }
+        ulong __a0 = NativeString.Create(title);
+        ulong __a1 = NativeString.Create(currentDirectory);
+        ulong __a2 = NativeString.Create(root);
+        ulong __a3 = NativeString.Create(filename);
+        byte __a4 = showHidden ? (byte)1 : (byte)0;
+        long __a5 = (long)mode;
+        var __a6 = Packed.CreateStrings(filters);
+        ulong __a7 = options.Native;
+        var __a8 = callback.Native;
+        long __a9 = unchecked((long)parentWindowId);
+        var __args = stackalloc nint[10];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        __args[7] = (nint)(&__a7);
+        __args[8] = (nint)(&__a8);
+        __args[9] = (nint)(&__a9);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a1);
+        NativeString.Destroy(ref __a2);
+        NativeString.Destroy(ref __a3);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a6);
+        return (Error)__ret;
     }
 
     private static nint __mb_beep;
@@ -6454,6 +7244,24 @@ public static unsafe partial class DisplayServer
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
     }
 
+    private static nint __mb_color_picker;
+    public static bool ColorPicker(Callable callback)
+    {
+        var __mb = __mb_color_picker;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "color_picker", 151643214);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.color_picker is not available in this engine build.");
+            __mb_color_picker = __mb;
+        }
+        var __a0 = callback.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        byte __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return __ret != 0;
+    }
+
     private static nint __mb_process_events;
     public static void ProcessEvents()
     {
@@ -6513,6 +7321,29 @@ public static unsafe partial class DisplayServer
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
+    private static nint __mb_create_status_indicator;
+    public static int CreateStatusIndicator(Texture2D? icon, string tooltip, Callable callback)
+    {
+        var __mb = __mb_create_status_indicator;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "create_status_indicator", 1904285171);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.create_status_indicator is not available in this engine build.");
+            __mb_create_status_indicator = __mb;
+        }
+        nint __a0 = icon?.NativePtr ?? 0;
+        ulong __a1 = NativeString.Create(tooltip);
+        var __a2 = callback.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a1);
+        return unchecked((int)__ret);
+    }
+
     private static nint __mb_status_indicator_set_icon;
     public static void StatusIndicatorSetIcon(int id, Texture2D? icon)
     {
@@ -6562,6 +7393,24 @@ public static unsafe partial class DisplayServer
         }
         long __a0 = unchecked((long)id);
         var __a1 = menuRid;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_status_indicator_set_callback;
+    public static void StatusIndicatorSetCallback(int id, Callable callback)
+    {
+        var __mb = __mb_status_indicator_set_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "status_indicator_set_callback", 957362965);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.status_indicator_set_callback is not available in this engine build.");
+            __mb_status_indicator_set_callback = __mb;
+        }
+        long __a0 = unchecked((long)id);
+        var __a1 = callback.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);

@@ -38,10 +38,26 @@ public static class ApiGenerator
 
     private sealed record ClassInfo(string GdName, string CsName, string BaseCs, bool RefCounted, bool Instantiable);
 
-    private sealed record TypeRef(string Kind, string Cs)
+    private sealed record TypeRef(string Kind, string Cs, string? PackedElem = null, string? PackedGd = null)
     {
         public static readonly TypeRef Void = new("void", "void");
     }
+
+    // GodotSharp compat: Packed*Array marshals as a plain C# array (copies at
+    // the boundary). Element cs-type per packed class.
+    private static readonly Dictionary<string, string> PackedElemMap = new()
+    {
+        ["PackedByteArray"] = "byte", ["PackedInt32Array"] = "int", ["PackedInt64Array"] = "long",
+        ["PackedFloat32Array"] = "float", ["PackedFloat64Array"] = "double", ["PackedStringArray"] = "string",
+        ["PackedVector2Array"] = "Vector2", ["PackedVector3Array"] = "Vector3",
+        ["PackedColorArray"] = "Color", ["PackedVector4Array"] = "Vector4",
+    };
+
+    private static string PackedVt(string gd) =>
+        "GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_" +
+        string.Concat(gd.Select((c, i) => i > 0 && char.IsUpper(c) ? "_" + c : c.ToString())).ToUpperInvariant();
+
+    private static string PackedOpIndex(string gd) => $"GdExtensionInterface.{gd}OperatorIndex";
 
     private sealed record VirtualInfo(string GdName, string CsName, TypeRef Ret, List<(string name, TypeRef type)> Args);
 
@@ -375,7 +391,8 @@ public static class ApiGenerator
         var gdName = m.GetProperty("name").GetString()!;
         if (m.TryGetProperty("is_vararg", out var va) && va.GetBoolean())
         {
-            return; // varargs need variant calls
+            EmitVarargMethod(sb, m, info, used, staticClass, gdName);
+            return;
         }
         if (m.TryGetProperty("is_virtual", out var v) && v.GetBoolean())
         {
@@ -459,6 +476,10 @@ public static class ApiGenerator
                 "class" => $"nint __a{i} = {name}?.NativePtr ?? 0;",
                 "variant" => $"var __a{i} = {name}.Native;",
                 "builtinref" => $"ulong __a{i} = {name}.Native;",
+                "opaque16" => $"var __a{i} = {name}.Native;",
+                "packed" => t.PackedElem == "string"
+                    ? $"var __a{i} = Packed.CreateStrings({name});"
+                    : $"var __a{i} = Packed.CreatePod<{t.PackedElem}>({PackedVt(t.PackedGd!)}, {PackedOpIndex(t.PackedGd!)}, {name});",
                 _ => throw new InvalidOperationException(t.Kind),
             });
         }
@@ -517,12 +538,20 @@ public static class ApiGenerator
                 sb.AppendLine("        ulong __ret = 0;");
                 sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, {self}, {argsPtr}, (nint)(&__ret));");
                 break;
+            case "opaque16" or "packed":
+                sb.AppendLine("        Opaque16 __ret = default;");
+                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, {self}, {argsPtr}, (nint)(&__ret));");
+                break;
         }
 
-        // release owned string args
+        // release owned temporaries created for args
         for (var i = 0; i < args.Count; i++)
+        {
             if (args[i].type.Kind == "string")
                 sb.AppendLine($"        NativeString.Destroy(ref __a{i});");
+            else if (args[i].type.Kind == "packed")
+                sb.AppendLine($"        Packed.Destroy({PackedVt(args[i].type.PackedGd!)}, ref __a{i});");
+        }
 
         switch (ret.Kind)
         {
@@ -539,8 +568,149 @@ public static class ApiGenerator
                 break;
             case "variant": sb.AppendLine("        return new Variant(__ret);"); break;
             case "builtinref": sb.AppendLine($"        return new {ret.Cs}(__ret);"); break;
+            case "opaque16": sb.AppendLine($"        return new {ret.Cs}(__ret);"); break;
+            case "packed":
+                sb.AppendLine(ret.PackedElem == "string"
+                    ? "        return Packed.ToStringArray(ref __ret);"
+                    : $"        return Packed.ToPodArray<{ret.PackedElem}>({PackedVt(ret.PackedGd!)}, {PackedOpIndex(ret.PackedGd!)}, ref __ret);");
+                break;
         }
 
+        sb.AppendLine("    }");
+    }
+
+    // ------------------------------------------------------------ varargs --
+
+    private static readonly HashSet<string> VarargLeadingKinds =
+        ["bool", "int", "enum", "float", "string", "stringname", "class", "variant"];
+
+    private static readonly HashSet<string> VarargRetKinds =
+        ["void", "bool", "int", "enum", "float", "string", "variant", "class"];
+
+    private static string ToVariantExpr(TypeRef t, string name) => t.Kind switch
+    {
+        "bool" => $"Variants.FromBool({name})",
+        "int" => $"Variants.FromInt(unchecked((long){name}))",
+        "enum" => $"Variants.FromInt((long){name})",
+        "float" => $"Variants.FromFloat({name})",
+        "string" => $"Variants.FromString({name})",
+        "stringname" => $"Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get({name}).Opaque)",
+        "class" => $"Variants.FromObject({name}?.NativePtr ?? 0)",
+        "variant" => $"Variants.NewCopy(in {name}.Native)",
+        _ => throw new InvalidOperationException(t.Kind),
+    };
+
+    /// <summary>
+    /// Vararg methods (emit_signal, call, rpc, ...) go through the variant
+    /// call path (object_method_bind_call) with a `params Variant[]` tail -
+    /// GodotSharp's exact shape (Call(method, params Variant[] args)).
+    /// </summary>
+    private static void EmitVarargMethod(StringBuilder sb, JsonElement m, ClassInfo info, HashSet<string> used,
+        bool staticClass, string gdName)
+    {
+        var csName = Pascal(gdName);
+        if (ReservedMembers.Contains(csName) || !used.Add(csName)) { _skipped++; return; }
+
+        var ret = m.TryGetProperty("return_value", out var rv)
+            ? Map(rv.GetProperty("type").GetString()!, rv.TryGetProperty("meta", out var rm) ? rm.GetString() : null)
+            : TypeRef.Void;
+        if (ret is null || !VarargRetKinds.Contains(ret.Kind)) { _skipped++; return; }
+
+        var lead = new List<(string name, TypeRef type)>();
+        if (m.TryGetProperty("arguments", out var margs))
+        {
+            foreach (var a in margs.EnumerateArray())
+            {
+                var t = Map(a.GetProperty("type").GetString()!, a.TryGetProperty("meta", out var am) ? am.GetString() : null);
+                if (t is null || !VarargLeadingKinds.Contains(t.Kind)) { _skipped++; return; }
+                lead.Add((Camel(a.GetProperty("name").GetString()!), t));
+            }
+        }
+
+        var jsonStatic = m.TryGetProperty("is_static", out var st) && st.GetBoolean();
+        var hash = m.GetProperty("hash").GetInt64();
+        var mbField = $"__mb_{gdName}";
+        var self = jsonStatic ? "0" : staticClass ? "SingletonPtr" : "NativePtr";
+        _emitted++;
+
+        var visibility = _internalAccessors.Contains((info.GdName, gdName)) ? "internal" : "public";
+        var k = lead.Count;
+
+        sb.AppendLine();
+        sb.AppendLine($"    private static nint {mbField};");
+        var paramList = string.Join(", ", lead.Select(a => $"{ParamType(a.type)} {a.name}").Append("params Variant[] args"));
+        sb.AppendLine($"    {visibility} {(staticClass || jsonStatic ? "static " : "")}{RetType(ret)} {csName}({paramList})");
+        sb.AppendLine("    {");
+        sb.AppendLine($"        var __mb = {mbField};");
+        sb.AppendLine("        if (__mb == 0)");
+        sb.AppendLine("        {");
+        sb.AppendLine($"            __mb = MethodBinds.Resolve(\"{info.GdName}\", \"{gdName}\", {hash});");
+        sb.AppendLine($"            if (__mb == 0) throw new MissingMethodException(\"{info.GdName}.{gdName} is not available in this engine build.\");");
+        sb.AppendLine($"            {mbField} = __mb;");
+        sb.AppendLine("        }");
+        sb.AppendLine($"        var __n = {k} + args.Length;");
+        sb.AppendLine("        var __ptrs = stackalloc nint[Math.Max(__n, 1)];");
+        if (k > 0)
+        {
+            sb.AppendLine($"        var __lead = stackalloc NativeVariant[{k}];");
+            for (var i = 0; i < k; i++)
+            {
+                sb.AppendLine($"        __lead[{i}] = {ToVariantExpr(lead[i].type, lead[i].name)};");
+                sb.AppendLine($"        __ptrs[{i}] = (nint)(__lead + {i});");
+            }
+        }
+        sb.AppendLine("        var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];");
+        sb.AppendLine("        for (var __i = 0; __i < args.Length; __i++)");
+        sb.AppendLine("        {");
+        sb.AppendLine("            __tail[__i] = args[__i].Native;");
+        sb.AppendLine($"            __ptrs[{k} + __i] = (nint)(__tail + __i);");
+        sb.AppendLine("        }");
+        sb.AppendLine("        NativeVariant __ret = default;");
+        sb.AppendLine("        GDExtensionCallError __err = default;");
+        sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindCall(__mb, {self}, (nint)__ptrs, __n, (nint)(&__ret), (nint)(&__err));");
+        if (k > 0)
+        {
+            sb.AppendLine($"        for (var __i = 0; __i < {k}; __i++) Variants.Destroy(ref __lead[__i]);");
+        }
+        sb.AppendLine("        if ((int)__err.error != 0)");
+        sb.AppendLine("        {");
+        sb.AppendLine("            Variants.Destroy(ref __ret);");
+        sb.AppendLine($"            throw new InvalidOperationException($\"{info.GdName}.{gdName} call failed: error={{(int)__err.error}} argument={{__err.argument}}\");");
+        sb.AppendLine("        }");
+        switch (ret.Kind)
+        {
+            case "void":
+                sb.AppendLine("        Variants.Destroy(ref __ret);");
+                break;
+            case "bool":
+                sb.AppendLine("        var __v = Variants.ToBool(in __ret);");
+                sb.AppendLine("        Variants.Destroy(ref __ret);");
+                sb.AppendLine("        return __v;");
+                break;
+            case "int" or "enum":
+                sb.AppendLine("        var __v = Variants.ToInt(in __ret);");
+                sb.AppendLine("        Variants.Destroy(ref __ret);");
+                sb.AppendLine($"        return unchecked(({ret.Cs})__v);");
+                break;
+            case "float":
+                sb.AppendLine("        var __v = Variants.ToFloat(in __ret);");
+                sb.AppendLine("        Variants.Destroy(ref __ret);");
+                sb.AppendLine($"        return ({ret.Cs})__v;");
+                break;
+            case "string":
+                sb.AppendLine("        var __v = Variants.ToManagedString(in __ret);");
+                sb.AppendLine("        Variants.Destroy(ref __ret);");
+                sb.AppendLine("        return __v;");
+                break;
+            case "class":
+                sb.AppendLine("        var __obj = Variants.ToObject(in __ret);");
+                sb.AppendLine("        Variants.Destroy(ref __ret);");
+                sb.AppendLine($"        return ({ret.Cs}?)InstanceBindings.GetOrCreate(__obj, adoptRef: false);");
+                break;
+            case "variant":
+                sb.AppendLine("        return new Variant(__ret);");
+                break;
+        }
         sb.AppendLine("    }");
     }
 
@@ -922,9 +1092,10 @@ public static class ApiGenerator
 
     // ---------------------------------------------------------- virtuals --
 
-    // Virtual dispatch does not yet marshal Variant/collection kinds (borrowed
-    // args would need copy semantics distinct from method calls).
-    private static bool VirtualKindOk(TypeRef t) => t.Kind is not ("variant" or "builtinref");
+    // Virtual dispatch does not yet marshal Variant/collection/callable kinds
+    // (borrowed args would need copy semantics distinct from method calls);
+    // packed arrays work (copy-in/copy-out like methods).
+    private static bool VirtualKindOk(TypeRef t) => t.Kind is not ("variant" or "builtinref" or "opaque16");
 
     private static void CollectVirtual(JsonElement m, string gdName, HashSet<string> used, List<VirtualInfo> virtuals)
     {
@@ -992,6 +1163,9 @@ public static class ApiGenerator
                 "stringname" => $"StringNames.Read(*(ulong*)args[{i}])",
                 "math" => $"*({a.type.Cs}*)args[{i}]",
                 "class" => $"({a.type.Cs}?)InstanceBindings.GetOrCreate(*(nint*)args[{i}], adoptRef: false)",
+                "packed" => a.type.PackedElem == "string"
+                    ? $"Packed.ReadStrings((Opaque16*)args[{i}])"
+                    : $"Packed.ReadPod<{a.type.PackedElem}>({PackedVt(a.type.PackedGd!)}, {PackedOpIndex(a.type.PackedGd!)}, (Opaque16*)args[{i}])",
                 _ => throw new InvalidOperationException(a.type.Kind),
             }).ToList();
             var call = $"{vi.CsName}({string.Join(", ", argExprs)})";
@@ -1026,6 +1200,13 @@ public static class ApiGenerator
                     break;
                 case "stringname":
                     sb.AppendLine($"            *(ulong*)ret = StringNames.CreateOwned({call} ?? \"\");");
+                    break;
+                case "packed":
+                    // Ownership transfers into the engine-destructed ret slot
+                    // (default-constructed packed there is empty - no leak).
+                    sb.AppendLine(vi.Ret.PackedElem == "string"
+                        ? $"            *(Opaque16*)ret = Packed.CreateStrings({call} ?? []);"
+                        : $"            *(Opaque16*)ret = Packed.CreatePod<{vi.Ret.PackedElem}>({PackedVt(vi.Ret.PackedGd!)}, {PackedOpIndex(vi.Ret.PackedGd!)}, {call} ?? []);");
                     break;
             }
 
@@ -1068,7 +1249,10 @@ public static class ApiGenerator
         if (t == "Array" || t.StartsWith("typedarray::")) return new TypeRef("builtinref", "Godot.Collections.Array");
         if (t == "Dictionary" || t.StartsWith("typeddictionary::")) return new TypeRef("builtinref", "Godot.Collections.Dictionary");
         if (t == "NodePath") return new TypeRef("builtinref", "NodePath");
-        return null; // callables, signals, packed arrays, native-struct pointers, ...
+        if (t == "Callable") return new TypeRef("opaque16", "Callable");
+        if (t == "Signal") return new TypeRef("opaque16", "Signal");
+        if (PackedElemMap.TryGetValue(t, out var elem)) return new TypeRef("packed", elem + "[]", elem, t);
+        return null; // native-struct pointers, rid arrays, ...
     }
 
     private static string ParamType(TypeRef t) => t.Kind == "class" ? t.Cs + "?" : t.Cs;

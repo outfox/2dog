@@ -253,6 +253,25 @@ public unsafe partial class JSONRPC : GodotObject
         InternalError = -32603,
     }
 
+    private static nint __mb_set_method;
+    public void SetMethod(string name, Callable callback)
+    {
+        var __mb = __mb_set_method;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JSONRPC", "set_method", 2137474292);
+            if (__mb == 0) throw new MissingMethodException("JSONRPC.set_method is not available in this engine build.");
+            __mb_set_method = __mb;
+        }
+        ulong __a0 = NativeString.Create(name);
+        var __a1 = callback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
+    }
+
     private static nint __mb_process_action;
     public Variant ProcessAction(Variant action, bool recurse = false)
     {
@@ -505,6 +524,48 @@ public static unsafe partial class JavaClassWrapper
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (JavaObject?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
+
+    private static nint __mb_create_sam_callback;
+    public static JavaObject? CreateSamCallback(string samInterface, Callable callable)
+    {
+        var __mb = __mb_create_sam_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JavaClassWrapper", "create_sam_callback", 2479014754);
+            if (__mb == 0) throw new MissingMethodException("JavaClassWrapper.create_sam_callback is not available in this engine build.");
+            __mb_create_sam_callback = __mb;
+        }
+        ulong __a0 = NativeString.Create(samInterface);
+        var __a1 = callable.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return (JavaObject?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_create_proxy;
+    public static JavaObject? CreateProxy(GodotObject? @object, string[] interfaces)
+    {
+        var __mb = __mb_create_proxy;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JavaClassWrapper", "create_proxy", 2694931752);
+            if (__mb == 0) throw new MissingMethodException("JavaClassWrapper.create_proxy is not available in this engine build.");
+            __mb_create_proxy = __mb;
+        }
+        nint __a0 = @object?.NativePtr ?? 0;
+        var __a1 = Packed.CreateStrings(interfaces);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a1);
+        return (JavaObject?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
 }
 
 public unsafe partial class JavaObject : RefCounted
@@ -599,6 +660,24 @@ public static unsafe partial class JavaScriptBridge
         return (JavaScriptObject?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_create_callback;
+    public static JavaScriptObject? CreateCallback(Callable callable)
+    {
+        var __mb = __mb_create_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JavaScriptBridge", "create_callback", 422818440);
+            if (__mb == 0) throw new MissingMethodException("JavaScriptBridge.create_callback is not available in this engine build.");
+            __mb_create_callback = __mb;
+        }
+        var __a0 = callable.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return (JavaScriptObject?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
     private static nint __mb_is_js_buffer;
     public static bool IsJsBuffer(JavaScriptObject? javascriptObject)
     {
@@ -615,6 +694,80 @@ public static unsafe partial class JavaScriptBridge
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_js_buffer_to_packed_byte_array;
+    public static byte[] JsBufferToPackedByteArray(JavaScriptObject? javascriptBuffer)
+    {
+        var __mb = __mb_js_buffer_to_packed_byte_array;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JavaScriptBridge", "js_buffer_to_packed_byte_array", 64409880);
+            if (__mb == 0) throw new MissingMethodException("JavaScriptBridge.js_buffer_to_packed_byte_array is not available in this engine build.");
+            __mb_js_buffer_to_packed_byte_array = __mb;
+        }
+        nint __a0 = javascriptBuffer?.NativePtr ?? 0;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_create_object;
+    public static Variant CreateObject(string @object, params Variant[] args)
+    {
+        var __mb = __mb_create_object;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JavaScriptBridge", "create_object", 3093893586);
+            if (__mb == 0) throw new MissingMethodException("JavaScriptBridge.create_object is not available in this engine build.");
+            __mb_create_object = __mb;
+        }
+        var __n = 1 + args.Length;
+        var __ptrs = stackalloc nint[Math.Max(__n, 1)];
+        var __lead = stackalloc NativeVariant[1];
+        __lead[0] = Variants.FromString(@object);
+        __ptrs[0] = (nint)(__lead + 0);
+        var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
+        for (var __i = 0; __i < args.Length; __i++)
+        {
+            __tail[__i] = args[__i].Native;
+            __ptrs[1 + __i] = (nint)(__tail + __i);
+        }
+        NativeVariant __ret = default;
+        GDExtensionCallError __err = default;
+        GdExtensionInterface.ObjectMethodBindCall(__mb, SingletonPtr, (nint)__ptrs, __n, (nint)(&__ret), (nint)(&__err));
+        for (var __i = 0; __i < 1; __i++) Variants.Destroy(ref __lead[__i]);
+        if ((int)__err.error != 0)
+        {
+            Variants.Destroy(ref __ret);
+            throw new InvalidOperationException($"JavaScriptBridge.create_object call failed: error={(int)__err.error} argument={__err.argument}");
+        }
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_download_buffer;
+    public static void DownloadBuffer(byte[] buffer, string name, string mime = "application/octet-stream")
+    {
+        var __mb = __mb_download_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JavaScriptBridge", "download_buffer", 3352272093);
+            if (__mb == 0) throw new MissingMethodException("JavaScriptBridge.download_buffer is not available in this engine build.");
+            __mb_download_buffer = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        ulong __a1 = NativeString.Create(name);
+        ulong __a2 = NativeString.Create(mime);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        NativeString.Destroy(ref __a1);
+        NativeString.Destroy(ref __a2);
     }
 
     private static nint __mb_pwa_needs_update;

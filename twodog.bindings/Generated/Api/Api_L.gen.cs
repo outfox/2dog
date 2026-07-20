@@ -91,6 +91,12 @@ public unsafe partial class Label : Control
         set => SetUppercase(value);
     }
 
+    public float[] TabStops
+    {
+        get => GetTabStops();
+        set => SetTabStops(value);
+    }
+
     public int LinesSkipped
     {
         get => GetLinesSkipped();
@@ -487,6 +493,38 @@ public unsafe partial class Label : Control
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_set_tab_stops;
+    internal void SetTabStops(float[] tabStops)
+    {
+        var __mb = __mb_set_tab_stops;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Label", "set_tab_stops", 2899603908);
+            if (__mb == 0) throw new MissingMethodException("Label.set_tab_stops is not available in this engine build.");
+            __mb_set_tab_stops = __mb;
+        }
+        var __a0 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, tabStops);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_tab_stops;
+    internal float[] GetTabStops()
+    {
+        var __mb = __mb_get_tab_stops;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Label", "get_tab_stops", 675695659);
+            if (__mb == 0) throw new MissingMethodException("Label.get_tab_stops is not available in this engine build.");
+            __mb_get_tab_stops = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_text_overrun_behavior;
@@ -5650,6 +5688,12 @@ public unsafe partial class Line2D : Node2D
         Stretch = 2,
     }
 
+    public Vector2[] Points
+    {
+        get => GetPoints();
+        set => SetPoints(value);
+    }
+
     public bool Closed
     {
         get => IsClosed();
@@ -5726,6 +5770,38 @@ public unsafe partial class Line2D : Node2D
     {
         get => GetAntialiased();
         set => SetAntialiased(value);
+    }
+
+    private static nint __mb_set_points;
+    internal void SetPoints(Vector2[] points)
+    {
+        var __mb = __mb_set_points;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Line2D", "set_points", 1509147220);
+            if (__mb == 0) throw new MissingMethodException("Line2D.set_points is not available in this engine build.");
+            __mb_set_points = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, points);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_points;
+    internal Vector2[] GetPoints()
+    {
+        var __mb = __mb_get_points;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Line2D", "get_points", 2961356807);
+            if (__mb == 0) throw new MissingMethodException("Line2D.get_points is not available in this engine build.");
+            __mb_get_points = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_point_position;

@@ -881,6 +881,29 @@ public unsafe partial class VideoStreamPlayback : Resource
         ClassRegistry.AttachNew(this, "VideoStreamPlayback");
     }
 
+    private static nint __mb_mix_audio;
+    public int MixAudio(int numFrames, float[] buffer, int offset = unchecked((int)(0)))
+    {
+        var __mb = __mb_mix_audio;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VideoStreamPlayback", "mix_audio", 93876830);
+            if (__mb == 0) throw new MissingMethodException("VideoStreamPlayback.mix_audio is not available in this engine build.");
+            __mb_mix_audio = __mb;
+        }
+        long __a0 = unchecked((long)numFrames);
+        var __a1 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, buffer);
+        long __a2 = unchecked((long)offset);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a1);
+        return unchecked((int)__ret);
+    }
+
     public virtual void _Stop() { }
 
     public virtual void _Play() { }
@@ -5210,6 +5233,24 @@ public unsafe partial class VisualShader : Shader
         return __ret;
     }
 
+    private static nint __mb_get_node_list;
+    public int[] GetNodeList(VisualShader.Type type)
+    {
+        var __mb = __mb_get_node_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VisualShader", "get_node_list", 2370592410);
+            if (__mb == 0) throw new MissingMethodException("VisualShader.get_node_list is not available in this engine build.");
+            __mb_get_node_list = __mb;
+        }
+        long __a0 = (long)type;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_get_valid_node_id;
     public int GetValidNodeId(VisualShader.Type type)
     {
@@ -6784,6 +6825,8 @@ public unsafe partial class VisualShaderNodeCustom : VisualShaderNode
 
     public virtual int _GetPropertyDefaultIndex(int index) => default!;
 
+    public virtual string[] _GetPropertyOptions(int index) => default!;
+
     public virtual string _GetFuncCode(Shader.Mode mode, VisualShader.Type type) => default!;
 
     public virtual string _GetGlobalCode(Shader.Mode mode) => default!;
@@ -6806,6 +6849,7 @@ public unsafe partial class VisualShaderNodeCustom : VisualShaderNode
     private static ulong __vsn_get_property_count;
     private static ulong __vsn_get_property_name;
     private static ulong __vsn_get_property_default_index;
+    private static ulong __vsn_get_property_options;
     private static ulong __vsn_get_func_code;
     private static ulong __vsn_get_global_code;
     private static ulong __vsn_is_highend;
@@ -6895,6 +6939,12 @@ public unsafe partial class VisualShaderNodeCustom : VisualShaderNode
         if (nameSn == __vsn_get_property_default_index)
         {
             *(long*)ret = unchecked((long)_GetPropertyDefaultIndex(unchecked((int)(*(long*)args[0]))));
+            return true;
+        }
+        if (__vsn_get_property_options == 0) __vsn_get_property_options = StringNames.Get("_get_property_options").Opaque;
+        if (nameSn == __vsn_get_property_options)
+        {
+            *(Opaque16*)ret = Packed.CreateStrings(_GetPropertyOptions(unchecked((int)(*(long*)args[0]))) ?? []);
             return true;
         }
         if (__vsn_get_func_code == 0) __vsn_get_func_code = StringNames.Get("_get_func_code").Opaque;
@@ -7625,6 +7675,12 @@ public unsafe partial class VisualShaderNodeFrame : VisualShaderNodeResizableBas
         set => SetAutoshrinkEnabled(value);
     }
 
+    public int[] AttachedNodes
+    {
+        get => GetAttachedNodes();
+        set => SetAttachedNodes(value);
+    }
+
     private static nint __mb_set_title;
     internal void SetTitle(string title)
     {
@@ -7780,6 +7836,38 @@ public unsafe partial class VisualShaderNodeFrame : VisualShaderNodeResizableBas
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_attached_nodes;
+    internal void SetAttachedNodes(int[] attachedNodes)
+    {
+        var __mb = __mb_set_attached_nodes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VisualShaderNodeFrame", "set_attached_nodes", 3614634198);
+            if (__mb == 0) throw new MissingMethodException("VisualShaderNodeFrame.set_attached_nodes is not available in this engine build.");
+            __mb_set_attached_nodes = __mb;
+        }
+        var __a0 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, attachedNodes);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_attached_nodes;
+    internal int[] GetAttachedNodes()
+    {
+        var __mb = __mb_get_attached_nodes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VisualShaderNodeFrame", "get_attached_nodes", 1930428628);
+            if (__mb == 0) throw new MissingMethodException("VisualShaderNodeFrame.get_attached_nodes is not available in this engine build.");
+            __mb_get_attached_nodes = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 }
 
@@ -8443,6 +8531,12 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
         set => SetStep(value);
     }
 
+    public string[] EnumNames
+    {
+        get => GetEnumNames();
+        set => SetEnumNames(value);
+    }
+
     public bool DefaultValueEnabled
     {
         get => IsDefaultValueEnabled();
@@ -8577,6 +8671,38 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_set_enum_names;
+    internal void SetEnumNames(string[] names)
+    {
+        var __mb = __mb_set_enum_names;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VisualShaderNodeIntParameter", "set_enum_names", 4015028928);
+            if (__mb == 0) throw new MissingMethodException("VisualShaderNodeIntParameter.set_enum_names is not available in this engine build.");
+            __mb_set_enum_names = __mb;
+        }
+        var __a0 = Packed.CreateStrings(names);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_enum_names;
+    internal string[] GetEnumNames()
+    {
+        var __mb = __mb_get_enum_names;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VisualShaderNodeIntParameter", "get_enum_names", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("VisualShaderNodeIntParameter.get_enum_names is not available in this engine build.");
+            __mb_get_enum_names = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_set_default_value_enabled;
@@ -12030,6 +12156,38 @@ public unsafe partial class VoxelGIData : Resource
         set => SetInterior(value);
     }
 
+    private static nint __mb_allocate;
+    public void Allocate(Transform3D toCellXform, Aabb aabb, Vector3 octreeSize, byte[] octreeCells, byte[] dataCells, byte[] distanceField, int[] levelCounts)
+    {
+        var __mb = __mb_allocate;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VoxelGIData", "allocate", 4041601946);
+            if (__mb == 0) throw new MissingMethodException("VoxelGIData.allocate is not available in this engine build.");
+            __mb_allocate = __mb;
+        }
+        var __a0 = toCellXform;
+        var __a1 = aabb;
+        var __a2 = octreeSize;
+        var __a3 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, octreeCells);
+        var __a4 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, dataCells);
+        var __a5 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, distanceField);
+        var __a6 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, levelCounts);
+        var __args = stackalloc nint[7];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a3);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a4);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a5);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a6);
+    }
+
     private static nint __mb_get_bounds;
     public Aabb GetBounds()
     {
@@ -12073,6 +12231,51 @@ public unsafe partial class VoxelGIData : Resource
         var __ret = default(Transform3D);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_get_octree_cells;
+    public byte[] GetOctreeCells()
+    {
+        var __mb = __mb_get_octree_cells;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VoxelGIData", "get_octree_cells", 2362200018);
+            if (__mb == 0) throw new MissingMethodException("VoxelGIData.get_octree_cells is not available in this engine build.");
+            __mb_get_octree_cells = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_get_data_cells;
+    public byte[] GetDataCells()
+    {
+        var __mb = __mb_get_data_cells;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VoxelGIData", "get_data_cells", 2362200018);
+            if (__mb == 0) throw new MissingMethodException("VoxelGIData.get_data_cells is not available in this engine build.");
+            __mb_get_data_cells = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_get_level_counts;
+    public int[] GetLevelCounts()
+    {
+        var __mb = __mb_get_level_counts;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VoxelGIData", "get_level_counts", 1930428628);
+            if (__mb == 0) throw new MissingMethodException("VoxelGIData.get_level_counts is not available in this engine build.");
+            __mb_get_level_counts = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_dynamic_range;

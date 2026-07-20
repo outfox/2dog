@@ -12,7 +12,7 @@ namespace Godot;
 
 public static class GeneratedVirtualNames
 {
-    public static readonly Dictionary<string, string> Map = new(975);
+    public static readonly Dictionary<string, string> Map = new(1044);
 
     static GeneratedVirtualNames()
     {
@@ -65,6 +65,8 @@ public static class GeneratedVirtualNames
         Map["_area_set_transform"] = "_AreaSetTransform";
         Map["_auto_indent_code"] = "_AutoIndentCode";
         Map["_backspace"] = "_Backspace";
+        Map["_begin_customize_resources"] = "_BeginCustomizeResources";
+        Map["_begin_customize_scenes"] = "_BeginCustomizeScenes";
         Map["_begin_handle_action"] = "_BeginHandleAction";
         Map["_body_add_collision_exception"] = "_BodyAddCollisionException";
         Map["_body_add_constant_central_force"] = "_BodyAddConstantCentralForce";
@@ -204,14 +206,18 @@ public static class GeneratedVirtualNames
         Map["_execute"] = "_Execute";
         Map["_exists"] = "_Exists";
         Map["_exit_tree"] = "_ExitTree";
+        Map["_export_begin"] = "_ExportBegin";
         Map["_export_end"] = "_ExportEnd";
+        Map["_export_file"] = "_ExportFile";
         Map["_export_pack"] = "_ExportPack";
+        Map["_export_pack_patch"] = "_ExportPackPatch";
         Map["_export_post"] = "_ExportPost";
         Map["_export_post_convert"] = "_ExportPostConvert";
         Map["_export_preflight"] = "_ExportPreflight";
         Map["_export_preserialize"] = "_ExportPreserialize";
         Map["_export_project"] = "_ExportProject";
         Map["_export_zip"] = "_ExportZip";
+        Map["_export_zip_patch"] = "_ExportZipPatch";
         Map["_fetch"] = "_Fetch";
         Map["_filter_neighbor"] = "_FilterNeighbor";
         Map["_finalize"] = "_Finalize";
@@ -240,6 +246,7 @@ public static class GeneratedVirtualNames
         Map["_font_get_global_oversampling"] = "_FontGetGlobalOversampling";
         Map["_font_get_glyph_advance"] = "_FontGetGlyphAdvance";
         Map["_font_get_glyph_index"] = "_FontGetGlyphIndex";
+        Map["_font_get_glyph_list"] = "_FontGetGlyphList";
         Map["_font_get_glyph_offset"] = "_FontGetGlyphOffset";
         Map["_font_get_glyph_size"] = "_FontGetGlyphSize";
         Map["_font_get_glyph_texture_idx"] = "_FontGetGlyphTextureIdx";
@@ -250,22 +257,32 @@ public static class GeneratedVirtualNames
         Map["_font_get_keep_rounding_remainders"] = "_FontGetKeepRoundingRemainders";
         Map["_font_get_kerning"] = "_FontGetKerning";
         Map["_font_get_language_support_override"] = "_FontGetLanguageSupportOverride";
+        Map["_font_get_language_support_overrides"] = "_FontGetLanguageSupportOverrides";
         Map["_font_get_msdf_pixel_range"] = "_FontGetMsdfPixelRange";
         Map["_font_get_msdf_size"] = "_FontGetMsdfSize";
         Map["_font_get_name"] = "_FontGetName";
         Map["_font_get_oversampling"] = "_FontGetOversampling";
+        Map["_font_get_palette_colors"] = "_FontGetPaletteColors";
         Map["_font_get_palette_count"] = "_FontGetPaletteCount";
+        Map["_font_get_palette_custom_colors"] = "_FontGetPaletteCustomColors";
         Map["_font_get_palette_name"] = "_FontGetPaletteName";
         Map["_font_get_scale"] = "_FontGetScale";
         Map["_font_get_script_support_override"] = "_FontGetScriptSupportOverride";
+        Map["_font_get_script_support_overrides"] = "_FontGetScriptSupportOverrides";
         Map["_font_get_spacing"] = "_FontGetSpacing";
         Map["_font_get_stretch"] = "_FontGetStretch";
         Map["_font_get_style"] = "_FontGetStyle";
         Map["_font_get_style_name"] = "_FontGetStyleName";
         Map["_font_get_subpixel_positioning"] = "_FontGetSubpixelPositioning";
+    }
+
+    private static void Init1()
+    {
         Map["_font_get_supported_chars"] = "_FontGetSupportedChars";
+        Map["_font_get_supported_glyphs"] = "_FontGetSupportedGlyphs";
         Map["_font_get_texture_count"] = "_FontGetTextureCount";
         Map["_font_get_texture_image"] = "_FontGetTextureImage";
+        Map["_font_get_texture_offsets"] = "_FontGetTextureOffsets";
         Map["_font_get_transform"] = "_FontGetTransform";
         Map["_font_get_underline_position"] = "_FontGetUnderlinePosition";
         Map["_font_get_underline_thickness"] = "_FontGetUnderlineThickness";
@@ -274,10 +291,6 @@ public static class GeneratedVirtualNames
         Map["_font_has_char"] = "_FontHasChar";
         Map["_font_is_allow_system_fallback"] = "_FontIsAllowSystemFallback";
         Map["_font_is_force_autohinter"] = "_FontIsForceAutohinter";
-    }
-
-    private static void Init1()
-    {
         Map["_font_is_language_supported"] = "_FontIsLanguageSupported";
         Map["_font_is_modulate_color_glyphs"] = "_FontIsModulateColorGlyphs";
         Map["_font_is_multichannel_signed_distance_field"] = "_FontIsMultichannelSignedDistanceField";
@@ -294,6 +307,7 @@ public static class GeneratedVirtualNames
         Map["_font_set_antialiasing"] = "_FontSetAntialiasing";
         Map["_font_set_ascent"] = "_FontSetAscent";
         Map["_font_set_baseline_offset"] = "_FontSetBaselineOffset";
+        Map["_font_set_data"] = "_FontSetData";
         Map["_font_set_descent"] = "_FontSetDescent";
         Map["_font_set_disable_embedded_bitmaps"] = "_FontSetDisableEmbeddedBitmaps";
         Map["_font_set_embolden"] = "_FontSetEmbolden";
@@ -318,6 +332,7 @@ public static class GeneratedVirtualNames
         Map["_font_set_multichannel_signed_distance_field"] = "_FontSetMultichannelSignedDistanceField";
         Map["_font_set_name"] = "_FontSetName";
         Map["_font_set_oversampling"] = "_FontSetOversampling";
+        Map["_font_set_palette_custom_colors"] = "_FontSetPaletteCustomColors";
         Map["_font_set_scale"] = "_FontSetScale";
         Map["_font_set_script_support_override"] = "_FontSetScriptSupportOverride";
         Map["_font_set_spacing"] = "_FontSetSpacing";
@@ -326,6 +341,7 @@ public static class GeneratedVirtualNames
         Map["_font_set_style_name"] = "_FontSetStyleName";
         Map["_font_set_subpixel_positioning"] = "_FontSetSubpixelPositioning";
         Map["_font_set_texture_image"] = "_FontSetTextureImage";
+        Map["_font_set_texture_offsets"] = "_FontSetTextureOffsets";
         Map["_font_set_transform"] = "_FontSetTransform";
         Map["_font_set_underline_position"] = "_FontSetUnderlinePosition";
         Map["_font_set_underline_thickness"] = "_FontSetUnderlineThickness";
@@ -343,8 +359,14 @@ public static class GeneratedVirtualNames
         Map["_generate_scene_node"] = "_GenerateSceneNode";
         Map["_generate_small_preview_automatically"] = "_GenerateSmallPreviewAutomatically";
         Map["_get_aabb"] = "_GetAabb";
+        Map["_get_accessibility_configuration_warnings"] = "_GetAccessibilityConfigurationWarnings";
         Map["_get_accessibility_container_name"] = "_GetAccessibilityContainerName";
+        Map["_get_allowed_size_flags_horizontal"] = "_GetAllowedSizeFlagsHorizontal";
+        Map["_get_allowed_size_flags_vertical"] = "_GetAllowedSizeFlagsVertical";
         Map["_get_anchor_detection_is_enabled"] = "_GetAnchorDetectionIsEnabled";
+        Map["_get_android_dependencies"] = "_GetAndroidDependencies";
+        Map["_get_android_dependencies_maven_repos"] = "_GetAndroidDependenciesMavenRepos";
+        Map["_get_android_libraries"] = "_GetAndroidLibraries";
         Map["_get_android_manifest_activity_element_contents"] = "_GetAndroidManifestActivityElementContents";
         Map["_get_android_manifest_application_element_contents"] = "_GetAndroidManifestApplicationElementContents";
         Map["_get_android_manifest_element_contents"] = "_GetAndroidManifestElementContents";
@@ -356,10 +378,13 @@ public static class GeneratedVirtualNames
         Map["_get_bar_beats"] = "_GetBarBeats";
         Map["_get_base_script"] = "_GetBaseScript";
         Map["_get_beat_count"] = "_GetBeatCount";
+        Map["_get_binary_extensions"] = "_GetBinaryExtensions";
         Map["_get_blend_shape_count"] = "_GetBlendShapeCount";
         Map["_get_blend_shape_name"] = "_GetBlendShapeName";
         Map["_get_bpm"] = "_GetBpm";
+        Map["_get_breakpoints"] = "_GetBreakpoints";
         Map["_get_buffered_amount"] = "_GetBufferedAmount";
+        Map["_get_build_dependencies"] = "_GetBuildDependencies";
         Map["_get_cam_projection"] = "_GetCamProjection";
         Map["_get_cam_transform"] = "_GetCamTransform";
         Map["_get_camera_attributes"] = "_GetCameraAttributes";
@@ -373,15 +398,19 @@ public static class GeneratedVirtualNames
         Map["_get_channels"] = "_GetChannels";
         Map["_get_child_by_name"] = "_GetChildByName";
         Map["_get_class_icon_path"] = "_GetClassIconPath";
+        Map["_get_classes_used"] = "_GetClassesUsed";
         Map["_get_closest_point_to_object_volume"] = "_GetClosestPointToObjectVolume";
         Map["_get_collision_layer"] = "_GetCollisionLayer";
         Map["_get_collision_mask"] = "_GetCollisionMask";
         Map["_get_color_texture"] = "_GetColorTexture";
+        Map["_get_comment_delimiters"] = "_GetCommentDelimiters";
         Map["_get_component_type"] = "_GetComponentType";
         Map["_get_composition_layer"] = "_GetCompositionLayer";
         Map["_get_composition_layer_count"] = "_GetCompositionLayerCount";
         Map["_get_composition_layer_order"] = "_GetCompositionLayerOrder";
         Map["_get_configuration"] = "_GetConfiguration";
+        Map["_get_configuration_warnings"] = "_GetConfigurationWarnings";
+        Map["_get_connection_line"] = "_GetConnectionLine";
         Map["_get_connection_state"] = "_GetConnectionState";
         Map["_get_connection_status"] = "_GetConnectionStatus";
         Map["_get_constant_force"] = "_GetConstantForce";
@@ -404,17 +433,22 @@ public static class GeneratedVirtualNames
         Map["_get_customization_configuration_hash"] = "_GetCustomizationConfigurationHash";
         Map["_get_debug_protocol"] = "_GetDebugProtocol";
         Map["_get_default_input_port"] = "_GetDefaultInputPort";
+        Map["_get_dependencies"] = "_GetDependencies";
         Map["_get_depth"] = "_GetDepth";
         Map["_get_depth_texture"] = "_GetDepthTexture";
         Map["_get_description"] = "_GetDescription";
         Map["_get_device_architecture"] = "_GetDeviceArchitecture";
         Map["_get_doc_class_name"] = "_GetDocClassName";
+        Map["_get_doc_comment_delimiters"] = "_GetDocCommentDelimiters";
         Map["_get_draw_rect"] = "_GetDrawRect";
         Map["_get_environment"] = "_GetEnvironment";
+        Map["_get_export_features"] = "_GetExportFeatures";
         Map["_get_export_option_visibility"] = "_GetExportOptionVisibility";
         Map["_get_export_option_warning"] = "_GetExportOptionWarning";
         Map["_get_extension"] = "_GetExtension";
+        Map["_get_extensions"] = "_GetExtensions";
         Map["_get_features"] = "_GetFeatures";
+        Map["_get_file_extensions"] = "_GetFileExtensions";
         Map["_get_focused_accessibility_element"] = "_GetFocusedAccessibilityElement";
         Map["_get_format"] = "_GetFormat";
         Map["_get_format_version"] = "_GetFormatVersion";
@@ -441,6 +475,7 @@ public static class GeneratedVirtualNames
         Map["_get_inverse_inertia"] = "_GetInverseInertia";
         Map["_get_inverse_inertia_tensor"] = "_GetInverseInertiaTensor";
         Map["_get_inverse_mass"] = "_GetInverseMass";
+        Map["_get_ip_modification"] = "_GetIpModification";
         Map["_get_label"] = "_GetLabel";
         Map["_get_language"] = "_GetLanguage";
         Map["_get_layer_data"] = "_GetLayerData";
@@ -473,25 +508,38 @@ public static class GeneratedVirtualNames
         Map["_get_packet_channel"] = "_GetPacketChannel";
         Map["_get_packet_mode"] = "_GetPacketMode";
         Map["_get_packet_peer"] = "_GetPacketPeer";
+        Map["_get_packet_script"] = "_GetPacketScript";
+        Map["_get_peer_ids"] = "_GetPeerIds";
+        Map["_get_platform_features"] = "_GetPlatformFeatures";
+        Map["_get_play_area"] = "_GetPlayArea";
         Map["_get_play_area_mode"] = "_GetPlayAreaMode";
         Map["_get_playback_position"] = "_GetPlaybackPosition";
         Map["_get_plugin_icon"] = "_GetPluginIcon";
         Map["_get_plugin_name"] = "_GetPluginName";
         Map["_get_plural_message"] = "_GetPluralMessage";
         Map["_get_preset_count"] = "_GetPresetCount";
+        Map["_get_preset_features"] = "_GetPresetFeatures";
         Map["_get_preset_name"] = "_GetPresetName";
         Map["_get_principal_inertia_axes"] = "_GetPrincipalInertiaAxes";
         Map["_get_priority"] = "_GetPriority";
         Map["_get_process_info"] = "_GetProcessInfo";
+        Map["_get_projection_for_view"] = "_GetProjectionForView";
         Map["_get_property_count"] = "_GetPropertyCount";
         Map["_get_property_default_index"] = "_GetPropertyDefaultIndex";
         Map["_get_property_name"] = "_GetPropertyName";
+        Map["_get_property_options"] = "_GetPropertyOptions";
+    }
+
+    private static void Init2()
+    {
         Map["_get_protocol"] = "_GetProtocol";
         Map["_get_ready_state"] = "_GetReadyState";
+        Map["_get_recognized_extensions"] = "_GetRecognizedExtensions";
         Map["_get_remote_sender_id"] = "_GetRemoteSenderId";
         Map["_get_render_scene_buffers"] = "_GetRenderSceneBuffers";
         Map["_get_render_scene_data"] = "_GetRenderSceneData";
         Map["_get_render_target_size"] = "_GetRenderTargetSize";
+        Map["_get_reserved_words"] = "_GetReservedWords";
         Map["_get_resource_script_class"] = "_GetResourceScriptClass";
         Map["_get_resource_type"] = "_GetResourceType";
         Map["_get_resource_uid"] = "_GetResourceUid";
@@ -499,6 +547,7 @@ public static class GeneratedVirtualNames
         Map["_get_rid"] = "_GetRid";
         Map["_get_run_icon"] = "_GetRunIcon";
         Map["_get_save_extension"] = "_GetSaveExtension";
+        Map["_get_saveable_image_formats"] = "_GetSaveableImageFormats";
         Map["_get_shader_mode"] = "_GetShaderMode";
         Map["_get_shader_rid"] = "_GetShaderRid";
         Map["_get_signaling_state"] = "_GetSignalingState";
@@ -507,10 +556,16 @@ public static class GeneratedVirtualNames
         Map["_get_step"] = "_GetStep";
         Map["_get_stream_name"] = "_GetStreamName";
         Map["_get_stream_sampling_rate"] = "_GetStreamSamplingRate";
+        Map["_get_string_delimiters"] = "_GetStringDelimiters";
         Map["_get_structure_data"] = "_GetStructureData";
         Map["_get_subgizmo_transform"] = "_GetSubgizmoTransform";
+        Map["_get_suggested_pose_names"] = "_GetSuggestedPoseNames";
+        Map["_get_suggested_tracker_names"] = "_GetSuggestedTrackerNames";
+        Map["_get_support_data"] = "_GetSupportData";
         Map["_get_support_data_filename"] = "_GetSupportDataFilename";
         Map["_get_support_data_info"] = "_GetSupportDataInfo";
+        Map["_get_supported_extensions"] = "_GetSupportedExtensions";
+        Map["_get_supported_languages"] = "_GetSupportedLanguages";
         Map["_get_surface_count"] = "_GetSurfaceCount";
         Map["_get_texture"] = "_GetTexture";
         Map["_get_tooltip"] = "_GetTooltip";
@@ -528,10 +583,6 @@ public static class GeneratedVirtualNames
         Map["_get_unique_id"] = "_GetUniqueId";
         Map["_get_unsaved_status"] = "_GetUnsavedStatus";
         Map["_get_vcs_name"] = "_GetVcsName";
-    }
-
-    private static void Init2()
-    {
         Map["_get_velocity_at_local_position"] = "_GetVelocityAtLocalPosition";
         Map["_get_velocity_texture"] = "_GetVelocityTexture";
         Map["_get_view_count"] = "_GetViewCount";
@@ -578,6 +629,7 @@ public static class GeneratedVirtualNames
         Map["_import_post"] = "_ImportPost";
         Map["_import_post_parse"] = "_ImportPostParse";
         Map["_import_pre_generate"] = "_ImportPreGenerate";
+        Map["_import_preflight"] = "_ImportPreflight";
         Map["_inherits_script"] = "_InheritsScript";
         Map["_init"] = "_Init";
         Map["_initialize"] = "_Initialize";
@@ -591,6 +643,7 @@ public static class GeneratedVirtualNames
         Map["_is_abstract"] = "_IsAbstract";
         Map["_is_active"] = "_IsActive";
         Map["_is_available"] = "_IsAvailable";
+        Map["_is_confusable"] = "_IsConfusable";
         Map["_is_control_flow_keyword"] = "_IsControlFlowKeyword";
         Map["_is_executable"] = "_IsExecutable";
         Map["_is_flushing_queries"] = "_IsFlushingQueries";
@@ -642,6 +695,7 @@ public static class GeneratedVirtualNames
         Map["_load_support_data"] = "_LoadSupportData";
         Map["_log_message"] = "_LogMessage";
         Map["_make_custom_tooltip"] = "_MakeCustomTooltip";
+        Map["_make_function"] = "_MakeFunction";
         Map["_make_template"] = "_MakeTemplate";
         Map["_make_visible"] = "_MakeVisible";
         Map["_mouse_enter"] = "_MouseEnter";
@@ -675,6 +729,7 @@ public static class GeneratedVirtualNames
         Map["_parse_category"] = "_ParseCategory";
         Map["_parse_end"] = "_ParseEnd";
         Map["_parse_group"] = "_ParseGroup";
+        Map["_parse_image_data"] = "_ParseImageData";
         Map["_parse_number"] = "_ParseNumber";
         Map["_parse_property"] = "_ParseProperty";
         Map["_paste"] = "_Paste";
@@ -692,6 +747,7 @@ public static class GeneratedVirtualNames
         Map["_play"] = "_Play";
         Map["_poll"] = "_Poll";
         Map["_poll_export"] = "_PollExport";
+        Map["_popup_menu"] = "_PopupMenu";
         Map["_post_draw_viewport"] = "_PostDrawViewport";
         Map["_post_import"] = "_PostImport";
         Map["_post_process"] = "_PostProcess";
@@ -703,6 +759,7 @@ public static class GeneratedVirtualNames
         Map["_pressed"] = "_Pressed";
         Map["_print_view_configuration_info"] = "_PrintViewConfigurationInfo";
         Map["_process"] = "_Process";
+        Map["_process_animation_node"] = "_ProcessAnimationNode";
         Map["_process_custom_fx"] = "_ProcessCustomFx";
         Map["_process_modification"] = "_ProcessModification";
         Map["_process_modification_with_delta"] = "_ProcessModificationWithDelta";
@@ -713,6 +770,7 @@ public static class GeneratedVirtualNames
         Map["_propagate_input_event"] = "_PropagateInputEvent";
         Map["_pull"] = "_Pull";
         Map["_push"] = "_Push";
+        Map["_put_packet_script"] = "_PutPacketScript";
         Map["_query"] = "_Query";
         Map["_ready"] = "_Ready";
         Map["_recognize"] = "_Recognize";
@@ -724,12 +782,17 @@ public static class GeneratedVirtualNames
         Map["_reload_all_scripts"] = "_ReloadAllScripts";
         Map["_reload_tool_script"] = "_ReloadToolScript";
         Map["_remove_branch"] = "_RemoveBranch";
+    }
+
+    private static void Init3()
+    {
         Map["_remove_named_global_constant"] = "_RemoveNamedGlobalConstant";
         Map["_remove_remote"] = "_RemoveRemote";
         Map["_render_callback"] = "_RenderCallback";
         Map["_request_code_completion"] = "_RequestCodeCompletion";
         Map["_reset_state"] = "_ResetState";
         Map["_run"] = "_Run";
+        Map["_run_scene"] = "_RunScene";
         Map["_save"] = "_Save";
         Map["_save_external_data"] = "_SaveExternalData";
         Map["_save_image_at_path"] = "_SaveImageAtPath";
@@ -782,10 +845,6 @@ public static class GeneratedVirtualNames
         Map["_setup_session"] = "_SetupSession";
         Map["_shape_get_custom_solver_bias"] = "_ShapeGetCustomSolverBias";
         Map["_shape_get_margin"] = "_ShapeGetMargin";
-    }
-
-    private static void Init3()
-    {
         Map["_shape_get_type"] = "_ShapeGetType";
         Map["_shape_set_custom_solver_bias"] = "_ShapeSetCustomSolverBias";
         Map["_shape_set_margin"] = "_ShapeSetMargin";
@@ -807,6 +866,7 @@ public static class GeneratedVirtualNames
         Map["_shaped_text_duplicate"] = "_ShapedTextDuplicate";
         Map["_shaped_text_fit_to_width"] = "_ShapedTextFitToWidth";
         Map["_shaped_text_get_ascent"] = "_ShapedTextGetAscent";
+        Map["_shaped_text_get_character_breaks"] = "_ShapedTextGetCharacterBreaks";
         Map["_shaped_text_get_custom_ellipsis"] = "_ShapedTextGetCustomEllipsis";
         Map["_shaped_text_get_custom_punctuation"] = "_ShapedTextGetCustomPunctuation";
         Map["_shaped_text_get_descent"] = "_ShapedTextGetDescent";
@@ -817,17 +877,21 @@ public static class GeneratedVirtualNames
         Map["_shaped_text_get_glyph_count"] = "_ShapedTextGetGlyphCount";
         Map["_shaped_text_get_grapheme_bounds"] = "_ShapedTextGetGraphemeBounds";
         Map["_shaped_text_get_inferred_direction"] = "_ShapedTextGetInferredDirection";
+        Map["_shaped_text_get_line_breaks"] = "_ShapedTextGetLineBreaks";
+        Map["_shaped_text_get_line_breaks_adv"] = "_ShapedTextGetLineBreaksAdv";
         Map["_shaped_text_get_orientation"] = "_ShapedTextGetOrientation";
         Map["_shaped_text_get_parent"] = "_ShapedTextGetParent";
         Map["_shaped_text_get_preserve_control"] = "_ShapedTextGetPreserveControl";
         Map["_shaped_text_get_preserve_invalid"] = "_ShapedTextGetPreserveInvalid";
         Map["_shaped_text_get_range"] = "_ShapedTextGetRange";
+        Map["_shaped_text_get_selection"] = "_ShapedTextGetSelection";
         Map["_shaped_text_get_size"] = "_ShapedTextGetSize";
         Map["_shaped_text_get_spacing"] = "_ShapedTextGetSpacing";
         Map["_shaped_text_get_trim_pos"] = "_ShapedTextGetTrimPos";
         Map["_shaped_text_get_underline_position"] = "_ShapedTextGetUnderlinePosition";
         Map["_shaped_text_get_underline_thickness"] = "_ShapedTextGetUnderlineThickness";
         Map["_shaped_text_get_width"] = "_ShapedTextGetWidth";
+        Map["_shaped_text_get_word_breaks"] = "_ShapedTextGetWordBreaks";
         Map["_shaped_text_hit_test_grapheme"] = "_ShapedTextHitTestGrapheme";
         Map["_shaped_text_hit_test_position"] = "_ShapedTextHitTestPosition";
         Map["_shaped_text_is_ready"] = "_ShapedTextIsReady";
@@ -845,6 +909,7 @@ public static class GeneratedVirtualNames
         Map["_shaped_text_set_spacing"] = "_ShapedTextSetSpacing";
         Map["_shaped_text_shape"] = "_ShapedTextShape";
         Map["_shaped_text_substr"] = "_ShapedTextSubstr";
+        Map["_shaped_text_tab_align"] = "_ShapedTextTabAlign";
         Map["_shaped_text_update_breaks"] = "_ShapedTextUpdateBreaks";
         Map["_shaped_text_update_justification_ops"] = "_ShapedTextUpdateJustificationOps";
         Map["_shortcut_input"] = "_ShortcutInput";
@@ -892,6 +957,7 @@ public static class GeneratedVirtualNames
         Map["_soft_body_update_rendering_server"] = "_SoftBodyUpdateRenderingServer";
         Map["_space_create"] = "_SpaceCreate";
         Map["_space_get_contact_count"] = "_SpaceGetContactCount";
+        Map["_space_get_contacts"] = "_SpaceGetContacts";
         Map["_space_get_direct_state"] = "_SpaceGetDirectState";
         Map["_space_get_param"] = "_SpaceGetParam";
         Map["_space_is_active"] = "_SpaceIsActive";
@@ -904,6 +970,8 @@ public static class GeneratedVirtualNames
         Map["_start"] = "_Start";
         Map["_step"] = "_Step";
         Map["_stop"] = "_Stop";
+        Map["_string_get_character_breaks"] = "_StringGetCharacterBreaks";
+        Map["_string_get_word_breaks"] = "_StringGetWordBreaks";
         Map["_string_to_lower"] = "_StringToLower";
         Map["_string_to_title"] = "_StringToTitle";
         Map["_string_to_upper"] = "_StringToUpper";
@@ -935,6 +1003,7 @@ public static class GeneratedVirtualNames
         Map["_unreference_oversampling_level"] = "_UnreferenceOversamplingLevel";
         Map["_unstage_file"] = "_UnstageFile";
         Map["_update"] = "_Update";
+        Map["_update_android_prebuilt_manifest"] = "_UpdateAndroidPrebuiltManifest";
         Map["_update_cache"] = "_UpdateCache";
         Map["_update_exports"] = "_UpdateExports";
         Map["_update_layout"] = "_UpdateLayout";

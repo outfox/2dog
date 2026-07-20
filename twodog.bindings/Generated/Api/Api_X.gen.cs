@@ -374,6 +374,25 @@ public unsafe partial class XMLParser : RefCounted
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
+
+    private static nint __mb_open_buffer;
+    public Error OpenBuffer(byte[] buffer)
+    {
+        var __mb = __mb_open_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("XMLParser", "open_buffer", 680677267);
+            if (__mb == 0) throw new MissingMethodException("XMLParser.open_buffer is not available in this engine build.");
+            __mb_open_buffer = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        return (Error)__ret;
+    }
 }
 
 public unsafe partial class XRAnchor3D : XRNode3D
@@ -1175,6 +1194,12 @@ public unsafe partial class XRFaceTracker : XRTracker
         Max = 143,
     }
 
+    public float[] BlendShapes
+    {
+        get => GetBlendShapes();
+        set => SetBlendShapes(value);
+    }
+
     private static nint __mb_get_blend_shape;
     public float GetBlendShape(XRFaceTracker.BlendShapeEntry blendShape)
     {
@@ -1209,6 +1234,38 @@ public unsafe partial class XRFaceTracker : XRTracker
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_blend_shapes;
+    internal float[] GetBlendShapes()
+    {
+        var __mb = __mb_get_blend_shapes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("XRFaceTracker", "get_blend_shapes", 675695659);
+            if (__mb == 0) throw new MissingMethodException("XRFaceTracker.get_blend_shapes is not available in this engine build.");
+            __mb_get_blend_shapes = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_set_blend_shapes;
+    internal void SetBlendShapes(float[] weights)
+    {
+        var __mb = __mb_set_blend_shapes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("XRFaceTracker", "set_blend_shapes", 2899603908);
+            if (__mb == 0) throw new MissingMethodException("XRFaceTracker.set_blend_shapes is not available in this engine build.");
+            __mb_set_blend_shapes = __mb;
+        }
+        var __a0 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, weights);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a0);
     }
 }
 
@@ -1932,6 +1989,21 @@ public unsafe partial class XRInterface : RefCounted
         return __ret != 0;
     }
 
+    private static nint __mb_get_play_area;
+    public Vector3[] GetPlayArea()
+    {
+        var __mb = __mb_get_play_area;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("XRInterface", "get_play_area", 497664490);
+            if (__mb == 0) throw new MissingMethodException("XRInterface.get_play_area is not available in this engine build.");
+            __mb_get_play_area = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_get_anchor_detection_is_enabled;
     internal bool GetAnchorDetectionIsEnabled()
     {
@@ -2253,6 +2325,8 @@ public unsafe partial class XRInterfaceExtension : XRInterface
 
     public virtual bool _SetPlayAreaMode(XRInterface.PlayAreaMode mode) => default!;
 
+    public virtual Vector3[] _GetPlayArea() => default!;
+
     public virtual Vector2 _GetRenderTargetSize() => default!;
 
     public virtual uint _GetViewCount() => default!;
@@ -2260,6 +2334,8 @@ public unsafe partial class XRInterfaceExtension : XRInterface
     public virtual Transform3D _GetCameraTransform() => default!;
 
     public virtual Transform3D _GetTransformForView(uint view, Transform3D camTransform) => default!;
+
+    public virtual double[] _GetProjectionForView(uint view, double aspect, double zNear, double zFar) => default!;
 
     public virtual Rid _GetVrsTexture() => default!;
 
@@ -2274,6 +2350,10 @@ public unsafe partial class XRInterfaceExtension : XRInterface
     public virtual void _PostDrawViewport(Rid renderTarget, Rect2 screenRect) { }
 
     public virtual void _EndFrame() { }
+
+    public virtual string[] _GetSuggestedTrackerNames() => default!;
+
+    public virtual string[] _GetSuggestedPoseNames(string trackerName) => default!;
 
     public virtual XRInterface.TrackingStatus _GetTrackingStatus() => default!;
 
@@ -2299,10 +2379,12 @@ public unsafe partial class XRInterfaceExtension : XRInterface
     private static ulong __vsn_supports_play_area_mode;
     private static ulong __vsn_get_play_area_mode;
     private static ulong __vsn_set_play_area_mode;
+    private static ulong __vsn_get_play_area;
     private static ulong __vsn_get_render_target_size;
     private static ulong __vsn_get_view_count;
     private static ulong __vsn_get_camera_transform;
     private static ulong __vsn_get_transform_for_view;
+    private static ulong __vsn_get_projection_for_view;
     private static ulong __vsn_get_vrs_texture;
     private static ulong __vsn_get_vrs_texture_format;
     private static ulong __vsn_process;
@@ -2310,6 +2392,8 @@ public unsafe partial class XRInterfaceExtension : XRInterface
     private static ulong __vsn_pre_draw_viewport;
     private static ulong __vsn_post_draw_viewport;
     private static ulong __vsn_end_frame;
+    private static ulong __vsn_get_suggested_tracker_names;
+    private static ulong __vsn_get_suggested_pose_names;
     private static ulong __vsn_get_tracking_status;
     private static ulong __vsn_trigger_haptic_pulse;
     private static ulong __vsn_get_anchor_detection_is_enabled;
@@ -2369,6 +2453,12 @@ public unsafe partial class XRInterfaceExtension : XRInterface
             *(byte*)ret = _SetPlayAreaMode((XRInterface.PlayAreaMode)(*(long*)args[0])) ? (byte)1 : (byte)0;
             return true;
         }
+        if (__vsn_get_play_area == 0) __vsn_get_play_area = StringNames.Get("_get_play_area").Opaque;
+        if (nameSn == __vsn_get_play_area)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, _GetPlayArea() ?? []);
+            return true;
+        }
         if (__vsn_get_render_target_size == 0) __vsn_get_render_target_size = StringNames.Get("_get_render_target_size").Opaque;
         if (nameSn == __vsn_get_render_target_size)
         {
@@ -2391,6 +2481,12 @@ public unsafe partial class XRInterfaceExtension : XRInterface
         if (nameSn == __vsn_get_transform_for_view)
         {
             *(Transform3D*)ret = _GetTransformForView(unchecked((uint)(*(long*)args[0])), *(Transform3D*)args[1]);
+            return true;
+        }
+        if (__vsn_get_projection_for_view == 0) __vsn_get_projection_for_view = StringNames.Get("_get_projection_for_view").Opaque;
+        if (nameSn == __vsn_get_projection_for_view)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<double>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT64_ARRAY, GdExtensionInterface.PackedFloat64ArrayOperatorIndex, _GetProjectionForView(unchecked((uint)(*(long*)args[0])), *(double*)args[1], *(double*)args[2], *(double*)args[3]) ?? []);
             return true;
         }
         if (__vsn_get_vrs_texture == 0) __vsn_get_vrs_texture = StringNames.Get("_get_vrs_texture").Opaque;
@@ -2433,6 +2529,18 @@ public unsafe partial class XRInterfaceExtension : XRInterface
         if (nameSn == __vsn_end_frame)
         {
             _EndFrame();
+            return true;
+        }
+        if (__vsn_get_suggested_tracker_names == 0) __vsn_get_suggested_tracker_names = StringNames.Get("_get_suggested_tracker_names").Opaque;
+        if (nameSn == __vsn_get_suggested_tracker_names)
+        {
+            *(Opaque16*)ret = Packed.CreateStrings(_GetSuggestedTrackerNames() ?? []);
+            return true;
+        }
+        if (__vsn_get_suggested_pose_names == 0) __vsn_get_suggested_pose_names = StringNames.Get("_get_suggested_pose_names").Opaque;
+        if (nameSn == __vsn_get_suggested_pose_names)
+        {
+            *(Opaque16*)ret = Packed.CreateStrings(_GetSuggestedPoseNames(StringNames.Read(*(ulong*)args[0])) ?? []);
             return true;
         }
         if (__vsn_get_tracking_status == 0) __vsn_get_tracking_status = StringNames.Get("_get_tracking_status").Opaque;
@@ -3863,6 +3971,27 @@ public unsafe partial class XRVRS : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_make_vrs_texture;
+    public Rid MakeVrsTexture(Vector2 targetSize, Vector2[] eyeFoci)
+    {
+        var __mb = __mb_make_vrs_texture;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("XRVRS", "make_vrs_texture", 3647044786);
+            if (__mb == 0) throw new MissingMethodException("XRVRS.make_vrs_texture is not available in this engine build.");
+            __mb_make_vrs_texture = __mb;
+        }
+        var __a0 = targetSize;
+        var __a1 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, eyeFoci);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        var __ret = default(Rid);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a1);
+        return __ret;
     }
 }
 

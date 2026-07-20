@@ -3891,6 +3891,22 @@ public unsafe partial class TextEdit : Control
         return __ret;
     }
 
+    private static nint __mb_set_tooltip_request_func;
+    public void SetTooltipRequestFunc(Callable callback)
+    {
+        var __mb = __mb_set_tooltip_request_func;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextEdit", "set_tooltip_request_func", 1611583062);
+            if (__mb == 0) throw new MissingMethodException("TextEdit.set_tooltip_request_func is not available in this engine build.");
+            __mb_set_tooltip_request_func = __mb;
+        }
+        var __a0 = callback.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_get_local_mouse_pos;
     public Vector2 GetLocalMousePos()
     {
@@ -4334,6 +4350,24 @@ public unsafe partial class TextEdit : Control
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_sorted_carets;
+    public int[] GetSortedCarets(bool includeIgnoredCarets = false)
+    {
+        var __mb = __mb_get_sorted_carets;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextEdit", "get_sorted_carets", 2131714034);
+            if (__mb == 0) throw new MissingMethodException("TextEdit.get_sorted_carets is not available in this engine build.");
+            __mb_get_sorted_carets = __mb;
+        }
+        byte __a0 = includeIgnoredCarets ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_collapse_carets;
@@ -5317,6 +5351,24 @@ public unsafe partial class TextEdit : Control
         return unchecked((int)__ret);
     }
 
+    private static nint __mb_get_line_wrapped_text;
+    public string[] GetLineWrappedText(int line)
+    {
+        var __mb = __mb_get_line_wrapped_text;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextEdit", "get_line_wrapped_text", 647634434);
+            if (__mb == 0) throw new MissingMethodException("TextEdit.get_line_wrapped_text is not available in this engine build.");
+            __mb_get_line_wrapped_text = __mb;
+        }
+        long __a0 = unchecked((long)line);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_set_smooth_scroll_enabled;
     internal void SetSmoothScrollEnabled(bool enable)
     {
@@ -6142,6 +6194,24 @@ public unsafe partial class TextEdit : Control
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_set_gutter_custom_draw;
+    public void SetGutterCustomDraw(int column, Callable drawCallback)
+    {
+        var __mb = __mb_set_gutter_custom_draw;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextEdit", "set_gutter_custom_draw", 957362965);
+            if (__mb == 0) throw new MissingMethodException("TextEdit.set_gutter_custom_draw is not available in this engine build.");
+            __mb_set_gutter_custom_draw = __mb;
+        }
+        long __a0 = unchecked((long)column);
+        var __a1 = drawCallback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_get_total_gutter_width;
     public int GetTotalGutterWidth()
     {
@@ -6650,6 +6720,21 @@ public unsafe partial class TextEdit : Control
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_caret_index_edit_order;
+    public int[] GetCaretIndexEditOrder()
+    {
+        var __mb = __mb_get_caret_index_edit_order;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextEdit", "get_caret_index_edit_order", 969006518);
+            if (__mb == 0) throw new MissingMethodException("TextEdit.get_caret_index_edit_order is not available in this engine build.");
+            __mb_get_caret_index_edit_order = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_get_selection_line;
     public int GetSelectionLine(int caretIndex = unchecked((int)(0)))
     {
@@ -7149,6 +7234,23 @@ public unsafe partial class TextLine : RefCounted
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (HorizontalAlignment)__ret;
+    }
+
+    private static nint __mb_tab_align;
+    public void TabAlign(float[] tabStops)
+    {
+        var __mb = __mb_tab_align;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextLine", "tab_align", 2899603908);
+            if (__mb == 0) throw new MissingMethodException("TextLine.tab_align is not available in this engine build.");
+            __mb_tab_align = __mb;
+        }
+        var __a0 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, tabStops);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a0);
     }
 
     private static nint __mb_set_flags;
@@ -8596,6 +8698,23 @@ public unsafe partial class TextParagraph : RefCounted
         return (HorizontalAlignment)__ret;
     }
 
+    private static nint __mb_tab_align;
+    public void TabAlign(float[] tabStops)
+    {
+        var __mb = __mb_tab_align;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextParagraph", "tab_align", 2899603908);
+            if (__mb == 0) throw new MissingMethodException("TextParagraph.tab_align is not available in this engine build.");
+            __mb_tab_align = __mb;
+        }
+        var __a0 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, tabStops);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a0);
+    }
+
     private static nint __mb_set_break_flags;
     internal void SetBreakFlags(TextServer.LineBreakFlag flags)
     {
@@ -9597,6 +9716,21 @@ public unsafe partial class TextServer : RefCounted
         return __ret != 0;
     }
 
+    private static nint __mb_get_support_data;
+    public byte[] GetSupportData()
+    {
+        var __mb = __mb_get_support_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "get_support_data", 2362200018);
+            if (__mb == 0) throw new MissingMethodException("TextServer.get_support_data is not available in this engine build.");
+            __mb_get_support_data = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_is_locale_using_support_data;
     public bool IsLocaleUsingSupportData(string locale)
     {
@@ -9737,6 +9871,25 @@ public unsafe partial class TextServer : RefCounted
         var __ret = default(Rid);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_font_set_data;
+    public void FontSetData(Rid fontRid, byte[] data)
+    {
+        var __mb = __mb_font_set_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "font_set_data", 1355495400);
+            if (__mb == 0) throw new MissingMethodException("TextServer.font_set_data is not available in this engine build.");
+            __mb_font_set_data = __mb;
+        }
+        var __a0 = fontRid;
+        var __a1 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a1);
     }
 
     private static nint __mb_font_set_face_index;
@@ -10438,6 +10591,63 @@ public unsafe partial class TextServer : RefCounted
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_font_get_palette_colors;
+    public Color[] FontGetPaletteColors(Rid fontRid, long index)
+    {
+        var __mb = __mb_font_get_palette_colors;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "font_get_palette_colors", 1595517857);
+            if (__mb == 0) throw new MissingMethodException("TextServer.font_get_palette_colors is not available in this engine build.");
+            __mb_font_get_palette_colors = __mb;
+        }
+        var __a0 = fontRid;
+        long __a1 = unchecked((long)index);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_font_set_palette_custom_colors;
+    public void FontSetPaletteCustomColors(Rid fontRid, Color[] colors)
+    {
+        var __mb = __mb_font_set_palette_custom_colors;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "font_set_palette_custom_colors", 4037098590);
+            if (__mb == 0) throw new MissingMethodException("TextServer.font_set_palette_custom_colors is not available in this engine build.");
+            __mb_font_set_palette_custom_colors = __mb;
+        }
+        var __a0 = fontRid;
+        var __a1 = Packed.CreatePod<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, colors);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, ref __a1);
+    }
+
+    private static nint __mb_font_get_palette_custom_colors;
+    public Color[] FontGetPaletteCustomColors(Rid fontRid)
+    {
+        var __mb = __mb_font_get_palette_custom_colors;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "font_get_palette_custom_colors", 1569415609);
+            if (__mb == 0) throw new MissingMethodException("TextServer.font_get_palette_custom_colors is not available in this engine build.");
+            __mb_font_get_palette_custom_colors = __mb;
+        }
+        var __a0 = fontRid;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_font_get_used_palette;
@@ -11176,6 +11386,71 @@ public unsafe partial class TextServer : RefCounted
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_font_set_texture_offsets;
+    public void FontSetTextureOffsets(Rid fontRid, Vector2I size, long textureIndex, int[] offset)
+    {
+        var __mb = __mb_font_set_texture_offsets;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "font_set_texture_offsets", 3005398047);
+            if (__mb == 0) throw new MissingMethodException("TextServer.font_set_texture_offsets is not available in this engine build.");
+            __mb_font_set_texture_offsets = __mb;
+        }
+        var __a0 = fontRid;
+        var __a1 = size;
+        long __a2 = unchecked((long)textureIndex);
+        var __a3 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, offset);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a3);
+    }
+
+    private static nint __mb_font_get_texture_offsets;
+    public int[] FontGetTextureOffsets(Rid fontRid, Vector2I size, long textureIndex)
+    {
+        var __mb = __mb_font_get_texture_offsets;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "font_get_texture_offsets", 3420028887);
+            if (__mb == 0) throw new MissingMethodException("TextServer.font_get_texture_offsets is not available in this engine build.");
+            __mb_font_get_texture_offsets = __mb;
+        }
+        var __a0 = fontRid;
+        var __a1 = size;
+        long __a2 = unchecked((long)textureIndex);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_font_get_glyph_list;
+    public int[] FontGetGlyphList(Rid fontRid, Vector2I size)
+    {
+        var __mb = __mb_font_get_glyph_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "font_get_glyph_list", 46086620);
+            if (__mb == 0) throw new MissingMethodException("TextServer.font_get_glyph_list is not available in this engine build.");
+            __mb_font_get_glyph_list = __mb;
+        }
+        var __a0 = fontRid;
+        var __a1 = size;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_font_clear_glyphs;
     public void FontClearGlyphs(Rid fontRid, Vector2I size)
     {
@@ -11686,6 +11961,24 @@ public unsafe partial class TextServer : RefCounted
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
+    private static nint __mb_font_get_supported_glyphs;
+    public int[] FontGetSupportedGlyphs(Rid fontRid)
+    {
+        var __mb = __mb_font_get_supported_glyphs;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "font_get_supported_glyphs", 788230395);
+            if (__mb == 0) throw new MissingMethodException("TextServer.font_get_supported_glyphs is not available in this engine build.");
+            __mb_font_get_supported_glyphs = __mb;
+        }
+        var __a0 = fontRid;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_font_render_range;
     public void FontRenderRange(Rid fontRid, Vector2I size, long start, long end)
     {
@@ -11868,6 +12161,24 @@ public unsafe partial class TextServer : RefCounted
         NativeString.Destroy(ref __a1);
     }
 
+    private static nint __mb_font_get_language_support_overrides;
+    public string[] FontGetLanguageSupportOverrides(Rid fontRid)
+    {
+        var __mb = __mb_font_get_language_support_overrides;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "font_get_language_support_overrides", 2801473409);
+            if (__mb == 0) throw new MissingMethodException("TextServer.font_get_language_support_overrides is not available in this engine build.");
+            __mb_font_get_language_support_overrides = __mb;
+        }
+        var __a0 = fontRid;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_font_is_script_supported;
     public bool FontIsScriptSupported(Rid fontRid, string script)
     {
@@ -11948,6 +12259,24 @@ public unsafe partial class TextServer : RefCounted
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
+    }
+
+    private static nint __mb_font_get_script_support_overrides;
+    public string[] FontGetScriptSupportOverrides(Rid fontRid)
+    {
+        var __mb = __mb_font_get_script_support_overrides;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "font_get_script_support_overrides", 2801473409);
+            if (__mb == 0) throw new MissingMethodException("TextServer.font_get_script_support_overrides is not available in this engine build.");
+            __mb_font_get_script_support_overrides = __mb;
+        }
+        var __a0 = fontRid;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_font_set_opentype_feature_overrides;
@@ -12930,6 +13259,27 @@ public unsafe partial class TextServer : RefCounted
         return (double)__ret;
     }
 
+    private static nint __mb_shaped_text_tab_align;
+    public double ShapedTextTabAlign(Rid shaped, float[] tabStops)
+    {
+        var __mb = __mb_shaped_text_tab_align;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "shaped_text_tab_align", 1283669550);
+            if (__mb == 0) throw new MissingMethodException("TextServer.shaped_text_tab_align is not available in this engine build.");
+            __mb_shaped_text_tab_align = __mb;
+        }
+        var __a0 = shaped;
+        var __a1 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, tabStops);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        double __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a1);
+        return (double)__ret;
+    }
+
     private static nint __mb_shaped_text_shape;
     public bool ShapedTextShape(Rid shaped)
     {
@@ -13054,6 +13404,79 @@ public unsafe partial class TextServer : RefCounted
         var __ret = default(Vector2I);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_shaped_text_get_line_breaks_adv;
+    public int[] ShapedTextGetLineBreaksAdv(Rid shaped, float[] width, long start = unchecked((long)(0)), bool once = true, TextServer.LineBreakFlag breakFlags = (TextServer.LineBreakFlag)(3))
+    {
+        var __mb = __mb_shaped_text_get_line_breaks_adv;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "shaped_text_get_line_breaks_adv", 2376991424);
+            if (__mb == 0) throw new MissingMethodException("TextServer.shaped_text_get_line_breaks_adv is not available in this engine build.");
+            __mb_shaped_text_get_line_breaks_adv = __mb;
+        }
+        var __a0 = shaped;
+        var __a1 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, width);
+        long __a2 = unchecked((long)start);
+        byte __a3 = once ? (byte)1 : (byte)0;
+        long __a4 = (long)breakFlags;
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a1);
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_shaped_text_get_line_breaks;
+    public int[] ShapedTextGetLineBreaks(Rid shaped, double width, long start = unchecked((long)(0)), TextServer.LineBreakFlag breakFlags = (TextServer.LineBreakFlag)(3))
+    {
+        var __mb = __mb_shaped_text_get_line_breaks;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "shaped_text_get_line_breaks", 2651359741);
+            if (__mb == 0) throw new MissingMethodException("TextServer.shaped_text_get_line_breaks is not available in this engine build.");
+            __mb_shaped_text_get_line_breaks = __mb;
+        }
+        var __a0 = shaped;
+        double __a1 = width;
+        long __a2 = unchecked((long)start);
+        long __a3 = (long)breakFlags;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_shaped_text_get_word_breaks;
+    public int[] ShapedTextGetWordBreaks(Rid shaped, TextServer.GraphemeFlag graphemeFlags = (TextServer.GraphemeFlag)(264), TextServer.GraphemeFlag skipGraphemeFlags = (TextServer.GraphemeFlag)(4))
+    {
+        var __mb = __mb_shaped_text_get_word_breaks;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "shaped_text_get_word_breaks", 4099476853);
+            if (__mb == 0) throw new MissingMethodException("TextServer.shaped_text_get_word_breaks is not available in this engine build.");
+            __mb_shaped_text_get_word_breaks = __mb;
+        }
+        var __a0 = shaped;
+        long __a1 = (long)graphemeFlags;
+        long __a2 = (long)skipGraphemeFlags;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_shaped_text_get_trim_pos;
@@ -13354,6 +13777,28 @@ public unsafe partial class TextServer : RefCounted
         return new Godot.Collections.Dictionary(__ret);
     }
 
+    private static nint __mb_shaped_text_get_selection;
+    public Vector2[] ShapedTextGetSelection(Rid shaped, long start, long end)
+    {
+        var __mb = __mb_shaped_text_get_selection;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "shaped_text_get_selection", 3714187733);
+            if (__mb == 0) throw new MissingMethodException("TextServer.shaped_text_get_selection is not available in this engine build.");
+            __mb_shaped_text_get_selection = __mb;
+        }
+        var __a0 = shaped;
+        long __a1 = unchecked((long)start);
+        long __a2 = unchecked((long)end);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_shaped_text_hit_test_grapheme;
     public long ShapedTextHitTestGrapheme(Rid shaped, double coords)
     {
@@ -13452,6 +13897,24 @@ public unsafe partial class TextServer : RefCounted
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((long)__ret);
+    }
+
+    private static nint __mb_shaped_text_get_character_breaks;
+    public int[] ShapedTextGetCharacterBreaks(Rid shaped)
+    {
+        var __mb = __mb_shaped_text_get_character_breaks;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "shaped_text_get_character_breaks", 788230395);
+            if (__mb == 0) throw new MissingMethodException("TextServer.shaped_text_get_character_breaks is not available in this engine build.");
+            __mb_shaped_text_get_character_breaks = __mb;
+        }
+        var __a0 = shaped;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_shaped_text_next_character_pos;
@@ -13655,6 +14118,74 @@ public unsafe partial class TextServer : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_string_get_word_breaks;
+    public int[] StringGetWordBreaks(string @string, string language = "", long charsPerLine = unchecked((long)(0)))
+    {
+        var __mb = __mb_string_get_word_breaks;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "string_get_word_breaks", 581857818);
+            if (__mb == 0) throw new MissingMethodException("TextServer.string_get_word_breaks is not available in this engine build.");
+            __mb_string_get_word_breaks = __mb;
+        }
+        ulong __a0 = NativeString.Create(@string);
+        ulong __a1 = NativeString.Create(language);
+        long __a2 = unchecked((long)charsPerLine);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a1);
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_string_get_character_breaks;
+    public int[] StringGetCharacterBreaks(string @string, string language = "")
+    {
+        var __mb = __mb_string_get_character_breaks;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "string_get_character_breaks", 2333794773);
+            if (__mb == 0) throw new MissingMethodException("TextServer.string_get_character_breaks is not available in this engine build.");
+            __mb_string_get_character_breaks = __mb;
+        }
+        ulong __a0 = NativeString.Create(@string);
+        ulong __a1 = NativeString.Create(language);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a1);
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_is_confusable;
+    public long IsConfusable(string @string, string[] dict)
+    {
+        var __mb = __mb_is_confusable;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TextServer", "is_confusable", 1433197768);
+            if (__mb == 0) throw new MissingMethodException("TextServer.is_confusable is not available in this engine build.");
+            __mb_is_confusable = __mb;
+        }
+        ulong __a0 = NativeString.Create(@string);
+        var __a1 = Packed.CreateStrings(dict);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a1);
+        return unchecked((long)__ret);
     }
 
     private static nint __mb_spoof_check;
@@ -13869,6 +14400,8 @@ public unsafe partial class TextServerExtension : TextServer
 
     public virtual bool _SaveSupportData(string filename) => default!;
 
+    public virtual byte[] _GetSupportData() => default!;
+
     public virtual bool _IsLocaleUsingSupportData(string locale) => default!;
 
     public virtual bool _IsLocaleRightToLeft(string locale) => default!;
@@ -13880,6 +14413,8 @@ public unsafe partial class TextServerExtension : TextServer
     public virtual Rid _CreateFont() => default!;
 
     public virtual Rid _CreateFontLinkedVariation(Rid fontRid) => default!;
+
+    public virtual void _FontSetData(Rid fontRid, byte[] data) { }
 
     public virtual void _FontSetFaceIndex(Rid fontRid, long faceIndex) { }
 
@@ -13957,6 +14492,12 @@ public unsafe partial class TextServerExtension : TextServer
 
     public virtual string _FontGetPaletteName(Rid fontRid, long index) => default!;
 
+    public virtual Color[] _FontGetPaletteColors(Rid fontRid, long index) => default!;
+
+    public virtual void _FontSetPaletteCustomColors(Rid fontRid, Color[] colors) { }
+
+    public virtual Color[] _FontGetPaletteCustomColors(Rid fontRid) => default!;
+
     public virtual long _FontGetUsedPalette(Rid fontRid) => default!;
 
     public virtual void _FontSetUsedPalette(Rid fontRid, long index) { }
@@ -14027,6 +14568,12 @@ public unsafe partial class TextServerExtension : TextServer
 
     public virtual Image? _FontGetTextureImage(Rid fontRid, Vector2I size, long textureIndex) => default!;
 
+    public virtual void _FontSetTextureOffsets(Rid fontRid, Vector2I size, long textureIndex, int[] offset) { }
+
+    public virtual int[] _FontGetTextureOffsets(Rid fontRid, Vector2I size, long textureIndex) => default!;
+
+    public virtual int[] _FontGetGlyphList(Rid fontRid, Vector2I size) => default!;
+
     public virtual void _FontClearGlyphs(Rid fontRid, Vector2I size) { }
 
     public virtual void _FontRemoveGlyph(Rid fontRid, Vector2I size, long glyph) { }
@@ -14071,6 +14618,8 @@ public unsafe partial class TextServerExtension : TextServer
 
     public virtual string _FontGetSupportedChars(Rid fontRid) => default!;
 
+    public virtual int[] _FontGetSupportedGlyphs(Rid fontRid) => default!;
+
     public virtual void _FontRenderRange(Rid fontRid, Vector2I size, long start, long end) { }
 
     public virtual void _FontRenderGlyph(Rid fontRid, Vector2I size, long index) { }
@@ -14087,6 +14636,8 @@ public unsafe partial class TextServerExtension : TextServer
 
     public virtual void _FontRemoveLanguageSupportOverride(Rid fontRid, string language) { }
 
+    public virtual string[] _FontGetLanguageSupportOverrides(Rid fontRid) => default!;
+
     public virtual bool _FontIsScriptSupported(Rid fontRid, string script) => default!;
 
     public virtual void _FontSetScriptSupportOverride(Rid fontRid, string script, bool supported) { }
@@ -14094,6 +14645,8 @@ public unsafe partial class TextServerExtension : TextServer
     public virtual bool _FontGetScriptSupportOverride(Rid fontRid, string script) => default!;
 
     public virtual void _FontRemoveScriptSupportOverride(Rid fontRid, string script) { }
+
+    public virtual string[] _FontGetScriptSupportOverrides(Rid fontRid) => default!;
 
     public virtual double _FontGetGlobalOversampling() => default!;
 
@@ -14171,6 +14724,8 @@ public unsafe partial class TextServerExtension : TextServer
 
     public virtual double _ShapedTextFitToWidth(Rid shaped, double width, TextServer.JustificationFlag justificationFlags) => default!;
 
+    public virtual double _ShapedTextTabAlign(Rid shaped, float[] tabStops) => default!;
+
     public virtual bool _ShapedTextShape(Rid shaped) => default!;
 
     public virtual bool _ShapedTextUpdateBreaks(Rid shaped) => default!;
@@ -14182,6 +14737,12 @@ public unsafe partial class TextServerExtension : TextServer
     public virtual long _ShapedTextGetGlyphCount(Rid shaped) => default!;
 
     public virtual Vector2I _ShapedTextGetRange(Rid shaped) => default!;
+
+    public virtual int[] _ShapedTextGetLineBreaksAdv(Rid shaped, float[] width, long start, bool once, TextServer.LineBreakFlag breakFlags) => default!;
+
+    public virtual int[] _ShapedTextGetLineBreaks(Rid shaped, double width, long start, TextServer.LineBreakFlag breakFlags) => default!;
+
+    public virtual int[] _ShapedTextGetWordBreaks(Rid shaped, TextServer.GraphemeFlag graphemeFlags, TextServer.GraphemeFlag skipGraphemeFlags) => default!;
 
     public virtual long _ShapedTextGetTrimPos(Rid shaped) => default!;
 
@@ -14205,6 +14766,8 @@ public unsafe partial class TextServerExtension : TextServer
 
     public virtual long _ShapedTextGetDominantDirectionInRange(Rid shaped, long start, long end) => default!;
 
+    public virtual Vector2[] _ShapedTextGetSelection(Rid shaped, long start, long end) => default!;
+
     public virtual long _ShapedTextHitTestGrapheme(Rid shaped, double coord) => default!;
 
     public virtual long _ShapedTextHitTestPosition(Rid shaped, double coord) => default!;
@@ -14218,6 +14781,8 @@ public unsafe partial class TextServerExtension : TextServer
     public virtual long _ShapedTextNextGraphemePos(Rid shaped, long pos) => default!;
 
     public virtual long _ShapedTextPrevGraphemePos(Rid shaped, long pos) => default!;
+
+    public virtual int[] _ShapedTextGetCharacterBreaks(Rid shaped) => default!;
 
     public virtual long _ShapedTextNextCharacterPos(Rid shaped, long pos) => default!;
 
@@ -14236,6 +14801,12 @@ public unsafe partial class TextServerExtension : TextServer
     public virtual bool _IsValidIdentifier(string @string) => default!;
 
     public virtual bool _IsValidLetter(ulong unicode) => default!;
+
+    public virtual int[] _StringGetWordBreaks(string @string, string language, long charsPerLine) => default!;
+
+    public virtual int[] _StringGetCharacterBreaks(string @string, string language) => default!;
+
+    public virtual long _IsConfusable(string @string, string[] dict) => default!;
 
     public virtual bool _SpoofCheck(string @string) => default!;
 
@@ -14256,12 +14827,14 @@ public unsafe partial class TextServerExtension : TextServer
     private static ulong __vsn_get_support_data_filename;
     private static ulong __vsn_get_support_data_info;
     private static ulong __vsn_save_support_data;
+    private static ulong __vsn_get_support_data;
     private static ulong __vsn_is_locale_using_support_data;
     private static ulong __vsn_is_locale_right_to_left;
     private static ulong __vsn_name_to_tag;
     private static ulong __vsn_tag_to_name;
     private static ulong __vsn_create_font;
     private static ulong __vsn_create_font_linked_variation;
+    private static ulong __vsn_font_set_data;
     private static ulong __vsn_font_set_face_index;
     private static ulong __vsn_font_get_face_index;
     private static ulong __vsn_font_get_face_count;
@@ -14300,6 +14873,9 @@ public unsafe partial class TextServerExtension : TextServer
     private static ulong __vsn_font_is_modulate_color_glyphs;
     private static ulong __vsn_font_get_palette_count;
     private static ulong __vsn_font_get_palette_name;
+    private static ulong __vsn_font_get_palette_colors;
+    private static ulong __vsn_font_set_palette_custom_colors;
+    private static ulong __vsn_font_get_palette_custom_colors;
     private static ulong __vsn_font_get_used_palette;
     private static ulong __vsn_font_set_used_palette;
     private static ulong __vsn_font_set_hinting;
@@ -14335,6 +14911,9 @@ public unsafe partial class TextServerExtension : TextServer
     private static ulong __vsn_font_remove_texture;
     private static ulong __vsn_font_set_texture_image;
     private static ulong __vsn_font_get_texture_image;
+    private static ulong __vsn_font_set_texture_offsets;
+    private static ulong __vsn_font_get_texture_offsets;
+    private static ulong __vsn_font_get_glyph_list;
     private static ulong __vsn_font_clear_glyphs;
     private static ulong __vsn_font_remove_glyph;
     private static ulong __vsn_font_get_glyph_advance;
@@ -14357,6 +14936,7 @@ public unsafe partial class TextServerExtension : TextServer
     private static ulong __vsn_font_get_char_from_glyph_index;
     private static ulong __vsn_font_has_char;
     private static ulong __vsn_font_get_supported_chars;
+    private static ulong __vsn_font_get_supported_glyphs;
     private static ulong __vsn_font_render_range;
     private static ulong __vsn_font_render_glyph;
     private static ulong __vsn_font_draw_glyph;
@@ -14365,10 +14945,12 @@ public unsafe partial class TextServerExtension : TextServer
     private static ulong __vsn_font_set_language_support_override;
     private static ulong __vsn_font_get_language_support_override;
     private static ulong __vsn_font_remove_language_support_override;
+    private static ulong __vsn_font_get_language_support_overrides;
     private static ulong __vsn_font_is_script_supported;
     private static ulong __vsn_font_set_script_support_override;
     private static ulong __vsn_font_get_script_support_override;
     private static ulong __vsn_font_remove_script_support_override;
+    private static ulong __vsn_font_get_script_support_overrides;
     private static ulong __vsn_font_get_global_oversampling;
     private static ulong __vsn_font_set_global_oversampling;
     private static ulong __vsn_reference_oversampling_level;
@@ -14407,12 +14989,16 @@ public unsafe partial class TextServerExtension : TextServer
     private static ulong __vsn_shaped_text_substr;
     private static ulong __vsn_shaped_text_get_parent;
     private static ulong __vsn_shaped_text_fit_to_width;
+    private static ulong __vsn_shaped_text_tab_align;
     private static ulong __vsn_shaped_text_shape;
     private static ulong __vsn_shaped_text_update_breaks;
     private static ulong __vsn_shaped_text_update_justification_ops;
     private static ulong __vsn_shaped_text_is_ready;
     private static ulong __vsn_shaped_text_get_glyph_count;
     private static ulong __vsn_shaped_text_get_range;
+    private static ulong __vsn_shaped_text_get_line_breaks_adv;
+    private static ulong __vsn_shaped_text_get_line_breaks;
+    private static ulong __vsn_shaped_text_get_word_breaks;
     private static ulong __vsn_shaped_text_get_trim_pos;
     private static ulong __vsn_shaped_text_get_ellipsis_pos;
     private static ulong __vsn_shaped_text_get_ellipsis_glyph_count;
@@ -14424,6 +15010,7 @@ public unsafe partial class TextServerExtension : TextServer
     private static ulong __vsn_shaped_text_get_underline_position;
     private static ulong __vsn_shaped_text_get_underline_thickness;
     private static ulong __vsn_shaped_text_get_dominant_direction_in_range;
+    private static ulong __vsn_shaped_text_get_selection;
     private static ulong __vsn_shaped_text_hit_test_grapheme;
     private static ulong __vsn_shaped_text_hit_test_position;
     private static ulong __vsn_shaped_text_draw;
@@ -14431,6 +15018,7 @@ public unsafe partial class TextServerExtension : TextServer
     private static ulong __vsn_shaped_text_get_grapheme_bounds;
     private static ulong __vsn_shaped_text_next_grapheme_pos;
     private static ulong __vsn_shaped_text_prev_grapheme_pos;
+    private static ulong __vsn_shaped_text_get_character_breaks;
     private static ulong __vsn_shaped_text_next_character_pos;
     private static ulong __vsn_shaped_text_prev_character_pos;
     private static ulong __vsn_shaped_text_closest_character_pos;
@@ -14440,6 +15028,9 @@ public unsafe partial class TextServerExtension : TextServer
     private static ulong __vsn_strip_diacritics;
     private static ulong __vsn_is_valid_identifier;
     private static ulong __vsn_is_valid_letter;
+    private static ulong __vsn_string_get_word_breaks;
+    private static ulong __vsn_string_get_character_breaks;
+    private static ulong __vsn_is_confusable;
     private static ulong __vsn_spoof_check;
     private static ulong __vsn_string_to_upper;
     private static ulong __vsn_string_to_lower;
@@ -14502,6 +15093,12 @@ public unsafe partial class TextServerExtension : TextServer
             *(byte*)ret = _SaveSupportData(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
             return true;
         }
+        if (__vsn_get_support_data == 0) __vsn_get_support_data = StringNames.Get("_get_support_data").Opaque;
+        if (nameSn == __vsn_get_support_data)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, _GetSupportData() ?? []);
+            return true;
+        }
         if (__vsn_is_locale_using_support_data == 0) __vsn_is_locale_using_support_data = StringNames.Get("_is_locale_using_support_data").Opaque;
         if (nameSn == __vsn_is_locale_using_support_data)
         {
@@ -14536,6 +15133,12 @@ public unsafe partial class TextServerExtension : TextServer
         if (nameSn == __vsn_create_font_linked_variation)
         {
             *(Rid*)ret = _CreateFontLinkedVariation(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_font_set_data == 0) __vsn_font_set_data = StringNames.Get("_font_set_data").Opaque;
+        if (nameSn == __vsn_font_set_data)
+        {
+            _FontSetData(*(Rid*)args[0], Packed.ReadPod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, (Opaque16*)args[1]));
             return true;
         }
         if (__vsn_font_set_face_index == 0) __vsn_font_set_face_index = StringNames.Get("_font_set_face_index").Opaque;
@@ -14766,6 +15369,24 @@ public unsafe partial class TextServerExtension : TextServer
             *(ulong*)ret = NativeString.Create(_FontGetPaletteName(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))) ?? "");
             return true;
         }
+        if (__vsn_font_get_palette_colors == 0) __vsn_font_get_palette_colors = StringNames.Get("_font_get_palette_colors").Opaque;
+        if (nameSn == __vsn_font_get_palette_colors)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, _FontGetPaletteColors(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))) ?? []);
+            return true;
+        }
+        if (__vsn_font_set_palette_custom_colors == 0) __vsn_font_set_palette_custom_colors = StringNames.Get("_font_set_palette_custom_colors").Opaque;
+        if (nameSn == __vsn_font_set_palette_custom_colors)
+        {
+            _FontSetPaletteCustomColors(*(Rid*)args[0], Packed.ReadPod<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, (Opaque16*)args[1]));
+            return true;
+        }
+        if (__vsn_font_get_palette_custom_colors == 0) __vsn_font_get_palette_custom_colors = StringNames.Get("_font_get_palette_custom_colors").Opaque;
+        if (nameSn == __vsn_font_get_palette_custom_colors)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, _FontGetPaletteCustomColors(*(Rid*)args[0]) ?? []);
+            return true;
+        }
         if (__vsn_font_get_used_palette == 0) __vsn_font_get_used_palette = StringNames.Get("_font_get_used_palette").Opaque;
         if (nameSn == __vsn_font_get_used_palette)
         {
@@ -14976,6 +15597,24 @@ public unsafe partial class TextServerExtension : TextServer
             *(nint*)ret = _FontGetTextureImage(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])))?.NativePtr ?? 0;
             return true;
         }
+        if (__vsn_font_set_texture_offsets == 0) __vsn_font_set_texture_offsets = StringNames.Get("_font_set_texture_offsets").Opaque;
+        if (nameSn == __vsn_font_set_texture_offsets)
+        {
+            _FontSetTextureOffsets(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2])), Packed.ReadPod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, (Opaque16*)args[3]));
+            return true;
+        }
+        if (__vsn_font_get_texture_offsets == 0) __vsn_font_get_texture_offsets = StringNames.Get("_font_get_texture_offsets").Opaque;
+        if (nameSn == __vsn_font_get_texture_offsets)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, _FontGetTextureOffsets(*(Rid*)args[0], *(Vector2I*)args[1], unchecked((long)(*(long*)args[2]))) ?? []);
+            return true;
+        }
+        if (__vsn_font_get_glyph_list == 0) __vsn_font_get_glyph_list = StringNames.Get("_font_get_glyph_list").Opaque;
+        if (nameSn == __vsn_font_get_glyph_list)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, _FontGetGlyphList(*(Rid*)args[0], *(Vector2I*)args[1]) ?? []);
+            return true;
+        }
         if (__vsn_font_clear_glyphs == 0) __vsn_font_clear_glyphs = StringNames.Get("_font_clear_glyphs").Opaque;
         if (nameSn == __vsn_font_clear_glyphs)
         {
@@ -15108,6 +15747,12 @@ public unsafe partial class TextServerExtension : TextServer
             *(ulong*)ret = NativeString.Create(_FontGetSupportedChars(*(Rid*)args[0]) ?? "");
             return true;
         }
+        if (__vsn_font_get_supported_glyphs == 0) __vsn_font_get_supported_glyphs = StringNames.Get("_font_get_supported_glyphs").Opaque;
+        if (nameSn == __vsn_font_get_supported_glyphs)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, _FontGetSupportedGlyphs(*(Rid*)args[0]) ?? []);
+            return true;
+        }
         if (__vsn_font_render_range == 0) __vsn_font_render_range = StringNames.Get("_font_render_range").Opaque;
         if (nameSn == __vsn_font_render_range)
         {
@@ -15156,6 +15801,12 @@ public unsafe partial class TextServerExtension : TextServer
             _FontRemoveLanguageSupportOverride(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]));
             return true;
         }
+        if (__vsn_font_get_language_support_overrides == 0) __vsn_font_get_language_support_overrides = StringNames.Get("_font_get_language_support_overrides").Opaque;
+        if (nameSn == __vsn_font_get_language_support_overrides)
+        {
+            *(Opaque16*)ret = Packed.CreateStrings(_FontGetLanguageSupportOverrides(*(Rid*)args[0]) ?? []);
+            return true;
+        }
         if (__vsn_font_is_script_supported == 0) __vsn_font_is_script_supported = StringNames.Get("_font_is_script_supported").Opaque;
         if (nameSn == __vsn_font_is_script_supported)
         {
@@ -15178,6 +15829,12 @@ public unsafe partial class TextServerExtension : TextServer
         if (nameSn == __vsn_font_remove_script_support_override)
         {
             _FontRemoveScriptSupportOverride(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]));
+            return true;
+        }
+        if (__vsn_font_get_script_support_overrides == 0) __vsn_font_get_script_support_overrides = StringNames.Get("_font_get_script_support_overrides").Opaque;
+        if (nameSn == __vsn_font_get_script_support_overrides)
+        {
+            *(Opaque16*)ret = Packed.CreateStrings(_FontGetScriptSupportOverrides(*(Rid*)args[0]) ?? []);
             return true;
         }
         if (__vsn_font_get_global_oversampling == 0) __vsn_font_get_global_oversampling = StringNames.Get("_font_get_global_oversampling").Opaque;
@@ -15408,6 +16065,12 @@ public unsafe partial class TextServerExtension : TextServer
             *(double*)ret = _ShapedTextFitToWidth(*(Rid*)args[0], *(double*)args[1], (TextServer.JustificationFlag)(*(long*)args[2]));
             return true;
         }
+        if (__vsn_shaped_text_tab_align == 0) __vsn_shaped_text_tab_align = StringNames.Get("_shaped_text_tab_align").Opaque;
+        if (nameSn == __vsn_shaped_text_tab_align)
+        {
+            *(double*)ret = _ShapedTextTabAlign(*(Rid*)args[0], Packed.ReadPod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, (Opaque16*)args[1]));
+            return true;
+        }
         if (__vsn_shaped_text_shape == 0) __vsn_shaped_text_shape = StringNames.Get("_shaped_text_shape").Opaque;
         if (nameSn == __vsn_shaped_text_shape)
         {
@@ -15442,6 +16105,24 @@ public unsafe partial class TextServerExtension : TextServer
         if (nameSn == __vsn_shaped_text_get_range)
         {
             *(Vector2I*)ret = _ShapedTextGetRange(*(Rid*)args[0]);
+            return true;
+        }
+        if (__vsn_shaped_text_get_line_breaks_adv == 0) __vsn_shaped_text_get_line_breaks_adv = StringNames.Get("_shaped_text_get_line_breaks_adv").Opaque;
+        if (nameSn == __vsn_shaped_text_get_line_breaks_adv)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, _ShapedTextGetLineBreaksAdv(*(Rid*)args[0], Packed.ReadPod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, (Opaque16*)args[1]), unchecked((long)(*(long*)args[2])), *(byte*)args[3] != 0, (TextServer.LineBreakFlag)(*(long*)args[4])) ?? []);
+            return true;
+        }
+        if (__vsn_shaped_text_get_line_breaks == 0) __vsn_shaped_text_get_line_breaks = StringNames.Get("_shaped_text_get_line_breaks").Opaque;
+        if (nameSn == __vsn_shaped_text_get_line_breaks)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, _ShapedTextGetLineBreaks(*(Rid*)args[0], *(double*)args[1], unchecked((long)(*(long*)args[2])), (TextServer.LineBreakFlag)(*(long*)args[3])) ?? []);
+            return true;
+        }
+        if (__vsn_shaped_text_get_word_breaks == 0) __vsn_shaped_text_get_word_breaks = StringNames.Get("_shaped_text_get_word_breaks").Opaque;
+        if (nameSn == __vsn_shaped_text_get_word_breaks)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, _ShapedTextGetWordBreaks(*(Rid*)args[0], (TextServer.GraphemeFlag)(*(long*)args[1]), (TextServer.GraphemeFlag)(*(long*)args[2])) ?? []);
             return true;
         }
         if (__vsn_shaped_text_get_trim_pos == 0) __vsn_shaped_text_get_trim_pos = StringNames.Get("_shaped_text_get_trim_pos").Opaque;
@@ -15510,6 +16191,12 @@ public unsafe partial class TextServerExtension : TextServer
             *(long*)ret = unchecked((long)_ShapedTextGetDominantDirectionInRange(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), unchecked((long)(*(long*)args[2]))));
             return true;
         }
+        if (__vsn_shaped_text_get_selection == 0) __vsn_shaped_text_get_selection = StringNames.Get("_shaped_text_get_selection").Opaque;
+        if (nameSn == __vsn_shaped_text_get_selection)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, _ShapedTextGetSelection(*(Rid*)args[0], unchecked((long)(*(long*)args[1])), unchecked((long)(*(long*)args[2]))) ?? []);
+            return true;
+        }
         if (__vsn_shaped_text_hit_test_grapheme == 0) __vsn_shaped_text_hit_test_grapheme = StringNames.Get("_shaped_text_hit_test_grapheme").Opaque;
         if (nameSn == __vsn_shaped_text_hit_test_grapheme)
         {
@@ -15550,6 +16237,12 @@ public unsafe partial class TextServerExtension : TextServer
         if (nameSn == __vsn_shaped_text_prev_grapheme_pos)
         {
             *(long*)ret = unchecked((long)_ShapedTextPrevGraphemePos(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))));
+            return true;
+        }
+        if (__vsn_shaped_text_get_character_breaks == 0) __vsn_shaped_text_get_character_breaks = StringNames.Get("_shaped_text_get_character_breaks").Opaque;
+        if (nameSn == __vsn_shaped_text_get_character_breaks)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, _ShapedTextGetCharacterBreaks(*(Rid*)args[0]) ?? []);
             return true;
         }
         if (__vsn_shaped_text_next_character_pos == 0) __vsn_shaped_text_next_character_pos = StringNames.Get("_shaped_text_next_character_pos").Opaque;
@@ -15604,6 +16297,24 @@ public unsafe partial class TextServerExtension : TextServer
         if (nameSn == __vsn_is_valid_letter)
         {
             *(byte*)ret = _IsValidLetter(unchecked((ulong)(*(long*)args[0]))) ? (byte)1 : (byte)0;
+            return true;
+        }
+        if (__vsn_string_get_word_breaks == 0) __vsn_string_get_word_breaks = StringNames.Get("_string_get_word_breaks").Opaque;
+        if (nameSn == __vsn_string_get_word_breaks)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, _StringGetWordBreaks(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1]), unchecked((long)(*(long*)args[2]))) ?? []);
+            return true;
+        }
+        if (__vsn_string_get_character_breaks == 0) __vsn_string_get_character_breaks = StringNames.Get("_string_get_character_breaks").Opaque;
+        if (nameSn == __vsn_string_get_character_breaks)
+        {
+            *(Opaque16*)ret = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, _StringGetCharacterBreaks(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1])) ?? []);
+            return true;
+        }
+        if (__vsn_is_confusable == 0) __vsn_is_confusable = StringNames.Get("_is_confusable").Opaque;
+        if (nameSn == __vsn_is_confusable)
+        {
+            *(long*)ret = unchecked((long)_IsConfusable(NativeString.Read(*(ulong*)args[0]), Packed.ReadStrings((Opaque16*)args[1])));
             return true;
         }
         if (__vsn_spoof_check == 0) __vsn_spoof_check = StringNames.Get("_spoof_check").Opaque;
@@ -17933,6 +18644,40 @@ public unsafe partial class Theme : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_icon_list;
+    public string[] GetIconList(string themeType)
+    {
+        var __mb = __mb_get_icon_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_icon_list", 4291131558);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_icon_list is not available in this engine build.");
+            __mb_get_icon_list = __mb;
+        }
+        ulong __a0 = NativeString.Create(themeType);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_get_icon_type_list;
+    public string[] GetIconTypeList()
+    {
+        var __mb = __mb_get_icon_type_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_icon_type_list", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_icon_type_list is not available in this engine build.");
+            __mb_get_icon_type_list = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_set_stylebox;
     public void SetStylebox(string name, string themeType, StyleBox? texture)
     {
@@ -18029,6 +18774,40 @@ public unsafe partial class Theme : Resource
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_stylebox_list;
+    public string[] GetStyleboxList(string themeType)
+    {
+        var __mb = __mb_get_stylebox_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_stylebox_list", 4291131558);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_stylebox_list is not available in this engine build.");
+            __mb_get_stylebox_list = __mb;
+        }
+        ulong __a0 = NativeString.Create(themeType);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_get_stylebox_type_list;
+    public string[] GetStyleboxTypeList()
+    {
+        var __mb = __mb_get_stylebox_type_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_stylebox_type_list", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_stylebox_type_list is not available in this engine build.");
+            __mb_get_stylebox_type_list = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_set_font;
@@ -18129,6 +18908,40 @@ public unsafe partial class Theme : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_font_list;
+    public string[] GetFontList(string themeType)
+    {
+        var __mb = __mb_get_font_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_font_list", 4291131558);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_font_list is not available in this engine build.");
+            __mb_get_font_list = __mb;
+        }
+        ulong __a0 = NativeString.Create(themeType);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_get_font_type_list;
+    public string[] GetFontTypeList()
+    {
+        var __mb = __mb_get_font_type_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_font_type_list", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_font_type_list is not available in this engine build.");
+            __mb_get_font_type_list = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_set_font_size;
     public void SetFontSize(string name, string themeType, int fontSize)
     {
@@ -18225,6 +19038,40 @@ public unsafe partial class Theme : Resource
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_font_size_list;
+    public string[] GetFontSizeList(string themeType)
+    {
+        var __mb = __mb_get_font_size_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_font_size_list", 4291131558);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_font_size_list is not available in this engine build.");
+            __mb_get_font_size_list = __mb;
+        }
+        ulong __a0 = NativeString.Create(themeType);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_get_font_size_type_list;
+    public string[] GetFontSizeTypeList()
+    {
+        var __mb = __mb_get_font_size_type_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_font_size_type_list", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_font_size_type_list is not available in this engine build.");
+            __mb_get_font_size_type_list = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_set_color;
@@ -18325,6 +19172,40 @@ public unsafe partial class Theme : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_color_list;
+    public string[] GetColorList(string themeType)
+    {
+        var __mb = __mb_get_color_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_color_list", 4291131558);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_color_list is not available in this engine build.");
+            __mb_get_color_list = __mb;
+        }
+        ulong __a0 = NativeString.Create(themeType);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_get_color_type_list;
+    public string[] GetColorTypeList()
+    {
+        var __mb = __mb_get_color_type_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_color_type_list", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_color_type_list is not available in this engine build.");
+            __mb_get_color_type_list = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_set_constant;
     public void SetConstant(string name, string themeType, int constant)
     {
@@ -18421,6 +19302,40 @@ public unsafe partial class Theme : Resource
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_constant_list;
+    public string[] GetConstantList(string themeType)
+    {
+        var __mb = __mb_get_constant_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_constant_list", 4291131558);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_constant_list is not available in this engine build.");
+            __mb_get_constant_list = __mb;
+        }
+        ulong __a0 = NativeString.Create(themeType);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_get_constant_type_list;
+    public string[] GetConstantTypeList()
+    {
+        var __mb = __mb_get_constant_type_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_constant_type_list", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_constant_type_list is not available in this engine build.");
+            __mb_get_constant_type_list = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_set_default_base_scale;
@@ -18669,6 +19584,45 @@ public unsafe partial class Theme : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_theme_item_list;
+    public string[] GetThemeItemList(Theme.DataType dataType, string themeType)
+    {
+        var __mb = __mb_get_theme_item_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_theme_item_list", 3726716710);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_theme_item_list is not available in this engine build.");
+            __mb_get_theme_item_list = __mb;
+        }
+        long __a0 = (long)dataType;
+        ulong __a1 = NativeString.Create(themeType);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a1);
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_get_theme_item_type_list;
+    public string[] GetThemeItemTypeList(Theme.DataType dataType)
+    {
+        var __mb = __mb_get_theme_item_type_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_theme_item_type_list", 1316004935);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_theme_item_type_list is not available in this engine build.");
+            __mb_get_theme_item_type_list = __mb;
+        }
+        long __a0 = (long)dataType;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_set_type_variation;
     public void SetTypeVariation(string themeType, string baseType)
     {
@@ -18741,6 +19695,24 @@ public unsafe partial class Theme : Resource
         return StringNames.ReadAndDestroy(ref __ret);
     }
 
+    private static nint __mb_get_type_variation_list;
+    public string[] GetTypeVariationList(string baseType)
+    {
+        var __mb = __mb_get_type_variation_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_type_variation_list", 1761182771);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_type_variation_list is not available in this engine build.");
+            __mb_get_type_variation_list = __mb;
+        }
+        ulong __a0 = StringNames.Get(baseType).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_add_type;
     public void AddType(string themeType)
     {
@@ -18789,6 +19761,21 @@ public unsafe partial class Theme : Resource
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_type_list;
+    public string[] GetTypeList()
+    {
+        var __mb = __mb_get_type_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Theme", "get_type_list", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("Theme.get_type_list is not available in this engine build.");
+            __mb_get_type_list = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_merge_with;
@@ -19060,6 +20047,26 @@ public unsafe partial class Thread : RefCounted
         Low = 0,
         Normal = 1,
         High = 2,
+    }
+
+    private static nint __mb_start;
+    public Error Start(Callable callable, Thread.Priority priority = (Thread.Priority)(1))
+    {
+        var __mb = __mb_start;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Thread", "start", 1327203254);
+            if (__mb == 0) throw new MissingMethodException("Thread.start is not available in this engine build.");
+            __mb_start = __mb;
+        }
+        var __a0 = callable.Native;
+        long __a1 = (long)priority;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Error)__ret;
     }
 
     private static nint __mb_get_id;
@@ -19775,6 +20782,47 @@ public unsafe partial class TileData : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_collision_polygon_points;
+    public void SetCollisionPolygonPoints(int layerId, int polygonIndex, Vector2[] polygon)
+    {
+        var __mb = __mb_set_collision_polygon_points;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TileData", "set_collision_polygon_points", 3230546541);
+            if (__mb == 0) throw new MissingMethodException("TileData.set_collision_polygon_points is not available in this engine build.");
+            __mb_set_collision_polygon_points = __mb;
+        }
+        long __a0 = unchecked((long)layerId);
+        long __a1 = unchecked((long)polygonIndex);
+        var __a2 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, polygon);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a2);
+    }
+
+    private static nint __mb_get_collision_polygon_points;
+    public Vector2[] GetCollisionPolygonPoints(int layerId, int polygonIndex)
+    {
+        var __mb = __mb_get_collision_polygon_points;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TileData", "get_collision_polygon_points", 103942801);
+            if (__mb == 0) throw new MissingMethodException("TileData.get_collision_polygon_points is not available in this engine build.");
+            __mb_get_collision_polygon_points = __mb;
+        }
+        long __a0 = unchecked((long)layerId);
+        long __a1 = unchecked((long)polygonIndex);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_collision_polygon_one_way;
@@ -21332,6 +22380,12 @@ public unsafe partial class TileMapLayer : Node2D
         ForceShow = 1,
     }
 
+    public byte[] TileMapData
+    {
+        get => GetTileMapDataAsArray();
+        set => SetTileMapDataFromArray(value);
+    }
+
     public bool Enabled
     {
         get => IsEnabled();
@@ -21882,6 +22936,38 @@ public unsafe partial class TileMapLayer : Node2D
         var __ret = default(Vector2I);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_set_tile_map_data_from_array;
+    internal void SetTileMapDataFromArray(byte[] tileMapLayerData)
+    {
+        var __mb = __mb_set_tile_map_data_from_array;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TileMapLayer", "set_tile_map_data_from_array", 2971499966);
+            if (__mb == 0) throw new MissingMethodException("TileMapLayer.set_tile_map_data_from_array is not available in this engine build.");
+            __mb_set_tile_map_data_from_array = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, tileMapLayerData);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_tile_map_data_as_array;
+    internal byte[] GetTileMapDataAsArray()
+    {
+        var __mb = __mb_get_tile_map_data_as_array;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TileMapLayer", "get_tile_map_data_as_array", 2362200018);
+            if (__mb == 0) throw new MissingMethodException("TileMapLayer.get_tile_map_data_as_array is not available in this engine build.");
+            __mb_get_tile_map_data_as_array = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_enabled;
@@ -24472,6 +25558,30 @@ public unsafe partial class TileSetAtlasSource : TileSetSource
         return __ret != 0;
     }
 
+    private static nint __mb_get_tiles_to_be_removed_on_change;
+    public Vector2[] GetTilesToBeRemovedOnChange(Texture2D? texture, Vector2I margins, Vector2I separation, Vector2I textureRegionSize)
+    {
+        var __mb = __mb_get_tiles_to_be_removed_on_change;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TileSetAtlasSource", "get_tiles_to_be_removed_on_change", 1240378054);
+            if (__mb == 0) throw new MissingMethodException("TileSetAtlasSource.get_tiles_to_be_removed_on_change is not available in this engine build.");
+            __mb_get_tiles_to_be_removed_on_change = __mb;
+        }
+        nint __a0 = texture?.NativePtr ?? 0;
+        var __a1 = margins;
+        var __a2 = separation;
+        var __a3 = textureRegionSize;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_get_tile_at_coords;
     public Vector2I GetTileAtCoords(Vector2I atlasCoords)
     {
@@ -26547,6 +27657,27 @@ public unsafe partial class Translation : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_add_plural_message;
+    public void AddPluralMessage(string srcMessage, string[] xlatedMessages, string context = "")
+    {
+        var __mb = __mb_add_plural_message;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Translation", "add_plural_message", 2356982266);
+            if (__mb == 0) throw new MissingMethodException("Translation.add_plural_message is not available in this engine build.");
+            __mb_add_plural_message = __mb;
+        }
+        ulong __a0 = StringNames.Get(srcMessage).Opaque;
+        var __a1 = Packed.CreateStrings(xlatedMessages);
+        ulong __a2 = StringNames.Get(context).Opaque;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a1);
+    }
+
     private static nint __mb_get_message;
     public string GetMessage(string srcMessage, string context = "")
     {
@@ -26607,6 +27738,36 @@ public unsafe partial class Translation : Resource
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_message_list;
+    public string[] GetMessageList()
+    {
+        var __mb = __mb_get_message_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Translation", "get_message_list", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("Translation.get_message_list is not available in this engine build.");
+            __mb_get_message_list = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_get_translated_message_list;
+    public string[] GetTranslatedMessageList()
+    {
+        var __mb = __mb_get_translated_message_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Translation", "get_translated_message_list", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("Translation.get_translated_message_list is not available in this engine build.");
+            __mb_get_translated_message_list = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_get_message_count;
@@ -27401,6 +28562,21 @@ public static unsafe partial class TranslationServer
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
+    private static nint __mb_get_all_languages;
+    public static string[] GetAllLanguages()
+    {
+        var __mb = __mb_get_all_languages;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TranslationServer", "get_all_languages", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("TranslationServer.get_all_languages is not available in this engine build.");
+            __mb_get_all_languages = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_get_language_name;
     public static string GetLanguageName(string language)
     {
@@ -27420,6 +28596,21 @@ public static unsafe partial class TranslationServer
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
+    private static nint __mb_get_all_scripts;
+    public static string[] GetAllScripts()
+    {
+        var __mb = __mb_get_all_scripts;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TranslationServer", "get_all_scripts", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("TranslationServer.get_all_scripts is not available in this engine build.");
+            __mb_get_all_scripts = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_get_script_name;
     public static string GetScriptName(string script)
     {
@@ -27437,6 +28628,21 @@ public static unsafe partial class TranslationServer
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_get_all_countries;
+    public static string[] GetAllCountries()
+    {
+        var __mb = __mb_get_all_countries;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TranslationServer", "get_all_countries", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("TranslationServer.get_all_countries is not available in this engine build.");
+            __mb_get_all_countries = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_get_country_name;
@@ -27729,6 +28935,21 @@ public static unsafe partial class TranslationServer
             __mb_clear = __mb;
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
+    }
+
+    private static nint __mb_get_loaded_locales;
+    public static string[] GetLoadedLocales()
+    {
+        var __mb = __mb_get_loaded_locales;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TranslationServer", "get_loaded_locales", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("TranslationServer.get_loaded_locales is not available in this engine build.");
+            __mb_get_loaded_locales = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_format_number;
@@ -30081,6 +31302,42 @@ public unsafe partial class TreeItem : GodotObject
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_set_custom_draw_callback;
+    public void SetCustomDrawCallback(int column, Callable callback)
+    {
+        var __mb = __mb_set_custom_draw_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TreeItem", "set_custom_draw_callback", 957362965);
+            if (__mb == 0) throw new MissingMethodException("TreeItem.set_custom_draw_callback is not available in this engine build.");
+            __mb_set_custom_draw_callback = __mb;
+        }
+        long __a0 = unchecked((long)column);
+        var __a1 = callback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_custom_draw_callback;
+    public Callable GetCustomDrawCallback(int column)
+    {
+        var __mb = __mb_get_custom_draw_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TreeItem", "get_custom_draw_callback", 1317077508);
+            if (__mb == 0) throw new MissingMethodException("TreeItem.get_custom_draw_callback is not available in this engine build.");
+            __mb_get_custom_draw_callback = __mb;
+        }
+        long __a0 = unchecked((long)column);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Callable(__ret);
+    }
+
     private static nint __mb_set_custom_stylebox;
     public void SetCustomStylebox(int column, StyleBox? stylebox)
     {
@@ -31371,6 +32628,39 @@ public unsafe partial class TreeItem : GodotObject
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
+
+    private static nint __mb_call_recursive;
+    public void CallRecursive(string method, params Variant[] args)
+    {
+        var __mb = __mb_call_recursive;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TreeItem", "call_recursive", 2866548813);
+            if (__mb == 0) throw new MissingMethodException("TreeItem.call_recursive is not available in this engine build.");
+            __mb_call_recursive = __mb;
+        }
+        var __n = 1 + args.Length;
+        var __ptrs = stackalloc nint[Math.Max(__n, 1)];
+        var __lead = stackalloc NativeVariant[1];
+        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __ptrs[0] = (nint)(__lead + 0);
+        var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
+        for (var __i = 0; __i < args.Length; __i++)
+        {
+            __tail[__i] = args[__i].Native;
+            __ptrs[1 + __i] = (nint)(__tail + __i);
+        }
+        NativeVariant __ret = default;
+        GDExtensionCallError __err = default;
+        GdExtensionInterface.ObjectMethodBindCall(__mb, NativePtr, (nint)__ptrs, __n, (nint)(&__ret), (nint)(&__err));
+        for (var __i = 0; __i < 1; __i++) Variants.Destroy(ref __lead[__i]);
+        if ((int)__err.error != 0)
+        {
+            Variants.Destroy(ref __ret);
+            throw new InvalidOperationException($"TreeItem.call_recursive call failed: error={(int)__err.error} argument={__err.argument}");
+        }
+        Variants.Destroy(ref __ret);
+    }
 }
 
 public unsafe partial class TriangleMesh : RefCounted
@@ -31380,6 +32670,40 @@ public unsafe partial class TriangleMesh : RefCounted
     public TriangleMesh() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "TriangleMesh");
+    }
+
+    private static nint __mb_create_from_faces;
+    public bool CreateFromFaces(Vector3[] faces)
+    {
+        var __mb = __mb_create_from_faces;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TriangleMesh", "create_from_faces", 2637816732);
+            if (__mb == 0) throw new MissingMethodException("TriangleMesh.create_from_faces is not available in this engine build.");
+            __mb_create_from_faces = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, faces);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        byte __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, ref __a0);
+        return __ret != 0;
+    }
+
+    private static nint __mb_get_faces;
+    public Vector3[] GetFaces()
+    {
+        var __mb = __mb_get_faces;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("TriangleMesh", "get_faces", 497664490);
+            if (__mb == 0) throw new MissingMethodException("TriangleMesh.get_faces is not available in this engine build.");
+            __mb_get_faces = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_intersect_segment;
@@ -31817,6 +33141,48 @@ public unsafe partial class Tween : RefCounted
         return (IntervalTweener?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_tween_callback;
+    public CallbackTweener? TweenCallback(Callable callback)
+    {
+        var __mb = __mb_tween_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Tween", "tween_callback", 1540176488);
+            if (__mb == 0) throw new MissingMethodException("Tween.tween_callback is not available in this engine build.");
+            __mb_tween_callback = __mb;
+        }
+        var __a0 = callback.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (CallbackTweener?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_tween_method;
+    public MethodTweener? TweenMethod(Callable method, Variant from, Variant to, double duration)
+    {
+        var __mb = __mb_tween_method;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Tween", "tween_method", 2337877153);
+            if (__mb == 0) throw new MissingMethodException("Tween.tween_method is not available in this engine build.");
+            __mb_tween_method = __mb;
+        }
+        var __a0 = method.Native;
+        var __a1 = from.Native;
+        var __a2 = to.Native;
+        double __a3 = duration;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (MethodTweener?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
     private static nint __mb_tween_subtween;
     public SubtweenTweener? TweenSubtween(Tween? subtween)
     {
@@ -31833,6 +33199,24 @@ public unsafe partial class Tween : RefCounted
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (SubtweenTweener?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_tween_await;
+    public AwaitTweener? TweenAwait(Signal signal)
+    {
+        var __mb = __mb_tween_await;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Tween", "tween_await", 2242837462);
+            if (__mb == 0) throw new MissingMethodException("Tween.tween_await is not available in this engine build.");
+            __mb_tween_await = __mb;
+        }
+        var __a0 = signal.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (AwaitTweener?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_custom_step;

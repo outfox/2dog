@@ -940,6 +940,18 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
         ClassRegistry.AttachNew(this, "WebSocketMultiplayerPeer");
     }
 
+    public string[] SupportedProtocols
+    {
+        get => GetSupportedProtocols();
+        set => SetSupportedProtocols(value);
+    }
+
+    public string[] HandshakeHeaders
+    {
+        get => GetHandshakeHeaders();
+        set => SetHandshakeHeaders(value);
+    }
+
     public int InboundBufferSize
     {
         get => GetInboundBufferSize();
@@ -1060,6 +1072,70 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_get_supported_protocols;
+    internal string[] GetSupportedProtocols()
+    {
+        var __mb = __mb_get_supported_protocols;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "get_supported_protocols", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.get_supported_protocols is not available in this engine build.");
+            __mb_get_supported_protocols = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_set_supported_protocols;
+    internal void SetSupportedProtocols(string[] protocols)
+    {
+        var __mb = __mb_set_supported_protocols;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "set_supported_protocols", 4015028928);
+            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.set_supported_protocols is not available in this engine build.");
+            __mb_set_supported_protocols = __mb;
+        }
+        var __a0 = Packed.CreateStrings(protocols);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_handshake_headers;
+    internal string[] GetHandshakeHeaders()
+    {
+        var __mb = __mb_get_handshake_headers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "get_handshake_headers", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.get_handshake_headers is not available in this engine build.");
+            __mb_get_handshake_headers = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_set_handshake_headers;
+    internal void SetHandshakeHeaders(string[] protocols)
+    {
+        var __mb = __mb_set_handshake_headers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "set_handshake_headers", 4015028928);
+            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.set_handshake_headers is not available in this engine build.");
+            __mb_set_handshake_headers = __mb;
+        }
+        var __a0 = Packed.CreateStrings(protocols);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
     }
 
     private static nint __mb_get_inbound_buffer_size;
@@ -1210,6 +1286,18 @@ public unsafe partial class WebSocketPeer : PacketPeer
         Closed = 3,
     }
 
+    public string[] SupportedProtocols
+    {
+        get => GetSupportedProtocols();
+        set => SetSupportedProtocols(value);
+    }
+
+    public string[] HandshakeHeaders
+    {
+        get => GetHandshakeHeaders();
+        set => SetHandshakeHeaders(value);
+    }
+
     public int InboundBufferSize
     {
         get => GetInboundBufferSize();
@@ -1270,6 +1358,27 @@ public unsafe partial class WebSocketPeer : PacketPeer
         __args[0] = (nint)(&__a0);
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Error)__ret;
+    }
+
+    private static nint __mb_send;
+    public Error Send(byte[] message, WebSocketPeer.WriteMode writeMode = (WebSocketPeer.WriteMode)(1))
+    {
+        var __mb = __mb_send;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebSocketPeer", "send", 2780360567);
+            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.send is not available in this engine build.");
+            __mb_send = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, message);
+        long __a1 = (long)writeMode;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
         return (Error)__ret;
     }
 
@@ -1473,6 +1582,70 @@ public unsafe partial class WebSocketPeer : PacketPeer
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_get_supported_protocols;
+    internal string[] GetSupportedProtocols()
+    {
+        var __mb = __mb_get_supported_protocols;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebSocketPeer", "get_supported_protocols", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_supported_protocols is not available in this engine build.");
+            __mb_get_supported_protocols = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_set_supported_protocols;
+    internal void SetSupportedProtocols(string[] protocols)
+    {
+        var __mb = __mb_set_supported_protocols;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebSocketPeer", "set_supported_protocols", 4015028928);
+            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.set_supported_protocols is not available in this engine build.");
+            __mb_set_supported_protocols = __mb;
+        }
+        var __a0 = Packed.CreateStrings(protocols);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_handshake_headers;
+    internal string[] GetHandshakeHeaders()
+    {
+        var __mb = __mb_get_handshake_headers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebSocketPeer", "get_handshake_headers", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_handshake_headers is not available in this engine build.");
+            __mb_get_handshake_headers = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_set_handshake_headers;
+    internal void SetHandshakeHeaders(string[] protocols)
+    {
+        var __mb = __mb_set_handshake_headers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebSocketPeer", "set_handshake_headers", 4015028928);
+            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.set_handshake_headers is not available in this engine build.");
+            __mb_set_handshake_headers = __mb;
+        }
+        var __a0 = Packed.CreateStrings(protocols);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
     }
 
     private static nint __mb_get_inbound_buffer_size;
@@ -2052,6 +2225,12 @@ public unsafe partial class Window : Viewport
     {
         get => GetNonclientArea();
         set => SetNonclientArea(value);
+    }
+
+    public Vector2[] MousePassthroughPolygon
+    {
+        get => GetMousePassthroughPolygon();
+        set => SetMousePassthroughPolygon(value);
     }
 
     public bool Visible
@@ -3260,6 +3439,38 @@ public unsafe partial class Window : Viewport
         return (float)__ret;
     }
 
+    private static nint __mb_set_mouse_passthrough_polygon;
+    internal void SetMousePassthroughPolygon(Vector2[] polygon)
+    {
+        var __mb = __mb_set_mouse_passthrough_polygon;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Window", "set_mouse_passthrough_polygon", 1509147220);
+            if (__mb == 0) throw new MissingMethodException("Window.set_mouse_passthrough_polygon is not available in this engine build.");
+            __mb_set_mouse_passthrough_polygon = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, polygon);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_mouse_passthrough_polygon;
+    internal Vector2[] GetMousePassthroughPolygon()
+    {
+        var __mb = __mb_get_mouse_passthrough_polygon;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Window", "get_mouse_passthrough_polygon", 2961356807);
+            if (__mb == 0) throw new MissingMethodException("Window.get_mouse_passthrough_polygon is not available in this engine build.");
+            __mb_get_mouse_passthrough_polygon = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_set_wrap_controls;
     internal void SetWrapControls(bool enable)
     {
@@ -4390,6 +4601,29 @@ public static unsafe partial class WorkerThreadPool
 
     public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
+    private static nint __mb_add_task;
+    public static long AddTask(Callable action, bool highPriority = false, string description = "")
+    {
+        var __mb = __mb_add_task;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WorkerThreadPool", "add_task", 3745067146);
+            if (__mb == 0) throw new MissingMethodException("WorkerThreadPool.add_task is not available in this engine build.");
+            __mb_add_task = __mb;
+        }
+        var __a0 = action.Native;
+        byte __a1 = highPriority ? (byte)1 : (byte)0;
+        ulong __a2 = NativeString.Create(description);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a2);
+        return unchecked((long)__ret);
+    }
+
     private static nint __mb_is_task_completed;
     public static bool IsTaskCompleted(long taskId)
     {
@@ -4438,6 +4672,33 @@ public static unsafe partial class WorkerThreadPool
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        return unchecked((long)__ret);
+    }
+
+    private static nint __mb_add_group_task;
+    public static long AddGroupTask(Callable action, int elements, int tasksNeeded = unchecked((int)(-1)), bool highPriority = false, string description = "")
+    {
+        var __mb = __mb_add_group_task;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WorkerThreadPool", "add_group_task", 1801953219);
+            if (__mb == 0) throw new MissingMethodException("WorkerThreadPool.add_group_task is not available in this engine build.");
+            __mb_add_group_task = __mb;
+        }
+        var __a0 = action.Native;
+        long __a1 = unchecked((long)elements);
+        long __a2 = unchecked((long)tasksNeeded);
+        byte __a3 = highPriority ? (byte)1 : (byte)0;
+        ulong __a4 = NativeString.Create(description);
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a4);
         return unchecked((long)__ret);
     }
 

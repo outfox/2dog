@@ -980,6 +980,33 @@ public unsafe partial class FileAccess : RefCounted
         return (FileAccess?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_open_encrypted;
+    public static FileAccess? OpenEncrypted(string path, FileAccess.ModeFlags modeFlags, byte[] key, byte[] iv)
+    {
+        var __mb = __mb_open_encrypted;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileAccess", "open_encrypted", 788003459);
+            if (__mb == 0) throw new MissingMethodException("FileAccess.open_encrypted is not available in this engine build.");
+            __mb_open_encrypted = __mb;
+        }
+        ulong __a0 = NativeString.Create(path);
+        long __a1 = (long)modeFlags;
+        var __a2 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, key);
+        var __a3 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, iv);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a2);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a3);
+        return (FileAccess?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
     private static nint __mb_open_encrypted_with_pass;
     public static FileAccess? OpenEncryptedWithPass(string path, FileAccess.ModeFlags modeFlags, string pass)
     {
@@ -1066,6 +1093,25 @@ public unsafe partial class FileAccess : RefCounted
         NativeString.Destroy(ref __a1);
         NativeString.Destroy(ref __a2);
         return (FileAccess?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_get_file_as_bytes;
+    public static byte[] GetFileAsBytes(string path)
+    {
+        var __mb = __mb_get_file_as_bytes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileAccess", "get_file_as_bytes", 659035735);
+            if (__mb == 0) throw new MissingMethodException("FileAccess.get_file_as_bytes is not available in this engine build.");
+            __mb_get_file_as_bytes = __mb;
+        }
+        ulong __a0 = NativeString.Create(path);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_file_as_string;
@@ -1360,6 +1406,24 @@ public unsafe partial class FileAccess : RefCounted
         return (float)__ret;
     }
 
+    private static nint __mb_get_buffer;
+    public byte[] GetBuffer(long length)
+    {
+        var __mb = __mb_get_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileAccess", "get_buffer", 4131300905);
+            if (__mb == 0) throw new MissingMethodException("FileAccess.get_buffer is not available in this engine build.");
+            __mb_get_buffer = __mb;
+        }
+        long __a0 = unchecked((long)length);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_get_line;
     public string GetLine()
     {
@@ -1373,6 +1437,25 @@ public unsafe partial class FileAccess : RefCounted
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_get_csv_line;
+    public string[] GetCsvLine(string delim = ",")
+    {
+        var __mb = __mb_get_csv_line;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileAccess", "get_csv_line", 2358116058);
+            if (__mb == 0) throw new MissingMethodException("FileAccess.get_csv_line is not available in this engine build.");
+            __mb_get_csv_line = __mb;
+        }
+        ulong __a0 = NativeString.Create(delim);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_get_as_text;
@@ -1636,6 +1719,25 @@ public unsafe partial class FileAccess : RefCounted
         return __ret != 0;
     }
 
+    private static nint __mb_store_buffer;
+    public bool StoreBuffer(byte[] buffer)
+    {
+        var __mb = __mb_store_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileAccess", "store_buffer", 114037665);
+            if (__mb == 0) throw new MissingMethodException("FileAccess.store_buffer is not available in this engine build.");
+            __mb_store_buffer = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        byte __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        return __ret != 0;
+    }
+
     private static nint __mb_store_line;
     public bool StoreLine(string line)
     {
@@ -1652,6 +1754,28 @@ public unsafe partial class FileAccess : RefCounted
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
+        return __ret != 0;
+    }
+
+    private static nint __mb_store_csv_line;
+    public bool StoreCsvLine(string[] values, string delim = ",")
+    {
+        var __mb = __mb_store_csv_line;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileAccess", "store_csv_line", 1611473434);
+            if (__mb == 0) throw new MissingMethodException("FileAccess.store_csv_line is not available in this engine build.");
+            __mb_store_csv_line = __mb;
+        }
+        var __a0 = Packed.CreateStrings(values);
+        ulong __a1 = NativeString.Create(delim);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        byte __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
+        NativeString.Destroy(ref __a1);
         return __ret != 0;
     }
 
@@ -1937,6 +2061,28 @@ public unsafe partial class FileAccess : RefCounted
         return __ret != 0;
     }
 
+    private static nint __mb_get_extended_attribute;
+    public static byte[] GetExtendedAttribute(string file, string attributeName)
+    {
+        var __mb = __mb_get_extended_attribute;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileAccess", "get_extended_attribute", 955893464);
+            if (__mb == 0) throw new MissingMethodException("FileAccess.get_extended_attribute is not available in this engine build.");
+            __mb_get_extended_attribute = __mb;
+        }
+        ulong __a0 = NativeString.Create(file);
+        ulong __a1 = NativeString.Create(attributeName);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a1);
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_get_extended_attribute_string;
     public static string GetExtendedAttributeString(string file, string attributeName)
     {
@@ -1957,6 +2103,31 @@ public unsafe partial class FileAccess : RefCounted
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_set_extended_attribute;
+    public static Error SetExtendedAttribute(string file, string attributeName, byte[] data)
+    {
+        var __mb = __mb_set_extended_attribute;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileAccess", "set_extended_attribute", 2643421469);
+            if (__mb == 0) throw new MissingMethodException("FileAccess.set_extended_attribute is not available in this engine build.");
+            __mb_set_extended_attribute = __mb;
+        }
+        ulong __a0 = NativeString.Create(file);
+        ulong __a1 = NativeString.Create(attributeName);
+        var __a2 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a1);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a2);
+        return (Error)__ret;
     }
 
     private static nint __mb_set_extended_attribute_string;
@@ -2004,6 +2175,25 @@ public unsafe partial class FileAccess : RefCounted
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return (Error)__ret;
+    }
+
+    private static nint __mb_get_extended_attributes_list;
+    public static string[] GetExtendedAttributesList(string file)
+    {
+        var __mb = __mb_get_extended_attributes_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileAccess", "get_extended_attributes_list", 3538744774);
+            if (__mb == 0) throw new MissingMethodException("FileAccess.get_extended_attributes_list is not available in this engine build.");
+            __mb_get_extended_attributes_list = __mb;
+        }
+        ulong __a0 = NativeString.Create(file);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToStringArray(ref __ret);
     }
 }
 
@@ -2079,6 +2269,12 @@ public unsafe partial class FileDialog : ConfirmationDialog
     {
         get => GetRootSubfolder();
         set => SetRootSubfolder(value);
+    }
+
+    public string[] Filters
+    {
+        get => GetFilters();
+        set => SetFilters(value);
     }
 
     public string FilenameFilter
@@ -2213,6 +2409,38 @@ public unsafe partial class FileDialog : ConfirmationDialog
         NativeString.Destroy(ref __a2);
     }
 
+    private static nint __mb_set_filters;
+    internal void SetFilters(string[] filters)
+    {
+        var __mb = __mb_set_filters;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileDialog", "set_filters", 4015028928);
+            if (__mb == 0) throw new MissingMethodException("FileDialog.set_filters is not available in this engine build.");
+            __mb_set_filters = __mb;
+        }
+        var __a0 = Packed.CreateStrings(filters);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_filters;
+    internal string[] GetFilters()
+    {
+        var __mb = __mb_get_filters;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileDialog", "get_filters", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("FileDialog.get_filters is not available in this engine build.");
+            __mb_get_filters = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_clear_filename_filter;
     public void ClearFilenameFilter()
     {
@@ -2276,6 +2504,24 @@ public unsafe partial class FileDialog : ConfirmationDialog
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
+    private static nint __mb_get_option_values;
+    public string[] GetOptionValues(int option)
+    {
+        var __mb = __mb_get_option_values;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileDialog", "get_option_values", 647634434);
+            if (__mb == 0) throw new MissingMethodException("FileDialog.get_option_values is not available in this engine build.");
+            __mb_get_option_values = __mb;
+        }
+        long __a0 = unchecked((long)option);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_get_option_default;
     public int GetOptionDefault(int option)
     {
@@ -2311,6 +2557,25 @@ public unsafe partial class FileDialog : ConfirmationDialog
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
+    }
+
+    private static nint __mb_set_option_values;
+    public void SetOptionValues(int option, string[] values)
+    {
+        var __mb = __mb_set_option_values;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileDialog", "set_option_values", 3353661094);
+            if (__mb == 0) throw new MissingMethodException("FileDialog.set_option_values is not available in this engine build.");
+            __mb_set_option_values = __mb;
+        }
+        long __a0 = unchecked((long)option);
+        var __a1 = Packed.CreateStrings(values);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a1);
     }
 
     private static nint __mb_set_option_default;
@@ -2360,6 +2625,28 @@ public unsafe partial class FileDialog : ConfirmationDialog
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_add_option;
+    public void AddOption(string name, string[] values, int defaultValueIndex)
+    {
+        var __mb = __mb_add_option;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileDialog", "add_option", 149592325);
+            if (__mb == 0) throw new MissingMethodException("FileDialog.add_option is not available in this engine build.");
+            __mb_add_option = __mb;
+        }
+        ulong __a0 = NativeString.Create(name);
+        var __a1 = Packed.CreateStrings(values);
+        long __a2 = unchecked((long)defaultValueIndex);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a1);
     }
 
     private static nint __mb_get_selected_options;
@@ -2768,6 +3055,102 @@ public unsafe partial class FileDialog : ConfirmationDialog
             __mb_deselect_all = __mb;
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+    }
+
+    private static nint __mb_set_favorite_list;
+    public static void SetFavoriteList(string[] favorites)
+    {
+        var __mb = __mb_set_favorite_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileDialog", "set_favorite_list", 4015028928);
+            if (__mb == 0) throw new MissingMethodException("FileDialog.set_favorite_list is not available in this engine build.");
+            __mb_set_favorite_list = __mb;
+        }
+        var __a0 = Packed.CreateStrings(favorites);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_favorite_list;
+    public static string[] GetFavoriteList()
+    {
+        var __mb = __mb_get_favorite_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileDialog", "get_favorite_list", 2981934095);
+            if (__mb == 0) throw new MissingMethodException("FileDialog.get_favorite_list is not available in this engine build.");
+            __mb_get_favorite_list = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_set_recent_list;
+    public static void SetRecentList(string[] recents)
+    {
+        var __mb = __mb_set_recent_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileDialog", "set_recent_list", 4015028928);
+            if (__mb == 0) throw new MissingMethodException("FileDialog.set_recent_list is not available in this engine build.");
+            __mb_set_recent_list = __mb;
+        }
+        var __a0 = Packed.CreateStrings(recents);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_recent_list;
+    public static string[] GetRecentList()
+    {
+        var __mb = __mb_get_recent_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileDialog", "get_recent_list", 2981934095);
+            if (__mb == 0) throw new MissingMethodException("FileDialog.get_recent_list is not available in this engine build.");
+            __mb_get_recent_list = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_set_get_icon_callback;
+    public static void SetGetIconCallback(Callable callback)
+    {
+        var __mb = __mb_set_get_icon_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileDialog", "set_get_icon_callback", 1611583062);
+            if (__mb == 0) throw new MissingMethodException("FileDialog.set_get_icon_callback is not available in this engine build.");
+            __mb_set_get_icon_callback = __mb;
+        }
+        var __a0 = callback.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_get_thumbnail_callback;
+    public static void SetGetThumbnailCallback(Callable callback)
+    {
+        var __mb = __mb_set_get_thumbnail_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileDialog", "set_get_thumbnail_callback", 1611583062);
+            if (__mb == 0) throw new MissingMethodException("FileDialog.set_get_thumbnail_callback is not available in this engine build.");
+            __mb_set_get_thumbnail_callback = __mb;
+        }
+        var __a0 = callback.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, 0);
     }
 
     private static nint __mb_popup_file_dialog;
@@ -3882,6 +4265,45 @@ public unsafe partial class Font : Resource
         return new Godot.Collections.Array(__ret);
     }
 
+    private static nint __mb_find_variation;
+    public Rid FindVariation(Godot.Collections.Dictionary variationCoordinates, int faceIndex, float strength, Transform2D transform, int spacingTop, int spacingBottom, int spacingSpace, int spacingGlyph, float baselineOffset, long paletteIndex, Color[] customColors)
+    {
+        var __mb = __mb_find_variation;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Font", "find_variation", 3275867622);
+            if (__mb == 0) throw new MissingMethodException("Font.find_variation is not available in this engine build.");
+            __mb_find_variation = __mb;
+        }
+        ulong __a0 = variationCoordinates.Native;
+        long __a1 = unchecked((long)faceIndex);
+        double __a2 = strength;
+        var __a3 = transform;
+        long __a4 = unchecked((long)spacingTop);
+        long __a5 = unchecked((long)spacingBottom);
+        long __a6 = unchecked((long)spacingSpace);
+        long __a7 = unchecked((long)spacingGlyph);
+        double __a8 = baselineOffset;
+        long __a9 = unchecked((long)paletteIndex);
+        var __a10 = Packed.CreatePod<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, customColors);
+        var __args = stackalloc nint[11];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        __args[7] = (nint)(&__a7);
+        __args[8] = (nint)(&__a8);
+        __args[9] = (nint)(&__a9);
+        __args[10] = (nint)(&__a10);
+        var __ret = default(Rid);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, ref __a10);
+        return __ret;
+    }
+
     private static nint __mb_get_rids;
     public Godot.Collections.Array GetRids()
     {
@@ -4108,6 +4530,24 @@ public unsafe partial class Font : Resource
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_get_palette_colors;
+    public Color[] GetPaletteColors(long index)
+    {
+        var __mb = __mb_get_palette_colors;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Font", "get_palette_colors", 2552048864);
+            if (__mb == 0) throw new MissingMethodException("Font.get_palette_colors is not available in this engine build.");
+            __mb_get_palette_colors = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_spacing;
@@ -4591,6 +5031,12 @@ public unsafe partial class FontFile : Font
         ClassRegistry.AttachNew(this, "FontFile");
     }
 
+    public byte[] Data
+    {
+        get => GetData();
+        set => SetData(value);
+    }
+
     public bool GenerateMipmaps
     {
         get => GetGenerateMipmaps();
@@ -4753,6 +5199,38 @@ public unsafe partial class FontFile : Font
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
+    }
+
+    private static nint __mb_set_data;
+    internal void SetData(byte[] data)
+    {
+        var __mb = __mb_set_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontFile", "set_data", 2971499966);
+            if (__mb == 0) throw new MissingMethodException("FontFile.set_data is not available in this engine build.");
+            __mb_set_data = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_data;
+    internal byte[] GetData()
+    {
+        var __mb = __mb_get_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontFile", "get_data", 2362200018);
+            if (__mb == 0) throw new MissingMethodException("FontFile.get_data is not available in this engine build.");
+            __mb_get_data = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_font_name;
@@ -5920,6 +6398,71 @@ public unsafe partial class FontFile : Font
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_set_texture_offsets;
+    public void SetTextureOffsets(int cacheIndex, Vector2I size, int textureIndex, int[] offset)
+    {
+        var __mb = __mb_set_texture_offsets;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontFile", "set_texture_offsets", 2849993437);
+            if (__mb == 0) throw new MissingMethodException("FontFile.set_texture_offsets is not available in this engine build.");
+            __mb_set_texture_offsets = __mb;
+        }
+        long __a0 = unchecked((long)cacheIndex);
+        var __a1 = size;
+        long __a2 = unchecked((long)textureIndex);
+        var __a3 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, offset);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a3);
+    }
+
+    private static nint __mb_get_texture_offsets;
+    public int[] GetTextureOffsets(int cacheIndex, Vector2I size, int textureIndex)
+    {
+        var __mb = __mb_get_texture_offsets;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontFile", "get_texture_offsets", 3703444828);
+            if (__mb == 0) throw new MissingMethodException("FontFile.get_texture_offsets is not available in this engine build.");
+            __mb_get_texture_offsets = __mb;
+        }
+        long __a0 = unchecked((long)cacheIndex);
+        var __a1 = size;
+        long __a2 = unchecked((long)textureIndex);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_get_glyph_list;
+    public int[] GetGlyphList(int cacheIndex, Vector2I size)
+    {
+        var __mb = __mb_get_glyph_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontFile", "get_glyph_list", 681709689);
+            if (__mb == 0) throw new MissingMethodException("FontFile.get_glyph_list is not available in this engine build.");
+            __mb_get_glyph_list = __mb;
+        }
+        long __a0 = unchecked((long)cacheIndex);
+        var __a1 = size;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_clear_glyphs;
     public void ClearGlyphs(int cacheIndex, Vector2I size)
     {
@@ -6377,6 +6920,21 @@ public unsafe partial class FontFile : Font
         NativeString.Destroy(ref __a0);
     }
 
+    private static nint __mb_get_language_support_overrides;
+    public string[] GetLanguageSupportOverrides()
+    {
+        var __mb = __mb_get_language_support_overrides;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontFile", "get_language_support_overrides", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("FontFile.get_language_support_overrides is not available in this engine build.");
+            __mb_get_language_support_overrides = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_set_script_support_override;
     public void SetScriptSupportOverride(string script, bool supported)
     {
@@ -6430,6 +6988,21 @@ public unsafe partial class FontFile : Font
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
+    }
+
+    private static nint __mb_get_script_support_overrides;
+    public string[] GetScriptSupportOverrides()
+    {
+        var __mb = __mb_get_script_support_overrides;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontFile", "get_script_support_overrides", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("FontFile.get_script_support_overrides is not available in this engine build.");
+            __mb_get_script_support_overrides = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_set_opentype_feature_overrides;
@@ -6585,6 +7158,12 @@ public unsafe partial class FontVariation : Font
     {
         get => GetPaletteIndex();
         set => SetPaletteIndex(value);
+    }
+
+    public Color[] PaletteCustomColors
+    {
+        get => GetPaletteCustomColors();
+        set => SetPaletteCustomColors(value);
     }
 
     private static nint __mb_set_base_font;
@@ -6836,6 +7415,38 @@ public unsafe partial class FontVariation : Font
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_palette_custom_colors;
+    internal Color[] GetPaletteCustomColors()
+    {
+        var __mb = __mb_get_palette_custom_colors;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontVariation", "get_palette_custom_colors", 1392750486);
+            if (__mb == 0) throw new MissingMethodException("FontVariation.get_palette_custom_colors is not available in this engine build.");
+            __mb_get_palette_custom_colors = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_set_palette_custom_colors;
+    internal void SetPaletteCustomColors(Color[] colors)
+    {
+        var __mb = __mb_set_palette_custom_colors;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontVariation", "set_palette_custom_colors", 3546319833);
+            if (__mb == 0) throw new MissingMethodException("FontVariation.set_palette_custom_colors is not available in this engine build.");
+            __mb_set_palette_custom_colors = __mb;
+        }
+        var __a0 = Packed.CreatePod<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, GdExtensionInterface.PackedColorArrayOperatorIndex, colors);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY, ref __a0);
     }
 }
 

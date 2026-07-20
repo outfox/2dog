@@ -155,6 +155,27 @@ public static unsafe partial class IP
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
+    private static nint __mb_resolve_hostname_addresses;
+    public static string[] ResolveHostnameAddresses(string host, IP.Type ipType = (IP.Type)(3))
+    {
+        var __mb = __mb_resolve_hostname_addresses;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("IP", "resolve_hostname_addresses", 773767525);
+            if (__mb == 0) throw new MissingMethodException("IP.resolve_hostname_addresses is not available in this engine build.");
+            __mb_resolve_hostname_addresses = __mb;
+        }
+        ulong __a0 = NativeString.Create(host);
+        long __a1 = (long)ipType;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_resolve_hostname_queue_item;
     public static int ResolveHostnameQueueItem(string host, IP.Type ipType = (IP.Type)(3))
     {
@@ -244,6 +265,21 @@ public static unsafe partial class IP
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_local_addresses;
+    public static string[] GetLocalAddresses()
+    {
+        var __mb = __mb_get_local_addresses;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("IP", "get_local_addresses", 1139954409);
+            if (__mb == 0) throw new MissingMethodException("IP.get_local_addresses is not available in this engine build.");
+            __mb_get_local_addresses = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_get_local_interfaces;
@@ -462,6 +498,21 @@ public unsafe partial class Image : Resource
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (Image.Format)__ret;
+    }
+
+    private static nint __mb_get_data;
+    public byte[] GetData()
+    {
+        var __mb = __mb_get_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "get_data", 2362200018);
+            if (__mb == 0) throw new MissingMethodException("Image.get_data is not available in this engine build.");
+            __mb_get_data = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_data_size;
@@ -702,6 +753,58 @@ public unsafe partial class Image : Resource
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_create_from_data;
+    public static Image? CreateFromData(int width, int height, bool useMipmaps, Image.Format format, byte[] data)
+    {
+        var __mb = __mb_create_from_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "create_from_data", 299398494);
+            if (__mb == 0) throw new MissingMethodException("Image.create_from_data is not available in this engine build.");
+            __mb_create_from_data = __mb;
+        }
+        long __a0 = unchecked((long)width);
+        long __a1 = unchecked((long)height);
+        byte __a2 = useMipmaps ? (byte)1 : (byte)0;
+        long __a3 = (long)format;
+        var __a4 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a4);
+        return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_set_data;
+    public void SetData(int width, int height, bool useMipmaps, Image.Format format, byte[] data)
+    {
+        var __mb = __mb_set_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "set_data", 2740482212);
+            if (__mb == 0) throw new MissingMethodException("Image.set_data is not available in this engine build.");
+            __mb_set_data = __mb;
+        }
+        long __a0 = unchecked((long)width);
+        long __a1 = unchecked((long)height);
+        byte __a2 = useMipmaps ? (byte)1 : (byte)0;
+        long __a3 = (long)format;
+        var __a4 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a4);
+    }
+
     private static nint __mb_is_empty;
     public bool IsEmpty()
     {
@@ -774,6 +877,21 @@ public unsafe partial class Image : Resource
         return (Error)__ret;
     }
 
+    private static nint __mb_save_png_to_buffer;
+    public byte[] SavePngToBuffer()
+    {
+        var __mb = __mb_save_png_to_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "save_png_to_buffer", 2362200018);
+            if (__mb == 0) throw new MissingMethodException("Image.save_png_to_buffer is not available in this engine build.");
+            __mb_save_png_to_buffer = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_save_jpg;
     public Error SaveJpg(string path, float quality = 0.75f)
     {
@@ -793,6 +911,24 @@ public unsafe partial class Image : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
+    }
+
+    private static nint __mb_save_jpg_to_buffer;
+    public byte[] SaveJpgToBuffer(float quality = 0.75f)
+    {
+        var __mb = __mb_save_jpg_to_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "save_jpg_to_buffer", 592235273);
+            if (__mb == 0) throw new MissingMethodException("Image.save_jpg_to_buffer is not available in this engine build.");
+            __mb_save_jpg_to_buffer = __mb;
+        }
+        double __a0 = quality;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_save_exr;
@@ -820,6 +956,28 @@ public unsafe partial class Image : Resource
         return (Error)__ret;
     }
 
+    private static nint __mb_save_exr_to_buffer;
+    public byte[] SaveExrToBuffer(bool grayscale = false, bool colorImage = false, float maxLinearValue = -1.0f)
+    {
+        var __mb = __mb_save_exr_to_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "save_exr_to_buffer", 1477518536);
+            if (__mb == 0) throw new MissingMethodException("Image.save_exr_to_buffer is not available in this engine build.");
+            __mb_save_exr_to_buffer = __mb;
+        }
+        byte __a0 = grayscale ? (byte)1 : (byte)0;
+        byte __a1 = colorImage ? (byte)1 : (byte)0;
+        double __a2 = maxLinearValue;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_save_dds;
     public Error SaveDds(string path)
     {
@@ -837,6 +995,21 @@ public unsafe partial class Image : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
+    }
+
+    private static nint __mb_save_dds_to_buffer;
+    public byte[] SaveDdsToBuffer()
+    {
+        var __mb = __mb_save_dds_to_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "save_dds_to_buffer", 2362200018);
+            if (__mb == 0) throw new MissingMethodException("Image.save_dds_to_buffer is not available in this engine build.");
+            __mb_save_dds_to_buffer = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_save_webp;
@@ -860,6 +1033,26 @@ public unsafe partial class Image : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
+    }
+
+    private static nint __mb_save_webp_to_buffer;
+    public byte[] SaveWebpToBuffer(bool lossy = false, float quality = 0.75f)
+    {
+        var __mb = __mb_save_webp_to_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "save_webp_to_buffer", 1214628238);
+            if (__mb == 0) throw new MissingMethodException("Image.save_webp_to_buffer is not available in this engine build.");
+            __mb_save_webp_to_buffer = __mb;
+        }
+        byte __a0 = lossy ? (byte)1 : (byte)0;
+        double __a1 = quality;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_detect_alpha;
@@ -1392,6 +1585,179 @@ public unsafe partial class Image : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_load_png_from_buffer;
+    public Error LoadPngFromBuffer(byte[] buffer)
+    {
+        var __mb = __mb_load_png_from_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "load_png_from_buffer", 680677267);
+            if (__mb == 0) throw new MissingMethodException("Image.load_png_from_buffer is not available in this engine build.");
+            __mb_load_png_from_buffer = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_load_jpg_from_buffer;
+    public Error LoadJpgFromBuffer(byte[] buffer)
+    {
+        var __mb = __mb_load_jpg_from_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "load_jpg_from_buffer", 680677267);
+            if (__mb == 0) throw new MissingMethodException("Image.load_jpg_from_buffer is not available in this engine build.");
+            __mb_load_jpg_from_buffer = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_load_webp_from_buffer;
+    public Error LoadWebpFromBuffer(byte[] buffer)
+    {
+        var __mb = __mb_load_webp_from_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "load_webp_from_buffer", 680677267);
+            if (__mb == 0) throw new MissingMethodException("Image.load_webp_from_buffer is not available in this engine build.");
+            __mb_load_webp_from_buffer = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_load_tga_from_buffer;
+    public Error LoadTgaFromBuffer(byte[] buffer)
+    {
+        var __mb = __mb_load_tga_from_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "load_tga_from_buffer", 680677267);
+            if (__mb == 0) throw new MissingMethodException("Image.load_tga_from_buffer is not available in this engine build.");
+            __mb_load_tga_from_buffer = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_load_bmp_from_buffer;
+    public Error LoadBmpFromBuffer(byte[] buffer)
+    {
+        var __mb = __mb_load_bmp_from_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "load_bmp_from_buffer", 680677267);
+            if (__mb == 0) throw new MissingMethodException("Image.load_bmp_from_buffer is not available in this engine build.");
+            __mb_load_bmp_from_buffer = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_load_ktx_from_buffer;
+    public Error LoadKtxFromBuffer(byte[] buffer)
+    {
+        var __mb = __mb_load_ktx_from_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "load_ktx_from_buffer", 680677267);
+            if (__mb == 0) throw new MissingMethodException("Image.load_ktx_from_buffer is not available in this engine build.");
+            __mb_load_ktx_from_buffer = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_load_dds_from_buffer;
+    public Error LoadDdsFromBuffer(byte[] buffer)
+    {
+        var __mb = __mb_load_dds_from_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "load_dds_from_buffer", 680677267);
+            if (__mb == 0) throw new MissingMethodException("Image.load_dds_from_buffer is not available in this engine build.");
+            __mb_load_dds_from_buffer = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_load_exr_from_buffer;
+    public Error LoadExrFromBuffer(byte[] buffer)
+    {
+        var __mb = __mb_load_exr_from_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "load_exr_from_buffer", 680677267);
+            if (__mb == 0) throw new MissingMethodException("Image.load_exr_from_buffer is not available in this engine build.");
+            __mb_load_exr_from_buffer = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_load_svg_from_buffer;
+    public Error LoadSvgFromBuffer(byte[] buffer, float scale = 1.0f)
+    {
+        var __mb = __mb_load_svg_from_buffer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Image", "load_svg_from_buffer", 311853421);
+            if (__mb == 0) throw new MissingMethodException("Image.load_svg_from_buffer is not available in this engine build.");
+            __mb_load_svg_from_buffer = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
+        double __a1 = scale;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        return (Error)__ret;
+    }
+
     private static nint __mb_load_svg_from_string;
     public Error LoadSvgFromString(string svgStr, float scale = 1.0f)
     {
@@ -1462,12 +1828,21 @@ public unsafe partial class ImageFormatLoaderExtension : ImageFormatLoader
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
 
+    public virtual string[] _GetRecognizedExtensions() => default!;
+
     public virtual Error _LoadImage(Image? image, FileAccess? fileaccess, ImageFormatLoader.LoaderFlags flags, float scale) => default!;
 
+    private static ulong __vsn_get_recognized_extensions;
     private static ulong __vsn_load_image;
 
     internal override bool __CallVirtual(ulong nameSn, nint* args, nint ret)
     {
+        if (__vsn_get_recognized_extensions == 0) __vsn_get_recognized_extensions = StringNames.Get("_get_recognized_extensions").Opaque;
+        if (nameSn == __vsn_get_recognized_extensions)
+        {
+            *(Opaque16*)ret = Packed.CreateStrings(_GetRecognizedExtensions() ?? []);
+            return true;
+        }
         if (__vsn_load_image == 0) __vsn_load_image = StringNames.Get("_load_image").Opaque;
         if (nameSn == __vsn_load_image)
         {
@@ -2083,6 +2458,26 @@ public unsafe partial class ImporterMesh : Resource
         double __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
+    }
+
+    private static nint __mb_get_surface_lod_indices;
+    public int[] GetSurfaceLodIndices(int surfaceIdx, int lodIdx)
+    {
+        var __mb = __mb_get_surface_lod_indices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ImporterMesh", "get_surface_lod_indices", 1265128013);
+            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_surface_lod_indices is not available in this engine build.");
+            __mb_get_surface_lod_indices = __mb;
+        }
+        long __a0 = unchecked((long)surfaceIdx);
+        long __a1 = unchecked((long)lodIdx);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_surface_material;
@@ -7941,6 +8336,21 @@ public unsafe partial class ItemList : Control
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_get_selected_items;
+    public int[] GetSelectedItems()
+    {
+        var __mb = __mb_get_selected_items;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ItemList", "get_selected_items", 969006518);
+            if (__mb == 0) throw new MissingMethodException("ItemList.get_selected_items is not available in this engine build.");
+            __mb_get_selected_items = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_move_item;

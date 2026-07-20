@@ -38,6 +38,61 @@ public unsafe partial class HMACContext : RefCounted
     {
         ClassRegistry.AttachNew(this, "HMACContext");
     }
+
+    private static nint __mb_start;
+    public Error Start(HashingContext.HashType hashType, byte[] key)
+    {
+        var __mb = __mb_start;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("HMACContext", "start", 3537364598);
+            if (__mb == 0) throw new MissingMethodException("HMACContext.start is not available in this engine build.");
+            __mb_start = __mb;
+        }
+        long __a0 = (long)hashType;
+        var __a1 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, key);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a1);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_update;
+    public Error Update(byte[] data)
+    {
+        var __mb = __mb_update;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("HMACContext", "update", 680677267);
+            if (__mb == 0) throw new MissingMethodException("HMACContext.update is not available in this engine build.");
+            __mb_update = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_finish;
+    public byte[] Finish()
+    {
+        var __mb = __mb_finish;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("HMACContext", "finish", 2115431945);
+            if (__mb == 0) throw new MissingMethodException("HMACContext.finish is not available in this engine build.");
+            __mb_finish = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
 }
 
 public unsafe partial class HScrollBar : ScrollBar
@@ -254,6 +309,60 @@ public unsafe partial class HTTPClient : RefCounted
         return (StreamPeer?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_request_raw;
+    public Error RequestRaw(HTTPClient.Method method, string url, string[] headers, byte[] body)
+    {
+        var __mb = __mb_request_raw;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("HTTPClient", "request_raw", 540161961);
+            if (__mb == 0) throw new MissingMethodException("HTTPClient.request_raw is not available in this engine build.");
+            __mb_request_raw = __mb;
+        }
+        long __a0 = (long)method;
+        ulong __a1 = NativeString.Create(url);
+        var __a2 = Packed.CreateStrings(headers);
+        var __a3 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, body);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a1);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a2);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a3);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_request;
+    public Error Request(HTTPClient.Method method, string url, string[] headers, string body = "")
+    {
+        var __mb = __mb_request;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("HTTPClient", "request", 3778990155);
+            if (__mb == 0) throw new MissingMethodException("HTTPClient.request is not available in this engine build.");
+            __mb_request = __mb;
+        }
+        long __a0 = (long)method;
+        ulong __a1 = NativeString.Create(url);
+        var __a2 = Packed.CreateStrings(headers);
+        ulong __a3 = NativeString.Create(body);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a1);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a2);
+        NativeString.Destroy(ref __a3);
+        return (Error)__ret;
+    }
+
     private static nint __mb_close;
     public void Close()
     {
@@ -312,6 +421,21 @@ public unsafe partial class HTTPClient : RefCounted
         return unchecked((int)__ret);
     }
 
+    private static nint __mb_get_response_headers;
+    public string[] GetResponseHeaders()
+    {
+        var __mb = __mb_get_response_headers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("HTTPClient", "get_response_headers", 2981934095);
+            if (__mb == 0) throw new MissingMethodException("HTTPClient.get_response_headers is not available in this engine build.");
+            __mb_get_response_headers = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
     private static nint __mb_get_response_headers_as_dictionary;
     public Godot.Collections.Dictionary GetResponseHeadersAsDictionary()
     {
@@ -340,6 +464,21 @@ public unsafe partial class HTTPClient : RefCounted
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((long)__ret);
+    }
+
+    private static nint __mb_read_response_body_chunk;
+    public byte[] ReadResponseBodyChunk()
+    {
+        var __mb = __mb_read_response_body_chunk;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("HTTPClient", "read_response_body_chunk", 2115431945);
+            if (__mb == 0) throw new MissingMethodException("HTTPClient.read_response_body_chunk is not available in this engine build.");
+            __mb_read_response_body_chunk = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_read_chunk_size;
@@ -558,6 +697,60 @@ public unsafe partial class HTTPRequest : Node
     {
         get => GetTimeout();
         set => SetTimeout(value);
+    }
+
+    private static nint __mb_request;
+    public Error Request(string url, string[] customHeaders, HTTPClient.Method method = (HTTPClient.Method)(0), string requestData = "")
+    {
+        var __mb = __mb_request;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("HTTPRequest", "request", 3215244323);
+            if (__mb == 0) throw new MissingMethodException("HTTPRequest.request is not available in this engine build.");
+            __mb_request = __mb;
+        }
+        ulong __a0 = NativeString.Create(url);
+        var __a1 = Packed.CreateStrings(customHeaders);
+        long __a2 = (long)method;
+        ulong __a3 = NativeString.Create(requestData);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a1);
+        NativeString.Destroy(ref __a3);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_request_raw;
+    public Error RequestRaw(string url, string[] customHeaders, HTTPClient.Method method, byte[] requestDataRaw)
+    {
+        var __mb = __mb_request_raw;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("HTTPRequest", "request_raw", 2714829993);
+            if (__mb == 0) throw new MissingMethodException("HTTPRequest.request_raw is not available in this engine build.");
+            __mb_request_raw = __mb;
+        }
+        ulong __a0 = NativeString.Create(url);
+        var __a1 = Packed.CreateStrings(customHeaders);
+        long __a2 = (long)method;
+        var __a3 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, requestDataRaw);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a1);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a3);
+        return (Error)__ret;
     }
 
     private static nint __mb_cancel_request;
@@ -924,6 +1117,40 @@ public unsafe partial class HashingContext : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
+
+    private static nint __mb_update;
+    public Error Update(byte[] chunk)
+    {
+        var __mb = __mb_update;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("HashingContext", "update", 680677267);
+            if (__mb == 0) throw new MissingMethodException("HashingContext.update is not available in this engine build.");
+            __mb_update = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, chunk);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        return (Error)__ret;
+    }
+
+    private static nint __mb_finish;
+    public byte[] Finish()
+    {
+        var __mb = __mb_finish;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("HashingContext", "finish", 2115431945);
+            if (__mb == 0) throw new MissingMethodException("HashingContext.finish is not available in this engine build.");
+            __mb_finish = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
+    }
 }
 
 public unsafe partial class HeightMapShape3D : Shape3D
@@ -945,6 +1172,12 @@ public unsafe partial class HeightMapShape3D : Shape3D
     {
         get => GetMapDepth();
         set => SetMapDepth(value);
+    }
+
+    public float[] MapData
+    {
+        get => GetMapData();
+        set => SetMapData(value);
     }
 
     private static nint __mb_set_map_width;
@@ -1007,6 +1240,38 @@ public unsafe partial class HeightMapShape3D : Shape3D
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_set_map_data;
+    internal void SetMapData(float[] data)
+    {
+        var __mb = __mb_set_map_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("HeightMapShape3D", "set_map_data", 2899603908);
+            if (__mb == 0) throw new MissingMethodException("HeightMapShape3D.set_map_data is not available in this engine build.");
+            __mb_set_map_data = __mb;
+        }
+        var __a0 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, data);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_map_data;
+    internal float[] GetMapData()
+    {
+        var __mb = __mb_get_map_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("HeightMapShape3D", "get_map_data", 675695659);
+            if (__mb == 0) throw new MissingMethodException("HeightMapShape3D.get_map_data is not available in this engine build.");
+            __mb_get_map_data = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_min_height;

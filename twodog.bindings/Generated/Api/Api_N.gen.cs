@@ -250,6 +250,78 @@ public static unsafe partial class NativeMenu
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
+    private static nint __mb_set_popup_open_callback;
+    public static void SetPopupOpenCallback(Rid rid, Callable callback)
+    {
+        var __mb = __mb_set_popup_open_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "set_popup_open_callback", 3379118538);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.set_popup_open_callback is not available in this engine build.");
+            __mb_set_popup_open_callback = __mb;
+        }
+        var __a0 = rid;
+        var __a1 = callback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_popup_open_callback;
+    public static Callable GetPopupOpenCallback(Rid rid)
+    {
+        var __mb = __mb_get_popup_open_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "get_popup_open_callback", 3170603026);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.get_popup_open_callback is not available in this engine build.");
+            __mb_get_popup_open_callback = __mb;
+        }
+        var __a0 = rid;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return new Callable(__ret);
+    }
+
+    private static nint __mb_set_popup_close_callback;
+    public static void SetPopupCloseCallback(Rid rid, Callable callback)
+    {
+        var __mb = __mb_set_popup_close_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "set_popup_close_callback", 3379118538);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.set_popup_close_callback is not available in this engine build.");
+            __mb_set_popup_close_callback = __mb;
+        }
+        var __a0 = rid;
+        var __a1 = callback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_popup_close_callback;
+    public static Callable GetPopupCloseCallback(Rid rid)
+    {
+        var __mb = __mb_get_popup_close_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "get_popup_close_callback", 3170603026);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.get_popup_close_callback is not available in this engine build.");
+            __mb_get_popup_close_callback = __mb;
+        }
+        var __a0 = rid;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return new Callable(__ret);
+    }
+
     private static nint __mb_set_minimum_width;
     public static void SetMinimumWidth(Rid rid, float width)
     {
@@ -325,6 +397,233 @@ public static unsafe partial class NativeMenu
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a1);
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_add_item;
+    public static int AddItem(Rid rid, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
+    {
+        var __mb = __mb_add_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "add_item", 980552939);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.add_item is not available in this engine build.");
+            __mb_add_item = __mb;
+        }
+        var __a0 = rid;
+        ulong __a1 = NativeString.Create(label);
+        var __a2 = callback.Native;
+        var __a3 = keyCallback.Native;
+        var __a4 = tag.Native;
+        long __a5 = (long)accelerator;
+        long __a6 = unchecked((long)index);
+        var __args = stackalloc nint[7];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a1);
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_add_check_item;
+    public static int AddCheckItem(Rid rid, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
+    {
+        var __mb = __mb_add_check_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "add_check_item", 980552939);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.add_check_item is not available in this engine build.");
+            __mb_add_check_item = __mb;
+        }
+        var __a0 = rid;
+        ulong __a1 = NativeString.Create(label);
+        var __a2 = callback.Native;
+        var __a3 = keyCallback.Native;
+        var __a4 = tag.Native;
+        long __a5 = (long)accelerator;
+        long __a6 = unchecked((long)index);
+        var __args = stackalloc nint[7];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a1);
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_add_icon_item;
+    public static int AddIconItem(Rid rid, Texture2D? icon, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
+    {
+        var __mb = __mb_add_icon_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "add_icon_item", 1372188274);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.add_icon_item is not available in this engine build.");
+            __mb_add_icon_item = __mb;
+        }
+        var __a0 = rid;
+        nint __a1 = icon?.NativePtr ?? 0;
+        ulong __a2 = NativeString.Create(label);
+        var __a3 = callback.Native;
+        var __a4 = keyCallback.Native;
+        var __a5 = tag.Native;
+        long __a6 = (long)accelerator;
+        long __a7 = unchecked((long)index);
+        var __args = stackalloc nint[8];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        __args[7] = (nint)(&__a7);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a2);
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_add_icon_check_item;
+    public static int AddIconCheckItem(Rid rid, Texture2D? icon, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
+    {
+        var __mb = __mb_add_icon_check_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "add_icon_check_item", 1372188274);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.add_icon_check_item is not available in this engine build.");
+            __mb_add_icon_check_item = __mb;
+        }
+        var __a0 = rid;
+        nint __a1 = icon?.NativePtr ?? 0;
+        ulong __a2 = NativeString.Create(label);
+        var __a3 = callback.Native;
+        var __a4 = keyCallback.Native;
+        var __a5 = tag.Native;
+        long __a6 = (long)accelerator;
+        long __a7 = unchecked((long)index);
+        var __args = stackalloc nint[8];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        __args[7] = (nint)(&__a7);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a2);
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_add_radio_check_item;
+    public static int AddRadioCheckItem(Rid rid, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
+    {
+        var __mb = __mb_add_radio_check_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "add_radio_check_item", 980552939);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.add_radio_check_item is not available in this engine build.");
+            __mb_add_radio_check_item = __mb;
+        }
+        var __a0 = rid;
+        ulong __a1 = NativeString.Create(label);
+        var __a2 = callback.Native;
+        var __a3 = keyCallback.Native;
+        var __a4 = tag.Native;
+        long __a5 = (long)accelerator;
+        long __a6 = unchecked((long)index);
+        var __args = stackalloc nint[7];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a1);
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_add_icon_radio_check_item;
+    public static int AddIconRadioCheckItem(Rid rid, Texture2D? icon, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
+    {
+        var __mb = __mb_add_icon_radio_check_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "add_icon_radio_check_item", 1372188274);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.add_icon_radio_check_item is not available in this engine build.");
+            __mb_add_icon_radio_check_item = __mb;
+        }
+        var __a0 = rid;
+        nint __a1 = icon?.NativePtr ?? 0;
+        ulong __a2 = NativeString.Create(label);
+        var __a3 = callback.Native;
+        var __a4 = keyCallback.Native;
+        var __a5 = tag.Native;
+        long __a6 = (long)accelerator;
+        long __a7 = unchecked((long)index);
+        var __args = stackalloc nint[8];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        __args[7] = (nint)(&__a7);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a2);
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_add_multistate_item;
+    public static int AddMultistateItem(Rid rid, string label, int maxStates, int defaultState, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
+    {
+        var __mb = __mb_add_multistate_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "add_multistate_item", 2674635658);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.add_multistate_item is not available in this engine build.");
+            __mb_add_multistate_item = __mb;
+        }
+        var __a0 = rid;
+        ulong __a1 = NativeString.Create(label);
+        long __a2 = unchecked((long)maxStates);
+        long __a3 = unchecked((long)defaultState);
+        var __a4 = callback.Native;
+        var __a5 = keyCallback.Native;
+        var __a6 = tag.Native;
+        long __a7 = (long)accelerator;
+        long __a8 = unchecked((long)index);
+        var __args = stackalloc nint[9];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        __args[7] = (nint)(&__a7);
+        __args[8] = (nint)(&__a8);
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a1);
@@ -470,6 +769,46 @@ public static unsafe partial class NativeMenu
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_get_item_callback;
+    public static Callable GetItemCallback(Rid rid, int idx)
+    {
+        var __mb = __mb_get_item_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "get_item_callback", 1639989698);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.get_item_callback is not available in this engine build.");
+            __mb_get_item_callback = __mb;
+        }
+        var __a0 = rid;
+        long __a1 = unchecked((long)idx);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return new Callable(__ret);
+    }
+
+    private static nint __mb_get_item_key_callback;
+    public static Callable GetItemKeyCallback(Rid rid, int idx)
+    {
+        var __mb = __mb_get_item_key_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "get_item_key_callback", 1639989698);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.get_item_key_callback is not available in this engine build.");
+            __mb_get_item_key_callback = __mb;
+        }
+        var __a0 = rid;
+        long __a1 = unchecked((long)idx);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return new Callable(__ret);
     }
 
     private static nint __mb_get_item_tag;
@@ -745,6 +1084,66 @@ public static unsafe partial class NativeMenu
         var __a0 = rid;
         long __a1 = unchecked((long)idx);
         byte __a2 = checkable ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_item_callback;
+    public static void SetItemCallback(Rid rid, int idx, Callable callback)
+    {
+        var __mb = __mb_set_item_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "set_item_callback", 2779810226);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.set_item_callback is not available in this engine build.");
+            __mb_set_item_callback = __mb;
+        }
+        var __a0 = rid;
+        long __a1 = unchecked((long)idx);
+        var __a2 = callback.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_item_hover_callbacks;
+    public static void SetItemHoverCallbacks(Rid rid, int idx, Callable callback)
+    {
+        var __mb = __mb_set_item_hover_callbacks;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "set_item_hover_callbacks", 2779810226);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.set_item_hover_callbacks is not available in this engine build.");
+            __mb_set_item_hover_callbacks = __mb;
+        }
+        var __a0 = rid;
+        long __a1 = unchecked((long)idx);
+        var __a2 = callback.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_item_key_callback;
+    public static void SetItemKeyCallback(Rid rid, int idx, Callable keyCallback)
+    {
+        var __mb = __mb_set_item_key_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "set_item_key_callback", 2779810226);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.set_item_key_callback is not available in this engine build.");
+            __mb_set_item_key_callback = __mb;
+        }
+        var __a0 = rid;
+        long __a1 = unchecked((long)idx);
+        var __a2 = keyCallback.Native;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -2094,6 +2493,21 @@ public unsafe partial class NavigationAgent2D : Node
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (NavigationPathQueryResult2D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_get_current_navigation_path;
+    public Vector2[] GetCurrentNavigationPath()
+    {
+        var __mb = __mb_get_current_navigation_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationAgent2D", "get_current_navigation_path", 2961356807);
+            if (__mb == 0) throw new MissingMethodException("NavigationAgent2D.get_current_navigation_path is not available in this engine build.");
+            __mb_get_current_navigation_path = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_current_navigation_path_index;
@@ -3663,6 +4077,21 @@ public unsafe partial class NavigationAgent3D : Node
         return (NavigationPathQueryResult3D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_get_current_navigation_path;
+    public Vector3[] GetCurrentNavigationPath()
+    {
+        var __mb = __mb_get_current_navigation_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationAgent3D", "get_current_navigation_path", 497664490);
+            if (__mb == 0) throw new MissingMethodException("NavigationAgent3D.get_current_navigation_path is not available in this engine build.");
+            __mb_get_current_navigation_path = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_get_current_navigation_path_index;
     public int GetCurrentNavigationPathIndex()
     {
@@ -4887,6 +5316,12 @@ public unsafe partial class NavigationMesh : Resource
         Max = 3,
     }
 
+    public Vector3[] Vertices
+    {
+        get => GetVertices();
+        set => SetVertices(value);
+    }
+
     public NavigationMesh.SamplePartitionTypeEnum SamplePartitionType
     {
         get => GetSamplePartitionType();
@@ -5811,6 +6246,55 @@ public unsafe partial class NavigationMesh : Resource
         return __ret;
     }
 
+    private static nint __mb_set_vertices;
+    internal void SetVertices(Vector3[] vertices)
+    {
+        var __mb = __mb_set_vertices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMesh", "set_vertices", 334873810);
+            if (__mb == 0) throw new MissingMethodException("NavigationMesh.set_vertices is not available in this engine build.");
+            __mb_set_vertices = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, vertices);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_vertices;
+    internal Vector3[] GetVertices()
+    {
+        var __mb = __mb_get_vertices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMesh", "get_vertices", 497664490);
+            if (__mb == 0) throw new MissingMethodException("NavigationMesh.get_vertices is not available in this engine build.");
+            __mb_get_vertices = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_add_polygon;
+    public void AddPolygon(int[] polygon)
+    {
+        var __mb = __mb_add_polygon;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMesh", "add_polygon", 3614634198);
+            if (__mb == 0) throw new MissingMethodException("NavigationMesh.add_polygon is not available in this engine build.");
+            __mb_add_polygon = __mb;
+        }
+        var __a0 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, polygon);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a0);
+    }
+
     private static nint __mb_get_polygon_count;
     public int GetPolygonCount()
     {
@@ -5824,6 +6308,24 @@ public unsafe partial class NavigationMesh : Resource
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_get_polygon;
+    public int[] GetPolygon(int idx)
+    {
+        var __mb = __mb_get_polygon;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMesh", "get_polygon", 3668444399);
+            if (__mb == 0) throw new MissingMethodException("NavigationMesh.get_polygon is not available in this engine build.");
+            __mb_get_polygon = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_clear_polygons;
@@ -5909,6 +6411,48 @@ public static unsafe partial class NavigationMeshGenerator
         nint __a0 = navigationMesh?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_parse_source_geometry_data;
+    public static void ParseSourceGeometryData(NavigationMesh? navigationMesh, NavigationMeshSourceGeometryData3D? sourceGeometryData, Node? rootNode, Callable callback)
+    {
+        var __mb = __mb_parse_source_geometry_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshGenerator", "parse_source_geometry_data", 3172802542);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshGenerator.parse_source_geometry_data is not available in this engine build.");
+            __mb_parse_source_geometry_data = __mb;
+        }
+        nint __a0 = navigationMesh?.NativePtr ?? 0;
+        nint __a1 = sourceGeometryData?.NativePtr ?? 0;
+        nint __a2 = rootNode?.NativePtr ?? 0;
+        var __a3 = callback.Native;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_bake_from_source_geometry_data;
+    public static void BakeFromSourceGeometryData(NavigationMesh? navigationMesh, NavigationMeshSourceGeometryData3D? sourceGeometryData, Callable callback)
+    {
+        var __mb = __mb_bake_from_source_geometry_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshGenerator", "bake_from_source_geometry_data", 1286748856);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshGenerator.bake_from_source_geometry_data is not available in this engine build.");
+            __mb_bake_from_source_geometry_data = __mb;
+        }
+        nint __a0 = navigationMesh?.NativePtr ?? 0;
+        nint __a1 = sourceGeometryData?.NativePtr ?? 0;
+        var __a2 = callback.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 }
@@ -6062,6 +6606,40 @@ public unsafe partial class NavigationMeshSourceGeometryData2D : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_add_traversable_outline;
+    public void AddTraversableOutline(Vector2[] shapeOutline)
+    {
+        var __mb = __mb_add_traversable_outline;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData2D", "add_traversable_outline", 1509147220);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData2D.add_traversable_outline is not available in this engine build.");
+            __mb_add_traversable_outline = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, shapeOutline);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_add_obstruction_outline;
+    public void AddObstructionOutline(Vector2[] shapeOutline)
+    {
+        var __mb = __mb_add_obstruction_outline;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData2D", "add_obstruction_outline", 1509147220);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData2D.add_obstruction_outline is not available in this engine build.");
+            __mb_add_obstruction_outline = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, shapeOutline);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
+    }
+
     private static nint __mb_merge;
     public void Merge(NavigationMeshSourceGeometryData2D? otherGeometry)
     {
@@ -6076,6 +6654,25 @@ public unsafe partial class NavigationMeshSourceGeometryData2D : Resource
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_add_projected_obstruction;
+    public void AddProjectedObstruction(Vector2[] vertices, bool carve)
+    {
+        var __mb = __mb_add_projected_obstruction;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData2D", "add_projected_obstruction", 3882407395);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData2D.add_projected_obstruction is not available in this engine build.");
+            __mb_add_projected_obstruction = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, vertices);
+        byte __a1 = carve ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
     }
 
     private static nint __mb_clear_projected_obstructions;
@@ -6147,10 +6744,106 @@ public unsafe partial class NavigationMeshSourceGeometryData3D : Resource
         ClassRegistry.AttachNew(this, "NavigationMeshSourceGeometryData3D");
     }
 
+    public float[] Vertices
+    {
+        get => GetVertices();
+        set => SetVertices(value);
+    }
+
+    public int[] Indices
+    {
+        get => GetIndices();
+        set => SetIndices(value);
+    }
+
     public Godot.Collections.Array ProjectedObstructions
     {
         get => GetProjectedObstructions();
         set => SetProjectedObstructions(value);
+    }
+
+    private static nint __mb_set_vertices;
+    internal void SetVertices(float[] vertices)
+    {
+        var __mb = __mb_set_vertices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData3D", "set_vertices", 2899603908);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData3D.set_vertices is not available in this engine build.");
+            __mb_set_vertices = __mb;
+        }
+        var __a0 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, vertices);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_vertices;
+    internal float[] GetVertices()
+    {
+        var __mb = __mb_get_vertices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData3D", "get_vertices", 675695659);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData3D.get_vertices is not available in this engine build.");
+            __mb_get_vertices = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_set_indices;
+    internal void SetIndices(int[] indices)
+    {
+        var __mb = __mb_set_indices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData3D", "set_indices", 3614634198);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData3D.set_indices is not available in this engine build.");
+            __mb_set_indices = __mb;
+        }
+        var __a0 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, indices);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_indices;
+    internal int[] GetIndices()
+    {
+        var __mb = __mb_get_indices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData3D", "get_indices", 1930428628);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData3D.get_indices is not available in this engine build.");
+            __mb_get_indices = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_append_arrays;
+    public void AppendArrays(float[] vertices, int[] indices)
+    {
+        var __mb = __mb_append_arrays;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData3D", "append_arrays", 3117535015);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData3D.append_arrays is not available in this engine build.");
+            __mb_append_arrays = __mb;
+        }
+        var __a0 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, vertices);
+        var __a1 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, indices);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a1);
     }
 
     private static nint __mb_clear;
@@ -6217,6 +6910,25 @@ public unsafe partial class NavigationMeshSourceGeometryData3D : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_add_faces;
+    public void AddFaces(Vector3[] faces, Transform3D xform)
+    {
+        var __mb = __mb_add_faces;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData3D", "add_faces", 1440358797);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData3D.add_faces is not available in this engine build.");
+            __mb_add_faces = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, faces);
+        var __a1 = xform;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, ref __a0);
+    }
+
     private static nint __mb_merge;
     public void Merge(NavigationMeshSourceGeometryData3D? otherGeometry)
     {
@@ -6231,6 +6943,29 @@ public unsafe partial class NavigationMeshSourceGeometryData3D : Resource
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_add_projected_obstruction;
+    public void AddProjectedObstruction(Vector3[] vertices, float elevation, float height, bool carve)
+    {
+        var __mb = __mb_add_projected_obstruction;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData3D", "add_projected_obstruction", 3351846707);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData3D.add_projected_obstruction is not available in this engine build.");
+            __mb_add_projected_obstruction = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, vertices);
+        double __a1 = elevation;
+        double __a2 = height;
+        byte __a3 = carve ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, ref __a0);
     }
 
     private static nint __mb_clear_projected_obstructions;
@@ -6306,6 +7041,12 @@ public unsafe partial class NavigationObstacle2D : Node2D
     {
         get => GetRadius();
         set => SetRadius(value);
+    }
+
+    public Vector2[] Vertices
+    {
+        get => GetVertices();
+        set => SetVertices(value);
     }
 
     public bool AffectNavigationMesh
@@ -6477,6 +7218,38 @@ public unsafe partial class NavigationObstacle2D : Node2D
         return __ret;
     }
 
+    private static nint __mb_set_vertices;
+    internal void SetVertices(Vector2[] vertices)
+    {
+        var __mb = __mb_set_vertices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationObstacle2D", "set_vertices", 1509147220);
+            if (__mb == 0) throw new MissingMethodException("NavigationObstacle2D.set_vertices is not available in this engine build.");
+            __mb_set_vertices = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, vertices);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_vertices;
+    internal Vector2[] GetVertices()
+    {
+        var __mb = __mb_get_vertices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationObstacle2D", "get_vertices", 2961356807);
+            if (__mb == 0) throw new MissingMethodException("NavigationObstacle2D.get_vertices is not available in this engine build.");
+            __mb_get_vertices = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_set_avoidance_layers;
     internal void SetAvoidanceLayers(uint layers)
     {
@@ -6626,6 +7399,12 @@ public unsafe partial class NavigationObstacle3D : Node3D
     {
         get => GetHeight();
         set => SetHeight(value);
+    }
+
+    public Vector3[] Vertices
+    {
+        get => GetVertices();
+        set => SetVertices(value);
     }
 
     public bool AffectNavigationMesh
@@ -6832,6 +7611,38 @@ public unsafe partial class NavigationObstacle3D : Node3D
         var __ret = default(Vector3);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_set_vertices;
+    internal void SetVertices(Vector3[] vertices)
+    {
+        var __mb = __mb_set_vertices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationObstacle3D", "set_vertices", 334873810);
+            if (__mb == 0) throw new MissingMethodException("NavigationObstacle3D.set_vertices is not available in this engine build.");
+            __mb_set_vertices = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, vertices);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_vertices;
+    internal Vector3[] GetVertices()
+    {
+        var __mb = __mb_get_vertices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationObstacle3D", "get_vertices", 497664490);
+            if (__mb == 0) throw new MissingMethodException("NavigationObstacle3D.get_vertices is not available in this engine build.");
+            __mb_get_vertices = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_avoidance_layers;
@@ -8184,16 +8995,98 @@ public unsafe partial class NavigationPathQueryResult2D : RefCounted
         Link = 1,
     }
 
+    public Vector2[] Path
+    {
+        get => GetPath();
+        set => SetPath(value);
+    }
+
+    public int[] PathTypes
+    {
+        get => GetPathTypes();
+        set => SetPathTypes(value);
+    }
+
     public Godot.Collections.Array PathRids
     {
         get => GetPathRids();
         set => SetPathRids(value);
     }
 
+    public long[] PathOwnerIds
+    {
+        get => GetPathOwnerIds();
+        set => SetPathOwnerIds(value);
+    }
+
     public float PathLength
     {
         get => GetPathLength();
         set => SetPathLength(value);
+    }
+
+    private static nint __mb_set_path;
+    internal void SetPath(Vector2[] path)
+    {
+        var __mb = __mb_set_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult2D", "set_path", 1509147220);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult2D.set_path is not available in this engine build.");
+            __mb_set_path = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, path);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_path;
+    internal Vector2[] GetPath()
+    {
+        var __mb = __mb_get_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult2D", "get_path", 2961356807);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult2D.get_path is not available in this engine build.");
+            __mb_get_path = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_set_path_types;
+    internal void SetPathTypes(int[] pathTypes)
+    {
+        var __mb = __mb_set_path_types;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult2D", "set_path_types", 3614634198);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult2D.set_path_types is not available in this engine build.");
+            __mb_set_path_types = __mb;
+        }
+        var __a0 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, pathTypes);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_path_types;
+    internal int[] GetPathTypes()
+    {
+        var __mb = __mb_get_path_types;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult2D", "get_path_types", 1930428628);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult2D.get_path_types is not available in this engine build.");
+            __mb_get_path_types = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_path_rids;
@@ -8225,6 +9118,38 @@ public unsafe partial class NavigationPathQueryResult2D : RefCounted
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_path_owner_ids;
+    internal void SetPathOwnerIds(long[] pathOwnerIds)
+    {
+        var __mb = __mb_set_path_owner_ids;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult2D", "set_path_owner_ids", 3709968205);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult2D.set_path_owner_ids is not available in this engine build.");
+            __mb_set_path_owner_ids = __mb;
+        }
+        var __a0 = Packed.CreatePod<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, pathOwnerIds);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_path_owner_ids;
+    internal long[] GetPathOwnerIds()
+    {
+        var __mb = __mb_get_path_owner_ids;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult2D", "get_path_owner_ids", 235988956);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult2D.get_path_owner_ids is not available in this engine build.");
+            __mb_get_path_owner_ids = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_path_length;
@@ -8287,16 +9212,98 @@ public unsafe partial class NavigationPathQueryResult3D : RefCounted
         Link = 1,
     }
 
+    public Vector3[] Path
+    {
+        get => GetPath();
+        set => SetPath(value);
+    }
+
+    public int[] PathTypes
+    {
+        get => GetPathTypes();
+        set => SetPathTypes(value);
+    }
+
     public Godot.Collections.Array PathRids
     {
         get => GetPathRids();
         set => SetPathRids(value);
     }
 
+    public long[] PathOwnerIds
+    {
+        get => GetPathOwnerIds();
+        set => SetPathOwnerIds(value);
+    }
+
     public float PathLength
     {
         get => GetPathLength();
         set => SetPathLength(value);
+    }
+
+    private static nint __mb_set_path;
+    internal void SetPath(Vector3[] path)
+    {
+        var __mb = __mb_set_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult3D", "set_path", 334873810);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult3D.set_path is not available in this engine build.");
+            __mb_set_path = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, path);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_path;
+    internal Vector3[] GetPath()
+    {
+        var __mb = __mb_get_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult3D", "get_path", 497664490);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult3D.get_path is not available in this engine build.");
+            __mb_get_path = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_set_path_types;
+    internal void SetPathTypes(int[] pathTypes)
+    {
+        var __mb = __mb_set_path_types;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult3D", "set_path_types", 3614634198);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult3D.set_path_types is not available in this engine build.");
+            __mb_set_path_types = __mb;
+        }
+        var __a0 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, pathTypes);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_path_types;
+    internal int[] GetPathTypes()
+    {
+        var __mb = __mb_get_path_types;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult3D", "get_path_types", 1930428628);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult3D.get_path_types is not available in this engine build.");
+            __mb_get_path_types = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_path_rids;
@@ -8328,6 +9335,38 @@ public unsafe partial class NavigationPathQueryResult3D : RefCounted
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_path_owner_ids;
+    internal void SetPathOwnerIds(long[] pathOwnerIds)
+    {
+        var __mb = __mb_set_path_owner_ids;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult3D", "set_path_owner_ids", 3709968205);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult3D.set_path_owner_ids is not available in this engine build.");
+            __mb_set_path_owner_ids = __mb;
+        }
+        var __a0 = Packed.CreatePod<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, pathOwnerIds);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_path_owner_ids;
+    internal long[] GetPathOwnerIds()
+    {
+        var __mb = __mb_get_path_owner_ids;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult3D", "get_path_owner_ids", 235988956);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult3D.get_path_owner_ids is not available in this engine build.");
+            __mb_get_path_owner_ids = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_path_length;
@@ -8407,6 +9446,12 @@ public unsafe partial class NavigationPolygon : Resource
         Max = 3,
     }
 
+    public Vector2[] Vertices
+    {
+        get => GetVertices();
+        set => SetVertices(value);
+    }
+
     public NavigationPolygon.SamplePartitionTypeEnum SamplePartitionType
     {
         get => GetSamplePartitionType();
@@ -8467,6 +9512,55 @@ public unsafe partial class NavigationPolygon : Resource
         set => SetBakingRectOffset(value);
     }
 
+    private static nint __mb_set_vertices;
+    internal void SetVertices(Vector2[] vertices)
+    {
+        var __mb = __mb_set_vertices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPolygon", "set_vertices", 1509147220);
+            if (__mb == 0) throw new MissingMethodException("NavigationPolygon.set_vertices is not available in this engine build.");
+            __mb_set_vertices = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, vertices);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_get_vertices;
+    internal Vector2[] GetVertices()
+    {
+        var __mb = __mb_get_vertices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPolygon", "get_vertices", 2961356807);
+            if (__mb == 0) throw new MissingMethodException("NavigationPolygon.get_vertices is not available in this engine build.");
+            __mb_get_vertices = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
+    }
+
+    private static nint __mb_add_polygon;
+    public void AddPolygon(int[] polygon)
+    {
+        var __mb = __mb_add_polygon;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPolygon", "add_polygon", 3614634198);
+            if (__mb == 0) throw new MissingMethodException("NavigationPolygon.add_polygon is not available in this engine build.");
+            __mb_add_polygon = __mb;
+        }
+        var __a0 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, polygon);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a0);
+    }
+
     private static nint __mb_get_polygon_count;
     public int GetPolygonCount()
     {
@@ -8480,6 +9574,24 @@ public unsafe partial class NavigationPolygon : Resource
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_get_polygon;
+    public int[] GetPolygon(int idx)
+    {
+        var __mb = __mb_get_polygon;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPolygon", "get_polygon", 3668444399);
+            if (__mb == 0) throw new MissingMethodException("NavigationPolygon.get_polygon is not available in this engine build.");
+            __mb_get_polygon = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_clear_polygons;
@@ -8510,6 +9622,42 @@ public unsafe partial class NavigationPolygon : Resource
         return (NavigationMesh?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_add_outline;
+    public void AddOutline(Vector2[] outline)
+    {
+        var __mb = __mb_add_outline;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPolygon", "add_outline", 1509147220);
+            if (__mb == 0) throw new MissingMethodException("NavigationPolygon.add_outline is not available in this engine build.");
+            __mb_add_outline = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, outline);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
+    }
+
+    private static nint __mb_add_outline_at_index;
+    public void AddOutlineAtIndex(Vector2[] outline, int index)
+    {
+        var __mb = __mb_add_outline_at_index;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPolygon", "add_outline_at_index", 1569738947);
+            if (__mb == 0) throw new MissingMethodException("NavigationPolygon.add_outline_at_index is not available in this engine build.");
+            __mb_add_outline_at_index = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, outline);
+        long __a1 = unchecked((long)index);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
+    }
+
     private static nint __mb_get_outline_count;
     public int GetOutlineCount()
     {
@@ -8523,6 +9671,43 @@ public unsafe partial class NavigationPolygon : Resource
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_set_outline;
+    public void SetOutline(int idx, Vector2[] outline)
+    {
+        var __mb = __mb_set_outline;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPolygon", "set_outline", 1201971903);
+            if (__mb == 0) throw new MissingMethodException("NavigationPolygon.set_outline is not available in this engine build.");
+            __mb_set_outline = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __a1 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, outline);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a1);
+    }
+
+    private static nint __mb_get_outline;
+    public Vector2[] GetOutline(int idx)
+    {
+        var __mb = __mb_get_outline;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPolygon", "get_outline", 3946907486);
+            if (__mb == 0) throw new MissingMethodException("NavigationPolygon.get_outline is not available in this engine build.");
+            __mb_get_outline = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_remove_outline;
@@ -9946,6 +11131,32 @@ public static unsafe partial class NavigationServer2D
         return (float)__ret;
     }
 
+    private static nint __mb_map_get_path;
+    public static Vector2[] MapGetPath(Rid map, Vector2 origin, Vector2 destination, bool optimize, uint navigationLayers = unchecked((uint)(1)))
+    {
+        var __mb = __mb_map_get_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2D", "map_get_path", 1279824844);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2D.map_get_path is not available in this engine build.");
+            __mb_map_get_path = __mb;
+        }
+        var __a0 = map;
+        var __a1 = origin;
+        var __a2 = destination;
+        byte __a3 = optimize ? (byte)1 : (byte)0;
+        long __a4 = unchecked((long)navigationLayers);
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_map_get_closest_point;
     public static Vector2 MapGetClosestPoint(Rid map, Vector2 toPoint)
     {
@@ -10148,6 +11359,26 @@ public static unsafe partial class NavigationServer2D
         var __ret = default(Vector2);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_query_path;
+    public static void QueryPath(NavigationPathQueryParameters2D? parameters, NavigationPathQueryResult2D? result, Callable callback)
+    {
+        var __mb = __mb_query_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2D", "query_path", 1254915886);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2D.query_path is not available in this engine build.");
+            __mb_query_path = __mb;
+        }
+        nint __a0 = parameters?.NativePtr ?? 0;
+        nint __a1 = result?.NativePtr ?? 0;
+        var __a2 = callback.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_create;
@@ -11467,6 +12698,24 @@ public static unsafe partial class NavigationServer2D
         return __ret != 0;
     }
 
+    private static nint __mb_agent_set_avoidance_callback;
+    public static void AgentSetAvoidanceCallback(Rid agent, Callable callback)
+    {
+        var __mb = __mb_agent_set_avoidance_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2D", "agent_set_avoidance_callback", 3379118538);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2D.agent_set_avoidance_callback is not available in this engine build.");
+            __mb_agent_set_avoidance_callback = __mb;
+        }
+        var __a0 = agent;
+        var __a1 = callback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
     private static nint __mb_agent_has_avoidance_callback;
     public static bool AgentHasAvoidanceCallback(Rid agent)
     {
@@ -11824,6 +13073,43 @@ public static unsafe partial class NavigationServer2D
         return __ret;
     }
 
+    private static nint __mb_obstacle_set_vertices;
+    public static void ObstacleSetVertices(Rid obstacle, Vector2[] vertices)
+    {
+        var __mb = __mb_obstacle_set_vertices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2D", "obstacle_set_vertices", 29476483);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2D.obstacle_set_vertices is not available in this engine build.");
+            __mb_obstacle_set_vertices = __mb;
+        }
+        var __a0 = obstacle;
+        var __a1 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, vertices);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a1);
+    }
+
+    private static nint __mb_obstacle_get_vertices;
+    public static Vector2[] ObstacleGetVertices(Rid obstacle)
+    {
+        var __mb = __mb_obstacle_get_vertices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2D", "obstacle_get_vertices", 2222557395);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2D.obstacle_get_vertices is not available in this engine build.");
+            __mb_obstacle_get_vertices = __mb;
+        }
+        var __a0 = obstacle;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_obstacle_set_avoidance_layers;
     public static void ObstacleSetAvoidanceLayers(Rid obstacle, uint layers)
     {
@@ -11860,6 +13146,68 @@ public static unsafe partial class NavigationServer2D
         return unchecked((uint)__ret);
     }
 
+    private static nint __mb_parse_source_geometry_data;
+    public static void ParseSourceGeometryData(NavigationPolygon? navigationPolygon, NavigationMeshSourceGeometryData2D? sourceGeometryData, Node? rootNode, Callable callback)
+    {
+        var __mb = __mb_parse_source_geometry_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2D", "parse_source_geometry_data", 1766905497);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2D.parse_source_geometry_data is not available in this engine build.");
+            __mb_parse_source_geometry_data = __mb;
+        }
+        nint __a0 = navigationPolygon?.NativePtr ?? 0;
+        nint __a1 = sourceGeometryData?.NativePtr ?? 0;
+        nint __a2 = rootNode?.NativePtr ?? 0;
+        var __a3 = callback.Native;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_bake_from_source_geometry_data;
+    public static void BakeFromSourceGeometryData(NavigationPolygon? navigationPolygon, NavigationMeshSourceGeometryData2D? sourceGeometryData, Callable callback)
+    {
+        var __mb = __mb_bake_from_source_geometry_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2D", "bake_from_source_geometry_data", 2179660022);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2D.bake_from_source_geometry_data is not available in this engine build.");
+            __mb_bake_from_source_geometry_data = __mb;
+        }
+        nint __a0 = navigationPolygon?.NativePtr ?? 0;
+        nint __a1 = sourceGeometryData?.NativePtr ?? 0;
+        var __a2 = callback.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_bake_from_source_geometry_data_async;
+    public static void BakeFromSourceGeometryDataAsync(NavigationPolygon? navigationPolygon, NavigationMeshSourceGeometryData2D? sourceGeometryData, Callable callback)
+    {
+        var __mb = __mb_bake_from_source_geometry_data_async;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2D", "bake_from_source_geometry_data_async", 2179660022);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2D.bake_from_source_geometry_data_async is not available in this engine build.");
+            __mb_bake_from_source_geometry_data_async = __mb;
+        }
+        nint __a0 = navigationPolygon?.NativePtr ?? 0;
+        nint __a1 = sourceGeometryData?.NativePtr ?? 0;
+        var __a2 = callback.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
     private static nint __mb_is_baking_navigation_polygon;
     public static bool IsBakingNavigationPolygon(NavigationPolygon? navigationPolygon)
     {
@@ -11891,6 +13239,45 @@ public static unsafe partial class NavigationServer2D
         var __ret = default(Rid);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_source_geometry_parser_set_callback;
+    public static void SourceGeometryParserSetCallback(Rid parser, Callable callback)
+    {
+        var __mb = __mb_source_geometry_parser_set_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2D", "source_geometry_parser_set_callback", 3379118538);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2D.source_geometry_parser_set_callback is not available in this engine build.");
+            __mb_source_geometry_parser_set_callback = __mb;
+        }
+        var __a0 = parser;
+        var __a1 = callback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_simplify_path;
+    public static Vector2[] SimplifyPath(Vector2[] path, float epsilon)
+    {
+        var __mb = __mb_simplify_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2D", "simplify_path", 2457191505);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2D.simplify_path is not available in this engine build.");
+            __mb_simplify_path = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, path);
+        double __a1 = epsilon;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
+        return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_free_rid;
@@ -11983,6 +13370,25 @@ public static unsafe partial class NavigationServer2DManager
         _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("NavigationServer2DManager");
 
     public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
+
+    private static nint __mb_register_server;
+    public static void RegisterServer(string name, Callable createCallback)
+    {
+        var __mb = __mb_register_server;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2DManager", "register_server", 2137474292);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2DManager.register_server is not available in this engine build.");
+            __mb_register_server = __mb;
+        }
+        ulong __a0 = NativeString.Create(name);
+        var __a1 = createCallback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
+    }
 
     private static nint __mb_set_default_server;
     public static void SetDefaultServer(string name, int priority)
@@ -12345,6 +13751,32 @@ public static unsafe partial class NavigationServer3D
         return (float)__ret;
     }
 
+    private static nint __mb_map_get_path;
+    public static Vector3[] MapGetPath(Rid map, Vector3 origin, Vector3 destination, bool optimize, uint navigationLayers = unchecked((uint)(1)))
+    {
+        var __mb = __mb_map_get_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3D", "map_get_path", 276783190);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3D.map_get_path is not available in this engine build.");
+            __mb_map_get_path = __mb;
+        }
+        var __a0 = map;
+        var __a1 = origin;
+        var __a2 = destination;
+        byte __a3 = optimize ? (byte)1 : (byte)0;
+        long __a4 = unchecked((long)navigationLayers);
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_map_get_closest_point_to_segment;
     public static Vector3 MapGetClosestPointToSegment(Rid map, Vector3 start, Vector3 end, bool useCollision = false)
     {
@@ -12591,6 +14023,26 @@ public static unsafe partial class NavigationServer3D
         var __ret = default(Vector3);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_query_path;
+    public static void QueryPath(NavigationPathQueryParameters3D? parameters, NavigationPathQueryResult3D? result, Callable callback)
+    {
+        var __mb = __mb_query_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3D", "query_path", 2146930868);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3D.query_path is not available in this engine build.");
+            __mb_query_path = __mb;
+        }
+        nint __a0 = parameters?.NativePtr ?? 0;
+        nint __a1 = result?.NativePtr ?? 0;
+        var __a2 = callback.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_create;
@@ -14044,6 +15496,24 @@ public static unsafe partial class NavigationServer3D
         return __ret != 0;
     }
 
+    private static nint __mb_agent_set_avoidance_callback;
+    public static void AgentSetAvoidanceCallback(Rid agent, Callable callback)
+    {
+        var __mb = __mb_agent_set_avoidance_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3D", "agent_set_avoidance_callback", 3379118538);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3D.agent_set_avoidance_callback is not available in this engine build.");
+            __mb_agent_set_avoidance_callback = __mb;
+        }
+        var __a0 = agent;
+        var __a1 = callback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
     private static nint __mb_agent_has_avoidance_callback;
     public static bool AgentHasAvoidanceCallback(Rid agent)
     {
@@ -14473,6 +15943,43 @@ public static unsafe partial class NavigationServer3D
         return __ret;
     }
 
+    private static nint __mb_obstacle_set_vertices;
+    public static void ObstacleSetVertices(Rid obstacle, Vector3[] vertices)
+    {
+        var __mb = __mb_obstacle_set_vertices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3D", "obstacle_set_vertices", 4030257846);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3D.obstacle_set_vertices is not available in this engine build.");
+            __mb_obstacle_set_vertices = __mb;
+        }
+        var __a0 = obstacle;
+        var __a1 = Packed.CreatePod<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, vertices);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, ref __a1);
+    }
+
+    private static nint __mb_obstacle_get_vertices;
+    public static Vector3[] ObstacleGetVertices(Rid obstacle)
+    {
+        var __mb = __mb_obstacle_get_vertices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3D", "obstacle_get_vertices", 808965560);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3D.obstacle_get_vertices is not available in this engine build.");
+            __mb_obstacle_get_vertices = __mb;
+        }
+        var __a0 = obstacle;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        return Packed.ToPodArray<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, ref __ret);
+    }
+
     private static nint __mb_obstacle_set_avoidance_layers;
     public static void ObstacleSetAvoidanceLayers(Rid obstacle, uint layers)
     {
@@ -14509,6 +16016,68 @@ public static unsafe partial class NavigationServer3D
         return unchecked((uint)__ret);
     }
 
+    private static nint __mb_parse_source_geometry_data;
+    public static void ParseSourceGeometryData(NavigationMesh? navigationMesh, NavigationMeshSourceGeometryData3D? sourceGeometryData, Node? rootNode, Callable callback)
+    {
+        var __mb = __mb_parse_source_geometry_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3D", "parse_source_geometry_data", 3172802542);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3D.parse_source_geometry_data is not available in this engine build.");
+            __mb_parse_source_geometry_data = __mb;
+        }
+        nint __a0 = navigationMesh?.NativePtr ?? 0;
+        nint __a1 = sourceGeometryData?.NativePtr ?? 0;
+        nint __a2 = rootNode?.NativePtr ?? 0;
+        var __a3 = callback.Native;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_bake_from_source_geometry_data;
+    public static void BakeFromSourceGeometryData(NavigationMesh? navigationMesh, NavigationMeshSourceGeometryData3D? sourceGeometryData, Callable callback)
+    {
+        var __mb = __mb_bake_from_source_geometry_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3D", "bake_from_source_geometry_data", 1286748856);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3D.bake_from_source_geometry_data is not available in this engine build.");
+            __mb_bake_from_source_geometry_data = __mb;
+        }
+        nint __a0 = navigationMesh?.NativePtr ?? 0;
+        nint __a1 = sourceGeometryData?.NativePtr ?? 0;
+        var __a2 = callback.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_bake_from_source_geometry_data_async;
+    public static void BakeFromSourceGeometryDataAsync(NavigationMesh? navigationMesh, NavigationMeshSourceGeometryData3D? sourceGeometryData, Callable callback)
+    {
+        var __mb = __mb_bake_from_source_geometry_data_async;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3D", "bake_from_source_geometry_data_async", 1286748856);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3D.bake_from_source_geometry_data_async is not available in this engine build.");
+            __mb_bake_from_source_geometry_data_async = __mb;
+        }
+        nint __a0 = navigationMesh?.NativePtr ?? 0;
+        nint __a1 = sourceGeometryData?.NativePtr ?? 0;
+        var __a2 = callback.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
     private static nint __mb_is_baking_navigation_mesh;
     public static bool IsBakingNavigationMesh(NavigationMesh? navigationMesh)
     {
@@ -14540,6 +16109,45 @@ public static unsafe partial class NavigationServer3D
         var __ret = default(Rid);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_source_geometry_parser_set_callback;
+    public static void SourceGeometryParserSetCallback(Rid parser, Callable callback)
+    {
+        var __mb = __mb_source_geometry_parser_set_callback;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3D", "source_geometry_parser_set_callback", 3379118538);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3D.source_geometry_parser_set_callback is not available in this engine build.");
+            __mb_source_geometry_parser_set_callback = __mb;
+        }
+        var __a0 = parser;
+        var __a1 = callback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_simplify_path;
+    public static Vector3[] SimplifyPath(Vector3[] path, float epsilon)
+    {
+        var __mb = __mb_simplify_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3D", "simplify_path", 2344122170);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3D.simplify_path is not available in this engine build.");
+            __mb_simplify_path = __mb;
+        }
+        var __a0 = Packed.CreatePod<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, path);
+        double __a1 = epsilon;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, ref __a0);
+        return Packed.ToPodArray<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_free_rid;
@@ -14632,6 +16240,25 @@ public static unsafe partial class NavigationServer3DManager
         _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("NavigationServer3DManager");
 
     public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
+
+    private static nint __mb_register_server;
+    public static void RegisterServer(string name, Callable createCallback)
+    {
+        var __mb = __mb_register_server;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3DManager", "register_server", 2137474292);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3DManager.register_server is not available in this engine build.");
+            __mb_register_server = __mb;
+        }
+        ulong __a0 = NativeString.Create(name);
+        var __a1 = createCallback.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
+    }
 
     private static nint __mb_set_default_server;
     public static void SetDefaultServer(string name, int priority)
@@ -16873,6 +18500,78 @@ public unsafe partial class Node : GodotObject
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
+    private static nint __mb_rpc;
+    public Error Rpc(string method, params Variant[] args)
+    {
+        var __mb = __mb_rpc;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "rpc", 4047867050);
+            if (__mb == 0) throw new MissingMethodException("Node.rpc is not available in this engine build.");
+            __mb_rpc = __mb;
+        }
+        var __n = 1 + args.Length;
+        var __ptrs = stackalloc nint[Math.Max(__n, 1)];
+        var __lead = stackalloc NativeVariant[1];
+        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __ptrs[0] = (nint)(__lead + 0);
+        var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
+        for (var __i = 0; __i < args.Length; __i++)
+        {
+            __tail[__i] = args[__i].Native;
+            __ptrs[1 + __i] = (nint)(__tail + __i);
+        }
+        NativeVariant __ret = default;
+        GDExtensionCallError __err = default;
+        GdExtensionInterface.ObjectMethodBindCall(__mb, NativePtr, (nint)__ptrs, __n, (nint)(&__ret), (nint)(&__err));
+        for (var __i = 0; __i < 1; __i++) Variants.Destroy(ref __lead[__i]);
+        if ((int)__err.error != 0)
+        {
+            Variants.Destroy(ref __ret);
+            throw new InvalidOperationException($"Node.rpc call failed: error={(int)__err.error} argument={__err.argument}");
+        }
+        var __v = Variants.ToInt(in __ret);
+        Variants.Destroy(ref __ret);
+        return unchecked((Error)__v);
+    }
+
+    private static nint __mb_rpc_id;
+    public Error RpcId(long peerId, string method, params Variant[] args)
+    {
+        var __mb = __mb_rpc_id;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "rpc_id", 361499283);
+            if (__mb == 0) throw new MissingMethodException("Node.rpc_id is not available in this engine build.");
+            __mb_rpc_id = __mb;
+        }
+        var __n = 2 + args.Length;
+        var __ptrs = stackalloc nint[Math.Max(__n, 1)];
+        var __lead = stackalloc NativeVariant[2];
+        __lead[0] = Variants.FromInt(unchecked((long)peerId));
+        __ptrs[0] = (nint)(__lead + 0);
+        __lead[1] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __ptrs[1] = (nint)(__lead + 1);
+        var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
+        for (var __i = 0; __i < args.Length; __i++)
+        {
+            __tail[__i] = args[__i].Native;
+            __ptrs[2 + __i] = (nint)(__tail + __i);
+        }
+        NativeVariant __ret = default;
+        GDExtensionCallError __err = default;
+        GdExtensionInterface.ObjectMethodBindCall(__mb, NativePtr, (nint)__ptrs, __n, (nint)(&__ret), (nint)(&__err));
+        for (var __i = 0; __i < 2; __i++) Variants.Destroy(ref __lead[__i]);
+        if ((int)__err.error != 0)
+        {
+            Variants.Destroy(ref __ret);
+            throw new InvalidOperationException($"Node.rpc_id call failed: error={(int)__err.error} argument={__err.argument}");
+        }
+        var __v = Variants.ToInt(in __ret);
+        Variants.Destroy(ref __ret);
+        return unchecked((Error)__v);
+    }
+
     private static nint __mb_update_configuration_warnings;
     public void UpdateConfigurationWarnings()
     {
@@ -16884,6 +18583,39 @@ public unsafe partial class Node : GodotObject
             __mb_update_configuration_warnings = __mb;
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+    }
+
+    private static nint __mb_call_deferred_thread_group;
+    public Variant CallDeferredThreadGroup(string method, params Variant[] args)
+    {
+        var __mb = __mb_call_deferred_thread_group;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "call_deferred_thread_group", 3400424181);
+            if (__mb == 0) throw new MissingMethodException("Node.call_deferred_thread_group is not available in this engine build.");
+            __mb_call_deferred_thread_group = __mb;
+        }
+        var __n = 1 + args.Length;
+        var __ptrs = stackalloc nint[Math.Max(__n, 1)];
+        var __lead = stackalloc NativeVariant[1];
+        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __ptrs[0] = (nint)(__lead + 0);
+        var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
+        for (var __i = 0; __i < args.Length; __i++)
+        {
+            __tail[__i] = args[__i].Native;
+            __ptrs[1 + __i] = (nint)(__tail + __i);
+        }
+        NativeVariant __ret = default;
+        GDExtensionCallError __err = default;
+        GdExtensionInterface.ObjectMethodBindCall(__mb, NativePtr, (nint)__ptrs, __n, (nint)(&__ret), (nint)(&__err));
+        for (var __i = 0; __i < 1; __i++) Variants.Destroy(ref __lead[__i]);
+        if ((int)__err.error != 0)
+        {
+            Variants.Destroy(ref __ret);
+            throw new InvalidOperationException($"Node.call_deferred_thread_group call failed: error={(int)__err.error} argument={__err.argument}");
+        }
+        return new Variant(__ret);
     }
 
     private static nint __mb_set_deferred_thread_group;
@@ -16918,6 +18650,39 @@ public unsafe partial class Node : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_call_thread_safe;
+    public Variant CallThreadSafe(string method, params Variant[] args)
+    {
+        var __mb = __mb_call_thread_safe;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "call_thread_safe", 3400424181);
+            if (__mb == 0) throw new MissingMethodException("Node.call_thread_safe is not available in this engine build.");
+            __mb_call_thread_safe = __mb;
+        }
+        var __n = 1 + args.Length;
+        var __ptrs = stackalloc nint[Math.Max(__n, 1)];
+        var __lead = stackalloc NativeVariant[1];
+        __lead[0] = Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME, StringNames.Get(method).Opaque);
+        __ptrs[0] = (nint)(__lead + 0);
+        var __tail = stackalloc NativeVariant[Math.Max(args.Length, 1)];
+        for (var __i = 0; __i < args.Length; __i++)
+        {
+            __tail[__i] = args[__i].Native;
+            __ptrs[1 + __i] = (nint)(__tail + __i);
+        }
+        NativeVariant __ret = default;
+        GDExtensionCallError __err = default;
+        GdExtensionInterface.ObjectMethodBindCall(__mb, NativePtr, (nint)__ptrs, __n, (nint)(&__ret), (nint)(&__err));
+        for (var __i = 0; __i < 1; __i++) Variants.Destroy(ref __lead[__i]);
+        if ((int)__err.error != 0)
+        {
+            Variants.Destroy(ref __ret);
+            throw new InvalidOperationException($"Node.call_thread_safe call failed: error={(int)__err.error} argument={__err.argument}");
+        }
+        return new Variant(__ret);
     }
 
     private static nint __mb_set_thread_safe;
@@ -16964,6 +18729,10 @@ public unsafe partial class Node : GodotObject
 
     public virtual void _Ready() { }
 
+    public virtual string[] _GetConfigurationWarnings() => default!;
+
+    public virtual string[] _GetAccessibilityConfigurationWarnings() => default!;
+
     public virtual void _Input(InputEvent? @event) { }
 
     public virtual void _ShortcutInput(InputEvent? @event) { }
@@ -16979,6 +18748,8 @@ public unsafe partial class Node : GodotObject
     private static ulong __vsn_enter_tree;
     private static ulong __vsn_exit_tree;
     private static ulong __vsn_ready;
+    private static ulong __vsn_get_configuration_warnings;
+    private static ulong __vsn_get_accessibility_configuration_warnings;
     private static ulong __vsn_input;
     private static ulong __vsn_shortcut_input;
     private static ulong __vsn_unhandled_input;
@@ -17015,6 +18786,18 @@ public unsafe partial class Node : GodotObject
         if (nameSn == __vsn_ready)
         {
             _Ready();
+            return true;
+        }
+        if (__vsn_get_configuration_warnings == 0) __vsn_get_configuration_warnings = StringNames.Get("_get_configuration_warnings").Opaque;
+        if (nameSn == __vsn_get_configuration_warnings)
+        {
+            *(Opaque16*)ret = Packed.CreateStrings(_GetConfigurationWarnings() ?? []);
+            return true;
+        }
+        if (__vsn_get_accessibility_configuration_warnings == 0) __vsn_get_accessibility_configuration_warnings = StringNames.Get("_get_accessibility_configuration_warnings").Opaque;
+        if (nameSn == __vsn_get_accessibility_configuration_warnings)
+        {
+            *(Opaque16*)ret = Packed.CreateStrings(_GetAccessibilityConfigurationWarnings() ?? []);
             return true;
         }
         if (__vsn_input == 0) __vsn_input = StringNames.Get("_input").Opaque;

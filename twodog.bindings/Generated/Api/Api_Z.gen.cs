@@ -138,6 +138,25 @@ public unsafe partial class ZIPPacker : RefCounted
         return (Error)__ret;
     }
 
+    private static nint __mb_write_file;
+    public Error WriteFile(byte[] data)
+    {
+        var __mb = __mb_write_file;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ZIPPacker", "write_file", 680677267);
+            if (__mb == 0) throw new MissingMethodException("ZIPPacker.write_file is not available in this engine build.");
+            __mb_write_file = __mb;
+        }
+        var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
+        return (Error)__ret;
+    }
+
     private static nint __mb_close_file;
     public Error CloseFile()
     {
@@ -210,6 +229,42 @@ public unsafe partial class ZIPReader : RefCounted
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (Error)__ret;
+    }
+
+    private static nint __mb_get_files;
+    public string[] GetFiles()
+    {
+        var __mb = __mb_get_files;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ZIPReader", "get_files", 2981934095);
+            if (__mb == 0) throw new MissingMethodException("ZIPReader.get_files is not available in this engine build.");
+            __mb_get_files = __mb;
+        }
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return Packed.ToStringArray(ref __ret);
+    }
+
+    private static nint __mb_read_file;
+    public byte[] ReadFile(string path, bool caseSensitive = true)
+    {
+        var __mb = __mb_read_file;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ZIPReader", "read_file", 740857591);
+            if (__mb == 0) throw new MissingMethodException("ZIPReader.read_file is not available in this engine build.");
+            __mb_read_file = __mb;
+        }
+        ulong __a0 = NativeString.Create(path);
+        byte __a1 = caseSensitive ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        Opaque16 __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_file_exists;
