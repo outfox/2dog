@@ -116,6 +116,24 @@ public unsafe partial class PackedDataContainer : Resource
         ClassRegistry.AttachNew(this, "PackedDataContainer");
     }
 
+    private static nint __mb_pack;
+    public Error Pack(Variant value)
+    {
+        var __mb = __mb_pack;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PackedDataContainer", "pack", 966674026);
+            if (__mb == 0) throw new MissingMethodException("PackedDataContainer.pack is not available in this engine build.");
+            __mb_pack = __mb;
+        }
+        var __a0 = value.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Error)__ret;
+    }
+
     private static nint __mb_size;
     public int Size()
     {
@@ -239,6 +257,44 @@ public unsafe partial class PackedScene : Resource
 public unsafe partial class PacketPeer : RefCounted
 {
     internal PacketPeer(nint ptr, bool rc) : base(ptr, rc) { }
+
+    private static nint __mb_get_var;
+    public Variant GetVar(bool allowObjects)
+    {
+        var __mb = __mb_get_var;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PacketPeer", "get_var", 3442865206);
+            if (__mb == 0) throw new MissingMethodException("PacketPeer.get_var is not available in this engine build.");
+            __mb_get_var = __mb;
+        }
+        byte __a0 = allowObjects ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_put_var;
+    public Error PutVar(Variant var, bool fullObjects)
+    {
+        var __mb = __mb_put_var;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PacketPeer", "put_var", 2436251611);
+            if (__mb == 0) throw new MissingMethodException("PacketPeer.put_var is not available in this engine build.");
+            __mb_put_var = __mb;
+        }
+        var __a0 = var.Native;
+        byte __a1 = fullObjects ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Error)__ret;
+    }
 
     private static nint __mb_get_packet_error;
     public Error GetPacketError()
@@ -4192,6 +4248,24 @@ public unsafe partial class Performance : GodotObject
         return __ret != 0;
     }
 
+    private static nint __mb_get_custom_monitor;
+    public Variant GetCustomMonitor(string id)
+    {
+        var __mb = __mb_get_custom_monitor;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Performance", "get_custom_monitor", 2138907829);
+            if (__mb == 0) throw new MissingMethodException("Performance.get_custom_monitor is not available in this engine build.");
+            __mb_get_custom_monitor = __mb;
+        }
+        ulong __a0 = StringNames.Get(id).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_get_monitor_modification_time;
     public ulong GetMonitorModificationTime()
     {
@@ -4205,6 +4279,21 @@ public unsafe partial class Performance : GodotObject
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
+    }
+
+    private static nint __mb_get_custom_monitor_names;
+    public Godot.Collections.Array GetCustomMonitorNames()
+    {
+        var __mb = __mb_get_custom_monitor_names;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Performance", "get_custom_monitor_names", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("Performance.get_custom_monitor_names is not available in this engine build.");
+            __mb_get_custom_monitor_names = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 }
 
@@ -4307,6 +4396,37 @@ public unsafe partial class PhysicalBone2D : RigidBody2D
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_set_bone2d_nodepath;
+    public void SetBone2dNodepath(NodePath nodepath)
+    {
+        var __mb = __mb_set_bone2d_nodepath;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicalBone2D", "set_bone2d_nodepath", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("PhysicalBone2D.set_bone2d_nodepath is not available in this engine build.");
+            __mb_set_bone2d_nodepath = __mb;
+        }
+        ulong __a0 = nodepath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_bone2d_nodepath;
+    public NodePath GetBone2dNodepath()
+    {
+        var __mb = __mb_get_bone2d_nodepath;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicalBone2D", "get_bone2d_nodepath", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("PhysicalBone2D.get_bone2d_nodepath is not available in this engine build.");
+            __mb_get_bone2d_nodepath = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_bone2d_index;
@@ -5025,6 +5145,22 @@ public unsafe partial class PhysicalBoneSimulator3D : SkeletonModifier3D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
 
+    private static nint __mb_physical_bones_start_simulation;
+    public void PhysicalBonesStartSimulation(Godot.Collections.Array bones)
+    {
+        var __mb = __mb_physical_bones_start_simulation;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicalBoneSimulator3D", "physical_bones_start_simulation", 2787316981);
+            if (__mb == 0) throw new MissingMethodException("PhysicalBoneSimulator3D.physical_bones_start_simulation is not available in this engine build.");
+            __mb_physical_bones_start_simulation = __mb;
+        }
+        ulong __a0 = bones.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_physical_bones_add_collision_exception;
     public void PhysicalBonesAddCollisionException(Rid exception)
     {
@@ -5478,6 +5614,21 @@ public unsafe partial class PhysicsBody2D : CollisionObject2D
         return __ret;
     }
 
+    private static nint __mb_get_collision_exceptions;
+    public Godot.Collections.Array GetCollisionExceptions()
+    {
+        var __mb = __mb_get_collision_exceptions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsBody2D", "get_collision_exceptions", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("PhysicsBody2D.get_collision_exceptions is not available in this engine build.");
+            __mb_get_collision_exceptions = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_add_collision_exception_with;
     public void AddCollisionExceptionWith(Node? body)
     {
@@ -5618,6 +5769,21 @@ public unsafe partial class PhysicsBody3D : CollisionObject3D
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_get_collision_exceptions;
+    public Godot.Collections.Array GetCollisionExceptions()
+    {
+        var __mb = __mb_get_collision_exceptions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsBody3D", "get_collision_exceptions", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("PhysicsBody3D.get_collision_exceptions is not available in this engine build.");
+            __mb_get_collision_exceptions = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_add_collision_exception_with;
@@ -8164,6 +8330,102 @@ public unsafe partial class PhysicsDirectBodyState3DExtension : PhysicsDirectBod
 public unsafe partial class PhysicsDirectSpaceState2D : GodotObject
 {
     internal PhysicsDirectSpaceState2D(nint ptr, bool rc) : base(ptr, rc) { }
+
+    private static nint __mb_intersect_point;
+    public Godot.Collections.Array IntersectPoint(PhysicsPointQueryParameters2D? parameters, int maxResults)
+    {
+        var __mb = __mb_intersect_point;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsDirectSpaceState2D", "intersect_point", 2118456068);
+            if (__mb == 0) throw new MissingMethodException("PhysicsDirectSpaceState2D.intersect_point is not available in this engine build.");
+            __mb_intersect_point = __mb;
+        }
+        nint __a0 = parameters?.NativePtr ?? 0;
+        long __a1 = unchecked((long)maxResults);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_intersect_ray;
+    public Godot.Collections.Dictionary IntersectRay(PhysicsRayQueryParameters2D? parameters)
+    {
+        var __mb = __mb_intersect_ray;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsDirectSpaceState2D", "intersect_ray", 1590275562);
+            if (__mb == 0) throw new MissingMethodException("PhysicsDirectSpaceState2D.intersect_ray is not available in this engine build.");
+            __mb_intersect_ray = __mb;
+        }
+        nint __a0 = parameters?.NativePtr ?? 0;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_intersect_shape;
+    public Godot.Collections.Array IntersectShape(PhysicsShapeQueryParameters2D? parameters, int maxResults)
+    {
+        var __mb = __mb_intersect_shape;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsDirectSpaceState2D", "intersect_shape", 2488867228);
+            if (__mb == 0) throw new MissingMethodException("PhysicsDirectSpaceState2D.intersect_shape is not available in this engine build.");
+            __mb_intersect_shape = __mb;
+        }
+        nint __a0 = parameters?.NativePtr ?? 0;
+        long __a1 = unchecked((long)maxResults);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_collide_shape;
+    public Godot.Collections.Array CollideShape(PhysicsShapeQueryParameters2D? parameters, int maxResults)
+    {
+        var __mb = __mb_collide_shape;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsDirectSpaceState2D", "collide_shape", 2488867228);
+            if (__mb == 0) throw new MissingMethodException("PhysicsDirectSpaceState2D.collide_shape is not available in this engine build.");
+            __mb_collide_shape = __mb;
+        }
+        nint __a0 = parameters?.NativePtr ?? 0;
+        long __a1 = unchecked((long)maxResults);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_rest_info;
+    public Godot.Collections.Dictionary GetRestInfo(PhysicsShapeQueryParameters2D? parameters)
+    {
+        var __mb = __mb_get_rest_info;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsDirectSpaceState2D", "get_rest_info", 2803666496);
+            if (__mb == 0) throw new MissingMethodException("PhysicsDirectSpaceState2D.get_rest_info is not available in this engine build.");
+            __mb_get_rest_info = __mb;
+        }
+        nint __a0 = parameters?.NativePtr ?? 0;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
 }
 
 public unsafe partial class PhysicsDirectSpaceState2DExtension : PhysicsDirectSpaceState2D
@@ -8197,6 +8459,102 @@ public unsafe partial class PhysicsDirectSpaceState2DExtension : PhysicsDirectSp
 public unsafe partial class PhysicsDirectSpaceState3D : GodotObject
 {
     internal PhysicsDirectSpaceState3D(nint ptr, bool rc) : base(ptr, rc) { }
+
+    private static nint __mb_intersect_point;
+    public Godot.Collections.Array IntersectPoint(PhysicsPointQueryParameters3D? parameters, int maxResults)
+    {
+        var __mb = __mb_intersect_point;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsDirectSpaceState3D", "intersect_point", 975173756);
+            if (__mb == 0) throw new MissingMethodException("PhysicsDirectSpaceState3D.intersect_point is not available in this engine build.");
+            __mb_intersect_point = __mb;
+        }
+        nint __a0 = parameters?.NativePtr ?? 0;
+        long __a1 = unchecked((long)maxResults);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_intersect_ray;
+    public Godot.Collections.Dictionary IntersectRay(PhysicsRayQueryParameters3D? parameters)
+    {
+        var __mb = __mb_intersect_ray;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsDirectSpaceState3D", "intersect_ray", 3957970750);
+            if (__mb == 0) throw new MissingMethodException("PhysicsDirectSpaceState3D.intersect_ray is not available in this engine build.");
+            __mb_intersect_ray = __mb;
+        }
+        nint __a0 = parameters?.NativePtr ?? 0;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_intersect_shape;
+    public Godot.Collections.Array IntersectShape(PhysicsShapeQueryParameters3D? parameters, int maxResults)
+    {
+        var __mb = __mb_intersect_shape;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsDirectSpaceState3D", "intersect_shape", 3762137681);
+            if (__mb == 0) throw new MissingMethodException("PhysicsDirectSpaceState3D.intersect_shape is not available in this engine build.");
+            __mb_intersect_shape = __mb;
+        }
+        nint __a0 = parameters?.NativePtr ?? 0;
+        long __a1 = unchecked((long)maxResults);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_collide_shape;
+    public Godot.Collections.Array CollideShape(PhysicsShapeQueryParameters3D? parameters, int maxResults)
+    {
+        var __mb = __mb_collide_shape;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsDirectSpaceState3D", "collide_shape", 3762137681);
+            if (__mb == 0) throw new MissingMethodException("PhysicsDirectSpaceState3D.collide_shape is not available in this engine build.");
+            __mb_collide_shape = __mb;
+        }
+        nint __a0 = parameters?.NativePtr ?? 0;
+        long __a1 = unchecked((long)maxResults);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_rest_info;
+    public Godot.Collections.Dictionary GetRestInfo(PhysicsShapeQueryParameters3D? parameters)
+    {
+        var __mb = __mb_get_rest_info;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsDirectSpaceState3D", "get_rest_info", 1376751592);
+            if (__mb == 0) throw new MissingMethodException("PhysicsDirectSpaceState3D.get_rest_info is not available in this engine build.");
+            __mb_get_rest_info = __mb;
+        }
+        nint __a0 = parameters?.NativePtr ?? 0;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
 }
 
 public unsafe partial class PhysicsDirectSpaceState3DExtension : PhysicsDirectSpaceState3D
@@ -8478,6 +8836,37 @@ public unsafe partial class PhysicsPointQueryParameters2D : RefCounted
         return unchecked((uint)__ret);
     }
 
+    private static nint __mb_set_exclude;
+    public void SetExclude(Godot.Collections.Array exclude)
+    {
+        var __mb = __mb_set_exclude;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsPointQueryParameters2D", "set_exclude", 381264803);
+            if (__mb == 0) throw new MissingMethodException("PhysicsPointQueryParameters2D.set_exclude is not available in this engine build.");
+            __mb_set_exclude = __mb;
+        }
+        ulong __a0 = exclude.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_exclude;
+    public Godot.Collections.Array GetExclude()
+    {
+        var __mb = __mb_get_exclude;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsPointQueryParameters2D", "get_exclude", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("PhysicsPointQueryParameters2D.get_exclude is not available in this engine build.");
+            __mb_get_exclude = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_collide_with_bodies;
     public void SetCollideWithBodies(bool enable)
     {
@@ -8612,6 +9001,37 @@ public unsafe partial class PhysicsPointQueryParameters3D : RefCounted
         return unchecked((uint)__ret);
     }
 
+    private static nint __mb_set_exclude;
+    public void SetExclude(Godot.Collections.Array exclude)
+    {
+        var __mb = __mb_set_exclude;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsPointQueryParameters3D", "set_exclude", 381264803);
+            if (__mb == 0) throw new MissingMethodException("PhysicsPointQueryParameters3D.set_exclude is not available in this engine build.");
+            __mb_set_exclude = __mb;
+        }
+        ulong __a0 = exclude.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_exclude;
+    public Godot.Collections.Array GetExclude()
+    {
+        var __mb = __mb_get_exclude;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsPointQueryParameters3D", "get_exclude", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("PhysicsPointQueryParameters3D.get_exclude is not available in this engine build.");
+            __mb_get_exclude = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_collide_with_bodies;
     public void SetCollideWithBodies(bool enable)
     {
@@ -8682,6 +9102,30 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
     public PhysicsRayQueryParameters2D() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "PhysicsRayQueryParameters2D");
+    }
+
+    private static nint __mb_create;
+    public static PhysicsRayQueryParameters2D? Create(Vector2 from, Vector2 to, uint collisionMask, Godot.Collections.Array exclude)
+    {
+        var __mb = __mb_create;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsRayQueryParameters2D", "create", 3196569324);
+            if (__mb == 0) throw new MissingMethodException("PhysicsRayQueryParameters2D.create is not available in this engine build.");
+            __mb_create = __mb;
+        }
+        var __a0 = from;
+        var __a1 = to;
+        long __a2 = unchecked((long)collisionMask);
+        ulong __a3 = exclude.Native;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        return (PhysicsRayQueryParameters2D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_from;
@@ -8775,6 +9219,37 @@ public unsafe partial class PhysicsRayQueryParameters2D : RefCounted
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((uint)__ret);
+    }
+
+    private static nint __mb_set_exclude;
+    public void SetExclude(Godot.Collections.Array exclude)
+    {
+        var __mb = __mb_set_exclude;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsRayQueryParameters2D", "set_exclude", 381264803);
+            if (__mb == 0) throw new MissingMethodException("PhysicsRayQueryParameters2D.set_exclude is not available in this engine build.");
+            __mb_set_exclude = __mb;
+        }
+        ulong __a0 = exclude.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_exclude;
+    public Godot.Collections.Array GetExclude()
+    {
+        var __mb = __mb_get_exclude;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsRayQueryParameters2D", "get_exclude", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("PhysicsRayQueryParameters2D.get_exclude is not available in this engine build.");
+            __mb_get_exclude = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_collide_with_bodies;
@@ -8880,6 +9355,30 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
         ClassRegistry.AttachNew(this, "PhysicsRayQueryParameters3D");
     }
 
+    private static nint __mb_create;
+    public static PhysicsRayQueryParameters3D? Create(Vector3 from, Vector3 to, uint collisionMask, Godot.Collections.Array exclude)
+    {
+        var __mb = __mb_create;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsRayQueryParameters3D", "create", 3110599579);
+            if (__mb == 0) throw new MissingMethodException("PhysicsRayQueryParameters3D.create is not available in this engine build.");
+            __mb_create = __mb;
+        }
+        var __a0 = from;
+        var __a1 = to;
+        long __a2 = unchecked((long)collisionMask);
+        ulong __a3 = exclude.Native;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        return (PhysicsRayQueryParameters3D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
     private static nint __mb_set_from;
     public void SetFrom(Vector3 from)
     {
@@ -8971,6 +9470,37 @@ public unsafe partial class PhysicsRayQueryParameters3D : RefCounted
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((uint)__ret);
+    }
+
+    private static nint __mb_set_exclude;
+    public void SetExclude(Godot.Collections.Array exclude)
+    {
+        var __mb = __mb_set_exclude;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsRayQueryParameters3D", "set_exclude", 381264803);
+            if (__mb == 0) throw new MissingMethodException("PhysicsRayQueryParameters3D.set_exclude is not available in this engine build.");
+            __mb_set_exclude = __mb;
+        }
+        ulong __a0 = exclude.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_exclude;
+    public Godot.Collections.Array GetExclude()
+    {
+        var __mb = __mb_get_exclude;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsRayQueryParameters3D", "get_exclude", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("PhysicsRayQueryParameters3D.get_exclude is not available in this engine build.");
+            __mb_get_exclude = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_collide_with_bodies;
@@ -9368,6 +9898,24 @@ public unsafe partial class PhysicsServer2D : GodotObject
         return __ret;
     }
 
+    private static nint __mb_shape_set_data;
+    public void ShapeSetData(Rid shape, Variant data)
+    {
+        var __mb = __mb_shape_set_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer2D", "shape_set_data", 3175752987);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer2D.shape_set_data is not available in this engine build.");
+            __mb_shape_set_data = __mb;
+        }
+        var __a0 = shape;
+        var __a1 = data.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_shape_get_type;
     public PhysicsServer2D.ShapeType ShapeGetType(Rid shape)
     {
@@ -9384,6 +9932,24 @@ public unsafe partial class PhysicsServer2D : GodotObject
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (PhysicsServer2D.ShapeType)__ret;
+    }
+
+    private static nint __mb_shape_get_data;
+    public Variant ShapeGetData(Rid shape)
+    {
+        var __mb = __mb_shape_get_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer2D", "shape_get_data", 4171304767);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer2D.shape_get_data is not available in this engine build.");
+            __mb_shape_get_data = __mb;
+        }
+        var __a0 = shape;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_space_create;
@@ -9792,6 +10358,26 @@ public unsafe partial class PhysicsServer2D : GodotObject
         return unchecked((uint)__ret);
     }
 
+    private static nint __mb_area_set_param;
+    public void AreaSetParam(Rid area, PhysicsServer2D.AreaParameter param, Variant value)
+    {
+        var __mb = __mb_area_set_param;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer2D", "area_set_param", 1257146028);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer2D.area_set_param is not available in this engine build.");
+            __mb_area_set_param = __mb;
+        }
+        var __a0 = area;
+        long __a1 = (long)param;
+        var __a2 = value.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_area_set_transform;
     public void AreaSetTransform(Rid area, Transform2D transform)
     {
@@ -9808,6 +10394,26 @@ public unsafe partial class PhysicsServer2D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_area_get_param;
+    public Variant AreaGetParam(Rid area, PhysicsServer2D.AreaParameter param)
+    {
+        var __mb = __mb_area_get_param;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer2D", "area_get_param", 3047435120);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer2D.area_get_param is not available in this engine build.");
+            __mb_area_get_param = __mb;
+        }
+        var __a0 = area;
+        long __a1 = (long)param;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_area_get_transform;
@@ -10419,6 +11025,46 @@ public unsafe partial class PhysicsServer2D : GodotObject
         return (float)__ret;
     }
 
+    private static nint __mb_body_set_param;
+    public void BodySetParam(Rid body, PhysicsServer2D.BodyParameter param, Variant value)
+    {
+        var __mb = __mb_body_set_param;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer2D", "body_set_param", 2715630609);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer2D.body_set_param is not available in this engine build.");
+            __mb_body_set_param = __mb;
+        }
+        var __a0 = body;
+        long __a1 = (long)param;
+        var __a2 = value.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_body_get_param;
+    public Variant BodyGetParam(Rid body, PhysicsServer2D.BodyParameter param)
+    {
+        var __mb = __mb_body_get_param;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer2D", "body_get_param", 3208033526);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer2D.body_get_param is not available in this engine build.");
+            __mb_body_get_param = __mb;
+        }
+        var __a0 = body;
+        long __a1 = (long)param;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_body_reset_mass_properties;
     public void BodyResetMassProperties(Rid body)
     {
@@ -10433,6 +11079,46 @@ public unsafe partial class PhysicsServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_body_set_state;
+    public void BodySetState(Rid body, PhysicsServer2D.BodyState state, Variant value)
+    {
+        var __mb = __mb_body_set_state;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer2D", "body_set_state", 1706355209);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer2D.body_set_state is not available in this engine build.");
+            __mb_body_set_state = __mb;
+        }
+        var __a0 = body;
+        long __a1 = (long)state;
+        var __a2 = value.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_body_get_state;
+    public Variant BodyGetState(Rid body, PhysicsServer2D.BodyState state)
+    {
+        var __mb = __mb_body_get_state;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer2D", "body_get_state", 4036367961);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer2D.body_get_state is not available in this engine build.");
+            __mb_body_get_state = __mb;
+        }
+        var __a0 = body;
+        long __a1 = (long)state;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_body_apply_central_impulse;
@@ -12763,6 +13449,24 @@ public unsafe partial class PhysicsServer3D : GodotObject
         return __ret;
     }
 
+    private static nint __mb_shape_set_data;
+    public void ShapeSetData(Rid shape, Variant data)
+    {
+        var __mb = __mb_shape_set_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer3D", "shape_set_data", 3175752987);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer3D.shape_set_data is not available in this engine build.");
+            __mb_shape_set_data = __mb;
+        }
+        var __a0 = shape;
+        var __a1 = data.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_shape_set_margin;
     public void ShapeSetMargin(Rid shape, float margin)
     {
@@ -12797,6 +13501,24 @@ public unsafe partial class PhysicsServer3D : GodotObject
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (PhysicsServer3D.ShapeType)__ret;
+    }
+
+    private static nint __mb_shape_get_data;
+    public Variant ShapeGetData(Rid shape)
+    {
+        var __mb = __mb_shape_get_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer3D", "shape_get_data", 4171304767);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer3D.shape_get_data is not available in this engine build.");
+            __mb_shape_get_data = __mb;
+        }
+        var __a0 = shape;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_shape_get_margin;
@@ -13223,6 +13945,26 @@ public unsafe partial class PhysicsServer3D : GodotObject
         return unchecked((uint)__ret);
     }
 
+    private static nint __mb_area_set_param;
+    public void AreaSetParam(Rid area, PhysicsServer3D.AreaParameter param, Variant value)
+    {
+        var __mb = __mb_area_set_param;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer3D", "area_set_param", 2980114638);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer3D.area_set_param is not available in this engine build.");
+            __mb_area_set_param = __mb;
+        }
+        var __a0 = area;
+        long __a1 = (long)param;
+        var __a2 = value.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_area_set_transform;
     public void AreaSetTransform(Rid area, Transform3D transform)
     {
@@ -13239,6 +13981,26 @@ public unsafe partial class PhysicsServer3D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_area_get_param;
+    public Variant AreaGetParam(Rid area, PhysicsServer3D.AreaParameter param)
+    {
+        var __mb = __mb_area_get_param;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer3D", "area_get_param", 890056067);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer3D.area_get_param is not available in this engine build.");
+            __mb_area_get_param = __mb;
+        }
+        var __a0 = area;
+        long __a1 = (long)param;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_area_get_transform;
@@ -13772,6 +14534,46 @@ public unsafe partial class PhysicsServer3D : GodotObject
         return __ret != 0;
     }
 
+    private static nint __mb_body_set_param;
+    public void BodySetParam(Rid body, PhysicsServer3D.BodyParameter param, Variant value)
+    {
+        var __mb = __mb_body_set_param;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer3D", "body_set_param", 910941953);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer3D.body_set_param is not available in this engine build.");
+            __mb_body_set_param = __mb;
+        }
+        var __a0 = body;
+        long __a1 = (long)param;
+        var __a2 = value.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_body_get_param;
+    public Variant BodyGetParam(Rid body, PhysicsServer3D.BodyParameter param)
+    {
+        var __mb = __mb_body_get_param;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer3D", "body_get_param", 3385027841);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer3D.body_get_param is not available in this engine build.");
+            __mb_body_get_param = __mb;
+        }
+        var __a0 = body;
+        long __a1 = (long)param;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_body_reset_mass_properties;
     public void BodyResetMassProperties(Rid body)
     {
@@ -13786,6 +14588,46 @@ public unsafe partial class PhysicsServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_body_set_state;
+    public void BodySetState(Rid body, PhysicsServer3D.BodyState state, Variant value)
+    {
+        var __mb = __mb_body_set_state;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer3D", "body_set_state", 599977762);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer3D.body_set_state is not available in this engine build.");
+            __mb_body_set_state = __mb;
+        }
+        var __a0 = body;
+        long __a1 = (long)state;
+        var __a2 = value.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_body_get_state;
+    public Variant BodyGetState(Rid body, PhysicsServer3D.BodyState state)
+    {
+        var __mb = __mb_body_get_state;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer3D", "body_get_state", 1850449534);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer3D.body_get_state is not available in this engine build.");
+            __mb_body_get_state = __mb;
+        }
+        var __a0 = body;
+        long __a1 = (long)state;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_body_apply_central_impulse;
@@ -14463,6 +15305,46 @@ public unsafe partial class PhysicsServer3D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_soft_body_set_state;
+    public void SoftBodySetState(Rid body, PhysicsServer3D.BodyState state, Variant variant)
+    {
+        var __mb = __mb_soft_body_set_state;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer3D", "soft_body_set_state", 599977762);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer3D.soft_body_set_state is not available in this engine build.");
+            __mb_soft_body_set_state = __mb;
+        }
+        var __a0 = body;
+        long __a1 = (long)state;
+        var __a2 = variant.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_soft_body_get_state;
+    public Variant SoftBodyGetState(Rid body, PhysicsServer3D.BodyState state)
+    {
+        var __mb = __mb_soft_body_get_state;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsServer3D", "soft_body_get_state", 1850449534);
+            if (__mb == 0) throw new MissingMethodException("PhysicsServer3D.soft_body_get_state is not available in this engine build.");
+            __mb_soft_body_get_state = __mb;
+        }
+        var __a0 = body;
+        long __a1 = (long)state;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_soft_body_set_transform;
@@ -17411,6 +18293,37 @@ public unsafe partial class PhysicsShapeQueryParameters2D : RefCounted
         return unchecked((uint)__ret);
     }
 
+    private static nint __mb_set_exclude;
+    public void SetExclude(Godot.Collections.Array exclude)
+    {
+        var __mb = __mb_set_exclude;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsShapeQueryParameters2D", "set_exclude", 381264803);
+            if (__mb == 0) throw new MissingMethodException("PhysicsShapeQueryParameters2D.set_exclude is not available in this engine build.");
+            __mb_set_exclude = __mb;
+        }
+        ulong __a0 = exclude.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_exclude;
+    public Godot.Collections.Array GetExclude()
+    {
+        var __mb = __mb_get_exclude;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsShapeQueryParameters2D", "get_exclude", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("PhysicsShapeQueryParameters2D.get_exclude is not available in this engine build.");
+            __mb_get_exclude = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_collide_with_bodies;
     public void SetCollideWithBodies(bool enable)
     {
@@ -17669,6 +18582,37 @@ public unsafe partial class PhysicsShapeQueryParameters3D : RefCounted
         return unchecked((uint)__ret);
     }
 
+    private static nint __mb_set_exclude;
+    public void SetExclude(Godot.Collections.Array exclude)
+    {
+        var __mb = __mb_set_exclude;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsShapeQueryParameters3D", "set_exclude", 381264803);
+            if (__mb == 0) throw new MissingMethodException("PhysicsShapeQueryParameters3D.set_exclude is not available in this engine build.");
+            __mb_set_exclude = __mb;
+        }
+        ulong __a0 = exclude.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_exclude;
+    public Godot.Collections.Array GetExclude()
+    {
+        var __mb = __mb_get_exclude;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsShapeQueryParameters3D", "get_exclude", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("PhysicsShapeQueryParameters3D.get_exclude is not available in this engine build.");
+            __mb_get_exclude = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_collide_with_bodies;
     public void SetCollideWithBodies(bool enable)
     {
@@ -17865,6 +18809,68 @@ public unsafe partial class PhysicsTestMotionParameters2D : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_exclude_bodies;
+    public Godot.Collections.Array GetExcludeBodies()
+    {
+        var __mb = __mb_get_exclude_bodies;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsTestMotionParameters2D", "get_exclude_bodies", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("PhysicsTestMotionParameters2D.get_exclude_bodies is not available in this engine build.");
+            __mb_get_exclude_bodies = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_exclude_bodies;
+    public void SetExcludeBodies(Godot.Collections.Array excludeList)
+    {
+        var __mb = __mb_set_exclude_bodies;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsTestMotionParameters2D", "set_exclude_bodies", 381264803);
+            if (__mb == 0) throw new MissingMethodException("PhysicsTestMotionParameters2D.set_exclude_bodies is not available in this engine build.");
+            __mb_set_exclude_bodies = __mb;
+        }
+        ulong __a0 = excludeList.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_exclude_objects;
+    public Godot.Collections.Array GetExcludeObjects()
+    {
+        var __mb = __mb_get_exclude_objects;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsTestMotionParameters2D", "get_exclude_objects", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("PhysicsTestMotionParameters2D.get_exclude_objects is not available in this engine build.");
+            __mb_get_exclude_objects = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_exclude_objects;
+    public void SetExcludeObjects(Godot.Collections.Array excludeList)
+    {
+        var __mb = __mb_set_exclude_objects;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsTestMotionParameters2D", "set_exclude_objects", 381264803);
+            if (__mb == 0) throw new MissingMethodException("PhysicsTestMotionParameters2D.set_exclude_objects is not available in this engine build.");
+            __mb_set_exclude_objects = __mb;
+        }
+        ulong __a0 = excludeList.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_is_recovery_as_collision_enabled;
     public bool IsRecoveryAsCollisionEnabled()
     {
@@ -18056,6 +19062,68 @@ public unsafe partial class PhysicsTestMotionParameters3D : RefCounted
             __mb_set_collide_separation_ray_enabled = __mb;
         }
         byte __a0 = enabled ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_exclude_bodies;
+    public Godot.Collections.Array GetExcludeBodies()
+    {
+        var __mb = __mb_get_exclude_bodies;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsTestMotionParameters3D", "get_exclude_bodies", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("PhysicsTestMotionParameters3D.get_exclude_bodies is not available in this engine build.");
+            __mb_get_exclude_bodies = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_exclude_bodies;
+    public void SetExcludeBodies(Godot.Collections.Array excludeList)
+    {
+        var __mb = __mb_set_exclude_bodies;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsTestMotionParameters3D", "set_exclude_bodies", 381264803);
+            if (__mb == 0) throw new MissingMethodException("PhysicsTestMotionParameters3D.set_exclude_bodies is not available in this engine build.");
+            __mb_set_exclude_bodies = __mb;
+        }
+        ulong __a0 = excludeList.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_exclude_objects;
+    public Godot.Collections.Array GetExcludeObjects()
+    {
+        var __mb = __mb_get_exclude_objects;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsTestMotionParameters3D", "get_exclude_objects", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("PhysicsTestMotionParameters3D.get_exclude_objects is not available in this engine build.");
+            __mb_get_exclude_objects = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_exclude_objects;
+    public void SetExcludeObjects(Godot.Collections.Array excludeList)
+    {
+        var __mb = __mb_set_exclude_objects;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PhysicsTestMotionParameters3D", "set_exclude_objects", 381264803);
+            if (__mb == 0) throw new MissingMethodException("PhysicsTestMotionParameters3D.set_exclude_objects is not available in this engine build.");
+            __mb_set_exclude_objects = __mb;
+        }
+        ulong __a0 = excludeList.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
@@ -19304,6 +20372,37 @@ public unsafe partial class Polygon2D : Node2D
         return __ret;
     }
 
+    private static nint __mb_set_polygons;
+    public void SetPolygons(Godot.Collections.Array polygons)
+    {
+        var __mb = __mb_set_polygons;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Polygon2D", "set_polygons", 381264803);
+            if (__mb == 0) throw new MissingMethodException("Polygon2D.set_polygons is not available in this engine build.");
+            __mb_set_polygons = __mb;
+        }
+        ulong __a0 = polygons.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_polygons;
+    public Godot.Collections.Array GetPolygons()
+    {
+        var __mb = __mb_get_polygons;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Polygon2D", "get_polygons", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Polygon2D.get_polygons is not available in this engine build.");
+            __mb_get_polygons = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_texture;
     public void SetTexture(Texture2D? texture)
     {
@@ -19567,6 +20666,24 @@ public unsafe partial class Polygon2D : Node2D
         return unchecked((int)__ret);
     }
 
+    private static nint __mb_get_bone_path;
+    public NodePath GetBonePath(int index)
+    {
+        var __mb = __mb_get_bone_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Polygon2D", "get_bone_path", 408788394);
+            if (__mb == 0) throw new MissingMethodException("Polygon2D.get_bone_path is not available in this engine build.");
+            __mb_get_bone_path = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_erase_bone;
     public void EraseBone(int index)
     {
@@ -19594,6 +20711,55 @@ public unsafe partial class Polygon2D : Node2D
             __mb_clear_bones = __mb;
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+    }
+
+    private static nint __mb_set_bone_path;
+    public void SetBonePath(int index, NodePath path)
+    {
+        var __mb = __mb_set_bone_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Polygon2D", "set_bone_path", 2761262315);
+            if (__mb == 0) throw new MissingMethodException("Polygon2D.set_bone_path is not available in this engine build.");
+            __mb_set_bone_path = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        ulong __a1 = path.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_skeleton;
+    public void SetSkeleton(NodePath skeleton)
+    {
+        var __mb = __mb_set_skeleton;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Polygon2D", "set_skeleton", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("Polygon2D.set_skeleton is not available in this engine build.");
+            __mb_set_skeleton = __mb;
+        }
+        ulong __a0 = skeleton.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_skeleton;
+    public NodePath GetSkeleton()
+    {
+        var __mb = __mb_get_skeleton;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Polygon2D", "get_skeleton", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("Polygon2D.get_skeleton is not available in this engine build.");
+            __mb_get_skeleton = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_internal_vertex_count;
@@ -20332,6 +21498,24 @@ public unsafe partial class PopupMenu : Popup
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_set_item_metadata;
+    public void SetItemMetadata(int index, Variant metadata)
+    {
+        var __mb = __mb_set_item_metadata;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PopupMenu", "set_item_metadata", 2152698145);
+            if (__mb == 0) throw new MissingMethodException("PopupMenu.set_item_metadata is not available in this engine build.");
+            __mb_set_item_metadata = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        var __a1 = metadata.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_set_item_disabled;
     public void SetItemDisabled(int index, bool disabled)
     {
@@ -20798,6 +21982,24 @@ public unsafe partial class PopupMenu : Popup
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (Key)__ret;
+    }
+
+    private static nint __mb_get_item_metadata;
+    public Variant GetItemMetadata(int index)
+    {
+        var __mb = __mb_get_item_metadata;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PopupMenu", "get_item_metadata", 4227898402);
+            if (__mb == 0) throw new MissingMethodException("PopupMenu.get_item_metadata is not available in this engine build.");
+            __mb_get_item_metadata = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_is_item_disabled;
@@ -21752,6 +22954,21 @@ public unsafe partial class PrimitiveMesh : Mesh
         return (Material?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_get_mesh_arrays;
+    public Godot.Collections.Array GetMeshArrays()
+    {
+        var __mb = __mb_get_mesh_arrays;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PrimitiveMesh", "get_mesh_arrays", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("PrimitiveMesh.get_mesh_arrays is not available in this engine build.");
+            __mb_get_mesh_arrays = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_custom_aabb;
     public void SetCustomAabb(Aabb aabb)
     {
@@ -22672,6 +23889,79 @@ public unsafe partial class ProjectSettings : GodotObject
         return __ret != 0;
     }
 
+    private static nint __mb_set_setting;
+    public void SetSetting(string name, Variant value)
+    {
+        var __mb = __mb_set_setting;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ProjectSettings", "set_setting", 402577236);
+            if (__mb == 0) throw new MissingMethodException("ProjectSettings.set_setting is not available in this engine build.");
+            __mb_set_setting = __mb;
+        }
+        ulong __a0 = NativeString.Create(name);
+        var __a1 = value.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
+    }
+
+    private static nint __mb_get_setting;
+    public Variant GetSetting(string name, Variant defaultValue)
+    {
+        var __mb = __mb_get_setting;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ProjectSettings", "get_setting", 223050753);
+            if (__mb == 0) throw new MissingMethodException("ProjectSettings.get_setting is not available in this engine build.");
+            __mb_get_setting = __mb;
+        }
+        ulong __a0 = NativeString.Create(name);
+        var __a1 = defaultValue.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_get_setting_with_override;
+    public Variant GetSettingWithOverride(string name)
+    {
+        var __mb = __mb_get_setting_with_override;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ProjectSettings", "get_setting_with_override", 2760726917);
+            if (__mb == 0) throw new MissingMethodException("ProjectSettings.get_setting_with_override is not available in this engine build.");
+            __mb_get_setting_with_override = __mb;
+        }
+        ulong __a0 = StringNames.Get(name).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_get_global_class_list;
+    public Godot.Collections.Array GetGlobalClassList()
+    {
+        var __mb = __mb_get_global_class_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ProjectSettings", "get_global_class_list", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("ProjectSettings.get_global_class_list is not available in this engine build.");
+            __mb_get_global_class_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_order;
     public void SetOrder(string name, int position)
     {
@@ -22710,6 +24000,25 @@ public unsafe partial class ProjectSettings : GodotObject
         return unchecked((int)__ret);
     }
 
+    private static nint __mb_set_initial_value;
+    public void SetInitialValue(string name, Variant value)
+    {
+        var __mb = __mb_set_initial_value;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ProjectSettings", "set_initial_value", 402577236);
+            if (__mb == 0) throw new MissingMethodException("ProjectSettings.set_initial_value is not available in this engine build.");
+            __mb_set_initial_value = __mb;
+        }
+        ulong __a0 = NativeString.Create(name);
+        var __a1 = value.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
+    }
+
     private static nint __mb_set_as_basic;
     public void SetAsBasic(string name, bool basic)
     {
@@ -22746,6 +24055,22 @@ public unsafe partial class ProjectSettings : GodotObject
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
+    }
+
+    private static nint __mb_add_property_info;
+    public void AddPropertyInfo(Godot.Collections.Dictionary hint)
+    {
+        var __mb = __mb_add_property_info;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ProjectSettings", "add_property_info", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("ProjectSettings.add_property_info is not available in this engine build.");
+            __mb_add_property_info = __mb;
+        }
+        ulong __a0 = hint.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_restart_if_changed;
@@ -22906,6 +24231,24 @@ public unsafe partial class PropertyTweener : Tweener
     public PropertyTweener() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "PropertyTweener");
+    }
+
+    private static nint __mb_from;
+    public PropertyTweener? From(Variant value)
+    {
+        var __mb = __mb_from;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("PropertyTweener", "from", 4190193059);
+            if (__mb == 0) throw new MissingMethodException("PropertyTweener.from is not available in this engine build.");
+            __mb_from = __mb;
+        }
+        var __a0 = value.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (PropertyTweener?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_from_current;

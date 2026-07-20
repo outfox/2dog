@@ -2333,6 +2333,21 @@ public unsafe partial class Viewport : Node
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
 
+    private static nint __mb_gui_get_drag_data;
+    public Variant GuiGetDragData()
+    {
+        var __mb = __mb_gui_get_drag_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Viewport", "gui_get_drag_data", 1214101251);
+            if (__mb == 0) throw new MissingMethodException("Viewport.gui_get_drag_data is not available in this engine build.");
+            __mb_gui_get_drag_data = __mb;
+        }
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_gui_get_drag_description;
     public string GuiGetDragDescription()
     {
@@ -2779,6 +2794,21 @@ public unsafe partial class Viewport : Node
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_get_embedded_subwindows;
+    public Godot.Collections.Array GetEmbeddedSubwindows()
+    {
+        var __mb = __mb_get_embedded_subwindows;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Viewport", "get_embedded_subwindows", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Viewport.get_embedded_subwindows is not available in this engine build.");
+            __mb_get_embedded_subwindows = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_drag_threshold;
@@ -3521,6 +3551,37 @@ public unsafe partial class ViewportTexture : Texture2D
     {
         ClassRegistry.AttachNew(this, "ViewportTexture");
     }
+
+    private static nint __mb_set_viewport_path_in_scene;
+    public void SetViewportPathInScene(NodePath path)
+    {
+        var __mb = __mb_set_viewport_path_in_scene;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ViewportTexture", "set_viewport_path_in_scene", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("ViewportTexture.set_viewport_path_in_scene is not available in this engine build.");
+            __mb_set_viewport_path_in_scene = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_viewport_path_in_scene;
+    public NodePath GetViewportPathInScene()
+    {
+        var __mb = __mb_get_viewport_path_in_scene;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ViewportTexture", "get_viewport_path_in_scene", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("ViewportTexture.get_viewport_path_in_scene is not available in this engine build.");
+            __mb_get_viewport_path_in_scene = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
 }
 
 public unsafe partial class VirtualJoystick : Control
@@ -3933,6 +3994,37 @@ public unsafe partial class VisibleOnScreenEnabler2D : VisibleOnScreenNotifier2D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (VisibleOnScreenEnabler2D.EnableMode)__ret;
     }
+
+    private static nint __mb_set_enable_node_path;
+    public void SetEnableNodePath(NodePath path)
+    {
+        var __mb = __mb_set_enable_node_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VisibleOnScreenEnabler2D", "set_enable_node_path", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("VisibleOnScreenEnabler2D.set_enable_node_path is not available in this engine build.");
+            __mb_set_enable_node_path = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_enable_node_path;
+    public NodePath GetEnableNodePath()
+    {
+        var __mb = __mb_get_enable_node_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VisibleOnScreenEnabler2D", "get_enable_node_path", 277076166);
+            if (__mb == 0) throw new MissingMethodException("VisibleOnScreenEnabler2D.get_enable_node_path is not available in this engine build.");
+            __mb_get_enable_node_path = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
 }
 
 public unsafe partial class VisibleOnScreenEnabler3D : VisibleOnScreenNotifier3D
@@ -3980,6 +4072,37 @@ public unsafe partial class VisibleOnScreenEnabler3D : VisibleOnScreenNotifier3D
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (VisibleOnScreenEnabler3D.EnableMode)__ret;
+    }
+
+    private static nint __mb_set_enable_node_path;
+    public void SetEnableNodePath(NodePath path)
+    {
+        var __mb = __mb_set_enable_node_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VisibleOnScreenEnabler3D", "set_enable_node_path", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("VisibleOnScreenEnabler3D.set_enable_node_path is not available in this engine build.");
+            __mb_set_enable_node_path = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_enable_node_path;
+    public NodePath GetEnableNodePath()
+    {
+        var __mb = __mb_get_enable_node_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VisibleOnScreenEnabler3D", "get_enable_node_path", 277076166);
+            if (__mb == 0) throw new MissingMethodException("VisibleOnScreenEnabler3D.get_enable_node_path is not available in this engine build.");
+            __mb_get_enable_node_path = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 }
 
@@ -4651,6 +4774,24 @@ public unsafe partial class VisualShader : Shader
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_node_connections;
+    public Godot.Collections.Array GetNodeConnections(VisualShader.Type type)
+    {
+        var __mb = __mb_get_node_connections;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VisualShader", "get_node_connections", 1441964831);
+            if (__mb == 0) throw new MissingMethodException("VisualShader.get_node_connections is not available in this engine build.");
+            __mb_get_node_connections = __mb;
+        }
+        long __a0 = (long)type;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_attach_node_to_frame;
     public void AttachNodeToFrame(VisualShader.Type type, int id, int frame)
     {
@@ -4845,6 +4986,44 @@ public unsafe partial class VisualShaderNode : Resource
         return unchecked((int)__ret);
     }
 
+    private static nint __mb_set_input_port_default_value;
+    public void SetInputPortDefaultValue(int port, Variant value, Variant prevValue)
+    {
+        var __mb = __mb_set_input_port_default_value;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VisualShaderNode", "set_input_port_default_value", 150923387);
+            if (__mb == 0) throw new MissingMethodException("VisualShaderNode.set_input_port_default_value is not available in this engine build.");
+            __mb_set_input_port_default_value = __mb;
+        }
+        long __a0 = unchecked((long)port);
+        var __a1 = value.Native;
+        var __a2 = prevValue.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_input_port_default_value;
+    public Variant GetInputPortDefaultValue(int port)
+    {
+        var __mb = __mb_get_input_port_default_value;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VisualShaderNode", "get_input_port_default_value", 4227898402);
+            if (__mb == 0) throw new MissingMethodException("VisualShaderNode.get_input_port_default_value is not available in this engine build.");
+            __mb_get_input_port_default_value = __mb;
+        }
+        long __a0 = unchecked((long)port);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_remove_input_port_default_value;
     public void RemoveInputPortDefaultValue(int port)
     {
@@ -4872,6 +5051,37 @@ public unsafe partial class VisualShaderNode : Resource
             __mb_clear_default_input_values = __mb;
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+    }
+
+    private static nint __mb_set_default_input_values;
+    public void SetDefaultInputValues(Godot.Collections.Array values)
+    {
+        var __mb = __mb_set_default_input_values;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VisualShaderNode", "set_default_input_values", 381264803);
+            if (__mb == 0) throw new MissingMethodException("VisualShaderNode.set_default_input_values is not available in this engine build.");
+            __mb_set_default_input_values = __mb;
+        }
+        ulong __a0 = values.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_default_input_values;
+    public Godot.Collections.Array GetDefaultInputValues()
+    {
+        var __mb = __mb_get_default_input_values;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("VisualShaderNode", "get_default_input_values", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("VisualShaderNode.get_default_input_values is not available in this engine build.");
+            __mb_get_default_input_values = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_frame;

@@ -307,6 +307,33 @@ public unsafe partial class NativeMenu : GodotObject
         return __ret != 0;
     }
 
+    private static nint __mb_add_submenu_item;
+    public int AddSubmenuItem(Rid rid, string label, Rid submenuRid, Variant tag, int index)
+    {
+        var __mb = __mb_add_submenu_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "add_submenu_item", 1002030223);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.add_submenu_item is not available in this engine build.");
+            __mb_add_submenu_item = __mb;
+        }
+        var __a0 = rid;
+        ulong __a1 = NativeString.Create(label);
+        var __a2 = submenuRid;
+        var __a3 = tag.Native;
+        long __a4 = unchecked((long)index);
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a1);
+        return unchecked((int)__ret);
+    }
+
     private static nint __mb_add_separator;
     public int AddSeparator(Rid rid, int index)
     {
@@ -345,6 +372,26 @@ public unsafe partial class NativeMenu : GodotObject
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a1);
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_find_item_index_with_tag;
+    public int FindItemIndexWithTag(Rid rid, Variant tag)
+    {
+        var __mb = __mb_find_item_index_with_tag;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "find_item_index_with_tag", 1260085030);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.find_item_index_with_tag is not available in this engine build.");
+            __mb_find_item_index_with_tag = __mb;
+        }
+        var __a0 = rid;
+        var __a1 = tag.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
@@ -426,6 +473,26 @@ public unsafe partial class NativeMenu : GodotObject
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_get_item_tag;
+    public Variant GetItemTag(Rid rid, int idx)
+    {
+        var __mb = __mb_get_item_tag;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "get_item_tag", 4069510997);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.get_item_tag is not available in this engine build.");
+            __mb_get_item_tag = __mb;
+        }
+        var __a0 = rid;
+        long __a1 = unchecked((long)idx);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_get_item_text;
@@ -681,6 +748,26 @@ public unsafe partial class NativeMenu : GodotObject
         var __a0 = rid;
         long __a1 = unchecked((long)idx);
         byte __a2 = checkable ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_item_tag;
+    public void SetItemTag(Rid rid, int idx, Variant tag)
+    {
+        var __mb = __mb_set_item_tag;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NativeMenu", "set_item_tag", 2706844827);
+            if (__mb == 0) throw new MissingMethodException("NativeMenu.set_item_tag is not available in this engine build.");
+            __mb_set_item_tag = __mb;
+        }
+        var __a0 = rid;
+        long __a1 = unchecked((long)idx);
+        var __a2 = tag.Native;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -5263,6 +5350,100 @@ public unsafe partial class NavigationMeshSourceGeometryData2D : Resource
         return __ret != 0;
     }
 
+    private static nint __mb_set_traversable_outlines;
+    public void SetTraversableOutlines(Godot.Collections.Array traversableOutlines)
+    {
+        var __mb = __mb_set_traversable_outlines;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData2D", "set_traversable_outlines", 381264803);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData2D.set_traversable_outlines is not available in this engine build.");
+            __mb_set_traversable_outlines = __mb;
+        }
+        ulong __a0 = traversableOutlines.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_traversable_outlines;
+    public Godot.Collections.Array GetTraversableOutlines()
+    {
+        var __mb = __mb_get_traversable_outlines;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData2D", "get_traversable_outlines", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData2D.get_traversable_outlines is not available in this engine build.");
+            __mb_get_traversable_outlines = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_obstruction_outlines;
+    public void SetObstructionOutlines(Godot.Collections.Array obstructionOutlines)
+    {
+        var __mb = __mb_set_obstruction_outlines;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData2D", "set_obstruction_outlines", 381264803);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData2D.set_obstruction_outlines is not available in this engine build.");
+            __mb_set_obstruction_outlines = __mb;
+        }
+        ulong __a0 = obstructionOutlines.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_obstruction_outlines;
+    public Godot.Collections.Array GetObstructionOutlines()
+    {
+        var __mb = __mb_get_obstruction_outlines;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData2D", "get_obstruction_outlines", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData2D.get_obstruction_outlines is not available in this engine build.");
+            __mb_get_obstruction_outlines = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_append_traversable_outlines;
+    public void AppendTraversableOutlines(Godot.Collections.Array traversableOutlines)
+    {
+        var __mb = __mb_append_traversable_outlines;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData2D", "append_traversable_outlines", 381264803);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData2D.append_traversable_outlines is not available in this engine build.");
+            __mb_append_traversable_outlines = __mb;
+        }
+        ulong __a0 = traversableOutlines.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_append_obstruction_outlines;
+    public void AppendObstructionOutlines(Godot.Collections.Array obstructionOutlines)
+    {
+        var __mb = __mb_append_obstruction_outlines;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData2D", "append_obstruction_outlines", 381264803);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData2D.append_obstruction_outlines is not available in this engine build.");
+            __mb_append_obstruction_outlines = __mb;
+        }
+        ulong __a0 = obstructionOutlines.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_merge;
     public void Merge(NavigationMeshSourceGeometryData2D? otherGeometry)
     {
@@ -5290,6 +5471,37 @@ public unsafe partial class NavigationMeshSourceGeometryData2D : Resource
             __mb_clear_projected_obstructions = __mb;
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+    }
+
+    private static nint __mb_set_projected_obstructions;
+    public void SetProjectedObstructions(Godot.Collections.Array projectedObstructions)
+    {
+        var __mb = __mb_set_projected_obstructions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData2D", "set_projected_obstructions", 381264803);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData2D.set_projected_obstructions is not available in this engine build.");
+            __mb_set_projected_obstructions = __mb;
+        }
+        ulong __a0 = projectedObstructions.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_projected_obstructions;
+    public Godot.Collections.Array GetProjectedObstructions()
+    {
+        var __mb = __mb_get_projected_obstructions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData2D", "get_projected_obstructions", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData2D.get_projected_obstructions is not available in this engine build.");
+            __mb_get_projected_obstructions = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_bounds;
@@ -5363,6 +5575,24 @@ public unsafe partial class NavigationMeshSourceGeometryData3D : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_add_mesh_array;
+    public void AddMeshArray(Godot.Collections.Array meshArray, Transform3D xform)
+    {
+        var __mb = __mb_add_mesh_array;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData3D", "add_mesh_array", 4235710913);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData3D.add_mesh_array is not available in this engine build.");
+            __mb_add_mesh_array = __mb;
+        }
+        ulong __a0 = meshArray.Native;
+        var __a1 = xform;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_merge;
     public void Merge(NavigationMeshSourceGeometryData3D? otherGeometry)
     {
@@ -5390,6 +5620,37 @@ public unsafe partial class NavigationMeshSourceGeometryData3D : Resource
             __mb_clear_projected_obstructions = __mb;
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+    }
+
+    private static nint __mb_set_projected_obstructions;
+    public void SetProjectedObstructions(Godot.Collections.Array projectedObstructions)
+    {
+        var __mb = __mb_set_projected_obstructions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData3D", "set_projected_obstructions", 381264803);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData3D.set_projected_obstructions is not available in this engine build.");
+            __mb_set_projected_obstructions = __mb;
+        }
+        ulong __a0 = projectedObstructions.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_projected_obstructions;
+    public Godot.Collections.Array GetProjectedObstructions()
+    {
+        var __mb = __mb_get_projected_obstructions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationMeshSourceGeometryData3D", "get_projected_obstructions", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("NavigationMeshSourceGeometryData3D.get_projected_obstructions is not available in this engine build.");
+            __mb_get_projected_obstructions = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_bounds;
@@ -6336,6 +6597,68 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
         return (float)__ret;
     }
 
+    private static nint __mb_set_included_regions;
+    public void SetIncludedRegions(Godot.Collections.Array regions)
+    {
+        var __mb = __mb_set_included_regions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryParameters2D", "set_included_regions", 381264803);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryParameters2D.set_included_regions is not available in this engine build.");
+            __mb_set_included_regions = __mb;
+        }
+        ulong __a0 = regions.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_included_regions;
+    public Godot.Collections.Array GetIncludedRegions()
+    {
+        var __mb = __mb_get_included_regions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryParameters2D", "get_included_regions", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryParameters2D.get_included_regions is not available in this engine build.");
+            __mb_get_included_regions = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_excluded_regions;
+    public void SetExcludedRegions(Godot.Collections.Array regions)
+    {
+        var __mb = __mb_set_excluded_regions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryParameters2D", "set_excluded_regions", 381264803);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryParameters2D.set_excluded_regions is not available in this engine build.");
+            __mb_set_excluded_regions = __mb;
+        }
+        ulong __a0 = regions.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_excluded_regions;
+    public Godot.Collections.Array GetExcludedRegions()
+    {
+        var __mb = __mb_get_excluded_regions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryParameters2D", "get_excluded_regions", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryParameters2D.get_excluded_regions is not available in this engine build.");
+            __mb_get_excluded_regions = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_path_return_max_length;
     public void SetPathReturnMaxLength(float length)
     {
@@ -6771,6 +7094,68 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
         return (float)__ret;
     }
 
+    private static nint __mb_set_included_regions;
+    public void SetIncludedRegions(Godot.Collections.Array regions)
+    {
+        var __mb = __mb_set_included_regions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryParameters3D", "set_included_regions", 381264803);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryParameters3D.set_included_regions is not available in this engine build.");
+            __mb_set_included_regions = __mb;
+        }
+        ulong __a0 = regions.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_included_regions;
+    public Godot.Collections.Array GetIncludedRegions()
+    {
+        var __mb = __mb_get_included_regions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryParameters3D", "get_included_regions", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryParameters3D.get_included_regions is not available in this engine build.");
+            __mb_get_included_regions = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_excluded_regions;
+    public void SetExcludedRegions(Godot.Collections.Array regions)
+    {
+        var __mb = __mb_set_excluded_regions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryParameters3D", "set_excluded_regions", 381264803);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryParameters3D.set_excluded_regions is not available in this engine build.");
+            __mb_set_excluded_regions = __mb;
+        }
+        ulong __a0 = regions.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_excluded_regions;
+    public Godot.Collections.Array GetExcludedRegions()
+    {
+        var __mb = __mb_get_excluded_regions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryParameters3D", "get_excluded_regions", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryParameters3D.get_excluded_regions is not available in this engine build.");
+            __mb_get_excluded_regions = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_path_return_max_length;
     public void SetPathReturnMaxLength(float length)
     {
@@ -6911,6 +7296,37 @@ public unsafe partial class NavigationPathQueryResult2D : RefCounted
         PATH_SEGMENT_TYPE_LINK = 1,
     }
 
+    private static nint __mb_set_path_rids;
+    public void SetPathRids(Godot.Collections.Array pathRids)
+    {
+        var __mb = __mb_set_path_rids;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult2D", "set_path_rids", 381264803);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult2D.set_path_rids is not available in this engine build.");
+            __mb_set_path_rids = __mb;
+        }
+        ulong __a0 = pathRids.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_path_rids;
+    public Godot.Collections.Array GetPathRids()
+    {
+        var __mb = __mb_get_path_rids;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult2D", "get_path_rids", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult2D.get_path_rids is not available in this engine build.");
+            __mb_get_path_rids = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_path_length;
     public void SetPathLength(float length)
     {
@@ -6969,6 +7385,37 @@ public unsafe partial class NavigationPathQueryResult3D : RefCounted
     {
         PATH_SEGMENT_TYPE_REGION = 0,
         PATH_SEGMENT_TYPE_LINK = 1,
+    }
+
+    private static nint __mb_set_path_rids;
+    public void SetPathRids(Godot.Collections.Array pathRids)
+    {
+        var __mb = __mb_set_path_rids;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult3D", "set_path_rids", 381264803);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult3D.set_path_rids is not available in this engine build.");
+            __mb_set_path_rids = __mb;
+        }
+        ulong __a0 = pathRids.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_path_rids;
+    public Godot.Collections.Array GetPathRids()
+    {
+        var __mb = __mb_get_path_rids;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationPathQueryResult3D", "get_path_rids", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("NavigationPathQueryResult3D.get_path_rids is not available in this engine build.");
+            __mb_get_path_rids = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_path_length;
@@ -8207,6 +8654,21 @@ public unsafe partial class NavigationServer2D : GodotObject
         INFO_OBSTACLE_COUNT = 9,
     }
 
+    private static nint __mb_get_maps;
+    public Godot.Collections.Array GetMaps()
+    {
+        var __mb = __mb_get_maps;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2D", "get_maps", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2D.get_maps is not available in this engine build.");
+            __mb_get_maps = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_map_create;
     public Rid MapCreate()
     {
@@ -8476,6 +8938,78 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __ret = default(Rid);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_map_get_links;
+    public Godot.Collections.Array MapGetLinks(Rid map)
+    {
+        var __mb = __mb_map_get_links;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2D", "map_get_links", 2684255073);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2D.map_get_links is not available in this engine build.");
+            __mb_map_get_links = __mb;
+        }
+        var __a0 = map;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_map_get_regions;
+    public Godot.Collections.Array MapGetRegions(Rid map)
+    {
+        var __mb = __mb_map_get_regions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2D", "map_get_regions", 2684255073);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2D.map_get_regions is not available in this engine build.");
+            __mb_map_get_regions = __mb;
+        }
+        var __a0 = map;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_map_get_agents;
+    public Godot.Collections.Array MapGetAgents(Rid map)
+    {
+        var __mb = __mb_map_get_agents;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2D", "map_get_agents", 2684255073);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2D.map_get_agents is not available in this engine build.");
+            __mb_map_get_agents = __mb;
+        }
+        var __a0 = map;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_map_get_obstacles;
+    public Godot.Collections.Array MapGetObstacles(Rid map)
+    {
+        var __mb = __mb_map_get_obstacles;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer2D", "map_get_obstacles", 2684255073);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer2D.map_get_obstacles is not available in this engine build.");
+            __mb_map_get_obstacles = __mb;
+        }
+        var __a0 = map;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_map_force_update;
@@ -10448,6 +10982,21 @@ public unsafe partial class NavigationServer3D : GodotObject
         INFO_OBSTACLE_COUNT = 9,
     }
 
+    private static nint __mb_get_maps;
+    public Godot.Collections.Array GetMaps()
+    {
+        var __mb = __mb_get_maps;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3D", "get_maps", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3D.get_maps is not available in this engine build.");
+            __mb_get_maps = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_map_create;
     public Rid MapCreate()
     {
@@ -10833,6 +11382,78 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __ret = default(Rid);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_map_get_links;
+    public Godot.Collections.Array MapGetLinks(Rid map)
+    {
+        var __mb = __mb_map_get_links;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3D", "map_get_links", 2684255073);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3D.map_get_links is not available in this engine build.");
+            __mb_map_get_links = __mb;
+        }
+        var __a0 = map;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_map_get_regions;
+    public Godot.Collections.Array MapGetRegions(Rid map)
+    {
+        var __mb = __mb_map_get_regions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3D", "map_get_regions", 2684255073);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3D.map_get_regions is not available in this engine build.");
+            __mb_map_get_regions = __mb;
+        }
+        var __a0 = map;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_map_get_agents;
+    public Godot.Collections.Array MapGetAgents(Rid map)
+    {
+        var __mb = __mb_map_get_agents;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3D", "map_get_agents", 2684255073);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3D.map_get_agents is not available in this engine build.");
+            __mb_map_get_agents = __mb;
+        }
+        var __a0 = map;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_map_get_obstacles;
+    public Godot.Collections.Array MapGetObstacles(Rid map)
+    {
+        var __mb = __mb_map_get_obstacles;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("NavigationServer3D", "map_get_obstacles", 2684255073);
+            if (__mb == 0) throw new MissingMethodException("NavigationServer3D.map_get_obstacles is not available in this engine build.");
+            __mb_map_get_obstacles = __mb;
+        }
+        var __a0 = map;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_map_force_update;
@@ -13275,6 +13896,21 @@ public unsafe partial class Node : GodotObject
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, 0, 0);
     }
 
+    private static nint __mb_get_orphan_node_ids;
+    public static Godot.Collections.Array GetOrphanNodeIds()
+    {
+        var __mb = __mb_get_orphan_node_ids;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "get_orphan_node_ids", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("Node.get_orphan_node_ids is not available in this engine build.");
+            __mb_get_orphan_node_ids = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_add_sibling;
     public void AddSibling(Node? sibling, bool forceReadableName)
     {
@@ -13396,6 +14032,24 @@ public unsafe partial class Node : GodotObject
         return unchecked((int)__ret);
     }
 
+    private static nint __mb_get_children;
+    public Godot.Collections.Array GetChildren(bool includeInternal)
+    {
+        var __mb = __mb_get_children;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "get_children", 873284517);
+            if (__mb == 0) throw new MissingMethodException("Node.get_children is not available in this engine build.");
+            __mb_get_children = __mb;
+        }
+        byte __a0 = includeInternal ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_get_child;
     public Node? GetChild(int idx, bool includeInternal)
     {
@@ -13411,6 +14065,60 @@ public unsafe partial class Node : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Node?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
+    }
+
+    private static nint __mb_has_node;
+    public bool HasNode(NodePath path)
+    {
+        var __mb = __mb_has_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "has_node", 861721659);
+            if (__mb == 0) throw new MissingMethodException("Node.has_node is not available in this engine build.");
+            __mb_has_node = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        byte __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return __ret != 0;
+    }
+
+    private static nint __mb_get_node;
+    public Node? GetNode(NodePath path)
+    {
+        var __mb = __mb_get_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "get_node", 2734337346);
+            if (__mb == 0) throw new MissingMethodException("Node.get_node is not available in this engine build.");
+            __mb_get_node = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Node?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
+    }
+
+    private static nint __mb_get_node_or_null;
+    public Node? GetNodeOrNull(NodePath path)
+    {
+        var __mb = __mb_get_node_or_null;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "get_node_or_null", 2734337346);
+            if (__mb == 0) throw new MissingMethodException("Node.get_node_or_null is not available in this engine build.");
+            __mb_get_node_or_null = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (Node?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
@@ -13454,6 +14162,32 @@ public unsafe partial class Node : GodotObject
         return (Node?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
+    private static nint __mb_find_children;
+    public Godot.Collections.Array FindChildren(string pattern, string type, bool recursive, bool owned)
+    {
+        var __mb = __mb_find_children;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "find_children", 2560337219);
+            if (__mb == 0) throw new MissingMethodException("Node.find_children is not available in this engine build.");
+            __mb_find_children = __mb;
+        }
+        ulong __a0 = NativeString.Create(pattern);
+        ulong __a1 = NativeString.Create(type);
+        byte __a2 = recursive ? (byte)1 : (byte)0;
+        byte __a3 = owned ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a1);
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_find_parent;
     public Node? FindParent(string pattern)
     {
@@ -13471,6 +14205,42 @@ public unsafe partial class Node : GodotObject
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Node?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
+    }
+
+    private static nint __mb_has_node_and_resource;
+    public bool HasNodeAndResource(NodePath path)
+    {
+        var __mb = __mb_has_node_and_resource;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "has_node_and_resource", 861721659);
+            if (__mb == 0) throw new MissingMethodException("Node.has_node_and_resource is not available in this engine build.");
+            __mb_has_node_and_resource = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        byte __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return __ret != 0;
+    }
+
+    private static nint __mb_get_node_and_resource;
+    public Godot.Collections.Array GetNodeAndResource(NodePath path)
+    {
+        var __mb = __mb_get_node_and_resource;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "get_node_and_resource", 502563882);
+            if (__mb == 0) throw new MissingMethodException("Node.get_node_and_resource is not available in this engine build.");
+            __mb_get_node_and_resource = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_is_inside_tree;
@@ -13537,6 +14307,41 @@ public unsafe partial class Node : GodotObject
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_get_path;
+    public NodePath GetPath()
+    {
+        var __mb = __mb_get_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "get_path", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("Node.get_path is not available in this engine build.");
+            __mb_get_path = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
+    private static nint __mb_get_path_to;
+    public NodePath GetPathTo(Node? node, bool useUniquePath)
+    {
+        var __mb = __mb_get_path_to;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "get_path_to", 498846349);
+            if (__mb == 0) throw new MissingMethodException("Node.get_path_to is not available in this engine build.");
+            __mb_get_path_to = __mb;
+        }
+        nint __a0 = node?.NativePtr ?? 0;
+        byte __a1 = useUniquePath ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_add_to_group;
@@ -13607,6 +14412,21 @@ public unsafe partial class Node : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_groups;
+    public Godot.Collections.Array GetGroups()
+    {
+        var __mb = __mb_get_groups;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "get_groups", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Node.get_groups is not available in this engine build.");
+            __mb_get_groups = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_owner;
@@ -13759,6 +14579,26 @@ public unsafe partial class Node : GodotObject
         long __a0 = unchecked((long)what);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_propagate_call;
+    public void PropagateCall(string method, Godot.Collections.Array args, bool parentFirst)
+    {
+        var __mb = __mb_propagate_call;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "propagate_call", 1871007965);
+            if (__mb == 0) throw new MissingMethodException("Node.propagate_call is not available in this engine build.");
+            __mb_propagate_call = __mb;
+        }
+        ulong __a0 = StringNames.Get(method).Opaque;
+        ulong __a1 = args.Native;
+        byte __a2 = parentFirst ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
@@ -14715,6 +15555,39 @@ public unsafe partial class Node : GodotObject
         return (MultiplayerAPI?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_rpc_config;
+    public void RpcConfig(string method, Variant config)
+    {
+        var __mb = __mb_rpc_config;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "rpc_config", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("Node.rpc_config is not available in this engine build.");
+            __mb_rpc_config = __mb;
+        }
+        ulong __a0 = StringNames.Get(method).Opaque;
+        var __a1 = config.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_node_rpc_config;
+    public Variant GetNodeRpcConfig()
+    {
+        var __mb = __mb_get_node_rpc_config;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "get_node_rpc_config", 1214101251);
+            if (__mb == 0) throw new MissingMethodException("Node.get_node_rpc_config is not available in this engine build.");
+            __mb_get_node_rpc_config = __mb;
+        }
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_set_editor_description;
     public void SetEditorDescription(string editorDescription)
     {
@@ -14837,6 +15710,24 @@ public unsafe partial class Node : GodotObject
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
 
+    private static nint __mb_set_deferred_thread_group;
+    public void SetDeferredThreadGroup(string property, Variant value)
+    {
+        var __mb = __mb_set_deferred_thread_group;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "set_deferred_thread_group", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("Node.set_deferred_thread_group is not available in this engine build.");
+            __mb_set_deferred_thread_group = __mb;
+        }
+        ulong __a0 = StringNames.Get(property).Opaque;
+        var __a1 = value.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_notify_deferred_thread_group;
     public void NotifyDeferredThreadGroup(int what)
     {
@@ -14850,6 +15741,24 @@ public unsafe partial class Node : GodotObject
         long __a0 = unchecked((long)what);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_thread_safe;
+    public void SetThreadSafe(string property, Variant value)
+    {
+        var __mb = __mb_set_thread_safe;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node", "set_thread_safe", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("Node.set_thread_safe is not available in this engine build.");
+            __mb_set_thread_safe = __mb;
+        }
+        ulong __a0 = StringNames.Get(property).Opaque;
+        var __a1 = value.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
@@ -16092,6 +17001,37 @@ public unsafe partial class Node3D : Node
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
 
+    private static nint __mb_set_visibility_parent;
+    public void SetVisibilityParent(NodePath path)
+    {
+        var __mb = __mb_set_visibility_parent;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node3D", "set_visibility_parent", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("Node3D.set_visibility_parent is not available in this engine build.");
+            __mb_set_visibility_parent = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_visibility_parent;
+    public NodePath GetVisibilityParent()
+    {
+        var __mb = __mb_get_visibility_parent;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node3D", "get_visibility_parent", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("Node3D.get_visibility_parent is not available in this engine build.");
+            __mb_get_visibility_parent = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_update_gizmos;
     public void UpdateGizmos()
     {
@@ -16119,6 +17059,21 @@ public unsafe partial class Node3D : Node
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_gizmos;
+    public Godot.Collections.Array GetGizmos()
+    {
+        var __mb = __mb_get_gizmos;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Node3D", "get_gizmos", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Node3D.get_gizmos is not available in this engine build.");
+            __mb_get_gizmos = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_clear_gizmos;
@@ -16745,6 +17700,60 @@ public unsafe partial class Noise : Resource
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_get_image_3d;
+    public Godot.Collections.Array GetImage3d(int width, int height, int depth, bool invert, bool normalize)
+    {
+        var __mb = __mb_get_image_3d;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Noise", "get_image_3d", 3977814329);
+            if (__mb == 0) throw new MissingMethodException("Noise.get_image_3d is not available in this engine build.");
+            __mb_get_image_3d = __mb;
+        }
+        long __a0 = unchecked((long)width);
+        long __a1 = unchecked((long)height);
+        long __a2 = unchecked((long)depth);
+        byte __a3 = invert ? (byte)1 : (byte)0;
+        byte __a4 = normalize ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_seamless_image_3d;
+    public Godot.Collections.Array GetSeamlessImage3d(int width, int height, int depth, bool invert, float skirt, bool normalize)
+    {
+        var __mb = __mb_get_seamless_image_3d;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Noise", "get_seamless_image_3d", 451006340);
+            if (__mb == 0) throw new MissingMethodException("Noise.get_seamless_image_3d is not available in this engine build.");
+            __mb_get_seamless_image_3d = __mb;
+        }
+        long __a0 = unchecked((long)width);
+        long __a1 = unchecked((long)height);
+        long __a2 = unchecked((long)depth);
+        byte __a3 = invert ? (byte)1 : (byte)0;
+        double __a4 = skirt;
+        byte __a5 = normalize ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[6];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 }
 

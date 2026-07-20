@@ -19,6 +19,31 @@ public unsafe partial class DPITexture : Texture2D
         ClassRegistry.AttachNew(this, "DPITexture");
     }
 
+    private static nint __mb_create_from_string;
+    public static DPITexture? CreateFromString(string source, float scale, float saturation, Godot.Collections.Dictionary colorMap)
+    {
+        var __mb = __mb_create_from_string;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DPITexture", "create_from_string", 755140520);
+            if (__mb == 0) throw new MissingMethodException("DPITexture.create_from_string is not available in this engine build.");
+            __mb_create_from_string = __mb;
+        }
+        ulong __a0 = NativeString.Create(source);
+        double __a1 = scale;
+        double __a2 = saturation;
+        ulong __a3 = colorMap.Native;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return (DPITexture?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
     private static nint __mb_set_source;
     public void SetSource(string source)
     {
@@ -173,6 +198,37 @@ public unsafe partial class DPITexture : Texture2D
         double __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
+    }
+
+    private static nint __mb_set_color_map;
+    public void SetColorMap(Godot.Collections.Dictionary colorMap)
+    {
+        var __mb = __mb_set_color_map;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DPITexture", "set_color_map", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("DPITexture.set_color_map is not available in this engine build.");
+            __mb_set_color_map = __mb;
+        }
+        ulong __a0 = colorMap.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_color_map;
+    public Godot.Collections.Dictionary GetColorMap()
+    {
+        var __mb = __mb_get_color_map;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DPITexture", "get_color_map", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("DPITexture.get_color_map is not available in this engine build.");
+            __mb_get_color_map = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_set_size_override;
@@ -2066,6 +2122,27 @@ public unsafe partial class DisplayServer : GodotObject
         return unchecked((int)__ret);
     }
 
+    private static nint __mb_global_menu_get_item_index_from_tag;
+    public int GlobalMenuGetItemIndexFromTag(string menuRoot, Variant tag)
+    {
+        var __mb = __mb_global_menu_get_item_index_from_tag;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_index_from_tag", 2941063483);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_index_from_tag is not available in this engine build.");
+            __mb_global_menu_get_item_index_from_tag = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        var __a1 = tag.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return unchecked((int)__ret);
+    }
+
     private static nint __mb_global_menu_is_item_checked;
     public bool GlobalMenuIsItemChecked(string menuRoot, int idx)
     {
@@ -2127,6 +2204,27 @@ public unsafe partial class DisplayServer : GodotObject
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
+    }
+
+    private static nint __mb_global_menu_get_item_tag;
+    public Variant GlobalMenuGetItemTag(string menuRoot, int idx)
+    {
+        var __mb = __mb_global_menu_get_item_tag;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_tag", 330672633);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_tag is not available in this engine build.");
+            __mb_global_menu_get_item_tag = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        long __a1 = unchecked((long)idx);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return new Variant(__ret);
     }
 
     private static nint __mb_global_menu_get_item_text;
@@ -2394,6 +2492,27 @@ public unsafe partial class DisplayServer : GodotObject
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         byte __a2 = checkable ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
+    }
+
+    private static nint __mb_global_menu_set_item_tag;
+    public void GlobalMenuSetItemTag(string menuRoot, int idx, Variant tag)
+    {
+        var __mb = __mb_global_menu_set_item_tag;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_tag", 453659863);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_tag is not available in this engine build.");
+            __mb_global_menu_set_item_tag = __mb;
+        }
+        ulong __a0 = NativeString.Create(menuRoot);
+        long __a1 = unchecked((long)idx);
+        var __a2 = tag.Native;
         var __args = stackalloc nint[3];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
@@ -2670,6 +2789,21 @@ public unsafe partial class DisplayServer : GodotObject
         NativeString.Destroy(ref __a0);
     }
 
+    private static nint __mb_global_menu_get_system_menu_roots;
+    public Godot.Collections.Dictionary GlobalMenuGetSystemMenuRoots()
+    {
+        var __mb = __mb_global_menu_get_system_menu_roots;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_system_menu_roots", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_system_menu_roots is not available in this engine build.");
+            __mb_global_menu_get_system_menu_roots = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
     private static nint __mb_tts_is_speaking;
     public bool TtsIsSpeaking()
     {
@@ -2698,6 +2832,21 @@ public unsafe partial class DisplayServer : GodotObject
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_tts_get_voices;
+    public Godot.Collections.Array TtsGetVoices()
+    {
+        var __mb = __mb_tts_get_voices;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "tts_get_voices", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.tts_get_voices is not available in this engine build.");
+            __mb_tts_get_voices = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_tts_speak;
@@ -3013,6 +3162,21 @@ public unsafe partial class DisplayServer : GodotObject
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_get_display_cutouts;
+    public Godot.Collections.Array GetDisplayCutouts()
+    {
+        var __mb = __mb_get_display_cutouts;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "get_display_cutouts", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.get_display_cutouts is not available in this engine build.");
+            __mb_get_display_cutouts = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_display_safe_area;
@@ -4513,6 +4677,42 @@ public unsafe partial class DisplayServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_accessibility_element_set_meta;
+    public void AccessibilityElementSetMeta(Rid id, Variant meta)
+    {
+        var __mb = __mb_accessibility_element_set_meta;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_element_set_meta", 3175752987);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_element_set_meta is not available in this engine build.");
+            __mb_accessibility_element_set_meta = __mb;
+        }
+        var __a0 = id;
+        var __a1 = meta.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_accessibility_element_get_meta;
+    public Variant AccessibilityElementGetMeta(Rid id)
+    {
+        var __mb = __mb_accessibility_element_get_meta;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_element_get_meta", 4171304767);
+            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_element_get_meta is not available in this engine build.");
+            __mb_accessibility_element_get_meta = __mb;
+        }
+        var __a0 = id;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_accessibility_set_window_rect;
@@ -6487,6 +6687,32 @@ public unsafe partial class DrawableTexture2D : Texture2D
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_blit_rect_multi;
+    public void BlitRectMulti(Rect2I rect, Godot.Collections.Array sources, Godot.Collections.Array extraTargets, Color modulate, int mipmap, Material? material)
+    {
+        var __mb = __mb_blit_rect_multi;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("DrawableTexture2D", "blit_rect_multi", 3074783066);
+            if (__mb == 0) throw new MissingMethodException("DrawableTexture2D.blit_rect_multi is not available in this engine build.");
+            __mb_blit_rect_multi = __mb;
+        }
+        var __a0 = rect;
+        ulong __a1 = sources.Native;
+        ulong __a2 = extraTargets.Native;
+        var __a3 = modulate;
+        long __a4 = unchecked((long)mipmap);
+        nint __a5 = material?.NativePtr ?? 0;
+        var __args = stackalloc nint[6];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 

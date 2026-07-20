@@ -706,6 +706,37 @@ public unsafe partial class Label : Control
         return (TextServer.StructuredTextParser)__ret;
     }
 
+    private static nint __mb_set_structured_text_bidi_override_options;
+    public void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
+    {
+        var __mb = __mb_set_structured_text_bidi_override_options;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Label", "set_structured_text_bidi_override_options", 381264803);
+            if (__mb == 0) throw new MissingMethodException("Label.set_structured_text_bidi_override_options is not available in this engine build.");
+            __mb_set_structured_text_bidi_override_options = __mb;
+        }
+        ulong __a0 = args.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_structured_text_bidi_override_options;
+    public Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
+    {
+        var __mb = __mb_get_structured_text_bidi_override_options;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Label", "get_structured_text_bidi_override_options", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Label.get_structured_text_bidi_override_options is not available in this engine build.");
+            __mb_get_structured_text_bidi_override_options = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_get_character_bounds;
     public Rect2 GetCharacterBounds(int pos)
     {
@@ -999,6 +1030,37 @@ public unsafe partial class Label3D : GeometryInstance3D
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (TextServer.StructuredTextParser)__ret;
+    }
+
+    private static nint __mb_set_structured_text_bidi_override_options;
+    public void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
+    {
+        var __mb = __mb_set_structured_text_bidi_override_options;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Label3D", "set_structured_text_bidi_override_options", 381264803);
+            if (__mb == 0) throw new MissingMethodException("Label3D.set_structured_text_bidi_override_options is not available in this engine build.");
+            __mb_set_structured_text_bidi_override_options = __mb;
+        }
+        ulong __a0 = args.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_structured_text_bidi_override_options;
+    public Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
+    {
+        var __mb = __mb_get_structured_text_bidi_override_options;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Label3D", "get_structured_text_bidi_override_options", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Label3D.get_structured_text_bidi_override_options is not available in this engine build.");
+            __mb_get_structured_text_bidi_override_options = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_uppercase;
@@ -4225,6 +4287,68 @@ public unsafe partial class LightmapGIData : Resource
         SHADOWMASK_MODE_OVERLAY = 2,
     }
 
+    private static nint __mb_set_lightmap_textures;
+    public void SetLightmapTextures(Godot.Collections.Array lightTextures)
+    {
+        var __mb = __mb_set_lightmap_textures;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("LightmapGIData", "set_lightmap_textures", 381264803);
+            if (__mb == 0) throw new MissingMethodException("LightmapGIData.set_lightmap_textures is not available in this engine build.");
+            __mb_set_lightmap_textures = __mb;
+        }
+        ulong __a0 = lightTextures.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_lightmap_textures;
+    public Godot.Collections.Array GetLightmapTextures()
+    {
+        var __mb = __mb_get_lightmap_textures;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("LightmapGIData", "get_lightmap_textures", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("LightmapGIData.get_lightmap_textures is not available in this engine build.");
+            __mb_get_lightmap_textures = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_shadowmask_textures;
+    public void SetShadowmaskTextures(Godot.Collections.Array shadowmaskTextures)
+    {
+        var __mb = __mb_set_shadowmask_textures;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("LightmapGIData", "set_shadowmask_textures", 381264803);
+            if (__mb == 0) throw new MissingMethodException("LightmapGIData.set_shadowmask_textures is not available in this engine build.");
+            __mb_set_shadowmask_textures = __mb;
+        }
+        ulong __a0 = shadowmaskTextures.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_shadowmask_textures;
+    public Godot.Collections.Array GetShadowmaskTextures()
+    {
+        var __mb = __mb_get_shadowmask_textures;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("LightmapGIData", "get_shadowmask_textures", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("LightmapGIData.get_shadowmask_textures is not available in this engine build.");
+            __mb_get_shadowmask_textures = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_uses_spherical_harmonics;
     public void SetUsesSphericalHarmonics(bool usesSphericalHarmonics)
     {
@@ -4256,6 +4380,28 @@ public unsafe partial class LightmapGIData : Resource
         return __ret != 0;
     }
 
+    private static nint __mb_add_user;
+    public void AddUser(NodePath path, Rect2 uvScale, int sliceIndex, int subInstance)
+    {
+        var __mb = __mb_add_user;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("LightmapGIData", "add_user", 4272570515);
+            if (__mb == 0) throw new MissingMethodException("LightmapGIData.add_user is not available in this engine build.");
+            __mb_add_user = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __a1 = uvScale;
+        long __a2 = unchecked((long)sliceIndex);
+        long __a3 = unchecked((long)subInstance);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_get_user_count;
     public int GetUserCount()
     {
@@ -4269,6 +4415,24 @@ public unsafe partial class LightmapGIData : Resource
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_get_user_path;
+    public NodePath GetUserPath(int userIdx)
+    {
+        var __mb = __mb_get_user_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("LightmapGIData", "get_user_path", 408788394);
+            if (__mb == 0) throw new MissingMethodException("LightmapGIData.get_user_path is not available in this engine build.");
+            __mb_get_user_path = __mb;
+        }
+        long __a0 = unchecked((long)userIdx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_clear_users;
@@ -5663,6 +5827,37 @@ public unsafe partial class LineEdit : Control
         return (TextServer.StructuredTextParser)__ret;
     }
 
+    private static nint __mb_set_structured_text_bidi_override_options;
+    public void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
+    {
+        var __mb = __mb_set_structured_text_bidi_override_options;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("LineEdit", "set_structured_text_bidi_override_options", 381264803);
+            if (__mb == 0) throw new MissingMethodException("LineEdit.set_structured_text_bidi_override_options is not available in this engine build.");
+            __mb_set_structured_text_bidi_override_options = __mb;
+        }
+        ulong __a0 = args.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_structured_text_bidi_override_options;
+    public Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
+    {
+        var __mb = __mb_get_structured_text_bidi_override_options;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("LineEdit", "get_structured_text_bidi_override_options", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("LineEdit.get_structured_text_bidi_override_options is not available in this engine build.");
+            __mb_get_structured_text_bidi_override_options = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_placeholder;
     public void SetPlaceholder(string text)
     {
@@ -6946,6 +7141,37 @@ public unsafe partial class LinkButton : BaseButton
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (TextServer.StructuredTextParser)__ret;
     }
+
+    private static nint __mb_set_structured_text_bidi_override_options;
+    public void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
+    {
+        var __mb = __mb_set_structured_text_bidi_override_options;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("LinkButton", "set_structured_text_bidi_override_options", 381264803);
+            if (__mb == 0) throw new MissingMethodException("LinkButton.set_structured_text_bidi_override_options is not available in this engine build.");
+            __mb_set_structured_text_bidi_override_options = __mb;
+        }
+        ulong __a0 = args.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_structured_text_bidi_override_options;
+    public Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
+    {
+        var __mb = __mb_get_structured_text_bidi_override_options;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("LinkButton", "get_structured_text_bidi_override_options", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("LinkButton.get_structured_text_bidi_override_options is not available in this engine build.");
+            __mb_get_structured_text_bidi_override_options = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
 }
 
 public unsafe partial class Logger : RefCounted
@@ -6995,6 +7221,37 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
         ORIGIN_FROM_SELF = 0,
         ORIGIN_FROM_SPECIFIC_BONE = 1,
         ORIGIN_FROM_EXTERNAL_NODE = 2,
+    }
+
+    private static nint __mb_set_target_node;
+    public void SetTargetNode(NodePath targetNode)
+    {
+        var __mb = __mb_set_target_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("LookAtModifier3D", "set_target_node", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("LookAtModifier3D.set_target_node is not available in this engine build.");
+            __mb_set_target_node = __mb;
+        }
+        ulong __a0 = targetNode.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_target_node;
+    public NodePath GetTargetNode()
+    {
+        var __mb = __mb_get_target_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("LookAtModifier3D", "get_target_node", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("LookAtModifier3D.get_target_node is not available in this engine build.");
+            __mb_get_target_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_bone_name;
@@ -7276,6 +7533,37 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_set_origin_external_node;
+    public void SetOriginExternalNode(NodePath externalNode)
+    {
+        var __mb = __mb_set_origin_external_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("LookAtModifier3D", "set_origin_external_node", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("LookAtModifier3D.set_origin_external_node is not available in this engine build.");
+            __mb_set_origin_external_node = __mb;
+        }
+        ulong __a0 = externalNode.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_origin_external_node;
+    public NodePath GetOriginExternalNode()
+    {
+        var __mb = __mb_get_origin_external_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("LookAtModifier3D", "get_origin_external_node", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("LookAtModifier3D.get_origin_external_node is not available in this engine build.");
+            __mb_get_origin_external_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_origin_offset;

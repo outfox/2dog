@@ -77,7 +77,40 @@ public static unsafe class Variants
         return v;
     }
 
+    /// <summary>Creates a variant from any blittable value type (math structs, opaque handles).</summary>
+    public static NativeVariant FromStruct<T>(GDExtensionVariantType type, in T value) where T : unmanaged
+    {
+        NativeVariant v;
+        fixed (T* p = &value)
+        {
+            From(type)((nint)(&v), (nint)p);
+        }
+        return v;
+    }
+
+    /// <summary>Owned deep copy of a (possibly borrowed) variant.</summary>
+    public static NativeVariant NewCopy(in NativeVariant source)
+    {
+        NativeVariant copy;
+        fixed (NativeVariant* p = &source)
+        {
+            GdExtensionInterface.VariantNewCopy((nint)(&copy), (nint)p);
+        }
+        return copy;
+    }
+
     // ---- extraction ----
+
+    /// <summary>Converts/coerces a variant to any blittable value type.</summary>
+    public static T ToStruct<T>(GDExtensionVariantType type, in NativeVariant v) where T : unmanaged
+    {
+        T value = default;
+        fixed (NativeVariant* p = &v)
+        {
+            To(type)((nint)(&value), (nint)p);
+        }
+        return value;
+    }
 
     public static GDExtensionVariantType TypeOf(in NativeVariant v)
     {

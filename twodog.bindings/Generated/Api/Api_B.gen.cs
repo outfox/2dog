@@ -3331,6 +3331,26 @@ public unsafe partial class BitMap : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
+
+    private static nint __mb_opaque_to_polygons;
+    public Godot.Collections.Array OpaqueToPolygons(Rect2I rect, float epsilon)
+    {
+        var __mb = __mb_opaque_to_polygons;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("BitMap", "opaque_to_polygons", 48478126);
+            if (__mb == 0) throw new MissingMethodException("BitMap.opaque_to_polygons is not available in this engine build.");
+            __mb_opaque_to_polygons = __mb;
+        }
+        var __a0 = rect;
+        double __a1 = epsilon;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
 }
 
 public unsafe partial class BlitMaterial : Material
@@ -3721,6 +3741,37 @@ public unsafe partial class BoneAttachment3D : Node3D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
+
+    private static nint __mb_set_external_skeleton;
+    public void SetExternalSkeleton(NodePath externalSkeleton)
+    {
+        var __mb = __mb_set_external_skeleton;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("BoneAttachment3D", "set_external_skeleton", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("BoneAttachment3D.set_external_skeleton is not available in this engine build.");
+            __mb_set_external_skeleton = __mb;
+        }
+        ulong __a0 = externalSkeleton.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_external_skeleton;
+    public NodePath GetExternalSkeleton()
+    {
+        var __mb = __mb_get_external_skeleton;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("BoneAttachment3D", "get_external_skeleton", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("BoneAttachment3D.get_external_skeleton is not available in this engine build.");
+            __mb_get_external_skeleton = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
 }
 
 public unsafe partial class BoneConstraint3D : SkeletonModifier3D
@@ -3954,6 +4005,42 @@ public unsafe partial class BoneConstraint3D : SkeletonModifier3D
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_set_reference_node;
+    public void SetReferenceNode(int index, NodePath node)
+    {
+        var __mb = __mb_set_reference_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("BoneConstraint3D", "set_reference_node", 2761262315);
+            if (__mb == 0) throw new MissingMethodException("BoneConstraint3D.set_reference_node is not available in this engine build.");
+            __mb_set_reference_node = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        ulong __a1 = node.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_reference_node;
+    public NodePath GetReferenceNode(int index)
+    {
+        var __mb = __mb_get_reference_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("BoneConstraint3D", "get_reference_node", 408788394);
+            if (__mb == 0) throw new MissingMethodException("BoneConstraint3D.get_reference_node is not available in this engine build.");
+            __mb_get_reference_node = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_setting_count;
@@ -5470,6 +5557,21 @@ public unsafe partial class ButtonGroup : Resource
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (BaseButton?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
+    }
+
+    private static nint __mb_get_buttons;
+    public Godot.Collections.Array GetButtons()
+    {
+        var __mb = __mb_get_buttons;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ButtonGroup", "get_buttons", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("ButtonGroup.get_buttons is not available in this engine build.");
+            __mb_get_buttons = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_allow_unpress;

@@ -252,6 +252,40 @@ public unsafe partial class GDScriptLanguageProtocol : JSONRPC
         return __ret != 0;
     }
 
+    private static nint __mb_initialize;
+    public Variant Initialize(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_initialize;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptLanguageProtocol", "initialize", 3762224011);
+            if (__mb == 0) throw new MissingMethodException("GDScriptLanguageProtocol.initialize is not available in this engine build.");
+            __mb_initialize = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_initialized;
+    public void Initialized(Variant @params)
+    {
+        var __mb = __mb_initialized;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptLanguageProtocol", "initialized", 1114965689);
+            if (__mb == 0) throw new MissingMethodException("GDScriptLanguageProtocol.initialized is not available in this engine build.");
+            __mb_initialized = __mb;
+        }
+        var __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_on_client_connected;
     public Error OnClientConnected()
     {
@@ -281,6 +315,27 @@ public unsafe partial class GDScriptLanguageProtocol : JSONRPC
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_notify_client;
+    public void NotifyClient(string method, Variant @params, int clientId)
+    {
+        var __mb = __mb_notify_client;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptLanguageProtocol", "notify_client", 2511212011);
+            if (__mb == 0) throw new MissingMethodException("GDScriptLanguageProtocol.notify_client is not available in this engine build.");
+            __mb_notify_client = __mb;
+        }
+        ulong __a0 = NativeString.Create(method);
+        var __a1 = @params.Native;
+        long __a2 = unchecked((long)clientId);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
     }
 }
 
@@ -318,6 +373,356 @@ public unsafe partial class GDScriptTextDocument : RefCounted
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
+    }
+
+    private static nint __mb_didOpen;
+    public void DidOpen(Variant @params)
+    {
+        var __mb = __mb_didOpen;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "didOpen", 1114965689);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.didOpen is not available in this engine build.");
+            __mb_didOpen = __mb;
+        }
+        var __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_didClose;
+    public void DidClose(Variant @params)
+    {
+        var __mb = __mb_didClose;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "didClose", 1114965689);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.didClose is not available in this engine build.");
+            __mb_didClose = __mb;
+        }
+        var __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_didChange;
+    public void DidChange(Variant @params)
+    {
+        var __mb = __mb_didChange;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "didChange", 1114965689);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.didChange is not available in this engine build.");
+            __mb_didChange = __mb;
+        }
+        var __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_willSaveWaitUntil;
+    public void WillSaveWaitUntil(Variant @params)
+    {
+        var __mb = __mb_willSaveWaitUntil;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "willSaveWaitUntil", 1114965689);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.willSaveWaitUntil is not available in this engine build.");
+            __mb_willSaveWaitUntil = __mb;
+        }
+        var __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_didSave;
+    public void DidSave(Variant @params)
+    {
+        var __mb = __mb_didSave;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "didSave", 1114965689);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.didSave is not available in this engine build.");
+            __mb_didSave = __mb;
+        }
+        var __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_nativeSymbol;
+    public Variant NativeSymbol(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_nativeSymbol;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "nativeSymbol", 3762224011);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.nativeSymbol is not available in this engine build.");
+            __mb_nativeSymbol = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_documentSymbol;
+    public Godot.Collections.Array DocumentSymbol(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_documentSymbol;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "documentSymbol", 3877611628);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.documentSymbol is not available in this engine build.");
+            __mb_documentSymbol = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_completion;
+    public Godot.Collections.Array Completion(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_completion;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "completion", 3877611628);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.completion is not available in this engine build.");
+            __mb_completion = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_resolve;
+    public Godot.Collections.Dictionary Resolve(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_resolve;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "resolve", 1333564645);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.resolve is not available in this engine build.");
+            __mb_resolve = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_rename;
+    public Godot.Collections.Dictionary Rename(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_rename;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "rename", 1333564645);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.rename is not available in this engine build.");
+            __mb_rename = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_prepareRename;
+    public Variant PrepareRename(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_prepareRename;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "prepareRename", 3762224011);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.prepareRename is not available in this engine build.");
+            __mb_prepareRename = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_references;
+    public Godot.Collections.Array References(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_references;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "references", 3877611628);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.references is not available in this engine build.");
+            __mb_references = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_foldingRange;
+    public Godot.Collections.Array FoldingRange(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_foldingRange;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "foldingRange", 3877611628);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.foldingRange is not available in this engine build.");
+            __mb_foldingRange = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_codeLens;
+    public Godot.Collections.Array CodeLens(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_codeLens;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "codeLens", 3877611628);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.codeLens is not available in this engine build.");
+            __mb_codeLens = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_documentLink;
+    public Godot.Collections.Array DocumentLink(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_documentLink;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "documentLink", 3877611628);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.documentLink is not available in this engine build.");
+            __mb_documentLink = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_colorPresentation;
+    public Godot.Collections.Array ColorPresentation(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_colorPresentation;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "colorPresentation", 3877611628);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.colorPresentation is not available in this engine build.");
+            __mb_colorPresentation = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_hover;
+    public Variant Hover(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_hover;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "hover", 3762224011);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.hover is not available in this engine build.");
+            __mb_hover = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_definition;
+    public Godot.Collections.Array Definition(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_definition;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "definition", 3877611628);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.definition is not available in this engine build.");
+            __mb_definition = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_declaration;
+    public Variant Declaration(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_declaration;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "declaration", 3762224011);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.declaration is not available in this engine build.");
+            __mb_declaration = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_signatureHelp;
+    public Variant SignatureHelp(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_signatureHelp;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptTextDocument", "signatureHelp", 3762224011);
+            if (__mb == 0) throw new MissingMethodException("GDScriptTextDocument.signatureHelp is not available in this engine build.");
+            __mb_signatureHelp = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 }
 
@@ -366,6 +771,41 @@ public unsafe partial class GDScriptWorkspace : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_generate_script_api;
+    public Godot.Collections.Dictionary GenerateScriptApi(string path)
+    {
+        var __mb = __mb_generate_script_api;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptWorkspace", "generate_script_api", 2786125124);
+            if (__mb == 0) throw new MissingMethodException("GDScriptWorkspace.generate_script_api is not available in this engine build.");
+            __mb_generate_script_api = __mb;
+        }
+        ulong __a0 = NativeString.Create(path);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_didDeleteFiles;
+    public void DidDeleteFiles(Godot.Collections.Dictionary @params)
+    {
+        var __mb = __mb_didDeleteFiles;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GDScriptWorkspace", "didDeleteFiles", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("GDScriptWorkspace.didDeleteFiles is not available in this engine build.");
+            __mb_didDeleteFiles = __mb;
+        }
+        ulong __a0 = @params.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_parse_script;
@@ -461,6 +901,39 @@ public unsafe partial class GLTFAccessor : Resource
         COMPONENT_TYPE_HALF_FLOAT = 5131,
         COMPONENT_TYPE_SIGNED_LONG = 5134,
         COMPONENT_TYPE_UNSIGNED_LONG = 5135,
+    }
+
+    private static nint __mb_from_dictionary;
+    public static GLTFAccessor? FromDictionary(Godot.Collections.Dictionary dictionary)
+    {
+        var __mb = __mb_from_dictionary;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFAccessor", "from_dictionary", 3495091019);
+            if (__mb == 0) throw new MissingMethodException("GLTFAccessor.from_dictionary is not available in this engine build.");
+            __mb_from_dictionary = __mb;
+        }
+        ulong __a0 = dictionary.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        return (GLTFAccessor?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_to_dictionary;
+    public Godot.Collections.Dictionary ToDictionary()
+    {
+        var __mb = __mb_to_dictionary;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFAccessor", "to_dictionary", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("GLTFAccessor.to_dictionary is not available in this engine build.");
+            __mb_to_dictionary = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_buffer_view;
@@ -923,6 +1396,42 @@ public unsafe partial class GLTFAnimation : Resource
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
+
+    private static nint __mb_get_additional_data;
+    public Variant GetAdditionalData(string extensionName)
+    {
+        var __mb = __mb_get_additional_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFAnimation", "get_additional_data", 2138907829);
+            if (__mb == 0) throw new MissingMethodException("GLTFAnimation.get_additional_data is not available in this engine build.");
+            __mb_get_additional_data = __mb;
+        }
+        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_set_additional_data;
+    public void SetAdditionalData(string extensionName, Variant additionalData)
+    {
+        var __mb = __mb_set_additional_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFAnimation", "set_additional_data", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("GLTFAnimation.set_additional_data is not available in this engine build.");
+            __mb_set_additional_data = __mb;
+        }
+        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        var __a1 = additionalData.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
 }
 
 public unsafe partial class GLTFBufferView : Resource
@@ -932,6 +1441,39 @@ public unsafe partial class GLTFBufferView : Resource
     public GLTFBufferView() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "GLTFBufferView");
+    }
+
+    private static nint __mb_from_dictionary;
+    public static GLTFBufferView? FromDictionary(Godot.Collections.Dictionary dictionary)
+    {
+        var __mb = __mb_from_dictionary;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFBufferView", "from_dictionary", 2594413512);
+            if (__mb == 0) throw new MissingMethodException("GLTFBufferView.from_dictionary is not available in this engine build.");
+            __mb_from_dictionary = __mb;
+        }
+        ulong __a0 = dictionary.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        return (GLTFBufferView?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_to_dictionary;
+    public Godot.Collections.Dictionary ToDictionary()
+    {
+        var __mb = __mb_to_dictionary;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFBufferView", "to_dictionary", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("GLTFBufferView.to_dictionary is not available in this engine build.");
+            __mb_to_dictionary = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_buffer;
@@ -1161,6 +1703,39 @@ public unsafe partial class GLTFCamera : Resource
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (Camera3D?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
+    }
+
+    private static nint __mb_from_dictionary;
+    public static GLTFCamera? FromDictionary(Godot.Collections.Dictionary dictionary)
+    {
+        var __mb = __mb_from_dictionary;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFCamera", "from_dictionary", 2495512509);
+            if (__mb == 0) throw new MissingMethodException("GLTFCamera.from_dictionary is not available in this engine build.");
+            __mb_from_dictionary = __mb;
+        }
+        ulong __a0 = dictionary.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        return (GLTFCamera?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_to_dictionary;
+    public Godot.Collections.Dictionary ToDictionary()
+    {
+        var __mb = __mb_to_dictionary;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFCamera", "to_dictionary", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("GLTFCamera.to_dictionary is not available in this engine build.");
+            __mb_to_dictionary = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_perspective;
@@ -1690,6 +2265,30 @@ public unsafe partial class GLTFDocument : Resource
         return (GLTFObjectModelProperty?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_export_object_model_property;
+    public static GLTFObjectModelProperty? ExportObjectModelProperty(GLTFState? state, NodePath nodePath, Node? godotNode, int gltfNodeIndex)
+    {
+        var __mb = __mb_export_object_model_property;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFDocument", "export_object_model_property", 314209806);
+            if (__mb == 0) throw new MissingMethodException("GLTFDocument.export_object_model_property is not available in this engine build.");
+            __mb_export_object_model_property = __mb;
+        }
+        nint __a0 = state?.NativePtr ?? 0;
+        ulong __a1 = nodePath.Native;
+        nint __a2 = godotNode?.NativePtr ?? 0;
+        long __a3 = unchecked((long)gltfNodeIndex);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        return (GLTFObjectModelProperty?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
     private static nint __mb_register_gltf_document_extension;
     public static void RegisterGltfDocumentExtension(GLTFDocumentExtension? extension, bool firstPriority)
     {
@@ -1892,6 +2491,39 @@ public unsafe partial class GLTFLight : Resource
         return (Light3D?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
+    private static nint __mb_from_dictionary;
+    public static GLTFLight? FromDictionary(Godot.Collections.Dictionary dictionary)
+    {
+        var __mb = __mb_from_dictionary;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFLight", "from_dictionary", 4057087208);
+            if (__mb == 0) throw new MissingMethodException("GLTFLight.from_dictionary is not available in this engine build.");
+            __mb_from_dictionary = __mb;
+        }
+        ulong __a0 = dictionary.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        return (GLTFLight?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_to_dictionary;
+    public Godot.Collections.Dictionary ToDictionary()
+    {
+        var __mb = __mb_to_dictionary;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFLight", "to_dictionary", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("GLTFLight.to_dictionary is not available in this engine build.");
+            __mb_to_dictionary = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
     private static nint __mb_get_color;
     public Color GetColor()
     {
@@ -2078,6 +2710,42 @@ public unsafe partial class GLTFLight : Resource
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
+
+    private static nint __mb_get_additional_data;
+    public Variant GetAdditionalData(string extensionName)
+    {
+        var __mb = __mb_get_additional_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFLight", "get_additional_data", 2138907829);
+            if (__mb == 0) throw new MissingMethodException("GLTFLight.get_additional_data is not available in this engine build.");
+            __mb_get_additional_data = __mb;
+        }
+        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_set_additional_data;
+    public void SetAdditionalData(string extensionName, Variant additionalData)
+    {
+        var __mb = __mb_set_additional_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFLight", "set_additional_data", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("GLTFLight.set_additional_data is not available in this engine build.");
+            __mb_set_additional_data = __mb;
+        }
+        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        var __a1 = additionalData.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
 }
 
 public unsafe partial class GLTFMesh : Resource
@@ -2149,6 +2817,73 @@ public unsafe partial class GLTFMesh : Resource
         nint __a0 = mesh?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_instance_materials;
+    public Godot.Collections.Array GetInstanceMaterials()
+    {
+        var __mb = __mb_get_instance_materials;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFMesh", "get_instance_materials", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("GLTFMesh.get_instance_materials is not available in this engine build.");
+            __mb_get_instance_materials = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_instance_materials;
+    public void SetInstanceMaterials(Godot.Collections.Array instanceMaterials)
+    {
+        var __mb = __mb_set_instance_materials;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFMesh", "set_instance_materials", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFMesh.set_instance_materials is not available in this engine build.");
+            __mb_set_instance_materials = __mb;
+        }
+        ulong __a0 = instanceMaterials.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_additional_data;
+    public Variant GetAdditionalData(string extensionName)
+    {
+        var __mb = __mb_get_additional_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFMesh", "get_additional_data", 2138907829);
+            if (__mb == 0) throw new MissingMethodException("GLTFMesh.get_additional_data is not available in this engine build.");
+            __mb_get_additional_data = __mb;
+        }
+        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_set_additional_data;
+    public void SetAdditionalData(string extensionName, Variant additionalData)
+    {
+        var __mb = __mb_set_additional_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFMesh", "set_additional_data", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("GLTFMesh.set_additional_data is not available in this engine build.");
+            __mb_set_additional_data = __mb;
+        }
+        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        var __a1 = additionalData.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 }
@@ -2581,6 +3316,62 @@ public unsafe partial class GLTFNode : Resource
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
+
+    private static nint __mb_get_additional_data;
+    public Variant GetAdditionalData(string extensionName)
+    {
+        var __mb = __mb_get_additional_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFNode", "get_additional_data", 2138907829);
+            if (__mb == 0) throw new MissingMethodException("GLTFNode.get_additional_data is not available in this engine build.");
+            __mb_get_additional_data = __mb;
+        }
+        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_set_additional_data;
+    public void SetAdditionalData(string extensionName, Variant additionalData)
+    {
+        var __mb = __mb_set_additional_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFNode", "set_additional_data", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("GLTFNode.set_additional_data is not available in this engine build.");
+            __mb_set_additional_data = __mb;
+        }
+        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        var __a1 = additionalData.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_scene_node_path;
+    public NodePath GetSceneNodePath(GLTFState? gltfState, bool handleSkeletons)
+    {
+        var __mb = __mb_get_scene_node_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFNode", "get_scene_node_path", 573359477);
+            if (__mb == 0) throw new MissingMethodException("GLTFNode.get_scene_node_path is not available in this engine build.");
+            __mb_get_scene_node_path = __mb;
+        }
+        nint __a0 = gltfState?.NativePtr ?? 0;
+        byte __a1 = handleSkeletons ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
 }
 
 public unsafe partial class GLTFObjectModelProperty : RefCounted
@@ -2605,6 +3396,40 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
         GLTF_OBJECT_MODEL_TYPE_FLOAT3X3 = 8,
         GLTF_OBJECT_MODEL_TYPE_FLOAT4X4 = 9,
         GLTF_OBJECT_MODEL_TYPE_INT = 10,
+    }
+
+    private static nint __mb_append_node_path;
+    public void AppendNodePath(NodePath nodePath)
+    {
+        var __mb = __mb_append_node_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFObjectModelProperty", "append_node_path", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("GLTFObjectModelProperty.append_node_path is not available in this engine build.");
+            __mb_append_node_path = __mb;
+        }
+        ulong __a0 = nodePath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_append_path_to_property;
+    public void AppendPathToProperty(NodePath nodePath, string propName)
+    {
+        var __mb = __mb_append_path_to_property;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFObjectModelProperty", "append_path_to_property", 1331931644);
+            if (__mb == 0) throw new MissingMethodException("GLTFObjectModelProperty.append_path_to_property is not available in this engine build.");
+            __mb_append_path_to_property = __mb;
+        }
+        ulong __a0 = nodePath.Native;
+        ulong __a1 = StringNames.Get(propName).Opaque;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_accessor_type;
@@ -2684,6 +3509,21 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_node_paths;
+    public Godot.Collections.Array GetNodePaths()
+    {
+        var __mb = __mb_get_node_paths;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFObjectModelProperty", "get_node_paths", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFObjectModelProperty.get_node_paths is not available in this engine build.");
+            __mb_get_node_paths = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_has_node_paths;
     public bool HasNodePaths()
     {
@@ -2697,6 +3537,22 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_set_node_paths;
+    public void SetNodePaths(Godot.Collections.Array nodePaths)
+    {
+        var __mb = __mb_set_node_paths;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFObjectModelProperty", "set_node_paths", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFObjectModelProperty.set_node_paths is not available in this engine build.");
+            __mb_set_node_paths = __mb;
+        }
+        ulong __a0 = nodePaths.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_object_model_type;
@@ -2730,6 +3586,21 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_json_pointers;
+    public Godot.Collections.Array GetJsonPointers()
+    {
+        var __mb = __mb_get_json_pointers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFObjectModelProperty", "get_json_pointers", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFObjectModelProperty.get_json_pointers is not available in this engine build.");
+            __mb_get_json_pointers = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_has_json_pointers;
     public bool HasJsonPointers()
     {
@@ -2743,6 +3614,22 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_set_json_pointers;
+    public void SetJsonPointers(Godot.Collections.Array jsonPointers)
+    {
+        var __mb = __mb_set_json_pointers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFObjectModelProperty", "set_json_pointers", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFObjectModelProperty.set_json_pointers is not available in this engine build.");
+            __mb_set_json_pointers = __mb;
+        }
+        ulong __a0 = jsonPointers.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_variant_type;
@@ -2835,6 +3722,39 @@ public unsafe partial class GLTFPhysicsBody : Resource
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (CollisionObject3D?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
+    }
+
+    private static nint __mb_from_dictionary;
+    public static GLTFPhysicsBody? FromDictionary(Godot.Collections.Dictionary dictionary)
+    {
+        var __mb = __mb_from_dictionary;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFPhysicsBody", "from_dictionary", 1177544336);
+            if (__mb == 0) throw new MissingMethodException("GLTFPhysicsBody.from_dictionary is not available in this engine build.");
+            __mb_from_dictionary = __mb;
+        }
+        ulong __a0 = dictionary.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        return (GLTFPhysicsBody?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_to_dictionary;
+    public Godot.Collections.Dictionary ToDictionary()
+    {
+        var __mb = __mb_to_dictionary;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFPhysicsBody", "to_dictionary", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("GLTFPhysicsBody.to_dictionary is not available in this engine build.");
+            __mb_to_dictionary = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_body_type;
@@ -3168,6 +4088,39 @@ public unsafe partial class GLTFPhysicsShape : Resource
         return (Shape3D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_from_dictionary;
+    public static GLTFPhysicsShape? FromDictionary(Godot.Collections.Dictionary dictionary)
+    {
+        var __mb = __mb_from_dictionary;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFPhysicsShape", "from_dictionary", 2390691823);
+            if (__mb == 0) throw new MissingMethodException("GLTFPhysicsShape.from_dictionary is not available in this engine build.");
+            __mb_from_dictionary = __mb;
+        }
+        ulong __a0 = dictionary.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        return (GLTFPhysicsShape?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_to_dictionary;
+    public Godot.Collections.Dictionary ToDictionary()
+    {
+        var __mb = __mb_to_dictionary;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFPhysicsShape", "to_dictionary", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("GLTFPhysicsShape.to_dictionary is not available in this engine build.");
+            __mb_to_dictionary = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
     private static nint __mb_get_shape_type;
     public string GetShapeType()
     {
@@ -3411,6 +4364,68 @@ public unsafe partial class GLTFSkeleton : Resource
         return (Skeleton3D?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
+    private static nint __mb_get_unique_names;
+    public Godot.Collections.Array GetUniqueNames()
+    {
+        var __mb = __mb_get_unique_names;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFSkeleton", "get_unique_names", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("GLTFSkeleton.get_unique_names is not available in this engine build.");
+            __mb_get_unique_names = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_unique_names;
+    public void SetUniqueNames(Godot.Collections.Array uniqueNames)
+    {
+        var __mb = __mb_set_unique_names;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFSkeleton", "set_unique_names", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFSkeleton.set_unique_names is not available in this engine build.");
+            __mb_set_unique_names = __mb;
+        }
+        ulong __a0 = uniqueNames.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_godot_bone_node;
+    public Godot.Collections.Dictionary GetGodotBoneNode()
+    {
+        var __mb = __mb_get_godot_bone_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFSkeleton", "get_godot_bone_node", 2382534195);
+            if (__mb == 0) throw new MissingMethodException("GLTFSkeleton.get_godot_bone_node is not available in this engine build.");
+            __mb_get_godot_bone_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_set_godot_bone_node;
+    public void SetGodotBoneNode(Godot.Collections.Dictionary godotBoneNode)
+    {
+        var __mb = __mb_set_godot_bone_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFSkeleton", "set_godot_bone_node", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("GLTFSkeleton.set_godot_bone_node is not available in this engine build.");
+            __mb_set_godot_bone_node = __mb;
+        }
+        ulong __a0 = godotBoneNode.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_get_bone_attachment_count;
     public int GetBoneAttachmentCount()
     {
@@ -3485,6 +4500,37 @@ public unsafe partial class GLTFSkin : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_inverse_binds;
+    public Godot.Collections.Array GetInverseBinds()
+    {
+        var __mb = __mb_get_inverse_binds;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFSkin", "get_inverse_binds", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("GLTFSkin.get_inverse_binds is not available in this engine build.");
+            __mb_get_inverse_binds = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_inverse_binds;
+    public void SetInverseBinds(Godot.Collections.Array inverseBinds)
+    {
+        var __mb = __mb_set_inverse_binds;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFSkin", "set_inverse_binds", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFSkin.set_inverse_binds is not available in this engine build.");
+            __mb_set_inverse_binds = __mb;
+        }
+        ulong __a0 = inverseBinds.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_get_skeleton;
     public int GetSkeleton()
     {
@@ -3511,6 +4557,68 @@ public unsafe partial class GLTFSkin : Resource
             __mb_set_skeleton = __mb;
         }
         long __a0 = unchecked((long)skeleton);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_joint_i_to_bone_i;
+    public Godot.Collections.Dictionary GetJointIToBoneI()
+    {
+        var __mb = __mb_get_joint_i_to_bone_i;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFSkin", "get_joint_i_to_bone_i", 2382534195);
+            if (__mb == 0) throw new MissingMethodException("GLTFSkin.get_joint_i_to_bone_i is not available in this engine build.");
+            __mb_get_joint_i_to_bone_i = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_set_joint_i_to_bone_i;
+    public void SetJointIToBoneI(Godot.Collections.Dictionary jointIToBoneI)
+    {
+        var __mb = __mb_set_joint_i_to_bone_i;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFSkin", "set_joint_i_to_bone_i", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("GLTFSkin.set_joint_i_to_bone_i is not available in this engine build.");
+            __mb_set_joint_i_to_bone_i = __mb;
+        }
+        ulong __a0 = jointIToBoneI.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_joint_i_to_name;
+    public Godot.Collections.Dictionary GetJointIToName()
+    {
+        var __mb = __mb_get_joint_i_to_name;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFSkin", "get_joint_i_to_name", 2382534195);
+            if (__mb == 0) throw new MissingMethodException("GLTFSkin.get_joint_i_to_name is not available in this engine build.");
+            __mb_get_joint_i_to_name = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_set_joint_i_to_name;
+    public void SetJointIToName(Godot.Collections.Dictionary jointIToName)
+    {
+        var __mb = __mb_set_joint_i_to_name;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFSkin", "set_joint_i_to_name", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("GLTFSkin.set_joint_i_to_name is not available in this engine build.");
+            __mb_set_joint_i_to_name = __mb;
+        }
+        ulong __a0 = jointIToName.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
@@ -3771,6 +4879,37 @@ public unsafe partial class GLTFState : Resource
         return unchecked((int)__ret);
     }
 
+    private static nint __mb_get_json;
+    public Godot.Collections.Dictionary GetJson()
+    {
+        var __mb = __mb_get_json;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_json", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_json is not available in this engine build.");
+            __mb_get_json = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_set_json;
+    public void SetJson(Godot.Collections.Dictionary json)
+    {
+        var __mb = __mb_set_json;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_json", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_json is not available in this engine build.");
+            __mb_set_json = __mb;
+        }
+        ulong __a0 = json.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_get_major_version;
     public int GetMajorVersion()
     {
@@ -3896,6 +5035,161 @@ public unsafe partial class GLTFState : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_nodes;
+    public Godot.Collections.Array GetNodes()
+    {
+        var __mb = __mb_get_nodes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_nodes", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_nodes is not available in this engine build.");
+            __mb_get_nodes = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_nodes;
+    public void SetNodes(Godot.Collections.Array nodes)
+    {
+        var __mb = __mb_set_nodes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_nodes", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_nodes is not available in this engine build.");
+            __mb_set_nodes = __mb;
+        }
+        ulong __a0 = nodes.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_buffers;
+    public Godot.Collections.Array GetBuffers()
+    {
+        var __mb = __mb_get_buffers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_buffers", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_buffers is not available in this engine build.");
+            __mb_get_buffers = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_buffers;
+    public void SetBuffers(Godot.Collections.Array buffers)
+    {
+        var __mb = __mb_set_buffers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_buffers", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_buffers is not available in this engine build.");
+            __mb_set_buffers = __mb;
+        }
+        ulong __a0 = buffers.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_buffer_views;
+    public Godot.Collections.Array GetBufferViews()
+    {
+        var __mb = __mb_get_buffer_views;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_buffer_views", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_buffer_views is not available in this engine build.");
+            __mb_get_buffer_views = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_buffer_views;
+    public void SetBufferViews(Godot.Collections.Array bufferViews)
+    {
+        var __mb = __mb_set_buffer_views;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_buffer_views", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_buffer_views is not available in this engine build.");
+            __mb_set_buffer_views = __mb;
+        }
+        ulong __a0 = bufferViews.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_accessors;
+    public Godot.Collections.Array GetAccessors()
+    {
+        var __mb = __mb_get_accessors;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_accessors", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_accessors is not available in this engine build.");
+            __mb_get_accessors = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_accessors;
+    public void SetAccessors(Godot.Collections.Array accessors)
+    {
+        var __mb = __mb_set_accessors;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_accessors", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_accessors is not available in this engine build.");
+            __mb_set_accessors = __mb;
+        }
+        ulong __a0 = accessors.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_meshes;
+    public Godot.Collections.Array GetMeshes()
+    {
+        var __mb = __mb_get_meshes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_meshes", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_meshes is not available in this engine build.");
+            __mb_get_meshes = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_meshes;
+    public void SetMeshes(Godot.Collections.Array meshes)
+    {
+        var __mb = __mb_set_meshes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_meshes", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_meshes is not available in this engine build.");
+            __mb_set_meshes = __mb;
+        }
+        ulong __a0 = meshes.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_get_animation_players_count;
     public int GetAnimationPlayersCount(int animPlayerIndex)
     {
@@ -3930,6 +5224,37 @@ public unsafe partial class GLTFState : Resource
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (AnimationPlayer?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
+    }
+
+    private static nint __mb_get_materials;
+    public Godot.Collections.Array GetMaterials()
+    {
+        var __mb = __mb_get_materials;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_materials", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_materials is not available in this engine build.");
+            __mb_get_materials = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_materials;
+    public void SetMaterials(Godot.Collections.Array materials)
+    {
+        var __mb = __mb_set_materials;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_materials", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_materials is not available in this engine build.");
+            __mb_set_materials = __mb;
+        }
+        ulong __a0 = materials.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_scene_name;
@@ -4028,6 +5353,285 @@ public unsafe partial class GLTFState : Resource
         NativeString.Destroy(ref __a0);
     }
 
+    private static nint __mb_get_textures;
+    public Godot.Collections.Array GetTextures()
+    {
+        var __mb = __mb_get_textures;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_textures", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_textures is not available in this engine build.");
+            __mb_get_textures = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_textures;
+    public void SetTextures(Godot.Collections.Array textures)
+    {
+        var __mb = __mb_set_textures;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_textures", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_textures is not available in this engine build.");
+            __mb_set_textures = __mb;
+        }
+        ulong __a0 = textures.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_texture_samplers;
+    public Godot.Collections.Array GetTextureSamplers()
+    {
+        var __mb = __mb_get_texture_samplers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_texture_samplers", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_texture_samplers is not available in this engine build.");
+            __mb_get_texture_samplers = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_texture_samplers;
+    public void SetTextureSamplers(Godot.Collections.Array textureSamplers)
+    {
+        var __mb = __mb_set_texture_samplers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_texture_samplers", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_texture_samplers is not available in this engine build.");
+            __mb_set_texture_samplers = __mb;
+        }
+        ulong __a0 = textureSamplers.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_images;
+    public Godot.Collections.Array GetImages()
+    {
+        var __mb = __mb_get_images;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_images", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_images is not available in this engine build.");
+            __mb_get_images = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_images;
+    public void SetImages(Godot.Collections.Array images)
+    {
+        var __mb = __mb_set_images;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_images", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_images is not available in this engine build.");
+            __mb_set_images = __mb;
+        }
+        ulong __a0 = images.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_skins;
+    public Godot.Collections.Array GetSkins()
+    {
+        var __mb = __mb_get_skins;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_skins", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_skins is not available in this engine build.");
+            __mb_get_skins = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_skins;
+    public void SetSkins(Godot.Collections.Array skins)
+    {
+        var __mb = __mb_set_skins;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_skins", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_skins is not available in this engine build.");
+            __mb_set_skins = __mb;
+        }
+        ulong __a0 = skins.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_cameras;
+    public Godot.Collections.Array GetCameras()
+    {
+        var __mb = __mb_get_cameras;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_cameras", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_cameras is not available in this engine build.");
+            __mb_get_cameras = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_cameras;
+    public void SetCameras(Godot.Collections.Array cameras)
+    {
+        var __mb = __mb_set_cameras;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_cameras", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_cameras is not available in this engine build.");
+            __mb_set_cameras = __mb;
+        }
+        ulong __a0 = cameras.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_lights;
+    public Godot.Collections.Array GetLights()
+    {
+        var __mb = __mb_get_lights;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_lights", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_lights is not available in this engine build.");
+            __mb_get_lights = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_lights;
+    public void SetLights(Godot.Collections.Array lights)
+    {
+        var __mb = __mb_set_lights;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_lights", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_lights is not available in this engine build.");
+            __mb_set_lights = __mb;
+        }
+        ulong __a0 = lights.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_unique_names;
+    public Godot.Collections.Array GetUniqueNames()
+    {
+        var __mb = __mb_get_unique_names;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_unique_names", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_unique_names is not available in this engine build.");
+            __mb_get_unique_names = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_unique_names;
+    public void SetUniqueNames(Godot.Collections.Array uniqueNames)
+    {
+        var __mb = __mb_set_unique_names;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_unique_names", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_unique_names is not available in this engine build.");
+            __mb_set_unique_names = __mb;
+        }
+        ulong __a0 = uniqueNames.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_unique_animation_names;
+    public Godot.Collections.Array GetUniqueAnimationNames()
+    {
+        var __mb = __mb_get_unique_animation_names;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_unique_animation_names", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_unique_animation_names is not available in this engine build.");
+            __mb_get_unique_animation_names = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_unique_animation_names;
+    public void SetUniqueAnimationNames(Godot.Collections.Array uniqueAnimationNames)
+    {
+        var __mb = __mb_set_unique_animation_names;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_unique_animation_names", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_unique_animation_names is not available in this engine build.");
+            __mb_set_unique_animation_names = __mb;
+        }
+        ulong __a0 = uniqueAnimationNames.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_skeletons;
+    public Godot.Collections.Array GetSkeletons()
+    {
+        var __mb = __mb_get_skeletons;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_skeletons", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_skeletons is not available in this engine build.");
+            __mb_get_skeletons = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_skeletons;
+    public void SetSkeletons(Godot.Collections.Array skeletons)
+    {
+        var __mb = __mb_set_skeletons;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_skeletons", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_skeletons is not available in this engine build.");
+            __mb_set_skeletons = __mb;
+        }
+        ulong __a0 = skeletons.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_get_create_animations;
     public bool GetCreateAnimations()
     {
@@ -4090,6 +5694,37 @@ public unsafe partial class GLTFState : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_animations;
+    public Godot.Collections.Array GetAnimations()
+    {
+        var __mb = __mb_get_animations;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_animations", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_animations is not available in this engine build.");
+            __mb_get_animations = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_animations;
+    public void SetAnimations(Godot.Collections.Array animations)
+    {
+        var __mb = __mb_set_animations;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_animations", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_animations is not available in this engine build.");
+            __mb_set_animations = __mb;
+        }
+        ulong __a0 = animations.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_get_scene_node;
     public Node? GetSceneNode(int gltfNodeIndex)
     {
@@ -4124,6 +5759,42 @@ public unsafe partial class GLTFState : Resource
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_get_additional_data;
+    public Variant GetAdditionalData(string extensionName)
+    {
+        var __mb = __mb_get_additional_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "get_additional_data", 2760726917);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.get_additional_data is not available in this engine build.");
+            __mb_get_additional_data = __mb;
+        }
+        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_set_additional_data;
+    public void SetAdditionalData(string extensionName, Variant additionalData)
+    {
+        var __mb = __mb_set_additional_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GLTFState", "set_additional_data", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("GLTFState.set_additional_data is not available in this engine build.");
+            __mb_set_additional_data = __mb;
+        }
+        ulong __a0 = StringNames.Get(extensionName).Opaque;
+        var __a1 = additionalData.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_handle_binary_image_mode;
@@ -5056,6 +6727,37 @@ public unsafe partial class GPUParticles2D : Node2D
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_sub_emitter;
+    public void SetSubEmitter(NodePath path)
+    {
+        var __mb = __mb_set_sub_emitter;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GPUParticles2D", "set_sub_emitter", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("GPUParticles2D.set_sub_emitter is not available in this engine build.");
+            __mb_set_sub_emitter = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_sub_emitter;
+    public NodePath GetSubEmitter()
+    {
+        var __mb = __mb_get_sub_emitter;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GPUParticles2D", "get_sub_emitter", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("GPUParticles2D.get_sub_emitter is not available in this engine build.");
+            __mb_get_sub_emitter = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_emit_particle;
@@ -6067,6 +7769,37 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
         var __ret = default(Aabb);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_set_sub_emitter;
+    public void SetSubEmitter(NodePath path)
+    {
+        var __mb = __mb_set_sub_emitter;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GPUParticles3D", "set_sub_emitter", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("GPUParticles3D.set_sub_emitter is not available in this engine build.");
+            __mb_set_sub_emitter = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_sub_emitter;
+    public NodePath GetSubEmitter()
+    {
+        var __mb = __mb_get_sub_emitter;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GPUParticles3D", "get_sub_emitter", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("GPUParticles3D.get_sub_emitter is not available in this engine build.");
+            __mb_get_sub_emitter = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_emit_particle;
@@ -7491,6 +9224,54 @@ public unsafe partial class Geometry2D : GodotObject
         return (float)__ret;
     }
 
+    private static nint __mb_segment_intersects_segment;
+    public Variant SegmentIntersectsSegment(Vector2 fromA, Vector2 toA, Vector2 fromB, Vector2 toB)
+    {
+        var __mb = __mb_segment_intersects_segment;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Geometry2D", "segment_intersects_segment", 2058025344);
+            if (__mb == 0) throw new MissingMethodException("Geometry2D.segment_intersects_segment is not available in this engine build.");
+            __mb_segment_intersects_segment = __mb;
+        }
+        var __a0 = fromA;
+        var __a1 = toA;
+        var __a2 = fromB;
+        var __a3 = toB;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_line_intersects_line;
+    public Variant LineIntersectsLine(Vector2 fromA, Vector2 dirA, Vector2 fromB, Vector2 dirB)
+    {
+        var __mb = __mb_line_intersects_line;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Geometry2D", "line_intersects_line", 2058025344);
+            if (__mb == 0) throw new MissingMethodException("Geometry2D.line_intersects_line is not available in this engine build.");
+            __mb_line_intersects_line = __mb;
+        }
+        var __a0 = fromA;
+        var __a1 = dirA;
+        var __a2 = fromB;
+        var __a3 = dirB;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_get_closest_point_to_segment;
     public Vector2 GetClosestPointToSegment(Vector2 point, Vector2 s1, Vector2 s2)
     {
@@ -7558,6 +9339,26 @@ public unsafe partial class Geometry2D : GodotObject
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
+
+    private static nint __mb_bresenham_line;
+    public Godot.Collections.Array BresenhamLine(Vector2I from, Vector2I to)
+    {
+        var __mb = __mb_bresenham_line;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Geometry2D", "bresenham_line", 1989391000);
+            if (__mb == 0) throw new MissingMethodException("Geometry2D.bresenham_line is not available in this engine build.");
+            __mb_bresenham_line = __mb;
+        }
+        var __a0 = from;
+        var __a1 = to;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
 }
 
 public unsafe partial class Geometry3D : GodotObject
@@ -7571,6 +9372,24 @@ public unsafe partial class Geometry3D : GodotObject
 
     private static Geometry3D? _singleton;
     public static Geometry3D Singleton => _singleton ??= (Geometry3D)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("Geometry3D"), adoptRef: false)!;
+
+    private static nint __mb_build_box_planes;
+    public Godot.Collections.Array BuildBoxPlanes(Vector3 extents)
+    {
+        var __mb = __mb_build_box_planes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Geometry3D", "build_box_planes", 3622277145);
+            if (__mb == 0) throw new MissingMethodException("Geometry3D.build_box_planes is not available in this engine build.");
+            __mb_build_box_planes = __mb;
+        }
+        var __a0 = extents;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
 
     private static nint __mb_get_closest_point_to_segment;
     public Vector3 GetClosestPointToSegment(Vector3 point, Vector3 s1, Vector3 s2)
@@ -7638,6 +9457,58 @@ public unsafe partial class Geometry3D : GodotObject
         var __ret = default(Vector3);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_ray_intersects_triangle;
+    public Variant RayIntersectsTriangle(Vector3 from, Vector3 dir, Vector3 a, Vector3 b, Vector3 c)
+    {
+        var __mb = __mb_ray_intersects_triangle;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Geometry3D", "ray_intersects_triangle", 1718655448);
+            if (__mb == 0) throw new MissingMethodException("Geometry3D.ray_intersects_triangle is not available in this engine build.");
+            __mb_ray_intersects_triangle = __mb;
+        }
+        var __a0 = from;
+        var __a1 = dir;
+        var __a2 = a;
+        var __a3 = b;
+        var __a4 = c;
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_segment_intersects_triangle;
+    public Variant SegmentIntersectsTriangle(Vector3 from, Vector3 to, Vector3 a, Vector3 b, Vector3 c)
+    {
+        var __mb = __mb_segment_intersects_triangle;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Geometry3D", "segment_intersects_triangle", 1718655448);
+            if (__mb == 0) throw new MissingMethodException("Geometry3D.segment_intersects_triangle is not available in this engine build.");
+            __mb_segment_intersects_triangle = __mb;
+        }
+        var __a0 = from;
+        var __a1 = to;
+        var __a2 = a;
+        var __a3 = b;
+        var __a4 = c;
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 }
 
@@ -7989,6 +9860,42 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (GeometryInstance3D.VisibilityRangeFadeMode)__ret;
+    }
+
+    private static nint __mb_set_instance_shader_parameter;
+    public void SetInstanceShaderParameter(string name, Variant value)
+    {
+        var __mb = __mb_set_instance_shader_parameter;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GeometryInstance3D", "set_instance_shader_parameter", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("GeometryInstance3D.set_instance_shader_parameter is not available in this engine build.");
+            __mb_set_instance_shader_parameter = __mb;
+        }
+        ulong __a0 = StringNames.Get(name).Opaque;
+        var __a1 = value.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_instance_shader_parameter;
+    public Variant GetInstanceShaderParameter(string name)
+    {
+        var __mb = __mb_get_instance_shader_parameter;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GeometryInstance3D", "get_instance_shader_parameter", 2760726917);
+            if (__mb == 0) throw new MissingMethodException("GeometryInstance3D.get_instance_shader_parameter is not available in this engine build.");
+            __mb_get_instance_shader_parameter = __mb;
+        }
+        ulong __a0 = StringNames.Get(name).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_set_extra_cull_margin;
@@ -8966,6 +10873,37 @@ public unsafe partial class GraphEdit : Control
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_set_connections;
+    public void SetConnections(Godot.Collections.Array connections)
+    {
+        var __mb = __mb_set_connections;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GraphEdit", "set_connections", 381264803);
+            if (__mb == 0) throw new MissingMethodException("GraphEdit.set_connections is not available in this engine build.");
+            __mb_set_connections = __mb;
+        }
+        ulong __a0 = connections.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_connection_list;
+    public Godot.Collections.Array GetConnectionList()
+    {
+        var __mb = __mb_get_connection_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GraphEdit", "get_connection_list", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GraphEdit.get_connection_list is not available in this engine build.");
+            __mb_get_connection_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_get_connection_count;
     public int GetConnectionCount(string fromNode, int fromPort)
     {
@@ -8984,6 +10922,62 @@ public unsafe partial class GraphEdit : Control
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_get_closest_connection_at_point;
+    public Godot.Collections.Dictionary GetClosestConnectionAtPoint(Vector2 point, float maxDistance)
+    {
+        var __mb = __mb_get_closest_connection_at_point;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GraphEdit", "get_closest_connection_at_point", 453879819);
+            if (__mb == 0) throw new MissingMethodException("GraphEdit.get_closest_connection_at_point is not available in this engine build.");
+            __mb_get_closest_connection_at_point = __mb;
+        }
+        var __a0 = point;
+        double __a1 = maxDistance;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_get_connection_list_from_node;
+    public Godot.Collections.Array GetConnectionListFromNode(string node)
+    {
+        var __mb = __mb_get_connection_list_from_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GraphEdit", "get_connection_list_from_node", 3147814860);
+            if (__mb == 0) throw new MissingMethodException("GraphEdit.get_connection_list_from_node is not available in this engine build.");
+            __mb_get_connection_list_from_node = __mb;
+        }
+        ulong __a0 = StringNames.Get(node).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_connections_intersecting_with_rect;
+    public Godot.Collections.Array GetConnectionsIntersectingWithRect(Rect2 rect)
+    {
+        var __mb = __mb_get_connections_intersecting_with_rect;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GraphEdit", "get_connections_intersecting_with_rect", 2709748719);
+            if (__mb == 0) throw new MissingMethodException("GraphEdit.get_connections_intersecting_with_rect is not available in this engine build.");
+            __mb_get_connections_intersecting_with_rect = __mb;
+        }
+        var __a0 = rect;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_clear_connections;
@@ -9213,6 +11207,24 @@ public unsafe partial class GraphEdit : Control
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (GraphFrame?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
+    }
+
+    private static nint __mb_get_attached_nodes_of_frame;
+    public Godot.Collections.Array GetAttachedNodesOfFrame(string frame)
+    {
+        var __mb = __mb_get_attached_nodes_of_frame;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GraphEdit", "get_attached_nodes_of_frame", 689397652);
+            if (__mb == 0) throw new MissingMethodException("GraphEdit.get_attached_nodes_of_frame is not available in this engine build.");
+            __mb_get_attached_nodes_of_frame = __mb;
+        }
+        ulong __a0 = StringNames.Get(frame).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_panning_scheme;
@@ -9895,6 +11907,37 @@ public unsafe partial class GraphEdit : Control
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_set_type_names;
+    public void SetTypeNames(Godot.Collections.Dictionary typeNames)
+    {
+        var __mb = __mb_set_type_names;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GraphEdit", "set_type_names", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("GraphEdit.set_type_names is not available in this engine build.");
+            __mb_set_type_names = __mb;
+        }
+        ulong __a0 = typeNames.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_type_names;
+    public Godot.Collections.Dictionary GetTypeNames()
+    {
+        var __mb = __mb_get_type_names;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GraphEdit", "get_type_names", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("GraphEdit.get_type_names is not available in this engine build.");
+            __mb_get_type_names = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_menu_hbox;
@@ -10646,6 +12689,42 @@ public unsafe partial class GraphNode : GraphElement
         return (Texture2D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_set_slot_metadata_left;
+    public void SetSlotMetadataLeft(int slotIndex, Variant value)
+    {
+        var __mb = __mb_set_slot_metadata_left;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GraphNode", "set_slot_metadata_left", 2152698145);
+            if (__mb == 0) throw new MissingMethodException("GraphNode.set_slot_metadata_left is not available in this engine build.");
+            __mb_set_slot_metadata_left = __mb;
+        }
+        long __a0 = unchecked((long)slotIndex);
+        var __a1 = value.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_slot_metadata_left;
+    public Variant GetSlotMetadataLeft(int slotIndex)
+    {
+        var __mb = __mb_get_slot_metadata_left;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GraphNode", "get_slot_metadata_left", 4227898402);
+            if (__mb == 0) throw new MissingMethodException("GraphNode.get_slot_metadata_left is not available in this engine build.");
+            __mb_get_slot_metadata_left = __mb;
+        }
+        long __a0 = unchecked((long)slotIndex);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_is_slot_enabled_right;
     public bool IsSlotEnabledRight(int slotIndex)
     {
@@ -10788,6 +12867,42 @@ public unsafe partial class GraphNode : GraphElement
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (Texture2D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_set_slot_metadata_right;
+    public void SetSlotMetadataRight(int slotIndex, Variant value)
+    {
+        var __mb = __mb_set_slot_metadata_right;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GraphNode", "set_slot_metadata_right", 2152698145);
+            if (__mb == 0) throw new MissingMethodException("GraphNode.set_slot_metadata_right is not available in this engine build.");
+            __mb_set_slot_metadata_right = __mb;
+        }
+        long __a0 = unchecked((long)slotIndex);
+        var __a1 = value.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_slot_metadata_right;
+    public Variant GetSlotMetadataRight(int slotIndex)
+    {
+        var __mb = __mb_get_slot_metadata_right;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GraphNode", "get_slot_metadata_right", 4227898402);
+            if (__mb == 0) throw new MissingMethodException("GraphNode.get_slot_metadata_right is not available in this engine build.");
+            __mb_get_slot_metadata_right = __mb;
+        }
+        long __a0 = unchecked((long)slotIndex);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_is_slot_draw_stylebox;
@@ -11816,6 +13931,146 @@ public unsafe partial class GridMap : Node3D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
 
+    private static nint __mb_get_used_cells;
+    public Godot.Collections.Array GetUsedCells()
+    {
+        var __mb = __mb_get_used_cells;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GridMap", "get_used_cells", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GridMap.get_used_cells is not available in this engine build.");
+            __mb_get_used_cells = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_used_cells_by_item;
+    public Godot.Collections.Array GetUsedCellsByItem(int item)
+    {
+        var __mb = __mb_get_used_cells_by_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GridMap", "get_used_cells_by_item", 663333327);
+            if (__mb == 0) throw new MissingMethodException("GridMap.get_used_cells_by_item is not available in this engine build.");
+            __mb_get_used_cells_by_item = __mb;
+        }
+        long __a0 = unchecked((long)item);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_used_octants;
+    public Godot.Collections.Array GetUsedOctants()
+    {
+        var __mb = __mb_get_used_octants;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GridMap", "get_used_octants", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GridMap.get_used_octants is not available in this engine build.");
+            __mb_get_used_octants = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_used_octants_by_item;
+    public Godot.Collections.Array GetUsedOctantsByItem(int item)
+    {
+        var __mb = __mb_get_used_octants_by_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GridMap", "get_used_octants_by_item", 663333327);
+            if (__mb == 0) throw new MissingMethodException("GridMap.get_used_octants_by_item is not available in this engine build.");
+            __mb_get_used_octants_by_item = __mb;
+        }
+        long __a0 = unchecked((long)item);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_used_cells_in_octant;
+    public Godot.Collections.Array GetUsedCellsInOctant(Vector3I octantCoords)
+    {
+        var __mb = __mb_get_used_cells_in_octant;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GridMap", "get_used_cells_in_octant", 2658725580);
+            if (__mb == 0) throw new MissingMethodException("GridMap.get_used_cells_in_octant is not available in this engine build.");
+            __mb_get_used_cells_in_octant = __mb;
+        }
+        var __a0 = octantCoords;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_used_cells_in_octant_by_item;
+    public Godot.Collections.Array GetUsedCellsInOctantByItem(Vector3I octantCoords, int item)
+    {
+        var __mb = __mb_get_used_cells_in_octant_by_item;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GridMap", "get_used_cells_in_octant_by_item", 2384667821);
+            if (__mb == 0) throw new MissingMethodException("GridMap.get_used_cells_in_octant_by_item is not available in this engine build.");
+            __mb_get_used_cells_in_octant_by_item = __mb;
+        }
+        var __a0 = octantCoords;
+        long __a1 = unchecked((long)item);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_octants_in_bounds;
+    public Godot.Collections.Array GetOctantsInBounds(Aabb bounds)
+    {
+        var __mb = __mb_get_octants_in_bounds;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GridMap", "get_octants_in_bounds", 2489849902);
+            if (__mb == 0) throw new MissingMethodException("GridMap.get_octants_in_bounds is not available in this engine build.");
+            __mb_get_octants_in_bounds = __mb;
+        }
+        var __a0 = bounds;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_used_octants_in_bounds;
+    public Godot.Collections.Array GetUsedOctantsInBounds(Aabb bounds)
+    {
+        var __mb = __mb_get_used_octants_in_bounds;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GridMap", "get_used_octants_in_bounds", 2489849902);
+            if (__mb == 0) throw new MissingMethodException("GridMap.get_used_octants_in_bounds is not available in this engine build.");
+            __mb_get_used_octants_in_bounds = __mb;
+        }
+        var __a0 = bounds;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_get_octant_coords_from_cell_coords;
     public Vector3I GetOctantCoordsFromCellCoords(Vector3I cellCoords)
     {
@@ -11832,6 +14087,36 @@ public unsafe partial class GridMap : Node3D
         var __ret = default(Vector3I);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_get_meshes;
+    public Godot.Collections.Array GetMeshes()
+    {
+        var __mb = __mb_get_meshes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GridMap", "get_meshes", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GridMap.get_meshes is not available in this engine build.");
+            __mb_get_meshes = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_bake_meshes;
+    public Godot.Collections.Array GetBakeMeshes()
+    {
+        var __mb = __mb_get_bake_meshes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GridMap", "get_bake_meshes", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("GridMap.get_bake_meshes is not available in this engine build.");
+            __mb_get_bake_meshes = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_bake_mesh_instance;
@@ -11967,6 +14252,21 @@ public unsafe partial class GridMapEditorPlugin : EditorPlugin
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_get_selected_cells;
+    public Godot.Collections.Array GetSelectedCells()
+    {
+        var __mb = __mb_get_selected_cells;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("GridMapEditorPlugin", "get_selected_cells", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("GridMapEditorPlugin.get_selected_cells is not available in this engine build.");
+            __mb_get_selected_cells = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_selected_palette_item;
@@ -12119,6 +14419,108 @@ public unsafe partial class GodotObject
         return __ret != 0;
     }
 
+    private static nint __mb_set;
+    public void Set(string property, Variant value)
+    {
+        var __mb = __mb_set;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "set", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("Object.set is not available in this engine build.");
+            __mb_set = __mb;
+        }
+        ulong __a0 = StringNames.Get(property).Opaque;
+        var __a1 = value.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get;
+    public Variant Get(string property)
+    {
+        var __mb = __mb_get;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "get", 2760726917);
+            if (__mb == 0) throw new MissingMethodException("Object.get is not available in this engine build.");
+            __mb_get = __mb;
+        }
+        ulong __a0 = StringNames.Get(property).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_set_indexed;
+    public void SetIndexed(NodePath propertyPath, Variant value)
+    {
+        var __mb = __mb_set_indexed;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "set_indexed", 3500910842);
+            if (__mb == 0) throw new MissingMethodException("Object.set_indexed is not available in this engine build.");
+            __mb_set_indexed = __mb;
+        }
+        ulong __a0 = propertyPath.Native;
+        var __a1 = value.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_indexed;
+    public Variant GetIndexed(NodePath propertyPath)
+    {
+        var __mb = __mb_get_indexed;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "get_indexed", 4006125091);
+            if (__mb == 0) throw new MissingMethodException("Object.get_indexed is not available in this engine build.");
+            __mb_get_indexed = __mb;
+        }
+        ulong __a0 = propertyPath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_get_property_list;
+    public Godot.Collections.Array GetPropertyList()
+    {
+        var __mb = __mb_get_property_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "get_property_list", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Object.get_property_list is not available in this engine build.");
+            __mb_get_property_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_method_list;
+    public Godot.Collections.Array GetMethodList()
+    {
+        var __mb = __mb_get_method_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "get_method_list", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Object.get_method_list is not available in this engine build.");
+            __mb_get_method_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_property_can_revert;
     public bool PropertyCanRevert(string property)
     {
@@ -12135,6 +14537,24 @@ public unsafe partial class GodotObject
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_property_get_revert;
+    public Variant PropertyGetRevert(string property)
+    {
+        var __mb = __mb_property_get_revert;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "property_get_revert", 2760726917);
+            if (__mb == 0) throw new MissingMethodException("Object.property_get_revert is not available in this engine build.");
+            __mb_property_get_revert = __mb;
+        }
+        ulong __a0 = StringNames.Get(property).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_notification;
@@ -12170,6 +14590,55 @@ public unsafe partial class GodotObject
         return unchecked((ulong)__ret);
     }
 
+    private static nint __mb_set_script;
+    public void SetScript(Variant script)
+    {
+        var __mb = __mb_set_script;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "set_script", 1114965689);
+            if (__mb == 0) throw new MissingMethodException("Object.set_script is not available in this engine build.");
+            __mb_set_script = __mb;
+        }
+        var __a0 = script.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_script;
+    public Variant GetScript()
+    {
+        var __mb = __mb_get_script;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "get_script", 1214101251);
+            if (__mb == 0) throw new MissingMethodException("Object.get_script is not available in this engine build.");
+            __mb_get_script = __mb;
+        }
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_set_meta;
+    public void SetMeta(string name, Variant value)
+    {
+        var __mb = __mb_set_meta;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "set_meta", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("Object.set_meta is not available in this engine build.");
+            __mb_set_meta = __mb;
+        }
+        ulong __a0 = StringNames.Get(name).Opaque;
+        var __a1 = value.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_remove_meta;
     public void RemoveMeta(string name)
     {
@@ -12184,6 +14653,26 @@ public unsafe partial class GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_meta;
+    public Variant GetMeta(string name, Variant @default)
+    {
+        var __mb = __mb_get_meta;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "get_meta", 3990617847);
+            if (__mb == 0) throw new MissingMethodException("Object.get_meta is not available in this engine build.");
+            __mb_get_meta = __mb;
+        }
+        ulong __a0 = StringNames.Get(name).Opaque;
+        var __a1 = @default.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_has_meta;
@@ -12202,6 +14691,40 @@ public unsafe partial class GodotObject
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_get_meta_list;
+    public Godot.Collections.Array GetMetaList()
+    {
+        var __mb = __mb_get_meta_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "get_meta_list", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Object.get_meta_list is not available in this engine build.");
+            __mb_get_meta_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_add_user_signal;
+    public void AddUserSignal(string signal, Godot.Collections.Array arguments)
+    {
+        var __mb = __mb_add_user_signal;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "add_user_signal", 85656714);
+            if (__mb == 0) throw new MissingMethodException("Object.add_user_signal is not available in this engine build.");
+            __mb_add_user_signal = __mb;
+        }
+        ulong __a0 = NativeString.Create(signal);
+        ulong __a1 = arguments.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_has_user_signal;
@@ -12236,6 +14759,44 @@ public unsafe partial class GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_deferred;
+    public void SetDeferred(string property, Variant value)
+    {
+        var __mb = __mb_set_deferred;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "set_deferred", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("Object.set_deferred is not available in this engine build.");
+            __mb_set_deferred = __mb;
+        }
+        ulong __a0 = StringNames.Get(property).Opaque;
+        var __a1 = value.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_callv;
+    public Variant Callv(string method, Godot.Collections.Array argArray)
+    {
+        var __mb = __mb_callv;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "callv", 1260104456);
+            if (__mb == 0) throw new MissingMethodException("Object.callv is not available in this engine build.");
+            __mb_callv = __mb;
+        }
+        ulong __a0 = StringNames.Get(method).Opaque;
+        ulong __a1 = argArray.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_has_method;
@@ -12290,6 +14851,54 @@ public unsafe partial class GodotObject
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_get_signal_list;
+    public Godot.Collections.Array GetSignalList()
+    {
+        var __mb = __mb_get_signal_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "get_signal_list", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Object.get_signal_list is not available in this engine build.");
+            __mb_get_signal_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_signal_connection_list;
+    public Godot.Collections.Array GetSignalConnectionList(string signal)
+    {
+        var __mb = __mb_get_signal_connection_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "get_signal_connection_list", 3147814860);
+            if (__mb == 0) throw new MissingMethodException("Object.get_signal_connection_list is not available in this engine build.");
+            __mb_get_signal_connection_list = __mb;
+        }
+        ulong __a0 = StringNames.Get(signal).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_incoming_connections;
+    public Godot.Collections.Array GetIncomingConnections()
+    {
+        var __mb = __mb_get_incoming_connections;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Object", "get_incoming_connections", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Object.get_incoming_connections is not available in this engine build.");
+            __mb_get_incoming_connections = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_has_connections;

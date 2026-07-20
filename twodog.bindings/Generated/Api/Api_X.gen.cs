@@ -824,6 +824,24 @@ public unsafe partial class XRController3D : XRNode3D
         return __ret != 0;
     }
 
+    private static nint __mb_get_input;
+    public Variant GetInput(string name)
+    {
+        var __mb = __mb_get_input;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("XRController3D", "get_input", 2760726917);
+            if (__mb == 0) throw new MissingMethodException("XRController3D.get_input is not available in this engine build.");
+            __mb_get_input = __mb;
+        }
+        ulong __a0 = StringNames.Get(name).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_get_float;
     public float GetFloat(string name)
     {
@@ -924,6 +942,37 @@ public unsafe partial class XRFaceModifier3D : Node3D
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return StringNames.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_set_target;
+    public void SetTarget(NodePath target)
+    {
+        var __mb = __mb_set_target;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("XRFaceModifier3D", "set_target", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("XRFaceModifier3D.set_target is not available in this engine build.");
+            __mb_set_target = __mb;
+        }
+        ulong __a0 = target.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_target;
+    public NodePath GetTarget()
+    {
+        var __mb = __mb_get_target;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("XRFaceModifier3D", "get_target", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("XRFaceModifier3D.get_target is not available in this engine build.");
+            __mb_get_target = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 }
 
@@ -1655,6 +1704,21 @@ public unsafe partial class XRInterface : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
 
+    private static nint __mb_get_system_info;
+    public Godot.Collections.Dictionary GetSystemInfo()
+    {
+        var __mb = __mb_get_system_info;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("XRInterface", "get_system_info", 2382534195);
+            if (__mb == 0) throw new MissingMethodException("XRInterface.get_system_info is not available in this engine build.");
+            __mb_get_system_info = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
     private static nint __mb_get_tracking_status;
     public XRInterface.TrackingStatus GetTrackingStatus()
     {
@@ -1924,6 +1988,21 @@ public unsafe partial class XRInterface : RefCounted
         var __ret = default(Projection);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_get_supported_environment_blend_modes;
+    public Godot.Collections.Array GetSupportedEnvironmentBlendModes()
+    {
+        var __mb = __mb_get_supported_environment_blend_modes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("XRInterface", "get_supported_environment_blend_modes", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("XRInterface.get_supported_environment_blend_modes is not available in this engine build.");
+            __mb_get_supported_environment_blend_modes = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_environment_blend_mode;
@@ -2936,6 +3015,42 @@ public unsafe partial class XRPositionalTracker : XRTracker
         __args[4] = (nint)(&__a4);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
+
+    private static nint __mb_get_input;
+    public Variant GetInput(string name)
+    {
+        var __mb = __mb_get_input;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("XRPositionalTracker", "get_input", 2760726917);
+            if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.get_input is not available in this engine build.");
+            __mb_get_input = __mb;
+        }
+        ulong __a0 = StringNames.Get(name).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_set_input;
+    public void SetInput(string name, Variant value)
+    {
+        var __mb = __mb_set_input;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("XRPositionalTracker", "set_input", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.set_input is not available in this engine build.");
+            __mb_set_input = __mb;
+        }
+        ulong __a0 = StringNames.Get(name).Opaque;
+        var __a1 = value.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
 }
 
 public unsafe partial class XRServer : GodotObject
@@ -3190,6 +3305,21 @@ public unsafe partial class XRServer : GodotObject
         return (XRInterface?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_get_interfaces;
+    public Godot.Collections.Array GetInterfaces()
+    {
+        var __mb = __mb_get_interfaces;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("XRServer", "get_interfaces", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("XRServer.get_interfaces is not available in this engine build.");
+            __mb_get_interfaces = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_find_interface;
     public XRInterface? FindInterface(string name)
     {
@@ -3239,6 +3369,24 @@ public unsafe partial class XRServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_trackers;
+    public Godot.Collections.Dictionary GetTrackers(int trackerTypes)
+    {
+        var __mb = __mb_get_trackers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("XRServer", "get_trackers", 3554694381);
+            if (__mb == 0) throw new MissingMethodException("XRServer.get_trackers is not available in this engine build.");
+            __mb_get_trackers = __mb;
+        }
+        long __a0 = unchecked((long)trackerTypes);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_tracker;

@@ -306,6 +306,8 @@ public static class ApiGenerator
                 "stringname" => $"ulong __a{i} = StringNames.Get({name}).Opaque;",
                 "math" => $"var __a{i} = {name};",
                 "class" => $"nint __a{i} = {name}?.NativePtr ?? 0;",
+                "variant" => $"var __a{i} = {name}.Native;",
+                "builtinref" => $"ulong __a{i} = {name}.Native;",
                 _ => throw new InvalidOperationException(t.Kind),
             });
         }
@@ -354,6 +356,16 @@ public static class ApiGenerator
                 sb.AppendLine("        nint __ret = 0;");
                 sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, {self}, {argsPtr}, (nint)(&__ret));");
                 break;
+            case "variant":
+                // Zero-init = NIL; the engine assigns over it (destroys prior).
+                sb.AppendLine("        NativeVariant __ret = default;");
+                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, {self}, {argsPtr}, (nint)(&__ret));");
+                break;
+            case "builtinref":
+                // Zero-init = empty/null handle; engine assigns a ref into it.
+                sb.AppendLine("        ulong __ret = 0;");
+                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, {self}, {argsPtr}, (nint)(&__ret));");
+                break;
         }
 
         // release owned string args
@@ -374,6 +386,8 @@ public static class ApiGenerator
                 var refCounted = _classes.TryGetValue(GdOf(ret.Cs), out var rc2) && rc2.RefCounted;
                 sb.AppendLine($"        return ({ret.Cs}?)InstanceBindings.GetOrCreate(__ret, adoptRef: {Bool(refCounted)});");
                 break;
+            case "variant": sb.AppendLine("        return new Variant(__ret);"); break;
+            case "builtinref": sb.AppendLine($"        return new {ret.Cs}(__ret);"); break;
         }
 
         sb.AppendLine("    }");
@@ -383,12 +397,16 @@ public static class ApiGenerator
 
     // ---------------------------------------------------------- virtuals --
 
+    // Virtual dispatch does not yet marshal Variant/collection kinds (borrowed
+    // args would need copy semantics distinct from method calls).
+    private static bool VirtualKindOk(TypeRef t) => t.Kind is not ("variant" or "builtinref");
+
     private static void CollectVirtual(JsonElement m, string gdName, HashSet<string> used, List<VirtualInfo> virtuals)
     {
         var ret = m.TryGetProperty("return_value", out var rv)
             ? Map(rv.GetProperty("type").GetString()!, rv.TryGetProperty("meta", out var rm) ? rm.GetString() : null)
             : TypeRef.Void;
-        if (ret is null) { _virtualsSkipped++; return; }
+        if (ret is null || !VirtualKindOk(ret)) { _virtualsSkipped++; return; }
 
         var args = new List<(string name, TypeRef type)>();
         if (m.TryGetProperty("arguments", out var margs))
@@ -396,7 +414,7 @@ public static class ApiGenerator
             foreach (var a in margs.EnumerateArray())
             {
                 var t = Map(a.GetProperty("type").GetString()!, a.TryGetProperty("meta", out var am) ? am.GetString() : null);
-                if (t is null) { _virtualsSkipped++; return; }
+                if (t is null || !VirtualKindOk(t)) { _virtualsSkipped++; return; }
                 args.Add((Camel(a.GetProperty("name").GetString()!), t));
             }
         }
@@ -521,7 +539,11 @@ public static class ApiGenerator
         }
         if (MathMap.TryGetValue(t, out var math)) return new TypeRef("math", math);
         if (_classes.TryGetValue(t, out var cls)) return new TypeRef("class", cls.CsName);
-        return null; // Variant, containers, callables, node paths, pointers, ...
+        if (t == "Variant") return new TypeRef("variant", "Variant");
+        if (t == "Array" || t.StartsWith("typedarray::")) return new TypeRef("builtinref", "Godot.Collections.Array");
+        if (t == "Dictionary" || t.StartsWith("typeddictionary::")) return new TypeRef("builtinref", "Godot.Collections.Dictionary");
+        if (t == "NodePath") return new TypeRef("builtinref", "NodePath");
+        return null; // callables, signals, packed arrays, native-struct pointers, ...
     }
 
     private static string ParamType(TypeRef t) => t.Kind == "class" ? t.Cs + "?" : t.Cs;

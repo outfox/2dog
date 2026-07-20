@@ -776,6 +776,21 @@ public unsafe partial class OS : GodotObject
         return unchecked((ulong)__ret);
     }
 
+    private static nint __mb_get_memory_info;
+    public Godot.Collections.Dictionary GetMemoryInfo()
+    {
+        var __mb = __mb_get_memory_info;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OS", "get_memory_info", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("OS.get_memory_info is not available in this engine build.");
+            __mb_get_memory_info = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
     private static nint __mb_move_to_trash;
     public Error MoveToTrash(string path)
     {
@@ -1381,6 +1396,37 @@ public unsafe partial class OggPacketSequence : Resource
         ClassRegistry.AttachNew(this, "OggPacketSequence");
     }
 
+    private static nint __mb_set_packet_data;
+    public void SetPacketData(Godot.Collections.Array packetData)
+    {
+        var __mb = __mb_set_packet_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OggPacketSequence", "set_packet_data", 381264803);
+            if (__mb == 0) throw new MissingMethodException("OggPacketSequence.set_packet_data is not available in this engine build.");
+            __mb_set_packet_data = __mb;
+        }
+        ulong __a0 = packetData.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_packet_data;
+    public Godot.Collections.Array GetPacketData()
+    {
+        var __mb = __mb_get_packet_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OggPacketSequence", "get_packet_data", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("OggPacketSequence.get_packet_data is not available in this engine build.");
+            __mb_get_packet_data = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_sampling_rate;
     public void SetSamplingRate(float samplingRate)
     {
@@ -1559,6 +1605,29 @@ public unsafe partial class OpenXRAPIExtension : RefCounted
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
+    }
+
+    private static nint __mb_xr_result;
+    public bool XrResult(ulong result, string format, Godot.Collections.Array args)
+    {
+        var __mb = __mb_xr_result;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "xr_result", 3886436197);
+            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.xr_result is not available in this engine build.");
+            __mb_xr_result = __mb;
+        }
+        long __a0 = unchecked((long)result);
+        ulong __a1 = NativeString.Create(format);
+        ulong __a2 = args.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        byte __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a1);
+        return __ret != 0;
     }
 
     private static nint __mb_openxr_is_enabled;
@@ -2375,6 +2444,37 @@ public unsafe partial class OpenXRActionMap : Resource
         ClassRegistry.AttachNew(this, "OpenXRActionMap");
     }
 
+    private static nint __mb_set_action_sets;
+    public void SetActionSets(Godot.Collections.Array actionSets)
+    {
+        var __mb = __mb_set_action_sets;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRActionMap", "set_action_sets", 381264803);
+            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.set_action_sets is not available in this engine build.");
+            __mb_set_action_sets = __mb;
+        }
+        ulong __a0 = actionSets.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_action_sets;
+    public Godot.Collections.Array GetActionSets()
+    {
+        var __mb = __mb_get_action_sets;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRActionMap", "get_action_sets", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.get_action_sets is not available in this engine build.");
+            __mb_get_action_sets = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_get_action_set_count;
     public int GetActionSetCount()
     {
@@ -2457,6 +2557,37 @@ public unsafe partial class OpenXRActionMap : Resource
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_interaction_profiles;
+    public void SetInteractionProfiles(Godot.Collections.Array interactionProfiles)
+    {
+        var __mb = __mb_set_interaction_profiles;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRActionMap", "set_interaction_profiles", 381264803);
+            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.set_interaction_profiles is not available in this engine build.");
+            __mb_set_interaction_profiles = __mb;
+        }
+        ulong __a0 = interactionProfiles.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_interaction_profiles;
+    public Godot.Collections.Array GetInteractionProfiles()
+    {
+        var __mb = __mb_get_interaction_profiles;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRActionMap", "get_interaction_profiles", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.get_interaction_profiles is not available in this engine build.");
+            __mb_get_interaction_profiles = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_interaction_profile_count;
@@ -2642,6 +2773,37 @@ public unsafe partial class OpenXRActionSet : Resource
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_set_actions;
+    public void SetActions(Godot.Collections.Array actions)
+    {
+        var __mb = __mb_set_actions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRActionSet", "set_actions", 381264803);
+            if (__mb == 0) throw new MissingMethodException("OpenXRActionSet.set_actions is not available in this engine build.");
+            __mb_set_actions = __mb;
+        }
+        ulong __a0 = actions.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_actions;
+    public Godot.Collections.Array GetActions()
+    {
+        var __mb = __mb_get_actions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRActionSet", "get_actions", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("OpenXRActionSet.get_actions is not available in this engine build.");
+            __mb_get_actions = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_add_action;
@@ -4756,6 +4918,37 @@ public unsafe partial class OpenXRFutureResult : RefCounted
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
+
+    private static nint __mb_set_result_value;
+    public void SetResultValue(Variant resultValue)
+    {
+        var __mb = __mb_set_result_value;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRFutureResult", "set_result_value", 1114965689);
+            if (__mb == 0) throw new MissingMethodException("OpenXRFutureResult.set_result_value is not available in this engine build.");
+            __mb_set_result_value = __mb;
+        }
+        var __a0 = resultValue.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_result_value;
+    public Variant GetResultValue()
+    {
+        var __mb = __mb_get_result_value;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRFutureResult", "get_result_value", 1214101251);
+            if (__mb == 0) throw new MissingMethodException("OpenXRFutureResult.get_result_value is not available in this engine build.");
+            __mb_get_result_value = __mb;
+        }
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Variant(__ret);
+    }
 }
 
 public unsafe partial class OpenXRHand : Node3D
@@ -4824,6 +5017,37 @@ public unsafe partial class OpenXRHand : Node3D
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (OpenXRHand.Hands)__ret;
+    }
+
+    private static nint __mb_set_hand_skeleton;
+    public void SetHandSkeleton(NodePath handSkeleton)
+    {
+        var __mb = __mb_set_hand_skeleton;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRHand", "set_hand_skeleton", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("OpenXRHand.set_hand_skeleton is not available in this engine build.");
+            __mb_set_hand_skeleton = __mb;
+        }
+        ulong __a0 = handSkeleton.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_hand_skeleton;
+    public NodePath GetHandSkeleton()
+    {
+        var __mb = __mb_get_hand_skeleton;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRHand", "get_hand_skeleton", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("OpenXRHand.get_hand_skeleton is not available in this engine build.");
+            __mb_get_hand_skeleton = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_motion_range;
@@ -5133,6 +5357,37 @@ public unsafe partial class OpenXRIPBinding : Resource
         return (OpenXRActionBindingModifier?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_set_binding_modifiers;
+    public void SetBindingModifiers(Godot.Collections.Array bindingModifiers)
+    {
+        var __mb = __mb_set_binding_modifiers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRIPBinding", "set_binding_modifiers", 381264803);
+            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.set_binding_modifiers is not available in this engine build.");
+            __mb_set_binding_modifiers = __mb;
+        }
+        ulong __a0 = bindingModifiers.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_binding_modifiers;
+    public Godot.Collections.Array GetBindingModifiers()
+    {
+        var __mb = __mb_get_binding_modifiers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRIPBinding", "get_binding_modifiers", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.get_binding_modifiers is not available in this engine build.");
+            __mb_get_binding_modifiers = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_get_path_count;
     public int GetPathCount()
     {
@@ -5286,6 +5541,37 @@ public unsafe partial class OpenXRInteractionProfile : Resource
         return (OpenXRIPBinding?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_set_bindings;
+    public void SetBindings(Godot.Collections.Array bindings)
+    {
+        var __mb = __mb_set_bindings;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRInteractionProfile", "set_bindings", 381264803);
+            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfile.set_bindings is not available in this engine build.");
+            __mb_set_bindings = __mb;
+        }
+        ulong __a0 = bindings.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_bindings;
+    public Godot.Collections.Array GetBindings()
+    {
+        var __mb = __mb_get_bindings;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRInteractionProfile", "get_bindings", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfile.get_bindings is not available in this engine build.");
+            __mb_get_bindings = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_get_binding_modifier_count;
     public int GetBindingModifierCount()
     {
@@ -5317,6 +5603,37 @@ public unsafe partial class OpenXRInteractionProfile : Resource
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRIPBindingModifier?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_set_binding_modifiers;
+    public void SetBindingModifiers(Godot.Collections.Array bindingModifiers)
+    {
+        var __mb = __mb_set_binding_modifiers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRInteractionProfile", "set_binding_modifiers", 381264803);
+            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfile.set_binding_modifiers is not available in this engine build.");
+            __mb_set_binding_modifiers = __mb;
+        }
+        ulong __a0 = bindingModifiers.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_binding_modifiers;
+    public Godot.Collections.Array GetBindingModifiers()
+    {
+        var __mb = __mb_get_binding_modifiers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRInteractionProfile", "get_binding_modifiers", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfile.get_binding_modifiers is not available in this engine build.");
+            __mb_get_binding_modifiers = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 }
 
@@ -5842,6 +6159,36 @@ public unsafe partial class OpenXRInterface : XRInterface
         NativeString.Destroy(ref __a0);
     }
 
+    private static nint __mb_get_action_sets;
+    public Godot.Collections.Array GetActionSets()
+    {
+        var __mb = __mb_get_action_sets;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRInterface", "get_action_sets", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_action_sets is not available in this engine build.");
+            __mb_get_action_sets = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_available_display_refresh_rates;
+    public Godot.Collections.Array GetAvailableDisplayRefreshRates()
+    {
+        var __mb = __mb_get_available_display_refresh_rates;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRInterface", "get_available_display_refresh_rates", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_available_display_refresh_rates is not available in this engine build.");
+            __mb_get_available_display_refresh_rates = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_motion_range;
     public void SetMotionRange(OpenXRInterface.Hand hand, OpenXRInterface.HandMotionRange motionRange)
     {
@@ -6257,6 +6604,37 @@ public unsafe partial class OpenXRMarkerTracker : OpenXRSpatialEntityTracker
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
+
+    private static nint __mb_set_marker_data;
+    public void SetMarkerData(Variant markerData)
+    {
+        var __mb = __mb_set_marker_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRMarkerTracker", "set_marker_data", 1114965689);
+            if (__mb == 0) throw new MissingMethodException("OpenXRMarkerTracker.set_marker_data is not available in this engine build.");
+            __mb_set_marker_data = __mb;
+        }
+        var __a0 = markerData.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_marker_data;
+    public Variant GetMarkerData()
+    {
+        var __mb = __mb_get_marker_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRMarkerTracker", "get_marker_data", 1214101251);
+            if (__mb == 0) throw new MissingMethodException("OpenXRMarkerTracker.get_marker_data is not available in this engine build.");
+            __mb_get_marker_data = __mb;
+        }
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Variant(__ret);
+    }
 }
 
 public unsafe partial class OpenXRPlaneTracker : OpenXRSpatialEntityTracker
@@ -6536,6 +6914,21 @@ public unsafe partial class OpenXRRenderModelExtension : OpenXRExtensionWrapper
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_render_model_get_all;
+    public Godot.Collections.Array RenderModelGetAll()
+    {
+        var __mb = __mb_render_model_get_all;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRRenderModelExtension", "render_model_get_all", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelExtension.render_model_get_all is not available in this engine build.");
+            __mb_render_model_get_all = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_render_model_new_scene_instance;
@@ -6902,6 +7295,28 @@ public unsafe partial class OpenXRSpatialAnchorCapability : OpenXRExtensionWrapp
         nint __a0 = anchorTracker?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_do_entity_update;
+    public void DoEntityUpdate(Rid spatialContext, Godot.Collections.Array componentData, OpenXRStructureBase? nextSnapshotCreate, OpenXRStructureBase? nextSnapshotQuery)
+    {
+        var __mb = __mb_do_entity_update;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRSpatialAnchorCapability", "do_entity_update", 3138044275);
+            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialAnchorCapability.do_entity_update is not available in this engine build.");
+            __mb_do_entity_update = __mb;
+        }
+        var __a0 = spatialContext;
+        ulong __a1 = componentData.Native;
+        nint __a2 = nextSnapshotCreate?.NativePtr ?? 0;
+        nint __a3 = nextSnapshotQuery?.NativePtr ?? 0;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 }
@@ -7413,6 +7828,26 @@ public unsafe partial class OpenXRSpatialComponentMarkerList : OpenXRSpatialComp
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
+
+    private static nint __mb_get_marker_data;
+    public Variant GetMarkerData(Rid snapshot, long index)
+    {
+        var __mb = __mb_get_marker_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRSpatialComponentMarkerList", "get_marker_data", 4069510997);
+            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentMarkerList.get_marker_data is not available in this engine build.");
+            __mb_get_marker_data = __mb;
+        }
+        var __a0 = snapshot;
+        long __a1 = unchecked((long)index);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
 }
 
 public unsafe partial class OpenXRSpatialComponentMesh2DList : OpenXRSpatialComponentData
@@ -7704,6 +8139,21 @@ public unsafe partial class OpenXRSpatialContextPersistenceConfig : OpenXRStruct
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
+
+    private static nint __mb_get_persistence_contexts;
+    public Godot.Collections.Array GetPersistenceContexts()
+    {
+        var __mb = __mb_get_persistence_contexts;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRSpatialContextPersistenceConfig", "get_persistence_contexts", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialContextPersistenceConfig.get_persistence_contexts is not available in this engine build.");
+            __mb_get_persistence_contexts = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
 }
 
 public unsafe partial class OpenXRSpatialEntityExtension : OpenXRExtensionWrapper
@@ -7880,6 +8330,28 @@ public unsafe partial class OpenXRSpatialEntityExtension : OpenXRExtensionWrappe
         var __ret = default(Rid);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_query_snapshot;
+    public bool QuerySnapshot(Rid spatialSnapshot, Godot.Collections.Array componentData, OpenXRStructureBase? next)
+    {
+        var __mb = __mb_query_snapshot;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "query_snapshot", 641015484);
+            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.query_snapshot is not available in this engine build.");
+            __mb_query_snapshot = __mb;
+        }
+        var __a0 = spatialSnapshot;
+        ulong __a1 = componentData.Native;
+        nint __a2 = next?.NativePtr ?? 0;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        byte __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return __ret != 0;
     }
 
     private static nint __mb_get_string;
@@ -8240,6 +8712,28 @@ public unsafe partial class OpenXRSpatialMarkerTrackingCapability : OpenXRExtens
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
+
+    private static nint __mb_do_entity_update;
+    public void DoEntityUpdate(Rid spatialContext, Godot.Collections.Array componentData, OpenXRStructureBase? nextSnapshotCreate, OpenXRStructureBase? nextSnapshotQuery)
+    {
+        var __mb = __mb_do_entity_update;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OpenXRSpatialMarkerTrackingCapability", "do_entity_update", 3138044275);
+            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialMarkerTrackingCapability.do_entity_update is not available in this engine build.");
+            __mb_do_entity_update = __mb;
+        }
+        var __a0 = spatialContext;
+        ulong __a1 = componentData.Native;
+        nint __a2 = nextSnapshotCreate?.NativePtr ?? 0;
+        nint __a3 = nextSnapshotQuery?.NativePtr ?? 0;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
 }
 
 public unsafe partial class OpenXRSpatialPlaneTrackingCapability : OpenXRExtensionWrapper
@@ -8559,6 +9053,24 @@ public unsafe partial class OptionButton : Button
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_set_item_metadata;
+    public void SetItemMetadata(int idx, Variant metadata)
+    {
+        var __mb = __mb_set_item_metadata;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OptionButton", "set_item_metadata", 2152698145);
+            if (__mb == 0) throw new MissingMethodException("OptionButton.set_item_metadata is not available in this engine build.");
+            __mb_set_item_metadata = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __a1 = metadata.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_set_item_tooltip;
     public void SetItemTooltip(int idx, string tooltip)
     {
@@ -8777,6 +9289,24 @@ public unsafe partial class OptionButton : Button
         return unchecked((int)__ret);
     }
 
+    private static nint __mb_get_item_metadata;
+    public Variant GetItemMetadata(int idx)
+    {
+        var __mb = __mb_get_item_metadata;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OptionButton", "get_item_metadata", 4227898402);
+            if (__mb == 0) throw new MissingMethodException("OptionButton.get_item_metadata is not available in this engine build.");
+            __mb_get_item_metadata = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_get_item_tooltip;
     public string GetItemTooltip(int idx)
     {
@@ -8938,6 +9468,21 @@ public unsafe partial class OptionButton : Button
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_get_selected_metadata;
+    public Variant GetSelectedMetadata()
+    {
+        var __mb = __mb_get_selected_metadata;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("OptionButton", "get_selected_metadata", 1214101251);
+            if (__mb == 0) throw new MissingMethodException("OptionButton.get_selected_metadata is not available in this engine build.");
+            __mb_get_selected_metadata = __mb;
+        }
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_remove_item;

@@ -1336,6 +1336,24 @@ public unsafe partial class FileAccess : RefCounted
         return (Error)__ret;
     }
 
+    private static nint __mb_get_var;
+    public Variant GetVar(bool allowObjects)
+    {
+        var __mb = __mb_get_var;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileAccess", "get_var", 189129690);
+            if (__mb == 0) throw new MissingMethodException("FileAccess.get_var is not available in this engine build.");
+            __mb_get_var = __mb;
+        }
+        byte __a0 = allowObjects ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_store_8;
     public bool Store8(byte value)
     {
@@ -1515,6 +1533,26 @@ public unsafe partial class FileAccess : RefCounted
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
+        return __ret != 0;
+    }
+
+    private static nint __mb_store_var;
+    public bool StoreVar(Variant value, bool fullObjects)
+    {
+        var __mb = __mb_store_var;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileAccess", "store_var", 117357437);
+            if (__mb == 0) throw new MissingMethodException("FileAccess.store_var is not available in this engine build.");
+            __mb_store_var = __mb;
+        }
+        var __a0 = value.Native;
+        byte __a1 = fullObjects ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        byte __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
@@ -2058,6 +2096,21 @@ public unsafe partial class FileDialog : ConfirmationDialog
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_get_selected_options;
+    public Godot.Collections.Dictionary GetSelectedOptions()
+    {
+        var __mb = __mb_get_selected_options;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FileDialog", "get_selected_options", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("FileDialog.get_selected_options is not available in this engine build.");
+            __mb_get_selected_options = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_current_dir;
@@ -3345,6 +3398,21 @@ public unsafe partial class FoldableGroup : Resource
         return (FoldableContainer?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
+    private static nint __mb_get_containers;
+    public Godot.Collections.Array GetContainers()
+    {
+        var __mb = __mb_get_containers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FoldableGroup", "get_containers", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("FoldableGroup.get_containers is not available in this engine build.");
+            __mb_get_containers = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_allow_folding_all;
     public void SetAllowFoldingAll(bool enabled)
     {
@@ -3380,6 +3448,52 @@ public unsafe partial class FoldableGroup : Resource
 public unsafe partial class Font : Resource
 {
     internal Font(nint ptr, bool rc) : base(ptr, rc) { }
+
+    private static nint __mb_set_fallbacks;
+    public void SetFallbacks(Godot.Collections.Array fallbacks)
+    {
+        var __mb = __mb_set_fallbacks;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Font", "set_fallbacks", 381264803);
+            if (__mb == 0) throw new MissingMethodException("Font.set_fallbacks is not available in this engine build.");
+            __mb_set_fallbacks = __mb;
+        }
+        ulong __a0 = fallbacks.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_fallbacks;
+    public Godot.Collections.Array GetFallbacks()
+    {
+        var __mb = __mb_get_fallbacks;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Font", "get_fallbacks", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Font.get_fallbacks is not available in this engine build.");
+            __mb_get_fallbacks = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_rids;
+    public Godot.Collections.Array GetRids()
+    {
+        var __mb = __mb_get_rids;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Font", "get_rids", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Font.get_rids is not available in this engine build.");
+            __mb_get_rids = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
 
     private static nint __mb_get_height;
     public float GetHeight(int fontSize)
@@ -3501,6 +3615,21 @@ public unsafe partial class Font : Resource
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
+    private static nint __mb_get_ot_name_strings;
+    public Godot.Collections.Dictionary GetOtNameStrings()
+    {
+        var __mb = __mb_get_ot_name_strings;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Font", "get_ot_name_strings", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("Font.get_ot_name_strings is not available in this engine build.");
+            __mb_get_ot_name_strings = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
     private static nint __mb_get_font_style;
     public TextServer.FontStyle GetFontStyle()
     {
@@ -3595,6 +3724,21 @@ public unsafe partial class Font : Resource
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_get_opentype_features;
+    public Godot.Collections.Dictionary GetOpentypeFeatures()
+    {
+        var __mb = __mb_get_opentype_features;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Font", "get_opentype_features", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("Font.get_opentype_features is not available in this engine build.");
+            __mb_get_opentype_features = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_set_cache_capacity;
@@ -3988,6 +4132,36 @@ public unsafe partial class Font : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
+    }
+
+    private static nint __mb_get_supported_feature_list;
+    public Godot.Collections.Dictionary GetSupportedFeatureList()
+    {
+        var __mb = __mb_get_supported_feature_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Font", "get_supported_feature_list", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("Font.get_supported_feature_list is not available in this engine build.");
+            __mb_get_supported_feature_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_get_supported_variation_list;
+    public Godot.Collections.Dictionary GetSupportedVariationList()
+    {
+        var __mb = __mb_get_supported_variation_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Font", "get_supported_variation_list", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("Font.get_supported_variation_list is not available in this engine build.");
+            __mb_get_supported_variation_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_face_count;
@@ -4644,6 +4818,24 @@ public unsafe partial class FontFile : Font
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_size_cache_list;
+    public Godot.Collections.Array GetSizeCacheList(int cacheIndex)
+    {
+        var __mb = __mb_get_size_cache_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontFile", "get_size_cache_list", 663333327);
+            if (__mb == 0) throw new MissingMethodException("FontFile.get_size_cache_list is not available in this engine build.");
+            __mb_get_size_cache_list = __mb;
+        }
+        long __a0 = unchecked((long)cacheIndex);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_clear_size_cache;
     public void ClearSizeCache(int cacheIndex)
     {
@@ -4676,6 +4868,42 @@ public unsafe partial class FontFile : Font
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_variation_coordinates;
+    public void SetVariationCoordinates(int cacheIndex, Godot.Collections.Dictionary variationCoordinates)
+    {
+        var __mb = __mb_set_variation_coordinates;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontFile", "set_variation_coordinates", 64545446);
+            if (__mb == 0) throw new MissingMethodException("FontFile.set_variation_coordinates is not available in this engine build.");
+            __mb_set_variation_coordinates = __mb;
+        }
+        long __a0 = unchecked((long)cacheIndex);
+        ulong __a1 = variationCoordinates.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_variation_coordinates;
+    public Godot.Collections.Dictionary GetVariationCoordinates(int cacheIndex)
+    {
+        var __mb = __mb_get_variation_coordinates;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontFile", "get_variation_coordinates", 3485342025);
+            if (__mb == 0) throw new MissingMethodException("FontFile.get_variation_coordinates is not available in this engine build.");
+            __mb_get_variation_coordinates = __mb;
+        }
+        long __a0 = unchecked((long)cacheIndex);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_set_embolden;
@@ -5422,6 +5650,26 @@ public unsafe partial class FontFile : Font
         return unchecked((int)__ret);
     }
 
+    private static nint __mb_get_kerning_list;
+    public Godot.Collections.Array GetKerningList(int cacheIndex, int size)
+    {
+        var __mb = __mb_get_kerning_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontFile", "get_kerning_list", 2345056839);
+            if (__mb == 0) throw new MissingMethodException("FontFile.get_kerning_list is not available in this engine build.");
+            __mb_get_kerning_list = __mb;
+        }
+        long __a0 = unchecked((long)cacheIndex);
+        long __a1 = unchecked((long)size);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_clear_kerning_map;
     public void ClearKerningMap(int cacheIndex, int size)
     {
@@ -5656,6 +5904,37 @@ public unsafe partial class FontFile : Font
         NativeString.Destroy(ref __a0);
     }
 
+    private static nint __mb_set_opentype_feature_overrides;
+    public void SetOpentypeFeatureOverrides(Godot.Collections.Dictionary overrides)
+    {
+        var __mb = __mb_set_opentype_feature_overrides;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontFile", "set_opentype_feature_overrides", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("FontFile.set_opentype_feature_overrides is not available in this engine build.");
+            __mb_set_opentype_feature_overrides = __mb;
+        }
+        ulong __a0 = overrides.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_opentype_feature_overrides;
+    public Godot.Collections.Dictionary GetOpentypeFeatureOverrides()
+    {
+        var __mb = __mb_get_opentype_feature_overrides;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontFile", "get_opentype_feature_overrides", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("FontFile.get_opentype_feature_overrides is not available in this engine build.");
+            __mb_get_opentype_feature_overrides = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
     private static nint __mb_get_glyph_index;
     public int GetGlyphIndex(int size, int @char, int variationSelector)
     {
@@ -5737,6 +6016,37 @@ public unsafe partial class FontVariation : Font
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (Font?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_set_variation_opentype;
+    public void SetVariationOpentype(Godot.Collections.Dictionary coords)
+    {
+        var __mb = __mb_set_variation_opentype;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontVariation", "set_variation_opentype", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("FontVariation.set_variation_opentype is not available in this engine build.");
+            __mb_set_variation_opentype = __mb;
+        }
+        ulong __a0 = coords.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_variation_opentype;
+    public Godot.Collections.Dictionary GetVariationOpentype()
+    {
+        var __mb = __mb_get_variation_opentype;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontVariation", "get_variation_opentype", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("FontVariation.get_variation_opentype is not available in this engine build.");
+            __mb_get_variation_opentype = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_set_variation_embolden;
@@ -5832,6 +6142,22 @@ public unsafe partial class FontVariation : Font
         return __ret;
     }
 
+    private static nint __mb_set_opentype_features;
+    public void SetOpentypeFeatures(Godot.Collections.Dictionary features)
+    {
+        var __mb = __mb_set_opentype_features;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FontVariation", "set_opentype_features", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("FontVariation.set_opentype_features is not available in this engine build.");
+            __mb_set_opentype_features = __mb;
+        }
+        ulong __a0 = features.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_set_spacing;
     public void SetSpacing(TextServer.SpacingType spacing, int value)
     {
@@ -5920,6 +6246,28 @@ public unsafe partial class FramebufferCacheRD : GodotObject
     public FramebufferCacheRD() : this(0, false)
     {
         ClassRegistry.AttachNew(this, "FramebufferCacheRD");
+    }
+
+    private static nint __mb_get_cache_multipass;
+    public static Rid GetCacheMultipass(Godot.Collections.Array textures, Godot.Collections.Array passes, uint views)
+    {
+        var __mb = __mb_get_cache_multipass;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("FramebufferCacheRD", "get_cache_multipass", 3437881813);
+            if (__mb == 0) throw new MissingMethodException("FramebufferCacheRD.get_cache_multipass is not available in this engine build.");
+            __mb_get_cache_multipass = __mb;
+        }
+        ulong __a0 = textures.Native;
+        ulong __a1 = passes.Native;
+        long __a2 = unchecked((long)views);
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        var __ret = default(Rid);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        return __ret;
     }
 }
 

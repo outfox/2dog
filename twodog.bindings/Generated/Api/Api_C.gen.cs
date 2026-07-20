@@ -3079,6 +3079,37 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
         return unchecked((int)__ret);
     }
 
+    private static nint __mb_set_path_node;
+    public void SetPathNode(NodePath path)
+    {
+        var __mb = __mb_set_path_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CSGPolygon3D", "set_path_node", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("CSGPolygon3D.set_path_node is not available in this engine build.");
+            __mb_set_path_node = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_path_node;
+    public NodePath GetPathNode()
+    {
+        var __mb = __mb_get_path_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CSGPolygon3D", "get_path_node", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("CSGPolygon3D.get_path_node is not available in this engine build.");
+            __mb_get_path_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_set_path_interval_type;
     public void SetPathIntervalType(CSGPolygon3D.PathIntervalType intervalType)
     {
@@ -3785,6 +3816,21 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_get_meshes;
+    public Godot.Collections.Array GetMeshes()
+    {
+        var __mb = __mb_get_meshes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CSGShape3D", "get_meshes", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("CSGShape3D.get_meshes is not available in this engine build.");
+            __mb_get_meshes = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_bake_static_mesh;
@@ -5805,6 +5851,21 @@ public unsafe partial class Camera3D : Node3D
         return (Camera3D.DopplerTracking)__ret;
     }
 
+    private static nint __mb_get_frustum;
+    public Godot.Collections.Array GetFrustum()
+    {
+        var __mb = __mb_get_frustum;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Camera3D", "get_frustum", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Camera3D.get_frustum is not available in this engine build.");
+            __mb_get_frustum = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_is_position_in_frustum;
     public bool IsPositionInFrustum(Vector3 worldPoint)
     {
@@ -6883,6 +6944,41 @@ public unsafe partial class CameraFeed : RefCounted
         return (CameraFeed.FeedDataType)__ret;
     }
 
+    private static nint __mb_get_formats;
+    public Godot.Collections.Array GetFormats()
+    {
+        var __mb = __mb_get_formats;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CameraFeed", "get_formats", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("CameraFeed.get_formats is not available in this engine build.");
+            __mb_get_formats = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_format;
+    public bool SetFormat(int index, Godot.Collections.Dictionary parameters)
+    {
+        var __mb = __mb_set_format;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CameraFeed", "set_format", 31872775);
+            if (__mb == 0) throw new MissingMethodException("CameraFeed.set_format is not available in this engine build.");
+            __mb_set_format = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        ulong __a1 = parameters.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        byte __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return __ret != 0;
+    }
+
     public virtual bool _ActivateFeed() => default!;
 
     public virtual void _DeactivateFeed() { }
@@ -6990,6 +7086,21 @@ public unsafe partial class CameraServer : GodotObject
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_feeds;
+    public Godot.Collections.Array Feeds()
+    {
+        var __mb = __mb_feeds;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CameraServer", "feeds", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("CameraServer.feeds is not available in this engine build.");
+            __mb_feeds = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_add_feed;
@@ -8499,6 +8610,42 @@ public unsafe partial class CanvasItem : Node
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (Material?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_set_instance_shader_parameter;
+    public void SetInstanceShaderParameter(string name, Variant value)
+    {
+        var __mb = __mb_set_instance_shader_parameter;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CanvasItem", "set_instance_shader_parameter", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("CanvasItem.set_instance_shader_parameter is not available in this engine build.");
+            __mb_set_instance_shader_parameter = __mb;
+        }
+        ulong __a0 = StringNames.Get(name).Opaque;
+        var __a1 = value.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_instance_shader_parameter;
+    public Variant GetInstanceShaderParameter(string name)
+    {
+        var __mb = __mb_get_instance_shader_parameter;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CanvasItem", "get_instance_shader_parameter", 2760726917);
+            if (__mb == 0) throw new MissingMethodException("CanvasItem.get_instance_shader_parameter is not available in this engine build.");
+            __mb_get_instance_shader_parameter = __mb;
+        }
+        ulong __a0 = StringNames.Get(name).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_set_use_parent_material;
@@ -10599,6 +10746,37 @@ public unsafe partial class CharFXTransform : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_environment;
+    public Godot.Collections.Dictionary GetEnvironment()
+    {
+        var __mb = __mb_get_environment;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CharFXTransform", "get_environment", 2382534195);
+            if (__mb == 0) throw new MissingMethodException("CharFXTransform.get_environment is not available in this engine build.");
+            __mb_get_environment = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_set_environment;
+    public void SetEnvironment(Godot.Collections.Dictionary environment)
+    {
+        var __mb = __mb_set_environment;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CharFXTransform", "set_environment", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("CharFXTransform.set_environment is not available in this engine build.");
+            __mb_set_environment = __mb;
+        }
+        ulong __a0 = environment.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_get_glyph_index;
     public uint GetGlyphIndex()
     {
@@ -12450,6 +12628,24 @@ public unsafe partial class ClassDB : GodotObject
         return __ret != 0;
     }
 
+    private static nint __mb_instantiate;
+    public Variant Instantiate(string @class)
+    {
+        var __mb = __mb_instantiate;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ClassDB", "instantiate", 2760726917);
+            if (__mb == 0) throw new MissingMethodException("ClassDB.instantiate is not available in this engine build.");
+            __mb_instantiate = __mb;
+        }
+        ulong __a0 = StringNames.Get(@class).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_class_get_api_type;
     public ClassDB.APIType ClassGetApiType(string @class)
     {
@@ -12486,6 +12682,66 @@ public unsafe partial class ClassDB : GodotObject
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_class_get_signal;
+    public Godot.Collections.Dictionary ClassGetSignal(string @class, string signal)
+    {
+        var __mb = __mb_class_get_signal;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ClassDB", "class_get_signal", 3061114238);
+            if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_signal is not available in this engine build.");
+            __mb_class_get_signal = __mb;
+        }
+        ulong __a0 = StringNames.Get(@class).Opaque;
+        ulong __a1 = StringNames.Get(signal).Opaque;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_class_get_signal_list;
+    public Godot.Collections.Array ClassGetSignalList(string @class, bool noInheritance)
+    {
+        var __mb = __mb_class_get_signal_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ClassDB", "class_get_signal_list", 3504980660);
+            if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_signal_list is not available in this engine build.");
+            __mb_class_get_signal_list = __mb;
+        }
+        ulong __a0 = StringNames.Get(@class).Opaque;
+        byte __a1 = noInheritance ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_class_get_property_list;
+    public Godot.Collections.Array ClassGetPropertyList(string @class, bool noInheritance)
+    {
+        var __mb = __mb_class_get_property_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ClassDB", "class_get_property_list", 3504980660);
+            if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_property_list is not available in this engine build.");
+            __mb_class_get_property_list = __mb;
+        }
+        ulong __a0 = StringNames.Get(@class).Opaque;
+        byte __a1 = noInheritance ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_class_get_property_getter;
@@ -12526,6 +12782,68 @@ public unsafe partial class ClassDB : GodotObject
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return StringNames.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_class_get_property;
+    public Variant ClassGetProperty(GodotObject? @object, string property)
+    {
+        var __mb = __mb_class_get_property;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ClassDB", "class_get_property", 2498641674);
+            if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_property is not available in this engine build.");
+            __mb_class_get_property = __mb;
+        }
+        nint __a0 = @object?.NativePtr ?? 0;
+        ulong __a1 = StringNames.Get(property).Opaque;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_class_set_property;
+    public Error ClassSetProperty(GodotObject? @object, string property, Variant value)
+    {
+        var __mb = __mb_class_set_property;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ClassDB", "class_set_property", 1690314931);
+            if (__mb == 0) throw new MissingMethodException("ClassDB.class_set_property is not available in this engine build.");
+            __mb_class_set_property = __mb;
+        }
+        nint __a0 = @object?.NativePtr ?? 0;
+        ulong __a1 = StringNames.Get(property).Opaque;
+        var __a2 = value.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Error)__ret;
+    }
+
+    private static nint __mb_class_get_property_default_value;
+    public Variant ClassGetPropertyDefaultValue(string @class, string property)
+    {
+        var __mb = __mb_class_get_property_default_value;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ClassDB", "class_get_property_default_value", 2718203076);
+            if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_property_default_value is not available in this engine build.");
+            __mb_class_get_property_default_value = __mb;
+        }
+        ulong __a0 = StringNames.Get(@class).Opaque;
+        ulong __a1 = StringNames.Get(property).Opaque;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_class_has_method;
@@ -12570,6 +12888,26 @@ public unsafe partial class ClassDB : GodotObject
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_class_get_method_list;
+    public Godot.Collections.Array ClassGetMethodList(string @class, bool noInheritance)
+    {
+        var __mb = __mb_class_get_method_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ClassDB", "class_get_method_list", 3504980660);
+            if (__mb == 0) throw new MissingMethodException("ClassDB.class_get_method_list is not available in this engine build.");
+            __mb_class_get_method_list = __mb;
+        }
+        ulong __a0 = StringNames.Get(@class).Opaque;
+        byte __a1 = noInheritance ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_class_has_integer_constant;
@@ -12822,6 +13160,37 @@ public unsafe partial class CodeEdit : TextEdit
         return __ret != 0;
     }
 
+    private static nint __mb_set_auto_indent_prefixes;
+    public void SetAutoIndentPrefixes(Godot.Collections.Array prefixes)
+    {
+        var __mb = __mb_set_auto_indent_prefixes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "set_auto_indent_prefixes", 381264803);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.set_auto_indent_prefixes is not available in this engine build.");
+            __mb_set_auto_indent_prefixes = __mb;
+        }
+        ulong __a0 = prefixes.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_auto_indent_prefixes;
+    public Godot.Collections.Array GetAutoIndentPrefixes()
+    {
+        var __mb = __mb_get_auto_indent_prefixes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "get_auto_indent_prefixes", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.get_auto_indent_prefixes is not available in this engine build.");
+            __mb_get_auto_indent_prefixes = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_do_indent;
     public void DoIndent()
     {
@@ -12959,6 +13328,37 @@ public unsafe partial class CodeEdit : TextEdit
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
+    }
+
+    private static nint __mb_set_auto_brace_completion_pairs;
+    public void SetAutoBraceCompletionPairs(Godot.Collections.Dictionary pairs)
+    {
+        var __mb = __mb_set_auto_brace_completion_pairs;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "set_auto_brace_completion_pairs", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.set_auto_brace_completion_pairs is not available in this engine build.");
+            __mb_set_auto_brace_completion_pairs = __mb;
+        }
+        ulong __a0 = pairs.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_auto_brace_completion_pairs;
+    public Godot.Collections.Dictionary GetAutoBraceCompletionPairs()
+    {
+        var __mb = __mb_get_auto_brace_completion_pairs;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "get_auto_brace_completion_pairs", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.get_auto_brace_completion_pairs is not available in this engine build.");
+            __mb_get_auto_brace_completion_pairs = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_has_auto_brace_completion_open_key;
@@ -13536,6 +13936,21 @@ public unsafe partial class CodeEdit : TextEdit
         return __ret != 0;
     }
 
+    private static nint __mb_get_folded_lines;
+    public Godot.Collections.Array GetFoldedLines()
+    {
+        var __mb = __mb_get_folded_lines;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "get_folded_lines", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.get_folded_lines is not available in this engine build.");
+            __mb_get_folded_lines = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_create_code_region;
     public void CreateCodeRegion()
     {
@@ -13693,6 +14108,22 @@ public unsafe partial class CodeEdit : TextEdit
         return __ret != 0;
     }
 
+    private static nint __mb_set_string_delimiters;
+    public void SetStringDelimiters(Godot.Collections.Array stringDelimiters)
+    {
+        var __mb = __mb_set_string_delimiters;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "set_string_delimiters", 381264803);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.set_string_delimiters is not available in this engine build.");
+            __mb_set_string_delimiters = __mb;
+        }
+        ulong __a0 = stringDelimiters.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_clear_string_delimiters;
     public void ClearStringDelimiters()
     {
@@ -13704,6 +14135,21 @@ public unsafe partial class CodeEdit : TextEdit
             __mb_clear_string_delimiters = __mb;
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+    }
+
+    private static nint __mb_get_string_delimiters;
+    public Godot.Collections.Array GetStringDelimiters()
+    {
+        var __mb = __mb_get_string_delimiters;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "get_string_delimiters", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.get_string_delimiters is not available in this engine build.");
+            __mb_get_string_delimiters = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_is_in_string;
@@ -13784,6 +14230,22 @@ public unsafe partial class CodeEdit : TextEdit
         return __ret != 0;
     }
 
+    private static nint __mb_set_comment_delimiters;
+    public void SetCommentDelimiters(Godot.Collections.Array commentDelimiters)
+    {
+        var __mb = __mb_set_comment_delimiters;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "set_comment_delimiters", 381264803);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.set_comment_delimiters is not available in this engine build.");
+            __mb_set_comment_delimiters = __mb;
+        }
+        ulong __a0 = commentDelimiters.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_clear_comment_delimiters;
     public void ClearCommentDelimiters()
     {
@@ -13795,6 +14257,21 @@ public unsafe partial class CodeEdit : TextEdit
             __mb_clear_comment_delimiters = __mb;
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+    }
+
+    private static nint __mb_get_comment_delimiters;
+    public Godot.Collections.Array GetCommentDelimiters()
+    {
+        var __mb = __mb_get_comment_delimiters;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "get_comment_delimiters", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.get_comment_delimiters is not available in this engine build.");
+            __mb_get_comment_delimiters = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_is_in_comment;
@@ -13957,6 +14434,36 @@ public unsafe partial class CodeEdit : TextEdit
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_add_code_completion_option;
+    public void AddCodeCompletionOption(CodeEdit.CodeCompletionKind type, string displayText, string insertText, Color textColor, Resource? icon, Variant value, int location)
+    {
+        var __mb = __mb_add_code_completion_option;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "add_code_completion_option", 3944379502);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.add_code_completion_option is not available in this engine build.");
+            __mb_add_code_completion_option = __mb;
+        }
+        long __a0 = (long)type;
+        ulong __a1 = NativeString.Create(displayText);
+        ulong __a2 = NativeString.Create(insertText);
+        var __a3 = textColor;
+        nint __a4 = icon?.NativePtr ?? 0;
+        var __a5 = value.Native;
+        long __a6 = unchecked((long)location);
+        var __args = stackalloc nint[7];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        __args[5] = (nint)(&__a5);
+        __args[6] = (nint)(&__a6);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a1);
+        NativeString.Destroy(ref __a2);
+    }
+
     private static nint __mb_update_code_completion_options;
     public void UpdateCodeCompletionOptions(bool force)
     {
@@ -13971,6 +14478,39 @@ public unsafe partial class CodeEdit : TextEdit
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_code_completion_options;
+    public Godot.Collections.Array GetCodeCompletionOptions()
+    {
+        var __mb = __mb_get_code_completion_options;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "get_code_completion_options", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.get_code_completion_options is not available in this engine build.");
+            __mb_get_code_completion_options = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_code_completion_option;
+    public Godot.Collections.Dictionary GetCodeCompletionOption(int index)
+    {
+        var __mb = __mb_get_code_completion_option;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "get_code_completion_option", 3485342025);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.get_code_completion_option is not available in this engine build.");
+            __mb_get_code_completion_option = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_code_completion_selected_index;
@@ -14062,6 +14602,68 @@ public unsafe partial class CodeEdit : TextEdit
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_set_code_completion_prefixes;
+    public void SetCodeCompletionPrefixes(Godot.Collections.Array prefixes)
+    {
+        var __mb = __mb_set_code_completion_prefixes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "set_code_completion_prefixes", 381264803);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.set_code_completion_prefixes is not available in this engine build.");
+            __mb_set_code_completion_prefixes = __mb;
+        }
+        ulong __a0 = prefixes.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_code_completion_prefixes;
+    public Godot.Collections.Array GetCodeCompletionPrefixes()
+    {
+        var __mb = __mb_get_code_completion_prefixes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "get_code_completion_prefixes", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.get_code_completion_prefixes is not available in this engine build.");
+            __mb_get_code_completion_prefixes = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_line_length_guidelines;
+    public void SetLineLengthGuidelines(Godot.Collections.Array guidelineColumns)
+    {
+        var __mb = __mb_set_line_length_guidelines;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "set_line_length_guidelines", 381264803);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.set_line_length_guidelines is not available in this engine build.");
+            __mb_set_line_length_guidelines = __mb;
+        }
+        ulong __a0 = guidelineColumns.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_line_length_guidelines;
+    public Godot.Collections.Array GetLineLengthGuidelines()
+    {
+        var __mb = __mb_get_line_length_guidelines;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeEdit", "get_line_length_guidelines", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("CodeEdit.get_line_length_guidelines is not available in this engine build.");
+            __mb_get_line_length_guidelines = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_symbol_lookup_on_click_enabled;
@@ -14367,6 +14969,22 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
         return __ret;
     }
 
+    private static nint __mb_set_keyword_colors;
+    public void SetKeywordColors(Godot.Collections.Dictionary keywords)
+    {
+        var __mb = __mb_set_keyword_colors;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeHighlighter", "set_keyword_colors", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("CodeHighlighter.set_keyword_colors is not available in this engine build.");
+            __mb_set_keyword_colors = __mb;
+        }
+        ulong __a0 = keywords.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_clear_keyword_colors;
     public void ClearKeywordColors()
     {
@@ -14378,6 +14996,21 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
             __mb_clear_keyword_colors = __mb;
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+    }
+
+    private static nint __mb_get_keyword_colors;
+    public Godot.Collections.Dictionary GetKeywordColors()
+    {
+        var __mb = __mb_get_keyword_colors;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeHighlighter", "get_keyword_colors", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("CodeHighlighter.get_keyword_colors is not available in this engine build.");
+            __mb_get_keyword_colors = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_add_member_keyword_color;
@@ -14454,6 +15087,22 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
         return __ret;
     }
 
+    private static nint __mb_set_member_keyword_colors;
+    public void SetMemberKeywordColors(Godot.Collections.Dictionary memberKeyword)
+    {
+        var __mb = __mb_set_member_keyword_colors;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeHighlighter", "set_member_keyword_colors", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("CodeHighlighter.set_member_keyword_colors is not available in this engine build.");
+            __mb_set_member_keyword_colors = __mb;
+        }
+        ulong __a0 = memberKeyword.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_clear_member_keyword_colors;
     public void ClearMemberKeywordColors()
     {
@@ -14465,6 +15114,21 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
             __mb_clear_member_keyword_colors = __mb;
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+    }
+
+    private static nint __mb_get_member_keyword_colors;
+    public Godot.Collections.Dictionary GetMemberKeywordColors()
+    {
+        var __mb = __mb_get_member_keyword_colors;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeHighlighter", "get_member_keyword_colors", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("CodeHighlighter.get_member_keyword_colors is not available in this engine build.");
+            __mb_get_member_keyword_colors = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_add_color_region;
@@ -14527,6 +15191,22 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
         return __ret != 0;
     }
 
+    private static nint __mb_set_color_regions;
+    public void SetColorRegions(Godot.Collections.Dictionary colorRegions)
+    {
+        var __mb = __mb_set_color_regions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeHighlighter", "set_color_regions", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("CodeHighlighter.set_color_regions is not available in this engine build.");
+            __mb_set_color_regions = __mb;
+        }
+        ulong __a0 = colorRegions.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_clear_color_regions;
     public void ClearColorRegions()
     {
@@ -14538,6 +15218,21 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
             __mb_clear_color_regions = __mb;
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+    }
+
+    private static nint __mb_get_color_regions;
+    public Godot.Collections.Dictionary GetColorRegions()
+    {
+        var __mb = __mb_get_color_regions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("CodeHighlighter", "get_color_regions", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("CodeHighlighter.get_color_regions is not available in this engine build.");
+            __mb_get_color_regions = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_set_function_color;
@@ -17253,6 +17948,37 @@ public unsafe partial class Compositor : Resource
     {
         ClassRegistry.AttachNew(this, "Compositor");
     }
+
+    private static nint __mb_set_compositor_effects;
+    public void SetCompositorEffects(Godot.Collections.Array compositorEffects)
+    {
+        var __mb = __mb_set_compositor_effects;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Compositor", "set_compositor_effects", 381264803);
+            if (__mb == 0) throw new MissingMethodException("Compositor.set_compositor_effects is not available in this engine build.");
+            __mb_set_compositor_effects = __mb;
+        }
+        ulong __a0 = compositorEffects.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_compositor_effects;
+    public Godot.Collections.Array GetCompositorEffects()
+    {
+        var __mb = __mb_get_compositor_effects;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Compositor", "get_compositor_effects", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Compositor.get_compositor_effects is not available in this engine build.");
+            __mb_get_compositor_effects = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
 }
 
 public unsafe partial class CompositorEffect : Resource
@@ -17778,6 +18504,52 @@ public unsafe partial class ConfigFile : RefCounted
     public ConfigFile() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "ConfigFile");
+    }
+
+    private static nint __mb_set_value;
+    public void SetValue(string section, string key, Variant value)
+    {
+        var __mb = __mb_set_value;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ConfigFile", "set_value", 2504492430);
+            if (__mb == 0) throw new MissingMethodException("ConfigFile.set_value is not available in this engine build.");
+            __mb_set_value = __mb;
+        }
+        ulong __a0 = NativeString.Create(section);
+        ulong __a1 = NativeString.Create(key);
+        var __a2 = value.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a1);
+    }
+
+    private static nint __mb_get_value;
+    public Variant GetValue(string section, string key, Variant @default)
+    {
+        var __mb = __mb_get_value;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ConfigFile", "get_value", 89809366);
+            if (__mb == 0) throw new MissingMethodException("ConfigFile.get_value is not available in this engine build.");
+            __mb_get_value = __mb;
+        }
+        ulong __a0 = NativeString.Create(section);
+        ulong __a1 = NativeString.Create(key);
+        var __a2 = @default.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        NativeString.Destroy(ref __a1);
+        return new Variant(__ret);
     }
 
     private static nint __mb_has_section;
@@ -20424,6 +21196,122 @@ public unsafe partial class Control : CanvasItem
         return (Control.CursorShape)__ret;
     }
 
+    private static nint __mb_set_focus_neighbor;
+    public void SetFocusNeighbor(Side side, NodePath neighbor)
+    {
+        var __mb = __mb_set_focus_neighbor;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Control", "set_focus_neighbor", 2024461774);
+            if (__mb == 0) throw new MissingMethodException("Control.set_focus_neighbor is not available in this engine build.");
+            __mb_set_focus_neighbor = __mb;
+        }
+        long __a0 = (long)side;
+        ulong __a1 = neighbor.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_focus_neighbor;
+    public NodePath GetFocusNeighbor(Side side)
+    {
+        var __mb = __mb_get_focus_neighbor;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Control", "get_focus_neighbor", 2757935761);
+            if (__mb == 0) throw new MissingMethodException("Control.get_focus_neighbor is not available in this engine build.");
+            __mb_get_focus_neighbor = __mb;
+        }
+        long __a0 = (long)side;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
+    private static nint __mb_set_focus_next;
+    public void SetFocusNext(NodePath next)
+    {
+        var __mb = __mb_set_focus_next;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Control", "set_focus_next", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("Control.set_focus_next is not available in this engine build.");
+            __mb_set_focus_next = __mb;
+        }
+        ulong __a0 = next.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_focus_next;
+    public NodePath GetFocusNext()
+    {
+        var __mb = __mb_get_focus_next;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Control", "get_focus_next", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("Control.get_focus_next is not available in this engine build.");
+            __mb_get_focus_next = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
+    private static nint __mb_set_focus_previous;
+    public void SetFocusPrevious(NodePath previous)
+    {
+        var __mb = __mb_set_focus_previous;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Control", "set_focus_previous", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("Control.set_focus_previous is not available in this engine build.");
+            __mb_set_focus_previous = __mb;
+        }
+        ulong __a0 = previous.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_focus_previous;
+    public NodePath GetFocusPrevious()
+    {
+        var __mb = __mb_get_focus_previous;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Control", "get_focus_previous", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("Control.get_focus_previous is not available in this engine build.");
+            __mb_get_focus_previous = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
+    private static nint __mb_force_drag;
+    public void ForceDrag(Variant data, Control? preview)
+    {
+        var __mb = __mb_force_drag;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Control", "force_drag", 3191844692);
+            if (__mb == 0) throw new MissingMethodException("Control.force_drag is not available in this engine build.");
+            __mb_force_drag = __mb;
+        }
+        var __a0 = data.Native;
+        nint __a1 = preview?.NativePtr ?? 0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_accessibility_drag;
     public void AccessibilityDrag()
     {
@@ -20543,6 +21431,130 @@ public unsafe partial class Control : CanvasItem
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (AccessibilityServer.AccessibilityLiveMode)__ret;
+    }
+
+    private static nint __mb_set_accessibility_controls_nodes;
+    public void SetAccessibilityControlsNodes(Godot.Collections.Array nodePath)
+    {
+        var __mb = __mb_set_accessibility_controls_nodes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Control", "set_accessibility_controls_nodes", 381264803);
+            if (__mb == 0) throw new MissingMethodException("Control.set_accessibility_controls_nodes is not available in this engine build.");
+            __mb_set_accessibility_controls_nodes = __mb;
+        }
+        ulong __a0 = nodePath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_accessibility_controls_nodes;
+    public Godot.Collections.Array GetAccessibilityControlsNodes()
+    {
+        var __mb = __mb_get_accessibility_controls_nodes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Control", "get_accessibility_controls_nodes", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Control.get_accessibility_controls_nodes is not available in this engine build.");
+            __mb_get_accessibility_controls_nodes = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_accessibility_described_by_nodes;
+    public void SetAccessibilityDescribedByNodes(Godot.Collections.Array nodePath)
+    {
+        var __mb = __mb_set_accessibility_described_by_nodes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Control", "set_accessibility_described_by_nodes", 381264803);
+            if (__mb == 0) throw new MissingMethodException("Control.set_accessibility_described_by_nodes is not available in this engine build.");
+            __mb_set_accessibility_described_by_nodes = __mb;
+        }
+        ulong __a0 = nodePath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_accessibility_described_by_nodes;
+    public Godot.Collections.Array GetAccessibilityDescribedByNodes()
+    {
+        var __mb = __mb_get_accessibility_described_by_nodes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Control", "get_accessibility_described_by_nodes", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Control.get_accessibility_described_by_nodes is not available in this engine build.");
+            __mb_get_accessibility_described_by_nodes = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_accessibility_labeled_by_nodes;
+    public void SetAccessibilityLabeledByNodes(Godot.Collections.Array nodePath)
+    {
+        var __mb = __mb_set_accessibility_labeled_by_nodes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Control", "set_accessibility_labeled_by_nodes", 381264803);
+            if (__mb == 0) throw new MissingMethodException("Control.set_accessibility_labeled_by_nodes is not available in this engine build.");
+            __mb_set_accessibility_labeled_by_nodes = __mb;
+        }
+        ulong __a0 = nodePath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_accessibility_labeled_by_nodes;
+    public Godot.Collections.Array GetAccessibilityLabeledByNodes()
+    {
+        var __mb = __mb_get_accessibility_labeled_by_nodes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Control", "get_accessibility_labeled_by_nodes", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Control.get_accessibility_labeled_by_nodes is not available in this engine build.");
+            __mb_get_accessibility_labeled_by_nodes = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_set_accessibility_flow_to_nodes;
+    public void SetAccessibilityFlowToNodes(Godot.Collections.Array nodePath)
+    {
+        var __mb = __mb_set_accessibility_flow_to_nodes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Control", "set_accessibility_flow_to_nodes", 381264803);
+            if (__mb == 0) throw new MissingMethodException("Control.set_accessibility_flow_to_nodes is not available in this engine build.");
+            __mb_set_accessibility_flow_to_nodes = __mb;
+        }
+        ulong __a0 = nodePath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_accessibility_flow_to_nodes;
+    public Godot.Collections.Array GetAccessibilityFlowToNodes()
+    {
+        var __mb = __mb_get_accessibility_flow_to_nodes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Control", "get_accessibility_flow_to_nodes", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Control.get_accessibility_flow_to_nodes is not available in this engine build.");
+            __mb_get_accessibility_flow_to_nodes = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_mouse_filter;

@@ -47,6 +47,50 @@ public unsafe partial class JSON : Resource
         ClassRegistry.AttachNew(this, "JSON");
     }
 
+    private static nint __mb_stringify;
+    public static string Stringify(Variant data, string indent, bool sortKeys, bool fullPrecision)
+    {
+        var __mb = __mb_stringify;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JSON", "stringify", 462733549);
+            if (__mb == 0) throw new MissingMethodException("JSON.stringify is not available in this engine build.");
+            __mb_stringify = __mb;
+        }
+        var __a0 = data.Native;
+        ulong __a1 = NativeString.Create(indent);
+        byte __a2 = sortKeys ? (byte)1 : (byte)0;
+        byte __a3 = fullPrecision ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a1);
+        return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_parse_string;
+    public static Variant ParseString(string jsonString)
+    {
+        var __mb = __mb_parse_string;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JSON", "parse_string", 309047738);
+            if (__mb == 0) throw new MissingMethodException("JSON.parse_string is not available in this engine build.");
+            __mb_parse_string = __mb;
+        }
+        ulong __a0 = NativeString.Create(jsonString);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return new Variant(__ret);
+    }
+
     private static nint __mb_parse;
     public Error Parse(string jsonText, bool keepText)
     {
@@ -66,6 +110,37 @@ public unsafe partial class JSON : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
+    }
+
+    private static nint __mb_get_data;
+    public Variant GetData()
+    {
+        var __mb = __mb_get_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JSON", "get_data", 1214101251);
+            if (__mb == 0) throw new MissingMethodException("JSON.get_data is not available in this engine build.");
+            __mb_get_data = __mb;
+        }
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_set_data;
+    public void SetData(Variant data)
+    {
+        var __mb = __mb_set_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JSON", "set_data", 1114965689);
+            if (__mb == 0) throw new MissingMethodException("JSON.set_data is not available in this engine build.");
+            __mb_set_data = __mb;
+        }
+        var __a0 = data.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_parsed_text;
@@ -112,6 +187,46 @@ public unsafe partial class JSON : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
+
+    private static nint __mb_from_native;
+    public static Variant FromNative(Variant variant, bool fullObjects)
+    {
+        var __mb = __mb_from_native;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JSON", "from_native", 2963479484);
+            if (__mb == 0) throw new MissingMethodException("JSON.from_native is not available in this engine build.");
+            __mb_from_native = __mb;
+        }
+        var __a0 = variant.Native;
+        byte __a1 = fullObjects ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_to_native;
+    public static Variant ToNative(Variant json, bool allowObjects)
+    {
+        var __mb = __mb_to_native;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JSON", "to_native", 2963479484);
+            if (__mb == 0) throw new MissingMethodException("JSON.to_native is not available in this engine build.");
+            __mb_to_native = __mb;
+        }
+        var __a0 = json.Native;
+        byte __a1 = allowObjects ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
 }
 
 public unsafe partial class JSONRPC : GodotObject
@@ -132,6 +247,26 @@ public unsafe partial class JSONRPC : GodotObject
         INTERNAL_ERROR = -32603,
     }
 
+    private static nint __mb_process_action;
+    public Variant ProcessAction(Variant action, bool recurse)
+    {
+        var __mb = __mb_process_action;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JSONRPC", "process_action", 2963479484);
+            if (__mb == 0) throw new MissingMethodException("JSONRPC.process_action is not available in this engine build.");
+            __mb_process_action = __mb;
+        }
+        var __a0 = action.Native;
+        byte __a1 = recurse ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_process_string;
     public string ProcessString(string action)
     {
@@ -149,6 +284,93 @@ public unsafe partial class JSONRPC : GodotObject
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_make_request;
+    public Godot.Collections.Dictionary MakeRequest(string method, Variant @params, Variant id)
+    {
+        var __mb = __mb_make_request;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JSONRPC", "make_request", 3423508980);
+            if (__mb == 0) throw new MissingMethodException("JSONRPC.make_request is not available in this engine build.");
+            __mb_make_request = __mb;
+        }
+        ulong __a0 = NativeString.Create(method);
+        var __a1 = @params.Native;
+        var __a2 = id.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_make_response;
+    public Godot.Collections.Dictionary MakeResponse(Variant result, Variant id)
+    {
+        var __mb = __mb_make_response;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JSONRPC", "make_response", 5053918);
+            if (__mb == 0) throw new MissingMethodException("JSONRPC.make_response is not available in this engine build.");
+            __mb_make_response = __mb;
+        }
+        var __a0 = result.Native;
+        var __a1 = id.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_make_notification;
+    public Godot.Collections.Dictionary MakeNotification(string method, Variant @params)
+    {
+        var __mb = __mb_make_notification;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JSONRPC", "make_notification", 2949127017);
+            if (__mb == 0) throw new MissingMethodException("JSONRPC.make_notification is not available in this engine build.");
+            __mb_make_notification = __mb;
+        }
+        ulong __a0 = NativeString.Create(method);
+        var __a1 = @params.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_make_response_error;
+    public Godot.Collections.Dictionary MakeResponseError(int code, string message, Variant id)
+    {
+        var __mb = __mb_make_response_error;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JSONRPC", "make_response_error", 928596297);
+            if (__mb == 0) throw new MissingMethodException("JSONRPC.make_response_error is not available in this engine build.");
+            __mb_make_response_error = __mb;
+        }
+        long __a0 = unchecked((long)code);
+        ulong __a1 = NativeString.Create(message);
+        var __a2 = id.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a1);
+        return new Godot.Collections.Dictionary(__ret);
     }
 }
 
@@ -184,6 +406,21 @@ public unsafe partial class JavaClass : RefCounted
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_get_java_method_list;
+    public Godot.Collections.Array GetJavaMethodList()
+    {
+        var __mb = __mb_get_java_method_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JavaClass", "get_java_method_list", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("JavaClass.get_java_method_list is not available in this engine build.");
+            __mb_get_java_method_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_java_parent_class;
@@ -317,6 +554,27 @@ public unsafe partial class JavaScriptBridge : GodotObject
     private static JavaScriptBridge? _singleton;
     public static JavaScriptBridge Singleton => _singleton ??= (JavaScriptBridge)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("JavaScriptBridge"), adoptRef: false)!;
 
+    private static nint __mb_eval;
+    public Variant Eval(string code, bool useGlobalExecutionContext)
+    {
+        var __mb = __mb_eval;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("JavaScriptBridge", "eval", 218087648);
+            if (__mb == 0) throw new MissingMethodException("JavaScriptBridge.eval is not available in this engine build.");
+            __mb_eval = __mb;
+        }
+        ulong __a0 = NativeString.Create(code);
+        byte __a1 = useGlobalExecutionContext ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return new Variant(__ret);
+    }
+
     private static nint __mb_get_interface;
     public JavaScriptObject? GetInterface(string @interface)
     {
@@ -407,6 +665,68 @@ public unsafe partial class Joint2D : Node2D
 {
     internal Joint2D(nint ptr, bool rc) : base(ptr, rc) { }
 
+    private static nint __mb_set_node_a;
+    public void SetNodeA(NodePath node)
+    {
+        var __mb = __mb_set_node_a;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Joint2D", "set_node_a", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("Joint2D.set_node_a is not available in this engine build.");
+            __mb_set_node_a = __mb;
+        }
+        ulong __a0 = node.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_node_a;
+    public NodePath GetNodeA()
+    {
+        var __mb = __mb_get_node_a;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Joint2D", "get_node_a", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("Joint2D.get_node_a is not available in this engine build.");
+            __mb_get_node_a = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
+    private static nint __mb_set_node_b;
+    public void SetNodeB(NodePath node)
+    {
+        var __mb = __mb_set_node_b;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Joint2D", "set_node_b", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("Joint2D.set_node_b is not available in this engine build.");
+            __mb_set_node_b = __mb;
+        }
+        ulong __a0 = node.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_node_b;
+    public NodePath GetNodeB()
+    {
+        var __mb = __mb_get_node_b;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Joint2D", "get_node_b", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("Joint2D.get_node_b is not available in this engine build.");
+            __mb_get_node_b = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_set_bias;
     public void SetBias(float bias)
     {
@@ -488,6 +808,68 @@ public unsafe partial class Joint2D : Node2D
 public unsafe partial class Joint3D : Node3D
 {
     internal Joint3D(nint ptr, bool rc) : base(ptr, rc) { }
+
+    private static nint __mb_set_node_a;
+    public void SetNodeA(NodePath node)
+    {
+        var __mb = __mb_set_node_a;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Joint3D", "set_node_a", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("Joint3D.set_node_a is not available in this engine build.");
+            __mb_set_node_a = __mb;
+        }
+        ulong __a0 = node.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_node_a;
+    public NodePath GetNodeA()
+    {
+        var __mb = __mb_get_node_a;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Joint3D", "get_node_a", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("Joint3D.get_node_a is not available in this engine build.");
+            __mb_get_node_a = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
+    private static nint __mb_set_node_b;
+    public void SetNodeB(NodePath node)
+    {
+        var __mb = __mb_set_node_b;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Joint3D", "set_node_b", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("Joint3D.set_node_b is not available in this engine build.");
+            __mb_set_node_b = __mb;
+        }
+        ulong __a0 = node.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_node_b;
+    public NodePath GetNodeB()
+    {
+        var __mb = __mb_get_node_b;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Joint3D", "get_node_b", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("Joint3D.get_node_b is not available in this engine build.");
+            __mb_get_node_b = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
 
     private static nint __mb_set_solver_priority;
     public void SetSolverPriority(int priority)

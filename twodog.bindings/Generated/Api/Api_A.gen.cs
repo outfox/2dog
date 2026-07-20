@@ -1381,6 +1381,46 @@ public unsafe partial class AStarGrid2D : RefCounted
         return __ret;
     }
 
+    private static nint __mb_get_point_data_in_region;
+    public Godot.Collections.Array GetPointDataInRegion(Rect2I region)
+    {
+        var __mb = __mb_get_point_data_in_region;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AStarGrid2D", "get_point_data_in_region", 3893818462);
+            if (__mb == 0) throw new MissingMethodException("AStarGrid2D.get_point_data_in_region is not available in this engine build.");
+            __mb_get_point_data_in_region = __mb;
+        }
+        var __a0 = region;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_id_path;
+    public Godot.Collections.Array GetIdPath(Vector2I fromId, Vector2I toId, bool allowPartialPath)
+    {
+        var __mb = __mb_get_id_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AStarGrid2D", "get_id_path", 1918132273);
+            if (__mb == 0) throw new MissingMethodException("AStarGrid2D.get_id_path is not available in this engine build.");
+            __mb_get_id_path = __mb;
+        }
+        var __a0 = fromId;
+        var __a1 = toId;
+        byte __a2 = allowPartialPath ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     public virtual float _EstimateCost(Vector2I fromId, Vector2I endId) => default!;
 
     public virtual float _ComputeCost(Vector2I fromId, Vector2I toId) => default!;
@@ -1924,6 +1964,42 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_element_set_meta;
+    public void ElementSetMeta(Rid id, Variant meta)
+    {
+        var __mb = __mb_element_set_meta;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AccessibilityServer", "element_set_meta", 3175752987);
+            if (__mb == 0) throw new MissingMethodException("AccessibilityServer.element_set_meta is not available in this engine build.");
+            __mb_element_set_meta = __mb;
+        }
+        var __a0 = id;
+        var __a1 = meta.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_element_get_meta;
+    public Variant ElementGetMeta(Rid id)
+    {
+        var __mb = __mb_element_get_meta;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AccessibilityServer", "element_get_meta", 4171304767);
+            if (__mb == 0) throw new MissingMethodException("AccessibilityServer.element_get_meta is not available in this engine build.");
+            __mb_element_get_meta = __mb;
+        }
+        var __a0 = id;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_set_window_rect;
@@ -4495,6 +4571,62 @@ public unsafe partial class Animation : Resource
         return (Animation.TrackType)__ret;
     }
 
+    private static nint __mb_track_get_path;
+    public NodePath TrackGetPath(int trackIdx)
+    {
+        var __mb = __mb_track_get_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Animation", "track_get_path", 408788394);
+            if (__mb == 0) throw new MissingMethodException("Animation.track_get_path is not available in this engine build.");
+            __mb_track_get_path = __mb;
+        }
+        long __a0 = unchecked((long)trackIdx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
+    private static nint __mb_track_set_path;
+    public void TrackSetPath(int trackIdx, NodePath path)
+    {
+        var __mb = __mb_track_set_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Animation", "track_set_path", 2761262315);
+            if (__mb == 0) throw new MissingMethodException("Animation.track_set_path is not available in this engine build.");
+            __mb_track_set_path = __mb;
+        }
+        long __a0 = unchecked((long)trackIdx);
+        ulong __a1 = path.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_find_track;
+    public int FindTrack(NodePath path, Animation.TrackType type)
+    {
+        var __mb = __mb_find_track;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Animation", "find_track", 245376003);
+            if (__mb == 0) throw new MissingMethodException("Animation.find_track is not available in this engine build.");
+            __mb_find_track = __mb;
+        }
+        ulong __a0 = path.Native;
+        long __a1 = (long)type;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return unchecked((int)__ret);
+    }
+
     private static nint __mb_track_move_up;
     public void TrackMoveUp(int trackIdx)
     {
@@ -4811,6 +4943,30 @@ public unsafe partial class Animation : Resource
         return (float)__ret;
     }
 
+    private static nint __mb_track_insert_key;
+    public int TrackInsertKey(int trackIdx, double time, Variant key, float transition)
+    {
+        var __mb = __mb_track_insert_key;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Animation", "track_insert_key", 808952278);
+            if (__mb == 0) throw new MissingMethodException("Animation.track_insert_key is not available in this engine build.");
+            __mb_track_insert_key = __mb;
+        }
+        long __a0 = unchecked((long)trackIdx);
+        double __a1 = time;
+        var __a2 = key.Native;
+        double __a3 = transition;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return unchecked((int)__ret);
+    }
+
     private static nint __mb_track_remove_key;
     public void TrackRemoveKey(int trackIdx, int keyIdx)
     {
@@ -4844,6 +5000,26 @@ public unsafe partial class Animation : Resource
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_track_set_key_value;
+    public void TrackSetKeyValue(int trackIdx, int key, Variant value)
+    {
+        var __mb = __mb_track_set_key_value;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Animation", "track_set_key_value", 2060538656);
+            if (__mb == 0) throw new MissingMethodException("Animation.track_set_key_value is not available in this engine build.");
+            __mb_track_set_key_value = __mb;
+        }
+        long __a0 = unchecked((long)trackIdx);
+        long __a1 = unchecked((long)key);
+        var __a2 = value.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
@@ -4923,6 +5099,26 @@ public unsafe partial class Animation : Resource
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_track_get_key_value;
+    public Variant TrackGetKeyValue(int trackIdx, int keyIdx)
+    {
+        var __mb = __mb_track_get_key_value;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Animation", "track_get_key_value", 678354945);
+            if (__mb == 0) throw new MissingMethodException("Animation.track_get_key_value is not available in this engine build.");
+            __mb_track_get_key_value = __mb;
+        }
+        long __a0 = unchecked((long)trackIdx);
+        long __a1 = unchecked((long)keyIdx);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_track_get_key_time;
@@ -5097,6 +5293,28 @@ public unsafe partial class Animation : Resource
         return (Animation.UpdateMode)__ret;
     }
 
+    private static nint __mb_value_track_interpolate;
+    public Variant ValueTrackInterpolate(int trackIdx, double timeSec, bool backward)
+    {
+        var __mb = __mb_value_track_interpolate;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Animation", "value_track_interpolate", 747269075);
+            if (__mb == 0) throw new MissingMethodException("Animation.value_track_interpolate is not available in this engine build.");
+            __mb_value_track_interpolate = __mb;
+        }
+        long __a0 = unchecked((long)trackIdx);
+        double __a1 = timeSec;
+        byte __a2 = backward ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_method_track_get_name;
     public string MethodTrackGetName(int trackIdx, int keyIdx)
     {
@@ -5115,6 +5333,26 @@ public unsafe partial class Animation : Resource
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return StringNames.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_method_track_get_params;
+    public Godot.Collections.Array MethodTrackGetParams(int trackIdx, int keyIdx)
+    {
+        var __mb = __mb_method_track_get_params;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Animation", "method_track_get_params", 2345056839);
+            if (__mb == 0) throw new MissingMethodException("Animation.method_track_get_params is not available in this engine build.");
+            __mb_method_track_get_params = __mb;
+        }
+        long __a0 = unchecked((long)trackIdx);
+        long __a1 = unchecked((long)keyIdx);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_bezier_track_insert_key;
@@ -5970,6 +6208,21 @@ public unsafe partial class AnimationLibrary : Resource
         return (Animation?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_get_animation_list;
+    public Godot.Collections.Array GetAnimationList()
+    {
+        var __mb = __mb_get_animation_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationLibrary", "get_animation_list", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("AnimationLibrary.get_animation_list is not available in this engine build.");
+            __mb_get_animation_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_get_animation_list_size;
     public int GetAnimationListSize()
     {
@@ -6100,6 +6353,21 @@ public unsafe partial class AnimationMixer : Node
         return (AnimationLibrary?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_get_animation_library_list;
+    public Godot.Collections.Array GetAnimationLibraryList()
+    {
+        var __mb = __mb_get_animation_library_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationMixer", "get_animation_library_list", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("AnimationMixer.get_animation_library_list is not available in this engine build.");
+            __mb_get_animation_library_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_has_animation;
     public bool HasAnimation(string name)
     {
@@ -6196,6 +6464,37 @@ public unsafe partial class AnimationMixer : Node
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_set_root_node;
+    public void SetRootNode(NodePath path)
+    {
+        var __mb = __mb_set_root_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationMixer", "set_root_node", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("AnimationMixer.set_root_node is not available in this engine build.");
+            __mb_set_root_node = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_root_node;
+    public NodePath GetRootNode()
+    {
+        var __mb = __mb_get_root_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationMixer", "get_root_node", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("AnimationMixer.get_root_node is not available in this engine build.");
+            __mb_get_root_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_callback_mode_process;
@@ -6320,6 +6619,37 @@ public unsafe partial class AnimationMixer : Node
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_set_root_motion_track;
+    public void SetRootMotionTrack(NodePath path)
+    {
+        var __mb = __mb_set_root_motion_track;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationMixer", "set_root_motion_track", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("AnimationMixer.set_root_motion_track is not available in this engine build.");
+            __mb_set_root_motion_track = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_root_motion_track;
+    public NodePath GetRootMotionTrack()
+    {
+        var __mb = __mb_get_root_motion_track;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationMixer", "get_root_motion_track", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("AnimationMixer.get_root_motion_track is not available in this engine build.");
+            __mb_get_root_motion_track = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_root_motion_local;
@@ -6687,6 +7017,42 @@ public unsafe partial class AnimationNode : Resource
         return unchecked((int)__ret);
     }
 
+    private static nint __mb_set_filter_path;
+    public void SetFilterPath(NodePath path, bool enable)
+    {
+        var __mb = __mb_set_filter_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationNode", "set_filter_path", 3868023870);
+            if (__mb == 0) throw new MissingMethodException("AnimationNode.set_filter_path is not available in this engine build.");
+            __mb_set_filter_path = __mb;
+        }
+        ulong __a0 = path.Native;
+        byte __a1 = enable ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_is_path_filtered;
+    public bool IsPathFiltered(NodePath path)
+    {
+        var __mb = __mb_is_path_filtered;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationNode", "is_path_filtered", 861721659);
+            if (__mb == 0) throw new MissingMethodException("AnimationNode.is_path_filtered is not available in this engine build.");
+            __mb_is_path_filtered = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        byte __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return __ret != 0;
+    }
+
     private static nint __mb_set_filter_enabled;
     public void SetFilterEnabled(bool enable)
     {
@@ -6840,6 +7206,42 @@ public unsafe partial class AnimationNode : Resource
         double __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (double)__ret;
+    }
+
+    private static nint __mb_set_parameter;
+    public void SetParameter(string name, Variant value)
+    {
+        var __mb = __mb_set_parameter;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationNode", "set_parameter", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("AnimationNode.set_parameter is not available in this engine build.");
+            __mb_set_parameter = __mb;
+        }
+        ulong __a0 = StringNames.Get(name).Opaque;
+        var __a1 = value.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_parameter;
+    public Variant GetParameter(string name)
+    {
+        var __mb = __mb_get_parameter;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationNode", "get_parameter", 2760726917);
+            if (__mb == 0) throw new MissingMethodException("AnimationNode.get_parameter is not available in this engine build.");
+            __mb_get_parameter = __mb;
+        }
+        ulong __a0 = StringNames.Get(name).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     public virtual AnimationNode? _GetChildByName(string name) => default!;
@@ -8413,6 +8815,21 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_node_list;
+    public Godot.Collections.Array GetNodeList()
+    {
+        var __mb = __mb_get_node_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationNodeBlendTree", "get_node_list", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("AnimationNodeBlendTree.get_node_list is not available in this engine build.");
+            __mb_get_node_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_node_position;
     public void SetNodePosition(string name, Vector2 position)
     {
@@ -8977,6 +9394,21 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
         return StringNames.ReadAndDestroy(ref __ret);
     }
 
+    private static nint __mb_get_node_list;
+    public Godot.Collections.Array GetNodeList()
+    {
+        var __mb = __mb_get_node_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationNodeStateMachine", "get_node_list", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachine.get_node_list is not available in this engine build.");
+            __mb_get_node_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_node_position;
     public void SetNodePosition(string name, Vector2 position)
     {
@@ -9485,6 +9917,21 @@ public unsafe partial class AnimationNodeStateMachinePlayback : Resource
         double __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
+    }
+
+    private static nint __mb_get_travel_path;
+    public Godot.Collections.Array GetTravelPath()
+    {
+        var __mb = __mb_get_travel_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationNodeStateMachinePlayback", "get_travel_path", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("AnimationNodeStateMachinePlayback.get_travel_path is not available in this engine build.");
+            __mb_get_travel_path = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 }
 
@@ -10675,6 +11122,21 @@ public unsafe partial class AnimationPlayer : AnimationMixer
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_get_queue;
+    public Godot.Collections.Array GetQueue()
+    {
+        var __mb = __mb_get_queue;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationPlayer", "get_queue", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("AnimationPlayer.get_queue is not available in this engine build.");
+            __mb_get_queue = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_clear_queue;
     public void ClearQueue()
     {
@@ -11001,6 +11463,37 @@ public unsafe partial class AnimationPlayer : AnimationMixer
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (AnimationPlayer.AnimationMethodCallMode)__ret;
     }
+
+    private static nint __mb_set_root;
+    public void SetRoot(NodePath path)
+    {
+        var __mb = __mb_set_root;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationPlayer", "set_root", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("AnimationPlayer.set_root is not available in this engine build.");
+            __mb_set_root = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_root;
+    public NodePath GetRoot()
+    {
+        var __mb = __mb_get_root;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationPlayer", "get_root", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("AnimationPlayer.get_root is not available in this engine build.");
+            __mb_get_root = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
 }
 
 public unsafe partial class AnimationRootNode : AnimationNode
@@ -11058,6 +11551,68 @@ public unsafe partial class AnimationTree : AnimationMixer
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (AnimationRootNode?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_set_advance_expression_base_node;
+    public void SetAdvanceExpressionBaseNode(NodePath path)
+    {
+        var __mb = __mb_set_advance_expression_base_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationTree", "set_advance_expression_base_node", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("AnimationTree.set_advance_expression_base_node is not available in this engine build.");
+            __mb_set_advance_expression_base_node = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_advance_expression_base_node;
+    public NodePath GetAdvanceExpressionBaseNode()
+    {
+        var __mb = __mb_get_advance_expression_base_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationTree", "get_advance_expression_base_node", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("AnimationTree.get_advance_expression_base_node is not available in this engine build.");
+            __mb_get_advance_expression_base_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
+    private static nint __mb_set_animation_player;
+    public void SetAnimationPlayer(NodePath path)
+    {
+        var __mb = __mb_set_animation_player;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationTree", "set_animation_player", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("AnimationTree.set_animation_player is not available in this engine build.");
+            __mb_set_animation_player = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_animation_player;
+    public NodePath GetAnimationPlayer()
+    {
+        var __mb = __mb_get_animation_player;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AnimationTree", "get_animation_player", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("AnimationTree.get_animation_player is not available in this engine build.");
+            __mb_get_animation_player = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_process_callback;
@@ -11511,6 +12066,36 @@ public unsafe partial class Area2D : CollisionObject2D
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_get_overlapping_bodies;
+    public Godot.Collections.Array GetOverlappingBodies()
+    {
+        var __mb = __mb_get_overlapping_bodies;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Area2D", "get_overlapping_bodies", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Area2D.get_overlapping_bodies is not available in this engine build.");
+            __mb_get_overlapping_bodies = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_overlapping_areas;
+    public Godot.Collections.Array GetOverlappingAreas()
+    {
+        var __mb = __mb_get_overlapping_areas;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Area2D", "get_overlapping_areas", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Area2D.get_overlapping_areas is not available in this engine build.");
+            __mb_get_overlapping_areas = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_has_overlapping_bodies;
@@ -12063,6 +12648,37 @@ public unsafe partial class Area3D : CollisionObject3D
         return (float)__ret;
     }
 
+    private static nint __mb_set_wind_source_path;
+    public void SetWindSourcePath(NodePath windSourcePath)
+    {
+        var __mb = __mb_set_wind_source_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Area3D", "set_wind_source_path", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("Area3D.set_wind_source_path is not available in this engine build.");
+            __mb_set_wind_source_path = __mb;
+        }
+        ulong __a0 = windSourcePath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_wind_source_path;
+    public NodePath GetWindSourcePath()
+    {
+        var __mb = __mb_get_wind_source_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Area3D", "get_wind_source_path", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("Area3D.get_wind_source_path is not available in this engine build.");
+            __mb_get_wind_source_path = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_set_monitorable;
     public void SetMonitorable(bool enable)
     {
@@ -12123,6 +12739,36 @@ public unsafe partial class Area3D : CollisionObject3D
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_get_overlapping_bodies;
+    public Godot.Collections.Array GetOverlappingBodies()
+    {
+        var __mb = __mb_get_overlapping_bodies;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Area3D", "get_overlapping_bodies", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Area3D.get_overlapping_bodies is not available in this engine build.");
+            __mb_get_overlapping_bodies = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_overlapping_areas;
+    public Godot.Collections.Array GetOverlappingAreas()
+    {
+        var __mb = __mb_get_overlapping_areas;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Area3D", "get_overlapping_areas", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Area3D.get_overlapping_areas is not available in this engine build.");
+            __mb_get_overlapping_areas = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_has_overlapping_bodies;
@@ -12599,6 +13245,30 @@ public unsafe partial class ArrayMesh : Mesh
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (Mesh.BlendShapeMode)__ret;
+    }
+
+    private static nint __mb_add_surface_from_arrays;
+    public void AddSurfaceFromArrays(Mesh.PrimitiveType primitive, Godot.Collections.Array arrays, Godot.Collections.Array blendShapes, Godot.Collections.Dictionary lods, Mesh.ArrayFormat flags)
+    {
+        var __mb = __mb_add_surface_from_arrays;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ArrayMesh", "add_surface_from_arrays", 1796411378);
+            if (__mb == 0) throw new MissingMethodException("ArrayMesh.add_surface_from_arrays is not available in this engine build.");
+            __mb_add_surface_from_arrays = __mb;
+        }
+        long __a0 = (long)primitive;
+        ulong __a1 = arrays.Native;
+        ulong __a2 = blendShapes.Native;
+        ulong __a3 = lods.Native;
+        long __a4 = (long)flags;
+        var __args = stackalloc nint[5];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        __args[4] = (nint)(&__a4);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_clear_surfaces;
@@ -18330,6 +19000,37 @@ public unsafe partial class AudioStreamOggVorbis : AudioStream
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
+
+    private static nint __mb_set_tags;
+    public void SetTags(Godot.Collections.Dictionary tags)
+    {
+        var __mb = __mb_set_tags;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AudioStreamOggVorbis", "set_tags", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("AudioStreamOggVorbis.set_tags is not available in this engine build.");
+            __mb_set_tags = __mb;
+        }
+        ulong __a0 = tags.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_tags;
+    public Godot.Collections.Dictionary GetTags()
+    {
+        var __mb = __mb_get_tags;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AudioStreamOggVorbis", "get_tags", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("AudioStreamOggVorbis.get_tags is not available in this engine build.");
+            __mb_get_tags = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
 }
 
 public unsafe partial class AudioStreamPlayback : RefCounted
@@ -21186,6 +21887,27 @@ public unsafe partial class AudioStreamWAV : AudioStream
         LOOP_BACKWARD = 3,
     }
 
+    private static nint __mb_load_from_file;
+    public static AudioStreamWAV? LoadFromFile(string path, Godot.Collections.Dictionary options)
+    {
+        var __mb = __mb_load_from_file;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AudioStreamWAV", "load_from_file", 4015802384);
+            if (__mb == 0) throw new MissingMethodException("AudioStreamWAV.load_from_file is not available in this engine build.");
+            __mb_load_from_file = __mb;
+        }
+        ulong __a0 = NativeString.Create(path);
+        ulong __a1 = options.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return (AudioStreamWAV?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
     private static nint __mb_set_format;
     public void SetFormat(AudioStreamWAV.Format format)
     {
@@ -21370,6 +22092,37 @@ public unsafe partial class AudioStreamWAV : AudioStream
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_set_tags;
+    public void SetTags(Godot.Collections.Dictionary tags)
+    {
+        var __mb = __mb_set_tags;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AudioStreamWAV", "set_tags", 4155329257);
+            if (__mb == 0) throw new MissingMethodException("AudioStreamWAV.set_tags is not available in this engine build.");
+            __mb_set_tags = __mb;
+        }
+        ulong __a0 = tags.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_tags;
+    public Godot.Collections.Dictionary GetTags()
+    {
+        var __mb = __mb_get_tags;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("AudioStreamWAV", "get_tags", 3102165223);
+            if (__mb == 0) throw new MissingMethodException("AudioStreamWAV.get_tags is not available in this engine build.");
+            __mb_get_tags = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_save_to_wav;

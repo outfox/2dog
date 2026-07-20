@@ -294,6 +294,21 @@ public unsafe partial class HTTPClient : RefCounted
         return unchecked((int)__ret);
     }
 
+    private static nint __mb_get_response_headers_as_dictionary;
+    public Godot.Collections.Dictionary GetResponseHeadersAsDictionary()
+    {
+        var __mb = __mb_get_response_headers_as_dictionary;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("HTTPClient", "get_response_headers_as_dictionary", 2382534195);
+            if (__mb == 0) throw new MissingMethodException("HTTPClient.get_response_headers_as_dictionary is not available in this engine build.");
+            __mb_get_response_headers_as_dictionary = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
     private static nint __mb_get_response_body_length;
     public long GetResponseBodyLength()
     {
@@ -437,6 +452,24 @@ public unsafe partial class HTTPClient : RefCounted
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
+    }
+
+    private static nint __mb_query_string_from_dict;
+    public string QueryStringFromDict(Godot.Collections.Dictionary fields)
+    {
+        var __mb = __mb_query_string_from_dict;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("HTTPClient", "query_string_from_dict", 2538086567);
+            if (__mb == 0) throw new MissingMethodException("HTTPClient.query_string_from_dict is not available in this engine build.");
+            __mb_query_string_from_dict = __mb;
+        }
+        ulong __a0 = fields.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return NativeString.ReadAndDestroy(ref __ret);
     }
 }
 

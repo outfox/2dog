@@ -901,6 +901,46 @@ public unsafe partial class UndoRedo : GodotObject
         return __ret != 0;
     }
 
+    private static nint __mb_add_do_property;
+    public void AddDoProperty(GodotObject? @object, string property, Variant value)
+    {
+        var __mb = __mb_add_do_property;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("UndoRedo", "add_do_property", 1017172818);
+            if (__mb == 0) throw new MissingMethodException("UndoRedo.add_do_property is not available in this engine build.");
+            __mb_add_do_property = __mb;
+        }
+        nint __a0 = @object?.NativePtr ?? 0;
+        ulong __a1 = StringNames.Get(property).Opaque;
+        var __a2 = value.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_add_undo_property;
+    public void AddUndoProperty(GodotObject? @object, string property, Variant value)
+    {
+        var __mb = __mb_add_undo_property;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("UndoRedo", "add_undo_property", 1017172818);
+            if (__mb == 0) throw new MissingMethodException("UndoRedo.add_undo_property is not available in this engine build.");
+            __mb_add_undo_property = __mb;
+        }
+        nint __a0 = @object?.NativePtr ?? 0;
+        ulong __a1 = StringNames.Get(property).Opaque;
+        var __a2 = value.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_add_do_reference;
     public void AddDoReference(GodotObject? @object)
     {
@@ -1152,6 +1192,28 @@ public unsafe partial class UniformSetCacheRD : GodotObject
     public UniformSetCacheRD() : this(0, false)
     {
         ClassRegistry.AttachNew(this, "UniformSetCacheRD");
+    }
+
+    private static nint __mb_get_cache;
+    public static Rid GetCache(Rid shader, uint set, Godot.Collections.Array uniforms)
+    {
+        var __mb = __mb_get_cache;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("UniformSetCacheRD", "get_cache", 658571723);
+            if (__mb == 0) throw new MissingMethodException("UniformSetCacheRD.get_cache is not available in this engine build.");
+            __mb_get_cache = __mb;
+        }
+        var __a0 = shader;
+        long __a1 = unchecked((long)set);
+        ulong __a2 = uniforms.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        var __ret = default(Rid);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        return __ret;
     }
 }
 

@@ -18,6 +18,21 @@ public unsafe partial class WeakRef : RefCounted
     {
         ClassRegistry.AttachNew(this, "WeakRef");
     }
+
+    private static nint __mb_get_ref;
+    public Variant GetRef()
+    {
+        var __mb = __mb_get_ref;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WeakRef", "get_ref", 1214101251);
+            if (__mb == 0) throw new MissingMethodException("WeakRef.get_ref is not available in this engine build.");
+            __mb_get_ref = __mb;
+        }
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Variant(__ret);
+    }
 }
 
 public unsafe partial class WebRTCDataChannel : PacketPeer
@@ -417,6 +432,64 @@ public unsafe partial class WebRTCMultiplayerPeer : MultiplayerPeer
         ClassRegistry.AttachNew(this, "WebRTCMultiplayerPeer");
     }
 
+    private static nint __mb_create_server;
+    public Error CreateServer(Godot.Collections.Array channelsConfig)
+    {
+        var __mb = __mb_create_server;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebRTCMultiplayerPeer", "create_server", 2865356025);
+            if (__mb == 0) throw new MissingMethodException("WebRTCMultiplayerPeer.create_server is not available in this engine build.");
+            __mb_create_server = __mb;
+        }
+        ulong __a0 = channelsConfig.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Error)__ret;
+    }
+
+    private static nint __mb_create_client;
+    public Error CreateClient(int peerId, Godot.Collections.Array channelsConfig)
+    {
+        var __mb = __mb_create_client;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebRTCMultiplayerPeer", "create_client", 2641732907);
+            if (__mb == 0) throw new MissingMethodException("WebRTCMultiplayerPeer.create_client is not available in this engine build.");
+            __mb_create_client = __mb;
+        }
+        long __a0 = unchecked((long)peerId);
+        ulong __a1 = channelsConfig.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Error)__ret;
+    }
+
+    private static nint __mb_create_mesh;
+    public Error CreateMesh(int peerId, Godot.Collections.Array channelsConfig)
+    {
+        var __mb = __mb_create_mesh;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebRTCMultiplayerPeer", "create_mesh", 2641732907);
+            if (__mb == 0) throw new MissingMethodException("WebRTCMultiplayerPeer.create_mesh is not available in this engine build.");
+            __mb_create_mesh = __mb;
+        }
+        long __a0 = unchecked((long)peerId);
+        ulong __a1 = channelsConfig.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Error)__ret;
+    }
+
     private static nint __mb_add_peer;
     public Error AddPeer(WebRTCPeerConnection? peer, int peerId, int unreliableLifetime)
     {
@@ -472,6 +545,39 @@ public unsafe partial class WebRTCMultiplayerPeer : MultiplayerPeer
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
+
+    private static nint __mb_get_peer;
+    public Godot.Collections.Dictionary GetPeer(int peerId)
+    {
+        var __mb = __mb_get_peer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebRTCMultiplayerPeer", "get_peer", 3554694381);
+            if (__mb == 0) throw new MissingMethodException("WebRTCMultiplayerPeer.get_peer is not available in this engine build.");
+            __mb_get_peer = __mb;
+        }
+        long __a0 = unchecked((long)peerId);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_get_peers;
+    public Godot.Collections.Dictionary GetPeers()
+    {
+        var __mb = __mb_get_peers;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebRTCMultiplayerPeer", "get_peers", 2382534195);
+            if (__mb == 0) throw new MissingMethodException("WebRTCMultiplayerPeer.get_peers is not available in this engine build.");
+            __mb_get_peers = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
 }
 
 public unsafe partial class WebRTCPeerConnection : RefCounted
@@ -524,6 +630,45 @@ public unsafe partial class WebRTCPeerConnection : RefCounted
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, 0);
+    }
+
+    private static nint __mb_initialize;
+    public Error Initialize(Godot.Collections.Dictionary configuration)
+    {
+        var __mb = __mb_initialize;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebRTCPeerConnection", "initialize", 2625064318);
+            if (__mb == 0) throw new MissingMethodException("WebRTCPeerConnection.initialize is not available in this engine build.");
+            __mb_initialize = __mb;
+        }
+        ulong __a0 = configuration.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Error)__ret;
+    }
+
+    private static nint __mb_create_data_channel;
+    public WebRTCDataChannel? CreateDataChannel(string label, Godot.Collections.Dictionary options)
+    {
+        var __mb = __mb_create_data_channel;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebRTCPeerConnection", "create_data_channel", 1288557393);
+            if (__mb == 0) throw new MissingMethodException("WebRTCPeerConnection.create_data_channel is not available in this engine build.");
+            __mb_create_data_channel = __mb;
+        }
+        ulong __a0 = NativeString.Create(label);
+        ulong __a1 = options.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return (WebRTCDataChannel?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_create_offer;
@@ -1686,6 +1831,21 @@ public unsafe partial class WebXRInterface : XRInterface
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_available_display_refresh_rates;
+    public Godot.Collections.Array GetAvailableDisplayRefreshRates()
+    {
+        var __mb = __mb_get_available_display_refresh_rates;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("WebXRInterface", "get_available_display_refresh_rates", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("WebXRInterface.get_available_display_refresh_rates is not available in this engine build.");
+            __mb_get_available_display_refresh_rates = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 }
 

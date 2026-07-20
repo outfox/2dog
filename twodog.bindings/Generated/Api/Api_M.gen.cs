@@ -166,6 +166,47 @@ public unsafe partial class Marshalls : GodotObject
     private static Marshalls? _singleton;
     public static Marshalls Singleton => _singleton ??= (Marshalls)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("Marshalls"), adoptRef: false)!;
 
+    private static nint __mb_variant_to_base64;
+    public string VariantToBase64(Variant variant, bool fullObjects)
+    {
+        var __mb = __mb_variant_to_base64;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Marshalls", "variant_to_base64", 3876248563);
+            if (__mb == 0) throw new MissingMethodException("Marshalls.variant_to_base64 is not available in this engine build.");
+            __mb_variant_to_base64 = __mb;
+        }
+        var __a0 = variant.Native;
+        byte __a1 = fullObjects ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_base64_to_variant;
+    public Variant Base64ToVariant(string base64Str, bool allowObjects)
+    {
+        var __mb = __mb_base64_to_variant;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Marshalls", "base64_to_variant", 218087648);
+            if (__mb == 0) throw new MissingMethodException("Marshalls.base64_to_variant is not available in this engine build.");
+            __mb_base64_to_variant = __mb;
+        }
+        ulong __a0 = NativeString.Create(base64Str);
+        byte __a1 = allowObjects ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        NativeString.Destroy(ref __a0);
+        return new Variant(__ret);
+    }
+
     private static nint __mb_utf8_to_base64;
     public string Utf8ToBase64(string utf8Str)
     {
@@ -1016,6 +1057,42 @@ public unsafe partial class Mesh : Resource
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_surface_get_arrays;
+    public Godot.Collections.Array SurfaceGetArrays(int surfIdx)
+    {
+        var __mb = __mb_surface_get_arrays;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Mesh", "surface_get_arrays", 663333327);
+            if (__mb == 0) throw new MissingMethodException("Mesh.surface_get_arrays is not available in this engine build.");
+            __mb_surface_get_arrays = __mb;
+        }
+        long __a0 = unchecked((long)surfIdx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_surface_get_blend_shape_arrays;
+    public Godot.Collections.Array SurfaceGetBlendShapeArrays(int surfIdx)
+    {
+        var __mb = __mb_surface_get_blend_shape_arrays;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Mesh", "surface_get_blend_shape_arrays", 663333327);
+            if (__mb == 0) throw new MissingMethodException("Mesh.surface_get_blend_shape_arrays is not available in this engine build.");
+            __mb_surface_get_blend_shape_arrays = __mb;
+        }
+        long __a0 = unchecked((long)surfIdx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_surface_set_material;
@@ -2000,6 +2077,42 @@ public unsafe partial class MeshDataTool : RefCounted
         return __ret;
     }
 
+    private static nint __mb_set_vertex_meta;
+    public void SetVertexMeta(int idx, Variant meta)
+    {
+        var __mb = __mb_set_vertex_meta;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MeshDataTool", "set_vertex_meta", 2152698145);
+            if (__mb == 0) throw new MissingMethodException("MeshDataTool.set_vertex_meta is not available in this engine build.");
+            __mb_set_vertex_meta = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __a1 = meta.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_vertex_meta;
+    public Variant GetVertexMeta(int idx)
+    {
+        var __mb = __mb_get_vertex_meta;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MeshDataTool", "get_vertex_meta", 4227898402);
+            if (__mb == 0) throw new MissingMethodException("MeshDataTool.get_vertex_meta is not available in this engine build.");
+            __mb_get_vertex_meta = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_get_edge_vertex;
     public int GetEdgeVertex(int idx, int vertex)
     {
@@ -2018,6 +2131,42 @@ public unsafe partial class MeshDataTool : RefCounted
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_set_edge_meta;
+    public void SetEdgeMeta(int idx, Variant meta)
+    {
+        var __mb = __mb_set_edge_meta;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MeshDataTool", "set_edge_meta", 2152698145);
+            if (__mb == 0) throw new MissingMethodException("MeshDataTool.set_edge_meta is not available in this engine build.");
+            __mb_set_edge_meta = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __a1 = meta.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_edge_meta;
+    public Variant GetEdgeMeta(int idx)
+    {
+        var __mb = __mb_get_edge_meta;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MeshDataTool", "get_edge_meta", 4227898402);
+            if (__mb == 0) throw new MissingMethodException("MeshDataTool.get_edge_meta is not available in this engine build.");
+            __mb_get_edge_meta = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_get_face_vertex;
@@ -2058,6 +2207,42 @@ public unsafe partial class MeshDataTool : RefCounted
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_set_face_meta;
+    public void SetFaceMeta(int idx, Variant meta)
+    {
+        var __mb = __mb_set_face_meta;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MeshDataTool", "set_face_meta", 2152698145);
+            if (__mb == 0) throw new MissingMethodException("MeshDataTool.set_face_meta is not available in this engine build.");
+            __mb_set_face_meta = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __a1 = meta.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_face_meta;
+    public Variant GetFaceMeta(int idx)
+    {
+        var __mb = __mb_get_face_meta;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MeshDataTool", "get_face_meta", 4227898402);
+            if (__mb == 0) throw new MissingMethodException("MeshDataTool.get_face_meta is not available in this engine build.");
+            __mb_get_face_meta = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_get_face_normal;
@@ -2220,6 +2405,37 @@ public unsafe partial class MeshInstance3D : GeometryInstance3D
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (Mesh?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_set_skeleton_path;
+    public void SetSkeletonPath(NodePath skeletonPath)
+    {
+        var __mb = __mb_set_skeleton_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MeshInstance3D", "set_skeleton_path", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("MeshInstance3D.set_skeleton_path is not available in this engine build.");
+            __mb_set_skeleton_path = __mb;
+        }
+        ulong __a0 = skeletonPath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_skeleton_path;
+    public NodePath GetSkeletonPath()
+    {
+        var __mb = __mb_get_skeleton_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MeshInstance3D", "get_skeleton_path", 277076166);
+            if (__mb == 0) throw new MissingMethodException("MeshInstance3D.get_skeleton_path is not available in this engine build.");
+            __mb_get_skeleton_path = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_skin;
@@ -2655,6 +2871,24 @@ public unsafe partial class MeshLibrary : Resource
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_set_item_shapes;
+    public void SetItemShapes(int id, Godot.Collections.Array shapes)
+    {
+        var __mb = __mb_set_item_shapes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MeshLibrary", "set_item_shapes", 537221740);
+            if (__mb == 0) throw new MissingMethodException("MeshLibrary.set_item_shapes is not available in this engine build.");
+            __mb_set_item_shapes = __mb;
+        }
+        long __a0 = unchecked((long)id);
+        ulong __a1 = shapes.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_set_item_preview;
     public void SetItemPreview(int id, Texture2D? texture)
     {
@@ -2797,6 +3031,24 @@ public unsafe partial class MeshLibrary : Resource
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
+    }
+
+    private static nint __mb_get_item_shapes;
+    public Godot.Collections.Array GetItemShapes(int id)
+    {
+        var __mb = __mb_get_item_shapes;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MeshLibrary", "get_item_shapes", 663333327);
+            if (__mb == 0) throw new MissingMethodException("MeshLibrary.get_item_shapes is not available in this engine build.");
+            __mb_get_item_shapes = __mb;
+        }
+        long __a0 = unchecked((long)id);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_item_preview;
@@ -4430,6 +4682,70 @@ public unsafe partial class MultiplayerAPI : RefCounted
         return (Error)__ret;
     }
 
+    private static nint __mb_rpc;
+    public Error Rpc(int peer, GodotObject? @object, string method, Godot.Collections.Array arguments)
+    {
+        var __mb = __mb_rpc;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MultiplayerAPI", "rpc", 2077486355);
+            if (__mb == 0) throw new MissingMethodException("MultiplayerAPI.rpc is not available in this engine build.");
+            __mb_rpc = __mb;
+        }
+        long __a0 = unchecked((long)peer);
+        nint __a1 = @object?.NativePtr ?? 0;
+        ulong __a2 = StringNames.Get(method).Opaque;
+        ulong __a3 = arguments.Native;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Error)__ret;
+    }
+
+    private static nint __mb_object_configuration_add;
+    public Error ObjectConfigurationAdd(GodotObject? @object, Variant configuration)
+    {
+        var __mb = __mb_object_configuration_add;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MultiplayerAPI", "object_configuration_add", 1171879464);
+            if (__mb == 0) throw new MissingMethodException("MultiplayerAPI.object_configuration_add is not available in this engine build.");
+            __mb_object_configuration_add = __mb;
+        }
+        nint __a0 = @object?.NativePtr ?? 0;
+        var __a1 = configuration.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Error)__ret;
+    }
+
+    private static nint __mb_object_configuration_remove;
+    public Error ObjectConfigurationRemove(GodotObject? @object, Variant configuration)
+    {
+        var __mb = __mb_object_configuration_remove;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MultiplayerAPI", "object_configuration_remove", 1171879464);
+            if (__mb == 0) throw new MissingMethodException("MultiplayerAPI.object_configuration_remove is not available in this engine build.");
+            __mb_object_configuration_remove = __mb;
+        }
+        nint __a0 = @object?.NativePtr ?? 0;
+        var __a1 = configuration.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Error)__ret;
+    }
+
     private static nint __mb_set_default_interface;
     public static void SetDefaultInterface(string interfaceName)
     {
@@ -5074,6 +5390,55 @@ public unsafe partial class MultiplayerSpawner : Node
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
 
+    private static nint __mb_spawn;
+    public Node? Spawn(Variant data)
+    {
+        var __mb = __mb_spawn;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MultiplayerSpawner", "spawn", 1991184589);
+            if (__mb == 0) throw new MissingMethodException("MultiplayerSpawner.spawn is not available in this engine build.");
+            __mb_spawn = __mb;
+        }
+        var __a0 = data.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (Node?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
+    }
+
+    private static nint __mb_get_spawn_path;
+    public NodePath GetSpawnPath()
+    {
+        var __mb = __mb_get_spawn_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MultiplayerSpawner", "get_spawn_path", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("MultiplayerSpawner.get_spawn_path is not available in this engine build.");
+            __mb_get_spawn_path = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
+    private static nint __mb_set_spawn_path;
+    public void SetSpawnPath(NodePath path)
+    {
+        var __mb = __mb_set_spawn_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MultiplayerSpawner", "set_spawn_path", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("MultiplayerSpawner.set_spawn_path is not available in this engine build.");
+            __mb_set_spawn_path = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_get_spawn_limit;
     public uint GetSpawnLimit()
     {
@@ -5120,6 +5485,37 @@ public unsafe partial class MultiplayerSynchronizer : Node
         VISIBILITY_PROCESS_IDLE = 0,
         VISIBILITY_PROCESS_PHYSICS = 1,
         VISIBILITY_PROCESS_NONE = 2,
+    }
+
+    private static nint __mb_set_root_path;
+    public void SetRootPath(NodePath path)
+    {
+        var __mb = __mb_set_root_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MultiplayerSynchronizer", "set_root_path", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("MultiplayerSynchronizer.set_root_path is not available in this engine build.");
+            __mb_set_root_path = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_root_path;
+    public NodePath GetRootPath()
+    {
+        var __mb = __mb_get_root_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("MultiplayerSynchronizer", "get_root_path", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("MultiplayerSynchronizer.get_root_path is not available in this engine build.");
+            __mb_get_root_path = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_replication_interval;

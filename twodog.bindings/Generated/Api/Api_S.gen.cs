@@ -19,6 +19,37 @@ public unsafe partial class SceneMultiplayer : MultiplayerAPI
         ClassRegistry.AttachNew(this, "SceneMultiplayer");
     }
 
+    private static nint __mb_set_root_path;
+    public void SetRootPath(NodePath path)
+    {
+        var __mb = __mb_set_root_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneMultiplayer", "set_root_path", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("SceneMultiplayer.set_root_path is not available in this engine build.");
+            __mb_set_root_path = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_root_path;
+    public NodePath GetRootPath()
+    {
+        var __mb = __mb_get_root_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneMultiplayer", "get_root_path", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("SceneMultiplayer.get_root_path is not available in this engine build.");
+            __mb_get_root_path = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_clear;
     public void Clear()
     {
@@ -268,6 +299,235 @@ public unsafe partial class SceneReplicationConfig : Resource
         REPLICATION_MODE_ALWAYS = 1,
         REPLICATION_MODE_ON_CHANGE = 2,
     }
+
+    private static nint __mb_get_properties;
+    public Godot.Collections.Array GetProperties()
+    {
+        var __mb = __mb_get_properties;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneReplicationConfig", "get_properties", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("SceneReplicationConfig.get_properties is not available in this engine build.");
+            __mb_get_properties = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_add_property;
+    public void AddProperty(NodePath path, int index)
+    {
+        var __mb = __mb_add_property;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneReplicationConfig", "add_property", 4094619021);
+            if (__mb == 0) throw new MissingMethodException("SceneReplicationConfig.add_property is not available in this engine build.");
+            __mb_add_property = __mb;
+        }
+        ulong __a0 = path.Native;
+        long __a1 = unchecked((long)index);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_has_property;
+    public bool HasProperty(NodePath path)
+    {
+        var __mb = __mb_has_property;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneReplicationConfig", "has_property", 861721659);
+            if (__mb == 0) throw new MissingMethodException("SceneReplicationConfig.has_property is not available in this engine build.");
+            __mb_has_property = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        byte __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return __ret != 0;
+    }
+
+    private static nint __mb_remove_property;
+    public void RemoveProperty(NodePath path)
+    {
+        var __mb = __mb_remove_property;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneReplicationConfig", "remove_property", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("SceneReplicationConfig.remove_property is not available in this engine build.");
+            __mb_remove_property = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_property_get_index;
+    public int PropertyGetIndex(NodePath path)
+    {
+        var __mb = __mb_property_get_index;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneReplicationConfig", "property_get_index", 1382022557);
+            if (__mb == 0) throw new MissingMethodException("SceneReplicationConfig.property_get_index is not available in this engine build.");
+            __mb_property_get_index = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return unchecked((int)__ret);
+    }
+
+    private static nint __mb_property_get_spawn;
+    public bool PropertyGetSpawn(NodePath path)
+    {
+        var __mb = __mb_property_get_spawn;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneReplicationConfig", "property_get_spawn", 3456846888);
+            if (__mb == 0) throw new MissingMethodException("SceneReplicationConfig.property_get_spawn is not available in this engine build.");
+            __mb_property_get_spawn = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        byte __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return __ret != 0;
+    }
+
+    private static nint __mb_property_set_spawn;
+    public void PropertySetSpawn(NodePath path, bool enabled)
+    {
+        var __mb = __mb_property_set_spawn;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneReplicationConfig", "property_set_spawn", 3868023870);
+            if (__mb == 0) throw new MissingMethodException("SceneReplicationConfig.property_set_spawn is not available in this engine build.");
+            __mb_property_set_spawn = __mb;
+        }
+        ulong __a0 = path.Native;
+        byte __a1 = enabled ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_property_get_replication_mode;
+    public SceneReplicationConfig.ReplicationMode PropertyGetReplicationMode(NodePath path)
+    {
+        var __mb = __mb_property_get_replication_mode;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneReplicationConfig", "property_get_replication_mode", 2870606336);
+            if (__mb == 0) throw new MissingMethodException("SceneReplicationConfig.property_get_replication_mode is not available in this engine build.");
+            __mb_property_get_replication_mode = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        long __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (SceneReplicationConfig.ReplicationMode)__ret;
+    }
+
+    private static nint __mb_property_set_replication_mode;
+    public void PropertySetReplicationMode(NodePath path, SceneReplicationConfig.ReplicationMode mode)
+    {
+        var __mb = __mb_property_set_replication_mode;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneReplicationConfig", "property_set_replication_mode", 3200083865);
+            if (__mb == 0) throw new MissingMethodException("SceneReplicationConfig.property_set_replication_mode is not available in this engine build.");
+            __mb_property_set_replication_mode = __mb;
+        }
+        ulong __a0 = path.Native;
+        long __a1 = (long)mode;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_property_get_sync;
+    public bool PropertyGetSync(NodePath path)
+    {
+        var __mb = __mb_property_get_sync;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneReplicationConfig", "property_get_sync", 3456846888);
+            if (__mb == 0) throw new MissingMethodException("SceneReplicationConfig.property_get_sync is not available in this engine build.");
+            __mb_property_get_sync = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        byte __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return __ret != 0;
+    }
+
+    private static nint __mb_property_set_sync;
+    public void PropertySetSync(NodePath path, bool enabled)
+    {
+        var __mb = __mb_property_set_sync;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneReplicationConfig", "property_set_sync", 3868023870);
+            if (__mb == 0) throw new MissingMethodException("SceneReplicationConfig.property_set_sync is not available in this engine build.");
+            __mb_property_set_sync = __mb;
+        }
+        ulong __a0 = path.Native;
+        byte __a1 = enabled ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_property_get_watch;
+    public bool PropertyGetWatch(NodePath path)
+    {
+        var __mb = __mb_property_get_watch;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneReplicationConfig", "property_get_watch", 3456846888);
+            if (__mb == 0) throw new MissingMethodException("SceneReplicationConfig.property_get_watch is not available in this engine build.");
+            __mb_property_get_watch = __mb;
+        }
+        ulong __a0 = path.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        byte __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return __ret != 0;
+    }
+
+    private static nint __mb_property_set_watch;
+    public void PropertySetWatch(NodePath path, bool enabled)
+    {
+        var __mb = __mb_property_set_watch;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneReplicationConfig", "property_set_watch", 3868023870);
+            if (__mb == 0) throw new MissingMethodException("SceneReplicationConfig.property_set_watch is not available in this engine build.");
+            __mb_property_set_watch = __mb;
+        }
+        ulong __a0 = path.Native;
+        byte __a1 = enabled ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
 }
 
 public unsafe partial class SceneState : RefCounted
@@ -361,6 +621,44 @@ public unsafe partial class SceneState : RefCounted
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return StringNames.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_get_node_path;
+    public NodePath GetNodePath(int idx, bool forParent)
+    {
+        var __mb = __mb_get_node_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneState", "get_node_path", 2272487792);
+            if (__mb == 0) throw new MissingMethodException("SceneState.get_node_path is not available in this engine build.");
+            __mb_get_node_path = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        byte __a1 = forParent ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
+    private static nint __mb_get_node_owner_path;
+    public NodePath GetNodeOwnerPath(int idx)
+    {
+        var __mb = __mb_get_node_owner_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneState", "get_node_owner_path", 408788394);
+            if (__mb == 0) throw new MissingMethodException("SceneState.get_node_owner_path is not available in this engine build.");
+            __mb_get_node_owner_path = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_is_node_instance_placeholder;
@@ -473,6 +771,26 @@ public unsafe partial class SceneState : RefCounted
         return StringNames.ReadAndDestroy(ref __ret);
     }
 
+    private static nint __mb_get_node_property_value;
+    public Variant GetNodePropertyValue(int idx, int propIdx)
+    {
+        var __mb = __mb_get_node_property_value;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneState", "get_node_property_value", 678354945);
+            if (__mb == 0) throw new MissingMethodException("SceneState.get_node_property_value is not available in this engine build.");
+            __mb_get_node_property_value = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        long __a1 = unchecked((long)propIdx);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_get_connection_count;
     public int GetConnectionCount()
     {
@@ -486,6 +804,24 @@ public unsafe partial class SceneState : RefCounted
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_get_connection_source;
+    public NodePath GetConnectionSource(int idx)
+    {
+        var __mb = __mb_get_connection_source;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneState", "get_connection_source", 408788394);
+            if (__mb == 0) throw new MissingMethodException("SceneState.get_connection_source is not available in this engine build.");
+            __mb_get_connection_source = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_get_connection_signal;
@@ -504,6 +840,24 @@ public unsafe partial class SceneState : RefCounted
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return StringNames.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_get_connection_target;
+    public NodePath GetConnectionTarget(int idx)
+    {
+        var __mb = __mb_get_connection_target;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneState", "get_connection_target", 408788394);
+            if (__mb == 0) throw new MissingMethodException("SceneState.get_connection_target is not available in this engine build.");
+            __mb_get_connection_target = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_get_connection_method;
@@ -540,6 +894,24 @@ public unsafe partial class SceneState : RefCounted
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_get_connection_binds;
+    public Godot.Collections.Array GetConnectionBinds(int idx)
+    {
+        var __mb = __mb_get_connection_binds;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneState", "get_connection_binds", 663333327);
+            if (__mb == 0) throw new MissingMethodException("SceneState.get_connection_binds is not available in this engine build.");
+            __mb_get_connection_binds = __mb;
+        }
+        long __a0 = unchecked((long)idx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_connection_unbinds;
@@ -897,6 +1269,21 @@ public unsafe partial class SceneTree : MainLoop
         return (Tween?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_get_processed_tweens;
+    public Godot.Collections.Array GetProcessedTweens()
+    {
+        var __mb = __mb_get_processed_tweens;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneTree", "get_processed_tweens", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("SceneTree.get_processed_tweens is not available in this engine build.");
+            __mb_get_processed_tweens = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_get_node_count;
     public int GetNodeCount()
     {
@@ -1010,6 +1397,29 @@ public unsafe partial class SceneTree : MainLoop
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_set_group_flags;
+    public void SetGroupFlags(uint callFlags, string group, string property, Variant value)
+    {
+        var __mb = __mb_set_group_flags;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneTree", "set_group_flags", 3497599527);
+            if (__mb == 0) throw new MissingMethodException("SceneTree.set_group_flags is not available in this engine build.");
+            __mb_set_group_flags = __mb;
+        }
+        long __a0 = unchecked((long)callFlags);
+        ulong __a1 = StringNames.Get(group).Opaque;
+        ulong __a2 = NativeString.Create(property);
+        var __a3 = value.Native;
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a2);
+    }
+
     private static nint __mb_notify_group;
     public void NotifyGroup(string group, int notification)
     {
@@ -1026,6 +1436,45 @@ public unsafe partial class SceneTree : MainLoop
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_group;
+    public void SetGroup(string group, string property, Variant value)
+    {
+        var __mb = __mb_set_group;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneTree", "set_group", 1279312029);
+            if (__mb == 0) throw new MissingMethodException("SceneTree.set_group is not available in this engine build.");
+            __mb_set_group = __mb;
+        }
+        ulong __a0 = StringNames.Get(group).Opaque;
+        ulong __a1 = NativeString.Create(property);
+        var __a2 = value.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        NativeString.Destroy(ref __a1);
+    }
+
+    private static nint __mb_get_nodes_in_group;
+    public Godot.Collections.Array GetNodesInGroup(string group)
+    {
+        var __mb = __mb_get_nodes_in_group;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneTree", "get_nodes_in_group", 689397652);
+            if (__mb == 0) throw new MissingMethodException("SceneTree.get_nodes_in_group is not available in this engine build.");
+            __mb_get_nodes_in_group = __mb;
+        }
+        ulong __a0 = StringNames.Get(group).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_first_node_in_group;
@@ -1176,6 +1625,42 @@ public unsafe partial class SceneTree : MainLoop
             __mb_unload_current_scene = __mb;
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+    }
+
+    private static nint __mb_set_multiplayer;
+    public void SetMultiplayer(MultiplayerAPI? multiplayer, NodePath rootPath)
+    {
+        var __mb = __mb_set_multiplayer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneTree", "set_multiplayer", 2385607013);
+            if (__mb == 0) throw new MissingMethodException("SceneTree.set_multiplayer is not available in this engine build.");
+            __mb_set_multiplayer = __mb;
+        }
+        nint __a0 = multiplayer?.NativePtr ?? 0;
+        ulong __a1 = rootPath.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_multiplayer;
+    public MultiplayerAPI? GetMultiplayer(NodePath forPath)
+    {
+        var __mb = __mb_get_multiplayer;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SceneTree", "get_multiplayer", 3453401404);
+            if (__mb == 0) throw new MissingMethodException("SceneTree.get_multiplayer is not available in this engine build.");
+            __mb_get_multiplayer = __mb;
+        }
+        ulong __a0 = forPath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        nint __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return (MultiplayerAPI?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_multiplayer_poll_enabled;
@@ -1411,6 +1896,84 @@ public unsafe partial class Script : Resource
         return __ret != 0;
     }
 
+    private static nint __mb_get_script_property_list;
+    public Godot.Collections.Array GetScriptPropertyList()
+    {
+        var __mb = __mb_get_script_property_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Script", "get_script_property_list", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("Script.get_script_property_list is not available in this engine build.");
+            __mb_get_script_property_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_script_method_list;
+    public Godot.Collections.Array GetScriptMethodList()
+    {
+        var __mb = __mb_get_script_method_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Script", "get_script_method_list", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("Script.get_script_method_list is not available in this engine build.");
+            __mb_get_script_method_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_script_signal_list;
+    public Godot.Collections.Array GetScriptSignalList()
+    {
+        var __mb = __mb_get_script_signal_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Script", "get_script_signal_list", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("Script.get_script_signal_list is not available in this engine build.");
+            __mb_get_script_signal_list = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_script_constant_map;
+    public Godot.Collections.Dictionary GetScriptConstantMap()
+    {
+        var __mb = __mb_get_script_constant_map;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Script", "get_script_constant_map", 2382534195);
+            if (__mb == 0) throw new MissingMethodException("Script.get_script_constant_map is not available in this engine build.");
+            __mb_get_script_constant_map = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
+    }
+
+    private static nint __mb_get_property_default_value;
+    public Variant GetPropertyDefaultValue(string property)
+    {
+        var __mb = __mb_get_property_default_value;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Script", "get_property_default_value", 2138907829);
+            if (__mb == 0) throw new MissingMethodException("Script.get_property_default_value is not available in this engine build.");
+            __mb_get_property_default_value = __mb;
+        }
+        ulong __a0 = StringNames.Get(property).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_is_tool;
     public bool IsTool()
     {
@@ -1439,6 +2002,21 @@ public unsafe partial class Script : Resource
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_get_rpc_config;
+    public Variant GetRpcConfig()
+    {
+        var __mb = __mb_get_rpc_config;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Script", "get_rpc_config", 1214101251);
+            if (__mb == 0) throw new MissingMethodException("Script.get_rpc_config is not available in this engine build.");
+            __mb_get_rpc_config = __mb;
+        }
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_instance_has;
@@ -1601,6 +2179,24 @@ public unsafe partial class ScriptBacktrace : RefCounted
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
+    private static nint __mb_get_global_variable_value;
+    public Variant GetGlobalVariableValue(int variableIndex)
+    {
+        var __mb = __mb_get_global_variable_value;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ScriptBacktrace", "get_global_variable_value", 4227898402);
+            if (__mb == 0) throw new MissingMethodException("ScriptBacktrace.get_global_variable_value is not available in this engine build.");
+            __mb_get_global_variable_value = __mb;
+        }
+        long __a0 = unchecked((long)variableIndex);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_get_local_variable_count;
     public int GetLocalVariableCount(int frameIndex)
     {
@@ -1639,6 +2235,26 @@ public unsafe partial class ScriptBacktrace : RefCounted
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
+    private static nint __mb_get_local_variable_value;
+    public Variant GetLocalVariableValue(int frameIndex, int variableIndex)
+    {
+        var __mb = __mb_get_local_variable_value;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ScriptBacktrace", "get_local_variable_value", 678354945);
+            if (__mb == 0) throw new MissingMethodException("ScriptBacktrace.get_local_variable_value is not available in this engine build.");
+            __mb_get_local_variable_value = __mb;
+        }
+        long __a0 = unchecked((long)frameIndex);
+        long __a1 = unchecked((long)variableIndex);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
     private static nint __mb_get_member_variable_count;
     public int GetMemberVariableCount(int frameIndex)
     {
@@ -1675,6 +2291,26 @@ public unsafe partial class ScriptBacktrace : RefCounted
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_get_member_variable_value;
+    public Variant GetMemberVariableValue(int frameIndex, int variableIndex)
+    {
+        var __mb = __mb_get_member_variable_value;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ScriptBacktrace", "get_member_variable_value", 678354945);
+            if (__mb == 0) throw new MissingMethodException("ScriptBacktrace.get_member_variable_value is not available in this engine build.");
+            __mb_get_member_variable_value = __mb;
+        }
+        long __a0 = unchecked((long)frameIndex);
+        long __a1 = unchecked((long)variableIndex);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 
     private static nint __mb_format;
@@ -1751,6 +2387,21 @@ public unsafe partial class ScriptEditor : PanelContainer
         return (ScriptEditorBase?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
+    private static nint __mb_get_open_script_editors;
+    public Godot.Collections.Array GetOpenScriptEditors()
+    {
+        var __mb = __mb_get_open_script_editors;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ScriptEditor", "get_open_script_editors", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("ScriptEditor.get_open_script_editors is not available in this engine build.");
+            __mb_get_open_script_editors = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_register_syntax_highlighter;
     public void RegisterSyntaxHighlighter(EditorSyntaxHighlighter? syntaxHighlighter)
     {
@@ -1812,6 +2463,21 @@ public unsafe partial class ScriptEditor : PanelContainer
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (Script?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_get_open_scripts;
+    public Godot.Collections.Array GetOpenScripts()
+    {
+        var __mb = __mb_get_open_scripts;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ScriptEditor", "get_open_scripts", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("ScriptEditor.get_open_scripts is not available in this engine build.");
+            __mb_get_open_scripts = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_open_script_create_dialog;
@@ -3454,6 +4120,24 @@ public unsafe partial class Shader : Resource
         return (Texture?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
+    private static nint __mb_get_shader_uniform_list;
+    public Godot.Collections.Array GetShaderUniformList(bool getGroups)
+    {
+        var __mb = __mb_get_shader_uniform_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Shader", "get_shader_uniform_list", 1230511656);
+            if (__mb == 0) throw new MissingMethodException("Shader.get_shader_uniform_list is not available in this engine build.");
+            __mb_get_shader_uniform_list = __mb;
+        }
+        byte __a0 = getGroups ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_inspect_native_shader_code;
     public void InspectNativeShaderCode()
     {
@@ -3606,6 +4290,42 @@ public unsafe partial class ShaderMaterial : Material
         nint __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (Shader?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    private static nint __mb_set_shader_parameter;
+    public void SetShaderParameter(string param, Variant value)
+    {
+        var __mb = __mb_set_shader_parameter;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ShaderMaterial", "set_shader_parameter", 3776071444);
+            if (__mb == 0) throw new MissingMethodException("ShaderMaterial.set_shader_parameter is not available in this engine build.");
+            __mb_set_shader_parameter = __mb;
+        }
+        ulong __a0 = StringNames.Get(param).Opaque;
+        var __a1 = value.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_shader_parameter;
+    public Variant GetShaderParameter(string param)
+    {
+        var __mb = __mb_get_shader_parameter;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ShaderMaterial", "get_shader_parameter", 2760726917);
+            if (__mb == 0) throw new MissingMethodException("ShaderMaterial.get_shader_parameter is not available in this engine build.");
+            __mb_get_shader_parameter = __mb;
+        }
+        ulong __a0 = StringNames.Get(param).Opaque;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 }
 
@@ -4371,6 +5091,21 @@ public unsafe partial class ShapeCast2D : Node2D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
+
+    private static nint __mb_get_collision_result;
+    public Godot.Collections.Array GetCollisionResult()
+    {
+        var __mb = __mb_get_collision_result;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ShapeCast2D", "get_collision_result", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("ShapeCast2D.get_collision_result is not available in this engine build.");
+            __mb_get_collision_result = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
 }
 
 public unsafe partial class ShapeCast3D : Node3D
@@ -4953,6 +5688,21 @@ public unsafe partial class ShapeCast3D : Node3D
         return __ret != 0;
     }
 
+    private static nint __mb_get_collision_result;
+    public Godot.Collections.Array GetCollisionResult()
+    {
+        var __mb = __mb_get_collision_result;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("ShapeCast3D", "get_collision_result", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("ShapeCast3D.get_collision_result is not available in this engine build.");
+            __mb_get_collision_result = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_set_debug_shape_custom_color;
     public void SetDebugShapeCustomColor(Color debugShapeCustomColor)
     {
@@ -4992,6 +5742,37 @@ public unsafe partial class Shortcut : Resource
     public Shortcut() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "Shortcut");
+    }
+
+    private static nint __mb_set_events;
+    public void SetEvents(Godot.Collections.Array events)
+    {
+        var __mb = __mb_set_events;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Shortcut", "set_events", 381264803);
+            if (__mb == 0) throw new MissingMethodException("Shortcut.set_events is not available in this engine build.");
+            __mb_set_events = __mb;
+        }
+        ulong __a0 = events.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_events;
+    public Godot.Collections.Array GetEvents()
+    {
+        var __mb = __mb_get_events;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Shortcut", "get_events", 3995934104);
+            if (__mb == 0) throw new MissingMethodException("Shortcut.get_events is not available in this engine build.");
+            __mb_get_events = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_has_valid_event;
@@ -5281,6 +6062,44 @@ public unsafe partial class Skeleton3D : Node3D
         NativeString.Destroy(ref __a1);
     }
 
+    private static nint __mb_get_bone_meta;
+    public Variant GetBoneMeta(int boneIdx, string key)
+    {
+        var __mb = __mb_get_bone_meta;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Skeleton3D", "get_bone_meta", 203112058);
+            if (__mb == 0) throw new MissingMethodException("Skeleton3D.get_bone_meta is not available in this engine build.");
+            __mb_get_bone_meta = __mb;
+        }
+        long __a0 = unchecked((long)boneIdx);
+        ulong __a1 = StringNames.Get(key).Opaque;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
+    }
+
+    private static nint __mb_get_bone_meta_list;
+    public Godot.Collections.Array GetBoneMetaList(int boneIdx)
+    {
+        var __mb = __mb_get_bone_meta_list;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Skeleton3D", "get_bone_meta_list", 663333327);
+            if (__mb == 0) throw new MissingMethodException("Skeleton3D.get_bone_meta_list is not available in this engine build.");
+            __mb_get_bone_meta_list = __mb;
+        }
+        long __a0 = unchecked((long)boneIdx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
     private static nint __mb_has_bone_meta;
     public bool HasBoneMeta(int boneIdx, string key)
     {
@@ -5299,6 +6118,26 @@ public unsafe partial class Skeleton3D : Node3D
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_set_bone_meta;
+    public void SetBoneMeta(int boneIdx, string key, Variant value)
+    {
+        var __mb = __mb_set_bone_meta;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Skeleton3D", "set_bone_meta", 702482756);
+            if (__mb == 0) throw new MissingMethodException("Skeleton3D.set_bone_meta is not available in this engine build.");
+            __mb_set_bone_meta = __mb;
+        }
+        long __a0 = unchecked((long)boneIdx);
+        ulong __a1 = StringNames.Get(key).Opaque;
+        var __a2 = value.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_concatenated_bone_names;
@@ -6009,6 +6848,22 @@ public unsafe partial class Skeleton3D : Node3D
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
     }
 
+    private static nint __mb_physical_bones_start_simulation;
+    public void PhysicalBonesStartSimulation(Godot.Collections.Array bones)
+    {
+        var __mb = __mb_physical_bones_start_simulation;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("Skeleton3D", "physical_bones_start_simulation", 2787316981);
+            if (__mb == 0) throw new MissingMethodException("Skeleton3D.physical_bones_start_simulation is not available in this engine build.");
+            __mb_physical_bones_start_simulation = __mb;
+        }
+        ulong __a0 = bones.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_physical_bones_add_collision_exception;
     public void PhysicalBonesAddCollisionException(Rid exception)
     {
@@ -6142,6 +6997,37 @@ public unsafe partial class SkeletonIK3D : SkeletonModifier3D
         var __ret = default(Transform3D);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    private static nint __mb_set_target_node;
+    public void SetTargetNode(NodePath node)
+    {
+        var __mb = __mb_set_target_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonIK3D", "set_target_node", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("SkeletonIK3D.set_target_node is not available in this engine build.");
+            __mb_set_target_node = __mb;
+        }
+        ulong __a0 = node.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_target_node;
+    public NodePath GetTargetNode()
+    {
+        var __mb = __mb_get_target_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonIK3D", "get_target_node", 277076166);
+            if (__mb == 0) throw new MissingMethodException("SkeletonIK3D.get_target_node is not available in this engine build.");
+            __mb_get_target_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_override_tip_basis;
@@ -6605,6 +7491,68 @@ public unsafe partial class SkeletonModification2DCCDIK : SkeletonModification2D
         ClassRegistry.AttachNew(this, "SkeletonModification2DCCDIK");
     }
 
+    private static nint __mb_set_target_node;
+    public void SetTargetNode(NodePath targetNodepath)
+    {
+        var __mb = __mb_set_target_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DCCDIK", "set_target_node", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DCCDIK.set_target_node is not available in this engine build.");
+            __mb_set_target_node = __mb;
+        }
+        ulong __a0 = targetNodepath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_target_node;
+    public NodePath GetTargetNode()
+    {
+        var __mb = __mb_get_target_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DCCDIK", "get_target_node", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DCCDIK.get_target_node is not available in this engine build.");
+            __mb_get_target_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
+    private static nint __mb_set_tip_node;
+    public void SetTipNode(NodePath tipNodepath)
+    {
+        var __mb = __mb_set_tip_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DCCDIK", "set_tip_node", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DCCDIK.set_tip_node is not available in this engine build.");
+            __mb_set_tip_node = __mb;
+        }
+        ulong __a0 = tipNodepath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_tip_node;
+    public NodePath GetTipNode()
+    {
+        var __mb = __mb_get_tip_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DCCDIK", "get_tip_node", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DCCDIK.get_tip_node is not available in this engine build.");
+            __mb_get_tip_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_set_ccdik_data_chain_length;
     public void SetCcdikDataChainLength(int length)
     {
@@ -6634,6 +7582,42 @@ public unsafe partial class SkeletonModification2DCCDIK : SkeletonModification2D
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_set_ccdik_joint_bone2d_node;
+    public void SetCcdikJointBone2dNode(int jointIdx, NodePath bone2dNodepath)
+    {
+        var __mb = __mb_set_ccdik_joint_bone2d_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DCCDIK", "set_ccdik_joint_bone2d_node", 2761262315);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DCCDIK.set_ccdik_joint_bone2d_node is not available in this engine build.");
+            __mb_set_ccdik_joint_bone2d_node = __mb;
+        }
+        long __a0 = unchecked((long)jointIdx);
+        ulong __a1 = bone2dNodepath.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_ccdik_joint_bone2d_node;
+    public NodePath GetCcdikJointBone2dNode(int jointIdx)
+    {
+        var __mb = __mb_get_ccdik_joint_bone2d_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DCCDIK", "get_ccdik_joint_bone2d_node", 408788394);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DCCDIK.get_ccdik_joint_bone2d_node is not available in this engine build.");
+            __mb_get_ccdik_joint_bone2d_node = __mb;
+        }
+        long __a0 = unchecked((long)jointIdx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_ccdik_joint_bone_index;
@@ -6862,6 +7846,37 @@ public unsafe partial class SkeletonModification2DFABRIK : SkeletonModification2
         ClassRegistry.AttachNew(this, "SkeletonModification2DFABRIK");
     }
 
+    private static nint __mb_set_target_node;
+    public void SetTargetNode(NodePath targetNodepath)
+    {
+        var __mb = __mb_set_target_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DFABRIK", "set_target_node", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DFABRIK.set_target_node is not available in this engine build.");
+            __mb_set_target_node = __mb;
+        }
+        ulong __a0 = targetNodepath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_target_node;
+    public NodePath GetTargetNode()
+    {
+        var __mb = __mb_get_target_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DFABRIK", "get_target_node", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DFABRIK.get_target_node is not available in this engine build.");
+            __mb_get_target_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_set_fabrik_data_chain_length;
     public void SetFabrikDataChainLength(int length)
     {
@@ -6891,6 +7906,42 @@ public unsafe partial class SkeletonModification2DFABRIK : SkeletonModification2
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_set_fabrik_joint_bone2d_node;
+    public void SetFabrikJointBone2dNode(int jointIdx, NodePath bone2dNodepath)
+    {
+        var __mb = __mb_set_fabrik_joint_bone2d_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DFABRIK", "set_fabrik_joint_bone2d_node", 2761262315);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DFABRIK.set_fabrik_joint_bone2d_node is not available in this engine build.");
+            __mb_set_fabrik_joint_bone2d_node = __mb;
+        }
+        long __a0 = unchecked((long)jointIdx);
+        ulong __a1 = bone2dNodepath.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_fabrik_joint_bone2d_node;
+    public NodePath GetFabrikJointBone2dNode(int jointIdx)
+    {
+        var __mb = __mb_get_fabrik_joint_bone2d_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DFABRIK", "get_fabrik_joint_bone2d_node", 408788394);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DFABRIK.get_fabrik_joint_bone2d_node is not available in this engine build.");
+            __mb_get_fabrik_joint_bone2d_node = __mb;
+        }
+        long __a0 = unchecked((long)jointIdx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_fabrik_joint_bone_index;
@@ -7009,6 +8060,37 @@ public unsafe partial class SkeletonModification2DJiggle : SkeletonModification2
     public SkeletonModification2DJiggle() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "SkeletonModification2DJiggle");
+    }
+
+    private static nint __mb_set_target_node;
+    public void SetTargetNode(NodePath targetNodepath)
+    {
+        var __mb = __mb_set_target_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DJiggle", "set_target_node", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DJiggle.set_target_node is not available in this engine build.");
+            __mb_set_target_node = __mb;
+        }
+        ulong __a0 = targetNodepath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_target_node;
+    public NodePath GetTargetNode()
+    {
+        var __mb = __mb_get_target_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DJiggle", "get_target_node", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DJiggle.get_target_node is not available in this engine build.");
+            __mb_get_target_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_jiggle_data_chain_length;
@@ -7270,6 +8352,42 @@ public unsafe partial class SkeletonModification2DJiggle : SkeletonModification2
             __mb_reset = __mb;
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+    }
+
+    private static nint __mb_set_jiggle_joint_bone2d_node;
+    public void SetJiggleJointBone2dNode(int jointIdx, NodePath bone2dNode)
+    {
+        var __mb = __mb_set_jiggle_joint_bone2d_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DJiggle", "set_jiggle_joint_bone2d_node", 2761262315);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DJiggle.set_jiggle_joint_bone2d_node is not available in this engine build.");
+            __mb_set_jiggle_joint_bone2d_node = __mb;
+        }
+        long __a0 = unchecked((long)jointIdx);
+        ulong __a1 = bone2dNode.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_jiggle_joint_bone2d_node;
+    public NodePath GetJiggleJointBone2dNode(int jointIdx)
+    {
+        var __mb = __mb_get_jiggle_joint_bone2d_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DJiggle", "get_jiggle_joint_bone2d_node", 408788394);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DJiggle.get_jiggle_joint_bone2d_node is not available in this engine build.");
+            __mb_get_jiggle_joint_bone2d_node = __mb;
+        }
+        long __a0 = unchecked((long)jointIdx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_jiggle_joint_bone_index;
@@ -7534,6 +8652,37 @@ public unsafe partial class SkeletonModification2DLookAt : SkeletonModification2
         ClassRegistry.AttachNew(this, "SkeletonModification2DLookAt");
     }
 
+    private static nint __mb_set_bone2d_node;
+    public void SetBone2dNode(NodePath bone2dNodepath)
+    {
+        var __mb = __mb_set_bone2d_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DLookAt", "set_bone2d_node", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DLookAt.set_bone2d_node is not available in this engine build.");
+            __mb_set_bone2d_node = __mb;
+        }
+        ulong __a0 = bone2dNodepath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_bone2d_node;
+    public NodePath GetBone2dNode()
+    {
+        var __mb = __mb_get_bone2d_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DLookAt", "get_bone2d_node", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DLookAt.get_bone2d_node is not available in this engine build.");
+            __mb_get_bone2d_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_set_bone_index;
     public void SetBoneIndex(int boneIdx)
     {
@@ -7563,6 +8712,37 @@ public unsafe partial class SkeletonModification2DLookAt : SkeletonModification2
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_set_target_node;
+    public void SetTargetNode(NodePath targetNodepath)
+    {
+        var __mb = __mb_set_target_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DLookAt", "set_target_node", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DLookAt.set_target_node is not available in this engine build.");
+            __mb_set_target_node = __mb;
+        }
+        ulong __a0 = targetNodepath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_target_node;
+    public NodePath GetTargetNode()
+    {
+        var __mb = __mb_get_target_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DLookAt", "get_target_node", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DLookAt.get_target_node is not available in this engine build.");
+            __mb_get_target_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_additional_rotation;
@@ -7761,6 +8941,42 @@ public unsafe partial class SkeletonModification2DPhysicalBones : SkeletonModifi
         return unchecked((int)__ret);
     }
 
+    private static nint __mb_set_physical_bone_node;
+    public void SetPhysicalBoneNode(int jointIdx, NodePath physicalbone2dNode)
+    {
+        var __mb = __mb_set_physical_bone_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DPhysicalBones", "set_physical_bone_node", 2761262315);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DPhysicalBones.set_physical_bone_node is not available in this engine build.");
+            __mb_set_physical_bone_node = __mb;
+        }
+        long __a0 = unchecked((long)jointIdx);
+        ulong __a1 = physicalbone2dNode.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_physical_bone_node;
+    public NodePath GetPhysicalBoneNode(int jointIdx)
+    {
+        var __mb = __mb_get_physical_bone_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DPhysicalBones", "get_physical_bone_node", 408788394);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DPhysicalBones.get_physical_bone_node is not available in this engine build.");
+            __mb_get_physical_bone_node = __mb;
+        }
+        long __a0 = unchecked((long)jointIdx);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_fetch_physical_bones;
     public void FetchPhysicalBones()
     {
@@ -7772,6 +8988,38 @@ public unsafe partial class SkeletonModification2DPhysicalBones : SkeletonModifi
             __mb_fetch_physical_bones = __mb;
         }
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+    }
+
+    private static nint __mb_start_simulation;
+    public void StartSimulation(Godot.Collections.Array bones)
+    {
+        var __mb = __mb_start_simulation;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DPhysicalBones", "start_simulation", 2787316981);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DPhysicalBones.start_simulation is not available in this engine build.");
+            __mb_start_simulation = __mb;
+        }
+        ulong __a0 = bones.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_stop_simulation;
+    public void StopSimulation(Godot.Collections.Array bones)
+    {
+        var __mb = __mb_stop_simulation;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DPhysicalBones", "stop_simulation", 2787316981);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DPhysicalBones.stop_simulation is not available in this engine build.");
+            __mb_stop_simulation = __mb;
+        }
+        ulong __a0 = bones.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 }
 
@@ -7823,6 +9071,37 @@ public unsafe partial class SkeletonModification2DTwoBoneIK : SkeletonModificati
     public SkeletonModification2DTwoBoneIK() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "SkeletonModification2DTwoBoneIK");
+    }
+
+    private static nint __mb_set_target_node;
+    public void SetTargetNode(NodePath targetNodepath)
+    {
+        var __mb = __mb_set_target_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DTwoBoneIK", "set_target_node", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DTwoBoneIK.set_target_node is not available in this engine build.");
+            __mb_set_target_node = __mb;
+        }
+        ulong __a0 = targetNodepath.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_target_node;
+    public NodePath GetTargetNode()
+    {
+        var __mb = __mb_get_target_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DTwoBoneIK", "get_target_node", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DTwoBoneIK.get_target_node is not available in this engine build.");
+            __mb_get_target_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_target_minimum_distance;
@@ -7918,6 +9197,37 @@ public unsafe partial class SkeletonModification2DTwoBoneIK : SkeletonModificati
         return __ret != 0;
     }
 
+    private static nint __mb_set_joint_one_bone2d_node;
+    public void SetJointOneBone2dNode(NodePath bone2dNode)
+    {
+        var __mb = __mb_set_joint_one_bone2d_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DTwoBoneIK", "set_joint_one_bone2d_node", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DTwoBoneIK.set_joint_one_bone2d_node is not available in this engine build.");
+            __mb_set_joint_one_bone2d_node = __mb;
+        }
+        ulong __a0 = bone2dNode.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_joint_one_bone2d_node;
+    public NodePath GetJointOneBone2dNode()
+    {
+        var __mb = __mb_get_joint_one_bone2d_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DTwoBoneIK", "get_joint_one_bone2d_node", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DTwoBoneIK.get_joint_one_bone2d_node is not available in this engine build.");
+            __mb_get_joint_one_bone2d_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_set_joint_one_bone_idx;
     public void SetJointOneBoneIdx(int boneIdx)
     {
@@ -7947,6 +9257,37 @@ public unsafe partial class SkeletonModification2DTwoBoneIK : SkeletonModificati
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    private static nint __mb_set_joint_two_bone2d_node;
+    public void SetJointTwoBone2dNode(NodePath bone2dNode)
+    {
+        var __mb = __mb_set_joint_two_bone2d_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DTwoBoneIK", "set_joint_two_bone2d_node", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DTwoBoneIK.set_joint_two_bone2d_node is not available in this engine build.");
+            __mb_set_joint_two_bone2d_node = __mb;
+        }
+        ulong __a0 = bone2dNode.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_joint_two_bone2d_node;
+    public NodePath GetJointTwoBone2dNode()
+    {
+        var __mb = __mb_get_joint_two_bone2d_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SkeletonModification2DTwoBoneIK", "get_joint_two_bone2d_node", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("SkeletonModification2DTwoBoneIK.get_joint_two_bone2d_node is not available in this engine build.");
+            __mb_get_joint_two_bone2d_node = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_joint_two_bone_idx;
@@ -9754,6 +11095,37 @@ public unsafe partial class SoftBody3D : MeshInstance3D
         return __ret != 0;
     }
 
+    private static nint __mb_set_parent_collision_ignore;
+    public void SetParentCollisionIgnore(NodePath parentCollisionIgnore)
+    {
+        var __mb = __mb_set_parent_collision_ignore;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SoftBody3D", "set_parent_collision_ignore", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("SoftBody3D.set_parent_collision_ignore is not available in this engine build.");
+            __mb_set_parent_collision_ignore = __mb;
+        }
+        ulong __a0 = parentCollisionIgnore.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_parent_collision_ignore;
+    public NodePath GetParentCollisionIgnore()
+    {
+        var __mb = __mb_get_parent_collision_ignore;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SoftBody3D", "get_parent_collision_ignore", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("SoftBody3D.get_parent_collision_ignore is not available in this engine build.");
+            __mb_get_parent_collision_ignore = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_set_disable_mode;
     public void SetDisableMode(SoftBody3D.DisableMode mode)
     {
@@ -9783,6 +11155,21 @@ public unsafe partial class SoftBody3D : MeshInstance3D
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return (SoftBody3D.DisableMode)__ret;
+    }
+
+    private static nint __mb_get_collision_exceptions;
+    public Godot.Collections.Array GetCollisionExceptions()
+    {
+        var __mb = __mb_get_collision_exceptions;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SoftBody3D", "get_collision_exceptions", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("SoftBody3D.get_collision_exceptions is not available in this engine build.");
+            __mb_get_collision_exceptions = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_add_collision_exception_with;
@@ -10117,6 +11504,28 @@ public unsafe partial class SoftBody3D : MeshInstance3D
         var __a0 = force;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_point_pinned;
+    public void SetPointPinned(int pointIndex, bool pinned, NodePath attachmentPath, int insertAt)
+    {
+        var __mb = __mb_set_point_pinned;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SoftBody3D", "set_point_pinned", 528784402);
+            if (__mb == 0) throw new MissingMethodException("SoftBody3D.set_point_pinned is not available in this engine build.");
+            __mb_set_point_pinned = __mb;
+        }
+        long __a0 = unchecked((long)pointIndex);
+        byte __a1 = pinned ? (byte)1 : (byte)0;
+        ulong __a2 = attachmentPath.Native;
+        long __a3 = unchecked((long)insertAt);
+        var __args = stackalloc nint[4];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        __args[3] = (nint)(&__a3);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
@@ -10714,6 +12123,42 @@ public unsafe partial class SplineIK3D : ChainIK3D
         ClassRegistry.AttachNew(this, "SplineIK3D");
     }
 
+    private static nint __mb_set_path_3d;
+    public void SetPath3d(int index, NodePath path3d)
+    {
+        var __mb = __mb_set_path_3d;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SplineIK3D", "set_path_3d", 2761262315);
+            if (__mb == 0) throw new MissingMethodException("SplineIK3D.set_path_3d is not available in this engine build.");
+            __mb_set_path_3d = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        ulong __a1 = path3d.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_path_3d;
+    public NodePath GetPath3d(int index)
+    {
+        var __mb = __mb_get_path_3d;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SplineIK3D", "get_path_3d", 408788394);
+            if (__mb == 0) throw new MissingMethodException("SplineIK3D.get_path_3d is not available in this engine build.");
+            __mb_get_path_3d = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_set_tilt_enabled;
     public void SetTiltEnabled(int index, bool enabled)
     {
@@ -11101,6 +12546,21 @@ public unsafe partial class SplitContainer : Container
         byte __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    private static nint __mb_get_drag_area_controls;
+    public Godot.Collections.Array GetDragAreaControls()
+    {
+        var __mb = __mb_get_drag_area_controls;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SplitContainer", "get_drag_area_controls", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("SplitContainer.get_drag_area_controls is not available in this engine build.");
+            __mb_get_drag_area_controls = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_touch_dragger_enabled;
@@ -12090,6 +13550,42 @@ public unsafe partial class SpringBoneSimulator3D : SkeletonModifier3D
         return (SpringBoneSimulator3D.CenterFrom)__ret;
     }
 
+    private static nint __mb_set_center_node;
+    public void SetCenterNode(int index, NodePath nodePath)
+    {
+        var __mb = __mb_set_center_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SpringBoneSimulator3D", "set_center_node", 2761262315);
+            if (__mb == 0) throw new MissingMethodException("SpringBoneSimulator3D.set_center_node is not available in this engine build.");
+            __mb_set_center_node = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        ulong __a1 = nodePath.Native;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_center_node;
+    public NodePath GetCenterNode(int index)
+    {
+        var __mb = __mb_get_center_node;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SpringBoneSimulator3D", "get_center_node", 408788394);
+            if (__mb == 0) throw new MissingMethodException("SpringBoneSimulator3D.get_center_node is not available in this engine build.");
+            __mb_get_center_node = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_set_center_bone_name;
     public void SetCenterBoneName(int index, string boneName)
     {
@@ -13013,6 +14509,46 @@ public unsafe partial class SpringBoneSimulator3D : SkeletonModifier3D
         return __ret != 0;
     }
 
+    private static nint __mb_set_exclude_collision_path;
+    public void SetExcludeCollisionPath(int index, int collision, NodePath nodePath)
+    {
+        var __mb = __mb_set_exclude_collision_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SpringBoneSimulator3D", "set_exclude_collision_path", 132481804);
+            if (__mb == 0) throw new MissingMethodException("SpringBoneSimulator3D.set_exclude_collision_path is not available in this engine build.");
+            __mb_set_exclude_collision_path = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        long __a1 = unchecked((long)collision);
+        ulong __a2 = nodePath.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_exclude_collision_path;
+    public NodePath GetExcludeCollisionPath(int index, int collision)
+    {
+        var __mb = __mb_get_exclude_collision_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SpringBoneSimulator3D", "get_exclude_collision_path", 464924783);
+            if (__mb == 0) throw new MissingMethodException("SpringBoneSimulator3D.get_exclude_collision_path is not available in this engine build.");
+            __mb_get_exclude_collision_path = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        long __a1 = unchecked((long)collision);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_set_exclude_collision_count;
     public void SetExcludeCollisionCount(int index, int count)
     {
@@ -13063,6 +14599,46 @@ public unsafe partial class SpringBoneSimulator3D : SkeletonModifier3D
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_set_collision_path;
+    public void SetCollisionPath(int index, int collision, NodePath nodePath)
+    {
+        var __mb = __mb_set_collision_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SpringBoneSimulator3D", "set_collision_path", 132481804);
+            if (__mb == 0) throw new MissingMethodException("SpringBoneSimulator3D.set_collision_path is not available in this engine build.");
+            __mb_set_collision_path = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        long __a1 = unchecked((long)collision);
+        ulong __a2 = nodePath.Native;
+        var __args = stackalloc nint[3];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        __args[2] = (nint)(&__a2);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_collision_path;
+    public NodePath GetCollisionPath(int index, int collision)
+    {
+        var __mb = __mb_get_collision_path;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SpringBoneSimulator3D", "get_collision_path", 464924783);
+            if (__mb == 0) throw new MissingMethodException("SpringBoneSimulator3D.get_collision_path is not available in this engine build.");
+            __mb_get_collision_path = __mb;
+        }
+        long __a0 = unchecked((long)index);
+        long __a1 = unchecked((long)collision);
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new NodePath(__ret);
     }
 
     private static nint __mb_set_collision_count;
@@ -15037,6 +16613,37 @@ public unsafe partial class StatusIndicator : Node
         return __ret != 0;
     }
 
+    private static nint __mb_set_menu;
+    public void SetMenu(NodePath menu)
+    {
+        var __mb = __mb_set_menu;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("StatusIndicator", "set_menu", 1348162250);
+            if (__mb == 0) throw new MissingMethodException("StatusIndicator.set_menu is not available in this engine build.");
+            __mb_set_menu = __mb;
+        }
+        ulong __a0 = menu.Native;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
+    private static nint __mb_get_menu;
+    public NodePath GetMenu()
+    {
+        var __mb = __mb_get_menu;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("StatusIndicator", "get_menu", 4075236667);
+            if (__mb == 0) throw new MissingMethodException("StatusIndicator.get_menu is not available in this engine build.");
+            __mb_get_menu = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new NodePath(__ret);
+    }
+
     private static nint __mb_get_rect;
     public Rect2 GetRect()
     {
@@ -15056,6 +16663,42 @@ public unsafe partial class StatusIndicator : Node
 public unsafe partial class StreamPeer : RefCounted
 {
     internal StreamPeer(nint ptr, bool rc) : base(ptr, rc) { }
+
+    private static nint __mb_get_data;
+    public Godot.Collections.Array GetData(int bytes)
+    {
+        var __mb = __mb_get_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("StreamPeer", "get_data", 1171824711);
+            if (__mb == 0) throw new MissingMethodException("StreamPeer.get_data is not available in this engine build.");
+            __mb_get_data = __mb;
+        }
+        long __a0 = unchecked((long)bytes);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
+
+    private static nint __mb_get_partial_data;
+    public Godot.Collections.Array GetPartialData(int bytes)
+    {
+        var __mb = __mb_get_partial_data;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("StreamPeer", "get_partial_data", 1171824711);
+            if (__mb == 0) throw new MissingMethodException("StreamPeer.get_partial_data is not available in this engine build.");
+            __mb_get_partial_data = __mb;
+        }
+        long __a0 = unchecked((long)bytes);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
 
     private static nint __mb_get_available_bytes;
     public int GetAvailableBytes()
@@ -15313,6 +16956,24 @@ public unsafe partial class StreamPeer : RefCounted
         NativeString.Destroy(ref __a0);
     }
 
+    private static nint __mb_put_var;
+    public void PutVar(Variant value, bool fullObjects)
+    {
+        var __mb = __mb_put_var;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("StreamPeer", "put_var", 738511890);
+            if (__mb == 0) throw new MissingMethodException("StreamPeer.put_var is not available in this engine build.");
+            __mb_put_var = __mb;
+        }
+        var __a0 = value.Native;
+        byte __a1 = fullObjects ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_get_8;
     public sbyte Get8()
     {
@@ -15512,6 +17173,24 @@ public unsafe partial class StreamPeer : RefCounted
         ulong __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    private static nint __mb_get_var;
+    public Variant GetVar(bool allowObjects)
+    {
+        var __mb = __mb_get_var;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("StreamPeer", "get_var", 3442865206);
+            if (__mb == 0) throw new MissingMethodException("StreamPeer.get_var is not available in this engine build.");
+            __mb_get_var = __mb;
+        }
+        byte __a0 = allowObjects ? (byte)1 : (byte)0;
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        NativeVariant __ret = default;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Variant(__ret);
     }
 }
 
@@ -18037,6 +19716,24 @@ public unsafe partial class SurfaceTool : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
+    private static nint __mb_create_from_arrays;
+    public void CreateFromArrays(Godot.Collections.Array arrays, Mesh.PrimitiveType primitiveType)
+    {
+        var __mb = __mb_create_from_arrays;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SurfaceTool", "create_from_arrays", 1894639680);
+            if (__mb == 0) throw new MissingMethodException("SurfaceTool.create_from_arrays is not available in this engine build.");
+            __mb_create_from_arrays = __mb;
+        }
+        ulong __a0 = arrays.Native;
+        long __a1 = (long)primitiveType;
+        var __args = stackalloc nint[2];
+        __args[0] = (nint)(&__a0);
+        __args[1] = (nint)(&__a1);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+    }
+
     private static nint __mb_create_from_blend_shape;
     public void CreateFromBlendShape(Mesh? existing, int surface, string blendShape)
     {
@@ -18097,6 +19794,21 @@ public unsafe partial class SurfaceTool : RefCounted
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
         return (ArrayMesh?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
+
+    private static nint __mb_commit_to_arrays;
+    public Godot.Collections.Array CommitToArrays()
+    {
+        var __mb = __mb_commit_to_arrays;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SurfaceTool", "commit_to_arrays", 2915620761);
+            if (__mb == 0) throw new MissingMethodException("SurfaceTool.commit_to_arrays is not available in this engine build.");
+            __mb_commit_to_arrays = __mb;
+        }
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        return new Godot.Collections.Array(__ret);
+    }
 }
 
 public unsafe partial class SyntaxHighlighter : Resource
@@ -18106,6 +19818,24 @@ public unsafe partial class SyntaxHighlighter : Resource
     public SyntaxHighlighter() : this(0, true)
     {
         ClassRegistry.AttachNew(this, "SyntaxHighlighter");
+    }
+
+    private static nint __mb_get_line_syntax_highlighting;
+    public Godot.Collections.Dictionary GetLineSyntaxHighlighting(int line)
+    {
+        var __mb = __mb_get_line_syntax_highlighting;
+        if (__mb == 0)
+        {
+            __mb = MethodBinds.Resolve("SyntaxHighlighter", "get_line_syntax_highlighting", 3554694381);
+            if (__mb == 0) throw new MissingMethodException("SyntaxHighlighter.get_line_syntax_highlighting is not available in this engine build.");
+            __mb_get_line_syntax_highlighting = __mb;
+        }
+        long __a0 = unchecked((long)line);
+        var __args = stackalloc nint[1];
+        __args[0] = (nint)(&__a0);
+        ulong __ret = 0;
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_update_cache;
