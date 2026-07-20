@@ -107,6 +107,16 @@ public static unsafe class Variants
         return value;
     }
 
+    public static double ToFloat(in NativeVariant v)
+    {
+        double value = 0;
+        fixed (NativeVariant* p = &v)
+        {
+            To(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_FLOAT)((nint)(&value), (nint)p);
+        }
+        return value;
+    }
+
     public static nint ToObject(in NativeVariant v)
     {
         nint obj = 0;
