@@ -46,6 +46,17 @@
         </Task>
     </UsingTask>
 
+    <!-- nuget.config declares godot/bin/GodotSharp/Tools/nupkgs as a local
+         package source, but the folder only exists after a mono glue build
+         (build-godot.py generate_glue) - and it lives inside the gitignored
+         bin/ of the godot submodule, so it cannot be kept via .gitkeep.
+         Restore fails with NU1301 when a declared source is missing, so
+         create it before restore runs. MakeDir is idempotent and safe under
+         parallel restores. -->
+    <Target Name="TwoDogEnsureLocalNugetSource" BeforeTargets="Restore;CollectPackageReferences">
+        <MakeDir Directories="$(MSBuildThisFileDirectory)godot/bin/GodotSharp/Tools/nupkgs" />
+    </Target>
+
     <!-- Keep the repository clean across configuration changes. The SDK Clean
          target removes the active configuration's outputs; this also removes
          the shared bin/obj roots used by these projects. Web hosts add their
