@@ -165,8 +165,12 @@ public class ExtensionClassTests(GodotBindingsFixture godot)
     }
 
     [Fact]
-    public void RefCountedBase_IsRejectedForNow()
+    public void RefCountedBase_IsSupported()
     {
-        Assert.Throws<NotSupportedException>(ClassRegistry.Register<TestResource>);
+        ClassRegistry.Register<TestResource>();
+        Assert.True(ClassDB.ClassExists("TestResource"));
+        using var res = new TestResource();
+        Assert.Equal(1, res.GetReferenceCount());
+        DisposalQueue.Drain();
     }
 }

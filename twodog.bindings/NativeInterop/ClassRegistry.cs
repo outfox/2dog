@@ -31,6 +31,7 @@ public static unsafe class ClassRegistry
         public required string ClassName { get; init; }
         public required string ParentName { get; init; }
         public required string BaseEngineClass { get; init; }
+        public required bool RefCounted { get; init; }
         internal GCHandle SelfHandle;
         internal readonly Dictionary<ulong, bool> OverriddenCache = [];
     }
@@ -90,9 +91,6 @@ public static unsafe class ClassRegistry
             if (ByType.ContainsKey(type)) return;
 
             var (parentName, baseEngineClass, refCounted) = ResolveParent(type);
-            if (refCounted)
-                throw new NotSupportedException(
-                    $"{type.Name}: RefCounted-based user classes are not supported yet (phase 3a covers Object/Node-based classes).");
 
             var info = new ClassInfo
             {
@@ -100,6 +98,7 @@ public static unsafe class ClassRegistry
                 ClassName = type.Name,
                 ParentName = parentName,
                 BaseEngineClass = baseEngineClass,
+                RefCounted = refCounted,
             };
             info.SelfHandle = GCHandle.Alloc(info);
 
@@ -184,15 +183,32 @@ public static unsafe class ClassRegistry
             instance.NativePtr = native;
             instance.InstanceId = GdExtensionInterface.ObjectGetInstanceId(native);
 
-            // The engine instance owns the managed object: strong handle,
-            // released in FreeInstance when the engine object dies.
-            var handle = GCHandle.Alloc(instance);
+            // Instance handle lifetime model:
+            // - Non-refcounted (Node...): the engine object owns the managed
+            //   instance outright - STRONG handle, freed by free_instance.
+            // - RefCounted: the handle must stay WEAK (its pointer is stored
+            //   engine-side and can never be swapped); the strong root while
+            //   the engine holds refs comes from the instance-binding slot's
+            //   strong/weak flip (RefCounted::reference fires the binding
+            //   callbacks), and the managed side owns exactly one engine ref
+            //   (released via finalizer -> DisposalQueue like wrappers).
+            var handle = GCHandle.Alloc(instance, info.RefCounted ? GCHandleType.Weak : GCHandleType.Normal);
             var snClass = StringNames.Get(info.ClassName).Opaque;
             GdExtensionInterface.ObjectSetInstance(native, (nint)(&snClass), GCHandle.ToIntPtr(handle));
 
-            // Also install the instance binding so GetOrCreate resolves this
-            // same managed object (weak: the instance handle is the owner).
+            // Install the instance binding so GetOrCreate resolves this same
+            // managed object (and, for RefCounted, so its flip provides the
+            // strong root when refcount > 1).
             InstanceBindings.InstallWeakBinding(instance);
+
+            if (info.RefCounted)
+            {
+                // C#-first: adopt construct3's established refcount=1 as the
+                // managed instance's owned ref. Engine-first: that ref belongs
+                // to the engine caller (create_instance3 contract: "return
+                // with refcount=1"), so take the managed instance's own on top.
+                if (fromEngine) RefCountedNative.Reference(native);
+            }
         }
         else
         {
