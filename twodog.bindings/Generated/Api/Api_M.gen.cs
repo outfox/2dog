@@ -166,20 +166,17 @@ public unsafe partial class Marker3D : Node3D
     }
 }
 
-public unsafe partial class Marshalls : GodotObject
+public static unsafe partial class Marshalls
 {
-    internal Marshalls(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public Marshalls() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "Marshalls");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("Marshalls");
 
-    private static Marshalls? _singleton;
-    public static Marshalls Singleton => _singleton ??= (Marshalls)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("Marshalls"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     private static nint __mb_variant_to_base64;
-    public string VariantToBase64(Variant variant, bool fullObjects)
+    public static string VariantToBase64(Variant variant, bool fullObjects = false)
     {
         var __mb = __mb_variant_to_base64;
         if (__mb == 0)
@@ -194,12 +191,12 @@ public unsafe partial class Marshalls : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_base64_to_variant;
-    public Variant Base64ToVariant(string base64Str, bool allowObjects)
+    public static Variant Base64ToVariant(string base64Str, bool allowObjects = false)
     {
         var __mb = __mb_base64_to_variant;
         if (__mb == 0)
@@ -214,13 +211,13 @@ public unsafe partial class Marshalls : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return new Variant(__ret);
     }
 
     private static nint __mb_utf8_to_base64;
-    public string Utf8ToBase64(string utf8Str)
+    public static string Utf8ToBase64(string utf8Str)
     {
         var __mb = __mb_utf8_to_base64;
         if (__mb == 0)
@@ -233,13 +230,13 @@ public unsafe partial class Marshalls : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_base64_to_utf8;
-    public string Base64ToUtf8(string base64Str)
+    public static string Base64ToUtf8(string base64Str)
     {
         var __mb = __mb_base64_to_utf8;
         if (__mb == 0)
@@ -252,7 +249,7 @@ public unsafe partial class Marshalls : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
@@ -994,80 +991,80 @@ public unsafe partial class Mesh : Resource
 
     public enum PrimitiveType : long
     {
-        PRIMITIVE_POINTS = 0,
-        PRIMITIVE_LINES = 1,
-        PRIMITIVE_LINE_STRIP = 2,
-        PRIMITIVE_TRIANGLES = 3,
-        PRIMITIVE_TRIANGLE_STRIP = 4,
+        Points = 0,
+        Lines = 1,
+        LineStrip = 2,
+        Triangles = 3,
+        TriangleStrip = 4,
     }
 
     public enum ArrayType : long
     {
-        ARRAY_VERTEX = 0,
-        ARRAY_NORMAL = 1,
-        ARRAY_TANGENT = 2,
-        ARRAY_COLOR = 3,
-        ARRAY_TEX_UV = 4,
-        ARRAY_TEX_UV2 = 5,
-        ARRAY_CUSTOM0 = 6,
-        ARRAY_CUSTOM1 = 7,
-        ARRAY_CUSTOM2 = 8,
-        ARRAY_CUSTOM3 = 9,
-        ARRAY_BONES = 10,
-        ARRAY_WEIGHTS = 11,
-        ARRAY_INDEX = 12,
-        ARRAY_MAX = 13,
+        Vertex = 0,
+        Normal = 1,
+        Tangent = 2,
+        Color = 3,
+        TexUv = 4,
+        TexUv2 = 5,
+        Custom0 = 6,
+        Custom1 = 7,
+        Custom2 = 8,
+        Custom3 = 9,
+        Bones = 10,
+        Weights = 11,
+        Index = 12,
+        Max = 13,
     }
 
     public enum ArrayCustomFormat : long
     {
-        ARRAY_CUSTOM_RGBA8_UNORM = 0,
-        ARRAY_CUSTOM_RGBA8_SNORM = 1,
-        ARRAY_CUSTOM_RG_HALF = 2,
-        ARRAY_CUSTOM_RGBA_HALF = 3,
-        ARRAY_CUSTOM_R_FLOAT = 4,
-        ARRAY_CUSTOM_RG_FLOAT = 5,
-        ARRAY_CUSTOM_RGB_FLOAT = 6,
-        ARRAY_CUSTOM_RGBA_FLOAT = 7,
-        ARRAY_CUSTOM_MAX = 8,
+        Rgba8Unorm = 0,
+        Rgba8Snorm = 1,
+        RgHalf = 2,
+        RgbaHalf = 3,
+        RFloat = 4,
+        RgFloat = 5,
+        RgbFloat = 6,
+        RgbaFloat = 7,
+        Max = 8,
     }
 
     [Flags]
     public enum ArrayFormat : long
     {
-        ARRAY_FORMAT_VERTEX = 1,
-        ARRAY_FORMAT_NORMAL = 2,
-        ARRAY_FORMAT_TANGENT = 4,
-        ARRAY_FORMAT_COLOR = 8,
-        ARRAY_FORMAT_TEX_UV = 16,
-        ARRAY_FORMAT_TEX_UV2 = 32,
-        ARRAY_FORMAT_CUSTOM0 = 64,
-        ARRAY_FORMAT_CUSTOM1 = 128,
-        ARRAY_FORMAT_CUSTOM2 = 256,
-        ARRAY_FORMAT_CUSTOM3 = 512,
-        ARRAY_FORMAT_BONES = 1024,
-        ARRAY_FORMAT_WEIGHTS = 2048,
-        ARRAY_FORMAT_INDEX = 4096,
-        ARRAY_FORMAT_BLEND_SHAPE_MASK = 7,
-        ARRAY_FORMAT_CUSTOM_BASE = 13,
-        ARRAY_FORMAT_CUSTOM_BITS = 3,
-        ARRAY_FORMAT_CUSTOM0_SHIFT = 13,
-        ARRAY_FORMAT_CUSTOM1_SHIFT = 16,
-        ARRAY_FORMAT_CUSTOM2_SHIFT = 19,
-        ARRAY_FORMAT_CUSTOM3_SHIFT = 22,
-        ARRAY_FORMAT_CUSTOM_MASK = 7,
-        ARRAY_COMPRESS_FLAGS_BASE = 25,
-        ARRAY_FLAG_USE_2D_VERTICES = 33554432,
-        ARRAY_FLAG_USE_DYNAMIC_UPDATE = 67108864,
-        ARRAY_FLAG_USE_8_BONE_WEIGHTS = 134217728,
-        ARRAY_FLAG_USES_EMPTY_VERTEX_ARRAY = 268435456,
-        ARRAY_FLAG_COMPRESS_ATTRIBUTES = 536870912,
+        FormatVertex = 1,
+        FormatNormal = 2,
+        FormatTangent = 4,
+        FormatColor = 8,
+        FormatTexUv = 16,
+        FormatTexUv2 = 32,
+        FormatCustom0 = 64,
+        FormatCustom1 = 128,
+        FormatCustom2 = 256,
+        FormatCustom3 = 512,
+        FormatBones = 1024,
+        FormatWeights = 2048,
+        FormatIndex = 4096,
+        FormatBlendShapeMask = 7,
+        FormatCustomBase = 13,
+        FormatCustomBits = 3,
+        FormatCustom0Shift = 13,
+        FormatCustom1Shift = 16,
+        FormatCustom2Shift = 19,
+        FormatCustom3Shift = 22,
+        FormatCustomMask = 7,
+        CompressFlagsBase = 25,
+        FlagUse2dVertices = 33554432,
+        FlagUseDynamicUpdate = 67108864,
+        FlagUse8BoneWeights = 134217728,
+        FlagUsesEmptyVertexArray = 268435456,
+        FlagCompressAttributes = 536870912,
     }
 
     public enum BlendShapeMode : long
     {
-        BLEND_SHAPE_MODE_NORMALIZED = 0,
-        BLEND_SHAPE_MODE_RELATIVE = 1,
+        Normalized = 0,
+        Relative = 1,
     }
 
     public Vector2I LightmapSizeHint
@@ -1240,7 +1237,7 @@ public unsafe partial class Mesh : Resource
     }
 
     private static nint __mb_create_convex_shape;
-    public ConvexPolygonShape3D? CreateConvexShape(bool clean, bool simplify)
+    public ConvexPolygonShape3D? CreateConvexShape(bool clean = true, bool simplify = false)
     {
         var __mb = __mb_create_convex_shape;
         if (__mb == 0)
@@ -1409,8 +1406,8 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
 
     public enum ModeEnum : long
     {
-        CONVEX_DECOMPOSITION_MODE_VOXEL = 0,
-        CONVEX_DECOMPOSITION_MODE_TETRAHEDRON = 1,
+        Voxel = 0,
+        Tetrahedron = 1,
     }
 
     public float MaxConcavity
@@ -1938,7 +1935,7 @@ public unsafe partial class MeshDataTool : RefCounted
     }
 
     private static nint __mb_commit_to_surface;
-    public Error CommitToSurface(ArrayMesh? mesh, ulong compressionFlags)
+    public Error CommitToSurface(ArrayMesh? mesh, ulong compressionFlags = unchecked((ulong)(0)))
     {
         var __mb = __mb_commit_to_surface;
         if (__mb == 0)
@@ -2753,7 +2750,7 @@ public unsafe partial class MeshInstance3D : GeometryInstance3D
     }
 
     private static nint __mb_create_convex_collision;
-    public void CreateConvexCollision(bool clean, bool simplify)
+    public void CreateConvexCollision(bool clean = true, bool simplify = false)
     {
         var __mb = __mb_create_convex_collision;
         if (__mb == 0)
@@ -2771,7 +2768,7 @@ public unsafe partial class MeshInstance3D : GeometryInstance3D
     }
 
     private static nint __mb_create_multiple_convex_collisions;
-    public void CreateMultipleConvexCollisions(MeshConvexDecompositionSettings? settings)
+    public void CreateMultipleConvexCollisions(MeshConvexDecompositionSettings? settings = null)
     {
         var __mb = __mb_create_multiple_convex_collisions;
         if (__mb == 0)
@@ -2869,7 +2866,7 @@ public unsafe partial class MeshInstance3D : GeometryInstance3D
     }
 
     private static nint __mb_bake_mesh_from_current_blend_shape_mix;
-    public ArrayMesh? BakeMeshFromCurrentBlendShapeMix(ArrayMesh? existing)
+    public ArrayMesh? BakeMeshFromCurrentBlendShapeMix(ArrayMesh? existing = null)
     {
         var __mb = __mb_bake_mesh_from_current_blend_shape_mix;
         if (__mb == 0)
@@ -2887,7 +2884,7 @@ public unsafe partial class MeshInstance3D : GeometryInstance3D
     }
 
     private static nint __mb_bake_mesh_from_current_skeleton_pose;
-    public ArrayMesh? BakeMeshFromCurrentSkeletonPose(ArrayMesh? existing)
+    public ArrayMesh? BakeMeshFromCurrentSkeletonPose(ArrayMesh? existing = null)
     {
         var __mb = __mb_bake_mesh_from_current_skeleton_pose;
         if (__mb == 0)
@@ -4317,14 +4314,14 @@ public unsafe partial class MultiMesh : Resource
 
     public enum TransformFormatEnum : long
     {
-        TRANSFORM_2D = 0,
-        TRANSFORM_3D = 1,
+        Transform2d = 0,
+        Transform3d = 1,
     }
 
     public enum PhysicsInterpolationQualityEnum : long
     {
-        INTERP_QUALITY_FAST = 0,
-        INTERP_QUALITY_HIGH = 1,
+        Fast = 0,
+        High = 1,
     }
 
     public MultiMesh.TransformFormatEnum TransformFormat
@@ -4949,9 +4946,9 @@ public unsafe partial class MultiplayerAPI : RefCounted
 
     public enum RPCMode : long
     {
-        RPC_MODE_DISABLED = 0,
-        RPC_MODE_ANY_PEER = 1,
-        RPC_MODE_AUTHORITY = 2,
+        Disabled = 0,
+        AnyPeer = 1,
+        Authority = 2,
     }
 
     public MultiplayerPeer? MultiplayerPeer
@@ -5244,16 +5241,16 @@ public unsafe partial class MultiplayerPeer : PacketPeer
 
     public enum ConnectionStatus : long
     {
-        CONNECTION_DISCONNECTED = 0,
-        CONNECTION_CONNECTING = 1,
-        CONNECTION_CONNECTED = 2,
+        Disconnected = 0,
+        Connecting = 1,
+        Connected = 2,
     }
 
     public enum TransferModeEnum : long
     {
-        TRANSFER_MODE_UNRELIABLE = 0,
-        TRANSFER_MODE_UNRELIABLE_ORDERED = 1,
-        TRANSFER_MODE_RELIABLE = 2,
+        Unreliable = 0,
+        UnreliableOrdered = 1,
+        Reliable = 2,
     }
 
     public bool RefuseNewConnections
@@ -5424,7 +5421,7 @@ public unsafe partial class MultiplayerPeer : PacketPeer
     }
 
     private static nint __mb_disconnect_peer;
-    public void DisconnectPeer(int peer, bool force)
+    public void DisconnectPeer(int peer, bool force = false)
     {
         var __mb = __mb_disconnect_peer;
         if (__mb == 0)
@@ -5805,7 +5802,7 @@ public unsafe partial class MultiplayerSpawner : Node
     }
 
     private static nint __mb_spawn;
-    public Node? Spawn(Variant data)
+    public Node? Spawn(Variant data = default)
     {
         var __mb = __mb_spawn;
         if (__mb == 0)
@@ -5896,9 +5893,9 @@ public unsafe partial class MultiplayerSynchronizer : Node
 
     public enum VisibilityUpdateModeEnum : long
     {
-        VISIBILITY_PROCESS_IDLE = 0,
-        VISIBILITY_PROCESS_PHYSICS = 1,
-        VISIBILITY_PROCESS_NONE = 2,
+        Idle = 0,
+        Physics = 1,
+        None = 2,
     }
 
     public NodePath RootPath
@@ -6093,7 +6090,7 @@ public unsafe partial class MultiplayerSynchronizer : Node
     }
 
     private static nint __mb_update_visibility;
-    public void UpdateVisibility(int forPeer)
+    public void UpdateVisibility(int forPeer = unchecked((int)(0)))
     {
         var __mb = __mb_update_visibility;
         if (__mb == 0)

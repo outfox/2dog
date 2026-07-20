@@ -1561,153 +1561,153 @@ public unsafe partial class Viewport : Node
 
     public enum PositionalShadowAtlasQuadrantSubdiv : long
     {
-        SHADOW_ATLAS_QUADRANT_SUBDIV_DISABLED = 0,
-        SHADOW_ATLAS_QUADRANT_SUBDIV_1 = 1,
-        SHADOW_ATLAS_QUADRANT_SUBDIV_4 = 2,
-        SHADOW_ATLAS_QUADRANT_SUBDIV_16 = 3,
-        SHADOW_ATLAS_QUADRANT_SUBDIV_64 = 4,
-        SHADOW_ATLAS_QUADRANT_SUBDIV_256 = 5,
-        SHADOW_ATLAS_QUADRANT_SUBDIV_1024 = 6,
-        SHADOW_ATLAS_QUADRANT_SUBDIV_MAX = 7,
+        Disabled = 0,
+        Subdiv1 = 1,
+        Subdiv4 = 2,
+        Subdiv16 = 3,
+        Subdiv64 = 4,
+        Subdiv256 = 5,
+        Subdiv1024 = 6,
+        Max = 7,
     }
 
     public enum Scaling3DMode : long
     {
-        SCALING_3D_MODE_BILINEAR = 0,
-        SCALING_3D_MODE_FSR = 1,
-        SCALING_3D_MODE_FSR2 = 2,
-        SCALING_3D_MODE_METALFX_SPATIAL = 3,
-        SCALING_3D_MODE_METALFX_TEMPORAL = 4,
-        SCALING_3D_MODE_NEAREST = 5,
-        SCALING_3D_MODE_MAX = 6,
+        Bilinear = 0,
+        Fsr = 1,
+        Fsr2 = 2,
+        MetalfxSpatial = 3,
+        MetalfxTemporal = 4,
+        Nearest = 5,
+        Max = 6,
     }
 
     public enum MSAA : long
     {
-        MSAA_DISABLED = 0,
-        MSAA_2X = 1,
-        MSAA_4X = 2,
-        MSAA_8X = 3,
-        MSAA_MAX = 4,
+        Disabled = 0,
+        Msaa2x = 1,
+        Msaa4x = 2,
+        Msaa8x = 3,
+        Max = 4,
     }
 
     public enum AnisotropicFiltering : long
     {
-        ANISOTROPY_DISABLED = 0,
-        ANISOTROPY_2X = 1,
-        ANISOTROPY_4X = 2,
-        ANISOTROPY_8X = 3,
-        ANISOTROPY_16X = 4,
-        ANISOTROPY_MAX = 5,
+        Disabled = 0,
+        Anisotropy2x = 1,
+        Anisotropy4x = 2,
+        Anisotropy8x = 3,
+        Anisotropy16x = 4,
+        Max = 5,
     }
 
     public enum ScreenSpaceAA : long
     {
-        SCREEN_SPACE_AA_DISABLED = 0,
-        SCREEN_SPACE_AA_FXAA = 1,
-        SCREEN_SPACE_AA_SMAA = 2,
-        SCREEN_SPACE_AA_MAX = 3,
+        Disabled = 0,
+        Fxaa = 1,
+        Smaa = 2,
+        Max = 3,
     }
 
     public enum RenderInfo : long
     {
-        RENDER_INFO_OBJECTS_IN_FRAME = 0,
-        RENDER_INFO_PRIMITIVES_IN_FRAME = 1,
-        RENDER_INFO_DRAW_CALLS_IN_FRAME = 2,
-        RENDER_INFO_MAX = 3,
+        ObjectsInFrame = 0,
+        PrimitivesInFrame = 1,
+        DrawCallsInFrame = 2,
+        Max = 3,
     }
 
     public enum RenderInfoType : long
     {
-        RENDER_INFO_TYPE_VISIBLE = 0,
-        RENDER_INFO_TYPE_SHADOW = 1,
-        RENDER_INFO_TYPE_CANVAS = 2,
-        RENDER_INFO_TYPE_MAX = 3,
+        Visible = 0,
+        Shadow = 1,
+        Canvas = 2,
+        Max = 3,
     }
 
     public enum DebugDrawEnum : long
     {
-        DEBUG_DRAW_DISABLED = 0,
-        DEBUG_DRAW_UNSHADED = 1,
-        DEBUG_DRAW_LIGHTING = 2,
-        DEBUG_DRAW_OVERDRAW = 3,
-        DEBUG_DRAW_WIREFRAME = 4,
-        DEBUG_DRAW_NORMAL_BUFFER = 5,
-        DEBUG_DRAW_VOXEL_GI_ALBEDO = 6,
-        DEBUG_DRAW_VOXEL_GI_LIGHTING = 7,
-        DEBUG_DRAW_VOXEL_GI_EMISSION = 8,
-        DEBUG_DRAW_SHADOW_ATLAS = 9,
-        DEBUG_DRAW_DIRECTIONAL_SHADOW_ATLAS = 10,
-        DEBUG_DRAW_SCENE_LUMINANCE = 11,
-        DEBUG_DRAW_SSAO = 12,
-        DEBUG_DRAW_SSIL = 13,
-        DEBUG_DRAW_PSSM_SPLITS = 14,
-        DEBUG_DRAW_DECAL_ATLAS = 15,
-        DEBUG_DRAW_SDFGI = 16,
-        DEBUG_DRAW_SDFGI_PROBES = 17,
-        DEBUG_DRAW_GI_BUFFER = 18,
-        DEBUG_DRAW_DISABLE_LOD = 19,
-        DEBUG_DRAW_CLUSTER_OMNI_LIGHTS = 20,
-        DEBUG_DRAW_CLUSTER_SPOT_LIGHTS = 21,
-        DEBUG_DRAW_CLUSTER_DECALS = 22,
-        DEBUG_DRAW_CLUSTER_REFLECTION_PROBES = 23,
-        DEBUG_DRAW_OCCLUDERS = 24,
-        DEBUG_DRAW_MOTION_VECTORS = 25,
-        DEBUG_DRAW_INTERNAL_BUFFER = 26,
-        DEBUG_DRAW_CLUSTER_AREA_LIGHTS = 27,
-        DEBUG_DRAW_AREA_LIGHT_ATLAS = 28,
+        Disabled = 0,
+        Unshaded = 1,
+        Lighting = 2,
+        Overdraw = 3,
+        Wireframe = 4,
+        NormalBuffer = 5,
+        VoxelGiAlbedo = 6,
+        VoxelGiLighting = 7,
+        VoxelGiEmission = 8,
+        ShadowAtlas = 9,
+        DirectionalShadowAtlas = 10,
+        SceneLuminance = 11,
+        Ssao = 12,
+        Ssil = 13,
+        PssmSplits = 14,
+        DecalAtlas = 15,
+        Sdfgi = 16,
+        SdfgiProbes = 17,
+        GiBuffer = 18,
+        DisableLod = 19,
+        ClusterOmniLights = 20,
+        ClusterSpotLights = 21,
+        ClusterDecals = 22,
+        ClusterReflectionProbes = 23,
+        Occluders = 24,
+        MotionVectors = 25,
+        InternalBuffer = 26,
+        ClusterAreaLights = 27,
+        AreaLightAtlas = 28,
     }
 
     public enum DefaultCanvasItemTextureFilter : long
     {
-        DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST = 0,
-        DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_LINEAR = 1,
-        DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_LINEAR_WITH_MIPMAPS = 2,
-        DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST_WITH_MIPMAPS = 3,
-        DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_PARENT_NODE = 4,
-        DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_MAX = 5,
+        Nearest = 0,
+        Linear = 1,
+        LinearWithMipmaps = 2,
+        NearestWithMipmaps = 3,
+        ParentNode = 4,
+        Max = 5,
     }
 
     public enum DefaultCanvasItemTextureRepeat : long
     {
-        DEFAULT_CANVAS_ITEM_TEXTURE_REPEAT_DISABLED = 0,
-        DEFAULT_CANVAS_ITEM_TEXTURE_REPEAT_ENABLED = 1,
-        DEFAULT_CANVAS_ITEM_TEXTURE_REPEAT_MIRROR = 2,
-        DEFAULT_CANVAS_ITEM_TEXTURE_REPEAT_PARENT_NODE = 3,
-        DEFAULT_CANVAS_ITEM_TEXTURE_REPEAT_MAX = 4,
+        Disabled = 0,
+        Enabled = 1,
+        Mirror = 2,
+        ParentNode = 3,
+        Max = 4,
     }
 
     public enum SDFOversize : long
     {
-        SDF_OVERSIZE_100_PERCENT = 0,
-        SDF_OVERSIZE_120_PERCENT = 1,
-        SDF_OVERSIZE_150_PERCENT = 2,
-        SDF_OVERSIZE_200_PERCENT = 3,
-        SDF_OVERSIZE_MAX = 4,
+        Oversize100Percent = 0,
+        Oversize120Percent = 1,
+        Oversize150Percent = 2,
+        Oversize200Percent = 3,
+        Max = 4,
     }
 
     public enum SDFScale : long
     {
-        SDF_SCALE_100_PERCENT = 0,
-        SDF_SCALE_50_PERCENT = 1,
-        SDF_SCALE_25_PERCENT = 2,
-        SDF_SCALE_MAX = 3,
+        Scale100Percent = 0,
+        Scale50Percent = 1,
+        Scale25Percent = 2,
+        Max = 3,
     }
 
     public enum VRSMode : long
     {
-        VRS_DISABLED = 0,
-        VRS_TEXTURE = 1,
-        VRS_XR = 2,
-        VRS_MAX = 3,
+        Disabled = 0,
+        Texture = 1,
+        Xr = 2,
+        Max = 3,
     }
 
     public enum VRSUpdateMode : long
     {
-        VRS_UPDATE_DISABLED = 0,
-        VRS_UPDATE_ONCE = 1,
-        VRS_UPDATE_ALWAYS = 2,
-        VRS_UPDATE_MAX = 3,
+        Disabled = 0,
+        Once = 1,
+        Always = 2,
+        Max = 3,
     }
 
     public bool Disable3d
@@ -2695,7 +2695,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_push_input;
-    public void PushInput(InputEvent? @event, bool inLocalCoords)
+    public void PushInput(InputEvent? @event, bool inLocalCoords = false)
     {
         var __mb = __mb_push_input;
         if (__mb == 0)
@@ -2713,7 +2713,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_push_unhandled_input;
-    public void PushUnhandledInput(InputEvent? @event, bool inLocalCoords)
+    public void PushUnhandledInput(InputEvent? @event, bool inLocalCoords = false)
     {
         var __mb = __mb_push_unhandled_input;
         if (__mb == 0)
@@ -4081,15 +4081,15 @@ public unsafe partial class VirtualJoystick : Control
 
     public enum JoystickModeEnum : long
     {
-        JOYSTICK_FIXED = 0,
-        JOYSTICK_DYNAMIC = 1,
-        JOYSTICK_FOLLOWING = 2,
+        Fixed = 0,
+        Dynamic = 1,
+        Following = 2,
     }
 
     public enum VisibilityModeEnum : long
     {
-        VISIBILITY_ALWAYS = 0,
-        VISIBILITY_WHEN_TOUCHED = 1,
+        Always = 0,
+        WhenTouched = 1,
     }
 
     public VirtualJoystick.JoystickModeEnum JoystickMode
@@ -4511,9 +4511,9 @@ public unsafe partial class VisibleOnScreenEnabler2D : VisibleOnScreenNotifier2D
 
     public enum EnableModeEnum : long
     {
-        ENABLE_MODE_INHERIT = 0,
-        ENABLE_MODE_ALWAYS = 1,
-        ENABLE_MODE_WHEN_PAUSED = 2,
+        Inherit = 0,
+        Always = 1,
+        WhenPaused = 2,
     }
 
     public VisibleOnScreenEnabler2D.EnableModeEnum EnableMode
@@ -4602,9 +4602,9 @@ public unsafe partial class VisibleOnScreenEnabler3D : VisibleOnScreenNotifier3D
 
     public enum EnableModeEnum : long
     {
-        ENABLE_MODE_INHERIT = 0,
-        ENABLE_MODE_ALWAYS = 1,
-        ENABLE_MODE_WHEN_PAUSED = 2,
+        Inherit = 0,
+        Always = 1,
+        WhenPaused = 2,
     }
 
     public VisibleOnScreenEnabler3D.EnableModeEnum EnableMode
@@ -5072,38 +5072,38 @@ public unsafe partial class VisualShader : Shader
 
     public enum Type : long
     {
-        TYPE_VERTEX = 0,
-        TYPE_FRAGMENT = 1,
-        TYPE_LIGHT = 2,
-        TYPE_START = 3,
-        TYPE_PROCESS = 4,
-        TYPE_COLLIDE = 5,
-        TYPE_START_CUSTOM = 6,
-        TYPE_PROCESS_CUSTOM = 7,
-        TYPE_SKY = 8,
-        TYPE_FOG = 9,
-        TYPE_TEXTURE_BLIT = 10,
-        TYPE_MAX = 11,
+        Vertex = 0,
+        Fragment = 1,
+        Light = 2,
+        Start = 3,
+        Process = 4,
+        Collide = 5,
+        StartCustom = 6,
+        ProcessCustom = 7,
+        Sky = 8,
+        Fog = 9,
+        TextureBlit = 10,
+        Max = 11,
     }
 
     public enum VaryingMode : long
     {
-        VARYING_MODE_VERTEX_TO_FRAG_LIGHT = 0,
-        VARYING_MODE_FRAG_TO_LIGHT = 1,
-        VARYING_MODE_MAX = 2,
+        VertexToFragLight = 0,
+        FragToLight = 1,
+        Max = 2,
     }
 
     public enum VaryingType : long
     {
-        VARYING_TYPE_FLOAT = 0,
-        VARYING_TYPE_INT = 1,
-        VARYING_TYPE_UINT = 2,
-        VARYING_TYPE_VECTOR_2D = 3,
-        VARYING_TYPE_VECTOR_3D = 4,
-        VARYING_TYPE_VECTOR_4D = 5,
-        VARYING_TYPE_BOOLEAN = 6,
-        VARYING_TYPE_TRANSFORM = 7,
-        VARYING_TYPE_MAX = 8,
+        Float = 0,
+        Int = 1,
+        Uint = 2,
+        Vector2d = 3,
+        Vector3d = 4,
+        Vector4d = 5,
+        Boolean = 6,
+        Transform = 7,
+        Max = 8,
     }
 
     public Vector2 GraphOffset
@@ -5543,16 +5543,16 @@ public unsafe partial class VisualShaderNode : Resource
 
     public enum PortType : long
     {
-        PORT_TYPE_SCALAR = 0,
-        PORT_TYPE_SCALAR_INT = 1,
-        PORT_TYPE_SCALAR_UINT = 2,
-        PORT_TYPE_VECTOR_2D = 3,
-        PORT_TYPE_VECTOR_3D = 4,
-        PORT_TYPE_VECTOR_4D = 5,
-        PORT_TYPE_BOOLEAN = 6,
-        PORT_TYPE_TRANSFORM = 7,
-        PORT_TYPE_SAMPLER = 8,
-        PORT_TYPE_MAX = 9,
+        Scalar = 0,
+        ScalarInt = 1,
+        ScalarUint = 2,
+        Vector2d = 3,
+        Vector3d = 4,
+        Vector4d = 5,
+        Boolean = 6,
+        Transform = 7,
+        Sampler = 8,
+        Max = 9,
     }
 
     public int OutputPortForPreview
@@ -5623,7 +5623,7 @@ public unsafe partial class VisualShaderNode : Resource
     }
 
     private static nint __mb_set_input_port_default_value;
-    public void SetInputPortDefaultValue(int port, Variant value, Variant prevValue)
+    public void SetInputPortDefaultValue(int port, Variant value, Variant prevValue = default)
     {
         var __mb = __mb_set_input_port_default_value;
         if (__mb == 0)
@@ -5763,11 +5763,11 @@ public unsafe partial class VisualShaderNodeBillboard : VisualShaderNode
 
     public enum BillboardTypeEnum : long
     {
-        BILLBOARD_TYPE_DISABLED = 0,
-        BILLBOARD_TYPE_ENABLED = 1,
-        BILLBOARD_TYPE_FIXED_Y = 2,
-        BILLBOARD_TYPE_PARTICLES = 3,
-        BILLBOARD_TYPE_MAX = 4,
+        Disabled = 0,
+        Enabled = 1,
+        FixedY = 2,
+        Particles = 3,
+        Max = 4,
     }
 
     public VisualShaderNodeBillboard.BillboardTypeEnum BillboardType
@@ -5987,13 +5987,13 @@ public unsafe partial class VisualShaderNodeClamp : VisualShaderNode
 
     public enum OpTypeEnum : long
     {
-        OP_TYPE_FLOAT = 0,
-        OP_TYPE_INT = 1,
-        OP_TYPE_UINT = 2,
-        OP_TYPE_VECTOR_2D = 3,
-        OP_TYPE_VECTOR_3D = 4,
-        OP_TYPE_VECTOR_4D = 5,
-        OP_TYPE_MAX = 6,
+        Float = 0,
+        Int = 1,
+        Uint = 2,
+        Vector2d = 3,
+        Vector3d = 4,
+        Vector4d = 5,
+        Max = 6,
     }
 
     public VisualShaderNodeClamp.OpTypeEnum OpType
@@ -6092,13 +6092,13 @@ public unsafe partial class VisualShaderNodeColorFunc : VisualShaderNode
 
     public enum FunctionEnum : long
     {
-        FUNC_GRAYSCALE = 0,
-        FUNC_HSV2RGB = 1,
-        FUNC_RGB2HSV = 2,
-        FUNC_SEPIA = 3,
-        FUNC_LINEAR_TO_SRGB = 4,
-        FUNC_SRGB_TO_LINEAR = 5,
-        FUNC_MAX = 6,
+        Grayscale = 0,
+        Hsv2rgb = 1,
+        Rgb2hsv = 2,
+        Sepia = 3,
+        LinearToSrgb = 4,
+        SrgbToLinear = 5,
+        Max = 6,
     }
 
     public VisualShaderNodeColorFunc.FunctionEnum Function
@@ -6150,16 +6150,16 @@ public unsafe partial class VisualShaderNodeColorOp : VisualShaderNode
 
     public enum OperatorEnum : long
     {
-        OP_SCREEN = 0,
-        OP_DIFFERENCE = 1,
-        OP_DARKEN = 2,
-        OP_LIGHTEN = 3,
-        OP_OVERLAY = 4,
-        OP_DODGE = 5,
-        OP_BURN = 6,
-        OP_SOFT_LIGHT = 7,
-        OP_HARD_LIGHT = 8,
-        OP_MAX = 9,
+        Screen = 0,
+        Difference = 1,
+        Darken = 2,
+        Lighten = 3,
+        Overlay = 4,
+        Dodge = 5,
+        Burn = 6,
+        SoftLight = 7,
+        HardLight = 8,
+        Max = 9,
     }
 
     public VisualShaderNodeColorOp.OperatorEnum Operator
@@ -6343,33 +6343,33 @@ public unsafe partial class VisualShaderNodeCompare : VisualShaderNode
 
     public enum ComparisonType : long
     {
-        CTYPE_SCALAR = 0,
-        CTYPE_SCALAR_INT = 1,
-        CTYPE_SCALAR_UINT = 2,
-        CTYPE_VECTOR_2D = 3,
-        CTYPE_VECTOR_3D = 4,
-        CTYPE_VECTOR_4D = 5,
-        CTYPE_BOOLEAN = 6,
-        CTYPE_TRANSFORM = 7,
-        CTYPE_MAX = 8,
+        Scalar = 0,
+        ScalarInt = 1,
+        ScalarUint = 2,
+        Vector2d = 3,
+        Vector3d = 4,
+        Vector4d = 5,
+        Boolean = 6,
+        Transform = 7,
+        Max = 8,
     }
 
     public enum FunctionEnum : long
     {
-        FUNC_EQUAL = 0,
-        FUNC_NOT_EQUAL = 1,
-        FUNC_GREATER_THAN = 2,
-        FUNC_GREATER_THAN_EQUAL = 3,
-        FUNC_LESS_THAN = 4,
-        FUNC_LESS_THAN_EQUAL = 5,
-        FUNC_MAX = 6,
+        Equal = 0,
+        NotEqual = 1,
+        GreaterThan = 2,
+        GreaterThanEqual = 3,
+        LessThan = 4,
+        LessThanEqual = 5,
+        Max = 6,
     }
 
     public enum ConditionEnum : long
     {
-        COND_ALL = 0,
-        COND_ANY = 1,
-        COND_MAX = 2,
+        All = 0,
+        Any = 1,
+        Max = 2,
     }
 
     public VisualShaderNodeCompare.ComparisonType Type
@@ -6500,17 +6500,17 @@ public unsafe partial class VisualShaderNodeCubemap : VisualShaderNode
 
     public enum SourceEnum : long
     {
-        SOURCE_TEXTURE = 0,
-        SOURCE_PORT = 1,
-        SOURCE_MAX = 2,
+        Texture = 0,
+        Port = 1,
+        Max = 2,
     }
 
     public enum TextureTypeEnum : long
     {
-        TYPE_DATA = 0,
-        TYPE_COLOR = 1,
-        TYPE_NORMAL_MAP = 2,
-        TYPE_MAX = 3,
+        Data = 0,
+        Color = 1,
+        NormalMap = 2,
+        Max = 3,
     }
 
     public VisualShaderNodeCubemap.SourceEnum Source
@@ -6936,27 +6936,27 @@ public unsafe partial class VisualShaderNodeDerivativeFunc : VisualShaderNode
 
     public enum OpTypeEnum : long
     {
-        OP_TYPE_SCALAR = 0,
-        OP_TYPE_VECTOR_2D = 1,
-        OP_TYPE_VECTOR_3D = 2,
-        OP_TYPE_VECTOR_4D = 3,
-        OP_TYPE_MAX = 4,
+        Scalar = 0,
+        Vector2d = 1,
+        Vector3d = 2,
+        Vector4d = 3,
+        Max = 4,
     }
 
     public enum FunctionEnum : long
     {
-        FUNC_SUM = 0,
-        FUNC_X = 1,
-        FUNC_Y = 2,
-        FUNC_MAX = 3,
+        Sum = 0,
+        X = 1,
+        Y = 2,
+        Max = 3,
     }
 
     public enum PrecisionEnum : long
     {
-        PRECISION_NONE = 0,
-        PRECISION_COARSE = 1,
-        PRECISION_FINE = 2,
-        PRECISION_MAX = 3,
+        None = 0,
+        Coarse = 1,
+        Fine = 2,
+        Max = 3,
     }
 
     public VisualShaderNodeDerivativeFunc.OpTypeEnum OpType
@@ -7217,39 +7217,39 @@ public unsafe partial class VisualShaderNodeFloatFunc : VisualShaderNode
 
     public enum FunctionEnum : long
     {
-        FUNC_SIN = 0,
-        FUNC_COS = 1,
-        FUNC_TAN = 2,
-        FUNC_ASIN = 3,
-        FUNC_ACOS = 4,
-        FUNC_ATAN = 5,
-        FUNC_SINH = 6,
-        FUNC_COSH = 7,
-        FUNC_TANH = 8,
-        FUNC_LOG = 9,
-        FUNC_EXP = 10,
-        FUNC_SQRT = 11,
-        FUNC_ABS = 12,
-        FUNC_SIGN = 13,
-        FUNC_FLOOR = 14,
-        FUNC_ROUND = 15,
-        FUNC_CEIL = 16,
-        FUNC_FRACT = 17,
-        FUNC_SATURATE = 18,
-        FUNC_NEGATE = 19,
-        FUNC_ACOSH = 20,
-        FUNC_ASINH = 21,
-        FUNC_ATANH = 22,
-        FUNC_DEGREES = 23,
-        FUNC_EXP2 = 24,
-        FUNC_INVERSE_SQRT = 25,
-        FUNC_LOG2 = 26,
-        FUNC_RADIANS = 27,
-        FUNC_RECIPROCAL = 28,
-        FUNC_ROUNDEVEN = 29,
-        FUNC_TRUNC = 30,
-        FUNC_ONEMINUS = 31,
-        FUNC_MAX = 32,
+        Sin = 0,
+        Cos = 1,
+        Tan = 2,
+        Asin = 3,
+        Acos = 4,
+        Atan = 5,
+        Sinh = 6,
+        Cosh = 7,
+        Tanh = 8,
+        Log = 9,
+        Exp = 10,
+        Sqrt = 11,
+        Abs = 12,
+        Sign = 13,
+        Floor = 14,
+        Round = 15,
+        Ceil = 16,
+        Fract = 17,
+        Saturate = 18,
+        Negate = 19,
+        Acosh = 20,
+        Asinh = 21,
+        Atanh = 22,
+        Degrees = 23,
+        Exp2 = 24,
+        InverseSqrt = 25,
+        Log2 = 26,
+        Radians = 27,
+        Reciprocal = 28,
+        Roundeven = 29,
+        Trunc = 30,
+        Oneminus = 31,
+        Max = 32,
     }
 
     public VisualShaderNodeFloatFunc.FunctionEnum Function
@@ -7301,17 +7301,17 @@ public unsafe partial class VisualShaderNodeFloatOp : VisualShaderNode
 
     public enum OperatorEnum : long
     {
-        OP_ADD = 0,
-        OP_SUB = 1,
-        OP_MUL = 2,
-        OP_DIV = 3,
-        OP_MOD = 4,
-        OP_POW = 5,
-        OP_MAX = 6,
-        OP_MIN = 7,
-        OP_ATAN2 = 8,
-        OP_STEP = 9,
-        OP_ENUM_SIZE = 10,
+        Add = 0,
+        Sub = 1,
+        Mul = 2,
+        Div = 3,
+        Mod = 4,
+        Pow = 5,
+        Max = 6,
+        Min = 7,
+        Atan2 = 8,
+        Step = 9,
+        EnumSize = 10,
     }
 
     public VisualShaderNodeFloatOp.OperatorEnum Operator
@@ -7363,10 +7363,10 @@ public unsafe partial class VisualShaderNodeFloatParameter : VisualShaderNodePar
 
     public enum HintEnum : long
     {
-        HINT_NONE = 0,
-        HINT_RANGE = 1,
-        HINT_RANGE_STEP = 2,
-        HINT_MAX = 3,
+        None = 0,
+        Range = 1,
+        RangeStep = 2,
+        Max = 3,
     }
 
     public VisualShaderNodeFloatParameter.HintEnum Hint
@@ -8292,11 +8292,11 @@ public unsafe partial class VisualShaderNodeIntFunc : VisualShaderNode
 
     public enum FunctionEnum : long
     {
-        FUNC_ABS = 0,
-        FUNC_NEGATE = 1,
-        FUNC_SIGN = 2,
-        FUNC_BITWISE_NOT = 3,
-        FUNC_MAX = 4,
+        Abs = 0,
+        Negate = 1,
+        Sign = 2,
+        BitwiseNot = 3,
+        Max = 4,
     }
 
     public VisualShaderNodeIntFunc.FunctionEnum Function
@@ -8348,19 +8348,19 @@ public unsafe partial class VisualShaderNodeIntOp : VisualShaderNode
 
     public enum OperatorEnum : long
     {
-        OP_ADD = 0,
-        OP_SUB = 1,
-        OP_MUL = 2,
-        OP_DIV = 3,
-        OP_MOD = 4,
-        OP_MAX = 5,
-        OP_MIN = 6,
-        OP_BITWISE_AND = 7,
-        OP_BITWISE_OR = 8,
-        OP_BITWISE_XOR = 9,
-        OP_BITWISE_LEFT_SHIFT = 10,
-        OP_BITWISE_RIGHT_SHIFT = 11,
-        OP_ENUM_SIZE = 12,
+        Add = 0,
+        Sub = 1,
+        Mul = 2,
+        Div = 3,
+        Mod = 4,
+        Max = 5,
+        Min = 6,
+        BitwiseAnd = 7,
+        BitwiseOr = 8,
+        BitwiseXor = 9,
+        BitwiseLeftShift = 10,
+        BitwiseRightShift = 11,
+        EnumSize = 12,
     }
 
     public VisualShaderNodeIntOp.OperatorEnum Operator
@@ -8412,11 +8412,11 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
 
     public enum HintEnum : long
     {
-        HINT_NONE = 0,
-        HINT_RANGE = 1,
-        HINT_RANGE_STEP = 2,
-        HINT_ENUM = 3,
-        HINT_MAX = 4,
+        None = 0,
+        Range = 1,
+        RangeStep = 2,
+        Enum = 3,
+        Max = 4,
     }
 
     public VisualShaderNodeIntParameter.HintEnum Hint
@@ -8653,9 +8653,9 @@ public unsafe partial class VisualShaderNodeIs : VisualShaderNode
 
     public enum FunctionEnum : long
     {
-        FUNC_IS_INF = 0,
-        FUNC_IS_NAN = 1,
-        FUNC_MAX = 2,
+        IsInf = 0,
+        IsNan = 1,
+        Max = 2,
     }
 
     public VisualShaderNodeIs.FunctionEnum Function
@@ -8717,14 +8717,14 @@ public unsafe partial class VisualShaderNodeMix : VisualShaderNode
 
     public enum OpTypeEnum : long
     {
-        OP_TYPE_SCALAR = 0,
-        OP_TYPE_VECTOR_2D = 1,
-        OP_TYPE_VECTOR_2D_SCALAR = 2,
-        OP_TYPE_VECTOR_3D = 3,
-        OP_TYPE_VECTOR_3D_SCALAR = 4,
-        OP_TYPE_VECTOR_4D = 5,
-        OP_TYPE_VECTOR_4D_SCALAR = 6,
-        OP_TYPE_MAX = 7,
+        Scalar = 0,
+        Vector2d = 1,
+        Vector2dScalar = 2,
+        Vector3d = 3,
+        Vector3dScalar = 4,
+        Vector4d = 5,
+        Vector4dScalar = 6,
+        Max = 7,
     }
 
     public VisualShaderNodeMix.OpTypeEnum OpType
@@ -8776,11 +8776,11 @@ public unsafe partial class VisualShaderNodeMultiplyAdd : VisualShaderNode
 
     public enum OpTypeEnum : long
     {
-        OP_TYPE_SCALAR = 0,
-        OP_TYPE_VECTOR_2D = 1,
-        OP_TYPE_VECTOR_3D = 2,
-        OP_TYPE_VECTOR_4D = 3,
-        OP_TYPE_MAX = 4,
+        Scalar = 0,
+        Vector2d = 1,
+        Vector3d = 2,
+        Vector4d = 3,
+        Max = 4,
     }
 
     public VisualShaderNodeMultiplyAdd.OpTypeEnum OpType
@@ -8842,11 +8842,11 @@ public unsafe partial class VisualShaderNodeParameter : VisualShaderNode
 
     public enum QualifierEnum : long
     {
-        QUAL_NONE = 0,
-        QUAL_GLOBAL = 1,
-        QUAL_INSTANCE = 2,
-        QUAL_INSTANCE_INDEX = 3,
-        QUAL_MAX = 4,
+        None = 0,
+        Global = 1,
+        Instance = 2,
+        InstanceIndex = 3,
+        Max = 4,
     }
 
     public string ParameterName
@@ -9021,10 +9021,10 @@ public unsafe partial class VisualShaderNodeParticleAccelerator : VisualShaderNo
 
     public enum ModeEnum : long
     {
-        MODE_LINEAR = 0,
-        MODE_RADIAL = 1,
-        MODE_TANGENTIAL = 2,
-        MODE_MAX = 3,
+        Linear = 0,
+        Radial = 1,
+        Tangential = 2,
+        Max = 3,
     }
 
     public VisualShaderNodeParticleAccelerator.ModeEnum Mode
@@ -9096,11 +9096,11 @@ public unsafe partial class VisualShaderNodeParticleEmit : VisualShaderNode
 
     public enum EmitFlags : long
     {
-        EMIT_FLAG_POSITION = 1,
-        EMIT_FLAG_ROT_SCALE = 2,
-        EMIT_FLAG_VELOCITY = 4,
-        EMIT_FLAG_COLOR = 8,
-        EMIT_FLAG_CUSTOM = 16,
+        Position = 1,
+        RotScale = 2,
+        Velocity = 4,
+        Color = 8,
+        Custom = 16,
     }
 
     public VisualShaderNodeParticleEmit.EmitFlags Flags
@@ -9372,11 +9372,11 @@ public unsafe partial class VisualShaderNodeParticleRandomness : VisualShaderNod
 
     public enum OpTypeEnum : long
     {
-        OP_TYPE_SCALAR = 0,
-        OP_TYPE_VECTOR_2D = 1,
-        OP_TYPE_VECTOR_3D = 2,
-        OP_TYPE_VECTOR_4D = 3,
-        OP_TYPE_MAX = 4,
+        Scalar = 0,
+        Vector2d = 1,
+        Vector3d = 2,
+        Vector4d = 3,
+        Max = 4,
     }
 
     public VisualShaderNodeParticleRandomness.OpTypeEnum OpType
@@ -9468,14 +9468,14 @@ public unsafe partial class VisualShaderNodeRemap : VisualShaderNode
 
     public enum OpTypeEnum : long
     {
-        OP_TYPE_SCALAR = 0,
-        OP_TYPE_VECTOR_2D = 1,
-        OP_TYPE_VECTOR_2D_SCALAR = 2,
-        OP_TYPE_VECTOR_3D = 3,
-        OP_TYPE_VECTOR_3D_SCALAR = 4,
-        OP_TYPE_VECTOR_4D = 5,
-        OP_TYPE_VECTOR_4D_SCALAR = 6,
-        OP_TYPE_MAX = 7,
+        Scalar = 0,
+        Vector2d = 1,
+        Vector2dScalar = 2,
+        Vector3d = 3,
+        Vector3dScalar = 4,
+        Vector4d = 5,
+        Vector4dScalar = 6,
+        Max = 7,
     }
 
     public VisualShaderNodeRemap.OpTypeEnum OpType
@@ -9621,9 +9621,9 @@ public unsafe partial class VisualShaderNodeSample3D : VisualShaderNode
 
     public enum SourceEnum : long
     {
-        SOURCE_TEXTURE = 0,
-        SOURCE_PORT = 1,
-        SOURCE_MAX = 2,
+        Texture = 0,
+        Port = 1,
+        Max = 2,
     }
 
     public VisualShaderNodeSample3D.SourceEnum Source
@@ -9695,14 +9695,14 @@ public unsafe partial class VisualShaderNodeSmoothStep : VisualShaderNode
 
     public enum OpTypeEnum : long
     {
-        OP_TYPE_SCALAR = 0,
-        OP_TYPE_VECTOR_2D = 1,
-        OP_TYPE_VECTOR_2D_SCALAR = 2,
-        OP_TYPE_VECTOR_3D = 3,
-        OP_TYPE_VECTOR_3D_SCALAR = 4,
-        OP_TYPE_VECTOR_4D = 5,
-        OP_TYPE_VECTOR_4D_SCALAR = 6,
-        OP_TYPE_MAX = 7,
+        Scalar = 0,
+        Vector2d = 1,
+        Vector2dScalar = 2,
+        Vector3d = 3,
+        Vector3dScalar = 4,
+        Vector4d = 5,
+        Vector4dScalar = 6,
+        Max = 7,
     }
 
     public VisualShaderNodeSmoothStep.OpTypeEnum OpType
@@ -9754,14 +9754,14 @@ public unsafe partial class VisualShaderNodeStep : VisualShaderNode
 
     public enum OpTypeEnum : long
     {
-        OP_TYPE_SCALAR = 0,
-        OP_TYPE_VECTOR_2D = 1,
-        OP_TYPE_VECTOR_2D_SCALAR = 2,
-        OP_TYPE_VECTOR_3D = 3,
-        OP_TYPE_VECTOR_3D_SCALAR = 4,
-        OP_TYPE_VECTOR_4D = 5,
-        OP_TYPE_VECTOR_4D_SCALAR = 6,
-        OP_TYPE_MAX = 7,
+        Scalar = 0,
+        Vector2d = 1,
+        Vector2dScalar = 2,
+        Vector3d = 3,
+        Vector3dScalar = 4,
+        Vector4d = 5,
+        Vector4dScalar = 6,
+        Max = 7,
     }
 
     public VisualShaderNodeStep.OpTypeEnum OpType
@@ -9813,15 +9813,15 @@ public unsafe partial class VisualShaderNodeSwitch : VisualShaderNode
 
     public enum OpTypeEnum : long
     {
-        OP_TYPE_FLOAT = 0,
-        OP_TYPE_INT = 1,
-        OP_TYPE_UINT = 2,
-        OP_TYPE_VECTOR_2D = 3,
-        OP_TYPE_VECTOR_3D = 4,
-        OP_TYPE_VECTOR_4D = 5,
-        OP_TYPE_BOOLEAN = 6,
-        OP_TYPE_TRANSFORM = 7,
-        OP_TYPE_MAX = 8,
+        Float = 0,
+        Int = 1,
+        Uint = 2,
+        Vector2d = 3,
+        Vector3d = 4,
+        Vector4d = 5,
+        Boolean = 6,
+        Transform = 7,
+        Max = 8,
     }
 
     public VisualShaderNodeSwitch.OpTypeEnum OpType
@@ -9873,23 +9873,23 @@ public unsafe partial class VisualShaderNodeTexture : VisualShaderNode
 
     public enum SourceEnum : long
     {
-        SOURCE_TEXTURE = 0,
-        SOURCE_SCREEN = 1,
-        SOURCE_2D_TEXTURE = 2,
-        SOURCE_2D_NORMAL = 3,
-        SOURCE_DEPTH = 4,
-        SOURCE_PORT = 5,
-        SOURCE_3D_NORMAL = 6,
-        SOURCE_ROUGHNESS = 7,
-        SOURCE_MAX = 8,
+        Texture = 0,
+        Screen = 1,
+        Source2dTexture = 2,
+        Source2dNormal = 3,
+        Depth = 4,
+        Port = 5,
+        Source3dNormal = 6,
+        Roughness = 7,
+        Max = 8,
     }
 
     public enum TextureTypeEnum : long
     {
-        TYPE_DATA = 0,
-        TYPE_COLOR = 1,
-        TYPE_NORMAL_MAP = 2,
-        TYPE_MAX = 3,
+        Data = 0,
+        Color = 1,
+        NormalMap = 2,
+        Max = 3,
     }
 
     public VisualShaderNodeTexture.SourceEnum Source
@@ -10134,48 +10134,48 @@ public unsafe partial class VisualShaderNodeTextureParameter : VisualShaderNodeP
 
     public enum TextureTypeEnum : long
     {
-        TYPE_DATA = 0,
-        TYPE_COLOR = 1,
-        TYPE_NORMAL_MAP = 2,
-        TYPE_ANISOTROPY = 3,
-        TYPE_MAX = 4,
+        Data = 0,
+        Color = 1,
+        NormalMap = 2,
+        Anisotropy = 3,
+        Max = 4,
     }
 
     public enum ColorDefaultEnum : long
     {
-        COLOR_DEFAULT_WHITE = 0,
-        COLOR_DEFAULT_BLACK = 1,
-        COLOR_DEFAULT_TRANSPARENT = 2,
-        COLOR_DEFAULT_MAX = 3,
+        White = 0,
+        Black = 1,
+        Transparent = 2,
+        Max = 3,
     }
 
     public enum TextureFilterEnum : long
     {
-        FILTER_DEFAULT = 0,
-        FILTER_NEAREST = 1,
-        FILTER_LINEAR = 2,
-        FILTER_NEAREST_MIPMAP = 3,
-        FILTER_LINEAR_MIPMAP = 4,
-        FILTER_NEAREST_MIPMAP_ANISOTROPIC = 5,
-        FILTER_LINEAR_MIPMAP_ANISOTROPIC = 6,
-        FILTER_MAX = 7,
+        Default = 0,
+        Nearest = 1,
+        Linear = 2,
+        NearestMipmap = 3,
+        LinearMipmap = 4,
+        NearestMipmapAnisotropic = 5,
+        LinearMipmapAnisotropic = 6,
+        Max = 7,
     }
 
     public enum TextureRepeatEnum : long
     {
-        REPEAT_DEFAULT = 0,
-        REPEAT_ENABLED = 1,
-        REPEAT_DISABLED = 2,
-        REPEAT_MAX = 3,
+        Default = 0,
+        Enabled = 1,
+        Disabled = 2,
+        Max = 3,
     }
 
     public enum TextureSourceEnum : long
     {
-        SOURCE_NONE = 0,
-        SOURCE_SCREEN = 1,
-        SOURCE_DEPTH = 2,
-        SOURCE_NORMAL_ROUGHNESS = 3,
-        SOURCE_MAX = 4,
+        None = 0,
+        Screen = 1,
+        Depth = 2,
+        NormalRoughness = 3,
+        Max = 4,
     }
 
     public VisualShaderNodeTextureParameter.TextureTypeEnum TextureType
@@ -10472,9 +10472,9 @@ public unsafe partial class VisualShaderNodeTransformFunc : VisualShaderNode
 
     public enum FunctionEnum : long
     {
-        FUNC_INVERSE = 0,
-        FUNC_TRANSPOSE = 1,
-        FUNC_MAX = 2,
+        Inverse = 0,
+        Transpose = 1,
+        Max = 2,
     }
 
     public VisualShaderNodeTransformFunc.FunctionEnum Function
@@ -10526,16 +10526,16 @@ public unsafe partial class VisualShaderNodeTransformOp : VisualShaderNode
 
     public enum OperatorEnum : long
     {
-        OP_AxB = 0,
-        OP_BxA = 1,
-        OP_AxB_COMP = 2,
-        OP_BxA_COMP = 3,
-        OP_ADD = 4,
-        OP_A_MINUS_B = 5,
-        OP_B_MINUS_A = 6,
-        OP_A_DIV_B = 7,
-        OP_B_DIV_A = 8,
-        OP_MAX = 9,
+        Axb = 0,
+        Bxa = 1,
+        AxbComp = 2,
+        BxaComp = 3,
+        Add = 4,
+        AMinusB = 5,
+        BMinusA = 6,
+        ADivB = 7,
+        BDivA = 8,
+        Max = 9,
     }
 
     public VisualShaderNodeTransformOp.OperatorEnum Operator
@@ -10671,11 +10671,11 @@ public unsafe partial class VisualShaderNodeTransformVecMult : VisualShaderNode
 
     public enum OperatorEnum : long
     {
-        OP_AxB = 0,
-        OP_BxA = 1,
-        OP_3x3_AxB = 2,
-        OP_3x3_BxA = 3,
-        OP_MAX = 4,
+        Axb = 0,
+        Bxa = 1,
+        Op3x3Axb = 2,
+        Op3x3Bxa = 3,
+        Max = 4,
     }
 
     public VisualShaderNodeTransformVecMult.OperatorEnum Operator
@@ -10774,9 +10774,9 @@ public unsafe partial class VisualShaderNodeUIntFunc : VisualShaderNode
 
     public enum FunctionEnum : long
     {
-        FUNC_NEGATE = 0,
-        FUNC_BITWISE_NOT = 1,
-        FUNC_MAX = 2,
+        Negate = 0,
+        BitwiseNot = 1,
+        Max = 2,
     }
 
     public VisualShaderNodeUIntFunc.FunctionEnum Function
@@ -10828,19 +10828,19 @@ public unsafe partial class VisualShaderNodeUIntOp : VisualShaderNode
 
     public enum OperatorEnum : long
     {
-        OP_ADD = 0,
-        OP_SUB = 1,
-        OP_MUL = 2,
-        OP_DIV = 3,
-        OP_MOD = 4,
-        OP_MAX = 5,
-        OP_MIN = 6,
-        OP_BITWISE_AND = 7,
-        OP_BITWISE_OR = 8,
-        OP_BITWISE_XOR = 9,
-        OP_BITWISE_LEFT_SHIFT = 10,
-        OP_BITWISE_RIGHT_SHIFT = 11,
-        OP_ENUM_SIZE = 12,
+        Add = 0,
+        Sub = 1,
+        Mul = 2,
+        Div = 3,
+        Mod = 4,
+        Max = 5,
+        Min = 6,
+        BitwiseAnd = 7,
+        BitwiseOr = 8,
+        BitwiseXor = 9,
+        BitwiseLeftShift = 10,
+        BitwiseRightShift = 11,
+        EnumSize = 12,
     }
 
     public VisualShaderNodeUIntOp.OperatorEnum Operator
@@ -10976,9 +10976,9 @@ public unsafe partial class VisualShaderNodeUVFunc : VisualShaderNode
 
     public enum FunctionEnum : long
     {
-        FUNC_PANNING = 0,
-        FUNC_SCALING = 1,
-        FUNC_MAX = 2,
+        Panning = 0,
+        Scaling = 1,
+        Max = 2,
     }
 
     public VisualShaderNodeUVFunc.FunctionEnum Function
@@ -11528,10 +11528,10 @@ public unsafe partial class VisualShaderNodeVectorBase : VisualShaderNode
 
     public enum OpTypeEnum : long
     {
-        OP_TYPE_VECTOR_2D = 0,
-        OP_TYPE_VECTOR_3D = 1,
-        OP_TYPE_VECTOR_4D = 2,
-        OP_TYPE_MAX = 3,
+        Vector2d = 0,
+        Vector3d = 1,
+        Vector4d = 2,
+        Max = 3,
     }
 
     public VisualShaderNodeVectorBase.OpTypeEnum OpType
@@ -11613,40 +11613,40 @@ public unsafe partial class VisualShaderNodeVectorFunc : VisualShaderNodeVectorB
 
     public enum FunctionEnum : long
     {
-        FUNC_NORMALIZE = 0,
-        FUNC_SATURATE = 1,
-        FUNC_NEGATE = 2,
-        FUNC_RECIPROCAL = 3,
-        FUNC_ABS = 4,
-        FUNC_ACOS = 5,
-        FUNC_ACOSH = 6,
-        FUNC_ASIN = 7,
-        FUNC_ASINH = 8,
-        FUNC_ATAN = 9,
-        FUNC_ATANH = 10,
-        FUNC_CEIL = 11,
-        FUNC_COS = 12,
-        FUNC_COSH = 13,
-        FUNC_DEGREES = 14,
-        FUNC_EXP = 15,
-        FUNC_EXP2 = 16,
-        FUNC_FLOOR = 17,
-        FUNC_FRACT = 18,
-        FUNC_INVERSE_SQRT = 19,
-        FUNC_LOG = 20,
-        FUNC_LOG2 = 21,
-        FUNC_RADIANS = 22,
-        FUNC_ROUND = 23,
-        FUNC_ROUNDEVEN = 24,
-        FUNC_SIGN = 25,
-        FUNC_SIN = 26,
-        FUNC_SINH = 27,
-        FUNC_SQRT = 28,
-        FUNC_TAN = 29,
-        FUNC_TANH = 30,
-        FUNC_TRUNC = 31,
-        FUNC_ONEMINUS = 32,
-        FUNC_MAX = 33,
+        Normalize = 0,
+        Saturate = 1,
+        Negate = 2,
+        Reciprocal = 3,
+        Abs = 4,
+        Acos = 5,
+        Acosh = 6,
+        Asin = 7,
+        Asinh = 8,
+        Atan = 9,
+        Atanh = 10,
+        Ceil = 11,
+        Cos = 12,
+        Cosh = 13,
+        Degrees = 14,
+        Exp = 15,
+        Exp2 = 16,
+        Floor = 17,
+        Fract = 18,
+        InverseSqrt = 19,
+        Log = 20,
+        Log2 = 21,
+        Radians = 22,
+        Round = 23,
+        Roundeven = 24,
+        Sign = 25,
+        Sin = 26,
+        Sinh = 27,
+        Sqrt = 28,
+        Tan = 29,
+        Tanh = 30,
+        Trunc = 31,
+        Oneminus = 32,
+        Max = 33,
     }
 
     public VisualShaderNodeVectorFunc.FunctionEnum Function
@@ -11708,19 +11708,19 @@ public unsafe partial class VisualShaderNodeVectorOp : VisualShaderNodeVectorBas
 
     public enum OperatorEnum : long
     {
-        OP_ADD = 0,
-        OP_SUB = 1,
-        OP_MUL = 2,
-        OP_DIV = 3,
-        OP_MOD = 4,
-        OP_POW = 5,
-        OP_MAX = 6,
-        OP_MIN = 7,
-        OP_CROSS = 8,
-        OP_ATAN2 = 9,
-        OP_REFLECT = 10,
-        OP_STEP = 11,
-        OP_ENUM_SIZE = 12,
+        Add = 0,
+        Sub = 1,
+        Mul = 2,
+        Div = 3,
+        Mod = 4,
+        Pow = 5,
+        Max = 6,
+        Min = 7,
+        Cross = 8,
+        Atan2 = 9,
+        Reflect = 10,
+        Step = 11,
+        EnumSize = 12,
     }
 
     public VisualShaderNodeVectorOp.OperatorEnum Operator
@@ -11792,11 +11792,11 @@ public unsafe partial class VoxelGI : VisualInstance3D
 
     public enum SubdivEnum : long
     {
-        SUBDIV_64 = 0,
-        SUBDIV_128 = 1,
-        SUBDIV_256 = 2,
-        SUBDIV_512 = 3,
-        SUBDIV_MAX = 4,
+        Subdiv64 = 0,
+        Subdiv128 = 1,
+        Subdiv256 = 2,
+        Subdiv512 = 3,
+        Max = 4,
     }
 
     public VoxelGI.SubdivEnum Subdiv
@@ -11948,7 +11948,7 @@ public unsafe partial class VoxelGI : VisualInstance3D
     }
 
     private static nint __mb_bake;
-    public void Bake(Node? fromNode, bool createVisualDebug)
+    public void Bake(Node? fromNode = null, bool createVisualDebug = false)
     {
         var __mb = __mb_bake;
         if (__mb == 0)

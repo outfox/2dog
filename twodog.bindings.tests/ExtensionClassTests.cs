@@ -51,8 +51,8 @@ public class ExtensionClassTests(GodotBindingsFixture godot)
     {
         EnsureRegistered();
         Assert.True(ClassRegistry.IsRegistered(typeof(TestNode)));
-        Assert.True(ClassDB.Singleton.ClassExists("TestNode"));
-        Assert.True(ClassDB.Singleton.IsParentClass("TestNode", "Node"));
+        Assert.True(ClassDB.ClassExists("TestNode"));
+        Assert.True(ClassDB.IsParentClass("TestNode", "Node"));
     }
 
     [Fact]
@@ -103,11 +103,11 @@ public class ExtensionClassTests(GodotBindingsFixture godot)
     public void Virtuals_DispatchIntoOverrides()
     {
         EnsureRegistered();
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
+        var root = ((SceneTree)Godot.Engine.GetMainLoop()!).Root!;
         var node = new TestNode();
         try
         {
-            root.AddChild(node, false, Node.InternalMode.INTERNAL_MODE_DISABLED);
+            root.AddChild(node);
             Assert.True(node.EnterTreeCalled);
             Assert.True(node.ReadyCalled);
 
@@ -128,15 +128,15 @@ public class ExtensionClassTests(GodotBindingsFixture godot)
     public void DerivedUserClass_ChainsOverridesAndRegistration()
     {
         EnsureRegistered();
-        Assert.True(ClassDB.Singleton.ClassExists("TestNodeChild"));
-        Assert.True(ClassDB.Singleton.IsParentClass("TestNodeChild", "TestNode"));
+        Assert.True(ClassDB.ClassExists("TestNodeChild"));
+        Assert.True(ClassDB.IsParentClass("TestNodeChild", "TestNode"));
 
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
+        var root = ((SceneTree)Godot.Engine.GetMainLoop()!).Root!;
         var node = new TestNodeChild();
         try
         {
             Assert.Equal("TestNodeChild", node.GetClass());
-            root.AddChild(node, false, Node.InternalMode.INTERNAL_MODE_DISABLED);
+            root.AddChild(node);
             Assert.True(node.ReadyCalled);      // base override still runs
             Assert.True(node.ChildReadyCalled); // most-derived override ran
             root.RemoveChild(node);

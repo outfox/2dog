@@ -12,19 +12,19 @@ public class PublicVariantTests
     public void Scalars_RoundtripWithTypeTags()
     {
         using Variant i = 42L;
-        Assert.Equal(VariantType.TYPE_INT, i.VariantType);
+        Assert.Equal(VariantType.Int, i.VariantType);
         Assert.Equal(42L, i.AsInt64());
 
         using Variant b = true;
-        Assert.Equal(VariantType.TYPE_BOOL, b.VariantType);
+        Assert.Equal(VariantType.Bool, b.VariantType);
         Assert.True(b.AsBool());
 
         using Variant d = -2.5;
-        Assert.Equal(VariantType.TYPE_FLOAT, d.VariantType);
+        Assert.Equal(VariantType.Float, d.VariantType);
         Assert.Equal(-2.5, d.AsDouble());
 
         using Variant s = "höllo 🐶";
-        Assert.Equal(VariantType.TYPE_STRING, s.VariantType);
+        Assert.Equal(VariantType.String, s.VariantType);
         Assert.Equal("höllo 🐶", s.AsString());
     }
 
@@ -32,7 +32,7 @@ public class PublicVariantTests
     public void MathTypes_Roundtrip()
     {
         using Variant v2 = new Vector2(1.5f, -2f);
-        Assert.Equal(VariantType.TYPE_VECTOR2, v2.VariantType);
+        Assert.Equal(VariantType.Vector2, v2.VariantType);
         Assert.Equal(1.5f, v2.AsVector2().X);
 
         using Variant v3 = new Vector3(1, 2, 3);
@@ -47,7 +47,7 @@ public class PublicVariantTests
     {
         using var rc = new RefCounted();
         using var v = Variant.From(rc);
-        Assert.Equal(VariantType.TYPE_OBJECT, v.VariantType);
+        Assert.Equal(VariantType.Object, v.VariantType);
         Assert.Equal(2, rc.GetReferenceCount()); // wrapper + variant
         Assert.Same(rc, v.AsGodotObject());
         Assert.Same(rc, v.As<RefCounted>());
@@ -142,7 +142,7 @@ public class CollectionsTests(GodotBindingsFixture godot)
     [Fact]
     public void EngineDictionary_GetVersionInfo()
     {
-        using var info = Godot.Engine.Singleton.GetVersionInfo();
+        using var info = Godot.Engine.GetVersionInfo();
         using Variant key = "major";
         Assert.True(info.ContainsKey(key));
         using var major = info[key];
@@ -152,13 +152,13 @@ public class CollectionsTests(GodotBindingsFixture godot)
     [Fact]
     public void EngineArray_GetChildren_ElementIdentity()
     {
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
+        var root = ((SceneTree)Godot.Engine.GetMainLoop()!).Root!;
         var child = new Node();
         try
         {
-            root.AddChild(child, false, Node.InternalMode.INTERNAL_MODE_DISABLED);
+            root.AddChild(child);
             using var children = root.GetChildren(false);
-            Assert.Equal(root.GetChildCount(false), children.Count);
+            Assert.Equal(root.GetChildCount(), children.Count);
 
             using var last = children[children.Count - 1];
             Assert.Same(child, last.AsGodotObject()); // binding identity through Array->Variant->Object
@@ -173,7 +173,7 @@ public class CollectionsTests(GodotBindingsFixture godot)
     [Fact]
     public void NodePath_GetNodeAndToString()
     {
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
+        var root = ((SceneTree)Godot.Engine.GetMainLoop()!).Root!;
         var main = root.GetNode("Main"); // implicit string -> NodePath
         Assert.NotNull(main);
         Assert.Equal("Main", main!.Name);

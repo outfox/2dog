@@ -21,17 +21,17 @@ public unsafe partial class ZIPPacker : RefCounted
 
     public enum ZipAppend : long
     {
-        APPEND_CREATE = 0,
-        APPEND_CREATEAFTER = 1,
-        APPEND_ADDINZIP = 2,
+        Create = 0,
+        Createafter = 1,
+        Addinzip = 2,
     }
 
     public enum CompressionLevelEnum : long
     {
-        COMPRESSION_DEFAULT = -1,
-        COMPRESSION_NONE = 0,
-        COMPRESSION_FAST = 1,
-        COMPRESSION_BEST = 9,
+        Default = -1,
+        None = 0,
+        Fast = 1,
+        Best = 9,
     }
 
     public int CompressionLevel
@@ -41,7 +41,7 @@ public unsafe partial class ZIPPacker : RefCounted
     }
 
     private static nint __mb_open;
-    public Error Open(string path, ZIPPacker.ZipAppend append)
+    public Error Open(string path, ZIPPacker.ZipAppend append = (ZIPPacker.ZipAppend)(0))
     {
         var __mb = __mb_open;
         if (__mb == 0)
@@ -93,7 +93,7 @@ public unsafe partial class ZIPPacker : RefCounted
     }
 
     private static nint __mb_add_directory;
-    public Error AddDirectory(string path, FileAccess.UnixPermissionFlags permissions, ulong modifiedTime)
+    public Error AddDirectory(string path, FileAccess.UnixPermissionFlags permissions = (FileAccess.UnixPermissionFlags)(493), ulong modifiedTime = unchecked((ulong)(0)))
     {
         var __mb = __mb_add_directory;
         if (__mb == 0)
@@ -116,7 +116,7 @@ public unsafe partial class ZIPPacker : RefCounted
     }
 
     private static nint __mb_start_file;
-    public Error StartFile(string path, FileAccess.UnixPermissionFlags permissions, ulong modifiedTime)
+    public Error StartFile(string path, FileAccess.UnixPermissionFlags permissions = (FileAccess.UnixPermissionFlags)(420), ulong modifiedTime = unchecked((ulong)(0)))
     {
         var __mb = __mb_start_file;
         if (__mb == 0)
@@ -213,7 +213,7 @@ public unsafe partial class ZIPReader : RefCounted
     }
 
     private static nint __mb_file_exists;
-    public bool FileExists(string path, bool caseSensitive)
+    public bool FileExists(string path, bool caseSensitive = true)
     {
         var __mb = __mb_file_exists;
         if (__mb == 0)
@@ -234,7 +234,7 @@ public unsafe partial class ZIPReader : RefCounted
     }
 
     private static nint __mb_get_compression_level;
-    public int GetCompressionLevel(string path, bool caseSensitive)
+    public int GetCompressionLevel(string path, bool caseSensitive = true)
     {
         var __mb = __mb_get_compression_level;
         if (__mb == 0)

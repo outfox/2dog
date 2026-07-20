@@ -103,13 +103,13 @@ public unsafe partial class XMLParser : RefCounted
 
     public enum NodeType : long
     {
-        NODE_NONE = 0,
-        NODE_ELEMENT = 1,
-        NODE_ELEMENT_END = 2,
-        NODE_TEXT = 3,
-        NODE_COMMENT = 4,
-        NODE_CDATA = 5,
-        NODE_UNKNOWN = 6,
+        None = 0,
+        Element = 1,
+        ElementEnd = 2,
+        Text = 3,
+        Comment = 4,
+        Cdata = 5,
+        Unknown = 6,
     }
 
     private static nint __mb_read;
@@ -428,16 +428,16 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
     [Flags]
     public enum BodyUpdateEnum : long
     {
-        BODY_UPDATE_UPPER_BODY = 1,
-        BODY_UPDATE_LOWER_BODY = 2,
-        BODY_UPDATE_HANDS = 4,
+        UpperBody = 1,
+        LowerBody = 2,
+        Hands = 4,
     }
 
     public enum BoneUpdateEnum : long
     {
-        BONE_UPDATE_FULL = 0,
-        BONE_UPDATE_ROTATION_ONLY = 1,
-        BONE_UPDATE_MAX = 2,
+        Full = 0,
+        RotationOnly = 1,
+        Max = 2,
     }
 
     public string BodyTracker
@@ -564,110 +564,110 @@ public unsafe partial class XRBodyTracker : XRPositionalTracker
     [Flags]
     public enum BodyFlagsEnum : long
     {
-        BODY_FLAG_UPPER_BODY_SUPPORTED = 1,
-        BODY_FLAG_LOWER_BODY_SUPPORTED = 2,
-        BODY_FLAG_HANDS_SUPPORTED = 4,
+        UpperBodySupported = 1,
+        LowerBodySupported = 2,
+        HandsSupported = 4,
     }
 
     public enum Joint : long
     {
-        JOINT_ROOT = 0,
-        JOINT_HIPS = 1,
-        JOINT_SPINE = 2,
-        JOINT_CHEST = 3,
-        JOINT_UPPER_CHEST = 4,
-        JOINT_NECK = 5,
-        JOINT_HEAD = 6,
-        JOINT_HEAD_TIP = 7,
-        JOINT_LEFT_SHOULDER = 8,
-        JOINT_LEFT_UPPER_ARM = 9,
-        JOINT_LEFT_LOWER_ARM = 10,
-        JOINT_RIGHT_SHOULDER = 11,
-        JOINT_RIGHT_UPPER_ARM = 12,
-        JOINT_RIGHT_LOWER_ARM = 13,
-        JOINT_LEFT_UPPER_LEG = 14,
-        JOINT_LEFT_LOWER_LEG = 15,
-        JOINT_LEFT_FOOT = 16,
-        JOINT_LEFT_TOES = 17,
-        JOINT_RIGHT_UPPER_LEG = 18,
-        JOINT_RIGHT_LOWER_LEG = 19,
-        JOINT_RIGHT_FOOT = 20,
-        JOINT_RIGHT_TOES = 21,
-        JOINT_LEFT_HAND = 22,
-        JOINT_LEFT_PALM = 23,
-        JOINT_LEFT_WRIST = 24,
-        JOINT_LEFT_THUMB_METACARPAL = 25,
-        JOINT_LEFT_THUMB_PHALANX_PROXIMAL = 26,
-        JOINT_LEFT_THUMB_PHALANX_DISTAL = 27,
-        JOINT_LEFT_THUMB_TIP = 28,
-        JOINT_LEFT_INDEX_FINGER_METACARPAL = 29,
-        JOINT_LEFT_INDEX_FINGER_PHALANX_PROXIMAL = 30,
-        JOINT_LEFT_INDEX_FINGER_PHALANX_INTERMEDIATE = 31,
-        JOINT_LEFT_INDEX_FINGER_PHALANX_DISTAL = 32,
-        JOINT_LEFT_INDEX_FINGER_TIP = 33,
-        JOINT_LEFT_MIDDLE_FINGER_METACARPAL = 34,
-        JOINT_LEFT_MIDDLE_FINGER_PHALANX_PROXIMAL = 35,
-        JOINT_LEFT_MIDDLE_FINGER_PHALANX_INTERMEDIATE = 36,
-        JOINT_LEFT_MIDDLE_FINGER_PHALANX_DISTAL = 37,
-        JOINT_LEFT_MIDDLE_FINGER_TIP = 38,
-        JOINT_LEFT_RING_FINGER_METACARPAL = 39,
-        JOINT_LEFT_RING_FINGER_PHALANX_PROXIMAL = 40,
-        JOINT_LEFT_RING_FINGER_PHALANX_INTERMEDIATE = 41,
-        JOINT_LEFT_RING_FINGER_PHALANX_DISTAL = 42,
-        JOINT_LEFT_RING_FINGER_TIP = 43,
-        JOINT_LEFT_PINKY_FINGER_METACARPAL = 44,
-        JOINT_LEFT_PINKY_FINGER_PHALANX_PROXIMAL = 45,
-        JOINT_LEFT_PINKY_FINGER_PHALANX_INTERMEDIATE = 46,
-        JOINT_LEFT_PINKY_FINGER_PHALANX_DISTAL = 47,
-        JOINT_LEFT_PINKY_FINGER_TIP = 48,
-        JOINT_RIGHT_HAND = 49,
-        JOINT_RIGHT_PALM = 50,
-        JOINT_RIGHT_WRIST = 51,
-        JOINT_RIGHT_THUMB_METACARPAL = 52,
-        JOINT_RIGHT_THUMB_PHALANX_PROXIMAL = 53,
-        JOINT_RIGHT_THUMB_PHALANX_DISTAL = 54,
-        JOINT_RIGHT_THUMB_TIP = 55,
-        JOINT_RIGHT_INDEX_FINGER_METACARPAL = 56,
-        JOINT_RIGHT_INDEX_FINGER_PHALANX_PROXIMAL = 57,
-        JOINT_RIGHT_INDEX_FINGER_PHALANX_INTERMEDIATE = 58,
-        JOINT_RIGHT_INDEX_FINGER_PHALANX_DISTAL = 59,
-        JOINT_RIGHT_INDEX_FINGER_TIP = 60,
-        JOINT_RIGHT_MIDDLE_FINGER_METACARPAL = 61,
-        JOINT_RIGHT_MIDDLE_FINGER_PHALANX_PROXIMAL = 62,
-        JOINT_RIGHT_MIDDLE_FINGER_PHALANX_INTERMEDIATE = 63,
-        JOINT_RIGHT_MIDDLE_FINGER_PHALANX_DISTAL = 64,
-        JOINT_RIGHT_MIDDLE_FINGER_TIP = 65,
-        JOINT_RIGHT_RING_FINGER_METACARPAL = 66,
-        JOINT_RIGHT_RING_FINGER_PHALANX_PROXIMAL = 67,
-        JOINT_RIGHT_RING_FINGER_PHALANX_INTERMEDIATE = 68,
-        JOINT_RIGHT_RING_FINGER_PHALANX_DISTAL = 69,
-        JOINT_RIGHT_RING_FINGER_TIP = 70,
-        JOINT_RIGHT_PINKY_FINGER_METACARPAL = 71,
-        JOINT_RIGHT_PINKY_FINGER_PHALANX_PROXIMAL = 72,
-        JOINT_RIGHT_PINKY_FINGER_PHALANX_INTERMEDIATE = 73,
-        JOINT_RIGHT_PINKY_FINGER_PHALANX_DISTAL = 74,
-        JOINT_RIGHT_PINKY_FINGER_TIP = 75,
-        JOINT_LOWER_CHEST = 76,
-        JOINT_LEFT_SCAPULA = 77,
-        JOINT_LEFT_WRIST_TWIST = 78,
-        JOINT_RIGHT_SCAPULA = 79,
-        JOINT_RIGHT_WRIST_TWIST = 80,
-        JOINT_LEFT_FOOT_TWIST = 81,
-        JOINT_LEFT_HEEL = 82,
-        JOINT_LEFT_MIDDLE_FOOT = 83,
-        JOINT_RIGHT_FOOT_TWIST = 84,
-        JOINT_RIGHT_HEEL = 85,
-        JOINT_RIGHT_MIDDLE_FOOT = 86,
-        JOINT_MAX = 87,
+        Root = 0,
+        Hips = 1,
+        Spine = 2,
+        Chest = 3,
+        UpperChest = 4,
+        Neck = 5,
+        Head = 6,
+        HeadTip = 7,
+        LeftShoulder = 8,
+        LeftUpperArm = 9,
+        LeftLowerArm = 10,
+        RightShoulder = 11,
+        RightUpperArm = 12,
+        RightLowerArm = 13,
+        LeftUpperLeg = 14,
+        LeftLowerLeg = 15,
+        LeftFoot = 16,
+        LeftToes = 17,
+        RightUpperLeg = 18,
+        RightLowerLeg = 19,
+        RightFoot = 20,
+        RightToes = 21,
+        LeftHand = 22,
+        LeftPalm = 23,
+        LeftWrist = 24,
+        LeftThumbMetacarpal = 25,
+        LeftThumbPhalanxProximal = 26,
+        LeftThumbPhalanxDistal = 27,
+        LeftThumbTip = 28,
+        LeftIndexFingerMetacarpal = 29,
+        LeftIndexFingerPhalanxProximal = 30,
+        LeftIndexFingerPhalanxIntermediate = 31,
+        LeftIndexFingerPhalanxDistal = 32,
+        LeftIndexFingerTip = 33,
+        LeftMiddleFingerMetacarpal = 34,
+        LeftMiddleFingerPhalanxProximal = 35,
+        LeftMiddleFingerPhalanxIntermediate = 36,
+        LeftMiddleFingerPhalanxDistal = 37,
+        LeftMiddleFingerTip = 38,
+        LeftRingFingerMetacarpal = 39,
+        LeftRingFingerPhalanxProximal = 40,
+        LeftRingFingerPhalanxIntermediate = 41,
+        LeftRingFingerPhalanxDistal = 42,
+        LeftRingFingerTip = 43,
+        LeftPinkyFingerMetacarpal = 44,
+        LeftPinkyFingerPhalanxProximal = 45,
+        LeftPinkyFingerPhalanxIntermediate = 46,
+        LeftPinkyFingerPhalanxDistal = 47,
+        LeftPinkyFingerTip = 48,
+        RightHand = 49,
+        RightPalm = 50,
+        RightWrist = 51,
+        RightThumbMetacarpal = 52,
+        RightThumbPhalanxProximal = 53,
+        RightThumbPhalanxDistal = 54,
+        RightThumbTip = 55,
+        RightIndexFingerMetacarpal = 56,
+        RightIndexFingerPhalanxProximal = 57,
+        RightIndexFingerPhalanxIntermediate = 58,
+        RightIndexFingerPhalanxDistal = 59,
+        RightIndexFingerTip = 60,
+        RightMiddleFingerMetacarpal = 61,
+        RightMiddleFingerPhalanxProximal = 62,
+        RightMiddleFingerPhalanxIntermediate = 63,
+        RightMiddleFingerPhalanxDistal = 64,
+        RightMiddleFingerTip = 65,
+        RightRingFingerMetacarpal = 66,
+        RightRingFingerPhalanxProximal = 67,
+        RightRingFingerPhalanxIntermediate = 68,
+        RightRingFingerPhalanxDistal = 69,
+        RightRingFingerTip = 70,
+        RightPinkyFingerMetacarpal = 71,
+        RightPinkyFingerPhalanxProximal = 72,
+        RightPinkyFingerPhalanxIntermediate = 73,
+        RightPinkyFingerPhalanxDistal = 74,
+        RightPinkyFingerTip = 75,
+        LowerChest = 76,
+        LeftScapula = 77,
+        LeftWristTwist = 78,
+        RightScapula = 79,
+        RightWristTwist = 80,
+        LeftFootTwist = 81,
+        LeftHeel = 82,
+        LeftMiddleFoot = 83,
+        RightFootTwist = 84,
+        RightHeel = 85,
+        RightMiddleFoot = 86,
+        Max = 87,
     }
 
     [Flags]
     public enum JointFlags : long
     {
-        JOINT_FLAG_ORIENTATION_VALID = 1,
-        JOINT_FLAG_ORIENTATION_TRACKED = 2,
-        JOINT_FLAG_POSITION_VALID = 4,
-        JOINT_FLAG_POSITION_TRACKED = 8,
+        OrientationValid = 1,
+        OrientationTracked = 2,
+        PositionValid = 4,
+        PositionTracked = 8,
     }
 
     public bool HasTrackingData
@@ -1029,150 +1029,150 @@ public unsafe partial class XRFaceTracker : XRTracker
 
     public enum BlendShapeEntry : long
     {
-        FT_EYE_LOOK_OUT_RIGHT = 0,
-        FT_EYE_LOOK_IN_RIGHT = 1,
-        FT_EYE_LOOK_UP_RIGHT = 2,
-        FT_EYE_LOOK_DOWN_RIGHT = 3,
-        FT_EYE_LOOK_OUT_LEFT = 4,
-        FT_EYE_LOOK_IN_LEFT = 5,
-        FT_EYE_LOOK_UP_LEFT = 6,
-        FT_EYE_LOOK_DOWN_LEFT = 7,
-        FT_EYE_CLOSED_RIGHT = 8,
-        FT_EYE_CLOSED_LEFT = 9,
-        FT_EYE_SQUINT_RIGHT = 10,
-        FT_EYE_SQUINT_LEFT = 11,
-        FT_EYE_WIDE_RIGHT = 12,
-        FT_EYE_WIDE_LEFT = 13,
-        FT_EYE_DILATION_RIGHT = 14,
-        FT_EYE_DILATION_LEFT = 15,
-        FT_EYE_CONSTRICT_RIGHT = 16,
-        FT_EYE_CONSTRICT_LEFT = 17,
-        FT_BROW_PINCH_RIGHT = 18,
-        FT_BROW_PINCH_LEFT = 19,
-        FT_BROW_LOWERER_RIGHT = 20,
-        FT_BROW_LOWERER_LEFT = 21,
-        FT_BROW_INNER_UP_RIGHT = 22,
-        FT_BROW_INNER_UP_LEFT = 23,
-        FT_BROW_OUTER_UP_RIGHT = 24,
-        FT_BROW_OUTER_UP_LEFT = 25,
-        FT_NOSE_SNEER_RIGHT = 26,
-        FT_NOSE_SNEER_LEFT = 27,
-        FT_NASAL_DILATION_RIGHT = 28,
-        FT_NASAL_DILATION_LEFT = 29,
-        FT_NASAL_CONSTRICT_RIGHT = 30,
-        FT_NASAL_CONSTRICT_LEFT = 31,
-        FT_CHEEK_SQUINT_RIGHT = 32,
-        FT_CHEEK_SQUINT_LEFT = 33,
-        FT_CHEEK_PUFF_RIGHT = 34,
-        FT_CHEEK_PUFF_LEFT = 35,
-        FT_CHEEK_SUCK_RIGHT = 36,
-        FT_CHEEK_SUCK_LEFT = 37,
-        FT_JAW_OPEN = 38,
-        FT_MOUTH_CLOSED = 39,
-        FT_JAW_RIGHT = 40,
-        FT_JAW_LEFT = 41,
-        FT_JAW_FORWARD = 42,
-        FT_JAW_BACKWARD = 43,
-        FT_JAW_CLENCH = 44,
-        FT_JAW_MANDIBLE_RAISE = 45,
-        FT_LIP_SUCK_UPPER_RIGHT = 46,
-        FT_LIP_SUCK_UPPER_LEFT = 47,
-        FT_LIP_SUCK_LOWER_RIGHT = 48,
-        FT_LIP_SUCK_LOWER_LEFT = 49,
-        FT_LIP_SUCK_CORNER_RIGHT = 50,
-        FT_LIP_SUCK_CORNER_LEFT = 51,
-        FT_LIP_FUNNEL_UPPER_RIGHT = 52,
-        FT_LIP_FUNNEL_UPPER_LEFT = 53,
-        FT_LIP_FUNNEL_LOWER_RIGHT = 54,
-        FT_LIP_FUNNEL_LOWER_LEFT = 55,
-        FT_LIP_PUCKER_UPPER_RIGHT = 56,
-        FT_LIP_PUCKER_UPPER_LEFT = 57,
-        FT_LIP_PUCKER_LOWER_RIGHT = 58,
-        FT_LIP_PUCKER_LOWER_LEFT = 59,
-        FT_MOUTH_UPPER_UP_RIGHT = 60,
-        FT_MOUTH_UPPER_UP_LEFT = 61,
-        FT_MOUTH_LOWER_DOWN_RIGHT = 62,
-        FT_MOUTH_LOWER_DOWN_LEFT = 63,
-        FT_MOUTH_UPPER_DEEPEN_RIGHT = 64,
-        FT_MOUTH_UPPER_DEEPEN_LEFT = 65,
-        FT_MOUTH_UPPER_RIGHT = 66,
-        FT_MOUTH_UPPER_LEFT = 67,
-        FT_MOUTH_LOWER_RIGHT = 68,
-        FT_MOUTH_LOWER_LEFT = 69,
-        FT_MOUTH_CORNER_PULL_RIGHT = 70,
-        FT_MOUTH_CORNER_PULL_LEFT = 71,
-        FT_MOUTH_CORNER_SLANT_RIGHT = 72,
-        FT_MOUTH_CORNER_SLANT_LEFT = 73,
-        FT_MOUTH_FROWN_RIGHT = 74,
-        FT_MOUTH_FROWN_LEFT = 75,
-        FT_MOUTH_STRETCH_RIGHT = 76,
-        FT_MOUTH_STRETCH_LEFT = 77,
-        FT_MOUTH_DIMPLE_RIGHT = 78,
-        FT_MOUTH_DIMPLE_LEFT = 79,
-        FT_MOUTH_RAISER_UPPER = 80,
-        FT_MOUTH_RAISER_LOWER = 81,
-        FT_MOUTH_PRESS_RIGHT = 82,
-        FT_MOUTH_PRESS_LEFT = 83,
-        FT_MOUTH_TIGHTENER_RIGHT = 84,
-        FT_MOUTH_TIGHTENER_LEFT = 85,
-        FT_TONGUE_OUT = 86,
-        FT_TONGUE_UP = 87,
-        FT_TONGUE_DOWN = 88,
-        FT_TONGUE_RIGHT = 89,
-        FT_TONGUE_LEFT = 90,
-        FT_TONGUE_ROLL = 91,
-        FT_TONGUE_BLEND_DOWN = 92,
-        FT_TONGUE_CURL_UP = 93,
-        FT_TONGUE_SQUISH = 94,
-        FT_TONGUE_FLAT = 95,
-        FT_TONGUE_TWIST_RIGHT = 96,
-        FT_TONGUE_TWIST_LEFT = 97,
-        FT_SOFT_PALATE_CLOSE = 98,
-        FT_THROAT_SWALLOW = 99,
-        FT_NECK_FLEX_RIGHT = 100,
-        FT_NECK_FLEX_LEFT = 101,
-        FT_EYE_CLOSED = 102,
-        FT_EYE_WIDE = 103,
-        FT_EYE_SQUINT = 104,
-        FT_EYE_DILATION = 105,
-        FT_EYE_CONSTRICT = 106,
-        FT_BROW_DOWN_RIGHT = 107,
-        FT_BROW_DOWN_LEFT = 108,
-        FT_BROW_DOWN = 109,
-        FT_BROW_UP_RIGHT = 110,
-        FT_BROW_UP_LEFT = 111,
-        FT_BROW_UP = 112,
-        FT_NOSE_SNEER = 113,
-        FT_NASAL_DILATION = 114,
-        FT_NASAL_CONSTRICT = 115,
-        FT_CHEEK_PUFF = 116,
-        FT_CHEEK_SUCK = 117,
-        FT_CHEEK_SQUINT = 118,
-        FT_LIP_SUCK_UPPER = 119,
-        FT_LIP_SUCK_LOWER = 120,
-        FT_LIP_SUCK = 121,
-        FT_LIP_FUNNEL_UPPER = 122,
-        FT_LIP_FUNNEL_LOWER = 123,
-        FT_LIP_FUNNEL = 124,
-        FT_LIP_PUCKER_UPPER = 125,
-        FT_LIP_PUCKER_LOWER = 126,
-        FT_LIP_PUCKER = 127,
-        FT_MOUTH_UPPER_UP = 128,
-        FT_MOUTH_LOWER_DOWN = 129,
-        FT_MOUTH_OPEN = 130,
-        FT_MOUTH_RIGHT = 131,
-        FT_MOUTH_LEFT = 132,
-        FT_MOUTH_SMILE_RIGHT = 133,
-        FT_MOUTH_SMILE_LEFT = 134,
-        FT_MOUTH_SMILE = 135,
-        FT_MOUTH_SAD_RIGHT = 136,
-        FT_MOUTH_SAD_LEFT = 137,
-        FT_MOUTH_SAD = 138,
-        FT_MOUTH_STRETCH = 139,
-        FT_MOUTH_DIMPLE = 140,
-        FT_MOUTH_TIGHTENER = 141,
-        FT_MOUTH_PRESS = 142,
-        FT_MAX = 143,
+        EyeLookOutRight = 0,
+        EyeLookInRight = 1,
+        EyeLookUpRight = 2,
+        EyeLookDownRight = 3,
+        EyeLookOutLeft = 4,
+        EyeLookInLeft = 5,
+        EyeLookUpLeft = 6,
+        EyeLookDownLeft = 7,
+        EyeClosedRight = 8,
+        EyeClosedLeft = 9,
+        EyeSquintRight = 10,
+        EyeSquintLeft = 11,
+        EyeWideRight = 12,
+        EyeWideLeft = 13,
+        EyeDilationRight = 14,
+        EyeDilationLeft = 15,
+        EyeConstrictRight = 16,
+        EyeConstrictLeft = 17,
+        BrowPinchRight = 18,
+        BrowPinchLeft = 19,
+        BrowLowererRight = 20,
+        BrowLowererLeft = 21,
+        BrowInnerUpRight = 22,
+        BrowInnerUpLeft = 23,
+        BrowOuterUpRight = 24,
+        BrowOuterUpLeft = 25,
+        NoseSneerRight = 26,
+        NoseSneerLeft = 27,
+        NasalDilationRight = 28,
+        NasalDilationLeft = 29,
+        NasalConstrictRight = 30,
+        NasalConstrictLeft = 31,
+        CheekSquintRight = 32,
+        CheekSquintLeft = 33,
+        CheekPuffRight = 34,
+        CheekPuffLeft = 35,
+        CheekSuckRight = 36,
+        CheekSuckLeft = 37,
+        JawOpen = 38,
+        MouthClosed = 39,
+        JawRight = 40,
+        JawLeft = 41,
+        JawForward = 42,
+        JawBackward = 43,
+        JawClench = 44,
+        JawMandibleRaise = 45,
+        LipSuckUpperRight = 46,
+        LipSuckUpperLeft = 47,
+        LipSuckLowerRight = 48,
+        LipSuckLowerLeft = 49,
+        LipSuckCornerRight = 50,
+        LipSuckCornerLeft = 51,
+        LipFunnelUpperRight = 52,
+        LipFunnelUpperLeft = 53,
+        LipFunnelLowerRight = 54,
+        LipFunnelLowerLeft = 55,
+        LipPuckerUpperRight = 56,
+        LipPuckerUpperLeft = 57,
+        LipPuckerLowerRight = 58,
+        LipPuckerLowerLeft = 59,
+        MouthUpperUpRight = 60,
+        MouthUpperUpLeft = 61,
+        MouthLowerDownRight = 62,
+        MouthLowerDownLeft = 63,
+        MouthUpperDeepenRight = 64,
+        MouthUpperDeepenLeft = 65,
+        MouthUpperRight = 66,
+        MouthUpperLeft = 67,
+        MouthLowerRight = 68,
+        MouthLowerLeft = 69,
+        MouthCornerPullRight = 70,
+        MouthCornerPullLeft = 71,
+        MouthCornerSlantRight = 72,
+        MouthCornerSlantLeft = 73,
+        MouthFrownRight = 74,
+        MouthFrownLeft = 75,
+        MouthStretchRight = 76,
+        MouthStretchLeft = 77,
+        MouthDimpleRight = 78,
+        MouthDimpleLeft = 79,
+        MouthRaiserUpper = 80,
+        MouthRaiserLower = 81,
+        MouthPressRight = 82,
+        MouthPressLeft = 83,
+        MouthTightenerRight = 84,
+        MouthTightenerLeft = 85,
+        TongueOut = 86,
+        TongueUp = 87,
+        TongueDown = 88,
+        TongueRight = 89,
+        TongueLeft = 90,
+        TongueRoll = 91,
+        TongueBlendDown = 92,
+        TongueCurlUp = 93,
+        TongueSquish = 94,
+        TongueFlat = 95,
+        TongueTwistRight = 96,
+        TongueTwistLeft = 97,
+        SoftPalateClose = 98,
+        ThroatSwallow = 99,
+        NeckFlexRight = 100,
+        NeckFlexLeft = 101,
+        EyeClosed = 102,
+        EyeWide = 103,
+        EyeSquint = 104,
+        EyeDilation = 105,
+        EyeConstrict = 106,
+        BrowDownRight = 107,
+        BrowDownLeft = 108,
+        BrowDown = 109,
+        BrowUpRight = 110,
+        BrowUpLeft = 111,
+        BrowUp = 112,
+        NoseSneer = 113,
+        NasalDilation = 114,
+        NasalConstrict = 115,
+        CheekPuff = 116,
+        CheekSuck = 117,
+        CheekSquint = 118,
+        LipSuckUpper = 119,
+        LipSuckLower = 120,
+        LipSuck = 121,
+        LipFunnelUpper = 122,
+        LipFunnelLower = 123,
+        LipFunnel = 124,
+        LipPuckerUpper = 125,
+        LipPuckerLower = 126,
+        LipPucker = 127,
+        MouthUpperUp = 128,
+        MouthLowerDown = 129,
+        MouthOpen = 130,
+        MouthRight = 131,
+        MouthLeft = 132,
+        MouthSmileRight = 133,
+        MouthSmileLeft = 134,
+        MouthSmile = 135,
+        MouthSadRight = 136,
+        MouthSadLeft = 137,
+        MouthSad = 138,
+        MouthStretch = 139,
+        MouthDimple = 140,
+        MouthTightener = 141,
+        MouthPress = 142,
+        Max = 143,
     }
 
     private static nint __mb_get_blend_shape;
@@ -1223,9 +1223,9 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
 
     public enum BoneUpdateEnum : long
     {
-        BONE_UPDATE_FULL = 0,
-        BONE_UPDATE_ROTATION_ONLY = 1,
-        BONE_UPDATE_MAX = 2,
+        Full = 0,
+        RotationOnly = 1,
+        Max = 2,
     }
 
     public string HandTracker
@@ -1314,53 +1314,53 @@ public unsafe partial class XRHandTracker : XRPositionalTracker
 
     public enum HandTrackingSourceEnum : long
     {
-        HAND_TRACKING_SOURCE_UNKNOWN = 0,
-        HAND_TRACKING_SOURCE_UNOBSTRUCTED = 1,
-        HAND_TRACKING_SOURCE_CONTROLLER = 2,
-        HAND_TRACKING_SOURCE_NOT_TRACKED = 3,
-        HAND_TRACKING_SOURCE_MAX = 4,
+        Unknown = 0,
+        Unobstructed = 1,
+        Controller = 2,
+        NotTracked = 3,
+        Max = 4,
     }
 
     public enum HandJoint : long
     {
-        HAND_JOINT_PALM = 0,
-        HAND_JOINT_WRIST = 1,
-        HAND_JOINT_THUMB_METACARPAL = 2,
-        HAND_JOINT_THUMB_PHALANX_PROXIMAL = 3,
-        HAND_JOINT_THUMB_PHALANX_DISTAL = 4,
-        HAND_JOINT_THUMB_TIP = 5,
-        HAND_JOINT_INDEX_FINGER_METACARPAL = 6,
-        HAND_JOINT_INDEX_FINGER_PHALANX_PROXIMAL = 7,
-        HAND_JOINT_INDEX_FINGER_PHALANX_INTERMEDIATE = 8,
-        HAND_JOINT_INDEX_FINGER_PHALANX_DISTAL = 9,
-        HAND_JOINT_INDEX_FINGER_TIP = 10,
-        HAND_JOINT_MIDDLE_FINGER_METACARPAL = 11,
-        HAND_JOINT_MIDDLE_FINGER_PHALANX_PROXIMAL = 12,
-        HAND_JOINT_MIDDLE_FINGER_PHALANX_INTERMEDIATE = 13,
-        HAND_JOINT_MIDDLE_FINGER_PHALANX_DISTAL = 14,
-        HAND_JOINT_MIDDLE_FINGER_TIP = 15,
-        HAND_JOINT_RING_FINGER_METACARPAL = 16,
-        HAND_JOINT_RING_FINGER_PHALANX_PROXIMAL = 17,
-        HAND_JOINT_RING_FINGER_PHALANX_INTERMEDIATE = 18,
-        HAND_JOINT_RING_FINGER_PHALANX_DISTAL = 19,
-        HAND_JOINT_RING_FINGER_TIP = 20,
-        HAND_JOINT_PINKY_FINGER_METACARPAL = 21,
-        HAND_JOINT_PINKY_FINGER_PHALANX_PROXIMAL = 22,
-        HAND_JOINT_PINKY_FINGER_PHALANX_INTERMEDIATE = 23,
-        HAND_JOINT_PINKY_FINGER_PHALANX_DISTAL = 24,
-        HAND_JOINT_PINKY_FINGER_TIP = 25,
-        HAND_JOINT_MAX = 26,
+        Palm = 0,
+        Wrist = 1,
+        ThumbMetacarpal = 2,
+        ThumbPhalanxProximal = 3,
+        ThumbPhalanxDistal = 4,
+        ThumbTip = 5,
+        IndexFingerMetacarpal = 6,
+        IndexFingerPhalanxProximal = 7,
+        IndexFingerPhalanxIntermediate = 8,
+        IndexFingerPhalanxDistal = 9,
+        IndexFingerTip = 10,
+        MiddleFingerMetacarpal = 11,
+        MiddleFingerPhalanxProximal = 12,
+        MiddleFingerPhalanxIntermediate = 13,
+        MiddleFingerPhalanxDistal = 14,
+        MiddleFingerTip = 15,
+        RingFingerMetacarpal = 16,
+        RingFingerPhalanxProximal = 17,
+        RingFingerPhalanxIntermediate = 18,
+        RingFingerPhalanxDistal = 19,
+        RingFingerTip = 20,
+        PinkyFingerMetacarpal = 21,
+        PinkyFingerPhalanxProximal = 22,
+        PinkyFingerPhalanxIntermediate = 23,
+        PinkyFingerPhalanxDistal = 24,
+        PinkyFingerTip = 25,
+        Max = 26,
     }
 
     [Flags]
     public enum HandJointFlags : long
     {
-        HAND_JOINT_FLAG_ORIENTATION_VALID = 1,
-        HAND_JOINT_FLAG_ORIENTATION_TRACKED = 2,
-        HAND_JOINT_FLAG_POSITION_VALID = 4,
-        HAND_JOINT_FLAG_POSITION_TRACKED = 8,
-        HAND_JOINT_FLAG_LINEAR_VELOCITY_VALID = 16,
-        HAND_JOINT_FLAG_ANGULAR_VELOCITY_VALID = 32,
+        OrientationValid = 1,
+        OrientationTracked = 2,
+        PositionValid = 4,
+        PositionTracked = 8,
+        LinearVelocityValid = 16,
+        AngularVelocityValid = 32,
     }
 
     public bool HasTrackingData
@@ -1624,46 +1624,46 @@ public unsafe partial class XRInterface : RefCounted
 
     public enum Capabilities : long
     {
-        XR_NONE = 0,
-        XR_MONO = 1,
-        XR_STEREO = 2,
-        XR_QUAD = 4,
-        XR_VR = 8,
-        XR_AR = 16,
-        XR_EXTERNAL = 32,
+        None = 0,
+        Mono = 1,
+        Stereo = 2,
+        Quad = 4,
+        Vr = 8,
+        Ar = 16,
+        External = 32,
     }
 
     public enum TrackingStatus : long
     {
-        XR_NORMAL_TRACKING = 0,
-        XR_EXCESSIVE_MOTION = 1,
-        XR_INSUFFICIENT_FEATURES = 2,
-        XR_UNKNOWN_TRACKING = 3,
-        XR_NOT_TRACKING = 4,
+        NormalTracking = 0,
+        ExcessiveMotion = 1,
+        InsufficientFeatures = 2,
+        UnknownTracking = 3,
+        NotTracking = 4,
     }
 
     public enum PlayAreaMode : long
     {
-        XR_PLAY_AREA_UNKNOWN = 0,
-        XR_PLAY_AREA_3DOF = 1,
-        XR_PLAY_AREA_SITTING = 2,
-        XR_PLAY_AREA_ROOMSCALE = 3,
-        XR_PLAY_AREA_STAGE = 4,
-        XR_PLAY_AREA_CUSTOM = 2147483647,
+        Unknown = 0,
+        Area3dof = 1,
+        Sitting = 2,
+        Roomscale = 3,
+        Stage = 4,
+        Custom = 2147483647,
     }
 
     public enum EnvironmentBlendModeEnum : long
     {
-        XR_ENV_BLEND_MODE_OPAQUE = 0,
-        XR_ENV_BLEND_MODE_ADDITIVE = 1,
-        XR_ENV_BLEND_MODE_ALPHA_BLEND = 2,
+        Opaque = 0,
+        Additive = 1,
+        AlphaBlend = 2,
     }
 
     public enum VRSTextureFormat : long
     {
-        XR_VRS_TEXTURE_FORMAT_UNIFIED = 0,
-        XR_VRS_TEXTURE_FORMAT_FRAGMENT_SHADING_RATE = 1,
-        XR_VRS_TEXTURE_FORMAT_FRAGMENT_DENSITY_MAP = 2,
+        Unified = 0,
+        FragmentShadingRate = 1,
+        FragmentDensityMap = 2,
     }
 
     public bool InterfaceIsPrimary
@@ -2773,9 +2773,9 @@ public unsafe partial class XRPose : RefCounted
 
     public enum TrackingConfidenceEnum : long
     {
-        XR_TRACKING_CONFIDENCE_NONE = 0,
-        XR_TRACKING_CONFIDENCE_LOW = 1,
-        XR_TRACKING_CONFIDENCE_HIGH = 2,
+        None = 0,
+        Low = 1,
+        High = 2,
     }
 
     public bool HasTrackingData
@@ -3027,10 +3027,10 @@ public unsafe partial class XRPositionalTracker : XRTracker
 
     public enum TrackerHand : long
     {
-        TRACKER_HAND_UNKNOWN = 0,
-        TRACKER_HAND_LEFT = 1,
-        TRACKER_HAND_RIGHT = 2,
-        TRACKER_HAND_MAX = 3,
+        Unknown = 0,
+        Left = 1,
+        Right = 2,
+        Max = 3,
     }
 
     public string Profile
@@ -3221,65 +3221,62 @@ public unsafe partial class XRPositionalTracker : XRTracker
     }
 }
 
-public unsafe partial class XRServer : GodotObject
+public static unsafe partial class XRServer
 {
-    internal XRServer(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public XRServer() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "XRServer");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("XRServer");
 
-    private static XRServer? _singleton;
-    public static XRServer Singleton => _singleton ??= (XRServer)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("XRServer"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum TrackerType : long
     {
-        TRACKER_HEAD = 1,
-        TRACKER_CONTROLLER = 2,
-        TRACKER_BASESTATION = 4,
-        TRACKER_ANCHOR = 8,
-        TRACKER_HAND = 16,
-        TRACKER_BODY = 32,
-        TRACKER_FACE = 64,
-        TRACKER_ANY_KNOWN = 127,
-        TRACKER_UNKNOWN = 128,
-        TRACKER_ANY = 255,
+        Head = 1,
+        Controller = 2,
+        Basestation = 4,
+        Anchor = 8,
+        Hand = 16,
+        Body = 32,
+        Face = 64,
+        AnyKnown = 127,
+        Unknown = 128,
+        Any = 255,
     }
 
     public enum RotationMode : long
     {
-        RESET_FULL_ROTATION = 0,
-        RESET_BUT_KEEP_TILT = 1,
-        DONT_RESET_ROTATION = 2,
+        ResetFullRotation = 0,
+        ResetButKeepTilt = 1,
+        DontResetRotation = 2,
     }
 
-    public double WorldScale
+    public static double WorldScale
     {
         get => GetWorldScale();
         set => SetWorldScale(value);
     }
 
-    public Transform3D WorldOrigin
+    public static Transform3D WorldOrigin
     {
         get => GetWorldOrigin();
         set => SetWorldOrigin(value);
     }
 
-    public bool CameraLockedToOrigin
+    public static bool CameraLockedToOrigin
     {
         get => IsCameraLockedToOrigin();
         set => SetCameraLockedToOrigin(value);
     }
 
-    public XRInterface? PrimaryInterface
+    public static XRInterface? PrimaryInterface
     {
         get => GetPrimaryInterface();
         set => SetPrimaryInterface(value);
     }
 
     private static nint __mb_get_world_scale;
-    internal double GetWorldScale()
+    internal static double GetWorldScale()
     {
         var __mb = __mb_get_world_scale;
         if (__mb == 0)
@@ -3289,12 +3286,12 @@ public unsafe partial class XRServer : GodotObject
             __mb_get_world_scale = __mb;
         }
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (double)__ret;
     }
 
     private static nint __mb_set_world_scale;
-    internal void SetWorldScale(double scale)
+    internal static void SetWorldScale(double scale)
     {
         var __mb = __mb_set_world_scale;
         if (__mb == 0)
@@ -3306,11 +3303,11 @@ public unsafe partial class XRServer : GodotObject
         double __a0 = scale;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_world_origin;
-    internal Transform3D GetWorldOrigin()
+    internal static Transform3D GetWorldOrigin()
     {
         var __mb = __mb_get_world_origin;
         if (__mb == 0)
@@ -3320,12 +3317,12 @@ public unsafe partial class XRServer : GodotObject
             __mb_get_world_origin = __mb;
         }
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_world_origin;
-    internal void SetWorldOrigin(Transform3D worldOrigin)
+    internal static void SetWorldOrigin(Transform3D worldOrigin)
     {
         var __mb = __mb_set_world_origin;
         if (__mb == 0)
@@ -3337,11 +3334,11 @@ public unsafe partial class XRServer : GodotObject
         var __a0 = worldOrigin;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_reference_frame;
-    public Transform3D GetReferenceFrame()
+    public static Transform3D GetReferenceFrame()
     {
         var __mb = __mb_get_reference_frame;
         if (__mb == 0)
@@ -3351,12 +3348,12 @@ public unsafe partial class XRServer : GodotObject
             __mb_get_reference_frame = __mb;
         }
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_clear_reference_frame;
-    public void ClearReferenceFrame()
+    public static void ClearReferenceFrame()
     {
         var __mb = __mb_clear_reference_frame;
         if (__mb == 0)
@@ -3365,11 +3362,11 @@ public unsafe partial class XRServer : GodotObject
             if (__mb == 0) throw new MissingMethodException("XRServer.clear_reference_frame is not available in this engine build.");
             __mb_clear_reference_frame = __mb;
         }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_center_on_hmd;
-    public void CenterOnHmd(XRServer.RotationMode rotationMode, bool keepHeight)
+    public static void CenterOnHmd(XRServer.RotationMode rotationMode, bool keepHeight)
     {
         var __mb = __mb_center_on_hmd;
         if (__mb == 0)
@@ -3383,11 +3380,11 @@ public unsafe partial class XRServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_hmd_transform;
-    public Transform3D GetHmdTransform()
+    public static Transform3D GetHmdTransform()
     {
         var __mb = __mb_get_hmd_transform;
         if (__mb == 0)
@@ -3397,12 +3394,12 @@ public unsafe partial class XRServer : GodotObject
             __mb_get_hmd_transform = __mb;
         }
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_camera_locked_to_origin;
-    internal void SetCameraLockedToOrigin(bool enabled)
+    internal static void SetCameraLockedToOrigin(bool enabled)
     {
         var __mb = __mb_set_camera_locked_to_origin;
         if (__mb == 0)
@@ -3414,11 +3411,11 @@ public unsafe partial class XRServer : GodotObject
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_camera_locked_to_origin;
-    internal bool IsCameraLockedToOrigin()
+    internal static bool IsCameraLockedToOrigin()
     {
         var __mb = __mb_is_camera_locked_to_origin;
         if (__mb == 0)
@@ -3428,12 +3425,12 @@ public unsafe partial class XRServer : GodotObject
             __mb_is_camera_locked_to_origin = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_add_interface;
-    public void AddInterface(XRInterface? @interface)
+    public static void AddInterface(XRInterface? @interface)
     {
         var __mb = __mb_add_interface;
         if (__mb == 0)
@@ -3445,11 +3442,11 @@ public unsafe partial class XRServer : GodotObject
         nint __a0 = @interface?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_interface_count;
-    public int GetInterfaceCount()
+    public static int GetInterfaceCount()
     {
         var __mb = __mb_get_interface_count;
         if (__mb == 0)
@@ -3459,12 +3456,12 @@ public unsafe partial class XRServer : GodotObject
             __mb_get_interface_count = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_remove_interface;
-    public void RemoveInterface(XRInterface? @interface)
+    public static void RemoveInterface(XRInterface? @interface)
     {
         var __mb = __mb_remove_interface;
         if (__mb == 0)
@@ -3476,11 +3473,11 @@ public unsafe partial class XRServer : GodotObject
         nint __a0 = @interface?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_interface;
-    public XRInterface? GetInterface(int idx)
+    public static XRInterface? GetInterface(int idx)
     {
         var __mb = __mb_get_interface;
         if (__mb == 0)
@@ -3493,12 +3490,12 @@ public unsafe partial class XRServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (XRInterface?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_interfaces;
-    public Godot.Collections.Array GetInterfaces()
+    public static Godot.Collections.Array GetInterfaces()
     {
         var __mb = __mb_get_interfaces;
         if (__mb == 0)
@@ -3508,12 +3505,12 @@ public unsafe partial class XRServer : GodotObject
             __mb_get_interfaces = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_find_interface;
-    public XRInterface? FindInterface(string name)
+    public static XRInterface? FindInterface(string name)
     {
         var __mb = __mb_find_interface;
         if (__mb == 0)
@@ -3526,13 +3523,13 @@ public unsafe partial class XRServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (XRInterface?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_add_tracker;
-    public void AddTracker(XRTracker? tracker)
+    public static void AddTracker(XRTracker? tracker)
     {
         var __mb = __mb_add_tracker;
         if (__mb == 0)
@@ -3544,11 +3541,11 @@ public unsafe partial class XRServer : GodotObject
         nint __a0 = tracker?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_tracker;
-    public void RemoveTracker(XRTracker? tracker)
+    public static void RemoveTracker(XRTracker? tracker)
     {
         var __mb = __mb_remove_tracker;
         if (__mb == 0)
@@ -3560,11 +3557,11 @@ public unsafe partial class XRServer : GodotObject
         nint __a0 = tracker?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_trackers;
-    public Godot.Collections.Dictionary GetTrackers(int trackerTypes)
+    public static Godot.Collections.Dictionary GetTrackers(int trackerTypes)
     {
         var __mb = __mb_get_trackers;
         if (__mb == 0)
@@ -3577,12 +3574,12 @@ public unsafe partial class XRServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_tracker;
-    public XRTracker? GetTracker(string trackerName)
+    public static XRTracker? GetTracker(string trackerName)
     {
         var __mb = __mb_get_tracker;
         if (__mb == 0)
@@ -3595,12 +3592,12 @@ public unsafe partial class XRServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (XRTracker?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_primary_interface;
-    internal XRInterface? GetPrimaryInterface()
+    internal static XRInterface? GetPrimaryInterface()
     {
         var __mb = __mb_get_primary_interface;
         if (__mb == 0)
@@ -3610,12 +3607,12 @@ public unsafe partial class XRServer : GodotObject
             __mb_get_primary_interface = __mb;
         }
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (XRInterface?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_primary_interface;
-    internal void SetPrimaryInterface(XRInterface? @interface)
+    internal static void SetPrimaryInterface(XRInterface? @interface)
     {
         var __mb = __mb_set_primary_interface;
         if (__mb == 0)
@@ -3627,7 +3624,7 @@ public unsafe partial class XRServer : GodotObject
         nint __a0 = @interface?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 }
 

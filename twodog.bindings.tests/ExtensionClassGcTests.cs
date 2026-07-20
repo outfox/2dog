@@ -29,7 +29,7 @@ public class ExtensionClassGcTests(GodotBindingsFixture godot)
     public void StrongHandle_StateSurvivesGc_WhileOnlyEngineOwns()
     {
         EnsureRegistered();
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
+        var root = ((SceneTree)Godot.Engine.GetMainLoop()!).Root!;
 
         var id = CreateInTreeUnrooted(root);
         GC.Collect();
@@ -58,7 +58,7 @@ public class ExtensionClassGcTests(GodotBindingsFixture godot)
     {
         var node = new TestNode();
         node.Name = "gc_survivor";
-        root.AddChild(node, false, Node.InternalMode.INTERNAL_MODE_DISABLED);
+        root.AddChild(node);
         node.ProcessCalls = 1000; // distinctive managed state
         return node.InstanceId;
     }
@@ -107,12 +107,12 @@ public class ExtensionClassGcTests(GodotBindingsFixture godot)
     public void EngineReturnedChild_IsSameManagedInstance()
     {
         EnsureRegistered();
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
+        var root = ((SceneTree)Godot.Engine.GetMainLoop()!).Root!;
         var node = new TestNode();
         try
         {
-            root.AddChild(node, false, Node.InternalMode.INTERNAL_MODE_DISABLED);
-            var back = root.GetChild(root.GetChildCount(false) - 1, false);
+            root.AddChild(node);
+            var back = root.GetChild(root.GetChildCount() - 1);
             Assert.Same(node, back);
             root.RemoveChild(node);
         }
@@ -127,9 +127,9 @@ public class ExtensionClassGcTests(GodotBindingsFixture godot)
     public void QueueFree_EngineInitiatedDeath_DetachesWrapper()
     {
         EnsureRegistered();
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
+        var root = ((SceneTree)Godot.Engine.GetMainLoop()!).Root!;
         var node = new TestNode();
-        root.AddChild(node, false, Node.InternalMode.INTERNAL_MODE_DISABLED);
+        root.AddChild(node);
 
         node.QueueFree();
         Assert.True(node.IsValid); // still alive until the deferred flush

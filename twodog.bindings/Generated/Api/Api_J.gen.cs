@@ -54,7 +54,7 @@ public unsafe partial class JSON : Resource
     }
 
     private static nint __mb_stringify;
-    public static string Stringify(Variant data, string indent, bool sortKeys, bool fullPrecision)
+    public static string Stringify(Variant data, string indent = "", bool sortKeys = true, bool fullPrecision = false)
     {
         var __mb = __mb_stringify;
         if (__mb == 0)
@@ -98,7 +98,7 @@ public unsafe partial class JSON : Resource
     }
 
     private static nint __mb_parse;
-    public Error Parse(string jsonText, bool keepText)
+    public Error Parse(string jsonText, bool keepText = false)
     {
         var __mb = __mb_parse;
         if (__mb == 0)
@@ -195,7 +195,7 @@ public unsafe partial class JSON : Resource
     }
 
     private static nint __mb_from_native;
-    public static Variant FromNative(Variant variant, bool fullObjects)
+    public static Variant FromNative(Variant variant, bool fullObjects = false)
     {
         var __mb = __mb_from_native;
         if (__mb == 0)
@@ -215,7 +215,7 @@ public unsafe partial class JSON : Resource
     }
 
     private static nint __mb_to_native;
-    public static Variant ToNative(Variant json, bool allowObjects)
+    public static Variant ToNative(Variant json, bool allowObjects = false)
     {
         var __mb = __mb_to_native;
         if (__mb == 0)
@@ -246,15 +246,15 @@ public unsafe partial class JSONRPC : GodotObject
 
     public enum ErrorCode : long
     {
-        PARSE_ERROR = -32700,
-        INVALID_REQUEST = -32600,
-        METHOD_NOT_FOUND = -32601,
-        INVALID_PARAMS = -32602,
-        INTERNAL_ERROR = -32603,
+        ParseError = -32700,
+        InvalidRequest = -32600,
+        MethodNotFound = -32601,
+        InvalidParams = -32602,
+        InternalError = -32603,
     }
 
     private static nint __mb_process_action;
-    public Variant ProcessAction(Variant action, bool recurse)
+    public Variant ProcessAction(Variant action, bool recurse = false)
     {
         var __mb = __mb_process_action;
         if (__mb == 0)
@@ -357,7 +357,7 @@ public unsafe partial class JSONRPC : GodotObject
     }
 
     private static nint __mb_make_response_error;
-    public Godot.Collections.Dictionary MakeResponseError(int code, string message, Variant id)
+    public Godot.Collections.Dictionary MakeResponseError(int code, string message, Variant id = default)
     {
         var __mb = __mb_make_response_error;
         if (__mb == 0)
@@ -463,20 +463,17 @@ public unsafe partial class JavaClass : RefCounted
     }
 }
 
-public unsafe partial class JavaClassWrapper : GodotObject
+public static unsafe partial class JavaClassWrapper
 {
-    internal JavaClassWrapper(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public JavaClassWrapper() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "JavaClassWrapper");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("JavaClassWrapper");
 
-    private static JavaClassWrapper? _singleton;
-    public static JavaClassWrapper Singleton => _singleton ??= (JavaClassWrapper)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("JavaClassWrapper"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     private static nint __mb_wrap;
-    public JavaClass? Wrap(string name)
+    public static JavaClass? Wrap(string name)
     {
         var __mb = __mb_wrap;
         if (__mb == 0)
@@ -489,13 +486,13 @@ public unsafe partial class JavaClassWrapper : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (JavaClass?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_exception;
-    public JavaObject? GetException()
+    public static JavaObject? GetException()
     {
         var __mb = __mb_get_exception;
         if (__mb == 0)
@@ -505,7 +502,7 @@ public unsafe partial class JavaClassWrapper : GodotObject
             __mb_get_exception = __mb;
         }
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (JavaObject?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 }
@@ -553,15 +550,17 @@ public unsafe partial class JavaObject : RefCounted
     }
 }
 
-public unsafe partial class JavaScriptBridge : GodotObject
+public static unsafe partial class JavaScriptBridge
 {
-    internal JavaScriptBridge(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    private static JavaScriptBridge? _singleton;
-    public static JavaScriptBridge Singleton => _singleton ??= (JavaScriptBridge)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("JavaScriptBridge"), adoptRef: false)!;
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("JavaScriptBridge");
+
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     private static nint __mb_eval;
-    public Variant Eval(string code, bool useGlobalExecutionContext)
+    public static Variant Eval(string code, bool useGlobalExecutionContext = false)
     {
         var __mb = __mb_eval;
         if (__mb == 0)
@@ -576,13 +575,13 @@ public unsafe partial class JavaScriptBridge : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return new Variant(__ret);
     }
 
     private static nint __mb_get_interface;
-    public JavaScriptObject? GetInterface(string @interface)
+    public static JavaScriptObject? GetInterface(string @interface)
     {
         var __mb = __mb_get_interface;
         if (__mb == 0)
@@ -595,13 +594,13 @@ public unsafe partial class JavaScriptBridge : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (JavaScriptObject?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_is_js_buffer;
-    public bool IsJsBuffer(JavaScriptObject? javascriptObject)
+    public static bool IsJsBuffer(JavaScriptObject? javascriptObject)
     {
         var __mb = __mb_is_js_buffer;
         if (__mb == 0)
@@ -614,12 +613,12 @@ public unsafe partial class JavaScriptBridge : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_pwa_needs_update;
-    public bool PwaNeedsUpdate()
+    public static bool PwaNeedsUpdate()
     {
         var __mb = __mb_pwa_needs_update;
         if (__mb == 0)
@@ -629,12 +628,12 @@ public unsafe partial class JavaScriptBridge : GodotObject
             __mb_pwa_needs_update = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_pwa_update;
-    public Error PwaUpdate()
+    public static Error PwaUpdate()
     {
         var __mb = __mb_pwa_update;
         if (__mb == 0)
@@ -644,12 +643,12 @@ public unsafe partial class JavaScriptBridge : GodotObject
             __mb_pwa_update = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_force_fs_sync;
-    public void ForceFsSync()
+    public static void ForceFsSync()
     {
         var __mb = __mb_force_fs_sync;
         if (__mb == 0)
@@ -658,7 +657,7 @@ public unsafe partial class JavaScriptBridge : GodotObject
             if (__mb == 0) throw new MissingMethodException("JavaScriptBridge.force_fs_sync is not available in this engine build.");
             __mb_force_fs_sync = __mb;
         }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
     }
 }
 

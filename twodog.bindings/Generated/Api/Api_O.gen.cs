@@ -20,67 +20,64 @@ public unsafe partial class ORMMaterial3D : BaseMaterial3D
     }
 }
 
-public unsafe partial class OS : GodotObject
+public static unsafe partial class OS
 {
-    internal OS(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public OS() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "OS");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("OS");
 
-    private static OS? _singleton;
-    public static OS Singleton => _singleton ??= (OS)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("OS"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum RenderingDriver : long
     {
-        RENDERING_DRIVER_VULKAN = 0,
-        RENDERING_DRIVER_OPENGL3 = 1,
-        RENDERING_DRIVER_D3D12 = 2,
-        RENDERING_DRIVER_METAL = 3,
+        Vulkan = 0,
+        Opengl3 = 1,
+        D3d12 = 2,
+        Metal = 3,
     }
 
     public enum SystemDir : long
     {
-        SYSTEM_DIR_DESKTOP = 0,
-        SYSTEM_DIR_DCIM = 1,
-        SYSTEM_DIR_DOCUMENTS = 2,
-        SYSTEM_DIR_DOWNLOADS = 3,
-        SYSTEM_DIR_MOVIES = 4,
-        SYSTEM_DIR_MUSIC = 5,
-        SYSTEM_DIR_PICTURES = 6,
-        SYSTEM_DIR_RINGTONES = 7,
+        Desktop = 0,
+        Dcim = 1,
+        Documents = 2,
+        Downloads = 3,
+        Movies = 4,
+        Music = 5,
+        Pictures = 6,
+        Ringtones = 7,
     }
 
     public enum StdHandleType : long
     {
-        STD_HANDLE_INVALID = 0,
-        STD_HANDLE_CONSOLE = 1,
-        STD_HANDLE_FILE = 2,
-        STD_HANDLE_PIPE = 3,
-        STD_HANDLE_UNKNOWN = 4,
+        Invalid = 0,
+        Console = 1,
+        File = 2,
+        Pipe = 3,
+        Unknown = 4,
     }
 
-    public bool LowProcessorUsageMode
+    public static bool LowProcessorUsageMode
     {
         get => IsInLowProcessorUsageMode();
         set => SetLowProcessorUsageMode(value);
     }
 
-    public int LowProcessorUsageModeSleepUsec
+    public static int LowProcessorUsageModeSleepUsec
     {
         get => GetLowProcessorUsageModeSleepUsec();
         set => SetLowProcessorUsageModeSleepUsec(value);
     }
 
-    public bool DeltaSmoothing
+    public static bool DeltaSmoothing
     {
         get => IsDeltaSmoothingEnabled();
         set => SetDeltaSmoothing(value);
     }
 
     private static nint __mb_get_system_ca_certificates;
-    public string GetSystemCaCertificates()
+    public static string GetSystemCaCertificates()
     {
         var __mb = __mb_get_system_ca_certificates;
         if (__mb == 0)
@@ -90,12 +87,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_system_ca_certificates = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_open_midi_inputs;
-    public void OpenMidiInputs()
+    public static void OpenMidiInputs()
     {
         var __mb = __mb_open_midi_inputs;
         if (__mb == 0)
@@ -104,11 +101,11 @@ public unsafe partial class OS : GodotObject
             if (__mb == 0) throw new MissingMethodException("OS.open_midi_inputs is not available in this engine build.");
             __mb_open_midi_inputs = __mb;
         }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_close_midi_inputs;
-    public void CloseMidiInputs()
+    public static void CloseMidiInputs()
     {
         var __mb = __mb_close_midi_inputs;
         if (__mb == 0)
@@ -117,11 +114,11 @@ public unsafe partial class OS : GodotObject
             if (__mb == 0) throw new MissingMethodException("OS.close_midi_inputs is not available in this engine build.");
             __mb_close_midi_inputs = __mb;
         }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_alert;
-    public void Alert(string text, string title)
+    public static void Alert(string text, string title = "Alert!")
     {
         var __mb = __mb_alert;
         if (__mb == 0)
@@ -135,13 +132,13 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_crash;
-    public void Crash(string message)
+    public static void Crash(string message)
     {
         var __mb = __mb_crash;
         if (__mb == 0)
@@ -153,12 +150,12 @@ public unsafe partial class OS : GodotObject
         ulong __a0 = NativeString.Create(message);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_set_low_processor_usage_mode;
-    internal void SetLowProcessorUsageMode(bool enable)
+    internal static void SetLowProcessorUsageMode(bool enable)
     {
         var __mb = __mb_set_low_processor_usage_mode;
         if (__mb == 0)
@@ -170,11 +167,11 @@ public unsafe partial class OS : GodotObject
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_in_low_processor_usage_mode;
-    internal bool IsInLowProcessorUsageMode()
+    internal static bool IsInLowProcessorUsageMode()
     {
         var __mb = __mb_is_in_low_processor_usage_mode;
         if (__mb == 0)
@@ -184,12 +181,12 @@ public unsafe partial class OS : GodotObject
             __mb_is_in_low_processor_usage_mode = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_low_processor_usage_mode_sleep_usec;
-    internal void SetLowProcessorUsageModeSleepUsec(int usec)
+    internal static void SetLowProcessorUsageModeSleepUsec(int usec)
     {
         var __mb = __mb_set_low_processor_usage_mode_sleep_usec;
         if (__mb == 0)
@@ -201,11 +198,11 @@ public unsafe partial class OS : GodotObject
         long __a0 = unchecked((long)usec);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_low_processor_usage_mode_sleep_usec;
-    internal int GetLowProcessorUsageModeSleepUsec()
+    internal static int GetLowProcessorUsageModeSleepUsec()
     {
         var __mb = __mb_get_low_processor_usage_mode_sleep_usec;
         if (__mb == 0)
@@ -215,12 +212,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_low_processor_usage_mode_sleep_usec = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_delta_smoothing;
-    internal void SetDeltaSmoothing(bool deltaSmoothingEnabled)
+    internal static void SetDeltaSmoothing(bool deltaSmoothingEnabled)
     {
         var __mb = __mb_set_delta_smoothing;
         if (__mb == 0)
@@ -232,11 +229,11 @@ public unsafe partial class OS : GodotObject
         byte __a0 = deltaSmoothingEnabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_delta_smoothing_enabled;
-    internal bool IsDeltaSmoothingEnabled()
+    internal static bool IsDeltaSmoothingEnabled()
     {
         var __mb = __mb_is_delta_smoothing_enabled;
         if (__mb == 0)
@@ -246,12 +243,12 @@ public unsafe partial class OS : GodotObject
             __mb_is_delta_smoothing_enabled = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_processor_count;
-    public int GetProcessorCount()
+    public static int GetProcessorCount()
     {
         var __mb = __mb_get_processor_count;
         if (__mb == 0)
@@ -261,12 +258,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_processor_count = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_processor_name;
-    public string GetProcessorName()
+    public static string GetProcessorName()
     {
         var __mb = __mb_get_processor_name;
         if (__mb == 0)
@@ -276,12 +273,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_processor_name = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_system_font_path;
-    public string GetSystemFontPath(string fontName, int weight, int stretch, bool italic)
+    public static string GetSystemFontPath(string fontName, int weight = unchecked((int)(400)), int stretch = unchecked((int)(100)), bool italic = false)
     {
         var __mb = __mb_get_system_font_path;
         if (__mb == 0)
@@ -300,13 +297,13 @@ public unsafe partial class OS : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_executable_path;
-    public string GetExecutablePath()
+    public static string GetExecutablePath()
     {
         var __mb = __mb_get_executable_path;
         if (__mb == 0)
@@ -316,12 +313,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_executable_path = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_read_string_from_stdin;
-    public string ReadStringFromStdin(long bufferSize)
+    public static string ReadStringFromStdin(long bufferSize = unchecked((long)(1024)))
     {
         var __mb = __mb_read_string_from_stdin;
         if (__mb == 0)
@@ -334,12 +331,12 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_stdin_type;
-    public OS.StdHandleType GetStdinType()
+    public static OS.StdHandleType GetStdinType()
     {
         var __mb = __mb_get_stdin_type;
         if (__mb == 0)
@@ -349,12 +346,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_stdin_type = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (OS.StdHandleType)__ret;
     }
 
     private static nint __mb_get_stdout_type;
-    public OS.StdHandleType GetStdoutType()
+    public static OS.StdHandleType GetStdoutType()
     {
         var __mb = __mb_get_stdout_type;
         if (__mb == 0)
@@ -364,12 +361,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_stdout_type = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (OS.StdHandleType)__ret;
     }
 
     private static nint __mb_get_stderr_type;
-    public OS.StdHandleType GetStderrType()
+    public static OS.StdHandleType GetStderrType()
     {
         var __mb = __mb_get_stderr_type;
         if (__mb == 0)
@@ -379,12 +376,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_stderr_type = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (OS.StdHandleType)__ret;
     }
 
     private static nint __mb_kill;
-    public Error Kill(int pid)
+    public static Error Kill(int pid)
     {
         var __mb = __mb_kill;
         if (__mb == 0)
@@ -397,12 +394,12 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_shell_open;
-    public Error ShellOpen(string uri)
+    public static Error ShellOpen(string uri)
     {
         var __mb = __mb_shell_open;
         if (__mb == 0)
@@ -415,13 +412,13 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
 
     private static nint __mb_shell_show_in_file_manager;
-    public Error ShellShowInFileManager(string fileOrDirPath, bool openFolder)
+    public static Error ShellShowInFileManager(string fileOrDirPath, bool openFolder = true)
     {
         var __mb = __mb_shell_show_in_file_manager;
         if (__mb == 0)
@@ -436,13 +433,13 @@ public unsafe partial class OS : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
 
     private static nint __mb_is_process_running;
-    public bool IsProcessRunning(int pid)
+    public static bool IsProcessRunning(int pid)
     {
         var __mb = __mb_is_process_running;
         if (__mb == 0)
@@ -455,12 +452,12 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_process_exit_code;
-    public int GetProcessExitCode(int pid)
+    public static int GetProcessExitCode(int pid)
     {
         var __mb = __mb_get_process_exit_code;
         if (__mb == 0)
@@ -473,12 +470,12 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_process_id;
-    public int GetProcessId()
+    public static int GetProcessId()
     {
         var __mb = __mb_get_process_id;
         if (__mb == 0)
@@ -488,12 +485,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_process_id = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_has_environment;
-    public bool HasEnvironment(string variable)
+    public static bool HasEnvironment(string variable)
     {
         var __mb = __mb_has_environment;
         if (__mb == 0)
@@ -506,13 +503,13 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
 
     private static nint __mb_get_environment;
-    public string GetEnvironment(string variable)
+    public static string GetEnvironment(string variable)
     {
         var __mb = __mb_get_environment;
         if (__mb == 0)
@@ -525,13 +522,13 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_environment;
-    public void SetEnvironment(string variable, string value)
+    public static void SetEnvironment(string variable, string value)
     {
         var __mb = __mb_set_environment;
         if (__mb == 0)
@@ -545,13 +542,13 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_unset_environment;
-    public void UnsetEnvironment(string variable)
+    public static void UnsetEnvironment(string variable)
     {
         var __mb = __mb_unset_environment;
         if (__mb == 0)
@@ -563,12 +560,12 @@ public unsafe partial class OS : GodotObject
         ulong __a0 = NativeString.Create(variable);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_name;
-    public string GetName()
+    public static string GetName()
     {
         var __mb = __mb_get_name;
         if (__mb == 0)
@@ -578,12 +575,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_name = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_distribution_name;
-    public string GetDistributionName()
+    public static string GetDistributionName()
     {
         var __mb = __mb_get_distribution_name;
         if (__mb == 0)
@@ -593,12 +590,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_distribution_name = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_version;
-    public string GetVersion()
+    public static string GetVersion()
     {
         var __mb = __mb_get_version;
         if (__mb == 0)
@@ -608,12 +605,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_version = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_version_alias;
-    public string GetVersionAlias()
+    public static string GetVersionAlias()
     {
         var __mb = __mb_get_version_alias;
         if (__mb == 0)
@@ -623,12 +620,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_version_alias = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_is_restart_on_exit_set;
-    public bool IsRestartOnExitSet()
+    public static bool IsRestartOnExitSet()
     {
         var __mb = __mb_is_restart_on_exit_set;
         if (__mb == 0)
@@ -638,12 +635,12 @@ public unsafe partial class OS : GodotObject
             __mb_is_restart_on_exit_set = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_delay_usec;
-    public void DelayUsec(int usec)
+    public static void DelayUsec(int usec)
     {
         var __mb = __mb_delay_usec;
         if (__mb == 0)
@@ -655,11 +652,11 @@ public unsafe partial class OS : GodotObject
         long __a0 = unchecked((long)usec);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_delay_msec;
-    public void DelayMsec(int msec)
+    public static void DelayMsec(int msec)
     {
         var __mb = __mb_delay_msec;
         if (__mb == 0)
@@ -671,11 +668,11 @@ public unsafe partial class OS : GodotObject
         long __a0 = unchecked((long)msec);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_locale;
-    public string GetLocale()
+    public static string GetLocale()
     {
         var __mb = __mb_get_locale;
         if (__mb == 0)
@@ -685,12 +682,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_locale = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_locale_language;
-    public string GetLocaleLanguage()
+    public static string GetLocaleLanguage()
     {
         var __mb = __mb_get_locale_language;
         if (__mb == 0)
@@ -700,12 +697,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_locale_language = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_model_name;
-    public string GetModelName()
+    public static string GetModelName()
     {
         var __mb = __mb_get_model_name;
         if (__mb == 0)
@@ -715,12 +712,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_model_name = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_is_userfs_persistent;
-    public bool IsUserfsPersistent()
+    public static bool IsUserfsPersistent()
     {
         var __mb = __mb_is_userfs_persistent;
         if (__mb == 0)
@@ -730,12 +727,12 @@ public unsafe partial class OS : GodotObject
             __mb_is_userfs_persistent = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_stdout_verbose;
-    public bool IsStdoutVerbose()
+    public static bool IsStdoutVerbose()
     {
         var __mb = __mb_is_stdout_verbose;
         if (__mb == 0)
@@ -745,12 +742,12 @@ public unsafe partial class OS : GodotObject
             __mb_is_stdout_verbose = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_debug_build;
-    public bool IsDebugBuild()
+    public static bool IsDebugBuild()
     {
         var __mb = __mb_is_debug_build;
         if (__mb == 0)
@@ -760,12 +757,12 @@ public unsafe partial class OS : GodotObject
             __mb_is_debug_build = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_static_memory_usage;
-    public ulong GetStaticMemoryUsage()
+    public static ulong GetStaticMemoryUsage()
     {
         var __mb = __mb_get_static_memory_usage;
         if (__mb == 0)
@@ -775,12 +772,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_static_memory_usage = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_static_memory_peak_usage;
-    public ulong GetStaticMemoryPeakUsage()
+    public static ulong GetStaticMemoryPeakUsage()
     {
         var __mb = __mb_get_static_memory_peak_usage;
         if (__mb == 0)
@@ -790,12 +787,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_static_memory_peak_usage = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_memory_info;
-    public Godot.Collections.Dictionary GetMemoryInfo()
+    public static Godot.Collections.Dictionary GetMemoryInfo()
     {
         var __mb = __mb_get_memory_info;
         if (__mb == 0)
@@ -805,12 +802,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_memory_info = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_move_to_trash;
-    public Error MoveToTrash(string path)
+    public static Error MoveToTrash(string path)
     {
         var __mb = __mb_move_to_trash;
         if (__mb == 0)
@@ -823,13 +820,13 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
 
     private static nint __mb_get_user_data_dir;
-    public string GetUserDataDir()
+    public static string GetUserDataDir()
     {
         var __mb = __mb_get_user_data_dir;
         if (__mb == 0)
@@ -839,12 +836,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_user_data_dir = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_system_dir;
-    public string GetSystemDir(OS.SystemDir dir, bool sharedStorage)
+    public static string GetSystemDir(OS.SystemDir dir, bool sharedStorage = true)
     {
         var __mb = __mb_get_system_dir;
         if (__mb == 0)
@@ -859,12 +856,12 @@ public unsafe partial class OS : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_config_dir;
-    public string GetConfigDir()
+    public static string GetConfigDir()
     {
         var __mb = __mb_get_config_dir;
         if (__mb == 0)
@@ -874,12 +871,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_config_dir = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_data_dir;
-    public string GetDataDir()
+    public static string GetDataDir()
     {
         var __mb = __mb_get_data_dir;
         if (__mb == 0)
@@ -889,12 +886,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_data_dir = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_cache_dir;
-    public string GetCacheDir()
+    public static string GetCacheDir()
     {
         var __mb = __mb_get_cache_dir;
         if (__mb == 0)
@@ -904,12 +901,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_cache_dir = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_temp_dir;
-    public string GetTempDir()
+    public static string GetTempDir()
     {
         var __mb = __mb_get_temp_dir;
         if (__mb == 0)
@@ -919,12 +916,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_temp_dir = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_unique_id;
-    public string GetUniqueId()
+    public static string GetUniqueId()
     {
         var __mb = __mb_get_unique_id;
         if (__mb == 0)
@@ -934,12 +931,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_unique_id = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_keycode_string;
-    public string GetKeycodeString(Key code)
+    public static string GetKeycodeString(Key code)
     {
         var __mb = __mb_get_keycode_string;
         if (__mb == 0)
@@ -952,12 +949,12 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_is_keycode_unicode;
-    public bool IsKeycodeUnicode(int code)
+    public static bool IsKeycodeUnicode(int code)
     {
         var __mb = __mb_is_keycode_unicode;
         if (__mb == 0)
@@ -970,12 +967,12 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_find_keycode_from_string;
-    public Key FindKeycodeFromString(string @string)
+    public static Key FindKeycodeFromString(string @string)
     {
         var __mb = __mb_find_keycode_from_string;
         if (__mb == 0)
@@ -988,13 +985,13 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Key)__ret;
     }
 
     private static nint __mb_set_use_file_access_save_and_swap;
-    public void SetUseFileAccessSaveAndSwap(bool enabled)
+    public static void SetUseFileAccessSaveAndSwap(bool enabled)
     {
         var __mb = __mb_set_use_file_access_save_and_swap;
         if (__mb == 0)
@@ -1006,11 +1003,11 @@ public unsafe partial class OS : GodotObject
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_thread_name;
-    public Error SetThreadName(string name)
+    public static Error SetThreadName(string name)
     {
         var __mb = __mb_set_thread_name;
         if (__mb == 0)
@@ -1023,13 +1020,13 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
 
     private static nint __mb_get_thread_caller_id;
-    public ulong GetThreadCallerId()
+    public static ulong GetThreadCallerId()
     {
         var __mb = __mb_get_thread_caller_id;
         if (__mb == 0)
@@ -1039,12 +1036,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_thread_caller_id = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_main_thread_id;
-    public ulong GetMainThreadId()
+    public static ulong GetMainThreadId()
     {
         var __mb = __mb_get_main_thread_id;
         if (__mb == 0)
@@ -1054,12 +1051,12 @@ public unsafe partial class OS : GodotObject
             __mb_get_main_thread_id = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_has_feature;
-    public bool HasFeature(string tagName)
+    public static bool HasFeature(string tagName)
     {
         var __mb = __mb_has_feature;
         if (__mb == 0)
@@ -1072,13 +1069,13 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
 
     private static nint __mb_is_sandboxed;
-    public bool IsSandboxed()
+    public static bool IsSandboxed()
     {
         var __mb = __mb_is_sandboxed;
         if (__mb == 0)
@@ -1088,12 +1085,12 @@ public unsafe partial class OS : GodotObject
             __mb_is_sandboxed = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_request_permission;
-    public bool RequestPermission(string name)
+    public static bool RequestPermission(string name)
     {
         var __mb = __mb_request_permission;
         if (__mb == 0)
@@ -1106,13 +1103,13 @@ public unsafe partial class OS : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
 
     private static nint __mb_request_permissions;
-    public bool RequestPermissions()
+    public static bool RequestPermissions()
     {
         var __mb = __mb_request_permissions;
         if (__mb == 0)
@@ -1122,12 +1119,12 @@ public unsafe partial class OS : GodotObject
             __mb_request_permissions = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_revoke_granted_permissions;
-    public void RevokeGrantedPermissions()
+    public static void RevokeGrantedPermissions()
     {
         var __mb = __mb_revoke_granted_permissions;
         if (__mb == 0)
@@ -1136,11 +1133,11 @@ public unsafe partial class OS : GodotObject
             if (__mb == 0) throw new MissingMethodException("OS.revoke_granted_permissions is not available in this engine build.");
             __mb_revoke_granted_permissions = __mb;
         }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_add_logger;
-    public void AddLogger(Logger? logger)
+    public static void AddLogger(Logger? logger)
     {
         var __mb = __mb_add_logger;
         if (__mb == 0)
@@ -1152,11 +1149,11 @@ public unsafe partial class OS : GodotObject
         nint __a0 = logger?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_logger;
-    public void RemoveLogger(Logger? logger)
+    public static void RemoveLogger(Logger? logger)
     {
         var __mb = __mb_remove_logger;
         if (__mb == 0)
@@ -1168,7 +1165,7 @@ public unsafe partial class OS : GodotObject
         nint __a0 = logger?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 }
 
@@ -1345,9 +1342,9 @@ public unsafe partial class OccluderPolygon2D : Resource
 
     public enum CullModeEnum : long
     {
-        CULL_DISABLED = 0,
-        CULL_CLOCKWISE = 1,
-        CULL_COUNTER_CLOCKWISE = 2,
+        Disabled = 0,
+        Clockwise = 1,
+        CounterClockwise = 2,
     }
 
     public bool Closed
@@ -1555,8 +1552,8 @@ public unsafe partial class OmniLight3D : Light3D
 
     public enum ShadowMode : long
     {
-        SHADOW_DUAL_PARABOLOID = 0,
-        SHADOW_CUBE = 1,
+        DualParaboloid = 0,
+        Cube = 1,
     }
 
     public float OmniRange
@@ -1620,9 +1617,9 @@ public unsafe partial class OpenXRAPIExtension : RefCounted
 
     public enum OpenXRAlphaBlendModeSupport : long
     {
-        OPENXR_ALPHA_BLEND_MODE_SUPPORT_NONE = 0,
-        OPENXR_ALPHA_BLEND_MODE_SUPPORT_REAL = 1,
-        OPENXR_ALPHA_BLEND_MODE_SUPPORT_EMULATING = 2,
+        None = 0,
+        Real = 1,
+        Emulating = 2,
     }
 
     private static nint __mb_get_openxr_version;
@@ -2433,10 +2430,10 @@ public unsafe partial class OpenXRAction : Resource
 
     public enum ActionTypeEnum : long
     {
-        OPENXR_ACTION_BOOL = 0,
-        OPENXR_ACTION_FLOAT = 1,
-        OPENXR_ACTION_VECTOR2 = 2,
-        OPENXR_ACTION_POSE = 3,
+        Bool = 0,
+        Float = 1,
+        Vector2 = 2,
+        Pose = 3,
     }
 
     public string LocalizedName
@@ -3191,14 +3188,14 @@ public unsafe partial class OpenXRAndroidThreadSettingsExtension : OpenXRExtensi
 
     public enum ThreadType : long
     {
-        THREAD_TYPE_APPLICATION_MAIN = 0,
-        THREAD_TYPE_APPLICATION_WORKER = 1,
-        THREAD_TYPE_RENDERER_MAIN = 2,
-        THREAD_TYPE_RENDERER_WORKER = 3,
+        ApplicationMain = 0,
+        ApplicationWorker = 1,
+        RendererMain = 2,
+        RendererWorker = 3,
     }
 
     private static nint __mb_set_application_thread_type;
-    public bool SetApplicationThreadType(OpenXRAndroidThreadSettingsExtension.ThreadType threadType, uint threadId)
+    public bool SetApplicationThreadType(OpenXRAndroidThreadSettingsExtension.ThreadType threadType, uint threadId = unchecked((uint)(0)))
     {
         var __mb = __mb_set_application_thread_type;
         if (__mb == 0)
@@ -3287,42 +3284,42 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
 
     public enum Filter : long
     {
-        FILTER_NEAREST = 0,
-        FILTER_LINEAR = 1,
-        FILTER_CUBIC = 2,
+        Nearest = 0,
+        Linear = 1,
+        Cubic = 2,
     }
 
     public enum MipmapMode : long
     {
-        MIPMAP_MODE_DISABLED = 0,
-        MIPMAP_MODE_NEAREST = 1,
-        MIPMAP_MODE_LINEAR = 2,
+        Disabled = 0,
+        Nearest = 1,
+        Linear = 2,
     }
 
     public enum Wrap : long
     {
-        WRAP_CLAMP_TO_BORDER = 0,
-        WRAP_CLAMP_TO_EDGE = 1,
-        WRAP_REPEAT = 2,
-        WRAP_MIRRORED_REPEAT = 3,
-        WRAP_MIRROR_CLAMP_TO_EDGE = 4,
+        ClampToBorder = 0,
+        ClampToEdge = 1,
+        Repeat = 2,
+        MirroredRepeat = 3,
+        MirrorClampToEdge = 4,
     }
 
     public enum Swizzle : long
     {
-        SWIZZLE_RED = 0,
-        SWIZZLE_GREEN = 1,
-        SWIZZLE_BLUE = 2,
-        SWIZZLE_ALPHA = 3,
-        SWIZZLE_ZERO = 4,
-        SWIZZLE_ONE = 5,
+        Red = 0,
+        Green = 1,
+        Blue = 2,
+        Alpha = 3,
+        Zero = 4,
+        One = 5,
     }
 
     public enum EyeVisibilityEnum : long
     {
-        EYE_VISIBILITY_BOTH = 0,
-        EYE_VISIBILITY_LEFT = 1,
-        EYE_VISIBILITY_RIGHT = 2,
+        Both = 0,
+        Left = 1,
+        Right = 2,
     }
 
     public SubViewport? LayerViewport
@@ -5261,9 +5258,9 @@ public unsafe partial class OpenXRFutureResult : RefCounted
 
     public enum ResultStatus : long
     {
-        RESULT_RUNNING = 0,
-        RESULT_FINISHED = 1,
-        RESULT_CANCELLED = 2,
+        Running = 0,
+        Finished = 1,
+        Cancelled = 2,
     }
 
     private static nint __mb_get_status;
@@ -5352,30 +5349,30 @@ public unsafe partial class OpenXRHand : Node3D
 
     public enum Hands : long
     {
-        HAND_LEFT = 0,
-        HAND_RIGHT = 1,
-        HAND_MAX = 2,
+        Left = 0,
+        Right = 1,
+        Max = 2,
     }
 
     public enum MotionRangeEnum : long
     {
-        MOTION_RANGE_UNOBSTRUCTED = 0,
-        MOTION_RANGE_CONFORM_TO_CONTROLLER = 1,
-        MOTION_RANGE_MAX = 2,
+        Unobstructed = 0,
+        ConformToController = 1,
+        Max = 2,
     }
 
     public enum SkeletonRigEnum : long
     {
-        SKELETON_RIG_OPENXR = 0,
-        SKELETON_RIG_HUMANOID = 1,
-        SKELETON_RIG_MAX = 2,
+        Openxr = 0,
+        Humanoid = 1,
+        Max = 2,
     }
 
     public enum BoneUpdateEnum : long
     {
-        BONE_UPDATE_FULL = 0,
-        BONE_UPDATE_ROTATION_ONLY = 1,
-        BONE_UPDATE_MAX = 2,
+        Full = 0,
+        RotationOnly = 1,
+        Max = 2,
     }
 
     public OpenXRHand.Hands Hand
@@ -6282,102 +6279,102 @@ public unsafe partial class OpenXRInterface : XRInterface
 
     public enum SessionState : long
     {
-        SESSION_STATE_UNKNOWN = 0,
-        SESSION_STATE_IDLE = 1,
-        SESSION_STATE_READY = 2,
-        SESSION_STATE_SYNCHRONIZED = 3,
-        SESSION_STATE_VISIBLE = 4,
-        SESSION_STATE_FOCUSED = 5,
-        SESSION_STATE_STOPPING = 6,
-        SESSION_STATE_LOSS_PENDING = 7,
-        SESSION_STATE_EXITING = 8,
+        Unknown = 0,
+        Idle = 1,
+        Ready = 2,
+        Synchronized = 3,
+        Visible = 4,
+        Focused = 5,
+        Stopping = 6,
+        LossPending = 7,
+        Exiting = 8,
     }
 
     public enum Hand : long
     {
-        HAND_LEFT = 0,
-        HAND_RIGHT = 1,
-        HAND_MAX = 2,
+        Left = 0,
+        Right = 1,
+        Max = 2,
     }
 
     public enum HandMotionRange : long
     {
-        HAND_MOTION_RANGE_UNOBSTRUCTED = 0,
-        HAND_MOTION_RANGE_CONFORM_TO_CONTROLLER = 1,
-        HAND_MOTION_RANGE_MAX = 2,
+        Unobstructed = 0,
+        ConformToController = 1,
+        Max = 2,
     }
 
     public enum HandTrackedSource : long
     {
-        HAND_TRACKED_SOURCE_UNKNOWN = 0,
-        HAND_TRACKED_SOURCE_UNOBSTRUCTED = 1,
-        HAND_TRACKED_SOURCE_CONTROLLER = 2,
-        HAND_TRACKED_SOURCE_MAX = 3,
+        Unknown = 0,
+        Unobstructed = 1,
+        Controller = 2,
+        Max = 3,
     }
 
     public enum HandJoints : long
     {
-        HAND_JOINT_PALM = 0,
-        HAND_JOINT_WRIST = 1,
-        HAND_JOINT_THUMB_METACARPAL = 2,
-        HAND_JOINT_THUMB_PROXIMAL = 3,
-        HAND_JOINT_THUMB_DISTAL = 4,
-        HAND_JOINT_THUMB_TIP = 5,
-        HAND_JOINT_INDEX_METACARPAL = 6,
-        HAND_JOINT_INDEX_PROXIMAL = 7,
-        HAND_JOINT_INDEX_INTERMEDIATE = 8,
-        HAND_JOINT_INDEX_DISTAL = 9,
-        HAND_JOINT_INDEX_TIP = 10,
-        HAND_JOINT_MIDDLE_METACARPAL = 11,
-        HAND_JOINT_MIDDLE_PROXIMAL = 12,
-        HAND_JOINT_MIDDLE_INTERMEDIATE = 13,
-        HAND_JOINT_MIDDLE_DISTAL = 14,
-        HAND_JOINT_MIDDLE_TIP = 15,
-        HAND_JOINT_RING_METACARPAL = 16,
-        HAND_JOINT_RING_PROXIMAL = 17,
-        HAND_JOINT_RING_INTERMEDIATE = 18,
-        HAND_JOINT_RING_DISTAL = 19,
-        HAND_JOINT_RING_TIP = 20,
-        HAND_JOINT_LITTLE_METACARPAL = 21,
-        HAND_JOINT_LITTLE_PROXIMAL = 22,
-        HAND_JOINT_LITTLE_INTERMEDIATE = 23,
-        HAND_JOINT_LITTLE_DISTAL = 24,
-        HAND_JOINT_LITTLE_TIP = 25,
-        HAND_JOINT_MAX = 26,
+        Palm = 0,
+        Wrist = 1,
+        ThumbMetacarpal = 2,
+        ThumbProximal = 3,
+        ThumbDistal = 4,
+        ThumbTip = 5,
+        IndexMetacarpal = 6,
+        IndexProximal = 7,
+        IndexIntermediate = 8,
+        IndexDistal = 9,
+        IndexTip = 10,
+        MiddleMetacarpal = 11,
+        MiddleProximal = 12,
+        MiddleIntermediate = 13,
+        MiddleDistal = 14,
+        MiddleTip = 15,
+        RingMetacarpal = 16,
+        RingProximal = 17,
+        RingIntermediate = 18,
+        RingDistal = 19,
+        RingTip = 20,
+        LittleMetacarpal = 21,
+        LittleProximal = 22,
+        LittleIntermediate = 23,
+        LittleDistal = 24,
+        LittleTip = 25,
+        Max = 26,
     }
 
     public enum PerfSettingsLevel : long
     {
-        PERF_SETTINGS_LEVEL_POWER_SAVINGS = 0,
-        PERF_SETTINGS_LEVEL_SUSTAINED_LOW = 1,
-        PERF_SETTINGS_LEVEL_SUSTAINED_HIGH = 2,
-        PERF_SETTINGS_LEVEL_BOOST = 3,
+        PowerSavings = 0,
+        SustainedLow = 1,
+        SustainedHigh = 2,
+        Boost = 3,
     }
 
     public enum PerfSettingsSubDomain : long
     {
-        PERF_SETTINGS_SUB_DOMAIN_COMPOSITING = 0,
-        PERF_SETTINGS_SUB_DOMAIN_RENDERING = 1,
-        PERF_SETTINGS_SUB_DOMAIN_THERMAL = 2,
+        Compositing = 0,
+        Rendering = 1,
+        Thermal = 2,
     }
 
     public enum PerfSettingsNotificationLevel : long
     {
-        PERF_SETTINGS_NOTIF_LEVEL_NORMAL = 0,
-        PERF_SETTINGS_NOTIF_LEVEL_WARNING = 1,
-        PERF_SETTINGS_NOTIF_LEVEL_IMPAIRED = 2,
+        Normal = 0,
+        Warning = 1,
+        Impaired = 2,
     }
 
     [Flags]
     public enum HandJointFlags : long
     {
-        HAND_JOINT_NONE = 0,
-        HAND_JOINT_ORIENTATION_VALID = 1,
-        HAND_JOINT_ORIENTATION_TRACKED = 2,
-        HAND_JOINT_POSITION_VALID = 4,
-        HAND_JOINT_POSITION_TRACKED = 8,
-        HAND_JOINT_LINEAR_VELOCITY_VALID = 16,
-        HAND_JOINT_ANGULAR_VELOCITY_VALID = 32,
+        None = 0,
+        OrientationValid = 1,
+        OrientationTracked = 2,
+        PositionValid = 4,
+        PositionTracked = 8,
+        LinearVelocityValid = 16,
+        AngularVelocityValid = 32,
     }
 
     public float DisplayRefreshRate
@@ -7336,7 +7333,7 @@ public unsafe partial class OpenXRPlaneTracker : OpenXRSpatialEntityTracker
     }
 
     private static nint __mb_get_shape;
-    public Shape3D? GetShape(float thickness)
+    public Shape3D? GetShape(float thickness = 0.01f)
     {
         var __mb = __mb_get_shape;
         if (__mb == 0)
@@ -7651,10 +7648,10 @@ public unsafe partial class OpenXRRenderModelManager : Node3D
 
     public enum RenderModelTracker : long
     {
-        RENDER_MODEL_TRACKER_ANY = 0,
-        RENDER_MODEL_TRACKER_NONE_SET = 1,
-        RENDER_MODEL_TRACKER_LEFT_HAND = 2,
-        RENDER_MODEL_TRACKER_RIGHT_HAND = 3,
+        Any = 0,
+        NoneSet = 1,
+        LeftHand = 2,
+        RightHand = 3,
     }
 
     public OpenXRRenderModelManager.RenderModelTracker Tracker
@@ -7744,8 +7741,8 @@ public unsafe partial class OpenXRSpatialAnchorCapability : OpenXRExtensionWrapp
 
     public enum PersistenceScope : long
     {
-        PERSISTENCE_SCOPE_SYSTEM_MANAGED = 1,
-        PERSISTENCE_SCOPE_LOCAL_ANCHORS = 1000781000,
+        SystemManaged = 1,
+        LocalAnchors = 1000781000,
     }
 
     private static nint __mb_is_spatial_anchor_supported;
@@ -7831,7 +7828,7 @@ public unsafe partial class OpenXRSpatialAnchorCapability : OpenXRExtensionWrapp
     }
 
     private static nint __mb_create_new_anchor;
-    public OpenXRAnchorTracker? CreateNewAnchor(Transform3D transform, Rid spatialContext, OpenXRStructureBase? next)
+    public OpenXRAnchorTracker? CreateNewAnchor(Transform3D transform, Rid spatialContext = default, OpenXRStructureBase? next = null)
     {
         var __mb = __mb_create_new_anchor;
         if (__mb == 0)
@@ -7869,7 +7866,7 @@ public unsafe partial class OpenXRSpatialAnchorCapability : OpenXRExtensionWrapp
     }
 
     private static nint __mb_do_entity_update;
-    public void DoEntityUpdate(Rid spatialContext, Godot.Collections.Array componentData, OpenXRStructureBase? nextSnapshotCreate, OpenXRStructureBase? nextSnapshotQuery)
+    public void DoEntityUpdate(Rid spatialContext, Godot.Collections.Array componentData, OpenXRStructureBase? nextSnapshotCreate = null, OpenXRStructureBase? nextSnapshotQuery = null)
     {
         var __mb = __mb_do_entity_update;
         if (__mb == 0)
@@ -7912,10 +7909,10 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationAprilTag : OpenX
 
     public enum AprilTagDict : long
     {
-        APRIL_TAG_DICT_16H5 = 1,
-        APRIL_TAG_DICT_25H9 = 2,
-        APRIL_TAG_DICT_36H10 = 3,
-        APRIL_TAG_DICT_36H11 = 4,
+        Dict16h5 = 1,
+        Dict25h9 = 2,
+        Dict36h10 = 3,
+        Dict36h11 = 4,
     }
 
     public OpenXRSpatialCapabilityConfigurationAprilTag.AprilTagDict AprilDict
@@ -7967,22 +7964,22 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationAruco : OpenXRSp
 
     public enum ArucoDictEnum : long
     {
-        ARUCO_DICT_4X4_50 = 1,
-        ARUCO_DICT_4X4_100 = 2,
-        ARUCO_DICT_4X4_250 = 3,
-        ARUCO_DICT_4X4_1000 = 4,
-        ARUCO_DICT_5X5_50 = 5,
-        ARUCO_DICT_5X5_100 = 6,
-        ARUCO_DICT_5X5_250 = 7,
-        ARUCO_DICT_5X5_1000 = 8,
-        ARUCO_DICT_6X6_50 = 9,
-        ARUCO_DICT_6X6_100 = 10,
-        ARUCO_DICT_6X6_250 = 11,
-        ARUCO_DICT_6X6_1000 = 12,
-        ARUCO_DICT_7X7_50 = 13,
-        ARUCO_DICT_7X7_100 = 14,
-        ARUCO_DICT_7X7_250 = 15,
-        ARUCO_DICT_7X7_1000 = 16,
+        Dict4x450 = 1,
+        Dict4x4100 = 2,
+        Dict4x4250 = 3,
+        Dict4x41000 = 4,
+        Dict5x550 = 5,
+        Dict5x5100 = 6,
+        Dict5x5250 = 7,
+        Dict5x51000 = 8,
+        Dict6x650 = 9,
+        Dict6x6100 = 10,
+        Dict6x6250 = 11,
+        Dict6x61000 = 12,
+        Dict7x750 = 13,
+        Dict7x7100 = 14,
+        Dict7x7250 = 15,
+        Dict7x71000 = 16,
     }
 
     public OpenXRSpatialCapabilityConfigurationAruco.ArucoDictEnum ArucoDict
@@ -8367,12 +8364,12 @@ public unsafe partial class OpenXRSpatialComponentMarkerList : OpenXRSpatialComp
 
     public enum MarkerType : long
     {
-        MARKER_TYPE_UNKNOWN = 0,
-        MARKER_TYPE_QRCODE = 1,
-        MARKER_TYPE_MICRO_QRCODE = 2,
-        MARKER_TYPE_ARUCO = 3,
-        MARKER_TYPE_APRIL_TAG = 4,
-        MARKER_TYPE_MAX = 5,
+        Unknown = 0,
+        Qrcode = 1,
+        MicroQrcode = 2,
+        Aruco = 3,
+        AprilTag = 4,
+        Max = 5,
     }
 
     private static nint __mb_get_marker_type;
@@ -8591,10 +8588,10 @@ public unsafe partial class OpenXRSpatialComponentPlaneAlignmentList : OpenXRSpa
 
     public enum PlaneAlignment : long
     {
-        PLANE_ALIGNMENT_HORIZONTAL_UPWARD = 0,
-        PLANE_ALIGNMENT_HORIZONTAL_DOWNWARD = 1,
-        PLANE_ALIGNMENT_VERTICAL = 2,
-        PLANE_ALIGNMENT_ARBITRARY = 3,
+        HorizontalUpward = 0,
+        HorizontalDownward = 1,
+        Vertical = 2,
+        Arbitrary = 3,
     }
 
     private static nint __mb_get_plane_alignment;
@@ -8627,11 +8624,11 @@ public unsafe partial class OpenXRSpatialComponentPlaneSemanticLabelList : OpenX
 
     public enum PlaneSemanticLabel : long
     {
-        PLANE_SEMANTIC_LABEL_UNCATEGORIZED = 1,
-        PLANE_SEMANTIC_LABEL_FLOOR = 2,
-        PLANE_SEMANTIC_LABEL_WALL = 3,
-        PLANE_SEMANTIC_LABEL_CEILING = 4,
-        PLANE_SEMANTIC_LABEL_TABLE = 5,
+        Uncategorized = 1,
+        Floor = 2,
+        Wall = 3,
+        Ceiling = 4,
+        Table = 5,
     }
 
     private static nint __mb_get_plane_semantic_label;
@@ -8749,27 +8746,27 @@ public unsafe partial class OpenXRSpatialEntityExtension : OpenXRExtensionWrappe
 
     public enum Capability : long
     {
-        CAPABILITY_PLANE_TRACKING = 1000741000,
-        CAPABILITY_MARKER_TRACKING_QR_CODE = 1000743000,
-        CAPABILITY_MARKER_TRACKING_MICRO_QR_CODE = 1000743001,
-        CAPABILITY_MARKER_TRACKING_ARUCO_MARKER = 1000743002,
-        CAPABILITY_MARKER_TRACKING_APRIL_TAG = 1000743003,
-        CAPABILITY_ANCHOR = 1000762000,
+        PlaneTracking = 1000741000,
+        MarkerTrackingQrCode = 1000743000,
+        MarkerTrackingMicroQrCode = 1000743001,
+        MarkerTrackingArucoMarker = 1000743002,
+        MarkerTrackingAprilTag = 1000743003,
+        Anchor = 1000762000,
     }
 
     public enum ComponentType : long
     {
-        COMPONENT_TYPE_BOUNDED_2D = 1,
-        COMPONENT_TYPE_BOUNDED_3D = 2,
-        COMPONENT_TYPE_PARENT = 3,
-        COMPONENT_TYPE_MESH_3D = 4,
-        COMPONENT_TYPE_PLANE_ALIGNMENT = 1000741000,
-        COMPONENT_TYPE_MESH_2D = 1000741001,
-        COMPONENT_TYPE_POLYGON_2D = 1000741002,
-        COMPONENT_TYPE_PLANE_SEMANTIC_LABEL = 1000741003,
-        COMPONENT_TYPE_MARKER = 1000743000,
-        COMPONENT_TYPE_ANCHOR = 1000762000,
-        COMPONENT_TYPE_PERSISTENCE = 1000763000,
+        Bounded2d = 1,
+        Bounded3d = 2,
+        Parent = 3,
+        Mesh3d = 4,
+        PlaneAlignment = 1000741000,
+        Mesh2d = 1000741001,
+        Polygon2d = 1000741002,
+        PlaneSemanticLabel = 1000741003,
+        Marker = 1000743000,
+        Anchor = 1000762000,
+        Persistence = 1000763000,
     }
 
     private static nint __mb_supports_capability;
@@ -8915,7 +8912,7 @@ public unsafe partial class OpenXRSpatialEntityExtension : OpenXRExtensionWrappe
     }
 
     private static nint __mb_query_snapshot;
-    public bool QuerySnapshot(Rid spatialSnapshot, Godot.Collections.Array componentData, OpenXRStructureBase? next)
+    public bool QuerySnapshot(Rid spatialSnapshot, Godot.Collections.Array componentData, OpenXRStructureBase? next = null)
     {
         var __mb = __mb_query_snapshot;
         if (__mb == 0)
@@ -9080,9 +9077,9 @@ public unsafe partial class OpenXRSpatialEntityTracker : XRPositionalTracker
 
     public enum EntityTrackingState : long
     {
-        ENTITY_TRACKING_STATE_STOPPED = 1,
-        ENTITY_TRACKING_STATE_PAUSED = 2,
-        ENTITY_TRACKING_STATE_TRACKING = 3,
+        Stopped = 1,
+        Paused = 2,
+        Tracking = 3,
     }
 
     public Rid Entity
@@ -9308,7 +9305,7 @@ public unsafe partial class OpenXRSpatialMarkerTrackingCapability : OpenXRExtens
     }
 
     private static nint __mb_do_entity_update;
-    public void DoEntityUpdate(Rid spatialContext, Godot.Collections.Array componentData, OpenXRStructureBase? nextSnapshotCreate, OpenXRStructureBase? nextSnapshotQuery)
+    public void DoEntityUpdate(Rid spatialContext, Godot.Collections.Array componentData, OpenXRStructureBase? nextSnapshotCreate = null, OpenXRStructureBase? nextSnapshotQuery = null)
     {
         var __mb = __mb_do_entity_update;
         if (__mb == 0)
@@ -9585,7 +9582,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_add_item;
-    public void AddItem(string label, int id)
+    public void AddItem(string label, int id = unchecked((int)(-1)))
     {
         var __mb = __mb_add_item;
         if (__mb == 0)
@@ -9604,7 +9601,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_add_icon_item;
-    public void AddIconItem(Texture2D? texture, string label, int id)
+    public void AddIconItem(Texture2D? texture, string label, int id = unchecked((int)(-1)))
     {
         var __mb = __mb_add_icon_item;
         if (__mb == 0)
@@ -10039,7 +10036,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_add_separator;
-    public void AddSeparator(string text)
+    public void AddSeparator(string text = "")
     {
         var __mb = __mb_add_separator;
         if (__mb == 0)
@@ -10220,7 +10217,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_get_selectable_item;
-    public int GetSelectableItem(bool fromLast)
+    public int GetSelectableItem(bool fromLast = false)
     {
         var __mb = __mb_get_selectable_item;
         if (__mb == 0)

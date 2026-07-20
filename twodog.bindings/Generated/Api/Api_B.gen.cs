@@ -21,9 +21,9 @@ public unsafe partial class BackBufferCopy : Node2D
 
     public enum CopyModeEnum : long
     {
-        COPY_MODE_DISABLED = 0,
-        COPY_MODE_RECT = 1,
-        COPY_MODE_VIEWPORT = 2,
+        Disabled = 0,
+        Rect = 1,
+        Viewport = 2,
     }
 
     public BackBufferCopy.CopyModeEnum CopyMode
@@ -112,17 +112,17 @@ public unsafe partial class BaseButton : Control
 
     public enum DrawMode : long
     {
-        DRAW_NORMAL = 0,
-        DRAW_PRESSED = 1,
-        DRAW_HOVER = 2,
-        DRAW_DISABLED = 3,
-        DRAW_HOVER_PRESSED = 4,
+        Normal = 0,
+        Pressed = 1,
+        Hover = 2,
+        Disabled = 3,
+        HoverPressed = 4,
     }
 
     public enum ActionModeEnum : long
     {
-        ACTION_MODE_BUTTON_PRESS = 0,
-        ACTION_MODE_BUTTON_RELEASE = 1,
+        Press = 0,
+        Release = 1,
     }
 
     public bool Disabled
@@ -572,217 +572,217 @@ public unsafe partial class BaseMaterial3D : Material
 
     public enum TextureParam : long
     {
-        TEXTURE_ALBEDO = 0,
-        TEXTURE_METALLIC = 1,
-        TEXTURE_ROUGHNESS = 2,
-        TEXTURE_EMISSION = 3,
-        TEXTURE_NORMAL = 4,
-        TEXTURE_BENT_NORMAL = 18,
-        TEXTURE_RIM = 5,
-        TEXTURE_CLEARCOAT = 6,
-        TEXTURE_FLOWMAP = 7,
-        TEXTURE_AMBIENT_OCCLUSION = 8,
-        TEXTURE_HEIGHTMAP = 9,
-        TEXTURE_SUBSURFACE_SCATTERING = 10,
-        TEXTURE_SUBSURFACE_TRANSMITTANCE = 11,
-        TEXTURE_BACKLIGHT = 12,
-        TEXTURE_REFRACTION = 13,
-        TEXTURE_DETAIL_MASK = 14,
-        TEXTURE_DETAIL_ALBEDO = 15,
-        TEXTURE_DETAIL_NORMAL = 16,
-        TEXTURE_ORM = 17,
-        TEXTURE_MAX = 19,
+        Albedo = 0,
+        Metallic = 1,
+        Roughness = 2,
+        Emission = 3,
+        Normal = 4,
+        BentNormal = 18,
+        Rim = 5,
+        Clearcoat = 6,
+        Flowmap = 7,
+        AmbientOcclusion = 8,
+        Heightmap = 9,
+        SubsurfaceScattering = 10,
+        SubsurfaceTransmittance = 11,
+        Backlight = 12,
+        Refraction = 13,
+        DetailMask = 14,
+        DetailAlbedo = 15,
+        DetailNormal = 16,
+        Orm = 17,
+        Max = 19,
     }
 
     public enum TextureFilterEnum : long
     {
-        TEXTURE_FILTER_NEAREST = 0,
-        TEXTURE_FILTER_LINEAR = 1,
-        TEXTURE_FILTER_NEAREST_WITH_MIPMAPS = 2,
-        TEXTURE_FILTER_LINEAR_WITH_MIPMAPS = 3,
-        TEXTURE_FILTER_NEAREST_WITH_MIPMAPS_ANISOTROPIC = 4,
-        TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC = 5,
-        TEXTURE_FILTER_MAX = 6,
+        Nearest = 0,
+        Linear = 1,
+        NearestWithMipmaps = 2,
+        LinearWithMipmaps = 3,
+        NearestWithMipmapsAnisotropic = 4,
+        LinearWithMipmapsAnisotropic = 5,
+        Max = 6,
     }
 
     public enum DetailUV : long
     {
-        DETAIL_UV_1 = 0,
-        DETAIL_UV_2 = 1,
+        Uv1 = 0,
+        Uv2 = 1,
     }
 
     public enum TransparencyEnum : long
     {
-        TRANSPARENCY_DISABLED = 0,
-        TRANSPARENCY_ALPHA = 1,
-        TRANSPARENCY_ALPHA_SCISSOR = 2,
-        TRANSPARENCY_ALPHA_HASH = 3,
-        TRANSPARENCY_ALPHA_DEPTH_PRE_PASS = 4,
-        TRANSPARENCY_MAX = 5,
+        Disabled = 0,
+        Alpha = 1,
+        AlphaScissor = 2,
+        AlphaHash = 3,
+        AlphaDepthPrePass = 4,
+        Max = 5,
     }
 
     public enum ShadingModeEnum : long
     {
-        SHADING_MODE_UNSHADED = 0,
-        SHADING_MODE_PER_PIXEL = 1,
-        SHADING_MODE_PER_VERTEX = 2,
-        SHADING_MODE_MAX = 3,
+        Unshaded = 0,
+        PerPixel = 1,
+        PerVertex = 2,
+        Max = 3,
     }
 
     public enum Feature : long
     {
-        FEATURE_EMISSION = 0,
-        FEATURE_NORMAL_MAPPING = 1,
-        FEATURE_RIM = 2,
-        FEATURE_CLEARCOAT = 3,
-        FEATURE_ANISOTROPY = 4,
-        FEATURE_AMBIENT_OCCLUSION = 5,
-        FEATURE_HEIGHT_MAPPING = 6,
-        FEATURE_SUBSURFACE_SCATTERING = 7,
-        FEATURE_SUBSURFACE_TRANSMITTANCE = 8,
-        FEATURE_BACKLIGHT = 9,
-        FEATURE_REFRACTION = 10,
-        FEATURE_DETAIL = 11,
-        FEATURE_BENT_NORMAL_MAPPING = 12,
-        FEATURE_MAX = 13,
+        Emission = 0,
+        NormalMapping = 1,
+        Rim = 2,
+        Clearcoat = 3,
+        Anisotropy = 4,
+        AmbientOcclusion = 5,
+        HeightMapping = 6,
+        SubsurfaceScattering = 7,
+        SubsurfaceTransmittance = 8,
+        Backlight = 9,
+        Refraction = 10,
+        Detail = 11,
+        BentNormalMapping = 12,
+        Max = 13,
     }
 
     public enum BlendModeEnum : long
     {
-        BLEND_MODE_MIX = 0,
-        BLEND_MODE_ADD = 1,
-        BLEND_MODE_SUB = 2,
-        BLEND_MODE_MUL = 3,
-        BLEND_MODE_PREMULT_ALPHA = 4,
+        Mix = 0,
+        Add = 1,
+        Sub = 2,
+        Mul = 3,
+        PremultAlpha = 4,
     }
 
     public enum AlphaAntiAliasing : long
     {
-        ALPHA_ANTIALIASING_OFF = 0,
-        ALPHA_ANTIALIASING_ALPHA_TO_COVERAGE = 1,
-        ALPHA_ANTIALIASING_ALPHA_TO_COVERAGE_AND_TO_ONE = 2,
+        Off = 0,
+        AlphaToCoverage = 1,
+        AlphaToCoverageAndToOne = 2,
     }
 
     public enum DepthDrawModeEnum : long
     {
-        DEPTH_DRAW_OPAQUE_ONLY = 0,
-        DEPTH_DRAW_ALWAYS = 1,
-        DEPTH_DRAW_DISABLED = 2,
+        OpaqueOnly = 0,
+        Always = 1,
+        Disabled = 2,
     }
 
     public enum DepthTestEnum : long
     {
-        DEPTH_TEST_DEFAULT = 0,
-        DEPTH_TEST_INVERTED = 1,
+        Default = 0,
+        Inverted = 1,
     }
 
     public enum CullModeEnum : long
     {
-        CULL_BACK = 0,
-        CULL_FRONT = 1,
-        CULL_DISABLED = 2,
+        Back = 0,
+        Front = 1,
+        Disabled = 2,
     }
 
     public enum Flags : long
     {
-        FLAG_DISABLE_DEPTH_TEST = 0,
-        FLAG_ALBEDO_FROM_VERTEX_COLOR = 1,
-        FLAG_SRGB_VERTEX_COLOR = 2,
-        FLAG_USE_POINT_SIZE = 3,
-        FLAG_FIXED_SIZE = 4,
-        FLAG_BILLBOARD_KEEP_SCALE = 5,
-        FLAG_UV1_USE_TRIPLANAR = 6,
-        FLAG_UV2_USE_TRIPLANAR = 7,
-        FLAG_UV1_USE_WORLD_TRIPLANAR = 8,
-        FLAG_UV2_USE_WORLD_TRIPLANAR = 9,
-        FLAG_AO_ON_UV2 = 10,
-        FLAG_EMISSION_ON_UV2 = 11,
-        FLAG_ALBEDO_TEXTURE_FORCE_SRGB = 12,
-        FLAG_DONT_RECEIVE_SHADOWS = 13,
-        FLAG_DISABLE_AMBIENT_LIGHT = 14,
-        FLAG_USE_SHADOW_TO_OPACITY = 15,
-        FLAG_USE_TEXTURE_REPEAT = 16,
-        FLAG_INVERT_HEIGHTMAP = 17,
-        FLAG_SUBSURFACE_MODE_SKIN = 18,
-        FLAG_PARTICLE_TRAILS_MODE = 19,
-        FLAG_ALBEDO_TEXTURE_MSDF = 20,
-        FLAG_DISABLE_FOG = 21,
-        FLAG_DISABLE_SPECULAR_OCCLUSION = 22,
-        FLAG_USE_Z_CLIP_SCALE = 23,
-        FLAG_USE_FOV_OVERRIDE = 24,
-        FLAG_MAX = 25,
+        DisableDepthTest = 0,
+        AlbedoFromVertexColor = 1,
+        SrgbVertexColor = 2,
+        UsePointSize = 3,
+        FixedSize = 4,
+        BillboardKeepScale = 5,
+        Uv1UseTriplanar = 6,
+        Uv2UseTriplanar = 7,
+        Uv1UseWorldTriplanar = 8,
+        Uv2UseWorldTriplanar = 9,
+        AoOnUv2 = 10,
+        EmissionOnUv2 = 11,
+        AlbedoTextureForceSrgb = 12,
+        DontReceiveShadows = 13,
+        DisableAmbientLight = 14,
+        UseShadowToOpacity = 15,
+        UseTextureRepeat = 16,
+        InvertHeightmap = 17,
+        SubsurfaceModeSkin = 18,
+        ParticleTrailsMode = 19,
+        AlbedoTextureMsdf = 20,
+        DisableFog = 21,
+        DisableSpecularOcclusion = 22,
+        UseZClipScale = 23,
+        UseFovOverride = 24,
+        Max = 25,
     }
 
     public enum DiffuseModeEnum : long
     {
-        DIFFUSE_BURLEY = 0,
-        DIFFUSE_LAMBERT = 1,
-        DIFFUSE_LAMBERT_WRAP = 2,
-        DIFFUSE_TOON = 3,
+        Burley = 0,
+        Lambert = 1,
+        LambertWrap = 2,
+        Toon = 3,
     }
 
     public enum SpecularModeEnum : long
     {
-        SPECULAR_SCHLICK_GGX = 0,
-        SPECULAR_TOON = 1,
-        SPECULAR_DISABLED = 2,
+        SchlickGgx = 0,
+        Toon = 1,
+        Disabled = 2,
     }
 
     public enum BillboardModeEnum : long
     {
-        BILLBOARD_DISABLED = 0,
-        BILLBOARD_ENABLED = 1,
-        BILLBOARD_FIXED_Y = 2,
-        BILLBOARD_PARTICLES = 3,
+        Disabled = 0,
+        Enabled = 1,
+        FixedY = 2,
+        Particles = 3,
     }
 
     public enum TextureChannel : long
     {
-        TEXTURE_CHANNEL_RED = 0,
-        TEXTURE_CHANNEL_GREEN = 1,
-        TEXTURE_CHANNEL_BLUE = 2,
-        TEXTURE_CHANNEL_ALPHA = 3,
-        TEXTURE_CHANNEL_GRAYSCALE = 4,
+        Red = 0,
+        Green = 1,
+        Blue = 2,
+        Alpha = 3,
+        Grayscale = 4,
     }
 
     public enum EmissionOperatorEnum : long
     {
-        EMISSION_OP_ADD = 0,
-        EMISSION_OP_MULTIPLY = 1,
+        Add = 0,
+        Multiply = 1,
     }
 
     public enum DistanceFadeModeEnum : long
     {
-        DISTANCE_FADE_DISABLED = 0,
-        DISTANCE_FADE_PIXEL_ALPHA = 1,
-        DISTANCE_FADE_PIXEL_DITHER = 2,
-        DISTANCE_FADE_OBJECT_DITHER = 3,
+        Disabled = 0,
+        PixelAlpha = 1,
+        PixelDither = 2,
+        ObjectDither = 3,
     }
 
     public enum StencilModeEnum : long
     {
-        STENCIL_MODE_DISABLED = 0,
-        STENCIL_MODE_OUTLINE = 1,
-        STENCIL_MODE_XRAY = 2,
-        STENCIL_MODE_CUSTOM = 3,
+        Disabled = 0,
+        Outline = 1,
+        Xray = 2,
+        Custom = 3,
     }
 
     public enum StencilFlagsEnum : long
     {
-        STENCIL_FLAG_READ = 1,
-        STENCIL_FLAG_WRITE = 2,
-        STENCIL_FLAG_WRITE_DEPTH_FAIL = 4,
+        Read = 1,
+        Write = 2,
+        WriteDepthFail = 4,
     }
 
     public enum StencilCompareEnum : long
     {
-        STENCIL_COMPARE_ALWAYS = 0,
-        STENCIL_COMPARE_LESS = 1,
-        STENCIL_COMPARE_EQUAL = 2,
-        STENCIL_COMPARE_LESS_OR_EQUAL = 3,
-        STENCIL_COMPARE_GREATER = 4,
-        STENCIL_COMPARE_NOT_EQUAL = 5,
-        STENCIL_COMPARE_GREATER_OR_EQUAL = 6,
+        Always = 0,
+        Less = 1,
+        Equal = 2,
+        LessOrEqual = 3,
+        Greater = 4,
+        NotEqual = 5,
+        GreaterOrEqual = 6,
     }
 
     public BaseMaterial3D.TransparencyEnum Transparency
@@ -4000,7 +4000,7 @@ public unsafe partial class BitMap : Resource
     }
 
     private static nint __mb_create_from_image_alpha;
-    public void CreateFromImageAlpha(Image? image, float threshold)
+    public void CreateFromImageAlpha(Image? image, float threshold = 0.1f)
     {
         var __mb = __mb_create_from_image_alpha;
         if (__mb == 0)
@@ -4191,7 +4191,7 @@ public unsafe partial class BitMap : Resource
     }
 
     private static nint __mb_opaque_to_polygons;
-    public Godot.Collections.Array OpaqueToPolygons(Rect2I rect, float epsilon)
+    public Godot.Collections.Array OpaqueToPolygons(Rect2I rect, float epsilon = 2.0f)
     {
         var __mb = __mb_opaque_to_polygons;
         if (__mb == 0)
@@ -4222,11 +4222,11 @@ public unsafe partial class BlitMaterial : Material
 
     public enum BlendModeEnum : long
     {
-        BLEND_MODE_MIX = 0,
-        BLEND_MODE_ADD = 1,
-        BLEND_MODE_SUB = 2,
-        BLEND_MODE_MUL = 3,
-        BLEND_MODE_DISABLED = 4,
+        Mix = 0,
+        Add = 1,
+        Sub = 2,
+        Mul = 3,
+        Disabled = 4,
     }
 
     public BlitMaterial.BlendModeEnum BlendMode
@@ -4685,8 +4685,8 @@ public unsafe partial class BoneConstraint3D : SkeletonModifier3D
 
     public enum ReferenceType : long
     {
-        REFERENCE_TYPE_BONE = 0,
-        REFERENCE_TYPE_NODE = 1,
+        Bone = 0,
+        Node = 1,
     }
 
     private static nint __mb_set_amount;
@@ -5100,9 +5100,9 @@ public unsafe partial class BoneTwistDisperser3D : SkeletonModifier3D
 
     public enum DisperseMode : long
     {
-        DISPERSE_MODE_EVEN = 0,
-        DISPERSE_MODE_WEIGHTED = 1,
-        DISPERSE_MODE_CUSTOM = 2,
+        Even = 0,
+        Weighted = 1,
+        Custom = 2,
     }
 
     public bool MutableBoneAxes
@@ -5736,9 +5736,9 @@ public unsafe partial class BoxContainer : Container
 
     public enum AlignmentMode : long
     {
-        ALIGNMENT_BEGIN = 0,
-        ALIGNMENT_CENTER = 1,
-        ALIGNMENT_END = 2,
+        Begin = 0,
+        Center = 1,
+        End = 2,
     }
 
     public BoxContainer.AlignmentMode Alignment

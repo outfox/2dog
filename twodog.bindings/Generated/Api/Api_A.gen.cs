@@ -21,11 +21,11 @@ public unsafe partial class AESContext : RefCounted
 
     public enum Mode : long
     {
-        MODE_ECB_ENCRYPT = 0,
-        MODE_ECB_DECRYPT = 1,
-        MODE_CBC_ENCRYPT = 2,
-        MODE_CBC_DECRYPT = 3,
-        MODE_MAX = 4,
+        EcbEncrypt = 0,
+        EcbDecrypt = 1,
+        CbcEncrypt = 2,
+        CbcDecrypt = 3,
+        Max = 4,
     }
 
     private static nint __mb_finish;
@@ -73,7 +73,7 @@ public unsafe partial class AStar2D : RefCounted
     }
 
     private static nint __mb_add_point;
-    public void AddPoint(long id, Vector2 position, float weightScale)
+    public void AddPoint(long id, Vector2 position, float weightScale = 1.0f)
     {
         var __mb = __mb_add_point;
         if (__mb == 0)
@@ -230,7 +230,7 @@ public unsafe partial class AStar2D : RefCounted
     }
 
     private static nint __mb_set_point_disabled;
-    public void SetPointDisabled(long id, bool disabled)
+    public void SetPointDisabled(long id, bool disabled = true)
     {
         var __mb = __mb_set_point_disabled;
         if (__mb == 0)
@@ -266,7 +266,7 @@ public unsafe partial class AStar2D : RefCounted
     }
 
     private static nint __mb_connect_points;
-    public void ConnectPoints(long id, long toId, bool bidirectional)
+    public void ConnectPoints(long id, long toId, bool bidirectional = true)
     {
         var __mb = __mb_connect_points;
         if (__mb == 0)
@@ -286,7 +286,7 @@ public unsafe partial class AStar2D : RefCounted
     }
 
     private static nint __mb_disconnect_points;
-    public void DisconnectPoints(long id, long toId, bool bidirectional)
+    public void DisconnectPoints(long id, long toId, bool bidirectional = true)
     {
         var __mb = __mb_disconnect_points;
         if (__mb == 0)
@@ -306,7 +306,7 @@ public unsafe partial class AStar2D : RefCounted
     }
 
     private static nint __mb_are_points_connected;
-    public bool ArePointsConnected(long id, long toId, bool bidirectional)
+    public bool ArePointsConnected(long id, long toId, bool bidirectional = true)
     {
         var __mb = __mb_are_points_connected;
         if (__mb == 0)
@@ -387,7 +387,7 @@ public unsafe partial class AStar2D : RefCounted
     }
 
     private static nint __mb_get_closest_point;
-    public long GetClosestPoint(Vector2 toPosition, bool includeDisabled)
+    public long GetClosestPoint(Vector2 toPosition, bool includeDisabled = false)
     {
         var __mb = __mb_get_closest_point;
         if (__mb == 0)
@@ -489,7 +489,7 @@ public unsafe partial class AStar3D : RefCounted
     }
 
     private static nint __mb_add_point;
-    public void AddPoint(long id, Vector3 position, float weightScale)
+    public void AddPoint(long id, Vector3 position, float weightScale = 1.0f)
     {
         var __mb = __mb_add_point;
         if (__mb == 0)
@@ -615,7 +615,7 @@ public unsafe partial class AStar3D : RefCounted
     }
 
     private static nint __mb_set_point_disabled;
-    public void SetPointDisabled(long id, bool disabled)
+    public void SetPointDisabled(long id, bool disabled = true)
     {
         var __mb = __mb_set_point_disabled;
         if (__mb == 0)
@@ -682,7 +682,7 @@ public unsafe partial class AStar3D : RefCounted
     }
 
     private static nint __mb_connect_points;
-    public void ConnectPoints(long id, long toId, bool bidirectional)
+    public void ConnectPoints(long id, long toId, bool bidirectional = true)
     {
         var __mb = __mb_connect_points;
         if (__mb == 0)
@@ -702,7 +702,7 @@ public unsafe partial class AStar3D : RefCounted
     }
 
     private static nint __mb_disconnect_points;
-    public void DisconnectPoints(long id, long toId, bool bidirectional)
+    public void DisconnectPoints(long id, long toId, bool bidirectional = true)
     {
         var __mb = __mb_disconnect_points;
         if (__mb == 0)
@@ -722,7 +722,7 @@ public unsafe partial class AStar3D : RefCounted
     }
 
     private static nint __mb_are_points_connected;
-    public bool ArePointsConnected(long id, long toId, bool bidirectional)
+    public bool ArePointsConnected(long id, long toId, bool bidirectional = true)
     {
         var __mb = __mb_are_points_connected;
         if (__mb == 0)
@@ -803,7 +803,7 @@ public unsafe partial class AStar3D : RefCounted
     }
 
     private static nint __mb_get_closest_point;
-    public long GetClosestPoint(Vector3 toPosition, bool includeDisabled)
+    public long GetClosestPoint(Vector3 toPosition, bool includeDisabled = false)
     {
         var __mb = __mb_get_closest_point;
         if (__mb == 0)
@@ -885,28 +885,28 @@ public unsafe partial class AStarGrid2D : RefCounted
 
     public enum Heuristic : long
     {
-        HEURISTIC_EUCLIDEAN = 0,
-        HEURISTIC_MANHATTAN = 1,
-        HEURISTIC_OCTILE = 2,
-        HEURISTIC_CHEBYSHEV = 3,
-        HEURISTIC_MAX = 4,
+        Euclidean = 0,
+        Manhattan = 1,
+        Octile = 2,
+        Chebyshev = 3,
+        Max = 4,
     }
 
     public enum DiagonalModeEnum : long
     {
-        DIAGONAL_MODE_ALWAYS = 0,
-        DIAGONAL_MODE_NEVER = 1,
-        DIAGONAL_MODE_AT_LEAST_ONE_WALKABLE = 2,
-        DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES = 3,
-        DIAGONAL_MODE_MAX = 4,
+        Always = 0,
+        Never = 1,
+        AtLeastOneWalkable = 2,
+        OnlyIfNoObstacles = 3,
+        Max = 4,
     }
 
     public enum CellShapeEnum : long
     {
-        CELL_SHAPE_SQUARE = 0,
-        CELL_SHAPE_ISOMETRIC_RIGHT = 1,
-        CELL_SHAPE_ISOMETRIC_DOWN = 2,
-        CELL_SHAPE_MAX = 3,
+        Square = 0,
+        IsometricRight = 1,
+        IsometricDown = 2,
+        Max = 3,
     }
 
     public Rect2I Region
@@ -1309,7 +1309,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_set_point_solid;
-    public void SetPointSolid(Vector2I id, bool solid)
+    public void SetPointSolid(Vector2I id, bool solid = true)
     {
         var __mb = __mb_set_point_solid;
         if (__mb == 0)
@@ -1381,7 +1381,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_fill_solid_region;
-    public void FillSolidRegion(Rect2I region, bool solid)
+    public void FillSolidRegion(Rect2I region, bool solid = true)
     {
         var __mb = __mb_fill_solid_region;
         if (__mb == 0)
@@ -1466,7 +1466,7 @@ public unsafe partial class AStarGrid2D : RefCounted
     }
 
     private static nint __mb_get_id_path;
-    public Godot.Collections.Array GetIdPath(Vector2I fromId, Vector2I toId, bool allowPartialPath)
+    public Godot.Collections.Array GetIdPath(Vector2I fromId, Vector2I toId, bool allowPartialPath = false)
     {
         var __mb = __mb_get_id_path;
         if (__mb == 0)
@@ -1644,7 +1644,7 @@ public unsafe partial class AcceptDialog : Window
     }
 
     private static nint __mb_add_button;
-    public Button? AddButton(string text, bool right, string action)
+    public Button? AddButton(string text, bool right = false, string action = "")
     {
         var __mb = __mb_add_button;
         if (__mb == 0)
@@ -1814,139 +1814,141 @@ public unsafe partial class AcceptDialog : Window
     }
 }
 
-public unsafe partial class AccessibilityServer : GodotObject
+public static unsafe partial class AccessibilityServer
 {
-    internal AccessibilityServer(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    private static AccessibilityServer? _singleton;
-    public static AccessibilityServer Singleton => _singleton ??= (AccessibilityServer)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("AccessibilityServer"), adoptRef: false)!;
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("AccessibilityServer");
+
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum AccessibilityRole : long
     {
-        ROLE_UNKNOWN = 0,
-        ROLE_DEFAULT_BUTTON = 1,
-        ROLE_AUDIO = 2,
-        ROLE_VIDEO = 3,
-        ROLE_STATIC_TEXT = 4,
-        ROLE_CONTAINER = 5,
-        ROLE_PANEL = 6,
-        ROLE_BUTTON = 7,
-        ROLE_LINK = 8,
-        ROLE_CHECK_BOX = 9,
-        ROLE_RADIO_BUTTON = 10,
-        ROLE_CHECK_BUTTON = 11,
-        ROLE_SCROLL_BAR = 12,
-        ROLE_SCROLL_VIEW = 13,
-        ROLE_SPLITTER = 14,
-        ROLE_SLIDER = 15,
-        ROLE_SPIN_BUTTON = 16,
-        ROLE_PROGRESS_INDICATOR = 17,
-        ROLE_TEXT_FIELD = 18,
-        ROLE_MULTILINE_TEXT_FIELD = 19,
-        ROLE_COLOR_PICKER = 20,
-        ROLE_TABLE = 21,
-        ROLE_CELL = 22,
-        ROLE_ROW = 23,
-        ROLE_ROW_GROUP = 24,
-        ROLE_ROW_HEADER = 25,
-        ROLE_COLUMN_HEADER = 26,
-        ROLE_TREE = 27,
-        ROLE_TREE_ITEM = 28,
-        ROLE_LIST = 29,
-        ROLE_LIST_ITEM = 30,
-        ROLE_LIST_BOX = 31,
-        ROLE_LIST_BOX_OPTION = 32,
-        ROLE_TAB_BAR = 33,
-        ROLE_TAB = 34,
-        ROLE_TAB_PANEL = 35,
-        ROLE_MENU_BAR = 36,
-        ROLE_MENU = 37,
-        ROLE_MENU_ITEM = 38,
-        ROLE_MENU_ITEM_CHECK_BOX = 39,
-        ROLE_MENU_ITEM_RADIO = 40,
-        ROLE_IMAGE = 41,
-        ROLE_WINDOW = 42,
-        ROLE_TITLE_BAR = 43,
-        ROLE_DIALOG = 44,
-        ROLE_TOOLTIP = 45,
-        ROLE_REGION = 46,
-        ROLE_TEXT_RUN = 47,
+        Unknown = 0,
+        DefaultButton = 1,
+        Audio = 2,
+        Video = 3,
+        StaticText = 4,
+        Container = 5,
+        Panel = 6,
+        Button = 7,
+        Link = 8,
+        CheckBox = 9,
+        RadioButton = 10,
+        CheckButton = 11,
+        ScrollBar = 12,
+        ScrollView = 13,
+        Splitter = 14,
+        Slider = 15,
+        SpinButton = 16,
+        ProgressIndicator = 17,
+        TextField = 18,
+        MultilineTextField = 19,
+        ColorPicker = 20,
+        Table = 21,
+        Cell = 22,
+        Row = 23,
+        RowGroup = 24,
+        RowHeader = 25,
+        ColumnHeader = 26,
+        Tree = 27,
+        TreeItem = 28,
+        List = 29,
+        ListItem = 30,
+        ListBox = 31,
+        ListBoxOption = 32,
+        TabBar = 33,
+        Tab = 34,
+        TabPanel = 35,
+        MenuBar = 36,
+        Menu = 37,
+        MenuItem = 38,
+        MenuItemCheckBox = 39,
+        MenuItemRadio = 40,
+        Image = 41,
+        Window = 42,
+        TitleBar = 43,
+        Dialog = 44,
+        Tooltip = 45,
+        Region = 46,
+        TextRun = 47,
     }
 
     public enum AccessibilityPopupType : long
     {
-        POPUP_MENU = 0,
-        POPUP_LIST = 1,
-        POPUP_TREE = 2,
-        POPUP_DIALOG = 3,
+        Menu = 0,
+        List = 1,
+        Tree = 2,
+        Dialog = 3,
     }
 
     public enum AccessibilityFlags : long
     {
-        FLAG_HIDDEN = 0,
-        FLAG_MULTISELECTABLE = 1,
-        FLAG_REQUIRED = 2,
-        FLAG_VISITED = 3,
-        FLAG_BUSY = 4,
-        FLAG_MODAL = 5,
-        FLAG_TOUCH_PASSTHROUGH = 6,
-        FLAG_READONLY = 7,
-        FLAG_DISABLED = 8,
-        FLAG_CLIPS_CHILDREN = 9,
+        Hidden = 0,
+        Multiselectable = 1,
+        Required = 2,
+        Visited = 3,
+        Busy = 4,
+        Modal = 5,
+        TouchPassthrough = 6,
+        Readonly = 7,
+        Disabled = 8,
+        ClipsChildren = 9,
     }
 
     public enum AccessibilityAction : long
     {
-        ACTION_CLICK = 0,
-        ACTION_FOCUS = 1,
-        ACTION_BLUR = 2,
-        ACTION_COLLAPSE = 3,
-        ACTION_EXPAND = 4,
-        ACTION_DECREMENT = 5,
-        ACTION_INCREMENT = 6,
-        ACTION_HIDE_TOOLTIP = 7,
-        ACTION_SHOW_TOOLTIP = 8,
-        ACTION_SET_TEXT_SELECTION = 9,
-        ACTION_REPLACE_SELECTED_TEXT = 10,
-        ACTION_SCROLL_BACKWARD = 11,
-        ACTION_SCROLL_DOWN = 12,
-        ACTION_SCROLL_FORWARD = 13,
-        ACTION_SCROLL_LEFT = 14,
-        ACTION_SCROLL_RIGHT = 15,
-        ACTION_SCROLL_UP = 16,
-        ACTION_SCROLL_INTO_VIEW = 17,
-        ACTION_SCROLL_TO_POINT = 18,
-        ACTION_SET_SCROLL_OFFSET = 19,
-        ACTION_SET_VALUE = 20,
-        ACTION_SHOW_CONTEXT_MENU = 21,
-        ACTION_CUSTOM = 22,
+        Click = 0,
+        Focus = 1,
+        Blur = 2,
+        Collapse = 3,
+        Expand = 4,
+        Decrement = 5,
+        Increment = 6,
+        HideTooltip = 7,
+        ShowTooltip = 8,
+        SetTextSelection = 9,
+        ReplaceSelectedText = 10,
+        ScrollBackward = 11,
+        ScrollDown = 12,
+        ScrollForward = 13,
+        ScrollLeft = 14,
+        ScrollRight = 15,
+        ScrollUp = 16,
+        ScrollIntoView = 17,
+        ScrollToPoint = 18,
+        SetScrollOffset = 19,
+        SetValue = 20,
+        ShowContextMenu = 21,
+        Custom = 22,
     }
 
     public enum AccessibilityLiveMode : long
     {
-        LIVE_OFF = 0,
-        LIVE_POLITE = 1,
-        LIVE_ASSERTIVE = 2,
+        Off = 0,
+        Polite = 1,
+        Assertive = 2,
     }
 
     public enum AccessibilityScrollUnit : long
     {
-        SCROLL_UNIT_ITEM = 0,
-        SCROLL_UNIT_PAGE = 1,
+        Item = 0,
+        Page = 1,
     }
 
     public enum AccessibilityScrollHint : long
     {
-        SCROLL_HINT_TOP_LEFT = 0,
-        SCROLL_HINT_BOTTOM_RIGHT = 1,
-        SCROLL_HINT_TOP_EDGE = 2,
-        SCROLL_HINT_BOTTOM_EDGE = 3,
-        SCROLL_HINT_LEFT_EDGE = 4,
-        SCROLL_HINT_RIGHT_EDGE = 5,
+        TopLeft = 0,
+        BottomRight = 1,
+        TopEdge = 2,
+        BottomEdge = 3,
+        LeftEdge = 4,
+        RightEdge = 5,
     }
 
     private static nint __mb_is_supported;
-    public bool IsSupported()
+    public static bool IsSupported()
     {
         var __mb = __mb_is_supported;
         if (__mb == 0)
@@ -1956,12 +1958,12 @@ public unsafe partial class AccessibilityServer : GodotObject
             __mb_is_supported = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_create_element;
-    public Rid CreateElement(int windowId, AccessibilityServer.AccessibilityRole role)
+    public static Rid CreateElement(int windowId, AccessibilityServer.AccessibilityRole role)
     {
         var __mb = __mb_create_element;
         if (__mb == 0)
@@ -1976,12 +1978,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_create_sub_element;
-    public Rid CreateSubElement(Rid parentRid, AccessibilityServer.AccessibilityRole role, int insertPos)
+    public static Rid CreateSubElement(Rid parentRid, AccessibilityServer.AccessibilityRole role, int insertPos = unchecked((int)(-1)))
     {
         var __mb = __mb_create_sub_element;
         if (__mb == 0)
@@ -1998,12 +2000,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_create_sub_text_edit_elements;
-    public Rid CreateSubTextEditElements(Rid parentRid, Rid shapedText, float minHeight, int insertPos, bool isLastLine)
+    public static Rid CreateSubTextEditElements(Rid parentRid, Rid shapedText, float minHeight, int insertPos = unchecked((int)(-1)), bool isLastLine = false)
     {
         var __mb = __mb_create_sub_text_edit_elements;
         if (__mb == 0)
@@ -2024,12 +2026,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_has_element;
-    public bool HasElement(Rid id)
+    public static bool HasElement(Rid id)
     {
         var __mb = __mb_has_element;
         if (__mb == 0)
@@ -2042,12 +2044,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_free_element;
-    public void FreeElement(Rid id)
+    public static void FreeElement(Rid id)
     {
         var __mb = __mb_free_element;
         if (__mb == 0)
@@ -2059,11 +2061,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __a0 = id;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_element_set_meta;
-    public void ElementSetMeta(Rid id, Variant meta)
+    public static void ElementSetMeta(Rid id, Variant meta)
     {
         var __mb = __mb_element_set_meta;
         if (__mb == 0)
@@ -2077,11 +2079,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_element_get_meta;
-    public Variant ElementGetMeta(Rid id)
+    public static Variant ElementGetMeta(Rid id)
     {
         var __mb = __mb_element_get_meta;
         if (__mb == 0)
@@ -2094,12 +2096,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_set_window_rect;
-    public void SetWindowRect(int windowId, Rect2 rectOut, Rect2 rectIn)
+    public static void SetWindowRect(int windowId, Rect2 rectOut, Rect2 rectIn)
     {
         var __mb = __mb_set_window_rect;
         if (__mb == 0)
@@ -2115,11 +2117,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_window_focused;
-    public void SetWindowFocused(int windowId, bool focused)
+    public static void SetWindowFocused(int windowId, bool focused)
     {
         var __mb = __mb_set_window_focused;
         if (__mb == 0)
@@ -2133,11 +2135,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_focus;
-    public void UpdateSetFocus(Rid id)
+    public static void UpdateSetFocus(Rid id)
     {
         var __mb = __mb_update_set_focus;
         if (__mb == 0)
@@ -2149,11 +2151,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __a0 = id;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_window_root;
-    public Rid GetWindowRoot(int windowId)
+    public static Rid GetWindowRoot(int windowId)
     {
         var __mb = __mb_get_window_root;
         if (__mb == 0)
@@ -2166,12 +2168,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_update_set_role;
-    public void UpdateSetRole(Rid id, AccessibilityServer.AccessibilityRole role)
+    public static void UpdateSetRole(Rid id, AccessibilityServer.AccessibilityRole role)
     {
         var __mb = __mb_update_set_role;
         if (__mb == 0)
@@ -2185,11 +2187,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_name;
-    public void UpdateSetName(Rid id, string name)
+    public static void UpdateSetName(Rid id, string name)
     {
         var __mb = __mb_update_set_name;
         if (__mb == 0)
@@ -2203,12 +2205,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_update_set_braille_label;
-    public void UpdateSetBrailleLabel(Rid id, string name)
+    public static void UpdateSetBrailleLabel(Rid id, string name)
     {
         var __mb = __mb_update_set_braille_label;
         if (__mb == 0)
@@ -2222,12 +2224,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_update_set_braille_role_description;
-    public void UpdateSetBrailleRoleDescription(Rid id, string description)
+    public static void UpdateSetBrailleRoleDescription(Rid id, string description)
     {
         var __mb = __mb_update_set_braille_role_description;
         if (__mb == 0)
@@ -2241,12 +2243,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_update_set_extra_info;
-    public void UpdateSetExtraInfo(Rid id, string name)
+    public static void UpdateSetExtraInfo(Rid id, string name)
     {
         var __mb = __mb_update_set_extra_info;
         if (__mb == 0)
@@ -2260,12 +2262,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_update_set_description;
-    public void UpdateSetDescription(Rid id, string description)
+    public static void UpdateSetDescription(Rid id, string description)
     {
         var __mb = __mb_update_set_description;
         if (__mb == 0)
@@ -2279,12 +2281,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_update_set_value;
-    public void UpdateSetValue(Rid id, string value)
+    public static void UpdateSetValue(Rid id, string value)
     {
         var __mb = __mb_update_set_value;
         if (__mb == 0)
@@ -2298,12 +2300,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_update_set_tooltip;
-    public void UpdateSetTooltip(Rid id, string tooltip)
+    public static void UpdateSetTooltip(Rid id, string tooltip)
     {
         var __mb = __mb_update_set_tooltip;
         if (__mb == 0)
@@ -2317,12 +2319,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_update_set_bounds;
-    public void UpdateSetBounds(Rid id, Rect2 rect)
+    public static void UpdateSetBounds(Rid id, Rect2 rect)
     {
         var __mb = __mb_update_set_bounds;
         if (__mb == 0)
@@ -2336,11 +2338,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_transform;
-    public void UpdateSetTransform(Rid id, Transform2D transform)
+    public static void UpdateSetTransform(Rid id, Transform2D transform)
     {
         var __mb = __mb_update_set_transform;
         if (__mb == 0)
@@ -2354,11 +2356,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_add_child;
-    public void UpdateAddChild(Rid id, Rid childId)
+    public static void UpdateAddChild(Rid id, Rid childId)
     {
         var __mb = __mb_update_add_child;
         if (__mb == 0)
@@ -2372,11 +2374,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_add_related_controls;
-    public void UpdateAddRelatedControls(Rid id, Rid relatedId)
+    public static void UpdateAddRelatedControls(Rid id, Rid relatedId)
     {
         var __mb = __mb_update_add_related_controls;
         if (__mb == 0)
@@ -2390,11 +2392,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_add_related_details;
-    public void UpdateAddRelatedDetails(Rid id, Rid relatedId)
+    public static void UpdateAddRelatedDetails(Rid id, Rid relatedId)
     {
         var __mb = __mb_update_add_related_details;
         if (__mb == 0)
@@ -2408,11 +2410,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_add_related_described_by;
-    public void UpdateAddRelatedDescribedBy(Rid id, Rid relatedId)
+    public static void UpdateAddRelatedDescribedBy(Rid id, Rid relatedId)
     {
         var __mb = __mb_update_add_related_described_by;
         if (__mb == 0)
@@ -2426,11 +2428,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_add_related_flow_to;
-    public void UpdateAddRelatedFlowTo(Rid id, Rid relatedId)
+    public static void UpdateAddRelatedFlowTo(Rid id, Rid relatedId)
     {
         var __mb = __mb_update_add_related_flow_to;
         if (__mb == 0)
@@ -2444,11 +2446,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_add_related_labeled_by;
-    public void UpdateAddRelatedLabeledBy(Rid id, Rid relatedId)
+    public static void UpdateAddRelatedLabeledBy(Rid id, Rid relatedId)
     {
         var __mb = __mb_update_add_related_labeled_by;
         if (__mb == 0)
@@ -2462,11 +2464,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_add_related_radio_group;
-    public void UpdateAddRelatedRadioGroup(Rid id, Rid relatedId)
+    public static void UpdateAddRelatedRadioGroup(Rid id, Rid relatedId)
     {
         var __mb = __mb_update_add_related_radio_group;
         if (__mb == 0)
@@ -2480,11 +2482,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_active_descendant;
-    public void UpdateSetActiveDescendant(Rid id, Rid otherId)
+    public static void UpdateSetActiveDescendant(Rid id, Rid otherId)
     {
         var __mb = __mb_update_set_active_descendant;
         if (__mb == 0)
@@ -2498,11 +2500,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_next_on_line;
-    public void UpdateSetNextOnLine(Rid id, Rid otherId)
+    public static void UpdateSetNextOnLine(Rid id, Rid otherId)
     {
         var __mb = __mb_update_set_next_on_line;
         if (__mb == 0)
@@ -2516,11 +2518,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_previous_on_line;
-    public void UpdateSetPreviousOnLine(Rid id, Rid otherId)
+    public static void UpdateSetPreviousOnLine(Rid id, Rid otherId)
     {
         var __mb = __mb_update_set_previous_on_line;
         if (__mb == 0)
@@ -2534,11 +2536,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_member_of;
-    public void UpdateSetMemberOf(Rid id, Rid groupId)
+    public static void UpdateSetMemberOf(Rid id, Rid groupId)
     {
         var __mb = __mb_update_set_member_of;
         if (__mb == 0)
@@ -2552,11 +2554,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_in_page_link_target;
-    public void UpdateSetInPageLinkTarget(Rid id, Rid otherId)
+    public static void UpdateSetInPageLinkTarget(Rid id, Rid otherId)
     {
         var __mb = __mb_update_set_in_page_link_target;
         if (__mb == 0)
@@ -2570,11 +2572,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_error_message;
-    public void UpdateSetErrorMessage(Rid id, Rid otherId)
+    public static void UpdateSetErrorMessage(Rid id, Rid otherId)
     {
         var __mb = __mb_update_set_error_message;
         if (__mb == 0)
@@ -2588,11 +2590,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_live;
-    public void UpdateSetLive(Rid id, AccessibilityServer.AccessibilityLiveMode live)
+    public static void UpdateSetLive(Rid id, AccessibilityServer.AccessibilityLiveMode live)
     {
         var __mb = __mb_update_set_live;
         if (__mb == 0)
@@ -2606,11 +2608,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_add_custom_action;
-    public void UpdateAddCustomAction(Rid id, int actionId, string actionDescription)
+    public static void UpdateAddCustomAction(Rid id, int actionId, string actionDescription)
     {
         var __mb = __mb_update_add_custom_action;
         if (__mb == 0)
@@ -2626,12 +2628,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a2);
     }
 
     private static nint __mb_update_set_table_row_count;
-    public void UpdateSetTableRowCount(Rid id, int count)
+    public static void UpdateSetTableRowCount(Rid id, int count)
     {
         var __mb = __mb_update_set_table_row_count;
         if (__mb == 0)
@@ -2645,11 +2647,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_table_column_count;
-    public void UpdateSetTableColumnCount(Rid id, int count)
+    public static void UpdateSetTableColumnCount(Rid id, int count)
     {
         var __mb = __mb_update_set_table_column_count;
         if (__mb == 0)
@@ -2663,11 +2665,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_table_row_index;
-    public void UpdateSetTableRowIndex(Rid id, int index)
+    public static void UpdateSetTableRowIndex(Rid id, int index)
     {
         var __mb = __mb_update_set_table_row_index;
         if (__mb == 0)
@@ -2681,11 +2683,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_table_column_index;
-    public void UpdateSetTableColumnIndex(Rid id, int index)
+    public static void UpdateSetTableColumnIndex(Rid id, int index)
     {
         var __mb = __mb_update_set_table_column_index;
         if (__mb == 0)
@@ -2699,11 +2701,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_table_cell_position;
-    public void UpdateSetTableCellPosition(Rid id, int rowIndex, int columnIndex)
+    public static void UpdateSetTableCellPosition(Rid id, int rowIndex, int columnIndex)
     {
         var __mb = __mb_update_set_table_cell_position;
         if (__mb == 0)
@@ -2719,11 +2721,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_table_cell_span;
-    public void UpdateSetTableCellSpan(Rid id, int rowSpan, int columnSpan)
+    public static void UpdateSetTableCellSpan(Rid id, int rowSpan, int columnSpan)
     {
         var __mb = __mb_update_set_table_cell_span;
         if (__mb == 0)
@@ -2739,11 +2741,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_list_item_count;
-    public void UpdateSetListItemCount(Rid id, int size)
+    public static void UpdateSetListItemCount(Rid id, int size)
     {
         var __mb = __mb_update_set_list_item_count;
         if (__mb == 0)
@@ -2757,11 +2759,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_list_item_index;
-    public void UpdateSetListItemIndex(Rid id, int index)
+    public static void UpdateSetListItemIndex(Rid id, int index)
     {
         var __mb = __mb_update_set_list_item_index;
         if (__mb == 0)
@@ -2775,11 +2777,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_list_item_level;
-    public void UpdateSetListItemLevel(Rid id, int level)
+    public static void UpdateSetListItemLevel(Rid id, int level)
     {
         var __mb = __mb_update_set_list_item_level;
         if (__mb == 0)
@@ -2793,11 +2795,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_list_item_selected;
-    public void UpdateSetListItemSelected(Rid id, bool selected)
+    public static void UpdateSetListItemSelected(Rid id, bool selected)
     {
         var __mb = __mb_update_set_list_item_selected;
         if (__mb == 0)
@@ -2811,11 +2813,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_list_item_expanded;
-    public void UpdateSetListItemExpanded(Rid id, bool expanded)
+    public static void UpdateSetListItemExpanded(Rid id, bool expanded)
     {
         var __mb = __mb_update_set_list_item_expanded;
         if (__mb == 0)
@@ -2829,11 +2831,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_popup_type;
-    public void UpdateSetPopupType(Rid id, AccessibilityServer.AccessibilityPopupType popup)
+    public static void UpdateSetPopupType(Rid id, AccessibilityServer.AccessibilityPopupType popup)
     {
         var __mb = __mb_update_set_popup_type;
         if (__mb == 0)
@@ -2847,11 +2849,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_checked;
-    public void UpdateSetChecked(Rid id, bool checekd)
+    public static void UpdateSetChecked(Rid id, bool checekd)
     {
         var __mb = __mb_update_set_checked;
         if (__mb == 0)
@@ -2865,11 +2867,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_num_value;
-    public void UpdateSetNumValue(Rid id, double position)
+    public static void UpdateSetNumValue(Rid id, double position)
     {
         var __mb = __mb_update_set_num_value;
         if (__mb == 0)
@@ -2883,11 +2885,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_num_range;
-    public void UpdateSetNumRange(Rid id, double min, double max)
+    public static void UpdateSetNumRange(Rid id, double min, double max)
     {
         var __mb = __mb_update_set_num_range;
         if (__mb == 0)
@@ -2903,11 +2905,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_num_step;
-    public void UpdateSetNumStep(Rid id, double step)
+    public static void UpdateSetNumStep(Rid id, double step)
     {
         var __mb = __mb_update_set_num_step;
         if (__mb == 0)
@@ -2921,11 +2923,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_num_jump;
-    public void UpdateSetNumJump(Rid id, double jump)
+    public static void UpdateSetNumJump(Rid id, double jump)
     {
         var __mb = __mb_update_set_num_jump;
         if (__mb == 0)
@@ -2939,11 +2941,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_scroll_x;
-    public void UpdateSetScrollX(Rid id, double position)
+    public static void UpdateSetScrollX(Rid id, double position)
     {
         var __mb = __mb_update_set_scroll_x;
         if (__mb == 0)
@@ -2957,11 +2959,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_scroll_x_range;
-    public void UpdateSetScrollXRange(Rid id, double min, double max)
+    public static void UpdateSetScrollXRange(Rid id, double min, double max)
     {
         var __mb = __mb_update_set_scroll_x_range;
         if (__mb == 0)
@@ -2977,11 +2979,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_scroll_y;
-    public void UpdateSetScrollY(Rid id, double position)
+    public static void UpdateSetScrollY(Rid id, double position)
     {
         var __mb = __mb_update_set_scroll_y;
         if (__mb == 0)
@@ -2995,11 +2997,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_scroll_y_range;
-    public void UpdateSetScrollYRange(Rid id, double min, double max)
+    public static void UpdateSetScrollYRange(Rid id, double min, double max)
     {
         var __mb = __mb_update_set_scroll_y_range;
         if (__mb == 0)
@@ -3015,11 +3017,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_text_decorations;
-    public void UpdateSetTextDecorations(Rid id, bool underline, bool strikethrough, bool overline, Color color)
+    public static void UpdateSetTextDecorations(Rid id, bool underline, bool strikethrough, bool overline, Color color)
     {
         var __mb = __mb_update_set_text_decorations;
         if (__mb == 0)
@@ -3039,11 +3041,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_text_align;
-    public void UpdateSetTextAlign(Rid id, HorizontalAlignment align)
+    public static void UpdateSetTextAlign(Rid id, HorizontalAlignment align)
     {
         var __mb = __mb_update_set_text_align;
         if (__mb == 0)
@@ -3057,11 +3059,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_text_selection;
-    public void UpdateSetTextSelection(Rid id, Rid textStartId, int startChar, Rid textEndId, int endChar)
+    public static void UpdateSetTextSelection(Rid id, Rid textStartId, int startChar, Rid textEndId, int endChar)
     {
         var __mb = __mb_update_set_text_selection;
         if (__mb == 0)
@@ -3081,11 +3083,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_flag;
-    public void UpdateSetFlag(Rid id, AccessibilityServer.AccessibilityFlags flag, bool value)
+    public static void UpdateSetFlag(Rid id, AccessibilityServer.AccessibilityFlags flag, bool value)
     {
         var __mb = __mb_update_set_flag;
         if (__mb == 0)
@@ -3101,11 +3103,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_classname;
-    public void UpdateSetClassname(Rid id, string classname)
+    public static void UpdateSetClassname(Rid id, string classname)
     {
         var __mb = __mb_update_set_classname;
         if (__mb == 0)
@@ -3119,12 +3121,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_update_set_placeholder;
-    public void UpdateSetPlaceholder(Rid id, string placeholder)
+    public static void UpdateSetPlaceholder(Rid id, string placeholder)
     {
         var __mb = __mb_update_set_placeholder;
         if (__mb == 0)
@@ -3138,12 +3140,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_update_set_language;
-    public void UpdateSetLanguage(Rid id, string language)
+    public static void UpdateSetLanguage(Rid id, string language)
     {
         var __mb = __mb_update_set_language;
         if (__mb == 0)
@@ -3157,12 +3159,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_update_set_text_orientation;
-    public void UpdateSetTextOrientation(Rid id, bool vertical)
+    public static void UpdateSetTextOrientation(Rid id, bool vertical)
     {
         var __mb = __mb_update_set_text_orientation;
         if (__mb == 0)
@@ -3176,11 +3178,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_list_orientation;
-    public void UpdateSetListOrientation(Rid id, bool vertical)
+    public static void UpdateSetListOrientation(Rid id, bool vertical)
     {
         var __mb = __mb_update_set_list_orientation;
         if (__mb == 0)
@@ -3194,11 +3196,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_shortcut;
-    public void UpdateSetShortcut(Rid id, string shortcut)
+    public static void UpdateSetShortcut(Rid id, string shortcut)
     {
         var __mb = __mb_update_set_shortcut;
         if (__mb == 0)
@@ -3212,12 +3214,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_update_set_url;
-    public void UpdateSetUrl(Rid id, string url)
+    public static void UpdateSetUrl(Rid id, string url)
     {
         var __mb = __mb_update_set_url;
         if (__mb == 0)
@@ -3231,12 +3233,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_update_set_role_description;
-    public void UpdateSetRoleDescription(Rid id, string description)
+    public static void UpdateSetRoleDescription(Rid id, string description)
     {
         var __mb = __mb_update_set_role_description;
         if (__mb == 0)
@@ -3250,12 +3252,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_update_set_state_description;
-    public void UpdateSetStateDescription(Rid id, string description)
+    public static void UpdateSetStateDescription(Rid id, string description)
     {
         var __mb = __mb_update_set_state_description;
         if (__mb == 0)
@@ -3269,12 +3271,12 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_update_set_color_value;
-    public void UpdateSetColorValue(Rid id, Color color)
+    public static void UpdateSetColorValue(Rid id, Color color)
     {
         var __mb = __mb_update_set_color_value;
         if (__mb == 0)
@@ -3288,11 +3290,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_background_color;
-    public void UpdateSetBackgroundColor(Rid id, Color color)
+    public static void UpdateSetBackgroundColor(Rid id, Color color)
     {
         var __mb = __mb_update_set_background_color;
         if (__mb == 0)
@@ -3306,11 +3308,11 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_update_set_foreground_color;
-    public void UpdateSetForegroundColor(Rid id, Color color)
+    public static void UpdateSetForegroundColor(Rid id, Color color)
     {
         var __mb = __mb_update_set_foreground_color;
         if (__mb == 0)
@@ -3324,7 +3326,7 @@ public unsafe partial class AccessibilityServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 }
 
@@ -3761,7 +3763,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_play;
-    public void Play(string name, float customSpeed, bool fromEnd)
+    public void Play(string name = "", float customSpeed = 1.0f, bool fromEnd = false)
     {
         var __mb = __mb_play;
         if (__mb == 0)
@@ -3781,7 +3783,7 @@ public unsafe partial class AnimatedSprite2D : Node2D
     }
 
     private static nint __mb_play_backwards;
-    public void PlayBackwards(string name)
+    public void PlayBackwards(string name = "")
     {
         var __mb = __mb_play_backwards;
         if (__mb == 0)
@@ -4228,7 +4230,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_play;
-    public void Play(string name, float customSpeed, bool fromEnd)
+    public void Play(string name = "", float customSpeed = 1.0f, bool fromEnd = false)
     {
         var __mb = __mb_play;
         if (__mb == 0)
@@ -4248,7 +4250,7 @@ public unsafe partial class AnimatedSprite3D : SpriteBase3D
     }
 
     private static nint __mb_play_backwards;
-    public void PlayBackwards(string name)
+    public void PlayBackwards(string name = "")
     {
         var __mb = __mb_play_backwards;
         if (__mb == 0)
@@ -4694,52 +4696,52 @@ public unsafe partial class Animation : Resource
 
     public enum TrackType : long
     {
-        TYPE_VALUE = 0,
-        TYPE_POSITION_3D = 1,
-        TYPE_ROTATION_3D = 2,
-        TYPE_SCALE_3D = 3,
-        TYPE_BLEND_SHAPE = 4,
-        TYPE_METHOD = 5,
-        TYPE_BEZIER = 6,
-        TYPE_AUDIO = 7,
-        TYPE_ANIMATION = 8,
+        Value = 0,
+        Position3d = 1,
+        Rotation3d = 2,
+        Scale3d = 3,
+        BlendShape = 4,
+        Method = 5,
+        Bezier = 6,
+        Audio = 7,
+        Animation = 8,
     }
 
     public enum InterpolationType : long
     {
-        INTERPOLATION_NEAREST = 0,
-        INTERPOLATION_LINEAR = 1,
-        INTERPOLATION_CUBIC = 2,
-        INTERPOLATION_LINEAR_ANGLE = 3,
-        INTERPOLATION_CUBIC_ANGLE = 4,
+        Nearest = 0,
+        Linear = 1,
+        Cubic = 2,
+        LinearAngle = 3,
+        CubicAngle = 4,
     }
 
     public enum UpdateMode : long
     {
-        UPDATE_CONTINUOUS = 0,
-        UPDATE_DISCRETE = 1,
-        UPDATE_CAPTURE = 2,
+        Continuous = 0,
+        Discrete = 1,
+        Capture = 2,
     }
 
     public enum LoopModeEnum : long
     {
-        LOOP_NONE = 0,
-        LOOP_LINEAR = 1,
-        LOOP_PINGPONG = 2,
+        None = 0,
+        Linear = 1,
+        Pingpong = 2,
     }
 
     public enum LoopedFlag : long
     {
-        LOOPED_FLAG_NONE = 0,
-        LOOPED_FLAG_END = 1,
-        LOOPED_FLAG_START = 2,
+        None = 0,
+        End = 1,
+        Start = 2,
     }
 
     public enum FindMode : long
     {
-        FIND_MODE_NEAREST = 0,
-        FIND_MODE_APPROX = 1,
-        FIND_MODE_EXACT = 2,
+        Nearest = 0,
+        Approx = 1,
+        Exact = 2,
     }
 
     public double Length
@@ -4763,7 +4765,7 @@ public unsafe partial class Animation : Resource
     public bool CaptureIncluded => IsCaptureIncluded();
 
     private static nint __mb_add_track;
-    public int AddTrack(Animation.TrackType type, int atPosition)
+    public int AddTrack(Animation.TrackType type, int atPosition = unchecked((int)(-1)))
     {
         var __mb = __mb_add_track;
         if (__mb == 0)
@@ -5116,7 +5118,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_position_track_interpolate;
-    public Vector3 PositionTrackInterpolate(int trackIdx, double timeSec, bool backward)
+    public Vector3 PositionTrackInterpolate(int trackIdx, double timeSec, bool backward = false)
     {
         var __mb = __mb_position_track_interpolate;
         if (__mb == 0)
@@ -5138,7 +5140,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_rotation_track_interpolate;
-    public Quaternion RotationTrackInterpolate(int trackIdx, double timeSec, bool backward)
+    public Quaternion RotationTrackInterpolate(int trackIdx, double timeSec, bool backward = false)
     {
         var __mb = __mb_rotation_track_interpolate;
         if (__mb == 0)
@@ -5160,7 +5162,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_scale_track_interpolate;
-    public Vector3 ScaleTrackInterpolate(int trackIdx, double timeSec, bool backward)
+    public Vector3 ScaleTrackInterpolate(int trackIdx, double timeSec, bool backward = false)
     {
         var __mb = __mb_scale_track_interpolate;
         if (__mb == 0)
@@ -5182,7 +5184,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_blend_shape_track_interpolate;
-    public float BlendShapeTrackInterpolate(int trackIdx, double timeSec, bool backward)
+    public float BlendShapeTrackInterpolate(int trackIdx, double timeSec, bool backward = false)
     {
         var __mb = __mb_blend_shape_track_interpolate;
         if (__mb == 0)
@@ -5204,7 +5206,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_track_insert_key;
-    public int TrackInsertKey(int trackIdx, double time, Variant key, float transition)
+    public int TrackInsertKey(int trackIdx, double time, Variant key, float transition = 1f)
     {
         var __mb = __mb_track_insert_key;
         if (__mb == 0)
@@ -5402,7 +5404,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_track_find_key;
-    public int TrackFindKey(int trackIdx, double time, Animation.FindMode findMode, bool limit, bool backward)
+    public int TrackFindKey(int trackIdx, double time, Animation.FindMode findMode = (Animation.FindMode)(0), bool limit = false, bool backward = false)
     {
         var __mb = __mb_track_find_key;
         if (__mb == 0)
@@ -5554,7 +5556,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_value_track_interpolate;
-    public Variant ValueTrackInterpolate(int trackIdx, double timeSec, bool backward)
+    public Variant ValueTrackInterpolate(int trackIdx, double timeSec, bool backward = false)
     {
         var __mb = __mb_value_track_interpolate;
         if (__mb == 0)
@@ -5616,7 +5618,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_bezier_track_insert_key;
-    public int BezierTrackInsertKey(int trackIdx, double time, float value, Vector2 inHandle, Vector2 outHandle)
+    public int BezierTrackInsertKey(int trackIdx, double time, float value, Vector2 inHandle = default, Vector2 outHandle = default)
     {
         var __mb = __mb_bezier_track_insert_key;
         if (__mb == 0)
@@ -5662,7 +5664,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_bezier_track_set_key_in_handle;
-    public void BezierTrackSetKeyInHandle(int trackIdx, int keyIdx, Vector2 inHandle, float balancedValueTimeRatio)
+    public void BezierTrackSetKeyInHandle(int trackIdx, int keyIdx, Vector2 inHandle, float balancedValueTimeRatio = 1.0f)
     {
         var __mb = __mb_bezier_track_set_key_in_handle;
         if (__mb == 0)
@@ -5684,7 +5686,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_bezier_track_set_key_out_handle;
-    public void BezierTrackSetKeyOutHandle(int trackIdx, int keyIdx, Vector2 outHandle, float balancedValueTimeRatio)
+    public void BezierTrackSetKeyOutHandle(int trackIdx, int keyIdx, Vector2 outHandle, float balancedValueTimeRatio = 1.0f)
     {
         var __mb = __mb_bezier_track_set_key_out_handle;
         if (__mb == 0)
@@ -5786,7 +5788,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_audio_track_insert_key;
-    public int AudioTrackInsertKey(int trackIdx, double time, Resource? stream, float startOffset, float endOffset)
+    public int AudioTrackInsertKey(int trackIdx, double time, Resource? stream, float startOffset = 0f, float endOffset = 0f)
     {
         var __mb = __mb_audio_track_insert_key;
         if (__mb == 0)
@@ -6314,7 +6316,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_optimize;
-    public void Optimize(float allowedVelocityErr, float allowedAngularErr, int precision)
+    public void Optimize(float allowedVelocityErr = 0.01f, float allowedAngularErr = 0.01f, int precision = unchecked((int)(3)))
     {
         var __mb = __mb_optimize;
         if (__mb == 0)
@@ -6334,7 +6336,7 @@ public unsafe partial class Animation : Resource
     }
 
     private static nint __mb_compress;
-    public void Compress(uint pageSize, uint fps, float splitTolerance)
+    public void Compress(uint pageSize = unchecked((uint)(8192)), uint fps = unchecked((uint)(120)), float splitTolerance = 4.0f)
     {
         var __mb = __mb_compress;
         if (__mb == 0)
@@ -6505,22 +6507,22 @@ public unsafe partial class AnimationMixer : Node
 
     public enum AnimationCallbackModeProcess : long
     {
-        ANIMATION_CALLBACK_MODE_PROCESS_PHYSICS = 0,
-        ANIMATION_CALLBACK_MODE_PROCESS_IDLE = 1,
-        ANIMATION_CALLBACK_MODE_PROCESS_MANUAL = 2,
+        Physics = 0,
+        Idle = 1,
+        Manual = 2,
     }
 
     public enum AnimationCallbackModeMethod : long
     {
-        ANIMATION_CALLBACK_MODE_METHOD_DEFERRED = 0,
-        ANIMATION_CALLBACK_MODE_METHOD_IMMEDIATE = 1,
+        Deferred = 0,
+        Immediate = 1,
     }
 
     public enum AnimationCallbackModeDiscrete : long
     {
-        ANIMATION_CALLBACK_MODE_DISCRETE_DOMINANT = 0,
-        ANIMATION_CALLBACK_MODE_DISCRETE_RECESSIVE = 1,
-        ANIMATION_CALLBACK_MODE_DISCRETE_FORCE_CONTINUOUS = 2,
+        Dominant = 0,
+        Recessive = 1,
+        ForceContinuous = 2,
     }
 
     public bool Active
@@ -7123,7 +7125,7 @@ public unsafe partial class AnimationMixer : Node
     }
 
     private static nint __mb_capture;
-    public void Capture(string name, double duration, Tween.TransitionType transType, Tween.EaseType easeType)
+    public void Capture(string name, double duration, Tween.TransitionType transType = (Tween.TransitionType)(0), Tween.EaseType easeType = (Tween.EaseType)(0))
     {
         var __mb = __mb_capture;
         if (__mb == 0)
@@ -7223,10 +7225,10 @@ public unsafe partial class AnimationNode : Resource
 
     public enum FilterAction : long
     {
-        FILTER_IGNORE = 0,
-        FILTER_PASS = 1,
-        FILTER_STOP = 2,
-        FILTER_BLEND = 3,
+        Ignore = 0,
+        Pass = 1,
+        Stop = 2,
+        Blend = 3,
     }
 
     public bool FilterEnabled
@@ -7441,7 +7443,7 @@ public unsafe partial class AnimationNode : Resource
     }
 
     private static nint __mb_blend_animation;
-    public void BlendAnimation(string animation, double time, double delta, bool seeked, bool isExternalSeeking, float blend, Animation.LoopedFlag loopedFlag)
+    public void BlendAnimation(string animation, double time, double delta, bool seeked, bool isExternalSeeking, float blend, Animation.LoopedFlag loopedFlag = (Animation.LoopedFlag)(0))
     {
         var __mb = __mb_blend_animation;
         if (__mb == 0)
@@ -7469,7 +7471,7 @@ public unsafe partial class AnimationNode : Resource
     }
 
     private static nint __mb_blend_node;
-    public double BlendNode(string name, AnimationNode? node, double time, bool seek, bool isExternalSeeking, float blend, AnimationNode.FilterAction filter, bool sync, bool testOnly)
+    public double BlendNode(string name, AnimationNode? node, double time, bool seek, bool isExternalSeeking, float blend, AnimationNode.FilterAction filter = (AnimationNode.FilterAction)(0), bool sync = true, bool testOnly = false)
     {
         var __mb = __mb_blend_node;
         if (__mb == 0)
@@ -7503,7 +7505,7 @@ public unsafe partial class AnimationNode : Resource
     }
 
     private static nint __mb_blend_input;
-    public double BlendInput(int inputIndex, double time, bool seek, bool isExternalSeeking, float blend, AnimationNode.FilterAction filter, bool sync, bool testOnly)
+    public double BlendInput(int inputIndex, double time, bool seek, bool isExternalSeeking, float blend, AnimationNode.FilterAction filter = (AnimationNode.FilterAction)(0), bool sync = true, bool testOnly = false)
     {
         var __mb = __mb_blend_input;
         if (__mb == 0)
@@ -7653,8 +7655,8 @@ public unsafe partial class AnimationNodeAnimation : AnimationRootNode
 
     public enum PlayModeEnum : long
     {
-        PLAY_MODE_FORWARD = 0,
-        PLAY_MODE_BACKWARD = 1,
+        Forward = 0,
+        Backward = 1,
     }
 
     public string Animation
@@ -7985,17 +7987,17 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
 
     public enum BlendModeEnum : long
     {
-        BLEND_MODE_INTERPOLATED = 0,
-        BLEND_MODE_DISCRETE = 1,
-        BLEND_MODE_DISCRETE_CARRY = 2,
+        Interpolated = 0,
+        Discrete = 1,
+        DiscreteCarry = 2,
     }
 
     public enum SyncModeEnum : long
     {
-        SYNC_MODE_NONE = 0,
-        SYNC_MODE_INDEPENDENT = 1,
-        SYNC_MODE_CYCLIC_MUTABLE = 2,
-        SYNC_MODE_CYCLIC_CONSTANT = 3,
+        None = 0,
+        Independent = 1,
+        CyclicMutable = 2,
+        CyclicConstant = 3,
     }
 
     public float MinSpace
@@ -8047,7 +8049,7 @@ public unsafe partial class AnimationNodeBlendSpace1D : AnimationRootNode
     }
 
     private static nint __mb_add_blend_point;
-    public void AddBlendPoint(AnimationRootNode? node, float pos, int atIndex, string name)
+    public void AddBlendPoint(AnimationRootNode? node, float pos, int atIndex = unchecked((int)(-1)), string name = "")
     {
         var __mb = __mb_add_blend_point;
         if (__mb == 0)
@@ -8504,17 +8506,17 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
 
     public enum BlendModeEnum : long
     {
-        BLEND_MODE_INTERPOLATED = 0,
-        BLEND_MODE_DISCRETE = 1,
-        BLEND_MODE_DISCRETE_CARRY = 2,
+        Interpolated = 0,
+        Discrete = 1,
+        DiscreteCarry = 2,
     }
 
     public enum SyncModeEnum : long
     {
-        SYNC_MODE_NONE = 0,
-        SYNC_MODE_INDEPENDENT = 1,
-        SYNC_MODE_CYCLIC_MUTABLE = 2,
-        SYNC_MODE_CYCLIC_CONSTANT = 3,
+        None = 0,
+        Independent = 1,
+        CyclicMutable = 2,
+        CyclicConstant = 3,
     }
 
     public bool AutoTriangles
@@ -8578,7 +8580,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_add_blend_point;
-    public void AddBlendPoint(AnimationRootNode? node, Vector2 pos, int atIndex, string name)
+    public void AddBlendPoint(AnimationRootNode? node, Vector2 pos, int atIndex = unchecked((int)(-1)), string name = "")
     {
         var __mb = __mb_add_blend_point;
         if (__mb == 0)
@@ -8775,7 +8777,7 @@ public unsafe partial class AnimationNodeBlendSpace2D : AnimationRootNode
     }
 
     private static nint __mb_add_triangle;
-    public void AddTriangle(int x, int y, int z, int atIndex)
+    public void AddTriangle(int x, int y, int z, int atIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_add_triangle;
         if (__mb == 0)
@@ -9176,7 +9178,7 @@ public unsafe partial class AnimationNodeBlendTree : AnimationRootNode
     }
 
     private static nint __mb_add_node;
-    public void AddNode(string name, AnimationNode? node, Vector2 position)
+    public void AddNode(string name, AnimationNode? node, Vector2 position = default)
     {
         var __mb = __mb_add_node;
         if (__mb == 0)
@@ -9407,16 +9409,16 @@ public unsafe partial class AnimationNodeOneShot : AnimationNodeSync
 
     public enum OneShotRequest : long
     {
-        ONE_SHOT_REQUEST_NONE = 0,
-        ONE_SHOT_REQUEST_FIRE = 1,
-        ONE_SHOT_REQUEST_ABORT = 2,
-        ONE_SHOT_REQUEST_FADE_OUT = 3,
+        None = 0,
+        Fire = 1,
+        Abort = 2,
+        FadeOut = 3,
     }
 
     public enum MixModeEnum : long
     {
-        MIX_MODE_BLEND = 0,
-        MIX_MODE_ADD = 1,
+        Blend = 0,
+        Add = 1,
     }
 
     public AnimationNodeOneShot.MixModeEnum MixMode
@@ -9811,9 +9813,9 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
 
     public enum StateMachineTypeEnum : long
     {
-        STATE_MACHINE_TYPE_ROOT = 0,
-        STATE_MACHINE_TYPE_NESTED = 1,
-        STATE_MACHINE_TYPE_GROUPED = 2,
+        Root = 0,
+        Nested = 1,
+        Grouped = 2,
     }
 
     public AnimationNodeStateMachine.StateMachineTypeEnum StateMachineType
@@ -9835,7 +9837,7 @@ public unsafe partial class AnimationNodeStateMachine : AnimationRootNode
     }
 
     private static nint __mb_add_node;
-    public void AddNode(string name, AnimationNode? node, Vector2 position)
+    public void AddNode(string name, AnimationNode? node, Vector2 position = default)
     {
         var __mb = __mb_add_node;
         if (__mb == 0)
@@ -10289,7 +10291,7 @@ public unsafe partial class AnimationNodeStateMachinePlayback : Resource
     }
 
     private static nint __mb_travel;
-    public void Travel(string toNode, bool resetOnTeleport)
+    public void Travel(string toNode, bool resetOnTeleport = true)
     {
         var __mb = __mb_travel;
         if (__mb == 0)
@@ -10307,7 +10309,7 @@ public unsafe partial class AnimationNodeStateMachinePlayback : Resource
     }
 
     private static nint __mb_start;
-    public void Start(string node, bool reset)
+    public void Start(string node, bool reset = true)
     {
         var __mb = __mb_start;
         if (__mb == 0)
@@ -10512,16 +10514,16 @@ public unsafe partial class AnimationNodeStateMachineTransition : Resource
 
     public enum SwitchModeEnum : long
     {
-        SWITCH_MODE_IMMEDIATE = 0,
-        SWITCH_MODE_SYNC = 1,
-        SWITCH_MODE_AT_END = 2,
+        Immediate = 0,
+        Sync = 1,
+        AtEnd = 2,
     }
 
     public enum AdvanceModeEnum : long
     {
-        ADVANCE_MODE_DISABLED = 0,
-        ADVANCE_MODE_ENABLED = 1,
-        ADVANCE_MODE_AUTO = 2,
+        Disabled = 0,
+        Enabled = 1,
+        Auto = 2,
     }
 
     public float XfadeTime
@@ -11235,15 +11237,15 @@ public unsafe partial class AnimationPlayer : AnimationMixer
 
     public enum AnimationProcessCallback : long
     {
-        ANIMATION_PROCESS_PHYSICS = 0,
-        ANIMATION_PROCESS_IDLE = 1,
-        ANIMATION_PROCESS_MANUAL = 2,
+        Physics = 0,
+        Idle = 1,
+        Manual = 2,
     }
 
     public enum AnimationMethodCallMode : long
     {
-        ANIMATION_METHOD_CALL_DEFERRED = 0,
-        ANIMATION_METHOD_CALL_IMMEDIATE = 1,
+        Deferred = 0,
+        Immediate = 1,
     }
 
     public string CurrentAnimation
@@ -11542,7 +11544,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_play;
-    public void Play(string name, double customBlend, float customSpeed, bool fromEnd)
+    public void Play(string name = "", double customBlend = -1, float customSpeed = 1.0f, bool fromEnd = false)
     {
         var __mb = __mb_play;
         if (__mb == 0)
@@ -11564,7 +11566,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_play_section_with_markers;
-    public void PlaySectionWithMarkers(string name, string startMarker, string endMarker, double customBlend, float customSpeed, bool fromEnd)
+    public void PlaySectionWithMarkers(string name = "", string startMarker = "", string endMarker = "", double customBlend = -1, float customSpeed = 1.0f, bool fromEnd = false)
     {
         var __mb = __mb_play_section_with_markers;
         if (__mb == 0)
@@ -11590,7 +11592,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_play_section;
-    public void PlaySection(string name, double startTime, double endTime, double customBlend, float customSpeed, bool fromEnd)
+    public void PlaySection(string name = "", double startTime = -1, double endTime = -1, double customBlend = -1, float customSpeed = 1.0f, bool fromEnd = false)
     {
         var __mb = __mb_play_section;
         if (__mb == 0)
@@ -11616,7 +11618,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_play_backwards;
-    public void PlayBackwards(string name, double customBlend)
+    public void PlayBackwards(string name = "", double customBlend = -1)
     {
         var __mb = __mb_play_backwards;
         if (__mb == 0)
@@ -11634,7 +11636,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_play_section_with_markers_backwards;
-    public void PlaySectionWithMarkersBackwards(string name, string startMarker, string endMarker, double customBlend)
+    public void PlaySectionWithMarkersBackwards(string name = "", string startMarker = "", string endMarker = "", double customBlend = -1)
     {
         var __mb = __mb_play_section_with_markers_backwards;
         if (__mb == 0)
@@ -11656,7 +11658,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_play_section_backwards;
-    public void PlaySectionBackwards(string name, double startTime, double endTime, double customBlend)
+    public void PlaySectionBackwards(string name = "", double startTime = -1, double endTime = -1, double customBlend = -1)
     {
         var __mb = __mb_play_section_backwards;
         if (__mb == 0)
@@ -11678,7 +11680,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_play_with_capture;
-    public void PlayWithCapture(string name, double duration, double customBlend, float customSpeed, bool fromEnd, Tween.TransitionType transType, Tween.EaseType easeType)
+    public void PlayWithCapture(string name = "", double duration = -1.0, double customBlend = -1, float customSpeed = 1.0f, bool fromEnd = false, Tween.TransitionType transType = (Tween.TransitionType)(0), Tween.EaseType easeType = (Tween.EaseType)(0))
     {
         var __mb = __mb_play_with_capture;
         if (__mb == 0)
@@ -11719,7 +11721,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_stop;
-    public void Stop(bool keepState)
+    public void Stop(bool keepState = false)
     {
         var __mb = __mb_stop;
         if (__mb == 0)
@@ -12009,7 +12011,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_set_section_with_markers;
-    public void SetSectionWithMarkers(string startMarker, string endMarker)
+    public void SetSectionWithMarkers(string startMarker = "", string endMarker = "")
     {
         var __mb = __mb_set_section_with_markers;
         if (__mb == 0)
@@ -12027,7 +12029,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_set_section;
-    public void SetSection(double startTime, double endTime)
+    public void SetSection(double startTime = -1, double endTime = -1)
     {
         var __mb = __mb_set_section;
         if (__mb == 0)
@@ -12103,7 +12105,7 @@ public unsafe partial class AnimationPlayer : AnimationMixer
     }
 
     private static nint __mb_seek;
-    public void Seek(double seconds, bool update, bool updateOnly)
+    public void Seek(double seconds, bool update = false, bool updateOnly = false)
     {
         var __mb = __mb_seek;
         if (__mb == 0)
@@ -12237,9 +12239,9 @@ public unsafe partial class AnimationTree : AnimationMixer
 
     public enum AnimationProcessCallback : long
     {
-        ANIMATION_PROCESS_PHYSICS = 0,
-        ANIMATION_PROCESS_IDLE = 1,
-        ANIMATION_PROCESS_MANUAL = 2,
+        Physics = 0,
+        Idle = 1,
+        Manual = 2,
     }
 
     public AnimationRootNode? TreeRoot
@@ -12396,11 +12398,11 @@ public unsafe partial class Area2D : CollisionObject2D
 
     public enum SpaceOverride : long
     {
-        SPACE_OVERRIDE_DISABLED = 0,
-        SPACE_OVERRIDE_COMBINE = 1,
-        SPACE_OVERRIDE_COMBINE_REPLACE = 2,
-        SPACE_OVERRIDE_REPLACE = 3,
-        SPACE_OVERRIDE_REPLACE_COMBINE = 4,
+        Disabled = 0,
+        Combine = 1,
+        CombineReplace = 2,
+        Replace = 3,
+        ReplaceCombine = 4,
     }
 
     public bool Monitoring
@@ -13066,11 +13068,11 @@ public unsafe partial class Area3D : CollisionObject3D
 
     public enum SpaceOverride : long
     {
-        SPACE_OVERRIDE_DISABLED = 0,
-        SPACE_OVERRIDE_COMBINE = 1,
-        SPACE_OVERRIDE_COMBINE_REPLACE = 2,
-        SPACE_OVERRIDE_REPLACE = 3,
-        SPACE_OVERRIDE_REPLACE_COMBINE = 4,
+        Disabled = 0,
+        Combine = 1,
+        CombineReplace = 2,
+        Replace = 3,
+        ReplaceCombine = 4,
     }
 
     public bool Monitoring
@@ -14256,7 +14258,7 @@ public unsafe partial class ArrayMesh : Mesh
     }
 
     private static nint __mb_add_surface_from_arrays;
-    public void AddSurfaceFromArrays(Mesh.PrimitiveType primitive, Godot.Collections.Array arrays, Godot.Collections.Array blendShapes, Godot.Collections.Dictionary lods, Mesh.ArrayFormat flags)
+    public void AddSurfaceFromArrays(Mesh.PrimitiveType primitive, Godot.Collections.Array arrays, Godot.Collections.Array blendShapes, Godot.Collections.Dictionary lods, Mesh.ArrayFormat flags = (Mesh.ArrayFormat)(0))
     {
         var __mb = __mb_add_surface_from_arrays;
         if (__mb == 0)
@@ -14553,17 +14555,17 @@ public unsafe partial class AspectRatioContainer : Container
 
     public enum StretchModeEnum : long
     {
-        STRETCH_WIDTH_CONTROLS_HEIGHT = 0,
-        STRETCH_HEIGHT_CONTROLS_WIDTH = 1,
-        STRETCH_FIT = 2,
-        STRETCH_COVER = 3,
+        WidthControlsHeight = 0,
+        HeightControlsWidth = 1,
+        Fit = 2,
+        Cover = 3,
     }
 
     public enum AlignmentMode : long
     {
-        ALIGNMENT_BEGIN = 0,
-        ALIGNMENT_CENTER = 1,
-        ALIGNMENT_END = 2,
+        Begin = 0,
+        Center = 1,
+        End = 2,
     }
 
     public float Ratio
@@ -16258,11 +16260,11 @@ public unsafe partial class AudioEffectDistortion : AudioEffect
 
     public enum ModeEnum : long
     {
-        MODE_CLIP = 0,
-        MODE_ATAN = 1,
-        MODE_LOFI = 2,
-        MODE_OVERDRIVE = 3,
-        MODE_WAVESHAPE = 4,
+        Clip = 0,
+        Atan = 1,
+        Lofi = 2,
+        Overdrive = 3,
+        Waveshape = 4,
     }
 
     public AudioEffectDistortion.ModeEnum Mode
@@ -16553,10 +16555,10 @@ public unsafe partial class AudioEffectFilter : AudioEffect
 
     public enum FilterDB : long
     {
-        FILTER_6DB = 0,
-        FILTER_12DB = 1,
-        FILTER_18DB = 2,
-        FILTER_24DB = 3,
+        Filter6db = 0,
+        Filter12db = 1,
+        Filter18db = 2,
+        Filter24db = 3,
     }
 
     public float CutoffHz
@@ -17315,12 +17317,12 @@ public unsafe partial class AudioEffectPitchShift : AudioEffect
 
     public enum FFTSize : long
     {
-        FFT_SIZE_256 = 0,
-        FFT_SIZE_512 = 1,
-        FFT_SIZE_1024 = 2,
-        FFT_SIZE_2048 = 3,
-        FFT_SIZE_4096 = 4,
-        FFT_SIZE_MAX = 5,
+        Size256 = 0,
+        Size512 = 1,
+        Size1024 = 2,
+        Size2048 = 3,
+        Size4096 = 4,
+        Max = 5,
     }
 
     public float PitchScale
@@ -17845,12 +17847,12 @@ public unsafe partial class AudioEffectSpectrumAnalyzer : AudioEffect
 
     public enum FFTSize : long
     {
-        FFT_SIZE_256 = 0,
-        FFT_SIZE_512 = 1,
-        FFT_SIZE_1024 = 2,
-        FFT_SIZE_2048 = 3,
-        FFT_SIZE_4096 = 4,
-        FFT_SIZE_MAX = 5,
+        Size256 = 0,
+        Size512 = 1,
+        Size1024 = 2,
+        Size2048 = 3,
+        Size4096 = 4,
+        Max = 5,
     }
 
     public float BufferLength
@@ -17934,12 +17936,12 @@ public unsafe partial class AudioEffectSpectrumAnalyzerInstance : AudioEffectIns
 
     public enum MagnitudeMode : long
     {
-        MAGNITUDE_AVERAGE = 0,
-        MAGNITUDE_MAX = 1,
+        Average = 0,
+        Max = 1,
     }
 
     private static nint __mb_get_magnitude_for_frequency_range;
-    public Vector2 GetMagnitudeForFrequencyRange(float fromHz, float toHz, AudioEffectSpectrumAnalyzerInstance.MagnitudeMode mode)
+    public Vector2 GetMagnitudeForFrequencyRange(float fromHz, float toHz, AudioEffectSpectrumAnalyzerInstance.MagnitudeMode mode = (AudioEffectSpectrumAnalyzerInstance.MagnitudeMode)(1))
     {
         var __mb = __mb_get_magnitude_for_frequency_range;
         if (__mb == 0)
@@ -18144,9 +18146,9 @@ public unsafe partial class AudioListener3D : Node3D
 
     public enum DopplerTrackingEnum : long
     {
-        DOPPLER_TRACKING_DISABLED = 0,
-        DOPPLER_TRACKING_IDLE_STEP = 1,
-        DOPPLER_TRACKING_PHYSICS_STEP = 2,
+        Disabled = 0,
+        IdleStep = 1,
+        PhysicsStep = 2,
     }
 
     public AudioListener3D.DopplerTrackingEnum DopplerTracking
@@ -18263,60 +18265,57 @@ public unsafe partial class AudioSamplePlayback : RefCounted
     }
 }
 
-public unsafe partial class AudioServer : GodotObject
+public static unsafe partial class AudioServer
 {
-    internal AudioServer(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public AudioServer() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "AudioServer");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("AudioServer");
 
-    private static AudioServer? _singleton;
-    public static AudioServer Singleton => _singleton ??= (AudioServer)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("AudioServer"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum SpeakerMode : long
     {
-        SPEAKER_MODE_STEREO = 0,
-        SPEAKER_SURROUND_31 = 1,
-        SPEAKER_SURROUND_51 = 2,
-        SPEAKER_SURROUND_71 = 3,
+        ModeStereo = 0,
+        Surround31 = 1,
+        Surround51 = 2,
+        Surround71 = 3,
     }
 
     public enum PlaybackType : long
     {
-        PLAYBACK_TYPE_DEFAULT = 0,
-        PLAYBACK_TYPE_STREAM = 1,
-        PLAYBACK_TYPE_SAMPLE = 2,
-        PLAYBACK_TYPE_MAX = 3,
+        Default = 0,
+        Stream = 1,
+        Sample = 2,
+        Max = 3,
     }
 
-    public int BusCount
+    public static int BusCount
     {
         get => GetBusCount();
         set => SetBusCount(value);
     }
 
-    public string OutputDevice
+    public static string OutputDevice
     {
         get => GetOutputDevice();
         set => SetOutputDevice(value);
     }
 
-    public string InputDevice
+    public static string InputDevice
     {
         get => GetInputDevice();
         set => SetInputDevice(value);
     }
 
-    public float PlaybackSpeedScale
+    public static float PlaybackSpeedScale
     {
         get => GetPlaybackSpeedScale();
         set => SetPlaybackSpeedScale(value);
     }
 
     private static nint __mb_set_bus_count;
-    internal void SetBusCount(int amount)
+    internal static void SetBusCount(int amount)
     {
         var __mb = __mb_set_bus_count;
         if (__mb == 0)
@@ -18328,11 +18327,11 @@ public unsafe partial class AudioServer : GodotObject
         long __a0 = unchecked((long)amount);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bus_count;
-    internal int GetBusCount()
+    internal static int GetBusCount()
     {
         var __mb = __mb_get_bus_count;
         if (__mb == 0)
@@ -18342,12 +18341,12 @@ public unsafe partial class AudioServer : GodotObject
             __mb_get_bus_count = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_remove_bus;
-    public void RemoveBus(int index)
+    public static void RemoveBus(int index)
     {
         var __mb = __mb_remove_bus;
         if (__mb == 0)
@@ -18359,11 +18358,11 @@ public unsafe partial class AudioServer : GodotObject
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_add_bus;
-    public void AddBus(int atPosition)
+    public static void AddBus(int atPosition = unchecked((int)(-1)))
     {
         var __mb = __mb_add_bus;
         if (__mb == 0)
@@ -18375,11 +18374,11 @@ public unsafe partial class AudioServer : GodotObject
         long __a0 = unchecked((long)atPosition);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_move_bus;
-    public void MoveBus(int index, int toIndex)
+    public static void MoveBus(int index, int toIndex)
     {
         var __mb = __mb_move_bus;
         if (__mb == 0)
@@ -18393,11 +18392,11 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_bus_name;
-    public void SetBusName(int busIdx, string name)
+    public static void SetBusName(int busIdx, string name)
     {
         var __mb = __mb_set_bus_name;
         if (__mb == 0)
@@ -18411,12 +18410,12 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_get_bus_name;
-    public string GetBusName(int busIdx)
+    public static string GetBusName(int busIdx)
     {
         var __mb = __mb_get_bus_name;
         if (__mb == 0)
@@ -18429,12 +18428,12 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_bus_index;
-    public int GetBusIndex(string busName)
+    public static int GetBusIndex(string busName)
     {
         var __mb = __mb_get_bus_index;
         if (__mb == 0)
@@ -18447,12 +18446,12 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_bus_channels;
-    public int GetBusChannels(int busIdx)
+    public static int GetBusChannels(int busIdx)
     {
         var __mb = __mb_get_bus_channels;
         if (__mb == 0)
@@ -18465,12 +18464,12 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_bus_volume_db;
-    public void SetBusVolumeDb(int busIdx, float volumeDb)
+    public static void SetBusVolumeDb(int busIdx, float volumeDb)
     {
         var __mb = __mb_set_bus_volume_db;
         if (__mb == 0)
@@ -18484,11 +18483,11 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bus_volume_db;
-    public float GetBusVolumeDb(int busIdx)
+    public static float GetBusVolumeDb(int busIdx)
     {
         var __mb = __mb_get_bus_volume_db;
         if (__mb == 0)
@@ -18501,12 +18500,12 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_bus_volume_linear;
-    public void SetBusVolumeLinear(int busIdx, float volumeLinear)
+    public static void SetBusVolumeLinear(int busIdx, float volumeLinear)
     {
         var __mb = __mb_set_bus_volume_linear;
         if (__mb == 0)
@@ -18520,11 +18519,11 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bus_volume_linear;
-    public float GetBusVolumeLinear(int busIdx)
+    public static float GetBusVolumeLinear(int busIdx)
     {
         var __mb = __mb_get_bus_volume_linear;
         if (__mb == 0)
@@ -18537,12 +18536,12 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_bus_send;
-    public void SetBusSend(int busIdx, string send)
+    public static void SetBusSend(int busIdx, string send)
     {
         var __mb = __mb_set_bus_send;
         if (__mb == 0)
@@ -18556,11 +18555,11 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bus_send;
-    public string GetBusSend(int busIdx)
+    public static string GetBusSend(int busIdx)
     {
         var __mb = __mb_get_bus_send;
         if (__mb == 0)
@@ -18573,12 +18572,12 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return StringNames.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_bus_solo;
-    public void SetBusSolo(int busIdx, bool enable)
+    public static void SetBusSolo(int busIdx, bool enable)
     {
         var __mb = __mb_set_bus_solo;
         if (__mb == 0)
@@ -18592,11 +18591,11 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_bus_solo;
-    public bool IsBusSolo(int busIdx)
+    public static bool IsBusSolo(int busIdx)
     {
         var __mb = __mb_is_bus_solo;
         if (__mb == 0)
@@ -18609,12 +18608,12 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_bus_mute;
-    public void SetBusMute(int busIdx, bool enable)
+    public static void SetBusMute(int busIdx, bool enable)
     {
         var __mb = __mb_set_bus_mute;
         if (__mb == 0)
@@ -18628,11 +18627,11 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_bus_mute;
-    public bool IsBusMute(int busIdx)
+    public static bool IsBusMute(int busIdx)
     {
         var __mb = __mb_is_bus_mute;
         if (__mb == 0)
@@ -18645,12 +18644,12 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_bus_bypass_effects;
-    public void SetBusBypassEffects(int busIdx, bool enable)
+    public static void SetBusBypassEffects(int busIdx, bool enable)
     {
         var __mb = __mb_set_bus_bypass_effects;
         if (__mb == 0)
@@ -18664,11 +18663,11 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_bus_bypassing_effects;
-    public bool IsBusBypassingEffects(int busIdx)
+    public static bool IsBusBypassingEffects(int busIdx)
     {
         var __mb = __mb_is_bus_bypassing_effects;
         if (__mb == 0)
@@ -18681,12 +18680,12 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_add_bus_effect;
-    public void AddBusEffect(int busIdx, AudioEffect? effect, int atPosition)
+    public static void AddBusEffect(int busIdx, AudioEffect? effect, int atPosition = unchecked((int)(-1)))
     {
         var __mb = __mb_add_bus_effect;
         if (__mb == 0)
@@ -18702,11 +18701,11 @@ public unsafe partial class AudioServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_bus_effect;
-    public void RemoveBusEffect(int busIdx, int effectIdx)
+    public static void RemoveBusEffect(int busIdx, int effectIdx)
     {
         var __mb = __mb_remove_bus_effect;
         if (__mb == 0)
@@ -18720,11 +18719,11 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bus_effect_count;
-    public int GetBusEffectCount(int busIdx)
+    public static int GetBusEffectCount(int busIdx)
     {
         var __mb = __mb_get_bus_effect_count;
         if (__mb == 0)
@@ -18737,12 +18736,12 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_bus_effect;
-    public AudioEffect? GetBusEffect(int busIdx, int effectIdx)
+    public static AudioEffect? GetBusEffect(int busIdx, int effectIdx)
     {
         var __mb = __mb_get_bus_effect;
         if (__mb == 0)
@@ -18757,12 +18756,12 @@ public unsafe partial class AudioServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (AudioEffect?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_bus_effect_instance;
-    public AudioEffectInstance? GetBusEffectInstance(int busIdx, int effectIdx, int channel)
+    public static AudioEffectInstance? GetBusEffectInstance(int busIdx, int effectIdx, int channel = unchecked((int)(0)))
     {
         var __mb = __mb_get_bus_effect_instance;
         if (__mb == 0)
@@ -18779,12 +18778,12 @@ public unsafe partial class AudioServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (AudioEffectInstance?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_swap_bus_effects;
-    public void SwapBusEffects(int busIdx, int effectIdx, int byEffectIdx)
+    public static void SwapBusEffects(int busIdx, int effectIdx, int byEffectIdx)
     {
         var __mb = __mb_swap_bus_effects;
         if (__mb == 0)
@@ -18800,11 +18799,11 @@ public unsafe partial class AudioServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_bus_effect_enabled;
-    public void SetBusEffectEnabled(int busIdx, int effectIdx, bool enabled)
+    public static void SetBusEffectEnabled(int busIdx, int effectIdx, bool enabled)
     {
         var __mb = __mb_set_bus_effect_enabled;
         if (__mb == 0)
@@ -18820,11 +18819,11 @@ public unsafe partial class AudioServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_bus_effect_enabled;
-    public bool IsBusEffectEnabled(int busIdx, int effectIdx)
+    public static bool IsBusEffectEnabled(int busIdx, int effectIdx)
     {
         var __mb = __mb_is_bus_effect_enabled;
         if (__mb == 0)
@@ -18839,12 +18838,12 @@ public unsafe partial class AudioServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_bus_peak_volume_left_db;
-    public float GetBusPeakVolumeLeftDb(int busIdx, int channel)
+    public static float GetBusPeakVolumeLeftDb(int busIdx, int channel)
     {
         var __mb = __mb_get_bus_peak_volume_left_db;
         if (__mb == 0)
@@ -18859,12 +18858,12 @@ public unsafe partial class AudioServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_bus_peak_volume_right_db;
-    public float GetBusPeakVolumeRightDb(int busIdx, int channel)
+    public static float GetBusPeakVolumeRightDb(int busIdx, int channel)
     {
         var __mb = __mb_get_bus_peak_volume_right_db;
         if (__mb == 0)
@@ -18879,12 +18878,12 @@ public unsafe partial class AudioServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_playback_speed_scale;
-    internal void SetPlaybackSpeedScale(float scale)
+    internal static void SetPlaybackSpeedScale(float scale)
     {
         var __mb = __mb_set_playback_speed_scale;
         if (__mb == 0)
@@ -18896,11 +18895,11 @@ public unsafe partial class AudioServer : GodotObject
         double __a0 = scale;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_playback_speed_scale;
-    internal float GetPlaybackSpeedScale()
+    internal static float GetPlaybackSpeedScale()
     {
         var __mb = __mb_get_playback_speed_scale;
         if (__mb == 0)
@@ -18910,12 +18909,12 @@ public unsafe partial class AudioServer : GodotObject
             __mb_get_playback_speed_scale = __mb;
         }
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_lock;
-    public void Lock()
+    public static void Lock()
     {
         var __mb = __mb_lock;
         if (__mb == 0)
@@ -18924,11 +18923,11 @@ public unsafe partial class AudioServer : GodotObject
             if (__mb == 0) throw new MissingMethodException("AudioServer.lock is not available in this engine build.");
             __mb_lock = __mb;
         }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_unlock;
-    public void Unlock()
+    public static void Unlock()
     {
         var __mb = __mb_unlock;
         if (__mb == 0)
@@ -18937,11 +18936,11 @@ public unsafe partial class AudioServer : GodotObject
             if (__mb == 0) throw new MissingMethodException("AudioServer.unlock is not available in this engine build.");
             __mb_unlock = __mb;
         }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_get_speaker_mode;
-    public AudioServer.SpeakerMode GetSpeakerMode()
+    public static AudioServer.SpeakerMode GetSpeakerMode()
     {
         var __mb = __mb_get_speaker_mode;
         if (__mb == 0)
@@ -18951,12 +18950,12 @@ public unsafe partial class AudioServer : GodotObject
             __mb_get_speaker_mode = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (AudioServer.SpeakerMode)__ret;
     }
 
     private static nint __mb_get_mix_rate;
-    public float GetMixRate()
+    public static float GetMixRate()
     {
         var __mb = __mb_get_mix_rate;
         if (__mb == 0)
@@ -18966,12 +18965,12 @@ public unsafe partial class AudioServer : GodotObject
             __mb_get_mix_rate = __mb;
         }
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_input_mix_rate;
-    public float GetInputMixRate()
+    public static float GetInputMixRate()
     {
         var __mb = __mb_get_input_mix_rate;
         if (__mb == 0)
@@ -18981,12 +18980,12 @@ public unsafe partial class AudioServer : GodotObject
             __mb_get_input_mix_rate = __mb;
         }
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_driver_name;
-    public string GetDriverName()
+    public static string GetDriverName()
     {
         var __mb = __mb_get_driver_name;
         if (__mb == 0)
@@ -18996,12 +18995,12 @@ public unsafe partial class AudioServer : GodotObject
             __mb_get_driver_name = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_output_device;
-    internal string GetOutputDevice()
+    internal static string GetOutputDevice()
     {
         var __mb = __mb_get_output_device;
         if (__mb == 0)
@@ -19011,12 +19010,12 @@ public unsafe partial class AudioServer : GodotObject
             __mb_get_output_device = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_output_device;
-    internal void SetOutputDevice(string name)
+    internal static void SetOutputDevice(string name)
     {
         var __mb = __mb_set_output_device;
         if (__mb == 0)
@@ -19028,12 +19027,12 @@ public unsafe partial class AudioServer : GodotObject
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_time_to_next_mix;
-    public double GetTimeToNextMix()
+    public static double GetTimeToNextMix()
     {
         var __mb = __mb_get_time_to_next_mix;
         if (__mb == 0)
@@ -19043,12 +19042,12 @@ public unsafe partial class AudioServer : GodotObject
             __mb_get_time_to_next_mix = __mb;
         }
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (double)__ret;
     }
 
     private static nint __mb_get_time_since_last_mix;
-    public double GetTimeSinceLastMix()
+    public static double GetTimeSinceLastMix()
     {
         var __mb = __mb_get_time_since_last_mix;
         if (__mb == 0)
@@ -19058,12 +19057,12 @@ public unsafe partial class AudioServer : GodotObject
             __mb_get_time_since_last_mix = __mb;
         }
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (double)__ret;
     }
 
     private static nint __mb_get_output_latency;
-    public double GetOutputLatency()
+    public static double GetOutputLatency()
     {
         var __mb = __mb_get_output_latency;
         if (__mb == 0)
@@ -19073,12 +19072,12 @@ public unsafe partial class AudioServer : GodotObject
             __mb_get_output_latency = __mb;
         }
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (double)__ret;
     }
 
     private static nint __mb_get_input_device;
-    internal string GetInputDevice()
+    internal static string GetInputDevice()
     {
         var __mb = __mb_get_input_device;
         if (__mb == 0)
@@ -19088,12 +19087,12 @@ public unsafe partial class AudioServer : GodotObject
             __mb_get_input_device = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_input_device;
-    internal void SetInputDevice(string name)
+    internal static void SetInputDevice(string name)
     {
         var __mb = __mb_set_input_device;
         if (__mb == 0)
@@ -19105,12 +19104,12 @@ public unsafe partial class AudioServer : GodotObject
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_set_input_device_active;
-    public Error SetInputDeviceActive(bool active)
+    public static Error SetInputDeviceActive(bool active)
     {
         var __mb = __mb_set_input_device_active;
         if (__mb == 0)
@@ -19123,12 +19122,12 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_get_input_frames_available;
-    public int GetInputFramesAvailable()
+    public static int GetInputFramesAvailable()
     {
         var __mb = __mb_get_input_frames_available;
         if (__mb == 0)
@@ -19138,12 +19137,12 @@ public unsafe partial class AudioServer : GodotObject
             __mb_get_input_frames_available = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_input_buffer_length_frames;
-    public int GetInputBufferLengthFrames()
+    public static int GetInputBufferLengthFrames()
     {
         var __mb = __mb_get_input_buffer_length_frames;
         if (__mb == 0)
@@ -19153,12 +19152,12 @@ public unsafe partial class AudioServer : GodotObject
             __mb_get_input_buffer_length_frames = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_bus_layout;
-    public void SetBusLayout(AudioBusLayout? busLayout)
+    public static void SetBusLayout(AudioBusLayout? busLayout)
     {
         var __mb = __mb_set_bus_layout;
         if (__mb == 0)
@@ -19170,11 +19169,11 @@ public unsafe partial class AudioServer : GodotObject
         nint __a0 = busLayout?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_generate_bus_layout;
-    public AudioBusLayout? GenerateBusLayout()
+    public static AudioBusLayout? GenerateBusLayout()
     {
         var __mb = __mb_generate_bus_layout;
         if (__mb == 0)
@@ -19184,12 +19183,12 @@ public unsafe partial class AudioServer : GodotObject
             __mb_generate_bus_layout = __mb;
         }
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (AudioBusLayout?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_enable_tagging_used_audio_streams;
-    public void SetEnableTaggingUsedAudioStreams(bool enable)
+    public static void SetEnableTaggingUsedAudioStreams(bool enable)
     {
         var __mb = __mb_set_enable_tagging_used_audio_streams;
         if (__mb == 0)
@@ -19201,11 +19200,11 @@ public unsafe partial class AudioServer : GodotObject
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_stream_registered_as_sample;
-    public bool IsStreamRegisteredAsSample(AudioStream? stream)
+    public static bool IsStreamRegisteredAsSample(AudioStream? stream)
     {
         var __mb = __mb_is_stream_registered_as_sample;
         if (__mb == 0)
@@ -19218,12 +19217,12 @@ public unsafe partial class AudioServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_register_stream_as_sample;
-    public void RegisterStreamAsSample(AudioStream? stream)
+    public static void RegisterStreamAsSample(AudioStream? stream)
     {
         var __mb = __mb_register_stream_as_sample;
         if (__mb == 0)
@@ -19235,7 +19234,7 @@ public unsafe partial class AudioServer : GodotObject
         nint __a0 = stream?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 }
 
@@ -19428,10 +19427,10 @@ public unsafe partial class AudioStreamGenerator : AudioStream
 
     public enum AudioStreamGeneratorMixRate : long
     {
-        MIX_RATE_OUTPUT = 0,
-        MIX_RATE_INPUT = 1,
-        MIX_RATE_CUSTOM = 2,
-        MIX_RATE_MAX = 3,
+        Output = 0,
+        Input = 1,
+        Custom = 2,
+        Max = 3,
     }
 
     public AudioStreamGenerator.AudioStreamGeneratorMixRate MixRateMode
@@ -19641,33 +19640,33 @@ public unsafe partial class AudioStreamInteractive : AudioStream
 
     public enum TransitionFromTime : long
     {
-        TRANSITION_FROM_TIME_IMMEDIATE = 0,
-        TRANSITION_FROM_TIME_NEXT_BEAT = 1,
-        TRANSITION_FROM_TIME_NEXT_BAR = 2,
-        TRANSITION_FROM_TIME_END = 3,
+        Immediate = 0,
+        NextBeat = 1,
+        NextBar = 2,
+        End = 3,
     }
 
     public enum TransitionToTime : long
     {
-        TRANSITION_TO_TIME_SAME_POSITION = 0,
-        TRANSITION_TO_TIME_START = 1,
-        TRANSITION_TO_TIME_PREVIOUS_POSITION = 2,
+        SamePosition = 0,
+        Start = 1,
+        PreviousPosition = 2,
     }
 
     public enum FadeMode : long
     {
-        FADE_DISABLED = 0,
-        FADE_IN = 1,
-        FADE_OUT = 2,
-        FADE_CROSS = 3,
-        FADE_AUTOMATIC = 4,
+        Disabled = 0,
+        In = 1,
+        Out = 2,
+        Cross = 3,
+        Automatic = 4,
     }
 
     public enum AutoAdvanceMode : long
     {
-        AUTO_ADVANCE_DISABLED = 0,
-        AUTO_ADVANCE_ENABLED = 1,
-        AUTO_ADVANCE_RETURN_TO_HOLD = 2,
+        Disabled = 0,
+        Enabled = 1,
+        ReturnToHold = 2,
     }
 
     public int ClipCount
@@ -19889,7 +19888,7 @@ public unsafe partial class AudioStreamInteractive : AudioStream
     }
 
     private static nint __mb_add_transition;
-    public void AddTransition(int fromClip, int toClip, AudioStreamInteractive.TransitionFromTime fromTime, AudioStreamInteractive.TransitionToTime toTime, AudioStreamInteractive.FadeMode fadeMode, float fadeBeats, bool useFillerClip, int fillerClip, bool holdPrevious)
+    public void AddTransition(int fromClip, int toClip, AudioStreamInteractive.TransitionFromTime fromTime, AudioStreamInteractive.TransitionToTime toTime, AudioStreamInteractive.FadeMode fadeMode, float fadeBeats, bool useFillerClip = false, int fillerClip = unchecked((int)(-1)), bool holdPrevious = false)
     {
         var __mb = __mb_add_transition;
         if (__mb == 0)
@@ -20652,7 +20651,7 @@ public unsafe partial class AudioStreamPlayback : RefCounted
     }
 
     private static nint __mb_start;
-    public void Start(double fromPos)
+    public void Start(double fromPos = 0.0)
     {
         var __mb = __mb_start;
         if (__mb == 0)
@@ -20668,7 +20667,7 @@ public unsafe partial class AudioStreamPlayback : RefCounted
     }
 
     private static nint __mb_seek;
-    public void Seek(double time)
+    public void Seek(double time = 0.0)
     {
         var __mb = __mb_seek;
         if (__mb == 0)
@@ -20883,7 +20882,7 @@ public unsafe partial class AudioStreamPlaybackPolyphonic : AudioStreamPlayback
     internal AudioStreamPlaybackPolyphonic(nint ptr, bool rc) : base(ptr, rc) { }
 
     private static nint __mb_play_stream;
-    public long PlayStream(AudioStream? stream, float fromOffset, float volumeDb, float pitchScale, AudioServer.PlaybackType playbackType, string bus)
+    public long PlayStream(AudioStream? stream, float fromOffset = 0f, float volumeDb = 0f, float pitchScale = 1.0f, AudioServer.PlaybackType playbackType = (AudioServer.PlaybackType)(0), string bus = "Master")
     {
         var __mb = __mb_play_stream;
         if (__mb == 0)
@@ -21035,9 +21034,9 @@ public unsafe partial class AudioStreamPlayer : Node
 
     public enum MixTargetEnum : long
     {
-        MIX_TARGET_STEREO = 0,
-        MIX_TARGET_SURROUND = 1,
-        MIX_TARGET_CENTER = 2,
+        Stereo = 0,
+        Surround = 1,
+        Center = 2,
     }
 
     public AudioStream? Stream
@@ -21231,7 +21230,7 @@ public unsafe partial class AudioStreamPlayer : Node
     }
 
     private static nint __mb_play;
-    public void Play(float fromPosition)
+    public void Play(float fromPosition = 0.0f)
     {
         var __mb = __mb_play;
         if (__mb == 0)
@@ -21756,7 +21755,7 @@ public unsafe partial class AudioStreamPlayer2D : Node2D
     }
 
     private static nint __mb_play;
-    public void Play(float fromPosition)
+    public void Play(float fromPosition = 0.0f)
     {
         var __mb = __mb_play;
         if (__mb == 0)
@@ -22167,17 +22166,17 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
 
     public enum AttenuationModelEnum : long
     {
-        ATTENUATION_INVERSE_DISTANCE = 0,
-        ATTENUATION_INVERSE_SQUARE_DISTANCE = 1,
-        ATTENUATION_LOGARITHMIC = 2,
-        ATTENUATION_DISABLED = 3,
+        InverseDistance = 0,
+        InverseSquareDistance = 1,
+        Logarithmic = 2,
+        Disabled = 3,
     }
 
     public enum DopplerTrackingEnum : long
     {
-        DOPPLER_TRACKING_DISABLED = 0,
-        DOPPLER_TRACKING_IDLE_STEP = 1,
-        DOPPLER_TRACKING_PHYSICS_STEP = 2,
+        Disabled = 0,
+        IdleStep = 1,
+        PhysicsStep = 2,
     }
 
     public AudioStream? Stream
@@ -22499,7 +22498,7 @@ public unsafe partial class AudioStreamPlayer3D : Node3D
     }
 
     private static nint __mb_play;
-    public void Play(float fromPosition)
+    public void Play(float fromPosition = 0.0f)
     {
         var __mb = __mb_play;
         if (__mb == 0)
@@ -23736,9 +23735,9 @@ public unsafe partial class AudioStreamRandomizer : AudioStream
 
     public enum PlaybackModeEnum : long
     {
-        PLAYBACK_RANDOM_NO_REPEATS = 0,
-        PLAYBACK_RANDOM = 1,
-        PLAYBACK_SEQUENTIAL = 2,
+        RandomNoRepeats = 0,
+        Random = 1,
+        Sequential = 2,
     }
 
     public AudioStreamRandomizer.PlaybackModeEnum PlaybackMode
@@ -23772,7 +23771,7 @@ public unsafe partial class AudioStreamRandomizer : AudioStream
     }
 
     private static nint __mb_add_stream;
-    public void AddStream(int index, AudioStream? stream, float weight)
+    public void AddStream(int index, AudioStream? stream, float weight = 1.0f)
     {
         var __mb = __mb_add_stream;
         if (__mb == 0)
@@ -24183,18 +24182,18 @@ public unsafe partial class AudioStreamWAV : AudioStream
 
     public enum FormatEnum : long
     {
-        FORMAT_8_BITS = 0,
-        FORMAT_16_BITS = 1,
-        FORMAT_IMA_ADPCM = 2,
-        FORMAT_QOA = 3,
+        Format8Bits = 0,
+        Format16Bits = 1,
+        ImaAdpcm = 2,
+        Qoa = 3,
     }
 
     public enum LoopModeEnum : long
     {
-        LOOP_DISABLED = 0,
-        LOOP_FORWARD = 1,
-        LOOP_PINGPONG = 2,
-        LOOP_BACKWARD = 3,
+        Disabled = 0,
+        Forward = 1,
+        Pingpong = 2,
+        Backward = 3,
     }
 
     public AudioStreamWAV.FormatEnum Format

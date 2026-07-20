@@ -288,7 +288,7 @@ public unsafe partial class KinematicCollision3D : RefCounted
     }
 
     private static nint __mb_get_position;
-    public Vector3 GetPosition(int collisionIndex)
+    public Vector3 GetPosition(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_position;
         if (__mb == 0)
@@ -306,7 +306,7 @@ public unsafe partial class KinematicCollision3D : RefCounted
     }
 
     private static nint __mb_get_normal;
-    public Vector3 GetNormal(int collisionIndex)
+    public Vector3 GetNormal(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_normal;
         if (__mb == 0)
@@ -344,7 +344,7 @@ public unsafe partial class KinematicCollision3D : RefCounted
     }
 
     private static nint __mb_get_local_shape;
-    public GodotObject? GetLocalShape(int collisionIndex)
+    public GodotObject? GetLocalShape(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_local_shape;
         if (__mb == 0)
@@ -362,7 +362,7 @@ public unsafe partial class KinematicCollision3D : RefCounted
     }
 
     private static nint __mb_get_collider;
-    public GodotObject? GetCollider(int collisionIndex)
+    public GodotObject? GetCollider(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_collider;
         if (__mb == 0)
@@ -380,7 +380,7 @@ public unsafe partial class KinematicCollision3D : RefCounted
     }
 
     private static nint __mb_get_collider_id;
-    public ulong GetColliderId(int collisionIndex)
+    public ulong GetColliderId(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_collider_id;
         if (__mb == 0)
@@ -398,7 +398,7 @@ public unsafe partial class KinematicCollision3D : RefCounted
     }
 
     private static nint __mb_get_collider_rid;
-    public Rid GetColliderRid(int collisionIndex)
+    public Rid GetColliderRid(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_collider_rid;
         if (__mb == 0)
@@ -416,7 +416,7 @@ public unsafe partial class KinematicCollision3D : RefCounted
     }
 
     private static nint __mb_get_collider_shape;
-    public GodotObject? GetColliderShape(int collisionIndex)
+    public GodotObject? GetColliderShape(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_collider_shape;
         if (__mb == 0)
@@ -434,7 +434,7 @@ public unsafe partial class KinematicCollision3D : RefCounted
     }
 
     private static nint __mb_get_collider_shape_index;
-    public int GetColliderShapeIndex(int collisionIndex)
+    public int GetColliderShapeIndex(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_collider_shape_index;
         if (__mb == 0)
@@ -452,7 +452,7 @@ public unsafe partial class KinematicCollision3D : RefCounted
     }
 
     private static nint __mb_get_collider_velocity;
-    public Vector3 GetColliderVelocity(int collisionIndex)
+    public Vector3 GetColliderVelocity(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_collider_velocity;
         if (__mb == 0)

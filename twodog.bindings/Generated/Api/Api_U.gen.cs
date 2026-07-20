@@ -26,7 +26,7 @@ public unsafe partial class UDPServer : RefCounted
     }
 
     private static nint __mb_listen;
-    public Error Listen(ushort port, string bindAddress)
+    public Error Listen(ushort port, string bindAddress = "*")
     {
         var __mb = __mb_listen;
         if (__mb == 0)
@@ -221,35 +221,35 @@ public unsafe partial class UPNP : RefCounted
 
     public enum UPNPResult : long
     {
-        UPNP_RESULT_SUCCESS = 0,
-        UPNP_RESULT_NOT_AUTHORIZED = 1,
-        UPNP_RESULT_PORT_MAPPING_NOT_FOUND = 2,
-        UPNP_RESULT_INCONSISTENT_PARAMETERS = 3,
-        UPNP_RESULT_NO_SUCH_ENTRY_IN_ARRAY = 4,
-        UPNP_RESULT_ACTION_FAILED = 5,
-        UPNP_RESULT_SRC_IP_WILDCARD_NOT_PERMITTED = 6,
-        UPNP_RESULT_EXT_PORT_WILDCARD_NOT_PERMITTED = 7,
-        UPNP_RESULT_INT_PORT_WILDCARD_NOT_PERMITTED = 8,
-        UPNP_RESULT_REMOTE_HOST_MUST_BE_WILDCARD = 9,
-        UPNP_RESULT_EXT_PORT_MUST_BE_WILDCARD = 10,
-        UPNP_RESULT_NO_PORT_MAPS_AVAILABLE = 11,
-        UPNP_RESULT_CONFLICT_WITH_OTHER_MECHANISM = 12,
-        UPNP_RESULT_CONFLICT_WITH_OTHER_MAPPING = 13,
-        UPNP_RESULT_SAME_PORT_VALUES_REQUIRED = 14,
-        UPNP_RESULT_ONLY_PERMANENT_LEASE_SUPPORTED = 15,
-        UPNP_RESULT_INVALID_GATEWAY = 16,
-        UPNP_RESULT_INVALID_PORT = 17,
-        UPNP_RESULT_INVALID_PROTOCOL = 18,
-        UPNP_RESULT_INVALID_DURATION = 19,
-        UPNP_RESULT_INVALID_ARGS = 20,
-        UPNP_RESULT_INVALID_RESPONSE = 21,
-        UPNP_RESULT_INVALID_PARAM = 22,
-        UPNP_RESULT_HTTP_ERROR = 23,
-        UPNP_RESULT_SOCKET_ERROR = 24,
-        UPNP_RESULT_MEM_ALLOC_ERROR = 25,
-        UPNP_RESULT_NO_GATEWAY = 26,
-        UPNP_RESULT_NO_DEVICES = 27,
-        UPNP_RESULT_UNKNOWN_ERROR = 28,
+        Success = 0,
+        NotAuthorized = 1,
+        PortMappingNotFound = 2,
+        InconsistentParameters = 3,
+        NoSuchEntryInArray = 4,
+        ActionFailed = 5,
+        SrcIpWildcardNotPermitted = 6,
+        ExtPortWildcardNotPermitted = 7,
+        IntPortWildcardNotPermitted = 8,
+        RemoteHostMustBeWildcard = 9,
+        ExtPortMustBeWildcard = 10,
+        NoPortMapsAvailable = 11,
+        ConflictWithOtherMechanism = 12,
+        ConflictWithOtherMapping = 13,
+        SamePortValuesRequired = 14,
+        OnlyPermanentLeaseSupported = 15,
+        InvalidGateway = 16,
+        InvalidPort = 17,
+        InvalidProtocol = 18,
+        InvalidDuration = 19,
+        InvalidArgs = 20,
+        InvalidResponse = 21,
+        InvalidParam = 22,
+        HttpError = 23,
+        SocketError = 24,
+        MemAllocError = 25,
+        NoGateway = 26,
+        NoDevices = 27,
+        UnknownError = 28,
     }
 
     public string DiscoverMulticastIf
@@ -382,7 +382,7 @@ public unsafe partial class UPNP : RefCounted
     }
 
     private static nint __mb_discover;
-    public int Discover(int timeout, int ttl, string deviceFilter)
+    public int Discover(int timeout = unchecked((int)(2000)), int ttl = unchecked((int)(2)), string deviceFilter = "InternetGatewayDevice")
     {
         var __mb = __mb_discover;
         if (__mb == 0)
@@ -420,7 +420,7 @@ public unsafe partial class UPNP : RefCounted
     }
 
     private static nint __mb_add_port_mapping;
-    public int AddPortMapping(int port, int portInternal, string desc, string proto, int duration)
+    public int AddPortMapping(int port, int portInternal = unchecked((int)(0)), string desc = "", string proto = "UDP", int duration = unchecked((int)(0)))
     {
         var __mb = __mb_add_port_mapping;
         if (__mb == 0)
@@ -448,7 +448,7 @@ public unsafe partial class UPNP : RefCounted
     }
 
     private static nint __mb_delete_port_mapping;
-    public int DeletePortMapping(int port, string proto)
+    public int DeletePortMapping(int port, string proto = "UDP")
     {
         var __mb = __mb_delete_port_mapping;
         if (__mb == 0)
@@ -574,16 +574,16 @@ public unsafe partial class UPNPDevice : RefCounted
 
     public enum IGDStatus : long
     {
-        IGD_STATUS_OK = 0,
-        IGD_STATUS_HTTP_ERROR = 1,
-        IGD_STATUS_HTTP_EMPTY = 2,
-        IGD_STATUS_NO_URLS = 3,
-        IGD_STATUS_NO_IGD = 4,
-        IGD_STATUS_DISCONNECTED = 5,
-        IGD_STATUS_UNKNOWN_DEVICE = 6,
-        IGD_STATUS_INVALID_CONTROL = 7,
-        IGD_STATUS_MALLOC_ERROR = 8,
-        IGD_STATUS_UNKNOWN_ERROR = 9,
+        Ok = 0,
+        HttpError = 1,
+        HttpEmpty = 2,
+        NoUrls = 3,
+        NoIgd = 4,
+        Disconnected = 5,
+        UnknownDevice = 6,
+        InvalidControl = 7,
+        MallocError = 8,
+        UnknownError = 9,
     }
 
     public string DescriptionUrl
@@ -653,7 +653,7 @@ public unsafe partial class UPNPDevice : RefCounted
     }
 
     private static nint __mb_add_port_mapping;
-    public int AddPortMapping(int port, int portInternal, string desc, string proto, int duration)
+    public int AddPortMapping(int port, int portInternal = unchecked((int)(0)), string desc = "", string proto = "UDP", int duration = unchecked((int)(0)))
     {
         var __mb = __mb_add_port_mapping;
         if (__mb == 0)
@@ -681,7 +681,7 @@ public unsafe partial class UPNPDevice : RefCounted
     }
 
     private static nint __mb_delete_port_mapping;
-    public int DeletePortMapping(int port, string proto)
+    public int DeletePortMapping(int port, string proto = "UDP")
     {
         var __mb = __mb_delete_port_mapping;
         if (__mb == 0)
@@ -904,9 +904,9 @@ public unsafe partial class UndoRedo : GodotObject
 
     public enum MergeMode : long
     {
-        MERGE_DISABLE = 0,
-        MERGE_ENDS = 1,
-        MERGE_ALL = 2,
+        Disable = 0,
+        Ends = 1,
+        All = 2,
     }
 
     public int MaxSteps
@@ -916,7 +916,7 @@ public unsafe partial class UndoRedo : GodotObject
     }
 
     private static nint __mb_create_action;
-    public void CreateAction(string name, UndoRedo.MergeMode mergeMode, bool backwardUndoOps)
+    public void CreateAction(string name, UndoRedo.MergeMode mergeMode = (UndoRedo.MergeMode)(0), bool backwardUndoOps = false)
     {
         var __mb = __mb_create_action;
         if (__mb == 0)
@@ -937,7 +937,7 @@ public unsafe partial class UndoRedo : GodotObject
     }
 
     private static nint __mb_commit_action;
-    public void CommitAction(bool execute)
+    public void CommitAction(bool execute = true)
     {
         var __mb = __mb_commit_action;
         if (__mb == 0)
@@ -1114,7 +1114,7 @@ public unsafe partial class UndoRedo : GodotObject
     }
 
     private static nint __mb_clear_history;
-    public void ClearHistory(bool increaseVersion)
+    public void ClearHistory(bool increaseVersion = true)
     {
         var __mb = __mb_clear_history;
         if (__mb == 0)

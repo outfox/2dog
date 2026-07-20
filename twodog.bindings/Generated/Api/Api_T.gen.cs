@@ -20,7 +20,7 @@ public unsafe partial class TCPServer : SocketServer
     }
 
     private static nint __mb_listen;
-    public Error Listen(ushort port, string bindAddress)
+    public Error Listen(ushort port, string bindAddress = "*")
     {
         var __mb = __mb_listen;
         if (__mb == 0)
@@ -76,7 +76,7 @@ public unsafe partial class TLSOptions : RefCounted
     internal TLSOptions(nint ptr, bool rc) : base(ptr, rc) { }
 
     private static nint __mb_client;
-    public static TLSOptions? Client(X509Certificate? trustedChain, string commonNameOverride)
+    public static TLSOptions? Client(X509Certificate? trustedChain = null, string commonNameOverride = "")
     {
         var __mb = __mb_client;
         if (__mb == 0)
@@ -97,7 +97,7 @@ public unsafe partial class TLSOptions : RefCounted
     }
 
     private static nint __mb_client_unsafe;
-    public static TLSOptions? ClientUnsafe(X509Certificate? trustedChain)
+    public static TLSOptions? ClientUnsafe(X509Certificate? trustedChain = null)
     {
         var __mb = __mb_client_unsafe;
         if (__mb == 0)
@@ -236,18 +236,18 @@ public unsafe partial class TabBar : Control
 
     public enum AlignmentMode : long
     {
-        ALIGNMENT_LEFT = 0,
-        ALIGNMENT_CENTER = 1,
-        ALIGNMENT_RIGHT = 2,
-        ALIGNMENT_MAX = 3,
+        Left = 0,
+        Center = 1,
+        Right = 2,
+        Max = 3,
     }
 
     public enum CloseButtonDisplayPolicy : long
     {
-        CLOSE_BUTTON_SHOW_NEVER = 0,
-        CLOSE_BUTTON_SHOW_ACTIVE_ONLY = 1,
-        CLOSE_BUTTON_SHOW_ALWAYS = 2,
-        CLOSE_BUTTON_MAX = 3,
+        ShowNever = 0,
+        ShowActiveOnly = 1,
+        ShowAlways = 2,
+        Max = 3,
     }
 
     public int CurrentTab
@@ -821,7 +821,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_add_tab;
-    public void AddTab(string title, Texture2D? icon)
+    public void AddTab(string title = "", Texture2D? icon = null)
     {
         var __mb = __mb_add_tab;
         if (__mb == 0)
@@ -1336,9 +1336,9 @@ public unsafe partial class TabContainer : Container
 
     public enum TabPosition : long
     {
-        POSITION_TOP = 0,
-        POSITION_BOTTOM = 1,
-        POSITION_MAX = 2,
+        Top = 0,
+        Bottom = 1,
+        Max = 2,
     }
 
     public TabBar.AlignmentMode TabAlignment
@@ -2262,81 +2262,81 @@ public unsafe partial class TextEdit : Control
 
     public enum MenuItems : long
     {
-        MENU_CUT = 0,
-        MENU_COPY = 1,
-        MENU_PASTE = 2,
-        MENU_CLEAR = 3,
-        MENU_SELECT_ALL = 4,
-        MENU_UNDO = 5,
-        MENU_REDO = 6,
-        MENU_SUBMENU_TEXT_DIR = 7,
-        MENU_DIR_INHERITED = 8,
-        MENU_DIR_AUTO = 9,
-        MENU_DIR_LTR = 10,
-        MENU_DIR_RTL = 11,
-        MENU_DISPLAY_UCC = 12,
-        MENU_SUBMENU_INSERT_UCC = 13,
-        MENU_INSERT_LRM = 14,
-        MENU_INSERT_RLM = 15,
-        MENU_INSERT_LRE = 16,
-        MENU_INSERT_RLE = 17,
-        MENU_INSERT_LRO = 18,
-        MENU_INSERT_RLO = 19,
-        MENU_INSERT_PDF = 20,
-        MENU_INSERT_ALM = 21,
-        MENU_INSERT_LRI = 22,
-        MENU_INSERT_RLI = 23,
-        MENU_INSERT_FSI = 24,
-        MENU_INSERT_PDI = 25,
-        MENU_INSERT_ZWJ = 26,
-        MENU_INSERT_ZWNJ = 27,
-        MENU_INSERT_WJ = 28,
-        MENU_INSERT_SHY = 29,
-        MENU_EMOJI_AND_SYMBOL = 30,
-        MENU_MAX = 31,
+        Cut = 0,
+        Copy = 1,
+        Paste = 2,
+        Clear = 3,
+        SelectAll = 4,
+        Undo = 5,
+        Redo = 6,
+        SubmenuTextDir = 7,
+        DirInherited = 8,
+        DirAuto = 9,
+        DirLtr = 10,
+        DirRtl = 11,
+        DisplayUcc = 12,
+        SubmenuInsertUcc = 13,
+        InsertLrm = 14,
+        InsertRlm = 15,
+        InsertLre = 16,
+        InsertRle = 17,
+        InsertLro = 18,
+        InsertRlo = 19,
+        InsertPdf = 20,
+        InsertAlm = 21,
+        InsertLri = 22,
+        InsertRli = 23,
+        InsertFsi = 24,
+        InsertPdi = 25,
+        InsertZwj = 26,
+        InsertZwnj = 27,
+        InsertWj = 28,
+        InsertShy = 29,
+        EmojiAndSymbol = 30,
+        Max = 31,
     }
 
     public enum EditAction : long
     {
-        ACTION_NONE = 0,
-        ACTION_TYPING = 1,
-        ACTION_BACKSPACE = 2,
-        ACTION_DELETE = 3,
+        None = 0,
+        Typing = 1,
+        Backspace = 2,
+        Delete = 3,
     }
 
     public enum SearchFlags : long
     {
-        SEARCH_MATCH_CASE = 1,
-        SEARCH_WHOLE_WORDS = 2,
-        SEARCH_BACKWARDS = 4,
+        MatchCase = 1,
+        WholeWords = 2,
+        Backwards = 4,
     }
 
     public enum CaretTypeEnum : long
     {
-        CARET_TYPE_LINE = 0,
-        CARET_TYPE_BLOCK = 1,
+        Line = 0,
+        Block = 1,
     }
 
     public enum SelectionMode : long
     {
-        SELECTION_MODE_NONE = 0,
-        SELECTION_MODE_SHIFT = 1,
-        SELECTION_MODE_POINTER = 2,
-        SELECTION_MODE_WORD = 3,
-        SELECTION_MODE_LINE = 4,
+        None = 0,
+        Shift = 1,
+        Pointer = 2,
+        Word = 3,
+        Line = 4,
     }
 
     public enum LineWrappingMode : long
     {
-        LINE_WRAPPING_NONE = 0,
-        LINE_WRAPPING_BOUNDARY = 1,
+        None = 0,
+        Boundary = 1,
     }
 
     public enum GutterType : long
     {
-        GUTTER_TYPE_STRING = 0,
-        GUTTER_TYPE_ICON = 1,
-        GUTTER_TYPE_CUSTOM = 2,
+        String = 0,
+        Icon = 1,
+        Custom = 2,
     }
 
     public string Text
@@ -3338,7 +3338,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_line_width;
-    public int GetLineWidth(int line, int wrapIndex)
+    public int GetLineWidth(int line, int wrapIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_get_line_width;
         if (__mb == 0)
@@ -3446,7 +3446,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_remove_line_at;
-    public void RemoveLineAt(int line, bool moveCaretsDown)
+    public void RemoveLineAt(int line, bool moveCaretsDown = true)
     {
         var __mb = __mb_remove_line_at;
         if (__mb == 0)
@@ -3464,7 +3464,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_insert_text_at_caret;
-    public void InsertTextAtCaret(string text, int caretIndex)
+    public void InsertTextAtCaret(string text, int caretIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_insert_text_at_caret;
         if (__mb == 0)
@@ -3483,7 +3483,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_insert_text;
-    public void InsertText(string text, int line, int column, bool beforeSelectionBegin, bool beforeSelectionEnd)
+    public void InsertText(string text, int line, int column, bool beforeSelectionBegin = true, bool beforeSelectionEnd = false)
     {
         var __mb = __mb_insert_text;
         if (__mb == 0)
@@ -3587,7 +3587,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_backspace;
-    public void Backspace(int caretIndex)
+    public void Backspace(int caretIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_backspace;
         if (__mb == 0)
@@ -3603,7 +3603,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_cut;
-    public void Cut(int caretIndex)
+    public void Cut(int caretIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_cut;
         if (__mb == 0)
@@ -3619,7 +3619,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_copy;
-    public void Copy(int caretIndex)
+    public void Copy(int caretIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_copy;
         if (__mb == 0)
@@ -3635,7 +3635,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_paste;
-    public void Paste(int caretIndex)
+    public void Paste(int caretIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_paste;
         if (__mb == 0)
@@ -3651,7 +3651,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_paste_primary_clipboard;
-    public void PastePrimaryClipboard(int caretIndex)
+    public void PastePrimaryClipboard(int caretIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_paste_primary_clipboard;
         if (__mb == 0)
@@ -3925,7 +3925,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_line_column_at_pos;
-    public Vector2I GetLineColumnAtPos(Vector2I position, bool clampLine, bool clampColumn)
+    public Vector2I GetLineColumnAtPos(Vector2I position, bool clampLine = true, bool clampColumn = true)
     {
         var __mb = __mb_get_line_column_at_pos;
         if (__mb == 0)
@@ -4020,7 +4020,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_mouse_over_selection;
-    public bool IsMouseOverSelection(bool edges, int caretIndex)
+    public bool IsMouseOverSelection(bool edges, int caretIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_is_mouse_over_selection;
         if (__mb == 0)
@@ -4337,7 +4337,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_collapse_carets;
-    public void CollapseCarets(int fromLine, int fromColumn, int toLine, int toColumn, bool inclusive)
+    public void CollapseCarets(int fromLine, int fromColumn, int toLine, int toColumn, bool inclusive = false)
     {
         var __mb = __mb_collapse_carets;
         if (__mb == 0)
@@ -4433,7 +4433,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_caret_visible;
-    public bool IsCaretVisible(int caretIndex)
+    public bool IsCaretVisible(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_is_caret_visible;
         if (__mb == 0)
@@ -4451,7 +4451,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_caret_draw_pos;
-    public Vector2 GetCaretDrawPos(int caretIndex)
+    public Vector2 GetCaretDrawPos(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_caret_draw_pos;
         if (__mb == 0)
@@ -4469,7 +4469,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_caret_line;
-    public void SetCaretLine(int line, bool adjustViewport, bool canBeHidden, int wrapIndex, int caretIndex)
+    public void SetCaretLine(int line, bool adjustViewport = true, bool canBeHidden = true, int wrapIndex = unchecked((int)(0)), int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_set_caret_line;
         if (__mb == 0)
@@ -4493,7 +4493,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_caret_line;
-    public int GetCaretLine(int caretIndex)
+    public int GetCaretLine(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_caret_line;
         if (__mb == 0)
@@ -4511,7 +4511,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_caret_column;
-    public void SetCaretColumn(int column, bool adjustViewport, int caretIndex)
+    public void SetCaretColumn(int column, bool adjustViewport = true, int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_set_caret_column;
         if (__mb == 0)
@@ -4531,7 +4531,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_caret_column;
-    public int GetCaretColumn(int caretIndex)
+    public int GetCaretColumn(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_caret_column;
         if (__mb == 0)
@@ -4589,7 +4589,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_caret_wrap_index;
-    public int GetCaretWrapIndex(int caretIndex)
+    public int GetCaretWrapIndex(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_caret_wrap_index;
         if (__mb == 0)
@@ -4607,7 +4607,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_word_under_caret;
-    public string GetWordUnderCaret(int caretIndex)
+    public string GetWordUnderCaret(int caretIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_get_word_under_caret;
         if (__mb == 0)
@@ -4856,7 +4856,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_select_word_under_caret;
-    public void SelectWordUnderCaret(int caretIndex)
+    public void SelectWordUnderCaret(int caretIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_select_word_under_caret;
         if (__mb == 0)
@@ -4898,7 +4898,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_select;
-    public void Select(int originLine, int originColumn, int caretLine, int caretColumn, int caretIndex)
+    public void Select(int originLine, int originColumn, int caretLine, int caretColumn, int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_select;
         if (__mb == 0)
@@ -4922,7 +4922,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_has_selection;
-    public bool HasSelection(int caretIndex)
+    public bool HasSelection(int caretIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_has_selection;
         if (__mb == 0)
@@ -4940,7 +4940,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_selected_text;
-    public string GetSelectedText(int caretIndex)
+    public string GetSelectedText(int caretIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_get_selected_text;
         if (__mb == 0)
@@ -4958,7 +4958,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_selection_at_line_column;
-    public int GetSelectionAtLineColumn(int line, int column, bool includeEdges, bool onlySelections)
+    public int GetSelectionAtLineColumn(int line, int column, bool includeEdges = true, bool onlySelections = true)
     {
         var __mb = __mb_get_selection_at_line_column;
         if (__mb == 0)
@@ -4982,7 +4982,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_line_ranges_from_carets;
-    public Godot.Collections.Array GetLineRangesFromCarets(bool onlySelections, bool mergeAdjacent)
+    public Godot.Collections.Array GetLineRangesFromCarets(bool onlySelections = false, bool mergeAdjacent = true)
     {
         var __mb = __mb_get_line_ranges_from_carets;
         if (__mb == 0)
@@ -5002,7 +5002,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_selection_origin_line;
-    public int GetSelectionOriginLine(int caretIndex)
+    public int GetSelectionOriginLine(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_selection_origin_line;
         if (__mb == 0)
@@ -5020,7 +5020,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_selection_origin_column;
-    public int GetSelectionOriginColumn(int caretIndex)
+    public int GetSelectionOriginColumn(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_selection_origin_column;
         if (__mb == 0)
@@ -5038,7 +5038,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_selection_origin_line;
-    public void SetSelectionOriginLine(int line, bool canBeHidden, int wrapIndex, int caretIndex)
+    public void SetSelectionOriginLine(int line, bool canBeHidden = true, int wrapIndex = unchecked((int)(-1)), int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_set_selection_origin_line;
         if (__mb == 0)
@@ -5060,7 +5060,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_selection_origin_column;
-    public void SetSelectionOriginColumn(int column, int caretIndex)
+    public void SetSelectionOriginColumn(int column, int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_set_selection_origin_column;
         if (__mb == 0)
@@ -5078,7 +5078,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_selection_from_line;
-    public int GetSelectionFromLine(int caretIndex)
+    public int GetSelectionFromLine(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_selection_from_line;
         if (__mb == 0)
@@ -5096,7 +5096,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_selection_from_column;
-    public int GetSelectionFromColumn(int caretIndex)
+    public int GetSelectionFromColumn(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_selection_from_column;
         if (__mb == 0)
@@ -5114,7 +5114,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_selection_to_line;
-    public int GetSelectionToLine(int caretIndex)
+    public int GetSelectionToLine(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_selection_to_line;
         if (__mb == 0)
@@ -5132,7 +5132,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_selection_to_column;
-    public int GetSelectionToColumn(int caretIndex)
+    public int GetSelectionToColumn(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_selection_to_column;
         if (__mb == 0)
@@ -5150,7 +5150,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_caret_after_selection_origin;
-    public bool IsCaretAfterSelectionOrigin(int caretIndex)
+    public bool IsCaretAfterSelectionOrigin(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_is_caret_after_selection_origin;
         if (__mb == 0)
@@ -5168,7 +5168,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_deselect;
-    public void Deselect(int caretIndex)
+    public void Deselect(int caretIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_deselect;
         if (__mb == 0)
@@ -5184,7 +5184,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_delete_selection;
-    public void DeleteSelection(int caretIndex)
+    public void DeleteSelection(int caretIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_delete_selection;
         if (__mb == 0)
@@ -5565,7 +5565,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_scroll_pos_for_line;
-    public double GetScrollPosForLine(int line, int wrapIndex)
+    public double GetScrollPosForLine(int line, int wrapIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_scroll_pos_for_line;
         if (__mb == 0)
@@ -5585,7 +5585,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_line_as_first_visible;
-    public void SetLineAsFirstVisible(int line, int wrapIndex)
+    public void SetLineAsFirstVisible(int line, int wrapIndex = unchecked((int)(0)))
     {
         var __mb = __mb_set_line_as_first_visible;
         if (__mb == 0)
@@ -5636,7 +5636,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_line_as_center_visible;
-    public void SetLineAsCenterVisible(int line, int wrapIndex)
+    public void SetLineAsCenterVisible(int line, int wrapIndex = unchecked((int)(0)))
     {
         var __mb = __mb_set_line_as_center_visible;
         if (__mb == 0)
@@ -5654,7 +5654,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_line_as_last_visible;
-    public void SetLineAsLastVisible(int line, int wrapIndex)
+    public void SetLineAsLastVisible(int line, int wrapIndex = unchecked((int)(0)))
     {
         var __mb = __mb_set_line_as_last_visible;
         if (__mb == 0)
@@ -5752,7 +5752,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_adjust_viewport_to_caret;
-    public void AdjustViewportToCaret(int caretIndex)
+    public void AdjustViewportToCaret(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_adjust_viewport_to_caret;
         if (__mb == 0)
@@ -5768,7 +5768,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_center_viewport_to_caret;
-    public void CenterViewportToCaret(int caretIndex)
+    public void CenterViewportToCaret(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_center_viewport_to_caret;
         if (__mb == 0)
@@ -5861,7 +5861,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_add_gutter;
-    public void AddGutter(int at)
+    public void AddGutter(int at = unchecked((int)(-1)))
     {
         var __mb = __mb_add_gutter;
         if (__mb == 0)
@@ -6651,7 +6651,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_selection_line;
-    public int GetSelectionLine(int caretIndex)
+    public int GetSelectionLine(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_selection_line;
         if (__mb == 0)
@@ -6669,7 +6669,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_selection_column;
-    public int GetSelectionColumn(int caretIndex)
+    public int GetSelectionColumn(int caretIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_selection_column;
         if (__mb == 0)
@@ -6994,7 +6994,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_add_string;
-    public bool AddString(string text, Font? font, int fontSize, string language, Variant meta)
+    public bool AddString(string text, Font? font, int fontSize, string language = "", Variant meta = default)
     {
         var __mb = __mb_add_string;
         if (__mb == 0)
@@ -7022,7 +7022,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_add_object;
-    public bool AddObject(Variant key, Vector2 size, InlineAlignment inlineAlign, int length, float baseline)
+    public bool AddObject(Variant key, Vector2 size, InlineAlignment inlineAlign = (InlineAlignment)(5), int length = unchecked((int)(1)), float baseline = 0.0f)
     {
         var __mb = __mb_add_object;
         if (__mb == 0)
@@ -7048,7 +7048,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_resize_object;
-    public bool ResizeObject(Variant key, Vector2 size, InlineAlignment inlineAlign, float baseline)
+    public bool ResizeObject(Variant key, Vector2 size, InlineAlignment inlineAlign = (InlineAlignment)(5), float baseline = 0.0f)
     {
         var __mb = __mb_resize_object;
         if (__mb == 0)
@@ -7384,7 +7384,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_draw;
-    public void Draw(Rid canvas, Vector2 pos, Color color, float oversampling)
+    public void Draw(Rid canvas, Vector2 pos, Color color, float oversampling = 0.0f)
     {
         var __mb = __mb_draw;
         if (__mb == 0)
@@ -7406,7 +7406,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_draw_outline;
-    public void DrawOutline(Rid canvas, Vector2 pos, int outlineSize, Color color, float oversampling)
+    public void DrawOutline(Rid canvas, Vector2 pos, int outlineSize, Color color, float oversampling = 0.0f)
     {
         var __mb = __mb_draw_outline;
         if (__mb == 0)
@@ -8429,7 +8429,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_set_dropcap;
-    public bool SetDropcap(string text, Font? font, int fontSize, Rect2 dropcapMargins, string language)
+    public bool SetDropcap(string text, Font? font, int fontSize, Rect2 dropcapMargins = default, string language = "")
     {
         var __mb = __mb_set_dropcap;
         if (__mb == 0)
@@ -8470,7 +8470,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_add_string;
-    public bool AddString(string text, Font? font, int fontSize, string language, Variant meta)
+    public bool AddString(string text, Font? font, int fontSize, string language = "", Variant meta = default)
     {
         var __mb = __mb_add_string;
         if (__mb == 0)
@@ -8498,7 +8498,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_add_object;
-    public bool AddObject(Variant key, Vector2 size, InlineAlignment inlineAlign, int length, float baseline)
+    public bool AddObject(Variant key, Vector2 size, InlineAlignment inlineAlign = (InlineAlignment)(5), int length = unchecked((int)(1)), float baseline = 0.0f)
     {
         var __mb = __mb_add_object;
         if (__mb == 0)
@@ -8524,7 +8524,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_resize_object;
-    public bool ResizeObject(Variant key, Vector2 size, InlineAlignment inlineAlign, float baseline)
+    public bool ResizeObject(Variant key, Vector2 size, InlineAlignment inlineAlign = (InlineAlignment)(5), float baseline = 0.0f)
     {
         var __mb = __mb_resize_object;
         if (__mb == 0)
@@ -9117,7 +9117,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_draw;
-    public void Draw(Rid canvas, Vector2 pos, Color color, Color dcColor, float oversampling)
+    public void Draw(Rid canvas, Vector2 pos, Color color, Color dcColor, float oversampling = 0.0f)
     {
         var __mb = __mb_draw;
         if (__mb == 0)
@@ -9141,7 +9141,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_draw_outline;
-    public void DrawOutline(Rid canvas, Vector2 pos, int outlineSize, Color color, Color dcColor, float oversampling)
+    public void DrawOutline(Rid canvas, Vector2 pos, int outlineSize, Color color, Color dcColor, float oversampling = 0.0f)
     {
         var __mb = __mb_draw_outline;
         if (__mb == 0)
@@ -9167,7 +9167,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_draw_line;
-    public void DrawLine(Rid canvas, Vector2 pos, int line, Color color, float oversampling)
+    public void DrawLine(Rid canvas, Vector2 pos, int line, Color color, float oversampling = 0.0f)
     {
         var __mb = __mb_draw_line;
         if (__mb == 0)
@@ -9191,7 +9191,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_draw_line_outline;
-    public void DrawLineOutline(Rid canvas, Vector2 pos, int line, int outlineSize, Color color, float oversampling)
+    public void DrawLineOutline(Rid canvas, Vector2 pos, int line, int outlineSize, Color color, float oversampling = 0.0f)
     {
         var __mb = __mb_draw_line_outline;
         if (__mb == 0)
@@ -9217,7 +9217,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_draw_dropcap;
-    public void DrawDropcap(Rid canvas, Vector2 pos, Color color, float oversampling)
+    public void DrawDropcap(Rid canvas, Vector2 pos, Color color, float oversampling = 0.0f)
     {
         var __mb = __mb_draw_dropcap;
         if (__mb == 0)
@@ -9239,7 +9239,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_draw_dropcap_outline;
-    public void DrawDropcapOutline(Rid canvas, Vector2 pos, int outlineSize, Color color, float oversampling)
+    public void DrawDropcapOutline(Rid canvas, Vector2 pos, int outlineSize, Color color, float oversampling = 0.0f)
     {
         var __mb = __mb_draw_dropcap_outline;
         if (__mb == 0)
@@ -9287,198 +9287,198 @@ public unsafe partial class TextServer : RefCounted
 
     public enum FontAntialiasing : long
     {
-        FONT_ANTIALIASING_NONE = 0,
-        FONT_ANTIALIASING_GRAY = 1,
-        FONT_ANTIALIASING_LCD = 2,
+        None = 0,
+        Gray = 1,
+        Lcd = 2,
     }
 
     public enum FontLCDSubpixelLayout : long
     {
-        FONT_LCD_SUBPIXEL_LAYOUT_NONE = 0,
-        FONT_LCD_SUBPIXEL_LAYOUT_HRGB = 1,
-        FONT_LCD_SUBPIXEL_LAYOUT_HBGR = 2,
-        FONT_LCD_SUBPIXEL_LAYOUT_VRGB = 3,
-        FONT_LCD_SUBPIXEL_LAYOUT_VBGR = 4,
-        FONT_LCD_SUBPIXEL_LAYOUT_MAX = 5,
+        None = 0,
+        Hrgb = 1,
+        Hbgr = 2,
+        Vrgb = 3,
+        Vbgr = 4,
+        Max = 5,
     }
 
     public enum Direction : long
     {
-        DIRECTION_AUTO = 0,
-        DIRECTION_LTR = 1,
-        DIRECTION_RTL = 2,
-        DIRECTION_INHERITED = 3,
+        Auto = 0,
+        Ltr = 1,
+        Rtl = 2,
+        Inherited = 3,
     }
 
     public enum Orientation : long
     {
-        ORIENTATION_HORIZONTAL = 0,
-        ORIENTATION_VERTICAL = 1,
+        Horizontal = 0,
+        Vertical = 1,
     }
 
     [Flags]
     public enum JustificationFlag : long
     {
-        JUSTIFICATION_NONE = 0,
-        JUSTIFICATION_KASHIDA = 1,
-        JUSTIFICATION_WORD_BOUND = 2,
-        JUSTIFICATION_TRIM_EDGE_SPACES = 4,
-        JUSTIFICATION_AFTER_LAST_TAB = 8,
-        JUSTIFICATION_CONSTRAIN_ELLIPSIS = 16,
-        JUSTIFICATION_SKIP_LAST_LINE = 32,
-        JUSTIFICATION_SKIP_LAST_LINE_WITH_VISIBLE_CHARS = 64,
-        JUSTIFICATION_DO_NOT_SKIP_SINGLE_LINE = 128,
+        None = 0,
+        Kashida = 1,
+        WordBound = 2,
+        TrimEdgeSpaces = 4,
+        AfterLastTab = 8,
+        ConstrainEllipsis = 16,
+        SkipLastLine = 32,
+        SkipLastLineWithVisibleChars = 64,
+        DoNotSkipSingleLine = 128,
     }
 
     public enum AutowrapMode : long
     {
-        AUTOWRAP_OFF = 0,
-        AUTOWRAP_ARBITRARY = 1,
-        AUTOWRAP_WORD = 2,
-        AUTOWRAP_WORD_SMART = 3,
+        Off = 0,
+        Arbitrary = 1,
+        Word = 2,
+        WordSmart = 3,
     }
 
     [Flags]
     public enum LineBreakFlag : long
     {
-        BREAK_NONE = 0,
-        BREAK_MANDATORY = 1,
-        BREAK_WORD_BOUND = 2,
-        BREAK_GRAPHEME_BOUND = 4,
-        BREAK_ADAPTIVE = 8,
-        BREAK_TRIM_EDGE_SPACES = 16,
-        BREAK_TRIM_INDENT = 32,
-        BREAK_TRIM_START_EDGE_SPACES = 64,
-        BREAK_TRIM_END_EDGE_SPACES = 128,
+        None = 0,
+        Mandatory = 1,
+        WordBound = 2,
+        GraphemeBound = 4,
+        Adaptive = 8,
+        TrimEdgeSpaces = 16,
+        TrimIndent = 32,
+        TrimStartEdgeSpaces = 64,
+        TrimEndEdgeSpaces = 128,
     }
 
     public enum VisibleCharactersBehavior : long
     {
-        VC_CHARS_BEFORE_SHAPING = 0,
-        VC_CHARS_AFTER_SHAPING = 1,
-        VC_GLYPHS_AUTO = 2,
-        VC_GLYPHS_LTR = 3,
-        VC_GLYPHS_RTL = 4,
+        CharsBeforeShaping = 0,
+        CharsAfterShaping = 1,
+        GlyphsAuto = 2,
+        GlyphsLtr = 3,
+        GlyphsRtl = 4,
     }
 
     public enum OverrunBehavior : long
     {
-        OVERRUN_NO_TRIMMING = 0,
-        OVERRUN_TRIM_CHAR = 1,
-        OVERRUN_TRIM_WORD = 2,
-        OVERRUN_TRIM_ELLIPSIS = 3,
-        OVERRUN_TRIM_WORD_ELLIPSIS = 4,
-        OVERRUN_TRIM_ELLIPSIS_FORCE = 5,
-        OVERRUN_TRIM_WORD_ELLIPSIS_FORCE = 6,
+        NoTrimming = 0,
+        TrimChar = 1,
+        TrimWord = 2,
+        TrimEllipsis = 3,
+        TrimWordEllipsis = 4,
+        TrimEllipsisForce = 5,
+        TrimWordEllipsisForce = 6,
     }
 
     [Flags]
     public enum TextOverrunFlag : long
     {
-        OVERRUN_NO_TRIM = 0,
-        OVERRUN_TRIM = 1,
-        OVERRUN_TRIM_WORD_ONLY = 2,
-        OVERRUN_ADD_ELLIPSIS = 4,
-        OVERRUN_ENFORCE_ELLIPSIS = 8,
-        OVERRUN_JUSTIFICATION_AWARE = 16,
-        OVERRUN_SHORT_STRING_ELLIPSIS = 32,
+        NoTrim = 0,
+        Trim = 1,
+        TrimWordOnly = 2,
+        AddEllipsis = 4,
+        EnforceEllipsis = 8,
+        JustificationAware = 16,
+        ShortStringEllipsis = 32,
     }
 
     [Flags]
     public enum GraphemeFlag : long
     {
-        GRAPHEME_IS_VALID = 1,
-        GRAPHEME_IS_RTL = 2,
-        GRAPHEME_IS_VIRTUAL = 4,
-        GRAPHEME_IS_SPACE = 8,
-        GRAPHEME_IS_BREAK_HARD = 16,
-        GRAPHEME_IS_BREAK_SOFT = 32,
-        GRAPHEME_IS_TAB = 64,
-        GRAPHEME_IS_ELONGATION = 128,
-        GRAPHEME_IS_PUNCTUATION = 256,
-        GRAPHEME_IS_UNDERSCORE = 512,
-        GRAPHEME_IS_CONNECTED = 1024,
-        GRAPHEME_IS_SAFE_TO_INSERT_TATWEEL = 2048,
-        GRAPHEME_IS_EMBEDDED_OBJECT = 4096,
-        GRAPHEME_IS_SOFT_HYPHEN = 8192,
+        Valid = 1,
+        Rtl = 2,
+        Virtual = 4,
+        Space = 8,
+        BreakHard = 16,
+        BreakSoft = 32,
+        Tab = 64,
+        Elongation = 128,
+        Punctuation = 256,
+        Underscore = 512,
+        Connected = 1024,
+        SafeToInsertTatweel = 2048,
+        EmbeddedObject = 4096,
+        SoftHyphen = 8192,
     }
 
     public enum Hinting : long
     {
-        HINTING_NONE = 0,
-        HINTING_LIGHT = 1,
-        HINTING_NORMAL = 2,
+        None = 0,
+        Light = 1,
+        Normal = 2,
     }
 
     public enum SubpixelPositioning : long
     {
-        SUBPIXEL_POSITIONING_DISABLED = 0,
-        SUBPIXEL_POSITIONING_AUTO = 1,
-        SUBPIXEL_POSITIONING_ONE_HALF = 2,
-        SUBPIXEL_POSITIONING_ONE_QUARTER = 3,
-        SUBPIXEL_POSITIONING_ONE_HALF_MAX_SIZE = 20,
-        SUBPIXEL_POSITIONING_ONE_QUARTER_MAX_SIZE = 16,
+        Disabled = 0,
+        Auto = 1,
+        OneHalf = 2,
+        OneQuarter = 3,
+        OneHalfMaxSize = 20,
+        OneQuarterMaxSize = 16,
     }
 
     public enum Feature : long
     {
-        FEATURE_SIMPLE_LAYOUT = 1,
-        FEATURE_BIDI_LAYOUT = 2,
-        FEATURE_VERTICAL_LAYOUT = 4,
-        FEATURE_SHAPING = 8,
-        FEATURE_KASHIDA_JUSTIFICATION = 16,
-        FEATURE_BREAK_ITERATORS = 32,
-        FEATURE_FONT_BITMAP = 64,
-        FEATURE_FONT_DYNAMIC = 128,
-        FEATURE_FONT_MSDF = 256,
-        FEATURE_FONT_SYSTEM = 512,
-        FEATURE_FONT_VARIABLE = 1024,
-        FEATURE_CONTEXT_SENSITIVE_CASE_CONVERSION = 2048,
-        FEATURE_USE_SUPPORT_DATA = 4096,
-        FEATURE_UNICODE_IDENTIFIERS = 8192,
-        FEATURE_UNICODE_SECURITY = 16384,
+        SimpleLayout = 1,
+        BidiLayout = 2,
+        VerticalLayout = 4,
+        Shaping = 8,
+        KashidaJustification = 16,
+        BreakIterators = 32,
+        FontBitmap = 64,
+        FontDynamic = 128,
+        FontMsdf = 256,
+        FontSystem = 512,
+        FontVariable = 1024,
+        ContextSensitiveCaseConversion = 2048,
+        UseSupportData = 4096,
+        UnicodeIdentifiers = 8192,
+        UnicodeSecurity = 16384,
     }
 
     public enum ContourPointTag : long
     {
-        CONTOUR_CURVE_TAG_ON = 1,
-        CONTOUR_CURVE_TAG_OFF_CONIC = 0,
-        CONTOUR_CURVE_TAG_OFF_CUBIC = 2,
+        On = 1,
+        OffConic = 0,
+        OffCubic = 2,
     }
 
     public enum SpacingType : long
     {
-        SPACING_GLYPH = 0,
-        SPACING_SPACE = 1,
-        SPACING_TOP = 2,
-        SPACING_BOTTOM = 3,
-        SPACING_MAX = 4,
+        Glyph = 0,
+        Space = 1,
+        Top = 2,
+        Bottom = 3,
+        Max = 4,
     }
 
     [Flags]
     public enum FontStyle : long
     {
-        FONT_BOLD = 1,
-        FONT_ITALIC = 2,
-        FONT_FIXED_WIDTH = 4,
+        Bold = 1,
+        Italic = 2,
+        FixedWidth = 4,
     }
 
     public enum StructuredTextParser : long
     {
-        STRUCTURED_TEXT_DEFAULT = 0,
-        STRUCTURED_TEXT_URI = 1,
-        STRUCTURED_TEXT_FILE = 2,
-        STRUCTURED_TEXT_EMAIL = 3,
-        STRUCTURED_TEXT_LIST = 4,
-        STRUCTURED_TEXT_GDSCRIPT = 5,
-        STRUCTURED_TEXT_CUSTOM = 6,
+        Default = 0,
+        Uri = 1,
+        File = 2,
+        Email = 3,
+        List = 4,
+        Gdscript = 5,
+        Custom = 6,
     }
 
     public enum FixedSizeScaleMode : long
     {
-        FIXED_SIZE_SCALE_DISABLE = 0,
-        FIXED_SIZE_SCALE_INTEGER_ONLY = 1,
-        FIXED_SIZE_SCALE_ENABLED = 2,
+        Disable = 0,
+        IntegerOnly = 1,
+        Enabled = 2,
     }
 
     private static nint __mb_has_feature;
@@ -11729,7 +11729,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_font_draw_glyph;
-    public void FontDrawGlyph(Rid fontRid, Rid canvas, long size, Vector2 pos, long index, Color color, float oversampling)
+    public void FontDrawGlyph(Rid fontRid, Rid canvas, long size, Vector2 pos, long index, Color color, float oversampling = 0.0f)
     {
         var __mb = __mb_font_draw_glyph;
         if (__mb == 0)
@@ -11757,7 +11757,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_font_draw_glyph_outline;
-    public void FontDrawGlyphOutline(Rid fontRid, Rid canvas, long size, long outlineSize, Vector2 pos, long index, Color color, float oversampling)
+    public void FontDrawGlyphOutline(Rid fontRid, Rid canvas, long size, long outlineSize, Vector2 pos, long index, Color color, float oversampling = 0.0f)
     {
         var __mb = __mb_font_draw_glyph_outline;
         if (__mb == 0)
@@ -12098,7 +12098,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_create_shaped_text;
-    public Rid CreateShapedText(TextServer.Direction direction, TextServer.Orientation orientation)
+    public Rid CreateShapedText(TextServer.Direction direction = (TextServer.Direction)(0), TextServer.Orientation orientation = (TextServer.Orientation)(0))
     {
         var __mb = __mb_create_shaped_text;
         if (__mb == 0)
@@ -12152,7 +12152,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_shaped_text_set_direction;
-    public void ShapedTextSetDirection(Rid shaped, TextServer.Direction direction)
+    public void ShapedTextSetDirection(Rid shaped, TextServer.Direction direction = (TextServer.Direction)(0))
     {
         var __mb = __mb_shaped_text_set_direction;
         if (__mb == 0)
@@ -12297,7 +12297,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_shaped_text_set_orientation;
-    public void ShapedTextSetOrientation(Rid shaped, TextServer.Orientation orientation)
+    public void ShapedTextSetOrientation(Rid shaped, TextServer.Orientation orientation = (TextServer.Orientation)(0))
     {
         var __mb = __mb_shaped_text_set_orientation;
         if (__mb == 0)
@@ -12445,7 +12445,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_shaped_text_add_string;
-    public bool ShapedTextAddString(Rid shaped, string text, Godot.Collections.Array fonts, long size, Godot.Collections.Dictionary opentypeFeatures, string language, Variant meta)
+    public bool ShapedTextAddString(Rid shaped, string text, Godot.Collections.Array fonts, long size, Godot.Collections.Dictionary opentypeFeatures, string language = "", Variant meta = default)
     {
         var __mb = __mb_shaped_text_add_string;
         if (__mb == 0)
@@ -12477,7 +12477,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_shaped_text_add_object;
-    public bool ShapedTextAddObject(Rid shaped, Variant key, Vector2 size, InlineAlignment inlineAlign, long length, double baseline)
+    public bool ShapedTextAddObject(Rid shaped, Variant key, Vector2 size, InlineAlignment inlineAlign = (InlineAlignment)(5), long length = unchecked((long)(1)), double baseline = 0.0)
     {
         var __mb = __mb_shaped_text_add_object;
         if (__mb == 0)
@@ -12505,7 +12505,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_shaped_text_resize_object;
-    public bool ShapedTextResizeObject(Rid shaped, Variant key, Vector2 size, InlineAlignment inlineAlign, double baseline)
+    public bool ShapedTextResizeObject(Rid shaped, Variant key, Vector2 size, InlineAlignment inlineAlign = (InlineAlignment)(5), double baseline = 0.0)
     {
         var __mb = __mb_shaped_text_resize_object;
         if (__mb == 0)
@@ -12909,7 +12909,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_shaped_text_fit_to_width;
-    public double ShapedTextFitToWidth(Rid shaped, double width, TextServer.JustificationFlag justificationFlags)
+    public double ShapedTextFitToWidth(Rid shaped, double width, TextServer.JustificationFlag justificationFlags = (TextServer.JustificationFlag)(3))
     {
         var __mb = __mb_shaped_text_fit_to_width;
         if (__mb == 0)
@@ -13129,7 +13129,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_shaped_text_overrun_trim_to_width;
-    public void ShapedTextOverrunTrimToWidth(Rid shaped, double width, TextServer.TextOverrunFlag overrunTrimFlags)
+    public void ShapedTextOverrunTrimToWidth(Rid shaped, double width = 0, TextServer.TextOverrunFlag overrunTrimFlags = (TextServer.TextOverrunFlag)(0))
     {
         var __mb = __mb_shaped_text_overrun_trim_to_width;
         if (__mb == 0)
@@ -13515,7 +13515,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_shaped_text_draw;
-    public void ShapedTextDraw(Rid shaped, Rid canvas, Vector2 pos, double clipL, double clipR, Color color, float oversampling)
+    public void ShapedTextDraw(Rid shaped, Rid canvas, Vector2 pos, double clipL, double clipR, Color color, float oversampling = 0.0f)
     {
         var __mb = __mb_shaped_text_draw;
         if (__mb == 0)
@@ -13543,7 +13543,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_shaped_text_draw_outline;
-    public void ShapedTextDrawOutline(Rid shaped, Rid canvas, Vector2 pos, double clipL, double clipR, long outlineSize, Color color, float oversampling)
+    public void ShapedTextDrawOutline(Rid shaped, Rid canvas, Vector2 pos, double clipL, double clipR, long outlineSize, Color color, float oversampling = 0.0f)
     {
         var __mb = __mb_shaped_text_draw_outline;
         if (__mb == 0)
@@ -13595,7 +13595,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_format_number;
-    public string FormatNumber(string number, string language)
+    public string FormatNumber(string number, string language = "")
     {
         var __mb = __mb_format_number;
         if (__mb == 0)
@@ -13617,7 +13617,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_parse_number;
-    public string ParseNumber(string number, string language)
+    public string ParseNumber(string number, string language = "")
     {
         var __mb = __mb_parse_number;
         if (__mb == 0)
@@ -13639,7 +13639,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_percent_sign;
-    public string PercentSign(string language)
+    public string PercentSign(string language = "")
     {
         var __mb = __mb_percent_sign;
         if (__mb == 0)
@@ -13733,7 +13733,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_string_to_upper;
-    public string StringToUpper(string @string, string language)
+    public string StringToUpper(string @string, string language = "")
     {
         var __mb = __mb_string_to_upper;
         if (__mb == 0)
@@ -13755,7 +13755,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_string_to_lower;
-    public string StringToLower(string @string, string language)
+    public string StringToLower(string @string, string language = "")
     {
         var __mb = __mb_string_to_lower;
         if (__mb == 0)
@@ -13777,7 +13777,7 @@ public unsafe partial class TextServer : RefCounted
     }
 
     private static nint __mb_string_to_title;
-    public string StringToTitle(string @string, string language)
+    public string StringToTitle(string @string, string language = "")
     {
         var __mb = __mb_string_to_title;
         if (__mb == 0)
@@ -15640,20 +15640,17 @@ public unsafe partial class TextServerExtension : TextServer
     }
 }
 
-public unsafe partial class TextServerManager : GodotObject
+public static unsafe partial class TextServerManager
 {
-    internal TextServerManager(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public TextServerManager() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "TextServerManager");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("TextServerManager");
 
-    private static TextServerManager? _singleton;
-    public static TextServerManager Singleton => _singleton ??= (TextServerManager)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("TextServerManager"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     private static nint __mb_add_interface;
-    public void AddInterface(TextServer? @interface)
+    public static void AddInterface(TextServer? @interface)
     {
         var __mb = __mb_add_interface;
         if (__mb == 0)
@@ -15665,11 +15662,11 @@ public unsafe partial class TextServerManager : GodotObject
         nint __a0 = @interface?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_interface_count;
-    public int GetInterfaceCount()
+    public static int GetInterfaceCount()
     {
         var __mb = __mb_get_interface_count;
         if (__mb == 0)
@@ -15679,12 +15676,12 @@ public unsafe partial class TextServerManager : GodotObject
             __mb_get_interface_count = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_remove_interface;
-    public void RemoveInterface(TextServer? @interface)
+    public static void RemoveInterface(TextServer? @interface)
     {
         var __mb = __mb_remove_interface;
         if (__mb == 0)
@@ -15696,11 +15693,11 @@ public unsafe partial class TextServerManager : GodotObject
         nint __a0 = @interface?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_interface;
-    public TextServer? GetInterface(int idx)
+    public static TextServer? GetInterface(int idx)
     {
         var __mb = __mb_get_interface;
         if (__mb == 0)
@@ -15713,12 +15710,12 @@ public unsafe partial class TextServerManager : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (TextServer?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_interfaces;
-    public Godot.Collections.Array GetInterfaces()
+    public static Godot.Collections.Array GetInterfaces()
     {
         var __mb = __mb_get_interfaces;
         if (__mb == 0)
@@ -15728,12 +15725,12 @@ public unsafe partial class TextServerManager : GodotObject
             __mb_get_interfaces = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_find_interface;
-    public TextServer? FindInterface(string name)
+    public static TextServer? FindInterface(string name)
     {
         var __mb = __mb_find_interface;
         if (__mb == 0)
@@ -15746,13 +15743,13 @@ public unsafe partial class TextServerManager : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (TextServer?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_primary_interface;
-    public void SetPrimaryInterface(TextServer? index)
+    public static void SetPrimaryInterface(TextServer? index)
     {
         var __mb = __mb_set_primary_interface;
         if (__mb == 0)
@@ -15764,11 +15761,11 @@ public unsafe partial class TextServerManager : GodotObject
         nint __a0 = index?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_primary_interface;
-    public TextServer? GetPrimaryInterface()
+    public static TextServer? GetPrimaryInterface()
     {
         var __mb = __mb_get_primary_interface;
         if (__mb == 0)
@@ -15778,7 +15775,7 @@ public unsafe partial class TextServerManager : GodotObject
             __mb_get_primary_interface = __mb;
         }
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (TextServer?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 }
@@ -15908,7 +15905,7 @@ public unsafe partial class Texture2D : Texture
     }
 
     private static nint __mb_draw;
-    public void Draw(Rid canvasItem, Vector2 position, Color modulate, bool transpose)
+    public void Draw(Rid canvasItem, Vector2 position, Color modulate, bool transpose = false)
     {
         var __mb = __mb_draw;
         if (__mb == 0)
@@ -15930,7 +15927,7 @@ public unsafe partial class Texture2D : Texture
     }
 
     private static nint __mb_draw_rect;
-    public void DrawRect(Rid canvasItem, Rect2 rect, bool tile, Color modulate, bool transpose)
+    public void DrawRect(Rid canvasItem, Rect2 rect, bool tile, Color modulate, bool transpose = false)
     {
         var __mb = __mb_draw_rect;
         if (__mb == 0)
@@ -15954,7 +15951,7 @@ public unsafe partial class Texture2D : Texture
     }
 
     private static nint __mb_draw_rect_region;
-    public void DrawRectRegion(Rid canvasItem, Rect2 rect, Rect2 srcRect, Color modulate, bool transpose, bool clipUv)
+    public void DrawRectRegion(Rid canvasItem, Rect2 rect, Rect2 srcRect, Color modulate, bool transpose = false, bool clipUv = true)
     {
         var __mb = __mb_draw_rect_region;
         if (__mb == 0)
@@ -16421,13 +16418,13 @@ public unsafe partial class TextureButton : BaseButton
 
     public enum StretchModeEnum : long
     {
-        STRETCH_SCALE = 0,
-        STRETCH_TILE = 1,
-        STRETCH_KEEP = 2,
-        STRETCH_KEEP_CENTERED = 3,
-        STRETCH_KEEP_ASPECT = 4,
-        STRETCH_KEEP_ASPECT_CENTERED = 5,
-        STRETCH_KEEP_ASPECT_COVERED = 6,
+        Scale = 0,
+        Tile = 1,
+        Keep = 2,
+        KeepCentered = 3,
+        KeepAspect = 4,
+        KeepAspectCentered = 5,
+        KeepAspectCovered = 6,
     }
 
     public Texture2D? TextureNormal
@@ -16832,9 +16829,9 @@ public unsafe partial class TextureLayered : Texture
 
     public enum LayeredType : long
     {
-        LAYERED_TYPE_2D_ARRAY = 0,
-        LAYERED_TYPE_CUBEMAP = 1,
-        LAYERED_TYPE_CUBEMAP_ARRAY = 2,
+        Type2dArray = 0,
+        Cubemap = 1,
+        CubemapArray = 2,
     }
 
     private static nint __mb_get_format;
@@ -17068,15 +17065,15 @@ public unsafe partial class TextureProgressBar : Range
 
     public enum FillModeEnum : long
     {
-        FILL_LEFT_TO_RIGHT = 0,
-        FILL_RIGHT_TO_LEFT = 1,
-        FILL_TOP_TO_BOTTOM = 2,
-        FILL_BOTTOM_TO_TOP = 3,
-        FILL_CLOCKWISE = 4,
-        FILL_COUNTER_CLOCKWISE = 5,
-        FILL_BILINEAR_LEFT_AND_RIGHT = 6,
-        FILL_BILINEAR_TOP_AND_BOTTOM = 7,
-        FILL_CLOCKWISE_AND_COUNTER_CLOCKWISE = 8,
+        LeftToRight = 0,
+        RightToLeft = 1,
+        TopToBottom = 2,
+        BottomToTop = 3,
+        Clockwise = 4,
+        CounterClockwise = 5,
+        BilinearLeftAndRight = 6,
+        BilinearTopAndBottom = 7,
+        ClockwiseAndCounterClockwise = 8,
     }
 
     public int FillMode
@@ -17595,23 +17592,23 @@ public unsafe partial class TextureRect : Control
 
     public enum ExpandModeEnum : long
     {
-        EXPAND_KEEP_SIZE = 0,
-        EXPAND_IGNORE_SIZE = 1,
-        EXPAND_FIT_WIDTH = 2,
-        EXPAND_FIT_WIDTH_PROPORTIONAL = 3,
-        EXPAND_FIT_HEIGHT = 4,
-        EXPAND_FIT_HEIGHT_PROPORTIONAL = 5,
+        KeepSize = 0,
+        IgnoreSize = 1,
+        FitWidth = 2,
+        FitWidthProportional = 3,
+        FitHeight = 4,
+        FitHeightProportional = 5,
     }
 
     public enum StretchModeEnum : long
     {
-        STRETCH_SCALE = 0,
-        STRETCH_TILE = 1,
-        STRETCH_KEEP = 2,
-        STRETCH_KEEP_CENTERED = 3,
-        STRETCH_KEEP_ASPECT = 4,
-        STRETCH_KEEP_ASPECT_CENTERED = 5,
-        STRETCH_KEEP_ASPECT_COVERED = 6,
+        Scale = 0,
+        Tile = 1,
+        Keep = 2,
+        KeepCentered = 3,
+        KeepAspect = 4,
+        KeepAspectCentered = 5,
+        KeepAspectCovered = 6,
     }
 
     public Texture2D? Texture
@@ -17811,13 +17808,13 @@ public unsafe partial class Theme : Resource
 
     public enum DataType : long
     {
-        DATA_TYPE_COLOR = 0,
-        DATA_TYPE_CONSTANT = 1,
-        DATA_TYPE_FONT = 2,
-        DATA_TYPE_FONT_SIZE = 3,
-        DATA_TYPE_ICON = 4,
-        DATA_TYPE_STYLEBOX = 5,
-        DATA_TYPE_MAX = 6,
+        Color = 0,
+        Constant = 1,
+        Font = 2,
+        FontSize = 3,
+        Icon = 4,
+        Stylebox = 5,
+        Max = 6,
     }
 
     public float DefaultBaseScale
@@ -18824,50 +18821,47 @@ public unsafe partial class Theme : Resource
     }
 }
 
-public unsafe partial class ThemeDB : GodotObject
+public static unsafe partial class ThemeDB
 {
-    internal ThemeDB(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public ThemeDB() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "ThemeDB");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("ThemeDB");
 
-    private static ThemeDB? _singleton;
-    public static ThemeDB Singleton => _singleton ??= (ThemeDB)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("ThemeDB"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
-    public float FallbackBaseScale
+    public static float FallbackBaseScale
     {
         get => GetFallbackBaseScale();
         set => SetFallbackBaseScale(value);
     }
 
-    public Font? FallbackFont
+    public static Font? FallbackFont
     {
         get => GetFallbackFont();
         set => SetFallbackFont(value);
     }
 
-    public int FallbackFontSize
+    public static int FallbackFontSize
     {
         get => GetFallbackFontSize();
         set => SetFallbackFontSize(value);
     }
 
-    public Texture2D? FallbackIcon
+    public static Texture2D? FallbackIcon
     {
         get => GetFallbackIcon();
         set => SetFallbackIcon(value);
     }
 
-    public StyleBox? FallbackStylebox
+    public static StyleBox? FallbackStylebox
     {
         get => GetFallbackStylebox();
         set => SetFallbackStylebox(value);
     }
 
     private static nint __mb_get_default_theme;
-    public Theme? GetDefaultTheme()
+    public static Theme? GetDefaultTheme()
     {
         var __mb = __mb_get_default_theme;
         if (__mb == 0)
@@ -18877,12 +18871,12 @@ public unsafe partial class ThemeDB : GodotObject
             __mb_get_default_theme = __mb;
         }
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (Theme?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_project_theme;
-    public Theme? GetProjectTheme()
+    public static Theme? GetProjectTheme()
     {
         var __mb = __mb_get_project_theme;
         if (__mb == 0)
@@ -18892,12 +18886,12 @@ public unsafe partial class ThemeDB : GodotObject
             __mb_get_project_theme = __mb;
         }
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (Theme?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_fallback_base_scale;
-    internal void SetFallbackBaseScale(float baseScale)
+    internal static void SetFallbackBaseScale(float baseScale)
     {
         var __mb = __mb_set_fallback_base_scale;
         if (__mb == 0)
@@ -18909,11 +18903,11 @@ public unsafe partial class ThemeDB : GodotObject
         double __a0 = baseScale;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_fallback_base_scale;
-    internal float GetFallbackBaseScale()
+    internal static float GetFallbackBaseScale()
     {
         var __mb = __mb_get_fallback_base_scale;
         if (__mb == 0)
@@ -18923,12 +18917,12 @@ public unsafe partial class ThemeDB : GodotObject
             __mb_get_fallback_base_scale = __mb;
         }
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_fallback_font;
-    internal void SetFallbackFont(Font? font)
+    internal static void SetFallbackFont(Font? font)
     {
         var __mb = __mb_set_fallback_font;
         if (__mb == 0)
@@ -18940,11 +18934,11 @@ public unsafe partial class ThemeDB : GodotObject
         nint __a0 = font?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_fallback_font;
-    internal Font? GetFallbackFont()
+    internal static Font? GetFallbackFont()
     {
         var __mb = __mb_get_fallback_font;
         if (__mb == 0)
@@ -18954,12 +18948,12 @@ public unsafe partial class ThemeDB : GodotObject
             __mb_get_fallback_font = __mb;
         }
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (Font?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_fallback_font_size;
-    internal void SetFallbackFontSize(int fontSize)
+    internal static void SetFallbackFontSize(int fontSize)
     {
         var __mb = __mb_set_fallback_font_size;
         if (__mb == 0)
@@ -18971,11 +18965,11 @@ public unsafe partial class ThemeDB : GodotObject
         long __a0 = unchecked((long)fontSize);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_fallback_font_size;
-    internal int GetFallbackFontSize()
+    internal static int GetFallbackFontSize()
     {
         var __mb = __mb_get_fallback_font_size;
         if (__mb == 0)
@@ -18985,12 +18979,12 @@ public unsafe partial class ThemeDB : GodotObject
             __mb_get_fallback_font_size = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_fallback_icon;
-    internal void SetFallbackIcon(Texture2D? icon)
+    internal static void SetFallbackIcon(Texture2D? icon)
     {
         var __mb = __mb_set_fallback_icon;
         if (__mb == 0)
@@ -19002,11 +18996,11 @@ public unsafe partial class ThemeDB : GodotObject
         nint __a0 = icon?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_fallback_icon;
-    internal Texture2D? GetFallbackIcon()
+    internal static Texture2D? GetFallbackIcon()
     {
         var __mb = __mb_get_fallback_icon;
         if (__mb == 0)
@@ -19016,12 +19010,12 @@ public unsafe partial class ThemeDB : GodotObject
             __mb_get_fallback_icon = __mb;
         }
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (Texture2D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_fallback_stylebox;
-    internal void SetFallbackStylebox(StyleBox? stylebox)
+    internal static void SetFallbackStylebox(StyleBox? stylebox)
     {
         var __mb = __mb_set_fallback_stylebox;
         if (__mb == 0)
@@ -19033,11 +19027,11 @@ public unsafe partial class ThemeDB : GodotObject
         nint __a0 = stylebox?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_fallback_stylebox;
-    internal StyleBox? GetFallbackStylebox()
+    internal static StyleBox? GetFallbackStylebox()
     {
         var __mb = __mb_get_fallback_stylebox;
         if (__mb == 0)
@@ -19047,7 +19041,7 @@ public unsafe partial class ThemeDB : GodotObject
             __mb_get_fallback_stylebox = __mb;
         }
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (StyleBox?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 }
@@ -19063,9 +19057,9 @@ public unsafe partial class Thread : RefCounted
 
     public enum Priority : long
     {
-        PRIORITY_LOW = 0,
-        PRIORITY_NORMAL = 1,
-        PRIORITY_HIGH = 2,
+        Low = 0,
+        Normal = 1,
+        High = 2,
     }
 
     private static nint __mb_get_id;
@@ -19574,7 +19568,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_get_occluder_polygon;
-    public OccluderPolygon2D? GetOccluderPolygon(int layerId, int polygonIndex, bool flipH, bool flipV, bool transpose)
+    public OccluderPolygon2D? GetOccluderPolygon(int layerId, int polygonIndex, bool flipH = false, bool flipV = false, bool transpose = false)
     {
         var __mb = __mb_get_occluder_polygon;
         if (__mb == 0)
@@ -19618,7 +19612,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_get_occluder;
-    public OccluderPolygon2D? GetOccluder(int layerId, bool flipH, bool flipV, bool transpose)
+    public OccluderPolygon2D? GetOccluder(int layerId, bool flipH = false, bool flipV = false, bool transpose = false)
     {
         var __mb = __mb_get_occluder;
         if (__mb == 0)
@@ -19998,7 +19992,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_get_navigation_polygon;
-    public NavigationPolygon? GetNavigationPolygon(int layerId, bool flipH, bool flipV, bool transpose)
+    public NavigationPolygon? GetNavigationPolygon(int layerId, bool flipH = false, bool flipV = false, bool transpose = false)
     {
         var __mb = __mb_get_navigation_polygon;
         if (__mb == 0)
@@ -20157,9 +20151,9 @@ public unsafe partial class TileMap : Node2D
 
     public enum VisibilityMode : long
     {
-        VISIBILITY_MODE_DEFAULT = 0,
-        VISIBILITY_MODE_FORCE_HIDE = 2,
-        VISIBILITY_MODE_FORCE_SHOW = 1,
+        Default = 0,
+        ForceHide = 2,
+        ForceShow = 1,
     }
 
     public TileSet? TileSet
@@ -20229,7 +20223,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_force_update;
-    public void ForceUpdate(int layer)
+    public void ForceUpdate(int layer = unchecked((int)(-1)))
     {
         var __mb = __mb_force_update;
         if (__mb == 0)
@@ -20754,7 +20748,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_set_cell;
-    public void SetCell(int layer, Vector2I coords, int sourceId, Vector2I atlasCoords, int alternativeTile)
+    public void SetCell(int layer, Vector2I coords, int sourceId, Vector2I atlasCoords, int alternativeTile = unchecked((int)(0)))
     {
         var __mb = __mb_set_cell;
         if (__mb == 0)
@@ -20796,7 +20790,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_get_cell_source_id;
-    public int GetCellSourceId(int layer, Vector2I coords, bool useProxies)
+    public int GetCellSourceId(int layer, Vector2I coords, bool useProxies = false)
     {
         var __mb = __mb_get_cell_source_id;
         if (__mb == 0)
@@ -20818,7 +20812,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_get_cell_atlas_coords;
-    public Vector2I GetCellAtlasCoords(int layer, Vector2I coords, bool useProxies)
+    public Vector2I GetCellAtlasCoords(int layer, Vector2I coords, bool useProxies = false)
     {
         var __mb = __mb_get_cell_atlas_coords;
         if (__mb == 0)
@@ -20840,7 +20834,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_get_cell_alternative_tile;
-    public int GetCellAlternativeTile(int layer, Vector2I coords, bool useProxies)
+    public int GetCellAlternativeTile(int layer, Vector2I coords, bool useProxies = false)
     {
         var __mb = __mb_get_cell_alternative_tile;
         if (__mb == 0)
@@ -20862,7 +20856,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_get_cell_tile_data;
-    public TileData? GetCellTileData(int layer, Vector2I coords, bool useProxies)
+    public TileData? GetCellTileData(int layer, Vector2I coords, bool useProxies = false)
     {
         var __mb = __mb_get_cell_tile_data;
         if (__mb == 0)
@@ -20884,7 +20878,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_is_cell_flipped_h;
-    public bool IsCellFlippedH(int layer, Vector2I coords, bool useProxies)
+    public bool IsCellFlippedH(int layer, Vector2I coords, bool useProxies = false)
     {
         var __mb = __mb_is_cell_flipped_h;
         if (__mb == 0)
@@ -20906,7 +20900,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_is_cell_flipped_v;
-    public bool IsCellFlippedV(int layer, Vector2I coords, bool useProxies)
+    public bool IsCellFlippedV(int layer, Vector2I coords, bool useProxies = false)
     {
         var __mb = __mb_is_cell_flipped_v;
         if (__mb == 0)
@@ -20928,7 +20922,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_is_cell_transposed;
-    public bool IsCellTransposed(int layer, Vector2I coords, bool useProxies)
+    public bool IsCellTransposed(int layer, Vector2I coords, bool useProxies = false)
     {
         var __mb = __mb_is_cell_transposed;
         if (__mb == 0)
@@ -21048,7 +21042,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_set_cells_terrain_connect;
-    public void SetCellsTerrainConnect(int layer, Godot.Collections.Array cells, int terrainSet, int terrain, bool ignoreEmptyTerrains)
+    public void SetCellsTerrainConnect(int layer, Godot.Collections.Array cells, int terrainSet, int terrain, bool ignoreEmptyTerrains = true)
     {
         var __mb = __mb_set_cells_terrain_connect;
         if (__mb == 0)
@@ -21072,7 +21066,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_set_cells_terrain_path;
-    public void SetCellsTerrainPath(int layer, Godot.Collections.Array path, int terrainSet, int terrain, bool ignoreEmptyTerrains)
+    public void SetCellsTerrainPath(int layer, Godot.Collections.Array path, int terrainSet, int terrain, bool ignoreEmptyTerrains = true)
     {
         var __mb = __mb_set_cells_terrain_path;
         if (__mb == 0)
@@ -21151,7 +21145,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_notify_runtime_tile_data_update;
-    public void NotifyRuntimeTileDataUpdate(int layer)
+    public void NotifyRuntimeTileDataUpdate(int layer = unchecked((int)(-1)))
     {
         var __mb = __mb_notify_runtime_tile_data_update;
         if (__mb == 0)
@@ -21203,7 +21197,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_get_used_cells_by_id;
-    public Godot.Collections.Array GetUsedCellsById(int layer, int sourceId, Vector2I atlasCoords, int alternativeTile)
+    public Godot.Collections.Array GetUsedCellsById(int layer, int sourceId, Vector2I atlasCoords, int alternativeTile = unchecked((int)(-1)))
     {
         var __mb = __mb_get_used_cells_by_id;
         if (__mb == 0)
@@ -21333,9 +21327,9 @@ public unsafe partial class TileMapLayer : Node2D
 
     public enum DebugVisibilityMode : long
     {
-        DEBUG_VISIBILITY_MODE_DEFAULT = 0,
-        DEBUG_VISIBILITY_MODE_FORCE_HIDE = 2,
-        DEBUG_VISIBILITY_MODE_FORCE_SHOW = 1,
+        Default = 0,
+        ForceHide = 2,
+        ForceShow = 1,
     }
 
     public bool Enabled
@@ -21411,7 +21405,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_cell;
-    public void SetCell(Vector2I coords, int sourceId, Vector2I atlasCoords, int alternativeTile)
+    public void SetCell(Vector2I coords, int sourceId, Vector2I atlasCoords, int alternativeTile = unchecked((int)(0)))
     {
         var __mb = __mb_set_cell;
         if (__mb == 0)
@@ -21616,7 +21610,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_get_used_cells_by_id;
-    public Godot.Collections.Array GetUsedCellsById(int sourceId, Vector2I atlasCoords, int alternativeTile)
+    public Godot.Collections.Array GetUsedCellsById(int sourceId, Vector2I atlasCoords, int alternativeTile = unchecked((int)(-1)))
     {
         var __mb = __mb_get_used_cells_by_id;
         if (__mb == 0)
@@ -21689,7 +21683,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_cells_terrain_connect;
-    public void SetCellsTerrainConnect(Godot.Collections.Array cells, int terrainSet, int terrain, bool ignoreEmptyTerrains)
+    public void SetCellsTerrainConnect(Godot.Collections.Array cells, int terrainSet, int terrain, bool ignoreEmptyTerrains = true)
     {
         var __mb = __mb_set_cells_terrain_connect;
         if (__mb == 0)
@@ -21711,7 +21705,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_cells_terrain_path;
-    public void SetCellsTerrainPath(Godot.Collections.Array path, int terrainSet, int terrain, bool ignoreEmptyTerrains)
+    public void SetCellsTerrainPath(Godot.Collections.Array path, int terrainSet, int terrain, bool ignoreEmptyTerrains = true)
     {
         var __mb = __mb_set_cells_terrain_path;
         if (__mb == 0)
@@ -22328,7 +22322,7 @@ public unsafe partial class TileMapPattern : Resource
     }
 
     private static nint __mb_set_cell;
-    public void SetCell(Vector2I coords, int sourceId, Vector2I atlasCoords, int alternativeTile)
+    public void SetCell(Vector2I coords, int sourceId, Vector2I atlasCoords, int alternativeTile = unchecked((int)(-1)))
     {
         var __mb = __mb_set_cell;
         if (__mb == 0)
@@ -22512,53 +22506,53 @@ public unsafe partial class TileSet : Resource
 
     public enum TileShapeEnum : long
     {
-        TILE_SHAPE_SQUARE = 0,
-        TILE_SHAPE_ISOMETRIC = 1,
-        TILE_SHAPE_HALF_OFFSET_SQUARE = 2,
-        TILE_SHAPE_HEXAGON = 3,
+        Square = 0,
+        Isometric = 1,
+        HalfOffsetSquare = 2,
+        Hexagon = 3,
     }
 
     public enum TileLayoutEnum : long
     {
-        TILE_LAYOUT_STACKED = 0,
-        TILE_LAYOUT_STACKED_OFFSET = 1,
-        TILE_LAYOUT_STAIRS_RIGHT = 2,
-        TILE_LAYOUT_STAIRS_DOWN = 3,
-        TILE_LAYOUT_DIAMOND_RIGHT = 4,
-        TILE_LAYOUT_DIAMOND_DOWN = 5,
+        Stacked = 0,
+        StackedOffset = 1,
+        StairsRight = 2,
+        StairsDown = 3,
+        DiamondRight = 4,
+        DiamondDown = 5,
     }
 
     public enum TileOffsetAxisEnum : long
     {
-        TILE_OFFSET_AXIS_HORIZONTAL = 0,
-        TILE_OFFSET_AXIS_VERTICAL = 1,
+        Horizontal = 0,
+        Vertical = 1,
     }
 
     public enum CellNeighbor : long
     {
-        CELL_NEIGHBOR_RIGHT_SIDE = 0,
-        CELL_NEIGHBOR_RIGHT_CORNER = 1,
-        CELL_NEIGHBOR_BOTTOM_RIGHT_SIDE = 2,
-        CELL_NEIGHBOR_BOTTOM_RIGHT_CORNER = 3,
-        CELL_NEIGHBOR_BOTTOM_SIDE = 4,
-        CELL_NEIGHBOR_BOTTOM_CORNER = 5,
-        CELL_NEIGHBOR_BOTTOM_LEFT_SIDE = 6,
-        CELL_NEIGHBOR_BOTTOM_LEFT_CORNER = 7,
-        CELL_NEIGHBOR_LEFT_SIDE = 8,
-        CELL_NEIGHBOR_LEFT_CORNER = 9,
-        CELL_NEIGHBOR_TOP_LEFT_SIDE = 10,
-        CELL_NEIGHBOR_TOP_LEFT_CORNER = 11,
-        CELL_NEIGHBOR_TOP_SIDE = 12,
-        CELL_NEIGHBOR_TOP_CORNER = 13,
-        CELL_NEIGHBOR_TOP_RIGHT_SIDE = 14,
-        CELL_NEIGHBOR_TOP_RIGHT_CORNER = 15,
+        RightSide = 0,
+        RightCorner = 1,
+        BottomRightSide = 2,
+        BottomRightCorner = 3,
+        BottomSide = 4,
+        BottomCorner = 5,
+        BottomLeftSide = 6,
+        BottomLeftCorner = 7,
+        LeftSide = 8,
+        LeftCorner = 9,
+        TopLeftSide = 10,
+        TopLeftCorner = 11,
+        TopSide = 12,
+        TopCorner = 13,
+        TopRightSide = 14,
+        TopRightCorner = 15,
     }
 
     public enum TerrainMode : long
     {
-        TERRAIN_MODE_MATCH_CORNERS_AND_SIDES = 0,
-        TERRAIN_MODE_MATCH_CORNERS = 1,
-        TERRAIN_MODE_MATCH_SIDES = 2,
+        CornersAndSides = 0,
+        Corners = 1,
+        Sides = 2,
     }
 
     public TileSet.TileShapeEnum TileShape
@@ -22607,7 +22601,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_add_source;
-    public int AddSource(TileSetSource? source, int atlasSourceIdOverride)
+    public int AddSource(TileSetSource? source, int atlasSourceIdOverride = unchecked((int)(-1)))
     {
         var __mb = __mb_add_source;
         if (__mb == 0)
@@ -22900,7 +22894,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_add_occlusion_layer;
-    public void AddOcclusionLayer(int toPosition)
+    public void AddOcclusionLayer(int toPosition = unchecked((int)(-1)))
     {
         var __mb = __mb_add_occlusion_layer;
         if (__mb == 0)
@@ -23037,7 +23031,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_add_physics_layer;
-    public void AddPhysicsLayer(int toPosition)
+    public void AddPhysicsLayer(int toPosition = unchecked((int)(-1)))
     {
         var __mb = __mb_add_physics_layer;
         if (__mb == 0)
@@ -23246,7 +23240,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_add_terrain_set;
-    public void AddTerrainSet(int toPosition)
+    public void AddTerrainSet(int toPosition = unchecked((int)(-1)))
     {
         var __mb = __mb_add_terrain_set;
         if (__mb == 0)
@@ -23350,7 +23344,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_add_terrain;
-    public void AddTerrain(int terrainSet, int toPosition)
+    public void AddTerrain(int terrainSet, int toPosition = unchecked((int)(-1)))
     {
         var __mb = __mb_add_terrain;
         if (__mb == 0)
@@ -23518,7 +23512,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_add_navigation_layer;
-    public void AddNavigationLayer(int toPosition)
+    public void AddNavigationLayer(int toPosition = unchecked((int)(-1)))
     {
         var __mb = __mb_add_navigation_layer;
         if (__mb == 0)
@@ -23659,7 +23653,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_add_custom_data_layer;
-    public void AddCustomDataLayer(int toPosition)
+    public void AddCustomDataLayer(int toPosition = unchecked((int)(-1)))
     {
         var __mb = __mb_add_custom_data_layer;
         if (__mb == 0)
@@ -24108,7 +24102,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_add_pattern;
-    public int AddPattern(TileMapPattern? pattern, int index)
+    public int AddPattern(TileMapPattern? pattern, int index = unchecked((int)(-1)))
     {
         var __mb = __mb_add_pattern;
         if (__mb == 0)
@@ -24128,7 +24122,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_get_pattern;
-    public TileMapPattern? GetPattern(int index)
+    public TileMapPattern? GetPattern(int index = unchecked((int)(-1)))
     {
         var __mb = __mb_get_pattern;
         if (__mb == 0)
@@ -24188,9 +24182,9 @@ public unsafe partial class TileSetAtlasSource : TileSetSource
 
     public enum TileAnimationMode : long
     {
-        TILE_ANIMATION_MODE_DEFAULT = 0,
-        TILE_ANIMATION_MODE_RANDOM_START_TIMES = 1,
-        TILE_ANIMATION_MODE_MAX = 2,
+        Default = 0,
+        RandomStartTimes = 1,
+        Max = 2,
     }
 
     public Texture2D? Texture
@@ -24763,7 +24757,7 @@ public unsafe partial class TileSetAtlasSource : TileSetSource
     }
 
     private static nint __mb_create_alternative_tile;
-    public int CreateAlternativeTile(Vector2I atlasCoords, int alternativeIdOverride)
+    public int CreateAlternativeTile(Vector2I atlasCoords, int alternativeIdOverride = unchecked((int)(-1)))
     {
         var __mb = __mb_create_alternative_tile;
         if (__mb == 0)
@@ -24874,7 +24868,7 @@ public unsafe partial class TileSetAtlasSource : TileSetSource
     }
 
     private static nint __mb_get_tile_texture_region;
-    public Rect2I GetTileTextureRegion(Vector2I atlasCoords, int frame)
+    public Rect2I GetTileTextureRegion(Vector2I atlasCoords, int frame = unchecked((int)(0)))
     {
         var __mb = __mb_get_tile_texture_region;
         if (__mb == 0)
@@ -24990,7 +24984,7 @@ public unsafe partial class TileSetScenesCollectionSource : TileSetSource
     }
 
     private static nint __mb_create_scene_tile;
-    public int CreateSceneTile(PackedScene? packedScene, int idOverride)
+    public int CreateSceneTile(PackedScene? packedScene, int idOverride = unchecked((int)(-1)))
     {
         var __mb = __mb_create_scene_tile;
         if (__mb == 0)
@@ -25245,47 +25239,44 @@ public unsafe partial class TileSetSource : Resource
     }
 }
 
-public unsafe partial class Time : GodotObject
+public static unsafe partial class Time
 {
-    internal Time(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public Time() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "Time");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("Time");
 
-    private static Time? _singleton;
-    public static Time Singleton => _singleton ??= (Time)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("Time"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum Month : long
     {
-        MONTH_JANUARY = 1,
-        MONTH_FEBRUARY = 2,
-        MONTH_MARCH = 3,
-        MONTH_APRIL = 4,
-        MONTH_MAY = 5,
-        MONTH_JUNE = 6,
-        MONTH_JULY = 7,
-        MONTH_AUGUST = 8,
-        MONTH_SEPTEMBER = 9,
-        MONTH_OCTOBER = 10,
-        MONTH_NOVEMBER = 11,
-        MONTH_DECEMBER = 12,
+        January = 1,
+        February = 2,
+        March = 3,
+        April = 4,
+        May = 5,
+        June = 6,
+        July = 7,
+        August = 8,
+        September = 9,
+        October = 10,
+        November = 11,
+        December = 12,
     }
 
     public enum Weekday : long
     {
-        WEEKDAY_SUNDAY = 0,
-        WEEKDAY_MONDAY = 1,
-        WEEKDAY_TUESDAY = 2,
-        WEEKDAY_WEDNESDAY = 3,
-        WEEKDAY_THURSDAY = 4,
-        WEEKDAY_FRIDAY = 5,
-        WEEKDAY_SATURDAY = 6,
+        Sunday = 0,
+        Monday = 1,
+        Tuesday = 2,
+        Wednesday = 3,
+        Thursday = 4,
+        Friday = 5,
+        Saturday = 6,
     }
 
     private static nint __mb_get_datetime_dict_from_unix_time;
-    public Godot.Collections.Dictionary GetDatetimeDictFromUnixTime(long unixTimeVal)
+    public static Godot.Collections.Dictionary GetDatetimeDictFromUnixTime(long unixTimeVal)
     {
         var __mb = __mb_get_datetime_dict_from_unix_time;
         if (__mb == 0)
@@ -25298,12 +25289,12 @@ public unsafe partial class Time : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_date_dict_from_unix_time;
-    public Godot.Collections.Dictionary GetDateDictFromUnixTime(long unixTimeVal)
+    public static Godot.Collections.Dictionary GetDateDictFromUnixTime(long unixTimeVal)
     {
         var __mb = __mb_get_date_dict_from_unix_time;
         if (__mb == 0)
@@ -25316,12 +25307,12 @@ public unsafe partial class Time : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_time_dict_from_unix_time;
-    public Godot.Collections.Dictionary GetTimeDictFromUnixTime(long unixTimeVal)
+    public static Godot.Collections.Dictionary GetTimeDictFromUnixTime(long unixTimeVal)
     {
         var __mb = __mb_get_time_dict_from_unix_time;
         if (__mb == 0)
@@ -25334,12 +25325,12 @@ public unsafe partial class Time : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_datetime_string_from_unix_time;
-    public string GetDatetimeStringFromUnixTime(long unixTimeVal, bool useSpace)
+    public static string GetDatetimeStringFromUnixTime(long unixTimeVal, bool useSpace = false)
     {
         var __mb = __mb_get_datetime_string_from_unix_time;
         if (__mb == 0)
@@ -25354,12 +25345,12 @@ public unsafe partial class Time : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_date_string_from_unix_time;
-    public string GetDateStringFromUnixTime(long unixTimeVal)
+    public static string GetDateStringFromUnixTime(long unixTimeVal)
     {
         var __mb = __mb_get_date_string_from_unix_time;
         if (__mb == 0)
@@ -25372,12 +25363,12 @@ public unsafe partial class Time : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_time_string_from_unix_time;
-    public string GetTimeStringFromUnixTime(long unixTimeVal)
+    public static string GetTimeStringFromUnixTime(long unixTimeVal)
     {
         var __mb = __mb_get_time_string_from_unix_time;
         if (__mb == 0)
@@ -25390,12 +25381,12 @@ public unsafe partial class Time : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_datetime_dict_from_datetime_string;
-    public Godot.Collections.Dictionary GetDatetimeDictFromDatetimeString(string datetime, bool weekday)
+    public static Godot.Collections.Dictionary GetDatetimeDictFromDatetimeString(string datetime, bool weekday)
     {
         var __mb = __mb_get_datetime_dict_from_datetime_string;
         if (__mb == 0)
@@ -25410,13 +25401,13 @@ public unsafe partial class Time : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_datetime_string_from_datetime_dict;
-    public string GetDatetimeStringFromDatetimeDict(Godot.Collections.Dictionary datetime, bool useSpace)
+    public static string GetDatetimeStringFromDatetimeDict(Godot.Collections.Dictionary datetime, bool useSpace)
     {
         var __mb = __mb_get_datetime_string_from_datetime_dict;
         if (__mb == 0)
@@ -25431,12 +25422,12 @@ public unsafe partial class Time : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_unix_time_from_datetime_dict;
-    public long GetUnixTimeFromDatetimeDict(Godot.Collections.Dictionary datetime)
+    public static long GetUnixTimeFromDatetimeDict(Godot.Collections.Dictionary datetime)
     {
         var __mb = __mb_get_unix_time_from_datetime_dict;
         if (__mb == 0)
@@ -25449,12 +25440,12 @@ public unsafe partial class Time : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((long)__ret);
     }
 
     private static nint __mb_get_unix_time_from_datetime_string;
-    public long GetUnixTimeFromDatetimeString(string datetime)
+    public static long GetUnixTimeFromDatetimeString(string datetime)
     {
         var __mb = __mb_get_unix_time_from_datetime_string;
         if (__mb == 0)
@@ -25467,13 +25458,13 @@ public unsafe partial class Time : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((long)__ret);
     }
 
     private static nint __mb_get_offset_string_from_offset_minutes;
-    public string GetOffsetStringFromOffsetMinutes(long offsetMinutes)
+    public static string GetOffsetStringFromOffsetMinutes(long offsetMinutes)
     {
         var __mb = __mb_get_offset_string_from_offset_minutes;
         if (__mb == 0)
@@ -25486,12 +25477,12 @@ public unsafe partial class Time : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_datetime_dict_from_system;
-    public Godot.Collections.Dictionary GetDatetimeDictFromSystem(bool utc)
+    public static Godot.Collections.Dictionary GetDatetimeDictFromSystem(bool utc = false)
     {
         var __mb = __mb_get_datetime_dict_from_system;
         if (__mb == 0)
@@ -25504,12 +25495,12 @@ public unsafe partial class Time : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_date_dict_from_system;
-    public Godot.Collections.Dictionary GetDateDictFromSystem(bool utc)
+    public static Godot.Collections.Dictionary GetDateDictFromSystem(bool utc = false)
     {
         var __mb = __mb_get_date_dict_from_system;
         if (__mb == 0)
@@ -25522,12 +25513,12 @@ public unsafe partial class Time : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_time_dict_from_system;
-    public Godot.Collections.Dictionary GetTimeDictFromSystem(bool utc)
+    public static Godot.Collections.Dictionary GetTimeDictFromSystem(bool utc = false)
     {
         var __mb = __mb_get_time_dict_from_system;
         if (__mb == 0)
@@ -25540,12 +25531,12 @@ public unsafe partial class Time : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_datetime_string_from_system;
-    public string GetDatetimeStringFromSystem(bool utc, bool useSpace)
+    public static string GetDatetimeStringFromSystem(bool utc = false, bool useSpace = false)
     {
         var __mb = __mb_get_datetime_string_from_system;
         if (__mb == 0)
@@ -25560,12 +25551,12 @@ public unsafe partial class Time : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_date_string_from_system;
-    public string GetDateStringFromSystem(bool utc)
+    public static string GetDateStringFromSystem(bool utc = false)
     {
         var __mb = __mb_get_date_string_from_system;
         if (__mb == 0)
@@ -25578,12 +25569,12 @@ public unsafe partial class Time : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_time_string_from_system;
-    public string GetTimeStringFromSystem(bool utc)
+    public static string GetTimeStringFromSystem(bool utc = false)
     {
         var __mb = __mb_get_time_string_from_system;
         if (__mb == 0)
@@ -25596,12 +25587,12 @@ public unsafe partial class Time : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_time_zone_from_system;
-    public Godot.Collections.Dictionary GetTimeZoneFromSystem()
+    public static Godot.Collections.Dictionary GetTimeZoneFromSystem()
     {
         var __mb = __mb_get_time_zone_from_system;
         if (__mb == 0)
@@ -25611,12 +25602,12 @@ public unsafe partial class Time : GodotObject
             __mb_get_time_zone_from_system = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_unix_time_from_system;
-    public double GetUnixTimeFromSystem()
+    public static double GetUnixTimeFromSystem()
     {
         var __mb = __mb_get_unix_time_from_system;
         if (__mb == 0)
@@ -25626,12 +25617,12 @@ public unsafe partial class Time : GodotObject
             __mb_get_unix_time_from_system = __mb;
         }
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (double)__ret;
     }
 
     private static nint __mb_get_ticks_msec;
-    public ulong GetTicksMsec()
+    public static ulong GetTicksMsec()
     {
         var __mb = __mb_get_ticks_msec;
         if (__mb == 0)
@@ -25641,12 +25632,12 @@ public unsafe partial class Time : GodotObject
             __mb_get_ticks_msec = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_ticks_usec;
-    public ulong GetTicksUsec()
+    public static ulong GetTicksUsec()
     {
         var __mb = __mb_get_ticks_usec;
         if (__mb == 0)
@@ -25656,7 +25647,7 @@ public unsafe partial class Time : GodotObject
             __mb_get_ticks_usec = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 }
@@ -25672,8 +25663,8 @@ public unsafe partial class Timer : Node
 
     public enum TimerProcessCallback : long
     {
-        TIMER_PROCESS_PHYSICS = 0,
-        TIMER_PROCESS_IDLE = 1,
+        Physics = 0,
+        Idle = 1,
     }
 
     public Timer.TimerProcessCallback ProcessCallback
@@ -25808,7 +25799,7 @@ public unsafe partial class Timer : Node
     }
 
     private static nint __mb_start;
-    public void Start(double timeSec)
+    public void Start(double timeSec = -1)
     {
         var __mb = __mb_start;
         if (__mb == 0)
@@ -26129,8 +26120,8 @@ public unsafe partial class TouchScreenButton : Node2D
 
     public enum VisibilityModeEnum : long
     {
-        VISIBILITY_ALWAYS = 0,
-        VISIBILITY_TOUCHSCREEN_ONLY = 1,
+        Always = 0,
+        TouchscreenOnly = 1,
     }
 
     public Texture2D? TextureNormal
@@ -26537,7 +26528,7 @@ public unsafe partial class Translation : Resource
     }
 
     private static nint __mb_add_message;
-    public void AddMessage(string srcMessage, string xlatedMessage, string context)
+    public void AddMessage(string srcMessage, string xlatedMessage, string context = "")
     {
         var __mb = __mb_add_message;
         if (__mb == 0)
@@ -26557,7 +26548,7 @@ public unsafe partial class Translation : Resource
     }
 
     private static nint __mb_get_message;
-    public string GetMessage(string srcMessage, string context)
+    public string GetMessage(string srcMessage, string context = "")
     {
         var __mb = __mb_get_message;
         if (__mb == 0)
@@ -26577,7 +26568,7 @@ public unsafe partial class Translation : Resource
     }
 
     private static nint __mb_get_plural_message;
-    public string GetPluralMessage(string srcMessage, string srcPluralMessage, int n, string context)
+    public string GetPluralMessage(string srcMessage, string srcPluralMessage, int n, string context = "")
     {
         var __mb = __mb_get_plural_message;
         if (__mb == 0)
@@ -26601,7 +26592,7 @@ public unsafe partial class Translation : Resource
     }
 
     private static nint __mb_erase_message;
-    public void EraseMessage(string srcMessage, string context)
+    public void EraseMessage(string srcMessage, string context = "")
     {
         var __mb = __mb_erase_message;
         if (__mb == 0)
@@ -26899,7 +26890,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_translate;
-    public string Translate(string message, string context)
+    public string Translate(string message, string context = "")
     {
         var __mb = __mb_translate;
         if (__mb == 0)
@@ -26919,7 +26910,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_translate_plural;
-    public string TranslatePlural(string message, string messagePlural, int n, string context)
+    public string TranslatePlural(string message, string messagePlural, int n, string context = "")
     {
         var __mb = __mb_translate_plural;
         if (__mb == 0)
@@ -27305,26 +27296,23 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 }
 
-public unsafe partial class TranslationServer : GodotObject
+public static unsafe partial class TranslationServer
 {
-    internal TranslationServer(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public TranslationServer() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "TranslationServer");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("TranslationServer");
 
-    private static TranslationServer? _singleton;
-    public static TranslationServer Singleton => _singleton ??= (TranslationServer)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("TranslationServer"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
-    public bool PseudolocalizationEnabled
+    public static bool PseudolocalizationEnabled
     {
         get => IsPseudolocalizationEnabled();
         set => SetPseudolocalizationEnabled(value);
     }
 
     private static nint __mb_set_locale;
-    public void SetLocale(string locale)
+    public static void SetLocale(string locale)
     {
         var __mb = __mb_set_locale;
         if (__mb == 0)
@@ -27336,12 +27324,12 @@ public unsafe partial class TranslationServer : GodotObject
         ulong __a0 = NativeString.Create(locale);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_locale;
-    public string GetLocale()
+    public static string GetLocale()
     {
         var __mb = __mb_get_locale;
         if (__mb == 0)
@@ -27351,12 +27339,12 @@ public unsafe partial class TranslationServer : GodotObject
             __mb_get_locale = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_tool_locale;
-    public string GetToolLocale()
+    public static string GetToolLocale()
     {
         var __mb = __mb_get_tool_locale;
         if (__mb == 0)
@@ -27366,12 +27354,12 @@ public unsafe partial class TranslationServer : GodotObject
             __mb_get_tool_locale = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_compare_locales;
-    public int CompareLocales(string localeA, string localeB)
+    public static int CompareLocales(string localeA, string localeB)
     {
         var __mb = __mb_compare_locales;
         if (__mb == 0)
@@ -27386,14 +27374,14 @@ public unsafe partial class TranslationServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return unchecked((int)__ret);
     }
 
     private static nint __mb_standardize_locale;
-    public string StandardizeLocale(string locale, bool addDefaults)
+    public static string StandardizeLocale(string locale, bool addDefaults = false)
     {
         var __mb = __mb_standardize_locale;
         if (__mb == 0)
@@ -27408,13 +27396,13 @@ public unsafe partial class TranslationServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_language_name;
-    public string GetLanguageName(string language)
+    public static string GetLanguageName(string language)
     {
         var __mb = __mb_get_language_name;
         if (__mb == 0)
@@ -27427,13 +27415,13 @@ public unsafe partial class TranslationServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_script_name;
-    public string GetScriptName(string script)
+    public static string GetScriptName(string script)
     {
         var __mb = __mb_get_script_name;
         if (__mb == 0)
@@ -27446,13 +27434,13 @@ public unsafe partial class TranslationServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_country_name;
-    public string GetCountryName(string country)
+    public static string GetCountryName(string country)
     {
         var __mb = __mb_get_country_name;
         if (__mb == 0)
@@ -27465,13 +27453,13 @@ public unsafe partial class TranslationServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_locale_name;
-    public string GetLocaleName(string locale)
+    public static string GetLocaleName(string locale)
     {
         var __mb = __mb_get_locale_name;
         if (__mb == 0)
@@ -27484,13 +27472,13 @@ public unsafe partial class TranslationServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_plural_rules;
-    public string GetPluralRules(string locale)
+    public static string GetPluralRules(string locale)
     {
         var __mb = __mb_get_plural_rules;
         if (__mb == 0)
@@ -27503,13 +27491,13 @@ public unsafe partial class TranslationServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_translate;
-    public string Translate(string message, string context)
+    public static string Translate(string message, string context = "")
     {
         var __mb = __mb_translate;
         if (__mb == 0)
@@ -27524,12 +27512,12 @@ public unsafe partial class TranslationServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return StringNames.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_translate_plural;
-    public string TranslatePlural(string message, string pluralMessage, int n, string context)
+    public static string TranslatePlural(string message, string pluralMessage, int n, string context = "")
     {
         var __mb = __mb_translate_plural;
         if (__mb == 0)
@@ -27548,12 +27536,12 @@ public unsafe partial class TranslationServer : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return StringNames.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_add_translation;
-    public void AddTranslation(Translation? translation)
+    public static void AddTranslation(Translation? translation)
     {
         var __mb = __mb_add_translation;
         if (__mb == 0)
@@ -27565,11 +27553,11 @@ public unsafe partial class TranslationServer : GodotObject
         nint __a0 = translation?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_translation;
-    public void RemoveTranslation(Translation? translation)
+    public static void RemoveTranslation(Translation? translation)
     {
         var __mb = __mb_remove_translation;
         if (__mb == 0)
@@ -27581,11 +27569,11 @@ public unsafe partial class TranslationServer : GodotObject
         nint __a0 = translation?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_translation_object;
-    public Translation? GetTranslationObject(string locale)
+    public static Translation? GetTranslationObject(string locale)
     {
         var __mb = __mb_get_translation_object;
         if (__mb == 0)
@@ -27598,13 +27586,13 @@ public unsafe partial class TranslationServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Translation?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_translations;
-    public Godot.Collections.Array GetTranslations()
+    public static Godot.Collections.Array GetTranslations()
     {
         var __mb = __mb_get_translations;
         if (__mb == 0)
@@ -27614,12 +27602,12 @@ public unsafe partial class TranslationServer : GodotObject
             __mb_get_translations = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_find_translations;
-    public Godot.Collections.Array FindTranslations(string locale, bool exact)
+    public static Godot.Collections.Array FindTranslations(string locale, bool exact)
     {
         var __mb = __mb_find_translations;
         if (__mb == 0)
@@ -27634,13 +27622,13 @@ public unsafe partial class TranslationServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_has_translation_for_locale;
-    public bool HasTranslationForLocale(string locale, bool exact)
+    public static bool HasTranslationForLocale(string locale, bool exact)
     {
         var __mb = __mb_has_translation_for_locale;
         if (__mb == 0)
@@ -27655,13 +27643,13 @@ public unsafe partial class TranslationServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
 
     private static nint __mb_has_translation;
-    public bool HasTranslation(Translation? translation)
+    public static bool HasTranslation(Translation? translation)
     {
         var __mb = __mb_has_translation;
         if (__mb == 0)
@@ -27674,12 +27662,12 @@ public unsafe partial class TranslationServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_domain;
-    public bool HasDomain(string domain)
+    public static bool HasDomain(string domain)
     {
         var __mb = __mb_has_domain;
         if (__mb == 0)
@@ -27692,12 +27680,12 @@ public unsafe partial class TranslationServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_or_add_domain;
-    public TranslationDomain? GetOrAddDomain(string domain)
+    public static TranslationDomain? GetOrAddDomain(string domain)
     {
         var __mb = __mb_get_or_add_domain;
         if (__mb == 0)
@@ -27710,12 +27698,12 @@ public unsafe partial class TranslationServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (TranslationDomain?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_remove_domain;
-    public void RemoveDomain(string domain)
+    public static void RemoveDomain(string domain)
     {
         var __mb = __mb_remove_domain;
         if (__mb == 0)
@@ -27727,11 +27715,11 @@ public unsafe partial class TranslationServer : GodotObject
         ulong __a0 = StringNames.Get(domain).Opaque;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_clear;
-    public void Clear()
+    public static void Clear()
     {
         var __mb = __mb_clear;
         if (__mb == 0)
@@ -27740,11 +27728,11 @@ public unsafe partial class TranslationServer : GodotObject
             if (__mb == 0) throw new MissingMethodException("TranslationServer.clear is not available in this engine build.");
             __mb_clear = __mb;
         }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_format_number;
-    public string FormatNumber(string number, string locale)
+    public static string FormatNumber(string number, string locale)
     {
         var __mb = __mb_format_number;
         if (__mb == 0)
@@ -27759,14 +27747,14 @@ public unsafe partial class TranslationServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_percent_sign;
-    public string GetPercentSign(string locale)
+    public static string GetPercentSign(string locale)
     {
         var __mb = __mb_get_percent_sign;
         if (__mb == 0)
@@ -27779,13 +27767,13 @@ public unsafe partial class TranslationServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_parse_number;
-    public string ParseNumber(string number, string locale)
+    public static string ParseNumber(string number, string locale)
     {
         var __mb = __mb_parse_number;
         if (__mb == 0)
@@ -27800,14 +27788,14 @@ public unsafe partial class TranslationServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_is_pseudolocalization_enabled;
-    internal bool IsPseudolocalizationEnabled()
+    internal static bool IsPseudolocalizationEnabled()
     {
         var __mb = __mb_is_pseudolocalization_enabled;
         if (__mb == 0)
@@ -27817,12 +27805,12 @@ public unsafe partial class TranslationServer : GodotObject
             __mb_is_pseudolocalization_enabled = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_pseudolocalization_enabled;
-    internal void SetPseudolocalizationEnabled(bool enabled)
+    internal static void SetPseudolocalizationEnabled(bool enabled)
     {
         var __mb = __mb_set_pseudolocalization_enabled;
         if (__mb == 0)
@@ -27834,11 +27822,11 @@ public unsafe partial class TranslationServer : GodotObject
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reload_pseudolocalization;
-    public void ReloadPseudolocalization()
+    public static void ReloadPseudolocalization()
     {
         var __mb = __mb_reload_pseudolocalization;
         if (__mb == 0)
@@ -27847,11 +27835,11 @@ public unsafe partial class TranslationServer : GodotObject
             if (__mb == 0) throw new MissingMethodException("TranslationServer.reload_pseudolocalization is not available in this engine build.");
             __mb_reload_pseudolocalization = __mb;
         }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_pseudolocalize;
-    public string Pseudolocalize(string message)
+    public static string Pseudolocalize(string message)
     {
         var __mb = __mb_pseudolocalize;
         if (__mb == 0)
@@ -27864,7 +27852,7 @@ public unsafe partial class TranslationServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return StringNames.ReadAndDestroy(ref __ret);
     }
 }
@@ -27880,24 +27868,24 @@ public unsafe partial class Tree : Control
 
     public enum SelectModeEnum : long
     {
-        SELECT_SINGLE = 0,
-        SELECT_ROW = 1,
-        SELECT_MULTI = 2,
+        Single = 0,
+        Row = 1,
+        Multi = 2,
     }
 
     public enum DropModeFlagsEnum : long
     {
-        DROP_MODE_DISABLED = 0,
-        DROP_MODE_ON_ITEM = 1,
-        DROP_MODE_INBETWEEN = 2,
+        Disabled = 0,
+        OnItem = 1,
+        Inbetween = 2,
     }
 
     public enum ScrollHintModeEnum : long
     {
-        SCROLL_HINT_MODE_DISABLED = 0,
-        SCROLL_HINT_MODE_BOTH = 1,
-        SCROLL_HINT_MODE_TOP = 2,
-        SCROLL_HINT_MODE_BOTTOM = 3,
+        Disabled = 0,
+        Both = 1,
+        Top = 2,
+        Bottom = 3,
     }
 
     public int Columns
@@ -28010,7 +27998,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_create_item;
-    public TreeItem? CreateItem(TreeItem? parent, int index)
+    public TreeItem? CreateItem(TreeItem? parent = null, int index = unchecked((int)(-1)))
     {
         var __mb = __mb_create_item;
         if (__mb == 0)
@@ -28421,7 +28409,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_edit_selected;
-    public bool EditSelected(bool forceEdit)
+    public bool EditSelected(bool forceEdit = false)
     {
         var __mb = __mb_edit_selected;
         if (__mb == 0)
@@ -28454,7 +28442,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_get_item_area_rect;
-    public Rect2 GetItemAreaRect(TreeItem? item, int column, int buttonIndex)
+    public Rect2 GetItemAreaRect(TreeItem? item, int column = unchecked((int)(-1)), int buttonIndex = unchecked((int)(-1)))
     {
         var __mb = __mb_get_item_area_rect;
         if (__mb == 0)
@@ -28790,7 +28778,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_scroll_to_item;
-    public void ScrollToItem(TreeItem? item, bool centerOnItem)
+    public void ScrollToItem(TreeItem? item, bool centerOnItem = false)
     {
         var __mb = __mb_scroll_to_item;
         if (__mb == 0)
@@ -29186,11 +29174,11 @@ public unsafe partial class TreeItem : GodotObject
 
     public enum TreeCellMode : long
     {
-        CELL_MODE_STRING = 0,
-        CELL_MODE_CHECK = 1,
-        CELL_MODE_RANGE = 2,
-        CELL_MODE_ICON = 3,
-        CELL_MODE_CUSTOM = 4,
+        String = 0,
+        Check = 1,
+        Range = 2,
+        Icon = 3,
+        Custom = 4,
     }
 
     public bool Collapsed
@@ -29398,7 +29386,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_propagate_check;
-    public void PropagateCheck(int column, bool emitSignal)
+    public void PropagateCheck(int column, bool emitSignal = true)
     {
         var __mb = __mb_propagate_check;
         if (__mb == 0)
@@ -29996,7 +29984,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_set_range_config;
-    public void SetRangeConfig(int column, double min, double max, double step, bool expr)
+    public void SetRangeConfig(int column, double min, double max, double step, bool expr = false)
     {
         var __mb = __mb_set_range_config;
         if (__mb == 0)
@@ -30177,7 +30165,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_is_any_collapsed;
-    public bool IsAnyCollapsed(bool onlyVisible)
+    public bool IsAnyCollapsed(bool onlyVisible = false)
     {
         var __mb = __mb_is_any_collapsed;
         if (__mb == 0)
@@ -30339,7 +30327,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_select;
-    public void Select(int column, bool setAsCursor)
+    public void Select(int column, bool setAsCursor = true)
     {
         var __mb = __mb_select;
         if (__mb == 0)
@@ -30533,7 +30521,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_set_custom_bg_color;
-    public void SetCustomBgColor(int column, Color color, bool justOutline)
+    public void SetCustomBgColor(int column, Color color, bool justOutline = false)
     {
         var __mb = __mb_set_custom_bg_color;
         if (__mb == 0)
@@ -30636,7 +30624,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_add_button;
-    public void AddButton(int column, Texture2D? button, int id, bool disabled, string tooltipText, string description)
+    public void AddButton(int column, Texture2D? button, int id = unchecked((int)(-1)), bool disabled = false, string tooltipText = "", string description = "")
     {
         var __mb = __mb_add_button;
         if (__mb == 0)
@@ -31093,7 +31081,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_create_child;
-    public TreeItem? CreateChild(int index)
+    public TreeItem? CreateChild(int index = unchecked((int)(-1)))
     {
         var __mb = __mb_create_child;
         if (__mb == 0)
@@ -31218,7 +31206,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_get_next_in_tree;
-    public TreeItem? GetNextInTree(bool wrap)
+    public TreeItem? GetNextInTree(bool wrap = false)
     {
         var __mb = __mb_get_next_in_tree;
         if (__mb == 0)
@@ -31236,7 +31224,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_get_prev_in_tree;
-    public TreeItem? GetPrevInTree(bool wrap)
+    public TreeItem? GetPrevInTree(bool wrap = false)
     {
         var __mb = __mb_get_prev_in_tree;
         if (__mb == 0)
@@ -31254,7 +31242,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_get_next_visible;
-    public TreeItem? GetNextVisible(bool wrap)
+    public TreeItem? GetNextVisible(bool wrap = false)
     {
         var __mb = __mb_get_next_visible;
         if (__mb == 0)
@@ -31272,7 +31260,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_get_prev_visible;
-    public TreeItem? GetPrevVisible(bool wrap)
+    public TreeItem? GetPrevVisible(bool wrap = false)
     {
         var __mb = __mb_get_prev_visible;
         if (__mb == 0)
@@ -31752,39 +31740,39 @@ public unsafe partial class Tween : RefCounted
 
     public enum TweenProcessMode : long
     {
-        TWEEN_PROCESS_PHYSICS = 0,
-        TWEEN_PROCESS_IDLE = 1,
+        Physics = 0,
+        Idle = 1,
     }
 
     public enum TweenPauseMode : long
     {
-        TWEEN_PAUSE_BOUND = 0,
-        TWEEN_PAUSE_STOP = 1,
-        TWEEN_PAUSE_PROCESS = 2,
+        Bound = 0,
+        Stop = 1,
+        Process = 2,
     }
 
     public enum TransitionType : long
     {
-        TRANS_LINEAR = 0,
-        TRANS_SINE = 1,
-        TRANS_QUINT = 2,
-        TRANS_QUART = 3,
-        TRANS_QUAD = 4,
-        TRANS_EXPO = 5,
-        TRANS_ELASTIC = 6,
-        TRANS_CUBIC = 7,
-        TRANS_CIRC = 8,
-        TRANS_BOUNCE = 9,
-        TRANS_BACK = 10,
-        TRANS_SPRING = 11,
+        Linear = 0,
+        Sine = 1,
+        Quint = 2,
+        Quart = 3,
+        Quad = 4,
+        Expo = 5,
+        Elastic = 6,
+        Cubic = 7,
+        Circ = 8,
+        Bounce = 9,
+        Back = 10,
+        Spring = 11,
     }
 
     public enum EaseType : long
     {
-        EASE_IN = 0,
-        EASE_OUT = 1,
-        EASE_IN_OUT = 2,
-        EASE_OUT_IN = 3,
+        In = 0,
+        Out = 1,
+        InOut = 2,
+        OutIn = 3,
     }
 
     private static nint __mb_tween_property;
@@ -32017,7 +32005,7 @@ public unsafe partial class Tween : RefCounted
     }
 
     private static nint __mb_set_ignore_time_scale;
-    public Tween? SetIgnoreTimeScale(bool ignore)
+    public Tween? SetIgnoreTimeScale(bool ignore = true)
     {
         var __mb = __mb_set_ignore_time_scale;
         if (__mb == 0)
@@ -32035,7 +32023,7 @@ public unsafe partial class Tween : RefCounted
     }
 
     private static nint __mb_set_parallel;
-    public Tween? SetParallel(bool parallel)
+    public Tween? SetParallel(bool parallel = true)
     {
         var __mb = __mb_set_parallel;
         if (__mb == 0)
@@ -32053,7 +32041,7 @@ public unsafe partial class Tween : RefCounted
     }
 
     private static nint __mb_set_loops;
-    public Tween? SetLoops(int loops)
+    public Tween? SetLoops(int loops = unchecked((int)(0)))
     {
         var __mb = __mb_set_loops;
         if (__mb == 0)

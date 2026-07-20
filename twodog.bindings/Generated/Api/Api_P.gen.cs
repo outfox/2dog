@@ -20,7 +20,7 @@ public unsafe partial class PCKPacker : RefCounted
     }
 
     private static nint __mb_pck_start;
-    public Error PckStart(string pckPath, int alignment, string key, bool encryptDirectory)
+    public Error PckStart(string pckPath, int alignment = unchecked((int)(32)), string key = "0000000000000000000000000000000000000000000000000000000000000000", bool encryptDirectory = false)
     {
         var __mb = __mb_pck_start;
         if (__mb == 0)
@@ -46,7 +46,7 @@ public unsafe partial class PCKPacker : RefCounted
     }
 
     private static nint __mb_add_file;
-    public Error AddFile(string targetPath, string sourcePath, bool encrypt)
+    public Error AddFile(string targetPath, string sourcePath, bool encrypt = false)
     {
         var __mb = __mb_add_file;
         if (__mb == 0)
@@ -89,7 +89,7 @@ public unsafe partial class PCKPacker : RefCounted
     }
 
     private static nint __mb_flush;
-    public Error Flush(bool verbose)
+    public Error Flush(bool verbose = false)
     {
         var __mb = __mb_flush;
         if (__mb == 0)
@@ -181,10 +181,10 @@ public unsafe partial class PackedScene : Resource
 
     public enum GenEditState : long
     {
-        GEN_EDIT_STATE_DISABLED = 0,
-        GEN_EDIT_STATE_INSTANCE = 1,
-        GEN_EDIT_STATE_MAIN = 2,
-        GEN_EDIT_STATE_MAIN_INHERITED = 3,
+        Disabled = 0,
+        Instance = 1,
+        Main = 2,
+        MainInherited = 3,
     }
 
     private static nint __mb_pack;
@@ -206,7 +206,7 @@ public unsafe partial class PackedScene : Resource
     }
 
     private static nint __mb_instantiate;
-    public Node? Instantiate(PackedScene.GenEditState editState)
+    public Node? Instantiate(PackedScene.GenEditState editState = (PackedScene.GenEditState)(0))
     {
         var __mb = __mb_instantiate;
         if (__mb == 0)
@@ -265,7 +265,7 @@ public unsafe partial class PacketPeer : RefCounted
     }
 
     private static nint __mb_get_var;
-    public Variant GetVar(bool allowObjects)
+    public Variant GetVar(bool allowObjects = false)
     {
         var __mb = __mb_get_var;
         if (__mb == 0)
@@ -283,7 +283,7 @@ public unsafe partial class PacketPeer : RefCounted
     }
 
     private static nint __mb_put_var;
-    public Error PutVar(Variant var, bool fullObjects)
+    public Error PutVar(Variant var, bool fullObjects = false)
     {
         var __mb = __mb_put_var;
         if (__mb == 0)
@@ -375,11 +375,11 @@ public unsafe partial class PacketPeerDTLS : PacketPeer
 
     public enum Status : long
     {
-        STATUS_DISCONNECTED = 0,
-        STATUS_HANDSHAKING = 1,
-        STATUS_CONNECTED = 2,
-        STATUS_ERROR = 3,
-        STATUS_ERROR_HOSTNAME_MISMATCH = 4,
+        Disconnected = 0,
+        Handshaking = 1,
+        Connected = 2,
+        Error = 3,
+        ErrorHostnameMismatch = 4,
     }
 
     private static nint __mb_poll;
@@ -396,7 +396,7 @@ public unsafe partial class PacketPeerDTLS : PacketPeer
     }
 
     private static nint __mb_connect_to_peer;
-    public Error ConnectToPeer(PacketPeerUDP? packetPeer, string hostname, TLSOptions? clientOptions)
+    public Error ConnectToPeer(PacketPeerUDP? packetPeer, string hostname, TLSOptions? clientOptions = null)
     {
         var __mb = __mb_connect_to_peer;
         if (__mb == 0)
@@ -612,7 +612,7 @@ public unsafe partial class PacketPeerUDP : PacketPeer
     }
 
     private static nint __mb_bind;
-    public Error Bind(int port, string bindAddress, int recvBufSize)
+    public Error Bind(int port, string bindAddress = "*", int recvBufSize = unchecked((int)(65536)))
     {
         var __mb = __mb_bind;
         if (__mb == 0)
@@ -1725,65 +1725,65 @@ public unsafe partial class ParticleProcessMaterial : Material
 
     public enum Parameter : long
     {
-        PARAM_INITIAL_LINEAR_VELOCITY = 0,
-        PARAM_ANGULAR_VELOCITY = 1,
-        PARAM_ORBIT_VELOCITY = 2,
-        PARAM_LINEAR_ACCEL = 3,
-        PARAM_RADIAL_ACCEL = 4,
-        PARAM_TANGENTIAL_ACCEL = 5,
-        PARAM_DAMPING = 6,
-        PARAM_ANGLE = 7,
-        PARAM_SCALE = 8,
-        PARAM_HUE_VARIATION = 9,
-        PARAM_ANIM_SPEED = 10,
-        PARAM_ANIM_OFFSET = 11,
-        PARAM_RADIAL_VELOCITY = 15,
-        PARAM_DIRECTIONAL_VELOCITY = 16,
-        PARAM_SCALE_OVER_VELOCITY = 17,
-        PARAM_MAX = 18,
-        PARAM_TURB_VEL_INFLUENCE = 13,
-        PARAM_TURB_INIT_DISPLACEMENT = 14,
-        PARAM_TURB_INFLUENCE_OVER_LIFE = 12,
+        InitialLinearVelocity = 0,
+        AngularVelocity = 1,
+        OrbitVelocity = 2,
+        LinearAccel = 3,
+        RadialAccel = 4,
+        TangentialAccel = 5,
+        Damping = 6,
+        Angle = 7,
+        Scale = 8,
+        HueVariation = 9,
+        AnimSpeed = 10,
+        AnimOffset = 11,
+        RadialVelocity = 15,
+        DirectionalVelocity = 16,
+        ScaleOverVelocity = 17,
+        Max = 18,
+        TurbVelInfluence = 13,
+        TurbInitDisplacement = 14,
+        TurbInfluenceOverLife = 12,
     }
 
     public enum ParticleFlags : long
     {
-        PARTICLE_FLAG_ALIGN_Y_TO_VELOCITY = 0,
-        PARTICLE_FLAG_ROTATE_Y = 1,
-        PARTICLE_FLAG_DISABLE_Z = 2,
-        PARTICLE_FLAG_DAMPING_AS_FRICTION = 3,
-        PARTICLE_FLAG_INHERIT_EMITTER_SCALE = 4,
-        PARTICLE_FLAG_MAX = 5,
+        AlignYToVelocity = 0,
+        RotateY = 1,
+        DisableZ = 2,
+        DampingAsFriction = 3,
+        InheritEmitterScale = 4,
+        Max = 5,
     }
 
     public enum EmissionShapeEnum : long
     {
-        EMISSION_SHAPE_POINT = 0,
-        EMISSION_SHAPE_SPHERE = 1,
-        EMISSION_SHAPE_SPHERE_SURFACE = 2,
-        EMISSION_SHAPE_BOX = 3,
-        EMISSION_SHAPE_POINTS = 4,
-        EMISSION_SHAPE_DIRECTED_POINTS = 5,
-        EMISSION_SHAPE_RING = 6,
-        EMISSION_SHAPE_MAX = 7,
+        Point = 0,
+        Sphere = 1,
+        SphereSurface = 2,
+        Box = 3,
+        Points = 4,
+        DirectedPoints = 5,
+        Ring = 6,
+        Max = 7,
     }
 
     public enum SubEmitterModeEnum : long
     {
-        SUB_EMITTER_DISABLED = 0,
-        SUB_EMITTER_CONSTANT = 1,
-        SUB_EMITTER_AT_END = 2,
-        SUB_EMITTER_AT_COLLISION = 3,
-        SUB_EMITTER_AT_START = 4,
-        SUB_EMITTER_MAX = 5,
+        Disabled = 0,
+        Constant = 1,
+        AtEnd = 2,
+        AtCollision = 3,
+        AtStart = 4,
+        Max = 5,
     }
 
     public enum CollisionModeEnum : long
     {
-        COLLISION_DISABLED = 0,
-        COLLISION_RIGID = 1,
-        COLLISION_HIDE_ON_CONTACT = 2,
-        COLLISION_MAX = 3,
+        Disabled = 0,
+        Rigid = 1,
+        HideOnContact = 2,
+        Max = 3,
     }
 
     public double LifetimeRandomness
@@ -4765,11 +4765,11 @@ public unsafe partial class PathFollow3D : Node3D
 
     public enum RotationModeEnum : long
     {
-        ROTATION_NONE = 0,
-        ROTATION_Y = 1,
-        ROTATION_XY = 2,
-        ROTATION_XYZ = 3,
-        ROTATION_ORIENTED = 4,
+        None = 0,
+        Y = 1,
+        Xy = 2,
+        Xyz = 3,
+        Oriented = 4,
     }
 
     public float Progress
@@ -5126,92 +5126,89 @@ public unsafe partial class PathFollow3D : Node3D
     }
 }
 
-public unsafe partial class Performance : GodotObject
+public static unsafe partial class Performance
 {
-    internal Performance(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public Performance() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "Performance");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("Performance");
 
-    private static Performance? _singleton;
-    public static Performance Singleton => _singleton ??= (Performance)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("Performance"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum Monitor : long
     {
-        TIME_FPS = 0,
-        TIME_PROCESS = 1,
-        TIME_PHYSICS_PROCESS = 2,
-        TIME_NAVIGATION_PROCESS = 3,
-        MEMORY_STATIC = 4,
-        MEMORY_STATIC_MAX = 5,
-        MEMORY_MESSAGE_BUFFER_MAX = 6,
-        OBJECT_COUNT = 7,
-        OBJECT_RESOURCE_COUNT = 8,
-        OBJECT_NODE_COUNT = 9,
-        OBJECT_ORPHAN_NODE_COUNT = 10,
-        RENDER_TOTAL_OBJECTS_IN_FRAME = 11,
-        RENDER_TOTAL_PRIMITIVES_IN_FRAME = 12,
-        RENDER_TOTAL_DRAW_CALLS_IN_FRAME = 13,
-        RENDER_VIDEO_MEM_USED = 14,
-        RENDER_TEXTURE_MEM_USED = 15,
-        RENDER_BUFFER_MEM_USED = 16,
-        PHYSICS_2D_ACTIVE_OBJECTS = 17,
-        PHYSICS_2D_COLLISION_PAIRS = 18,
-        PHYSICS_2D_ISLAND_COUNT = 19,
-        PHYSICS_3D_ACTIVE_OBJECTS = 20,
-        PHYSICS_3D_COLLISION_PAIRS = 21,
-        PHYSICS_3D_ISLAND_COUNT = 22,
-        AUDIO_OUTPUT_LATENCY = 23,
-        NAVIGATION_ACTIVE_MAPS = 24,
-        NAVIGATION_REGION_COUNT = 25,
-        NAVIGATION_AGENT_COUNT = 26,
-        NAVIGATION_LINK_COUNT = 27,
-        NAVIGATION_POLYGON_COUNT = 28,
-        NAVIGATION_EDGE_COUNT = 29,
-        NAVIGATION_EDGE_MERGE_COUNT = 30,
-        NAVIGATION_EDGE_CONNECTION_COUNT = 31,
-        NAVIGATION_EDGE_FREE_COUNT = 32,
-        NAVIGATION_OBSTACLE_COUNT = 33,
-        PIPELINE_COMPILATIONS_CANVAS = 34,
-        PIPELINE_COMPILATIONS_MESH = 35,
-        PIPELINE_COMPILATIONS_SURFACE = 36,
-        PIPELINE_COMPILATIONS_DRAW = 37,
-        PIPELINE_COMPILATIONS_SPECIALIZATION = 38,
-        NAVIGATION_2D_ACTIVE_MAPS = 39,
-        NAVIGATION_2D_REGION_COUNT = 40,
-        NAVIGATION_2D_AGENT_COUNT = 41,
-        NAVIGATION_2D_LINK_COUNT = 42,
-        NAVIGATION_2D_POLYGON_COUNT = 43,
-        NAVIGATION_2D_EDGE_COUNT = 44,
-        NAVIGATION_2D_EDGE_MERGE_COUNT = 45,
-        NAVIGATION_2D_EDGE_CONNECTION_COUNT = 46,
-        NAVIGATION_2D_EDGE_FREE_COUNT = 47,
-        NAVIGATION_2D_OBSTACLE_COUNT = 48,
-        NAVIGATION_3D_ACTIVE_MAPS = 49,
-        NAVIGATION_3D_REGION_COUNT = 50,
-        NAVIGATION_3D_AGENT_COUNT = 51,
-        NAVIGATION_3D_LINK_COUNT = 52,
-        NAVIGATION_3D_POLYGON_COUNT = 53,
-        NAVIGATION_3D_EDGE_COUNT = 54,
-        NAVIGATION_3D_EDGE_MERGE_COUNT = 55,
-        NAVIGATION_3D_EDGE_CONNECTION_COUNT = 56,
-        NAVIGATION_3D_EDGE_FREE_COUNT = 57,
-        NAVIGATION_3D_OBSTACLE_COUNT = 58,
-        MONITOR_MAX = 59,
+        TimeFps = 0,
+        TimeProcess = 1,
+        TimePhysicsProcess = 2,
+        TimeNavigationProcess = 3,
+        MemoryStatic = 4,
+        MemoryStaticMax = 5,
+        MemoryMessageBufferMax = 6,
+        ObjectCount = 7,
+        ObjectResourceCount = 8,
+        ObjectNodeCount = 9,
+        ObjectOrphanNodeCount = 10,
+        RenderTotalObjectsInFrame = 11,
+        RenderTotalPrimitivesInFrame = 12,
+        RenderTotalDrawCallsInFrame = 13,
+        RenderVideoMemUsed = 14,
+        RenderTextureMemUsed = 15,
+        RenderBufferMemUsed = 16,
+        Physics2dActiveObjects = 17,
+        Physics2dCollisionPairs = 18,
+        Physics2dIslandCount = 19,
+        Physics3dActiveObjects = 20,
+        Physics3dCollisionPairs = 21,
+        Physics3dIslandCount = 22,
+        AudioOutputLatency = 23,
+        NavigationActiveMaps = 24,
+        NavigationRegionCount = 25,
+        NavigationAgentCount = 26,
+        NavigationLinkCount = 27,
+        NavigationPolygonCount = 28,
+        NavigationEdgeCount = 29,
+        NavigationEdgeMergeCount = 30,
+        NavigationEdgeConnectionCount = 31,
+        NavigationEdgeFreeCount = 32,
+        NavigationObstacleCount = 33,
+        PipelineCompilationsCanvas = 34,
+        PipelineCompilationsMesh = 35,
+        PipelineCompilationsSurface = 36,
+        PipelineCompilationsDraw = 37,
+        PipelineCompilationsSpecialization = 38,
+        Navigation2dActiveMaps = 39,
+        Navigation2dRegionCount = 40,
+        Navigation2dAgentCount = 41,
+        Navigation2dLinkCount = 42,
+        Navigation2dPolygonCount = 43,
+        Navigation2dEdgeCount = 44,
+        Navigation2dEdgeMergeCount = 45,
+        Navigation2dEdgeConnectionCount = 46,
+        Navigation2dEdgeFreeCount = 47,
+        Navigation2dObstacleCount = 48,
+        Navigation3dActiveMaps = 49,
+        Navigation3dRegionCount = 50,
+        Navigation3dAgentCount = 51,
+        Navigation3dLinkCount = 52,
+        Navigation3dPolygonCount = 53,
+        Navigation3dEdgeCount = 54,
+        Navigation3dEdgeMergeCount = 55,
+        Navigation3dEdgeConnectionCount = 56,
+        Navigation3dEdgeFreeCount = 57,
+        Navigation3dObstacleCount = 58,
+        MonitorMax = 59,
     }
 
     public enum MonitorType : long
     {
-        MONITOR_TYPE_QUANTITY = 0,
-        MONITOR_TYPE_MEMORY = 1,
-        MONITOR_TYPE_TIME = 2,
-        MONITOR_TYPE_PERCENTAGE = 3,
+        Quantity = 0,
+        Memory = 1,
+        Time = 2,
+        Percentage = 3,
     }
 
     private static nint __mb_get_monitor;
-    public double GetMonitor(Performance.Monitor monitor)
+    public static double GetMonitor(Performance.Monitor monitor)
     {
         var __mb = __mb_get_monitor;
         if (__mb == 0)
@@ -5224,12 +5221,12 @@ public unsafe partial class Performance : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (double)__ret;
     }
 
     private static nint __mb_remove_custom_monitor;
-    public void RemoveCustomMonitor(string id)
+    public static void RemoveCustomMonitor(string id)
     {
         var __mb = __mb_remove_custom_monitor;
         if (__mb == 0)
@@ -5241,11 +5238,11 @@ public unsafe partial class Performance : GodotObject
         ulong __a0 = StringNames.Get(id).Opaque;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_custom_monitor;
-    public bool HasCustomMonitor(string id)
+    public static bool HasCustomMonitor(string id)
     {
         var __mb = __mb_has_custom_monitor;
         if (__mb == 0)
@@ -5258,12 +5255,12 @@ public unsafe partial class Performance : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_custom_monitor;
-    public Variant GetCustomMonitor(string id)
+    public static Variant GetCustomMonitor(string id)
     {
         var __mb = __mb_get_custom_monitor;
         if (__mb == 0)
@@ -5276,12 +5273,12 @@ public unsafe partial class Performance : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_get_monitor_modification_time;
-    public ulong GetMonitorModificationTime()
+    public static ulong GetMonitorModificationTime()
     {
         var __mb = __mb_get_monitor_modification_time;
         if (__mb == 0)
@@ -5291,12 +5288,12 @@ public unsafe partial class Performance : GodotObject
             __mb_get_monitor_modification_time = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_custom_monitor_names;
-    public Godot.Collections.Array GetCustomMonitorNames()
+    public static Godot.Collections.Array GetCustomMonitorNames()
     {
         var __mb = __mb_get_custom_monitor_names;
         if (__mb == 0)
@@ -5306,7 +5303,7 @@ public unsafe partial class Performance : GodotObject
             __mb_get_custom_monitor_names = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 }
@@ -5547,18 +5544,18 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
 
     public enum DampMode : long
     {
-        DAMP_MODE_COMBINE = 0,
-        DAMP_MODE_REPLACE = 1,
+        Combine = 0,
+        Replace = 1,
     }
 
     public enum JointTypeEnum : long
     {
-        JOINT_TYPE_NONE = 0,
-        JOINT_TYPE_PIN = 1,
-        JOINT_TYPE_CONE = 2,
-        JOINT_TYPE_HINGE = 3,
-        JOINT_TYPE_SLIDER = 4,
-        JOINT_TYPE_6DOF = 5,
+        None = 0,
+        Pin = 1,
+        Cone = 2,
+        Hinge = 3,
+        Slider = 4,
+        Type6dof = 5,
     }
 
     public PhysicalBone3D.JointTypeEnum JointType
@@ -5674,7 +5671,7 @@ public unsafe partial class PhysicalBone3D : PhysicsBody3D
     }
 
     private static nint __mb_apply_impulse;
-    public void ApplyImpulse(Vector3 impulse, Vector3 position)
+    public void ApplyImpulse(Vector3 impulse, Vector3 position = default)
     {
         var __mb = __mb_apply_impulse;
         if (__mb == 0)
@@ -6756,7 +6753,7 @@ public unsafe partial class PhysicsBody2D : CollisionObject2D
     internal PhysicsBody2D(nint ptr, bool rc) : base(ptr, rc) { }
 
     private static nint __mb_move_and_collide;
-    public KinematicCollision2D? MoveAndCollide(Vector2 motion, bool testOnly, float safeMargin, bool recoveryAsCollision)
+    public KinematicCollision2D? MoveAndCollide(Vector2 motion, bool testOnly = false, float safeMargin = 0.08f, bool recoveryAsCollision = false)
     {
         var __mb = __mb_move_and_collide;
         if (__mb == 0)
@@ -6780,7 +6777,7 @@ public unsafe partial class PhysicsBody2D : CollisionObject2D
     }
 
     private static nint __mb_test_move;
-    public bool TestMove(Transform2D from, Vector2 motion, KinematicCollision2D? collision, float safeMargin, bool recoveryAsCollision)
+    public bool TestMove(Transform2D from, Vector2 motion, KinematicCollision2D? collision = null, float safeMargin = 0.08f, bool recoveryAsCollision = false)
     {
         var __mb = __mb_test_move;
         if (__mb == 0)
@@ -6909,7 +6906,7 @@ public unsafe partial class PhysicsBody3D : CollisionObject3D
     }
 
     private static nint __mb_move_and_collide;
-    public KinematicCollision3D? MoveAndCollide(Vector3 motion, bool testOnly, float safeMargin, bool recoveryAsCollision, int maxCollisions)
+    public KinematicCollision3D? MoveAndCollide(Vector3 motion, bool testOnly = false, float safeMargin = 0.001f, bool recoveryAsCollision = false, int maxCollisions = unchecked((int)(1)))
     {
         var __mb = __mb_move_and_collide;
         if (__mb == 0)
@@ -6935,7 +6932,7 @@ public unsafe partial class PhysicsBody3D : CollisionObject3D
     }
 
     private static nint __mb_test_move;
-    public bool TestMove(Transform3D from, Vector3 motion, KinematicCollision3D? collision, float safeMargin, bool recoveryAsCollision, int maxCollisions)
+    public bool TestMove(Transform3D from, Vector3 motion, KinematicCollision3D? collision = null, float safeMargin = 0.001f, bool recoveryAsCollision = false, int maxCollisions = unchecked((int)(1)))
     {
         var __mb = __mb_test_move;
         if (__mb == 0)
@@ -7366,7 +7363,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_apply_impulse;
-    public void ApplyImpulse(Vector2 impulse, Vector2 position)
+    public void ApplyImpulse(Vector2 impulse, Vector2 position = default)
     {
         var __mb = __mb_apply_impulse;
         if (__mb == 0)
@@ -7384,7 +7381,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_apply_central_force;
-    public void ApplyCentralForce(Vector2 force)
+    public void ApplyCentralForce(Vector2 force = default)
     {
         var __mb = __mb_apply_central_force;
         if (__mb == 0)
@@ -7400,7 +7397,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_apply_force;
-    public void ApplyForce(Vector2 force, Vector2 position)
+    public void ApplyForce(Vector2 force, Vector2 position = default)
     {
         var __mb = __mb_apply_force;
         if (__mb == 0)
@@ -7434,7 +7431,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_add_constant_central_force;
-    public void AddConstantCentralForce(Vector2 force)
+    public void AddConstantCentralForce(Vector2 force = default)
     {
         var __mb = __mb_add_constant_central_force;
         if (__mb == 0)
@@ -7450,7 +7447,7 @@ public unsafe partial class PhysicsDirectBodyState2D : GodotObject
     }
 
     private static nint __mb_add_constant_force;
-    public void AddConstantForce(Vector2 force, Vector2 position)
+    public void AddConstantForce(Vector2 force, Vector2 position = default)
     {
         var __mb = __mb_add_constant_force;
         if (__mb == 0)
@@ -8650,7 +8647,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_apply_central_impulse;
-    public void ApplyCentralImpulse(Vector3 impulse)
+    public void ApplyCentralImpulse(Vector3 impulse = default)
     {
         var __mb = __mb_apply_central_impulse;
         if (__mb == 0)
@@ -8666,7 +8663,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_apply_impulse;
-    public void ApplyImpulse(Vector3 impulse, Vector3 position)
+    public void ApplyImpulse(Vector3 impulse, Vector3 position = default)
     {
         var __mb = __mb_apply_impulse;
         if (__mb == 0)
@@ -8700,7 +8697,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_apply_central_force;
-    public void ApplyCentralForce(Vector3 force)
+    public void ApplyCentralForce(Vector3 force = default)
     {
         var __mb = __mb_apply_central_force;
         if (__mb == 0)
@@ -8716,7 +8713,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_apply_force;
-    public void ApplyForce(Vector3 force, Vector3 position)
+    public void ApplyForce(Vector3 force, Vector3 position = default)
     {
         var __mb = __mb_apply_force;
         if (__mb == 0)
@@ -8750,7 +8747,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_add_constant_central_force;
-    public void AddConstantCentralForce(Vector3 force)
+    public void AddConstantCentralForce(Vector3 force = default)
     {
         var __mb = __mb_add_constant_central_force;
         if (__mb == 0)
@@ -8766,7 +8763,7 @@ public unsafe partial class PhysicsDirectBodyState3D : GodotObject
     }
 
     private static nint __mb_add_constant_force;
-    public void AddConstantForce(Vector3 force, Vector3 position)
+    public void AddConstantForce(Vector3 force, Vector3 position = default)
     {
         var __mb = __mb_add_constant_force;
         if (__mb == 0)
@@ -9682,7 +9679,7 @@ public unsafe partial class PhysicsDirectSpaceState2D : GodotObject
     internal PhysicsDirectSpaceState2D(nint ptr, bool rc) : base(ptr, rc) { }
 
     private static nint __mb_intersect_point;
-    public Godot.Collections.Array IntersectPoint(PhysicsPointQueryParameters2D? parameters, int maxResults)
+    public Godot.Collections.Array IntersectPoint(PhysicsPointQueryParameters2D? parameters, int maxResults = unchecked((int)(32)))
     {
         var __mb = __mb_intersect_point;
         if (__mb == 0)
@@ -9720,7 +9717,7 @@ public unsafe partial class PhysicsDirectSpaceState2D : GodotObject
     }
 
     private static nint __mb_intersect_shape;
-    public Godot.Collections.Array IntersectShape(PhysicsShapeQueryParameters2D? parameters, int maxResults)
+    public Godot.Collections.Array IntersectShape(PhysicsShapeQueryParameters2D? parameters, int maxResults = unchecked((int)(32)))
     {
         var __mb = __mb_intersect_shape;
         if (__mb == 0)
@@ -9740,7 +9737,7 @@ public unsafe partial class PhysicsDirectSpaceState2D : GodotObject
     }
 
     private static nint __mb_collide_shape;
-    public Godot.Collections.Array CollideShape(PhysicsShapeQueryParameters2D? parameters, int maxResults)
+    public Godot.Collections.Array CollideShape(PhysicsShapeQueryParameters2D? parameters, int maxResults = unchecked((int)(32)))
     {
         var __mb = __mb_collide_shape;
         if (__mb == 0)
@@ -9811,7 +9808,7 @@ public unsafe partial class PhysicsDirectSpaceState3D : GodotObject
     internal PhysicsDirectSpaceState3D(nint ptr, bool rc) : base(ptr, rc) { }
 
     private static nint __mb_intersect_point;
-    public Godot.Collections.Array IntersectPoint(PhysicsPointQueryParameters3D? parameters, int maxResults)
+    public Godot.Collections.Array IntersectPoint(PhysicsPointQueryParameters3D? parameters, int maxResults = unchecked((int)(32)))
     {
         var __mb = __mb_intersect_point;
         if (__mb == 0)
@@ -9849,7 +9846,7 @@ public unsafe partial class PhysicsDirectSpaceState3D : GodotObject
     }
 
     private static nint __mb_intersect_shape;
-    public Godot.Collections.Array IntersectShape(PhysicsShapeQueryParameters3D? parameters, int maxResults)
+    public Godot.Collections.Array IntersectShape(PhysicsShapeQueryParameters3D? parameters, int maxResults = unchecked((int)(32)))
     {
         var __mb = __mb_intersect_shape;
         if (__mb == 0)
@@ -9869,7 +9866,7 @@ public unsafe partial class PhysicsDirectSpaceState3D : GodotObject
     }
 
     private static nint __mb_collide_shape;
-    public Godot.Collections.Array CollideShape(PhysicsShapeQueryParameters3D? parameters, int maxResults)
+    public Godot.Collections.Array CollideShape(PhysicsShapeQueryParameters3D? parameters, int maxResults = unchecked((int)(32)))
     {
         var __mb = __mb_collide_shape;
         if (__mb == 0)
@@ -11167,145 +11164,145 @@ public unsafe partial class PhysicsServer2D : GodotObject
 
     public enum SpaceParameter : long
     {
-        SPACE_PARAM_CONTACT_RECYCLE_RADIUS = 0,
-        SPACE_PARAM_CONTACT_MAX_SEPARATION = 1,
-        SPACE_PARAM_CONTACT_MAX_ALLOWED_PENETRATION = 2,
-        SPACE_PARAM_CONTACT_DEFAULT_BIAS = 3,
-        SPACE_PARAM_BODY_LINEAR_VELOCITY_SLEEP_THRESHOLD = 4,
-        SPACE_PARAM_BODY_ANGULAR_VELOCITY_SLEEP_THRESHOLD = 5,
-        SPACE_PARAM_BODY_TIME_TO_SLEEP = 6,
-        SPACE_PARAM_CONSTRAINT_DEFAULT_BIAS = 7,
-        SPACE_PARAM_SOLVER_ITERATIONS = 8,
+        ContactRecycleRadius = 0,
+        ContactMaxSeparation = 1,
+        ContactMaxAllowedPenetration = 2,
+        ContactDefaultBias = 3,
+        BodyLinearVelocitySleepThreshold = 4,
+        BodyAngularVelocitySleepThreshold = 5,
+        BodyTimeToSleep = 6,
+        ConstraintDefaultBias = 7,
+        SolverIterations = 8,
     }
 
     public enum ShapeType : long
     {
-        SHAPE_WORLD_BOUNDARY = 0,
-        SHAPE_SEPARATION_RAY = 1,
-        SHAPE_SEGMENT = 2,
-        SHAPE_CIRCLE = 3,
-        SHAPE_RECTANGLE = 4,
-        SHAPE_CAPSULE = 5,
-        SHAPE_CONVEX_POLYGON = 6,
-        SHAPE_CONCAVE_POLYGON = 7,
-        SHAPE_CUSTOM = 8,
+        WorldBoundary = 0,
+        SeparationRay = 1,
+        Segment = 2,
+        Circle = 3,
+        Rectangle = 4,
+        Capsule = 5,
+        ConvexPolygon = 6,
+        ConcavePolygon = 7,
+        Custom = 8,
     }
 
     public enum AreaParameter : long
     {
-        AREA_PARAM_GRAVITY_OVERRIDE_MODE = 0,
-        AREA_PARAM_GRAVITY = 1,
-        AREA_PARAM_GRAVITY_VECTOR = 2,
-        AREA_PARAM_GRAVITY_IS_POINT = 3,
-        AREA_PARAM_GRAVITY_POINT_UNIT_DISTANCE = 4,
-        AREA_PARAM_LINEAR_DAMP_OVERRIDE_MODE = 5,
-        AREA_PARAM_LINEAR_DAMP = 6,
-        AREA_PARAM_ANGULAR_DAMP_OVERRIDE_MODE = 7,
-        AREA_PARAM_ANGULAR_DAMP = 8,
-        AREA_PARAM_PRIORITY = 9,
+        GravityOverrideMode = 0,
+        Gravity = 1,
+        GravityVector = 2,
+        GravityIsPoint = 3,
+        GravityPointUnitDistance = 4,
+        LinearDampOverrideMode = 5,
+        LinearDamp = 6,
+        AngularDampOverrideMode = 7,
+        AngularDamp = 8,
+        Priority = 9,
     }
 
     public enum AreaSpaceOverrideMode : long
     {
-        AREA_SPACE_OVERRIDE_DISABLED = 0,
-        AREA_SPACE_OVERRIDE_COMBINE = 1,
-        AREA_SPACE_OVERRIDE_COMBINE_REPLACE = 2,
-        AREA_SPACE_OVERRIDE_REPLACE = 3,
-        AREA_SPACE_OVERRIDE_REPLACE_COMBINE = 4,
+        Disabled = 0,
+        Combine = 1,
+        CombineReplace = 2,
+        Replace = 3,
+        ReplaceCombine = 4,
     }
 
     public enum BodyMode : long
     {
-        BODY_MODE_STATIC = 0,
-        BODY_MODE_KINEMATIC = 1,
-        BODY_MODE_RIGID = 2,
-        BODY_MODE_RIGID_LINEAR = 3,
+        Static = 0,
+        Kinematic = 1,
+        Rigid = 2,
+        RigidLinear = 3,
     }
 
     public enum BodyParameter : long
     {
-        BODY_PARAM_BOUNCE = 0,
-        BODY_PARAM_FRICTION = 1,
-        BODY_PARAM_MASS = 2,
-        BODY_PARAM_INERTIA = 3,
-        BODY_PARAM_CENTER_OF_MASS = 4,
-        BODY_PARAM_GRAVITY_SCALE = 5,
-        BODY_PARAM_LINEAR_DAMP_MODE = 6,
-        BODY_PARAM_ANGULAR_DAMP_MODE = 7,
-        BODY_PARAM_LINEAR_DAMP = 8,
-        BODY_PARAM_ANGULAR_DAMP = 9,
-        BODY_PARAM_MAX = 10,
+        Bounce = 0,
+        Friction = 1,
+        Mass = 2,
+        Inertia = 3,
+        CenterOfMass = 4,
+        GravityScale = 5,
+        LinearDampMode = 6,
+        AngularDampMode = 7,
+        LinearDamp = 8,
+        AngularDamp = 9,
+        Max = 10,
     }
 
     public enum BodyDampMode : long
     {
-        BODY_DAMP_MODE_COMBINE = 0,
-        BODY_DAMP_MODE_REPLACE = 1,
+        Combine = 0,
+        Replace = 1,
     }
 
     public enum BodyState : long
     {
-        BODY_STATE_TRANSFORM = 0,
-        BODY_STATE_LINEAR_VELOCITY = 1,
-        BODY_STATE_ANGULAR_VELOCITY = 2,
-        BODY_STATE_SLEEPING = 3,
-        BODY_STATE_CAN_SLEEP = 4,
+        Transform = 0,
+        LinearVelocity = 1,
+        AngularVelocity = 2,
+        Sleeping = 3,
+        CanSleep = 4,
     }
 
     public enum JointType : long
     {
-        JOINT_TYPE_PIN = 0,
-        JOINT_TYPE_GROOVE = 1,
-        JOINT_TYPE_DAMPED_SPRING = 2,
-        JOINT_TYPE_MAX = 3,
+        Pin = 0,
+        Groove = 1,
+        DampedSpring = 2,
+        Max = 3,
     }
 
     public enum JointParam : long
     {
-        JOINT_PARAM_BIAS = 0,
-        JOINT_PARAM_MAX_BIAS = 1,
-        JOINT_PARAM_MAX_FORCE = 2,
+        Bias = 0,
+        MaxBias = 1,
+        MaxForce = 2,
     }
 
     public enum PinJointParam : long
     {
-        PIN_JOINT_SOFTNESS = 0,
-        PIN_JOINT_LIMIT_UPPER = 1,
-        PIN_JOINT_LIMIT_LOWER = 2,
-        PIN_JOINT_MOTOR_TARGET_VELOCITY = 3,
+        Softness = 0,
+        LimitUpper = 1,
+        LimitLower = 2,
+        MotorTargetVelocity = 3,
     }
 
     public enum PinJointFlag : long
     {
-        PIN_JOINT_FLAG_ANGULAR_LIMIT_ENABLED = 0,
-        PIN_JOINT_FLAG_MOTOR_ENABLED = 1,
+        AngularLimitEnabled = 0,
+        MotorEnabled = 1,
     }
 
     public enum DampedSpringParam : long
     {
-        DAMPED_SPRING_REST_LENGTH = 0,
-        DAMPED_SPRING_STIFFNESS = 1,
-        DAMPED_SPRING_DAMPING = 2,
+        RestLength = 0,
+        Stiffness = 1,
+        Damping = 2,
     }
 
     public enum CCDMode : long
     {
-        CCD_MODE_DISABLED = 0,
-        CCD_MODE_CAST_RAY = 1,
-        CCD_MODE_CAST_SHAPE = 2,
+        Disabled = 0,
+        CastRay = 1,
+        CastShape = 2,
     }
 
     public enum AreaBodyStatus : long
     {
-        AREA_BODY_ADDED = 0,
-        AREA_BODY_REMOVED = 1,
+        Added = 0,
+        Removed = 1,
     }
 
     public enum ProcessInfo : long
     {
-        INFO_ACTIVE_OBJECTS = 0,
-        INFO_COLLISION_PAIRS = 1,
-        INFO_ISLAND_COUNT = 2,
+        ActiveObjects = 0,
+        CollisionPairs = 1,
+        IslandCount = 2,
     }
 
     private static nint __mb_world_boundary_shape_create;
@@ -11643,7 +11640,7 @@ public unsafe partial class PhysicsServer2D : GodotObject
     }
 
     private static nint __mb_area_add_shape;
-    public void AreaAddShape(Rid area, Rid shape, Transform2D transform, bool disabled)
+    public void AreaAddShape(Rid area, Rid shape, Transform2D transform, bool disabled = false)
     {
         var __mb = __mb_area_add_shape;
         if (__mb == 0)
@@ -12142,7 +12139,7 @@ public unsafe partial class PhysicsServer2D : GodotObject
     }
 
     private static nint __mb_body_add_shape;
-    public void BodyAddShape(Rid body, Rid shape, Transform2D transform, bool disabled)
+    public void BodyAddShape(Rid body, Rid shape, Transform2D transform, bool disabled = false)
     {
         var __mb = __mb_body_add_shape;
         if (__mb == 0)
@@ -12688,7 +12685,7 @@ public unsafe partial class PhysicsServer2D : GodotObject
     }
 
     private static nint __mb_body_apply_impulse;
-    public void BodyApplyImpulse(Rid body, Vector2 impulse, Vector2 position)
+    public void BodyApplyImpulse(Rid body, Vector2 impulse, Vector2 position = default)
     {
         var __mb = __mb_body_apply_impulse;
         if (__mb == 0)
@@ -12726,7 +12723,7 @@ public unsafe partial class PhysicsServer2D : GodotObject
     }
 
     private static nint __mb_body_apply_force;
-    public void BodyApplyForce(Rid body, Vector2 force, Vector2 position)
+    public void BodyApplyForce(Rid body, Vector2 force, Vector2 position = default)
     {
         var __mb = __mb_body_apply_force;
         if (__mb == 0)
@@ -12782,7 +12779,7 @@ public unsafe partial class PhysicsServer2D : GodotObject
     }
 
     private static nint __mb_body_add_constant_force;
-    public void BodyAddConstantForce(Rid body, Vector2 force, Vector2 position)
+    public void BodyAddConstantForce(Rid body, Vector2 force, Vector2 position = default)
     {
         var __mb = __mb_body_add_constant_force;
         if (__mb == 0)
@@ -13018,7 +13015,7 @@ public unsafe partial class PhysicsServer2D : GodotObject
     }
 
     private static nint __mb_body_test_motion;
-    public bool BodyTestMotion(Rid body, PhysicsTestMotionParameters2D? parameters, PhysicsTestMotionResult2D? result)
+    public bool BodyTestMotion(Rid body, PhysicsTestMotionParameters2D? parameters, PhysicsTestMotionResult2D? result = null)
     {
         var __mb = __mb_body_test_motion;
         if (__mb == 0)
@@ -13165,7 +13162,7 @@ public unsafe partial class PhysicsServer2D : GodotObject
     }
 
     private static nint __mb_joint_make_pin;
-    public void JointMakePin(Rid joint, Vector2 anchor, Rid bodyA, Rid bodyB)
+    public void JointMakePin(Rid joint, Vector2 anchor, Rid bodyA, Rid bodyB = default)
     {
         var __mb = __mb_joint_make_pin;
         if (__mb == 0)
@@ -13187,7 +13184,7 @@ public unsafe partial class PhysicsServer2D : GodotObject
     }
 
     private static nint __mb_joint_make_groove;
-    public void JointMakeGroove(Rid joint, Vector2 groove1A, Vector2 groove2A, Vector2 anchorB, Rid bodyA, Rid bodyB)
+    public void JointMakeGroove(Rid joint, Vector2 groove1A, Vector2 groove2A, Vector2 anchorB, Rid bodyA = default, Rid bodyB = default)
     {
         var __mb = __mb_joint_make_groove;
         if (__mb == 0)
@@ -13213,7 +13210,7 @@ public unsafe partial class PhysicsServer2D : GodotObject
     }
 
     private static nint __mb_joint_make_damped_spring;
-    public void JointMakeDampedSpring(Rid joint, Vector2 anchorA, Vector2 anchorB, Rid bodyA, Rid bodyB)
+    public void JointMakeDampedSpring(Rid joint, Vector2 anchorA, Vector2 anchorB, Rid bodyA, Rid bodyB = default)
     {
         var __mb = __mb_joint_make_damped_spring;
         if (__mb == 0)
@@ -14566,20 +14563,17 @@ public unsafe partial class PhysicsServer2DExtension : PhysicsServer2D
     }
 }
 
-public unsafe partial class PhysicsServer2DManager : GodotObject
+public static unsafe partial class PhysicsServer2DManager
 {
-    internal PhysicsServer2DManager(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public PhysicsServer2DManager() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "PhysicsServer2DManager");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("PhysicsServer2DManager");
 
-    private static PhysicsServer2DManager? _singleton;
-    public static PhysicsServer2DManager Singleton => _singleton ??= (PhysicsServer2DManager)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("PhysicsServer2DManager"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     private static nint __mb_set_default_server;
-    public void SetDefaultServer(string name, int priority)
+    public static void SetDefaultServer(string name, int priority)
     {
         var __mb = __mb_set_default_server;
         if (__mb == 0)
@@ -14593,7 +14587,7 @@ public unsafe partial class PhysicsServer2DManager : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 }
@@ -14607,226 +14601,226 @@ public unsafe partial class PhysicsServer3D : GodotObject
 
     public enum JointType : long
     {
-        JOINT_TYPE_PIN = 0,
-        JOINT_TYPE_HINGE = 1,
-        JOINT_TYPE_SLIDER = 2,
-        JOINT_TYPE_CONE_TWIST = 3,
-        JOINT_TYPE_6DOF = 4,
-        JOINT_TYPE_MAX = 5,
+        Pin = 0,
+        Hinge = 1,
+        Slider = 2,
+        ConeTwist = 3,
+        Type6dof = 4,
+        Max = 5,
     }
 
     public enum PinJointParam : long
     {
-        PIN_JOINT_BIAS = 0,
-        PIN_JOINT_DAMPING = 1,
-        PIN_JOINT_IMPULSE_CLAMP = 2,
+        Bias = 0,
+        Damping = 1,
+        ImpulseClamp = 2,
     }
 
     public enum HingeJointParam : long
     {
-        HINGE_JOINT_BIAS = 0,
-        HINGE_JOINT_LIMIT_UPPER = 1,
-        HINGE_JOINT_LIMIT_LOWER = 2,
-        HINGE_JOINT_LIMIT_BIAS = 3,
-        HINGE_JOINT_LIMIT_SOFTNESS = 4,
-        HINGE_JOINT_LIMIT_RELAXATION = 5,
-        HINGE_JOINT_MOTOR_TARGET_VELOCITY = 6,
-        HINGE_JOINT_MOTOR_MAX_IMPULSE = 7,
+        Bias = 0,
+        LimitUpper = 1,
+        LimitLower = 2,
+        LimitBias = 3,
+        LimitSoftness = 4,
+        LimitRelaxation = 5,
+        MotorTargetVelocity = 6,
+        MotorMaxImpulse = 7,
     }
 
     public enum HingeJointFlag : long
     {
-        HINGE_JOINT_FLAG_USE_LIMIT = 0,
-        HINGE_JOINT_FLAG_ENABLE_MOTOR = 1,
+        UseLimit = 0,
+        EnableMotor = 1,
     }
 
     public enum SliderJointParam : long
     {
-        SLIDER_JOINT_LINEAR_LIMIT_UPPER = 0,
-        SLIDER_JOINT_LINEAR_LIMIT_LOWER = 1,
-        SLIDER_JOINT_LINEAR_LIMIT_SOFTNESS = 2,
-        SLIDER_JOINT_LINEAR_LIMIT_RESTITUTION = 3,
-        SLIDER_JOINT_LINEAR_LIMIT_DAMPING = 4,
-        SLIDER_JOINT_LINEAR_MOTION_SOFTNESS = 5,
-        SLIDER_JOINT_LINEAR_MOTION_RESTITUTION = 6,
-        SLIDER_JOINT_LINEAR_MOTION_DAMPING = 7,
-        SLIDER_JOINT_LINEAR_ORTHOGONAL_SOFTNESS = 8,
-        SLIDER_JOINT_LINEAR_ORTHOGONAL_RESTITUTION = 9,
-        SLIDER_JOINT_LINEAR_ORTHOGONAL_DAMPING = 10,
-        SLIDER_JOINT_ANGULAR_LIMIT_UPPER = 11,
-        SLIDER_JOINT_ANGULAR_LIMIT_LOWER = 12,
-        SLIDER_JOINT_ANGULAR_LIMIT_SOFTNESS = 13,
-        SLIDER_JOINT_ANGULAR_LIMIT_RESTITUTION = 14,
-        SLIDER_JOINT_ANGULAR_LIMIT_DAMPING = 15,
-        SLIDER_JOINT_ANGULAR_MOTION_SOFTNESS = 16,
-        SLIDER_JOINT_ANGULAR_MOTION_RESTITUTION = 17,
-        SLIDER_JOINT_ANGULAR_MOTION_DAMPING = 18,
-        SLIDER_JOINT_ANGULAR_ORTHOGONAL_SOFTNESS = 19,
-        SLIDER_JOINT_ANGULAR_ORTHOGONAL_RESTITUTION = 20,
-        SLIDER_JOINT_ANGULAR_ORTHOGONAL_DAMPING = 21,
-        SLIDER_JOINT_MAX = 22,
+        LinearLimitUpper = 0,
+        LinearLimitLower = 1,
+        LinearLimitSoftness = 2,
+        LinearLimitRestitution = 3,
+        LinearLimitDamping = 4,
+        LinearMotionSoftness = 5,
+        LinearMotionRestitution = 6,
+        LinearMotionDamping = 7,
+        LinearOrthogonalSoftness = 8,
+        LinearOrthogonalRestitution = 9,
+        LinearOrthogonalDamping = 10,
+        AngularLimitUpper = 11,
+        AngularLimitLower = 12,
+        AngularLimitSoftness = 13,
+        AngularLimitRestitution = 14,
+        AngularLimitDamping = 15,
+        AngularMotionSoftness = 16,
+        AngularMotionRestitution = 17,
+        AngularMotionDamping = 18,
+        AngularOrthogonalSoftness = 19,
+        AngularOrthogonalRestitution = 20,
+        AngularOrthogonalDamping = 21,
+        Max = 22,
     }
 
     public enum ConeTwistJointParam : long
     {
-        CONE_TWIST_JOINT_SWING_SPAN = 0,
-        CONE_TWIST_JOINT_TWIST_SPAN = 1,
-        CONE_TWIST_JOINT_BIAS = 2,
-        CONE_TWIST_JOINT_SOFTNESS = 3,
-        CONE_TWIST_JOINT_RELAXATION = 4,
+        SwingSpan = 0,
+        TwistSpan = 1,
+        Bias = 2,
+        Softness = 3,
+        Relaxation = 4,
     }
 
     public enum G6DOFJointAxisParam : long
     {
-        G6DOF_JOINT_LINEAR_LOWER_LIMIT = 0,
-        G6DOF_JOINT_LINEAR_UPPER_LIMIT = 1,
-        G6DOF_JOINT_LINEAR_LIMIT_SOFTNESS = 2,
-        G6DOF_JOINT_LINEAR_RESTITUTION = 3,
-        G6DOF_JOINT_LINEAR_DAMPING = 4,
-        G6DOF_JOINT_LINEAR_MOTOR_TARGET_VELOCITY = 5,
-        G6DOF_JOINT_LINEAR_MOTOR_FORCE_LIMIT = 6,
-        G6DOF_JOINT_LINEAR_SPRING_STIFFNESS = 7,
-        G6DOF_JOINT_LINEAR_SPRING_DAMPING = 8,
-        G6DOF_JOINT_LINEAR_SPRING_EQUILIBRIUM_POINT = 9,
-        G6DOF_JOINT_ANGULAR_LOWER_LIMIT = 10,
-        G6DOF_JOINT_ANGULAR_UPPER_LIMIT = 11,
-        G6DOF_JOINT_ANGULAR_LIMIT_SOFTNESS = 12,
-        G6DOF_JOINT_ANGULAR_DAMPING = 13,
-        G6DOF_JOINT_ANGULAR_RESTITUTION = 14,
-        G6DOF_JOINT_ANGULAR_FORCE_LIMIT = 15,
-        G6DOF_JOINT_ANGULAR_ERP = 16,
-        G6DOF_JOINT_ANGULAR_MOTOR_TARGET_VELOCITY = 17,
-        G6DOF_JOINT_ANGULAR_MOTOR_FORCE_LIMIT = 18,
-        G6DOF_JOINT_ANGULAR_SPRING_STIFFNESS = 19,
-        G6DOF_JOINT_ANGULAR_SPRING_DAMPING = 20,
-        G6DOF_JOINT_ANGULAR_SPRING_EQUILIBRIUM_POINT = 21,
-        G6DOF_JOINT_MAX = 22,
+        LinearLowerLimit = 0,
+        LinearUpperLimit = 1,
+        LinearLimitSoftness = 2,
+        LinearRestitution = 3,
+        LinearDamping = 4,
+        LinearMotorTargetVelocity = 5,
+        LinearMotorForceLimit = 6,
+        LinearSpringStiffness = 7,
+        LinearSpringDamping = 8,
+        LinearSpringEquilibriumPoint = 9,
+        AngularLowerLimit = 10,
+        AngularUpperLimit = 11,
+        AngularLimitSoftness = 12,
+        AngularDamping = 13,
+        AngularRestitution = 14,
+        AngularForceLimit = 15,
+        AngularErp = 16,
+        AngularMotorTargetVelocity = 17,
+        AngularMotorForceLimit = 18,
+        AngularSpringStiffness = 19,
+        AngularSpringDamping = 20,
+        AngularSpringEquilibriumPoint = 21,
+        Max = 22,
     }
 
     public enum G6DOFJointAxisFlag : long
     {
-        G6DOF_JOINT_FLAG_ENABLE_LINEAR_LIMIT = 0,
-        G6DOF_JOINT_FLAG_ENABLE_ANGULAR_LIMIT = 1,
-        G6DOF_JOINT_FLAG_ENABLE_ANGULAR_SPRING = 2,
-        G6DOF_JOINT_FLAG_ENABLE_LINEAR_SPRING = 3,
-        G6DOF_JOINT_FLAG_ENABLE_MOTOR = 4,
-        G6DOF_JOINT_FLAG_ENABLE_LINEAR_MOTOR = 5,
-        G6DOF_JOINT_FLAG_MAX = 6,
+        EnableLinearLimit = 0,
+        EnableAngularLimit = 1,
+        EnableAngularSpring = 2,
+        EnableLinearSpring = 3,
+        EnableMotor = 4,
+        EnableLinearMotor = 5,
+        Max = 6,
     }
 
     public enum ShapeType : long
     {
-        SHAPE_WORLD_BOUNDARY = 0,
-        SHAPE_SEPARATION_RAY = 1,
-        SHAPE_SPHERE = 2,
-        SHAPE_BOX = 3,
-        SHAPE_CAPSULE = 4,
-        SHAPE_CYLINDER = 5,
-        SHAPE_CONVEX_POLYGON = 6,
-        SHAPE_CONCAVE_POLYGON = 7,
-        SHAPE_HEIGHTMAP = 8,
-        SHAPE_SOFT_BODY = 9,
-        SHAPE_CUSTOM = 10,
+        WorldBoundary = 0,
+        SeparationRay = 1,
+        Sphere = 2,
+        Box = 3,
+        Capsule = 4,
+        Cylinder = 5,
+        ConvexPolygon = 6,
+        ConcavePolygon = 7,
+        Heightmap = 8,
+        SoftBody = 9,
+        Custom = 10,
     }
 
     public enum AreaParameter : long
     {
-        AREA_PARAM_GRAVITY_OVERRIDE_MODE = 0,
-        AREA_PARAM_GRAVITY = 1,
-        AREA_PARAM_GRAVITY_VECTOR = 2,
-        AREA_PARAM_GRAVITY_IS_POINT = 3,
-        AREA_PARAM_GRAVITY_POINT_UNIT_DISTANCE = 4,
-        AREA_PARAM_LINEAR_DAMP_OVERRIDE_MODE = 5,
-        AREA_PARAM_LINEAR_DAMP = 6,
-        AREA_PARAM_ANGULAR_DAMP_OVERRIDE_MODE = 7,
-        AREA_PARAM_ANGULAR_DAMP = 8,
-        AREA_PARAM_PRIORITY = 9,
-        AREA_PARAM_WIND_FORCE_MAGNITUDE = 10,
-        AREA_PARAM_WIND_SOURCE = 11,
-        AREA_PARAM_WIND_DIRECTION = 12,
-        AREA_PARAM_WIND_ATTENUATION_FACTOR = 13,
+        GravityOverrideMode = 0,
+        Gravity = 1,
+        GravityVector = 2,
+        GravityIsPoint = 3,
+        GravityPointUnitDistance = 4,
+        LinearDampOverrideMode = 5,
+        LinearDamp = 6,
+        AngularDampOverrideMode = 7,
+        AngularDamp = 8,
+        Priority = 9,
+        WindForceMagnitude = 10,
+        WindSource = 11,
+        WindDirection = 12,
+        WindAttenuationFactor = 13,
     }
 
     public enum AreaSpaceOverrideMode : long
     {
-        AREA_SPACE_OVERRIDE_DISABLED = 0,
-        AREA_SPACE_OVERRIDE_COMBINE = 1,
-        AREA_SPACE_OVERRIDE_COMBINE_REPLACE = 2,
-        AREA_SPACE_OVERRIDE_REPLACE = 3,
-        AREA_SPACE_OVERRIDE_REPLACE_COMBINE = 4,
+        Disabled = 0,
+        Combine = 1,
+        CombineReplace = 2,
+        Replace = 3,
+        ReplaceCombine = 4,
     }
 
     public enum BodyMode : long
     {
-        BODY_MODE_STATIC = 0,
-        BODY_MODE_KINEMATIC = 1,
-        BODY_MODE_RIGID = 2,
-        BODY_MODE_RIGID_LINEAR = 3,
+        Static = 0,
+        Kinematic = 1,
+        Rigid = 2,
+        RigidLinear = 3,
     }
 
     public enum BodyParameter : long
     {
-        BODY_PARAM_BOUNCE = 0,
-        BODY_PARAM_FRICTION = 1,
-        BODY_PARAM_MASS = 2,
-        BODY_PARAM_INERTIA = 3,
-        BODY_PARAM_CENTER_OF_MASS = 4,
-        BODY_PARAM_GRAVITY_SCALE = 5,
-        BODY_PARAM_LINEAR_DAMP_MODE = 6,
-        BODY_PARAM_ANGULAR_DAMP_MODE = 7,
-        BODY_PARAM_LINEAR_DAMP = 8,
-        BODY_PARAM_ANGULAR_DAMP = 9,
-        BODY_PARAM_MAX = 10,
+        Bounce = 0,
+        Friction = 1,
+        Mass = 2,
+        Inertia = 3,
+        CenterOfMass = 4,
+        GravityScale = 5,
+        LinearDampMode = 6,
+        AngularDampMode = 7,
+        LinearDamp = 8,
+        AngularDamp = 9,
+        Max = 10,
     }
 
     public enum BodyDampMode : long
     {
-        BODY_DAMP_MODE_COMBINE = 0,
-        BODY_DAMP_MODE_REPLACE = 1,
+        Combine = 0,
+        Replace = 1,
     }
 
     public enum BodyState : long
     {
-        BODY_STATE_TRANSFORM = 0,
-        BODY_STATE_LINEAR_VELOCITY = 1,
-        BODY_STATE_ANGULAR_VELOCITY = 2,
-        BODY_STATE_SLEEPING = 3,
-        BODY_STATE_CAN_SLEEP = 4,
+        Transform = 0,
+        LinearVelocity = 1,
+        AngularVelocity = 2,
+        Sleeping = 3,
+        CanSleep = 4,
     }
 
     public enum AreaBodyStatus : long
     {
-        AREA_BODY_ADDED = 0,
-        AREA_BODY_REMOVED = 1,
+        Added = 0,
+        Removed = 1,
     }
 
     public enum ProcessInfo : long
     {
-        INFO_ACTIVE_OBJECTS = 0,
-        INFO_COLLISION_PAIRS = 1,
-        INFO_ISLAND_COUNT = 2,
+        ActiveObjects = 0,
+        CollisionPairs = 1,
+        IslandCount = 2,
     }
 
     public enum SpaceParameter : long
     {
-        SPACE_PARAM_CONTACT_RECYCLE_RADIUS = 0,
-        SPACE_PARAM_CONTACT_MAX_SEPARATION = 1,
-        SPACE_PARAM_CONTACT_MAX_ALLOWED_PENETRATION = 2,
-        SPACE_PARAM_CONTACT_DEFAULT_BIAS = 3,
-        SPACE_PARAM_BODY_LINEAR_VELOCITY_SLEEP_THRESHOLD = 4,
-        SPACE_PARAM_BODY_ANGULAR_VELOCITY_SLEEP_THRESHOLD = 5,
-        SPACE_PARAM_BODY_TIME_TO_SLEEP = 6,
-        SPACE_PARAM_SOLVER_ITERATIONS = 7,
+        ContactRecycleRadius = 0,
+        ContactMaxSeparation = 1,
+        ContactMaxAllowedPenetration = 2,
+        ContactDefaultBias = 3,
+        BodyLinearVelocitySleepThreshold = 4,
+        BodyAngularVelocitySleepThreshold = 5,
+        BodyTimeToSleep = 6,
+        SolverIterations = 7,
     }
 
     public enum BodyAxis : long
     {
-        BODY_AXIS_LINEAR_X = 1,
-        BODY_AXIS_LINEAR_Y = 2,
-        BODY_AXIS_LINEAR_Z = 4,
-        BODY_AXIS_ANGULAR_X = 8,
-        BODY_AXIS_ANGULAR_Y = 16,
-        BODY_AXIS_ANGULAR_Z = 32,
+        LinearX = 1,
+        LinearY = 2,
+        LinearZ = 4,
+        AngularX = 8,
+        AngularY = 16,
+        AngularZ = 32,
     }
 
     private static nint __mb_world_boundary_shape_create;
@@ -15230,7 +15224,7 @@ public unsafe partial class PhysicsServer3D : GodotObject
     }
 
     private static nint __mb_area_add_shape;
-    public void AreaAddShape(Rid area, Rid shape, Transform3D transform, bool disabled)
+    public void AreaAddShape(Rid area, Rid shape, Transform3D transform, bool disabled = false)
     {
         var __mb = __mb_area_add_shape;
         if (__mb == 0)
@@ -15819,7 +15813,7 @@ public unsafe partial class PhysicsServer3D : GodotObject
     }
 
     private static nint __mb_body_add_shape;
-    public void BodyAddShape(Rid body, Rid shape, Transform3D transform, bool disabled)
+    public void BodyAddShape(Rid body, Rid shape, Transform3D transform, bool disabled = false)
     {
         var __mb = __mb_body_add_shape;
         if (__mb == 0)
@@ -16179,7 +16173,7 @@ public unsafe partial class PhysicsServer3D : GodotObject
     }
 
     private static nint __mb_body_apply_impulse;
-    public void BodyApplyImpulse(Rid body, Vector3 impulse, Vector3 position)
+    public void BodyApplyImpulse(Rid body, Vector3 impulse, Vector3 position = default)
     {
         var __mb = __mb_body_apply_impulse;
         if (__mb == 0)
@@ -16235,7 +16229,7 @@ public unsafe partial class PhysicsServer3D : GodotObject
     }
 
     private static nint __mb_body_apply_force;
-    public void BodyApplyForce(Rid body, Vector3 force, Vector3 position)
+    public void BodyApplyForce(Rid body, Vector3 force, Vector3 position = default)
     {
         var __mb = __mb_body_apply_force;
         if (__mb == 0)
@@ -16291,7 +16285,7 @@ public unsafe partial class PhysicsServer3D : GodotObject
     }
 
     private static nint __mb_body_add_constant_force;
-    public void BodyAddConstantForce(Rid body, Vector3 force, Vector3 position)
+    public void BodyAddConstantForce(Rid body, Vector3 force, Vector3 position = default)
     {
         var __mb = __mb_body_add_constant_force;
         if (__mb == 0)
@@ -16585,7 +16579,7 @@ public unsafe partial class PhysicsServer3D : GodotObject
     }
 
     private static nint __mb_body_test_motion;
-    public bool BodyTestMotion(Rid body, PhysicsTestMotionParameters3D? parameters, PhysicsTestMotionResult3D? result)
+    public bool BodyTestMotion(Rid body, PhysicsTestMotionParameters3D? parameters, PhysicsTestMotionResult3D? result = null)
     {
         var __mb = __mb_body_test_motion;
         if (__mb == 0)
@@ -19501,20 +19495,17 @@ public unsafe partial class PhysicsServer3DExtension : PhysicsServer3D
     }
 }
 
-public unsafe partial class PhysicsServer3DManager : GodotObject
+public static unsafe partial class PhysicsServer3DManager
 {
-    internal PhysicsServer3DManager(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public PhysicsServer3DManager() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "PhysicsServer3DManager");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("PhysicsServer3DManager");
 
-    private static PhysicsServer3DManager? _singleton;
-    public static PhysicsServer3DManager Singleton => _singleton ??= (PhysicsServer3DManager)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("PhysicsServer3DManager"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     private static nint __mb_set_default_server;
-    public void SetDefaultServer(string name, int priority)
+    public static void SetDefaultServer(string name, int priority)
     {
         var __mb = __mb_set_default_server;
         if (__mb == 0)
@@ -19528,7 +19519,7 @@ public unsafe partial class PhysicsServer3DManager : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 }
@@ -21179,7 +21170,7 @@ public unsafe partial class PhysicsTestMotionResult3D : RefCounted
     }
 
     private static nint __mb_get_collision_point;
-    public Vector3 GetCollisionPoint(int collisionIndex)
+    public Vector3 GetCollisionPoint(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_collision_point;
         if (__mb == 0)
@@ -21197,7 +21188,7 @@ public unsafe partial class PhysicsTestMotionResult3D : RefCounted
     }
 
     private static nint __mb_get_collision_normal;
-    public Vector3 GetCollisionNormal(int collisionIndex)
+    public Vector3 GetCollisionNormal(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_collision_normal;
         if (__mb == 0)
@@ -21215,7 +21206,7 @@ public unsafe partial class PhysicsTestMotionResult3D : RefCounted
     }
 
     private static nint __mb_get_collider_velocity;
-    public Vector3 GetColliderVelocity(int collisionIndex)
+    public Vector3 GetColliderVelocity(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_collider_velocity;
         if (__mb == 0)
@@ -21233,7 +21224,7 @@ public unsafe partial class PhysicsTestMotionResult3D : RefCounted
     }
 
     private static nint __mb_get_collider_id;
-    public ulong GetColliderId(int collisionIndex)
+    public ulong GetColliderId(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_collider_id;
         if (__mb == 0)
@@ -21251,7 +21242,7 @@ public unsafe partial class PhysicsTestMotionResult3D : RefCounted
     }
 
     private static nint __mb_get_collider_rid;
-    public Rid GetColliderRid(int collisionIndex)
+    public Rid GetColliderRid(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_collider_rid;
         if (__mb == 0)
@@ -21269,7 +21260,7 @@ public unsafe partial class PhysicsTestMotionResult3D : RefCounted
     }
 
     private static nint __mb_get_collider;
-    public GodotObject? GetCollider(int collisionIndex)
+    public GodotObject? GetCollider(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_collider;
         if (__mb == 0)
@@ -21287,7 +21278,7 @@ public unsafe partial class PhysicsTestMotionResult3D : RefCounted
     }
 
     private static nint __mb_get_collider_shape;
-    public int GetColliderShape(int collisionIndex)
+    public int GetColliderShape(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_collider_shape;
         if (__mb == 0)
@@ -21305,7 +21296,7 @@ public unsafe partial class PhysicsTestMotionResult3D : RefCounted
     }
 
     private static nint __mb_get_collision_local_shape;
-    public int GetCollisionLocalShape(int collisionIndex)
+    public int GetCollisionLocalShape(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_collision_local_shape;
         if (__mb == 0)
@@ -21323,7 +21314,7 @@ public unsafe partial class PhysicsTestMotionResult3D : RefCounted
     }
 
     private static nint __mb_get_collision_depth;
-    public float GetCollisionDepth(int collisionIndex)
+    public float GetCollisionDepth(int collisionIndex = unchecked((int)(0)))
     {
         var __mb = __mb_get_collision_depth;
         if (__mb == 0)
@@ -21584,9 +21575,9 @@ public unsafe partial class PinJoint3D : Joint3D
 
     public enum Param : long
     {
-        PARAM_BIAS = 0,
-        PARAM_DAMPING = 1,
-        PARAM_IMPULSE_CLAMP = 2,
+        Bias = 0,
+        Damping = 1,
+        ImpulseClamp = 2,
     }
 
     private static nint __mb_set_param;
@@ -21852,9 +21843,9 @@ public unsafe partial class PlaneMesh : PrimitiveMesh
 
     public enum OrientationEnum : long
     {
-        FACE_X = 0,
-        FACE_Y = 1,
-        FACE_Z = 2,
+        X = 0,
+        Y = 1,
+        Z = 2,
     }
 
     public Vector2 Size
@@ -22925,7 +22916,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_activate_item_by_event;
-    public bool ActivateItemByEvent(InputEvent? @event, bool forGlobalOnly)
+    public bool ActivateItemByEvent(InputEvent? @event, bool forGlobalOnly = false)
     {
         var __mb = __mb_activate_item_by_event;
         if (__mb == 0)
@@ -22991,7 +22982,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_item;
-    public void AddItem(string label, int id, Key accel)
+    public void AddItem(string label, int id = unchecked((int)(-1)), Key accel = (Key)(0))
     {
         var __mb = __mb_add_item;
         if (__mb == 0)
@@ -23012,7 +23003,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_icon_item;
-    public void AddIconItem(Texture2D? texture, string label, int id, Key accel)
+    public void AddIconItem(Texture2D? texture, string label, int id = unchecked((int)(-1)), Key accel = (Key)(0))
     {
         var __mb = __mb_add_icon_item;
         if (__mb == 0)
@@ -23035,7 +23026,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_check_item;
-    public void AddCheckItem(string label, int id, Key accel)
+    public void AddCheckItem(string label, int id = unchecked((int)(-1)), Key accel = (Key)(0))
     {
         var __mb = __mb_add_check_item;
         if (__mb == 0)
@@ -23056,7 +23047,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_icon_check_item;
-    public void AddIconCheckItem(Texture2D? texture, string label, int id, Key accel)
+    public void AddIconCheckItem(Texture2D? texture, string label, int id = unchecked((int)(-1)), Key accel = (Key)(0))
     {
         var __mb = __mb_add_icon_check_item;
         if (__mb == 0)
@@ -23079,7 +23070,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_radio_check_item;
-    public void AddRadioCheckItem(string label, int id, Key accel)
+    public void AddRadioCheckItem(string label, int id = unchecked((int)(-1)), Key accel = (Key)(0))
     {
         var __mb = __mb_add_radio_check_item;
         if (__mb == 0)
@@ -23100,7 +23091,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_icon_radio_check_item;
-    public void AddIconRadioCheckItem(Texture2D? texture, string label, int id, Key accel)
+    public void AddIconRadioCheckItem(Texture2D? texture, string label, int id = unchecked((int)(-1)), Key accel = (Key)(0))
     {
         var __mb = __mb_add_icon_radio_check_item;
         if (__mb == 0)
@@ -23123,7 +23114,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_multistate_item;
-    public void AddMultistateItem(string label, int maxStates, int defaultState, int id, Key accel)
+    public void AddMultistateItem(string label, int maxStates, int defaultState = unchecked((int)(0)), int id = unchecked((int)(-1)), Key accel = (Key)(0))
     {
         var __mb = __mb_add_multistate_item;
         if (__mb == 0)
@@ -23148,7 +23139,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_shortcut;
-    public void AddShortcut(Shortcut? shortcut, int id, bool global, bool allowEcho)
+    public void AddShortcut(Shortcut? shortcut, int id = unchecked((int)(-1)), bool global = false, bool allowEcho = false)
     {
         var __mb = __mb_add_shortcut;
         if (__mb == 0)
@@ -23170,7 +23161,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_icon_shortcut;
-    public void AddIconShortcut(Texture2D? texture, Shortcut? shortcut, int id, bool global, bool allowEcho)
+    public void AddIconShortcut(Texture2D? texture, Shortcut? shortcut, int id = unchecked((int)(-1)), bool global = false, bool allowEcho = false)
     {
         var __mb = __mb_add_icon_shortcut;
         if (__mb == 0)
@@ -23194,7 +23185,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_check_shortcut;
-    public void AddCheckShortcut(Shortcut? shortcut, int id, bool global)
+    public void AddCheckShortcut(Shortcut? shortcut, int id = unchecked((int)(-1)), bool global = false)
     {
         var __mb = __mb_add_check_shortcut;
         if (__mb == 0)
@@ -23214,7 +23205,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_icon_check_shortcut;
-    public void AddIconCheckShortcut(Texture2D? texture, Shortcut? shortcut, int id, bool global)
+    public void AddIconCheckShortcut(Texture2D? texture, Shortcut? shortcut, int id = unchecked((int)(-1)), bool global = false)
     {
         var __mb = __mb_add_icon_check_shortcut;
         if (__mb == 0)
@@ -23236,7 +23227,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_radio_check_shortcut;
-    public void AddRadioCheckShortcut(Shortcut? shortcut, int id, bool global)
+    public void AddRadioCheckShortcut(Shortcut? shortcut, int id = unchecked((int)(-1)), bool global = false)
     {
         var __mb = __mb_add_radio_check_shortcut;
         if (__mb == 0)
@@ -23256,7 +23247,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_icon_radio_check_shortcut;
-    public void AddIconRadioCheckShortcut(Texture2D? texture, Shortcut? shortcut, int id, bool global)
+    public void AddIconRadioCheckShortcut(Texture2D? texture, Shortcut? shortcut, int id = unchecked((int)(-1)), bool global = false)
     {
         var __mb = __mb_add_icon_radio_check_shortcut;
         if (__mb == 0)
@@ -23278,7 +23269,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_submenu_item;
-    public void AddSubmenuItem(string label, string submenu, int id)
+    public void AddSubmenuItem(string label, string submenu, int id = unchecked((int)(-1)))
     {
         var __mb = __mb_add_submenu_item;
         if (__mb == 0)
@@ -23300,7 +23291,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_submenu_node_item;
-    public void AddSubmenuNodeItem(string label, PopupMenu? submenu, int id)
+    public void AddSubmenuNodeItem(string label, PopupMenu? submenu, int id = unchecked((int)(-1)))
     {
         var __mb = __mb_add_submenu_node_item;
         if (__mb == 0)
@@ -23649,7 +23640,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_set_item_shortcut;
-    public void SetItemShortcut(int index, Shortcut? shortcut, bool global)
+    public void SetItemShortcut(int index, Shortcut? shortcut, bool global = false)
     {
         var __mb = __mb_set_item_shortcut;
         if (__mb == 0)
@@ -24317,7 +24308,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_add_separator;
-    public void AddSeparator(string label, int id)
+    public void AddSeparator(string label = "", int id = unchecked((int)(-1)))
     {
         var __mb = __mb_add_separator;
         if (__mb == 0)
@@ -24336,7 +24327,7 @@ public unsafe partial class PopupMenu : Popup
     }
 
     private static nint __mb_clear;
-    public void Clear(bool freeSubmenus)
+    public void Clear(bool freeSubmenus = false)
     {
         var __mb = __mb_clear;
         if (__mb == 0)
@@ -24760,13 +24751,13 @@ public unsafe partial class PortableCompressedTexture2D : Texture2D
 
     public enum CompressionMode : long
     {
-        COMPRESSION_MODE_LOSSLESS = 0,
-        COMPRESSION_MODE_LOSSY = 1,
-        COMPRESSION_MODE_BASIS_UNIVERSAL = 2,
-        COMPRESSION_MODE_S3TC = 3,
-        COMPRESSION_MODE_ETC2 = 4,
-        COMPRESSION_MODE_BPTC = 5,
-        COMPRESSION_MODE_ASTC = 6,
+        Lossless = 0,
+        Lossy = 1,
+        BasisUniversal = 2,
+        S3tc = 3,
+        Etc2 = 4,
+        Bptc = 5,
+        Astc = 6,
     }
 
     public Vector2 SizeOverride
@@ -24782,7 +24773,7 @@ public unsafe partial class PortableCompressedTexture2D : Texture2D
     }
 
     private static nint __mb_create_from_image;
-    public void CreateFromImage(Image? image, PortableCompressedTexture2D.CompressionMode compressionMode, bool normalMap, float lossyQuality)
+    public void CreateFromImage(Image? image, PortableCompressedTexture2D.CompressionMode compressionMode, bool normalMap = false, float lossyQuality = 0.8f)
     {
         var __mb = __mb_create_from_image;
         if (__mb == 0)
@@ -25887,10 +25878,10 @@ public unsafe partial class ProgressBar : Range
 
     public enum FillModeEnum : long
     {
-        FILL_BEGIN_TO_END = 0,
-        FILL_END_TO_BEGIN = 1,
-        FILL_TOP_TO_BOTTOM = 2,
-        FILL_BOTTOM_TO_TOP = 3,
+        BeginToEnd = 0,
+        EndToBegin = 1,
+        TopToBottom = 2,
+        BottomToTop = 3,
     }
 
     public int FillMode
@@ -26042,20 +26033,17 @@ public unsafe partial class ProgressBar : Range
     }
 }
 
-public unsafe partial class ProjectSettings : GodotObject
+public static unsafe partial class ProjectSettings
 {
-    internal ProjectSettings(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public ProjectSettings() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "ProjectSettings");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("ProjectSettings");
 
-    private static ProjectSettings? _singleton;
-    public static ProjectSettings Singleton => _singleton ??= (ProjectSettings)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("ProjectSettings"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     private static nint __mb_has_setting;
-    public bool HasSetting(string name)
+    public static bool HasSetting(string name)
     {
         var __mb = __mb_has_setting;
         if (__mb == 0)
@@ -26068,13 +26056,13 @@ public unsafe partial class ProjectSettings : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
 
     private static nint __mb_set_setting;
-    public void SetSetting(string name, Variant value)
+    public static void SetSetting(string name, Variant value)
     {
         var __mb = __mb_set_setting;
         if (__mb == 0)
@@ -26088,12 +26076,12 @@ public unsafe partial class ProjectSettings : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_setting;
-    public Variant GetSetting(string name, Variant defaultValue)
+    public static Variant GetSetting(string name, Variant defaultValue = default)
     {
         var __mb = __mb_get_setting;
         if (__mb == 0)
@@ -26108,13 +26096,13 @@ public unsafe partial class ProjectSettings : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return new Variant(__ret);
     }
 
     private static nint __mb_get_setting_with_override;
-    public Variant GetSettingWithOverride(string name)
+    public static Variant GetSettingWithOverride(string name)
     {
         var __mb = __mb_get_setting_with_override;
         if (__mb == 0)
@@ -26127,12 +26115,12 @@ public unsafe partial class ProjectSettings : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_get_global_class_list;
-    public Godot.Collections.Array GetGlobalClassList()
+    public static Godot.Collections.Array GetGlobalClassList()
     {
         var __mb = __mb_get_global_class_list;
         if (__mb == 0)
@@ -26142,12 +26130,12 @@ public unsafe partial class ProjectSettings : GodotObject
             __mb_get_global_class_list = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_order;
-    public void SetOrder(string name, int position)
+    public static void SetOrder(string name, int position)
     {
         var __mb = __mb_set_order;
         if (__mb == 0)
@@ -26161,12 +26149,12 @@ public unsafe partial class ProjectSettings : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_order;
-    public int GetOrder(string name)
+    public static int GetOrder(string name)
     {
         var __mb = __mb_get_order;
         if (__mb == 0)
@@ -26179,13 +26167,13 @@ public unsafe partial class ProjectSettings : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_initial_value;
-    public void SetInitialValue(string name, Variant value)
+    public static void SetInitialValue(string name, Variant value)
     {
         var __mb = __mb_set_initial_value;
         if (__mb == 0)
@@ -26199,12 +26187,12 @@ public unsafe partial class ProjectSettings : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_set_as_basic;
-    public void SetAsBasic(string name, bool basic)
+    public static void SetAsBasic(string name, bool basic)
     {
         var __mb = __mb_set_as_basic;
         if (__mb == 0)
@@ -26218,12 +26206,12 @@ public unsafe partial class ProjectSettings : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_set_as_internal;
-    public void SetAsInternal(string name, bool @internal)
+    public static void SetAsInternal(string name, bool @internal)
     {
         var __mb = __mb_set_as_internal;
         if (__mb == 0)
@@ -26237,12 +26225,12 @@ public unsafe partial class ProjectSettings : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_add_property_info;
-    public void AddPropertyInfo(Godot.Collections.Dictionary hint)
+    public static void AddPropertyInfo(Godot.Collections.Dictionary hint)
     {
         var __mb = __mb_add_property_info;
         if (__mb == 0)
@@ -26254,11 +26242,11 @@ public unsafe partial class ProjectSettings : GodotObject
         ulong __a0 = hint.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_restart_if_changed;
-    public void SetRestartIfChanged(string name, bool restart)
+    public static void SetRestartIfChanged(string name, bool restart)
     {
         var __mb = __mb_set_restart_if_changed;
         if (__mb == 0)
@@ -26272,12 +26260,12 @@ public unsafe partial class ProjectSettings : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_clear;
-    public void Clear(string name)
+    public static void Clear(string name)
     {
         var __mb = __mb_clear;
         if (__mb == 0)
@@ -26289,12 +26277,12 @@ public unsafe partial class ProjectSettings : GodotObject
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_localize_path;
-    public string LocalizePath(string path)
+    public static string LocalizePath(string path)
     {
         var __mb = __mb_localize_path;
         if (__mb == 0)
@@ -26307,13 +26295,13 @@ public unsafe partial class ProjectSettings : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_globalize_path;
-    public string GlobalizePath(string path)
+    public static string GlobalizePath(string path)
     {
         var __mb = __mb_globalize_path;
         if (__mb == 0)
@@ -26326,13 +26314,13 @@ public unsafe partial class ProjectSettings : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_save;
-    public Error Save()
+    public static Error Save()
     {
         var __mb = __mb_save;
         if (__mb == 0)
@@ -26342,12 +26330,12 @@ public unsafe partial class ProjectSettings : GodotObject
             __mb_save = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_load_resource_pack;
-    public bool LoadResourcePack(string pack, bool replaceFiles, int offset)
+    public static bool LoadResourcePack(string pack, bool replaceFiles = true, int offset = unchecked((int)(0)))
     {
         var __mb = __mb_load_resource_pack;
         if (__mb == 0)
@@ -26364,13 +26352,13 @@ public unsafe partial class ProjectSettings : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
 
     private static nint __mb_save_custom;
-    public Error SaveCustom(string file)
+    public static Error SaveCustom(string file)
     {
         var __mb = __mb_save_custom;
         if (__mb == 0)
@@ -26383,13 +26371,13 @@ public unsafe partial class ProjectSettings : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
 
     private static nint __mb_check_changed_settings_in_group;
-    public bool CheckChangedSettingsInGroup(string settingPrefix)
+    public static bool CheckChangedSettingsInGroup(string settingPrefix)
     {
         var __mb = __mb_check_changed_settings_in_group;
         if (__mb == 0)
@@ -26402,7 +26390,7 @@ public unsafe partial class ProjectSettings : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }

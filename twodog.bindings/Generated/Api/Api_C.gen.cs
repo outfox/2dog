@@ -31,45 +31,45 @@ public unsafe partial class CPUParticles2D : Node2D
 
     public enum DrawOrderEnum : long
     {
-        DRAW_ORDER_INDEX = 0,
-        DRAW_ORDER_LIFETIME = 1,
+        Index = 0,
+        Lifetime = 1,
     }
 
     public enum Parameter : long
     {
-        PARAM_INITIAL_LINEAR_VELOCITY = 0,
-        PARAM_ANGULAR_VELOCITY = 1,
-        PARAM_ORBIT_VELOCITY = 2,
-        PARAM_LINEAR_ACCEL = 3,
-        PARAM_RADIAL_ACCEL = 4,
-        PARAM_TANGENTIAL_ACCEL = 5,
-        PARAM_DAMPING = 6,
-        PARAM_ANGLE = 7,
-        PARAM_SCALE = 8,
-        PARAM_HUE_VARIATION = 9,
-        PARAM_ANIM_SPEED = 10,
-        PARAM_ANIM_OFFSET = 11,
-        PARAM_MAX = 12,
+        InitialLinearVelocity = 0,
+        AngularVelocity = 1,
+        OrbitVelocity = 2,
+        LinearAccel = 3,
+        RadialAccel = 4,
+        TangentialAccel = 5,
+        Damping = 6,
+        Angle = 7,
+        Scale = 8,
+        HueVariation = 9,
+        AnimSpeed = 10,
+        AnimOffset = 11,
+        Max = 12,
     }
 
     public enum ParticleFlags : long
     {
-        PARTICLE_FLAG_ALIGN_Y_TO_VELOCITY = 0,
-        PARTICLE_FLAG_ROTATE_Y = 1,
-        PARTICLE_FLAG_DISABLE_Z = 2,
-        PARTICLE_FLAG_MAX = 3,
+        AlignYToVelocity = 0,
+        RotateY = 1,
+        DisableZ = 2,
+        Max = 3,
     }
 
     public enum EmissionShapeEnum : long
     {
-        EMISSION_SHAPE_POINT = 0,
-        EMISSION_SHAPE_SPHERE = 1,
-        EMISSION_SHAPE_SPHERE_SURFACE = 2,
-        EMISSION_SHAPE_RECTANGLE = 3,
-        EMISSION_SHAPE_POINTS = 4,
-        EMISSION_SHAPE_DIRECTED_POINTS = 5,
-        EMISSION_SHAPE_RING = 6,
-        EMISSION_SHAPE_MAX = 7,
+        Point = 0,
+        Sphere = 1,
+        SphereSurface = 2,
+        Rectangle = 3,
+        Points = 4,
+        DirectedPoints = 5,
+        Ring = 6,
+        Max = 7,
     }
 
     public bool Emitting
@@ -661,7 +661,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_request_particles_process;
-    public void RequestParticlesProcess(float processTime, float processTimeResidual)
+    public void RequestParticlesProcess(float processTime, float processTimeResidual = 0.0f)
     {
         var __mb = __mb_request_particles_process;
         if (__mb == 0)
@@ -983,7 +983,7 @@ public unsafe partial class CPUParticles2D : Node2D
     }
 
     private static nint __mb_restart;
-    public void Restart(bool keepSeed)
+    public void Restart(bool keepSeed = false)
     {
         var __mb = __mb_restart;
         if (__mb == 0)
@@ -1604,46 +1604,46 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
 
     public enum DrawOrderEnum : long
     {
-        DRAW_ORDER_INDEX = 0,
-        DRAW_ORDER_LIFETIME = 1,
-        DRAW_ORDER_VIEW_DEPTH = 2,
+        Index = 0,
+        Lifetime = 1,
+        ViewDepth = 2,
     }
 
     public enum Parameter : long
     {
-        PARAM_INITIAL_LINEAR_VELOCITY = 0,
-        PARAM_ANGULAR_VELOCITY = 1,
-        PARAM_ORBIT_VELOCITY = 2,
-        PARAM_LINEAR_ACCEL = 3,
-        PARAM_RADIAL_ACCEL = 4,
-        PARAM_TANGENTIAL_ACCEL = 5,
-        PARAM_DAMPING = 6,
-        PARAM_ANGLE = 7,
-        PARAM_SCALE = 8,
-        PARAM_HUE_VARIATION = 9,
-        PARAM_ANIM_SPEED = 10,
-        PARAM_ANIM_OFFSET = 11,
-        PARAM_MAX = 12,
+        InitialLinearVelocity = 0,
+        AngularVelocity = 1,
+        OrbitVelocity = 2,
+        LinearAccel = 3,
+        RadialAccel = 4,
+        TangentialAccel = 5,
+        Damping = 6,
+        Angle = 7,
+        Scale = 8,
+        HueVariation = 9,
+        AnimSpeed = 10,
+        AnimOffset = 11,
+        Max = 12,
     }
 
     public enum ParticleFlags : long
     {
-        PARTICLE_FLAG_ALIGN_Y_TO_VELOCITY = 0,
-        PARTICLE_FLAG_ROTATE_Y = 1,
-        PARTICLE_FLAG_DISABLE_Z = 2,
-        PARTICLE_FLAG_MAX = 3,
+        AlignYToVelocity = 0,
+        RotateY = 1,
+        DisableZ = 2,
+        Max = 3,
     }
 
     public enum EmissionShapeEnum : long
     {
-        EMISSION_SHAPE_POINT = 0,
-        EMISSION_SHAPE_SPHERE = 1,
-        EMISSION_SHAPE_SPHERE_SURFACE = 2,
-        EMISSION_SHAPE_BOX = 3,
-        EMISSION_SHAPE_POINTS = 4,
-        EMISSION_SHAPE_DIRECTED_POINTS = 5,
-        EMISSION_SHAPE_RING = 6,
-        EMISSION_SHAPE_MAX = 7,
+        Point = 0,
+        Sphere = 1,
+        SphereSurface = 2,
+        Box = 3,
+        Points = 4,
+        DirectedPoints = 5,
+        Ring = 6,
+        Max = 7,
     }
 
     public bool Emitting
@@ -2618,7 +2618,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_restart;
-    public void Restart(bool keepSeed)
+    public void Restart(bool keepSeed = false)
     {
         var __mb = __mb_restart;
         if (__mb == 0)
@@ -2634,7 +2634,7 @@ public unsafe partial class CPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_request_particles_process;
-    public void RequestParticlesProcess(float processTime, float processTimeResidual)
+    public void RequestParticlesProcess(float processTime, float processTimeResidual = 0.0f)
     {
         var __mb = __mb_request_particles_process;
         if (__mb == 0)
@@ -3837,22 +3837,22 @@ public unsafe partial class CSGPolygon3D : CSGPrimitive3D
 
     public enum ModeEnum : long
     {
-        MODE_DEPTH = 0,
-        MODE_SPIN = 1,
-        MODE_PATH = 2,
+        Depth = 0,
+        Spin = 1,
+        Path = 2,
     }
 
     public enum PathRotationEnum : long
     {
-        PATH_ROTATION_POLYGON = 0,
-        PATH_ROTATION_PATH = 1,
-        PATH_ROTATION_PATH_FOLLOW = 2,
+        Polygon = 0,
+        Path = 1,
+        PathFollow = 2,
     }
 
     public enum PathIntervalTypeEnum : long
     {
-        PATH_INTERVAL_DISTANCE = 0,
-        PATH_INTERVAL_SUBDIVIDE = 1,
+        Distance = 0,
+        Subdivide = 1,
     }
 
     public CSGPolygon3D.ModeEnum Mode
@@ -4496,9 +4496,9 @@ public unsafe partial class CSGShape3D : GeometryInstance3D
 
     public enum OperationEnum : long
     {
-        OPERATION_UNION = 0,
-        OPERATION_INTERSECTION = 1,
-        OPERATION_SUBTRACTION = 2,
+        Union = 0,
+        Intersection = 1,
+        Subtraction = 2,
     }
 
     public bool Autosmooth
@@ -5433,14 +5433,14 @@ public unsafe partial class Camera2D : Node2D
 
     public enum AnchorModeEnum : long
     {
-        ANCHOR_MODE_FIXED_TOP_LEFT = 0,
-        ANCHOR_MODE_DRAG_CENTER = 1,
+        FixedTopLeft = 0,
+        DragCenter = 1,
     }
 
     public enum Camera2DProcessCallback : long
     {
-        CAMERA2D_PROCESS_PHYSICS = 0,
-        CAMERA2D_PROCESS_IDLE = 1,
+        Physics = 0,
+        Idle = 1,
     }
 
     public Vector2 Offset
@@ -6427,22 +6427,22 @@ public unsafe partial class Camera3D : Node3D
 
     public enum ProjectionType : long
     {
-        PROJECTION_PERSPECTIVE = 0,
-        PROJECTION_ORTHOGONAL = 1,
-        PROJECTION_FRUSTUM = 2,
+        Perspective = 0,
+        Orthogonal = 1,
+        Frustum = 2,
     }
 
     public enum KeepAspectEnum : long
     {
-        KEEP_WIDTH = 0,
-        KEEP_HEIGHT = 1,
+        Width = 0,
+        Height = 1,
     }
 
     public enum DopplerTrackingEnum : long
     {
-        DOPPLER_TRACKING_DISABLED = 0,
-        DOPPLER_TRACKING_IDLE_STEP = 1,
-        DOPPLER_TRACKING_PHYSICS_STEP = 2,
+        Disabled = 0,
+        IdleStep = 1,
+        PhysicsStep = 2,
     }
 
     public Camera3D.KeepAspectEnum KeepAspect
@@ -6721,7 +6721,7 @@ public unsafe partial class Camera3D : Node3D
     }
 
     private static nint __mb_clear_current;
-    public void ClearCurrent(bool enableNext)
+    public void ClearCurrent(bool enableNext = true)
     {
         var __mb = __mb_clear_current;
         if (__mb == 0)
@@ -8201,18 +8201,18 @@ public unsafe partial class CameraFeed : RefCounted
 
     public enum FeedDataType : long
     {
-        FEED_NOIMAGE = 0,
-        FEED_RGB = 1,
-        FEED_YCBCR = 2,
-        FEED_YCBCR_SEP = 3,
-        FEED_EXTERNAL = 4,
+        Noimage = 0,
+        Rgb = 1,
+        Ycbcr = 2,
+        YcbcrSep = 3,
+        External = 4,
     }
 
     public enum FeedPosition : long
     {
-        FEED_UNSPECIFIED = 0,
-        FEED_FRONT = 1,
-        FEED_BACK = 2,
+        Unspecified = 0,
+        Front = 1,
+        Back = 2,
     }
 
     public bool FeedIsActive
@@ -8530,34 +8530,31 @@ public unsafe partial class CameraFeed : RefCounted
     }
 }
 
-public unsafe partial class CameraServer : GodotObject
+public static unsafe partial class CameraServer
 {
-    internal CameraServer(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public CameraServer() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "CameraServer");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("CameraServer");
 
-    private static CameraServer? _singleton;
-    public static CameraServer Singleton => _singleton ??= (CameraServer)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("CameraServer"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum FeedImage : long
     {
-        FEED_RGBA_IMAGE = 0,
-        FEED_YCBCR_IMAGE = 0,
-        FEED_Y_IMAGE = 0,
-        FEED_CBCR_IMAGE = 1,
+        RgbaImage = 0,
+        YcbcrImage = 0,
+        YImage = 0,
+        CbcrImage = 1,
     }
 
-    public bool MonitoringFeeds
+    public static bool MonitoringFeeds
     {
         get => IsMonitoringFeeds();
         set => SetMonitoringFeeds(value);
     }
 
     private static nint __mb_set_monitoring_feeds;
-    internal void SetMonitoringFeeds(bool isMonitoringFeeds)
+    internal static void SetMonitoringFeeds(bool isMonitoringFeeds)
     {
         var __mb = __mb_set_monitoring_feeds;
         if (__mb == 0)
@@ -8569,11 +8566,11 @@ public unsafe partial class CameraServer : GodotObject
         byte __a0 = isMonitoringFeeds ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_monitoring_feeds;
-    internal bool IsMonitoringFeeds()
+    internal static bool IsMonitoringFeeds()
     {
         var __mb = __mb_is_monitoring_feeds;
         if (__mb == 0)
@@ -8583,12 +8580,12 @@ public unsafe partial class CameraServer : GodotObject
             __mb_is_monitoring_feeds = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_feed;
-    public CameraFeed? GetFeed(int index)
+    public static CameraFeed? GetFeed(int index)
     {
         var __mb = __mb_get_feed;
         if (__mb == 0)
@@ -8601,12 +8598,12 @@ public unsafe partial class CameraServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (CameraFeed?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_feed_count;
-    public int GetFeedCount()
+    public static int GetFeedCount()
     {
         var __mb = __mb_get_feed_count;
         if (__mb == 0)
@@ -8616,12 +8613,12 @@ public unsafe partial class CameraServer : GodotObject
             __mb_get_feed_count = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_feeds;
-    public Godot.Collections.Array Feeds()
+    public static Godot.Collections.Array Feeds()
     {
         var __mb = __mb_feeds;
         if (__mb == 0)
@@ -8631,12 +8628,12 @@ public unsafe partial class CameraServer : GodotObject
             __mb_feeds = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_add_feed;
-    public void AddFeed(CameraFeed? feed)
+    public static void AddFeed(CameraFeed? feed)
     {
         var __mb = __mb_add_feed;
         if (__mb == 0)
@@ -8648,11 +8645,11 @@ public unsafe partial class CameraServer : GodotObject
         nint __a0 = feed?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_feed;
-    public void RemoveFeed(CameraFeed? feed)
+    public static void RemoveFeed(CameraFeed? feed)
     {
         var __mb = __mb_remove_feed;
         if (__mb == 0)
@@ -8664,7 +8661,7 @@ public unsafe partial class CameraServer : GodotObject
         nint __a0 = feed?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 }
 
@@ -8916,39 +8913,39 @@ public unsafe partial class CanvasItem : Node
 
     public enum TextureFilterEnum : long
     {
-        TEXTURE_FILTER_PARENT_NODE = 0,
-        TEXTURE_FILTER_NEAREST = 1,
-        TEXTURE_FILTER_LINEAR = 2,
-        TEXTURE_FILTER_NEAREST_WITH_MIPMAPS = 3,
-        TEXTURE_FILTER_LINEAR_WITH_MIPMAPS = 4,
-        TEXTURE_FILTER_NEAREST_WITH_MIPMAPS_ANISOTROPIC = 5,
-        TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC = 6,
-        TEXTURE_FILTER_MAX = 7,
+        ParentNode = 0,
+        Nearest = 1,
+        Linear = 2,
+        NearestWithMipmaps = 3,
+        LinearWithMipmaps = 4,
+        NearestWithMipmapsAnisotropic = 5,
+        LinearWithMipmapsAnisotropic = 6,
+        Max = 7,
     }
 
     public enum TextureRepeatEnum : long
     {
-        TEXTURE_REPEAT_PARENT_NODE = 0,
-        TEXTURE_REPEAT_DISABLED = 1,
-        TEXTURE_REPEAT_ENABLED = 2,
-        TEXTURE_REPEAT_MIRROR = 3,
-        TEXTURE_REPEAT_MAX = 4,
+        ParentNode = 0,
+        Disabled = 1,
+        Enabled = 2,
+        Mirror = 3,
+        Max = 4,
     }
 
     public enum ClipChildrenMode : long
     {
-        CLIP_CHILDREN_DISABLED = 0,
-        CLIP_CHILDREN_ONLY = 1,
-        CLIP_CHILDREN_AND_DRAW = 2,
-        CLIP_CHILDREN_MAX = 3,
+        Disabled = 0,
+        Only = 1,
+        AndDraw = 2,
+        Max = 3,
     }
 
     public enum OversamplingWithScaleEnum : long
     {
-        OVERSAMPLING_WITH_SCALE_PARENT_NODE = 0,
-        OVERSAMPLING_WITH_SCALE_DISABLED = 1,
-        OVERSAMPLING_WITH_SCALE_ENABLED = 2,
-        OVERSAMPLING_WITH_SCALE_MAX = 3,
+        ParentNode = 0,
+        Disabled = 1,
+        Enabled = 2,
+        Max = 3,
     }
 
     public bool Visible
@@ -9409,7 +9406,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_line;
-    public void DrawLine(Vector2 from, Vector2 to, Color color, float width, bool antialiased)
+    public void DrawLine(Vector2 from, Vector2 to, Color color, float width = -1.0f, bool antialiased = false)
     {
         var __mb = __mb_draw_line;
         if (__mb == 0)
@@ -9433,7 +9430,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_dashed_line;
-    public void DrawDashedLine(Vector2 from, Vector2 to, Color color, float width, float dash, bool aligned, bool antialiased)
+    public void DrawDashedLine(Vector2 from, Vector2 to, Color color, float width = -1.0f, float dash = 2.0f, bool aligned = true, bool antialiased = false)
     {
         var __mb = __mb_draw_dashed_line;
         if (__mb == 0)
@@ -9461,7 +9458,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_ellipse_arc;
-    public void DrawEllipseArc(Vector2 center, float major, float minor, float startAngle, float endAngle, int pointCount, Color color, float width, bool antialiased)
+    public void DrawEllipseArc(Vector2 center, float major, float minor, float startAngle, float endAngle, int pointCount, Color color, float width = -1.0f, bool antialiased = false)
     {
         var __mb = __mb_draw_ellipse_arc;
         if (__mb == 0)
@@ -9493,7 +9490,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_arc;
-    public void DrawArc(Vector2 center, float radius, float startAngle, float endAngle, int pointCount, Color color, float width, bool antialiased)
+    public void DrawArc(Vector2 center, float radius, float startAngle, float endAngle, int pointCount, Color color, float width = -1.0f, bool antialiased = false)
     {
         var __mb = __mb_draw_arc;
         if (__mb == 0)
@@ -9523,7 +9520,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_rect;
-    public void DrawRect(Rect2 rect, Color color, bool filled, float width, bool antialiased)
+    public void DrawRect(Rect2 rect, Color color, bool filled = true, float width = -1.0f, bool antialiased = false)
     {
         var __mb = __mb_draw_rect;
         if (__mb == 0)
@@ -9547,7 +9544,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_circle;
-    public void DrawCircle(Vector2 position, float radius, Color color, bool filled, float width, bool antialiased)
+    public void DrawCircle(Vector2 position, float radius, Color color, bool filled = true, float width = -1.0f, bool antialiased = false)
     {
         var __mb = __mb_draw_circle;
         if (__mb == 0)
@@ -9573,7 +9570,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_ellipse;
-    public void DrawEllipse(Vector2 position, float major, float minor, Color color, bool filled, float width, bool antialiased)
+    public void DrawEllipse(Vector2 position, float major, float minor, Color color, bool filled = true, float width = -1.0f, bool antialiased = false)
     {
         var __mb = __mb_draw_ellipse;
         if (__mb == 0)
@@ -9621,7 +9618,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_texture_rect;
-    public void DrawTextureRect(Texture2D? texture, Rect2 rect, bool tile, Color modulate, bool transpose)
+    public void DrawTextureRect(Texture2D? texture, Rect2 rect, bool tile, Color modulate, bool transpose = false)
     {
         var __mb = __mb_draw_texture_rect;
         if (__mb == 0)
@@ -9645,7 +9642,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_texture_rect_region;
-    public void DrawTextureRectRegion(Texture2D? texture, Rect2 rect, Rect2 srcRect, Color modulate, bool transpose, bool clipUv)
+    public void DrawTextureRectRegion(Texture2D? texture, Rect2 rect, Rect2 srcRect, Color modulate, bool transpose = false, bool clipUv = true)
     {
         var __mb = __mb_draw_texture_rect_region;
         if (__mb == 0)
@@ -9671,7 +9668,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_msdf_texture_rect_region;
-    public void DrawMsdfTextureRectRegion(Texture2D? texture, Rect2 rect, Rect2 srcRect, Color modulate, double outline, double pixelRange, double scale)
+    public void DrawMsdfTextureRectRegion(Texture2D? texture, Rect2 rect, Rect2 srcRect, Color modulate, double outline = 0.0, double pixelRange = 4.0, double scale = 1.0)
     {
         var __mb = __mb_draw_msdf_texture_rect_region;
         if (__mb == 0)
@@ -9739,7 +9736,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_string;
-    public void DrawString(Font? font, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, Color modulate, TextServer.JustificationFlag justificationFlags, TextServer.Direction direction, TextServer.Orientation orientation, float oversampling)
+    public void DrawString(Font? font, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, Color modulate, TextServer.JustificationFlag justificationFlags = (TextServer.JustificationFlag)(3), TextServer.Direction direction = (TextServer.Direction)(0), TextServer.Orientation orientation = (TextServer.Orientation)(0), float oversampling = 0.0f)
     {
         var __mb = __mb_draw_string;
         if (__mb == 0)
@@ -9776,7 +9773,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_multiline_string;
-    public void DrawMultilineString(Font? font, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, int maxLines, Color modulate, TextServer.LineBreakFlag brkFlags, TextServer.JustificationFlag justificationFlags, TextServer.Direction direction, TextServer.Orientation orientation, float oversampling)
+    public void DrawMultilineString(Font? font, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, int maxLines, Color modulate, TextServer.LineBreakFlag brkFlags = (TextServer.LineBreakFlag)(3), TextServer.JustificationFlag justificationFlags = (TextServer.JustificationFlag)(3), TextServer.Direction direction = (TextServer.Direction)(0), TextServer.Orientation orientation = (TextServer.Orientation)(0), float oversampling = 0.0f)
     {
         var __mb = __mb_draw_multiline_string;
         if (__mb == 0)
@@ -9817,7 +9814,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_string_outline;
-    public void DrawStringOutline(Font? font, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, int size, Color modulate, TextServer.JustificationFlag justificationFlags, TextServer.Direction direction, TextServer.Orientation orientation, float oversampling)
+    public void DrawStringOutline(Font? font, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, int size, Color modulate, TextServer.JustificationFlag justificationFlags = (TextServer.JustificationFlag)(3), TextServer.Direction direction = (TextServer.Direction)(0), TextServer.Orientation orientation = (TextServer.Orientation)(0), float oversampling = 0.0f)
     {
         var __mb = __mb_draw_string_outline;
         if (__mb == 0)
@@ -9856,7 +9853,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_multiline_string_outline;
-    public void DrawMultilineStringOutline(Font? font, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, int maxLines, int size, Color modulate, TextServer.LineBreakFlag brkFlags, TextServer.JustificationFlag justificationFlags, TextServer.Direction direction, TextServer.Orientation orientation, float oversampling)
+    public void DrawMultilineStringOutline(Font? font, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, int maxLines, int size, Color modulate, TextServer.LineBreakFlag brkFlags = (TextServer.LineBreakFlag)(3), TextServer.JustificationFlag justificationFlags = (TextServer.JustificationFlag)(3), TextServer.Direction direction = (TextServer.Direction)(0), TextServer.Orientation orientation = (TextServer.Orientation)(0), float oversampling = 0.0f)
     {
         var __mb = __mb_draw_multiline_string_outline;
         if (__mb == 0)
@@ -9899,7 +9896,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_char;
-    public void DrawChar(Font? font, Vector2 pos, string @char, int fontSize, Color modulate, float oversampling)
+    public void DrawChar(Font? font, Vector2 pos, string @char, int fontSize, Color modulate, float oversampling = 0.0f)
     {
         var __mb = __mb_draw_char;
         if (__mb == 0)
@@ -9926,7 +9923,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_char_outline;
-    public void DrawCharOutline(Font? font, Vector2 pos, string @char, int fontSize, int size, Color modulate, float oversampling)
+    public void DrawCharOutline(Font? font, Vector2 pos, string @char, int fontSize, int size, Color modulate, float oversampling = 0.0f)
     {
         var __mb = __mb_draw_char_outline;
         if (__mb == 0)
@@ -10031,7 +10028,7 @@ public unsafe partial class CanvasItem : Node
     }
 
     private static nint __mb_draw_animation_slice;
-    public void DrawAnimationSlice(double animationLength, double sliceBegin, double sliceEnd, double offset)
+    public void DrawAnimationSlice(double animationLength, double sliceBegin, double sliceEnd, double offset = 0.0)
     {
         var __mb = __mb_draw_animation_slice;
         if (__mb == 0)
@@ -10672,18 +10669,18 @@ public unsafe partial class CanvasItemMaterial : Material
 
     public enum BlendModeEnum : long
     {
-        BLEND_MODE_MIX = 0,
-        BLEND_MODE_ADD = 1,
-        BLEND_MODE_SUB = 2,
-        BLEND_MODE_MUL = 3,
-        BLEND_MODE_PREMULT_ALPHA = 4,
+        Mix = 0,
+        Add = 1,
+        Sub = 2,
+        Mul = 3,
+        PremultAlpha = 4,
     }
 
     public enum LightModeEnum : long
     {
-        LIGHT_MODE_NORMAL = 0,
-        LIGHT_MODE_UNSHADED = 1,
-        LIGHT_MODE_LIGHT_ONLY = 2,
+        Normal = 0,
+        Unshaded = 1,
+        LightOnly = 2,
     }
 
     public CanvasItemMaterial.BlendModeEnum BlendMode
@@ -12890,15 +12887,15 @@ public unsafe partial class CharacterBody2D : PhysicsBody2D
 
     public enum MotionModeEnum : long
     {
-        MOTION_MODE_GROUNDED = 0,
-        MOTION_MODE_FLOATING = 1,
+        Grounded = 0,
+        Floating = 1,
     }
 
     public enum PlatformOnLeaveEnum : long
     {
-        PLATFORM_ON_LEAVE_ADD_VELOCITY = 0,
-        PLATFORM_ON_LEAVE_ADD_UPWARD_VELOCITY = 1,
-        PLATFORM_ON_LEAVE_DO_NOTHING = 2,
+        AddVelocity = 0,
+        AddUpwardVelocity = 1,
+        DoNothing = 2,
     }
 
     public CharacterBody2D.MotionModeEnum MotionMode
@@ -13742,15 +13739,15 @@ public unsafe partial class CharacterBody3D : PhysicsBody3D
 
     public enum MotionModeEnum : long
     {
-        MOTION_MODE_GROUNDED = 0,
-        MOTION_MODE_FLOATING = 1,
+        Grounded = 0,
+        Floating = 1,
     }
 
     public enum PlatformOnLeaveEnum : long
     {
-        PLATFORM_ON_LEAVE_ADD_VELOCITY = 0,
-        PLATFORM_ON_LEAVE_ADD_UPWARD_VELOCITY = 1,
-        PLATFORM_ON_LEAVE_DO_NOTHING = 2,
+        AddVelocity = 0,
+        AddUpwardVelocity = 1,
+        DoNothing = 2,
     }
 
     public CharacterBody3D.MotionModeEnum MotionMode
@@ -14665,29 +14662,26 @@ public unsafe partial class CircleShape2D : Shape2D
     }
 }
 
-public unsafe partial class ClassDB : GodotObject
+public static unsafe partial class ClassDB
 {
-    internal ClassDB(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public ClassDB() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "ClassDB");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("ClassDB");
 
-    private static ClassDB? _singleton;
-    public static ClassDB Singleton => _singleton ??= (ClassDB)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("ClassDB"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum APIType : long
     {
-        API_CORE = 0,
-        API_EDITOR = 1,
-        API_EXTENSION = 2,
-        API_EDITOR_EXTENSION = 3,
-        API_NONE = 4,
+        Core = 0,
+        Editor = 1,
+        Extension = 2,
+        EditorExtension = 3,
+        None = 4,
     }
 
     private static nint __mb_get_parent_class;
-    public string GetParentClass(string @class)
+    public static string GetParentClass(string @class)
     {
         var __mb = __mb_get_parent_class;
         if (__mb == 0)
@@ -14700,12 +14694,12 @@ public unsafe partial class ClassDB : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return StringNames.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_class_exists;
-    public bool ClassExists(string @class)
+    public static bool ClassExists(string @class)
     {
         var __mb = __mb_class_exists;
         if (__mb == 0)
@@ -14718,12 +14712,12 @@ public unsafe partial class ClassDB : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_parent_class;
-    public bool IsParentClass(string @class, string inherits)
+    public static bool IsParentClass(string @class, string inherits)
     {
         var __mb = __mb_is_parent_class;
         if (__mb == 0)
@@ -14738,12 +14732,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_can_instantiate;
-    public bool CanInstantiate(string @class)
+    public static bool CanInstantiate(string @class)
     {
         var __mb = __mb_can_instantiate;
         if (__mb == 0)
@@ -14756,12 +14750,12 @@ public unsafe partial class ClassDB : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_instantiate;
-    public Variant Instantiate(string @class)
+    public static Variant Instantiate(string @class)
     {
         var __mb = __mb_instantiate;
         if (__mb == 0)
@@ -14774,12 +14768,12 @@ public unsafe partial class ClassDB : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_class_get_api_type;
-    public ClassDB.APIType ClassGetApiType(string @class)
+    public static ClassDB.APIType ClassGetApiType(string @class)
     {
         var __mb = __mb_class_get_api_type;
         if (__mb == 0)
@@ -14792,12 +14786,12 @@ public unsafe partial class ClassDB : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (ClassDB.APIType)__ret;
     }
 
     private static nint __mb_class_has_signal;
-    public bool ClassHasSignal(string @class, string signal)
+    public static bool ClassHasSignal(string @class, string signal)
     {
         var __mb = __mb_class_has_signal;
         if (__mb == 0)
@@ -14812,12 +14806,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_class_get_signal;
-    public Godot.Collections.Dictionary ClassGetSignal(string @class, string signal)
+    public static Godot.Collections.Dictionary ClassGetSignal(string @class, string signal)
     {
         var __mb = __mb_class_get_signal;
         if (__mb == 0)
@@ -14832,12 +14826,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_class_get_signal_list;
-    public Godot.Collections.Array ClassGetSignalList(string @class, bool noInheritance)
+    public static Godot.Collections.Array ClassGetSignalList(string @class, bool noInheritance = false)
     {
         var __mb = __mb_class_get_signal_list;
         if (__mb == 0)
@@ -14852,12 +14846,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_class_get_property_list;
-    public Godot.Collections.Array ClassGetPropertyList(string @class, bool noInheritance)
+    public static Godot.Collections.Array ClassGetPropertyList(string @class, bool noInheritance = false)
     {
         var __mb = __mb_class_get_property_list;
         if (__mb == 0)
@@ -14872,12 +14866,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_class_get_property_getter;
-    public string ClassGetPropertyGetter(string @class, string property)
+    public static string ClassGetPropertyGetter(string @class, string property)
     {
         var __mb = __mb_class_get_property_getter;
         if (__mb == 0)
@@ -14892,12 +14886,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return StringNames.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_class_get_property_setter;
-    public string ClassGetPropertySetter(string @class, string property)
+    public static string ClassGetPropertySetter(string @class, string property)
     {
         var __mb = __mb_class_get_property_setter;
         if (__mb == 0)
@@ -14912,12 +14906,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return StringNames.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_class_get_property;
-    public Variant ClassGetProperty(GodotObject? @object, string property)
+    public static Variant ClassGetProperty(GodotObject? @object, string property)
     {
         var __mb = __mb_class_get_property;
         if (__mb == 0)
@@ -14932,12 +14926,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_class_set_property;
-    public Error ClassSetProperty(GodotObject? @object, string property, Variant value)
+    public static Error ClassSetProperty(GodotObject? @object, string property, Variant value)
     {
         var __mb = __mb_class_set_property;
         if (__mb == 0)
@@ -14954,12 +14948,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_class_get_property_default_value;
-    public Variant ClassGetPropertyDefaultValue(string @class, string property)
+    public static Variant ClassGetPropertyDefaultValue(string @class, string property)
     {
         var __mb = __mb_class_get_property_default_value;
         if (__mb == 0)
@@ -14974,12 +14968,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_class_has_method;
-    public bool ClassHasMethod(string @class, string method, bool noInheritance)
+    public static bool ClassHasMethod(string @class, string method, bool noInheritance = false)
     {
         var __mb = __mb_class_has_method;
         if (__mb == 0)
@@ -14996,12 +14990,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_class_get_method_argument_count;
-    public int ClassGetMethodArgumentCount(string @class, string method, bool noInheritance)
+    public static int ClassGetMethodArgumentCount(string @class, string method, bool noInheritance = false)
     {
         var __mb = __mb_class_get_method_argument_count;
         if (__mb == 0)
@@ -15018,12 +15012,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_class_get_method_list;
-    public Godot.Collections.Array ClassGetMethodList(string @class, bool noInheritance)
+    public static Godot.Collections.Array ClassGetMethodList(string @class, bool noInheritance = false)
     {
         var __mb = __mb_class_get_method_list;
         if (__mb == 0)
@@ -15038,12 +15032,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_class_has_integer_constant;
-    public bool ClassHasIntegerConstant(string @class, string name)
+    public static bool ClassHasIntegerConstant(string @class, string name)
     {
         var __mb = __mb_class_has_integer_constant;
         if (__mb == 0)
@@ -15058,12 +15052,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_class_get_integer_constant;
-    public long ClassGetIntegerConstant(string @class, string name)
+    public static long ClassGetIntegerConstant(string @class, string name)
     {
         var __mb = __mb_class_get_integer_constant;
         if (__mb == 0)
@@ -15078,12 +15072,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((long)__ret);
     }
 
     private static nint __mb_class_has_enum;
-    public bool ClassHasEnum(string @class, string name, bool noInheritance)
+    public static bool ClassHasEnum(string @class, string name, bool noInheritance = false)
     {
         var __mb = __mb_class_has_enum;
         if (__mb == 0)
@@ -15100,12 +15094,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_class_get_integer_constant_enum;
-    public string ClassGetIntegerConstantEnum(string @class, string name, bool noInheritance)
+    public static string ClassGetIntegerConstantEnum(string @class, string name, bool noInheritance = false)
     {
         var __mb = __mb_class_get_integer_constant_enum;
         if (__mb == 0)
@@ -15122,12 +15116,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return StringNames.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_is_class_enum_bitfield;
-    public bool IsClassEnumBitfield(string @class, string @enum, bool noInheritance)
+    public static bool IsClassEnumBitfield(string @class, string @enum, bool noInheritance = false)
     {
         var __mb = __mb_is_class_enum_bitfield;
         if (__mb == 0)
@@ -15144,12 +15138,12 @@ public unsafe partial class ClassDB : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_class_enabled;
-    public bool IsClassEnabled(string @class)
+    public static bool IsClassEnabled(string @class)
     {
         var __mb = __mb_is_class_enabled;
         if (__mb == 0)
@@ -15162,7 +15156,7 @@ public unsafe partial class ClassDB : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 }
@@ -15178,25 +15172,25 @@ public unsafe partial class CodeEdit : TextEdit
 
     public enum CodeCompletionKind : long
     {
-        KIND_CLASS = 0,
-        KIND_FUNCTION = 1,
-        KIND_SIGNAL = 2,
-        KIND_VARIABLE = 3,
-        KIND_MEMBER = 4,
-        KIND_ENUM = 5,
-        KIND_CONSTANT = 6,
-        KIND_NODE_PATH = 7,
-        KIND_FILE_PATH = 8,
-        KIND_PLAIN_TEXT = 9,
-        KIND_KEYWORD = 10,
+        Class = 0,
+        Function = 1,
+        Signal = 2,
+        Variable = 3,
+        Member = 4,
+        Enum = 5,
+        Constant = 6,
+        NodePath = 7,
+        FilePath = 8,
+        PlainText = 9,
+        Keyword = 10,
     }
 
     public enum CodeCompletionLocation : long
     {
-        LOCATION_LOCAL = 0,
-        LOCATION_PARENT_MASK = 256,
-        LOCATION_OTHER_USER_CODE = 512,
-        LOCATION_OTHER = 1024,
+        Local = 0,
+        ParentMask = 256,
+        OtherUserCode = 512,
+        Other = 1024,
     }
 
     public bool SymbolLookupOnClick
@@ -15495,7 +15489,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_convert_indent;
-    public void ConvertIndent(int fromLine, int toLine)
+    public void ConvertIndent(int fromLine = unchecked((int)(-1)), int toLine = unchecked((int)(-1)))
     {
         var __mb = __mb_convert_indent;
         if (__mb == 0)
@@ -16259,7 +16253,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_set_code_region_tags;
-    public void SetCodeRegionTags(string start, string end)
+    public void SetCodeRegionTags(string start = "region", string end = "endregion")
     {
         var __mb = __mb_set_code_region_tags;
         if (__mb == 0)
@@ -16315,7 +16309,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_add_string_delimiter;
-    public void AddStringDelimiter(string startKey, string endKey, bool lineOnly)
+    public void AddStringDelimiter(string startKey, string endKey, bool lineOnly = false)
     {
         var __mb = __mb_add_string_delimiter;
         if (__mb == 0)
@@ -16417,7 +16411,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_in_string;
-    public int IsInString(int line, int column)
+    public int IsInString(int line, int column = unchecked((int)(-1)))
     {
         var __mb = __mb_is_in_string;
         if (__mb == 0)
@@ -16437,7 +16431,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_add_comment_delimiter;
-    public void AddCommentDelimiter(string startKey, string endKey, bool lineOnly)
+    public void AddCommentDelimiter(string startKey, string endKey, bool lineOnly = false)
     {
         var __mb = __mb_add_comment_delimiter;
         if (__mb == 0)
@@ -16539,7 +16533,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_is_in_comment;
-    public int IsInComment(int line, int column)
+    public int IsInComment(int line, int column = unchecked((int)(-1)))
     {
         var __mb = __mb_is_in_comment;
         if (__mb == 0)
@@ -16683,7 +16677,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_request_code_completion;
-    public void RequestCodeCompletion(bool force)
+    public void RequestCodeCompletion(bool force = false)
     {
         var __mb = __mb_request_code_completion;
         if (__mb == 0)
@@ -16699,7 +16693,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_add_code_completion_option;
-    public void AddCodeCompletionOption(CodeEdit.CodeCompletionKind type, string displayText, string insertText, Color textColor, Resource? icon, Variant value, int location)
+    public void AddCodeCompletionOption(CodeEdit.CodeCompletionKind type, string displayText, string insertText, Color textColor, Resource? icon = null, Variant value = default, int location = unchecked((int)(1024)))
     {
         var __mb = __mb_add_code_completion_option;
         if (__mb == 0)
@@ -16809,7 +16803,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_confirm_code_completion;
-    public void ConfirmCodeCompletion(bool replace)
+    public void ConfirmCodeCompletion(bool replace = false)
     {
         var __mb = __mb_confirm_code_completion;
         if (__mb == 0)
@@ -17083,7 +17077,7 @@ public unsafe partial class CodeEdit : TextEdit
     }
 
     private static nint __mb_join_lines;
-    public void JoinLines(string lineEnding)
+    public void JoinLines(string lineEnding = " ")
     {
         var __mb = __mb_join_lines;
         if (__mb == 0)
@@ -17438,7 +17432,7 @@ public unsafe partial class CodeHighlighter : SyntaxHighlighter
     }
 
     private static nint __mb_add_color_region;
-    public void AddColorRegion(string startKey, string endKey, Color color, bool lineOnly)
+    public void AddColorRegion(string startKey, string endKey, Color color, bool lineOnly = false)
     {
         var __mb = __mb_add_color_region;
         if (__mb == 0)
@@ -17672,9 +17666,9 @@ public unsafe partial class CollisionObject2D : Node2D
 
     public enum DisableModeEnum : long
     {
-        DISABLE_MODE_REMOVE = 0,
-        DISABLE_MODE_MAKE_STATIC = 1,
-        DISABLE_MODE_KEEP_ACTIVE = 2,
+        Remove = 0,
+        MakeStatic = 1,
+        KeepActive = 2,
     }
 
     public CollisionObject2D.DisableModeEnum DisableMode
@@ -18367,9 +18361,9 @@ public unsafe partial class CollisionObject3D : Node3D
 
     public enum DisableModeEnum : long
     {
-        DISABLE_MODE_REMOVE = 0,
-        DISABLE_MODE_MAKE_STATIC = 1,
-        DISABLE_MODE_KEEP_ACTIVE = 2,
+        Remove = 0,
+        MakeStatic = 1,
+        KeepActive = 2,
     }
 
     public CollisionObject3D.DisableModeEnum DisableMode
@@ -18978,8 +18972,8 @@ public unsafe partial class CollisionPolygon2D : Node2D
 
     public enum BuildModeEnum : long
     {
-        BUILD_SOLIDS = 0,
-        BUILD_SEGMENTS = 1,
+        Solids = 0,
+        Segments = 1,
     }
 
     public CollisionPolygon2D.BuildModeEnum BuildMode
@@ -19803,22 +19797,22 @@ public unsafe partial class ColorPicker : VBoxContainer
 
     public enum ColorModeType : long
     {
-        MODE_RGB = 0,
-        MODE_HSV = 1,
-        MODE_RAW = 2,
-        MODE_LINEAR = 2,
-        MODE_OKHSL = 3,
+        Rgb = 0,
+        Hsv = 1,
+        Raw = 2,
+        Linear = 2,
+        Okhsl = 3,
     }
 
     public enum PickerShapeType : long
     {
-        SHAPE_HSV_RECTANGLE = 0,
-        SHAPE_HSV_WHEEL = 1,
-        SHAPE_VHS_CIRCLE = 2,
-        SHAPE_OKHSL_CIRCLE = 3,
-        SHAPE_NONE = 4,
-        SHAPE_OK_HS_RECTANGLE = 5,
-        SHAPE_OK_HL_RECTANGLE = 6,
+        HsvRectangle = 0,
+        HsvWheel = 1,
+        VhsCircle = 2,
+        OkhslCircle = 3,
+        None = 4,
+        OkHsRectangle = 5,
+        OkHlRectangle = 6,
     }
 
     public Color Color
@@ -20586,12 +20580,12 @@ public unsafe partial class CompositorEffect : Resource
 
     public enum EffectCallbackTypeEnum : long
     {
-        EFFECT_CALLBACK_TYPE_PRE_OPAQUE = 0,
-        EFFECT_CALLBACK_TYPE_POST_OPAQUE = 1,
-        EFFECT_CALLBACK_TYPE_POST_SKY = 2,
-        EFFECT_CALLBACK_TYPE_PRE_TRANSPARENT = 3,
-        EFFECT_CALLBACK_TYPE_POST_TRANSPARENT = 4,
-        EFFECT_CALLBACK_TYPE_MAX = 5,
+        PreOpaque = 0,
+        PostOpaque = 1,
+        PostSky = 2,
+        PreTransparent = 3,
+        PostTransparent = 4,
+        Max = 5,
     }
 
     public bool Enabled
@@ -21112,12 +21106,12 @@ public unsafe partial class ConeTwistJoint3D : Joint3D
 
     public enum Param : long
     {
-        PARAM_SWING_SPAN = 0,
-        PARAM_TWIST_SPAN = 1,
-        PARAM_BIAS = 2,
-        PARAM_SOFTNESS = 3,
-        PARAM_RELAXATION = 4,
-        PARAM_MAX = 5,
+        SwingSpan = 0,
+        TwistSpan = 1,
+        Bias = 2,
+        Softness = 3,
+        Relaxation = 4,
+        Max = 5,
     }
 
     public float SwingSpan
@@ -21219,7 +21213,7 @@ public unsafe partial class ConfigFile : RefCounted
     }
 
     private static nint __mb_get_value;
-    public Variant GetValue(string section, string key, Variant @default)
+    public Variant GetValue(string section, string key, Variant @default = default)
     {
         var __mb = __mb_get_value;
         if (__mb == 0)
@@ -21602,123 +21596,123 @@ public unsafe partial class Control : CanvasItem
 
     public enum FocusModeEnum : long
     {
-        FOCUS_NONE = 0,
-        FOCUS_CLICK = 1,
-        FOCUS_ALL = 2,
-        FOCUS_ACCESSIBILITY = 3,
+        None = 0,
+        Click = 1,
+        All = 2,
+        Accessibility = 3,
     }
 
     public enum FocusBehaviorRecursiveEnum : long
     {
-        FOCUS_BEHAVIOR_INHERITED = 0,
-        FOCUS_BEHAVIOR_DISABLED = 1,
-        FOCUS_BEHAVIOR_ENABLED = 2,
+        Inherited = 0,
+        Disabled = 1,
+        Enabled = 2,
     }
 
     public enum MouseBehaviorRecursiveEnum : long
     {
-        MOUSE_BEHAVIOR_INHERITED = 0,
-        MOUSE_BEHAVIOR_DISABLED = 1,
-        MOUSE_BEHAVIOR_ENABLED = 2,
+        Inherited = 0,
+        Disabled = 1,
+        Enabled = 2,
     }
 
     public enum CursorShape : long
     {
-        CURSOR_ARROW = 0,
-        CURSOR_IBEAM = 1,
-        CURSOR_POINTING_HAND = 2,
-        CURSOR_CROSS = 3,
-        CURSOR_WAIT = 4,
-        CURSOR_BUSY = 5,
-        CURSOR_DRAG = 6,
-        CURSOR_CAN_DROP = 7,
-        CURSOR_FORBIDDEN = 8,
-        CURSOR_VSIZE = 9,
-        CURSOR_HSIZE = 10,
-        CURSOR_BDIAGSIZE = 11,
-        CURSOR_FDIAGSIZE = 12,
-        CURSOR_MOVE = 13,
-        CURSOR_VSPLIT = 14,
-        CURSOR_HSPLIT = 15,
-        CURSOR_HELP = 16,
+        Arrow = 0,
+        Ibeam = 1,
+        PointingHand = 2,
+        Cross = 3,
+        Wait = 4,
+        Busy = 5,
+        Drag = 6,
+        CanDrop = 7,
+        Forbidden = 8,
+        Vsize = 9,
+        Hsize = 10,
+        Bdiagsize = 11,
+        Fdiagsize = 12,
+        Move = 13,
+        Vsplit = 14,
+        Hsplit = 15,
+        Help = 16,
     }
 
     public enum LayoutPreset : long
     {
-        PRESET_TOP_LEFT = 0,
-        PRESET_TOP_RIGHT = 1,
-        PRESET_BOTTOM_LEFT = 2,
-        PRESET_BOTTOM_RIGHT = 3,
-        PRESET_CENTER_LEFT = 4,
-        PRESET_CENTER_TOP = 5,
-        PRESET_CENTER_RIGHT = 6,
-        PRESET_CENTER_BOTTOM = 7,
-        PRESET_CENTER = 8,
-        PRESET_LEFT_WIDE = 9,
-        PRESET_TOP_WIDE = 10,
-        PRESET_RIGHT_WIDE = 11,
-        PRESET_BOTTOM_WIDE = 12,
-        PRESET_VCENTER_WIDE = 13,
-        PRESET_HCENTER_WIDE = 14,
-        PRESET_FULL_RECT = 15,
+        TopLeft = 0,
+        TopRight = 1,
+        BottomLeft = 2,
+        BottomRight = 3,
+        CenterLeft = 4,
+        CenterTop = 5,
+        CenterRight = 6,
+        CenterBottom = 7,
+        Center = 8,
+        LeftWide = 9,
+        TopWide = 10,
+        RightWide = 11,
+        BottomWide = 12,
+        VcenterWide = 13,
+        HcenterWide = 14,
+        FullRect = 15,
     }
 
     public enum LayoutPresetMode : long
     {
-        PRESET_MODE_MINSIZE = 0,
-        PRESET_MODE_KEEP_WIDTH = 1,
-        PRESET_MODE_KEEP_HEIGHT = 2,
-        PRESET_MODE_KEEP_SIZE = 3,
+        Minsize = 0,
+        KeepWidth = 1,
+        KeepHeight = 2,
+        KeepSize = 3,
     }
 
     [Flags]
     public enum SizeFlags : long
     {
-        SIZE_SHRINK_BEGIN = 0,
-        SIZE_FILL = 1,
-        SIZE_EXPAND = 2,
-        SIZE_EXPAND_FILL = 3,
-        SIZE_SHRINK_CENTER = 4,
-        SIZE_SHRINK_END = 8,
+        ShrinkBegin = 0,
+        Fill = 1,
+        Expand = 2,
+        ExpandFill = 3,
+        ShrinkCenter = 4,
+        ShrinkEnd = 8,
     }
 
     public enum MouseFilterEnum : long
     {
-        MOUSE_FILTER_STOP = 0,
-        MOUSE_FILTER_PASS = 1,
-        MOUSE_FILTER_IGNORE = 2,
+        Stop = 0,
+        Pass = 1,
+        Ignore = 2,
     }
 
     public enum GrowDirection : long
     {
-        GROW_DIRECTION_BEGIN = 0,
-        GROW_DIRECTION_END = 1,
-        GROW_DIRECTION_BOTH = 2,
+        Begin = 0,
+        End = 1,
+        Both = 2,
     }
 
     public enum Anchor : long
     {
-        ANCHOR_BEGIN = 0,
-        ANCHOR_END = 1,
+        Begin = 0,
+        End = 1,
     }
 
     public enum LayoutDirectionEnum : long
     {
-        LAYOUT_DIRECTION_INHERITED = 0,
-        LAYOUT_DIRECTION_APPLICATION_LOCALE = 1,
-        LAYOUT_DIRECTION_LTR = 2,
-        LAYOUT_DIRECTION_RTL = 3,
-        LAYOUT_DIRECTION_SYSTEM_LOCALE = 4,
-        LAYOUT_DIRECTION_MAX = 5,
-        LAYOUT_DIRECTION_LOCALE = 1,
+        Inherited = 0,
+        ApplicationLocale = 1,
+        Ltr = 2,
+        Rtl = 3,
+        SystemLocale = 4,
+        Max = 5,
+        Locale = 1,
     }
 
     public enum TextDirection : long
     {
-        TEXT_DIRECTION_INHERITED = 3,
-        TEXT_DIRECTION_AUTO = 0,
-        TEXT_DIRECTION_LTR = 1,
-        TEXT_DIRECTION_RTL = 2,
+        Inherited = 3,
+        Auto = 0,
+        Ltr = 1,
+        Rtl = 2,
     }
 
     public Vector2 CustomMinimumSize
@@ -22179,7 +22173,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_anchors_preset;
-    public void SetAnchorsPreset(Control.LayoutPreset preset, bool keepOffsets)
+    public void SetAnchorsPreset(Control.LayoutPreset preset, bool keepOffsets = false)
     {
         var __mb = __mb_set_anchors_preset;
         if (__mb == 0)
@@ -22197,7 +22191,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_offsets_preset;
-    public void SetOffsetsPreset(Control.LayoutPreset preset, Control.LayoutPresetMode resizeMode, int margin)
+    public void SetOffsetsPreset(Control.LayoutPreset preset, Control.LayoutPresetMode resizeMode = (Control.LayoutPresetMode)(0), int margin = unchecked((int)(0)))
     {
         var __mb = __mb_set_offsets_preset;
         if (__mb == 0)
@@ -22217,7 +22211,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_anchors_and_offsets_preset;
-    public void SetAnchorsAndOffsetsPreset(Control.LayoutPreset preset, Control.LayoutPresetMode resizeMode, int margin)
+    public void SetAnchorsAndOffsetsPreset(Control.LayoutPreset preset, Control.LayoutPresetMode resizeMode = (Control.LayoutPresetMode)(0), int margin = unchecked((int)(0)))
     {
         var __mb = __mb_set_anchors_and_offsets_preset;
         if (__mb == 0)
@@ -22237,7 +22231,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_anchor;
-    public void SetAnchor(Side side, float anchor, bool keepOffset, bool pushOppositeAnchor)
+    public void SetAnchor(Side side, float anchor, bool keepOffset = false, bool pushOppositeAnchor = true)
     {
         var __mb = __mb_set_anchor;
         if (__mb == 0)
@@ -22313,7 +22307,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_anchor_and_offset;
-    public void SetAnchorAndOffset(Side side, float anchor, float offset, bool pushOppositeAnchor)
+    public void SetAnchorAndOffset(Side side, float anchor, float offset, bool pushOppositeAnchor = false)
     {
         var __mb = __mb_set_anchor_and_offset;
         if (__mb == 0)
@@ -22367,7 +22361,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_position;
-    public void SetPosition(Vector2 position, bool keepOffsets)
+    public void SetPosition(Vector2 position, bool keepOffsets = false)
     {
         var __mb = __mb_set_position;
         if (__mb == 0)
@@ -22385,7 +22379,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_size;
-    public void SetSize(Vector2 size, bool keepOffsets)
+    public void SetSize(Vector2 size, bool keepOffsets = false)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -22448,7 +22442,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_set_global_position;
-    public void SetGlobalPosition(Vector2 position, bool keepOffsets)
+    public void SetGlobalPosition(Vector2 position, bool keepOffsets = false)
     {
         var __mb = __mb_set_global_position;
         if (__mb == 0)
@@ -22878,7 +22872,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_focus;
-    public bool HasFocus(bool ignoreHiddenFocus)
+    public bool HasFocus(bool ignoreHiddenFocus = false)
     {
         var __mb = __mb_has_focus;
         if (__mb == 0)
@@ -22896,7 +22890,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_grab_focus;
-    public void GrabFocus(bool hideFocus)
+    public void GrabFocus(bool hideFocus = false)
     {
         var __mb = __mb_grab_focus;
         if (__mb == 0)
@@ -23606,7 +23600,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_theme_icon;
-    public Texture2D? GetThemeIcon(string name, string themeType)
+    public Texture2D? GetThemeIcon(string name, string themeType = "")
     {
         var __mb = __mb_get_theme_icon;
         if (__mb == 0)
@@ -23626,7 +23620,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_theme_stylebox;
-    public StyleBox? GetThemeStylebox(string name, string themeType)
+    public StyleBox? GetThemeStylebox(string name, string themeType = "")
     {
         var __mb = __mb_get_theme_stylebox;
         if (__mb == 0)
@@ -23646,7 +23640,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_theme_font;
-    public Font? GetThemeFont(string name, string themeType)
+    public Font? GetThemeFont(string name, string themeType = "")
     {
         var __mb = __mb_get_theme_font;
         if (__mb == 0)
@@ -23666,7 +23660,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_theme_font_size;
-    public int GetThemeFontSize(string name, string themeType)
+    public int GetThemeFontSize(string name, string themeType = "")
     {
         var __mb = __mb_get_theme_font_size;
         if (__mb == 0)
@@ -23686,7 +23680,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_theme_color;
-    public Color GetThemeColor(string name, string themeType)
+    public Color GetThemeColor(string name, string themeType = "")
     {
         var __mb = __mb_get_theme_color;
         if (__mb == 0)
@@ -23706,7 +23700,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_theme_constant;
-    public int GetThemeConstant(string name, string themeType)
+    public int GetThemeConstant(string name, string themeType = "")
     {
         var __mb = __mb_get_theme_constant;
         if (__mb == 0)
@@ -23834,7 +23828,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_icon;
-    public bool HasThemeIcon(string name, string themeType)
+    public bool HasThemeIcon(string name, string themeType = "")
     {
         var __mb = __mb_has_theme_icon;
         if (__mb == 0)
@@ -23854,7 +23848,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_stylebox;
-    public bool HasThemeStylebox(string name, string themeType)
+    public bool HasThemeStylebox(string name, string themeType = "")
     {
         var __mb = __mb_has_theme_stylebox;
         if (__mb == 0)
@@ -23874,7 +23868,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_font;
-    public bool HasThemeFont(string name, string themeType)
+    public bool HasThemeFont(string name, string themeType = "")
     {
         var __mb = __mb_has_theme_font;
         if (__mb == 0)
@@ -23894,7 +23888,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_font_size;
-    public bool HasThemeFontSize(string name, string themeType)
+    public bool HasThemeFontSize(string name, string themeType = "")
     {
         var __mb = __mb_has_theme_font_size;
         if (__mb == 0)
@@ -23914,7 +23908,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_color;
-    public bool HasThemeColor(string name, string themeType)
+    public bool HasThemeColor(string name, string themeType = "")
     {
         var __mb = __mb_has_theme_color;
         if (__mb == 0)
@@ -23934,7 +23928,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_has_theme_constant;
-    public bool HasThemeConstant(string name, string themeType)
+    public bool HasThemeConstant(string name, string themeType = "")
     {
         var __mb = __mb_has_theme_constant;
         if (__mb == 0)
@@ -24139,7 +24133,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_tooltip;
-    public string GetTooltip(Vector2 atPosition)
+    public string GetTooltip(Vector2 atPosition = default)
     {
         var __mb = __mb_get_tooltip;
         if (__mb == 0)
@@ -24219,7 +24213,7 @@ public unsafe partial class Control : CanvasItem
     }
 
     private static nint __mb_get_cursor_shape;
-    public Control.CursorShape GetCursorShape(Vector2 atPosition)
+    public Control.CursorShape GetCursorShape(Vector2 atPosition = default)
     {
         var __mb = __mb_get_cursor_shape;
         if (__mb == 0)
@@ -25069,9 +25063,9 @@ public unsafe partial class ConvertTransformModifier3D : BoneConstraint3D
 
     public enum TransformMode : long
     {
-        TRANSFORM_MODE_POSITION = 0,
-        TRANSFORM_MODE_ROTATION = 1,
-        TRANSFORM_MODE_SCALE = 2,
+        Position = 0,
+        Rotation = 1,
+        Scale = 2,
     }
 
     public int SettingCount
@@ -25401,19 +25395,19 @@ public unsafe partial class CopyTransformModifier3D : BoneConstraint3D
     [Flags]
     public enum TransformFlag : long
     {
-        TRANSFORM_FLAG_POSITION = 1,
-        TRANSFORM_FLAG_ROTATION = 2,
-        TRANSFORM_FLAG_SCALE = 4,
-        TRANSFORM_FLAG_ALL = 7,
+        Position = 1,
+        Rotation = 2,
+        Scale = 4,
+        All = 7,
     }
 
     [Flags]
     public enum AxisFlag : long
     {
-        AXIS_FLAG_X = 1,
-        AXIS_FLAG_Y = 2,
-        AXIS_FLAG_Z = 4,
-        AXIS_FLAG_ALL = 7,
+        X = 1,
+        Y = 2,
+        Z = 4,
+        All = 7,
     }
 
     public int SettingCount
@@ -25955,7 +25949,7 @@ public unsafe partial class Crypto : RefCounted
     }
 
     private static nint __mb_generate_self_signed_certificate;
-    public X509Certificate? GenerateSelfSignedCertificate(CryptoKey? key, string issuerName, string notBefore, string notAfter)
+    public X509Certificate? GenerateSelfSignedCertificate(CryptoKey? key, string issuerName = "CN=myserver,O=myorganisation,C=IT", string notBefore = "20140101000000", string notAfter = "20340101000000")
     {
         var __mb = __mb_generate_self_signed_certificate;
         if (__mb == 0)
@@ -25992,7 +25986,7 @@ public unsafe partial class CryptoKey : Resource
     }
 
     private static nint __mb_save;
-    public Error Save(string path, bool publicOnly)
+    public Error Save(string path, bool publicOnly = false)
     {
         var __mb = __mb_save;
         if (__mb == 0)
@@ -26013,7 +26007,7 @@ public unsafe partial class CryptoKey : Resource
     }
 
     private static nint __mb_load;
-    public Error Load(string path, bool publicOnly)
+    public Error Load(string path, bool publicOnly = false)
     {
         var __mb = __mb_load;
         if (__mb == 0)
@@ -26049,7 +26043,7 @@ public unsafe partial class CryptoKey : Resource
     }
 
     private static nint __mb_save_to_string;
-    public string SaveToString(bool publicOnly)
+    public string SaveToString(bool publicOnly = false)
     {
         var __mb = __mb_save_to_string;
         if (__mb == 0)
@@ -26067,7 +26061,7 @@ public unsafe partial class CryptoKey : Resource
     }
 
     private static nint __mb_load_from_string;
-    public Error LoadFromString(string stringKey, bool publicOnly)
+    public Error LoadFromString(string stringKey, bool publicOnly = false)
     {
         var __mb = __mb_load_from_string;
         if (__mb == 0)
@@ -26149,9 +26143,9 @@ public unsafe partial class Curve : Resource
 
     public enum TangentMode : long
     {
-        TANGENT_FREE = 0,
-        TANGENT_LINEAR = 1,
-        TANGENT_MODE_COUNT = 2,
+        Free = 0,
+        Linear = 1,
+        ModeCount = 2,
     }
 
     public float MinDomain
@@ -26222,7 +26216,7 @@ public unsafe partial class Curve : Resource
     }
 
     private static nint __mb_add_point;
-    public int AddPoint(Vector2 position, float leftTangent, float rightTangent, Curve.TangentMode leftMode, Curve.TangentMode rightMode)
+    public int AddPoint(Vector2 position, float leftTangent = 0f, float rightTangent = 0f, Curve.TangentMode leftMode = (Curve.TangentMode)(0), Curve.TangentMode rightMode = (Curve.TangentMode)(0))
     {
         var __mb = __mb_add_point;
         if (__mb == 0)
@@ -26777,7 +26771,7 @@ public unsafe partial class Curve2D : Resource
     }
 
     private static nint __mb_add_point;
-    public void AddPoint(Vector2 position, Vector2 @in, Vector2 @out, int index)
+    public void AddPoint(Vector2 position, Vector2 @in = default, Vector2 @out = default, int index = unchecked((int)(-1)))
     {
         var __mb = __mb_add_point;
         if (__mb == 0)
@@ -27020,7 +27014,7 @@ public unsafe partial class Curve2D : Resource
     }
 
     private static nint __mb_sample_baked;
-    public Vector2 SampleBaked(float offset, bool cubic)
+    public Vector2 SampleBaked(float offset = 0.0f, bool cubic = false)
     {
         var __mb = __mb_sample_baked;
         if (__mb == 0)
@@ -27040,7 +27034,7 @@ public unsafe partial class Curve2D : Resource
     }
 
     private static nint __mb_sample_baked_with_rotation;
-    public Transform2D SampleBakedWithRotation(float offset, bool cubic)
+    public Transform2D SampleBakedWithRotation(float offset = 0.0f, bool cubic = false)
     {
         var __mb = __mb_sample_baked_with_rotation;
         if (__mb == 0)
@@ -27161,7 +27155,7 @@ public unsafe partial class Curve3D : Resource
     }
 
     private static nint __mb_add_point;
-    public void AddPoint(Vector3 position, Vector3 @in, Vector3 @out, int index)
+    public void AddPoint(Vector3 position, Vector3 @in = default, Vector3 @out = default, int index = unchecked((int)(-1)))
     {
         var __mb = __mb_add_point;
         if (__mb == 0)
@@ -27502,7 +27496,7 @@ public unsafe partial class Curve3D : Resource
     }
 
     private static nint __mb_sample_baked;
-    public Vector3 SampleBaked(float offset, bool cubic)
+    public Vector3 SampleBaked(float offset = 0.0f, bool cubic = false)
     {
         var __mb = __mb_sample_baked;
         if (__mb == 0)
@@ -27522,7 +27516,7 @@ public unsafe partial class Curve3D : Resource
     }
 
     private static nint __mb_sample_baked_with_rotation;
-    public Transform3D SampleBakedWithRotation(float offset, bool cubic, bool applyTilt)
+    public Transform3D SampleBakedWithRotation(float offset = 0.0f, bool cubic = false, bool applyTilt = false)
     {
         var __mb = __mb_sample_baked_with_rotation;
         if (__mb == 0)
@@ -27544,7 +27538,7 @@ public unsafe partial class Curve3D : Resource
     }
 
     private static nint __mb_sample_baked_up_vector;
-    public Vector3 SampleBakedUpVector(float offset, bool applyTilt)
+    public Vector3 SampleBakedUpVector(float offset, bool applyTilt = false)
     {
         var __mb = __mb_sample_baked_up_vector;
         if (__mb == 0)
@@ -27611,8 +27605,8 @@ public unsafe partial class CurveTexture : Texture2D
 
     public enum TextureModeEnum : long
     {
-        TEXTURE_MODE_RGB = 0,
-        TEXTURE_MODE_RED = 1,
+        Rgb = 0,
+        Red = 1,
     }
 
     public int Width

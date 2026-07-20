@@ -584,7 +584,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_line_height;
-    public int GetLineHeight(int line)
+    public int GetLineHeight(int line = unchecked((int)(-1)))
     {
         var __mb = __mb_get_line_height;
         if (__mb == 0)
@@ -893,19 +893,19 @@ public unsafe partial class Label3D : GeometryInstance3D
 
     public enum DrawFlags : long
     {
-        FLAG_SHADED = 0,
-        FLAG_DOUBLE_SIDED = 1,
-        FLAG_DISABLE_DEPTH_TEST = 2,
-        FLAG_FIXED_SIZE = 3,
-        FLAG_MAX = 4,
+        Shaded = 0,
+        DoubleSided = 1,
+        DisableDepthTest = 2,
+        FixedSize = 3,
+        Max = 4,
     }
 
     public enum AlphaCutMode : long
     {
-        ALPHA_CUT_DISABLED = 0,
-        ALPHA_CUT_DISCARD = 1,
-        ALPHA_CUT_OPAQUE_PREPASS = 2,
-        ALPHA_CUT_HASH = 3,
+        Disabled = 0,
+        Discard = 1,
+        OpaquePrepass = 2,
+        Hash = 3,
     }
 
     public float PixelSize
@@ -2482,7 +2482,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_add_stacked_outline;
-    public void AddStackedOutline(int index)
+    public void AddStackedOutline(int index = unchecked((int)(-1)))
     {
         var __mb = __mb_add_stacked_outline;
         if (__mb == 0)
@@ -2635,7 +2635,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_add_stacked_shadow;
-    public void AddStackedShadow(int index)
+    public void AddStackedShadow(int index = unchecked((int)(-1)))
     {
         var __mb = __mb_add_stacked_shadow;
         if (__mb == 0)
@@ -2799,16 +2799,16 @@ public unsafe partial class Light2D : Node2D
 
     public enum ShadowFilterEnum : long
     {
-        SHADOW_FILTER_NONE = 0,
-        SHADOW_FILTER_PCF5 = 1,
-        SHADOW_FILTER_PCF13 = 2,
+        None = 0,
+        Pcf5 = 1,
+        Pcf13 = 2,
     }
 
     public enum BlendModeEnum : long
     {
-        BLEND_MODE_ADD = 0,
-        BLEND_MODE_SUB = 1,
-        BLEND_MODE_MIX = 2,
+        Add = 0,
+        Sub = 1,
+        Mix = 2,
     }
 
     public bool Enabled
@@ -3404,35 +3404,35 @@ public unsafe partial class Light3D : VisualInstance3D
 
     public enum Param : long
     {
-        PARAM_ENERGY = 0,
-        PARAM_INDIRECT_ENERGY = 1,
-        PARAM_VOLUMETRIC_FOG_ENERGY = 2,
-        PARAM_SPECULAR = 3,
-        PARAM_RANGE = 4,
-        PARAM_SIZE = 5,
-        PARAM_ATTENUATION = 6,
-        PARAM_SPOT_ANGLE = 7,
-        PARAM_SPOT_ATTENUATION = 8,
-        PARAM_SHADOW_MAX_DISTANCE = 9,
-        PARAM_SHADOW_SPLIT_1_OFFSET = 10,
-        PARAM_SHADOW_SPLIT_2_OFFSET = 11,
-        PARAM_SHADOW_SPLIT_3_OFFSET = 12,
-        PARAM_SHADOW_FADE_START = 13,
-        PARAM_SHADOW_NORMAL_BIAS = 14,
-        PARAM_SHADOW_BIAS = 15,
-        PARAM_SHADOW_PANCAKE_SIZE = 16,
-        PARAM_SHADOW_OPACITY = 17,
-        PARAM_SHADOW_BLUR = 18,
-        PARAM_TRANSMITTANCE_BIAS = 19,
-        PARAM_INTENSITY = 20,
-        PARAM_MAX = 21,
+        Energy = 0,
+        IndirectEnergy = 1,
+        VolumetricFogEnergy = 2,
+        Specular = 3,
+        Range = 4,
+        Size = 5,
+        Attenuation = 6,
+        SpotAngle = 7,
+        SpotAttenuation = 8,
+        ShadowMaxDistance = 9,
+        ShadowSplit1Offset = 10,
+        ShadowSplit2Offset = 11,
+        ShadowSplit3Offset = 12,
+        ShadowFadeStart = 13,
+        ShadowNormalBias = 14,
+        ShadowBias = 15,
+        ShadowPancakeSize = 16,
+        ShadowOpacity = 17,
+        ShadowBlur = 18,
+        TransmittanceBias = 19,
+        Intensity = 20,
+        Max = 21,
     }
 
     public enum BakeMode : long
     {
-        BAKE_DISABLED = 0,
-        BAKE_STATIC = 1,
-        BAKE_DYNAMIC = 2,
+        Disabled = 0,
+        Static = 1,
+        Dynamic = 2,
     }
 
     public float LightIntensityLumens
@@ -4215,43 +4215,43 @@ public unsafe partial class LightmapGI : VisualInstance3D
 
     public enum BakeQuality : long
     {
-        BAKE_QUALITY_LOW = 0,
-        BAKE_QUALITY_MEDIUM = 1,
-        BAKE_QUALITY_HIGH = 2,
-        BAKE_QUALITY_ULTRA = 3,
+        Low = 0,
+        Medium = 1,
+        High = 2,
+        Ultra = 3,
     }
 
     public enum GenerateProbes : long
     {
-        GENERATE_PROBES_DISABLED = 0,
-        GENERATE_PROBES_SUBDIV_4 = 1,
-        GENERATE_PROBES_SUBDIV_8 = 2,
-        GENERATE_PROBES_SUBDIV_16 = 3,
-        GENERATE_PROBES_SUBDIV_32 = 4,
+        Disabled = 0,
+        Subdiv4 = 1,
+        Subdiv8 = 2,
+        Subdiv16 = 3,
+        Subdiv32 = 4,
     }
 
     public enum BakeError : long
     {
-        BAKE_ERROR_OK = 0,
-        BAKE_ERROR_NO_SCENE_ROOT = 1,
-        BAKE_ERROR_FOREIGN_DATA = 2,
-        BAKE_ERROR_NO_LIGHTMAPPER = 3,
-        BAKE_ERROR_NO_SAVE_PATH = 4,
-        BAKE_ERROR_NO_MESHES = 5,
-        BAKE_ERROR_MESHES_INVALID = 6,
-        BAKE_ERROR_CANT_CREATE_IMAGE = 7,
-        BAKE_ERROR_USER_ABORTED = 8,
-        BAKE_ERROR_TEXTURE_SIZE_TOO_SMALL = 9,
-        BAKE_ERROR_LIGHTMAP_TOO_SMALL = 10,
-        BAKE_ERROR_ATLAS_TOO_SMALL = 11,
+        Ok = 0,
+        NoSceneRoot = 1,
+        ForeignData = 2,
+        NoLightmapper = 3,
+        NoSavePath = 4,
+        NoMeshes = 5,
+        MeshesInvalid = 6,
+        CantCreateImage = 7,
+        UserAborted = 8,
+        TextureSizeTooSmall = 9,
+        LightmapTooSmall = 10,
+        AtlasTooSmall = 11,
     }
 
     public enum EnvironmentModeEnum : long
     {
-        ENVIRONMENT_MODE_DISABLED = 0,
-        ENVIRONMENT_MODE_SCENE = 1,
-        ENVIRONMENT_MODE_CUSTOM_SKY = 2,
-        ENVIRONMENT_MODE_CUSTOM_COLOR = 3,
+        Disabled = 0,
+        Scene = 1,
+        CustomSky = 2,
+        CustomColor = 3,
     }
 
     public LightmapGI.BakeQuality Quality
@@ -5080,9 +5080,9 @@ public unsafe partial class LightmapGIData : Resource
 
     public enum ShadowmaskMode : long
     {
-        SHADOWMASK_MODE_NONE = 0,
-        SHADOWMASK_MODE_REPLACE = 1,
-        SHADOWMASK_MODE_OVERLAY = 2,
+        None = 0,
+        Replace = 1,
+        Overlay = 2,
     }
 
     public Godot.Collections.Array LightmapTextures
@@ -5631,23 +5631,23 @@ public unsafe partial class Line2D : Node2D
 
     public enum LineJointMode : long
     {
-        LINE_JOINT_SHARP = 0,
-        LINE_JOINT_BEVEL = 1,
-        LINE_JOINT_ROUND = 2,
+        Sharp = 0,
+        Bevel = 1,
+        Round = 2,
     }
 
     public enum LineCapMode : long
     {
-        LINE_CAP_NONE = 0,
-        LINE_CAP_BOX = 1,
-        LINE_CAP_ROUND = 2,
+        None = 0,
+        Box = 1,
+        Round = 2,
     }
 
     public enum LineTextureMode : long
     {
-        LINE_TEXTURE_NONE = 0,
-        LINE_TEXTURE_TILE = 1,
-        LINE_TEXTURE_STRETCH = 2,
+        None = 0,
+        Tile = 1,
+        Stretch = 2,
     }
 
     public bool Closed
@@ -5780,7 +5780,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_add_point;
-    public void AddPoint(Vector2 position, int index)
+    public void AddPoint(Vector2 position, int index = unchecked((int)(-1)))
     {
         var __mb = __mb_add_point;
         if (__mb == 0)
@@ -6241,57 +6241,57 @@ public unsafe partial class LineEdit : Control
 
     public enum MenuItems : long
     {
-        MENU_CUT = 0,
-        MENU_COPY = 1,
-        MENU_PASTE = 2,
-        MENU_CLEAR = 3,
-        MENU_SELECT_ALL = 4,
-        MENU_UNDO = 5,
-        MENU_REDO = 6,
-        MENU_SUBMENU_TEXT_DIR = 7,
-        MENU_DIR_INHERITED = 8,
-        MENU_DIR_AUTO = 9,
-        MENU_DIR_LTR = 10,
-        MENU_DIR_RTL = 11,
-        MENU_DISPLAY_UCC = 12,
-        MENU_SUBMENU_INSERT_UCC = 13,
-        MENU_INSERT_LRM = 14,
-        MENU_INSERT_RLM = 15,
-        MENU_INSERT_LRE = 16,
-        MENU_INSERT_RLE = 17,
-        MENU_INSERT_LRO = 18,
-        MENU_INSERT_RLO = 19,
-        MENU_INSERT_PDF = 20,
-        MENU_INSERT_ALM = 21,
-        MENU_INSERT_LRI = 22,
-        MENU_INSERT_RLI = 23,
-        MENU_INSERT_FSI = 24,
-        MENU_INSERT_PDI = 25,
-        MENU_INSERT_ZWJ = 26,
-        MENU_INSERT_ZWNJ = 27,
-        MENU_INSERT_WJ = 28,
-        MENU_INSERT_SHY = 29,
-        MENU_EMOJI_AND_SYMBOL = 30,
-        MENU_MAX = 31,
+        Cut = 0,
+        Copy = 1,
+        Paste = 2,
+        Clear = 3,
+        SelectAll = 4,
+        Undo = 5,
+        Redo = 6,
+        SubmenuTextDir = 7,
+        DirInherited = 8,
+        DirAuto = 9,
+        DirLtr = 10,
+        DirRtl = 11,
+        DisplayUcc = 12,
+        SubmenuInsertUcc = 13,
+        InsertLrm = 14,
+        InsertRlm = 15,
+        InsertLre = 16,
+        InsertRle = 17,
+        InsertLro = 18,
+        InsertRlo = 19,
+        InsertPdf = 20,
+        InsertAlm = 21,
+        InsertLri = 22,
+        InsertRli = 23,
+        InsertFsi = 24,
+        InsertPdi = 25,
+        InsertZwj = 26,
+        InsertZwnj = 27,
+        InsertWj = 28,
+        InsertShy = 29,
+        EmojiAndSymbol = 30,
+        Max = 31,
     }
 
     public enum VirtualKeyboardTypeEnum : long
     {
-        KEYBOARD_TYPE_DEFAULT = 0,
-        KEYBOARD_TYPE_MULTILINE = 1,
-        KEYBOARD_TYPE_NUMBER = 2,
-        KEYBOARD_TYPE_NUMBER_DECIMAL = 3,
-        KEYBOARD_TYPE_PHONE = 4,
-        KEYBOARD_TYPE_EMAIL_ADDRESS = 5,
-        KEYBOARD_TYPE_PASSWORD = 6,
-        KEYBOARD_TYPE_URL = 7,
+        Default = 0,
+        Multiline = 1,
+        Number = 2,
+        NumberDecimal = 3,
+        Phone = 4,
+        EmailAddress = 5,
+        Password = 6,
+        Url = 7,
     }
 
     public enum ExpandMode : long
     {
-        EXPAND_MODE_ORIGINAL_SIZE = 0,
-        EXPAND_MODE_FIT_TO_TEXT = 1,
-        EXPAND_MODE_FIT_TO_LINE_EDIT = 2,
+        OriginalSize = 0,
+        FitToText = 1,
+        FitToLineEdit = 2,
     }
 
     public string Text
@@ -6583,7 +6583,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_edit;
-    public void Edit(bool hideFocus)
+    public void Edit(bool hideFocus = false)
     {
         var __mb = __mb_edit;
         if (__mb == 0)
@@ -6671,7 +6671,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_select;
-    public void Select(int from, int to)
+    public void Select(int from = unchecked((int)(0)), int to = unchecked((int)(-1)))
     {
         var __mb = __mb_select;
         if (__mb == 0)
@@ -8019,9 +8019,9 @@ public unsafe partial class LinkButton : BaseButton
 
     public enum UnderlineMode : long
     {
-        UNDERLINE_MODE_ALWAYS = 0,
-        UNDERLINE_MODE_ON_HOVER = 1,
-        UNDERLINE_MODE_NEVER = 2,
+        Always = 0,
+        OnHover = 1,
+        Never = 2,
     }
 
     public string Text
@@ -8373,10 +8373,10 @@ public unsafe partial class Logger : RefCounted
 
     public enum ErrorType : long
     {
-        ERROR_TYPE_ERROR = 0,
-        ERROR_TYPE_WARNING = 1,
-        ERROR_TYPE_SCRIPT = 2,
-        ERROR_TYPE_SHADER = 3,
+        Error = 0,
+        Warning = 1,
+        Script = 2,
+        Shader = 3,
     }
 
     public virtual void _LogMessage(string message, bool error) { }
@@ -8406,9 +8406,9 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
 
     public enum OriginFromEnum : long
     {
-        ORIGIN_FROM_SELF = 0,
-        ORIGIN_FROM_SPECIFIC_BONE = 1,
-        ORIGIN_FROM_EXTERNAL_NODE = 2,
+        Self = 0,
+        SpecificBone = 1,
+        ExternalNode = 2,
     }
 
     public NodePath TargetNode

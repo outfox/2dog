@@ -88,53 +88,53 @@ public unsafe partial class FastNoiseLite : Noise
 
     public enum NoiseTypeEnum : long
     {
-        TYPE_VALUE = 5,
-        TYPE_VALUE_CUBIC = 4,
-        TYPE_PERLIN = 3,
-        TYPE_CELLULAR = 2,
-        TYPE_SIMPLEX = 0,
-        TYPE_SIMPLEX_SMOOTH = 1,
+        Value = 5,
+        ValueCubic = 4,
+        Perlin = 3,
+        Cellular = 2,
+        Simplex = 0,
+        SimplexSmooth = 1,
     }
 
     public enum FractalTypeEnum : long
     {
-        FRACTAL_NONE = 0,
-        FRACTAL_FBM = 1,
-        FRACTAL_RIDGED = 2,
-        FRACTAL_PING_PONG = 3,
+        None = 0,
+        Fbm = 1,
+        Ridged = 2,
+        PingPong = 3,
     }
 
     public enum CellularDistanceFunctionEnum : long
     {
-        DISTANCE_EUCLIDEAN = 0,
-        DISTANCE_EUCLIDEAN_SQUARED = 1,
-        DISTANCE_MANHATTAN = 2,
-        DISTANCE_HYBRID = 3,
+        Euclidean = 0,
+        EuclideanSquared = 1,
+        Manhattan = 2,
+        Hybrid = 3,
     }
 
     public enum CellularReturnTypeEnum : long
     {
-        RETURN_CELL_VALUE = 0,
-        RETURN_DISTANCE = 1,
-        RETURN_DISTANCE2 = 2,
-        RETURN_DISTANCE2_ADD = 3,
-        RETURN_DISTANCE2_SUB = 4,
-        RETURN_DISTANCE2_MUL = 5,
-        RETURN_DISTANCE2_DIV = 6,
+        CellValue = 0,
+        Distance = 1,
+        Distance2 = 2,
+        Distance2Add = 3,
+        Distance2Sub = 4,
+        Distance2Mul = 5,
+        Distance2Div = 6,
     }
 
     public enum DomainWarpTypeEnum : long
     {
-        DOMAIN_WARP_SIMPLEX = 0,
-        DOMAIN_WARP_SIMPLEX_REDUCED = 1,
-        DOMAIN_WARP_BASIC_GRID = 2,
+        Simplex = 0,
+        SimplexReduced = 1,
+        BasicGrid = 2,
     }
 
     public enum DomainWarpFractalTypeEnum : long
     {
-        DOMAIN_WARP_FRACTAL_NONE = 0,
-        DOMAIN_WARP_FRACTAL_PROGRESSIVE = 1,
-        DOMAIN_WARP_FRACTAL_INDEPENDENT = 2,
+        None = 0,
+        Progressive = 1,
+        Independent = 2,
     }
 
     public FastNoiseLite.NoiseTypeEnum NoiseType
@@ -921,36 +921,36 @@ public unsafe partial class FileAccess : RefCounted
 
     public enum ModeFlags : long
     {
-        READ = 1,
-        WRITE = 2,
-        READ_WRITE = 3,
-        WRITE_READ = 7,
+        Read = 1,
+        Write = 2,
+        ReadWrite = 3,
+        WriteRead = 7,
     }
 
     public enum CompressionMode : long
     {
-        COMPRESSION_FASTLZ = 0,
-        COMPRESSION_DEFLATE = 1,
-        COMPRESSION_ZSTD = 2,
-        COMPRESSION_GZIP = 3,
-        COMPRESSION_BROTLI = 4,
+        Fastlz = 0,
+        Deflate = 1,
+        Zstd = 2,
+        Gzip = 3,
+        Brotli = 4,
     }
 
     [Flags]
     public enum UnixPermissionFlags : long
     {
-        UNIX_READ_OWNER = 256,
-        UNIX_WRITE_OWNER = 128,
-        UNIX_EXECUTE_OWNER = 64,
-        UNIX_READ_GROUP = 32,
-        UNIX_WRITE_GROUP = 16,
-        UNIX_EXECUTE_GROUP = 8,
-        UNIX_READ_OTHER = 4,
-        UNIX_WRITE_OTHER = 2,
-        UNIX_EXECUTE_OTHER = 1,
-        UNIX_SET_USER_ID = 2048,
-        UNIX_SET_GROUP_ID = 1024,
-        UNIX_RESTRICTED_DELETE = 512,
+        ReadOwner = 256,
+        WriteOwner = 128,
+        ExecuteOwner = 64,
+        ReadGroup = 32,
+        WriteGroup = 16,
+        ExecuteGroup = 8,
+        ReadOther = 4,
+        WriteOther = 2,
+        ExecuteOther = 1,
+        SetUserId = 2048,
+        SetGroupId = 1024,
+        RestrictedDelete = 512,
     }
 
     public bool BigEndian
@@ -1005,7 +1005,7 @@ public unsafe partial class FileAccess : RefCounted
     }
 
     private static nint __mb_open_compressed;
-    public static FileAccess? OpenCompressed(string path, FileAccess.ModeFlags modeFlags, FileAccess.CompressionMode compressionMode)
+    public static FileAccess? OpenCompressed(string path, FileAccess.ModeFlags modeFlags, FileAccess.CompressionMode compressionMode = (FileAccess.CompressionMode)(0))
     {
         var __mb = __mb_open_compressed;
         if (__mb == 0)
@@ -1043,7 +1043,7 @@ public unsafe partial class FileAccess : RefCounted
     }
 
     private static nint __mb_create_temp;
-    public static FileAccess? CreateTemp(FileAccess.ModeFlags modeFlags, string prefix, string extension, bool keep)
+    public static FileAccess? CreateTemp(FileAccess.ModeFlags modeFlags, string prefix = "", string extension = "", bool keep = false)
     {
         var __mb = __mb_create_temp;
         if (__mb == 0)
@@ -1180,7 +1180,7 @@ public unsafe partial class FileAccess : RefCounted
     }
 
     private static nint __mb_seek_end;
-    public void SeekEnd(long position)
+    public void SeekEnd(long position = unchecked((long)(0)))
     {
         var __mb = __mb_seek_end;
         if (__mb == 0)
@@ -1475,7 +1475,7 @@ public unsafe partial class FileAccess : RefCounted
     }
 
     private static nint __mb_get_var;
-    public Variant GetVar(bool allowObjects)
+    public Variant GetVar(bool allowObjects = false)
     {
         var __mb = __mb_get_var;
         if (__mb == 0)
@@ -1675,7 +1675,7 @@ public unsafe partial class FileAccess : RefCounted
     }
 
     private static nint __mb_store_var;
-    public bool StoreVar(Variant value, bool fullObjects)
+    public bool StoreVar(Variant value, bool fullObjects = false)
     {
         var __mb = __mb_store_var;
         if (__mb == 0)
@@ -2018,37 +2018,37 @@ public unsafe partial class FileDialog : ConfirmationDialog
 
     public enum FileModeEnum : long
     {
-        FILE_MODE_OPEN_FILE = 0,
-        FILE_MODE_OPEN_FILES = 1,
-        FILE_MODE_OPEN_DIR = 2,
-        FILE_MODE_OPEN_ANY = 3,
-        FILE_MODE_SAVE_FILE = 4,
+        OpenFile = 0,
+        OpenFiles = 1,
+        OpenDir = 2,
+        OpenAny = 3,
+        SaveFile = 4,
     }
 
     public enum AccessEnum : long
     {
-        ACCESS_RESOURCES = 0,
-        ACCESS_USERDATA = 1,
-        ACCESS_FILESYSTEM = 2,
+        Resources = 0,
+        Userdata = 1,
+        Filesystem = 2,
     }
 
     public enum DisplayModeEnum : long
     {
-        DISPLAY_THUMBNAILS = 0,
-        DISPLAY_LIST = 1,
+        Thumbnails = 0,
+        List = 1,
     }
 
     public enum Customization : long
     {
-        CUSTOMIZATION_HIDDEN_FILES = 0,
-        CUSTOMIZATION_CREATE_FOLDER = 1,
-        CUSTOMIZATION_FILE_FILTER = 2,
-        CUSTOMIZATION_FILE_SORT = 3,
-        CUSTOMIZATION_FAVORITES = 4,
-        CUSTOMIZATION_RECENT = 5,
-        CUSTOMIZATION_LAYOUT = 6,
-        CUSTOMIZATION_OVERWRITE_WARNING = 7,
-        CUSTOMIZATION_DELETE = 8,
+        HiddenFiles = 0,
+        CreateFolder = 1,
+        FileFilter = 2,
+        FileSort = 3,
+        Favorites = 4,
+        Recent = 5,
+        Layout = 6,
+        OverwriteWarning = 7,
+        Delete = 8,
     }
 
     public bool ModeOverridesTitle
@@ -2191,7 +2191,7 @@ public unsafe partial class FileDialog : ConfirmationDialog
     }
 
     private static nint __mb_add_filter;
-    public void AddFilter(string filter, string description, string mimeType)
+    public void AddFilter(string filter, string description = "", string mimeType = "")
     {
         var __mb = __mb_add_filter;
         if (__mb == 0)
@@ -2862,17 +2862,17 @@ public unsafe partial class FlowContainer : Container
 
     public enum AlignmentMode : long
     {
-        ALIGNMENT_BEGIN = 0,
-        ALIGNMENT_CENTER = 1,
-        ALIGNMENT_END = 2,
+        Begin = 0,
+        Center = 1,
+        End = 2,
     }
 
     public enum LastWrapAlignmentMode : long
     {
-        LAST_WRAP_ALIGNMENT_INHERIT = 0,
-        LAST_WRAP_ALIGNMENT_BEGIN = 1,
-        LAST_WRAP_ALIGNMENT_CENTER = 2,
-        LAST_WRAP_ALIGNMENT_END = 3,
+        Inherit = 0,
+        Begin = 1,
+        Center = 2,
+        End = 3,
     }
 
     public FlowContainer.AlignmentMode Alignment
@@ -3403,8 +3403,8 @@ public unsafe partial class FoldableContainer : Container
 
     public enum TitlePositionEnum : long
     {
-        POSITION_TOP = 0,
-        POSITION_BOTTOM = 1,
+        Top = 0,
+        Bottom = 1,
     }
 
     public bool Folded
@@ -3898,7 +3898,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_get_height;
-    public float GetHeight(int fontSize)
+    public float GetHeight(int fontSize = unchecked((int)(16)))
     {
         var __mb = __mb_get_height;
         if (__mb == 0)
@@ -3916,7 +3916,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_get_ascent;
-    public float GetAscent(int fontSize)
+    public float GetAscent(int fontSize = unchecked((int)(16)))
     {
         var __mb = __mb_get_ascent;
         if (__mb == 0)
@@ -3934,7 +3934,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_get_descent;
-    public float GetDescent(int fontSize)
+    public float GetDescent(int fontSize = unchecked((int)(16)))
     {
         var __mb = __mb_get_descent;
         if (__mb == 0)
@@ -3952,7 +3952,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_get_underline_position;
-    public float GetUnderlinePosition(int fontSize)
+    public float GetUnderlinePosition(int fontSize = unchecked((int)(16)))
     {
         var __mb = __mb_get_underline_position;
         if (__mb == 0)
@@ -3970,7 +3970,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_get_underline_thickness;
-    public float GetUnderlineThickness(int fontSize)
+    public float GetUnderlineThickness(int fontSize = unchecked((int)(16)))
     {
         var __mb = __mb_get_underline_thickness;
         if (__mb == 0)
@@ -4162,7 +4162,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_get_string_size;
-    public Vector2 GetStringSize(string text, HorizontalAlignment alignment, float width, int fontSize, TextServer.JustificationFlag justificationFlags, TextServer.Direction direction, TextServer.Orientation orientation)
+    public Vector2 GetStringSize(string text, HorizontalAlignment alignment = (HorizontalAlignment)(0), float width = -1f, int fontSize = unchecked((int)(16)), TextServer.JustificationFlag justificationFlags = (TextServer.JustificationFlag)(3), TextServer.Direction direction = (TextServer.Direction)(0), TextServer.Orientation orientation = (TextServer.Orientation)(0))
     {
         var __mb = __mb_get_string_size;
         if (__mb == 0)
@@ -4193,7 +4193,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_get_multiline_string_size;
-    public Vector2 GetMultilineStringSize(string text, HorizontalAlignment alignment, float width, int fontSize, int maxLines, TextServer.LineBreakFlag brkFlags, TextServer.JustificationFlag justificationFlags, TextServer.Direction direction, TextServer.Orientation orientation)
+    public Vector2 GetMultilineStringSize(string text, HorizontalAlignment alignment = (HorizontalAlignment)(0), float width = -1f, int fontSize = unchecked((int)(16)), int maxLines = unchecked((int)(-1)), TextServer.LineBreakFlag brkFlags = (TextServer.LineBreakFlag)(3), TextServer.JustificationFlag justificationFlags = (TextServer.JustificationFlag)(3), TextServer.Direction direction = (TextServer.Direction)(0), TextServer.Orientation orientation = (TextServer.Orientation)(0))
     {
         var __mb = __mb_get_multiline_string_size;
         if (__mb == 0)
@@ -4228,7 +4228,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_draw_string;
-    public void DrawString(Rid canvasItem, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, Color modulate, TextServer.JustificationFlag justificationFlags, TextServer.Direction direction, TextServer.Orientation orientation, float oversampling)
+    public void DrawString(Rid canvasItem, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, Color modulate, TextServer.JustificationFlag justificationFlags = (TextServer.JustificationFlag)(3), TextServer.Direction direction = (TextServer.Direction)(0), TextServer.Orientation orientation = (TextServer.Orientation)(0), float oversampling = 0.0f)
     {
         var __mb = __mb_draw_string;
         if (__mb == 0)
@@ -4265,7 +4265,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_draw_multiline_string;
-    public void DrawMultilineString(Rid canvasItem, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, int maxLines, Color modulate, TextServer.LineBreakFlag brkFlags, TextServer.JustificationFlag justificationFlags, TextServer.Direction direction, TextServer.Orientation orientation, float oversampling)
+    public void DrawMultilineString(Rid canvasItem, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, int maxLines, Color modulate, TextServer.LineBreakFlag brkFlags = (TextServer.LineBreakFlag)(3), TextServer.JustificationFlag justificationFlags = (TextServer.JustificationFlag)(3), TextServer.Direction direction = (TextServer.Direction)(0), TextServer.Orientation orientation = (TextServer.Orientation)(0), float oversampling = 0.0f)
     {
         var __mb = __mb_draw_multiline_string;
         if (__mb == 0)
@@ -4306,7 +4306,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_draw_string_outline;
-    public void DrawStringOutline(Rid canvasItem, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, int size, Color modulate, TextServer.JustificationFlag justificationFlags, TextServer.Direction direction, TextServer.Orientation orientation, float oversampling)
+    public void DrawStringOutline(Rid canvasItem, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, int size, Color modulate, TextServer.JustificationFlag justificationFlags = (TextServer.JustificationFlag)(3), TextServer.Direction direction = (TextServer.Direction)(0), TextServer.Orientation orientation = (TextServer.Orientation)(0), float oversampling = 0.0f)
     {
         var __mb = __mb_draw_string_outline;
         if (__mb == 0)
@@ -4345,7 +4345,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_draw_multiline_string_outline;
-    public void DrawMultilineStringOutline(Rid canvasItem, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, int maxLines, int size, Color modulate, TextServer.LineBreakFlag brkFlags, TextServer.JustificationFlag justificationFlags, TextServer.Direction direction, TextServer.Orientation orientation, float oversampling)
+    public void DrawMultilineStringOutline(Rid canvasItem, Vector2 pos, string text, HorizontalAlignment alignment, float width, int fontSize, int maxLines, int size, Color modulate, TextServer.LineBreakFlag brkFlags = (TextServer.LineBreakFlag)(3), TextServer.JustificationFlag justificationFlags = (TextServer.JustificationFlag)(3), TextServer.Direction direction = (TextServer.Direction)(0), TextServer.Orientation orientation = (TextServer.Orientation)(0), float oversampling = 0.0f)
     {
         var __mb = __mb_draw_multiline_string_outline;
         if (__mb == 0)
@@ -4408,7 +4408,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_draw_char;
-    public float DrawChar(Rid canvasItem, Vector2 pos, int @char, int fontSize, Color modulate, float oversampling)
+    public float DrawChar(Rid canvasItem, Vector2 pos, int @char, int fontSize, Color modulate, float oversampling = 0.0f)
     {
         var __mb = __mb_draw_char;
         if (__mb == 0)
@@ -4436,7 +4436,7 @@ public unsafe partial class Font : Resource
     }
 
     private static nint __mb_draw_char_outline;
-    public float DrawCharOutline(Rid canvasItem, Vector2 pos, int @char, int fontSize, int size, Color modulate, float oversampling)
+    public float DrawCharOutline(Rid canvasItem, Vector2 pos, int @char, int fontSize, int size, Color modulate, float oversampling = 0.0f)
     {
         var __mb = __mb_draw_char_outline;
         if (__mb == 0)

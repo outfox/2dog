@@ -10,39 +10,36 @@ using Godot.NativeInterop;
 
 namespace Godot;
 
-public unsafe partial class NativeMenu : GodotObject
+public static unsafe partial class NativeMenu
 {
-    internal NativeMenu(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public NativeMenu() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "NativeMenu");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("NativeMenu");
 
-    private static NativeMenu? _singleton;
-    public static NativeMenu Singleton => _singleton ??= (NativeMenu)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("NativeMenu"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum Feature : long
     {
-        FEATURE_GLOBAL_MENU = 0,
-        FEATURE_POPUP_MENU = 1,
-        FEATURE_OPEN_CLOSE_CALLBACK = 2,
-        FEATURE_HOVER_CALLBACK = 3,
-        FEATURE_KEY_CALLBACK = 4,
+        GlobalMenu = 0,
+        PopupMenu = 1,
+        OpenCloseCallback = 2,
+        HoverCallback = 3,
+        KeyCallback = 4,
     }
 
     public enum SystemMenus : long
     {
-        INVALID_MENU_ID = 0,
-        MAIN_MENU_ID = 1,
-        APPLICATION_MENU_ID = 2,
-        WINDOW_MENU_ID = 3,
-        HELP_MENU_ID = 4,
-        DOCK_MENU_ID = 5,
+        InvalidMenuId = 0,
+        MainMenuId = 1,
+        ApplicationMenuId = 2,
+        WindowMenuId = 3,
+        HelpMenuId = 4,
+        DockMenuId = 5,
     }
 
     private static nint __mb_has_feature;
-    public bool HasFeature(NativeMenu.Feature feature)
+    public static bool HasFeature(NativeMenu.Feature feature)
     {
         var __mb = __mb_has_feature;
         if (__mb == 0)
@@ -55,12 +52,12 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_system_menu;
-    public bool HasSystemMenu(NativeMenu.SystemMenus menuId)
+    public static bool HasSystemMenu(NativeMenu.SystemMenus menuId)
     {
         var __mb = __mb_has_system_menu;
         if (__mb == 0)
@@ -73,12 +70,12 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_system_menu;
-    public Rid GetSystemMenu(NativeMenu.SystemMenus menuId)
+    public static Rid GetSystemMenu(NativeMenu.SystemMenus menuId)
     {
         var __mb = __mb_get_system_menu;
         if (__mb == 0)
@@ -91,12 +88,12 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_system_menu_name;
-    public string GetSystemMenuName(NativeMenu.SystemMenus menuId)
+    public static string GetSystemMenuName(NativeMenu.SystemMenus menuId)
     {
         var __mb = __mb_get_system_menu_name;
         if (__mb == 0)
@@ -109,12 +106,12 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_system_menu_text;
-    public string GetSystemMenuText(NativeMenu.SystemMenus menuId)
+    public static string GetSystemMenuText(NativeMenu.SystemMenus menuId)
     {
         var __mb = __mb_get_system_menu_text;
         if (__mb == 0)
@@ -127,12 +124,12 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_system_menu_text;
-    public void SetSystemMenuText(NativeMenu.SystemMenus menuId, string name)
+    public static void SetSystemMenuText(NativeMenu.SystemMenus menuId, string name)
     {
         var __mb = __mb_set_system_menu_text;
         if (__mb == 0)
@@ -146,12 +143,12 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_create_menu;
-    public Rid CreateMenu()
+    public static Rid CreateMenu()
     {
         var __mb = __mb_create_menu;
         if (__mb == 0)
@@ -161,12 +158,12 @@ public unsafe partial class NativeMenu : GodotObject
             __mb_create_menu = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_has_menu;
-    public bool HasMenu(Rid rid)
+    public static bool HasMenu(Rid rid)
     {
         var __mb = __mb_has_menu;
         if (__mb == 0)
@@ -179,12 +176,12 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_free_menu;
-    public void FreeMenu(Rid rid)
+    public static void FreeMenu(Rid rid)
     {
         var __mb = __mb_free_menu;
         if (__mb == 0)
@@ -196,11 +193,11 @@ public unsafe partial class NativeMenu : GodotObject
         var __a0 = rid;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_size;
-    public Vector2 GetSize(Rid rid)
+    public static Vector2 GetSize(Rid rid)
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -213,12 +210,12 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_popup;
-    public void Popup(Rid rid, Vector2I position)
+    public static void Popup(Rid rid, Vector2I position)
     {
         var __mb = __mb_popup;
         if (__mb == 0)
@@ -232,11 +229,11 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_interface_direction;
-    public void SetInterfaceDirection(Rid rid, bool isRtl)
+    public static void SetInterfaceDirection(Rid rid, bool isRtl)
     {
         var __mb = __mb_set_interface_direction;
         if (__mb == 0)
@@ -250,11 +247,11 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_minimum_width;
-    public void SetMinimumWidth(Rid rid, float width)
+    public static void SetMinimumWidth(Rid rid, float width)
     {
         var __mb = __mb_set_minimum_width;
         if (__mb == 0)
@@ -268,11 +265,11 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_minimum_width;
-    public float GetMinimumWidth(Rid rid)
+    public static float GetMinimumWidth(Rid rid)
     {
         var __mb = __mb_get_minimum_width;
         if (__mb == 0)
@@ -285,12 +282,12 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_is_opened;
-    public bool IsOpened(Rid rid)
+    public static bool IsOpened(Rid rid)
     {
         var __mb = __mb_is_opened;
         if (__mb == 0)
@@ -303,12 +300,12 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_add_submenu_item;
-    public int AddSubmenuItem(Rid rid, string label, Rid submenuRid, Variant tag, int index)
+    public static int AddSubmenuItem(Rid rid, string label, Rid submenuRid, Variant tag = default, int index = unchecked((int)(-1)))
     {
         var __mb = __mb_add_submenu_item;
         if (__mb == 0)
@@ -329,13 +326,13 @@ public unsafe partial class NativeMenu : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a1);
         return unchecked((int)__ret);
     }
 
     private static nint __mb_add_separator;
-    public int AddSeparator(Rid rid, int index)
+    public static int AddSeparator(Rid rid, int index = unchecked((int)(-1)))
     {
         var __mb = __mb_add_separator;
         if (__mb == 0)
@@ -350,12 +347,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_find_item_index_with_text;
-    public int FindItemIndexWithText(Rid rid, string text)
+    public static int FindItemIndexWithText(Rid rid, string text)
     {
         var __mb = __mb_find_item_index_with_text;
         if (__mb == 0)
@@ -370,13 +367,13 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a1);
         return unchecked((int)__ret);
     }
 
     private static nint __mb_find_item_index_with_tag;
-    public int FindItemIndexWithTag(Rid rid, Variant tag)
+    public static int FindItemIndexWithTag(Rid rid, Variant tag)
     {
         var __mb = __mb_find_item_index_with_tag;
         if (__mb == 0)
@@ -391,12 +388,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_find_item_index_with_submenu;
-    public int FindItemIndexWithSubmenu(Rid rid, Rid submenuRid)
+    public static int FindItemIndexWithSubmenu(Rid rid, Rid submenuRid)
     {
         var __mb = __mb_find_item_index_with_submenu;
         if (__mb == 0)
@@ -411,12 +408,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_is_item_checked;
-    public bool IsItemChecked(Rid rid, int idx)
+    public static bool IsItemChecked(Rid rid, int idx)
     {
         var __mb = __mb_is_item_checked;
         if (__mb == 0)
@@ -431,12 +428,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_item_checkable;
-    public bool IsItemCheckable(Rid rid, int idx)
+    public static bool IsItemCheckable(Rid rid, int idx)
     {
         var __mb = __mb_is_item_checkable;
         if (__mb == 0)
@@ -451,12 +448,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_item_radio_checkable;
-    public bool IsItemRadioCheckable(Rid rid, int idx)
+    public static bool IsItemRadioCheckable(Rid rid, int idx)
     {
         var __mb = __mb_is_item_radio_checkable;
         if (__mb == 0)
@@ -471,12 +468,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_item_tag;
-    public Variant GetItemTag(Rid rid, int idx)
+    public static Variant GetItemTag(Rid rid, int idx)
     {
         var __mb = __mb_get_item_tag;
         if (__mb == 0)
@@ -491,12 +488,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_get_item_text;
-    public string GetItemText(Rid rid, int idx)
+    public static string GetItemText(Rid rid, int idx)
     {
         var __mb = __mb_get_item_text;
         if (__mb == 0)
@@ -511,12 +508,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_item_submenu;
-    public Rid GetItemSubmenu(Rid rid, int idx)
+    public static Rid GetItemSubmenu(Rid rid, int idx)
     {
         var __mb = __mb_get_item_submenu;
         if (__mb == 0)
@@ -531,12 +528,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_item_accelerator;
-    public Key GetItemAccelerator(Rid rid, int idx)
+    public static Key GetItemAccelerator(Rid rid, int idx)
     {
         var __mb = __mb_get_item_accelerator;
         if (__mb == 0)
@@ -551,12 +548,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Key)__ret;
     }
 
     private static nint __mb_is_item_disabled;
-    public bool IsItemDisabled(Rid rid, int idx)
+    public static bool IsItemDisabled(Rid rid, int idx)
     {
         var __mb = __mb_is_item_disabled;
         if (__mb == 0)
@@ -571,12 +568,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_item_hidden;
-    public bool IsItemHidden(Rid rid, int idx)
+    public static bool IsItemHidden(Rid rid, int idx)
     {
         var __mb = __mb_is_item_hidden;
         if (__mb == 0)
@@ -591,12 +588,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_item_tooltip;
-    public string GetItemTooltip(Rid rid, int idx)
+    public static string GetItemTooltip(Rid rid, int idx)
     {
         var __mb = __mb_get_item_tooltip;
         if (__mb == 0)
@@ -611,12 +608,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_item_state;
-    public int GetItemState(Rid rid, int idx)
+    public static int GetItemState(Rid rid, int idx)
     {
         var __mb = __mb_get_item_state;
         if (__mb == 0)
@@ -631,12 +628,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_item_max_states;
-    public int GetItemMaxStates(Rid rid, int idx)
+    public static int GetItemMaxStates(Rid rid, int idx)
     {
         var __mb = __mb_get_item_max_states;
         if (__mb == 0)
@@ -651,12 +648,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_item_icon;
-    public Texture2D? GetItemIcon(Rid rid, int idx)
+    public static Texture2D? GetItemIcon(Rid rid, int idx)
     {
         var __mb = __mb_get_item_icon;
         if (__mb == 0)
@@ -671,12 +668,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Texture2D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_item_indentation_level;
-    public int GetItemIndentationLevel(Rid rid, int idx)
+    public static int GetItemIndentationLevel(Rid rid, int idx)
     {
         var __mb = __mb_get_item_indentation_level;
         if (__mb == 0)
@@ -691,12 +688,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_item_checked;
-    public void SetItemChecked(Rid rid, int idx, bool @checked)
+    public static void SetItemChecked(Rid rid, int idx, bool @checked)
     {
         var __mb = __mb_set_item_checked;
         if (__mb == 0)
@@ -712,11 +709,11 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_checkable;
-    public void SetItemCheckable(Rid rid, int idx, bool checkable)
+    public static void SetItemCheckable(Rid rid, int idx, bool checkable)
     {
         var __mb = __mb_set_item_checkable;
         if (__mb == 0)
@@ -732,11 +729,11 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_radio_checkable;
-    public void SetItemRadioCheckable(Rid rid, int idx, bool checkable)
+    public static void SetItemRadioCheckable(Rid rid, int idx, bool checkable)
     {
         var __mb = __mb_set_item_radio_checkable;
         if (__mb == 0)
@@ -752,11 +749,11 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_tag;
-    public void SetItemTag(Rid rid, int idx, Variant tag)
+    public static void SetItemTag(Rid rid, int idx, Variant tag)
     {
         var __mb = __mb_set_item_tag;
         if (__mb == 0)
@@ -772,11 +769,11 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_text;
-    public void SetItemText(Rid rid, int idx, string text)
+    public static void SetItemText(Rid rid, int idx, string text)
     {
         var __mb = __mb_set_item_text;
         if (__mb == 0)
@@ -792,12 +789,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a2);
     }
 
     private static nint __mb_set_item_submenu;
-    public void SetItemSubmenu(Rid rid, int idx, Rid submenuRid)
+    public static void SetItemSubmenu(Rid rid, int idx, Rid submenuRid)
     {
         var __mb = __mb_set_item_submenu;
         if (__mb == 0)
@@ -813,11 +810,11 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_accelerator;
-    public void SetItemAccelerator(Rid rid, int idx, Key keycode)
+    public static void SetItemAccelerator(Rid rid, int idx, Key keycode)
     {
         var __mb = __mb_set_item_accelerator;
         if (__mb == 0)
@@ -833,11 +830,11 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_disabled;
-    public void SetItemDisabled(Rid rid, int idx, bool disabled)
+    public static void SetItemDisabled(Rid rid, int idx, bool disabled)
     {
         var __mb = __mb_set_item_disabled;
         if (__mb == 0)
@@ -853,11 +850,11 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_hidden;
-    public void SetItemHidden(Rid rid, int idx, bool hidden)
+    public static void SetItemHidden(Rid rid, int idx, bool hidden)
     {
         var __mb = __mb_set_item_hidden;
         if (__mb == 0)
@@ -873,11 +870,11 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_tooltip;
-    public void SetItemTooltip(Rid rid, int idx, string tooltip)
+    public static void SetItemTooltip(Rid rid, int idx, string tooltip)
     {
         var __mb = __mb_set_item_tooltip;
         if (__mb == 0)
@@ -893,12 +890,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a2);
     }
 
     private static nint __mb_set_item_state;
-    public void SetItemState(Rid rid, int idx, int state)
+    public static void SetItemState(Rid rid, int idx, int state)
     {
         var __mb = __mb_set_item_state;
         if (__mb == 0)
@@ -914,11 +911,11 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_max_states;
-    public void SetItemMaxStates(Rid rid, int idx, int maxStates)
+    public static void SetItemMaxStates(Rid rid, int idx, int maxStates)
     {
         var __mb = __mb_set_item_max_states;
         if (__mb == 0)
@@ -934,11 +931,11 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_icon;
-    public void SetItemIcon(Rid rid, int idx, Texture2D? icon)
+    public static void SetItemIcon(Rid rid, int idx, Texture2D? icon)
     {
         var __mb = __mb_set_item_icon;
         if (__mb == 0)
@@ -954,11 +951,11 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_indentation_level;
-    public void SetItemIndentationLevel(Rid rid, int idx, int level)
+    public static void SetItemIndentationLevel(Rid rid, int idx, int level)
     {
         var __mb = __mb_set_item_indentation_level;
         if (__mb == 0)
@@ -974,11 +971,11 @@ public unsafe partial class NativeMenu : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_index;
-    public int SetItemIndex(Rid rid, int idx, int targetIdx)
+    public static int SetItemIndex(Rid rid, int idx, int targetIdx)
     {
         var __mb = __mb_set_item_index;
         if (__mb == 0)
@@ -995,12 +992,12 @@ public unsafe partial class NativeMenu : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_item_count;
-    public int GetItemCount(Rid rid)
+    public static int GetItemCount(Rid rid)
     {
         var __mb = __mb_get_item_count;
         if (__mb == 0)
@@ -1013,12 +1010,12 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_is_system_menu;
-    public bool IsSystemMenu(Rid rid)
+    public static bool IsSystemMenu(Rid rid)
     {
         var __mb = __mb_is_system_menu;
         if (__mb == 0)
@@ -1031,12 +1028,12 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_remove_item;
-    public void RemoveItem(Rid rid, int idx)
+    public static void RemoveItem(Rid rid, int idx)
     {
         var __mb = __mb_remove_item;
         if (__mb == 0)
@@ -1050,11 +1047,11 @@ public unsafe partial class NativeMenu : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_clear;
-    public void Clear(Rid rid)
+    public static void Clear(Rid rid)
     {
         var __mb = __mb_clear;
         if (__mb == 0)
@@ -1066,7 +1063,7 @@ public unsafe partial class NativeMenu : GodotObject
         var __a0 = rid;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 }
 
@@ -4868,26 +4865,26 @@ public unsafe partial class NavigationMesh : Resource
 
     public enum SamplePartitionTypeEnum : long
     {
-        SAMPLE_PARTITION_WATERSHED = 0,
-        SAMPLE_PARTITION_MONOTONE = 1,
-        SAMPLE_PARTITION_LAYERS = 2,
-        SAMPLE_PARTITION_MAX = 3,
+        Watershed = 0,
+        Monotone = 1,
+        Layers = 2,
+        Max = 3,
     }
 
     public enum ParsedGeometryType : long
     {
-        PARSED_GEOMETRY_MESH_INSTANCES = 0,
-        PARSED_GEOMETRY_STATIC_COLLIDERS = 1,
-        PARSED_GEOMETRY_BOTH = 2,
-        PARSED_GEOMETRY_MAX = 3,
+        MeshInstances = 0,
+        StaticColliders = 1,
+        Both = 2,
+        Max = 3,
     }
 
     public enum SourceGeometryMode : long
     {
-        SOURCE_GEOMETRY_ROOT_NODE_CHILDREN = 0,
-        SOURCE_GEOMETRY_GROUPS_WITH_CHILDREN = 1,
-        SOURCE_GEOMETRY_GROUPS_EXPLICIT = 2,
-        SOURCE_GEOMETRY_MAX = 3,
+        RootNodeChildren = 0,
+        GroupsWithChildren = 1,
+        GroupsExplicit = 2,
+        Max = 3,
     }
 
     public NavigationMesh.SamplePartitionTypeEnum SamplePartitionType
@@ -5872,20 +5869,17 @@ public unsafe partial class NavigationMesh : Resource
     }
 }
 
-public unsafe partial class NavigationMeshGenerator : GodotObject
+public static unsafe partial class NavigationMeshGenerator
 {
-    internal NavigationMeshGenerator(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public NavigationMeshGenerator() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "NavigationMeshGenerator");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("NavigationMeshGenerator");
 
-    private static NavigationMeshGenerator? _singleton;
-    public static NavigationMeshGenerator Singleton => _singleton ??= (NavigationMeshGenerator)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("NavigationMeshGenerator"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     private static nint __mb_bake;
-    public void Bake(NavigationMesh? navigationMesh, Node? rootNode)
+    public static void Bake(NavigationMesh? navigationMesh, Node? rootNode)
     {
         var __mb = __mb_bake;
         if (__mb == 0)
@@ -5899,11 +5893,11 @@ public unsafe partial class NavigationMeshGenerator : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_clear;
-    public void Clear(NavigationMesh? navigationMesh)
+    public static void Clear(NavigationMesh? navigationMesh)
     {
         var __mb = __mb_clear;
         if (__mb == 0)
@@ -5915,7 +5909,7 @@ public unsafe partial class NavigationMeshGenerator : GodotObject
         nint __a0 = navigationMesh?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 }
 
@@ -7012,24 +7006,24 @@ public unsafe partial class NavigationPathQueryParameters2D : RefCounted
 
     public enum PathfindingAlgorithmEnum : long
     {
-        PATHFINDING_ALGORITHM_ASTAR = 0,
+        PathfindingAlgorithmAstar = 0,
     }
 
     public enum PathPostProcessing : long
     {
-        PATH_POSTPROCESSING_CORRIDORFUNNEL = 0,
-        PATH_POSTPROCESSING_EDGECENTERED = 1,
-        PATH_POSTPROCESSING_NONE = 2,
+        Corridorfunnel = 0,
+        Edgecentered = 1,
+        None = 2,
     }
 
     [Flags]
     public enum PathMetadataFlags : long
     {
-        PATH_METADATA_INCLUDE_NONE = 0,
-        PATH_METADATA_INCLUDE_TYPES = 1,
-        PATH_METADATA_INCLUDE_RIDS = 2,
-        PATH_METADATA_INCLUDE_OWNERS = 4,
-        PATH_METADATA_INCLUDE_ALL = 7,
+        None = 0,
+        Types = 1,
+        Rids = 2,
+        Owners = 4,
+        All = 7,
     }
 
     public Rid Map
@@ -7599,24 +7593,24 @@ public unsafe partial class NavigationPathQueryParameters3D : RefCounted
 
     public enum PathfindingAlgorithmEnum : long
     {
-        PATHFINDING_ALGORITHM_ASTAR = 0,
+        PathfindingAlgorithmAstar = 0,
     }
 
     public enum PathPostProcessing : long
     {
-        PATH_POSTPROCESSING_CORRIDORFUNNEL = 0,
-        PATH_POSTPROCESSING_EDGECENTERED = 1,
-        PATH_POSTPROCESSING_NONE = 2,
+        Corridorfunnel = 0,
+        Edgecentered = 1,
+        None = 2,
     }
 
     [Flags]
     public enum PathMetadataFlags : long
     {
-        PATH_METADATA_INCLUDE_NONE = 0,
-        PATH_METADATA_INCLUDE_TYPES = 1,
-        PATH_METADATA_INCLUDE_RIDS = 2,
-        PATH_METADATA_INCLUDE_OWNERS = 4,
-        PATH_METADATA_INCLUDE_ALL = 7,
+        None = 0,
+        Types = 1,
+        Rids = 2,
+        Owners = 4,
+        All = 7,
     }
 
     public Rid Map
@@ -8186,8 +8180,8 @@ public unsafe partial class NavigationPathQueryResult2D : RefCounted
 
     public enum PathSegmentType : long
     {
-        PATH_SEGMENT_TYPE_REGION = 0,
-        PATH_SEGMENT_TYPE_LINK = 1,
+        Region = 0,
+        Link = 1,
     }
 
     public Godot.Collections.Array PathRids
@@ -8289,8 +8283,8 @@ public unsafe partial class NavigationPathQueryResult3D : RefCounted
 
     public enum PathSegmentType : long
     {
-        PATH_SEGMENT_TYPE_REGION = 0,
-        PATH_SEGMENT_TYPE_LINK = 1,
+        Region = 0,
+        Link = 1,
     }
 
     public Godot.Collections.Array PathRids
@@ -8392,25 +8386,25 @@ public unsafe partial class NavigationPolygon : Resource
 
     public enum SamplePartitionTypeEnum : long
     {
-        SAMPLE_PARTITION_CONVEX_PARTITION = 0,
-        SAMPLE_PARTITION_TRIANGULATE = 1,
-        SAMPLE_PARTITION_MAX = 2,
+        ConvexPartition = 0,
+        Triangulate = 1,
+        Max = 2,
     }
 
     public enum ParsedGeometryTypeEnum : long
     {
-        PARSED_GEOMETRY_MESH_INSTANCES = 0,
-        PARSED_GEOMETRY_STATIC_COLLIDERS = 1,
-        PARSED_GEOMETRY_BOTH = 2,
-        PARSED_GEOMETRY_MAX = 3,
+        MeshInstances = 0,
+        StaticColliders = 1,
+        Both = 2,
+        Max = 3,
     }
 
     public enum SourceGeometryModeEnum : long
     {
-        SOURCE_GEOMETRY_ROOT_NODE_CHILDREN = 0,
-        SOURCE_GEOMETRY_GROUPS_WITH_CHILDREN = 1,
-        SOURCE_GEOMETRY_GROUPS_EXPLICIT = 2,
-        SOURCE_GEOMETRY_MAX = 3,
+        RootNodeChildren = 0,
+        GroupsWithChildren = 1,
+        GroupsExplicit = 2,
+        Max = 3,
     }
 
     public NavigationPolygon.SamplePartitionTypeEnum SamplePartitionType
@@ -9262,7 +9256,7 @@ public unsafe partial class NavigationRegion2D : Node2D
     }
 
     private static nint __mb_bake_navigation_polygon;
-    public void BakeNavigationPolygon(bool onThread)
+    public void BakeNavigationPolygon(bool onThread = true)
     {
         var __mb = __mb_bake_navigation_polygon;
         if (__mb == 0)
@@ -9637,7 +9631,7 @@ public unsafe partial class NavigationRegion3D : Node3D
     }
 
     private static nint __mb_bake_navigation_mesh;
-    public void BakeNavigationMesh(bool onThread)
+    public void BakeNavigationMesh(bool onThread = true)
     {
         var __mb = __mb_bake_navigation_mesh;
         if (__mb == 0)
@@ -9683,29 +9677,31 @@ public unsafe partial class NavigationRegion3D : Node3D
     }
 }
 
-public unsafe partial class NavigationServer2D : GodotObject
+public static unsafe partial class NavigationServer2D
 {
-    internal NavigationServer2D(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    private static NavigationServer2D? _singleton;
-    public static NavigationServer2D Singleton => _singleton ??= (NavigationServer2D)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("NavigationServer2D"), adoptRef: false)!;
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("NavigationServer2D");
+
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum ProcessInfo : long
     {
-        INFO_ACTIVE_MAPS = 0,
-        INFO_REGION_COUNT = 1,
-        INFO_AGENT_COUNT = 2,
-        INFO_LINK_COUNT = 3,
-        INFO_POLYGON_COUNT = 4,
-        INFO_EDGE_COUNT = 5,
-        INFO_EDGE_MERGE_COUNT = 6,
-        INFO_EDGE_CONNECTION_COUNT = 7,
-        INFO_EDGE_FREE_COUNT = 8,
-        INFO_OBSTACLE_COUNT = 9,
+        ActiveMaps = 0,
+        RegionCount = 1,
+        AgentCount = 2,
+        LinkCount = 3,
+        PolygonCount = 4,
+        EdgeCount = 5,
+        EdgeMergeCount = 6,
+        EdgeConnectionCount = 7,
+        EdgeFreeCount = 8,
+        ObstacleCount = 9,
     }
 
     private static nint __mb_get_maps;
-    public Godot.Collections.Array GetMaps()
+    public static Godot.Collections.Array GetMaps()
     {
         var __mb = __mb_get_maps;
         if (__mb == 0)
@@ -9715,12 +9711,12 @@ public unsafe partial class NavigationServer2D : GodotObject
             __mb_get_maps = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_map_create;
-    public Rid MapCreate()
+    public static Rid MapCreate()
     {
         var __mb = __mb_map_create;
         if (__mb == 0)
@@ -9730,12 +9726,12 @@ public unsafe partial class NavigationServer2D : GodotObject
             __mb_map_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_map_set_active;
-    public void MapSetActive(Rid map, bool active)
+    public static void MapSetActive(Rid map, bool active)
     {
         var __mb = __mb_map_set_active;
         if (__mb == 0)
@@ -9749,11 +9745,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_is_active;
-    public bool MapIsActive(Rid map)
+    public static bool MapIsActive(Rid map)
     {
         var __mb = __mb_map_is_active;
         if (__mb == 0)
@@ -9766,12 +9762,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_map_set_cell_size;
-    public void MapSetCellSize(Rid map, float cellSize)
+    public static void MapSetCellSize(Rid map, float cellSize)
     {
         var __mb = __mb_map_set_cell_size;
         if (__mb == 0)
@@ -9785,11 +9781,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_cell_size;
-    public float MapGetCellSize(Rid map)
+    public static float MapGetCellSize(Rid map)
     {
         var __mb = __mb_map_get_cell_size;
         if (__mb == 0)
@@ -9802,12 +9798,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_map_set_merge_rasterizer_cell_scale;
-    public void MapSetMergeRasterizerCellScale(Rid map, float scale)
+    public static void MapSetMergeRasterizerCellScale(Rid map, float scale)
     {
         var __mb = __mb_map_set_merge_rasterizer_cell_scale;
         if (__mb == 0)
@@ -9821,11 +9817,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_merge_rasterizer_cell_scale;
-    public float MapGetMergeRasterizerCellScale(Rid map)
+    public static float MapGetMergeRasterizerCellScale(Rid map)
     {
         var __mb = __mb_map_get_merge_rasterizer_cell_scale;
         if (__mb == 0)
@@ -9838,12 +9834,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_map_set_use_edge_connections;
-    public void MapSetUseEdgeConnections(Rid map, bool enabled)
+    public static void MapSetUseEdgeConnections(Rid map, bool enabled)
     {
         var __mb = __mb_map_set_use_edge_connections;
         if (__mb == 0)
@@ -9857,11 +9853,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_use_edge_connections;
-    public bool MapGetUseEdgeConnections(Rid map)
+    public static bool MapGetUseEdgeConnections(Rid map)
     {
         var __mb = __mb_map_get_use_edge_connections;
         if (__mb == 0)
@@ -9874,12 +9870,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_map_set_edge_connection_margin;
-    public void MapSetEdgeConnectionMargin(Rid map, float margin)
+    public static void MapSetEdgeConnectionMargin(Rid map, float margin)
     {
         var __mb = __mb_map_set_edge_connection_margin;
         if (__mb == 0)
@@ -9893,11 +9889,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_edge_connection_margin;
-    public float MapGetEdgeConnectionMargin(Rid map)
+    public static float MapGetEdgeConnectionMargin(Rid map)
     {
         var __mb = __mb_map_get_edge_connection_margin;
         if (__mb == 0)
@@ -9910,12 +9906,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_map_set_link_connection_radius;
-    public void MapSetLinkConnectionRadius(Rid map, float radius)
+    public static void MapSetLinkConnectionRadius(Rid map, float radius)
     {
         var __mb = __mb_map_set_link_connection_radius;
         if (__mb == 0)
@@ -9929,11 +9925,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_link_connection_radius;
-    public float MapGetLinkConnectionRadius(Rid map)
+    public static float MapGetLinkConnectionRadius(Rid map)
     {
         var __mb = __mb_map_get_link_connection_radius;
         if (__mb == 0)
@@ -9946,12 +9942,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_map_get_closest_point;
-    public Vector2 MapGetClosestPoint(Rid map, Vector2 toPoint)
+    public static Vector2 MapGetClosestPoint(Rid map, Vector2 toPoint)
     {
         var __mb = __mb_map_get_closest_point;
         if (__mb == 0)
@@ -9966,12 +9962,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_map_get_closest_point_owner;
-    public Rid MapGetClosestPointOwner(Rid map, Vector2 toPoint)
+    public static Rid MapGetClosestPointOwner(Rid map, Vector2 toPoint)
     {
         var __mb = __mb_map_get_closest_point_owner;
         if (__mb == 0)
@@ -9986,12 +9982,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_map_get_links;
-    public Godot.Collections.Array MapGetLinks(Rid map)
+    public static Godot.Collections.Array MapGetLinks(Rid map)
     {
         var __mb = __mb_map_get_links;
         if (__mb == 0)
@@ -10004,12 +10000,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_map_get_regions;
-    public Godot.Collections.Array MapGetRegions(Rid map)
+    public static Godot.Collections.Array MapGetRegions(Rid map)
     {
         var __mb = __mb_map_get_regions;
         if (__mb == 0)
@@ -10022,12 +10018,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_map_get_agents;
-    public Godot.Collections.Array MapGetAgents(Rid map)
+    public static Godot.Collections.Array MapGetAgents(Rid map)
     {
         var __mb = __mb_map_get_agents;
         if (__mb == 0)
@@ -10040,12 +10036,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_map_get_obstacles;
-    public Godot.Collections.Array MapGetObstacles(Rid map)
+    public static Godot.Collections.Array MapGetObstacles(Rid map)
     {
         var __mb = __mb_map_get_obstacles;
         if (__mb == 0)
@@ -10058,12 +10054,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_map_force_update;
-    public void MapForceUpdate(Rid map)
+    public static void MapForceUpdate(Rid map)
     {
         var __mb = __mb_map_force_update;
         if (__mb == 0)
@@ -10075,11 +10071,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __a0 = map;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_iteration_id;
-    public uint MapGetIterationId(Rid map)
+    public static uint MapGetIterationId(Rid map)
     {
         var __mb = __mb_map_get_iteration_id;
         if (__mb == 0)
@@ -10092,12 +10088,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_map_set_use_async_iterations;
-    public void MapSetUseAsyncIterations(Rid map, bool enabled)
+    public static void MapSetUseAsyncIterations(Rid map, bool enabled)
     {
         var __mb = __mb_map_set_use_async_iterations;
         if (__mb == 0)
@@ -10111,11 +10107,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_use_async_iterations;
-    public bool MapGetUseAsyncIterations(Rid map)
+    public static bool MapGetUseAsyncIterations(Rid map)
     {
         var __mb = __mb_map_get_use_async_iterations;
         if (__mb == 0)
@@ -10128,12 +10124,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_map_get_random_point;
-    public Vector2 MapGetRandomPoint(Rid map, uint navigationLayers, bool uniformly)
+    public static Vector2 MapGetRandomPoint(Rid map, uint navigationLayers, bool uniformly)
     {
         var __mb = __mb_map_get_random_point;
         if (__mb == 0)
@@ -10150,12 +10146,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_create;
-    public Rid RegionCreate()
+    public static Rid RegionCreate()
     {
         var __mb = __mb_region_create;
         if (__mb == 0)
@@ -10165,12 +10161,12 @@ public unsafe partial class NavigationServer2D : GodotObject
             __mb_region_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_get_iteration_id;
-    public uint RegionGetIterationId(Rid region)
+    public static uint RegionGetIterationId(Rid region)
     {
         var __mb = __mb_region_get_iteration_id;
         if (__mb == 0)
@@ -10183,12 +10179,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_region_set_use_async_iterations;
-    public void RegionSetUseAsyncIterations(Rid region, bool enabled)
+    public static void RegionSetUseAsyncIterations(Rid region, bool enabled)
     {
         var __mb = __mb_region_set_use_async_iterations;
         if (__mb == 0)
@@ -10202,11 +10198,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_use_async_iterations;
-    public bool RegionGetUseAsyncIterations(Rid region)
+    public static bool RegionGetUseAsyncIterations(Rid region)
     {
         var __mb = __mb_region_get_use_async_iterations;
         if (__mb == 0)
@@ -10219,12 +10215,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_region_set_enabled;
-    public void RegionSetEnabled(Rid region, bool enabled)
+    public static void RegionSetEnabled(Rid region, bool enabled)
     {
         var __mb = __mb_region_set_enabled;
         if (__mb == 0)
@@ -10238,11 +10234,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_enabled;
-    public bool RegionGetEnabled(Rid region)
+    public static bool RegionGetEnabled(Rid region)
     {
         var __mb = __mb_region_get_enabled;
         if (__mb == 0)
@@ -10255,12 +10251,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_region_set_use_edge_connections;
-    public void RegionSetUseEdgeConnections(Rid region, bool enabled)
+    public static void RegionSetUseEdgeConnections(Rid region, bool enabled)
     {
         var __mb = __mb_region_set_use_edge_connections;
         if (__mb == 0)
@@ -10274,11 +10270,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_use_edge_connections;
-    public bool RegionGetUseEdgeConnections(Rid region)
+    public static bool RegionGetUseEdgeConnections(Rid region)
     {
         var __mb = __mb_region_get_use_edge_connections;
         if (__mb == 0)
@@ -10291,12 +10287,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_region_set_enter_cost;
-    public void RegionSetEnterCost(Rid region, float enterCost)
+    public static void RegionSetEnterCost(Rid region, float enterCost)
     {
         var __mb = __mb_region_set_enter_cost;
         if (__mb == 0)
@@ -10310,11 +10306,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_enter_cost;
-    public float RegionGetEnterCost(Rid region)
+    public static float RegionGetEnterCost(Rid region)
     {
         var __mb = __mb_region_get_enter_cost;
         if (__mb == 0)
@@ -10327,12 +10323,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_region_set_travel_cost;
-    public void RegionSetTravelCost(Rid region, float travelCost)
+    public static void RegionSetTravelCost(Rid region, float travelCost)
     {
         var __mb = __mb_region_set_travel_cost;
         if (__mb == 0)
@@ -10346,11 +10342,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_travel_cost;
-    public float RegionGetTravelCost(Rid region)
+    public static float RegionGetTravelCost(Rid region)
     {
         var __mb = __mb_region_get_travel_cost;
         if (__mb == 0)
@@ -10363,12 +10359,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_region_set_owner_id;
-    public void RegionSetOwnerId(Rid region, ulong ownerId)
+    public static void RegionSetOwnerId(Rid region, ulong ownerId)
     {
         var __mb = __mb_region_set_owner_id;
         if (__mb == 0)
@@ -10382,11 +10378,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_owner_id;
-    public ulong RegionGetOwnerId(Rid region)
+    public static ulong RegionGetOwnerId(Rid region)
     {
         var __mb = __mb_region_get_owner_id;
         if (__mb == 0)
@@ -10399,12 +10395,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_region_owns_point;
-    public bool RegionOwnsPoint(Rid region, Vector2 point)
+    public static bool RegionOwnsPoint(Rid region, Vector2 point)
     {
         var __mb = __mb_region_owns_point;
         if (__mb == 0)
@@ -10419,12 +10415,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_region_set_map;
-    public void RegionSetMap(Rid region, Rid map)
+    public static void RegionSetMap(Rid region, Rid map)
     {
         var __mb = __mb_region_set_map;
         if (__mb == 0)
@@ -10438,11 +10434,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_map;
-    public Rid RegionGetMap(Rid region)
+    public static Rid RegionGetMap(Rid region)
     {
         var __mb = __mb_region_get_map;
         if (__mb == 0)
@@ -10455,12 +10451,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_set_navigation_layers;
-    public void RegionSetNavigationLayers(Rid region, uint navigationLayers)
+    public static void RegionSetNavigationLayers(Rid region, uint navigationLayers)
     {
         var __mb = __mb_region_set_navigation_layers;
         if (__mb == 0)
@@ -10474,11 +10470,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_navigation_layers;
-    public uint RegionGetNavigationLayers(Rid region)
+    public static uint RegionGetNavigationLayers(Rid region)
     {
         var __mb = __mb_region_get_navigation_layers;
         if (__mb == 0)
@@ -10491,12 +10487,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_region_set_transform;
-    public void RegionSetTransform(Rid region, Transform2D transform)
+    public static void RegionSetTransform(Rid region, Transform2D transform)
     {
         var __mb = __mb_region_set_transform;
         if (__mb == 0)
@@ -10510,11 +10506,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_transform;
-    public Transform2D RegionGetTransform(Rid region)
+    public static Transform2D RegionGetTransform(Rid region)
     {
         var __mb = __mb_region_get_transform;
         if (__mb == 0)
@@ -10527,12 +10523,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Transform2D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_set_navigation_polygon;
-    public void RegionSetNavigationPolygon(Rid region, NavigationPolygon? navigationPolygon)
+    public static void RegionSetNavigationPolygon(Rid region, NavigationPolygon? navigationPolygon)
     {
         var __mb = __mb_region_set_navigation_polygon;
         if (__mb == 0)
@@ -10546,11 +10542,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_connections_count;
-    public int RegionGetConnectionsCount(Rid region)
+    public static int RegionGetConnectionsCount(Rid region)
     {
         var __mb = __mb_region_get_connections_count;
         if (__mb == 0)
@@ -10563,12 +10559,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_region_get_connection_pathway_start;
-    public Vector2 RegionGetConnectionPathwayStart(Rid region, int connection)
+    public static Vector2 RegionGetConnectionPathwayStart(Rid region, int connection)
     {
         var __mb = __mb_region_get_connection_pathway_start;
         if (__mb == 0)
@@ -10583,12 +10579,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_get_connection_pathway_end;
-    public Vector2 RegionGetConnectionPathwayEnd(Rid region, int connection)
+    public static Vector2 RegionGetConnectionPathwayEnd(Rid region, int connection)
     {
         var __mb = __mb_region_get_connection_pathway_end;
         if (__mb == 0)
@@ -10603,12 +10599,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_get_closest_point;
-    public Vector2 RegionGetClosestPoint(Rid region, Vector2 toPoint)
+    public static Vector2 RegionGetClosestPoint(Rid region, Vector2 toPoint)
     {
         var __mb = __mb_region_get_closest_point;
         if (__mb == 0)
@@ -10623,12 +10619,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_get_random_point;
-    public Vector2 RegionGetRandomPoint(Rid region, uint navigationLayers, bool uniformly)
+    public static Vector2 RegionGetRandomPoint(Rid region, uint navigationLayers, bool uniformly)
     {
         var __mb = __mb_region_get_random_point;
         if (__mb == 0)
@@ -10645,12 +10641,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_get_bounds;
-    public Rect2 RegionGetBounds(Rid region)
+    public static Rect2 RegionGetBounds(Rid region)
     {
         var __mb = __mb_region_get_bounds;
         if (__mb == 0)
@@ -10663,12 +10659,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rect2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_link_create;
-    public Rid LinkCreate()
+    public static Rid LinkCreate()
     {
         var __mb = __mb_link_create;
         if (__mb == 0)
@@ -10678,12 +10674,12 @@ public unsafe partial class NavigationServer2D : GodotObject
             __mb_link_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_link_get_iteration_id;
-    public uint LinkGetIterationId(Rid link)
+    public static uint LinkGetIterationId(Rid link)
     {
         var __mb = __mb_link_get_iteration_id;
         if (__mb == 0)
@@ -10696,12 +10692,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_link_set_map;
-    public void LinkSetMap(Rid link, Rid map)
+    public static void LinkSetMap(Rid link, Rid map)
     {
         var __mb = __mb_link_set_map;
         if (__mb == 0)
@@ -10715,11 +10711,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_map;
-    public Rid LinkGetMap(Rid link)
+    public static Rid LinkGetMap(Rid link)
     {
         var __mb = __mb_link_get_map;
         if (__mb == 0)
@@ -10732,12 +10728,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_link_set_enabled;
-    public void LinkSetEnabled(Rid link, bool enabled)
+    public static void LinkSetEnabled(Rid link, bool enabled)
     {
         var __mb = __mb_link_set_enabled;
         if (__mb == 0)
@@ -10751,11 +10747,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_enabled;
-    public bool LinkGetEnabled(Rid link)
+    public static bool LinkGetEnabled(Rid link)
     {
         var __mb = __mb_link_get_enabled;
         if (__mb == 0)
@@ -10768,12 +10764,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_link_set_bidirectional;
-    public void LinkSetBidirectional(Rid link, bool bidirectional)
+    public static void LinkSetBidirectional(Rid link, bool bidirectional)
     {
         var __mb = __mb_link_set_bidirectional;
         if (__mb == 0)
@@ -10787,11 +10783,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_is_bidirectional;
-    public bool LinkIsBidirectional(Rid link)
+    public static bool LinkIsBidirectional(Rid link)
     {
         var __mb = __mb_link_is_bidirectional;
         if (__mb == 0)
@@ -10804,12 +10800,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_link_set_navigation_layers;
-    public void LinkSetNavigationLayers(Rid link, uint navigationLayers)
+    public static void LinkSetNavigationLayers(Rid link, uint navigationLayers)
     {
         var __mb = __mb_link_set_navigation_layers;
         if (__mb == 0)
@@ -10823,11 +10819,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_navigation_layers;
-    public uint LinkGetNavigationLayers(Rid link)
+    public static uint LinkGetNavigationLayers(Rid link)
     {
         var __mb = __mb_link_get_navigation_layers;
         if (__mb == 0)
@@ -10840,12 +10836,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_link_set_start_position;
-    public void LinkSetStartPosition(Rid link, Vector2 position)
+    public static void LinkSetStartPosition(Rid link, Vector2 position)
     {
         var __mb = __mb_link_set_start_position;
         if (__mb == 0)
@@ -10859,11 +10855,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_start_position;
-    public Vector2 LinkGetStartPosition(Rid link)
+    public static Vector2 LinkGetStartPosition(Rid link)
     {
         var __mb = __mb_link_get_start_position;
         if (__mb == 0)
@@ -10876,12 +10872,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_link_set_end_position;
-    public void LinkSetEndPosition(Rid link, Vector2 position)
+    public static void LinkSetEndPosition(Rid link, Vector2 position)
     {
         var __mb = __mb_link_set_end_position;
         if (__mb == 0)
@@ -10895,11 +10891,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_end_position;
-    public Vector2 LinkGetEndPosition(Rid link)
+    public static Vector2 LinkGetEndPosition(Rid link)
     {
         var __mb = __mb_link_get_end_position;
         if (__mb == 0)
@@ -10912,12 +10908,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_link_set_enter_cost;
-    public void LinkSetEnterCost(Rid link, float enterCost)
+    public static void LinkSetEnterCost(Rid link, float enterCost)
     {
         var __mb = __mb_link_set_enter_cost;
         if (__mb == 0)
@@ -10931,11 +10927,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_enter_cost;
-    public float LinkGetEnterCost(Rid link)
+    public static float LinkGetEnterCost(Rid link)
     {
         var __mb = __mb_link_get_enter_cost;
         if (__mb == 0)
@@ -10948,12 +10944,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_link_set_travel_cost;
-    public void LinkSetTravelCost(Rid link, float travelCost)
+    public static void LinkSetTravelCost(Rid link, float travelCost)
     {
         var __mb = __mb_link_set_travel_cost;
         if (__mb == 0)
@@ -10967,11 +10963,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_travel_cost;
-    public float LinkGetTravelCost(Rid link)
+    public static float LinkGetTravelCost(Rid link)
     {
         var __mb = __mb_link_get_travel_cost;
         if (__mb == 0)
@@ -10984,12 +10980,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_link_set_owner_id;
-    public void LinkSetOwnerId(Rid link, ulong ownerId)
+    public static void LinkSetOwnerId(Rid link, ulong ownerId)
     {
         var __mb = __mb_link_set_owner_id;
         if (__mb == 0)
@@ -11003,11 +10999,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_owner_id;
-    public ulong LinkGetOwnerId(Rid link)
+    public static ulong LinkGetOwnerId(Rid link)
     {
         var __mb = __mb_link_get_owner_id;
         if (__mb == 0)
@@ -11020,12 +11016,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_agent_create;
-    public Rid AgentCreate()
+    public static Rid AgentCreate()
     {
         var __mb = __mb_agent_create;
         if (__mb == 0)
@@ -11035,12 +11031,12 @@ public unsafe partial class NavigationServer2D : GodotObject
             __mb_agent_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_agent_set_avoidance_enabled;
-    public void AgentSetAvoidanceEnabled(Rid agent, bool enabled)
+    public static void AgentSetAvoidanceEnabled(Rid agent, bool enabled)
     {
         var __mb = __mb_agent_set_avoidance_enabled;
         if (__mb == 0)
@@ -11054,11 +11050,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_avoidance_enabled;
-    public bool AgentGetAvoidanceEnabled(Rid agent)
+    public static bool AgentGetAvoidanceEnabled(Rid agent)
     {
         var __mb = __mb_agent_get_avoidance_enabled;
         if (__mb == 0)
@@ -11071,12 +11067,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_agent_set_map;
-    public void AgentSetMap(Rid agent, Rid map)
+    public static void AgentSetMap(Rid agent, Rid map)
     {
         var __mb = __mb_agent_set_map;
         if (__mb == 0)
@@ -11090,11 +11086,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_map;
-    public Rid AgentGetMap(Rid agent)
+    public static Rid AgentGetMap(Rid agent)
     {
         var __mb = __mb_agent_get_map;
         if (__mb == 0)
@@ -11107,12 +11103,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_agent_set_paused;
-    public void AgentSetPaused(Rid agent, bool paused)
+    public static void AgentSetPaused(Rid agent, bool paused)
     {
         var __mb = __mb_agent_set_paused;
         if (__mb == 0)
@@ -11126,11 +11122,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_paused;
-    public bool AgentGetPaused(Rid agent)
+    public static bool AgentGetPaused(Rid agent)
     {
         var __mb = __mb_agent_get_paused;
         if (__mb == 0)
@@ -11143,12 +11139,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_agent_set_neighbor_distance;
-    public void AgentSetNeighborDistance(Rid agent, float distance)
+    public static void AgentSetNeighborDistance(Rid agent, float distance)
     {
         var __mb = __mb_agent_set_neighbor_distance;
         if (__mb == 0)
@@ -11162,11 +11158,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_neighbor_distance;
-    public float AgentGetNeighborDistance(Rid agent)
+    public static float AgentGetNeighborDistance(Rid agent)
     {
         var __mb = __mb_agent_get_neighbor_distance;
         if (__mb == 0)
@@ -11179,12 +11175,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_agent_set_max_neighbors;
-    public void AgentSetMaxNeighbors(Rid agent, int count)
+    public static void AgentSetMaxNeighbors(Rid agent, int count)
     {
         var __mb = __mb_agent_set_max_neighbors;
         if (__mb == 0)
@@ -11198,11 +11194,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_max_neighbors;
-    public int AgentGetMaxNeighbors(Rid agent)
+    public static int AgentGetMaxNeighbors(Rid agent)
     {
         var __mb = __mb_agent_get_max_neighbors;
         if (__mb == 0)
@@ -11215,12 +11211,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_agent_set_time_horizon_agents;
-    public void AgentSetTimeHorizonAgents(Rid agent, float timeHorizon)
+    public static void AgentSetTimeHorizonAgents(Rid agent, float timeHorizon)
     {
         var __mb = __mb_agent_set_time_horizon_agents;
         if (__mb == 0)
@@ -11234,11 +11230,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_time_horizon_agents;
-    public float AgentGetTimeHorizonAgents(Rid agent)
+    public static float AgentGetTimeHorizonAgents(Rid agent)
     {
         var __mb = __mb_agent_get_time_horizon_agents;
         if (__mb == 0)
@@ -11251,12 +11247,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_agent_set_time_horizon_obstacles;
-    public void AgentSetTimeHorizonObstacles(Rid agent, float timeHorizon)
+    public static void AgentSetTimeHorizonObstacles(Rid agent, float timeHorizon)
     {
         var __mb = __mb_agent_set_time_horizon_obstacles;
         if (__mb == 0)
@@ -11270,11 +11266,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_time_horizon_obstacles;
-    public float AgentGetTimeHorizonObstacles(Rid agent)
+    public static float AgentGetTimeHorizonObstacles(Rid agent)
     {
         var __mb = __mb_agent_get_time_horizon_obstacles;
         if (__mb == 0)
@@ -11287,12 +11283,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_agent_set_radius;
-    public void AgentSetRadius(Rid agent, float radius)
+    public static void AgentSetRadius(Rid agent, float radius)
     {
         var __mb = __mb_agent_set_radius;
         if (__mb == 0)
@@ -11306,11 +11302,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_radius;
-    public float AgentGetRadius(Rid agent)
+    public static float AgentGetRadius(Rid agent)
     {
         var __mb = __mb_agent_get_radius;
         if (__mb == 0)
@@ -11323,12 +11319,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_agent_set_max_speed;
-    public void AgentSetMaxSpeed(Rid agent, float maxSpeed)
+    public static void AgentSetMaxSpeed(Rid agent, float maxSpeed)
     {
         var __mb = __mb_agent_set_max_speed;
         if (__mb == 0)
@@ -11342,11 +11338,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_max_speed;
-    public float AgentGetMaxSpeed(Rid agent)
+    public static float AgentGetMaxSpeed(Rid agent)
     {
         var __mb = __mb_agent_get_max_speed;
         if (__mb == 0)
@@ -11359,12 +11355,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_agent_set_velocity_forced;
-    public void AgentSetVelocityForced(Rid agent, Vector2 velocity)
+    public static void AgentSetVelocityForced(Rid agent, Vector2 velocity)
     {
         var __mb = __mb_agent_set_velocity_forced;
         if (__mb == 0)
@@ -11378,11 +11374,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_set_velocity;
-    public void AgentSetVelocity(Rid agent, Vector2 velocity)
+    public static void AgentSetVelocity(Rid agent, Vector2 velocity)
     {
         var __mb = __mb_agent_set_velocity;
         if (__mb == 0)
@@ -11396,11 +11392,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_velocity;
-    public Vector2 AgentGetVelocity(Rid agent)
+    public static Vector2 AgentGetVelocity(Rid agent)
     {
         var __mb = __mb_agent_get_velocity;
         if (__mb == 0)
@@ -11413,12 +11409,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_agent_set_position;
-    public void AgentSetPosition(Rid agent, Vector2 position)
+    public static void AgentSetPosition(Rid agent, Vector2 position)
     {
         var __mb = __mb_agent_set_position;
         if (__mb == 0)
@@ -11432,11 +11428,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_position;
-    public Vector2 AgentGetPosition(Rid agent)
+    public static Vector2 AgentGetPosition(Rid agent)
     {
         var __mb = __mb_agent_get_position;
         if (__mb == 0)
@@ -11449,12 +11445,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_agent_is_map_changed;
-    public bool AgentIsMapChanged(Rid agent)
+    public static bool AgentIsMapChanged(Rid agent)
     {
         var __mb = __mb_agent_is_map_changed;
         if (__mb == 0)
@@ -11467,12 +11463,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_agent_has_avoidance_callback;
-    public bool AgentHasAvoidanceCallback(Rid agent)
+    public static bool AgentHasAvoidanceCallback(Rid agent)
     {
         var __mb = __mb_agent_has_avoidance_callback;
         if (__mb == 0)
@@ -11485,12 +11481,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_agent_set_avoidance_layers;
-    public void AgentSetAvoidanceLayers(Rid agent, uint layers)
+    public static void AgentSetAvoidanceLayers(Rid agent, uint layers)
     {
         var __mb = __mb_agent_set_avoidance_layers;
         if (__mb == 0)
@@ -11504,11 +11500,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_avoidance_layers;
-    public uint AgentGetAvoidanceLayers(Rid agent)
+    public static uint AgentGetAvoidanceLayers(Rid agent)
     {
         var __mb = __mb_agent_get_avoidance_layers;
         if (__mb == 0)
@@ -11521,12 +11517,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_agent_set_avoidance_mask;
-    public void AgentSetAvoidanceMask(Rid agent, uint mask)
+    public static void AgentSetAvoidanceMask(Rid agent, uint mask)
     {
         var __mb = __mb_agent_set_avoidance_mask;
         if (__mb == 0)
@@ -11540,11 +11536,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_avoidance_mask;
-    public uint AgentGetAvoidanceMask(Rid agent)
+    public static uint AgentGetAvoidanceMask(Rid agent)
     {
         var __mb = __mb_agent_get_avoidance_mask;
         if (__mb == 0)
@@ -11557,12 +11553,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_agent_set_avoidance_priority;
-    public void AgentSetAvoidancePriority(Rid agent, float priority)
+    public static void AgentSetAvoidancePriority(Rid agent, float priority)
     {
         var __mb = __mb_agent_set_avoidance_priority;
         if (__mb == 0)
@@ -11576,11 +11572,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_avoidance_priority;
-    public float AgentGetAvoidancePriority(Rid agent)
+    public static float AgentGetAvoidancePriority(Rid agent)
     {
         var __mb = __mb_agent_get_avoidance_priority;
         if (__mb == 0)
@@ -11593,12 +11589,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_obstacle_create;
-    public Rid ObstacleCreate()
+    public static Rid ObstacleCreate()
     {
         var __mb = __mb_obstacle_create;
         if (__mb == 0)
@@ -11608,12 +11604,12 @@ public unsafe partial class NavigationServer2D : GodotObject
             __mb_obstacle_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_obstacle_set_avoidance_enabled;
-    public void ObstacleSetAvoidanceEnabled(Rid obstacle, bool enabled)
+    public static void ObstacleSetAvoidanceEnabled(Rid obstacle, bool enabled)
     {
         var __mb = __mb_obstacle_set_avoidance_enabled;
         if (__mb == 0)
@@ -11627,11 +11623,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_avoidance_enabled;
-    public bool ObstacleGetAvoidanceEnabled(Rid obstacle)
+    public static bool ObstacleGetAvoidanceEnabled(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_avoidance_enabled;
         if (__mb == 0)
@@ -11644,12 +11640,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_obstacle_set_map;
-    public void ObstacleSetMap(Rid obstacle, Rid map)
+    public static void ObstacleSetMap(Rid obstacle, Rid map)
     {
         var __mb = __mb_obstacle_set_map;
         if (__mb == 0)
@@ -11663,11 +11659,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_map;
-    public Rid ObstacleGetMap(Rid obstacle)
+    public static Rid ObstacleGetMap(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_map;
         if (__mb == 0)
@@ -11680,12 +11676,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_obstacle_set_paused;
-    public void ObstacleSetPaused(Rid obstacle, bool paused)
+    public static void ObstacleSetPaused(Rid obstacle, bool paused)
     {
         var __mb = __mb_obstacle_set_paused;
         if (__mb == 0)
@@ -11699,11 +11695,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_paused;
-    public bool ObstacleGetPaused(Rid obstacle)
+    public static bool ObstacleGetPaused(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_paused;
         if (__mb == 0)
@@ -11716,12 +11712,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_obstacle_set_radius;
-    public void ObstacleSetRadius(Rid obstacle, float radius)
+    public static void ObstacleSetRadius(Rid obstacle, float radius)
     {
         var __mb = __mb_obstacle_set_radius;
         if (__mb == 0)
@@ -11735,11 +11731,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_radius;
-    public float ObstacleGetRadius(Rid obstacle)
+    public static float ObstacleGetRadius(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_radius;
         if (__mb == 0)
@@ -11752,12 +11748,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_obstacle_set_velocity;
-    public void ObstacleSetVelocity(Rid obstacle, Vector2 velocity)
+    public static void ObstacleSetVelocity(Rid obstacle, Vector2 velocity)
     {
         var __mb = __mb_obstacle_set_velocity;
         if (__mb == 0)
@@ -11771,11 +11767,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_velocity;
-    public Vector2 ObstacleGetVelocity(Rid obstacle)
+    public static Vector2 ObstacleGetVelocity(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_velocity;
         if (__mb == 0)
@@ -11788,12 +11784,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_obstacle_set_position;
-    public void ObstacleSetPosition(Rid obstacle, Vector2 position)
+    public static void ObstacleSetPosition(Rid obstacle, Vector2 position)
     {
         var __mb = __mb_obstacle_set_position;
         if (__mb == 0)
@@ -11807,11 +11803,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_position;
-    public Vector2 ObstacleGetPosition(Rid obstacle)
+    public static Vector2 ObstacleGetPosition(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_position;
         if (__mb == 0)
@@ -11824,12 +11820,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_obstacle_set_avoidance_layers;
-    public void ObstacleSetAvoidanceLayers(Rid obstacle, uint layers)
+    public static void ObstacleSetAvoidanceLayers(Rid obstacle, uint layers)
     {
         var __mb = __mb_obstacle_set_avoidance_layers;
         if (__mb == 0)
@@ -11843,11 +11839,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_avoidance_layers;
-    public uint ObstacleGetAvoidanceLayers(Rid obstacle)
+    public static uint ObstacleGetAvoidanceLayers(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_avoidance_layers;
         if (__mb == 0)
@@ -11860,12 +11856,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_is_baking_navigation_polygon;
-    public bool IsBakingNavigationPolygon(NavigationPolygon? navigationPolygon)
+    public static bool IsBakingNavigationPolygon(NavigationPolygon? navigationPolygon)
     {
         var __mb = __mb_is_baking_navigation_polygon;
         if (__mb == 0)
@@ -11878,12 +11874,12 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_source_geometry_parser_create;
-    public Rid SourceGeometryParserCreate()
+    public static Rid SourceGeometryParserCreate()
     {
         var __mb = __mb_source_geometry_parser_create;
         if (__mb == 0)
@@ -11893,12 +11889,12 @@ public unsafe partial class NavigationServer2D : GodotObject
             __mb_source_geometry_parser_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_free_rid;
-    public void FreeRid(Rid rid)
+    public static void FreeRid(Rid rid)
     {
         var __mb = __mb_free_rid;
         if (__mb == 0)
@@ -11910,11 +11906,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __a0 = rid;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_active;
-    public void SetActive(bool active)
+    public static void SetActive(bool active)
     {
         var __mb = __mb_set_active;
         if (__mb == 0)
@@ -11926,11 +11922,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         byte __a0 = active ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_debug_enabled;
-    public void SetDebugEnabled(bool enabled)
+    public static void SetDebugEnabled(bool enabled)
     {
         var __mb = __mb_set_debug_enabled;
         if (__mb == 0)
@@ -11942,11 +11938,11 @@ public unsafe partial class NavigationServer2D : GodotObject
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_debug_enabled;
-    public bool GetDebugEnabled()
+    public static bool GetDebugEnabled()
     {
         var __mb = __mb_get_debug_enabled;
         if (__mb == 0)
@@ -11956,12 +11952,12 @@ public unsafe partial class NavigationServer2D : GodotObject
             __mb_get_debug_enabled = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_process_info;
-    public int GetProcessInfo(NavigationServer2D.ProcessInfo processInfo)
+    public static int GetProcessInfo(NavigationServer2D.ProcessInfo processInfo)
     {
         var __mb = __mb_get_process_info;
         if (__mb == 0)
@@ -11974,25 +11970,22 @@ public unsafe partial class NavigationServer2D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 }
 
-public unsafe partial class NavigationServer2DManager : GodotObject
+public static unsafe partial class NavigationServer2DManager
 {
-    internal NavigationServer2DManager(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public NavigationServer2DManager() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "NavigationServer2DManager");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("NavigationServer2DManager");
 
-    private static NavigationServer2DManager? _singleton;
-    public static NavigationServer2DManager Singleton => _singleton ??= (NavigationServer2DManager)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("NavigationServer2DManager"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     private static nint __mb_set_default_server;
-    public void SetDefaultServer(string name, int priority)
+    public static void SetDefaultServer(string name, int priority)
     {
         var __mb = __mb_set_default_server;
         if (__mb == 0)
@@ -12006,34 +11999,36 @@ public unsafe partial class NavigationServer2DManager : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 }
 
-public unsafe partial class NavigationServer3D : GodotObject
+public static unsafe partial class NavigationServer3D
 {
-    internal NavigationServer3D(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    private static NavigationServer3D? _singleton;
-    public static NavigationServer3D Singleton => _singleton ??= (NavigationServer3D)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("NavigationServer3D"), adoptRef: false)!;
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("NavigationServer3D");
+
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum ProcessInfo : long
     {
-        INFO_ACTIVE_MAPS = 0,
-        INFO_REGION_COUNT = 1,
-        INFO_AGENT_COUNT = 2,
-        INFO_LINK_COUNT = 3,
-        INFO_POLYGON_COUNT = 4,
-        INFO_EDGE_COUNT = 5,
-        INFO_EDGE_MERGE_COUNT = 6,
-        INFO_EDGE_CONNECTION_COUNT = 7,
-        INFO_EDGE_FREE_COUNT = 8,
-        INFO_OBSTACLE_COUNT = 9,
+        ActiveMaps = 0,
+        RegionCount = 1,
+        AgentCount = 2,
+        LinkCount = 3,
+        PolygonCount = 4,
+        EdgeCount = 5,
+        EdgeMergeCount = 6,
+        EdgeConnectionCount = 7,
+        EdgeFreeCount = 8,
+        ObstacleCount = 9,
     }
 
     private static nint __mb_get_maps;
-    public Godot.Collections.Array GetMaps()
+    public static Godot.Collections.Array GetMaps()
     {
         var __mb = __mb_get_maps;
         if (__mb == 0)
@@ -12043,12 +12038,12 @@ public unsafe partial class NavigationServer3D : GodotObject
             __mb_get_maps = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_map_create;
-    public Rid MapCreate()
+    public static Rid MapCreate()
     {
         var __mb = __mb_map_create;
         if (__mb == 0)
@@ -12058,12 +12053,12 @@ public unsafe partial class NavigationServer3D : GodotObject
             __mb_map_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_map_set_active;
-    public void MapSetActive(Rid map, bool active)
+    public static void MapSetActive(Rid map, bool active)
     {
         var __mb = __mb_map_set_active;
         if (__mb == 0)
@@ -12077,11 +12072,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_is_active;
-    public bool MapIsActive(Rid map)
+    public static bool MapIsActive(Rid map)
     {
         var __mb = __mb_map_is_active;
         if (__mb == 0)
@@ -12094,12 +12089,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_map_set_up;
-    public void MapSetUp(Rid map, Vector3 up)
+    public static void MapSetUp(Rid map, Vector3 up)
     {
         var __mb = __mb_map_set_up;
         if (__mb == 0)
@@ -12113,11 +12108,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_up;
-    public Vector3 MapGetUp(Rid map)
+    public static Vector3 MapGetUp(Rid map)
     {
         var __mb = __mb_map_get_up;
         if (__mb == 0)
@@ -12130,12 +12125,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_map_set_cell_size;
-    public void MapSetCellSize(Rid map, float cellSize)
+    public static void MapSetCellSize(Rid map, float cellSize)
     {
         var __mb = __mb_map_set_cell_size;
         if (__mb == 0)
@@ -12149,11 +12144,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_cell_size;
-    public float MapGetCellSize(Rid map)
+    public static float MapGetCellSize(Rid map)
     {
         var __mb = __mb_map_get_cell_size;
         if (__mb == 0)
@@ -12166,12 +12161,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_map_set_cell_height;
-    public void MapSetCellHeight(Rid map, float cellHeight)
+    public static void MapSetCellHeight(Rid map, float cellHeight)
     {
         var __mb = __mb_map_set_cell_height;
         if (__mb == 0)
@@ -12185,11 +12180,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_cell_height;
-    public float MapGetCellHeight(Rid map)
+    public static float MapGetCellHeight(Rid map)
     {
         var __mb = __mb_map_get_cell_height;
         if (__mb == 0)
@@ -12202,12 +12197,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_map_set_merge_rasterizer_cell_scale;
-    public void MapSetMergeRasterizerCellScale(Rid map, float scale)
+    public static void MapSetMergeRasterizerCellScale(Rid map, float scale)
     {
         var __mb = __mb_map_set_merge_rasterizer_cell_scale;
         if (__mb == 0)
@@ -12221,11 +12216,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_merge_rasterizer_cell_scale;
-    public float MapGetMergeRasterizerCellScale(Rid map)
+    public static float MapGetMergeRasterizerCellScale(Rid map)
     {
         var __mb = __mb_map_get_merge_rasterizer_cell_scale;
         if (__mb == 0)
@@ -12238,12 +12233,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_map_set_use_edge_connections;
-    public void MapSetUseEdgeConnections(Rid map, bool enabled)
+    public static void MapSetUseEdgeConnections(Rid map, bool enabled)
     {
         var __mb = __mb_map_set_use_edge_connections;
         if (__mb == 0)
@@ -12257,11 +12252,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_use_edge_connections;
-    public bool MapGetUseEdgeConnections(Rid map)
+    public static bool MapGetUseEdgeConnections(Rid map)
     {
         var __mb = __mb_map_get_use_edge_connections;
         if (__mb == 0)
@@ -12274,12 +12269,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_map_set_edge_connection_margin;
-    public void MapSetEdgeConnectionMargin(Rid map, float margin)
+    public static void MapSetEdgeConnectionMargin(Rid map, float margin)
     {
         var __mb = __mb_map_set_edge_connection_margin;
         if (__mb == 0)
@@ -12293,11 +12288,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_edge_connection_margin;
-    public float MapGetEdgeConnectionMargin(Rid map)
+    public static float MapGetEdgeConnectionMargin(Rid map)
     {
         var __mb = __mb_map_get_edge_connection_margin;
         if (__mb == 0)
@@ -12310,12 +12305,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_map_set_link_connection_radius;
-    public void MapSetLinkConnectionRadius(Rid map, float radius)
+    public static void MapSetLinkConnectionRadius(Rid map, float radius)
     {
         var __mb = __mb_map_set_link_connection_radius;
         if (__mb == 0)
@@ -12329,11 +12324,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_link_connection_radius;
-    public float MapGetLinkConnectionRadius(Rid map)
+    public static float MapGetLinkConnectionRadius(Rid map)
     {
         var __mb = __mb_map_get_link_connection_radius;
         if (__mb == 0)
@@ -12346,12 +12341,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_map_get_closest_point_to_segment;
-    public Vector3 MapGetClosestPointToSegment(Rid map, Vector3 start, Vector3 end, bool useCollision)
+    public static Vector3 MapGetClosestPointToSegment(Rid map, Vector3 start, Vector3 end, bool useCollision = false)
     {
         var __mb = __mb_map_get_closest_point_to_segment;
         if (__mb == 0)
@@ -12370,12 +12365,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_map_get_closest_point;
-    public Vector3 MapGetClosestPoint(Rid map, Vector3 toPoint)
+    public static Vector3 MapGetClosestPoint(Rid map, Vector3 toPoint)
     {
         var __mb = __mb_map_get_closest_point;
         if (__mb == 0)
@@ -12390,12 +12385,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_map_get_closest_point_normal;
-    public Vector3 MapGetClosestPointNormal(Rid map, Vector3 toPoint)
+    public static Vector3 MapGetClosestPointNormal(Rid map, Vector3 toPoint)
     {
         var __mb = __mb_map_get_closest_point_normal;
         if (__mb == 0)
@@ -12410,12 +12405,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_map_get_closest_point_owner;
-    public Rid MapGetClosestPointOwner(Rid map, Vector3 toPoint)
+    public static Rid MapGetClosestPointOwner(Rid map, Vector3 toPoint)
     {
         var __mb = __mb_map_get_closest_point_owner;
         if (__mb == 0)
@@ -12430,12 +12425,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_map_get_links;
-    public Godot.Collections.Array MapGetLinks(Rid map)
+    public static Godot.Collections.Array MapGetLinks(Rid map)
     {
         var __mb = __mb_map_get_links;
         if (__mb == 0)
@@ -12448,12 +12443,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_map_get_regions;
-    public Godot.Collections.Array MapGetRegions(Rid map)
+    public static Godot.Collections.Array MapGetRegions(Rid map)
     {
         var __mb = __mb_map_get_regions;
         if (__mb == 0)
@@ -12466,12 +12461,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_map_get_agents;
-    public Godot.Collections.Array MapGetAgents(Rid map)
+    public static Godot.Collections.Array MapGetAgents(Rid map)
     {
         var __mb = __mb_map_get_agents;
         if (__mb == 0)
@@ -12484,12 +12479,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_map_get_obstacles;
-    public Godot.Collections.Array MapGetObstacles(Rid map)
+    public static Godot.Collections.Array MapGetObstacles(Rid map)
     {
         var __mb = __mb_map_get_obstacles;
         if (__mb == 0)
@@ -12502,12 +12497,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_map_force_update;
-    public void MapForceUpdate(Rid map)
+    public static void MapForceUpdate(Rid map)
     {
         var __mb = __mb_map_force_update;
         if (__mb == 0)
@@ -12519,11 +12514,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __a0 = map;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_iteration_id;
-    public uint MapGetIterationId(Rid map)
+    public static uint MapGetIterationId(Rid map)
     {
         var __mb = __mb_map_get_iteration_id;
         if (__mb == 0)
@@ -12536,12 +12531,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_map_set_use_async_iterations;
-    public void MapSetUseAsyncIterations(Rid map, bool enabled)
+    public static void MapSetUseAsyncIterations(Rid map, bool enabled)
     {
         var __mb = __mb_map_set_use_async_iterations;
         if (__mb == 0)
@@ -12555,11 +12550,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_map_get_use_async_iterations;
-    public bool MapGetUseAsyncIterations(Rid map)
+    public static bool MapGetUseAsyncIterations(Rid map)
     {
         var __mb = __mb_map_get_use_async_iterations;
         if (__mb == 0)
@@ -12572,12 +12567,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_map_get_random_point;
-    public Vector3 MapGetRandomPoint(Rid map, uint navigationLayers, bool uniformly)
+    public static Vector3 MapGetRandomPoint(Rid map, uint navigationLayers, bool uniformly)
     {
         var __mb = __mb_map_get_random_point;
         if (__mb == 0)
@@ -12594,12 +12589,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_create;
-    public Rid RegionCreate()
+    public static Rid RegionCreate()
     {
         var __mb = __mb_region_create;
         if (__mb == 0)
@@ -12609,12 +12604,12 @@ public unsafe partial class NavigationServer3D : GodotObject
             __mb_region_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_get_iteration_id;
-    public uint RegionGetIterationId(Rid region)
+    public static uint RegionGetIterationId(Rid region)
     {
         var __mb = __mb_region_get_iteration_id;
         if (__mb == 0)
@@ -12627,12 +12622,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_region_set_use_async_iterations;
-    public void RegionSetUseAsyncIterations(Rid region, bool enabled)
+    public static void RegionSetUseAsyncIterations(Rid region, bool enabled)
     {
         var __mb = __mb_region_set_use_async_iterations;
         if (__mb == 0)
@@ -12646,11 +12641,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_use_async_iterations;
-    public bool RegionGetUseAsyncIterations(Rid region)
+    public static bool RegionGetUseAsyncIterations(Rid region)
     {
         var __mb = __mb_region_get_use_async_iterations;
         if (__mb == 0)
@@ -12663,12 +12658,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_region_set_enabled;
-    public void RegionSetEnabled(Rid region, bool enabled)
+    public static void RegionSetEnabled(Rid region, bool enabled)
     {
         var __mb = __mb_region_set_enabled;
         if (__mb == 0)
@@ -12682,11 +12677,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_enabled;
-    public bool RegionGetEnabled(Rid region)
+    public static bool RegionGetEnabled(Rid region)
     {
         var __mb = __mb_region_get_enabled;
         if (__mb == 0)
@@ -12699,12 +12694,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_region_set_use_edge_connections;
-    public void RegionSetUseEdgeConnections(Rid region, bool enabled)
+    public static void RegionSetUseEdgeConnections(Rid region, bool enabled)
     {
         var __mb = __mb_region_set_use_edge_connections;
         if (__mb == 0)
@@ -12718,11 +12713,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_use_edge_connections;
-    public bool RegionGetUseEdgeConnections(Rid region)
+    public static bool RegionGetUseEdgeConnections(Rid region)
     {
         var __mb = __mb_region_get_use_edge_connections;
         if (__mb == 0)
@@ -12735,12 +12730,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_region_set_enter_cost;
-    public void RegionSetEnterCost(Rid region, float enterCost)
+    public static void RegionSetEnterCost(Rid region, float enterCost)
     {
         var __mb = __mb_region_set_enter_cost;
         if (__mb == 0)
@@ -12754,11 +12749,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_enter_cost;
-    public float RegionGetEnterCost(Rid region)
+    public static float RegionGetEnterCost(Rid region)
     {
         var __mb = __mb_region_get_enter_cost;
         if (__mb == 0)
@@ -12771,12 +12766,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_region_set_travel_cost;
-    public void RegionSetTravelCost(Rid region, float travelCost)
+    public static void RegionSetTravelCost(Rid region, float travelCost)
     {
         var __mb = __mb_region_set_travel_cost;
         if (__mb == 0)
@@ -12790,11 +12785,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_travel_cost;
-    public float RegionGetTravelCost(Rid region)
+    public static float RegionGetTravelCost(Rid region)
     {
         var __mb = __mb_region_get_travel_cost;
         if (__mb == 0)
@@ -12807,12 +12802,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_region_set_owner_id;
-    public void RegionSetOwnerId(Rid region, ulong ownerId)
+    public static void RegionSetOwnerId(Rid region, ulong ownerId)
     {
         var __mb = __mb_region_set_owner_id;
         if (__mb == 0)
@@ -12826,11 +12821,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_owner_id;
-    public ulong RegionGetOwnerId(Rid region)
+    public static ulong RegionGetOwnerId(Rid region)
     {
         var __mb = __mb_region_get_owner_id;
         if (__mb == 0)
@@ -12843,12 +12838,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_region_owns_point;
-    public bool RegionOwnsPoint(Rid region, Vector3 point)
+    public static bool RegionOwnsPoint(Rid region, Vector3 point)
     {
         var __mb = __mb_region_owns_point;
         if (__mb == 0)
@@ -12863,12 +12858,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_region_set_map;
-    public void RegionSetMap(Rid region, Rid map)
+    public static void RegionSetMap(Rid region, Rid map)
     {
         var __mb = __mb_region_set_map;
         if (__mb == 0)
@@ -12882,11 +12877,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_map;
-    public Rid RegionGetMap(Rid region)
+    public static Rid RegionGetMap(Rid region)
     {
         var __mb = __mb_region_get_map;
         if (__mb == 0)
@@ -12899,12 +12894,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_set_navigation_layers;
-    public void RegionSetNavigationLayers(Rid region, uint navigationLayers)
+    public static void RegionSetNavigationLayers(Rid region, uint navigationLayers)
     {
         var __mb = __mb_region_set_navigation_layers;
         if (__mb == 0)
@@ -12918,11 +12913,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_navigation_layers;
-    public uint RegionGetNavigationLayers(Rid region)
+    public static uint RegionGetNavigationLayers(Rid region)
     {
         var __mb = __mb_region_get_navigation_layers;
         if (__mb == 0)
@@ -12935,12 +12930,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_region_set_transform;
-    public void RegionSetTransform(Rid region, Transform3D transform)
+    public static void RegionSetTransform(Rid region, Transform3D transform)
     {
         var __mb = __mb_region_set_transform;
         if (__mb == 0)
@@ -12954,11 +12949,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_transform;
-    public Transform3D RegionGetTransform(Rid region)
+    public static Transform3D RegionGetTransform(Rid region)
     {
         var __mb = __mb_region_get_transform;
         if (__mb == 0)
@@ -12971,12 +12966,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_set_navigation_mesh;
-    public void RegionSetNavigationMesh(Rid region, NavigationMesh? navigationMesh)
+    public static void RegionSetNavigationMesh(Rid region, NavigationMesh? navigationMesh)
     {
         var __mb = __mb_region_set_navigation_mesh;
         if (__mb == 0)
@@ -12990,11 +12985,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_bake_navigation_mesh;
-    public void RegionBakeNavigationMesh(NavigationMesh? navigationMesh, Node? rootNode)
+    public static void RegionBakeNavigationMesh(NavigationMesh? navigationMesh, Node? rootNode)
     {
         var __mb = __mb_region_bake_navigation_mesh;
         if (__mb == 0)
@@ -13008,11 +13003,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_region_get_connections_count;
-    public int RegionGetConnectionsCount(Rid region)
+    public static int RegionGetConnectionsCount(Rid region)
     {
         var __mb = __mb_region_get_connections_count;
         if (__mb == 0)
@@ -13025,12 +13020,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_region_get_connection_pathway_start;
-    public Vector3 RegionGetConnectionPathwayStart(Rid region, int connection)
+    public static Vector3 RegionGetConnectionPathwayStart(Rid region, int connection)
     {
         var __mb = __mb_region_get_connection_pathway_start;
         if (__mb == 0)
@@ -13045,12 +13040,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_get_connection_pathway_end;
-    public Vector3 RegionGetConnectionPathwayEnd(Rid region, int connection)
+    public static Vector3 RegionGetConnectionPathwayEnd(Rid region, int connection)
     {
         var __mb = __mb_region_get_connection_pathway_end;
         if (__mb == 0)
@@ -13065,12 +13060,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_get_closest_point_to_segment;
-    public Vector3 RegionGetClosestPointToSegment(Rid region, Vector3 start, Vector3 end, bool useCollision)
+    public static Vector3 RegionGetClosestPointToSegment(Rid region, Vector3 start, Vector3 end, bool useCollision = false)
     {
         var __mb = __mb_region_get_closest_point_to_segment;
         if (__mb == 0)
@@ -13089,12 +13084,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_get_closest_point;
-    public Vector3 RegionGetClosestPoint(Rid region, Vector3 toPoint)
+    public static Vector3 RegionGetClosestPoint(Rid region, Vector3 toPoint)
     {
         var __mb = __mb_region_get_closest_point;
         if (__mb == 0)
@@ -13109,12 +13104,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_get_closest_point_normal;
-    public Vector3 RegionGetClosestPointNormal(Rid region, Vector3 toPoint)
+    public static Vector3 RegionGetClosestPointNormal(Rid region, Vector3 toPoint)
     {
         var __mb = __mb_region_get_closest_point_normal;
         if (__mb == 0)
@@ -13129,12 +13124,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_get_random_point;
-    public Vector3 RegionGetRandomPoint(Rid region, uint navigationLayers, bool uniformly)
+    public static Vector3 RegionGetRandomPoint(Rid region, uint navigationLayers, bool uniformly)
     {
         var __mb = __mb_region_get_random_point;
         if (__mb == 0)
@@ -13151,12 +13146,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_region_get_bounds;
-    public Aabb RegionGetBounds(Rid region)
+    public static Aabb RegionGetBounds(Rid region)
     {
         var __mb = __mb_region_get_bounds;
         if (__mb == 0)
@@ -13169,12 +13164,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Aabb);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_link_create;
-    public Rid LinkCreate()
+    public static Rid LinkCreate()
     {
         var __mb = __mb_link_create;
         if (__mb == 0)
@@ -13184,12 +13179,12 @@ public unsafe partial class NavigationServer3D : GodotObject
             __mb_link_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_link_get_iteration_id;
-    public uint LinkGetIterationId(Rid link)
+    public static uint LinkGetIterationId(Rid link)
     {
         var __mb = __mb_link_get_iteration_id;
         if (__mb == 0)
@@ -13202,12 +13197,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_link_set_map;
-    public void LinkSetMap(Rid link, Rid map)
+    public static void LinkSetMap(Rid link, Rid map)
     {
         var __mb = __mb_link_set_map;
         if (__mb == 0)
@@ -13221,11 +13216,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_map;
-    public Rid LinkGetMap(Rid link)
+    public static Rid LinkGetMap(Rid link)
     {
         var __mb = __mb_link_get_map;
         if (__mb == 0)
@@ -13238,12 +13233,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_link_set_enabled;
-    public void LinkSetEnabled(Rid link, bool enabled)
+    public static void LinkSetEnabled(Rid link, bool enabled)
     {
         var __mb = __mb_link_set_enabled;
         if (__mb == 0)
@@ -13257,11 +13252,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_enabled;
-    public bool LinkGetEnabled(Rid link)
+    public static bool LinkGetEnabled(Rid link)
     {
         var __mb = __mb_link_get_enabled;
         if (__mb == 0)
@@ -13274,12 +13269,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_link_set_bidirectional;
-    public void LinkSetBidirectional(Rid link, bool bidirectional)
+    public static void LinkSetBidirectional(Rid link, bool bidirectional)
     {
         var __mb = __mb_link_set_bidirectional;
         if (__mb == 0)
@@ -13293,11 +13288,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_is_bidirectional;
-    public bool LinkIsBidirectional(Rid link)
+    public static bool LinkIsBidirectional(Rid link)
     {
         var __mb = __mb_link_is_bidirectional;
         if (__mb == 0)
@@ -13310,12 +13305,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_link_set_navigation_layers;
-    public void LinkSetNavigationLayers(Rid link, uint navigationLayers)
+    public static void LinkSetNavigationLayers(Rid link, uint navigationLayers)
     {
         var __mb = __mb_link_set_navigation_layers;
         if (__mb == 0)
@@ -13329,11 +13324,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_navigation_layers;
-    public uint LinkGetNavigationLayers(Rid link)
+    public static uint LinkGetNavigationLayers(Rid link)
     {
         var __mb = __mb_link_get_navigation_layers;
         if (__mb == 0)
@@ -13346,12 +13341,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_link_set_start_position;
-    public void LinkSetStartPosition(Rid link, Vector3 position)
+    public static void LinkSetStartPosition(Rid link, Vector3 position)
     {
         var __mb = __mb_link_set_start_position;
         if (__mb == 0)
@@ -13365,11 +13360,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_start_position;
-    public Vector3 LinkGetStartPosition(Rid link)
+    public static Vector3 LinkGetStartPosition(Rid link)
     {
         var __mb = __mb_link_get_start_position;
         if (__mb == 0)
@@ -13382,12 +13377,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_link_set_end_position;
-    public void LinkSetEndPosition(Rid link, Vector3 position)
+    public static void LinkSetEndPosition(Rid link, Vector3 position)
     {
         var __mb = __mb_link_set_end_position;
         if (__mb == 0)
@@ -13401,11 +13396,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_end_position;
-    public Vector3 LinkGetEndPosition(Rid link)
+    public static Vector3 LinkGetEndPosition(Rid link)
     {
         var __mb = __mb_link_get_end_position;
         if (__mb == 0)
@@ -13418,12 +13413,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_link_set_enter_cost;
-    public void LinkSetEnterCost(Rid link, float enterCost)
+    public static void LinkSetEnterCost(Rid link, float enterCost)
     {
         var __mb = __mb_link_set_enter_cost;
         if (__mb == 0)
@@ -13437,11 +13432,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_enter_cost;
-    public float LinkGetEnterCost(Rid link)
+    public static float LinkGetEnterCost(Rid link)
     {
         var __mb = __mb_link_get_enter_cost;
         if (__mb == 0)
@@ -13454,12 +13449,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_link_set_travel_cost;
-    public void LinkSetTravelCost(Rid link, float travelCost)
+    public static void LinkSetTravelCost(Rid link, float travelCost)
     {
         var __mb = __mb_link_set_travel_cost;
         if (__mb == 0)
@@ -13473,11 +13468,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_travel_cost;
-    public float LinkGetTravelCost(Rid link)
+    public static float LinkGetTravelCost(Rid link)
     {
         var __mb = __mb_link_get_travel_cost;
         if (__mb == 0)
@@ -13490,12 +13485,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_link_set_owner_id;
-    public void LinkSetOwnerId(Rid link, ulong ownerId)
+    public static void LinkSetOwnerId(Rid link, ulong ownerId)
     {
         var __mb = __mb_link_set_owner_id;
         if (__mb == 0)
@@ -13509,11 +13504,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_link_get_owner_id;
-    public ulong LinkGetOwnerId(Rid link)
+    public static ulong LinkGetOwnerId(Rid link)
     {
         var __mb = __mb_link_get_owner_id;
         if (__mb == 0)
@@ -13526,12 +13521,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_agent_create;
-    public Rid AgentCreate()
+    public static Rid AgentCreate()
     {
         var __mb = __mb_agent_create;
         if (__mb == 0)
@@ -13541,12 +13536,12 @@ public unsafe partial class NavigationServer3D : GodotObject
             __mb_agent_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_agent_set_avoidance_enabled;
-    public void AgentSetAvoidanceEnabled(Rid agent, bool enabled)
+    public static void AgentSetAvoidanceEnabled(Rid agent, bool enabled)
     {
         var __mb = __mb_agent_set_avoidance_enabled;
         if (__mb == 0)
@@ -13560,11 +13555,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_avoidance_enabled;
-    public bool AgentGetAvoidanceEnabled(Rid agent)
+    public static bool AgentGetAvoidanceEnabled(Rid agent)
     {
         var __mb = __mb_agent_get_avoidance_enabled;
         if (__mb == 0)
@@ -13577,12 +13572,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_agent_set_use_3d_avoidance;
-    public void AgentSetUse3dAvoidance(Rid agent, bool enabled)
+    public static void AgentSetUse3dAvoidance(Rid agent, bool enabled)
     {
         var __mb = __mb_agent_set_use_3d_avoidance;
         if (__mb == 0)
@@ -13596,11 +13591,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_use_3d_avoidance;
-    public bool AgentGetUse3dAvoidance(Rid agent)
+    public static bool AgentGetUse3dAvoidance(Rid agent)
     {
         var __mb = __mb_agent_get_use_3d_avoidance;
         if (__mb == 0)
@@ -13613,12 +13608,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_agent_set_map;
-    public void AgentSetMap(Rid agent, Rid map)
+    public static void AgentSetMap(Rid agent, Rid map)
     {
         var __mb = __mb_agent_set_map;
         if (__mb == 0)
@@ -13632,11 +13627,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_map;
-    public Rid AgentGetMap(Rid agent)
+    public static Rid AgentGetMap(Rid agent)
     {
         var __mb = __mb_agent_get_map;
         if (__mb == 0)
@@ -13649,12 +13644,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_agent_set_paused;
-    public void AgentSetPaused(Rid agent, bool paused)
+    public static void AgentSetPaused(Rid agent, bool paused)
     {
         var __mb = __mb_agent_set_paused;
         if (__mb == 0)
@@ -13668,11 +13663,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_paused;
-    public bool AgentGetPaused(Rid agent)
+    public static bool AgentGetPaused(Rid agent)
     {
         var __mb = __mb_agent_get_paused;
         if (__mb == 0)
@@ -13685,12 +13680,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_agent_set_neighbor_distance;
-    public void AgentSetNeighborDistance(Rid agent, float distance)
+    public static void AgentSetNeighborDistance(Rid agent, float distance)
     {
         var __mb = __mb_agent_set_neighbor_distance;
         if (__mb == 0)
@@ -13704,11 +13699,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_neighbor_distance;
-    public float AgentGetNeighborDistance(Rid agent)
+    public static float AgentGetNeighborDistance(Rid agent)
     {
         var __mb = __mb_agent_get_neighbor_distance;
         if (__mb == 0)
@@ -13721,12 +13716,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_agent_set_max_neighbors;
-    public void AgentSetMaxNeighbors(Rid agent, int count)
+    public static void AgentSetMaxNeighbors(Rid agent, int count)
     {
         var __mb = __mb_agent_set_max_neighbors;
         if (__mb == 0)
@@ -13740,11 +13735,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_max_neighbors;
-    public int AgentGetMaxNeighbors(Rid agent)
+    public static int AgentGetMaxNeighbors(Rid agent)
     {
         var __mb = __mb_agent_get_max_neighbors;
         if (__mb == 0)
@@ -13757,12 +13752,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_agent_set_time_horizon_agents;
-    public void AgentSetTimeHorizonAgents(Rid agent, float timeHorizon)
+    public static void AgentSetTimeHorizonAgents(Rid agent, float timeHorizon)
     {
         var __mb = __mb_agent_set_time_horizon_agents;
         if (__mb == 0)
@@ -13776,11 +13771,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_time_horizon_agents;
-    public float AgentGetTimeHorizonAgents(Rid agent)
+    public static float AgentGetTimeHorizonAgents(Rid agent)
     {
         var __mb = __mb_agent_get_time_horizon_agents;
         if (__mb == 0)
@@ -13793,12 +13788,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_agent_set_time_horizon_obstacles;
-    public void AgentSetTimeHorizonObstacles(Rid agent, float timeHorizon)
+    public static void AgentSetTimeHorizonObstacles(Rid agent, float timeHorizon)
     {
         var __mb = __mb_agent_set_time_horizon_obstacles;
         if (__mb == 0)
@@ -13812,11 +13807,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_time_horizon_obstacles;
-    public float AgentGetTimeHorizonObstacles(Rid agent)
+    public static float AgentGetTimeHorizonObstacles(Rid agent)
     {
         var __mb = __mb_agent_get_time_horizon_obstacles;
         if (__mb == 0)
@@ -13829,12 +13824,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_agent_set_radius;
-    public void AgentSetRadius(Rid agent, float radius)
+    public static void AgentSetRadius(Rid agent, float radius)
     {
         var __mb = __mb_agent_set_radius;
         if (__mb == 0)
@@ -13848,11 +13843,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_radius;
-    public float AgentGetRadius(Rid agent)
+    public static float AgentGetRadius(Rid agent)
     {
         var __mb = __mb_agent_get_radius;
         if (__mb == 0)
@@ -13865,12 +13860,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_agent_set_height;
-    public void AgentSetHeight(Rid agent, float height)
+    public static void AgentSetHeight(Rid agent, float height)
     {
         var __mb = __mb_agent_set_height;
         if (__mb == 0)
@@ -13884,11 +13879,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_height;
-    public float AgentGetHeight(Rid agent)
+    public static float AgentGetHeight(Rid agent)
     {
         var __mb = __mb_agent_get_height;
         if (__mb == 0)
@@ -13901,12 +13896,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_agent_set_max_speed;
-    public void AgentSetMaxSpeed(Rid agent, float maxSpeed)
+    public static void AgentSetMaxSpeed(Rid agent, float maxSpeed)
     {
         var __mb = __mb_agent_set_max_speed;
         if (__mb == 0)
@@ -13920,11 +13915,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_max_speed;
-    public float AgentGetMaxSpeed(Rid agent)
+    public static float AgentGetMaxSpeed(Rid agent)
     {
         var __mb = __mb_agent_get_max_speed;
         if (__mb == 0)
@@ -13937,12 +13932,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_agent_set_velocity_forced;
-    public void AgentSetVelocityForced(Rid agent, Vector3 velocity)
+    public static void AgentSetVelocityForced(Rid agent, Vector3 velocity)
     {
         var __mb = __mb_agent_set_velocity_forced;
         if (__mb == 0)
@@ -13956,11 +13951,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_set_velocity;
-    public void AgentSetVelocity(Rid agent, Vector3 velocity)
+    public static void AgentSetVelocity(Rid agent, Vector3 velocity)
     {
         var __mb = __mb_agent_set_velocity;
         if (__mb == 0)
@@ -13974,11 +13969,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_velocity;
-    public Vector3 AgentGetVelocity(Rid agent)
+    public static Vector3 AgentGetVelocity(Rid agent)
     {
         var __mb = __mb_agent_get_velocity;
         if (__mb == 0)
@@ -13991,12 +13986,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_agent_set_position;
-    public void AgentSetPosition(Rid agent, Vector3 position)
+    public static void AgentSetPosition(Rid agent, Vector3 position)
     {
         var __mb = __mb_agent_set_position;
         if (__mb == 0)
@@ -14010,11 +14005,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_position;
-    public Vector3 AgentGetPosition(Rid agent)
+    public static Vector3 AgentGetPosition(Rid agent)
     {
         var __mb = __mb_agent_get_position;
         if (__mb == 0)
@@ -14027,12 +14022,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_agent_is_map_changed;
-    public bool AgentIsMapChanged(Rid agent)
+    public static bool AgentIsMapChanged(Rid agent)
     {
         var __mb = __mb_agent_is_map_changed;
         if (__mb == 0)
@@ -14045,12 +14040,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_agent_has_avoidance_callback;
-    public bool AgentHasAvoidanceCallback(Rid agent)
+    public static bool AgentHasAvoidanceCallback(Rid agent)
     {
         var __mb = __mb_agent_has_avoidance_callback;
         if (__mb == 0)
@@ -14063,12 +14058,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_agent_set_avoidance_layers;
-    public void AgentSetAvoidanceLayers(Rid agent, uint layers)
+    public static void AgentSetAvoidanceLayers(Rid agent, uint layers)
     {
         var __mb = __mb_agent_set_avoidance_layers;
         if (__mb == 0)
@@ -14082,11 +14077,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_avoidance_layers;
-    public uint AgentGetAvoidanceLayers(Rid agent)
+    public static uint AgentGetAvoidanceLayers(Rid agent)
     {
         var __mb = __mb_agent_get_avoidance_layers;
         if (__mb == 0)
@@ -14099,12 +14094,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_agent_set_avoidance_mask;
-    public void AgentSetAvoidanceMask(Rid agent, uint mask)
+    public static void AgentSetAvoidanceMask(Rid agent, uint mask)
     {
         var __mb = __mb_agent_set_avoidance_mask;
         if (__mb == 0)
@@ -14118,11 +14113,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_avoidance_mask;
-    public uint AgentGetAvoidanceMask(Rid agent)
+    public static uint AgentGetAvoidanceMask(Rid agent)
     {
         var __mb = __mb_agent_get_avoidance_mask;
         if (__mb == 0)
@@ -14135,12 +14130,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_agent_set_avoidance_priority;
-    public void AgentSetAvoidancePriority(Rid agent, float priority)
+    public static void AgentSetAvoidancePriority(Rid agent, float priority)
     {
         var __mb = __mb_agent_set_avoidance_priority;
         if (__mb == 0)
@@ -14154,11 +14149,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_agent_get_avoidance_priority;
-    public float AgentGetAvoidancePriority(Rid agent)
+    public static float AgentGetAvoidancePriority(Rid agent)
     {
         var __mb = __mb_agent_get_avoidance_priority;
         if (__mb == 0)
@@ -14171,12 +14166,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_obstacle_create;
-    public Rid ObstacleCreate()
+    public static Rid ObstacleCreate()
     {
         var __mb = __mb_obstacle_create;
         if (__mb == 0)
@@ -14186,12 +14181,12 @@ public unsafe partial class NavigationServer3D : GodotObject
             __mb_obstacle_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_obstacle_set_avoidance_enabled;
-    public void ObstacleSetAvoidanceEnabled(Rid obstacle, bool enabled)
+    public static void ObstacleSetAvoidanceEnabled(Rid obstacle, bool enabled)
     {
         var __mb = __mb_obstacle_set_avoidance_enabled;
         if (__mb == 0)
@@ -14205,11 +14200,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_avoidance_enabled;
-    public bool ObstacleGetAvoidanceEnabled(Rid obstacle)
+    public static bool ObstacleGetAvoidanceEnabled(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_avoidance_enabled;
         if (__mb == 0)
@@ -14222,12 +14217,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_obstacle_set_use_3d_avoidance;
-    public void ObstacleSetUse3dAvoidance(Rid obstacle, bool enabled)
+    public static void ObstacleSetUse3dAvoidance(Rid obstacle, bool enabled)
     {
         var __mb = __mb_obstacle_set_use_3d_avoidance;
         if (__mb == 0)
@@ -14241,11 +14236,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_use_3d_avoidance;
-    public bool ObstacleGetUse3dAvoidance(Rid obstacle)
+    public static bool ObstacleGetUse3dAvoidance(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_use_3d_avoidance;
         if (__mb == 0)
@@ -14258,12 +14253,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_obstacle_set_map;
-    public void ObstacleSetMap(Rid obstacle, Rid map)
+    public static void ObstacleSetMap(Rid obstacle, Rid map)
     {
         var __mb = __mb_obstacle_set_map;
         if (__mb == 0)
@@ -14277,11 +14272,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_map;
-    public Rid ObstacleGetMap(Rid obstacle)
+    public static Rid ObstacleGetMap(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_map;
         if (__mb == 0)
@@ -14294,12 +14289,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_obstacle_set_paused;
-    public void ObstacleSetPaused(Rid obstacle, bool paused)
+    public static void ObstacleSetPaused(Rid obstacle, bool paused)
     {
         var __mb = __mb_obstacle_set_paused;
         if (__mb == 0)
@@ -14313,11 +14308,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_paused;
-    public bool ObstacleGetPaused(Rid obstacle)
+    public static bool ObstacleGetPaused(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_paused;
         if (__mb == 0)
@@ -14330,12 +14325,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_obstacle_set_radius;
-    public void ObstacleSetRadius(Rid obstacle, float radius)
+    public static void ObstacleSetRadius(Rid obstacle, float radius)
     {
         var __mb = __mb_obstacle_set_radius;
         if (__mb == 0)
@@ -14349,11 +14344,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_radius;
-    public float ObstacleGetRadius(Rid obstacle)
+    public static float ObstacleGetRadius(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_radius;
         if (__mb == 0)
@@ -14366,12 +14361,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_obstacle_set_height;
-    public void ObstacleSetHeight(Rid obstacle, float height)
+    public static void ObstacleSetHeight(Rid obstacle, float height)
     {
         var __mb = __mb_obstacle_set_height;
         if (__mb == 0)
@@ -14385,11 +14380,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_height;
-    public float ObstacleGetHeight(Rid obstacle)
+    public static float ObstacleGetHeight(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_height;
         if (__mb == 0)
@@ -14402,12 +14397,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_obstacle_set_velocity;
-    public void ObstacleSetVelocity(Rid obstacle, Vector3 velocity)
+    public static void ObstacleSetVelocity(Rid obstacle, Vector3 velocity)
     {
         var __mb = __mb_obstacle_set_velocity;
         if (__mb == 0)
@@ -14421,11 +14416,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_velocity;
-    public Vector3 ObstacleGetVelocity(Rid obstacle)
+    public static Vector3 ObstacleGetVelocity(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_velocity;
         if (__mb == 0)
@@ -14438,12 +14433,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_obstacle_set_position;
-    public void ObstacleSetPosition(Rid obstacle, Vector3 position)
+    public static void ObstacleSetPosition(Rid obstacle, Vector3 position)
     {
         var __mb = __mb_obstacle_set_position;
         if (__mb == 0)
@@ -14457,11 +14452,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_position;
-    public Vector3 ObstacleGetPosition(Rid obstacle)
+    public static Vector3 ObstacleGetPosition(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_position;
         if (__mb == 0)
@@ -14474,12 +14469,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_obstacle_set_avoidance_layers;
-    public void ObstacleSetAvoidanceLayers(Rid obstacle, uint layers)
+    public static void ObstacleSetAvoidanceLayers(Rid obstacle, uint layers)
     {
         var __mb = __mb_obstacle_set_avoidance_layers;
         if (__mb == 0)
@@ -14493,11 +14488,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_obstacle_get_avoidance_layers;
-    public uint ObstacleGetAvoidanceLayers(Rid obstacle)
+    public static uint ObstacleGetAvoidanceLayers(Rid obstacle)
     {
         var __mb = __mb_obstacle_get_avoidance_layers;
         if (__mb == 0)
@@ -14510,12 +14505,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_is_baking_navigation_mesh;
-    public bool IsBakingNavigationMesh(NavigationMesh? navigationMesh)
+    public static bool IsBakingNavigationMesh(NavigationMesh? navigationMesh)
     {
         var __mb = __mb_is_baking_navigation_mesh;
         if (__mb == 0)
@@ -14528,12 +14523,12 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_source_geometry_parser_create;
-    public Rid SourceGeometryParserCreate()
+    public static Rid SourceGeometryParserCreate()
     {
         var __mb = __mb_source_geometry_parser_create;
         if (__mb == 0)
@@ -14543,12 +14538,12 @@ public unsafe partial class NavigationServer3D : GodotObject
             __mb_source_geometry_parser_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_free_rid;
-    public void FreeRid(Rid rid)
+    public static void FreeRid(Rid rid)
     {
         var __mb = __mb_free_rid;
         if (__mb == 0)
@@ -14560,11 +14555,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __a0 = rid;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_active;
-    public void SetActive(bool active)
+    public static void SetActive(bool active)
     {
         var __mb = __mb_set_active;
         if (__mb == 0)
@@ -14576,11 +14571,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         byte __a0 = active ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_debug_enabled;
-    public void SetDebugEnabled(bool enabled)
+    public static void SetDebugEnabled(bool enabled)
     {
         var __mb = __mb_set_debug_enabled;
         if (__mb == 0)
@@ -14592,11 +14587,11 @@ public unsafe partial class NavigationServer3D : GodotObject
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_debug_enabled;
-    public bool GetDebugEnabled()
+    public static bool GetDebugEnabled()
     {
         var __mb = __mb_get_debug_enabled;
         if (__mb == 0)
@@ -14606,12 +14601,12 @@ public unsafe partial class NavigationServer3D : GodotObject
             __mb_get_debug_enabled = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_process_info;
-    public int GetProcessInfo(NavigationServer3D.ProcessInfo processInfo)
+    public static int GetProcessInfo(NavigationServer3D.ProcessInfo processInfo)
     {
         var __mb = __mb_get_process_info;
         if (__mb == 0)
@@ -14624,25 +14619,22 @@ public unsafe partial class NavigationServer3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 }
 
-public unsafe partial class NavigationServer3DManager : GodotObject
+public static unsafe partial class NavigationServer3DManager
 {
-    internal NavigationServer3DManager(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public NavigationServer3DManager() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "NavigationServer3DManager");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("NavigationServer3DManager");
 
-    private static NavigationServer3DManager? _singleton;
-    public static NavigationServer3DManager Singleton => _singleton ??= (NavigationServer3DManager)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("NavigationServer3DManager"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     private static nint __mb_set_default_server;
-    public void SetDefaultServer(string name, int priority)
+    public static void SetDefaultServer(string name, int priority)
     {
         var __mb = __mb_set_default_server;
         if (__mb == 0)
@@ -14656,7 +14648,7 @@ public unsafe partial class NavigationServer3DManager : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 }
@@ -14672,9 +14664,9 @@ public unsafe partial class NinePatchRect : Control
 
     public enum AxisStretchMode : long
     {
-        AXIS_STRETCH_MODE_STRETCH = 0,
-        AXIS_STRETCH_MODE_TILE = 1,
-        AXIS_STRETCH_MODE_TILE_FIT = 2,
+        Stretch = 0,
+        Tile = 1,
+        TileFit = 2,
     }
 
     public Texture2D? Texture
@@ -14934,57 +14926,57 @@ public unsafe partial class Node : GodotObject
 
     public enum ProcessModeEnum : long
     {
-        PROCESS_MODE_INHERIT = 0,
-        PROCESS_MODE_PAUSABLE = 1,
-        PROCESS_MODE_WHEN_PAUSED = 2,
-        PROCESS_MODE_ALWAYS = 3,
-        PROCESS_MODE_DISABLED = 4,
+        Inherit = 0,
+        Pausable = 1,
+        WhenPaused = 2,
+        Always = 3,
+        Disabled = 4,
     }
 
     public enum ProcessThreadGroupEnum : long
     {
-        PROCESS_THREAD_GROUP_INHERIT = 0,
-        PROCESS_THREAD_GROUP_MAIN_THREAD = 1,
-        PROCESS_THREAD_GROUP_SUB_THREAD = 2,
+        Inherit = 0,
+        MainThread = 1,
+        SubThread = 2,
     }
 
     [Flags]
     public enum ProcessThreadMessagesEnum : long
     {
-        FLAG_PROCESS_THREAD_MESSAGES = 1,
-        FLAG_PROCESS_THREAD_MESSAGES_PHYSICS = 2,
-        FLAG_PROCESS_THREAD_MESSAGES_ALL = 3,
+        Messages = 1,
+        MessagesPhysics = 2,
+        MessagesAll = 3,
     }
 
     public enum PhysicsInterpolationModeEnum : long
     {
-        PHYSICS_INTERPOLATION_MODE_INHERIT = 0,
-        PHYSICS_INTERPOLATION_MODE_ON = 1,
-        PHYSICS_INTERPOLATION_MODE_OFF = 2,
+        Inherit = 0,
+        On = 1,
+        Off = 2,
     }
 
     public enum DuplicateFlags : long
     {
-        DUPLICATE_SIGNALS = 1,
-        DUPLICATE_GROUPS = 2,
-        DUPLICATE_SCRIPTS = 4,
-        DUPLICATE_USE_INSTANTIATION = 8,
-        DUPLICATE_INTERNAL_STATE = 16,
-        DUPLICATE_DEFAULT = 15,
+        Signals = 1,
+        Groups = 2,
+        Scripts = 4,
+        UseInstantiation = 8,
+        InternalState = 16,
+        Default = 15,
     }
 
     public enum InternalMode : long
     {
-        INTERNAL_MODE_DISABLED = 0,
-        INTERNAL_MODE_FRONT = 1,
-        INTERNAL_MODE_BACK = 2,
+        Disabled = 0,
+        Front = 1,
+        Back = 2,
     }
 
     public enum AutoTranslateModeEnum : long
     {
-        AUTO_TRANSLATE_MODE_INHERIT = 0,
-        AUTO_TRANSLATE_MODE_ALWAYS = 1,
-        AUTO_TRANSLATE_MODE_DISABLED = 2,
+        Inherit = 0,
+        Always = 1,
+        Disabled = 2,
     }
 
     public string Name
@@ -15096,7 +15088,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_add_sibling;
-    public void AddSibling(Node? sibling, bool forceReadableName)
+    public void AddSibling(Node? sibling, bool forceReadableName = false)
     {
         var __mb = __mb_add_sibling;
         if (__mb == 0)
@@ -15145,7 +15137,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_add_child;
-    public void AddChild(Node? node, bool forceReadableName, Node.InternalMode @internal)
+    public void AddChild(Node? node, bool forceReadableName = false, Node.InternalMode @internal = (Node.InternalMode)(0))
     {
         var __mb = __mb_add_child;
         if (__mb == 0)
@@ -15181,7 +15173,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_reparent;
-    public void Reparent(Node? newParent, bool keepGlobalTransform)
+    public void Reparent(Node? newParent, bool keepGlobalTransform = true)
     {
         var __mb = __mb_reparent;
         if (__mb == 0)
@@ -15199,7 +15191,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_child_count;
-    public int GetChildCount(bool includeInternal)
+    public int GetChildCount(bool includeInternal = false)
     {
         var __mb = __mb_get_child_count;
         if (__mb == 0)
@@ -15217,7 +15209,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_children;
-    public Godot.Collections.Array GetChildren(bool includeInternal)
+    public Godot.Collections.Array GetChildren(bool includeInternal = false)
     {
         var __mb = __mb_get_children;
         if (__mb == 0)
@@ -15235,7 +15227,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_child;
-    public Node? GetChild(int idx, bool includeInternal)
+    public Node? GetChild(int idx, bool includeInternal = false)
     {
         var __mb = __mb_get_child;
         if (__mb == 0)
@@ -15324,7 +15316,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_find_child;
-    public Node? FindChild(string pattern, bool recursive, bool owned)
+    public Node? FindChild(string pattern, bool recursive = true, bool owned = true)
     {
         var __mb = __mb_find_child;
         if (__mb == 0)
@@ -15347,7 +15339,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_find_children;
-    public Godot.Collections.Array FindChildren(string pattern, string type, bool recursive, bool owned)
+    public Godot.Collections.Array FindChildren(string pattern, string type = "", bool recursive = true, bool owned = true)
     {
         var __mb = __mb_find_children;
         if (__mb == 0)
@@ -15509,7 +15501,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_path_to;
-    public NodePath GetPathTo(Node? node, bool useUniquePath)
+    public NodePath GetPathTo(Node? node, bool useUniquePath = false)
     {
         var __mb = __mb_get_path_to;
         if (__mb == 0)
@@ -15529,7 +15521,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_add_to_group;
-    public void AddToGroup(string group, bool persistent)
+    public void AddToGroup(string group, bool persistent = false)
     {
         var __mb = __mb_add_to_group;
         if (__mb == 0)
@@ -15645,7 +15637,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_get_index;
-    public int GetIndex(bool includeInternal)
+    public int GetIndex(bool includeInternal = false)
     {
         var __mb = __mb_get_index;
         if (__mb == 0)
@@ -15767,7 +15759,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_propagate_call;
-    public void PropagateCall(string method, Godot.Collections.Array args, bool parentFirst)
+    public void PropagateCall(string method, Godot.Collections.Array args, bool parentFirst = false)
     {
         var __mb = __mb_propagate_call;
         if (__mb == 0)
@@ -16518,7 +16510,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_duplicate;
-    public Node? Duplicate(int flags)
+    public Node? Duplicate(int flags = unchecked((int)(15)))
     {
         var __mb = __mb_duplicate;
         if (__mb == 0)
@@ -16536,7 +16528,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_replace_by;
-    public void ReplaceBy(Node? node, bool keepGroups)
+    public void ReplaceBy(Node? node, bool keepGroups = false)
     {
         var __mb = __mb_replace_by;
         if (__mb == 0)
@@ -16677,7 +16669,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_set_multiplayer_authority;
-    public void SetMultiplayerAuthority(int id, bool recursive)
+    public void SetMultiplayerAuthority(int id, bool recursive = true)
     {
         var __mb = __mb_set_multiplayer_authority;
         if (__mb == 0)
@@ -16836,7 +16828,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_atr;
-    public string Atr(string message, string context)
+    public string Atr(string message, string context = "")
     {
         var __mb = __mb_atr;
         if (__mb == 0)
@@ -16857,7 +16849,7 @@ public unsafe partial class Node : GodotObject
     }
 
     private static nint __mb_atr_n;
-    public string AtrN(string message, string pluralMessage, int n, string context)
+    public string AtrN(string message, string pluralMessage, int n, string context = "")
     {
         var __mb = __mb_atr_n;
         if (__mb == 0)
@@ -17312,7 +17304,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_move_local_x;
-    public void MoveLocalX(float delta, bool scaled)
+    public void MoveLocalX(float delta, bool scaled = false)
     {
         var __mb = __mb_move_local_x;
         if (__mb == 0)
@@ -17330,7 +17322,7 @@ public unsafe partial class Node2D : CanvasItem
     }
 
     private static nint __mb_move_local_y;
-    public void MoveLocalY(float delta, bool scaled)
+    public void MoveLocalY(float delta, bool scaled = false)
     {
         var __mb = __mb_move_local_y;
         if (__mb == 0)
@@ -17682,9 +17674,9 @@ public unsafe partial class Node3D : Node
 
     public enum RotationEditModeEnum : long
     {
-        ROTATION_EDIT_MODE_EULER = 0,
-        ROTATION_EDIT_MODE_QUATERNION = 1,
-        ROTATION_EDIT_MODE_BASIS = 2,
+        Euler = 0,
+        Quaternion = 1,
+        Basis = 2,
     }
 
     public Transform3D Transform
@@ -18823,7 +18815,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_look_at;
-    public void LookAt(Vector3 target, Vector3 up, bool useModelFront)
+    public void LookAt(Vector3 target, Vector3 up, bool useModelFront = false)
     {
         var __mb = __mb_look_at;
         if (__mb == 0)
@@ -18843,7 +18835,7 @@ public unsafe partial class Node3D : Node
     }
 
     private static nint __mb_look_at_from_position;
-    public void LookAtFromPosition(Vector3 position, Vector3 target, Vector3 up, bool useModelFront)
+    public void LookAtFromPosition(Vector3 position, Vector3 target, Vector3 up, bool useModelFront = false)
     {
         var __mb = __mb_look_at_from_position;
         if (__mb == 0)
@@ -19007,7 +18999,7 @@ public unsafe partial class Noise : Resource
     }
 
     private static nint __mb_get_image;
-    public Image? GetImage(int width, int height, bool invert, bool in3dSpace, bool normalize)
+    public Image? GetImage(int width, int height, bool invert = false, bool in3dSpace = false, bool normalize = true)
     {
         var __mb = __mb_get_image;
         if (__mb == 0)
@@ -19033,7 +19025,7 @@ public unsafe partial class Noise : Resource
     }
 
     private static nint __mb_get_seamless_image;
-    public Image? GetSeamlessImage(int width, int height, bool invert, bool in3dSpace, float skirt, bool normalize)
+    public Image? GetSeamlessImage(int width, int height, bool invert = false, bool in3dSpace = false, float skirt = 0.1f, bool normalize = true)
     {
         var __mb = __mb_get_seamless_image;
         if (__mb == 0)
@@ -19061,7 +19053,7 @@ public unsafe partial class Noise : Resource
     }
 
     private static nint __mb_get_image_3d;
-    public Godot.Collections.Array GetImage3d(int width, int height, int depth, bool invert, bool normalize)
+    public Godot.Collections.Array GetImage3d(int width, int height, int depth, bool invert = false, bool normalize = true)
     {
         var __mb = __mb_get_image_3d;
         if (__mb == 0)
@@ -19087,7 +19079,7 @@ public unsafe partial class Noise : Resource
     }
 
     private static nint __mb_get_seamless_image_3d;
-    public Godot.Collections.Array GetSeamlessImage3d(int width, int height, int depth, bool invert, float skirt, bool normalize)
+    public Godot.Collections.Array GetSeamlessImage3d(int width, int height, int depth, bool invert = false, float skirt = 0.1f, bool normalize = true)
     {
         var __mb = __mb_get_seamless_image_3d;
         if (__mb == 0)

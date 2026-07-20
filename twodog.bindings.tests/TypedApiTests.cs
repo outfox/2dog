@@ -24,32 +24,30 @@ public class TypedApiTests(GodotBindingsFixture godot)
     [Fact]
     public void ObjectReturn_MaterializesMostDerivedType()
     {
-        var loop = Godot.Engine.Singleton.GetMainLoop();
+        var loop = Godot.Engine.GetMainLoop();
         Assert.IsType<SceneTree>(loop);
     }
 
     [Fact]
     public void FloatReturn_Works()
     {
-        Assert.True(Godot.Engine.Singleton.GetFramesPerSecond() >= 0);
+        Assert.True(Godot.Engine.GetFramesPerSecond() >= 0);
     }
 
     [Fact]
     public void IntArgAndReturn_Roundtrip()
     {
-        var engine = Godot.Engine.Singleton;
-        var original = engine.PhysicsTicksPerSecond;
-        engine.PhysicsTicksPerSecond = 120;
-        Assert.Equal(120, engine.PhysicsTicksPerSecond);
-        engine.PhysicsTicksPerSecond = original;
+        var original = Godot.Engine.PhysicsTicksPerSecond;
+        Godot.Engine.PhysicsTicksPerSecond = 120;
+        Assert.Equal(120, Godot.Engine.PhysicsTicksPerSecond);
+        Godot.Engine.PhysicsTicksPerSecond = original;
     }
 
     [Fact]
     public void StringNameArg_And_BoolReturn()
     {
-        var classDb = ClassDB.Singleton;
-        Assert.True(classDb.ClassExists("Node"));
-        Assert.False(classDb.ClassExists("DefinitelyNotAClass"));
+        Assert.True(ClassDB.ClassExists("Node"));
+        Assert.False(ClassDB.ClassExists("DefinitelyNotAClass"));
     }
 
     [Fact]
@@ -114,8 +112,8 @@ public class TypedApiTests(GodotBindingsFixture godot)
         {
             // process_mode property + ProcessMode enum collide - GodotSharp
             // renames the enum with an "Enum" suffix; ours does the same.
-            node.ProcessMode = Node.ProcessModeEnum.PROCESS_MODE_DISABLED;
-            Assert.Equal(Node.ProcessModeEnum.PROCESS_MODE_DISABLED, node.ProcessMode);
+            node.ProcessMode = Node.ProcessModeEnum.Disabled;
+            Assert.Equal(Node.ProcessModeEnum.Disabled, node.ProcessMode);
         }
         finally
         {
@@ -126,16 +124,16 @@ public class TypedApiTests(GodotBindingsFixture godot)
     [Fact]
     public void ObjectArg_Works_InSceneTree()
     {
-        var root = ((SceneTree)Godot.Engine.Singleton.GetMainLoop()!).Root!;
-        var before = root.GetChildCount(false);
+        var root = ((SceneTree)Godot.Engine.GetMainLoop()!).Root!;
+        var before = root.GetChildCount();
 
         var child = new Node();
         child.Name = "typed_api_test_child";
-        root.AddChild(child, false, Node.InternalMode.INTERNAL_MODE_DISABLED);
-        Assert.Equal(before + 1, root.GetChildCount(false));
+        root.AddChild(child);
+        Assert.Equal(before + 1, root.GetChildCount());
 
         root.RemoveChild(child);
-        Assert.Equal(before, root.GetChildCount(false));
+        Assert.Equal(before, root.GetChildCount());
         child.Free();
     }
 
@@ -160,7 +158,7 @@ public class TypedApiTests(GodotBindingsFixture godot)
     {
         // SceneTree.create_timer returns a new SceneTreeTimer (RefCounted):
         // the wrapper must adopt exactly the transferred reference.
-        var tree = (SceneTree)Godot.Engine.Singleton.GetMainLoop()!;
+        var tree = (SceneTree)Godot.Engine.GetMainLoop()!;
         var timer = tree.CreateTimer(1000.0, false, false, false);
         Assert.NotNull(timer);
         Assert.True(timer!.IsRefCounted);
@@ -175,8 +173,8 @@ public class TypedApiTests(GodotBindingsFixture godot)
     [Fact]
     public void PumpFrames_Runs()
     {
-        var before = Godot.Engine.Singleton.GetProcessFrames();
+        var before = Godot.Engine.GetProcessFrames();
         godot.PumpFrames(3);
-        Assert.True(Godot.Engine.Singleton.GetProcessFrames() >= before + 3);
+        Assert.True(Godot.Engine.GetProcessFrames() >= before + 3);
     }
 }

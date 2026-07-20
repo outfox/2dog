@@ -109,31 +109,33 @@ public unsafe partial class IKModifier3D : SkeletonModifier3D
     }
 }
 
-public unsafe partial class IP : GodotObject
+public static unsafe partial class IP
 {
-    internal IP(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    private static IP? _singleton;
-    public static IP Singleton => _singleton ??= (IP)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("IP"), adoptRef: false)!;
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("IP");
+
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum ResolverStatus : long
     {
-        RESOLVER_STATUS_NONE = 0,
-        RESOLVER_STATUS_WAITING = 1,
-        RESOLVER_STATUS_DONE = 2,
-        RESOLVER_STATUS_ERROR = 3,
+        None = 0,
+        Waiting = 1,
+        Done = 2,
+        Error = 3,
     }
 
     public enum Type : long
     {
-        TYPE_NONE = 0,
-        TYPE_IPV4 = 1,
-        TYPE_IPV6 = 2,
-        TYPE_ANY = 3,
+        None = 0,
+        Ipv4 = 1,
+        Ipv6 = 2,
+        Any = 3,
     }
 
     private static nint __mb_resolve_hostname;
-    public string ResolveHostname(string host, IP.Type ipType)
+    public static string ResolveHostname(string host, IP.Type ipType = (IP.Type)(3))
     {
         var __mb = __mb_resolve_hostname;
         if (__mb == 0)
@@ -148,13 +150,13 @@ public unsafe partial class IP : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_resolve_hostname_queue_item;
-    public int ResolveHostnameQueueItem(string host, IP.Type ipType)
+    public static int ResolveHostnameQueueItem(string host, IP.Type ipType = (IP.Type)(3))
     {
         var __mb = __mb_resolve_hostname_queue_item;
         if (__mb == 0)
@@ -169,13 +171,13 @@ public unsafe partial class IP : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_resolve_item_status;
-    public IP.ResolverStatus GetResolveItemStatus(int id)
+    public static IP.ResolverStatus GetResolveItemStatus(int id)
     {
         var __mb = __mb_get_resolve_item_status;
         if (__mb == 0)
@@ -188,12 +190,12 @@ public unsafe partial class IP : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (IP.ResolverStatus)__ret;
     }
 
     private static nint __mb_get_resolve_item_address;
-    public string GetResolveItemAddress(int id)
+    public static string GetResolveItemAddress(int id)
     {
         var __mb = __mb_get_resolve_item_address;
         if (__mb == 0)
@@ -206,12 +208,12 @@ public unsafe partial class IP : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_resolve_item_addresses;
-    public Godot.Collections.Array GetResolveItemAddresses(int id)
+    public static Godot.Collections.Array GetResolveItemAddresses(int id)
     {
         var __mb = __mb_get_resolve_item_addresses;
         if (__mb == 0)
@@ -224,12 +226,12 @@ public unsafe partial class IP : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_erase_resolve_item;
-    public void EraseResolveItem(int id)
+    public static void EraseResolveItem(int id)
     {
         var __mb = __mb_erase_resolve_item;
         if (__mb == 0)
@@ -241,11 +243,11 @@ public unsafe partial class IP : GodotObject
         long __a0 = unchecked((long)id);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_local_interfaces;
-    public Godot.Collections.Array GetLocalInterfaces()
+    public static Godot.Collections.Array GetLocalInterfaces()
     {
         var __mb = __mb_get_local_interfaces;
         if (__mb == 0)
@@ -255,12 +257,12 @@ public unsafe partial class IP : GodotObject
             __mb_get_local_interfaces = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_clear_cache;
-    public void ClearCache(string hostname)
+    public static void ClearCache(string hostname = "")
     {
         var __mb = __mb_clear_cache;
         if (__mb == 0)
@@ -272,7 +274,7 @@ public unsafe partial class IP : GodotObject
         ulong __a0 = NativeString.Create(hostname);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 }
@@ -288,103 +290,103 @@ public unsafe partial class Image : Resource
 
     public enum Format : long
     {
-        FORMAT_L8 = 0,
-        FORMAT_LA8 = 1,
-        FORMAT_R8 = 2,
-        FORMAT_RG8 = 3,
-        FORMAT_RGB8 = 4,
-        FORMAT_RGBA8 = 5,
-        FORMAT_RGBA4444 = 6,
-        FORMAT_RGB565 = 7,
-        FORMAT_RF = 8,
-        FORMAT_RGF = 9,
-        FORMAT_RGBF = 10,
-        FORMAT_RGBAF = 11,
-        FORMAT_RH = 12,
-        FORMAT_RGH = 13,
-        FORMAT_RGBH = 14,
-        FORMAT_RGBAH = 15,
-        FORMAT_RGBE9995 = 16,
-        FORMAT_DXT1 = 17,
-        FORMAT_DXT3 = 18,
-        FORMAT_DXT5 = 19,
-        FORMAT_RGTC_R = 20,
-        FORMAT_RGTC_RG = 21,
-        FORMAT_BPTC_RGBA = 22,
-        FORMAT_BPTC_RGBF = 23,
-        FORMAT_BPTC_RGBFU = 24,
-        FORMAT_ETC = 25,
-        FORMAT_ETC2_R11 = 26,
-        FORMAT_ETC2_R11S = 27,
-        FORMAT_ETC2_RG11 = 28,
-        FORMAT_ETC2_RG11S = 29,
-        FORMAT_ETC2_RGB8 = 30,
-        FORMAT_ETC2_RGBA8 = 31,
-        FORMAT_ETC2_RGB8A1 = 32,
-        FORMAT_ETC2_RA_AS_RG = 33,
-        FORMAT_DXT5_RA_AS_RG = 34,
-        FORMAT_ASTC_4x4 = 35,
-        FORMAT_ASTC_4x4_HDR = 36,
-        FORMAT_ASTC_8x8 = 37,
-        FORMAT_ASTC_8x8_HDR = 38,
-        FORMAT_R16 = 39,
-        FORMAT_RG16 = 40,
-        FORMAT_RGB16 = 41,
-        FORMAT_RGBA16 = 42,
-        FORMAT_R16I = 43,
-        FORMAT_RG16I = 44,
-        FORMAT_RGB16I = 45,
-        FORMAT_RGBA16I = 46,
-        FORMAT_MAX = 47,
+        L8 = 0,
+        La8 = 1,
+        R8 = 2,
+        Rg8 = 3,
+        Rgb8 = 4,
+        Rgba8 = 5,
+        Rgba4444 = 6,
+        Rgb565 = 7,
+        Rf = 8,
+        Rgf = 9,
+        Rgbf = 10,
+        Rgbaf = 11,
+        Rh = 12,
+        Rgh = 13,
+        Rgbh = 14,
+        Rgbah = 15,
+        Rgbe9995 = 16,
+        Dxt1 = 17,
+        Dxt3 = 18,
+        Dxt5 = 19,
+        RgtcR = 20,
+        RgtcRg = 21,
+        BptcRgba = 22,
+        BptcRgbf = 23,
+        BptcRgbfu = 24,
+        Etc = 25,
+        Etc2R11 = 26,
+        Etc2R11s = 27,
+        Etc2Rg11 = 28,
+        Etc2Rg11s = 29,
+        Etc2Rgb8 = 30,
+        Etc2Rgba8 = 31,
+        Etc2Rgb8a1 = 32,
+        Etc2RaAsRg = 33,
+        Dxt5RaAsRg = 34,
+        Astc4x4 = 35,
+        Astc4x4Hdr = 36,
+        Astc8x8 = 37,
+        Astc8x8Hdr = 38,
+        R16 = 39,
+        Rg16 = 40,
+        Rgb16 = 41,
+        Rgba16 = 42,
+        R16i = 43,
+        Rg16i = 44,
+        Rgb16i = 45,
+        Rgba16i = 46,
+        Max = 47,
     }
 
     public enum Interpolation : long
     {
-        INTERPOLATE_NEAREST = 0,
-        INTERPOLATE_BILINEAR = 1,
-        INTERPOLATE_CUBIC = 2,
-        INTERPOLATE_TRILINEAR = 3,
-        INTERPOLATE_LANCZOS = 4,
+        Nearest = 0,
+        Bilinear = 1,
+        Cubic = 2,
+        Trilinear = 3,
+        Lanczos = 4,
     }
 
     public enum AlphaMode : long
     {
-        ALPHA_NONE = 0,
-        ALPHA_BIT = 1,
-        ALPHA_BLEND = 2,
+        None = 0,
+        Bit = 1,
+        Blend = 2,
     }
 
     public enum CompressMode : long
     {
-        COMPRESS_S3TC = 0,
-        COMPRESS_ETC = 1,
-        COMPRESS_ETC2 = 2,
-        COMPRESS_BPTC = 3,
-        COMPRESS_ASTC = 4,
-        COMPRESS_MAX = 5,
+        S3tc = 0,
+        Etc = 1,
+        Etc2 = 2,
+        Bptc = 3,
+        Astc = 4,
+        Max = 5,
     }
 
     public enum UsedChannels : long
     {
-        USED_CHANNELS_L = 0,
-        USED_CHANNELS_LA = 1,
-        USED_CHANNELS_R = 2,
-        USED_CHANNELS_RG = 3,
-        USED_CHANNELS_RGB = 4,
-        USED_CHANNELS_RGBA = 5,
+        L = 0,
+        La = 1,
+        R = 2,
+        Rg = 3,
+        Rgb = 4,
+        Rgba = 5,
     }
 
     public enum CompressSource : long
     {
-        COMPRESS_SOURCE_GENERIC = 0,
-        COMPRESS_SOURCE_SRGB = 1,
-        COMPRESS_SOURCE_NORMAL = 2,
+        Generic = 0,
+        Srgb = 1,
+        Normal = 2,
     }
 
     public enum ASTCFormat : long
     {
-        ASTC_FORMAT_4x4 = 0,
-        ASTC_FORMAT_8x8 = 1,
+        Format4x4 = 0,
+        Format8x8 = 1,
     }
 
     private static nint __mb_get_width;
@@ -527,7 +529,7 @@ public unsafe partial class Image : Resource
     }
 
     private static nint __mb_resize_to_po2;
-    public void ResizeToPo2(bool square, Image.Interpolation interpolation)
+    public void ResizeToPo2(bool square = false, Image.Interpolation interpolation = (Image.Interpolation)(1))
     {
         var __mb = __mb_resize_to_po2;
         if (__mb == 0)
@@ -545,7 +547,7 @@ public unsafe partial class Image : Resource
     }
 
     private static nint __mb_resize;
-    public void Resize(int width, int height, Image.Interpolation interpolation)
+    public void Resize(int width, int height, Image.Interpolation interpolation = (Image.Interpolation)(1))
     {
         var __mb = __mb_resize;
         if (__mb == 0)
@@ -622,7 +624,7 @@ public unsafe partial class Image : Resource
     }
 
     private static nint __mb_generate_mipmaps;
-    public Error GenerateMipmaps(bool renormalize)
+    public Error GenerateMipmaps(bool renormalize = false)
     {
         var __mb = __mb_generate_mipmaps;
         if (__mb == 0)
@@ -773,7 +775,7 @@ public unsafe partial class Image : Resource
     }
 
     private static nint __mb_save_jpg;
-    public Error SaveJpg(string path, float quality)
+    public Error SaveJpg(string path, float quality = 0.75f)
     {
         var __mb = __mb_save_jpg;
         if (__mb == 0)
@@ -794,7 +796,7 @@ public unsafe partial class Image : Resource
     }
 
     private static nint __mb_save_exr;
-    public Error SaveExr(string path, bool grayscale, bool colorImage, float maxLinearValue)
+    public Error SaveExr(string path, bool grayscale = false, bool colorImage = false, float maxLinearValue = -1.0f)
     {
         var __mb = __mb_save_exr;
         if (__mb == 0)
@@ -838,7 +840,7 @@ public unsafe partial class Image : Resource
     }
 
     private static nint __mb_save_webp;
-    public Error SaveWebp(string path, bool lossy, float quality)
+    public Error SaveWebp(string path, bool lossy = false, float quality = 0.75f)
     {
         var __mb = __mb_save_webp;
         if (__mb == 0)
@@ -891,7 +893,7 @@ public unsafe partial class Image : Resource
     }
 
     private static nint __mb_detect_used_channels;
-    public Image.UsedChannels DetectUsedChannels(Image.CompressSource source)
+    public Image.UsedChannels DetectUsedChannels(Image.CompressSource source = (Image.CompressSource)(0))
     {
         var __mb = __mb_detect_used_channels;
         if (__mb == 0)
@@ -909,7 +911,7 @@ public unsafe partial class Image : Resource
     }
 
     private static nint __mb_compress;
-    public Error Compress(Image.CompressMode mode, Image.CompressSource source, Image.ASTCFormat astcFormat)
+    public Error Compress(Image.CompressMode mode, Image.CompressSource source = (Image.CompressSource)(0), Image.ASTCFormat astcFormat = (Image.ASTCFormat)(0))
     {
         var __mb = __mb_compress;
         if (__mb == 0)
@@ -931,7 +933,7 @@ public unsafe partial class Image : Resource
     }
 
     private static nint __mb_compress_from_channels;
-    public Error CompressFromChannels(Image.CompressMode mode, Image.UsedChannels channels, Image.ASTCFormat astcFormat)
+    public Error CompressFromChannels(Image.CompressMode mode, Image.UsedChannels channels, Image.ASTCFormat astcFormat = (Image.ASTCFormat)(0))
     {
         var __mb = __mb_compress_from_channels;
         if (__mb == 0)
@@ -1092,7 +1094,7 @@ public unsafe partial class Image : Resource
     }
 
     private static nint __mb_bump_map_to_normal_map;
-    public void BumpMapToNormalMap(float bumpScale)
+    public void BumpMapToNormalMap(float bumpScale = 1.0f)
     {
         var __mb = __mb_bump_map_to_normal_map;
         if (__mb == 0)
@@ -1391,7 +1393,7 @@ public unsafe partial class Image : Resource
     }
 
     private static nint __mb_load_svg_from_string;
-    public Error LoadSvgFromString(string svgStr, float scale)
+    public Error LoadSvgFromString(string svgStr, float scale = 1.0f)
     {
         var __mb = __mb_load_svg_from_string;
         if (__mb == 0)
@@ -1419,9 +1421,9 @@ public unsafe partial class ImageFormatLoader : RefCounted
     [Flags]
     public enum LoaderFlags : long
     {
-        FLAG_NONE = 0,
-        FLAG_FORCE_LINEAR = 1,
-        FLAG_CONVERT_COLORS = 2,
+        None = 0,
+        ForceLinear = 1,
+        ConvertColors = 2,
     }
 }
 
@@ -1659,7 +1661,7 @@ public unsafe partial class ImmediateMesh : Mesh
     }
 
     private static nint __mb_surface_begin;
-    public void SurfaceBegin(Mesh.PrimitiveType primitive, Material? material)
+    public void SurfaceBegin(Mesh.PrimitiveType primitive, Material? material = null)
     {
         var __mb = __mb_surface_begin;
         if (__mb == 0)
@@ -1825,7 +1827,7 @@ public unsafe partial class ImporterMesh : Resource
     }
 
     private static nint __mb_merge_importer_meshes;
-    public static ImporterMesh? MergeImporterMeshes(Godot.Collections.Array importerMeshes, Godot.Collections.Array relativeTransforms, bool deduplicateSurfaces)
+    public static ImporterMesh? MergeImporterMeshes(Godot.Collections.Array importerMeshes, Godot.Collections.Array relativeTransforms, bool deduplicateSurfaces = true)
     {
         var __mb = __mb_merge_importer_meshes;
         if (__mb == 0)
@@ -1928,7 +1930,7 @@ public unsafe partial class ImporterMesh : Resource
     }
 
     private static nint __mb_add_surface;
-    public void AddSurface(Mesh.PrimitiveType primitive, Godot.Collections.Array arrays, Godot.Collections.Array blendShapes, Godot.Collections.Dictionary lods, Material? material, string name, ulong flags)
+    public void AddSurface(Mesh.PrimitiveType primitive, Godot.Collections.Array arrays, Godot.Collections.Array blendShapes, Godot.Collections.Dictionary lods, Material? material = null, string name = "", ulong flags = unchecked((ulong)(0)))
     {
         var __mb = __mb_add_surface;
         if (__mb == 0)
@@ -2177,7 +2179,7 @@ public unsafe partial class ImporterMesh : Resource
     }
 
     private static nint __mb_get_mesh;
-    public ArrayMesh? GetMesh(ArrayMesh? baseMesh)
+    public ArrayMesh? GetMesh(ArrayMesh? baseMesh = null)
     {
         var __mb = __mb_get_mesh;
         if (__mb == 0)
@@ -2637,76 +2639,78 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 }
 
-public unsafe partial class Input : GodotObject
+public static unsafe partial class Input
 {
-    internal Input(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    private static Input? _singleton;
-    public static Input Singleton => _singleton ??= (Input)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("Input"), adoptRef: false)!;
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("Input");
+
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum MouseModeEnum : long
     {
-        MOUSE_MODE_VISIBLE = 0,
-        MOUSE_MODE_HIDDEN = 1,
-        MOUSE_MODE_CAPTURED = 2,
-        MOUSE_MODE_CONFINED = 3,
-        MOUSE_MODE_CONFINED_HIDDEN = 4,
-        MOUSE_MODE_MAX = 5,
+        Visible = 0,
+        Hidden = 1,
+        Captured = 2,
+        Confined = 3,
+        ConfinedHidden = 4,
+        Max = 5,
     }
 
     public enum CursorShape : long
     {
-        CURSOR_ARROW = 0,
-        CURSOR_IBEAM = 1,
-        CURSOR_POINTING_HAND = 2,
-        CURSOR_CROSS = 3,
-        CURSOR_WAIT = 4,
-        CURSOR_BUSY = 5,
-        CURSOR_DRAG = 6,
-        CURSOR_CAN_DROP = 7,
-        CURSOR_FORBIDDEN = 8,
-        CURSOR_VSIZE = 9,
-        CURSOR_HSIZE = 10,
-        CURSOR_BDIAGSIZE = 11,
-        CURSOR_FDIAGSIZE = 12,
-        CURSOR_MOVE = 13,
-        CURSOR_VSPLIT = 14,
-        CURSOR_HSPLIT = 15,
-        CURSOR_HELP = 16,
+        Arrow = 0,
+        Ibeam = 1,
+        PointingHand = 2,
+        Cross = 3,
+        Wait = 4,
+        Busy = 5,
+        Drag = 6,
+        CanDrop = 7,
+        Forbidden = 8,
+        Vsize = 9,
+        Hsize = 10,
+        Bdiagsize = 11,
+        Fdiagsize = 12,
+        Move = 13,
+        Vsplit = 14,
+        Hsplit = 15,
+        Help = 16,
     }
 
-    public Input.MouseModeEnum MouseMode
+    public static Input.MouseModeEnum MouseMode
     {
         get => GetMouseMode();
         set => SetMouseMode(value);
     }
 
-    public bool UseAccumulatedInput
+    public static bool UseAccumulatedInput
     {
         get => IsUsingAccumulatedInput();
         set => SetUseAccumulatedInput(value);
     }
 
-    public bool EmulateMouseFromTouch
+    public static bool EmulateMouseFromTouch
     {
         get => IsEmulatingMouseFromTouch();
         set => SetEmulateMouseFromTouch(value);
     }
 
-    public bool EmulateTouchFromMouse
+    public static bool EmulateTouchFromMouse
     {
         get => IsEmulatingTouchFromMouse();
         set => SetEmulateTouchFromMouse(value);
     }
 
-    public bool IgnoreJoypadOnUnfocusedApplication
+    public static bool IgnoreJoypadOnUnfocusedApplication
     {
         get => IsIgnoringJoypadOnUnfocusedApplication();
         set => SetIgnoreJoypadOnUnfocusedApplication(value);
     }
 
     private static nint __mb_is_anything_pressed;
-    public bool IsAnythingPressed()
+    public static bool IsAnythingPressed()
     {
         var __mb = __mb_is_anything_pressed;
         if (__mb == 0)
@@ -2716,12 +2720,12 @@ public unsafe partial class Input : GodotObject
             __mb_is_anything_pressed = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_key_pressed;
-    public bool IsKeyPressed(Key keycode)
+    public static bool IsKeyPressed(Key keycode)
     {
         var __mb = __mb_is_key_pressed;
         if (__mb == 0)
@@ -2734,12 +2738,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_physical_key_pressed;
-    public bool IsPhysicalKeyPressed(Key keycode)
+    public static bool IsPhysicalKeyPressed(Key keycode)
     {
         var __mb = __mb_is_physical_key_pressed;
         if (__mb == 0)
@@ -2752,12 +2756,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_key_label_pressed;
-    public bool IsKeyLabelPressed(Key keycode)
+    public static bool IsKeyLabelPressed(Key keycode)
     {
         var __mb = __mb_is_key_label_pressed;
         if (__mb == 0)
@@ -2770,12 +2774,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_mouse_button_pressed;
-    public bool IsMouseButtonPressed(MouseButton button)
+    public static bool IsMouseButtonPressed(MouseButton button)
     {
         var __mb = __mb_is_mouse_button_pressed;
         if (__mb == 0)
@@ -2788,12 +2792,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_joy_button_pressed;
-    public bool IsJoyButtonPressed(int device, JoyButton button)
+    public static bool IsJoyButtonPressed(int device, JoyButton button)
     {
         var __mb = __mb_is_joy_button_pressed;
         if (__mb == 0)
@@ -2808,12 +2812,12 @@ public unsafe partial class Input : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_action_pressed;
-    public bool IsActionPressed(string action, bool exactMatch)
+    public static bool IsActionPressed(string action, bool exactMatch = false)
     {
         var __mb = __mb_is_action_pressed;
         if (__mb == 0)
@@ -2828,12 +2832,12 @@ public unsafe partial class Input : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_action_just_pressed;
-    public bool IsActionJustPressed(string action, bool exactMatch)
+    public static bool IsActionJustPressed(string action, bool exactMatch = false)
     {
         var __mb = __mb_is_action_just_pressed;
         if (__mb == 0)
@@ -2848,12 +2852,12 @@ public unsafe partial class Input : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_action_just_released;
-    public bool IsActionJustReleased(string action, bool exactMatch)
+    public static bool IsActionJustReleased(string action, bool exactMatch = false)
     {
         var __mb = __mb_is_action_just_released;
         if (__mb == 0)
@@ -2868,12 +2872,12 @@ public unsafe partial class Input : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_action_just_pressed_by_event;
-    public bool IsActionJustPressedByEvent(string action, InputEvent? @event, bool exactMatch)
+    public static bool IsActionJustPressedByEvent(string action, InputEvent? @event, bool exactMatch = false)
     {
         var __mb = __mb_is_action_just_pressed_by_event;
         if (__mb == 0)
@@ -2890,12 +2894,12 @@ public unsafe partial class Input : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_action_just_released_by_event;
-    public bool IsActionJustReleasedByEvent(string action, InputEvent? @event, bool exactMatch)
+    public static bool IsActionJustReleasedByEvent(string action, InputEvent? @event, bool exactMatch = false)
     {
         var __mb = __mb_is_action_just_released_by_event;
         if (__mb == 0)
@@ -2912,12 +2916,12 @@ public unsafe partial class Input : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_action_strength;
-    public float GetActionStrength(string action, bool exactMatch)
+    public static float GetActionStrength(string action, bool exactMatch = false)
     {
         var __mb = __mb_get_action_strength;
         if (__mb == 0)
@@ -2932,12 +2936,12 @@ public unsafe partial class Input : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_action_raw_strength;
-    public float GetActionRawStrength(string action, bool exactMatch)
+    public static float GetActionRawStrength(string action, bool exactMatch = false)
     {
         var __mb = __mb_get_action_raw_strength;
         if (__mb == 0)
@@ -2952,12 +2956,12 @@ public unsafe partial class Input : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_axis;
-    public float GetAxis(string negativeAction, string positiveAction)
+    public static float GetAxis(string negativeAction, string positiveAction)
     {
         var __mb = __mb_get_axis;
         if (__mb == 0)
@@ -2972,12 +2976,12 @@ public unsafe partial class Input : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_vector;
-    public Vector2 GetVector(string negativeX, string positiveX, string negativeY, string positiveY, float deadzone)
+    public static Vector2 GetVector(string negativeX, string positiveX, string negativeY, string positiveY, float deadzone = -1.0f)
     {
         var __mb = __mb_get_vector;
         if (__mb == 0)
@@ -2998,12 +3002,12 @@ public unsafe partial class Input : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_add_joy_mapping;
-    public void AddJoyMapping(string mapping, bool updateExisting)
+    public static void AddJoyMapping(string mapping, bool updateExisting = false)
     {
         var __mb = __mb_add_joy_mapping;
         if (__mb == 0)
@@ -3017,12 +3021,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_remove_joy_mapping;
-    public void RemoveJoyMapping(string guid)
+    public static void RemoveJoyMapping(string guid)
     {
         var __mb = __mb_remove_joy_mapping;
         if (__mb == 0)
@@ -3034,12 +3038,12 @@ public unsafe partial class Input : GodotObject
         ulong __a0 = NativeString.Create(guid);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_is_joy_known;
-    public bool IsJoyKnown(int device)
+    public static bool IsJoyKnown(int device)
     {
         var __mb = __mb_is_joy_known;
         if (__mb == 0)
@@ -3052,12 +3056,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_joy_axis;
-    public float GetJoyAxis(int device, JoyAxis axis)
+    public static float GetJoyAxis(int device, JoyAxis axis)
     {
         var __mb = __mb_get_joy_axis;
         if (__mb == 0)
@@ -3072,12 +3076,12 @@ public unsafe partial class Input : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_joy_name;
-    public string GetJoyName(int device)
+    public static string GetJoyName(int device)
     {
         var __mb = __mb_get_joy_name;
         if (__mb == 0)
@@ -3090,12 +3094,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_joy_guid;
-    public string GetJoyGuid(int device)
+    public static string GetJoyGuid(int device)
     {
         var __mb = __mb_get_joy_guid;
         if (__mb == 0)
@@ -3108,12 +3112,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_joy_info;
-    public Godot.Collections.Dictionary GetJoyInfo(int device)
+    public static Godot.Collections.Dictionary GetJoyInfo(int device)
     {
         var __mb = __mb_get_joy_info;
         if (__mb == 0)
@@ -3126,12 +3130,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_should_ignore_device;
-    public bool ShouldIgnoreDevice(int vendorId, int productId)
+    public static bool ShouldIgnoreDevice(int vendorId, int productId)
     {
         var __mb = __mb_should_ignore_device;
         if (__mb == 0)
@@ -3146,12 +3150,12 @@ public unsafe partial class Input : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_connected_joypads;
-    public Godot.Collections.Array GetConnectedJoypads()
+    public static Godot.Collections.Array GetConnectedJoypads()
     {
         var __mb = __mb_get_connected_joypads;
         if (__mb == 0)
@@ -3161,12 +3165,12 @@ public unsafe partial class Input : GodotObject
             __mb_get_connected_joypads = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_joy_vibration_strength;
-    public Vector2 GetJoyVibrationStrength(int device)
+    public static Vector2 GetJoyVibrationStrength(int device)
     {
         var __mb = __mb_get_joy_vibration_strength;
         if (__mb == 0)
@@ -3179,12 +3183,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_joy_vibration_duration;
-    public float GetJoyVibrationDuration(int device)
+    public static float GetJoyVibrationDuration(int device)
     {
         var __mb = __mb_get_joy_vibration_duration;
         if (__mb == 0)
@@ -3197,12 +3201,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_joy_vibration_remaining_duration;
-    public float GetJoyVibrationRemainingDuration(int device)
+    public static float GetJoyVibrationRemainingDuration(int device)
     {
         var __mb = __mb_get_joy_vibration_remaining_duration;
         if (__mb == 0)
@@ -3215,12 +3219,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_is_joy_vibrating;
-    public bool IsJoyVibrating(int device)
+    public static bool IsJoyVibrating(int device)
     {
         var __mb = __mb_is_joy_vibrating;
         if (__mb == 0)
@@ -3233,12 +3237,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_joy_vibration;
-    public bool HasJoyVibration(int device)
+    public static bool HasJoyVibration(int device)
     {
         var __mb = __mb_has_joy_vibration;
         if (__mb == 0)
@@ -3251,12 +3255,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_start_joy_vibration;
-    public void StartJoyVibration(int device, float weakMagnitude, float strongMagnitude, float duration)
+    public static void StartJoyVibration(int device, float weakMagnitude, float strongMagnitude, float duration = 0f)
     {
         var __mb = __mb_start_joy_vibration;
         if (__mb == 0)
@@ -3274,11 +3278,11 @@ public unsafe partial class Input : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_stop_joy_vibration;
-    public void StopJoyVibration(int device)
+    public static void StopJoyVibration(int device)
     {
         var __mb = __mb_stop_joy_vibration;
         if (__mb == 0)
@@ -3290,11 +3294,11 @@ public unsafe partial class Input : GodotObject
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_vibrate_handheld;
-    public void VibrateHandheld(int durationMs, float amplitude)
+    public static void VibrateHandheld(int durationMs = unchecked((int)(500)), float amplitude = -1.0f)
     {
         var __mb = __mb_vibrate_handheld;
         if (__mb == 0)
@@ -3308,11 +3312,11 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_ignore_joypad_on_unfocused_application;
-    internal void SetIgnoreJoypadOnUnfocusedApplication(bool enable)
+    internal static void SetIgnoreJoypadOnUnfocusedApplication(bool enable)
     {
         var __mb = __mb_set_ignore_joypad_on_unfocused_application;
         if (__mb == 0)
@@ -3324,11 +3328,11 @@ public unsafe partial class Input : GodotObject
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_ignoring_joypad_on_unfocused_application;
-    internal bool IsIgnoringJoypadOnUnfocusedApplication()
+    internal static bool IsIgnoringJoypadOnUnfocusedApplication()
     {
         var __mb = __mb_is_ignoring_joypad_on_unfocused_application;
         if (__mb == 0)
@@ -3338,12 +3342,12 @@ public unsafe partial class Input : GodotObject
             __mb_is_ignoring_joypad_on_unfocused_application = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_gravity;
-    public Vector3 GetGravity()
+    public static Vector3 GetGravity()
     {
         var __mb = __mb_get_gravity;
         if (__mb == 0)
@@ -3353,12 +3357,12 @@ public unsafe partial class Input : GodotObject
             __mb_get_gravity = __mb;
         }
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_accelerometer;
-    public Vector3 GetAccelerometer()
+    public static Vector3 GetAccelerometer()
     {
         var __mb = __mb_get_accelerometer;
         if (__mb == 0)
@@ -3368,12 +3372,12 @@ public unsafe partial class Input : GodotObject
             __mb_get_accelerometer = __mb;
         }
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_magnetometer;
-    public Vector3 GetMagnetometer()
+    public static Vector3 GetMagnetometer()
     {
         var __mb = __mb_get_magnetometer;
         if (__mb == 0)
@@ -3383,12 +3387,12 @@ public unsafe partial class Input : GodotObject
             __mb_get_magnetometer = __mb;
         }
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_gyroscope;
-    public Vector3 GetGyroscope()
+    public static Vector3 GetGyroscope()
     {
         var __mb = __mb_get_gyroscope;
         if (__mb == 0)
@@ -3398,12 +3402,12 @@ public unsafe partial class Input : GodotObject
             __mb_get_gyroscope = __mb;
         }
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_joy_accelerometer;
-    public Vector3 GetJoyAccelerometer(int device)
+    public static Vector3 GetJoyAccelerometer(int device)
     {
         var __mb = __mb_get_joy_accelerometer;
         if (__mb == 0)
@@ -3416,12 +3420,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_joy_gravity;
-    public Vector3 GetJoyGravity(int device)
+    public static Vector3 GetJoyGravity(int device)
     {
         var __mb = __mb_get_joy_gravity;
         if (__mb == 0)
@@ -3434,12 +3438,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_joy_gyroscope;
-    public Vector3 GetJoyGyroscope(int device)
+    public static Vector3 GetJoyGyroscope(int device)
     {
         var __mb = __mb_get_joy_gyroscope;
         if (__mb == 0)
@@ -3452,12 +3456,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_joy_motion_sensors_rate;
-    public float GetJoyMotionSensorsRate(int device)
+    public static float GetJoyMotionSensorsRate(int device)
     {
         var __mb = __mb_get_joy_motion_sensors_rate;
         if (__mb == 0)
@@ -3470,12 +3474,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_is_joy_motion_sensors_enabled;
-    public bool IsJoyMotionSensorsEnabled(int device)
+    public static bool IsJoyMotionSensorsEnabled(int device)
     {
         var __mb = __mb_is_joy_motion_sensors_enabled;
         if (__mb == 0)
@@ -3488,12 +3492,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_joy_motion_sensors_enabled;
-    public void SetJoyMotionSensorsEnabled(int device, bool enable)
+    public static void SetJoyMotionSensorsEnabled(int device, bool enable)
     {
         var __mb = __mb_set_joy_motion_sensors_enabled;
         if (__mb == 0)
@@ -3507,11 +3511,11 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_joy_motion_sensors;
-    public bool HasJoyMotionSensors(int device)
+    public static bool HasJoyMotionSensors(int device)
     {
         var __mb = __mb_has_joy_motion_sensors;
         if (__mb == 0)
@@ -3524,12 +3528,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_start_joy_motion_sensors_calibration;
-    public void StartJoyMotionSensorsCalibration(int device)
+    public static void StartJoyMotionSensorsCalibration(int device)
     {
         var __mb = __mb_start_joy_motion_sensors_calibration;
         if (__mb == 0)
@@ -3541,11 +3545,11 @@ public unsafe partial class Input : GodotObject
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_stop_joy_motion_sensors_calibration;
-    public void StopJoyMotionSensorsCalibration(int device)
+    public static void StopJoyMotionSensorsCalibration(int device)
     {
         var __mb = __mb_stop_joy_motion_sensors_calibration;
         if (__mb == 0)
@@ -3557,11 +3561,11 @@ public unsafe partial class Input : GodotObject
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_clear_joy_motion_sensors_calibration;
-    public void ClearJoyMotionSensorsCalibration(int device)
+    public static void ClearJoyMotionSensorsCalibration(int device)
     {
         var __mb = __mb_clear_joy_motion_sensors_calibration;
         if (__mb == 0)
@@ -3573,11 +3577,11 @@ public unsafe partial class Input : GodotObject
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_joy_motion_sensors_calibration;
-    public Godot.Collections.Dictionary GetJoyMotionSensorsCalibration(int device)
+    public static Godot.Collections.Dictionary GetJoyMotionSensorsCalibration(int device)
     {
         var __mb = __mb_get_joy_motion_sensors_calibration;
         if (__mb == 0)
@@ -3590,12 +3594,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_set_joy_motion_sensors_calibration;
-    public void SetJoyMotionSensorsCalibration(int device, Godot.Collections.Dictionary calibrationInfo)
+    public static void SetJoyMotionSensorsCalibration(int device, Godot.Collections.Dictionary calibrationInfo)
     {
         var __mb = __mb_set_joy_motion_sensors_calibration;
         if (__mb == 0)
@@ -3609,11 +3613,11 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_joy_motion_sensors_calibrated;
-    public bool IsJoyMotionSensorsCalibrated(int device)
+    public static bool IsJoyMotionSensorsCalibrated(int device)
     {
         var __mb = __mb_is_joy_motion_sensors_calibrated;
         if (__mb == 0)
@@ -3626,12 +3630,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_joy_motion_sensors_calibrating;
-    public bool IsJoyMotionSensorsCalibrating(int device)
+    public static bool IsJoyMotionSensorsCalibrating(int device)
     {
         var __mb = __mb_is_joy_motion_sensors_calibrating;
         if (__mb == 0)
@@ -3644,12 +3648,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_gravity;
-    public void SetGravity(Vector3 value)
+    public static void SetGravity(Vector3 value)
     {
         var __mb = __mb_set_gravity;
         if (__mb == 0)
@@ -3661,11 +3665,11 @@ public unsafe partial class Input : GodotObject
         var __a0 = value;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_accelerometer;
-    public void SetAccelerometer(Vector3 value)
+    public static void SetAccelerometer(Vector3 value)
     {
         var __mb = __mb_set_accelerometer;
         if (__mb == 0)
@@ -3677,11 +3681,11 @@ public unsafe partial class Input : GodotObject
         var __a0 = value;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_magnetometer;
-    public void SetMagnetometer(Vector3 value)
+    public static void SetMagnetometer(Vector3 value)
     {
         var __mb = __mb_set_magnetometer;
         if (__mb == 0)
@@ -3693,11 +3697,11 @@ public unsafe partial class Input : GodotObject
         var __a0 = value;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_gyroscope;
-    public void SetGyroscope(Vector3 value)
+    public static void SetGyroscope(Vector3 value)
     {
         var __mb = __mb_set_gyroscope;
         if (__mb == 0)
@@ -3709,11 +3713,11 @@ public unsafe partial class Input : GodotObject
         var __a0 = value;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_joy_light;
-    public void SetJoyLight(int device, Color color)
+    public static void SetJoyLight(int device, Color color)
     {
         var __mb = __mb_set_joy_light;
         if (__mb == 0)
@@ -3727,11 +3731,11 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_joy_light;
-    public bool HasJoyLight(int device)
+    public static bool HasJoyLight(int device)
     {
         var __mb = __mb_has_joy_light;
         if (__mb == 0)
@@ -3744,12 +3748,12 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_last_mouse_velocity;
-    public Vector2 GetLastMouseVelocity()
+    public static Vector2 GetLastMouseVelocity()
     {
         var __mb = __mb_get_last_mouse_velocity;
         if (__mb == 0)
@@ -3759,12 +3763,12 @@ public unsafe partial class Input : GodotObject
             __mb_get_last_mouse_velocity = __mb;
         }
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_last_mouse_screen_velocity;
-    public Vector2 GetLastMouseScreenVelocity()
+    public static Vector2 GetLastMouseScreenVelocity()
     {
         var __mb = __mb_get_last_mouse_screen_velocity;
         if (__mb == 0)
@@ -3774,12 +3778,12 @@ public unsafe partial class Input : GodotObject
             __mb_get_last_mouse_screen_velocity = __mb;
         }
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_mouse_button_mask;
-    public MouseButtonMask GetMouseButtonMask()
+    public static MouseButtonMask GetMouseButtonMask()
     {
         var __mb = __mb_get_mouse_button_mask;
         if (__mb == 0)
@@ -3789,12 +3793,12 @@ public unsafe partial class Input : GodotObject
             __mb_get_mouse_button_mask = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (MouseButtonMask)__ret;
     }
 
     private static nint __mb_set_mouse_mode;
-    internal void SetMouseMode(Input.MouseModeEnum mode)
+    internal static void SetMouseMode(Input.MouseModeEnum mode)
     {
         var __mb = __mb_set_mouse_mode;
         if (__mb == 0)
@@ -3806,11 +3810,11 @@ public unsafe partial class Input : GodotObject
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_mouse_mode;
-    internal Input.MouseModeEnum GetMouseMode()
+    internal static Input.MouseModeEnum GetMouseMode()
     {
         var __mb = __mb_get_mouse_mode;
         if (__mb == 0)
@@ -3820,12 +3824,12 @@ public unsafe partial class Input : GodotObject
             __mb_get_mouse_mode = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (Input.MouseModeEnum)__ret;
     }
 
     private static nint __mb_warp_mouse;
-    public void WarpMouse(Vector2 position)
+    public static void WarpMouse(Vector2 position)
     {
         var __mb = __mb_warp_mouse;
         if (__mb == 0)
@@ -3837,11 +3841,11 @@ public unsafe partial class Input : GodotObject
         var __a0 = position;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_action_press;
-    public void ActionPress(string action, float strength)
+    public static void ActionPress(string action, float strength = 1.0f)
     {
         var __mb = __mb_action_press;
         if (__mb == 0)
@@ -3855,11 +3859,11 @@ public unsafe partial class Input : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_action_release;
-    public void ActionRelease(string action)
+    public static void ActionRelease(string action)
     {
         var __mb = __mb_action_release;
         if (__mb == 0)
@@ -3871,11 +3875,11 @@ public unsafe partial class Input : GodotObject
         ulong __a0 = StringNames.Get(action).Opaque;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_default_cursor_shape;
-    public void SetDefaultCursorShape(Input.CursorShape shape)
+    public static void SetDefaultCursorShape(Input.CursorShape shape = (Input.CursorShape)(0))
     {
         var __mb = __mb_set_default_cursor_shape;
         if (__mb == 0)
@@ -3887,11 +3891,11 @@ public unsafe partial class Input : GodotObject
         long __a0 = (long)shape;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_current_cursor_shape;
-    public Input.CursorShape GetCurrentCursorShape()
+    public static Input.CursorShape GetCurrentCursorShape()
     {
         var __mb = __mb_get_current_cursor_shape;
         if (__mb == 0)
@@ -3901,12 +3905,12 @@ public unsafe partial class Input : GodotObject
             __mb_get_current_cursor_shape = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (Input.CursorShape)__ret;
     }
 
     private static nint __mb_set_custom_mouse_cursor;
-    public void SetCustomMouseCursor(Resource? image, Input.CursorShape shape, Vector2 hotspot)
+    public static void SetCustomMouseCursor(Resource? image, Input.CursorShape shape = (Input.CursorShape)(0), Vector2 hotspot = default)
     {
         var __mb = __mb_set_custom_mouse_cursor;
         if (__mb == 0)
@@ -3922,11 +3926,11 @@ public unsafe partial class Input : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_parse_input_event;
-    public void ParseInputEvent(InputEvent? @event)
+    public static void ParseInputEvent(InputEvent? @event)
     {
         var __mb = __mb_parse_input_event;
         if (__mb == 0)
@@ -3938,11 +3942,11 @@ public unsafe partial class Input : GodotObject
         nint __a0 = @event?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_use_accumulated_input;
-    internal void SetUseAccumulatedInput(bool enable)
+    internal static void SetUseAccumulatedInput(bool enable)
     {
         var __mb = __mb_set_use_accumulated_input;
         if (__mb == 0)
@@ -3954,11 +3958,11 @@ public unsafe partial class Input : GodotObject
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_using_accumulated_input;
-    internal bool IsUsingAccumulatedInput()
+    internal static bool IsUsingAccumulatedInput()
     {
         var __mb = __mb_is_using_accumulated_input;
         if (__mb == 0)
@@ -3968,12 +3972,12 @@ public unsafe partial class Input : GodotObject
             __mb_is_using_accumulated_input = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_flush_buffered_events;
-    public void FlushBufferedEvents()
+    public static void FlushBufferedEvents()
     {
         var __mb = __mb_flush_buffered_events;
         if (__mb == 0)
@@ -3982,11 +3986,11 @@ public unsafe partial class Input : GodotObject
             if (__mb == 0) throw new MissingMethodException("Input.flush_buffered_events is not available in this engine build.");
             __mb_flush_buffered_events = __mb;
         }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_set_emulate_mouse_from_touch;
-    internal void SetEmulateMouseFromTouch(bool enable)
+    internal static void SetEmulateMouseFromTouch(bool enable)
     {
         var __mb = __mb_set_emulate_mouse_from_touch;
         if (__mb == 0)
@@ -3998,11 +4002,11 @@ public unsafe partial class Input : GodotObject
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_emulating_mouse_from_touch;
-    internal bool IsEmulatingMouseFromTouch()
+    internal static bool IsEmulatingMouseFromTouch()
     {
         var __mb = __mb_is_emulating_mouse_from_touch;
         if (__mb == 0)
@@ -4012,12 +4016,12 @@ public unsafe partial class Input : GodotObject
             __mb_is_emulating_mouse_from_touch = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_emulate_touch_from_mouse;
-    internal void SetEmulateTouchFromMouse(bool enable)
+    internal static void SetEmulateTouchFromMouse(bool enable)
     {
         var __mb = __mb_set_emulate_touch_from_mouse;
         if (__mb == 0)
@@ -4029,11 +4033,11 @@ public unsafe partial class Input : GodotObject
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_emulating_touch_from_mouse;
-    internal bool IsEmulatingTouchFromMouse()
+    internal static bool IsEmulatingTouchFromMouse()
     {
         var __mb = __mb_is_emulating_touch_from_mouse;
         if (__mb == 0)
@@ -4043,7 +4047,7 @@ public unsafe partial class Input : GodotObject
             __mb_is_emulating_touch_from_mouse = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 }
@@ -4090,7 +4094,7 @@ public unsafe partial class InputEvent : Resource
     }
 
     private static nint __mb_is_action;
-    public bool IsAction(string action, bool exactMatch)
+    public bool IsAction(string action, bool exactMatch = false)
     {
         var __mb = __mb_is_action;
         if (__mb == 0)
@@ -4110,7 +4114,7 @@ public unsafe partial class InputEvent : Resource
     }
 
     private static nint __mb_is_action_pressed;
-    public bool IsActionPressed(string action, bool allowEcho, bool exactMatch)
+    public bool IsActionPressed(string action, bool allowEcho = false, bool exactMatch = false)
     {
         var __mb = __mb_is_action_pressed;
         if (__mb == 0)
@@ -4132,7 +4136,7 @@ public unsafe partial class InputEvent : Resource
     }
 
     private static nint __mb_is_action_released;
-    public bool IsActionReleased(string action, bool exactMatch)
+    public bool IsActionReleased(string action, bool exactMatch = false)
     {
         var __mb = __mb_is_action_released;
         if (__mb == 0)
@@ -4152,7 +4156,7 @@ public unsafe partial class InputEvent : Resource
     }
 
     private static nint __mb_get_action_strength;
-    public float GetActionStrength(string action, bool exactMatch)
+    public float GetActionStrength(string action, bool exactMatch = false)
     {
         var __mb = __mb_get_action_strength;
         if (__mb == 0)
@@ -4247,7 +4251,7 @@ public unsafe partial class InputEvent : Resource
     }
 
     private static nint __mb_is_match;
-    public bool IsMatch(InputEvent? @event, bool exactMatch)
+    public bool IsMatch(InputEvent? @event, bool exactMatch = true)
     {
         var __mb = __mb_is_match;
         if (__mb == 0)
@@ -4300,7 +4304,7 @@ public unsafe partial class InputEvent : Resource
     }
 
     private static nint __mb_xformed_by;
-    public InputEvent? XformedBy(Transform2D xform, Vector2 localOfs)
+    public InputEvent? XformedBy(Transform2D xform, Vector2 localOfs = default)
     {
         var __mb = __mb_xformed_by;
         if (__mb == 0)
@@ -6806,20 +6810,17 @@ public unsafe partial class InputEventWithModifiers : InputEventFromWindow
     }
 }
 
-public unsafe partial class InputMap : GodotObject
+public static unsafe partial class InputMap
 {
-    internal InputMap(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public InputMap() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "InputMap");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("InputMap");
 
-    private static InputMap? _singleton;
-    public static InputMap Singleton => _singleton ??= (InputMap)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("InputMap"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     private static nint __mb_has_action;
-    public bool HasAction(string action)
+    public static bool HasAction(string action)
     {
         var __mb = __mb_has_action;
         if (__mb == 0)
@@ -6832,12 +6833,12 @@ public unsafe partial class InputMap : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_actions;
-    public Godot.Collections.Array GetActions()
+    public static Godot.Collections.Array GetActions()
     {
         var __mb = __mb_get_actions;
         if (__mb == 0)
@@ -6847,12 +6848,12 @@ public unsafe partial class InputMap : GodotObject
             __mb_get_actions = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_add_action;
-    public void AddAction(string action, float deadzone)
+    public static void AddAction(string action, float deadzone = 0.2f)
     {
         var __mb = __mb_add_action;
         if (__mb == 0)
@@ -6866,11 +6867,11 @@ public unsafe partial class InputMap : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_erase_action;
-    public void EraseAction(string action)
+    public static void EraseAction(string action)
     {
         var __mb = __mb_erase_action;
         if (__mb == 0)
@@ -6882,11 +6883,11 @@ public unsafe partial class InputMap : GodotObject
         ulong __a0 = StringNames.Get(action).Opaque;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_action_description;
-    public string GetActionDescription(string action)
+    public static string GetActionDescription(string action)
     {
         var __mb = __mb_get_action_description;
         if (__mb == 0)
@@ -6899,12 +6900,12 @@ public unsafe partial class InputMap : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_action_set_deadzone;
-    public void ActionSetDeadzone(string action, float deadzone)
+    public static void ActionSetDeadzone(string action, float deadzone)
     {
         var __mb = __mb_action_set_deadzone;
         if (__mb == 0)
@@ -6918,11 +6919,11 @@ public unsafe partial class InputMap : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_action_get_deadzone;
-    public float ActionGetDeadzone(string action)
+    public static float ActionGetDeadzone(string action)
     {
         var __mb = __mb_action_get_deadzone;
         if (__mb == 0)
@@ -6935,12 +6936,12 @@ public unsafe partial class InputMap : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_action_add_event;
-    public void ActionAddEvent(string action, InputEvent? @event)
+    public static void ActionAddEvent(string action, InputEvent? @event)
     {
         var __mb = __mb_action_add_event;
         if (__mb == 0)
@@ -6954,11 +6955,11 @@ public unsafe partial class InputMap : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_action_has_event;
-    public bool ActionHasEvent(string action, InputEvent? @event)
+    public static bool ActionHasEvent(string action, InputEvent? @event)
     {
         var __mb = __mb_action_has_event;
         if (__mb == 0)
@@ -6973,12 +6974,12 @@ public unsafe partial class InputMap : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_action_erase_event;
-    public void ActionEraseEvent(string action, InputEvent? @event)
+    public static void ActionEraseEvent(string action, InputEvent? @event)
     {
         var __mb = __mb_action_erase_event;
         if (__mb == 0)
@@ -6992,11 +6993,11 @@ public unsafe partial class InputMap : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_action_erase_events;
-    public void ActionEraseEvents(string action)
+    public static void ActionEraseEvents(string action)
     {
         var __mb = __mb_action_erase_events;
         if (__mb == 0)
@@ -7008,11 +7009,11 @@ public unsafe partial class InputMap : GodotObject
         ulong __a0 = StringNames.Get(action).Opaque;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_action_get_events;
-    public Godot.Collections.Array ActionGetEvents(string action)
+    public static Godot.Collections.Array ActionGetEvents(string action)
     {
         var __mb = __mb_action_get_events;
         if (__mb == 0)
@@ -7025,12 +7026,12 @@ public unsafe partial class InputMap : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_event_is_action;
-    public bool EventIsAction(InputEvent? @event, string action, bool exactMatch)
+    public static bool EventIsAction(InputEvent? @event, string action, bool exactMatch = false)
     {
         var __mb = __mb_event_is_action;
         if (__mb == 0)
@@ -7047,12 +7048,12 @@ public unsafe partial class InputMap : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_load_from_project_settings;
-    public void LoadFromProjectSettings()
+    public static void LoadFromProjectSettings()
     {
         var __mb = __mb_load_from_project_settings;
         if (__mb == 0)
@@ -7061,7 +7062,7 @@ public unsafe partial class InputMap : GodotObject
             if (__mb == 0) throw new MissingMethodException("InputMap.load_from_project_settings is not available in this engine build.");
             __mb_load_from_project_settings = __mb;
         }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
     }
 }
 
@@ -7070,7 +7071,7 @@ public unsafe partial class InstancePlaceholder : Node
     internal InstancePlaceholder(nint ptr, bool rc) : base(ptr, rc) { }
 
     private static nint __mb_get_stored_values;
-    public Godot.Collections.Dictionary GetStoredValues(bool withOrder)
+    public Godot.Collections.Dictionary GetStoredValues(bool withOrder = false)
     {
         var __mb = __mb_get_stored_values;
         if (__mb == 0)
@@ -7088,7 +7089,7 @@ public unsafe partial class InstancePlaceholder : Node
     }
 
     private static nint __mb_create_instance;
-    public Node? CreateInstance(bool replace, PackedScene? customScene)
+    public Node? CreateInstance(bool replace = false, PackedScene? customScene = null)
     {
         var __mb = __mb_create_instance;
         if (__mb == 0)
@@ -7144,23 +7145,23 @@ public unsafe partial class ItemList : Control
 
     public enum IconModeEnum : long
     {
-        ICON_MODE_TOP = 0,
-        ICON_MODE_LEFT = 1,
+        Top = 0,
+        Left = 1,
     }
 
     public enum SelectModeEnum : long
     {
-        SELECT_SINGLE = 0,
-        SELECT_MULTI = 1,
-        SELECT_TOGGLE = 2,
+        Single = 0,
+        Multi = 1,
+        Toggle = 2,
     }
 
     public enum ScrollHintModeEnum : long
     {
-        SCROLL_HINT_MODE_DISABLED = 0,
-        SCROLL_HINT_MODE_BOTH = 1,
-        SCROLL_HINT_MODE_TOP = 2,
-        SCROLL_HINT_MODE_BOTTOM = 3,
+        Disabled = 0,
+        Both = 1,
+        Top = 2,
+        Bottom = 3,
     }
 
     public ItemList.SelectModeEnum SelectMode
@@ -7272,7 +7273,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_add_item;
-    public int AddItem(string text, Texture2D? icon, bool selectable)
+    public int AddItem(string text, Texture2D? icon = null, bool selectable = true)
     {
         var __mb = __mb_add_item;
         if (__mb == 0)
@@ -7295,7 +7296,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_add_icon_item;
-    public int AddIconItem(Texture2D? icon, bool selectable)
+    public int AddIconItem(Texture2D? icon, bool selectable = true)
     {
         var __mb = __mb_add_icon_item;
         if (__mb == 0)
@@ -7785,7 +7786,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_get_item_rect;
-    public Rect2 GetItemRect(int idx, bool expand)
+    public Rect2 GetItemRect(int idx, bool expand = true)
     {
         var __mb = __mb_get_item_rect;
         if (__mb == 0)
@@ -7878,7 +7879,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_select;
-    public void Select(int idx, bool single)
+    public void Select(int idx, bool single = true)
     {
         var __mb = __mb_select;
         if (__mb == 0)
@@ -8452,7 +8453,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_get_item_at_position;
-    public int GetItemAtPosition(Vector2 position, bool exact)
+    public int GetItemAtPosition(Vector2 position, bool exact = false)
     {
         var __mb = __mb_get_item_at_position;
         if (__mb == 0)
@@ -8485,7 +8486,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_center_on_current;
-    public void CenterOnCurrent(bool centerVerically, bool centerHorizontally)
+    public void CenterOnCurrent(bool centerVerically = true, bool centerHorizontally = true)
     {
         var __mb = __mb_center_on_current;
         if (__mb == 0)

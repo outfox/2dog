@@ -337,9 +337,9 @@ public unsafe partial class SceneReplicationConfig : Resource
 
     public enum ReplicationMode : long
     {
-        REPLICATION_MODE_NEVER = 0,
-        REPLICATION_MODE_ALWAYS = 1,
-        REPLICATION_MODE_ON_CHANGE = 2,
+        Never = 0,
+        Always = 1,
+        OnChange = 2,
     }
 
     private static nint __mb_get_properties;
@@ -358,7 +358,7 @@ public unsafe partial class SceneReplicationConfig : Resource
     }
 
     private static nint __mb_add_property;
-    public void AddProperty(NodePath path, int index)
+    public void AddProperty(NodePath path, int index = unchecked((int)(-1)))
     {
         var __mb = __mb_add_property;
         if (__mb == 0)
@@ -578,10 +578,10 @@ public unsafe partial class SceneState : RefCounted
 
     public enum GenEditState : long
     {
-        GEN_EDIT_STATE_DISABLED = 0,
-        GEN_EDIT_STATE_INSTANCE = 1,
-        GEN_EDIT_STATE_MAIN = 2,
-        GEN_EDIT_STATE_MAIN_INHERITED = 3,
+        Disabled = 0,
+        Instance = 1,
+        Main = 2,
+        MainInherited = 3,
     }
 
     private static nint __mb_get_path;
@@ -666,7 +666,7 @@ public unsafe partial class SceneState : RefCounted
     }
 
     private static nint __mb_get_node_path;
-    public NodePath GetNodePath(int idx, bool forParent)
+    public NodePath GetNodePath(int idx, bool forParent = false)
     {
         var __mb = __mb_get_node_path;
         if (__mb == 0)
@@ -986,10 +986,10 @@ public unsafe partial class SceneTree : MainLoop
 
     public enum GroupCallFlags : long
     {
-        GROUP_CALL_DEFAULT = 0,
-        GROUP_CALL_REVERSE = 1,
-        GROUP_CALL_DEFERRED = 2,
-        GROUP_CALL_UNIQUE = 4,
+        Default = 0,
+        Reverse = 1,
+        Deferred = 2,
+        Unique = 4,
     }
 
     public bool AutoAcceptQuit
@@ -1335,7 +1335,7 @@ public unsafe partial class SceneTree : MainLoop
     }
 
     private static nint __mb_create_timer;
-    public SceneTreeTimer? CreateTimer(double timeSec, bool processAlways, bool processInPhysics, bool ignoreTimeScale)
+    public SceneTreeTimer? CreateTimer(double timeSec, bool processAlways = true, bool processInPhysics = false, bool ignoreTimeScale = false)
     {
         var __mb = __mb_create_timer;
         if (__mb == 0)
@@ -1419,7 +1419,7 @@ public unsafe partial class SceneTree : MainLoop
     }
 
     private static nint __mb_quit;
-    public void Quit(int exitCode)
+    public void Quit(int exitCode = unchecked((int)(0)))
     {
         var __mb = __mb_quit;
         if (__mb == 0)
@@ -1914,7 +1914,7 @@ public unsafe partial class Script : Resource
     }
 
     private static nint __mb_reload;
-    public Error Reload(bool keepState)
+    public Error Reload(bool keepState = false)
     {
         var __mb = __mb_reload;
         if (__mb == 0)
@@ -2430,7 +2430,7 @@ public unsafe partial class ScriptBacktrace : RefCounted
     }
 
     private static nint __mb_format;
-    public string Format(int indentAll, int indentFrames)
+    public string Format(int indentAll = unchecked((int)(0)), int indentFrames = unchecked((int)(4)))
     {
         var __mb = __mb_format;
         if (__mb == 0)
@@ -2460,7 +2460,7 @@ public unsafe partial class ScriptCreateDialog : ConfirmationDialog
     }
 
     private static nint __mb_config;
-    public void Config(string inherits, string path, bool builtInEnabled, bool loadEnabled)
+    public void Config(string inherits, string path, bool builtInEnabled = true, bool loadEnabled = true)
     {
         var __mb = __mb_config;
         if (__mb == 0)
@@ -2985,11 +2985,11 @@ public unsafe partial class ScriptLanguage : GodotObject
 
     public enum ScriptNameCasing : long
     {
-        SCRIPT_NAME_CASING_AUTO = 0,
-        SCRIPT_NAME_CASING_PASCAL_CASE = 1,
-        SCRIPT_NAME_CASING_SNAKE_CASE = 2,
-        SCRIPT_NAME_CASING_KEBAB_CASE = 3,
-        SCRIPT_NAME_CASING_CAMEL_CASE = 4,
+        Auto = 0,
+        PascalCase = 1,
+        SnakeCase = 2,
+        KebabCase = 3,
+        CamelCase = 4,
     }
 }
 
@@ -3004,42 +3004,42 @@ public unsafe partial class ScriptLanguageExtension : ScriptLanguage
 
     public enum LookupResultType : long
     {
-        LOOKUP_RESULT_SCRIPT_LOCATION = 0,
-        LOOKUP_RESULT_CLASS = 1,
-        LOOKUP_RESULT_CLASS_CONSTANT = 2,
-        LOOKUP_RESULT_CLASS_PROPERTY = 3,
-        LOOKUP_RESULT_CLASS_METHOD = 4,
-        LOOKUP_RESULT_CLASS_SIGNAL = 5,
-        LOOKUP_RESULT_CLASS_ENUM = 6,
-        LOOKUP_RESULT_CLASS_TBD_GLOBALSCOPE = 7,
-        LOOKUP_RESULT_CLASS_ANNOTATION = 8,
-        LOOKUP_RESULT_LOCAL_CONSTANT = 9,
-        LOOKUP_RESULT_LOCAL_VARIABLE = 10,
-        LOOKUP_RESULT_MAX = 11,
+        ScriptLocation = 0,
+        Class = 1,
+        ClassConstant = 2,
+        ClassProperty = 3,
+        ClassMethod = 4,
+        ClassSignal = 5,
+        ClassEnum = 6,
+        ClassTbdGlobalscope = 7,
+        ClassAnnotation = 8,
+        LocalConstant = 9,
+        LocalVariable = 10,
+        Max = 11,
     }
 
     public enum CodeCompletionLocation : long
     {
-        LOCATION_LOCAL = 0,
-        LOCATION_PARENT_MASK = 256,
-        LOCATION_OTHER_USER_CODE = 512,
-        LOCATION_OTHER = 1024,
+        Local = 0,
+        ParentMask = 256,
+        OtherUserCode = 512,
+        Other = 1024,
     }
 
     public enum CodeCompletionKind : long
     {
-        CODE_COMPLETION_KIND_CLASS = 0,
-        CODE_COMPLETION_KIND_FUNCTION = 1,
-        CODE_COMPLETION_KIND_SIGNAL = 2,
-        CODE_COMPLETION_KIND_VARIABLE = 3,
-        CODE_COMPLETION_KIND_MEMBER = 4,
-        CODE_COMPLETION_KIND_ENUM = 5,
-        CODE_COMPLETION_KIND_CONSTANT = 6,
-        CODE_COMPLETION_KIND_NODE_PATH = 7,
-        CODE_COMPLETION_KIND_FILE_PATH = 8,
-        CODE_COMPLETION_KIND_PLAIN_TEXT = 9,
-        CODE_COMPLETION_KIND_KEYWORD = 10,
-        CODE_COMPLETION_KIND_MAX = 11,
+        Class = 0,
+        Function = 1,
+        Signal = 2,
+        Variable = 3,
+        Member = 4,
+        Enum = 5,
+        Constant = 6,
+        NodePath = 7,
+        FilePath = 8,
+        PlainText = 9,
+        Keyword = 10,
+        Max = 11,
     }
 
     public virtual string _GetName() => default!;
@@ -3426,20 +3426,20 @@ public unsafe partial class ScrollContainer : Container
 
     public enum ScrollMode : long
     {
-        SCROLL_MODE_DISABLED = 0,
-        SCROLL_MODE_AUTO = 1,
-        SCROLL_MODE_SHOW_ALWAYS = 2,
-        SCROLL_MODE_SHOW_NEVER = 3,
-        SCROLL_MODE_RESERVE = 4,
-        SCROLL_MODE_MAXIMIZE_FIRST = 5,
+        Disabled = 0,
+        Auto = 1,
+        ShowAlways = 2,
+        ShowNever = 3,
+        Reserve = 4,
+        MaximizeFirst = 5,
     }
 
     public enum ScrollHintModeEnum : long
     {
-        SCROLL_HINT_MODE_DISABLED = 0,
-        SCROLL_HINT_MODE_ALL = 1,
-        SCROLL_HINT_MODE_TOP_AND_LEFT = 2,
-        SCROLL_HINT_MODE_BOTTOM_AND_RIGHT = 3,
+        Disabled = 0,
+        All = 1,
+        TopAndLeft = 2,
+        BottomAndRight = 3,
     }
 
     public bool FollowFocus
@@ -4055,7 +4055,7 @@ public unsafe partial class Semaphore : RefCounted
     }
 
     private static nint __mb_post;
-    public void Post(int count)
+    public void Post(int count = unchecked((int)(1)))
     {
         var __mb = __mb_post;
         if (__mb == 0)
@@ -4255,12 +4255,12 @@ public unsafe partial class Shader : Resource
 
     public enum Mode : long
     {
-        MODE_SPATIAL = 0,
-        MODE_CANVAS_ITEM = 1,
-        MODE_PARTICLES = 2,
-        MODE_SKY = 3,
-        MODE_FOG = 4,
-        MODE_TEXTURE_BLIT = 5,
+        Spatial = 0,
+        CanvasItem = 1,
+        Particles = 2,
+        Sky = 3,
+        Fog = 4,
+        TextureBlit = 5,
     }
 
     public string Code
@@ -4317,7 +4317,7 @@ public unsafe partial class Shader : Resource
     }
 
     private static nint __mb_set_default_texture_parameter;
-    public void SetDefaultTextureParameter(string name, Texture? texture, int index)
+    public void SetDefaultTextureParameter(string name, Texture? texture, int index = unchecked((int)(0)))
     {
         var __mb = __mb_set_default_texture_parameter;
         if (__mb == 0)
@@ -4337,7 +4337,7 @@ public unsafe partial class Shader : Resource
     }
 
     private static nint __mb_get_default_texture_parameter;
-    public Texture? GetDefaultTextureParameter(string name, int index)
+    public Texture? GetDefaultTextureParameter(string name, int index = unchecked((int)(0)))
     {
         var __mb = __mb_get_default_texture_parameter;
         if (__mb == 0)
@@ -4357,7 +4357,7 @@ public unsafe partial class Shader : Resource
     }
 
     private static nint __mb_get_shader_uniform_list;
-    public Godot.Collections.Array GetShaderUniformList(bool getGroups)
+    public Godot.Collections.Array GetShaderUniformList(bool getGroups = false)
     {
         var __mb = __mb_get_shader_uniform_list;
         if (__mb == 0)
@@ -6372,9 +6372,9 @@ public unsafe partial class Skeleton3D : Node3D
 
     public enum ModifierCallbackModeProcessEnum : long
     {
-        MODIFIER_CALLBACK_MODE_PROCESS_PHYSICS = 0,
-        MODIFIER_CALLBACK_MODE_PROCESS_IDLE = 1,
-        MODIFIER_CALLBACK_MODE_PROCESS_MANUAL = 2,
+        Physics = 0,
+        Idle = 1,
+        Manual = 2,
     }
 
     public float MotionScale
@@ -6956,7 +6956,7 @@ public unsafe partial class Skeleton3D : Node3D
     }
 
     private static nint __mb_set_bone_enabled;
-    public void SetBoneEnabled(int boneIdx, bool enabled)
+    public void SetBoneEnabled(int boneIdx, bool enabled = true)
     {
         var __mb = __mb_set_bone_enabled;
         if (__mb == 0)
@@ -7161,7 +7161,7 @@ public unsafe partial class Skeleton3D : Node3D
     }
 
     private static nint __mb_set_bone_global_pose_override;
-    public void SetBoneGlobalPoseOverride(int boneIdx, Transform3D pose, float amount, bool persistent)
+    public void SetBoneGlobalPoseOverride(int boneIdx, Transform3D pose, float amount, bool persistent = false)
     {
         var __mb = __mb_set_bone_global_pose_override;
         if (__mb == 0)
@@ -7690,7 +7690,7 @@ public unsafe partial class SkeletonIK3D : SkeletonModifier3D
     }
 
     private static nint __mb_start;
-    public void Start(bool oneTime)
+    public void Start(bool oneTime = false)
     {
         var __mb = __mb_start;
         if (__mb == 0)
@@ -10205,44 +10205,44 @@ public unsafe partial class SkeletonModifier3D : Node3D
 
     public enum BoneAxis : long
     {
-        BONE_AXIS_PLUS_X = 0,
-        BONE_AXIS_MINUS_X = 1,
-        BONE_AXIS_PLUS_Y = 2,
-        BONE_AXIS_MINUS_Y = 3,
-        BONE_AXIS_PLUS_Z = 4,
-        BONE_AXIS_MINUS_Z = 5,
+        PlusX = 0,
+        MinusX = 1,
+        PlusY = 2,
+        MinusY = 3,
+        PlusZ = 4,
+        MinusZ = 5,
     }
 
     public enum BoneDirection : long
     {
-        BONE_DIRECTION_PLUS_X = 0,
-        BONE_DIRECTION_MINUS_X = 1,
-        BONE_DIRECTION_PLUS_Y = 2,
-        BONE_DIRECTION_MINUS_Y = 3,
-        BONE_DIRECTION_PLUS_Z = 4,
-        BONE_DIRECTION_MINUS_Z = 5,
-        BONE_DIRECTION_FROM_PARENT = 6,
+        PlusX = 0,
+        MinusX = 1,
+        PlusY = 2,
+        MinusY = 3,
+        PlusZ = 4,
+        MinusZ = 5,
+        FromParent = 6,
     }
 
     public enum SecondaryDirection : long
     {
-        SECONDARY_DIRECTION_NONE = 0,
-        SECONDARY_DIRECTION_PLUS_X = 1,
-        SECONDARY_DIRECTION_MINUS_X = 2,
-        SECONDARY_DIRECTION_PLUS_Y = 3,
-        SECONDARY_DIRECTION_MINUS_Y = 4,
-        SECONDARY_DIRECTION_PLUS_Z = 5,
-        SECONDARY_DIRECTION_MINUS_Z = 6,
-        SECONDARY_DIRECTION_CUSTOM = 7,
+        None = 0,
+        PlusX = 1,
+        MinusX = 2,
+        PlusY = 3,
+        MinusY = 4,
+        PlusZ = 5,
+        MinusZ = 6,
+        Custom = 7,
     }
 
     public enum RotationAxis : long
     {
-        ROTATION_AXIS_X = 0,
-        ROTATION_AXIS_Y = 1,
-        ROTATION_AXIS_Z = 2,
-        ROTATION_AXIS_ALL = 3,
-        ROTATION_AXIS_CUSTOM = 4,
+        X = 0,
+        Y = 1,
+        Z = 2,
+        All = 3,
+        Custom = 4,
     }
 
     public bool Active
@@ -10388,9 +10388,9 @@ public unsafe partial class SkeletonProfile : Resource
 
     public enum TailDirection : long
     {
-        TAIL_DIRECTION_AVERAGE_CHILDREN = 0,
-        TAIL_DIRECTION_SPECIFIC_CHILD = 1,
-        TAIL_DIRECTION_END = 2,
+        AverageChildren = 0,
+        SpecificChild = 1,
+        End = 2,
     }
 
     public string RootBone
@@ -11175,22 +11175,22 @@ public unsafe partial class Sky : Resource
 
     public enum RadianceSizeEnum : long
     {
-        RADIANCE_SIZE_32 = 0,
-        RADIANCE_SIZE_64 = 1,
-        RADIANCE_SIZE_128 = 2,
-        RADIANCE_SIZE_256 = 3,
-        RADIANCE_SIZE_512 = 4,
-        RADIANCE_SIZE_1024 = 5,
-        RADIANCE_SIZE_2048 = 6,
-        RADIANCE_SIZE_MAX = 7,
+        Size32 = 0,
+        Size64 = 1,
+        Size128 = 2,
+        Size256 = 3,
+        Size512 = 4,
+        Size1024 = 5,
+        Size2048 = 6,
+        Max = 7,
     }
 
     public enum ProcessModeEnum : long
     {
-        PROCESS_MODE_AUTOMATIC = 0,
-        PROCESS_MODE_QUALITY = 1,
-        PROCESS_MODE_INCREMENTAL = 2,
-        PROCESS_MODE_REALTIME = 3,
+        Automatic = 0,
+        Quality = 1,
+        Incremental = 2,
+        Realtime = 3,
     }
 
     public Material? SkyMaterial
@@ -11311,10 +11311,10 @@ public unsafe partial class Slider : Range
 
     public enum TickPosition : long
     {
-        TICK_POSITION_BOTTOM_RIGHT = 0,
-        TICK_POSITION_TOP_LEFT = 1,
-        TICK_POSITION_BOTH = 2,
-        TICK_POSITION_CENTER = 3,
+        BottomRight = 0,
+        TopLeft = 1,
+        Both = 2,
+        Center = 3,
     }
 
     public bool Editable
@@ -11514,29 +11514,29 @@ public unsafe partial class SliderJoint3D : Joint3D
 
     public enum Param : long
     {
-        PARAM_LINEAR_LIMIT_UPPER = 0,
-        PARAM_LINEAR_LIMIT_LOWER = 1,
-        PARAM_LINEAR_LIMIT_SOFTNESS = 2,
-        PARAM_LINEAR_LIMIT_RESTITUTION = 3,
-        PARAM_LINEAR_LIMIT_DAMPING = 4,
-        PARAM_LINEAR_MOTION_SOFTNESS = 5,
-        PARAM_LINEAR_MOTION_RESTITUTION = 6,
-        PARAM_LINEAR_MOTION_DAMPING = 7,
-        PARAM_LINEAR_ORTHOGONAL_SOFTNESS = 8,
-        PARAM_LINEAR_ORTHOGONAL_RESTITUTION = 9,
-        PARAM_LINEAR_ORTHOGONAL_DAMPING = 10,
-        PARAM_ANGULAR_LIMIT_UPPER = 11,
-        PARAM_ANGULAR_LIMIT_LOWER = 12,
-        PARAM_ANGULAR_LIMIT_SOFTNESS = 13,
-        PARAM_ANGULAR_LIMIT_RESTITUTION = 14,
-        PARAM_ANGULAR_LIMIT_DAMPING = 15,
-        PARAM_ANGULAR_MOTION_SOFTNESS = 16,
-        PARAM_ANGULAR_MOTION_RESTITUTION = 17,
-        PARAM_ANGULAR_MOTION_DAMPING = 18,
-        PARAM_ANGULAR_ORTHOGONAL_SOFTNESS = 19,
-        PARAM_ANGULAR_ORTHOGONAL_RESTITUTION = 20,
-        PARAM_ANGULAR_ORTHOGONAL_DAMPING = 21,
-        PARAM_MAX = 22,
+        LinearLimitUpper = 0,
+        LinearLimitLower = 1,
+        LinearLimitSoftness = 2,
+        LinearLimitRestitution = 3,
+        LinearLimitDamping = 4,
+        LinearMotionSoftness = 5,
+        LinearMotionRestitution = 6,
+        LinearMotionDamping = 7,
+        LinearOrthogonalSoftness = 8,
+        LinearOrthogonalRestitution = 9,
+        LinearOrthogonalDamping = 10,
+        AngularLimitUpper = 11,
+        AngularLimitLower = 12,
+        AngularLimitSoftness = 13,
+        AngularLimitRestitution = 14,
+        AngularLimitDamping = 15,
+        AngularMotionSoftness = 16,
+        AngularMotionRestitution = 17,
+        AngularMotionDamping = 18,
+        AngularOrthogonalSoftness = 19,
+        AngularOrthogonalRestitution = 20,
+        AngularOrthogonalDamping = 21,
+        Max = 22,
     }
 
     private static nint __mb_set_param;
@@ -11650,8 +11650,8 @@ public unsafe partial class SoftBody3D : MeshInstance3D
 
     public enum DisableModeEnum : long
     {
-        DISABLE_MODE_REMOVE = 0,
-        DISABLE_MODE_KEEP_ACTIVE = 1,
+        Remove = 0,
+        KeepActive = 1,
     }
 
     public uint CollisionLayer
@@ -12288,7 +12288,7 @@ public unsafe partial class SoftBody3D : MeshInstance3D
     }
 
     private static nint __mb_set_point_pinned;
-    public void SetPointPinned(int pointIndex, bool pinned, NodePath attachmentPath, int insertAt)
+    public void SetPointPinned(int pointIndex, bool pinned, NodePath attachmentPath, int insertAt = unchecked((int)(-1)))
     {
         var __mb = __mb_set_point_pinned;
         if (__mb == 0)
@@ -13155,9 +13155,9 @@ public unsafe partial class SplitContainer : Container
 
     public enum DraggerVisibilityEnum : long
     {
-        DRAGGER_VISIBLE = 0,
-        DRAGGER_HIDDEN = 1,
-        DRAGGER_HIDDEN_COLLAPSED = 2,
+        Visible = 0,
+        Hidden = 1,
+        HiddenCollapsed = 2,
     }
 
     public bool Collapsed
@@ -13227,7 +13227,7 @@ public unsafe partial class SplitContainer : Container
     }
 
     private static nint __mb_clamp_split_offset;
-    public void ClampSplitOffset(int priorityIndex)
+    public void ClampSplitOffset(int priorityIndex = unchecked((int)(0)))
     {
         var __mb = __mb_clamp_split_offset;
         if (__mb == 0)
@@ -14305,9 +14305,9 @@ public unsafe partial class SpringBoneSimulator3D : SkeletonModifier3D
 
     public enum CenterFrom : long
     {
-        CENTER_FROM_WORLD_ORIGIN = 0,
-        CENTER_FROM_NODE = 1,
-        CENTER_FROM_BONE = 2,
+        WorldOrigin = 0,
+        Node = 1,
+        Bone = 2,
     }
 
     public Vector3 ExternalForce
@@ -16599,20 +16599,20 @@ public unsafe partial class SpriteBase3D : GeometryInstance3D
 
     public enum DrawFlags : long
     {
-        FLAG_TRANSPARENT = 0,
-        FLAG_SHADED = 1,
-        FLAG_DOUBLE_SIDED = 2,
-        FLAG_DISABLE_DEPTH_TEST = 3,
-        FLAG_FIXED_SIZE = 4,
-        FLAG_MAX = 5,
+        Transparent = 0,
+        Shaded = 1,
+        DoubleSided = 2,
+        DisableDepthTest = 3,
+        FixedSize = 4,
+        Max = 5,
     }
 
     public enum AlphaCutMode : long
     {
-        ALPHA_CUT_DISABLED = 0,
-        ALPHA_CUT_DISCARD = 1,
-        ALPHA_CUT_OPAQUE_PREPASS = 2,
-        ALPHA_CUT_HASH = 3,
+        Disabled = 0,
+        Discard = 1,
+        OpaquePrepass = 2,
+        Hash = 3,
     }
 
     public bool Centered
@@ -17241,9 +17241,9 @@ public unsafe partial class SpriteFrames : Resource
 
     public enum LoopMode : long
     {
-        LOOP_NONE = 0,
-        LOOP_LINEAR = 1,
-        LOOP_PINGPONG = 2,
+        None = 0,
+        Linear = 1,
+        Pingpong = 2,
     }
 
     private static nint __mb_add_animation;
@@ -17441,7 +17441,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_add_frame;
-    public void AddFrame(string anim, Texture2D? texture, float duration, int atPosition)
+    public void AddFrame(string anim, Texture2D? texture, float duration = 1.0f, int atPosition = unchecked((int)(-1)))
     {
         var __mb = __mb_add_frame;
         if (__mb == 0)
@@ -17463,7 +17463,7 @@ public unsafe partial class SpriteFrames : Resource
     }
 
     private static nint __mb_set_frame;
-    public void SetFrame(string anim, int idx, Texture2D? texture, float duration)
+    public void SetFrame(string anim, int idx, Texture2D? texture, float duration = 1.0f)
     {
         var __mb = __mb_set_frame;
         if (__mb == 0)
@@ -18319,7 +18319,7 @@ public unsafe partial class StreamPeer : RefCounted
     }
 
     private static nint __mb_put_var;
-    public void PutVar(Variant value, bool fullObjects)
+    public void PutVar(Variant value, bool fullObjects = false)
     {
         var __mb = __mb_put_var;
         if (__mb == 0)
@@ -18502,7 +18502,7 @@ public unsafe partial class StreamPeer : RefCounted
     }
 
     private static nint __mb_get_string;
-    public string GetString(int bytes)
+    public string GetString(int bytes = unchecked((int)(-1)))
     {
         var __mb = __mb_get_string;
         if (__mb == 0)
@@ -18520,7 +18520,7 @@ public unsafe partial class StreamPeer : RefCounted
     }
 
     private static nint __mb_get_utf8_string;
-    public string GetUtf8String(int bytes)
+    public string GetUtf8String(int bytes = unchecked((int)(-1)))
     {
         var __mb = __mb_get_utf8_string;
         if (__mb == 0)
@@ -18538,7 +18538,7 @@ public unsafe partial class StreamPeer : RefCounted
     }
 
     private static nint __mb_get_var;
-    public Variant GetVar(bool allowObjects)
+    public Variant GetVar(bool allowObjects = false)
     {
         var __mb = __mb_get_var;
         if (__mb == 0)
@@ -18691,7 +18691,7 @@ public unsafe partial class StreamPeerGZIP : StreamPeer
     }
 
     private static nint __mb_start_compression;
-    public Error StartCompression(bool useDeflate, int bufferSize)
+    public Error StartCompression(bool useDeflate = false, int bufferSize = unchecked((int)(65535)))
     {
         var __mb = __mb_start_compression;
         if (__mb == 0)
@@ -18711,7 +18711,7 @@ public unsafe partial class StreamPeerGZIP : StreamPeer
     }
 
     private static nint __mb_start_decompression;
-    public Error StartDecompression(bool useDeflate, int bufferSize)
+    public Error StartDecompression(bool useDeflate = false, int bufferSize = unchecked((int)(65535)))
     {
         var __mb = __mb_start_decompression;
         if (__mb == 0)
@@ -18765,10 +18765,10 @@ public unsafe partial class StreamPeerSocket : StreamPeer
 
     public enum Status : long
     {
-        STATUS_NONE = 0,
-        STATUS_CONNECTING = 1,
-        STATUS_CONNECTED = 2,
-        STATUS_ERROR = 3,
+        None = 0,
+        Connecting = 1,
+        Connected = 2,
+        Error = 3,
     }
 
     private static nint __mb_poll;
@@ -18825,7 +18825,7 @@ public unsafe partial class StreamPeerTCP : StreamPeerSocket
     }
 
     private static nint __mb_bind;
-    public Error Bind(int port, string host)
+    public Error Bind(int port, string host = "*")
     {
         var __mb = __mb_bind;
         if (__mb == 0)
@@ -18939,11 +18939,11 @@ public unsafe partial class StreamPeerTLS : StreamPeer
 
     public enum Status : long
     {
-        STATUS_DISCONNECTED = 0,
-        STATUS_HANDSHAKING = 1,
-        STATUS_CONNECTED = 2,
-        STATUS_ERROR = 3,
-        STATUS_ERROR_HOSTNAME_MISMATCH = 4,
+        Disconnected = 0,
+        Handshaking = 1,
+        Connected = 2,
+        Error = 3,
+        ErrorHostnameMismatch = 4,
     }
 
     private static nint __mb_poll;
@@ -18980,7 +18980,7 @@ public unsafe partial class StreamPeerTLS : StreamPeer
     }
 
     private static nint __mb_connect_to_stream;
-    public Error ConnectToStream(StreamPeer? stream, string commonName, TLSOptions? clientOptions)
+    public Error ConnectToStream(StreamPeer? stream, string commonName, TLSOptions? clientOptions = null)
     {
         var __mb = __mb_connect_to_stream;
         if (__mb == 0)
@@ -20214,9 +20214,9 @@ public unsafe partial class StyleBoxTexture : StyleBox
 
     public enum AxisStretchMode : long
     {
-        AXIS_STRETCH_MODE_STRETCH = 0,
-        AXIS_STRETCH_MODE_TILE = 1,
-        AXIS_STRETCH_MODE_TILE_FIT = 2,
+        Stretch = 0,
+        Tile = 1,
+        TileFit = 2,
     }
 
     public Texture2D? Texture
@@ -20605,18 +20605,18 @@ public unsafe partial class SubViewport : Viewport
 
     public enum ClearMode : long
     {
-        CLEAR_MODE_ALWAYS = 0,
-        CLEAR_MODE_NEVER = 1,
-        CLEAR_MODE_ONCE = 2,
+        Always = 0,
+        Never = 1,
+        Once = 2,
     }
 
     public enum UpdateMode : long
     {
-        UPDATE_DISABLED = 0,
-        UPDATE_ONCE = 1,
-        UPDATE_WHEN_VISIBLE = 2,
-        UPDATE_WHEN_PARENT_VISIBLE = 3,
-        UPDATE_ALWAYS = 4,
+        Disabled = 0,
+        Once = 1,
+        WhenVisible = 2,
+        WhenParentVisible = 3,
+        Always = 4,
     }
 
     public Vector2I Size
@@ -21017,21 +21017,21 @@ public unsafe partial class SurfaceTool : RefCounted
 
     public enum CustomFormat : long
     {
-        CUSTOM_RGBA8_UNORM = 0,
-        CUSTOM_RGBA8_SNORM = 1,
-        CUSTOM_RG_HALF = 2,
-        CUSTOM_RGBA_HALF = 3,
-        CUSTOM_R_FLOAT = 4,
-        CUSTOM_RG_FLOAT = 5,
-        CUSTOM_RGB_FLOAT = 6,
-        CUSTOM_RGBA_FLOAT = 7,
-        CUSTOM_MAX = 8,
+        Rgba8Unorm = 0,
+        Rgba8Snorm = 1,
+        RgHalf = 2,
+        RgbaHalf = 3,
+        RFloat = 4,
+        RgFloat = 5,
+        RgbFloat = 6,
+        RgbaFloat = 7,
+        Max = 8,
     }
 
     public enum SkinWeightCount : long
     {
-        SKIN_4_WEIGHTS = 0,
-        SKIN_8_WEIGHTS = 1,
+        Skin4Weights = 0,
+        Skin8Weights = 1,
     }
 
     private static nint __mb_set_skin_weight_count;
@@ -21290,7 +21290,7 @@ public unsafe partial class SurfaceTool : RefCounted
     }
 
     private static nint __mb_generate_normals;
-    public void GenerateNormals(bool flip)
+    public void GenerateNormals(bool flip = false)
     {
         var __mb = __mb_generate_normals;
         if (__mb == 0)
@@ -21409,7 +21409,7 @@ public unsafe partial class SurfaceTool : RefCounted
     }
 
     private static nint __mb_create_from_arrays;
-    public void CreateFromArrays(Godot.Collections.Array arrays, Mesh.PrimitiveType primitiveType)
+    public void CreateFromArrays(Godot.Collections.Array arrays, Mesh.PrimitiveType primitiveType = (Mesh.PrimitiveType)(3))
     {
         var __mb = __mb_create_from_arrays;
         if (__mb == 0)
@@ -21468,7 +21468,7 @@ public unsafe partial class SurfaceTool : RefCounted
     }
 
     private static nint __mb_commit;
-    public ArrayMesh? Commit(ArrayMesh? existing, ulong flags)
+    public ArrayMesh? Commit(ArrayMesh? existing = null, ulong flags = unchecked((ulong)(0)))
     {
         var __mb = __mb_commit;
         if (__mb == 0)

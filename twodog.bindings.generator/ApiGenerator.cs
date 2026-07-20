@@ -55,6 +55,7 @@ public static class ApiGenerator
     private static readonly HashSet<(string cls, string method)> _internalAccessors = [];
     private static readonly Dictionary<(string cls, string enumName), string> _enumRenames = [];
     private static readonly SortedDictionary<string, string> _virtualNameMap = []; // gd virtual name -> cs stub name
+    private static readonly HashSet<string> _staticSingletons = [];
     private static int _emitted, _skipped, _virtualsEmitted, _virtualsSkipped, _propsEmitted, _propsSkipped;
 
     public static void Run(string apiJsonPath, string outDir)
@@ -118,6 +119,36 @@ public static class ApiGenerator
         foreach (var s in root.GetProperty("singletons").EnumerateArray())
             singletons[s.GetProperty("type").GetString()!] = s.GetProperty("name").GetString()!;
 
+        // ---- pure singletons become static classes (GodotSharp shape:
+        //      Engine.GetMainLoop(), Input.IsActionPressed(...)). A singleton
+        //      type must stay a normal class when something inherits it
+        //      (PhysicsServer2DExtension : PhysicsServer2D) or when it appears
+        //      as a type in any signature (EditorInterface). ----
+        _staticSingletons.Clear();
+        var inheritedBy = new HashSet<string>();
+        var usedAsType = new HashSet<string>();
+        foreach (var (gd, c) in _classJson)
+        {
+            if (c.TryGetProperty("inherits", out var inh)) inheritedBy.Add(inh.GetString()!);
+            if (!c.TryGetProperty("methods", out var ms)) continue;
+            foreach (var m in ms.EnumerateArray())
+            {
+                if (m.TryGetProperty("return_value", out var rv)) usedAsType.Add(rv.GetProperty("type").GetString()!);
+                if (!m.TryGetProperty("arguments", out var margs)) continue;
+                foreach (var a in margs.EnumerateArray()) usedAsType.Add(a.GetProperty("type").GetString()!);
+            }
+        }
+        foreach (var (type, _) in singletons)
+        {
+            // Instantiability is irrelevant (Engine/OS are nominally
+            // instantiable but never sanely constructed; GodotSharp
+            // staticizes them too).
+            if (_classes.ContainsKey(type) && !inheritedBy.Contains(type) && !usedAsType.Contains(type))
+            {
+                _staticSingletons.Add(type);
+            }
+        }
+
         // ---- global enums file ----
         var sbGlobal = NewFile();
         foreach (var e in root.GetProperty("global_enums").EnumerateArray())
@@ -158,11 +189,20 @@ public static class ApiGenerator
             sbReg.AppendLine($"    private static void Init{g.Key}()");
             sbReg.AppendLine("    {");
             foreach (var i in g)
-                sbReg.AppendLine($"        Entries[\"{i.GdName}\"] = (static (p, rc) => new {i.CsName}(p, rc), {Bool(i.RefCounted)});");
+            {
+                // Static singleton classes have no wrapper type: their engine
+                // instance wraps as a plain GodotObject (matches the Singleton
+                // property's type).
+                var factory = _staticSingletons.Contains(i.GdName) ? "GodotObject" : i.CsName;
+                sbReg.AppendLine($"        Entries[\"{i.GdName}\"] = (static (p, rc) => new {factory}(p, rc), {Bool(i.RefCounted)});");
+            }
             sbReg.AppendLine("    }");
         }
         sbReg.AppendLine("}");
         Write(outDir, "ApiRegistry.gen.cs", sbReg);
+
+        // ---- GD statics (GodotSharp's GD surface, from utility functions) ----
+        EmitGd(root, outDir);
 
         // ---- global virtual-name map (gd name -> generated stub name) ----
         var sbVirt = NewFile();
@@ -198,14 +238,30 @@ public static class ApiGenerator
     private static void EmitClass(StringBuilder sb, JsonElement c, ClassInfo info, Dictionary<string, string> singletons)
     {
         var isObject = info.CsName == "GodotObject";
-        sb.AppendLine(isObject || info.BaseCs == ""
-            ? $"public unsafe partial class {info.CsName}"
-            : $"public unsafe partial class {info.CsName} : {info.BaseCs}");
+        var isStaticSingleton = _staticSingletons.Contains(info.GdName);
+
+        sb.AppendLine(isStaticSingleton
+            ? $"public static unsafe partial class {info.CsName}"
+            : isObject || info.BaseCs == ""
+                ? $"public unsafe partial class {info.CsName}"
+                : $"public unsafe partial class {info.CsName} : {info.BaseCs}");
         sb.AppendLine("{");
 
         var used = new HashSet<string> { info.CsName };
 
-        if (!isObject)
+        if (isStaticSingleton)
+        {
+            // GodotSharp shape: pure singletons are static classes
+            // (Engine.GetMainLoop()); Singleton stays available for
+            // Connect/signal use, typed GodotObject.
+            sb.AppendLine("    private static nint _singletonPtr;");
+            sb.AppendLine();
+            sb.AppendLine("    internal static nint SingletonPtr =>");
+            sb.AppendLine($"        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr(\"{singletons[info.GdName]}\");");
+            sb.AppendLine();
+            sb.AppendLine("    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;");
+        }
+        else if (!isObject)
         {
             sb.AppendLine($"    internal {info.CsName}(nint ptr, bool rc) : base(ptr, rc) {{ }}");
             if (info.Instantiable)
@@ -218,7 +274,7 @@ public static class ApiGenerator
             }
         }
 
-        if (singletons.TryGetValue(info.GdName, out var singletonName))
+        if (!isStaticSingleton && singletons.TryGetValue(info.GdName, out var singletonName))
         {
             sb.AppendLine();
             sb.AppendLine($"    private static {info.CsName}? _singleton;");
@@ -235,13 +291,13 @@ public static class ApiGenerator
             }
         }
 
-        EmitProperties(sb, info, used);
+        EmitProperties(sb, info, used, isStaticSingleton);
 
         var virtuals = new List<VirtualInfo>();
         if (c.TryGetProperty("methods", out var methods))
         {
             foreach (var m in methods.EnumerateArray())
-                EmitMethod(sb, m, info, used, virtuals, isObject);
+                EmitMethod(sb, m, info, used, virtuals, isObject || isStaticSingleton, isStaticSingleton);
         }
 
         EmitVirtuals(sb, virtuals);
@@ -262,16 +318,59 @@ public static class ApiGenerator
         if (flags) sb.AppendLine($"{indent}[Flags]");
         sb.AppendLine($"{indent}public enum {cs} : long");
         sb.AppendLine($"{indent}{{");
-        foreach (var v in e.GetProperty("values").EnumerateArray())
-            sb.AppendLine($"{indent}    {v.GetProperty("name").GetString()} = {v.GetProperty("value").GetInt64()},");
+        foreach (var (name, value) in RenamedEnumMembers(e))
+            sb.AppendLine($"{indent}    {name} = {value},");
         sb.AppendLine($"{indent}}}");
         return cs;
+    }
+
+    /// <summary>
+    /// GodotSharp's enum-member renaming: strip the longest common
+    /// underscore-word prefix shared by all members, backing off per member
+    /// when stripping would leave an empty or digit-leading name, then
+    /// PascalCase what remains (PROCESS_MODE_DISABLED -> Disabled).
+    /// </summary>
+    private static List<(string name, long value)> RenamedEnumMembers(JsonElement e)
+    {
+        var members = e.GetProperty("values").EnumerateArray()
+            .Select(v => (name: v.GetProperty("name").GetString()!, value: v.GetProperty("value").GetInt64()))
+            .ToList();
+        var parts = members.Select(m => m.name.Split('_')).ToList();
+
+        var prefixLen = 0;
+        if (members.Count > 1)
+        {
+            while (parts.All(p => p.Length > prefixLen + 1 && p[prefixLen] == parts[0][prefixLen]))
+                prefixLen++;
+        }
+
+        var result = new List<(string, long)>(members.Count);
+        var seen = new HashSet<string>();
+        foreach (var p in parts.Select((p, i) => (words: p, i)))
+        {
+            var strip = Math.Min(prefixLen, p.words.Length - 1);
+            string cs;
+            while (true)
+            {
+                cs = string.Concat(p.words.Skip(strip).Select(EnumWord));
+                if (cs.Length > 0 && !char.IsDigit(cs[0])) break;
+                if (strip == 0) break;
+                strip--;
+            }
+            if (!seen.Add(cs)) cs = string.Concat(p.words.Select(EnumWord)); // collision: keep full name
+            seen.Add(cs);
+            result.Add((cs, members[p.i].value));
+        }
+        return result;
+
+        static string EnumWord(string w) =>
+            w.Length == 0 ? w : char.ToUpperInvariant(w[0]) + w[1..].ToLowerInvariant();
     }
 
     // ----------------------------------------------------------- methods --
 
     private static void EmitMethod(StringBuilder sb, JsonElement m, ClassInfo info, HashSet<string> used,
-        List<VirtualInfo> virtuals, bool isObject)
+        List<VirtualInfo> virtuals, bool noVirtuals, bool staticClass)
     {
         var gdName = m.GetProperty("name").GetString()!;
         if (m.TryGetProperty("is_vararg", out var va) && va.GetBoolean())
@@ -282,8 +381,8 @@ public static class ApiGenerator
         {
             // Object's virtuals (_get/_set/_get_property_list...) are all
             // Variant-typed and the handwritten GodotObject roots the
-            // __CallVirtual chain - skip them there.
-            if (!isObject) CollectVirtual(m, gdName, used, virtuals);
+            // __CallVirtual chain; static singletons cannot be inherited.
+            if (!noVirtuals) CollectVirtual(m, gdName, used, virtuals);
             return;
         }
 
@@ -296,6 +395,7 @@ public static class ApiGenerator
         if (ret is null) { _skipped++; return; }
 
         var args = new List<(string name, TypeRef type)>();
+        var defaults = new List<string?>();
         if (m.TryGetProperty("arguments", out var margs))
         {
             foreach (var a in margs.EnumerateArray())
@@ -303,10 +403,23 @@ public static class ApiGenerator
                 var t = Map(a.GetProperty("type").GetString()!, a.TryGetProperty("meta", out var am) ? am.GetString() : null);
                 if (t is null) { _skipped++; return; }
                 args.Add((Camel(a.GetProperty("name").GetString()!), t));
+                defaults.Add(a.TryGetProperty("default_value", out var dv) ? DefaultExpr(t, dv.GetString()!) : null);
             }
         }
 
-        var isStatic = m.TryGetProperty("is_static", out var st) && st.GetBoolean();
+        // C# defaults must be trailing-contiguous: keep the longest expressible
+        // tail, drop the rest.
+        for (var i = defaults.Count - 1; i >= 0; i--)
+        {
+            if (defaults[i] is null)
+            {
+                for (var j = 0; j < i; j++) defaults[j] = null;
+                break;
+            }
+        }
+
+        var jsonStatic = m.TryGetProperty("is_static", out var st) && st.GetBoolean();
+        var isStatic = staticClass || jsonStatic;
         var hash = m.GetProperty("hash").GetInt64();
         var mbField = $"__mb_{gdName}";
         _emitted++;
@@ -318,7 +431,8 @@ public static class ApiGenerator
 
         sb.AppendLine();
         sb.AppendLine($"    private static nint {mbField};");
-        var paramList = string.Join(", ", args.Select(a => $"{ParamType(a.type)} {a.name}"));
+        var paramList = string.Join(", ", args.Select((a, i) =>
+            $"{ParamType(a.type)} {a.name}{(defaults[i] is null ? "" : $" = {defaults[i]}")}"));
         sb.AppendLine($"    {visibility} {(isStatic ? "static " : "")}{RetType(ret)} {csName}({paramList})");
         sb.AppendLine("    {");
         sb.AppendLine($"        var __mb = {mbField};");
@@ -356,7 +470,7 @@ public static class ApiGenerator
                 sb.AppendLine($"        __args[{i}] = (nint)(&__a{i});");
         }
 
-        var self = isStatic ? "0" : "NativePtr";
+        var self = jsonStatic ? "0" : staticClass ? "SingletonPtr" : "NativePtr";
         var argsPtr = args.Count > 0 ? "(nint)__args" : "0";
 
         // return slot + call + decode
@@ -431,6 +545,238 @@ public static class ApiGenerator
     }
 
     private static string GdOf(string cs) => cs == "GodotObject" ? "Object" : cs;
+
+    // ------------------------------------------------------- GD statics --
+
+    // The subset of utility functions GodotSharp exposes on GD (math utilities
+    // live on Mathf there, so they are deliberately not emitted here).
+    private static readonly HashSet<string> GdUtilityAllowlist =
+    [
+        "print", "print_rich", "print_verbose", "printerr", "printraw", "prints", "printt",
+        "push_error", "push_warning",
+        "randf", "randi", "randf_range", "randi_range", "randfn", "randomize", "seed",
+        "error_string", "type_string", "var_to_str", "str_to_var", "hash",
+        "is_instance_valid", "is_instance_id_valid", "instance_from_id",
+    ];
+
+    private static readonly Dictionary<string, string> GdNameOverrides = new()
+    {
+        ["printerr"] = "PrintErr",
+        ["printraw"] = "PrintRaw",
+    };
+
+    private static void EmitGd(JsonElement root, string outDir)
+    {
+        var sb = NewFile();
+        sb.AppendLine("/// <summary>GodotSharp-compatible GD statics over Godot's utility functions.</summary>");
+        sb.AppendLine("public static unsafe partial class GD");
+        sb.AppendLine("{");
+        sb.AppendLine("    private static nint Utility(ref nint cache, string name, long hash)");
+        sb.AppendLine("    {");
+        sb.AppendLine("        if (cache != 0) return cache;");
+        sb.AppendLine("        var sn = StringNames.Get(name).Opaque;");
+        sb.AppendLine("        return cache = GdExtensionInterface.VariantGetPtrUtilityFunction((nint)(&sn), hash);");
+        sb.AppendLine("    }");
+
+        foreach (var uf in root.GetProperty("utility_functions").EnumerateArray())
+        {
+            var gdName = uf.GetProperty("name").GetString()!;
+            if (!GdUtilityAllowlist.Contains(gdName)) continue;
+
+            var csName = GdNameOverrides.TryGetValue(gdName, out var ov) ? ov : Pascal(gdName);
+            var hash = uf.GetProperty("hash").GetInt64();
+            var isVararg = uf.TryGetProperty("is_vararg", out var va) && va.GetBoolean();
+            var ret = uf.TryGetProperty("return_type", out var rt)
+                ? Map(rt.GetString()!, null)
+                : TypeRef.Void;
+            if (ret is null) continue;
+            var ufField = $"__uf_{gdName}";
+
+            if (isVararg)
+            {
+                if (ret.Kind != "void") continue; // vararg-with-return not needed for this subset
+                sb.AppendLine();
+                sb.AppendLine($"    private static nint {ufField};");
+                sb.AppendLine($"    public static void {csName}(params Variant[] what)");
+                sb.AppendLine("    {");
+                sb.AppendLine($"        var __fn = (delegate* unmanaged<nint, nint*, int, void>)Utility(ref {ufField}, \"{gdName}\", {hash});");
+                sb.AppendLine("        var __n = what.Length;");
+                sb.AppendLine("        var __natives = stackalloc NativeVariant[Math.Max(__n, 1)];");
+                sb.AppendLine("        var __ptrs = stackalloc nint[Math.Max(__n, 1)];");
+                sb.AppendLine("        for (var __i = 0; __i < __n; __i++)");
+                sb.AppendLine("        {");
+                sb.AppendLine("            __natives[__i] = what[__i].Native;");
+                sb.AppendLine("            __ptrs[__i] = (nint)(__natives + __i);");
+                sb.AppendLine("        }");
+                sb.AppendLine("        __fn(0, __ptrs, __n);");
+                sb.AppendLine("    }");
+                continue;
+            }
+
+            var args = new List<(string name, TypeRef type)>();
+            var supported = true;
+            if (uf.TryGetProperty("arguments", out var margs))
+            {
+                foreach (var a in margs.EnumerateArray())
+                {
+                    var t = Map(a.GetProperty("type").GetString()!, null);
+                    if (t is null) { supported = false; break; }
+                    args.Add((Camel(a.GetProperty("name").GetString()!), t));
+                }
+            }
+            if (!supported) continue;
+
+            sb.AppendLine();
+            sb.AppendLine($"    private static nint {ufField};");
+            var paramList = string.Join(", ", args.Select(a => $"{ParamType(a.type)} {a.name}"));
+            sb.AppendLine($"    public static {RetType(ret)} {csName}({paramList})");
+            sb.AppendLine("    {");
+            sb.AppendLine($"        var __fn = (delegate* unmanaged<nint, nint*, int, void>)Utility(ref {ufField}, \"{gdName}\", {hash});");
+
+            for (var i = 0; i < args.Count; i++)
+            {
+                var (name, t) = args[i];
+                sb.AppendLine("        " + t.Kind switch
+                {
+                    "bool" => $"byte __a{i} = {name} ? (byte)1 : (byte)0;",
+                    "int" => $"long __a{i} = unchecked((long){name});",
+                    "float" => $"double __a{i} = {name};",
+                    "enum" => $"long __a{i} = (long){name};",
+                    "string" => $"ulong __a{i} = NativeString.Create({name});",
+                    "stringname" => $"ulong __a{i} = StringNames.Get({name}).Opaque;",
+                    "math" => $"var __a{i} = {name};",
+                    "class" => $"nint __a{i} = {name}?.NativePtr ?? 0;",
+                    "variant" => $"var __a{i} = {name}.Native;",
+                    "builtinref" => $"ulong __a{i} = {name}.Native;",
+                    _ => throw new InvalidOperationException(t.Kind),
+                });
+            }
+            if (args.Count > 0)
+            {
+                sb.AppendLine($"        var __args = stackalloc nint[{args.Count}];");
+                for (var i = 0; i < args.Count; i++)
+                    sb.AppendLine($"        __args[{i}] = (nint)(&__a{i});");
+            }
+            var argsPtr = args.Count > 0 ? "__args" : "null";
+
+            switch (ret.Kind)
+            {
+                case "void":
+                    sb.AppendLine($"        __fn(0, {argsPtr}, {args.Count});");
+                    break;
+                case "bool":
+                    sb.AppendLine("        byte __ret = 0;");
+                    sb.AppendLine($"        __fn((nint)(&__ret), {argsPtr}, {args.Count});");
+                    break;
+                case "int" or "enum":
+                    sb.AppendLine("        long __ret = 0;");
+                    sb.AppendLine($"        __fn((nint)(&__ret), {argsPtr}, {args.Count});");
+                    break;
+                case "float":
+                    sb.AppendLine("        double __ret = 0;");
+                    sb.AppendLine($"        __fn((nint)(&__ret), {argsPtr}, {args.Count});");
+                    break;
+                case "string" or "stringname":
+                    sb.AppendLine("        ulong __ret = 0;");
+                    sb.AppendLine($"        __fn((nint)(&__ret), {argsPtr}, {args.Count});");
+                    break;
+                case "math":
+                    sb.AppendLine($"        var __ret = default({ret.Cs});");
+                    sb.AppendLine($"        __fn((nint)(&__ret), {argsPtr}, {args.Count});");
+                    break;
+                case "class":
+                    sb.AppendLine("        nint __ret = 0;");
+                    sb.AppendLine($"        __fn((nint)(&__ret), {argsPtr}, {args.Count});");
+                    break;
+                case "variant":
+                    sb.AppendLine("        NativeVariant __ret = default;");
+                    sb.AppendLine($"        __fn((nint)(&__ret), {argsPtr}, {args.Count});");
+                    break;
+                case "builtinref":
+                    sb.AppendLine("        ulong __ret = 0;");
+                    sb.AppendLine($"        __fn((nint)(&__ret), {argsPtr}, {args.Count});");
+                    break;
+            }
+
+            for (var i = 0; i < args.Count; i++)
+                if (args[i].type.Kind == "string")
+                    sb.AppendLine($"        NativeString.Destroy(ref __a{i});");
+
+            switch (ret.Kind)
+            {
+                case "bool": sb.AppendLine("        return __ret != 0;"); break;
+                case "int": sb.AppendLine($"        return unchecked(({ret.Cs})__ret);"); break;
+                case "enum": sb.AppendLine($"        return ({ret.Cs})__ret;"); break;
+                case "float": sb.AppendLine($"        return ({ret.Cs})__ret;"); break;
+                case "string": sb.AppendLine("        return NativeString.ReadAndDestroy(ref __ret);"); break;
+                case "stringname": sb.AppendLine("        return StringNames.ReadAndDestroy(ref __ret);"); break;
+                case "math": sb.AppendLine("        return __ret;"); break;
+                case "class": sb.AppendLine($"        return ({ret.Cs}?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);"); break;
+                case "variant": sb.AppendLine("        return new Variant(__ret);"); break;
+                case "builtinref": sb.AppendLine($"        return new {ret.Cs}(__ret);"); break;
+            }
+
+            sb.AppendLine("    }");
+        }
+
+        sb.AppendLine("}");
+        Write(outDir, "GD.gen.cs", sb);
+    }
+
+    // ------------------------------------------------------ default args --
+
+    /// <summary>
+    /// Maps a Godot default-value expression string to a C# constant default,
+    /// or null when inexpressible (caller drops the default chain there).
+    /// </summary>
+    private static string? DefaultExpr(TypeRef t, string dv)
+    {
+        switch (t.Kind)
+        {
+            case "bool":
+                return dv is "true" or "false" ? dv : null;
+            case "int":
+                return long.TryParse(dv, out _) || ulong.TryParse(dv, out _)
+                    ? $"unchecked(({t.Cs})({dv}))"
+                    : null;
+            case "enum":
+                return long.TryParse(dv, out _) ? $"({t.Cs})({dv})" : null;
+            case "float":
+                return dv switch
+                {
+                    "inf" => t.Cs == "float" ? "float.PositiveInfinity" : "double.PositiveInfinity",
+                    "-inf" => t.Cs == "float" ? "float.NegativeInfinity" : "double.NegativeInfinity",
+                    "nan" => t.Cs == "float" ? "float.NaN" : "double.NaN",
+                    _ => double.TryParse(dv, System.Globalization.CultureInfo.InvariantCulture, out _)
+                        ? t.Cs == "float" ? $"{dv}f" : dv
+                        : null,
+                };
+            case "string" or "stringname":
+            {
+                // String defaults arrive quoted ("..."), StringName as &"...".
+                var s = dv.StartsWith("&") ? dv[1..] : dv;
+                if (s.Length < 2 || s[0] != '"' || s[^1] != '"') return null;
+                return '"' + s[1..^1].Replace("\\", "\\\\").Replace("\"", "\\\"") + '"';
+            }
+            case "class":
+                return dv == "null" ? "null" : null;
+            case "variant":
+                // default(Variant) is all-zero storage = a valid NIL variant.
+                return dv == "null" ? "default" : null;
+            case "math":
+            {
+                // Only all-zero constructor patterns are expressible (= default).
+                var open = dv.IndexOf('(');
+                if (open < 0 || !dv.EndsWith(')')) return null;
+                var inner = dv[(open + 1)..^1].Replace(" ", "");
+                return inner.Length == 0 || inner.Split(',').All(p => p is "0" or "0.0" or "-0.0")
+                    ? "default"
+                    : null;
+            }
+            default:
+                return null; // builtinref and friends: no expressible default yet
+        }
+    }
 
     // -------------------------------------------------------- properties --
 
@@ -546,8 +892,9 @@ public static class ApiGenerator
         }
     }
 
-    private static void EmitProperties(StringBuilder sb, ClassInfo info, HashSet<string> used)
+    private static void EmitProperties(StringBuilder sb, ClassInfo info, HashSet<string> used, bool staticClass)
     {
+        var mod = staticClass ? "static " : "";
         foreach (var pi in _propsByClass[info.GdName])
         {
             if (!used.Add(pi.CsName)) { _propsSkipped++; continue; }
@@ -557,7 +904,7 @@ public static class ApiGenerator
             sb.AppendLine();
             if (pi.SetterCs is null)
             {
-                sb.AppendLine($"    public {RetType(pi.Type)} {pi.CsName} => {getCall};");
+                sb.AppendLine($"    public {mod}{RetType(pi.Type)} {pi.CsName} => {getCall};");
                 continue;
             }
 
@@ -565,7 +912,7 @@ public static class ApiGenerator
             var setCall = pi.IndexCast is null
                 ? $"{pi.SetterCs}({valueExpr})"
                 : $"{pi.SetterCs}({pi.IndexCast}, {valueExpr})";
-            sb.AppendLine($"    public {RetType(pi.Type)} {pi.CsName}");
+            sb.AppendLine($"    public {mod}{RetType(pi.Type)} {pi.CsName}");
             sb.AppendLine("    {");
             sb.AppendLine($"        get => {getCall};");
             sb.AppendLine($"        set => {setCall};");

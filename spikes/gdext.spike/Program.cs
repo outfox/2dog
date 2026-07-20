@@ -173,10 +173,9 @@ internal static unsafe class Program
         Check(InstanceBindings.FreedBindings >= 1, "binding free callback fired on RefCounted death");
 
         // -- generated typed API (phase 2): 1036 classes from extension_api.json --
-        var engineSingletonTyped = Godot.Engine.Singleton;
-        Check(engineSingletonTyped.NativePtr == engineSingleton, "typed Engine.Singleton wraps the same native pointer");
+        Check(Godot.Engine.Singleton.NativePtr == engineSingleton, "typed Engine.Singleton wraps the same native pointer");
 
-        var loop = engineSingletonTyped.GetMainLoop();
+        var loop = Godot.Engine.GetMainLoop();
         Check(loop is SceneTree, $"GetMainLoop() materialized as most-derived type ({loop?.GetType().Name})");
 
         var tree = (SceneTree)loop!;
@@ -185,9 +184,9 @@ internal static unsafe class Program
 
         var child = new Node();
         child.Name = "typed_child";
-        rootTyped!.AddChild(child, false, Node.InternalMode.INTERNAL_MODE_DISABLED);
+        rootTyped!.AddChild(child);
         Check(child.Name == "typed_child", $"typed Name property roundtrip (StringName return) = \"{child.Name}\"");
-        Check(rootTyped.GetChildCount(false) == childCount + 1, "typed AddChild seen by typed GetChildCount");
+        Check(rootTyped.GetChildCount() == childCount + 1, "typed AddChild seen by typed GetChildCount");
 
         var node2d = new Node2D();
         node2d.Position = new Vector2(3.5f, -4.25f);

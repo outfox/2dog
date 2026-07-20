@@ -41,16 +41,16 @@ public unsafe partial class WebRTCDataChannel : PacketPeer
 
     public enum WriteModeEnum : long
     {
-        WRITE_MODE_TEXT = 0,
-        WRITE_MODE_BINARY = 1,
+        Text = 0,
+        Binary = 1,
     }
 
     public enum ChannelState : long
     {
-        STATE_CONNECTING = 0,
-        STATE_OPEN = 1,
-        STATE_CLOSING = 2,
-        STATE_CLOSED = 3,
+        Connecting = 0,
+        Open = 1,
+        Closing = 2,
+        Closed = 3,
     }
 
     public WebRTCDataChannel.WriteModeEnum WriteMode
@@ -497,7 +497,7 @@ public unsafe partial class WebRTCMultiplayerPeer : MultiplayerPeer
     }
 
     private static nint __mb_add_peer;
-    public Error AddPeer(WebRTCPeerConnection? peer, int peerId, int unreliableLifetime)
+    public Error AddPeer(WebRTCPeerConnection? peer, int peerId, int unreliableLifetime = unchecked((int)(1)))
     {
         var __mb = __mb_add_peer;
         if (__mb == 0)
@@ -597,29 +597,29 @@ public unsafe partial class WebRTCPeerConnection : RefCounted
 
     public enum ConnectionState : long
     {
-        STATE_NEW = 0,
-        STATE_CONNECTING = 1,
-        STATE_CONNECTED = 2,
-        STATE_DISCONNECTED = 3,
-        STATE_FAILED = 4,
-        STATE_CLOSED = 5,
+        New = 0,
+        Connecting = 1,
+        Connected = 2,
+        Disconnected = 3,
+        Failed = 4,
+        Closed = 5,
     }
 
     public enum GatheringState : long
     {
-        GATHERING_STATE_NEW = 0,
-        GATHERING_STATE_GATHERING = 1,
-        GATHERING_STATE_COMPLETE = 2,
+        New = 0,
+        Gathering = 1,
+        Complete = 2,
     }
 
     public enum SignalingState : long
     {
-        SIGNALING_STATE_STABLE = 0,
-        SIGNALING_STATE_HAVE_LOCAL_OFFER = 1,
-        SIGNALING_STATE_HAVE_REMOTE_OFFER = 2,
-        SIGNALING_STATE_HAVE_LOCAL_PRANSWER = 3,
-        SIGNALING_STATE_HAVE_REMOTE_PRANSWER = 4,
-        SIGNALING_STATE_CLOSED = 5,
+        Stable = 0,
+        HaveLocalOffer = 1,
+        HaveRemoteOffer = 2,
+        HaveLocalPranswer = 3,
+        HaveRemotePranswer = 4,
+        Closed = 5,
     }
 
     private static nint __mb_set_default_extension;
@@ -965,7 +965,7 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
     }
 
     private static nint __mb_create_client;
-    public Error CreateClient(string url, TLSOptions? tlsClientOptions)
+    public Error CreateClient(string url, TLSOptions? tlsClientOptions = null)
     {
         var __mb = __mb_create_client;
         if (__mb == 0)
@@ -986,7 +986,7 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
     }
 
     private static nint __mb_create_server;
-    public Error CreateServer(int port, string bindAddress, TLSOptions? tlsServerOptions)
+    public Error CreateServer(int port, string bindAddress = "*", TLSOptions? tlsServerOptions = null)
     {
         var __mb = __mb_create_server;
         if (__mb == 0)
@@ -1198,16 +1198,16 @@ public unsafe partial class WebSocketPeer : PacketPeer
 
     public enum WriteMode : long
     {
-        WRITE_MODE_TEXT = 0,
-        WRITE_MODE_BINARY = 1,
+        Text = 0,
+        Binary = 1,
     }
 
     public enum State : long
     {
-        STATE_CONNECTING = 0,
-        STATE_OPEN = 1,
-        STATE_CLOSING = 2,
-        STATE_CLOSED = 3,
+        Connecting = 0,
+        Open = 1,
+        Closing = 2,
+        Closed = 3,
     }
 
     public int InboundBufferSize
@@ -1235,7 +1235,7 @@ public unsafe partial class WebSocketPeer : PacketPeer
     }
 
     private static nint __mb_connect_to_url;
-    public Error ConnectToUrl(string url, TLSOptions? tlsClientOptions)
+    public Error ConnectToUrl(string url, TLSOptions? tlsClientOptions = null)
     {
         var __mb = __mb_connect_to_url;
         if (__mb == 0)
@@ -1321,7 +1321,7 @@ public unsafe partial class WebSocketPeer : PacketPeer
     }
 
     private static nint __mb_close;
-    public void Close(int code, string reason)
+    public void Close(int code = unchecked((int)(1000)), string reason = "")
     {
         var __mb = __mb_close;
         if (__mb == 0)
@@ -1606,10 +1606,10 @@ public unsafe partial class WebXRInterface : XRInterface
 
     public enum TargetRayMode : long
     {
-        TARGET_RAY_MODE_UNKNOWN = 0,
-        TARGET_RAY_MODE_GAZE = 1,
-        TARGET_RAY_MODE_TRACKED_POINTER = 2,
-        TARGET_RAY_MODE_SCREEN = 3,
+        Unknown = 0,
+        Gaze = 1,
+        TrackedPointer = 2,
+        Screen = 3,
     }
 
     public string SessionMode
@@ -1944,72 +1944,72 @@ public unsafe partial class Window : Viewport
 
     public enum ModeEnum : long
     {
-        MODE_WINDOWED = 0,
-        MODE_MINIMIZED = 1,
-        MODE_MAXIMIZED = 2,
-        MODE_FULLSCREEN = 3,
-        MODE_EXCLUSIVE_FULLSCREEN = 4,
+        Windowed = 0,
+        Minimized = 1,
+        Maximized = 2,
+        Fullscreen = 3,
+        ExclusiveFullscreen = 4,
     }
 
     public enum Flags : long
     {
-        FLAG_RESIZE_DISABLED = 0,
-        FLAG_BORDERLESS = 1,
-        FLAG_ALWAYS_ON_TOP = 2,
-        FLAG_TRANSPARENT = 3,
-        FLAG_NO_FOCUS = 4,
-        FLAG_POPUP = 5,
-        FLAG_EXTEND_TO_TITLE = 6,
-        FLAG_MOUSE_PASSTHROUGH = 7,
-        FLAG_SHARP_CORNERS = 8,
-        FLAG_EXCLUDE_FROM_CAPTURE = 9,
-        FLAG_POPUP_WM_HINT = 10,
-        FLAG_MINIMIZE_DISABLED = 11,
-        FLAG_MAXIMIZE_DISABLED = 12,
-        FLAG_MAX = 13,
+        ResizeDisabled = 0,
+        Borderless = 1,
+        AlwaysOnTop = 2,
+        Transparent = 3,
+        NoFocus = 4,
+        Popup = 5,
+        ExtendToTitle = 6,
+        MousePassthrough = 7,
+        SharpCorners = 8,
+        ExcludeFromCapture = 9,
+        PopupWmHint = 10,
+        MinimizeDisabled = 11,
+        MaximizeDisabled = 12,
+        Max = 13,
     }
 
     public enum ContentScaleModeEnum : long
     {
-        CONTENT_SCALE_MODE_DISABLED = 0,
-        CONTENT_SCALE_MODE_CANVAS_ITEMS = 1,
-        CONTENT_SCALE_MODE_VIEWPORT = 2,
+        Disabled = 0,
+        CanvasItems = 1,
+        Viewport = 2,
     }
 
     public enum ContentScaleAspectEnum : long
     {
-        CONTENT_SCALE_ASPECT_IGNORE = 0,
-        CONTENT_SCALE_ASPECT_KEEP = 1,
-        CONTENT_SCALE_ASPECT_KEEP_WIDTH = 2,
-        CONTENT_SCALE_ASPECT_KEEP_HEIGHT = 3,
-        CONTENT_SCALE_ASPECT_EXPAND = 4,
+        Ignore = 0,
+        Keep = 1,
+        KeepWidth = 2,
+        KeepHeight = 3,
+        Expand = 4,
     }
 
     public enum ContentScaleStretchEnum : long
     {
-        CONTENT_SCALE_STRETCH_FRACTIONAL = 0,
-        CONTENT_SCALE_STRETCH_INTEGER = 1,
+        Fractional = 0,
+        Integer = 1,
     }
 
     public enum LayoutDirection : long
     {
-        LAYOUT_DIRECTION_INHERITED = 0,
-        LAYOUT_DIRECTION_APPLICATION_LOCALE = 1,
-        LAYOUT_DIRECTION_LTR = 2,
-        LAYOUT_DIRECTION_RTL = 3,
-        LAYOUT_DIRECTION_SYSTEM_LOCALE = 4,
-        LAYOUT_DIRECTION_MAX = 5,
-        LAYOUT_DIRECTION_LOCALE = 1,
+        Inherited = 0,
+        ApplicationLocale = 1,
+        Ltr = 2,
+        Rtl = 3,
+        SystemLocale = 4,
+        Max = 5,
+        Locale = 1,
     }
 
     public enum WindowInitialPosition : long
     {
-        WINDOW_INITIAL_POSITION_ABSOLUTE = 0,
-        WINDOW_INITIAL_POSITION_CENTER_PRIMARY_SCREEN = 1,
-        WINDOW_INITIAL_POSITION_CENTER_MAIN_WINDOW_SCREEN = 2,
-        WINDOW_INITIAL_POSITION_CENTER_OTHER_SCREEN = 3,
-        WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS = 4,
-        WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_KEYBOARD_FOCUS = 5,
+        Absolute = 0,
+        CenterPrimaryScreen = 1,
+        CenterMainWindowScreen = 2,
+        CenterOtherScreen = 3,
+        CenterScreenWithMouseFocus = 4,
+        CenterScreenWithKeyboardFocus = 5,
     }
 
     public Window.ModeEnum Mode
@@ -3597,7 +3597,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_theme_icon;
-    public Texture2D? GetThemeIcon(string name, string themeType)
+    public Texture2D? GetThemeIcon(string name, string themeType = "")
     {
         var __mb = __mb_get_theme_icon;
         if (__mb == 0)
@@ -3617,7 +3617,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_theme_stylebox;
-    public StyleBox? GetThemeStylebox(string name, string themeType)
+    public StyleBox? GetThemeStylebox(string name, string themeType = "")
     {
         var __mb = __mb_get_theme_stylebox;
         if (__mb == 0)
@@ -3637,7 +3637,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_theme_font;
-    public Font? GetThemeFont(string name, string themeType)
+    public Font? GetThemeFont(string name, string themeType = "")
     {
         var __mb = __mb_get_theme_font;
         if (__mb == 0)
@@ -3657,7 +3657,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_theme_font_size;
-    public int GetThemeFontSize(string name, string themeType)
+    public int GetThemeFontSize(string name, string themeType = "")
     {
         var __mb = __mb_get_theme_font_size;
         if (__mb == 0)
@@ -3677,7 +3677,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_theme_color;
-    public Color GetThemeColor(string name, string themeType)
+    public Color GetThemeColor(string name, string themeType = "")
     {
         var __mb = __mb_get_theme_color;
         if (__mb == 0)
@@ -3697,7 +3697,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_get_theme_constant;
-    public int GetThemeConstant(string name, string themeType)
+    public int GetThemeConstant(string name, string themeType = "")
     {
         var __mb = __mb_get_theme_constant;
         if (__mb == 0)
@@ -3825,7 +3825,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_icon;
-    public bool HasThemeIcon(string name, string themeType)
+    public bool HasThemeIcon(string name, string themeType = "")
     {
         var __mb = __mb_has_theme_icon;
         if (__mb == 0)
@@ -3845,7 +3845,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_stylebox;
-    public bool HasThemeStylebox(string name, string themeType)
+    public bool HasThemeStylebox(string name, string themeType = "")
     {
         var __mb = __mb_has_theme_stylebox;
         if (__mb == 0)
@@ -3865,7 +3865,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_font;
-    public bool HasThemeFont(string name, string themeType)
+    public bool HasThemeFont(string name, string themeType = "")
     {
         var __mb = __mb_has_theme_font;
         if (__mb == 0)
@@ -3885,7 +3885,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_font_size;
-    public bool HasThemeFontSize(string name, string themeType)
+    public bool HasThemeFontSize(string name, string themeType = "")
     {
         var __mb = __mb_has_theme_font_size;
         if (__mb == 0)
@@ -3905,7 +3905,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_color;
-    public bool HasThemeColor(string name, string themeType)
+    public bool HasThemeColor(string name, string themeType = "")
     {
         var __mb = __mb_has_theme_color;
         if (__mb == 0)
@@ -3925,7 +3925,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_has_theme_constant;
-    public bool HasThemeConstant(string name, string themeType)
+    public bool HasThemeConstant(string name, string themeType = "")
     {
         var __mb = __mb_has_theme_constant;
         if (__mb == 0)
@@ -4192,7 +4192,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_popup;
-    public void Popup(Rect2I rect)
+    public void Popup(Rect2I rect = default)
     {
         var __mb = __mb_popup;
         if (__mb == 0)
@@ -4224,7 +4224,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_popup_centered;
-    public void PopupCentered(Vector2I minsize)
+    public void PopupCentered(Vector2I minsize = default)
     {
         var __mb = __mb_popup_centered;
         if (__mb == 0)
@@ -4240,7 +4240,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_popup_centered_ratio;
-    public void PopupCenteredRatio(float ratio)
+    public void PopupCenteredRatio(float ratio = 0.8f)
     {
         var __mb = __mb_popup_centered_ratio;
         if (__mb == 0)
@@ -4256,7 +4256,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_popup_centered_clamped;
-    public void PopupCenteredClamped(Vector2I minsize, float fallbackRatio)
+    public void PopupCenteredClamped(Vector2I minsize = default, float fallbackRatio = 0.75f)
     {
         var __mb = __mb_popup_centered_clamped;
         if (__mb == 0)
@@ -4274,7 +4274,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_popup_exclusive;
-    public void PopupExclusive(Node? fromNode, Rect2I rect)
+    public void PopupExclusive(Node? fromNode, Rect2I rect = default)
     {
         var __mb = __mb_popup_exclusive;
         if (__mb == 0)
@@ -4310,7 +4310,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_popup_exclusive_centered;
-    public void PopupExclusiveCentered(Node? fromNode, Vector2I minsize)
+    public void PopupExclusiveCentered(Node? fromNode, Vector2I minsize = default)
     {
         var __mb = __mb_popup_exclusive_centered;
         if (__mb == 0)
@@ -4328,7 +4328,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_popup_exclusive_centered_ratio;
-    public void PopupExclusiveCenteredRatio(Node? fromNode, float ratio)
+    public void PopupExclusiveCenteredRatio(Node? fromNode, float ratio = 0.8f)
     {
         var __mb = __mb_popup_exclusive_centered_ratio;
         if (__mb == 0)
@@ -4346,7 +4346,7 @@ public unsafe partial class Window : Viewport
     }
 
     private static nint __mb_popup_exclusive_centered_clamped;
-    public void PopupExclusiveCenteredClamped(Node? fromNode, Vector2I minsize, float fallbackRatio)
+    public void PopupExclusiveCenteredClamped(Node? fromNode, Vector2I minsize = default, float fallbackRatio = 0.75f)
     {
         var __mb = __mb_popup_exclusive_centered_clamped;
         if (__mb == 0)
@@ -4381,15 +4381,17 @@ public unsafe partial class Window : Viewport
     }
 }
 
-public unsafe partial class WorkerThreadPool : GodotObject
+public static unsafe partial class WorkerThreadPool
 {
-    internal WorkerThreadPool(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    private static WorkerThreadPool? _singleton;
-    public static WorkerThreadPool Singleton => _singleton ??= (WorkerThreadPool)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("WorkerThreadPool"), adoptRef: false)!;
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("WorkerThreadPool");
+
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     private static nint __mb_is_task_completed;
-    public bool IsTaskCompleted(long taskId)
+    public static bool IsTaskCompleted(long taskId)
     {
         var __mb = __mb_is_task_completed;
         if (__mb == 0)
@@ -4402,12 +4404,12 @@ public unsafe partial class WorkerThreadPool : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_wait_for_task_completion;
-    public Error WaitForTaskCompletion(long taskId)
+    public static Error WaitForTaskCompletion(long taskId)
     {
         var __mb = __mb_wait_for_task_completion;
         if (__mb == 0)
@@ -4420,12 +4422,12 @@ public unsafe partial class WorkerThreadPool : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_get_caller_task_id;
-    public long GetCallerTaskId()
+    public static long GetCallerTaskId()
     {
         var __mb = __mb_get_caller_task_id;
         if (__mb == 0)
@@ -4435,12 +4437,12 @@ public unsafe partial class WorkerThreadPool : GodotObject
             __mb_get_caller_task_id = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((long)__ret);
     }
 
     private static nint __mb_is_group_task_completed;
-    public bool IsGroupTaskCompleted(long groupId)
+    public static bool IsGroupTaskCompleted(long groupId)
     {
         var __mb = __mb_is_group_task_completed;
         if (__mb == 0)
@@ -4453,12 +4455,12 @@ public unsafe partial class WorkerThreadPool : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_group_processed_element_count;
-    public uint GetGroupProcessedElementCount(long groupId)
+    public static uint GetGroupProcessedElementCount(long groupId)
     {
         var __mb = __mb_get_group_processed_element_count;
         if (__mb == 0)
@@ -4471,12 +4473,12 @@ public unsafe partial class WorkerThreadPool : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_wait_for_group_task_completion;
-    public void WaitForGroupTaskCompletion(long groupId)
+    public static void WaitForGroupTaskCompletion(long groupId)
     {
         var __mb = __mb_wait_for_group_task_completion;
         if (__mb == 0)
@@ -4488,11 +4490,11 @@ public unsafe partial class WorkerThreadPool : GodotObject
         long __a0 = unchecked((long)groupId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_caller_group_id;
-    public long GetCallerGroupId()
+    public static long GetCallerGroupId()
     {
         var __mb = __mb_get_caller_group_id;
         if (__mb == 0)
@@ -4502,7 +4504,7 @@ public unsafe partial class WorkerThreadPool : GodotObject
             __mb_get_caller_group_id = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((long)__ret);
     }
 }

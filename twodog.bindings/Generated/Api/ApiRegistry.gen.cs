@@ -50,7 +50,7 @@ public static class ApiRegistry
         Entries["AStar3D"] = (static (p, rc) => new AStar3D(p, rc), true);
         Entries["AStarGrid2D"] = (static (p, rc) => new AStarGrid2D(p, rc), true);
         Entries["AcceptDialog"] = (static (p, rc) => new AcceptDialog(p, rc), false);
-        Entries["AccessibilityServer"] = (static (p, rc) => new AccessibilityServer(p, rc), false);
+        Entries["AccessibilityServer"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["AimModifier3D"] = (static (p, rc) => new AimModifier3D(p, rc), false);
         Entries["AnimatableBody2D"] = (static (p, rc) => new AnimatableBody2D(p, rc), false);
         Entries["AnimatableBody3D"] = (static (p, rc) => new AnimatableBody3D(p, rc), false);
@@ -125,7 +125,7 @@ public static class ApiRegistry
         Entries["AudioListener3D"] = (static (p, rc) => new AudioListener3D(p, rc), false);
         Entries["AudioSample"] = (static (p, rc) => new AudioSample(p, rc), true);
         Entries["AudioSamplePlayback"] = (static (p, rc) => new AudioSamplePlayback(p, rc), true);
-        Entries["AudioServer"] = (static (p, rc) => new AudioServer(p, rc), false);
+        Entries["AudioServer"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["AudioStream"] = (static (p, rc) => new AudioStream(p, rc), true);
         Entries["AudioStreamGenerator"] = (static (p, rc) => new AudioStreamGenerator(p, rc), true);
         Entries["AudioStreamGeneratorPlayback"] = (static (p, rc) => new AudioStreamGeneratorPlayback(p, rc), true);
@@ -192,7 +192,7 @@ public static class ApiRegistry
         Entries["CameraAttributesPhysical"] = (static (p, rc) => new CameraAttributesPhysical(p, rc), true);
         Entries["CameraAttributesPractical"] = (static (p, rc) => new CameraAttributesPractical(p, rc), true);
         Entries["CameraFeed"] = (static (p, rc) => new CameraFeed(p, rc), true);
-        Entries["CameraServer"] = (static (p, rc) => new CameraServer(p, rc), false);
+        Entries["CameraServer"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["CameraTexture"] = (static (p, rc) => new CameraTexture(p, rc), true);
         Entries["CanvasGroup"] = (static (p, rc) => new CanvasGroup(p, rc), false);
         Entries["CanvasItem"] = (static (p, rc) => new CanvasItem(p, rc), false);
@@ -211,7 +211,7 @@ public static class ApiRegistry
         Entries["CheckBox"] = (static (p, rc) => new CheckBox(p, rc), false);
         Entries["CheckButton"] = (static (p, rc) => new CheckButton(p, rc), false);
         Entries["CircleShape2D"] = (static (p, rc) => new CircleShape2D(p, rc), true);
-        Entries["ClassDB"] = (static (p, rc) => new ClassDB(p, rc), false);
+        Entries["ClassDB"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["CodeEdit"] = (static (p, rc) => new CodeEdit(p, rc), false);
         Entries["CodeHighlighter"] = (static (p, rc) => new CodeHighlighter(p, rc), true);
         Entries["CollisionObject2D"] = (static (p, rc) => new CollisionObject2D(p, rc), false);
@@ -265,7 +265,7 @@ public static class ApiRegistry
         Entries["DirAccess"] = (static (p, rc) => new DirAccess(p, rc), true);
         Entries["DirectionalLight2D"] = (static (p, rc) => new DirectionalLight2D(p, rc), false);
         Entries["DirectionalLight3D"] = (static (p, rc) => new DirectionalLight3D(p, rc), false);
-        Entries["DisplayServer"] = (static (p, rc) => new DisplayServer(p, rc), false);
+        Entries["DisplayServer"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["DrawableTexture2D"] = (static (p, rc) => new DrawableTexture2D(p, rc), true);
     }
 
@@ -329,8 +329,8 @@ public static class ApiRegistry
         Entries["EditorUndoRedoManager"] = (static (p, rc) => new EditorUndoRedoManager(p, rc), false);
         Entries["EditorVCSInterface"] = (static (p, rc) => new EditorVCSInterface(p, rc), false);
         Entries["EncodedObjectAsID"] = (static (p, rc) => new EncodedObjectAsID(p, rc), true);
-        Entries["Engine"] = (static (p, rc) => new Engine(p, rc), false);
-        Entries["EngineDebugger"] = (static (p, rc) => new EngineDebugger(p, rc), false);
+        Entries["Engine"] = (static (p, rc) => new GodotObject(p, rc), false);
+        Entries["EngineDebugger"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["EngineProfiler"] = (static (p, rc) => new EngineProfiler(p, rc), true);
         Entries["Environment"] = (static (p, rc) => new Environment(p, rc), true);
         Entries["Expression"] = (static (p, rc) => new Expression(p, rc), true);
@@ -360,9 +360,9 @@ public static class ApiRegistry
     private static void InitG()
     {
         Entries["GDExtension"] = (static (p, rc) => new GDExtension(p, rc), true);
-        Entries["GDExtensionManager"] = (static (p, rc) => new GDExtensionManager(p, rc), false);
+        Entries["GDExtensionManager"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["GDScript"] = (static (p, rc) => new GDScript(p, rc), true);
-        Entries["GDScriptLanguageProtocol"] = (static (p, rc) => new GDScriptLanguageProtocol(p, rc), false);
+        Entries["GDScriptLanguageProtocol"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["GDScriptSyntaxHighlighter"] = (static (p, rc) => new GDScriptSyntaxHighlighter(p, rc), true);
         Entries["GDScriptTextDocument"] = (static (p, rc) => new GDScriptTextDocument(p, rc), true);
         Entries["GDScriptWorkspace"] = (static (p, rc) => new GDScriptWorkspace(p, rc), true);
@@ -397,8 +397,8 @@ public static class ApiRegistry
         Entries["GPUParticlesCollisionSDF3D"] = (static (p, rc) => new GPUParticlesCollisionSDF3D(p, rc), false);
         Entries["GPUParticlesCollisionSphere3D"] = (static (p, rc) => new GPUParticlesCollisionSphere3D(p, rc), false);
         Entries["Generic6DOFJoint3D"] = (static (p, rc) => new Generic6DOFJoint3D(p, rc), false);
-        Entries["Geometry2D"] = (static (p, rc) => new Geometry2D(p, rc), false);
-        Entries["Geometry3D"] = (static (p, rc) => new Geometry3D(p, rc), false);
+        Entries["Geometry2D"] = (static (p, rc) => new GodotObject(p, rc), false);
+        Entries["Geometry3D"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["GeometryInstance3D"] = (static (p, rc) => new GeometryInstance3D(p, rc), false);
         Entries["GodotInstance"] = (static (p, rc) => new GodotInstance(p, rc), false);
         Entries["Gradient"] = (static (p, rc) => new Gradient(p, rc), true);
@@ -434,7 +434,7 @@ public static class ApiRegistry
     private static void InitI()
     {
         Entries["IKModifier3D"] = (static (p, rc) => new IKModifier3D(p, rc), false);
-        Entries["IP"] = (static (p, rc) => new IP(p, rc), false);
+        Entries["IP"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["Image"] = (static (p, rc) => new Image(p, rc), true);
         Entries["ImageFormatLoader"] = (static (p, rc) => new ImageFormatLoader(p, rc), true);
         Entries["ImageFormatLoaderExtension"] = (static (p, rc) => new ImageFormatLoaderExtension(p, rc), true);
@@ -444,7 +444,7 @@ public static class ApiRegistry
         Entries["ImmediateMesh"] = (static (p, rc) => new ImmediateMesh(p, rc), true);
         Entries["ImporterMesh"] = (static (p, rc) => new ImporterMesh(p, rc), true);
         Entries["ImporterMeshInstance3D"] = (static (p, rc) => new ImporterMeshInstance3D(p, rc), false);
-        Entries["Input"] = (static (p, rc) => new Input(p, rc), false);
+        Entries["Input"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["InputEvent"] = (static (p, rc) => new InputEvent(p, rc), true);
         Entries["InputEventAction"] = (static (p, rc) => new InputEventAction(p, rc), true);
         Entries["InputEventFromWindow"] = (static (p, rc) => new InputEventFromWindow(p, rc), true);
@@ -462,7 +462,7 @@ public static class ApiRegistry
         Entries["InputEventScreenTouch"] = (static (p, rc) => new InputEventScreenTouch(p, rc), true);
         Entries["InputEventShortcut"] = (static (p, rc) => new InputEventShortcut(p, rc), true);
         Entries["InputEventWithModifiers"] = (static (p, rc) => new InputEventWithModifiers(p, rc), true);
-        Entries["InputMap"] = (static (p, rc) => new InputMap(p, rc), false);
+        Entries["InputMap"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["InstancePlaceholder"] = (static (p, rc) => new InstancePlaceholder(p, rc), false);
         Entries["IntervalTweener"] = (static (p, rc) => new IntervalTweener(p, rc), true);
         Entries["ItemList"] = (static (p, rc) => new ItemList(p, rc), false);
@@ -476,9 +476,9 @@ public static class ApiRegistry
         Entries["JSONRPC"] = (static (p, rc) => new JSONRPC(p, rc), false);
         Entries["JacobianIK3D"] = (static (p, rc) => new JacobianIK3D(p, rc), false);
         Entries["JavaClass"] = (static (p, rc) => new JavaClass(p, rc), true);
-        Entries["JavaClassWrapper"] = (static (p, rc) => new JavaClassWrapper(p, rc), false);
+        Entries["JavaClassWrapper"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["JavaObject"] = (static (p, rc) => new JavaObject(p, rc), true);
-        Entries["JavaScriptBridge"] = (static (p, rc) => new JavaScriptBridge(p, rc), false);
+        Entries["JavaScriptBridge"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["JavaScriptObject"] = (static (p, rc) => new JavaScriptObject(p, rc), true);
         Entries["Joint2D"] = (static (p, rc) => new Joint2D(p, rc), false);
         Entries["Joint3D"] = (static (p, rc) => new Joint3D(p, rc), false);
@@ -519,7 +519,7 @@ public static class ApiRegistry
         Entries["MarginContainer"] = (static (p, rc) => new MarginContainer(p, rc), false);
         Entries["Marker2D"] = (static (p, rc) => new Marker2D(p, rc), false);
         Entries["Marker3D"] = (static (p, rc) => new Marker3D(p, rc), false);
-        Entries["Marshalls"] = (static (p, rc) => new Marshalls(p, rc), false);
+        Entries["Marshalls"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["Material"] = (static (p, rc) => new Material(p, rc), true);
         Entries["MenuBar"] = (static (p, rc) => new MenuBar(p, rc), false);
         Entries["MenuButton"] = (static (p, rc) => new MenuButton(p, rc), false);
@@ -550,13 +550,13 @@ public static class ApiRegistry
 
     private static void InitN()
     {
-        Entries["NativeMenu"] = (static (p, rc) => new NativeMenu(p, rc), false);
+        Entries["NativeMenu"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["NavigationAgent2D"] = (static (p, rc) => new NavigationAgent2D(p, rc), false);
         Entries["NavigationAgent3D"] = (static (p, rc) => new NavigationAgent3D(p, rc), false);
         Entries["NavigationLink2D"] = (static (p, rc) => new NavigationLink2D(p, rc), false);
         Entries["NavigationLink3D"] = (static (p, rc) => new NavigationLink3D(p, rc), false);
         Entries["NavigationMesh"] = (static (p, rc) => new NavigationMesh(p, rc), true);
-        Entries["NavigationMeshGenerator"] = (static (p, rc) => new NavigationMeshGenerator(p, rc), false);
+        Entries["NavigationMeshGenerator"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["NavigationMeshSourceGeometryData2D"] = (static (p, rc) => new NavigationMeshSourceGeometryData2D(p, rc), true);
         Entries["NavigationMeshSourceGeometryData3D"] = (static (p, rc) => new NavigationMeshSourceGeometryData3D(p, rc), true);
         Entries["NavigationObstacle2D"] = (static (p, rc) => new NavigationObstacle2D(p, rc), false);
@@ -568,10 +568,10 @@ public static class ApiRegistry
         Entries["NavigationPolygon"] = (static (p, rc) => new NavigationPolygon(p, rc), true);
         Entries["NavigationRegion2D"] = (static (p, rc) => new NavigationRegion2D(p, rc), false);
         Entries["NavigationRegion3D"] = (static (p, rc) => new NavigationRegion3D(p, rc), false);
-        Entries["NavigationServer2D"] = (static (p, rc) => new NavigationServer2D(p, rc), false);
-        Entries["NavigationServer2DManager"] = (static (p, rc) => new NavigationServer2DManager(p, rc), false);
-        Entries["NavigationServer3D"] = (static (p, rc) => new NavigationServer3D(p, rc), false);
-        Entries["NavigationServer3DManager"] = (static (p, rc) => new NavigationServer3DManager(p, rc), false);
+        Entries["NavigationServer2D"] = (static (p, rc) => new GodotObject(p, rc), false);
+        Entries["NavigationServer2DManager"] = (static (p, rc) => new GodotObject(p, rc), false);
+        Entries["NavigationServer3D"] = (static (p, rc) => new GodotObject(p, rc), false);
+        Entries["NavigationServer3DManager"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["NinePatchRect"] = (static (p, rc) => new NinePatchRect(p, rc), false);
         Entries["Node"] = (static (p, rc) => new Node(p, rc), false);
         Entries["Node2D"] = (static (p, rc) => new Node2D(p, rc), false);
@@ -585,7 +585,7 @@ public static class ApiRegistry
     private static void InitO()
     {
         Entries["ORMMaterial3D"] = (static (p, rc) => new ORMMaterial3D(p, rc), true);
-        Entries["OS"] = (static (p, rc) => new OS(p, rc), false);
+        Entries["OS"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["Occluder3D"] = (static (p, rc) => new Occluder3D(p, rc), true);
         Entries["OccluderInstance3D"] = (static (p, rc) => new OccluderInstance3D(p, rc), false);
         Entries["OccluderPolygon2D"] = (static (p, rc) => new OccluderPolygon2D(p, rc), true);
@@ -682,7 +682,7 @@ public static class ApiRegistry
         Entries["Path3D"] = (static (p, rc) => new Path3D(p, rc), false);
         Entries["PathFollow2D"] = (static (p, rc) => new PathFollow2D(p, rc), false);
         Entries["PathFollow3D"] = (static (p, rc) => new PathFollow3D(p, rc), false);
-        Entries["Performance"] = (static (p, rc) => new Performance(p, rc), false);
+        Entries["Performance"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["PhysicalBone2D"] = (static (p, rc) => new PhysicalBone2D(p, rc), false);
         Entries["PhysicalBone3D"] = (static (p, rc) => new PhysicalBone3D(p, rc), false);
         Entries["PhysicalBoneSimulator3D"] = (static (p, rc) => new PhysicalBoneSimulator3D(p, rc), false);
@@ -704,10 +704,10 @@ public static class ApiRegistry
         Entries["PhysicsRayQueryParameters3D"] = (static (p, rc) => new PhysicsRayQueryParameters3D(p, rc), true);
         Entries["PhysicsServer2D"] = (static (p, rc) => new PhysicsServer2D(p, rc), false);
         Entries["PhysicsServer2DExtension"] = (static (p, rc) => new PhysicsServer2DExtension(p, rc), false);
-        Entries["PhysicsServer2DManager"] = (static (p, rc) => new PhysicsServer2DManager(p, rc), false);
+        Entries["PhysicsServer2DManager"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["PhysicsServer3D"] = (static (p, rc) => new PhysicsServer3D(p, rc), false);
         Entries["PhysicsServer3DExtension"] = (static (p, rc) => new PhysicsServer3DExtension(p, rc), false);
-        Entries["PhysicsServer3DManager"] = (static (p, rc) => new PhysicsServer3DManager(p, rc), false);
+        Entries["PhysicsServer3DManager"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["PhysicsServer3DRenderingServerHandler"] = (static (p, rc) => new PhysicsServer3DRenderingServerHandler(p, rc), false);
         Entries["PhysicsShapeQueryParameters2D"] = (static (p, rc) => new PhysicsShapeQueryParameters2D(p, rc), true);
         Entries["PhysicsShapeQueryParameters3D"] = (static (p, rc) => new PhysicsShapeQueryParameters3D(p, rc), true);
@@ -739,7 +739,7 @@ public static class ApiRegistry
         Entries["PrismMesh"] = (static (p, rc) => new PrismMesh(p, rc), true);
         Entries["ProceduralSkyMaterial"] = (static (p, rc) => new ProceduralSkyMaterial(p, rc), true);
         Entries["ProgressBar"] = (static (p, rc) => new ProgressBar(p, rc), false);
-        Entries["ProjectSettings"] = (static (p, rc) => new ProjectSettings(p, rc), false);
+        Entries["ProjectSettings"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["PropertyTweener"] = (static (p, rc) => new PropertyTweener(p, rc), true);
     }
 
@@ -794,7 +794,7 @@ public static class ApiRegistry
         Entries["RenderSceneDataExtension"] = (static (p, rc) => new RenderSceneDataExtension(p, rc), false);
         Entries["RenderSceneDataRD"] = (static (p, rc) => new RenderSceneDataRD(p, rc), false);
         Entries["RenderingDevice"] = (static (p, rc) => new RenderingDevice(p, rc), false);
-        Entries["RenderingServer"] = (static (p, rc) => new RenderingServer(p, rc), false);
+        Entries["RenderingServer"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["Resource"] = (static (p, rc) => new Resource(p, rc), true);
         Entries["ResourceFormatLoader"] = (static (p, rc) => new ResourceFormatLoader(p, rc), true);
         Entries["ResourceFormatSaver"] = (static (p, rc) => new ResourceFormatSaver(p, rc), true);
@@ -815,10 +815,10 @@ public static class ApiRegistry
         Entries["ResourceImporterTexture"] = (static (p, rc) => new ResourceImporterTexture(p, rc), true);
         Entries["ResourceImporterTextureAtlas"] = (static (p, rc) => new ResourceImporterTextureAtlas(p, rc), true);
         Entries["ResourceImporterWAV"] = (static (p, rc) => new ResourceImporterWAV(p, rc), true);
-        Entries["ResourceLoader"] = (static (p, rc) => new ResourceLoader(p, rc), false);
+        Entries["ResourceLoader"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["ResourcePreloader"] = (static (p, rc) => new ResourcePreloader(p, rc), false);
-        Entries["ResourceSaver"] = (static (p, rc) => new ResourceSaver(p, rc), false);
-        Entries["ResourceUID"] = (static (p, rc) => new ResourceUID(p, rc), false);
+        Entries["ResourceSaver"] = (static (p, rc) => new GodotObject(p, rc), false);
+        Entries["ResourceUID"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["RetargetModifier3D"] = (static (p, rc) => new RetargetModifier3D(p, rc), false);
         Entries["RibbonTrailMesh"] = (static (p, rc) => new RibbonTrailMesh(p, rc), true);
         Entries["RichTextEffect"] = (static (p, rc) => new RichTextEffect(p, rc), true);
@@ -938,7 +938,7 @@ public static class ApiRegistry
         Entries["TextServerAdvanced"] = (static (p, rc) => new TextServerAdvanced(p, rc), true);
         Entries["TextServerDummy"] = (static (p, rc) => new TextServerDummy(p, rc), true);
         Entries["TextServerExtension"] = (static (p, rc) => new TextServerExtension(p, rc), true);
-        Entries["TextServerManager"] = (static (p, rc) => new TextServerManager(p, rc), false);
+        Entries["TextServerManager"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["Texture"] = (static (p, rc) => new Texture(p, rc), true);
         Entries["Texture2D"] = (static (p, rc) => new Texture2D(p, rc), true);
         Entries["Texture2DArray"] = (static (p, rc) => new Texture2DArray(p, rc), true);
@@ -954,7 +954,7 @@ public static class ApiRegistry
         Entries["TextureProgressBar"] = (static (p, rc) => new TextureProgressBar(p, rc), false);
         Entries["TextureRect"] = (static (p, rc) => new TextureRect(p, rc), false);
         Entries["Theme"] = (static (p, rc) => new Theme(p, rc), true);
-        Entries["ThemeDB"] = (static (p, rc) => new ThemeDB(p, rc), false);
+        Entries["ThemeDB"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["Thread"] = (static (p, rc) => new Thread(p, rc), true);
         Entries["TileData"] = (static (p, rc) => new TileData(p, rc), false);
         Entries["TileMap"] = (static (p, rc) => new TileMap(p, rc), false);
@@ -964,13 +964,13 @@ public static class ApiRegistry
         Entries["TileSetAtlasSource"] = (static (p, rc) => new TileSetAtlasSource(p, rc), true);
         Entries["TileSetScenesCollectionSource"] = (static (p, rc) => new TileSetScenesCollectionSource(p, rc), true);
         Entries["TileSetSource"] = (static (p, rc) => new TileSetSource(p, rc), true);
-        Entries["Time"] = (static (p, rc) => new Time(p, rc), false);
+        Entries["Time"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["Timer"] = (static (p, rc) => new Timer(p, rc), false);
         Entries["TorusMesh"] = (static (p, rc) => new TorusMesh(p, rc), true);
         Entries["TouchScreenButton"] = (static (p, rc) => new TouchScreenButton(p, rc), false);
         Entries["Translation"] = (static (p, rc) => new Translation(p, rc), true);
         Entries["TranslationDomain"] = (static (p, rc) => new TranslationDomain(p, rc), true);
-        Entries["TranslationServer"] = (static (p, rc) => new TranslationServer(p, rc), false);
+        Entries["TranslationServer"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["Tree"] = (static (p, rc) => new Tree(p, rc), false);
         Entries["TreeItem"] = (static (p, rc) => new TreeItem(p, rc), false);
         Entries["TriangleMesh"] = (static (p, rc) => new TriangleMesh(p, rc), true);
@@ -1140,7 +1140,7 @@ public static class ApiRegistry
         Entries["WebSocketPeer"] = (static (p, rc) => new WebSocketPeer(p, rc), true);
         Entries["WebXRInterface"] = (static (p, rc) => new WebXRInterface(p, rc), true);
         Entries["Window"] = (static (p, rc) => new Window(p, rc), false);
-        Entries["WorkerThreadPool"] = (static (p, rc) => new WorkerThreadPool(p, rc), false);
+        Entries["WorkerThreadPool"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["World2D"] = (static (p, rc) => new World2D(p, rc), true);
         Entries["World3D"] = (static (p, rc) => new World3D(p, rc), true);
         Entries["WorldBoundaryShape2D"] = (static (p, rc) => new WorldBoundaryShape2D(p, rc), true);
@@ -1168,7 +1168,7 @@ public static class ApiRegistry
         Entries["XROrigin3D"] = (static (p, rc) => new XROrigin3D(p, rc), false);
         Entries["XRPose"] = (static (p, rc) => new XRPose(p, rc), true);
         Entries["XRPositionalTracker"] = (static (p, rc) => new XRPositionalTracker(p, rc), true);
-        Entries["XRServer"] = (static (p, rc) => new XRServer(p, rc), false);
+        Entries["XRServer"] = (static (p, rc) => new GodotObject(p, rc), false);
         Entries["XRTracker"] = (static (p, rc) => new XRTracker(p, rc), true);
         Entries["XRVRS"] = (static (p, rc) => new XRVRS(p, rc), false);
     }

@@ -3647,7 +3647,7 @@ public unsafe partial class RDShaderFile : Resource
     }
 
     private static nint __mb_set_bytecode;
-    public void SetBytecode(RDShaderSPIRV? bytecode, string version)
+    public void SetBytecode(RDShaderSPIRV? bytecode, string version = "")
     {
         var __mb = __mb_set_bytecode;
         if (__mb == 0)
@@ -3665,7 +3665,7 @@ public unsafe partial class RDShaderFile : Resource
     }
 
     private static nint __mb_get_spirv;
-    public RDShaderSPIRV? GetSpirv(string version)
+    public RDShaderSPIRV? GetSpirv(string version = "")
     {
         var __mb = __mb_get_spirv;
         if (__mb == 0)
@@ -5099,7 +5099,7 @@ public unsafe partial class RandomNumberGenerator : RefCounted
     }
 
     private static nint __mb_randfn;
-    public float Randfn(float mean, float deviation)
+    public float Randfn(float mean = 0.0f, float deviation = 1.0f)
     {
         var __mb = __mb_randfn;
         if (__mb == 0)
@@ -6957,15 +6957,15 @@ public unsafe partial class ReflectionProbe : VisualInstance3D
 
     public enum UpdateModeEnum : long
     {
-        UPDATE_ONCE = 0,
-        UPDATE_ALWAYS = 1,
+        Once = 0,
+        Always = 1,
     }
 
     public enum AmbientModeEnum : long
     {
-        AMBIENT_DISABLED = 0,
-        AMBIENT_ENVIRONMENT = 1,
-        AMBIENT_COLOR = 2,
+        Disabled = 0,
+        Environment = 1,
+        Color = 2,
     }
 
     public ReflectionProbe.UpdateModeEnum UpdateMode
@@ -7534,7 +7534,7 @@ public unsafe partial class RegEx : RefCounted
     }
 
     private static nint __mb_create_from_string;
-    public static RegEx? CreateFromString(string pattern, bool showError)
+    public static RegEx? CreateFromString(string pattern, bool showError = true)
     {
         var __mb = __mb_create_from_string;
         if (__mb == 0)
@@ -7568,7 +7568,7 @@ public unsafe partial class RegEx : RefCounted
     }
 
     private static nint __mb_compile;
-    public Error Compile(string pattern, bool showError)
+    public Error Compile(string pattern, bool showError = true)
     {
         var __mb = __mb_compile;
         if (__mb == 0)
@@ -7589,7 +7589,7 @@ public unsafe partial class RegEx : RefCounted
     }
 
     private static nint __mb_search;
-    public RegExMatch? Search(string subject, int offset, int end)
+    public RegExMatch? Search(string subject, int offset = unchecked((int)(0)), int end = unchecked((int)(-1)))
     {
         var __mb = __mb_search;
         if (__mb == 0)
@@ -7612,7 +7612,7 @@ public unsafe partial class RegEx : RefCounted
     }
 
     private static nint __mb_search_all;
-    public Godot.Collections.Array SearchAll(string subject, int offset, int end)
+    public Godot.Collections.Array SearchAll(string subject, int offset = unchecked((int)(0)), int end = unchecked((int)(-1)))
     {
         var __mb = __mb_search_all;
         if (__mb == 0)
@@ -7635,7 +7635,7 @@ public unsafe partial class RegEx : RefCounted
     }
 
     private static nint __mb_sub;
-    public string Sub(string subject, string replacement, bool all, int offset, int end)
+    public string Sub(string subject, string replacement, bool all = false, int offset = unchecked((int)(0)), int end = unchecked((int)(-1)))
     {
         var __mb = __mb_sub;
         if (__mb == 0)
@@ -9063,7 +9063,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_get_color_texture;
-    public Rid GetColorTexture(bool msaa)
+    public Rid GetColorTexture(bool msaa = false)
     {
         var __mb = __mb_get_color_texture;
         if (__mb == 0)
@@ -9081,7 +9081,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_get_color_layer;
-    public Rid GetColorLayer(uint layer, bool msaa)
+    public Rid GetColorLayer(uint layer, bool msaa = false)
     {
         var __mb = __mb_get_color_layer;
         if (__mb == 0)
@@ -9101,7 +9101,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_get_depth_texture;
-    public Rid GetDepthTexture(bool msaa)
+    public Rid GetDepthTexture(bool msaa = false)
     {
         var __mb = __mb_get_depth_texture;
         if (__mb == 0)
@@ -9119,7 +9119,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_get_depth_layer;
-    public Rid GetDepthLayer(uint layer, bool msaa)
+    public Rid GetDepthLayer(uint layer, bool msaa = false)
     {
         var __mb = __mb_get_depth_layer;
         if (__mb == 0)
@@ -9139,7 +9139,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_get_velocity_texture;
-    public Rid GetVelocityTexture(bool msaa)
+    public Rid GetVelocityTexture(bool msaa = false)
     {
         var __mb = __mb_get_velocity_texture;
         if (__mb == 0)
@@ -9157,7 +9157,7 @@ public unsafe partial class RenderSceneBuffersRD : RenderSceneBuffers
     }
 
     private static nint __mb_get_velocity_layer;
-    public Rid GetVelocityLayer(uint layer, bool msaa)
+    public Rid GetVelocityLayer(uint layer, bool msaa = false)
     {
         var __mb = __mb_get_velocity_layer;
         if (__mb == 0)
@@ -9529,739 +9529,739 @@ public unsafe partial class RenderingDevice : GodotObject
 
     public enum DeviceType : long
     {
-        DEVICE_TYPE_OTHER = 0,
-        DEVICE_TYPE_INTEGRATED_GPU = 1,
-        DEVICE_TYPE_DISCRETE_GPU = 2,
-        DEVICE_TYPE_VIRTUAL_GPU = 3,
-        DEVICE_TYPE_CPU = 4,
-        DEVICE_TYPE_MAX = 5,
+        Other = 0,
+        IntegratedGpu = 1,
+        DiscreteGpu = 2,
+        VirtualGpu = 3,
+        Cpu = 4,
+        Max = 5,
     }
 
     public enum DriverResource : long
     {
-        DRIVER_RESOURCE_LOGICAL_DEVICE = 0,
-        DRIVER_RESOURCE_PHYSICAL_DEVICE = 1,
-        DRIVER_RESOURCE_TOPMOST_OBJECT = 2,
-        DRIVER_RESOURCE_COMMAND_QUEUE = 3,
-        DRIVER_RESOURCE_QUEUE_FAMILY = 4,
-        DRIVER_RESOURCE_TEXTURE = 5,
-        DRIVER_RESOURCE_TEXTURE_VIEW = 6,
-        DRIVER_RESOURCE_TEXTURE_DATA_FORMAT = 7,
-        DRIVER_RESOURCE_SAMPLER = 8,
-        DRIVER_RESOURCE_UNIFORM_SET = 9,
-        DRIVER_RESOURCE_BUFFER = 10,
-        DRIVER_RESOURCE_COMPUTE_PIPELINE = 11,
-        DRIVER_RESOURCE_RENDER_PIPELINE = 12,
-        DRIVER_RESOURCE_VULKAN_DEVICE = 0,
-        DRIVER_RESOURCE_VULKAN_PHYSICAL_DEVICE = 1,
-        DRIVER_RESOURCE_VULKAN_INSTANCE = 2,
-        DRIVER_RESOURCE_VULKAN_QUEUE = 3,
-        DRIVER_RESOURCE_VULKAN_QUEUE_FAMILY_INDEX = 4,
-        DRIVER_RESOURCE_VULKAN_IMAGE = 5,
-        DRIVER_RESOURCE_VULKAN_IMAGE_VIEW = 6,
-        DRIVER_RESOURCE_VULKAN_IMAGE_NATIVE_TEXTURE_FORMAT = 7,
-        DRIVER_RESOURCE_VULKAN_SAMPLER = 8,
-        DRIVER_RESOURCE_VULKAN_DESCRIPTOR_SET = 9,
-        DRIVER_RESOURCE_VULKAN_BUFFER = 10,
-        DRIVER_RESOURCE_VULKAN_COMPUTE_PIPELINE = 11,
-        DRIVER_RESOURCE_VULKAN_RENDER_PIPELINE = 12,
+        LogicalDevice = 0,
+        PhysicalDevice = 1,
+        TopmostObject = 2,
+        CommandQueue = 3,
+        QueueFamily = 4,
+        Texture = 5,
+        TextureView = 6,
+        TextureDataFormat = 7,
+        Sampler = 8,
+        UniformSet = 9,
+        Buffer = 10,
+        ComputePipeline = 11,
+        RenderPipeline = 12,
+        VulkanDevice = 0,
+        VulkanPhysicalDevice = 1,
+        VulkanInstance = 2,
+        VulkanQueue = 3,
+        VulkanQueueFamilyIndex = 4,
+        VulkanImage = 5,
+        VulkanImageView = 6,
+        VulkanImageNativeTextureFormat = 7,
+        VulkanSampler = 8,
+        VulkanDescriptorSet = 9,
+        VulkanBuffer = 10,
+        VulkanComputePipeline = 11,
+        VulkanRenderPipeline = 12,
     }
 
     public enum DataFormat : long
     {
-        DATA_FORMAT_R4G4_UNORM_PACK8 = 0,
-        DATA_FORMAT_R4G4B4A4_UNORM_PACK16 = 1,
-        DATA_FORMAT_B4G4R4A4_UNORM_PACK16 = 2,
-        DATA_FORMAT_R5G6B5_UNORM_PACK16 = 3,
-        DATA_FORMAT_B5G6R5_UNORM_PACK16 = 4,
-        DATA_FORMAT_R5G5B5A1_UNORM_PACK16 = 5,
-        DATA_FORMAT_B5G5R5A1_UNORM_PACK16 = 6,
-        DATA_FORMAT_A1R5G5B5_UNORM_PACK16 = 7,
-        DATA_FORMAT_R8_UNORM = 8,
-        DATA_FORMAT_R8_SNORM = 9,
-        DATA_FORMAT_R8_USCALED = 10,
-        DATA_FORMAT_R8_SSCALED = 11,
-        DATA_FORMAT_R8_UINT = 12,
-        DATA_FORMAT_R8_SINT = 13,
-        DATA_FORMAT_R8_SRGB = 14,
-        DATA_FORMAT_R8G8_UNORM = 15,
-        DATA_FORMAT_R8G8_SNORM = 16,
-        DATA_FORMAT_R8G8_USCALED = 17,
-        DATA_FORMAT_R8G8_SSCALED = 18,
-        DATA_FORMAT_R8G8_UINT = 19,
-        DATA_FORMAT_R8G8_SINT = 20,
-        DATA_FORMAT_R8G8_SRGB = 21,
-        DATA_FORMAT_R8G8B8_UNORM = 22,
-        DATA_FORMAT_R8G8B8_SNORM = 23,
-        DATA_FORMAT_R8G8B8_USCALED = 24,
-        DATA_FORMAT_R8G8B8_SSCALED = 25,
-        DATA_FORMAT_R8G8B8_UINT = 26,
-        DATA_FORMAT_R8G8B8_SINT = 27,
-        DATA_FORMAT_R8G8B8_SRGB = 28,
-        DATA_FORMAT_B8G8R8_UNORM = 29,
-        DATA_FORMAT_B8G8R8_SNORM = 30,
-        DATA_FORMAT_B8G8R8_USCALED = 31,
-        DATA_FORMAT_B8G8R8_SSCALED = 32,
-        DATA_FORMAT_B8G8R8_UINT = 33,
-        DATA_FORMAT_B8G8R8_SINT = 34,
-        DATA_FORMAT_B8G8R8_SRGB = 35,
-        DATA_FORMAT_R8G8B8A8_UNORM = 36,
-        DATA_FORMAT_R8G8B8A8_SNORM = 37,
-        DATA_FORMAT_R8G8B8A8_USCALED = 38,
-        DATA_FORMAT_R8G8B8A8_SSCALED = 39,
-        DATA_FORMAT_R8G8B8A8_UINT = 40,
-        DATA_FORMAT_R8G8B8A8_SINT = 41,
-        DATA_FORMAT_R8G8B8A8_SRGB = 42,
-        DATA_FORMAT_B8G8R8A8_UNORM = 43,
-        DATA_FORMAT_B8G8R8A8_SNORM = 44,
-        DATA_FORMAT_B8G8R8A8_USCALED = 45,
-        DATA_FORMAT_B8G8R8A8_SSCALED = 46,
-        DATA_FORMAT_B8G8R8A8_UINT = 47,
-        DATA_FORMAT_B8G8R8A8_SINT = 48,
-        DATA_FORMAT_B8G8R8A8_SRGB = 49,
-        DATA_FORMAT_A8B8G8R8_UNORM_PACK32 = 50,
-        DATA_FORMAT_A8B8G8R8_SNORM_PACK32 = 51,
-        DATA_FORMAT_A8B8G8R8_USCALED_PACK32 = 52,
-        DATA_FORMAT_A8B8G8R8_SSCALED_PACK32 = 53,
-        DATA_FORMAT_A8B8G8R8_UINT_PACK32 = 54,
-        DATA_FORMAT_A8B8G8R8_SINT_PACK32 = 55,
-        DATA_FORMAT_A8B8G8R8_SRGB_PACK32 = 56,
-        DATA_FORMAT_A2R10G10B10_UNORM_PACK32 = 57,
-        DATA_FORMAT_A2R10G10B10_SNORM_PACK32 = 58,
-        DATA_FORMAT_A2R10G10B10_USCALED_PACK32 = 59,
-        DATA_FORMAT_A2R10G10B10_SSCALED_PACK32 = 60,
-        DATA_FORMAT_A2R10G10B10_UINT_PACK32 = 61,
-        DATA_FORMAT_A2R10G10B10_SINT_PACK32 = 62,
-        DATA_FORMAT_A2B10G10R10_UNORM_PACK32 = 63,
-        DATA_FORMAT_A2B10G10R10_SNORM_PACK32 = 64,
-        DATA_FORMAT_A2B10G10R10_USCALED_PACK32 = 65,
-        DATA_FORMAT_A2B10G10R10_SSCALED_PACK32 = 66,
-        DATA_FORMAT_A2B10G10R10_UINT_PACK32 = 67,
-        DATA_FORMAT_A2B10G10R10_SINT_PACK32 = 68,
-        DATA_FORMAT_R16_UNORM = 69,
-        DATA_FORMAT_R16_SNORM = 70,
-        DATA_FORMAT_R16_USCALED = 71,
-        DATA_FORMAT_R16_SSCALED = 72,
-        DATA_FORMAT_R16_UINT = 73,
-        DATA_FORMAT_R16_SINT = 74,
-        DATA_FORMAT_R16_SFLOAT = 75,
-        DATA_FORMAT_R16G16_UNORM = 76,
-        DATA_FORMAT_R16G16_SNORM = 77,
-        DATA_FORMAT_R16G16_USCALED = 78,
-        DATA_FORMAT_R16G16_SSCALED = 79,
-        DATA_FORMAT_R16G16_UINT = 80,
-        DATA_FORMAT_R16G16_SINT = 81,
-        DATA_FORMAT_R16G16_SFLOAT = 82,
-        DATA_FORMAT_R16G16B16_UNORM = 83,
-        DATA_FORMAT_R16G16B16_SNORM = 84,
-        DATA_FORMAT_R16G16B16_USCALED = 85,
-        DATA_FORMAT_R16G16B16_SSCALED = 86,
-        DATA_FORMAT_R16G16B16_UINT = 87,
-        DATA_FORMAT_R16G16B16_SINT = 88,
-        DATA_FORMAT_R16G16B16_SFLOAT = 89,
-        DATA_FORMAT_R16G16B16A16_UNORM = 90,
-        DATA_FORMAT_R16G16B16A16_SNORM = 91,
-        DATA_FORMAT_R16G16B16A16_USCALED = 92,
-        DATA_FORMAT_R16G16B16A16_SSCALED = 93,
-        DATA_FORMAT_R16G16B16A16_UINT = 94,
-        DATA_FORMAT_R16G16B16A16_SINT = 95,
-        DATA_FORMAT_R16G16B16A16_SFLOAT = 96,
-        DATA_FORMAT_R32_UINT = 97,
-        DATA_FORMAT_R32_SINT = 98,
-        DATA_FORMAT_R32_SFLOAT = 99,
-        DATA_FORMAT_R32G32_UINT = 100,
-        DATA_FORMAT_R32G32_SINT = 101,
-        DATA_FORMAT_R32G32_SFLOAT = 102,
-        DATA_FORMAT_R32G32B32_UINT = 103,
-        DATA_FORMAT_R32G32B32_SINT = 104,
-        DATA_FORMAT_R32G32B32_SFLOAT = 105,
-        DATA_FORMAT_R32G32B32A32_UINT = 106,
-        DATA_FORMAT_R32G32B32A32_SINT = 107,
-        DATA_FORMAT_R32G32B32A32_SFLOAT = 108,
-        DATA_FORMAT_R64_UINT = 109,
-        DATA_FORMAT_R64_SINT = 110,
-        DATA_FORMAT_R64_SFLOAT = 111,
-        DATA_FORMAT_R64G64_UINT = 112,
-        DATA_FORMAT_R64G64_SINT = 113,
-        DATA_FORMAT_R64G64_SFLOAT = 114,
-        DATA_FORMAT_R64G64B64_UINT = 115,
-        DATA_FORMAT_R64G64B64_SINT = 116,
-        DATA_FORMAT_R64G64B64_SFLOAT = 117,
-        DATA_FORMAT_R64G64B64A64_UINT = 118,
-        DATA_FORMAT_R64G64B64A64_SINT = 119,
-        DATA_FORMAT_R64G64B64A64_SFLOAT = 120,
-        DATA_FORMAT_B10G11R11_UFLOAT_PACK32 = 121,
-        DATA_FORMAT_E5B9G9R9_UFLOAT_PACK32 = 122,
-        DATA_FORMAT_D16_UNORM = 123,
-        DATA_FORMAT_X8_D24_UNORM_PACK32 = 124,
-        DATA_FORMAT_D32_SFLOAT = 125,
-        DATA_FORMAT_S8_UINT = 126,
-        DATA_FORMAT_D16_UNORM_S8_UINT = 127,
-        DATA_FORMAT_D24_UNORM_S8_UINT = 128,
-        DATA_FORMAT_D32_SFLOAT_S8_UINT = 129,
-        DATA_FORMAT_BC1_RGB_UNORM_BLOCK = 130,
-        DATA_FORMAT_BC1_RGB_SRGB_BLOCK = 131,
-        DATA_FORMAT_BC1_RGBA_UNORM_BLOCK = 132,
-        DATA_FORMAT_BC1_RGBA_SRGB_BLOCK = 133,
-        DATA_FORMAT_BC2_UNORM_BLOCK = 134,
-        DATA_FORMAT_BC2_SRGB_BLOCK = 135,
-        DATA_FORMAT_BC3_UNORM_BLOCK = 136,
-        DATA_FORMAT_BC3_SRGB_BLOCK = 137,
-        DATA_FORMAT_BC4_UNORM_BLOCK = 138,
-        DATA_FORMAT_BC4_SNORM_BLOCK = 139,
-        DATA_FORMAT_BC5_UNORM_BLOCK = 140,
-        DATA_FORMAT_BC5_SNORM_BLOCK = 141,
-        DATA_FORMAT_BC6H_UFLOAT_BLOCK = 142,
-        DATA_FORMAT_BC6H_SFLOAT_BLOCK = 143,
-        DATA_FORMAT_BC7_UNORM_BLOCK = 144,
-        DATA_FORMAT_BC7_SRGB_BLOCK = 145,
-        DATA_FORMAT_ETC2_R8G8B8_UNORM_BLOCK = 146,
-        DATA_FORMAT_ETC2_R8G8B8_SRGB_BLOCK = 147,
-        DATA_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK = 148,
-        DATA_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK = 149,
-        DATA_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK = 150,
-        DATA_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK = 151,
-        DATA_FORMAT_EAC_R11_UNORM_BLOCK = 152,
-        DATA_FORMAT_EAC_R11_SNORM_BLOCK = 153,
-        DATA_FORMAT_EAC_R11G11_UNORM_BLOCK = 154,
-        DATA_FORMAT_EAC_R11G11_SNORM_BLOCK = 155,
-        DATA_FORMAT_ASTC_4x4_UNORM_BLOCK = 156,
-        DATA_FORMAT_ASTC_4x4_SRGB_BLOCK = 157,
-        DATA_FORMAT_ASTC_5x4_UNORM_BLOCK = 158,
-        DATA_FORMAT_ASTC_5x4_SRGB_BLOCK = 159,
-        DATA_FORMAT_ASTC_5x5_UNORM_BLOCK = 160,
-        DATA_FORMAT_ASTC_5x5_SRGB_BLOCK = 161,
-        DATA_FORMAT_ASTC_6x5_UNORM_BLOCK = 162,
-        DATA_FORMAT_ASTC_6x5_SRGB_BLOCK = 163,
-        DATA_FORMAT_ASTC_6x6_UNORM_BLOCK = 164,
-        DATA_FORMAT_ASTC_6x6_SRGB_BLOCK = 165,
-        DATA_FORMAT_ASTC_8x5_UNORM_BLOCK = 166,
-        DATA_FORMAT_ASTC_8x5_SRGB_BLOCK = 167,
-        DATA_FORMAT_ASTC_8x6_UNORM_BLOCK = 168,
-        DATA_FORMAT_ASTC_8x6_SRGB_BLOCK = 169,
-        DATA_FORMAT_ASTC_8x8_UNORM_BLOCK = 170,
-        DATA_FORMAT_ASTC_8x8_SRGB_BLOCK = 171,
-        DATA_FORMAT_ASTC_10x5_UNORM_BLOCK = 172,
-        DATA_FORMAT_ASTC_10x5_SRGB_BLOCK = 173,
-        DATA_FORMAT_ASTC_10x6_UNORM_BLOCK = 174,
-        DATA_FORMAT_ASTC_10x6_SRGB_BLOCK = 175,
-        DATA_FORMAT_ASTC_10x8_UNORM_BLOCK = 176,
-        DATA_FORMAT_ASTC_10x8_SRGB_BLOCK = 177,
-        DATA_FORMAT_ASTC_10x10_UNORM_BLOCK = 178,
-        DATA_FORMAT_ASTC_10x10_SRGB_BLOCK = 179,
-        DATA_FORMAT_ASTC_12x10_UNORM_BLOCK = 180,
-        DATA_FORMAT_ASTC_12x10_SRGB_BLOCK = 181,
-        DATA_FORMAT_ASTC_12x12_UNORM_BLOCK = 182,
-        DATA_FORMAT_ASTC_12x12_SRGB_BLOCK = 183,
-        DATA_FORMAT_G8B8G8R8_422_UNORM = 184,
-        DATA_FORMAT_B8G8R8G8_422_UNORM = 185,
-        DATA_FORMAT_G8_B8_R8_3PLANE_420_UNORM = 186,
-        DATA_FORMAT_G8_B8R8_2PLANE_420_UNORM = 187,
-        DATA_FORMAT_G8_B8_R8_3PLANE_422_UNORM = 188,
-        DATA_FORMAT_G8_B8R8_2PLANE_422_UNORM = 189,
-        DATA_FORMAT_G8_B8_R8_3PLANE_444_UNORM = 190,
-        DATA_FORMAT_R10X6_UNORM_PACK16 = 191,
-        DATA_FORMAT_R10X6G10X6_UNORM_2PACK16 = 192,
-        DATA_FORMAT_R10X6G10X6B10X6A10X6_UNORM_4PACK16 = 193,
-        DATA_FORMAT_G10X6B10X6G10X6R10X6_422_UNORM_4PACK16 = 194,
-        DATA_FORMAT_B10X6G10X6R10X6G10X6_422_UNORM_4PACK16 = 195,
-        DATA_FORMAT_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16 = 196,
-        DATA_FORMAT_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16 = 197,
-        DATA_FORMAT_G10X6_B10X6_R10X6_3PLANE_422_UNORM_3PACK16 = 198,
-        DATA_FORMAT_G10X6_B10X6R10X6_2PLANE_422_UNORM_3PACK16 = 199,
-        DATA_FORMAT_G10X6_B10X6_R10X6_3PLANE_444_UNORM_3PACK16 = 200,
-        DATA_FORMAT_R12X4_UNORM_PACK16 = 201,
-        DATA_FORMAT_R12X4G12X4_UNORM_2PACK16 = 202,
-        DATA_FORMAT_R12X4G12X4B12X4A12X4_UNORM_4PACK16 = 203,
-        DATA_FORMAT_G12X4B12X4G12X4R12X4_422_UNORM_4PACK16 = 204,
-        DATA_FORMAT_B12X4G12X4R12X4G12X4_422_UNORM_4PACK16 = 205,
-        DATA_FORMAT_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16 = 206,
-        DATA_FORMAT_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16 = 207,
-        DATA_FORMAT_G12X4_B12X4_R12X4_3PLANE_422_UNORM_3PACK16 = 208,
-        DATA_FORMAT_G12X4_B12X4R12X4_2PLANE_422_UNORM_3PACK16 = 209,
-        DATA_FORMAT_G12X4_B12X4_R12X4_3PLANE_444_UNORM_3PACK16 = 210,
-        DATA_FORMAT_G16B16G16R16_422_UNORM = 211,
-        DATA_FORMAT_B16G16R16G16_422_UNORM = 212,
-        DATA_FORMAT_G16_B16_R16_3PLANE_420_UNORM = 213,
-        DATA_FORMAT_G16_B16R16_2PLANE_420_UNORM = 214,
-        DATA_FORMAT_G16_B16_R16_3PLANE_422_UNORM = 215,
-        DATA_FORMAT_G16_B16R16_2PLANE_422_UNORM = 216,
-        DATA_FORMAT_G16_B16_R16_3PLANE_444_UNORM = 217,
-        DATA_FORMAT_ASTC_4x4_SFLOAT_BLOCK = 218,
-        DATA_FORMAT_ASTC_5x4_SFLOAT_BLOCK = 219,
-        DATA_FORMAT_ASTC_5x5_SFLOAT_BLOCK = 220,
-        DATA_FORMAT_ASTC_6x5_SFLOAT_BLOCK = 221,
-        DATA_FORMAT_ASTC_6x6_SFLOAT_BLOCK = 222,
-        DATA_FORMAT_ASTC_8x5_SFLOAT_BLOCK = 223,
-        DATA_FORMAT_ASTC_8x6_SFLOAT_BLOCK = 224,
-        DATA_FORMAT_ASTC_8x8_SFLOAT_BLOCK = 225,
-        DATA_FORMAT_ASTC_10x5_SFLOAT_BLOCK = 226,
-        DATA_FORMAT_ASTC_10x6_SFLOAT_BLOCK = 227,
-        DATA_FORMAT_ASTC_10x8_SFLOAT_BLOCK = 228,
-        DATA_FORMAT_ASTC_10x10_SFLOAT_BLOCK = 229,
-        DATA_FORMAT_ASTC_12x10_SFLOAT_BLOCK = 230,
-        DATA_FORMAT_ASTC_12x12_SFLOAT_BLOCK = 231,
-        DATA_FORMAT_MAX = 232,
+        R4g4UnormPack8 = 0,
+        R4g4b4a4UnormPack16 = 1,
+        B4g4r4a4UnormPack16 = 2,
+        R5g6b5UnormPack16 = 3,
+        B5g6r5UnormPack16 = 4,
+        R5g5b5a1UnormPack16 = 5,
+        B5g5r5a1UnormPack16 = 6,
+        A1r5g5b5UnormPack16 = 7,
+        R8Unorm = 8,
+        R8Snorm = 9,
+        R8Uscaled = 10,
+        R8Sscaled = 11,
+        R8Uint = 12,
+        R8Sint = 13,
+        R8Srgb = 14,
+        R8g8Unorm = 15,
+        R8g8Snorm = 16,
+        R8g8Uscaled = 17,
+        R8g8Sscaled = 18,
+        R8g8Uint = 19,
+        R8g8Sint = 20,
+        R8g8Srgb = 21,
+        R8g8b8Unorm = 22,
+        R8g8b8Snorm = 23,
+        R8g8b8Uscaled = 24,
+        R8g8b8Sscaled = 25,
+        R8g8b8Uint = 26,
+        R8g8b8Sint = 27,
+        R8g8b8Srgb = 28,
+        B8g8r8Unorm = 29,
+        B8g8r8Snorm = 30,
+        B8g8r8Uscaled = 31,
+        B8g8r8Sscaled = 32,
+        B8g8r8Uint = 33,
+        B8g8r8Sint = 34,
+        B8g8r8Srgb = 35,
+        R8g8b8a8Unorm = 36,
+        R8g8b8a8Snorm = 37,
+        R8g8b8a8Uscaled = 38,
+        R8g8b8a8Sscaled = 39,
+        R8g8b8a8Uint = 40,
+        R8g8b8a8Sint = 41,
+        R8g8b8a8Srgb = 42,
+        B8g8r8a8Unorm = 43,
+        B8g8r8a8Snorm = 44,
+        B8g8r8a8Uscaled = 45,
+        B8g8r8a8Sscaled = 46,
+        B8g8r8a8Uint = 47,
+        B8g8r8a8Sint = 48,
+        B8g8r8a8Srgb = 49,
+        A8b8g8r8UnormPack32 = 50,
+        A8b8g8r8SnormPack32 = 51,
+        A8b8g8r8UscaledPack32 = 52,
+        A8b8g8r8SscaledPack32 = 53,
+        A8b8g8r8UintPack32 = 54,
+        A8b8g8r8SintPack32 = 55,
+        A8b8g8r8SrgbPack32 = 56,
+        A2r10g10b10UnormPack32 = 57,
+        A2r10g10b10SnormPack32 = 58,
+        A2r10g10b10UscaledPack32 = 59,
+        A2r10g10b10SscaledPack32 = 60,
+        A2r10g10b10UintPack32 = 61,
+        A2r10g10b10SintPack32 = 62,
+        A2b10g10r10UnormPack32 = 63,
+        A2b10g10r10SnormPack32 = 64,
+        A2b10g10r10UscaledPack32 = 65,
+        A2b10g10r10SscaledPack32 = 66,
+        A2b10g10r10UintPack32 = 67,
+        A2b10g10r10SintPack32 = 68,
+        R16Unorm = 69,
+        R16Snorm = 70,
+        R16Uscaled = 71,
+        R16Sscaled = 72,
+        R16Uint = 73,
+        R16Sint = 74,
+        R16Sfloat = 75,
+        R16g16Unorm = 76,
+        R16g16Snorm = 77,
+        R16g16Uscaled = 78,
+        R16g16Sscaled = 79,
+        R16g16Uint = 80,
+        R16g16Sint = 81,
+        R16g16Sfloat = 82,
+        R16g16b16Unorm = 83,
+        R16g16b16Snorm = 84,
+        R16g16b16Uscaled = 85,
+        R16g16b16Sscaled = 86,
+        R16g16b16Uint = 87,
+        R16g16b16Sint = 88,
+        R16g16b16Sfloat = 89,
+        R16g16b16a16Unorm = 90,
+        R16g16b16a16Snorm = 91,
+        R16g16b16a16Uscaled = 92,
+        R16g16b16a16Sscaled = 93,
+        R16g16b16a16Uint = 94,
+        R16g16b16a16Sint = 95,
+        R16g16b16a16Sfloat = 96,
+        R32Uint = 97,
+        R32Sint = 98,
+        R32Sfloat = 99,
+        R32g32Uint = 100,
+        R32g32Sint = 101,
+        R32g32Sfloat = 102,
+        R32g32b32Uint = 103,
+        R32g32b32Sint = 104,
+        R32g32b32Sfloat = 105,
+        R32g32b32a32Uint = 106,
+        R32g32b32a32Sint = 107,
+        R32g32b32a32Sfloat = 108,
+        R64Uint = 109,
+        R64Sint = 110,
+        R64Sfloat = 111,
+        R64g64Uint = 112,
+        R64g64Sint = 113,
+        R64g64Sfloat = 114,
+        R64g64b64Uint = 115,
+        R64g64b64Sint = 116,
+        R64g64b64Sfloat = 117,
+        R64g64b64a64Uint = 118,
+        R64g64b64a64Sint = 119,
+        R64g64b64a64Sfloat = 120,
+        B10g11r11UfloatPack32 = 121,
+        E5b9g9r9UfloatPack32 = 122,
+        D16Unorm = 123,
+        X8D24UnormPack32 = 124,
+        D32Sfloat = 125,
+        S8Uint = 126,
+        D16UnormS8Uint = 127,
+        D24UnormS8Uint = 128,
+        D32SfloatS8Uint = 129,
+        Bc1RgbUnormBlock = 130,
+        Bc1RgbSrgbBlock = 131,
+        Bc1RgbaUnormBlock = 132,
+        Bc1RgbaSrgbBlock = 133,
+        Bc2UnormBlock = 134,
+        Bc2SrgbBlock = 135,
+        Bc3UnormBlock = 136,
+        Bc3SrgbBlock = 137,
+        Bc4UnormBlock = 138,
+        Bc4SnormBlock = 139,
+        Bc5UnormBlock = 140,
+        Bc5SnormBlock = 141,
+        Bc6hUfloatBlock = 142,
+        Bc6hSfloatBlock = 143,
+        Bc7UnormBlock = 144,
+        Bc7SrgbBlock = 145,
+        Etc2R8g8b8UnormBlock = 146,
+        Etc2R8g8b8SrgbBlock = 147,
+        Etc2R8g8b8a1UnormBlock = 148,
+        Etc2R8g8b8a1SrgbBlock = 149,
+        Etc2R8g8b8a8UnormBlock = 150,
+        Etc2R8g8b8a8SrgbBlock = 151,
+        EacR11UnormBlock = 152,
+        EacR11SnormBlock = 153,
+        EacR11g11UnormBlock = 154,
+        EacR11g11SnormBlock = 155,
+        Astc4x4UnormBlock = 156,
+        Astc4x4SrgbBlock = 157,
+        Astc5x4UnormBlock = 158,
+        Astc5x4SrgbBlock = 159,
+        Astc5x5UnormBlock = 160,
+        Astc5x5SrgbBlock = 161,
+        Astc6x5UnormBlock = 162,
+        Astc6x5SrgbBlock = 163,
+        Astc6x6UnormBlock = 164,
+        Astc6x6SrgbBlock = 165,
+        Astc8x5UnormBlock = 166,
+        Astc8x5SrgbBlock = 167,
+        Astc8x6UnormBlock = 168,
+        Astc8x6SrgbBlock = 169,
+        Astc8x8UnormBlock = 170,
+        Astc8x8SrgbBlock = 171,
+        Astc10x5UnormBlock = 172,
+        Astc10x5SrgbBlock = 173,
+        Astc10x6UnormBlock = 174,
+        Astc10x6SrgbBlock = 175,
+        Astc10x8UnormBlock = 176,
+        Astc10x8SrgbBlock = 177,
+        Astc10x10UnormBlock = 178,
+        Astc10x10SrgbBlock = 179,
+        Astc12x10UnormBlock = 180,
+        Astc12x10SrgbBlock = 181,
+        Astc12x12UnormBlock = 182,
+        Astc12x12SrgbBlock = 183,
+        G8b8g8r8422Unorm = 184,
+        B8g8r8g8422Unorm = 185,
+        G8B8R83plane420Unorm = 186,
+        G8B8r82plane420Unorm = 187,
+        G8B8R83plane422Unorm = 188,
+        G8B8r82plane422Unorm = 189,
+        G8B8R83plane444Unorm = 190,
+        R10x6UnormPack16 = 191,
+        R10x6g10x6Unorm2pack16 = 192,
+        R10x6g10x6b10x6a10x6Unorm4pack16 = 193,
+        G10x6b10x6g10x6r10x6422Unorm4pack16 = 194,
+        B10x6g10x6r10x6g10x6422Unorm4pack16 = 195,
+        G10x6B10x6R10x63plane420Unorm3pack16 = 196,
+        G10x6B10x6r10x62plane420Unorm3pack16 = 197,
+        G10x6B10x6R10x63plane422Unorm3pack16 = 198,
+        G10x6B10x6r10x62plane422Unorm3pack16 = 199,
+        G10x6B10x6R10x63plane444Unorm3pack16 = 200,
+        R12x4UnormPack16 = 201,
+        R12x4g12x4Unorm2pack16 = 202,
+        R12x4g12x4b12x4a12x4Unorm4pack16 = 203,
+        G12x4b12x4g12x4r12x4422Unorm4pack16 = 204,
+        B12x4g12x4r12x4g12x4422Unorm4pack16 = 205,
+        G12x4B12x4R12x43plane420Unorm3pack16 = 206,
+        G12x4B12x4r12x42plane420Unorm3pack16 = 207,
+        G12x4B12x4R12x43plane422Unorm3pack16 = 208,
+        G12x4B12x4r12x42plane422Unorm3pack16 = 209,
+        G12x4B12x4R12x43plane444Unorm3pack16 = 210,
+        G16b16g16r16422Unorm = 211,
+        B16g16r16g16422Unorm = 212,
+        G16B16R163plane420Unorm = 213,
+        G16B16r162plane420Unorm = 214,
+        G16B16R163plane422Unorm = 215,
+        G16B16r162plane422Unorm = 216,
+        G16B16R163plane444Unorm = 217,
+        Astc4x4SfloatBlock = 218,
+        Astc5x4SfloatBlock = 219,
+        Astc5x5SfloatBlock = 220,
+        Astc6x5SfloatBlock = 221,
+        Astc6x6SfloatBlock = 222,
+        Astc8x5SfloatBlock = 223,
+        Astc8x6SfloatBlock = 224,
+        Astc8x8SfloatBlock = 225,
+        Astc10x5SfloatBlock = 226,
+        Astc10x6SfloatBlock = 227,
+        Astc10x8SfloatBlock = 228,
+        Astc10x10SfloatBlock = 229,
+        Astc12x10SfloatBlock = 230,
+        Astc12x12SfloatBlock = 231,
+        Max = 232,
     }
 
     [Flags]
     public enum BarrierMask : long
     {
-        BARRIER_MASK_VERTEX = 1,
-        BARRIER_MASK_FRAGMENT = 8,
-        BARRIER_MASK_COMPUTE = 2,
-        BARRIER_MASK_TRANSFER = 4,
-        BARRIER_MASK_RASTER = 9,
-        BARRIER_MASK_ALL_BARRIERS = 32767,
-        BARRIER_MASK_NO_BARRIER = 32768,
+        Vertex = 1,
+        Fragment = 8,
+        Compute = 2,
+        Transfer = 4,
+        Raster = 9,
+        AllBarriers = 32767,
+        NoBarrier = 32768,
     }
 
     public enum TextureType : long
     {
-        TEXTURE_TYPE_1D = 0,
-        TEXTURE_TYPE_2D = 1,
-        TEXTURE_TYPE_3D = 2,
-        TEXTURE_TYPE_CUBE = 3,
-        TEXTURE_TYPE_1D_ARRAY = 4,
-        TEXTURE_TYPE_2D_ARRAY = 5,
-        TEXTURE_TYPE_CUBE_ARRAY = 6,
-        TEXTURE_TYPE_MAX = 7,
+        Type1d = 0,
+        Type2d = 1,
+        Type3d = 2,
+        Cube = 3,
+        Type1dArray = 4,
+        Type2dArray = 5,
+        CubeArray = 6,
+        Max = 7,
     }
 
     public enum TextureSamples : long
     {
-        TEXTURE_SAMPLES_1 = 0,
-        TEXTURE_SAMPLES_2 = 1,
-        TEXTURE_SAMPLES_4 = 2,
-        TEXTURE_SAMPLES_8 = 3,
-        TEXTURE_SAMPLES_16 = 4,
-        TEXTURE_SAMPLES_32 = 5,
-        TEXTURE_SAMPLES_64 = 6,
-        TEXTURE_SAMPLES_MAX = 7,
+        Samples1 = 0,
+        Samples2 = 1,
+        Samples4 = 2,
+        Samples8 = 3,
+        Samples16 = 4,
+        Samples32 = 5,
+        Samples64 = 6,
+        Max = 7,
     }
 
     [Flags]
     public enum TextureUsageBits : long
     {
-        TEXTURE_USAGE_SAMPLING_BIT = 1,
-        TEXTURE_USAGE_COLOR_ATTACHMENT_BIT = 2,
-        TEXTURE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT = 4,
-        TEXTURE_USAGE_DEPTH_RESOLVE_ATTACHMENT_BIT = 4096,
-        TEXTURE_USAGE_STORAGE_BIT = 8,
-        TEXTURE_USAGE_STORAGE_ATOMIC_BIT = 16,
-        TEXTURE_USAGE_CPU_READ_BIT = 32,
-        TEXTURE_USAGE_CAN_UPDATE_BIT = 64,
-        TEXTURE_USAGE_CAN_COPY_FROM_BIT = 128,
-        TEXTURE_USAGE_CAN_COPY_TO_BIT = 256,
-        TEXTURE_USAGE_INPUT_ATTACHMENT_BIT = 512,
+        SamplingBit = 1,
+        ColorAttachmentBit = 2,
+        DepthStencilAttachmentBit = 4,
+        DepthResolveAttachmentBit = 4096,
+        StorageBit = 8,
+        StorageAtomicBit = 16,
+        CpuReadBit = 32,
+        CanUpdateBit = 64,
+        CanCopyFromBit = 128,
+        CanCopyToBit = 256,
+        InputAttachmentBit = 512,
     }
 
     public enum TextureSwizzle : long
     {
-        TEXTURE_SWIZZLE_IDENTITY = 0,
-        TEXTURE_SWIZZLE_ZERO = 1,
-        TEXTURE_SWIZZLE_ONE = 2,
-        TEXTURE_SWIZZLE_R = 3,
-        TEXTURE_SWIZZLE_G = 4,
-        TEXTURE_SWIZZLE_B = 5,
-        TEXTURE_SWIZZLE_A = 6,
-        TEXTURE_SWIZZLE_MAX = 7,
+        Identity = 0,
+        Zero = 1,
+        One = 2,
+        R = 3,
+        G = 4,
+        B = 5,
+        A = 6,
+        Max = 7,
     }
 
     public enum TextureSliceType : long
     {
-        TEXTURE_SLICE_2D = 0,
-        TEXTURE_SLICE_CUBEMAP = 1,
-        TEXTURE_SLICE_3D = 2,
+        Slice2d = 0,
+        Cubemap = 1,
+        Slice3d = 2,
     }
 
     public enum SamplerFilter : long
     {
-        SAMPLER_FILTER_NEAREST = 0,
-        SAMPLER_FILTER_LINEAR = 1,
+        Nearest = 0,
+        Linear = 1,
     }
 
     public enum SamplerRepeatMode : long
     {
-        SAMPLER_REPEAT_MODE_REPEAT = 0,
-        SAMPLER_REPEAT_MODE_MIRRORED_REPEAT = 1,
-        SAMPLER_REPEAT_MODE_CLAMP_TO_EDGE = 2,
-        SAMPLER_REPEAT_MODE_CLAMP_TO_BORDER = 3,
-        SAMPLER_REPEAT_MODE_MIRROR_CLAMP_TO_EDGE = 4,
-        SAMPLER_REPEAT_MODE_MAX = 5,
+        Repeat = 0,
+        MirroredRepeat = 1,
+        ClampToEdge = 2,
+        ClampToBorder = 3,
+        MirrorClampToEdge = 4,
+        Max = 5,
     }
 
     public enum SamplerBorderColor : long
     {
-        SAMPLER_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK = 0,
-        SAMPLER_BORDER_COLOR_INT_TRANSPARENT_BLACK = 1,
-        SAMPLER_BORDER_COLOR_FLOAT_OPAQUE_BLACK = 2,
-        SAMPLER_BORDER_COLOR_INT_OPAQUE_BLACK = 3,
-        SAMPLER_BORDER_COLOR_FLOAT_OPAQUE_WHITE = 4,
-        SAMPLER_BORDER_COLOR_INT_OPAQUE_WHITE = 5,
-        SAMPLER_BORDER_COLOR_MAX = 6,
+        FloatTransparentBlack = 0,
+        IntTransparentBlack = 1,
+        FloatOpaqueBlack = 2,
+        IntOpaqueBlack = 3,
+        FloatOpaqueWhite = 4,
+        IntOpaqueWhite = 5,
+        Max = 6,
     }
 
     public enum VertexFrequency : long
     {
-        VERTEX_FREQUENCY_VERTEX = 0,
-        VERTEX_FREQUENCY_INSTANCE = 1,
+        Vertex = 0,
+        Instance = 1,
     }
 
     public enum IndexBufferFormat : long
     {
-        INDEX_BUFFER_FORMAT_UINT16 = 0,
-        INDEX_BUFFER_FORMAT_UINT32 = 1,
+        Uint16 = 0,
+        Uint32 = 1,
     }
 
     [Flags]
     public enum StorageBufferUsage : long
     {
-        STORAGE_BUFFER_USAGE_DISPATCH_INDIRECT = 1,
+        StorageBufferUsageDispatchIndirect = 1,
     }
 
     [Flags]
     public enum BufferCreationBits : long
     {
-        BUFFER_CREATION_DEVICE_ADDRESS_BIT = 1,
-        BUFFER_CREATION_AS_STORAGE_BIT = 2,
-        BUFFER_CREATION_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT = 8,
+        DeviceAddressBit = 1,
+        AsStorageBit = 2,
+        AccelerationStructureBuildInputReadOnlyBit = 8,
     }
 
     [Flags]
     public enum AccelerationStructureFlagBits : long
     {
-        ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT = 1,
-        ACCELERATION_STRUCTURE_ALLOW_COMPACTION_BIT = 2,
-        ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT = 4,
-        ACCELERATION_STRUCTURE_PREFER_FAST_BUILD_BIT = 8,
-        ACCELERATION_STRUCTURE_LOW_MEMORY_BIT = 16,
+        AllowUpdateBit = 1,
+        AllowCompactionBit = 2,
+        PreferFastTraceBit = 4,
+        PreferFastBuildBit = 8,
+        LowMemoryBit = 16,
     }
 
     [Flags]
     public enum AccelerationStructureGeometryFlagBits : long
     {
-        ACCELERATION_STRUCTURE_GEOMETRY_OPAQUE_BIT = 1,
-        ACCELERATION_STRUCTURE_GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT = 2,
+        OpaqueBit = 1,
+        NoDuplicateAnyHitInvocationBit = 2,
     }
 
     [Flags]
     public enum AccelerationStructureInstanceFlagBits : long
     {
-        ACCELERATION_STRUCTURE_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT = 1,
-        ACCELERATION_STRUCTURE_INSTANCE_TRIANGLE_FLIP_FACING_BIT = 2,
-        ACCELERATION_STRUCTURE_INSTANCE_FORCE_OPAQUE_BIT = 4,
-        ACCELERATION_STRUCTURE_INSTANCE_FORCE_NO_OPAQUE_BIT = 8,
+        TriangleFacingCullDisableBit = 1,
+        TriangleFlipFacingBit = 2,
+        ForceOpaqueBit = 4,
+        ForceNoOpaqueBit = 8,
     }
 
     public enum UniformType : long
     {
-        UNIFORM_TYPE_SAMPLER = 0,
-        UNIFORM_TYPE_SAMPLER_WITH_TEXTURE = 1,
-        UNIFORM_TYPE_TEXTURE = 2,
-        UNIFORM_TYPE_IMAGE = 3,
-        UNIFORM_TYPE_TEXTURE_BUFFER = 4,
-        UNIFORM_TYPE_SAMPLER_WITH_TEXTURE_BUFFER = 5,
-        UNIFORM_TYPE_IMAGE_BUFFER = 6,
-        UNIFORM_TYPE_UNIFORM_BUFFER = 7,
-        UNIFORM_TYPE_STORAGE_BUFFER = 8,
-        UNIFORM_TYPE_INPUT_ATTACHMENT = 9,
-        UNIFORM_TYPE_UNIFORM_BUFFER_DYNAMIC = 10,
-        UNIFORM_TYPE_STORAGE_BUFFER_DYNAMIC = 11,
-        UNIFORM_TYPE_ACCELERATION_STRUCTURE = 12,
-        UNIFORM_TYPE_MAX = 13,
+        Sampler = 0,
+        SamplerWithTexture = 1,
+        Texture = 2,
+        Image = 3,
+        TextureBuffer = 4,
+        SamplerWithTextureBuffer = 5,
+        ImageBuffer = 6,
+        UniformBuffer = 7,
+        StorageBuffer = 8,
+        InputAttachment = 9,
+        UniformBufferDynamic = 10,
+        StorageBufferDynamic = 11,
+        AccelerationStructure = 12,
+        Max = 13,
     }
 
     public enum RenderPrimitive : long
     {
-        RENDER_PRIMITIVE_POINTS = 0,
-        RENDER_PRIMITIVE_LINES = 1,
-        RENDER_PRIMITIVE_LINES_WITH_ADJACENCY = 2,
-        RENDER_PRIMITIVE_LINESTRIPS = 3,
-        RENDER_PRIMITIVE_LINESTRIPS_WITH_ADJACENCY = 4,
-        RENDER_PRIMITIVE_TRIANGLES = 5,
-        RENDER_PRIMITIVE_TRIANGLES_WITH_ADJACENCY = 6,
-        RENDER_PRIMITIVE_TRIANGLE_STRIPS = 7,
-        RENDER_PRIMITIVE_TRIANGLE_STRIPS_WITH_AJACENCY = 8,
-        RENDER_PRIMITIVE_TRIANGLE_STRIPS_WITH_RESTART_INDEX = 9,
-        RENDER_PRIMITIVE_TESSELATION_PATCH = 10,
-        RENDER_PRIMITIVE_MAX = 11,
+        Points = 0,
+        Lines = 1,
+        LinesWithAdjacency = 2,
+        Linestrips = 3,
+        LinestripsWithAdjacency = 4,
+        Triangles = 5,
+        TrianglesWithAdjacency = 6,
+        TriangleStrips = 7,
+        TriangleStripsWithAjacency = 8,
+        TriangleStripsWithRestartIndex = 9,
+        TesselationPatch = 10,
+        Max = 11,
     }
 
     public enum PolygonCullMode : long
     {
-        POLYGON_CULL_DISABLED = 0,
-        POLYGON_CULL_FRONT = 1,
-        POLYGON_CULL_BACK = 2,
+        Disabled = 0,
+        Front = 1,
+        Back = 2,
     }
 
     public enum PolygonFrontFace : long
     {
-        POLYGON_FRONT_FACE_CLOCKWISE = 0,
-        POLYGON_FRONT_FACE_COUNTER_CLOCKWISE = 1,
+        Clockwise = 0,
+        CounterClockwise = 1,
     }
 
     public enum StencilOperation : long
     {
-        STENCIL_OP_KEEP = 0,
-        STENCIL_OP_ZERO = 1,
-        STENCIL_OP_REPLACE = 2,
-        STENCIL_OP_INCREMENT_AND_CLAMP = 3,
-        STENCIL_OP_DECREMENT_AND_CLAMP = 4,
-        STENCIL_OP_INVERT = 5,
-        STENCIL_OP_INCREMENT_AND_WRAP = 6,
-        STENCIL_OP_DECREMENT_AND_WRAP = 7,
-        STENCIL_OP_MAX = 8,
+        Keep = 0,
+        Zero = 1,
+        Replace = 2,
+        IncrementAndClamp = 3,
+        DecrementAndClamp = 4,
+        Invert = 5,
+        IncrementAndWrap = 6,
+        DecrementAndWrap = 7,
+        Max = 8,
     }
 
     public enum CompareOperator : long
     {
-        COMPARE_OP_NEVER = 0,
-        COMPARE_OP_LESS = 1,
-        COMPARE_OP_EQUAL = 2,
-        COMPARE_OP_LESS_OR_EQUAL = 3,
-        COMPARE_OP_GREATER = 4,
-        COMPARE_OP_NOT_EQUAL = 5,
-        COMPARE_OP_GREATER_OR_EQUAL = 6,
-        COMPARE_OP_ALWAYS = 7,
-        COMPARE_OP_MAX = 8,
+        Never = 0,
+        Less = 1,
+        Equal = 2,
+        LessOrEqual = 3,
+        Greater = 4,
+        NotEqual = 5,
+        GreaterOrEqual = 6,
+        Always = 7,
+        Max = 8,
     }
 
     public enum LogicOperation : long
     {
-        LOGIC_OP_CLEAR = 0,
-        LOGIC_OP_AND = 1,
-        LOGIC_OP_AND_REVERSE = 2,
-        LOGIC_OP_COPY = 3,
-        LOGIC_OP_AND_INVERTED = 4,
-        LOGIC_OP_NO_OP = 5,
-        LOGIC_OP_XOR = 6,
-        LOGIC_OP_OR = 7,
-        LOGIC_OP_NOR = 8,
-        LOGIC_OP_EQUIVALENT = 9,
-        LOGIC_OP_INVERT = 10,
-        LOGIC_OP_OR_REVERSE = 11,
-        LOGIC_OP_COPY_INVERTED = 12,
-        LOGIC_OP_OR_INVERTED = 13,
-        LOGIC_OP_NAND = 14,
-        LOGIC_OP_SET = 15,
-        LOGIC_OP_MAX = 16,
+        Clear = 0,
+        And = 1,
+        AndReverse = 2,
+        Copy = 3,
+        AndInverted = 4,
+        NoOp = 5,
+        Xor = 6,
+        Or = 7,
+        Nor = 8,
+        Equivalent = 9,
+        Invert = 10,
+        OrReverse = 11,
+        CopyInverted = 12,
+        OrInverted = 13,
+        Nand = 14,
+        Set = 15,
+        Max = 16,
     }
 
     public enum BlendFactor : long
     {
-        BLEND_FACTOR_ZERO = 0,
-        BLEND_FACTOR_ONE = 1,
-        BLEND_FACTOR_SRC_COLOR = 2,
-        BLEND_FACTOR_ONE_MINUS_SRC_COLOR = 3,
-        BLEND_FACTOR_DST_COLOR = 4,
-        BLEND_FACTOR_ONE_MINUS_DST_COLOR = 5,
-        BLEND_FACTOR_SRC_ALPHA = 6,
-        BLEND_FACTOR_ONE_MINUS_SRC_ALPHA = 7,
-        BLEND_FACTOR_DST_ALPHA = 8,
-        BLEND_FACTOR_ONE_MINUS_DST_ALPHA = 9,
-        BLEND_FACTOR_CONSTANT_COLOR = 10,
-        BLEND_FACTOR_ONE_MINUS_CONSTANT_COLOR = 11,
-        BLEND_FACTOR_CONSTANT_ALPHA = 12,
-        BLEND_FACTOR_ONE_MINUS_CONSTANT_ALPHA = 13,
-        BLEND_FACTOR_SRC_ALPHA_SATURATE = 14,
-        BLEND_FACTOR_SRC1_COLOR = 15,
-        BLEND_FACTOR_ONE_MINUS_SRC1_COLOR = 16,
-        BLEND_FACTOR_SRC1_ALPHA = 17,
-        BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA = 18,
-        BLEND_FACTOR_MAX = 19,
+        Zero = 0,
+        One = 1,
+        SrcColor = 2,
+        OneMinusSrcColor = 3,
+        DstColor = 4,
+        OneMinusDstColor = 5,
+        SrcAlpha = 6,
+        OneMinusSrcAlpha = 7,
+        DstAlpha = 8,
+        OneMinusDstAlpha = 9,
+        ConstantColor = 10,
+        OneMinusConstantColor = 11,
+        ConstantAlpha = 12,
+        OneMinusConstantAlpha = 13,
+        SrcAlphaSaturate = 14,
+        Src1Color = 15,
+        OneMinusSrc1Color = 16,
+        Src1Alpha = 17,
+        OneMinusSrc1Alpha = 18,
+        Max = 19,
     }
 
     public enum BlendOperation : long
     {
-        BLEND_OP_ADD = 0,
-        BLEND_OP_SUBTRACT = 1,
-        BLEND_OP_REVERSE_SUBTRACT = 2,
-        BLEND_OP_MINIMUM = 3,
-        BLEND_OP_MAXIMUM = 4,
-        BLEND_OP_MAX = 5,
+        Add = 0,
+        Subtract = 1,
+        ReverseSubtract = 2,
+        Minimum = 3,
+        Maximum = 4,
+        Max = 5,
     }
 
     [Flags]
     public enum PipelineDynamicStateFlags : long
     {
-        DYNAMIC_STATE_LINE_WIDTH = 1,
-        DYNAMIC_STATE_DEPTH_BIAS = 2,
-        DYNAMIC_STATE_BLEND_CONSTANTS = 4,
-        DYNAMIC_STATE_DEPTH_BOUNDS = 8,
-        DYNAMIC_STATE_STENCIL_COMPARE_MASK = 16,
-        DYNAMIC_STATE_STENCIL_WRITE_MASK = 32,
-        DYNAMIC_STATE_STENCIL_REFERENCE = 64,
+        LineWidth = 1,
+        DepthBias = 2,
+        BlendConstants = 4,
+        DepthBounds = 8,
+        StencilCompareMask = 16,
+        StencilWriteMask = 32,
+        StencilReference = 64,
     }
 
     public enum InitialAction : long
     {
-        INITIAL_ACTION_LOAD = 0,
-        INITIAL_ACTION_CLEAR = 1,
-        INITIAL_ACTION_DISCARD = 2,
-        INITIAL_ACTION_MAX = 3,
-        INITIAL_ACTION_CLEAR_REGION = 1,
-        INITIAL_ACTION_CLEAR_REGION_CONTINUE = 1,
-        INITIAL_ACTION_KEEP = 0,
-        INITIAL_ACTION_DROP = 2,
-        INITIAL_ACTION_CONTINUE = 0,
+        Load = 0,
+        Clear = 1,
+        Discard = 2,
+        Max = 3,
+        ClearRegion = 1,
+        ClearRegionContinue = 1,
+        Keep = 0,
+        Drop = 2,
+        Continue = 0,
     }
 
     public enum FinalAction : long
     {
-        FINAL_ACTION_STORE = 0,
-        FINAL_ACTION_DISCARD = 1,
-        FINAL_ACTION_MAX = 2,
-        FINAL_ACTION_READ = 0,
-        FINAL_ACTION_CONTINUE = 0,
+        Store = 0,
+        Discard = 1,
+        Max = 2,
+        Read = 0,
+        Continue = 0,
     }
 
     public enum ShaderStage : long
     {
-        SHADER_STAGE_VERTEX = 0,
-        SHADER_STAGE_FRAGMENT = 1,
-        SHADER_STAGE_TESSELATION_CONTROL = 2,
-        SHADER_STAGE_TESSELATION_EVALUATION = 3,
-        SHADER_STAGE_COMPUTE = 4,
-        SHADER_STAGE_RAYGEN = 5,
-        SHADER_STAGE_ANY_HIT = 6,
-        SHADER_STAGE_CLOSEST_HIT = 7,
-        SHADER_STAGE_MISS = 8,
-        SHADER_STAGE_INTERSECTION = 9,
-        SHADER_STAGE_MAX = 10,
-        SHADER_STAGE_VERTEX_BIT = 1,
-        SHADER_STAGE_FRAGMENT_BIT = 2,
-        SHADER_STAGE_TESSELATION_CONTROL_BIT = 4,
-        SHADER_STAGE_TESSELATION_EVALUATION_BIT = 8,
-        SHADER_STAGE_COMPUTE_BIT = 16,
-        SHADER_STAGE_RAYGEN_BIT = 32,
-        SHADER_STAGE_ANY_HIT_BIT = 64,
-        SHADER_STAGE_CLOSEST_HIT_BIT = 128,
-        SHADER_STAGE_MISS_BIT = 256,
-        SHADER_STAGE_INTERSECTION_BIT = 512,
+        Vertex = 0,
+        Fragment = 1,
+        TesselationControl = 2,
+        TesselationEvaluation = 3,
+        Compute = 4,
+        Raygen = 5,
+        AnyHit = 6,
+        ClosestHit = 7,
+        Miss = 8,
+        Intersection = 9,
+        Max = 10,
+        VertexBit = 1,
+        FragmentBit = 2,
+        TesselationControlBit = 4,
+        TesselationEvaluationBit = 8,
+        ComputeBit = 16,
+        RaygenBit = 32,
+        AnyHitBit = 64,
+        ClosestHitBit = 128,
+        MissBit = 256,
+        IntersectionBit = 512,
     }
 
     public enum ShaderLanguage : long
     {
-        SHADER_LANGUAGE_GLSL = 0,
-        SHADER_LANGUAGE_HLSL = 1,
+        Glsl = 0,
+        Hlsl = 1,
     }
 
     public enum PipelineSpecializationConstantType : long
     {
-        PIPELINE_SPECIALIZATION_CONSTANT_TYPE_BOOL = 0,
-        PIPELINE_SPECIALIZATION_CONSTANT_TYPE_INT = 1,
-        PIPELINE_SPECIALIZATION_CONSTANT_TYPE_FLOAT = 2,
+        Bool = 0,
+        Int = 1,
+        Float = 2,
     }
 
     public enum Features : long
     {
-        SUPPORTS_METALFX_SPATIAL = 3,
-        SUPPORTS_METALFX_TEMPORAL = 4,
-        SUPPORTS_BUFFER_DEVICE_ADDRESS = 6,
-        SUPPORTS_IMAGE_ATOMIC_32_BIT = 7,
-        SUPPORTS_RAY_QUERY = 11,
-        SUPPORTS_RAYTRACING_PIPELINE = 12,
-        SUPPORTS_HDR_OUTPUT = 13,
+        MetalfxSpatial = 3,
+        MetalfxTemporal = 4,
+        BufferDeviceAddress = 6,
+        ImageAtomic32Bit = 7,
+        RayQuery = 11,
+        RaytracingPipeline = 12,
+        HdrOutput = 13,
     }
 
     public enum Limit : long
     {
-        LIMIT_MAX_BOUND_UNIFORM_SETS = 0,
-        LIMIT_MAX_FRAMEBUFFER_COLOR_ATTACHMENTS = 1,
-        LIMIT_MAX_TEXTURES_PER_UNIFORM_SET = 2,
-        LIMIT_MAX_SAMPLERS_PER_UNIFORM_SET = 3,
-        LIMIT_MAX_STORAGE_BUFFERS_PER_UNIFORM_SET = 4,
-        LIMIT_MAX_STORAGE_IMAGES_PER_UNIFORM_SET = 5,
-        LIMIT_MAX_UNIFORM_BUFFERS_PER_UNIFORM_SET = 6,
-        LIMIT_MAX_DRAW_INDEXED_INDEX = 7,
-        LIMIT_MAX_FRAMEBUFFER_HEIGHT = 8,
-        LIMIT_MAX_FRAMEBUFFER_WIDTH = 9,
-        LIMIT_MAX_TEXTURE_ARRAY_LAYERS = 10,
-        LIMIT_MAX_TEXTURE_SIZE_1D = 11,
-        LIMIT_MAX_TEXTURE_SIZE_2D = 12,
-        LIMIT_MAX_TEXTURE_SIZE_3D = 13,
-        LIMIT_MAX_TEXTURE_SIZE_CUBE = 14,
-        LIMIT_MAX_TEXTURES_PER_SHADER_STAGE = 15,
-        LIMIT_MAX_SAMPLERS_PER_SHADER_STAGE = 16,
-        LIMIT_MAX_STORAGE_BUFFERS_PER_SHADER_STAGE = 17,
-        LIMIT_MAX_STORAGE_IMAGES_PER_SHADER_STAGE = 18,
-        LIMIT_MAX_UNIFORM_BUFFERS_PER_SHADER_STAGE = 19,
-        LIMIT_MAX_PUSH_CONSTANT_SIZE = 20,
-        LIMIT_MAX_UNIFORM_BUFFER_SIZE = 21,
-        LIMIT_MAX_VERTEX_INPUT_ATTRIBUTE_OFFSET = 22,
-        LIMIT_MAX_VERTEX_INPUT_ATTRIBUTES = 23,
-        LIMIT_MAX_VERTEX_INPUT_BINDINGS = 24,
-        LIMIT_MAX_VERTEX_INPUT_BINDING_STRIDE = 25,
-        LIMIT_MIN_UNIFORM_BUFFER_OFFSET_ALIGNMENT = 26,
-        LIMIT_MAX_COMPUTE_SHARED_MEMORY_SIZE = 27,
-        LIMIT_MAX_COMPUTE_WORKGROUP_COUNT_X = 28,
-        LIMIT_MAX_COMPUTE_WORKGROUP_COUNT_Y = 29,
-        LIMIT_MAX_COMPUTE_WORKGROUP_COUNT_Z = 30,
-        LIMIT_MAX_COMPUTE_WORKGROUP_INVOCATIONS = 31,
-        LIMIT_MAX_COMPUTE_WORKGROUP_SIZE_X = 32,
-        LIMIT_MAX_COMPUTE_WORKGROUP_SIZE_Y = 33,
-        LIMIT_MAX_COMPUTE_WORKGROUP_SIZE_Z = 34,
-        LIMIT_MAX_VIEWPORT_DIMENSIONS_X = 35,
-        LIMIT_MAX_VIEWPORT_DIMENSIONS_Y = 36,
-        LIMIT_METALFX_TEMPORAL_SCALER_MIN_SCALE = 46,
-        LIMIT_METALFX_TEMPORAL_SCALER_MAX_SCALE = 47,
+        MaxBoundUniformSets = 0,
+        MaxFramebufferColorAttachments = 1,
+        MaxTexturesPerUniformSet = 2,
+        MaxSamplersPerUniformSet = 3,
+        MaxStorageBuffersPerUniformSet = 4,
+        MaxStorageImagesPerUniformSet = 5,
+        MaxUniformBuffersPerUniformSet = 6,
+        MaxDrawIndexedIndex = 7,
+        MaxFramebufferHeight = 8,
+        MaxFramebufferWidth = 9,
+        MaxTextureArrayLayers = 10,
+        MaxTextureSize1d = 11,
+        MaxTextureSize2d = 12,
+        MaxTextureSize3d = 13,
+        MaxTextureSizeCube = 14,
+        MaxTexturesPerShaderStage = 15,
+        MaxSamplersPerShaderStage = 16,
+        MaxStorageBuffersPerShaderStage = 17,
+        MaxStorageImagesPerShaderStage = 18,
+        MaxUniformBuffersPerShaderStage = 19,
+        MaxPushConstantSize = 20,
+        MaxUniformBufferSize = 21,
+        MaxVertexInputAttributeOffset = 22,
+        MaxVertexInputAttributes = 23,
+        MaxVertexInputBindings = 24,
+        MaxVertexInputBindingStride = 25,
+        MinUniformBufferOffsetAlignment = 26,
+        MaxComputeSharedMemorySize = 27,
+        MaxComputeWorkgroupCountX = 28,
+        MaxComputeWorkgroupCountY = 29,
+        MaxComputeWorkgroupCountZ = 30,
+        MaxComputeWorkgroupInvocations = 31,
+        MaxComputeWorkgroupSizeX = 32,
+        MaxComputeWorkgroupSizeY = 33,
+        MaxComputeWorkgroupSizeZ = 34,
+        MaxViewportDimensionsX = 35,
+        MaxViewportDimensionsY = 36,
+        MetalfxTemporalScalerMinScale = 46,
+        MetalfxTemporalScalerMaxScale = 47,
     }
 
     public enum MemoryType : long
     {
-        MEMORY_TEXTURES = 0,
-        MEMORY_BUFFERS = 1,
-        MEMORY_TOTAL = 2,
+        Textures = 0,
+        Buffers = 1,
+        Total = 2,
     }
 
     public enum BreadcrumbMarker : long
     {
-        NONE = 0,
-        REFLECTION_PROBES = 65536,
-        SKY_PASS = 131072,
-        LIGHTMAPPER_PASS = 196608,
-        SHADOW_PASS_DIRECTIONAL = 262144,
-        SHADOW_PASS_CUBE = 327680,
-        OPAQUE_PASS = 393216,
-        ALPHA_PASS = 458752,
-        TRANSPARENT_PASS = 524288,
-        POST_PROCESSING_PASS = 589824,
-        BLIT_PASS = 655360,
-        UI_PASS = 720896,
-        DEBUG_PASS = 786432,
+        None = 0,
+        ReflectionProbes = 65536,
+        SkyPass = 131072,
+        LightmapperPass = 196608,
+        ShadowPassDirectional = 262144,
+        ShadowPassCube = 327680,
+        OpaquePass = 393216,
+        AlphaPass = 458752,
+        TransparentPass = 524288,
+        PostProcessingPass = 589824,
+        BlitPass = 655360,
+        UiPass = 720896,
+        DebugPass = 786432,
     }
 
     [Flags]
     public enum DrawFlags : long
     {
-        DRAW_DEFAULT_ALL = 0,
-        DRAW_CLEAR_COLOR_0 = 1,
-        DRAW_CLEAR_COLOR_1 = 2,
-        DRAW_CLEAR_COLOR_2 = 4,
-        DRAW_CLEAR_COLOR_3 = 8,
-        DRAW_CLEAR_COLOR_4 = 16,
-        DRAW_CLEAR_COLOR_5 = 32,
-        DRAW_CLEAR_COLOR_6 = 64,
-        DRAW_CLEAR_COLOR_7 = 128,
-        DRAW_CLEAR_COLOR_MASK = 255,
-        DRAW_CLEAR_COLOR_ALL = 255,
-        DRAW_IGNORE_COLOR_0 = 256,
-        DRAW_IGNORE_COLOR_1 = 512,
-        DRAW_IGNORE_COLOR_2 = 1024,
-        DRAW_IGNORE_COLOR_3 = 2048,
-        DRAW_IGNORE_COLOR_4 = 4096,
-        DRAW_IGNORE_COLOR_5 = 8192,
-        DRAW_IGNORE_COLOR_6 = 16384,
-        DRAW_IGNORE_COLOR_7 = 32768,
-        DRAW_IGNORE_COLOR_MASK = 65280,
-        DRAW_IGNORE_COLOR_ALL = 65280,
-        DRAW_CLEAR_DEPTH = 65536,
-        DRAW_IGNORE_DEPTH = 131072,
-        DRAW_CLEAR_STENCIL = 262144,
-        DRAW_IGNORE_STENCIL = 524288,
-        DRAW_CLEAR_ALL = 327935,
-        DRAW_IGNORE_ALL = 720640,
+        DefaultAll = 0,
+        ClearColor0 = 1,
+        ClearColor1 = 2,
+        ClearColor2 = 4,
+        ClearColor3 = 8,
+        ClearColor4 = 16,
+        ClearColor5 = 32,
+        ClearColor6 = 64,
+        ClearColor7 = 128,
+        ClearColorMask = 255,
+        ClearColorAll = 255,
+        IgnoreColor0 = 256,
+        IgnoreColor1 = 512,
+        IgnoreColor2 = 1024,
+        IgnoreColor3 = 2048,
+        IgnoreColor4 = 4096,
+        IgnoreColor5 = 8192,
+        IgnoreColor6 = 16384,
+        IgnoreColor7 = 32768,
+        IgnoreColorMask = 65280,
+        IgnoreColorAll = 65280,
+        ClearDepth = 65536,
+        IgnoreDepth = 131072,
+        ClearStencil = 262144,
+        IgnoreStencil = 524288,
+        ClearAll = 327935,
+        IgnoreAll = 720640,
     }
 
     private static nint __mb_texture_create;
@@ -10307,7 +10307,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_texture_create_shared_from_slice;
-    public Rid TextureCreateSharedFromSlice(RDTextureView? view, Rid withTexture, uint layer, uint mipmap, uint mipmaps, RenderingDevice.TextureSliceType sliceType)
+    public Rid TextureCreateSharedFromSlice(RDTextureView? view, Rid withTexture, uint layer, uint mipmap, uint mipmaps = unchecked((uint)(1)), RenderingDevice.TextureSliceType sliceType = (RenderingDevice.TextureSliceType)(0))
     {
         var __mb = __mb_texture_create_shared_from_slice;
         if (__mb == 0)
@@ -10335,7 +10335,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_texture_create_from_extension;
-    public Rid TextureCreateFromExtension(RenderingDevice.TextureType type, RenderingDevice.DataFormat format, RenderingDevice.TextureSamples samples, RenderingDevice.TextureUsageBits usageFlags, ulong image, ulong width, ulong height, ulong depth, ulong layers, ulong mipmaps)
+    public Rid TextureCreateFromExtension(RenderingDevice.TextureType type, RenderingDevice.DataFormat format, RenderingDevice.TextureSamples samples, RenderingDevice.TextureUsageBits usageFlags, ulong image, ulong width, ulong height, ulong depth, ulong layers, ulong mipmaps = unchecked((ulong)(1)))
     {
         var __mb = __mb_texture_create_from_extension;
         if (__mb == 0)
@@ -10581,7 +10581,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_framebuffer_format_create;
-    public long FramebufferFormatCreate(Godot.Collections.Array attachments, uint viewCount)
+    public long FramebufferFormatCreate(Godot.Collections.Array attachments, uint viewCount = unchecked((uint)(1)))
     {
         var __mb = __mb_framebuffer_format_create;
         if (__mb == 0)
@@ -10601,7 +10601,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_framebuffer_format_create_multipass;
-    public long FramebufferFormatCreateMultipass(Godot.Collections.Array attachments, Godot.Collections.Array passes, uint viewCount)
+    public long FramebufferFormatCreateMultipass(Godot.Collections.Array attachments, Godot.Collections.Array passes, uint viewCount = unchecked((uint)(1)))
     {
         var __mb = __mb_framebuffer_format_create_multipass;
         if (__mb == 0)
@@ -10623,7 +10623,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_framebuffer_format_create_empty;
-    public long FramebufferFormatCreateEmpty(RenderingDevice.TextureSamples samples)
+    public long FramebufferFormatCreateEmpty(RenderingDevice.TextureSamples samples = (RenderingDevice.TextureSamples)(0))
     {
         var __mb = __mb_framebuffer_format_create_empty;
         if (__mb == 0)
@@ -10641,7 +10641,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_framebuffer_format_get_texture_samples;
-    public RenderingDevice.TextureSamples FramebufferFormatGetTextureSamples(long format, uint renderPass)
+    public RenderingDevice.TextureSamples FramebufferFormatGetTextureSamples(long format, uint renderPass = unchecked((uint)(0)))
     {
         var __mb = __mb_framebuffer_format_get_texture_samples;
         if (__mb == 0)
@@ -10661,7 +10661,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_framebuffer_create;
-    public Rid FramebufferCreate(Godot.Collections.Array textures, long validateWithFormat, uint viewCount)
+    public Rid FramebufferCreate(Godot.Collections.Array textures, long validateWithFormat = unchecked((long)(-1)), uint viewCount = unchecked((uint)(1)))
     {
         var __mb = __mb_framebuffer_create;
         if (__mb == 0)
@@ -10683,7 +10683,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_framebuffer_create_multipass;
-    public Rid FramebufferCreateMultipass(Godot.Collections.Array textures, Godot.Collections.Array passes, long validateWithFormat, uint viewCount)
+    public Rid FramebufferCreateMultipass(Godot.Collections.Array textures, Godot.Collections.Array passes, long validateWithFormat = unchecked((long)(-1)), uint viewCount = unchecked((uint)(1)))
     {
         var __mb = __mb_framebuffer_create_multipass;
         if (__mb == 0)
@@ -10707,7 +10707,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_framebuffer_create_empty;
-    public Rid FramebufferCreateEmpty(Vector2I size, RenderingDevice.TextureSamples samples, long validateWithFormat)
+    public Rid FramebufferCreateEmpty(Vector2I size, RenderingDevice.TextureSamples samples = (RenderingDevice.TextureSamples)(0), long validateWithFormat = unchecked((long)(-1)))
     {
         var __mb = __mb_framebuffer_create_empty;
         if (__mb == 0)
@@ -10843,7 +10843,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_shader_compile_spirv_from_source;
-    public RDShaderSPIRV? ShaderCompileSpirvFromSource(RDShaderSource? shaderSource, bool allowCache)
+    public RDShaderSPIRV? ShaderCompileSpirvFromSource(RDShaderSource? shaderSource, bool allowCache = true)
     {
         var __mb = __mb_shader_compile_spirv_from_source;
         if (__mb == 0)
@@ -10863,7 +10863,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_shader_create_from_spirv;
-    public Rid ShaderCreateFromSpirv(RDShaderSPIRV? spirvData, string name)
+    public Rid ShaderCreateFromSpirv(RDShaderSPIRV? spirvData, string name = "")
     {
         var __mb = __mb_shader_create_from_spirv;
         if (__mb == 0)
@@ -11317,7 +11317,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_screen_get_width;
-    public int ScreenGetWidth(int screen)
+    public int ScreenGetWidth(int screen = unchecked((int)(0)))
     {
         var __mb = __mb_screen_get_width;
         if (__mb == 0)
@@ -11335,7 +11335,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_screen_get_height;
-    public int ScreenGetHeight(int screen)
+    public int ScreenGetHeight(int screen = unchecked((int)(0)))
     {
         var __mb = __mb_screen_get_height;
         if (__mb == 0)
@@ -11353,7 +11353,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_screen_get_framebuffer_format;
-    public long ScreenGetFramebufferFormat(int screen)
+    public long ScreenGetFramebufferFormat(int screen = unchecked((int)(0)))
     {
         var __mb = __mb_screen_get_framebuffer_format;
         if (__mb == 0)
@@ -11483,7 +11483,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_draw_list_draw;
-    public void DrawListDraw(long drawList, bool useIndices, uint instances, uint proceduralVertexCount)
+    public void DrawListDraw(long drawList, bool useIndices, uint instances, uint proceduralVertexCount = unchecked((uint)(0)))
     {
         var __mb = __mb_draw_list_draw;
         if (__mb == 0)
@@ -11505,7 +11505,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_draw_list_draw_indirect;
-    public void DrawListDrawIndirect(long drawList, bool useIndices, Rid buffer, uint offset, uint drawCount, uint stride)
+    public void DrawListDrawIndirect(long drawList, bool useIndices, Rid buffer, uint offset = unchecked((uint)(0)), uint drawCount = unchecked((uint)(1)), uint stride = unchecked((uint)(0)))
     {
         var __mb = __mb_draw_list_draw_indirect;
         if (__mb == 0)
@@ -11531,7 +11531,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_draw_list_enable_scissor;
-    public void DrawListEnableScissor(long drawList, Rect2 rect)
+    public void DrawListEnableScissor(long drawList, Rect2 rect = default)
     {
         var __mb = __mb_draw_list_enable_scissor;
         if (__mb == 0)
@@ -12003,7 +12003,7 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 
     private static nint __mb_barrier;
-    public void Barrier(RenderingDevice.BarrierMask from, RenderingDevice.BarrierMask to)
+    public void Barrier(RenderingDevice.BarrierMask from = (RenderingDevice.BarrierMask)(32767), RenderingDevice.BarrierMask to = (RenderingDevice.BarrierMask)(32767))
     {
         var __mb = __mb_barrier;
         if (__mb == 0)
@@ -12399,863 +12399,865 @@ public unsafe partial class RenderingDevice : GodotObject
     }
 }
 
-public unsafe partial class RenderingServer : GodotObject
+public static unsafe partial class RenderingServer
 {
-    internal RenderingServer(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    private static RenderingServer? _singleton;
-    public static RenderingServer Singleton => _singleton ??= (RenderingServer)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("RenderingServer"), adoptRef: false)!;
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("RenderingServer");
+
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum TextureType : long
     {
-        TEXTURE_TYPE_2D = 0,
-        TEXTURE_TYPE_LAYERED = 1,
-        TEXTURE_TYPE_3D = 2,
+        Type2d = 0,
+        Layered = 1,
+        Type3d = 2,
     }
 
     public enum TextureLayeredType : long
     {
-        TEXTURE_LAYERED_2D_ARRAY = 0,
-        TEXTURE_LAYERED_CUBEMAP = 1,
-        TEXTURE_LAYERED_CUBEMAP_ARRAY = 2,
+        Layered2dArray = 0,
+        Cubemap = 1,
+        CubemapArray = 2,
     }
 
     public enum CubeMapLayer : long
     {
-        CUBEMAP_LAYER_LEFT = 0,
-        CUBEMAP_LAYER_RIGHT = 1,
-        CUBEMAP_LAYER_BOTTOM = 2,
-        CUBEMAP_LAYER_TOP = 3,
-        CUBEMAP_LAYER_FRONT = 4,
-        CUBEMAP_LAYER_BACK = 5,
+        Left = 0,
+        Right = 1,
+        Bottom = 2,
+        Top = 3,
+        Front = 4,
+        Back = 5,
     }
 
     public enum TextureDrawableFormat : long
     {
-        TEXTURE_DRAWABLE_FORMAT_RGBA8 = 0,
-        TEXTURE_DRAWABLE_FORMAT_RGBA8_SRGB = 1,
-        TEXTURE_DRAWABLE_FORMAT_RGBAH = 2,
-        TEXTURE_DRAWABLE_FORMAT_RGBAF = 3,
+        Rgba8 = 0,
+        Rgba8Srgb = 1,
+        Rgbah = 2,
+        Rgbaf = 3,
     }
 
     public enum ShaderMode : long
     {
-        SHADER_SPATIAL = 0,
-        SHADER_CANVAS_ITEM = 1,
-        SHADER_PARTICLES = 2,
-        SHADER_SKY = 3,
-        SHADER_FOG = 4,
-        SHADER_TEXTURE_BLIT = 5,
-        SHADER_MAX = 6,
+        Spatial = 0,
+        CanvasItem = 1,
+        Particles = 2,
+        Sky = 3,
+        Fog = 4,
+        TextureBlit = 5,
+        Max = 6,
     }
 
     public enum ArrayType : long
     {
-        ARRAY_VERTEX = 0,
-        ARRAY_NORMAL = 1,
-        ARRAY_TANGENT = 2,
-        ARRAY_COLOR = 3,
-        ARRAY_TEX_UV = 4,
-        ARRAY_TEX_UV2 = 5,
-        ARRAY_CUSTOM0 = 6,
-        ARRAY_CUSTOM1 = 7,
-        ARRAY_CUSTOM2 = 8,
-        ARRAY_CUSTOM3 = 9,
-        ARRAY_BONES = 10,
-        ARRAY_WEIGHTS = 11,
-        ARRAY_INDEX = 12,
-        ARRAY_MAX = 13,
+        Vertex = 0,
+        Normal = 1,
+        Tangent = 2,
+        Color = 3,
+        TexUv = 4,
+        TexUv2 = 5,
+        Custom0 = 6,
+        Custom1 = 7,
+        Custom2 = 8,
+        Custom3 = 9,
+        Bones = 10,
+        Weights = 11,
+        Index = 12,
+        Max = 13,
     }
 
     public enum ArrayCustomFormat : long
     {
-        ARRAY_CUSTOM_RGBA8_UNORM = 0,
-        ARRAY_CUSTOM_RGBA8_SNORM = 1,
-        ARRAY_CUSTOM_RG_HALF = 2,
-        ARRAY_CUSTOM_RGBA_HALF = 3,
-        ARRAY_CUSTOM_R_FLOAT = 4,
-        ARRAY_CUSTOM_RG_FLOAT = 5,
-        ARRAY_CUSTOM_RGB_FLOAT = 6,
-        ARRAY_CUSTOM_RGBA_FLOAT = 7,
-        ARRAY_CUSTOM_MAX = 8,
+        Rgba8Unorm = 0,
+        Rgba8Snorm = 1,
+        RgHalf = 2,
+        RgbaHalf = 3,
+        RFloat = 4,
+        RgFloat = 5,
+        RgbFloat = 6,
+        RgbaFloat = 7,
+        Max = 8,
     }
 
     [Flags]
     public enum ArrayFormat : long
     {
-        ARRAY_FORMAT_VERTEX = 1,
-        ARRAY_FORMAT_NORMAL = 2,
-        ARRAY_FORMAT_TANGENT = 4,
-        ARRAY_FORMAT_COLOR = 8,
-        ARRAY_FORMAT_TEX_UV = 16,
-        ARRAY_FORMAT_TEX_UV2 = 32,
-        ARRAY_FORMAT_CUSTOM0 = 64,
-        ARRAY_FORMAT_CUSTOM1 = 128,
-        ARRAY_FORMAT_CUSTOM2 = 256,
-        ARRAY_FORMAT_CUSTOM3 = 512,
-        ARRAY_FORMAT_BONES = 1024,
-        ARRAY_FORMAT_WEIGHTS = 2048,
-        ARRAY_FORMAT_INDEX = 4096,
-        ARRAY_FORMAT_BLEND_SHAPE_MASK = 7,
-        ARRAY_FORMAT_CUSTOM_BASE = 13,
-        ARRAY_FORMAT_CUSTOM_BITS = 3,
-        ARRAY_FORMAT_CUSTOM0_SHIFT = 13,
-        ARRAY_FORMAT_CUSTOM1_SHIFT = 16,
-        ARRAY_FORMAT_CUSTOM2_SHIFT = 19,
-        ARRAY_FORMAT_CUSTOM3_SHIFT = 22,
-        ARRAY_FORMAT_CUSTOM_MASK = 7,
-        ARRAY_COMPRESS_FLAGS_BASE = 25,
-        ARRAY_FLAG_USE_2D_VERTICES = 33554432,
-        ARRAY_FLAG_USE_DYNAMIC_UPDATE = 67108864,
-        ARRAY_FLAG_USE_8_BONE_WEIGHTS = 134217728,
-        ARRAY_FLAG_USES_EMPTY_VERTEX_ARRAY = 268435456,
-        ARRAY_FLAG_COMPRESS_ATTRIBUTES = 536870912,
-        ARRAY_FLAG_FORMAT_VERSION_BASE = 35,
-        ARRAY_FLAG_FORMAT_VERSION_SHIFT = 35,
-        ARRAY_FLAG_FORMAT_VERSION_1 = 0,
-        ARRAY_FLAG_FORMAT_VERSION_2 = 34359738368,
-        ARRAY_FLAG_FORMAT_CURRENT_VERSION = 34359738368,
-        ARRAY_FLAG_FORMAT_VERSION_MASK = 255,
+        FormatVertex = 1,
+        FormatNormal = 2,
+        FormatTangent = 4,
+        FormatColor = 8,
+        FormatTexUv = 16,
+        FormatTexUv2 = 32,
+        FormatCustom0 = 64,
+        FormatCustom1 = 128,
+        FormatCustom2 = 256,
+        FormatCustom3 = 512,
+        FormatBones = 1024,
+        FormatWeights = 2048,
+        FormatIndex = 4096,
+        FormatBlendShapeMask = 7,
+        FormatCustomBase = 13,
+        FormatCustomBits = 3,
+        FormatCustom0Shift = 13,
+        FormatCustom1Shift = 16,
+        FormatCustom2Shift = 19,
+        FormatCustom3Shift = 22,
+        FormatCustomMask = 7,
+        CompressFlagsBase = 25,
+        FlagUse2dVertices = 33554432,
+        FlagUseDynamicUpdate = 67108864,
+        FlagUse8BoneWeights = 134217728,
+        FlagUsesEmptyVertexArray = 268435456,
+        FlagCompressAttributes = 536870912,
+        FlagFormatVersionBase = 35,
+        FlagFormatVersionShift = 35,
+        FlagFormatVersion1 = 0,
+        FlagFormatVersion2 = 34359738368,
+        FlagFormatCurrentVersion = 34359738368,
+        FlagFormatVersionMask = 255,
     }
 
     public enum PrimitiveType : long
     {
-        PRIMITIVE_POINTS = 0,
-        PRIMITIVE_LINES = 1,
-        PRIMITIVE_LINE_STRIP = 2,
-        PRIMITIVE_TRIANGLES = 3,
-        PRIMITIVE_TRIANGLE_STRIP = 4,
-        PRIMITIVE_MAX = 5,
+        Points = 0,
+        Lines = 1,
+        LineStrip = 2,
+        Triangles = 3,
+        TriangleStrip = 4,
+        Max = 5,
     }
 
     public enum BlendShapeMode : long
     {
-        BLEND_SHAPE_MODE_NORMALIZED = 0,
-        BLEND_SHAPE_MODE_RELATIVE = 1,
+        Normalized = 0,
+        Relative = 1,
     }
 
     public enum MultimeshTransformFormat : long
     {
-        MULTIMESH_TRANSFORM_2D = 0,
-        MULTIMESH_TRANSFORM_3D = 1,
+        Transform2d = 0,
+        Transform3d = 1,
     }
 
     public enum MultimeshPhysicsInterpolationQuality : long
     {
-        MULTIMESH_INTERP_QUALITY_FAST = 0,
-        MULTIMESH_INTERP_QUALITY_HIGH = 1,
+        Fast = 0,
+        High = 1,
     }
 
     public enum LightProjectorFilter : long
     {
-        LIGHT_PROJECTOR_FILTER_NEAREST = 0,
-        LIGHT_PROJECTOR_FILTER_LINEAR = 1,
-        LIGHT_PROJECTOR_FILTER_NEAREST_MIPMAPS = 2,
-        LIGHT_PROJECTOR_FILTER_LINEAR_MIPMAPS = 3,
-        LIGHT_PROJECTOR_FILTER_NEAREST_MIPMAPS_ANISOTROPIC = 4,
-        LIGHT_PROJECTOR_FILTER_LINEAR_MIPMAPS_ANISOTROPIC = 5,
+        Nearest = 0,
+        Linear = 1,
+        NearestMipmaps = 2,
+        LinearMipmaps = 3,
+        NearestMipmapsAnisotropic = 4,
+        LinearMipmapsAnisotropic = 5,
     }
 
     public enum LightType : long
     {
-        LIGHT_DIRECTIONAL = 0,
-        LIGHT_OMNI = 1,
-        LIGHT_SPOT = 2,
-        LIGHT_AREA = 3,
+        Directional = 0,
+        Omni = 1,
+        Spot = 2,
+        Area = 3,
     }
 
     public enum LightParam : long
     {
-        LIGHT_PARAM_ENERGY = 0,
-        LIGHT_PARAM_INDIRECT_ENERGY = 1,
-        LIGHT_PARAM_VOLUMETRIC_FOG_ENERGY = 2,
-        LIGHT_PARAM_SPECULAR = 3,
-        LIGHT_PARAM_RANGE = 4,
-        LIGHT_PARAM_SIZE = 5,
-        LIGHT_PARAM_ATTENUATION = 6,
-        LIGHT_PARAM_SPOT_ANGLE = 7,
-        LIGHT_PARAM_SPOT_ATTENUATION = 8,
-        LIGHT_PARAM_SHADOW_MAX_DISTANCE = 9,
-        LIGHT_PARAM_SHADOW_SPLIT_1_OFFSET = 10,
-        LIGHT_PARAM_SHADOW_SPLIT_2_OFFSET = 11,
-        LIGHT_PARAM_SHADOW_SPLIT_3_OFFSET = 12,
-        LIGHT_PARAM_SHADOW_FADE_START = 13,
-        LIGHT_PARAM_SHADOW_NORMAL_BIAS = 14,
-        LIGHT_PARAM_SHADOW_BIAS = 15,
-        LIGHT_PARAM_SHADOW_PANCAKE_SIZE = 16,
-        LIGHT_PARAM_SHADOW_OPACITY = 17,
-        LIGHT_PARAM_SHADOW_BLUR = 18,
-        LIGHT_PARAM_TRANSMITTANCE_BIAS = 19,
-        LIGHT_PARAM_INTENSITY = 20,
-        LIGHT_PARAM_MAX = 21,
+        Energy = 0,
+        IndirectEnergy = 1,
+        VolumetricFogEnergy = 2,
+        Specular = 3,
+        Range = 4,
+        Size = 5,
+        Attenuation = 6,
+        SpotAngle = 7,
+        SpotAttenuation = 8,
+        ShadowMaxDistance = 9,
+        ShadowSplit1Offset = 10,
+        ShadowSplit2Offset = 11,
+        ShadowSplit3Offset = 12,
+        ShadowFadeStart = 13,
+        ShadowNormalBias = 14,
+        ShadowBias = 15,
+        ShadowPancakeSize = 16,
+        ShadowOpacity = 17,
+        ShadowBlur = 18,
+        TransmittanceBias = 19,
+        Intensity = 20,
+        Max = 21,
     }
 
     public enum LightBakeMode : long
     {
-        LIGHT_BAKE_DISABLED = 0,
-        LIGHT_BAKE_STATIC = 1,
-        LIGHT_BAKE_DYNAMIC = 2,
+        Disabled = 0,
+        Static = 1,
+        Dynamic = 2,
     }
 
     public enum LightOmniShadowMode : long
     {
-        LIGHT_OMNI_SHADOW_DUAL_PARABOLOID = 0,
-        LIGHT_OMNI_SHADOW_CUBE = 1,
+        DualParaboloid = 0,
+        Cube = 1,
     }
 
     public enum LightDirectionalShadowMode : long
     {
-        LIGHT_DIRECTIONAL_SHADOW_ORTHOGONAL = 0,
-        LIGHT_DIRECTIONAL_SHADOW_PARALLEL_2_SPLITS = 1,
-        LIGHT_DIRECTIONAL_SHADOW_PARALLEL_4_SPLITS = 2,
+        Orthogonal = 0,
+        Parallel2Splits = 1,
+        Parallel4Splits = 2,
     }
 
     public enum LightDirectionalSkyMode : long
     {
-        LIGHT_DIRECTIONAL_SKY_MODE_LIGHT_AND_SKY = 0,
-        LIGHT_DIRECTIONAL_SKY_MODE_LIGHT_ONLY = 1,
-        LIGHT_DIRECTIONAL_SKY_MODE_SKY_ONLY = 2,
+        LightAndSky = 0,
+        LightOnly = 1,
+        SkyOnly = 2,
     }
 
     public enum ShadowQuality : long
     {
-        SHADOW_QUALITY_HARD = 0,
-        SHADOW_QUALITY_SOFT_VERY_LOW = 1,
-        SHADOW_QUALITY_SOFT_LOW = 2,
-        SHADOW_QUALITY_SOFT_MEDIUM = 3,
-        SHADOW_QUALITY_SOFT_HIGH = 4,
-        SHADOW_QUALITY_SOFT_ULTRA = 5,
-        SHADOW_QUALITY_MAX = 6,
+        Hard = 0,
+        SoftVeryLow = 1,
+        SoftLow = 2,
+        SoftMedium = 3,
+        SoftHigh = 4,
+        SoftUltra = 5,
+        Max = 6,
     }
 
     public enum ReflectionProbeUpdateMode : long
     {
-        REFLECTION_PROBE_UPDATE_ONCE = 0,
-        REFLECTION_PROBE_UPDATE_ALWAYS = 1,
+        Once = 0,
+        Always = 1,
     }
 
     public enum ReflectionProbeAmbientMode : long
     {
-        REFLECTION_PROBE_AMBIENT_DISABLED = 0,
-        REFLECTION_PROBE_AMBIENT_ENVIRONMENT = 1,
-        REFLECTION_PROBE_AMBIENT_COLOR = 2,
+        Disabled = 0,
+        Environment = 1,
+        Color = 2,
     }
 
     public enum DecalTexture : long
     {
-        DECAL_TEXTURE_ALBEDO = 0,
-        DECAL_TEXTURE_NORMAL = 1,
-        DECAL_TEXTURE_ORM = 2,
-        DECAL_TEXTURE_EMISSION = 3,
-        DECAL_TEXTURE_MAX = 4,
+        Albedo = 0,
+        Normal = 1,
+        Orm = 2,
+        Emission = 3,
+        Max = 4,
     }
 
     public enum DecalFilter : long
     {
-        DECAL_FILTER_NEAREST = 0,
-        DECAL_FILTER_LINEAR = 1,
-        DECAL_FILTER_NEAREST_MIPMAPS = 2,
-        DECAL_FILTER_LINEAR_MIPMAPS = 3,
-        DECAL_FILTER_NEAREST_MIPMAPS_ANISOTROPIC = 4,
-        DECAL_FILTER_LINEAR_MIPMAPS_ANISOTROPIC = 5,
+        Nearest = 0,
+        Linear = 1,
+        NearestMipmaps = 2,
+        LinearMipmaps = 3,
+        NearestMipmapsAnisotropic = 4,
+        LinearMipmapsAnisotropic = 5,
     }
 
     public enum VoxelGIQuality : long
     {
-        VOXEL_GI_QUALITY_LOW = 0,
-        VOXEL_GI_QUALITY_HIGH = 1,
+        Low = 0,
+        High = 1,
     }
 
     public enum ParticlesMode : long
     {
-        PARTICLES_MODE_2D = 0,
-        PARTICLES_MODE_3D = 1,
+        Mode2d = 0,
+        Mode3d = 1,
     }
 
     public enum ParticlesTransformAlign : long
     {
-        PARTICLES_TRANSFORM_ALIGN_DISABLED = 0,
-        PARTICLES_TRANSFORM_ALIGN_Z_BILLBOARD = 1,
-        PARTICLES_TRANSFORM_ALIGN_Y_TO_VELOCITY = 2,
-        PARTICLES_TRANSFORM_ALIGN_Z_BILLBOARD_Y_TO_VELOCITY = 3,
-        PARTICLES_TRANSFORM_ALIGN_LOCAL_BILLBOARD = 4,
+        Disabled = 0,
+        ZBillboard = 1,
+        YToVelocity = 2,
+        ZBillboardYToVelocity = 3,
+        LocalBillboard = 4,
     }
 
     public enum ParticlesTransformAlignCustomSrc : long
     {
-        PARTICLES_ALIGN_CHANNEL_FILTER_DISABLED = 0,
-        PARTICLES_ALIGN_CHANNEL_FILTER_X = 1,
-        PARTICLES_ALIGN_CHANNEL_FILTER_Y = 2,
-        PARTICLES_ALIGN_CHANNEL_FILTER_Z = 3,
-        PARTICLES_ALIGN_CHANNEL_FILTER_W = 4,
+        Disabled = 0,
+        X = 1,
+        Y = 2,
+        Z = 3,
+        W = 4,
     }
 
     public enum ParticlesTransformAlignAxis : long
     {
-        PARTICLES_ALIGN_AXIS_X = 0,
-        PARTICLES_ALIGN_AXIS_Y = 1,
+        X = 0,
+        Y = 1,
     }
 
     public enum ParticlesDrawOrder : long
     {
-        PARTICLES_DRAW_ORDER_INDEX = 0,
-        PARTICLES_DRAW_ORDER_LIFETIME = 1,
-        PARTICLES_DRAW_ORDER_REVERSE_LIFETIME = 2,
-        PARTICLES_DRAW_ORDER_VIEW_DEPTH = 3,
+        Index = 0,
+        Lifetime = 1,
+        ReverseLifetime = 2,
+        ViewDepth = 3,
     }
 
     public enum ParticlesCollisionType : long
     {
-        PARTICLES_COLLISION_TYPE_SPHERE_ATTRACT = 0,
-        PARTICLES_COLLISION_TYPE_BOX_ATTRACT = 1,
-        PARTICLES_COLLISION_TYPE_VECTOR_FIELD_ATTRACT = 2,
-        PARTICLES_COLLISION_TYPE_SPHERE_COLLIDE = 3,
-        PARTICLES_COLLISION_TYPE_BOX_COLLIDE = 4,
-        PARTICLES_COLLISION_TYPE_SDF_COLLIDE = 5,
-        PARTICLES_COLLISION_TYPE_HEIGHTFIELD_COLLIDE = 6,
+        SphereAttract = 0,
+        BoxAttract = 1,
+        VectorFieldAttract = 2,
+        SphereCollide = 3,
+        BoxCollide = 4,
+        SdfCollide = 5,
+        HeightfieldCollide = 6,
     }
 
     public enum ParticlesCollisionHeightfieldResolution : long
     {
-        PARTICLES_COLLISION_HEIGHTFIELD_RESOLUTION_256 = 0,
-        PARTICLES_COLLISION_HEIGHTFIELD_RESOLUTION_512 = 1,
-        PARTICLES_COLLISION_HEIGHTFIELD_RESOLUTION_1024 = 2,
-        PARTICLES_COLLISION_HEIGHTFIELD_RESOLUTION_2048 = 3,
-        PARTICLES_COLLISION_HEIGHTFIELD_RESOLUTION_4096 = 4,
-        PARTICLES_COLLISION_HEIGHTFIELD_RESOLUTION_8192 = 5,
-        PARTICLES_COLLISION_HEIGHTFIELD_RESOLUTION_MAX = 6,
+        Resolution256 = 0,
+        Resolution512 = 1,
+        Resolution1024 = 2,
+        Resolution2048 = 3,
+        Resolution4096 = 4,
+        Resolution8192 = 5,
+        Max = 6,
     }
 
     public enum FogVolumeShape : long
     {
-        FOG_VOLUME_SHAPE_ELLIPSOID = 0,
-        FOG_VOLUME_SHAPE_CONE = 1,
-        FOG_VOLUME_SHAPE_CYLINDER = 2,
-        FOG_VOLUME_SHAPE_BOX = 3,
-        FOG_VOLUME_SHAPE_WORLD = 4,
-        FOG_VOLUME_SHAPE_MAX = 5,
+        Ellipsoid = 0,
+        Cone = 1,
+        Cylinder = 2,
+        Box = 3,
+        World = 4,
+        Max = 5,
     }
 
     public enum ViewportScaling3DMode : long
     {
-        VIEWPORT_SCALING_3D_MODE_BILINEAR = 0,
-        VIEWPORT_SCALING_3D_MODE_FSR = 1,
-        VIEWPORT_SCALING_3D_MODE_FSR2 = 2,
-        VIEWPORT_SCALING_3D_MODE_METALFX_SPATIAL = 3,
-        VIEWPORT_SCALING_3D_MODE_METALFX_TEMPORAL = 4,
-        VIEWPORT_SCALING_3D_MODE_NEAREST = 5,
-        VIEWPORT_SCALING_3D_MODE_MAX = 6,
+        Bilinear = 0,
+        Fsr = 1,
+        Fsr2 = 2,
+        MetalfxSpatial = 3,
+        MetalfxTemporal = 4,
+        Nearest = 5,
+        Max = 6,
     }
 
     public enum ViewportUpdateMode : long
     {
-        VIEWPORT_UPDATE_DISABLED = 0,
-        VIEWPORT_UPDATE_ONCE = 1,
-        VIEWPORT_UPDATE_WHEN_VISIBLE = 2,
-        VIEWPORT_UPDATE_WHEN_PARENT_VISIBLE = 3,
-        VIEWPORT_UPDATE_ALWAYS = 4,
+        Disabled = 0,
+        Once = 1,
+        WhenVisible = 2,
+        WhenParentVisible = 3,
+        Always = 4,
     }
 
     public enum ViewportClearMode : long
     {
-        VIEWPORT_CLEAR_ALWAYS = 0,
-        VIEWPORT_CLEAR_NEVER = 1,
-        VIEWPORT_CLEAR_ONLY_NEXT_FRAME = 2,
+        Always = 0,
+        Never = 1,
+        OnlyNextFrame = 2,
     }
 
     public enum ViewportEnvironmentMode : long
     {
-        VIEWPORT_ENVIRONMENT_DISABLED = 0,
-        VIEWPORT_ENVIRONMENT_ENABLED = 1,
-        VIEWPORT_ENVIRONMENT_INHERIT = 2,
-        VIEWPORT_ENVIRONMENT_MAX = 3,
+        Disabled = 0,
+        Enabled = 1,
+        Inherit = 2,
+        Max = 3,
     }
 
     public enum ViewportSDFOversize : long
     {
-        VIEWPORT_SDF_OVERSIZE_100_PERCENT = 0,
-        VIEWPORT_SDF_OVERSIZE_120_PERCENT = 1,
-        VIEWPORT_SDF_OVERSIZE_150_PERCENT = 2,
-        VIEWPORT_SDF_OVERSIZE_200_PERCENT = 3,
-        VIEWPORT_SDF_OVERSIZE_MAX = 4,
+        Oversize100Percent = 0,
+        Oversize120Percent = 1,
+        Oversize150Percent = 2,
+        Oversize200Percent = 3,
+        Max = 4,
     }
 
     public enum ViewportSDFScale : long
     {
-        VIEWPORT_SDF_SCALE_100_PERCENT = 0,
-        VIEWPORT_SDF_SCALE_50_PERCENT = 1,
-        VIEWPORT_SDF_SCALE_25_PERCENT = 2,
-        VIEWPORT_SDF_SCALE_MAX = 3,
+        Scale100Percent = 0,
+        Scale50Percent = 1,
+        Scale25Percent = 2,
+        Max = 3,
     }
 
     public enum ViewportMSAA : long
     {
-        VIEWPORT_MSAA_DISABLED = 0,
-        VIEWPORT_MSAA_2X = 1,
-        VIEWPORT_MSAA_4X = 2,
-        VIEWPORT_MSAA_8X = 3,
-        VIEWPORT_MSAA_MAX = 4,
+        Disabled = 0,
+        Msaa2x = 1,
+        Msaa4x = 2,
+        Msaa8x = 3,
+        Max = 4,
     }
 
     public enum ViewportAnisotropicFiltering : long
     {
-        VIEWPORT_ANISOTROPY_DISABLED = 0,
-        VIEWPORT_ANISOTROPY_2X = 1,
-        VIEWPORT_ANISOTROPY_4X = 2,
-        VIEWPORT_ANISOTROPY_8X = 3,
-        VIEWPORT_ANISOTROPY_16X = 4,
-        VIEWPORT_ANISOTROPY_MAX = 5,
+        Disabled = 0,
+        Anisotropy2x = 1,
+        Anisotropy4x = 2,
+        Anisotropy8x = 3,
+        Anisotropy16x = 4,
+        Max = 5,
     }
 
     public enum ViewportScreenSpaceAA : long
     {
-        VIEWPORT_SCREEN_SPACE_AA_DISABLED = 0,
-        VIEWPORT_SCREEN_SPACE_AA_FXAA = 1,
-        VIEWPORT_SCREEN_SPACE_AA_SMAA = 2,
-        VIEWPORT_SCREEN_SPACE_AA_MAX = 3,
+        Disabled = 0,
+        Fxaa = 1,
+        Smaa = 2,
+        Max = 3,
     }
 
     public enum ViewportOcclusionCullingBuildQuality : long
     {
-        VIEWPORT_OCCLUSION_BUILD_QUALITY_LOW = 0,
-        VIEWPORT_OCCLUSION_BUILD_QUALITY_MEDIUM = 1,
-        VIEWPORT_OCCLUSION_BUILD_QUALITY_HIGH = 2,
+        Low = 0,
+        Medium = 1,
+        High = 2,
     }
 
     public enum ViewportRenderInfo : long
     {
-        VIEWPORT_RENDER_INFO_OBJECTS_IN_FRAME = 0,
-        VIEWPORT_RENDER_INFO_PRIMITIVES_IN_FRAME = 1,
-        VIEWPORT_RENDER_INFO_DRAW_CALLS_IN_FRAME = 2,
-        VIEWPORT_RENDER_INFO_MAX = 3,
+        ObjectsInFrame = 0,
+        PrimitivesInFrame = 1,
+        DrawCallsInFrame = 2,
+        Max = 3,
     }
 
     public enum ViewportRenderInfoType : long
     {
-        VIEWPORT_RENDER_INFO_TYPE_VISIBLE = 0,
-        VIEWPORT_RENDER_INFO_TYPE_SHADOW = 1,
-        VIEWPORT_RENDER_INFO_TYPE_CANVAS = 2,
-        VIEWPORT_RENDER_INFO_TYPE_MAX = 3,
+        Visible = 0,
+        Shadow = 1,
+        Canvas = 2,
+        Max = 3,
     }
 
     public enum ViewportDebugDraw : long
     {
-        VIEWPORT_DEBUG_DRAW_DISABLED = 0,
-        VIEWPORT_DEBUG_DRAW_UNSHADED = 1,
-        VIEWPORT_DEBUG_DRAW_LIGHTING = 2,
-        VIEWPORT_DEBUG_DRAW_OVERDRAW = 3,
-        VIEWPORT_DEBUG_DRAW_WIREFRAME = 4,
-        VIEWPORT_DEBUG_DRAW_NORMAL_BUFFER = 5,
-        VIEWPORT_DEBUG_DRAW_VOXEL_GI_ALBEDO = 6,
-        VIEWPORT_DEBUG_DRAW_VOXEL_GI_LIGHTING = 7,
-        VIEWPORT_DEBUG_DRAW_VOXEL_GI_EMISSION = 8,
-        VIEWPORT_DEBUG_DRAW_SHADOW_ATLAS = 9,
-        VIEWPORT_DEBUG_DRAW_DIRECTIONAL_SHADOW_ATLAS = 10,
-        VIEWPORT_DEBUG_DRAW_SCENE_LUMINANCE = 11,
-        VIEWPORT_DEBUG_DRAW_SSAO = 12,
-        VIEWPORT_DEBUG_DRAW_SSIL = 13,
-        VIEWPORT_DEBUG_DRAW_PSSM_SPLITS = 14,
-        VIEWPORT_DEBUG_DRAW_DECAL_ATLAS = 15,
-        VIEWPORT_DEBUG_DRAW_SDFGI = 16,
-        VIEWPORT_DEBUG_DRAW_SDFGI_PROBES = 17,
-        VIEWPORT_DEBUG_DRAW_GI_BUFFER = 18,
-        VIEWPORT_DEBUG_DRAW_DISABLE_LOD = 19,
-        VIEWPORT_DEBUG_DRAW_CLUSTER_OMNI_LIGHTS = 20,
-        VIEWPORT_DEBUG_DRAW_CLUSTER_SPOT_LIGHTS = 21,
-        VIEWPORT_DEBUG_DRAW_CLUSTER_DECALS = 22,
-        VIEWPORT_DEBUG_DRAW_CLUSTER_REFLECTION_PROBES = 23,
-        VIEWPORT_DEBUG_DRAW_OCCLUDERS = 24,
-        VIEWPORT_DEBUG_DRAW_MOTION_VECTORS = 25,
-        VIEWPORT_DEBUG_DRAW_INTERNAL_BUFFER = 26,
+        Disabled = 0,
+        Unshaded = 1,
+        Lighting = 2,
+        Overdraw = 3,
+        Wireframe = 4,
+        NormalBuffer = 5,
+        VoxelGiAlbedo = 6,
+        VoxelGiLighting = 7,
+        VoxelGiEmission = 8,
+        ShadowAtlas = 9,
+        DirectionalShadowAtlas = 10,
+        SceneLuminance = 11,
+        Ssao = 12,
+        Ssil = 13,
+        PssmSplits = 14,
+        DecalAtlas = 15,
+        Sdfgi = 16,
+        SdfgiProbes = 17,
+        GiBuffer = 18,
+        DisableLod = 19,
+        ClusterOmniLights = 20,
+        ClusterSpotLights = 21,
+        ClusterDecals = 22,
+        ClusterReflectionProbes = 23,
+        Occluders = 24,
+        MotionVectors = 25,
+        InternalBuffer = 26,
     }
 
     public enum ViewportVRSMode : long
     {
-        VIEWPORT_VRS_DISABLED = 0,
-        VIEWPORT_VRS_TEXTURE = 1,
-        VIEWPORT_VRS_XR = 2,
-        VIEWPORT_VRS_MAX = 3,
+        Disabled = 0,
+        Texture = 1,
+        Xr = 2,
+        Max = 3,
     }
 
     public enum ViewportVRSUpdateMode : long
     {
-        VIEWPORT_VRS_UPDATE_DISABLED = 0,
-        VIEWPORT_VRS_UPDATE_ONCE = 1,
-        VIEWPORT_VRS_UPDATE_ALWAYS = 2,
-        VIEWPORT_VRS_UPDATE_MAX = 3,
+        Disabled = 0,
+        Once = 1,
+        Always = 2,
+        Max = 3,
     }
 
     public enum SkyMode : long
     {
-        SKY_MODE_AUTOMATIC = 0,
-        SKY_MODE_QUALITY = 1,
-        SKY_MODE_INCREMENTAL = 2,
-        SKY_MODE_REALTIME = 3,
+        Automatic = 0,
+        Quality = 1,
+        Incremental = 2,
+        Realtime = 3,
     }
 
     public enum CompositorEffectFlags : long
     {
-        COMPOSITOR_EFFECT_FLAG_ACCESS_RESOLVED_COLOR = 1,
-        COMPOSITOR_EFFECT_FLAG_ACCESS_RESOLVED_DEPTH = 2,
-        COMPOSITOR_EFFECT_FLAG_NEEDS_MOTION_VECTORS = 4,
-        COMPOSITOR_EFFECT_FLAG_NEEDS_ROUGHNESS = 8,
-        COMPOSITOR_EFFECT_FLAG_NEEDS_SEPARATE_SPECULAR = 16,
+        AccessResolvedColor = 1,
+        AccessResolvedDepth = 2,
+        NeedsMotionVectors = 4,
+        NeedsRoughness = 8,
+        NeedsSeparateSpecular = 16,
     }
 
     public enum CompositorEffectCallbackType : long
     {
-        COMPOSITOR_EFFECT_CALLBACK_TYPE_PRE_OPAQUE = 0,
-        COMPOSITOR_EFFECT_CALLBACK_TYPE_POST_OPAQUE = 1,
-        COMPOSITOR_EFFECT_CALLBACK_TYPE_POST_SKY = 2,
-        COMPOSITOR_EFFECT_CALLBACK_TYPE_PRE_TRANSPARENT = 3,
-        COMPOSITOR_EFFECT_CALLBACK_TYPE_POST_TRANSPARENT = 4,
-        COMPOSITOR_EFFECT_CALLBACK_TYPE_ANY = -1,
+        PreOpaque = 0,
+        PostOpaque = 1,
+        PostSky = 2,
+        PreTransparent = 3,
+        PostTransparent = 4,
+        Any = -1,
     }
 
     public enum EnvironmentBG : long
     {
-        ENV_BG_CLEAR_COLOR = 0,
-        ENV_BG_COLOR = 1,
-        ENV_BG_SKY = 2,
-        ENV_BG_CANVAS = 3,
-        ENV_BG_KEEP = 4,
-        ENV_BG_CAMERA_FEED = 5,
-        ENV_BG_MAX = 6,
+        ClearColor = 0,
+        Color = 1,
+        Sky = 2,
+        Canvas = 3,
+        Keep = 4,
+        CameraFeed = 5,
+        Max = 6,
     }
 
     public enum EnvironmentAmbientSource : long
     {
-        ENV_AMBIENT_SOURCE_BG = 0,
-        ENV_AMBIENT_SOURCE_DISABLED = 1,
-        ENV_AMBIENT_SOURCE_COLOR = 2,
-        ENV_AMBIENT_SOURCE_SKY = 3,
+        Bg = 0,
+        Disabled = 1,
+        Color = 2,
+        Sky = 3,
     }
 
     public enum EnvironmentReflectionSource : long
     {
-        ENV_REFLECTION_SOURCE_BG = 0,
-        ENV_REFLECTION_SOURCE_DISABLED = 1,
-        ENV_REFLECTION_SOURCE_SKY = 2,
+        Bg = 0,
+        Disabled = 1,
+        Sky = 2,
     }
 
     public enum EnvironmentGlowBlendMode : long
     {
-        ENV_GLOW_BLEND_MODE_ADDITIVE = 0,
-        ENV_GLOW_BLEND_MODE_SCREEN = 1,
-        ENV_GLOW_BLEND_MODE_SOFTLIGHT = 2,
-        ENV_GLOW_BLEND_MODE_REPLACE = 3,
-        ENV_GLOW_BLEND_MODE_MIX = 4,
+        Additive = 0,
+        Screen = 1,
+        Softlight = 2,
+        Replace = 3,
+        Mix = 4,
     }
 
     public enum EnvironmentFogMode : long
     {
-        ENV_FOG_MODE_EXPONENTIAL = 0,
-        ENV_FOG_MODE_DEPTH = 1,
+        Exponential = 0,
+        Depth = 1,
     }
 
     public enum EnvironmentToneMapper : long
     {
-        ENV_TONE_MAPPER_LINEAR = 0,
-        ENV_TONE_MAPPER_REINHARD = 1,
-        ENV_TONE_MAPPER_FILMIC = 2,
-        ENV_TONE_MAPPER_ACES = 3,
-        ENV_TONE_MAPPER_AGX = 4,
+        Linear = 0,
+        Reinhard = 1,
+        Filmic = 2,
+        Aces = 3,
+        Agx = 4,
     }
 
     public enum EnvironmentSSRRoughnessQuality : long
     {
-        ENV_SSR_ROUGHNESS_QUALITY_DISABLED = 0,
-        ENV_SSR_ROUGHNESS_QUALITY_LOW = 1,
-        ENV_SSR_ROUGHNESS_QUALITY_MEDIUM = 2,
-        ENV_SSR_ROUGHNESS_QUALITY_HIGH = 3,
+        Disabled = 0,
+        Low = 1,
+        Medium = 2,
+        High = 3,
     }
 
     public enum EnvironmentSSAOQuality : long
     {
-        ENV_SSAO_QUALITY_VERY_LOW = 0,
-        ENV_SSAO_QUALITY_LOW = 1,
-        ENV_SSAO_QUALITY_MEDIUM = 2,
-        ENV_SSAO_QUALITY_HIGH = 3,
-        ENV_SSAO_QUALITY_ULTRA = 4,
+        VeryLow = 0,
+        Low = 1,
+        Medium = 2,
+        High = 3,
+        Ultra = 4,
     }
 
     public enum EnvironmentSSILQuality : long
     {
-        ENV_SSIL_QUALITY_VERY_LOW = 0,
-        ENV_SSIL_QUALITY_LOW = 1,
-        ENV_SSIL_QUALITY_MEDIUM = 2,
-        ENV_SSIL_QUALITY_HIGH = 3,
-        ENV_SSIL_QUALITY_ULTRA = 4,
+        VeryLow = 0,
+        Low = 1,
+        Medium = 2,
+        High = 3,
+        Ultra = 4,
     }
 
     public enum EnvironmentSDFGIYScale : long
     {
-        ENV_SDFGI_Y_SCALE_50_PERCENT = 0,
-        ENV_SDFGI_Y_SCALE_75_PERCENT = 1,
-        ENV_SDFGI_Y_SCALE_100_PERCENT = 2,
+        Scale50Percent = 0,
+        Scale75Percent = 1,
+        Scale100Percent = 2,
     }
 
     public enum EnvironmentSDFGIRayCount : long
     {
-        ENV_SDFGI_RAY_COUNT_4 = 0,
-        ENV_SDFGI_RAY_COUNT_8 = 1,
-        ENV_SDFGI_RAY_COUNT_16 = 2,
-        ENV_SDFGI_RAY_COUNT_32 = 3,
-        ENV_SDFGI_RAY_COUNT_64 = 4,
-        ENV_SDFGI_RAY_COUNT_96 = 5,
-        ENV_SDFGI_RAY_COUNT_128 = 6,
-        ENV_SDFGI_RAY_COUNT_MAX = 7,
+        Count4 = 0,
+        Count8 = 1,
+        Count16 = 2,
+        Count32 = 3,
+        Count64 = 4,
+        Count96 = 5,
+        Count128 = 6,
+        Max = 7,
     }
 
     public enum EnvironmentSDFGIFramesToConverge : long
     {
-        ENV_SDFGI_CONVERGE_IN_5_FRAMES = 0,
-        ENV_SDFGI_CONVERGE_IN_10_FRAMES = 1,
-        ENV_SDFGI_CONVERGE_IN_15_FRAMES = 2,
-        ENV_SDFGI_CONVERGE_IN_20_FRAMES = 3,
-        ENV_SDFGI_CONVERGE_IN_25_FRAMES = 4,
-        ENV_SDFGI_CONVERGE_IN_30_FRAMES = 5,
-        ENV_SDFGI_CONVERGE_MAX = 6,
+        In5Frames = 0,
+        In10Frames = 1,
+        In15Frames = 2,
+        In20Frames = 3,
+        In25Frames = 4,
+        In30Frames = 5,
+        Max = 6,
     }
 
     public enum EnvironmentSDFGIFramesToUpdateLight : long
     {
-        ENV_SDFGI_UPDATE_LIGHT_IN_1_FRAME = 0,
-        ENV_SDFGI_UPDATE_LIGHT_IN_2_FRAMES = 1,
-        ENV_SDFGI_UPDATE_LIGHT_IN_4_FRAMES = 2,
-        ENV_SDFGI_UPDATE_LIGHT_IN_8_FRAMES = 3,
-        ENV_SDFGI_UPDATE_LIGHT_IN_16_FRAMES = 4,
-        ENV_SDFGI_UPDATE_LIGHT_MAX = 5,
+        In1Frame = 0,
+        In2Frames = 1,
+        In4Frames = 2,
+        In8Frames = 3,
+        In16Frames = 4,
+        Max = 5,
     }
 
     public enum SubSurfaceScatteringQuality : long
     {
-        SUB_SURFACE_SCATTERING_QUALITY_DISABLED = 0,
-        SUB_SURFACE_SCATTERING_QUALITY_LOW = 1,
-        SUB_SURFACE_SCATTERING_QUALITY_MEDIUM = 2,
-        SUB_SURFACE_SCATTERING_QUALITY_HIGH = 3,
+        Disabled = 0,
+        Low = 1,
+        Medium = 2,
+        High = 3,
     }
 
     public enum DOFBokehShape : long
     {
-        DOF_BOKEH_BOX = 0,
-        DOF_BOKEH_HEXAGON = 1,
-        DOF_BOKEH_CIRCLE = 2,
+        Box = 0,
+        Hexagon = 1,
+        Circle = 2,
     }
 
     public enum DOFBlurQuality : long
     {
-        DOF_BLUR_QUALITY_VERY_LOW = 0,
-        DOF_BLUR_QUALITY_LOW = 1,
-        DOF_BLUR_QUALITY_MEDIUM = 2,
-        DOF_BLUR_QUALITY_HIGH = 3,
+        VeryLow = 0,
+        Low = 1,
+        Medium = 2,
+        High = 3,
     }
 
     public enum InstanceType : long
     {
-        INSTANCE_NONE = 0,
-        INSTANCE_MESH = 1,
-        INSTANCE_MULTIMESH = 2,
-        INSTANCE_PARTICLES = 3,
-        INSTANCE_PARTICLES_COLLISION = 4,
-        INSTANCE_LIGHT = 5,
-        INSTANCE_REFLECTION_PROBE = 6,
-        INSTANCE_DECAL = 7,
-        INSTANCE_VOXEL_GI = 8,
-        INSTANCE_LIGHTMAP = 9,
-        INSTANCE_OCCLUDER = 10,
-        INSTANCE_VISIBLITY_NOTIFIER = 11,
-        INSTANCE_FOG_VOLUME = 12,
-        INSTANCE_MAX = 13,
-        INSTANCE_GEOMETRY_MASK = 14,
+        None = 0,
+        Mesh = 1,
+        Multimesh = 2,
+        Particles = 3,
+        ParticlesCollision = 4,
+        Light = 5,
+        ReflectionProbe = 6,
+        Decal = 7,
+        VoxelGi = 8,
+        Lightmap = 9,
+        Occluder = 10,
+        VisiblityNotifier = 11,
+        FogVolume = 12,
+        Max = 13,
+        GeometryMask = 14,
     }
 
     public enum InstanceFlags : long
     {
-        INSTANCE_FLAG_USE_BAKED_LIGHT = 0,
-        INSTANCE_FLAG_USE_DYNAMIC_GI = 1,
-        INSTANCE_FLAG_DRAW_NEXT_FRAME_IF_VISIBLE = 2,
-        INSTANCE_FLAG_IGNORE_OCCLUSION_CULLING = 3,
-        INSTANCE_FLAG_MAX = 4,
+        UseBakedLight = 0,
+        UseDynamicGi = 1,
+        DrawNextFrameIfVisible = 2,
+        IgnoreOcclusionCulling = 3,
+        Max = 4,
     }
 
     public enum ShadowCastingSetting : long
     {
-        SHADOW_CASTING_SETTING_OFF = 0,
-        SHADOW_CASTING_SETTING_ON = 1,
-        SHADOW_CASTING_SETTING_DOUBLE_SIDED = 2,
-        SHADOW_CASTING_SETTING_SHADOWS_ONLY = 3,
+        Off = 0,
+        On = 1,
+        DoubleSided = 2,
+        ShadowsOnly = 3,
     }
 
     public enum VisibilityRangeFadeMode : long
     {
-        VISIBILITY_RANGE_FADE_DISABLED = 0,
-        VISIBILITY_RANGE_FADE_SELF = 1,
-        VISIBILITY_RANGE_FADE_DEPENDENCIES = 2,
+        Disabled = 0,
+        Self = 1,
+        Dependencies = 2,
     }
 
     public enum BakeChannels : long
     {
-        BAKE_CHANNEL_ALBEDO_ALPHA = 0,
-        BAKE_CHANNEL_NORMAL = 1,
-        BAKE_CHANNEL_ORM = 2,
-        BAKE_CHANNEL_EMISSION = 3,
+        AlbedoAlpha = 0,
+        Normal = 1,
+        Orm = 2,
+        Emission = 3,
     }
 
     public enum CanvasTextureChannel : long
     {
-        CANVAS_TEXTURE_CHANNEL_DIFFUSE = 0,
-        CANVAS_TEXTURE_CHANNEL_NORMAL = 1,
-        CANVAS_TEXTURE_CHANNEL_SPECULAR = 2,
+        Diffuse = 0,
+        Normal = 1,
+        Specular = 2,
     }
 
     public enum NinePatchAxisMode : long
     {
-        NINE_PATCH_STRETCH = 0,
-        NINE_PATCH_TILE = 1,
-        NINE_PATCH_TILE_FIT = 2,
+        Stretch = 0,
+        Tile = 1,
+        TileFit = 2,
     }
 
     public enum CanvasItemTextureFilter : long
     {
-        CANVAS_ITEM_TEXTURE_FILTER_DEFAULT = 0,
-        CANVAS_ITEM_TEXTURE_FILTER_NEAREST = 1,
-        CANVAS_ITEM_TEXTURE_FILTER_LINEAR = 2,
-        CANVAS_ITEM_TEXTURE_FILTER_NEAREST_WITH_MIPMAPS = 3,
-        CANVAS_ITEM_TEXTURE_FILTER_LINEAR_WITH_MIPMAPS = 4,
-        CANVAS_ITEM_TEXTURE_FILTER_NEAREST_WITH_MIPMAPS_ANISOTROPIC = 5,
-        CANVAS_ITEM_TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC = 6,
-        CANVAS_ITEM_TEXTURE_FILTER_MAX = 7,
+        Default = 0,
+        Nearest = 1,
+        Linear = 2,
+        NearestWithMipmaps = 3,
+        LinearWithMipmaps = 4,
+        NearestWithMipmapsAnisotropic = 5,
+        LinearWithMipmapsAnisotropic = 6,
+        Max = 7,
     }
 
     public enum CanvasItemTextureRepeat : long
     {
-        CANVAS_ITEM_TEXTURE_REPEAT_DEFAULT = 0,
-        CANVAS_ITEM_TEXTURE_REPEAT_DISABLED = 1,
-        CANVAS_ITEM_TEXTURE_REPEAT_ENABLED = 2,
-        CANVAS_ITEM_TEXTURE_REPEAT_MIRROR = 3,
-        CANVAS_ITEM_TEXTURE_REPEAT_MAX = 4,
+        Default = 0,
+        Disabled = 1,
+        Enabled = 2,
+        Mirror = 3,
+        Max = 4,
     }
 
     public enum CanvasGroupMode : long
     {
-        CANVAS_GROUP_MODE_DISABLED = 0,
-        CANVAS_GROUP_MODE_CLIP_ONLY = 1,
-        CANVAS_GROUP_MODE_CLIP_AND_DRAW = 2,
-        CANVAS_GROUP_MODE_TRANSPARENT = 3,
+        Disabled = 0,
+        ClipOnly = 1,
+        ClipAndDraw = 2,
+        Transparent = 3,
     }
 
     public enum CanvasLightMode : long
     {
-        CANVAS_LIGHT_MODE_POINT = 0,
-        CANVAS_LIGHT_MODE_DIRECTIONAL = 1,
+        Point = 0,
+        Directional = 1,
     }
 
     public enum CanvasLightBlendMode : long
     {
-        CANVAS_LIGHT_BLEND_MODE_ADD = 0,
-        CANVAS_LIGHT_BLEND_MODE_SUB = 1,
-        CANVAS_LIGHT_BLEND_MODE_MIX = 2,
+        Add = 0,
+        Sub = 1,
+        Mix = 2,
     }
 
     public enum CanvasLightShadowFilter : long
     {
-        CANVAS_LIGHT_FILTER_NONE = 0,
-        CANVAS_LIGHT_FILTER_PCF5 = 1,
-        CANVAS_LIGHT_FILTER_PCF13 = 2,
-        CANVAS_LIGHT_FILTER_MAX = 3,
+        None = 0,
+        Pcf5 = 1,
+        Pcf13 = 2,
+        Max = 3,
     }
 
     public enum CanvasOccluderPolygonCullMode : long
     {
-        CANVAS_OCCLUDER_POLYGON_CULL_DISABLED = 0,
-        CANVAS_OCCLUDER_POLYGON_CULL_CLOCKWISE = 1,
-        CANVAS_OCCLUDER_POLYGON_CULL_COUNTER_CLOCKWISE = 2,
+        Disabled = 0,
+        Clockwise = 1,
+        CounterClockwise = 2,
     }
 
     public enum GlobalShaderParameterType : long
     {
-        GLOBAL_VAR_TYPE_BOOL = 0,
-        GLOBAL_VAR_TYPE_BVEC2 = 1,
-        GLOBAL_VAR_TYPE_BVEC3 = 2,
-        GLOBAL_VAR_TYPE_BVEC4 = 3,
-        GLOBAL_VAR_TYPE_INT = 4,
-        GLOBAL_VAR_TYPE_IVEC2 = 5,
-        GLOBAL_VAR_TYPE_IVEC3 = 6,
-        GLOBAL_VAR_TYPE_IVEC4 = 7,
-        GLOBAL_VAR_TYPE_RECT2I = 8,
-        GLOBAL_VAR_TYPE_UINT = 9,
-        GLOBAL_VAR_TYPE_UVEC2 = 10,
-        GLOBAL_VAR_TYPE_UVEC3 = 11,
-        GLOBAL_VAR_TYPE_UVEC4 = 12,
-        GLOBAL_VAR_TYPE_FLOAT = 13,
-        GLOBAL_VAR_TYPE_VEC2 = 14,
-        GLOBAL_VAR_TYPE_VEC3 = 15,
-        GLOBAL_VAR_TYPE_VEC4 = 16,
-        GLOBAL_VAR_TYPE_COLOR = 17,
-        GLOBAL_VAR_TYPE_RECT2 = 18,
-        GLOBAL_VAR_TYPE_MAT2 = 19,
-        GLOBAL_VAR_TYPE_MAT3 = 20,
-        GLOBAL_VAR_TYPE_MAT4 = 21,
-        GLOBAL_VAR_TYPE_TRANSFORM_2D = 22,
-        GLOBAL_VAR_TYPE_TRANSFORM = 23,
-        GLOBAL_VAR_TYPE_SAMPLER2D = 24,
-        GLOBAL_VAR_TYPE_SAMPLER2DARRAY = 25,
-        GLOBAL_VAR_TYPE_SAMPLER3D = 26,
-        GLOBAL_VAR_TYPE_SAMPLERCUBE = 27,
-        GLOBAL_VAR_TYPE_SAMPLEREXT = 28,
-        GLOBAL_VAR_TYPE_MAX = 29,
+        Bool = 0,
+        Bvec2 = 1,
+        Bvec3 = 2,
+        Bvec4 = 3,
+        Int = 4,
+        Ivec2 = 5,
+        Ivec3 = 6,
+        Ivec4 = 7,
+        Rect2i = 8,
+        Uint = 9,
+        Uvec2 = 10,
+        Uvec3 = 11,
+        Uvec4 = 12,
+        Float = 13,
+        Vec2 = 14,
+        Vec3 = 15,
+        Vec4 = 16,
+        Color = 17,
+        Rect2 = 18,
+        Mat2 = 19,
+        Mat3 = 20,
+        Mat4 = 21,
+        Transform2d = 22,
+        Transform = 23,
+        Sampler2d = 24,
+        Sampler2darray = 25,
+        Sampler3d = 26,
+        Samplercube = 27,
+        Samplerext = 28,
+        Max = 29,
     }
 
     public enum RenderingInfo : long
     {
-        RENDERING_INFO_TOTAL_OBJECTS_IN_FRAME = 0,
-        RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME = 1,
-        RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME = 2,
-        RENDERING_INFO_TEXTURE_MEM_USED = 3,
-        RENDERING_INFO_BUFFER_MEM_USED = 4,
-        RENDERING_INFO_VIDEO_MEM_USED = 5,
-        RENDERING_INFO_PIPELINE_COMPILATIONS_CANVAS = 6,
-        RENDERING_INFO_PIPELINE_COMPILATIONS_MESH = 7,
-        RENDERING_INFO_PIPELINE_COMPILATIONS_SURFACE = 8,
-        RENDERING_INFO_PIPELINE_COMPILATIONS_DRAW = 9,
-        RENDERING_INFO_PIPELINE_COMPILATIONS_SPECIALIZATION = 10,
+        TotalObjectsInFrame = 0,
+        TotalPrimitivesInFrame = 1,
+        TotalDrawCallsInFrame = 2,
+        TextureMemUsed = 3,
+        BufferMemUsed = 4,
+        VideoMemUsed = 5,
+        PipelineCompilationsCanvas = 6,
+        PipelineCompilationsMesh = 7,
+        PipelineCompilationsSurface = 8,
+        PipelineCompilationsDraw = 9,
+        PipelineCompilationsSpecialization = 10,
     }
 
     public enum PipelineSource : long
     {
-        PIPELINE_SOURCE_CANVAS = 0,
-        PIPELINE_SOURCE_MESH = 1,
-        PIPELINE_SOURCE_SURFACE = 2,
-        PIPELINE_SOURCE_DRAW = 3,
-        PIPELINE_SOURCE_SPECIALIZATION = 4,
-        PIPELINE_SOURCE_MAX = 5,
+        Canvas = 0,
+        Mesh = 1,
+        Surface = 2,
+        Draw = 3,
+        Specialization = 4,
+        Max = 5,
     }
 
     public enum SplashStretchMode : long
     {
-        SPLASH_STRETCH_MODE_DISABLED = 0,
-        SPLASH_STRETCH_MODE_KEEP = 1,
-        SPLASH_STRETCH_MODE_KEEP_WIDTH = 2,
-        SPLASH_STRETCH_MODE_KEEP_HEIGHT = 3,
-        SPLASH_STRETCH_MODE_COVER = 4,
-        SPLASH_STRETCH_MODE_IGNORE = 5,
+        Disabled = 0,
+        Keep = 1,
+        KeepWidth = 2,
+        KeepHeight = 3,
+        Cover = 4,
+        Ignore = 5,
     }
 
     public enum Features : long
     {
-        FEATURE_SHADERS = 0,
-        FEATURE_MULTITHREADED = 1,
+        Shaders = 0,
+        Multithreaded = 1,
     }
 
-    public bool RenderLoopEnabled
+    public static bool RenderLoopEnabled
     {
         get => IsRenderLoopEnabled();
         set => SetRenderLoopEnabled(value);
     }
 
     private static nint __mb_texture_2d_create;
-    public Rid Texture2dCreate(Image? image)
+    public static Rid Texture2dCreate(Image? image)
     {
         var __mb = __mb_texture_2d_create;
         if (__mb == 0)
@@ -13268,12 +13270,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_texture_2d_layered_create;
-    public Rid Texture2dLayeredCreate(Godot.Collections.Array layers, RenderingServer.TextureLayeredType layeredType)
+    public static Rid Texture2dLayeredCreate(Godot.Collections.Array layers, RenderingServer.TextureLayeredType layeredType)
     {
         var __mb = __mb_texture_2d_layered_create;
         if (__mb == 0)
@@ -13288,12 +13290,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_texture_3d_create;
-    public Rid Texture3dCreate(Image.Format format, int width, int height, int depth, bool mipmaps, Godot.Collections.Array data)
+    public static Rid Texture3dCreate(Image.Format format, int width, int height, int depth, bool mipmaps, Godot.Collections.Array data)
     {
         var __mb = __mb_texture_3d_create;
         if (__mb == 0)
@@ -13316,12 +13318,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_texture_proxy_create;
-    public Rid TextureProxyCreate(Rid @base)
+    public static Rid TextureProxyCreate(Rid @base)
     {
         var __mb = __mb_texture_proxy_create;
         if (__mb == 0)
@@ -13334,12 +13336,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_texture_create_from_native_handle;
-    public Rid TextureCreateFromNativeHandle(RenderingServer.TextureType type, Image.Format format, ulong nativeHandle, int width, int height, int depth, int layers, RenderingServer.TextureLayeredType layeredType)
+    public static Rid TextureCreateFromNativeHandle(RenderingServer.TextureType type, Image.Format format, ulong nativeHandle, int width, int height, int depth, int layers = unchecked((int)(1)), RenderingServer.TextureLayeredType layeredType = (RenderingServer.TextureLayeredType)(0))
     {
         var __mb = __mb_texture_create_from_native_handle;
         if (__mb == 0)
@@ -13366,12 +13368,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[6] = (nint)(&__a6);
         __args[7] = (nint)(&__a7);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_texture_drawable_create;
-    public Rid TextureDrawableCreate(int width, int height, RenderingServer.TextureDrawableFormat format, Color color, bool withMipmaps)
+    public static Rid TextureDrawableCreate(int width, int height, RenderingServer.TextureDrawableFormat format, Color color, bool withMipmaps = false)
     {
         var __mb = __mb_texture_drawable_create;
         if (__mb == 0)
@@ -13392,12 +13394,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_texture_2d_update;
-    public void Texture2dUpdate(Rid texture, Image? image, int layer)
+    public static void Texture2dUpdate(Rid texture, Image? image, int layer)
     {
         var __mb = __mb_texture_2d_update;
         if (__mb == 0)
@@ -13413,11 +13415,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_texture_3d_update;
-    public void Texture3dUpdate(Rid texture, Godot.Collections.Array data)
+    public static void Texture3dUpdate(Rid texture, Godot.Collections.Array data)
     {
         var __mb = __mb_texture_3d_update;
         if (__mb == 0)
@@ -13431,11 +13433,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_texture_proxy_update;
-    public void TextureProxyUpdate(Rid texture, Rid proxyTo)
+    public static void TextureProxyUpdate(Rid texture, Rid proxyTo)
     {
         var __mb = __mb_texture_proxy_update;
         if (__mb == 0)
@@ -13449,11 +13451,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_texture_drawable_blit_rect;
-    public void TextureDrawableBlitRect(Godot.Collections.Array textures, Rect2I rect, Rid material, Color modulate, Godot.Collections.Array sourceTextures, int toMipmap)
+    public static void TextureDrawableBlitRect(Godot.Collections.Array textures, Rect2I rect, Rid material, Color modulate, Godot.Collections.Array sourceTextures, int toMipmap = unchecked((int)(0)))
     {
         var __mb = __mb_texture_drawable_blit_rect;
         if (__mb == 0)
@@ -13475,11 +13477,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_texture_2d_placeholder_create;
-    public Rid Texture2dPlaceholderCreate()
+    public static Rid Texture2dPlaceholderCreate()
     {
         var __mb = __mb_texture_2d_placeholder_create;
         if (__mb == 0)
@@ -13489,12 +13491,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_texture_2d_placeholder_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_texture_2d_layered_placeholder_create;
-    public Rid Texture2dLayeredPlaceholderCreate(RenderingServer.TextureLayeredType layeredType)
+    public static Rid Texture2dLayeredPlaceholderCreate(RenderingServer.TextureLayeredType layeredType)
     {
         var __mb = __mb_texture_2d_layered_placeholder_create;
         if (__mb == 0)
@@ -13507,12 +13509,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_texture_3d_placeholder_create;
-    public Rid Texture3dPlaceholderCreate()
+    public static Rid Texture3dPlaceholderCreate()
     {
         var __mb = __mb_texture_3d_placeholder_create;
         if (__mb == 0)
@@ -13522,12 +13524,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_texture_3d_placeholder_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_texture_2d_get;
-    public Image? Texture2dGet(Rid texture)
+    public static Image? Texture2dGet(Rid texture)
     {
         var __mb = __mb_texture_2d_get;
         if (__mb == 0)
@@ -13540,12 +13542,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_texture_2d_layer_get;
-    public Image? Texture2dLayerGet(Rid texture, int layer)
+    public static Image? Texture2dLayerGet(Rid texture, int layer)
     {
         var __mb = __mb_texture_2d_layer_get;
         if (__mb == 0)
@@ -13560,12 +13562,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_texture_3d_get;
-    public Godot.Collections.Array Texture3dGet(Rid texture)
+    public static Godot.Collections.Array Texture3dGet(Rid texture)
     {
         var __mb = __mb_texture_3d_get;
         if (__mb == 0)
@@ -13578,12 +13580,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_texture_drawable_generate_mipmaps;
-    public void TextureDrawableGenerateMipmaps(Rid texture)
+    public static void TextureDrawableGenerateMipmaps(Rid texture)
     {
         var __mb = __mb_texture_drawable_generate_mipmaps;
         if (__mb == 0)
@@ -13595,11 +13597,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __a0 = texture;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_texture_drawable_get_default_material;
-    public Rid TextureDrawableGetDefaultMaterial()
+    public static Rid TextureDrawableGetDefaultMaterial()
     {
         var __mb = __mb_texture_drawable_get_default_material;
         if (__mb == 0)
@@ -13609,12 +13611,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_texture_drawable_get_default_material = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_texture_replace;
-    public void TextureReplace(Rid texture, Rid byTexture)
+    public static void TextureReplace(Rid texture, Rid byTexture)
     {
         var __mb = __mb_texture_replace;
         if (__mb == 0)
@@ -13628,11 +13630,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_texture_set_size_override;
-    public void TextureSetSizeOverride(Rid texture, int width, int height)
+    public static void TextureSetSizeOverride(Rid texture, int width, int height)
     {
         var __mb = __mb_texture_set_size_override;
         if (__mb == 0)
@@ -13648,11 +13650,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_texture_set_path;
-    public void TextureSetPath(Rid texture, string path)
+    public static void TextureSetPath(Rid texture, string path)
     {
         var __mb = __mb_texture_set_path;
         if (__mb == 0)
@@ -13666,12 +13668,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_texture_get_path;
-    public string TextureGetPath(Rid texture)
+    public static string TextureGetPath(Rid texture)
     {
         var __mb = __mb_texture_get_path;
         if (__mb == 0)
@@ -13684,12 +13686,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_texture_get_format;
-    public Image.Format TextureGetFormat(Rid texture)
+    public static Image.Format TextureGetFormat(Rid texture)
     {
         var __mb = __mb_texture_get_format;
         if (__mb == 0)
@@ -13702,12 +13704,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Image.Format)__ret;
     }
 
     private static nint __mb_texture_set_force_redraw_if_visible;
-    public void TextureSetForceRedrawIfVisible(Rid texture, bool enable)
+    public static void TextureSetForceRedrawIfVisible(Rid texture, bool enable)
     {
         var __mb = __mb_texture_set_force_redraw_if_visible;
         if (__mb == 0)
@@ -13721,11 +13723,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_texture_rd_create;
-    public Rid TextureRdCreate(Rid rdTexture, RenderingServer.TextureLayeredType layerType)
+    public static Rid TextureRdCreate(Rid rdTexture, RenderingServer.TextureLayeredType layerType = (RenderingServer.TextureLayeredType)(0))
     {
         var __mb = __mb_texture_rd_create;
         if (__mb == 0)
@@ -13740,12 +13742,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_texture_get_rd_texture;
-    public Rid TextureGetRdTexture(Rid texture, bool srgb)
+    public static Rid TextureGetRdTexture(Rid texture, bool srgb = false)
     {
         var __mb = __mb_texture_get_rd_texture;
         if (__mb == 0)
@@ -13760,12 +13762,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_texture_get_native_handle;
-    public ulong TextureGetNativeHandle(Rid texture, bool srgb)
+    public static ulong TextureGetNativeHandle(Rid texture, bool srgb = false)
     {
         var __mb = __mb_texture_get_native_handle;
         if (__mb == 0)
@@ -13780,12 +13782,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_shader_create;
-    public Rid ShaderCreate()
+    public static Rid ShaderCreate()
     {
         var __mb = __mb_shader_create;
         if (__mb == 0)
@@ -13795,12 +13797,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_shader_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_shader_set_code;
-    public void ShaderSetCode(Rid shader, string code)
+    public static void ShaderSetCode(Rid shader, string code)
     {
         var __mb = __mb_shader_set_code;
         if (__mb == 0)
@@ -13814,12 +13816,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_shader_set_path_hint;
-    public void ShaderSetPathHint(Rid shader, string path)
+    public static void ShaderSetPathHint(Rid shader, string path)
     {
         var __mb = __mb_shader_set_path_hint;
         if (__mb == 0)
@@ -13833,12 +13835,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_shader_get_code;
-    public string ShaderGetCode(Rid shader)
+    public static string ShaderGetCode(Rid shader)
     {
         var __mb = __mb_shader_get_code;
         if (__mb == 0)
@@ -13851,12 +13853,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_shader_parameter_list;
-    public Godot.Collections.Array GetShaderParameterList(Rid shader)
+    public static Godot.Collections.Array GetShaderParameterList(Rid shader)
     {
         var __mb = __mb_get_shader_parameter_list;
         if (__mb == 0)
@@ -13869,12 +13871,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_shader_get_parameter_default;
-    public Variant ShaderGetParameterDefault(Rid shader, string name)
+    public static Variant ShaderGetParameterDefault(Rid shader, string name)
     {
         var __mb = __mb_shader_get_parameter_default;
         if (__mb == 0)
@@ -13889,12 +13891,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_shader_set_default_texture_parameter;
-    public void ShaderSetDefaultTextureParameter(Rid shader, string name, Rid texture, int index)
+    public static void ShaderSetDefaultTextureParameter(Rid shader, string name, Rid texture, int index = unchecked((int)(0)))
     {
         var __mb = __mb_shader_set_default_texture_parameter;
         if (__mb == 0)
@@ -13912,11 +13914,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_shader_get_default_texture_parameter;
-    public Rid ShaderGetDefaultTextureParameter(Rid shader, string name, int index)
+    public static Rid ShaderGetDefaultTextureParameter(Rid shader, string name, int index = unchecked((int)(0)))
     {
         var __mb = __mb_shader_get_default_texture_parameter;
         if (__mb == 0)
@@ -13933,12 +13935,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_material_create;
-    public Rid MaterialCreate()
+    public static Rid MaterialCreate()
     {
         var __mb = __mb_material_create;
         if (__mb == 0)
@@ -13948,12 +13950,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_material_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_material_set_shader;
-    public void MaterialSetShader(Rid shaderMaterial, Rid shader)
+    public static void MaterialSetShader(Rid shaderMaterial, Rid shader)
     {
         var __mb = __mb_material_set_shader;
         if (__mb == 0)
@@ -13967,11 +13969,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_material_set_param;
-    public void MaterialSetParam(Rid material, string parameter, Variant value)
+    public static void MaterialSetParam(Rid material, string parameter, Variant value)
     {
         var __mb = __mb_material_set_param;
         if (__mb == 0)
@@ -13987,11 +13989,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_material_get_param;
-    public Variant MaterialGetParam(Rid material, string parameter)
+    public static Variant MaterialGetParam(Rid material, string parameter)
     {
         var __mb = __mb_material_get_param;
         if (__mb == 0)
@@ -14006,12 +14008,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_material_set_render_priority;
-    public void MaterialSetRenderPriority(Rid material, int priority)
+    public static void MaterialSetRenderPriority(Rid material, int priority)
     {
         var __mb = __mb_material_set_render_priority;
         if (__mb == 0)
@@ -14025,11 +14027,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_material_set_next_pass;
-    public void MaterialSetNextPass(Rid material, Rid nextMaterial)
+    public static void MaterialSetNextPass(Rid material, Rid nextMaterial)
     {
         var __mb = __mb_material_set_next_pass;
         if (__mb == 0)
@@ -14043,11 +14045,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_material_set_use_debanding;
-    public void MaterialSetUseDebanding(bool enable)
+    public static void MaterialSetUseDebanding(bool enable)
     {
         var __mb = __mb_material_set_use_debanding;
         if (__mb == 0)
@@ -14059,11 +14061,11 @@ public unsafe partial class RenderingServer : GodotObject
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_mesh_create_from_surfaces;
-    public Rid MeshCreateFromSurfaces(Godot.Collections.Array surfaces, int blendShapeCount)
+    public static Rid MeshCreateFromSurfaces(Godot.Collections.Array surfaces, int blendShapeCount = unchecked((int)(0)))
     {
         var __mb = __mb_mesh_create_from_surfaces;
         if (__mb == 0)
@@ -14078,12 +14080,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_mesh_create;
-    public Rid MeshCreate()
+    public static Rid MeshCreate()
     {
         var __mb = __mb_mesh_create;
         if (__mb == 0)
@@ -14093,12 +14095,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_mesh_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_mesh_surface_get_format_offset;
-    public uint MeshSurfaceGetFormatOffset(RenderingServer.ArrayFormat format, int vertexCount, int arrayIndex)
+    public static uint MeshSurfaceGetFormatOffset(RenderingServer.ArrayFormat format, int vertexCount, int arrayIndex)
     {
         var __mb = __mb_mesh_surface_get_format_offset;
         if (__mb == 0)
@@ -14115,12 +14117,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_mesh_surface_get_format_vertex_stride;
-    public uint MeshSurfaceGetFormatVertexStride(RenderingServer.ArrayFormat format, int vertexCount)
+    public static uint MeshSurfaceGetFormatVertexStride(RenderingServer.ArrayFormat format, int vertexCount)
     {
         var __mb = __mb_mesh_surface_get_format_vertex_stride;
         if (__mb == 0)
@@ -14135,12 +14137,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_mesh_surface_get_format_normal_tangent_stride;
-    public uint MeshSurfaceGetFormatNormalTangentStride(RenderingServer.ArrayFormat format, int vertexCount)
+    public static uint MeshSurfaceGetFormatNormalTangentStride(RenderingServer.ArrayFormat format, int vertexCount)
     {
         var __mb = __mb_mesh_surface_get_format_normal_tangent_stride;
         if (__mb == 0)
@@ -14155,12 +14157,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_mesh_surface_get_format_attribute_stride;
-    public uint MeshSurfaceGetFormatAttributeStride(RenderingServer.ArrayFormat format, int vertexCount)
+    public static uint MeshSurfaceGetFormatAttributeStride(RenderingServer.ArrayFormat format, int vertexCount)
     {
         var __mb = __mb_mesh_surface_get_format_attribute_stride;
         if (__mb == 0)
@@ -14175,12 +14177,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_mesh_surface_get_format_skin_stride;
-    public uint MeshSurfaceGetFormatSkinStride(RenderingServer.ArrayFormat format, int vertexCount)
+    public static uint MeshSurfaceGetFormatSkinStride(RenderingServer.ArrayFormat format, int vertexCount)
     {
         var __mb = __mb_mesh_surface_get_format_skin_stride;
         if (__mb == 0)
@@ -14195,12 +14197,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_mesh_surface_get_format_index_stride;
-    public uint MeshSurfaceGetFormatIndexStride(RenderingServer.ArrayFormat format, int vertexCount)
+    public static uint MeshSurfaceGetFormatIndexStride(RenderingServer.ArrayFormat format, int vertexCount)
     {
         var __mb = __mb_mesh_surface_get_format_index_stride;
         if (__mb == 0)
@@ -14215,12 +14217,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_mesh_add_surface;
-    public void MeshAddSurface(Rid mesh, Godot.Collections.Dictionary surface)
+    public static void MeshAddSurface(Rid mesh, Godot.Collections.Dictionary surface)
     {
         var __mb = __mb_mesh_add_surface;
         if (__mb == 0)
@@ -14234,11 +14236,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_mesh_add_surface_from_arrays;
-    public void MeshAddSurfaceFromArrays(Rid mesh, RenderingServer.PrimitiveType primitive, Godot.Collections.Array arrays, Godot.Collections.Array blendShapes, Godot.Collections.Dictionary lods, RenderingServer.ArrayFormat compressFormat)
+    public static void MeshAddSurfaceFromArrays(Rid mesh, RenderingServer.PrimitiveType primitive, Godot.Collections.Array arrays, Godot.Collections.Array blendShapes, Godot.Collections.Dictionary lods, RenderingServer.ArrayFormat compressFormat = (RenderingServer.ArrayFormat)(0))
     {
         var __mb = __mb_mesh_add_surface_from_arrays;
         if (__mb == 0)
@@ -14260,11 +14262,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_mesh_get_blend_shape_count;
-    public int MeshGetBlendShapeCount(Rid mesh)
+    public static int MeshGetBlendShapeCount(Rid mesh)
     {
         var __mb = __mb_mesh_get_blend_shape_count;
         if (__mb == 0)
@@ -14277,12 +14279,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_mesh_set_blend_shape_mode;
-    public void MeshSetBlendShapeMode(Rid mesh, RenderingServer.BlendShapeMode mode)
+    public static void MeshSetBlendShapeMode(Rid mesh, RenderingServer.BlendShapeMode mode)
     {
         var __mb = __mb_mesh_set_blend_shape_mode;
         if (__mb == 0)
@@ -14296,11 +14298,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_mesh_get_blend_shape_mode;
-    public RenderingServer.BlendShapeMode MeshGetBlendShapeMode(Rid mesh)
+    public static RenderingServer.BlendShapeMode MeshGetBlendShapeMode(Rid mesh)
     {
         var __mb = __mb_mesh_get_blend_shape_mode;
         if (__mb == 0)
@@ -14313,12 +14315,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (RenderingServer.BlendShapeMode)__ret;
     }
 
     private static nint __mb_mesh_surface_set_material;
-    public void MeshSurfaceSetMaterial(Rid mesh, int surface, Rid material)
+    public static void MeshSurfaceSetMaterial(Rid mesh, int surface, Rid material)
     {
         var __mb = __mb_mesh_surface_set_material;
         if (__mb == 0)
@@ -14334,11 +14336,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_mesh_surface_get_material;
-    public Rid MeshSurfaceGetMaterial(Rid mesh, int surface)
+    public static Rid MeshSurfaceGetMaterial(Rid mesh, int surface)
     {
         var __mb = __mb_mesh_surface_get_material;
         if (__mb == 0)
@@ -14353,12 +14355,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_mesh_get_surface;
-    public Godot.Collections.Dictionary MeshGetSurface(Rid mesh, int surface)
+    public static Godot.Collections.Dictionary MeshGetSurface(Rid mesh, int surface)
     {
         var __mb = __mb_mesh_get_surface;
         if (__mb == 0)
@@ -14373,12 +14375,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_mesh_surface_get_arrays;
-    public Godot.Collections.Array MeshSurfaceGetArrays(Rid mesh, int surface)
+    public static Godot.Collections.Array MeshSurfaceGetArrays(Rid mesh, int surface)
     {
         var __mb = __mb_mesh_surface_get_arrays;
         if (__mb == 0)
@@ -14393,12 +14395,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_mesh_surface_get_blend_shape_arrays;
-    public Godot.Collections.Array MeshSurfaceGetBlendShapeArrays(Rid mesh, int surface)
+    public static Godot.Collections.Array MeshSurfaceGetBlendShapeArrays(Rid mesh, int surface)
     {
         var __mb = __mb_mesh_surface_get_blend_shape_arrays;
         if (__mb == 0)
@@ -14413,12 +14415,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_mesh_get_surface_count;
-    public int MeshGetSurfaceCount(Rid mesh)
+    public static int MeshGetSurfaceCount(Rid mesh)
     {
         var __mb = __mb_mesh_get_surface_count;
         if (__mb == 0)
@@ -14431,12 +14433,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_mesh_set_custom_aabb;
-    public void MeshSetCustomAabb(Rid mesh, Aabb aabb)
+    public static void MeshSetCustomAabb(Rid mesh, Aabb aabb)
     {
         var __mb = __mb_mesh_set_custom_aabb;
         if (__mb == 0)
@@ -14450,11 +14452,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_mesh_get_custom_aabb;
-    public Aabb MeshGetCustomAabb(Rid mesh)
+    public static Aabb MeshGetCustomAabb(Rid mesh)
     {
         var __mb = __mb_mesh_get_custom_aabb;
         if (__mb == 0)
@@ -14467,12 +14469,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Aabb);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_mesh_surface_remove;
-    public void MeshSurfaceRemove(Rid mesh, int surface)
+    public static void MeshSurfaceRemove(Rid mesh, int surface)
     {
         var __mb = __mb_mesh_surface_remove;
         if (__mb == 0)
@@ -14486,11 +14488,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_mesh_clear;
-    public void MeshClear(Rid mesh)
+    public static void MeshClear(Rid mesh)
     {
         var __mb = __mb_mesh_clear;
         if (__mb == 0)
@@ -14502,11 +14504,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __a0 = mesh;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_mesh_set_shadow_mesh;
-    public void MeshSetShadowMesh(Rid mesh, Rid shadowMesh)
+    public static void MeshSetShadowMesh(Rid mesh, Rid shadowMesh)
     {
         var __mb = __mb_mesh_set_shadow_mesh;
         if (__mb == 0)
@@ -14520,11 +14522,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_multimesh_create;
-    public Rid MultimeshCreate()
+    public static Rid MultimeshCreate()
     {
         var __mb = __mb_multimesh_create;
         if (__mb == 0)
@@ -14534,12 +14536,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_multimesh_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_multimesh_allocate_data;
-    public void MultimeshAllocateData(Rid multimesh, int instances, RenderingServer.MultimeshTransformFormat transformFormat, bool colorFormat, bool customDataFormat, bool useIndirect)
+    public static void MultimeshAllocateData(Rid multimesh, int instances, RenderingServer.MultimeshTransformFormat transformFormat, bool colorFormat = false, bool customDataFormat = false, bool useIndirect = false)
     {
         var __mb = __mb_multimesh_allocate_data;
         if (__mb == 0)
@@ -14561,11 +14563,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_multimesh_get_instance_count;
-    public int MultimeshGetInstanceCount(Rid multimesh)
+    public static int MultimeshGetInstanceCount(Rid multimesh)
     {
         var __mb = __mb_multimesh_get_instance_count;
         if (__mb == 0)
@@ -14578,12 +14580,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_multimesh_set_mesh;
-    public void MultimeshSetMesh(Rid multimesh, Rid mesh)
+    public static void MultimeshSetMesh(Rid multimesh, Rid mesh)
     {
         var __mb = __mb_multimesh_set_mesh;
         if (__mb == 0)
@@ -14597,11 +14599,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_multimesh_instance_set_transform;
-    public void MultimeshInstanceSetTransform(Rid multimesh, int index, Transform3D transform)
+    public static void MultimeshInstanceSetTransform(Rid multimesh, int index, Transform3D transform)
     {
         var __mb = __mb_multimesh_instance_set_transform;
         if (__mb == 0)
@@ -14617,11 +14619,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_multimesh_instance_set_transform_2d;
-    public void MultimeshInstanceSetTransform2d(Rid multimesh, int index, Transform2D transform)
+    public static void MultimeshInstanceSetTransform2d(Rid multimesh, int index, Transform2D transform)
     {
         var __mb = __mb_multimesh_instance_set_transform_2d;
         if (__mb == 0)
@@ -14637,11 +14639,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_multimesh_instance_set_color;
-    public void MultimeshInstanceSetColor(Rid multimesh, int index, Color color)
+    public static void MultimeshInstanceSetColor(Rid multimesh, int index, Color color)
     {
         var __mb = __mb_multimesh_instance_set_color;
         if (__mb == 0)
@@ -14657,11 +14659,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_multimesh_instance_set_custom_data;
-    public void MultimeshInstanceSetCustomData(Rid multimesh, int index, Color customData)
+    public static void MultimeshInstanceSetCustomData(Rid multimesh, int index, Color customData)
     {
         var __mb = __mb_multimesh_instance_set_custom_data;
         if (__mb == 0)
@@ -14677,11 +14679,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_multimesh_get_mesh;
-    public Rid MultimeshGetMesh(Rid multimesh)
+    public static Rid MultimeshGetMesh(Rid multimesh)
     {
         var __mb = __mb_multimesh_get_mesh;
         if (__mb == 0)
@@ -14694,12 +14696,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_multimesh_get_aabb;
-    public Aabb MultimeshGetAabb(Rid multimesh)
+    public static Aabb MultimeshGetAabb(Rid multimesh)
     {
         var __mb = __mb_multimesh_get_aabb;
         if (__mb == 0)
@@ -14712,12 +14714,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Aabb);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_multimesh_set_custom_aabb;
-    public void MultimeshSetCustomAabb(Rid multimesh, Aabb aabb)
+    public static void MultimeshSetCustomAabb(Rid multimesh, Aabb aabb)
     {
         var __mb = __mb_multimesh_set_custom_aabb;
         if (__mb == 0)
@@ -14731,11 +14733,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_multimesh_get_custom_aabb;
-    public Aabb MultimeshGetCustomAabb(Rid multimesh)
+    public static Aabb MultimeshGetCustomAabb(Rid multimesh)
     {
         var __mb = __mb_multimesh_get_custom_aabb;
         if (__mb == 0)
@@ -14748,12 +14750,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Aabb);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_multimesh_instance_get_transform;
-    public Transform3D MultimeshInstanceGetTransform(Rid multimesh, int index)
+    public static Transform3D MultimeshInstanceGetTransform(Rid multimesh, int index)
     {
         var __mb = __mb_multimesh_instance_get_transform;
         if (__mb == 0)
@@ -14768,12 +14770,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_multimesh_instance_get_transform_2d;
-    public Transform2D MultimeshInstanceGetTransform2d(Rid multimesh, int index)
+    public static Transform2D MultimeshInstanceGetTransform2d(Rid multimesh, int index)
     {
         var __mb = __mb_multimesh_instance_get_transform_2d;
         if (__mb == 0)
@@ -14788,12 +14790,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Transform2D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_multimesh_instance_get_color;
-    public Color MultimeshInstanceGetColor(Rid multimesh, int index)
+    public static Color MultimeshInstanceGetColor(Rid multimesh, int index)
     {
         var __mb = __mb_multimesh_instance_get_color;
         if (__mb == 0)
@@ -14808,12 +14810,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Color);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_multimesh_instance_get_custom_data;
-    public Color MultimeshInstanceGetCustomData(Rid multimesh, int index)
+    public static Color MultimeshInstanceGetCustomData(Rid multimesh, int index)
     {
         var __mb = __mb_multimesh_instance_get_custom_data;
         if (__mb == 0)
@@ -14828,12 +14830,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Color);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_multimesh_set_visible_instances;
-    public void MultimeshSetVisibleInstances(Rid multimesh, int visible)
+    public static void MultimeshSetVisibleInstances(Rid multimesh, int visible)
     {
         var __mb = __mb_multimesh_set_visible_instances;
         if (__mb == 0)
@@ -14847,11 +14849,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_multimesh_get_visible_instances;
-    public int MultimeshGetVisibleInstances(Rid multimesh)
+    public static int MultimeshGetVisibleInstances(Rid multimesh)
     {
         var __mb = __mb_multimesh_get_visible_instances;
         if (__mb == 0)
@@ -14864,12 +14866,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_multimesh_get_command_buffer_rd_rid;
-    public Rid MultimeshGetCommandBufferRdRid(Rid multimesh)
+    public static Rid MultimeshGetCommandBufferRdRid(Rid multimesh)
     {
         var __mb = __mb_multimesh_get_command_buffer_rd_rid;
         if (__mb == 0)
@@ -14882,12 +14884,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_multimesh_get_buffer_rd_rid;
-    public Rid MultimeshGetBufferRdRid(Rid multimesh)
+    public static Rid MultimeshGetBufferRdRid(Rid multimesh)
     {
         var __mb = __mb_multimesh_get_buffer_rd_rid;
         if (__mb == 0)
@@ -14900,12 +14902,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_multimesh_set_physics_interpolated;
-    public void MultimeshSetPhysicsInterpolated(Rid multimesh, bool interpolated)
+    public static void MultimeshSetPhysicsInterpolated(Rid multimesh, bool interpolated)
     {
         var __mb = __mb_multimesh_set_physics_interpolated;
         if (__mb == 0)
@@ -14919,11 +14921,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_multimesh_set_physics_interpolation_quality;
-    public void MultimeshSetPhysicsInterpolationQuality(Rid multimesh, RenderingServer.MultimeshPhysicsInterpolationQuality quality)
+    public static void MultimeshSetPhysicsInterpolationQuality(Rid multimesh, RenderingServer.MultimeshPhysicsInterpolationQuality quality)
     {
         var __mb = __mb_multimesh_set_physics_interpolation_quality;
         if (__mb == 0)
@@ -14937,11 +14939,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_multimesh_instance_reset_physics_interpolation;
-    public void MultimeshInstanceResetPhysicsInterpolation(Rid multimesh, int index)
+    public static void MultimeshInstanceResetPhysicsInterpolation(Rid multimesh, int index)
     {
         var __mb = __mb_multimesh_instance_reset_physics_interpolation;
         if (__mb == 0)
@@ -14955,11 +14957,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_multimesh_instances_reset_physics_interpolation;
-    public void MultimeshInstancesResetPhysicsInterpolation(Rid multimesh)
+    public static void MultimeshInstancesResetPhysicsInterpolation(Rid multimesh)
     {
         var __mb = __mb_multimesh_instances_reset_physics_interpolation;
         if (__mb == 0)
@@ -14971,11 +14973,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __a0 = multimesh;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_skeleton_create;
-    public Rid SkeletonCreate()
+    public static Rid SkeletonCreate()
     {
         var __mb = __mb_skeleton_create;
         if (__mb == 0)
@@ -14985,12 +14987,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_skeleton_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_skeleton_allocate_data;
-    public void SkeletonAllocateData(Rid skeleton, int bones, bool is2dSkeleton)
+    public static void SkeletonAllocateData(Rid skeleton, int bones, bool is2dSkeleton = false)
     {
         var __mb = __mb_skeleton_allocate_data;
         if (__mb == 0)
@@ -15006,11 +15008,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_skeleton_get_bone_count;
-    public int SkeletonGetBoneCount(Rid skeleton)
+    public static int SkeletonGetBoneCount(Rid skeleton)
     {
         var __mb = __mb_skeleton_get_bone_count;
         if (__mb == 0)
@@ -15023,12 +15025,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_skeleton_bone_set_transform;
-    public void SkeletonBoneSetTransform(Rid skeleton, int bone, Transform3D transform)
+    public static void SkeletonBoneSetTransform(Rid skeleton, int bone, Transform3D transform)
     {
         var __mb = __mb_skeleton_bone_set_transform;
         if (__mb == 0)
@@ -15044,11 +15046,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_skeleton_bone_get_transform;
-    public Transform3D SkeletonBoneGetTransform(Rid skeleton, int bone)
+    public static Transform3D SkeletonBoneGetTransform(Rid skeleton, int bone)
     {
         var __mb = __mb_skeleton_bone_get_transform;
         if (__mb == 0)
@@ -15063,12 +15065,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_skeleton_bone_set_transform_2d;
-    public void SkeletonBoneSetTransform2d(Rid skeleton, int bone, Transform2D transform)
+    public static void SkeletonBoneSetTransform2d(Rid skeleton, int bone, Transform2D transform)
     {
         var __mb = __mb_skeleton_bone_set_transform_2d;
         if (__mb == 0)
@@ -15084,11 +15086,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_skeleton_bone_get_transform_2d;
-    public Transform2D SkeletonBoneGetTransform2d(Rid skeleton, int bone)
+    public static Transform2D SkeletonBoneGetTransform2d(Rid skeleton, int bone)
     {
         var __mb = __mb_skeleton_bone_get_transform_2d;
         if (__mb == 0)
@@ -15103,12 +15105,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Transform2D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_skeleton_set_base_transform_2d;
-    public void SkeletonSetBaseTransform2d(Rid skeleton, Transform2D baseTransform)
+    public static void SkeletonSetBaseTransform2d(Rid skeleton, Transform2D baseTransform)
     {
         var __mb = __mb_skeleton_set_base_transform_2d;
         if (__mb == 0)
@@ -15122,11 +15124,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_directional_light_create;
-    public Rid DirectionalLightCreate()
+    public static Rid DirectionalLightCreate()
     {
         var __mb = __mb_directional_light_create;
         if (__mb == 0)
@@ -15136,12 +15138,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_directional_light_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_omni_light_create;
-    public Rid OmniLightCreate()
+    public static Rid OmniLightCreate()
     {
         var __mb = __mb_omni_light_create;
         if (__mb == 0)
@@ -15151,12 +15153,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_omni_light_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_spot_light_create;
-    public Rid SpotLightCreate()
+    public static Rid SpotLightCreate()
     {
         var __mb = __mb_spot_light_create;
         if (__mb == 0)
@@ -15166,12 +15168,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_spot_light_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_area_light_create;
-    public Rid AreaLightCreate()
+    public static Rid AreaLightCreate()
     {
         var __mb = __mb_area_light_create;
         if (__mb == 0)
@@ -15181,12 +15183,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_area_light_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_light_set_color;
-    public void LightSetColor(Rid light, Color color)
+    public static void LightSetColor(Rid light, Color color)
     {
         var __mb = __mb_light_set_color;
         if (__mb == 0)
@@ -15200,11 +15202,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_set_param;
-    public void LightSetParam(Rid light, RenderingServer.LightParam param, float value)
+    public static void LightSetParam(Rid light, RenderingServer.LightParam param, float value)
     {
         var __mb = __mb_light_set_param;
         if (__mb == 0)
@@ -15220,11 +15222,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_set_shadow;
-    public void LightSetShadow(Rid light, bool enabled)
+    public static void LightSetShadow(Rid light, bool enabled)
     {
         var __mb = __mb_light_set_shadow;
         if (__mb == 0)
@@ -15238,11 +15240,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_set_projector;
-    public void LightSetProjector(Rid light, Rid texture)
+    public static void LightSetProjector(Rid light, Rid texture)
     {
         var __mb = __mb_light_set_projector;
         if (__mb == 0)
@@ -15256,11 +15258,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_set_negative;
-    public void LightSetNegative(Rid light, bool enable)
+    public static void LightSetNegative(Rid light, bool enable)
     {
         var __mb = __mb_light_set_negative;
         if (__mb == 0)
@@ -15274,11 +15276,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_set_cull_mask;
-    public void LightSetCullMask(Rid light, uint mask)
+    public static void LightSetCullMask(Rid light, uint mask)
     {
         var __mb = __mb_light_set_cull_mask;
         if (__mb == 0)
@@ -15292,11 +15294,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_set_distance_fade;
-    public void LightSetDistanceFade(Rid decal, bool enabled, float begin, float shadow, float length)
+    public static void LightSetDistanceFade(Rid decal, bool enabled, float begin, float shadow, float length)
     {
         var __mb = __mb_light_set_distance_fade;
         if (__mb == 0)
@@ -15316,11 +15318,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_set_reverse_cull_face_mode;
-    public void LightSetReverseCullFaceMode(Rid light, bool enabled)
+    public static void LightSetReverseCullFaceMode(Rid light, bool enabled)
     {
         var __mb = __mb_light_set_reverse_cull_face_mode;
         if (__mb == 0)
@@ -15334,11 +15336,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_set_shadow_caster_mask;
-    public void LightSetShadowCasterMask(Rid light, uint mask)
+    public static void LightSetShadowCasterMask(Rid light, uint mask)
     {
         var __mb = __mb_light_set_shadow_caster_mask;
         if (__mb == 0)
@@ -15352,11 +15354,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_set_bake_mode;
-    public void LightSetBakeMode(Rid light, RenderingServer.LightBakeMode bakeMode)
+    public static void LightSetBakeMode(Rid light, RenderingServer.LightBakeMode bakeMode)
     {
         var __mb = __mb_light_set_bake_mode;
         if (__mb == 0)
@@ -15370,11 +15372,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_set_max_sdfgi_cascade;
-    public void LightSetMaxSdfgiCascade(Rid light, uint cascade)
+    public static void LightSetMaxSdfgiCascade(Rid light, uint cascade)
     {
         var __mb = __mb_light_set_max_sdfgi_cascade;
         if (__mb == 0)
@@ -15388,11 +15390,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_omni_set_shadow_mode;
-    public void LightOmniSetShadowMode(Rid light, RenderingServer.LightOmniShadowMode mode)
+    public static void LightOmniSetShadowMode(Rid light, RenderingServer.LightOmniShadowMode mode)
     {
         var __mb = __mb_light_omni_set_shadow_mode;
         if (__mb == 0)
@@ -15406,11 +15408,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_directional_set_shadow_mode;
-    public void LightDirectionalSetShadowMode(Rid light, RenderingServer.LightDirectionalShadowMode mode)
+    public static void LightDirectionalSetShadowMode(Rid light, RenderingServer.LightDirectionalShadowMode mode)
     {
         var __mb = __mb_light_directional_set_shadow_mode;
         if (__mb == 0)
@@ -15424,11 +15426,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_directional_set_blend_splits;
-    public void LightDirectionalSetBlendSplits(Rid light, bool enable)
+    public static void LightDirectionalSetBlendSplits(Rid light, bool enable)
     {
         var __mb = __mb_light_directional_set_blend_splits;
         if (__mb == 0)
@@ -15442,11 +15444,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_directional_set_sky_mode;
-    public void LightDirectionalSetSkyMode(Rid light, RenderingServer.LightDirectionalSkyMode mode)
+    public static void LightDirectionalSetSkyMode(Rid light, RenderingServer.LightDirectionalSkyMode mode)
     {
         var __mb = __mb_light_directional_set_sky_mode;
         if (__mb == 0)
@@ -15460,11 +15462,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_area_set_size;
-    public void LightAreaSetSize(Rid light, Vector2 size)
+    public static void LightAreaSetSize(Rid light, Vector2 size)
     {
         var __mb = __mb_light_area_set_size;
         if (__mb == 0)
@@ -15478,11 +15480,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_area_set_normalize_energy;
-    public void LightAreaSetNormalizeEnergy(Rid light, bool enable)
+    public static void LightAreaSetNormalizeEnergy(Rid light, bool enable)
     {
         var __mb = __mb_light_area_set_normalize_energy;
         if (__mb == 0)
@@ -15496,11 +15498,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_light_projectors_set_filter;
-    public void LightProjectorsSetFilter(RenderingServer.LightProjectorFilter filter)
+    public static void LightProjectorsSetFilter(RenderingServer.LightProjectorFilter filter)
     {
         var __mb = __mb_light_projectors_set_filter;
         if (__mb == 0)
@@ -15512,11 +15514,11 @@ public unsafe partial class RenderingServer : GodotObject
         long __a0 = (long)filter;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_lightmaps_set_bicubic_filter;
-    public void LightmapsSetBicubicFilter(bool enable)
+    public static void LightmapsSetBicubicFilter(bool enable)
     {
         var __mb = __mb_lightmaps_set_bicubic_filter;
         if (__mb == 0)
@@ -15528,11 +15530,11 @@ public unsafe partial class RenderingServer : GodotObject
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_positional_soft_shadow_filter_set_quality;
-    public void PositionalSoftShadowFilterSetQuality(RenderingServer.ShadowQuality quality)
+    public static void PositionalSoftShadowFilterSetQuality(RenderingServer.ShadowQuality quality)
     {
         var __mb = __mb_positional_soft_shadow_filter_set_quality;
         if (__mb == 0)
@@ -15544,11 +15546,11 @@ public unsafe partial class RenderingServer : GodotObject
         long __a0 = (long)quality;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_directional_soft_shadow_filter_set_quality;
-    public void DirectionalSoftShadowFilterSetQuality(RenderingServer.ShadowQuality quality)
+    public static void DirectionalSoftShadowFilterSetQuality(RenderingServer.ShadowQuality quality)
     {
         var __mb = __mb_directional_soft_shadow_filter_set_quality;
         if (__mb == 0)
@@ -15560,11 +15562,11 @@ public unsafe partial class RenderingServer : GodotObject
         long __a0 = (long)quality;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_directional_shadow_atlas_set_size;
-    public void DirectionalShadowAtlasSetSize(int size, bool is16bits)
+    public static void DirectionalShadowAtlasSetSize(int size, bool is16bits)
     {
         var __mb = __mb_directional_shadow_atlas_set_size;
         if (__mb == 0)
@@ -15578,11 +15580,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_create;
-    public Rid ReflectionProbeCreate()
+    public static Rid ReflectionProbeCreate()
     {
         var __mb = __mb_reflection_probe_create;
         if (__mb == 0)
@@ -15592,12 +15594,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_reflection_probe_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_reflection_probe_set_update_mode;
-    public void ReflectionProbeSetUpdateMode(Rid probe, RenderingServer.ReflectionProbeUpdateMode mode)
+    public static void ReflectionProbeSetUpdateMode(Rid probe, RenderingServer.ReflectionProbeUpdateMode mode)
     {
         var __mb = __mb_reflection_probe_set_update_mode;
         if (__mb == 0)
@@ -15611,11 +15613,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_set_intensity;
-    public void ReflectionProbeSetIntensity(Rid probe, float intensity)
+    public static void ReflectionProbeSetIntensity(Rid probe, float intensity)
     {
         var __mb = __mb_reflection_probe_set_intensity;
         if (__mb == 0)
@@ -15629,11 +15631,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_set_blend_distance;
-    public void ReflectionProbeSetBlendDistance(Rid probe, float blendDistance)
+    public static void ReflectionProbeSetBlendDistance(Rid probe, float blendDistance)
     {
         var __mb = __mb_reflection_probe_set_blend_distance;
         if (__mb == 0)
@@ -15647,11 +15649,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_set_ambient_mode;
-    public void ReflectionProbeSetAmbientMode(Rid probe, RenderingServer.ReflectionProbeAmbientMode mode)
+    public static void ReflectionProbeSetAmbientMode(Rid probe, RenderingServer.ReflectionProbeAmbientMode mode)
     {
         var __mb = __mb_reflection_probe_set_ambient_mode;
         if (__mb == 0)
@@ -15665,11 +15667,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_set_ambient_color;
-    public void ReflectionProbeSetAmbientColor(Rid probe, Color color)
+    public static void ReflectionProbeSetAmbientColor(Rid probe, Color color)
     {
         var __mb = __mb_reflection_probe_set_ambient_color;
         if (__mb == 0)
@@ -15683,11 +15685,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_set_ambient_energy;
-    public void ReflectionProbeSetAmbientEnergy(Rid probe, float energy)
+    public static void ReflectionProbeSetAmbientEnergy(Rid probe, float energy)
     {
         var __mb = __mb_reflection_probe_set_ambient_energy;
         if (__mb == 0)
@@ -15701,11 +15703,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_set_max_distance;
-    public void ReflectionProbeSetMaxDistance(Rid probe, float distance)
+    public static void ReflectionProbeSetMaxDistance(Rid probe, float distance)
     {
         var __mb = __mb_reflection_probe_set_max_distance;
         if (__mb == 0)
@@ -15719,11 +15721,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_set_size;
-    public void ReflectionProbeSetSize(Rid probe, Vector3 size)
+    public static void ReflectionProbeSetSize(Rid probe, Vector3 size)
     {
         var __mb = __mb_reflection_probe_set_size;
         if (__mb == 0)
@@ -15737,11 +15739,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_set_origin_offset;
-    public void ReflectionProbeSetOriginOffset(Rid probe, Vector3 offset)
+    public static void ReflectionProbeSetOriginOffset(Rid probe, Vector3 offset)
     {
         var __mb = __mb_reflection_probe_set_origin_offset;
         if (__mb == 0)
@@ -15755,11 +15757,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_set_as_interior;
-    public void ReflectionProbeSetAsInterior(Rid probe, bool enable)
+    public static void ReflectionProbeSetAsInterior(Rid probe, bool enable)
     {
         var __mb = __mb_reflection_probe_set_as_interior;
         if (__mb == 0)
@@ -15773,11 +15775,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_set_enable_box_projection;
-    public void ReflectionProbeSetEnableBoxProjection(Rid probe, bool enable)
+    public static void ReflectionProbeSetEnableBoxProjection(Rid probe, bool enable)
     {
         var __mb = __mb_reflection_probe_set_enable_box_projection;
         if (__mb == 0)
@@ -15791,11 +15793,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_set_enable_shadows;
-    public void ReflectionProbeSetEnableShadows(Rid probe, bool enable)
+    public static void ReflectionProbeSetEnableShadows(Rid probe, bool enable)
     {
         var __mb = __mb_reflection_probe_set_enable_shadows;
         if (__mb == 0)
@@ -15809,11 +15811,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_set_cull_mask;
-    public void ReflectionProbeSetCullMask(Rid probe, uint layers)
+    public static void ReflectionProbeSetCullMask(Rid probe, uint layers)
     {
         var __mb = __mb_reflection_probe_set_cull_mask;
         if (__mb == 0)
@@ -15827,11 +15829,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_set_reflection_mask;
-    public void ReflectionProbeSetReflectionMask(Rid probe, uint layers)
+    public static void ReflectionProbeSetReflectionMask(Rid probe, uint layers)
     {
         var __mb = __mb_reflection_probe_set_reflection_mask;
         if (__mb == 0)
@@ -15845,11 +15847,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_set_resolution;
-    public void ReflectionProbeSetResolution(Rid probe, int resolution)
+    public static void ReflectionProbeSetResolution(Rid probe, int resolution)
     {
         var __mb = __mb_reflection_probe_set_resolution;
         if (__mb == 0)
@@ -15863,11 +15865,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_reflection_probe_set_mesh_lod_threshold;
-    public void ReflectionProbeSetMeshLodThreshold(Rid probe, float pixels)
+    public static void ReflectionProbeSetMeshLodThreshold(Rid probe, float pixels)
     {
         var __mb = __mb_reflection_probe_set_mesh_lod_threshold;
         if (__mb == 0)
@@ -15881,11 +15883,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_decal_create;
-    public Rid DecalCreate()
+    public static Rid DecalCreate()
     {
         var __mb = __mb_decal_create;
         if (__mb == 0)
@@ -15895,12 +15897,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_decal_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_decal_set_size;
-    public void DecalSetSize(Rid decal, Vector3 size)
+    public static void DecalSetSize(Rid decal, Vector3 size)
     {
         var __mb = __mb_decal_set_size;
         if (__mb == 0)
@@ -15914,11 +15916,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_decal_set_texture;
-    public void DecalSetTexture(Rid decal, RenderingServer.DecalTexture type, Rid texture)
+    public static void DecalSetTexture(Rid decal, RenderingServer.DecalTexture type, Rid texture)
     {
         var __mb = __mb_decal_set_texture;
         if (__mb == 0)
@@ -15934,11 +15936,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_decal_set_emission_energy;
-    public void DecalSetEmissionEnergy(Rid decal, float energy)
+    public static void DecalSetEmissionEnergy(Rid decal, float energy)
     {
         var __mb = __mb_decal_set_emission_energy;
         if (__mb == 0)
@@ -15952,11 +15954,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_decal_set_albedo_mix;
-    public void DecalSetAlbedoMix(Rid decal, float albedoMix)
+    public static void DecalSetAlbedoMix(Rid decal, float albedoMix)
     {
         var __mb = __mb_decal_set_albedo_mix;
         if (__mb == 0)
@@ -15970,11 +15972,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_decal_set_modulate;
-    public void DecalSetModulate(Rid decal, Color color)
+    public static void DecalSetModulate(Rid decal, Color color)
     {
         var __mb = __mb_decal_set_modulate;
         if (__mb == 0)
@@ -15988,11 +15990,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_decal_set_cull_mask;
-    public void DecalSetCullMask(Rid decal, uint mask)
+    public static void DecalSetCullMask(Rid decal, uint mask)
     {
         var __mb = __mb_decal_set_cull_mask;
         if (__mb == 0)
@@ -16006,11 +16008,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_decal_set_distance_fade;
-    public void DecalSetDistanceFade(Rid decal, bool enabled, float begin, float length)
+    public static void DecalSetDistanceFade(Rid decal, bool enabled, float begin, float length)
     {
         var __mb = __mb_decal_set_distance_fade;
         if (__mb == 0)
@@ -16028,11 +16030,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_decal_set_fade;
-    public void DecalSetFade(Rid decal, float above, float below)
+    public static void DecalSetFade(Rid decal, float above, float below)
     {
         var __mb = __mb_decal_set_fade;
         if (__mb == 0)
@@ -16048,11 +16050,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_decal_set_normal_fade;
-    public void DecalSetNormalFade(Rid decal, float fade)
+    public static void DecalSetNormalFade(Rid decal, float fade)
     {
         var __mb = __mb_decal_set_normal_fade;
         if (__mb == 0)
@@ -16066,11 +16068,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_decals_set_filter;
-    public void DecalsSetFilter(RenderingServer.DecalFilter filter)
+    public static void DecalsSetFilter(RenderingServer.DecalFilter filter)
     {
         var __mb = __mb_decals_set_filter;
         if (__mb == 0)
@@ -16082,11 +16084,11 @@ public unsafe partial class RenderingServer : GodotObject
         long __a0 = (long)filter;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_gi_set_use_half_resolution;
-    public void GiSetUseHalfResolution(bool halfResolution)
+    public static void GiSetUseHalfResolution(bool halfResolution)
     {
         var __mb = __mb_gi_set_use_half_resolution;
         if (__mb == 0)
@@ -16098,11 +16100,11 @@ public unsafe partial class RenderingServer : GodotObject
         byte __a0 = halfResolution ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_voxel_gi_create;
-    public Rid VoxelGiCreate()
+    public static Rid VoxelGiCreate()
     {
         var __mb = __mb_voxel_gi_create;
         if (__mb == 0)
@@ -16112,12 +16114,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_voxel_gi_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_voxel_gi_get_octree_size;
-    public Vector3I VoxelGiGetOctreeSize(Rid voxelGi)
+    public static Vector3I VoxelGiGetOctreeSize(Rid voxelGi)
     {
         var __mb = __mb_voxel_gi_get_octree_size;
         if (__mb == 0)
@@ -16130,12 +16132,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_voxel_gi_get_to_cell_xform;
-    public Transform3D VoxelGiGetToCellXform(Rid voxelGi)
+    public static Transform3D VoxelGiGetToCellXform(Rid voxelGi)
     {
         var __mb = __mb_voxel_gi_get_to_cell_xform;
         if (__mb == 0)
@@ -16148,12 +16150,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_voxel_gi_set_dynamic_range;
-    public void VoxelGiSetDynamicRange(Rid voxelGi, float range)
+    public static void VoxelGiSetDynamicRange(Rid voxelGi, float range)
     {
         var __mb = __mb_voxel_gi_set_dynamic_range;
         if (__mb == 0)
@@ -16167,11 +16169,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_voxel_gi_set_propagation;
-    public void VoxelGiSetPropagation(Rid voxelGi, float amount)
+    public static void VoxelGiSetPropagation(Rid voxelGi, float amount)
     {
         var __mb = __mb_voxel_gi_set_propagation;
         if (__mb == 0)
@@ -16185,11 +16187,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_voxel_gi_set_energy;
-    public void VoxelGiSetEnergy(Rid voxelGi, float energy)
+    public static void VoxelGiSetEnergy(Rid voxelGi, float energy)
     {
         var __mb = __mb_voxel_gi_set_energy;
         if (__mb == 0)
@@ -16203,11 +16205,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_voxel_gi_set_baked_exposure_normalization;
-    public void VoxelGiSetBakedExposureNormalization(Rid voxelGi, float bakedExposure)
+    public static void VoxelGiSetBakedExposureNormalization(Rid voxelGi, float bakedExposure)
     {
         var __mb = __mb_voxel_gi_set_baked_exposure_normalization;
         if (__mb == 0)
@@ -16221,11 +16223,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_voxel_gi_set_bias;
-    public void VoxelGiSetBias(Rid voxelGi, float bias)
+    public static void VoxelGiSetBias(Rid voxelGi, float bias)
     {
         var __mb = __mb_voxel_gi_set_bias;
         if (__mb == 0)
@@ -16239,11 +16241,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_voxel_gi_set_normal_bias;
-    public void VoxelGiSetNormalBias(Rid voxelGi, float bias)
+    public static void VoxelGiSetNormalBias(Rid voxelGi, float bias)
     {
         var __mb = __mb_voxel_gi_set_normal_bias;
         if (__mb == 0)
@@ -16257,11 +16259,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_voxel_gi_set_interior;
-    public void VoxelGiSetInterior(Rid voxelGi, bool enable)
+    public static void VoxelGiSetInterior(Rid voxelGi, bool enable)
     {
         var __mb = __mb_voxel_gi_set_interior;
         if (__mb == 0)
@@ -16275,11 +16277,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_voxel_gi_set_use_two_bounces;
-    public void VoxelGiSetUseTwoBounces(Rid voxelGi, bool enable)
+    public static void VoxelGiSetUseTwoBounces(Rid voxelGi, bool enable)
     {
         var __mb = __mb_voxel_gi_set_use_two_bounces;
         if (__mb == 0)
@@ -16293,11 +16295,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_voxel_gi_set_quality;
-    public void VoxelGiSetQuality(RenderingServer.VoxelGIQuality quality)
+    public static void VoxelGiSetQuality(RenderingServer.VoxelGIQuality quality)
     {
         var __mb = __mb_voxel_gi_set_quality;
         if (__mb == 0)
@@ -16309,11 +16311,11 @@ public unsafe partial class RenderingServer : GodotObject
         long __a0 = (long)quality;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_lightmap_create;
-    public Rid LightmapCreate()
+    public static Rid LightmapCreate()
     {
         var __mb = __mb_lightmap_create;
         if (__mb == 0)
@@ -16323,12 +16325,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_lightmap_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_lightmap_set_textures;
-    public void LightmapSetTextures(Rid lightmap, Rid light, bool usesSh)
+    public static void LightmapSetTextures(Rid lightmap, Rid light, bool usesSh)
     {
         var __mb = __mb_lightmap_set_textures;
         if (__mb == 0)
@@ -16344,11 +16346,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_lightmap_set_probe_bounds;
-    public void LightmapSetProbeBounds(Rid lightmap, Aabb bounds)
+    public static void LightmapSetProbeBounds(Rid lightmap, Aabb bounds)
     {
         var __mb = __mb_lightmap_set_probe_bounds;
         if (__mb == 0)
@@ -16362,11 +16364,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_lightmap_set_probe_interior;
-    public void LightmapSetProbeInterior(Rid lightmap, bool interior)
+    public static void LightmapSetProbeInterior(Rid lightmap, bool interior)
     {
         var __mb = __mb_lightmap_set_probe_interior;
         if (__mb == 0)
@@ -16380,11 +16382,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_lightmap_set_baked_exposure_normalization;
-    public void LightmapSetBakedExposureNormalization(Rid lightmap, float bakedExposure)
+    public static void LightmapSetBakedExposureNormalization(Rid lightmap, float bakedExposure)
     {
         var __mb = __mb_lightmap_set_baked_exposure_normalization;
         if (__mb == 0)
@@ -16398,11 +16400,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_lightmap_set_probe_capture_update_speed;
-    public void LightmapSetProbeCaptureUpdateSpeed(float speed)
+    public static void LightmapSetProbeCaptureUpdateSpeed(float speed)
     {
         var __mb = __mb_lightmap_set_probe_capture_update_speed;
         if (__mb == 0)
@@ -16414,11 +16416,11 @@ public unsafe partial class RenderingServer : GodotObject
         double __a0 = speed;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_create;
-    public Rid ParticlesCreate()
+    public static Rid ParticlesCreate()
     {
         var __mb = __mb_particles_create;
         if (__mb == 0)
@@ -16428,12 +16430,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_particles_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_particles_set_mode;
-    public void ParticlesSetMode(Rid particles, RenderingServer.ParticlesMode mode)
+    public static void ParticlesSetMode(Rid particles, RenderingServer.ParticlesMode mode)
     {
         var __mb = __mb_particles_set_mode;
         if (__mb == 0)
@@ -16447,11 +16449,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_emitting;
-    public void ParticlesSetEmitting(Rid particles, bool emitting)
+    public static void ParticlesSetEmitting(Rid particles, bool emitting)
     {
         var __mb = __mb_particles_set_emitting;
         if (__mb == 0)
@@ -16465,11 +16467,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_get_emitting;
-    public bool ParticlesGetEmitting(Rid particles)
+    public static bool ParticlesGetEmitting(Rid particles)
     {
         var __mb = __mb_particles_get_emitting;
         if (__mb == 0)
@@ -16482,12 +16484,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_particles_set_amount;
-    public void ParticlesSetAmount(Rid particles, int amount)
+    public static void ParticlesSetAmount(Rid particles, int amount)
     {
         var __mb = __mb_particles_set_amount;
         if (__mb == 0)
@@ -16501,11 +16503,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_amount_ratio;
-    public void ParticlesSetAmountRatio(Rid particles, float ratio)
+    public static void ParticlesSetAmountRatio(Rid particles, float ratio)
     {
         var __mb = __mb_particles_set_amount_ratio;
         if (__mb == 0)
@@ -16519,11 +16521,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_lifetime;
-    public void ParticlesSetLifetime(Rid particles, double lifetime)
+    public static void ParticlesSetLifetime(Rid particles, double lifetime)
     {
         var __mb = __mb_particles_set_lifetime;
         if (__mb == 0)
@@ -16537,11 +16539,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_one_shot;
-    public void ParticlesSetOneShot(Rid particles, bool oneShot)
+    public static void ParticlesSetOneShot(Rid particles, bool oneShot)
     {
         var __mb = __mb_particles_set_one_shot;
         if (__mb == 0)
@@ -16555,11 +16557,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_pre_process_time;
-    public void ParticlesSetPreProcessTime(Rid particles, double time)
+    public static void ParticlesSetPreProcessTime(Rid particles, double time)
     {
         var __mb = __mb_particles_set_pre_process_time;
         if (__mb == 0)
@@ -16573,11 +16575,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_request_process_time;
-    public void ParticlesRequestProcessTime(Rid particles, float processTime, float processTimeResidual)
+    public static void ParticlesRequestProcessTime(Rid particles, float processTime, float processTimeResidual = 0.0f)
     {
         var __mb = __mb_particles_request_process_time;
         if (__mb == 0)
@@ -16593,11 +16595,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_explosiveness_ratio;
-    public void ParticlesSetExplosivenessRatio(Rid particles, float ratio)
+    public static void ParticlesSetExplosivenessRatio(Rid particles, float ratio)
     {
         var __mb = __mb_particles_set_explosiveness_ratio;
         if (__mb == 0)
@@ -16611,11 +16613,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_randomness_ratio;
-    public void ParticlesSetRandomnessRatio(Rid particles, float ratio)
+    public static void ParticlesSetRandomnessRatio(Rid particles, float ratio)
     {
         var __mb = __mb_particles_set_randomness_ratio;
         if (__mb == 0)
@@ -16629,11 +16631,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_interp_to_end;
-    public void ParticlesSetInterpToEnd(Rid particles, float factor)
+    public static void ParticlesSetInterpToEnd(Rid particles, float factor)
     {
         var __mb = __mb_particles_set_interp_to_end;
         if (__mb == 0)
@@ -16647,11 +16649,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_emitter_velocity;
-    public void ParticlesSetEmitterVelocity(Rid particles, Vector3 velocity)
+    public static void ParticlesSetEmitterVelocity(Rid particles, Vector3 velocity)
     {
         var __mb = __mb_particles_set_emitter_velocity;
         if (__mb == 0)
@@ -16665,11 +16667,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_custom_aabb;
-    public void ParticlesSetCustomAabb(Rid particles, Aabb aabb)
+    public static void ParticlesSetCustomAabb(Rid particles, Aabb aabb)
     {
         var __mb = __mb_particles_set_custom_aabb;
         if (__mb == 0)
@@ -16683,11 +16685,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_speed_scale;
-    public void ParticlesSetSpeedScale(Rid particles, double scale)
+    public static void ParticlesSetSpeedScale(Rid particles, double scale)
     {
         var __mb = __mb_particles_set_speed_scale;
         if (__mb == 0)
@@ -16701,11 +16703,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_use_local_coordinates;
-    public void ParticlesSetUseLocalCoordinates(Rid particles, bool enable)
+    public static void ParticlesSetUseLocalCoordinates(Rid particles, bool enable)
     {
         var __mb = __mb_particles_set_use_local_coordinates;
         if (__mb == 0)
@@ -16719,11 +16721,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_process_material;
-    public void ParticlesSetProcessMaterial(Rid particles, Rid material)
+    public static void ParticlesSetProcessMaterial(Rid particles, Rid material)
     {
         var __mb = __mb_particles_set_process_material;
         if (__mb == 0)
@@ -16737,11 +16739,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_fixed_fps;
-    public void ParticlesSetFixedFps(Rid particles, int fps)
+    public static void ParticlesSetFixedFps(Rid particles, int fps)
     {
         var __mb = __mb_particles_set_fixed_fps;
         if (__mb == 0)
@@ -16755,11 +16757,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_interpolate;
-    public void ParticlesSetInterpolate(Rid particles, bool enable)
+    public static void ParticlesSetInterpolate(Rid particles, bool enable)
     {
         var __mb = __mb_particles_set_interpolate;
         if (__mb == 0)
@@ -16773,11 +16775,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_fractional_delta;
-    public void ParticlesSetFractionalDelta(Rid particles, bool enable)
+    public static void ParticlesSetFractionalDelta(Rid particles, bool enable)
     {
         var __mb = __mb_particles_set_fractional_delta;
         if (__mb == 0)
@@ -16791,11 +16793,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_collision_base_size;
-    public void ParticlesSetCollisionBaseSize(Rid particles, float size)
+    public static void ParticlesSetCollisionBaseSize(Rid particles, float size)
     {
         var __mb = __mb_particles_set_collision_base_size;
         if (__mb == 0)
@@ -16809,11 +16811,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_transform_align;
-    public void ParticlesSetTransformAlign(Rid particles, RenderingServer.ParticlesTransformAlign align)
+    public static void ParticlesSetTransformAlign(Rid particles, RenderingServer.ParticlesTransformAlign align)
     {
         var __mb = __mb_particles_set_transform_align;
         if (__mb == 0)
@@ -16827,11 +16829,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_transform_align_channel_filter;
-    public void ParticlesSetTransformAlignChannelFilter(Rid particles, RenderingServer.ParticlesTransformAlignCustomSrc channelFilter)
+    public static void ParticlesSetTransformAlignChannelFilter(Rid particles, RenderingServer.ParticlesTransformAlignCustomSrc channelFilter)
     {
         var __mb = __mb_particles_set_transform_align_channel_filter;
         if (__mb == 0)
@@ -16845,11 +16847,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_transform_align_axis;
-    public void ParticlesSetTransformAlignAxis(Rid particles, RenderingServer.ParticlesTransformAlignAxis rotationAxis)
+    public static void ParticlesSetTransformAlignAxis(Rid particles, RenderingServer.ParticlesTransformAlignAxis rotationAxis)
     {
         var __mb = __mb_particles_set_transform_align_axis;
         if (__mb == 0)
@@ -16863,11 +16865,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_trails;
-    public void ParticlesSetTrails(Rid particles, bool enable, float lengthSec)
+    public static void ParticlesSetTrails(Rid particles, bool enable, float lengthSec)
     {
         var __mb = __mb_particles_set_trails;
         if (__mb == 0)
@@ -16883,11 +16885,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_trail_bind_poses;
-    public void ParticlesSetTrailBindPoses(Rid particles, Godot.Collections.Array bindPoses)
+    public static void ParticlesSetTrailBindPoses(Rid particles, Godot.Collections.Array bindPoses)
     {
         var __mb = __mb_particles_set_trail_bind_poses;
         if (__mb == 0)
@@ -16901,11 +16903,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_is_inactive;
-    public bool ParticlesIsInactive(Rid particles)
+    public static bool ParticlesIsInactive(Rid particles)
     {
         var __mb = __mb_particles_is_inactive;
         if (__mb == 0)
@@ -16918,12 +16920,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_particles_request_process;
-    public void ParticlesRequestProcess(Rid particles)
+    public static void ParticlesRequestProcess(Rid particles)
     {
         var __mb = __mb_particles_request_process;
         if (__mb == 0)
@@ -16935,11 +16937,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __a0 = particles;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_restart;
-    public void ParticlesRestart(Rid particles)
+    public static void ParticlesRestart(Rid particles)
     {
         var __mb = __mb_particles_restart;
         if (__mb == 0)
@@ -16951,11 +16953,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __a0 = particles;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_subemitter;
-    public void ParticlesSetSubemitter(Rid particles, Rid subemitterParticles)
+    public static void ParticlesSetSubemitter(Rid particles, Rid subemitterParticles)
     {
         var __mb = __mb_particles_set_subemitter;
         if (__mb == 0)
@@ -16969,11 +16971,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_emit;
-    public void ParticlesEmit(Rid particles, Transform3D transform, Vector3 velocity, Color color, Color custom, uint emitFlags)
+    public static void ParticlesEmit(Rid particles, Transform3D transform, Vector3 velocity, Color color, Color custom, uint emitFlags)
     {
         var __mb = __mb_particles_emit;
         if (__mb == 0)
@@ -16995,11 +16997,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_draw_order;
-    public void ParticlesSetDrawOrder(Rid particles, RenderingServer.ParticlesDrawOrder order)
+    public static void ParticlesSetDrawOrder(Rid particles, RenderingServer.ParticlesDrawOrder order)
     {
         var __mb = __mb_particles_set_draw_order;
         if (__mb == 0)
@@ -17013,11 +17015,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_draw_passes;
-    public void ParticlesSetDrawPasses(Rid particles, int count)
+    public static void ParticlesSetDrawPasses(Rid particles, int count)
     {
         var __mb = __mb_particles_set_draw_passes;
         if (__mb == 0)
@@ -17031,11 +17033,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_set_draw_pass_mesh;
-    public void ParticlesSetDrawPassMesh(Rid particles, int pass, Rid mesh)
+    public static void ParticlesSetDrawPassMesh(Rid particles, int pass, Rid mesh)
     {
         var __mb = __mb_particles_set_draw_pass_mesh;
         if (__mb == 0)
@@ -17051,11 +17053,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_get_current_aabb;
-    public Aabb ParticlesGetCurrentAabb(Rid particles)
+    public static Aabb ParticlesGetCurrentAabb(Rid particles)
     {
         var __mb = __mb_particles_get_current_aabb;
         if (__mb == 0)
@@ -17068,12 +17070,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Aabb);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_particles_set_emission_transform;
-    public void ParticlesSetEmissionTransform(Rid particles, Transform3D transform)
+    public static void ParticlesSetEmissionTransform(Rid particles, Transform3D transform)
     {
         var __mb = __mb_particles_set_emission_transform;
         if (__mb == 0)
@@ -17087,11 +17089,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_collision_create;
-    public Rid ParticlesCollisionCreate()
+    public static Rid ParticlesCollisionCreate()
     {
         var __mb = __mb_particles_collision_create;
         if (__mb == 0)
@@ -17101,12 +17103,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_particles_collision_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_particles_collision_set_collision_type;
-    public void ParticlesCollisionSetCollisionType(Rid particlesCollision, RenderingServer.ParticlesCollisionType type)
+    public static void ParticlesCollisionSetCollisionType(Rid particlesCollision, RenderingServer.ParticlesCollisionType type)
     {
         var __mb = __mb_particles_collision_set_collision_type;
         if (__mb == 0)
@@ -17120,11 +17122,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_collision_set_cull_mask;
-    public void ParticlesCollisionSetCullMask(Rid particlesCollision, uint mask)
+    public static void ParticlesCollisionSetCullMask(Rid particlesCollision, uint mask)
     {
         var __mb = __mb_particles_collision_set_cull_mask;
         if (__mb == 0)
@@ -17138,11 +17140,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_collision_set_sphere_radius;
-    public void ParticlesCollisionSetSphereRadius(Rid particlesCollision, float radius)
+    public static void ParticlesCollisionSetSphereRadius(Rid particlesCollision, float radius)
     {
         var __mb = __mb_particles_collision_set_sphere_radius;
         if (__mb == 0)
@@ -17156,11 +17158,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_collision_set_box_extents;
-    public void ParticlesCollisionSetBoxExtents(Rid particlesCollision, Vector3 extents)
+    public static void ParticlesCollisionSetBoxExtents(Rid particlesCollision, Vector3 extents)
     {
         var __mb = __mb_particles_collision_set_box_extents;
         if (__mb == 0)
@@ -17174,11 +17176,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_collision_set_attractor_strength;
-    public void ParticlesCollisionSetAttractorStrength(Rid particlesCollision, float strength)
+    public static void ParticlesCollisionSetAttractorStrength(Rid particlesCollision, float strength)
     {
         var __mb = __mb_particles_collision_set_attractor_strength;
         if (__mb == 0)
@@ -17192,11 +17194,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_collision_set_attractor_directionality;
-    public void ParticlesCollisionSetAttractorDirectionality(Rid particlesCollision, float amount)
+    public static void ParticlesCollisionSetAttractorDirectionality(Rid particlesCollision, float amount)
     {
         var __mb = __mb_particles_collision_set_attractor_directionality;
         if (__mb == 0)
@@ -17210,11 +17212,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_collision_set_attractor_attenuation;
-    public void ParticlesCollisionSetAttractorAttenuation(Rid particlesCollision, float curve)
+    public static void ParticlesCollisionSetAttractorAttenuation(Rid particlesCollision, float curve)
     {
         var __mb = __mb_particles_collision_set_attractor_attenuation;
         if (__mb == 0)
@@ -17228,11 +17230,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_collision_set_field_texture;
-    public void ParticlesCollisionSetFieldTexture(Rid particlesCollision, Rid texture)
+    public static void ParticlesCollisionSetFieldTexture(Rid particlesCollision, Rid texture)
     {
         var __mb = __mb_particles_collision_set_field_texture;
         if (__mb == 0)
@@ -17246,11 +17248,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_collision_height_field_update;
-    public void ParticlesCollisionHeightFieldUpdate(Rid particlesCollision)
+    public static void ParticlesCollisionHeightFieldUpdate(Rid particlesCollision)
     {
         var __mb = __mb_particles_collision_height_field_update;
         if (__mb == 0)
@@ -17262,11 +17264,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __a0 = particlesCollision;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_collision_set_height_field_resolution;
-    public void ParticlesCollisionSetHeightFieldResolution(Rid particlesCollision, RenderingServer.ParticlesCollisionHeightfieldResolution resolution)
+    public static void ParticlesCollisionSetHeightFieldResolution(Rid particlesCollision, RenderingServer.ParticlesCollisionHeightfieldResolution resolution)
     {
         var __mb = __mb_particles_collision_set_height_field_resolution;
         if (__mb == 0)
@@ -17280,11 +17282,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_particles_collision_set_height_field_mask;
-    public void ParticlesCollisionSetHeightFieldMask(Rid particlesCollision, uint mask)
+    public static void ParticlesCollisionSetHeightFieldMask(Rid particlesCollision, uint mask)
     {
         var __mb = __mb_particles_collision_set_height_field_mask;
         if (__mb == 0)
@@ -17298,11 +17300,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_fog_volume_create;
-    public Rid FogVolumeCreate()
+    public static Rid FogVolumeCreate()
     {
         var __mb = __mb_fog_volume_create;
         if (__mb == 0)
@@ -17312,12 +17314,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_fog_volume_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_fog_volume_set_shape;
-    public void FogVolumeSetShape(Rid fogVolume, RenderingServer.FogVolumeShape shape)
+    public static void FogVolumeSetShape(Rid fogVolume, RenderingServer.FogVolumeShape shape)
     {
         var __mb = __mb_fog_volume_set_shape;
         if (__mb == 0)
@@ -17331,11 +17333,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_fog_volume_set_size;
-    public void FogVolumeSetSize(Rid fogVolume, Vector3 size)
+    public static void FogVolumeSetSize(Rid fogVolume, Vector3 size)
     {
         var __mb = __mb_fog_volume_set_size;
         if (__mb == 0)
@@ -17349,11 +17351,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_fog_volume_set_material;
-    public void FogVolumeSetMaterial(Rid fogVolume, Rid material)
+    public static void FogVolumeSetMaterial(Rid fogVolume, Rid material)
     {
         var __mb = __mb_fog_volume_set_material;
         if (__mb == 0)
@@ -17367,11 +17369,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_visibility_notifier_create;
-    public Rid VisibilityNotifierCreate()
+    public static Rid VisibilityNotifierCreate()
     {
         var __mb = __mb_visibility_notifier_create;
         if (__mb == 0)
@@ -17381,12 +17383,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_visibility_notifier_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_visibility_notifier_set_aabb;
-    public void VisibilityNotifierSetAabb(Rid notifier, Aabb aabb)
+    public static void VisibilityNotifierSetAabb(Rid notifier, Aabb aabb)
     {
         var __mb = __mb_visibility_notifier_set_aabb;
         if (__mb == 0)
@@ -17400,11 +17402,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_occluder_create;
-    public Rid OccluderCreate()
+    public static Rid OccluderCreate()
     {
         var __mb = __mb_occluder_create;
         if (__mb == 0)
@@ -17414,12 +17416,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_occluder_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_camera_create;
-    public Rid CameraCreate()
+    public static Rid CameraCreate()
     {
         var __mb = __mb_camera_create;
         if (__mb == 0)
@@ -17429,12 +17431,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_camera_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_camera_set_perspective;
-    public void CameraSetPerspective(Rid camera, float fovyDegrees, float zNear, float zFar)
+    public static void CameraSetPerspective(Rid camera, float fovyDegrees, float zNear, float zFar)
     {
         var __mb = __mb_camera_set_perspective;
         if (__mb == 0)
@@ -17452,11 +17454,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_camera_set_orthogonal;
-    public void CameraSetOrthogonal(Rid camera, float size, float zNear, float zFar)
+    public static void CameraSetOrthogonal(Rid camera, float size, float zNear, float zFar)
     {
         var __mb = __mb_camera_set_orthogonal;
         if (__mb == 0)
@@ -17474,11 +17476,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_camera_set_frustum;
-    public void CameraSetFrustum(Rid camera, float size, Vector2 offset, float zNear, float zFar)
+    public static void CameraSetFrustum(Rid camera, float size, Vector2 offset, float zNear, float zFar)
     {
         var __mb = __mb_camera_set_frustum;
         if (__mb == 0)
@@ -17498,11 +17500,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_camera_set_transform;
-    public void CameraSetTransform(Rid camera, Transform3D transform)
+    public static void CameraSetTransform(Rid camera, Transform3D transform)
     {
         var __mb = __mb_camera_set_transform;
         if (__mb == 0)
@@ -17516,11 +17518,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_camera_set_cull_mask;
-    public void CameraSetCullMask(Rid camera, uint layers)
+    public static void CameraSetCullMask(Rid camera, uint layers)
     {
         var __mb = __mb_camera_set_cull_mask;
         if (__mb == 0)
@@ -17534,11 +17536,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_camera_set_environment;
-    public void CameraSetEnvironment(Rid camera, Rid env)
+    public static void CameraSetEnvironment(Rid camera, Rid env)
     {
         var __mb = __mb_camera_set_environment;
         if (__mb == 0)
@@ -17552,11 +17554,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_camera_set_camera_attributes;
-    public void CameraSetCameraAttributes(Rid camera, Rid effects)
+    public static void CameraSetCameraAttributes(Rid camera, Rid effects)
     {
         var __mb = __mb_camera_set_camera_attributes;
         if (__mb == 0)
@@ -17570,11 +17572,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_camera_set_compositor;
-    public void CameraSetCompositor(Rid camera, Rid compositor)
+    public static void CameraSetCompositor(Rid camera, Rid compositor)
     {
         var __mb = __mb_camera_set_compositor;
         if (__mb == 0)
@@ -17588,11 +17590,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_camera_set_use_vertical_aspect;
-    public void CameraSetUseVerticalAspect(Rid camera, bool enable)
+    public static void CameraSetUseVerticalAspect(Rid camera, bool enable)
     {
         var __mb = __mb_camera_set_use_vertical_aspect;
         if (__mb == 0)
@@ -17606,11 +17608,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_create;
-    public Rid ViewportCreate()
+    public static Rid ViewportCreate()
     {
         var __mb = __mb_viewport_create;
         if (__mb == 0)
@@ -17620,12 +17622,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_viewport_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_viewport_set_use_xr;
-    public void ViewportSetUseXr(Rid viewport, bool useXr)
+    public static void ViewportSetUseXr(Rid viewport, bool useXr)
     {
         var __mb = __mb_viewport_set_use_xr;
         if (__mb == 0)
@@ -17639,11 +17641,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_size;
-    public void ViewportSetSize(Rid viewport, int width, int height, int viewCount)
+    public static void ViewportSetSize(Rid viewport, int width, int height, int viewCount = unchecked((int)(1)))
     {
         var __mb = __mb_viewport_set_size;
         if (__mb == 0)
@@ -17661,11 +17663,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_active;
-    public void ViewportSetActive(Rid viewport, bool active)
+    public static void ViewportSetActive(Rid viewport, bool active)
     {
         var __mb = __mb_viewport_set_active;
         if (__mb == 0)
@@ -17679,11 +17681,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_parent_viewport;
-    public void ViewportSetParentViewport(Rid viewport, Rid parentViewport)
+    public static void ViewportSetParentViewport(Rid viewport, Rid parentViewport)
     {
         var __mb = __mb_viewport_set_parent_viewport;
         if (__mb == 0)
@@ -17697,11 +17699,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_attach_to_screen;
-    public void ViewportAttachToScreen(Rid viewport, Rect2 rect, int screen)
+    public static void ViewportAttachToScreen(Rid viewport, Rect2 rect = default, int screen = unchecked((int)(0)))
     {
         var __mb = __mb_viewport_attach_to_screen;
         if (__mb == 0)
@@ -17717,11 +17719,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_render_direct_to_screen;
-    public void ViewportSetRenderDirectToScreen(Rid viewport, bool enabled)
+    public static void ViewportSetRenderDirectToScreen(Rid viewport, bool enabled)
     {
         var __mb = __mb_viewport_set_render_direct_to_screen;
         if (__mb == 0)
@@ -17735,11 +17737,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_canvas_cull_mask;
-    public void ViewportSetCanvasCullMask(Rid viewport, uint canvasCullMask)
+    public static void ViewportSetCanvasCullMask(Rid viewport, uint canvasCullMask)
     {
         var __mb = __mb_viewport_set_canvas_cull_mask;
         if (__mb == 0)
@@ -17753,11 +17755,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_scaling_3d_mode;
-    public void ViewportSetScaling3dMode(Rid viewport, RenderingServer.ViewportScaling3DMode scaling3dMode)
+    public static void ViewportSetScaling3dMode(Rid viewport, RenderingServer.ViewportScaling3DMode scaling3dMode)
     {
         var __mb = __mb_viewport_set_scaling_3d_mode;
         if (__mb == 0)
@@ -17771,11 +17773,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_scaling_3d_scale;
-    public void ViewportSetScaling3dScale(Rid viewport, float scale)
+    public static void ViewportSetScaling3dScale(Rid viewport, float scale)
     {
         var __mb = __mb_viewport_set_scaling_3d_scale;
         if (__mb == 0)
@@ -17789,11 +17791,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_fsr_sharpness;
-    public void ViewportSetFsrSharpness(Rid viewport, float sharpness)
+    public static void ViewportSetFsrSharpness(Rid viewport, float sharpness)
     {
         var __mb = __mb_viewport_set_fsr_sharpness;
         if (__mb == 0)
@@ -17807,11 +17809,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_texture_mipmap_bias;
-    public void ViewportSetTextureMipmapBias(Rid viewport, float mipmapBias)
+    public static void ViewportSetTextureMipmapBias(Rid viewport, float mipmapBias)
     {
         var __mb = __mb_viewport_set_texture_mipmap_bias;
         if (__mb == 0)
@@ -17825,11 +17827,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_anisotropic_filtering_level;
-    public void ViewportSetAnisotropicFilteringLevel(Rid viewport, RenderingServer.ViewportAnisotropicFiltering anisotropicFilteringLevel)
+    public static void ViewportSetAnisotropicFilteringLevel(Rid viewport, RenderingServer.ViewportAnisotropicFiltering anisotropicFilteringLevel)
     {
         var __mb = __mb_viewport_set_anisotropic_filtering_level;
         if (__mb == 0)
@@ -17843,11 +17845,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_update_mode;
-    public void ViewportSetUpdateMode(Rid viewport, RenderingServer.ViewportUpdateMode updateMode)
+    public static void ViewportSetUpdateMode(Rid viewport, RenderingServer.ViewportUpdateMode updateMode)
     {
         var __mb = __mb_viewport_set_update_mode;
         if (__mb == 0)
@@ -17861,11 +17863,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_get_update_mode;
-    public RenderingServer.ViewportUpdateMode ViewportGetUpdateMode(Rid viewport)
+    public static RenderingServer.ViewportUpdateMode ViewportGetUpdateMode(Rid viewport)
     {
         var __mb = __mb_viewport_get_update_mode;
         if (__mb == 0)
@@ -17878,12 +17880,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (RenderingServer.ViewportUpdateMode)__ret;
     }
 
     private static nint __mb_viewport_set_clear_mode;
-    public void ViewportSetClearMode(Rid viewport, RenderingServer.ViewportClearMode clearMode)
+    public static void ViewportSetClearMode(Rid viewport, RenderingServer.ViewportClearMode clearMode)
     {
         var __mb = __mb_viewport_set_clear_mode;
         if (__mb == 0)
@@ -17897,11 +17899,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_get_render_target;
-    public Rid ViewportGetRenderTarget(Rid viewport)
+    public static Rid ViewportGetRenderTarget(Rid viewport)
     {
         var __mb = __mb_viewport_get_render_target;
         if (__mb == 0)
@@ -17914,12 +17916,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_viewport_get_texture;
-    public Rid ViewportGetTexture(Rid viewport)
+    public static Rid ViewportGetTexture(Rid viewport)
     {
         var __mb = __mb_viewport_get_texture;
         if (__mb == 0)
@@ -17932,12 +17934,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_viewport_set_disable_3d;
-    public void ViewportSetDisable3d(Rid viewport, bool disable)
+    public static void ViewportSetDisable3d(Rid viewport, bool disable)
     {
         var __mb = __mb_viewport_set_disable_3d;
         if (__mb == 0)
@@ -17951,11 +17953,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_disable_2d;
-    public void ViewportSetDisable2d(Rid viewport, bool disable)
+    public static void ViewportSetDisable2d(Rid viewport, bool disable)
     {
         var __mb = __mb_viewport_set_disable_2d;
         if (__mb == 0)
@@ -17969,11 +17971,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_environment_mode;
-    public void ViewportSetEnvironmentMode(Rid viewport, RenderingServer.ViewportEnvironmentMode mode)
+    public static void ViewportSetEnvironmentMode(Rid viewport, RenderingServer.ViewportEnvironmentMode mode)
     {
         var __mb = __mb_viewport_set_environment_mode;
         if (__mb == 0)
@@ -17987,11 +17989,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_attach_camera;
-    public void ViewportAttachCamera(Rid viewport, Rid camera)
+    public static void ViewportAttachCamera(Rid viewport, Rid camera)
     {
         var __mb = __mb_viewport_attach_camera;
         if (__mb == 0)
@@ -18005,11 +18007,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_scenario;
-    public void ViewportSetScenario(Rid viewport, Rid scenario)
+    public static void ViewportSetScenario(Rid viewport, Rid scenario)
     {
         var __mb = __mb_viewport_set_scenario;
         if (__mb == 0)
@@ -18023,11 +18025,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_attach_canvas;
-    public void ViewportAttachCanvas(Rid viewport, Rid canvas)
+    public static void ViewportAttachCanvas(Rid viewport, Rid canvas)
     {
         var __mb = __mb_viewport_attach_canvas;
         if (__mb == 0)
@@ -18041,11 +18043,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_remove_canvas;
-    public void ViewportRemoveCanvas(Rid viewport, Rid canvas)
+    public static void ViewportRemoveCanvas(Rid viewport, Rid canvas)
     {
         var __mb = __mb_viewport_remove_canvas;
         if (__mb == 0)
@@ -18059,11 +18061,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_snap_2d_transforms_to_pixel;
-    public void ViewportSetSnap2dTransformsToPixel(Rid viewport, bool enabled)
+    public static void ViewportSetSnap2dTransformsToPixel(Rid viewport, bool enabled)
     {
         var __mb = __mb_viewport_set_snap_2d_transforms_to_pixel;
         if (__mb == 0)
@@ -18077,11 +18079,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_snap_2d_vertices_to_pixel;
-    public void ViewportSetSnap2dVerticesToPixel(Rid viewport, bool enabled)
+    public static void ViewportSetSnap2dVerticesToPixel(Rid viewport, bool enabled)
     {
         var __mb = __mb_viewport_set_snap_2d_vertices_to_pixel;
         if (__mb == 0)
@@ -18095,11 +18097,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_default_canvas_item_texture_filter;
-    public void ViewportSetDefaultCanvasItemTextureFilter(Rid viewport, RenderingServer.CanvasItemTextureFilter filter)
+    public static void ViewportSetDefaultCanvasItemTextureFilter(Rid viewport, RenderingServer.CanvasItemTextureFilter filter)
     {
         var __mb = __mb_viewport_set_default_canvas_item_texture_filter;
         if (__mb == 0)
@@ -18113,11 +18115,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_default_canvas_item_texture_repeat;
-    public void ViewportSetDefaultCanvasItemTextureRepeat(Rid viewport, RenderingServer.CanvasItemTextureRepeat repeat)
+    public static void ViewportSetDefaultCanvasItemTextureRepeat(Rid viewport, RenderingServer.CanvasItemTextureRepeat repeat)
     {
         var __mb = __mb_viewport_set_default_canvas_item_texture_repeat;
         if (__mb == 0)
@@ -18131,11 +18133,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_canvas_transform;
-    public void ViewportSetCanvasTransform(Rid viewport, Rid canvas, Transform2D offset)
+    public static void ViewportSetCanvasTransform(Rid viewport, Rid canvas, Transform2D offset)
     {
         var __mb = __mb_viewport_set_canvas_transform;
         if (__mb == 0)
@@ -18151,11 +18153,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_canvas_stacking;
-    public void ViewportSetCanvasStacking(Rid viewport, Rid canvas, int layer, int sublayer)
+    public static void ViewportSetCanvasStacking(Rid viewport, Rid canvas, int layer, int sublayer)
     {
         var __mb = __mb_viewport_set_canvas_stacking;
         if (__mb == 0)
@@ -18173,11 +18175,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_transparent_background;
-    public void ViewportSetTransparentBackground(Rid viewport, bool enabled)
+    public static void ViewportSetTransparentBackground(Rid viewport, bool enabled)
     {
         var __mb = __mb_viewport_set_transparent_background;
         if (__mb == 0)
@@ -18191,11 +18193,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_global_canvas_transform;
-    public void ViewportSetGlobalCanvasTransform(Rid viewport, Transform2D transform)
+    public static void ViewportSetGlobalCanvasTransform(Rid viewport, Transform2D transform)
     {
         var __mb = __mb_viewport_set_global_canvas_transform;
         if (__mb == 0)
@@ -18209,11 +18211,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_sdf_oversize_and_scale;
-    public void ViewportSetSdfOversizeAndScale(Rid viewport, RenderingServer.ViewportSDFOversize oversize, RenderingServer.ViewportSDFScale scale)
+    public static void ViewportSetSdfOversizeAndScale(Rid viewport, RenderingServer.ViewportSDFOversize oversize, RenderingServer.ViewportSDFScale scale)
     {
         var __mb = __mb_viewport_set_sdf_oversize_and_scale;
         if (__mb == 0)
@@ -18229,11 +18231,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_positional_shadow_atlas_size;
-    public void ViewportSetPositionalShadowAtlasSize(Rid viewport, int size, bool use16Bits)
+    public static void ViewportSetPositionalShadowAtlasSize(Rid viewport, int size, bool use16Bits = false)
     {
         var __mb = __mb_viewport_set_positional_shadow_atlas_size;
         if (__mb == 0)
@@ -18249,11 +18251,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_positional_shadow_atlas_quadrant_subdivision;
-    public void ViewportSetPositionalShadowAtlasQuadrantSubdivision(Rid viewport, int quadrant, int subdivision)
+    public static void ViewportSetPositionalShadowAtlasQuadrantSubdivision(Rid viewport, int quadrant, int subdivision)
     {
         var __mb = __mb_viewport_set_positional_shadow_atlas_quadrant_subdivision;
         if (__mb == 0)
@@ -18269,11 +18271,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_msaa_3d;
-    public void ViewportSetMsaa3d(Rid viewport, RenderingServer.ViewportMSAA msaa)
+    public static void ViewportSetMsaa3d(Rid viewport, RenderingServer.ViewportMSAA msaa)
     {
         var __mb = __mb_viewport_set_msaa_3d;
         if (__mb == 0)
@@ -18287,11 +18289,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_msaa_2d;
-    public void ViewportSetMsaa2d(Rid viewport, RenderingServer.ViewportMSAA msaa)
+    public static void ViewportSetMsaa2d(Rid viewport, RenderingServer.ViewportMSAA msaa)
     {
         var __mb = __mb_viewport_set_msaa_2d;
         if (__mb == 0)
@@ -18305,11 +18307,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_use_hdr_2d;
-    public void ViewportSetUseHdr2d(Rid viewport, bool enabled)
+    public static void ViewportSetUseHdr2d(Rid viewport, bool enabled)
     {
         var __mb = __mb_viewport_set_use_hdr_2d;
         if (__mb == 0)
@@ -18323,11 +18325,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_screen_space_aa;
-    public void ViewportSetScreenSpaceAa(Rid viewport, RenderingServer.ViewportScreenSpaceAA mode)
+    public static void ViewportSetScreenSpaceAa(Rid viewport, RenderingServer.ViewportScreenSpaceAA mode)
     {
         var __mb = __mb_viewport_set_screen_space_aa;
         if (__mb == 0)
@@ -18341,11 +18343,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_use_taa;
-    public void ViewportSetUseTaa(Rid viewport, bool enable)
+    public static void ViewportSetUseTaa(Rid viewport, bool enable)
     {
         var __mb = __mb_viewport_set_use_taa;
         if (__mb == 0)
@@ -18359,11 +18361,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_use_debanding;
-    public void ViewportSetUseDebanding(Rid viewport, bool enable)
+    public static void ViewportSetUseDebanding(Rid viewport, bool enable)
     {
         var __mb = __mb_viewport_set_use_debanding;
         if (__mb == 0)
@@ -18377,11 +18379,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_use_occlusion_culling;
-    public void ViewportSetUseOcclusionCulling(Rid viewport, bool enable)
+    public static void ViewportSetUseOcclusionCulling(Rid viewport, bool enable)
     {
         var __mb = __mb_viewport_set_use_occlusion_culling;
         if (__mb == 0)
@@ -18395,11 +18397,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_occlusion_rays_per_thread;
-    public void ViewportSetOcclusionRaysPerThread(int raysPerThread)
+    public static void ViewportSetOcclusionRaysPerThread(int raysPerThread)
     {
         var __mb = __mb_viewport_set_occlusion_rays_per_thread;
         if (__mb == 0)
@@ -18411,11 +18413,11 @@ public unsafe partial class RenderingServer : GodotObject
         long __a0 = unchecked((long)raysPerThread);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_occlusion_culling_build_quality;
-    public void ViewportSetOcclusionCullingBuildQuality(RenderingServer.ViewportOcclusionCullingBuildQuality quality)
+    public static void ViewportSetOcclusionCullingBuildQuality(RenderingServer.ViewportOcclusionCullingBuildQuality quality)
     {
         var __mb = __mb_viewport_set_occlusion_culling_build_quality;
         if (__mb == 0)
@@ -18427,11 +18429,11 @@ public unsafe partial class RenderingServer : GodotObject
         long __a0 = (long)quality;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_get_render_info;
-    public int ViewportGetRenderInfo(Rid viewport, RenderingServer.ViewportRenderInfoType type, RenderingServer.ViewportRenderInfo info)
+    public static int ViewportGetRenderInfo(Rid viewport, RenderingServer.ViewportRenderInfoType type, RenderingServer.ViewportRenderInfo info)
     {
         var __mb = __mb_viewport_get_render_info;
         if (__mb == 0)
@@ -18448,12 +18450,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_viewport_set_debug_draw;
-    public void ViewportSetDebugDraw(Rid viewport, RenderingServer.ViewportDebugDraw draw)
+    public static void ViewportSetDebugDraw(Rid viewport, RenderingServer.ViewportDebugDraw draw)
     {
         var __mb = __mb_viewport_set_debug_draw;
         if (__mb == 0)
@@ -18467,11 +18469,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_measure_render_time;
-    public void ViewportSetMeasureRenderTime(Rid viewport, bool enable)
+    public static void ViewportSetMeasureRenderTime(Rid viewport, bool enable)
     {
         var __mb = __mb_viewport_set_measure_render_time;
         if (__mb == 0)
@@ -18485,11 +18487,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_get_measured_render_time_cpu;
-    public double ViewportGetMeasuredRenderTimeCpu(Rid viewport)
+    public static double ViewportGetMeasuredRenderTimeCpu(Rid viewport)
     {
         var __mb = __mb_viewport_get_measured_render_time_cpu;
         if (__mb == 0)
@@ -18502,12 +18504,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (double)__ret;
     }
 
     private static nint __mb_viewport_get_measured_render_time_gpu;
-    public double ViewportGetMeasuredRenderTimeGpu(Rid viewport)
+    public static double ViewportGetMeasuredRenderTimeGpu(Rid viewport)
     {
         var __mb = __mb_viewport_get_measured_render_time_gpu;
         if (__mb == 0)
@@ -18520,12 +18522,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (double)__ret;
     }
 
     private static nint __mb_viewport_set_vrs_mode;
-    public void ViewportSetVrsMode(Rid viewport, RenderingServer.ViewportVRSMode mode)
+    public static void ViewportSetVrsMode(Rid viewport, RenderingServer.ViewportVRSMode mode)
     {
         var __mb = __mb_viewport_set_vrs_mode;
         if (__mb == 0)
@@ -18539,11 +18541,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_vrs_update_mode;
-    public void ViewportSetVrsUpdateMode(Rid viewport, RenderingServer.ViewportVRSUpdateMode mode)
+    public static void ViewportSetVrsUpdateMode(Rid viewport, RenderingServer.ViewportVRSUpdateMode mode)
     {
         var __mb = __mb_viewport_set_vrs_update_mode;
         if (__mb == 0)
@@ -18557,11 +18559,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_viewport_set_vrs_texture;
-    public void ViewportSetVrsTexture(Rid viewport, Rid texture)
+    public static void ViewportSetVrsTexture(Rid viewport, Rid texture)
     {
         var __mb = __mb_viewport_set_vrs_texture;
         if (__mb == 0)
@@ -18575,11 +18577,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_sky_create;
-    public Rid SkyCreate()
+    public static Rid SkyCreate()
     {
         var __mb = __mb_sky_create;
         if (__mb == 0)
@@ -18589,12 +18591,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_sky_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_sky_set_radiance_size;
-    public void SkySetRadianceSize(Rid sky, int radianceSize)
+    public static void SkySetRadianceSize(Rid sky, int radianceSize)
     {
         var __mb = __mb_sky_set_radiance_size;
         if (__mb == 0)
@@ -18608,11 +18610,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_sky_set_mode;
-    public void SkySetMode(Rid sky, RenderingServer.SkyMode mode)
+    public static void SkySetMode(Rid sky, RenderingServer.SkyMode mode)
     {
         var __mb = __mb_sky_set_mode;
         if (__mb == 0)
@@ -18626,11 +18628,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_sky_set_material;
-    public void SkySetMaterial(Rid sky, Rid material)
+    public static void SkySetMaterial(Rid sky, Rid material)
     {
         var __mb = __mb_sky_set_material;
         if (__mb == 0)
@@ -18644,11 +18646,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_sky_bake_panorama;
-    public Image? SkyBakePanorama(Rid sky, float energy, bool bakeIrradiance, Vector2I size)
+    public static Image? SkyBakePanorama(Rid sky, float energy, bool bakeIrradiance, Vector2I size)
     {
         var __mb = __mb_sky_bake_panorama;
         if (__mb == 0)
@@ -18667,12 +18669,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_compositor_effect_create;
-    public Rid CompositorEffectCreate()
+    public static Rid CompositorEffectCreate()
     {
         var __mb = __mb_compositor_effect_create;
         if (__mb == 0)
@@ -18682,12 +18684,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_compositor_effect_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_compositor_effect_set_enabled;
-    public void CompositorEffectSetEnabled(Rid effect, bool enabled)
+    public static void CompositorEffectSetEnabled(Rid effect, bool enabled)
     {
         var __mb = __mb_compositor_effect_set_enabled;
         if (__mb == 0)
@@ -18701,11 +18703,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_compositor_effect_set_flag;
-    public void CompositorEffectSetFlag(Rid effect, RenderingServer.CompositorEffectFlags flag, bool set)
+    public static void CompositorEffectSetFlag(Rid effect, RenderingServer.CompositorEffectFlags flag, bool set)
     {
         var __mb = __mb_compositor_effect_set_flag;
         if (__mb == 0)
@@ -18721,11 +18723,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_compositor_create;
-    public Rid CompositorCreate()
+    public static Rid CompositorCreate()
     {
         var __mb = __mb_compositor_create;
         if (__mb == 0)
@@ -18735,12 +18737,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_compositor_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_compositor_set_compositor_effects;
-    public void CompositorSetCompositorEffects(Rid compositor, Godot.Collections.Array effects)
+    public static void CompositorSetCompositorEffects(Rid compositor, Godot.Collections.Array effects)
     {
         var __mb = __mb_compositor_set_compositor_effects;
         if (__mb == 0)
@@ -18754,11 +18756,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_create;
-    public Rid EnvironmentCreate()
+    public static Rid EnvironmentCreate()
     {
         var __mb = __mb_environment_create;
         if (__mb == 0)
@@ -18768,12 +18770,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_environment_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_environment_set_background;
-    public void EnvironmentSetBackground(Rid env, RenderingServer.EnvironmentBG bg)
+    public static void EnvironmentSetBackground(Rid env, RenderingServer.EnvironmentBG bg)
     {
         var __mb = __mb_environment_set_background;
         if (__mb == 0)
@@ -18787,11 +18789,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_camera_id;
-    public void EnvironmentSetCameraId(Rid env, int id)
+    public static void EnvironmentSetCameraId(Rid env, int id)
     {
         var __mb = __mb_environment_set_camera_id;
         if (__mb == 0)
@@ -18805,11 +18807,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_sky;
-    public void EnvironmentSetSky(Rid env, Rid sky)
+    public static void EnvironmentSetSky(Rid env, Rid sky)
     {
         var __mb = __mb_environment_set_sky;
         if (__mb == 0)
@@ -18823,11 +18825,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_sky_custom_fov;
-    public void EnvironmentSetSkyCustomFov(Rid env, float scale)
+    public static void EnvironmentSetSkyCustomFov(Rid env, float scale)
     {
         var __mb = __mb_environment_set_sky_custom_fov;
         if (__mb == 0)
@@ -18841,11 +18843,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_sky_orientation;
-    public void EnvironmentSetSkyOrientation(Rid env, Basis orientation)
+    public static void EnvironmentSetSkyOrientation(Rid env, Basis orientation)
     {
         var __mb = __mb_environment_set_sky_orientation;
         if (__mb == 0)
@@ -18859,11 +18861,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_bg_color;
-    public void EnvironmentSetBgColor(Rid env, Color color)
+    public static void EnvironmentSetBgColor(Rid env, Color color)
     {
         var __mb = __mb_environment_set_bg_color;
         if (__mb == 0)
@@ -18877,11 +18879,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_bg_energy;
-    public void EnvironmentSetBgEnergy(Rid env, float multiplier, float exposureValue)
+    public static void EnvironmentSetBgEnergy(Rid env, float multiplier, float exposureValue)
     {
         var __mb = __mb_environment_set_bg_energy;
         if (__mb == 0)
@@ -18897,11 +18899,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_canvas_max_layer;
-    public void EnvironmentSetCanvasMaxLayer(Rid env, int maxLayer)
+    public static void EnvironmentSetCanvasMaxLayer(Rid env, int maxLayer)
     {
         var __mb = __mb_environment_set_canvas_max_layer;
         if (__mb == 0)
@@ -18915,11 +18917,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_ambient_light;
-    public void EnvironmentSetAmbientLight(Rid env, Color color, RenderingServer.EnvironmentAmbientSource ambient, float energy, float skyContribution, RenderingServer.EnvironmentReflectionSource reflectionSource)
+    public static void EnvironmentSetAmbientLight(Rid env, Color color, RenderingServer.EnvironmentAmbientSource ambient = (RenderingServer.EnvironmentAmbientSource)(0), float energy = 1.0f, float skyContribution = 0.0f, RenderingServer.EnvironmentReflectionSource reflectionSource = (RenderingServer.EnvironmentReflectionSource)(0))
     {
         var __mb = __mb_environment_set_ambient_light;
         if (__mb == 0)
@@ -18941,11 +18943,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_tonemap;
-    public void EnvironmentSetTonemap(Rid env, RenderingServer.EnvironmentToneMapper toneMapper, float exposure, float white)
+    public static void EnvironmentSetTonemap(Rid env, RenderingServer.EnvironmentToneMapper toneMapper, float exposure, float white)
     {
         var __mb = __mb_environment_set_tonemap;
         if (__mb == 0)
@@ -18963,11 +18965,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_tonemap_agx_contrast;
-    public void EnvironmentSetTonemapAgxContrast(Rid env, float agxContrast)
+    public static void EnvironmentSetTonemapAgxContrast(Rid env, float agxContrast)
     {
         var __mb = __mb_environment_set_tonemap_agx_contrast;
         if (__mb == 0)
@@ -18981,11 +18983,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_adjustment;
-    public void EnvironmentSetAdjustment(Rid env, bool enable, float brightness, float contrast, float saturation, bool use1dColorCorrection, Rid colorCorrection)
+    public static void EnvironmentSetAdjustment(Rid env, bool enable, float brightness, float contrast, float saturation, bool use1dColorCorrection, Rid colorCorrection)
     {
         var __mb = __mb_environment_set_adjustment;
         if (__mb == 0)
@@ -19009,11 +19011,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
         __args[6] = (nint)(&__a6);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_ssr;
-    public void EnvironmentSetSsr(Rid env, bool enable, int maxSteps, float fadeIn, float fadeOut, float depthTolerance)
+    public static void EnvironmentSetSsr(Rid env, bool enable, int maxSteps, float fadeIn, float fadeOut, float depthTolerance)
     {
         var __mb = __mb_environment_set_ssr;
         if (__mb == 0)
@@ -19035,11 +19037,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_ssao;
-    public void EnvironmentSetSsao(Rid env, bool enable, float radius, float intensity, float power, float detail, float horizon, float sharpness, float lightAffect, float aoChannelAffect)
+    public static void EnvironmentSetSsao(Rid env, bool enable, float radius, float intensity, float power, float detail, float horizon, float sharpness, float lightAffect, float aoChannelAffect)
     {
         var __mb = __mb_environment_set_ssao;
         if (__mb == 0)
@@ -19069,11 +19071,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[7] = (nint)(&__a7);
         __args[8] = (nint)(&__a8);
         __args[9] = (nint)(&__a9);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_fog;
-    public void EnvironmentSetFog(Rid env, bool enable, Color lightColor, float lightEnergy, float sunScatter, float density, float height, float heightDensity, float aerialPerspective, float skyAffect, RenderingServer.EnvironmentFogMode fogMode)
+    public static void EnvironmentSetFog(Rid env, bool enable, Color lightColor, float lightEnergy, float sunScatter, float density, float height, float heightDensity, float aerialPerspective, float skyAffect, RenderingServer.EnvironmentFogMode fogMode = (RenderingServer.EnvironmentFogMode)(0))
     {
         var __mb = __mb_environment_set_fog;
         if (__mb == 0)
@@ -19105,11 +19107,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[8] = (nint)(&__a8);
         __args[9] = (nint)(&__a9);
         __args[10] = (nint)(&__a10);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_fog_depth;
-    public void EnvironmentSetFogDepth(Rid env, float curve, float begin, float end)
+    public static void EnvironmentSetFogDepth(Rid env, float curve, float begin, float end)
     {
         var __mb = __mb_environment_set_fog_depth;
         if (__mb == 0)
@@ -19127,11 +19129,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_sdfgi;
-    public void EnvironmentSetSdfgi(Rid env, bool enable, int cascades, float minCellSize, RenderingServer.EnvironmentSDFGIYScale yScale, bool useOcclusion, float bounceFeedback, bool readSky, float energy, float normalBias, float probeBias)
+    public static void EnvironmentSetSdfgi(Rid env, bool enable, int cascades, float minCellSize, RenderingServer.EnvironmentSDFGIYScale yScale, bool useOcclusion, float bounceFeedback, bool readSky, float energy, float normalBias, float probeBias)
     {
         var __mb = __mb_environment_set_sdfgi;
         if (__mb == 0)
@@ -19163,11 +19165,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[8] = (nint)(&__a8);
         __args[9] = (nint)(&__a9);
         __args[10] = (nint)(&__a10);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_volumetric_fog;
-    public void EnvironmentSetVolumetricFog(Rid env, bool enable, float density, Color albedo, Color emission, float emissionEnergy, float anisotropy, float length, float detailSpread, float giInject, bool temporalReprojection, float temporalReprojectionAmount, float ambientInject, float skyAffect)
+    public static void EnvironmentSetVolumetricFog(Rid env, bool enable, float density, Color albedo, Color emission, float emissionEnergy, float anisotropy, float length, float detailSpread, float giInject, bool temporalReprojection, float temporalReprojectionAmount, float ambientInject, float skyAffect)
     {
         var __mb = __mb_environment_set_volumetric_fog;
         if (__mb == 0)
@@ -19205,11 +19207,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[11] = (nint)(&__a11);
         __args[12] = (nint)(&__a12);
         __args[13] = (nint)(&__a13);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_glow_set_use_bicubic_upscale;
-    public void EnvironmentGlowSetUseBicubicUpscale(bool enable)
+    public static void EnvironmentGlowSetUseBicubicUpscale(bool enable)
     {
         var __mb = __mb_environment_glow_set_use_bicubic_upscale;
         if (__mb == 0)
@@ -19221,11 +19223,11 @@ public unsafe partial class RenderingServer : GodotObject
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_ssr_half_size;
-    public void EnvironmentSetSsrHalfSize(bool halfSize)
+    public static void EnvironmentSetSsrHalfSize(bool halfSize)
     {
         var __mb = __mb_environment_set_ssr_half_size;
         if (__mb == 0)
@@ -19237,11 +19239,11 @@ public unsafe partial class RenderingServer : GodotObject
         byte __a0 = halfSize ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_ssr_roughness_quality;
-    public void EnvironmentSetSsrRoughnessQuality(RenderingServer.EnvironmentSSRRoughnessQuality quality)
+    public static void EnvironmentSetSsrRoughnessQuality(RenderingServer.EnvironmentSSRRoughnessQuality quality)
     {
         var __mb = __mb_environment_set_ssr_roughness_quality;
         if (__mb == 0)
@@ -19253,11 +19255,11 @@ public unsafe partial class RenderingServer : GodotObject
         long __a0 = (long)quality;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_ssao_quality;
-    public void EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSSAOQuality quality, bool halfSize, float adaptiveTarget, int blurPasses, float fadeoutFrom, float fadeoutTo)
+    public static void EnvironmentSetSsaoQuality(RenderingServer.EnvironmentSSAOQuality quality, bool halfSize, float adaptiveTarget, int blurPasses, float fadeoutFrom, float fadeoutTo)
     {
         var __mb = __mb_environment_set_ssao_quality;
         if (__mb == 0)
@@ -19279,11 +19281,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_ssil_quality;
-    public void EnvironmentSetSsilQuality(RenderingServer.EnvironmentSSILQuality quality, bool halfSize, float adaptiveTarget, int blurPasses, float fadeoutFrom, float fadeoutTo)
+    public static void EnvironmentSetSsilQuality(RenderingServer.EnvironmentSSILQuality quality, bool halfSize, float adaptiveTarget, int blurPasses, float fadeoutFrom, float fadeoutTo)
     {
         var __mb = __mb_environment_set_ssil_quality;
         if (__mb == 0)
@@ -19305,11 +19307,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_sdfgi_ray_count;
-    public void EnvironmentSetSdfgiRayCount(RenderingServer.EnvironmentSDFGIRayCount rayCount)
+    public static void EnvironmentSetSdfgiRayCount(RenderingServer.EnvironmentSDFGIRayCount rayCount)
     {
         var __mb = __mb_environment_set_sdfgi_ray_count;
         if (__mb == 0)
@@ -19321,11 +19323,11 @@ public unsafe partial class RenderingServer : GodotObject
         long __a0 = (long)rayCount;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_sdfgi_frames_to_converge;
-    public void EnvironmentSetSdfgiFramesToConverge(RenderingServer.EnvironmentSDFGIFramesToConverge frames)
+    public static void EnvironmentSetSdfgiFramesToConverge(RenderingServer.EnvironmentSDFGIFramesToConverge frames)
     {
         var __mb = __mb_environment_set_sdfgi_frames_to_converge;
         if (__mb == 0)
@@ -19337,11 +19339,11 @@ public unsafe partial class RenderingServer : GodotObject
         long __a0 = (long)frames;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_sdfgi_frames_to_update_light;
-    public void EnvironmentSetSdfgiFramesToUpdateLight(RenderingServer.EnvironmentSDFGIFramesToUpdateLight frames)
+    public static void EnvironmentSetSdfgiFramesToUpdateLight(RenderingServer.EnvironmentSDFGIFramesToUpdateLight frames)
     {
         var __mb = __mb_environment_set_sdfgi_frames_to_update_light;
         if (__mb == 0)
@@ -19353,11 +19355,11 @@ public unsafe partial class RenderingServer : GodotObject
         long __a0 = (long)frames;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_volumetric_fog_volume_size;
-    public void EnvironmentSetVolumetricFogVolumeSize(int size, int depth)
+    public static void EnvironmentSetVolumetricFogVolumeSize(int size, int depth)
     {
         var __mb = __mb_environment_set_volumetric_fog_volume_size;
         if (__mb == 0)
@@ -19371,11 +19373,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_set_volumetric_fog_filter_active;
-    public void EnvironmentSetVolumetricFogFilterActive(bool active)
+    public static void EnvironmentSetVolumetricFogFilterActive(bool active)
     {
         var __mb = __mb_environment_set_volumetric_fog_filter_active;
         if (__mb == 0)
@@ -19387,11 +19389,11 @@ public unsafe partial class RenderingServer : GodotObject
         byte __a0 = active ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_environment_bake_panorama;
-    public Image? EnvironmentBakePanorama(Rid environment, bool bakeIrradiance, Vector2I size)
+    public static Image? EnvironmentBakePanorama(Rid environment, bool bakeIrradiance, Vector2I size)
     {
         var __mb = __mb_environment_bake_panorama;
         if (__mb == 0)
@@ -19408,12 +19410,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_screen_space_roughness_limiter_set_active;
-    public void ScreenSpaceRoughnessLimiterSetActive(bool enable, float amount, float limit)
+    public static void ScreenSpaceRoughnessLimiterSetActive(bool enable, float amount, float limit)
     {
         var __mb = __mb_screen_space_roughness_limiter_set_active;
         if (__mb == 0)
@@ -19429,11 +19431,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_sub_surface_scattering_set_quality;
-    public void SubSurfaceScatteringSetQuality(RenderingServer.SubSurfaceScatteringQuality quality)
+    public static void SubSurfaceScatteringSetQuality(RenderingServer.SubSurfaceScatteringQuality quality)
     {
         var __mb = __mb_sub_surface_scattering_set_quality;
         if (__mb == 0)
@@ -19445,11 +19447,11 @@ public unsafe partial class RenderingServer : GodotObject
         long __a0 = (long)quality;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_sub_surface_scattering_set_scale;
-    public void SubSurfaceScatteringSetScale(float scale, float depthScale)
+    public static void SubSurfaceScatteringSetScale(float scale, float depthScale)
     {
         var __mb = __mb_sub_surface_scattering_set_scale;
         if (__mb == 0)
@@ -19463,11 +19465,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_camera_attributes_create;
-    public Rid CameraAttributesCreate()
+    public static Rid CameraAttributesCreate()
     {
         var __mb = __mb_camera_attributes_create;
         if (__mb == 0)
@@ -19477,12 +19479,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_camera_attributes_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_camera_attributes_set_dof_blur_quality;
-    public void CameraAttributesSetDofBlurQuality(RenderingServer.DOFBlurQuality quality, bool useJitter)
+    public static void CameraAttributesSetDofBlurQuality(RenderingServer.DOFBlurQuality quality, bool useJitter)
     {
         var __mb = __mb_camera_attributes_set_dof_blur_quality;
         if (__mb == 0)
@@ -19496,11 +19498,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_camera_attributes_set_dof_blur_bokeh_shape;
-    public void CameraAttributesSetDofBlurBokehShape(RenderingServer.DOFBokehShape shape)
+    public static void CameraAttributesSetDofBlurBokehShape(RenderingServer.DOFBokehShape shape)
     {
         var __mb = __mb_camera_attributes_set_dof_blur_bokeh_shape;
         if (__mb == 0)
@@ -19512,11 +19514,11 @@ public unsafe partial class RenderingServer : GodotObject
         long __a0 = (long)shape;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_camera_attributes_set_dof_blur;
-    public void CameraAttributesSetDofBlur(Rid cameraAttributes, bool farEnable, float farDistance, float farTransition, bool nearEnable, float nearDistance, float nearTransition, float amount)
+    public static void CameraAttributesSetDofBlur(Rid cameraAttributes, bool farEnable, float farDistance, float farTransition, bool nearEnable, float nearDistance, float nearTransition, float amount)
     {
         var __mb = __mb_camera_attributes_set_dof_blur;
         if (__mb == 0)
@@ -19542,11 +19544,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[5] = (nint)(&__a5);
         __args[6] = (nint)(&__a6);
         __args[7] = (nint)(&__a7);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_camera_attributes_set_exposure;
-    public void CameraAttributesSetExposure(Rid cameraAttributes, float multiplier, float normalization)
+    public static void CameraAttributesSetExposure(Rid cameraAttributes, float multiplier, float normalization)
     {
         var __mb = __mb_camera_attributes_set_exposure;
         if (__mb == 0)
@@ -19562,11 +19564,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_camera_attributes_set_auto_exposure;
-    public void CameraAttributesSetAutoExposure(Rid cameraAttributes, bool enable, float minSensitivity, float maxSensitivity, float speed, float scale)
+    public static void CameraAttributesSetAutoExposure(Rid cameraAttributes, bool enable, float minSensitivity, float maxSensitivity, float speed, float scale)
     {
         var __mb = __mb_camera_attributes_set_auto_exposure;
         if (__mb == 0)
@@ -19588,11 +19590,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_scenario_create;
-    public Rid ScenarioCreate()
+    public static Rid ScenarioCreate()
     {
         var __mb = __mb_scenario_create;
         if (__mb == 0)
@@ -19602,12 +19604,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_scenario_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_scenario_set_environment;
-    public void ScenarioSetEnvironment(Rid scenario, Rid environment)
+    public static void ScenarioSetEnvironment(Rid scenario, Rid environment)
     {
         var __mb = __mb_scenario_set_environment;
         if (__mb == 0)
@@ -19621,11 +19623,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_scenario_set_fallback_environment;
-    public void ScenarioSetFallbackEnvironment(Rid scenario, Rid environment)
+    public static void ScenarioSetFallbackEnvironment(Rid scenario, Rid environment)
     {
         var __mb = __mb_scenario_set_fallback_environment;
         if (__mb == 0)
@@ -19639,11 +19641,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_scenario_set_camera_attributes;
-    public void ScenarioSetCameraAttributes(Rid scenario, Rid effects)
+    public static void ScenarioSetCameraAttributes(Rid scenario, Rid effects)
     {
         var __mb = __mb_scenario_set_camera_attributes;
         if (__mb == 0)
@@ -19657,11 +19659,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_scenario_set_compositor;
-    public void ScenarioSetCompositor(Rid scenario, Rid compositor)
+    public static void ScenarioSetCompositor(Rid scenario, Rid compositor)
     {
         var __mb = __mb_scenario_set_compositor;
         if (__mb == 0)
@@ -19675,11 +19677,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_create2;
-    public Rid InstanceCreate2(Rid @base, Rid scenario)
+    public static Rid InstanceCreate2(Rid @base, Rid scenario)
     {
         var __mb = __mb_instance_create2;
         if (__mb == 0)
@@ -19694,12 +19696,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_instance_create;
-    public Rid InstanceCreate()
+    public static Rid InstanceCreate()
     {
         var __mb = __mb_instance_create;
         if (__mb == 0)
@@ -19709,12 +19711,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_instance_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_instance_set_base;
-    public void InstanceSetBase(Rid instance, Rid @base)
+    public static void InstanceSetBase(Rid instance, Rid @base)
     {
         var __mb = __mb_instance_set_base;
         if (__mb == 0)
@@ -19728,11 +19730,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_set_scenario;
-    public void InstanceSetScenario(Rid instance, Rid scenario)
+    public static void InstanceSetScenario(Rid instance, Rid scenario)
     {
         var __mb = __mb_instance_set_scenario;
         if (__mb == 0)
@@ -19746,11 +19748,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_set_layer_mask;
-    public void InstanceSetLayerMask(Rid instance, uint mask)
+    public static void InstanceSetLayerMask(Rid instance, uint mask)
     {
         var __mb = __mb_instance_set_layer_mask;
         if (__mb == 0)
@@ -19764,11 +19766,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_set_pivot_data;
-    public void InstanceSetPivotData(Rid instance, float sortingOffset, bool useAabbCenter)
+    public static void InstanceSetPivotData(Rid instance, float sortingOffset, bool useAabbCenter)
     {
         var __mb = __mb_instance_set_pivot_data;
         if (__mb == 0)
@@ -19784,11 +19786,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_set_transform;
-    public void InstanceSetTransform(Rid instance, Transform3D transform)
+    public static void InstanceSetTransform(Rid instance, Transform3D transform)
     {
         var __mb = __mb_instance_set_transform;
         if (__mb == 0)
@@ -19802,11 +19804,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_attach_object_instance_id;
-    public void InstanceAttachObjectInstanceId(Rid instance, ulong id)
+    public static void InstanceAttachObjectInstanceId(Rid instance, ulong id)
     {
         var __mb = __mb_instance_attach_object_instance_id;
         if (__mb == 0)
@@ -19820,11 +19822,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_set_blend_shape_weight;
-    public void InstanceSetBlendShapeWeight(Rid instance, int shape, float weight)
+    public static void InstanceSetBlendShapeWeight(Rid instance, int shape, float weight)
     {
         var __mb = __mb_instance_set_blend_shape_weight;
         if (__mb == 0)
@@ -19840,11 +19842,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_set_surface_override_material;
-    public void InstanceSetSurfaceOverrideMaterial(Rid instance, int surface, Rid material)
+    public static void InstanceSetSurfaceOverrideMaterial(Rid instance, int surface, Rid material)
     {
         var __mb = __mb_instance_set_surface_override_material;
         if (__mb == 0)
@@ -19860,11 +19862,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_set_visible;
-    public void InstanceSetVisible(Rid instance, bool visible)
+    public static void InstanceSetVisible(Rid instance, bool visible)
     {
         var __mb = __mb_instance_set_visible;
         if (__mb == 0)
@@ -19878,11 +19880,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_geometry_set_transparency;
-    public void InstanceGeometrySetTransparency(Rid instance, float transparency)
+    public static void InstanceGeometrySetTransparency(Rid instance, float transparency)
     {
         var __mb = __mb_instance_geometry_set_transparency;
         if (__mb == 0)
@@ -19896,11 +19898,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_teleport;
-    public void InstanceTeleport(Rid instance)
+    public static void InstanceTeleport(Rid instance)
     {
         var __mb = __mb_instance_teleport;
         if (__mb == 0)
@@ -19912,11 +19914,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __a0 = instance;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_set_custom_aabb;
-    public void InstanceSetCustomAabb(Rid instance, Aabb aabb)
+    public static void InstanceSetCustomAabb(Rid instance, Aabb aabb)
     {
         var __mb = __mb_instance_set_custom_aabb;
         if (__mb == 0)
@@ -19930,11 +19932,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_attach_skeleton;
-    public void InstanceAttachSkeleton(Rid instance, Rid skeleton)
+    public static void InstanceAttachSkeleton(Rid instance, Rid skeleton)
     {
         var __mb = __mb_instance_attach_skeleton;
         if (__mb == 0)
@@ -19948,11 +19950,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_set_extra_visibility_margin;
-    public void InstanceSetExtraVisibilityMargin(Rid instance, float margin)
+    public static void InstanceSetExtraVisibilityMargin(Rid instance, float margin)
     {
         var __mb = __mb_instance_set_extra_visibility_margin;
         if (__mb == 0)
@@ -19966,11 +19968,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_set_visibility_parent;
-    public void InstanceSetVisibilityParent(Rid instance, Rid parent)
+    public static void InstanceSetVisibilityParent(Rid instance, Rid parent)
     {
         var __mb = __mb_instance_set_visibility_parent;
         if (__mb == 0)
@@ -19984,11 +19986,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_set_ignore_culling;
-    public void InstanceSetIgnoreCulling(Rid instance, bool enabled)
+    public static void InstanceSetIgnoreCulling(Rid instance, bool enabled)
     {
         var __mb = __mb_instance_set_ignore_culling;
         if (__mb == 0)
@@ -20002,11 +20004,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_geometry_set_flag;
-    public void InstanceGeometrySetFlag(Rid instance, RenderingServer.InstanceFlags flag, bool enabled)
+    public static void InstanceGeometrySetFlag(Rid instance, RenderingServer.InstanceFlags flag, bool enabled)
     {
         var __mb = __mb_instance_geometry_set_flag;
         if (__mb == 0)
@@ -20022,11 +20024,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_geometry_set_cast_shadows_setting;
-    public void InstanceGeometrySetCastShadowsSetting(Rid instance, RenderingServer.ShadowCastingSetting shadowCastingSetting)
+    public static void InstanceGeometrySetCastShadowsSetting(Rid instance, RenderingServer.ShadowCastingSetting shadowCastingSetting)
     {
         var __mb = __mb_instance_geometry_set_cast_shadows_setting;
         if (__mb == 0)
@@ -20040,11 +20042,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_geometry_set_material_override;
-    public void InstanceGeometrySetMaterialOverride(Rid instance, Rid material)
+    public static void InstanceGeometrySetMaterialOverride(Rid instance, Rid material)
     {
         var __mb = __mb_instance_geometry_set_material_override;
         if (__mb == 0)
@@ -20058,11 +20060,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_geometry_set_material_overlay;
-    public void InstanceGeometrySetMaterialOverlay(Rid instance, Rid material)
+    public static void InstanceGeometrySetMaterialOverlay(Rid instance, Rid material)
     {
         var __mb = __mb_instance_geometry_set_material_overlay;
         if (__mb == 0)
@@ -20076,11 +20078,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_geometry_set_visibility_range;
-    public void InstanceGeometrySetVisibilityRange(Rid instance, float min, float max, float minMargin, float maxMargin, RenderingServer.VisibilityRangeFadeMode fadeMode)
+    public static void InstanceGeometrySetVisibilityRange(Rid instance, float min, float max, float minMargin, float maxMargin, RenderingServer.VisibilityRangeFadeMode fadeMode)
     {
         var __mb = __mb_instance_geometry_set_visibility_range;
         if (__mb == 0)
@@ -20102,11 +20104,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_geometry_set_lightmap;
-    public void InstanceGeometrySetLightmap(Rid instance, Rid lightmap, Rect2 lightmapUvScale, int lightmapSlice)
+    public static void InstanceGeometrySetLightmap(Rid instance, Rid lightmap, Rect2 lightmapUvScale, int lightmapSlice)
     {
         var __mb = __mb_instance_geometry_set_lightmap;
         if (__mb == 0)
@@ -20124,11 +20126,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_geometry_set_lod_bias;
-    public void InstanceGeometrySetLodBias(Rid instance, float lodBias)
+    public static void InstanceGeometrySetLodBias(Rid instance, float lodBias)
     {
         var __mb = __mb_instance_geometry_set_lod_bias;
         if (__mb == 0)
@@ -20142,11 +20144,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_geometry_set_shader_parameter;
-    public void InstanceGeometrySetShaderParameter(Rid instance, string parameter, Variant value)
+    public static void InstanceGeometrySetShaderParameter(Rid instance, string parameter, Variant value)
     {
         var __mb = __mb_instance_geometry_set_shader_parameter;
         if (__mb == 0)
@@ -20162,11 +20164,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_instance_geometry_get_shader_parameter;
-    public Variant InstanceGeometryGetShaderParameter(Rid instance, string parameter)
+    public static Variant InstanceGeometryGetShaderParameter(Rid instance, string parameter)
     {
         var __mb = __mb_instance_geometry_get_shader_parameter;
         if (__mb == 0)
@@ -20181,12 +20183,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_instance_geometry_get_shader_parameter_default_value;
-    public Variant InstanceGeometryGetShaderParameterDefaultValue(Rid instance, string parameter)
+    public static Variant InstanceGeometryGetShaderParameterDefaultValue(Rid instance, string parameter)
     {
         var __mb = __mb_instance_geometry_get_shader_parameter_default_value;
         if (__mb == 0)
@@ -20201,12 +20203,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_instance_geometry_get_shader_parameter_list;
-    public Godot.Collections.Array InstanceGeometryGetShaderParameterList(Rid instance)
+    public static Godot.Collections.Array InstanceGeometryGetShaderParameterList(Rid instance)
     {
         var __mb = __mb_instance_geometry_get_shader_parameter_list;
         if (__mb == 0)
@@ -20219,12 +20221,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_bake_render_uv2;
-    public Godot.Collections.Array BakeRenderUv2(Rid @base, Godot.Collections.Array materialOverrides, Vector2I imageSize)
+    public static Godot.Collections.Array BakeRenderUv2(Rid @base, Godot.Collections.Array materialOverrides, Vector2I imageSize)
     {
         var __mb = __mb_bake_render_uv2;
         if (__mb == 0)
@@ -20241,12 +20243,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_canvas_create;
-    public Rid CanvasCreate()
+    public static Rid CanvasCreate()
     {
         var __mb = __mb_canvas_create;
         if (__mb == 0)
@@ -20256,12 +20258,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_canvas_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_canvas_set_item_mirroring;
-    public void CanvasSetItemMirroring(Rid canvas, Rid item, Vector2 mirroring)
+    public static void CanvasSetItemMirroring(Rid canvas, Rid item, Vector2 mirroring)
     {
         var __mb = __mb_canvas_set_item_mirroring;
         if (__mb == 0)
@@ -20277,11 +20279,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_set_item_repeat;
-    public void CanvasSetItemRepeat(Rid item, Vector2 repeatSize, int repeatTimes)
+    public static void CanvasSetItemRepeat(Rid item, Vector2 repeatSize, int repeatTimes)
     {
         var __mb = __mb_canvas_set_item_repeat;
         if (__mb == 0)
@@ -20297,11 +20299,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_set_modulate;
-    public void CanvasSetModulate(Rid canvas, Color color)
+    public static void CanvasSetModulate(Rid canvas, Color color)
     {
         var __mb = __mb_canvas_set_modulate;
         if (__mb == 0)
@@ -20315,11 +20317,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_set_disable_scale;
-    public void CanvasSetDisableScale(bool disable)
+    public static void CanvasSetDisableScale(bool disable)
     {
         var __mb = __mb_canvas_set_disable_scale;
         if (__mb == 0)
@@ -20331,11 +20333,11 @@ public unsafe partial class RenderingServer : GodotObject
         byte __a0 = disable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_texture_create;
-    public Rid CanvasTextureCreate()
+    public static Rid CanvasTextureCreate()
     {
         var __mb = __mb_canvas_texture_create;
         if (__mb == 0)
@@ -20345,12 +20347,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_canvas_texture_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_canvas_texture_set_channel;
-    public void CanvasTextureSetChannel(Rid canvasTexture, RenderingServer.CanvasTextureChannel channel, Rid texture)
+    public static void CanvasTextureSetChannel(Rid canvasTexture, RenderingServer.CanvasTextureChannel channel, Rid texture)
     {
         var __mb = __mb_canvas_texture_set_channel;
         if (__mb == 0)
@@ -20366,11 +20368,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_texture_set_shading_parameters;
-    public void CanvasTextureSetShadingParameters(Rid canvasTexture, Color baseColor, float shininess)
+    public static void CanvasTextureSetShadingParameters(Rid canvasTexture, Color baseColor, float shininess)
     {
         var __mb = __mb_canvas_texture_set_shading_parameters;
         if (__mb == 0)
@@ -20386,11 +20388,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_texture_set_texture_filter;
-    public void CanvasTextureSetTextureFilter(Rid canvasTexture, RenderingServer.CanvasItemTextureFilter filter)
+    public static void CanvasTextureSetTextureFilter(Rid canvasTexture, RenderingServer.CanvasItemTextureFilter filter)
     {
         var __mb = __mb_canvas_texture_set_texture_filter;
         if (__mb == 0)
@@ -20404,11 +20406,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_texture_set_texture_repeat;
-    public void CanvasTextureSetTextureRepeat(Rid canvasTexture, RenderingServer.CanvasItemTextureRepeat repeat)
+    public static void CanvasTextureSetTextureRepeat(Rid canvasTexture, RenderingServer.CanvasItemTextureRepeat repeat)
     {
         var __mb = __mb_canvas_texture_set_texture_repeat;
         if (__mb == 0)
@@ -20422,11 +20424,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_create;
-    public Rid CanvasItemCreate()
+    public static Rid CanvasItemCreate()
     {
         var __mb = __mb_canvas_item_create;
         if (__mb == 0)
@@ -20436,12 +20438,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_canvas_item_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_canvas_item_set_parent;
-    public void CanvasItemSetParent(Rid item, Rid parent)
+    public static void CanvasItemSetParent(Rid item, Rid parent)
     {
         var __mb = __mb_canvas_item_set_parent;
         if (__mb == 0)
@@ -20455,11 +20457,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_default_texture_filter;
-    public void CanvasItemSetDefaultTextureFilter(Rid item, RenderingServer.CanvasItemTextureFilter filter)
+    public static void CanvasItemSetDefaultTextureFilter(Rid item, RenderingServer.CanvasItemTextureFilter filter)
     {
         var __mb = __mb_canvas_item_set_default_texture_filter;
         if (__mb == 0)
@@ -20473,11 +20475,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_default_texture_repeat;
-    public void CanvasItemSetDefaultTextureRepeat(Rid item, RenderingServer.CanvasItemTextureRepeat repeat)
+    public static void CanvasItemSetDefaultTextureRepeat(Rid item, RenderingServer.CanvasItemTextureRepeat repeat)
     {
         var __mb = __mb_canvas_item_set_default_texture_repeat;
         if (__mb == 0)
@@ -20491,11 +20493,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_visible;
-    public void CanvasItemSetVisible(Rid item, bool visible)
+    public static void CanvasItemSetVisible(Rid item, bool visible)
     {
         var __mb = __mb_canvas_item_set_visible;
         if (__mb == 0)
@@ -20509,11 +20511,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_light_mask;
-    public void CanvasItemSetLightMask(Rid item, int mask)
+    public static void CanvasItemSetLightMask(Rid item, int mask)
     {
         var __mb = __mb_canvas_item_set_light_mask;
         if (__mb == 0)
@@ -20527,11 +20529,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_visibility_layer;
-    public void CanvasItemSetVisibilityLayer(Rid item, uint visibilityLayer)
+    public static void CanvasItemSetVisibilityLayer(Rid item, uint visibilityLayer)
     {
         var __mb = __mb_canvas_item_set_visibility_layer;
         if (__mb == 0)
@@ -20545,11 +20547,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_transform;
-    public void CanvasItemSetTransform(Rid item, Transform2D transform)
+    public static void CanvasItemSetTransform(Rid item, Transform2D transform)
     {
         var __mb = __mb_canvas_item_set_transform;
         if (__mb == 0)
@@ -20563,11 +20565,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_clip;
-    public void CanvasItemSetClip(Rid item, bool clip)
+    public static void CanvasItemSetClip(Rid item, bool clip)
     {
         var __mb = __mb_canvas_item_set_clip;
         if (__mb == 0)
@@ -20581,11 +20583,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_distance_field_mode;
-    public void CanvasItemSetDistanceFieldMode(Rid item, bool enabled)
+    public static void CanvasItemSetDistanceFieldMode(Rid item, bool enabled)
     {
         var __mb = __mb_canvas_item_set_distance_field_mode;
         if (__mb == 0)
@@ -20599,11 +20601,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_custom_rect;
-    public void CanvasItemSetCustomRect(Rid item, bool useCustomRect, Rect2 rect)
+    public static void CanvasItemSetCustomRect(Rid item, bool useCustomRect, Rect2 rect = default)
     {
         var __mb = __mb_canvas_item_set_custom_rect;
         if (__mb == 0)
@@ -20619,11 +20621,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_modulate;
-    public void CanvasItemSetModulate(Rid item, Color color)
+    public static void CanvasItemSetModulate(Rid item, Color color)
     {
         var __mb = __mb_canvas_item_set_modulate;
         if (__mb == 0)
@@ -20637,11 +20639,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_self_modulate;
-    public void CanvasItemSetSelfModulate(Rid item, Color color)
+    public static void CanvasItemSetSelfModulate(Rid item, Color color)
     {
         var __mb = __mb_canvas_item_set_self_modulate;
         if (__mb == 0)
@@ -20655,11 +20657,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_draw_behind_parent;
-    public void CanvasItemSetDrawBehindParent(Rid item, bool enabled)
+    public static void CanvasItemSetDrawBehindParent(Rid item, bool enabled)
     {
         var __mb = __mb_canvas_item_set_draw_behind_parent;
         if (__mb == 0)
@@ -20673,11 +20675,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_interpolated;
-    public void CanvasItemSetInterpolated(Rid item, bool interpolated)
+    public static void CanvasItemSetInterpolated(Rid item, bool interpolated)
     {
         var __mb = __mb_canvas_item_set_interpolated;
         if (__mb == 0)
@@ -20691,11 +20693,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_reset_physics_interpolation;
-    public void CanvasItemResetPhysicsInterpolation(Rid item)
+    public static void CanvasItemResetPhysicsInterpolation(Rid item)
     {
         var __mb = __mb_canvas_item_reset_physics_interpolation;
         if (__mb == 0)
@@ -20707,11 +20709,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __a0 = item;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_transform_physics_interpolation;
-    public void CanvasItemTransformPhysicsInterpolation(Rid item, Transform2D transform)
+    public static void CanvasItemTransformPhysicsInterpolation(Rid item, Transform2D transform)
     {
         var __mb = __mb_canvas_item_transform_physics_interpolation;
         if (__mb == 0)
@@ -20725,11 +20727,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_add_line;
-    public void CanvasItemAddLine(Rid item, Vector2 from, Vector2 to, Color color, float width, bool antialiased)
+    public static void CanvasItemAddLine(Rid item, Vector2 from, Vector2 to, Color color, float width = -1.0f, bool antialiased = false)
     {
         var __mb = __mb_canvas_item_add_line;
         if (__mb == 0)
@@ -20751,11 +20753,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_add_rect;
-    public void CanvasItemAddRect(Rid item, Rect2 rect, Color color, bool antialiased)
+    public static void CanvasItemAddRect(Rid item, Rect2 rect, Color color, bool antialiased = false)
     {
         var __mb = __mb_canvas_item_add_rect;
         if (__mb == 0)
@@ -20773,11 +20775,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_add_circle;
-    public void CanvasItemAddCircle(Rid item, Vector2 pos, float radius, Color color, bool antialiased)
+    public static void CanvasItemAddCircle(Rid item, Vector2 pos, float radius, Color color, bool antialiased = false)
     {
         var __mb = __mb_canvas_item_add_circle;
         if (__mb == 0)
@@ -20797,11 +20799,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_add_ellipse;
-    public void CanvasItemAddEllipse(Rid item, Vector2 pos, float major, float minor, Color color, bool antialiased)
+    public static void CanvasItemAddEllipse(Rid item, Vector2 pos, float major, float minor, Color color, bool antialiased = false)
     {
         var __mb = __mb_canvas_item_add_ellipse;
         if (__mb == 0)
@@ -20823,11 +20825,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_add_texture_rect;
-    public void CanvasItemAddTextureRect(Rid item, Rect2 rect, Rid texture, bool tile, Color modulate, bool transpose)
+    public static void CanvasItemAddTextureRect(Rid item, Rect2 rect, Rid texture, bool tile, Color modulate, bool transpose = false)
     {
         var __mb = __mb_canvas_item_add_texture_rect;
         if (__mb == 0)
@@ -20849,11 +20851,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_add_msdf_texture_rect_region;
-    public void CanvasItemAddMsdfTextureRectRegion(Rid item, Rect2 rect, Rid texture, Rect2 srcRect, Color modulate, int outlineSize, float pxRange, float scale)
+    public static void CanvasItemAddMsdfTextureRectRegion(Rid item, Rect2 rect, Rid texture, Rect2 srcRect, Color modulate, int outlineSize = unchecked((int)(0)), float pxRange = 1.0f, float scale = 1.0f)
     {
         var __mb = __mb_canvas_item_add_msdf_texture_rect_region;
         if (__mb == 0)
@@ -20879,11 +20881,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[5] = (nint)(&__a5);
         __args[6] = (nint)(&__a6);
         __args[7] = (nint)(&__a7);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_add_lcd_texture_rect_region;
-    public void CanvasItemAddLcdTextureRectRegion(Rid item, Rect2 rect, Rid texture, Rect2 srcRect, Color modulate)
+    public static void CanvasItemAddLcdTextureRectRegion(Rid item, Rect2 rect, Rid texture, Rect2 srcRect, Color modulate)
     {
         var __mb = __mb_canvas_item_add_lcd_texture_rect_region;
         if (__mb == 0)
@@ -20903,11 +20905,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_add_texture_rect_region;
-    public void CanvasItemAddTextureRectRegion(Rid item, Rect2 rect, Rid texture, Rect2 srcRect, Color modulate, bool transpose, bool clipUv)
+    public static void CanvasItemAddTextureRectRegion(Rid item, Rect2 rect, Rid texture, Rect2 srcRect, Color modulate, bool transpose = false, bool clipUv = true)
     {
         var __mb = __mb_canvas_item_add_texture_rect_region;
         if (__mb == 0)
@@ -20931,11 +20933,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
         __args[6] = (nint)(&__a6);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_add_nine_patch;
-    public void CanvasItemAddNinePatch(Rid item, Rect2 rect, Rect2 source, Rid texture, Vector2 topleft, Vector2 bottomright, RenderingServer.NinePatchAxisMode xAxisMode, RenderingServer.NinePatchAxisMode yAxisMode, bool drawCenter, Color modulate)
+    public static void CanvasItemAddNinePatch(Rid item, Rect2 rect, Rect2 source, Rid texture, Vector2 topleft, Vector2 bottomright, RenderingServer.NinePatchAxisMode xAxisMode, RenderingServer.NinePatchAxisMode yAxisMode, bool drawCenter, Color modulate)
     {
         var __mb = __mb_canvas_item_add_nine_patch;
         if (__mb == 0)
@@ -20965,11 +20967,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[7] = (nint)(&__a7);
         __args[8] = (nint)(&__a8);
         __args[9] = (nint)(&__a9);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_add_mesh;
-    public void CanvasItemAddMesh(Rid item, Rid mesh, Transform2D transform, Color modulate, Rid texture)
+    public static void CanvasItemAddMesh(Rid item, Rid mesh, Transform2D transform, Color modulate, Rid texture = default)
     {
         var __mb = __mb_canvas_item_add_mesh;
         if (__mb == 0)
@@ -20989,11 +20991,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_add_multimesh;
-    public void CanvasItemAddMultimesh(Rid item, Rid mesh, Rid texture)
+    public static void CanvasItemAddMultimesh(Rid item, Rid mesh, Rid texture = default)
     {
         var __mb = __mb_canvas_item_add_multimesh;
         if (__mb == 0)
@@ -21009,11 +21011,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_add_particles;
-    public void CanvasItemAddParticles(Rid item, Rid particles, Rid texture)
+    public static void CanvasItemAddParticles(Rid item, Rid particles, Rid texture)
     {
         var __mb = __mb_canvas_item_add_particles;
         if (__mb == 0)
@@ -21029,11 +21031,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_add_set_transform;
-    public void CanvasItemAddSetTransform(Rid item, Transform2D transform)
+    public static void CanvasItemAddSetTransform(Rid item, Transform2D transform)
     {
         var __mb = __mb_canvas_item_add_set_transform;
         if (__mb == 0)
@@ -21047,11 +21049,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_add_clip_ignore;
-    public void CanvasItemAddClipIgnore(Rid item, bool ignore)
+    public static void CanvasItemAddClipIgnore(Rid item, bool ignore)
     {
         var __mb = __mb_canvas_item_add_clip_ignore;
         if (__mb == 0)
@@ -21065,11 +21067,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_add_animation_slice;
-    public void CanvasItemAddAnimationSlice(Rid item, double animationLength, double sliceBegin, double sliceEnd, double offset)
+    public static void CanvasItemAddAnimationSlice(Rid item, double animationLength, double sliceBegin, double sliceEnd, double offset = 0.0)
     {
         var __mb = __mb_canvas_item_add_animation_slice;
         if (__mb == 0)
@@ -21089,11 +21091,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_sort_children_by_y;
-    public void CanvasItemSetSortChildrenByY(Rid item, bool enabled)
+    public static void CanvasItemSetSortChildrenByY(Rid item, bool enabled)
     {
         var __mb = __mb_canvas_item_set_sort_children_by_y;
         if (__mb == 0)
@@ -21107,11 +21109,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_z_index;
-    public void CanvasItemSetZIndex(Rid item, int zIndex)
+    public static void CanvasItemSetZIndex(Rid item, int zIndex)
     {
         var __mb = __mb_canvas_item_set_z_index;
         if (__mb == 0)
@@ -21125,11 +21127,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_z_as_relative_to_parent;
-    public void CanvasItemSetZAsRelativeToParent(Rid item, bool enabled)
+    public static void CanvasItemSetZAsRelativeToParent(Rid item, bool enabled)
     {
         var __mb = __mb_canvas_item_set_z_as_relative_to_parent;
         if (__mb == 0)
@@ -21143,11 +21145,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_copy_to_backbuffer;
-    public void CanvasItemSetCopyToBackbuffer(Rid item, bool enabled, Rect2 rect)
+    public static void CanvasItemSetCopyToBackbuffer(Rid item, bool enabled, Rect2 rect)
     {
         var __mb = __mb_canvas_item_set_copy_to_backbuffer;
         if (__mb == 0)
@@ -21163,11 +21165,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_attach_skeleton;
-    public void CanvasItemAttachSkeleton(Rid item, Rid skeleton)
+    public static void CanvasItemAttachSkeleton(Rid item, Rid skeleton)
     {
         var __mb = __mb_canvas_item_attach_skeleton;
         if (__mb == 0)
@@ -21181,11 +21183,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_clear;
-    public void CanvasItemClear(Rid item)
+    public static void CanvasItemClear(Rid item)
     {
         var __mb = __mb_canvas_item_clear;
         if (__mb == 0)
@@ -21197,11 +21199,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __a0 = item;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_draw_index;
-    public void CanvasItemSetDrawIndex(Rid item, int index)
+    public static void CanvasItemSetDrawIndex(Rid item, int index)
     {
         var __mb = __mb_canvas_item_set_draw_index;
         if (__mb == 0)
@@ -21215,11 +21217,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_material;
-    public void CanvasItemSetMaterial(Rid item, Rid material)
+    public static void CanvasItemSetMaterial(Rid item, Rid material)
     {
         var __mb = __mb_canvas_item_set_material;
         if (__mb == 0)
@@ -21233,11 +21235,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_use_parent_material;
-    public void CanvasItemSetUseParentMaterial(Rid item, bool enabled)
+    public static void CanvasItemSetUseParentMaterial(Rid item, bool enabled)
     {
         var __mb = __mb_canvas_item_set_use_parent_material;
         if (__mb == 0)
@@ -21251,11 +21253,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_set_instance_shader_parameter;
-    public void CanvasItemSetInstanceShaderParameter(Rid instance, string parameter, Variant value)
+    public static void CanvasItemSetInstanceShaderParameter(Rid instance, string parameter, Variant value)
     {
         var __mb = __mb_canvas_item_set_instance_shader_parameter;
         if (__mb == 0)
@@ -21271,11 +21273,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_item_get_instance_shader_parameter;
-    public Variant CanvasItemGetInstanceShaderParameter(Rid instance, string parameter)
+    public static Variant CanvasItemGetInstanceShaderParameter(Rid instance, string parameter)
     {
         var __mb = __mb_canvas_item_get_instance_shader_parameter;
         if (__mb == 0)
@@ -21290,12 +21292,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_canvas_item_get_instance_shader_parameter_default_value;
-    public Variant CanvasItemGetInstanceShaderParameterDefaultValue(Rid instance, string parameter)
+    public static Variant CanvasItemGetInstanceShaderParameterDefaultValue(Rid instance, string parameter)
     {
         var __mb = __mb_canvas_item_get_instance_shader_parameter_default_value;
         if (__mb == 0)
@@ -21310,12 +21312,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_canvas_item_get_instance_shader_parameter_list;
-    public Godot.Collections.Array CanvasItemGetInstanceShaderParameterList(Rid instance)
+    public static Godot.Collections.Array CanvasItemGetInstanceShaderParameterList(Rid instance)
     {
         var __mb = __mb_canvas_item_get_instance_shader_parameter_list;
         if (__mb == 0)
@@ -21328,12 +21330,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_canvas_item_set_canvas_group_mode;
-    public void CanvasItemSetCanvasGroupMode(Rid item, RenderingServer.CanvasGroupMode mode, float clearMargin, bool fitEmpty, float fitMargin, bool blurMipmaps)
+    public static void CanvasItemSetCanvasGroupMode(Rid item, RenderingServer.CanvasGroupMode mode, float clearMargin = 5.0f, bool fitEmpty = false, float fitMargin = 0.0f, bool blurMipmaps = false)
     {
         var __mb = __mb_canvas_item_set_canvas_group_mode;
         if (__mb == 0)
@@ -21355,11 +21357,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_debug_canvas_item_get_rect;
-    public Rect2 DebugCanvasItemGetRect(Rid item)
+    public static Rect2 DebugCanvasItemGetRect(Rid item)
     {
         var __mb = __mb_debug_canvas_item_get_rect;
         if (__mb == 0)
@@ -21372,12 +21374,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rect2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_canvas_light_create;
-    public Rid CanvasLightCreate()
+    public static Rid CanvasLightCreate()
     {
         var __mb = __mb_canvas_light_create;
         if (__mb == 0)
@@ -21387,12 +21389,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_canvas_light_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_canvas_light_attach_to_canvas;
-    public void CanvasLightAttachToCanvas(Rid light, Rid canvas)
+    public static void CanvasLightAttachToCanvas(Rid light, Rid canvas)
     {
         var __mb = __mb_canvas_light_attach_to_canvas;
         if (__mb == 0)
@@ -21406,11 +21408,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_enabled;
-    public void CanvasLightSetEnabled(Rid light, bool enabled)
+    public static void CanvasLightSetEnabled(Rid light, bool enabled)
     {
         var __mb = __mb_canvas_light_set_enabled;
         if (__mb == 0)
@@ -21424,11 +21426,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_texture_scale;
-    public void CanvasLightSetTextureScale(Rid light, float scale)
+    public static void CanvasLightSetTextureScale(Rid light, float scale)
     {
         var __mb = __mb_canvas_light_set_texture_scale;
         if (__mb == 0)
@@ -21442,11 +21444,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_transform;
-    public void CanvasLightSetTransform(Rid light, Transform2D transform)
+    public static void CanvasLightSetTransform(Rid light, Transform2D transform)
     {
         var __mb = __mb_canvas_light_set_transform;
         if (__mb == 0)
@@ -21460,11 +21462,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_texture;
-    public void CanvasLightSetTexture(Rid light, Rid texture)
+    public static void CanvasLightSetTexture(Rid light, Rid texture)
     {
         var __mb = __mb_canvas_light_set_texture;
         if (__mb == 0)
@@ -21478,11 +21480,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_texture_offset;
-    public void CanvasLightSetTextureOffset(Rid light, Vector2 offset)
+    public static void CanvasLightSetTextureOffset(Rid light, Vector2 offset)
     {
         var __mb = __mb_canvas_light_set_texture_offset;
         if (__mb == 0)
@@ -21496,11 +21498,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_color;
-    public void CanvasLightSetColor(Rid light, Color color)
+    public static void CanvasLightSetColor(Rid light, Color color)
     {
         var __mb = __mb_canvas_light_set_color;
         if (__mb == 0)
@@ -21514,11 +21516,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_height;
-    public void CanvasLightSetHeight(Rid light, float height)
+    public static void CanvasLightSetHeight(Rid light, float height)
     {
         var __mb = __mb_canvas_light_set_height;
         if (__mb == 0)
@@ -21532,11 +21534,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_energy;
-    public void CanvasLightSetEnergy(Rid light, float energy)
+    public static void CanvasLightSetEnergy(Rid light, float energy)
     {
         var __mb = __mb_canvas_light_set_energy;
         if (__mb == 0)
@@ -21550,11 +21552,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_z_range;
-    public void CanvasLightSetZRange(Rid light, int minZ, int maxZ)
+    public static void CanvasLightSetZRange(Rid light, int minZ, int maxZ)
     {
         var __mb = __mb_canvas_light_set_z_range;
         if (__mb == 0)
@@ -21570,11 +21572,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_layer_range;
-    public void CanvasLightSetLayerRange(Rid light, int minLayer, int maxLayer)
+    public static void CanvasLightSetLayerRange(Rid light, int minLayer, int maxLayer)
     {
         var __mb = __mb_canvas_light_set_layer_range;
         if (__mb == 0)
@@ -21590,11 +21592,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_item_cull_mask;
-    public void CanvasLightSetItemCullMask(Rid light, int mask)
+    public static void CanvasLightSetItemCullMask(Rid light, int mask)
     {
         var __mb = __mb_canvas_light_set_item_cull_mask;
         if (__mb == 0)
@@ -21608,11 +21610,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_item_shadow_cull_mask;
-    public void CanvasLightSetItemShadowCullMask(Rid light, int mask)
+    public static void CanvasLightSetItemShadowCullMask(Rid light, int mask)
     {
         var __mb = __mb_canvas_light_set_item_shadow_cull_mask;
         if (__mb == 0)
@@ -21626,11 +21628,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_mode;
-    public void CanvasLightSetMode(Rid light, RenderingServer.CanvasLightMode mode)
+    public static void CanvasLightSetMode(Rid light, RenderingServer.CanvasLightMode mode)
     {
         var __mb = __mb_canvas_light_set_mode;
         if (__mb == 0)
@@ -21644,11 +21646,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_shadow_enabled;
-    public void CanvasLightSetShadowEnabled(Rid light, bool enabled)
+    public static void CanvasLightSetShadowEnabled(Rid light, bool enabled)
     {
         var __mb = __mb_canvas_light_set_shadow_enabled;
         if (__mb == 0)
@@ -21662,11 +21664,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_shadow_filter;
-    public void CanvasLightSetShadowFilter(Rid light, RenderingServer.CanvasLightShadowFilter filter)
+    public static void CanvasLightSetShadowFilter(Rid light, RenderingServer.CanvasLightShadowFilter filter)
     {
         var __mb = __mb_canvas_light_set_shadow_filter;
         if (__mb == 0)
@@ -21680,11 +21682,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_shadow_color;
-    public void CanvasLightSetShadowColor(Rid light, Color color)
+    public static void CanvasLightSetShadowColor(Rid light, Color color)
     {
         var __mb = __mb_canvas_light_set_shadow_color;
         if (__mb == 0)
@@ -21698,11 +21700,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_shadow_smooth;
-    public void CanvasLightSetShadowSmooth(Rid light, float smooth)
+    public static void CanvasLightSetShadowSmooth(Rid light, float smooth)
     {
         var __mb = __mb_canvas_light_set_shadow_smooth;
         if (__mb == 0)
@@ -21716,11 +21718,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_blend_mode;
-    public void CanvasLightSetBlendMode(Rid light, RenderingServer.CanvasLightBlendMode mode)
+    public static void CanvasLightSetBlendMode(Rid light, RenderingServer.CanvasLightBlendMode mode)
     {
         var __mb = __mb_canvas_light_set_blend_mode;
         if (__mb == 0)
@@ -21734,11 +21736,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_set_interpolated;
-    public void CanvasLightSetInterpolated(Rid light, bool interpolated)
+    public static void CanvasLightSetInterpolated(Rid light, bool interpolated)
     {
         var __mb = __mb_canvas_light_set_interpolated;
         if (__mb == 0)
@@ -21752,11 +21754,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_reset_physics_interpolation;
-    public void CanvasLightResetPhysicsInterpolation(Rid light)
+    public static void CanvasLightResetPhysicsInterpolation(Rid light)
     {
         var __mb = __mb_canvas_light_reset_physics_interpolation;
         if (__mb == 0)
@@ -21768,11 +21770,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __a0 = light;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_transform_physics_interpolation;
-    public void CanvasLightTransformPhysicsInterpolation(Rid light, Transform2D transform)
+    public static void CanvasLightTransformPhysicsInterpolation(Rid light, Transform2D transform)
     {
         var __mb = __mb_canvas_light_transform_physics_interpolation;
         if (__mb == 0)
@@ -21786,11 +21788,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_occluder_create;
-    public Rid CanvasLightOccluderCreate()
+    public static Rid CanvasLightOccluderCreate()
     {
         var __mb = __mb_canvas_light_occluder_create;
         if (__mb == 0)
@@ -21800,12 +21802,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_canvas_light_occluder_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_canvas_light_occluder_attach_to_canvas;
-    public void CanvasLightOccluderAttachToCanvas(Rid occluder, Rid canvas)
+    public static void CanvasLightOccluderAttachToCanvas(Rid occluder, Rid canvas)
     {
         var __mb = __mb_canvas_light_occluder_attach_to_canvas;
         if (__mb == 0)
@@ -21819,11 +21821,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_occluder_set_enabled;
-    public void CanvasLightOccluderSetEnabled(Rid occluder, bool enabled)
+    public static void CanvasLightOccluderSetEnabled(Rid occluder, bool enabled)
     {
         var __mb = __mb_canvas_light_occluder_set_enabled;
         if (__mb == 0)
@@ -21837,11 +21839,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_occluder_set_polygon;
-    public void CanvasLightOccluderSetPolygon(Rid occluder, Rid polygon)
+    public static void CanvasLightOccluderSetPolygon(Rid occluder, Rid polygon)
     {
         var __mb = __mb_canvas_light_occluder_set_polygon;
         if (__mb == 0)
@@ -21855,11 +21857,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_occluder_set_as_sdf_collision;
-    public void CanvasLightOccluderSetAsSdfCollision(Rid occluder, bool enable)
+    public static void CanvasLightOccluderSetAsSdfCollision(Rid occluder, bool enable)
     {
         var __mb = __mb_canvas_light_occluder_set_as_sdf_collision;
         if (__mb == 0)
@@ -21873,11 +21875,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_occluder_set_transform;
-    public void CanvasLightOccluderSetTransform(Rid occluder, Transform2D transform)
+    public static void CanvasLightOccluderSetTransform(Rid occluder, Transform2D transform)
     {
         var __mb = __mb_canvas_light_occluder_set_transform;
         if (__mb == 0)
@@ -21891,11 +21893,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_occluder_set_light_mask;
-    public void CanvasLightOccluderSetLightMask(Rid occluder, int mask)
+    public static void CanvasLightOccluderSetLightMask(Rid occluder, int mask)
     {
         var __mb = __mb_canvas_light_occluder_set_light_mask;
         if (__mb == 0)
@@ -21909,11 +21911,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_occluder_set_interpolated;
-    public void CanvasLightOccluderSetInterpolated(Rid occluder, bool interpolated)
+    public static void CanvasLightOccluderSetInterpolated(Rid occluder, bool interpolated)
     {
         var __mb = __mb_canvas_light_occluder_set_interpolated;
         if (__mb == 0)
@@ -21927,11 +21929,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_occluder_reset_physics_interpolation;
-    public void CanvasLightOccluderResetPhysicsInterpolation(Rid occluder)
+    public static void CanvasLightOccluderResetPhysicsInterpolation(Rid occluder)
     {
         var __mb = __mb_canvas_light_occluder_reset_physics_interpolation;
         if (__mb == 0)
@@ -21943,11 +21945,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __a0 = occluder;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_light_occluder_transform_physics_interpolation;
-    public void CanvasLightOccluderTransformPhysicsInterpolation(Rid occluder, Transform2D transform)
+    public static void CanvasLightOccluderTransformPhysicsInterpolation(Rid occluder, Transform2D transform)
     {
         var __mb = __mb_canvas_light_occluder_transform_physics_interpolation;
         if (__mb == 0)
@@ -21961,11 +21963,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_occluder_polygon_create;
-    public Rid CanvasOccluderPolygonCreate()
+    public static Rid CanvasOccluderPolygonCreate()
     {
         var __mb = __mb_canvas_occluder_polygon_create;
         if (__mb == 0)
@@ -21975,12 +21977,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_canvas_occluder_polygon_create = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_canvas_occluder_polygon_set_cull_mode;
-    public void CanvasOccluderPolygonSetCullMode(Rid occluderPolygon, RenderingServer.CanvasOccluderPolygonCullMode mode)
+    public static void CanvasOccluderPolygonSetCullMode(Rid occluderPolygon, RenderingServer.CanvasOccluderPolygonCullMode mode)
     {
         var __mb = __mb_canvas_occluder_polygon_set_cull_mode;
         if (__mb == 0)
@@ -21994,11 +21996,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_canvas_set_shadow_texture_size;
-    public void CanvasSetShadowTextureSize(int size)
+    public static void CanvasSetShadowTextureSize(int size)
     {
         var __mb = __mb_canvas_set_shadow_texture_size;
         if (__mb == 0)
@@ -22010,11 +22012,11 @@ public unsafe partial class RenderingServer : GodotObject
         long __a0 = unchecked((long)size);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_global_shader_parameter_add;
-    public void GlobalShaderParameterAdd(string name, RenderingServer.GlobalShaderParameterType type, Variant defaultValue)
+    public static void GlobalShaderParameterAdd(string name, RenderingServer.GlobalShaderParameterType type, Variant defaultValue)
     {
         var __mb = __mb_global_shader_parameter_add;
         if (__mb == 0)
@@ -22030,11 +22032,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_global_shader_parameter_remove;
-    public void GlobalShaderParameterRemove(string name)
+    public static void GlobalShaderParameterRemove(string name)
     {
         var __mb = __mb_global_shader_parameter_remove;
         if (__mb == 0)
@@ -22046,11 +22048,11 @@ public unsafe partial class RenderingServer : GodotObject
         ulong __a0 = StringNames.Get(name).Opaque;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_global_shader_parameter_get_list;
-    public Godot.Collections.Array GlobalShaderParameterGetList()
+    public static Godot.Collections.Array GlobalShaderParameterGetList()
     {
         var __mb = __mb_global_shader_parameter_get_list;
         if (__mb == 0)
@@ -22060,12 +22062,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_global_shader_parameter_get_list = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_global_shader_parameter_set;
-    public void GlobalShaderParameterSet(string name, Variant value)
+    public static void GlobalShaderParameterSet(string name, Variant value)
     {
         var __mb = __mb_global_shader_parameter_set;
         if (__mb == 0)
@@ -22079,11 +22081,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_global_shader_parameter_set_override;
-    public void GlobalShaderParameterSetOverride(string name, Variant value)
+    public static void GlobalShaderParameterSetOverride(string name, Variant value)
     {
         var __mb = __mb_global_shader_parameter_set_override;
         if (__mb == 0)
@@ -22097,11 +22099,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_global_shader_parameter_get;
-    public Variant GlobalShaderParameterGet(string name)
+    public static Variant GlobalShaderParameterGet(string name)
     {
         var __mb = __mb_global_shader_parameter_get;
         if (__mb == 0)
@@ -22114,12 +22116,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_global_shader_parameter_get_type;
-    public RenderingServer.GlobalShaderParameterType GlobalShaderParameterGetType(string name)
+    public static RenderingServer.GlobalShaderParameterType GlobalShaderParameterGetType(string name)
     {
         var __mb = __mb_global_shader_parameter_get_type;
         if (__mb == 0)
@@ -22132,12 +22134,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (RenderingServer.GlobalShaderParameterType)__ret;
     }
 
     private static nint __mb_free_rid;
-    public void FreeRid(Rid rid)
+    public static void FreeRid(Rid rid)
     {
         var __mb = __mb_free_rid;
         if (__mb == 0)
@@ -22149,11 +22151,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __a0 = rid;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_changed;
-    public bool HasChanged()
+    public static bool HasChanged()
     {
         var __mb = __mb_has_changed;
         if (__mb == 0)
@@ -22163,12 +22165,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_has_changed = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_rendering_info;
-    public ulong GetRenderingInfo(RenderingServer.RenderingInfo info)
+    public static ulong GetRenderingInfo(RenderingServer.RenderingInfo info)
     {
         var __mb = __mb_get_rendering_info;
         if (__mb == 0)
@@ -22181,12 +22183,12 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_video_adapter_name;
-    public string GetVideoAdapterName()
+    public static string GetVideoAdapterName()
     {
         var __mb = __mb_get_video_adapter_name;
         if (__mb == 0)
@@ -22196,12 +22198,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_get_video_adapter_name = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_video_adapter_vendor;
-    public string GetVideoAdapterVendor()
+    public static string GetVideoAdapterVendor()
     {
         var __mb = __mb_get_video_adapter_vendor;
         if (__mb == 0)
@@ -22211,12 +22213,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_get_video_adapter_vendor = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_video_adapter_type;
-    public RenderingDevice.DeviceType GetVideoAdapterType()
+    public static RenderingDevice.DeviceType GetVideoAdapterType()
     {
         var __mb = __mb_get_video_adapter_type;
         if (__mb == 0)
@@ -22226,12 +22228,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_get_video_adapter_type = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (RenderingDevice.DeviceType)__ret;
     }
 
     private static nint __mb_get_video_adapter_api_version;
-    public string GetVideoAdapterApiVersion()
+    public static string GetVideoAdapterApiVersion()
     {
         var __mb = __mb_get_video_adapter_api_version;
         if (__mb == 0)
@@ -22241,12 +22243,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_get_video_adapter_api_version = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_current_rendering_driver_name;
-    public string GetCurrentRenderingDriverName()
+    public static string GetCurrentRenderingDriverName()
     {
         var __mb = __mb_get_current_rendering_driver_name;
         if (__mb == 0)
@@ -22256,12 +22258,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_get_current_rendering_driver_name = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_current_rendering_method;
-    public string GetCurrentRenderingMethod()
+    public static string GetCurrentRenderingMethod()
     {
         var __mb = __mb_get_current_rendering_method;
         if (__mb == 0)
@@ -22271,12 +22273,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_get_current_rendering_method = __mb;
         }
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_make_sphere_mesh;
-    public Rid MakeSphereMesh(int latitudes, int longitudes, float radius)
+    public static Rid MakeSphereMesh(int latitudes, int longitudes, float radius)
     {
         var __mb = __mb_make_sphere_mesh;
         if (__mb == 0)
@@ -22293,12 +22295,12 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_test_cube;
-    public Rid GetTestCube()
+    public static Rid GetTestCube()
     {
         var __mb = __mb_get_test_cube;
         if (__mb == 0)
@@ -22308,12 +22310,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_get_test_cube = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_test_texture;
-    public Rid GetTestTexture()
+    public static Rid GetTestTexture()
     {
         var __mb = __mb_get_test_texture;
         if (__mb == 0)
@@ -22323,12 +22325,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_get_test_texture = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_white_texture;
-    public Rid GetWhiteTexture()
+    public static Rid GetWhiteTexture()
     {
         var __mb = __mb_get_white_texture;
         if (__mb == 0)
@@ -22338,12 +22340,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_get_white_texture = __mb;
         }
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_boot_image_with_stretch;
-    public void SetBootImageWithStretch(Image? image, Color color, RenderingServer.SplashStretchMode stretchMode, bool useFilter)
+    public static void SetBootImageWithStretch(Image? image, Color color, RenderingServer.SplashStretchMode stretchMode, bool useFilter = true)
     {
         var __mb = __mb_set_boot_image_with_stretch;
         if (__mb == 0)
@@ -22361,11 +22363,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_boot_image;
-    public void SetBootImage(Image? image, Color color, bool scale, bool useFilter)
+    public static void SetBootImage(Image? image, Color color, bool scale, bool useFilter = true)
     {
         var __mb = __mb_set_boot_image;
         if (__mb == 0)
@@ -22383,11 +22385,11 @@ public unsafe partial class RenderingServer : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_default_clear_color;
-    public Color GetDefaultClearColor()
+    public static Color GetDefaultClearColor()
     {
         var __mb = __mb_get_default_clear_color;
         if (__mb == 0)
@@ -22397,12 +22399,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_get_default_clear_color = __mb;
         }
         var __ret = default(Color);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_default_clear_color;
-    public void SetDefaultClearColor(Color color)
+    public static void SetDefaultClearColor(Color color)
     {
         var __mb = __mb_set_default_clear_color;
         if (__mb == 0)
@@ -22414,11 +22416,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __a0 = color;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_os_feature;
-    public bool HasOsFeature(string feature)
+    public static bool HasOsFeature(string feature)
     {
         var __mb = __mb_has_os_feature;
         if (__mb == 0)
@@ -22431,13 +22433,13 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
 
     private static nint __mb_set_debug_generate_wireframes;
-    public void SetDebugGenerateWireframes(bool generate)
+    public static void SetDebugGenerateWireframes(bool generate)
     {
         var __mb = __mb_set_debug_generate_wireframes;
         if (__mb == 0)
@@ -22449,11 +22451,11 @@ public unsafe partial class RenderingServer : GodotObject
         byte __a0 = generate ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_render_loop_enabled;
-    internal bool IsRenderLoopEnabled()
+    internal static bool IsRenderLoopEnabled()
     {
         var __mb = __mb_is_render_loop_enabled;
         if (__mb == 0)
@@ -22463,12 +22465,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_is_render_loop_enabled = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_render_loop_enabled;
-    internal void SetRenderLoopEnabled(bool enabled)
+    internal static void SetRenderLoopEnabled(bool enabled)
     {
         var __mb = __mb_set_render_loop_enabled;
         if (__mb == 0)
@@ -22480,11 +22482,11 @@ public unsafe partial class RenderingServer : GodotObject
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_frame_setup_time_cpu;
-    public double GetFrameSetupTimeCpu()
+    public static double GetFrameSetupTimeCpu()
     {
         var __mb = __mb_get_frame_setup_time_cpu;
         if (__mb == 0)
@@ -22494,12 +22496,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_get_frame_setup_time_cpu = __mb;
         }
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (double)__ret;
     }
 
     private static nint __mb_force_sync;
-    public void ForceSync()
+    public static void ForceSync()
     {
         var __mb = __mb_force_sync;
         if (__mb == 0)
@@ -22508,11 +22510,11 @@ public unsafe partial class RenderingServer : GodotObject
             if (__mb == 0) throw new MissingMethodException("RenderingServer.force_sync is not available in this engine build.");
             __mb_force_sync = __mb;
         }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_force_draw;
-    public void ForceDraw(bool swapBuffers, double frameStep)
+    public static void ForceDraw(bool swapBuffers = true, double frameStep = 0.0)
     {
         var __mb = __mb_force_draw;
         if (__mb == 0)
@@ -22526,11 +22528,11 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_rendering_device;
-    public RenderingDevice? GetRenderingDevice()
+    public static RenderingDevice? GetRenderingDevice()
     {
         var __mb = __mb_get_rendering_device;
         if (__mb == 0)
@@ -22540,12 +22542,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_get_rendering_device = __mb;
         }
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (RenderingDevice?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
     private static nint __mb_create_local_rendering_device;
-    public RenderingDevice? CreateLocalRenderingDevice()
+    public static RenderingDevice? CreateLocalRenderingDevice()
     {
         var __mb = __mb_create_local_rendering_device;
         if (__mb == 0)
@@ -22555,12 +22557,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_create_local_rendering_device = __mb;
         }
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (RenderingDevice?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
     private static nint __mb_is_on_render_thread;
-    public bool IsOnRenderThread()
+    public static bool IsOnRenderThread()
     {
         var __mb = __mb_is_on_render_thread;
         if (__mb == 0)
@@ -22570,12 +22572,12 @@ public unsafe partial class RenderingServer : GodotObject
             __mb_is_on_render_thread = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_feature;
-    public bool HasFeature(RenderingServer.Features feature)
+    public static bool HasFeature(RenderingServer.Features feature)
     {
         var __mb = __mb_has_feature;
         if (__mb == 0)
@@ -22588,7 +22590,7 @@ public unsafe partial class RenderingServer : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 }
@@ -22604,9 +22606,9 @@ public unsafe partial class Resource : RefCounted
 
     public enum DeepDuplicateMode : long
     {
-        DEEP_DUPLICATE_NONE = 0,
-        DEEP_DUPLICATE_INTERNAL = 1,
-        DEEP_DUPLICATE_ALL = 2,
+        None = 0,
+        Internal = 1,
+        All = 2,
     }
 
     public bool ResourceLocalToScene
@@ -22933,7 +22935,7 @@ public unsafe partial class Resource : RefCounted
     }
 
     private static nint __mb_duplicate;
-    public Resource? Duplicate(bool deep)
+    public Resource? Duplicate(bool deep = false)
     {
         var __mb = __mb_duplicate;
         if (__mb == 0)
@@ -22951,7 +22953,7 @@ public unsafe partial class Resource : RefCounted
     }
 
     private static nint __mb_duplicate_deep;
-    public Resource? DuplicateDeep(Resource.DeepDuplicateMode deepSubresourcesMode)
+    public Resource? DuplicateDeep(Resource.DeepDuplicateMode deepSubresourcesMode = (Resource.DeepDuplicateMode)(1))
     {
         var __mb = __mb_duplicate_deep;
         if (__mb == 0)
@@ -23040,11 +23042,11 @@ public unsafe partial class ResourceFormatLoader : RefCounted
 
     public enum CacheMode : long
     {
-        CACHE_MODE_IGNORE = 0,
-        CACHE_MODE_REUSE = 1,
-        CACHE_MODE_REPLACE = 2,
-        CACHE_MODE_IGNORE_DEEP = 3,
-        CACHE_MODE_REPLACE_DEEP = 4,
+        Ignore = 0,
+        Reuse = 1,
+        Replace = 2,
+        IgnoreDeep = 3,
+        ReplaceDeep = 4,
     }
 
     public virtual bool _RecognizePath(string path, string type) => default!;
@@ -23166,8 +23168,8 @@ public unsafe partial class ResourceImporter : RefCounted
 
     public enum ImportOrder : long
     {
-        IMPORT_ORDER_DEFAULT = 0,
-        IMPORT_ORDER_SCENE = 100,
+        Default = 0,
+        Scene = 100,
     }
 }
 
@@ -23350,37 +23352,34 @@ public unsafe partial class ResourceImporterWAV : ResourceImporter
     }
 }
 
-public unsafe partial class ResourceLoader : GodotObject
+public static unsafe partial class ResourceLoader
 {
-    internal ResourceLoader(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public ResourceLoader() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "ResourceLoader");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("ResourceLoader");
 
-    private static ResourceLoader? _singleton;
-    public static ResourceLoader Singleton => _singleton ??= (ResourceLoader)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("ResourceLoader"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum ThreadLoadStatus : long
     {
-        THREAD_LOAD_INVALID_RESOURCE = 0,
-        THREAD_LOAD_IN_PROGRESS = 1,
-        THREAD_LOAD_FAILED = 2,
-        THREAD_LOAD_LOADED = 3,
+        InvalidResource = 0,
+        InProgress = 1,
+        Failed = 2,
+        Loaded = 3,
     }
 
     public enum CacheMode : long
     {
-        CACHE_MODE_IGNORE = 0,
-        CACHE_MODE_REUSE = 1,
-        CACHE_MODE_REPLACE = 2,
-        CACHE_MODE_IGNORE_DEEP = 3,
-        CACHE_MODE_REPLACE_DEEP = 4,
+        Ignore = 0,
+        Reuse = 1,
+        Replace = 2,
+        IgnoreDeep = 3,
+        ReplaceDeep = 4,
     }
 
     private static nint __mb_load_threaded_request;
-    public Error LoadThreadedRequest(string path, string typeHint, bool useSubThreads, ResourceLoader.CacheMode cacheMode)
+    public static Error LoadThreadedRequest(string path, string typeHint = "", bool useSubThreads = false, ResourceLoader.CacheMode cacheMode = (ResourceLoader.CacheMode)(1))
     {
         var __mb = __mb_load_threaded_request;
         if (__mb == 0)
@@ -23399,14 +23398,14 @@ public unsafe partial class ResourceLoader : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return (Error)__ret;
     }
 
     private static nint __mb_load_threaded_get_status;
-    public ResourceLoader.ThreadLoadStatus LoadThreadedGetStatus(string path, Godot.Collections.Array progress)
+    public static ResourceLoader.ThreadLoadStatus LoadThreadedGetStatus(string path, Godot.Collections.Array progress)
     {
         var __mb = __mb_load_threaded_get_status;
         if (__mb == 0)
@@ -23421,13 +23420,13 @@ public unsafe partial class ResourceLoader : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (ResourceLoader.ThreadLoadStatus)__ret;
     }
 
     private static nint __mb_load_threaded_get;
-    public Resource? LoadThreadedGet(string path)
+    public static Resource? LoadThreadedGet(string path)
     {
         var __mb = __mb_load_threaded_get;
         if (__mb == 0)
@@ -23440,13 +23439,13 @@ public unsafe partial class ResourceLoader : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Resource?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_load;
-    public Resource? Load(string path, string typeHint, ResourceLoader.CacheMode cacheMode)
+    public static Resource? Load(string path, string typeHint = "", ResourceLoader.CacheMode cacheMode = (ResourceLoader.CacheMode)(1))
     {
         var __mb = __mb_load;
         if (__mb == 0)
@@ -23463,14 +23462,14 @@ public unsafe partial class ResourceLoader : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return (Resource?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_add_resource_format_loader;
-    public void AddResourceFormatLoader(ResourceFormatLoader? formatLoader, bool atFront)
+    public static void AddResourceFormatLoader(ResourceFormatLoader? formatLoader, bool atFront = false)
     {
         var __mb = __mb_add_resource_format_loader;
         if (__mb == 0)
@@ -23484,11 +23483,11 @@ public unsafe partial class ResourceLoader : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_resource_format_loader;
-    public void RemoveResourceFormatLoader(ResourceFormatLoader? formatLoader)
+    public static void RemoveResourceFormatLoader(ResourceFormatLoader? formatLoader)
     {
         var __mb = __mb_remove_resource_format_loader;
         if (__mb == 0)
@@ -23500,11 +23499,11 @@ public unsafe partial class ResourceLoader : GodotObject
         nint __a0 = formatLoader?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_abort_on_missing_resources;
-    public void SetAbortOnMissingResources(bool abort)
+    public static void SetAbortOnMissingResources(bool abort)
     {
         var __mb = __mb_set_abort_on_missing_resources;
         if (__mb == 0)
@@ -23516,11 +23515,11 @@ public unsafe partial class ResourceLoader : GodotObject
         byte __a0 = abort ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_cached;
-    public bool HasCached(string path)
+    public static bool HasCached(string path)
     {
         var __mb = __mb_has_cached;
         if (__mb == 0)
@@ -23533,13 +23532,13 @@ public unsafe partial class ResourceLoader : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
 
     private static nint __mb_get_cached_ref;
-    public Resource? GetCachedRef(string path)
+    public static Resource? GetCachedRef(string path)
     {
         var __mb = __mb_get_cached_ref;
         if (__mb == 0)
@@ -23552,13 +23551,13 @@ public unsafe partial class ResourceLoader : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Resource?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_exists;
-    public bool Exists(string path, string typeHint)
+    public static bool Exists(string path, string typeHint = "")
     {
         var __mb = __mb_exists;
         if (__mb == 0)
@@ -23573,14 +23572,14 @@ public unsafe partial class ResourceLoader : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return __ret != 0;
     }
 
     private static nint __mb_get_resource_uid;
-    public long GetResourceUid(string path)
+    public static long GetResourceUid(string path)
     {
         var __mb = __mb_get_resource_uid;
         if (__mb == 0)
@@ -23593,7 +23592,7 @@ public unsafe partial class ResourceLoader : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((long)__ret);
     }
@@ -23697,33 +23696,30 @@ public unsafe partial class ResourcePreloader : Node
     }
 }
 
-public unsafe partial class ResourceSaver : GodotObject
+public static unsafe partial class ResourceSaver
 {
-    internal ResourceSaver(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public ResourceSaver() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "ResourceSaver");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("ResourceSaver");
 
-    private static ResourceSaver? _singleton;
-    public static ResourceSaver Singleton => _singleton ??= (ResourceSaver)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("ResourceSaver"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     [Flags]
     public enum SaverFlags : long
     {
-        FLAG_NONE = 0,
-        FLAG_RELATIVE_PATHS = 1,
-        FLAG_BUNDLE_RESOURCES = 2,
-        FLAG_CHANGE_PATH = 4,
-        FLAG_OMIT_EDITOR_PROPERTIES = 8,
-        FLAG_SAVE_BIG_ENDIAN = 16,
-        FLAG_COMPRESS = 32,
-        FLAG_REPLACE_SUBRESOURCE_PATHS = 64,
+        None = 0,
+        RelativePaths = 1,
+        BundleResources = 2,
+        ChangePath = 4,
+        OmitEditorProperties = 8,
+        SaveBigEndian = 16,
+        Compress = 32,
+        ReplaceSubresourcePaths = 64,
     }
 
     private static nint __mb_save;
-    public Error Save(Resource? resource, string path, ResourceSaver.SaverFlags flags)
+    public static Error Save(Resource? resource, string path = "", ResourceSaver.SaverFlags flags = (ResourceSaver.SaverFlags)(0))
     {
         var __mb = __mb_save;
         if (__mb == 0)
@@ -23740,13 +23736,13 @@ public unsafe partial class ResourceSaver : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a1);
         return (Error)__ret;
     }
 
     private static nint __mb_set_uid;
-    public Error SetUid(string resource, long uid)
+    public static Error SetUid(string resource, long uid)
     {
         var __mb = __mb_set_uid;
         if (__mb == 0)
@@ -23761,13 +23757,13 @@ public unsafe partial class ResourceSaver : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
 
     private static nint __mb_add_resource_format_saver;
-    public void AddResourceFormatSaver(ResourceFormatSaver? formatSaver, bool atFront)
+    public static void AddResourceFormatSaver(ResourceFormatSaver? formatSaver, bool atFront = false)
     {
         var __mb = __mb_add_resource_format_saver;
         if (__mb == 0)
@@ -23781,11 +23777,11 @@ public unsafe partial class ResourceSaver : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_resource_format_saver;
-    public void RemoveResourceFormatSaver(ResourceFormatSaver? formatSaver)
+    public static void RemoveResourceFormatSaver(ResourceFormatSaver? formatSaver)
     {
         var __mb = __mb_remove_resource_format_saver;
         if (__mb == 0)
@@ -23797,11 +23793,11 @@ public unsafe partial class ResourceSaver : GodotObject
         nint __a0 = formatSaver?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_resource_id_for_path;
-    public long GetResourceIdForPath(string path, bool generate)
+    public static long GetResourceIdForPath(string path, bool generate = false)
     {
         var __mb = __mb_get_resource_id_for_path;
         if (__mb == 0)
@@ -23816,21 +23812,23 @@ public unsafe partial class ResourceSaver : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((long)__ret);
     }
 }
 
-public unsafe partial class ResourceUID : GodotObject
+public static unsafe partial class ResourceUID
 {
-    internal ResourceUID(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    private static ResourceUID? _singleton;
-    public static ResourceUID Singleton => _singleton ??= (ResourceUID)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("ResourceUID"), adoptRef: false)!;
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("ResourceUID");
+
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     private static nint __mb_id_to_text;
-    public string IdToText(long id)
+    public static string IdToText(long id)
     {
         var __mb = __mb_id_to_text;
         if (__mb == 0)
@@ -23843,12 +23841,12 @@ public unsafe partial class ResourceUID : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_text_to_id;
-    public long TextToId(string textId)
+    public static long TextToId(string textId)
     {
         var __mb = __mb_text_to_id;
         if (__mb == 0)
@@ -23861,13 +23859,13 @@ public unsafe partial class ResourceUID : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((long)__ret);
     }
 
     private static nint __mb_create_id;
-    public long CreateId()
+    public static long CreateId()
     {
         var __mb = __mb_create_id;
         if (__mb == 0)
@@ -23877,12 +23875,12 @@ public unsafe partial class ResourceUID : GodotObject
             __mb_create_id = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((long)__ret);
     }
 
     private static nint __mb_create_id_for_path;
-    public long CreateIdForPath(string path)
+    public static long CreateIdForPath(string path)
     {
         var __mb = __mb_create_id_for_path;
         if (__mb == 0)
@@ -23895,13 +23893,13 @@ public unsafe partial class ResourceUID : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((long)__ret);
     }
 
     private static nint __mb_has_id;
-    public bool HasId(long id)
+    public static bool HasId(long id)
     {
         var __mb = __mb_has_id;
         if (__mb == 0)
@@ -23914,12 +23912,12 @@ public unsafe partial class ResourceUID : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_add_id;
-    public void AddId(long id, string path)
+    public static void AddId(long id, string path)
     {
         var __mb = __mb_add_id;
         if (__mb == 0)
@@ -23933,12 +23931,12 @@ public unsafe partial class ResourceUID : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_set_id;
-    public void SetId(long id, string path)
+    public static void SetId(long id, string path)
     {
         var __mb = __mb_set_id;
         if (__mb == 0)
@@ -23952,12 +23950,12 @@ public unsafe partial class ResourceUID : GodotObject
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_get_id_path;
-    public string GetIdPath(long id)
+    public static string GetIdPath(long id)
     {
         var __mb = __mb_get_id_path;
         if (__mb == 0)
@@ -23970,12 +23968,12 @@ public unsafe partial class ResourceUID : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_remove_id;
-    public void RemoveId(long id)
+    public static void RemoveId(long id)
     {
         var __mb = __mb_remove_id;
         if (__mb == 0)
@@ -23987,7 +23985,7 @@ public unsafe partial class ResourceUID : GodotObject
         long __a0 = unchecked((long)id);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_uid_to_path;
@@ -24060,10 +24058,10 @@ public unsafe partial class RetargetModifier3D : SkeletonModifier3D
     [Flags]
     public enum TransformFlag : long
     {
-        TRANSFORM_FLAG_POSITION = 1,
-        TRANSFORM_FLAG_ROTATION = 2,
-        TRANSFORM_FLAG_SCALE = 4,
-        TRANSFORM_FLAG_ALL = 7,
+        Position = 1,
+        Rotation = 2,
+        Scale = 4,
+        All = 7,
     }
 
     public SkeletonProfile? Profile
@@ -24282,8 +24280,8 @@ public unsafe partial class RibbonTrailMesh : PrimitiveMesh
 
     public enum ShapeEnum : long
     {
-        SHAPE_FLAT = 0,
-        SHAPE_CROSS = 1,
+        Flat = 0,
+        Cross = 1,
     }
 
     public RibbonTrailMesh.ShapeEnum Shape
@@ -24545,44 +24543,44 @@ public unsafe partial class RichTextLabel : Control
 
     public enum ListType : long
     {
-        LIST_NUMBERS = 0,
-        LIST_LETTERS = 1,
-        LIST_ROMAN = 2,
-        LIST_DOTS = 3,
+        Numbers = 0,
+        Letters = 1,
+        Roman = 2,
+        Dots = 3,
     }
 
     public enum MenuItems : long
     {
-        MENU_COPY = 0,
-        MENU_SELECT_ALL = 1,
-        MENU_MAX = 2,
+        Copy = 0,
+        SelectAll = 1,
+        Max = 2,
     }
 
     public enum MetaUnderline : long
     {
-        META_UNDERLINE_NEVER = 0,
-        META_UNDERLINE_ALWAYS = 1,
-        META_UNDERLINE_ON_HOVER = 2,
+        Never = 0,
+        Always = 1,
+        OnHover = 2,
     }
 
     [Flags]
     public enum ImageUpdateMask : long
     {
-        UPDATE_TEXTURE = 1,
-        UPDATE_SIZE = 2,
-        UPDATE_COLOR = 4,
-        UPDATE_ALIGNMENT = 8,
-        UPDATE_REGION = 16,
-        UPDATE_PAD = 32,
-        UPDATE_TOOLTIP = 64,
-        UPDATE_WIDTH_UNIT = 128,
+        Texture = 1,
+        Size = 2,
+        Color = 4,
+        Alignment = 8,
+        Region = 16,
+        Pad = 32,
+        Tooltip = 64,
+        WidthUnit = 128,
     }
 
     public enum ImageUnit : long
     {
-        IMAGE_UNIT_PIXEL = 0,
-        IMAGE_UNIT_PERCENT = 1,
-        IMAGE_UNIT_EM = 2,
+        Pixel = 0,
+        Percent = 1,
+        Em = 2,
     }
 
     public bool BbcodeEnabled
@@ -24809,7 +24807,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_add_hr;
-    public void AddHr(int width, int height, Color color, HorizontalAlignment alignment, bool widthInPercent, bool heightInPercent)
+    public void AddHr(int width, int height, Color color, HorizontalAlignment alignment = (HorizontalAlignment)(1), bool widthInPercent = true, bool heightInPercent = false)
     {
         var __mb = __mb_add_hr;
         if (__mb == 0)
@@ -24835,7 +24833,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_add_image;
-    public void AddImage(Texture2D? image, float width, float height, Color color, InlineAlignment inlineAlign, Rect2 region, Variant key, bool pad, string tooltip, RichTextLabel.ImageUnit widthUnit, RichTextLabel.ImageUnit heightUnit, string altText)
+    public void AddImage(Texture2D? image, float width, float height, Color color, InlineAlignment inlineAlign = (InlineAlignment)(5), Rect2 region = default, Variant key = default, bool pad = false, string tooltip = "", RichTextLabel.ImageUnit widthUnit = (RichTextLabel.ImageUnit)(0), RichTextLabel.ImageUnit heightUnit = (RichTextLabel.ImageUnit)(0), string altText = "")
     {
         var __mb = __mb_add_image;
         if (__mb == 0)
@@ -24875,7 +24873,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_update_image;
-    public void UpdateImage(Variant key, RichTextLabel.ImageUpdateMask mask, Texture2D? image, float width, float height, Color color, InlineAlignment inlineAlign, Rect2 region, bool pad, string tooltip, RichTextLabel.ImageUnit widthUnit, RichTextLabel.ImageUnit heightUnit)
+    public void UpdateImage(Variant key, RichTextLabel.ImageUpdateMask mask, Texture2D? image, float width, float height, Color color, InlineAlignment inlineAlign = (InlineAlignment)(5), Rect2 region = default, bool pad = false, string tooltip = "", RichTextLabel.ImageUnit widthUnit = (RichTextLabel.ImageUnit)(0), RichTextLabel.ImageUnit heightUnit = (RichTextLabel.ImageUnit)(0))
     {
         var __mb = __mb_update_image;
         if (__mb == 0)
@@ -24927,7 +24925,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_remove_paragraph;
-    public bool RemoveParagraph(int paragraph, bool noInvalidate)
+    public bool RemoveParagraph(int paragraph, bool noInvalidate = false)
     {
         var __mb = __mb_remove_paragraph;
         if (__mb == 0)
@@ -24965,7 +24963,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_push_font;
-    public void PushFont(Font? font, int fontSize)
+    public void PushFont(Font? font, int fontSize = unchecked((int)(0)))
     {
         var __mb = __mb_push_font;
         if (__mb == 0)
@@ -25128,7 +25126,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_push_list;
-    public void PushList(int level, RichTextLabel.ListType type, bool capitalize, string bullet)
+    public void PushList(int level, RichTextLabel.ListType type, bool capitalize, string bullet = "•")
     {
         var __mb = __mb_push_list;
         if (__mb == 0)
@@ -25151,7 +25149,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_push_meta;
-    public void PushMeta(Variant data, RichTextLabel.MetaUnderline underlineMode, string tooltip)
+    public void PushMeta(Variant data, RichTextLabel.MetaUnderline underlineMode = (RichTextLabel.MetaUnderline)(1), string tooltip = "")
     {
         var __mb = __mb_push_meta;
         if (__mb == 0)
@@ -25206,7 +25204,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_push_underline;
-    public void PushUnderline(Color color)
+    public void PushUnderline(Color color = default)
     {
         var __mb = __mb_push_underline;
         if (__mb == 0)
@@ -25222,7 +25220,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_push_strikethrough;
-    public void PushStrikethrough(Color color)
+    public void PushStrikethrough(Color color = default)
     {
         var __mb = __mb_push_strikethrough;
         if (__mb == 0)
@@ -25238,7 +25236,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_push_table;
-    public void PushTable(int columns, InlineAlignment inlineAlign, int alignToRow, string name)
+    public void PushTable(int columns, InlineAlignment inlineAlign = (InlineAlignment)(0), int alignToRow = unchecked((int)(-1)), string name = "")
     {
         var __mb = __mb_push_table;
         if (__mb == 0)
@@ -25261,7 +25259,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_push_dropcap;
-    public void PushDropcap(string @string, Font? font, int size, Rect2 dropcapMargins, Color color, int outlineSize, Color outlineColor)
+    public void PushDropcap(string @string, Font? font, int size, Rect2 dropcapMargins, Color color, int outlineSize = unchecked((int)(0)), Color outlineColor = default)
     {
         var __mb = __mb_push_dropcap;
         if (__mb == 0)
@@ -25290,7 +25288,7 @@ public unsafe partial class RichTextLabel : Control
     }
 
     private static nint __mb_set_table_column_expand;
-    public void SetTableColumnExpand(int column, bool expand, int ratio, bool shrink)
+    public void SetTableColumnExpand(int column, bool expand, int ratio = unchecked((int)(1)), bool shrink = true)
     {
         var __mb = __mb_set_table_column_expand;
         if (__mb == 0)
@@ -26953,27 +26951,27 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
 
     public enum FreezeModeEnum : long
     {
-        FREEZE_MODE_STATIC = 0,
-        FREEZE_MODE_KINEMATIC = 1,
+        Static = 0,
+        Kinematic = 1,
     }
 
     public enum CenterOfMassModeEnum : long
     {
-        CENTER_OF_MASS_MODE_AUTO = 0,
-        CENTER_OF_MASS_MODE_CUSTOM = 1,
+        Auto = 0,
+        Custom = 1,
     }
 
     public enum DampMode : long
     {
-        DAMP_MODE_COMBINE = 0,
-        DAMP_MODE_REPLACE = 1,
+        Combine = 0,
+        Replace = 1,
     }
 
     public enum CCDMode : long
     {
-        CCD_MODE_DISABLED = 0,
-        CCD_MODE_CAST_RAY = 1,
-        CCD_MODE_CAST_SHAPE = 2,
+        Disabled = 0,
+        CastRay = 1,
+        CastShape = 2,
     }
 
     public float Mass
@@ -27642,7 +27640,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_apply_central_impulse;
-    public void ApplyCentralImpulse(Vector2 impulse)
+    public void ApplyCentralImpulse(Vector2 impulse = default)
     {
         var __mb = __mb_apply_central_impulse;
         if (__mb == 0)
@@ -27658,7 +27656,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_apply_impulse;
-    public void ApplyImpulse(Vector2 impulse, Vector2 position)
+    public void ApplyImpulse(Vector2 impulse, Vector2 position = default)
     {
         var __mb = __mb_apply_impulse;
         if (__mb == 0)
@@ -27708,7 +27706,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_apply_force;
-    public void ApplyForce(Vector2 force, Vector2 position)
+    public void ApplyForce(Vector2 force, Vector2 position = default)
     {
         var __mb = __mb_apply_force;
         if (__mb == 0)
@@ -27758,7 +27756,7 @@ public unsafe partial class RigidBody2D : PhysicsBody2D
     }
 
     private static nint __mb_add_constant_force;
-    public void AddConstantForce(Vector2 force, Vector2 position)
+    public void AddConstantForce(Vector2 force, Vector2 position = default)
     {
         var __mb = __mb_add_constant_force;
         if (__mb == 0)
@@ -28050,20 +28048,20 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
 
     public enum FreezeModeEnum : long
     {
-        FREEZE_MODE_STATIC = 0,
-        FREEZE_MODE_KINEMATIC = 1,
+        Static = 0,
+        Kinematic = 1,
     }
 
     public enum CenterOfMassModeEnum : long
     {
-        CENTER_OF_MASS_MODE_AUTO = 0,
-        CENTER_OF_MASS_MODE_CUSTOM = 1,
+        Auto = 0,
+        Custom = 1,
     }
 
     public enum DampMode : long
     {
-        DAMP_MODE_COMBINE = 0,
-        DAMP_MODE_REPLACE = 1,
+        Combine = 0,
+        Replace = 1,
     }
 
     public float Mass
@@ -28763,7 +28761,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_apply_impulse;
-    public void ApplyImpulse(Vector3 impulse, Vector3 position)
+    public void ApplyImpulse(Vector3 impulse, Vector3 position = default)
     {
         var __mb = __mb_apply_impulse;
         if (__mb == 0)
@@ -28813,7 +28811,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_apply_force;
-    public void ApplyForce(Vector3 force, Vector3 position)
+    public void ApplyForce(Vector3 force, Vector3 position = default)
     {
         var __mb = __mb_apply_force;
         if (__mb == 0)
@@ -28863,7 +28861,7 @@ public unsafe partial class RigidBody3D : PhysicsBody3D
     }
 
     private static nint __mb_add_constant_force;
-    public void AddConstantForce(Vector3 force, Vector3 position)
+    public void AddConstantForce(Vector3 force, Vector3 position = default)
     {
         var __mb = __mb_add_constant_force;
         if (__mb == 0)

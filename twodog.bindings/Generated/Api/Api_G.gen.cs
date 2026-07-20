@@ -21,10 +21,10 @@ public unsafe partial class GDExtension : Resource
 
     public enum InitializationLevel : long
     {
-        INITIALIZATION_LEVEL_CORE = 0,
-        INITIALIZATION_LEVEL_SERVERS = 1,
-        INITIALIZATION_LEVEL_SCENE = 2,
-        INITIALIZATION_LEVEL_EDITOR = 3,
+        Core = 0,
+        Servers = 1,
+        Scene = 2,
+        Editor = 3,
     }
 
     private static nint __mb_is_library_open;
@@ -58,24 +58,26 @@ public unsafe partial class GDExtension : Resource
     }
 }
 
-public unsafe partial class GDExtensionManager : GodotObject
+public static unsafe partial class GDExtensionManager
 {
-    internal GDExtensionManager(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    private static GDExtensionManager? _singleton;
-    public static GDExtensionManager Singleton => _singleton ??= (GDExtensionManager)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("GDExtensionManager"), adoptRef: false)!;
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("GDExtensionManager");
+
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum LoadStatus : long
     {
-        LOAD_STATUS_OK = 0,
-        LOAD_STATUS_FAILED = 1,
-        LOAD_STATUS_ALREADY_LOADED = 2,
-        LOAD_STATUS_NOT_LOADED = 3,
-        LOAD_STATUS_NEEDS_RESTART = 4,
+        Ok = 0,
+        Failed = 1,
+        AlreadyLoaded = 2,
+        NotLoaded = 3,
+        NeedsRestart = 4,
     }
 
     private static nint __mb_load_extension;
-    public GDExtensionManager.LoadStatus LoadExtension(string path)
+    public static GDExtensionManager.LoadStatus LoadExtension(string path)
     {
         var __mb = __mb_load_extension;
         if (__mb == 0)
@@ -88,13 +90,13 @@ public unsafe partial class GDExtensionManager : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (GDExtensionManager.LoadStatus)__ret;
     }
 
     private static nint __mb_reload_extension;
-    public GDExtensionManager.LoadStatus ReloadExtension(string path)
+    public static GDExtensionManager.LoadStatus ReloadExtension(string path)
     {
         var __mb = __mb_reload_extension;
         if (__mb == 0)
@@ -107,13 +109,13 @@ public unsafe partial class GDExtensionManager : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (GDExtensionManager.LoadStatus)__ret;
     }
 
     private static nint __mb_unload_extension;
-    public GDExtensionManager.LoadStatus UnloadExtension(string path)
+    public static GDExtensionManager.LoadStatus UnloadExtension(string path)
     {
         var __mb = __mb_unload_extension;
         if (__mb == 0)
@@ -126,13 +128,13 @@ public unsafe partial class GDExtensionManager : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (GDExtensionManager.LoadStatus)__ret;
     }
 
     private static nint __mb_is_extension_loaded;
-    public bool IsExtensionLoaded(string path)
+    public static bool IsExtensionLoaded(string path)
     {
         var __mb = __mb_is_extension_loaded;
         if (__mb == 0)
@@ -145,13 +147,13 @@ public unsafe partial class GDExtensionManager : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
 
     private static nint __mb_get_extension;
-    public GDExtension? GetExtension(string path)
+    public static GDExtension? GetExtension(string path)
     {
         var __mb = __mb_get_extension;
         if (__mb == 0)
@@ -164,7 +166,7 @@ public unsafe partial class GDExtensionManager : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (GDExtension?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
@@ -180,20 +182,17 @@ public unsafe partial class GDScript : Script
     }
 }
 
-public unsafe partial class GDScriptLanguageProtocol : JSONRPC
+public static unsafe partial class GDScriptLanguageProtocol
 {
-    internal GDScriptLanguageProtocol(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public GDScriptLanguageProtocol() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "GDScriptLanguageProtocol");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("GDScriptLanguageProtocol");
 
-    private static GDScriptLanguageProtocol? _singleton;
-    public static GDScriptLanguageProtocol Singleton => _singleton ??= (GDScriptLanguageProtocol)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("GDScriptLanguageProtocol"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     private static nint __mb_get_text_document;
-    public GDScriptTextDocument? GetTextDocument()
+    public static GDScriptTextDocument? GetTextDocument()
     {
         var __mb = __mb_get_text_document;
         if (__mb == 0)
@@ -203,12 +202,12 @@ public unsafe partial class GDScriptLanguageProtocol : JSONRPC
             __mb_get_text_document = __mb;
         }
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (GDScriptTextDocument?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_workspace;
-    public GDScriptWorkspace? GetWorkspace()
+    public static GDScriptWorkspace? GetWorkspace()
     {
         var __mb = __mb_get_workspace;
         if (__mb == 0)
@@ -218,12 +217,12 @@ public unsafe partial class GDScriptLanguageProtocol : JSONRPC
             __mb_get_workspace = __mb;
         }
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (GDScriptWorkspace?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_is_smart_resolve_enabled;
-    public bool IsSmartResolveEnabled()
+    public static bool IsSmartResolveEnabled()
     {
         var __mb = __mb_is_smart_resolve_enabled;
         if (__mb == 0)
@@ -233,12 +232,12 @@ public unsafe partial class GDScriptLanguageProtocol : JSONRPC
             __mb_is_smart_resolve_enabled = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_initialized;
-    public bool IsInitialized()
+    public static bool IsInitialized()
     {
         var __mb = __mb_is_initialized;
         if (__mb == 0)
@@ -248,12 +247,12 @@ public unsafe partial class GDScriptLanguageProtocol : JSONRPC
             __mb_is_initialized = __mb;
         }
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_initialize;
-    public Variant Initialize(Godot.Collections.Dictionary @params)
+    public static Variant Initialize(Godot.Collections.Dictionary @params)
     {
         var __mb = __mb_initialize;
         if (__mb == 0)
@@ -266,12 +265,12 @@ public unsafe partial class GDScriptLanguageProtocol : JSONRPC
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_initialized;
-    public void Initialized(Variant @params)
+    public static void Initialized(Variant @params)
     {
         var __mb = __mb_initialized;
         if (__mb == 0)
@@ -283,11 +282,11 @@ public unsafe partial class GDScriptLanguageProtocol : JSONRPC
         var __a0 = @params.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_on_client_connected;
-    public Error OnClientConnected()
+    public static Error OnClientConnected()
     {
         var __mb = __mb_on_client_connected;
         if (__mb == 0)
@@ -297,12 +296,12 @@ public unsafe partial class GDScriptLanguageProtocol : JSONRPC
             __mb_on_client_connected = __mb;
         }
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_on_client_disconnected;
-    public void OnClientDisconnected(int clientId)
+    public static void OnClientDisconnected(int clientId)
     {
         var __mb = __mb_on_client_disconnected;
         if (__mb == 0)
@@ -314,11 +313,11 @@ public unsafe partial class GDScriptLanguageProtocol : JSONRPC
         long __a0 = unchecked((long)clientId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_notify_client;
-    public void NotifyClient(string method, Variant @params, int clientId)
+    public static void NotifyClient(string method, Variant @params = default, int clientId = unchecked((int)(-1)))
     {
         var __mb = __mb_notify_client;
         if (__mb == 0)
@@ -334,7 +333,7 @@ public unsafe partial class GDScriptLanguageProtocol : JSONRPC
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 }
@@ -878,29 +877,29 @@ public unsafe partial class GLTFAccessor : Resource
 
     public enum GLTFAccessorType : long
     {
-        TYPE_SCALAR = 0,
-        TYPE_VEC2 = 1,
-        TYPE_VEC3 = 2,
-        TYPE_VEC4 = 3,
-        TYPE_MAT2 = 4,
-        TYPE_MAT3 = 5,
-        TYPE_MAT4 = 6,
+        Scalar = 0,
+        Vec2 = 1,
+        Vec3 = 2,
+        Vec4 = 3,
+        Mat2 = 4,
+        Mat3 = 5,
+        Mat4 = 6,
     }
 
     public enum GLTFComponentType : long
     {
-        COMPONENT_TYPE_NONE = 0,
-        COMPONENT_TYPE_SIGNED_BYTE = 5120,
-        COMPONENT_TYPE_UNSIGNED_BYTE = 5121,
-        COMPONENT_TYPE_SIGNED_SHORT = 5122,
-        COMPONENT_TYPE_UNSIGNED_SHORT = 5123,
-        COMPONENT_TYPE_SIGNED_INT = 5124,
-        COMPONENT_TYPE_UNSIGNED_INT = 5125,
-        COMPONENT_TYPE_SINGLE_FLOAT = 5126,
-        COMPONENT_TYPE_DOUBLE_FLOAT = 5130,
-        COMPONENT_TYPE_HALF_FLOAT = 5131,
-        COMPONENT_TYPE_SIGNED_LONG = 5134,
-        COMPONENT_TYPE_UNSIGNED_LONG = 5135,
+        None = 0,
+        SignedByte = 5120,
+        UnsignedByte = 5121,
+        SignedShort = 5122,
+        UnsignedShort = 5123,
+        SignedInt = 5124,
+        UnsignedInt = 5125,
+        SingleFloat = 5126,
+        DoubleFloat = 5130,
+        HalfFloat = 5131,
+        SignedLong = 5134,
+        UnsignedLong = 5135,
     }
 
     public int BufferView
@@ -2055,31 +2054,31 @@ public unsafe partial class GLTFDocument : Resource
 
     public enum RootNodeModeEnum : long
     {
-        ROOT_NODE_MODE_SINGLE_ROOT = 0,
-        ROOT_NODE_MODE_KEEP_ROOT = 1,
-        ROOT_NODE_MODE_MULTI_ROOT = 2,
+        SingleRoot = 0,
+        KeepRoot = 1,
+        MultiRoot = 2,
     }
 
     public enum TextureMapModeEnum : long
     {
-        TEXTURE_MAP_MODE_DO_NOT_REMAP = 0,
-        TEXTURE_MAP_MODE_REMAP_TO_STANDARD_MATERIAL = 1,
+        DoNotRemap = 0,
+        RemapToStandardMaterial = 1,
     }
 
     public enum VisibilityModeEnum : long
     {
-        VISIBILITY_MODE_INCLUDE_REQUIRED = 0,
-        VISIBILITY_MODE_INCLUDE_OPTIONAL = 1,
-        VISIBILITY_MODE_EXCLUDE = 2,
+        IncludeRequired = 0,
+        IncludeOptional = 1,
+        Exclude = 2,
     }
 
     [Flags]
     public enum ImportFlags : long
     {
-        IMPORT_FLAG_GENERATE_TANGENT_ARRAYS = 8,
-        IMPORT_FLAG_USE_NAMED_SKIN_BINDS = 16,
-        IMPORT_FLAG_DISCARD_MESHES_AND_MATERIALS = 32,
-        IMPORT_FLAG_FORCE_DISABLE_MESH_COMPRESSION = 64,
+        GenerateTangentArrays = 8,
+        UseNamedSkinBinds = 16,
+        DiscardMeshesAndMaterials = 32,
+        ForceDisableMeshCompression = 64,
     }
 
     public string ImageFormat
@@ -2344,7 +2343,7 @@ public unsafe partial class GLTFDocument : Resource
     }
 
     private static nint __mb_append_from_file;
-    public Error AppendFromFile(string path, GLTFState? state, uint flags, string basePath)
+    public Error AppendFromFile(string path, GLTFState? state, uint flags = unchecked((uint)(0)), string basePath = "")
     {
         var __mb = __mb_append_from_file;
         if (__mb == 0)
@@ -2370,7 +2369,7 @@ public unsafe partial class GLTFDocument : Resource
     }
 
     private static nint __mb_append_from_scene;
-    public Error AppendFromScene(Node? node, GLTFState? state, uint flags)
+    public Error AppendFromScene(Node? node, GLTFState? state, uint flags = unchecked((uint)(0)))
     {
         var __mb = __mb_append_from_scene;
         if (__mb == 0)
@@ -2392,7 +2391,7 @@ public unsafe partial class GLTFDocument : Resource
     }
 
     private static nint __mb_generate_scene;
-    public Node? GenerateScene(GLTFState? state, float bakeFps, bool trimming, bool removeImmutableTracks)
+    public Node? GenerateScene(GLTFState? state, float bakeFps = 30f, bool trimming = false, bool removeImmutableTracks = true)
     {
         var __mb = __mb_generate_scene;
         if (__mb == 0)
@@ -2482,7 +2481,7 @@ public unsafe partial class GLTFDocument : Resource
     }
 
     private static nint __mb_register_gltf_document_extension;
-    public static void RegisterGltfDocumentExtension(GLTFDocumentExtension? extension, bool firstPriority)
+    public static void RegisterGltfDocumentExtension(GLTFDocumentExtension? extension, bool firstPriority = false)
     {
         var __mb = __mb_register_gltf_document_extension;
         if (__mb == 0)
@@ -3678,7 +3677,7 @@ public unsafe partial class GLTFNode : Resource
     }
 
     private static nint __mb_get_scene_node_path;
-    public NodePath GetSceneNodePath(GLTFState? gltfState, bool handleSkeletons)
+    public NodePath GetSceneNodePath(GLTFState? gltfState, bool handleSkeletons = true)
     {
         var __mb = __mb_get_scene_node_path;
         if (__mb == 0)
@@ -3709,17 +3708,17 @@ public unsafe partial class GLTFObjectModelProperty : RefCounted
 
     public enum GLTFObjectModelType : long
     {
-        GLTF_OBJECT_MODEL_TYPE_UNKNOWN = 0,
-        GLTF_OBJECT_MODEL_TYPE_BOOL = 1,
-        GLTF_OBJECT_MODEL_TYPE_FLOAT = 2,
-        GLTF_OBJECT_MODEL_TYPE_FLOAT_ARRAY = 3,
-        GLTF_OBJECT_MODEL_TYPE_FLOAT2 = 4,
-        GLTF_OBJECT_MODEL_TYPE_FLOAT3 = 5,
-        GLTF_OBJECT_MODEL_TYPE_FLOAT4 = 6,
-        GLTF_OBJECT_MODEL_TYPE_FLOAT2X2 = 7,
-        GLTF_OBJECT_MODEL_TYPE_FLOAT3X3 = 8,
-        GLTF_OBJECT_MODEL_TYPE_FLOAT4X4 = 9,
-        GLTF_OBJECT_MODEL_TYPE_INT = 10,
+        Unknown = 0,
+        Bool = 1,
+        Float = 2,
+        FloatArray = 3,
+        Float2 = 4,
+        Float3 = 5,
+        Float4 = 6,
+        Float2x2 = 7,
+        Float3x3 = 8,
+        Float4x4 = 9,
+        Int = 10,
     }
 
     public Expression? GltfToGodotExpression
@@ -4485,7 +4484,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_to_node;
-    public CollisionShape3D? ToNode(bool cacheShapes)
+    public CollisionShape3D? ToNode(bool cacheShapes = false)
     {
         var __mb = __mb_to_node;
         if (__mb == 0)
@@ -4521,7 +4520,7 @@ public unsafe partial class GLTFPhysicsShape : Resource
     }
 
     private static nint __mb_to_resource;
-    public Shape3D? ToResource(bool cacheShapes)
+    public Shape3D? ToResource(bool cacheShapes = false)
     {
         var __mb = __mb_to_resource;
         if (__mb == 0)
@@ -5360,10 +5359,10 @@ public unsafe partial class GLTFState : Resource
 
     public enum HandleBinaryImageModeEnum : long
     {
-        HANDLE_BINARY_IMAGE_MODE_DISCARD_TEXTURES = 0,
-        HANDLE_BINARY_IMAGE_MODE_EXTRACT_TEXTURES = 1,
-        HANDLE_BINARY_IMAGE_MODE_EMBED_AS_BASISU = 2,
-        HANDLE_BINARY_IMAGE_MODE_EMBED_AS_UNCOMPRESSED = 3,
+        DiscardTextures = 0,
+        ExtractTextures = 1,
+        EmbedAsBasisu = 2,
+        EmbedAsUncompressed = 3,
     }
 
     public Godot.Collections.Dictionary Json
@@ -6846,18 +6845,18 @@ public unsafe partial class GPUParticles2D : Node2D
 
     public enum DrawOrderEnum : long
     {
-        DRAW_ORDER_INDEX = 0,
-        DRAW_ORDER_LIFETIME = 1,
-        DRAW_ORDER_REVERSE_LIFETIME = 2,
+        Index = 0,
+        Lifetime = 1,
+        ReverseLifetime = 2,
     }
 
     public enum EmitFlags : long
     {
-        EMIT_FLAG_POSITION = 1,
-        EMIT_FLAG_ROTATION_SCALE = 2,
-        EMIT_FLAG_VELOCITY = 4,
-        EMIT_FLAG_COLOR = 8,
-        EMIT_FLAG_CUSTOM = 16,
+        Position = 1,
+        RotationScale = 2,
+        Velocity = 4,
+        Color = 8,
+        Custom = 16,
     }
 
     public bool Emitting
@@ -7273,7 +7272,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_request_particles_process;
-    public void RequestParticlesProcess(float processTime, float processTimeResidual)
+    public void RequestParticlesProcess(float processTime, float processTimeResidual = 0f)
     {
         var __mb = __mb_request_particles_process;
         if (__mb == 0)
@@ -7608,7 +7607,7 @@ public unsafe partial class GPUParticles2D : Node2D
     }
 
     private static nint __mb_restart;
-    public void Restart(bool keepSeed)
+    public void Restart(bool keepSeed = false)
     {
         var __mb = __mb_restart;
         if (__mb == 0)
@@ -7923,28 +7922,28 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
 
     public enum DrawOrderEnum : long
     {
-        DRAW_ORDER_INDEX = 0,
-        DRAW_ORDER_LIFETIME = 1,
-        DRAW_ORDER_REVERSE_LIFETIME = 2,
-        DRAW_ORDER_VIEW_DEPTH = 3,
+        Index = 0,
+        Lifetime = 1,
+        ReverseLifetime = 2,
+        ViewDepth = 3,
     }
 
     public enum EmitFlags : long
     {
-        EMIT_FLAG_POSITION = 1,
-        EMIT_FLAG_ROTATION_SCALE = 2,
-        EMIT_FLAG_VELOCITY = 4,
-        EMIT_FLAG_COLOR = 8,
-        EMIT_FLAG_CUSTOM = 16,
+        Position = 1,
+        RotationScale = 2,
+        Velocity = 4,
+        Color = 8,
+        Custom = 16,
     }
 
     public enum TransformAlignEnum : long
     {
-        TRANSFORM_ALIGN_DISABLED = 0,
-        TRANSFORM_ALIGN_Z_BILLBOARD = 1,
-        TRANSFORM_ALIGN_Y_TO_VELOCITY = 2,
-        TRANSFORM_ALIGN_Z_BILLBOARD_Y_TO_VELOCITY = 3,
-        TRANSFORM_ALIGN_LOCAL_BILLBOARD = 4,
+        Disabled = 0,
+        ZBillboard = 1,
+        YToVelocity = 2,
+        ZBillboardYToVelocity = 3,
+        LocalBillboard = 4,
     }
 
     public bool Emitting
@@ -8827,7 +8826,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_restart;
-    public void Restart(bool keepSeed)
+    public void Restart(bool keepSeed = false)
     {
         var __mb = __mb_restart;
         if (__mb == 0)
@@ -9115,7 +9114,7 @@ public unsafe partial class GPUParticles3D : GeometryInstance3D
     }
 
     private static nint __mb_request_particles_process;
-    public void RequestParticlesProcess(float processTime, float processTimeResidual)
+    public void RequestParticlesProcess(float processTime, float processTimeResidual = 0.0f)
     {
         var __mb = __mb_request_particles_process;
         if (__mb == 0)
@@ -9564,19 +9563,19 @@ public unsafe partial class GPUParticlesCollisionHeightField3D : GPUParticlesCol
 
     public enum ResolutionEnum : long
     {
-        RESOLUTION_256 = 0,
-        RESOLUTION_512 = 1,
-        RESOLUTION_1024 = 2,
-        RESOLUTION_2048 = 3,
-        RESOLUTION_4096 = 4,
-        RESOLUTION_8192 = 5,
-        RESOLUTION_MAX = 6,
+        Resolution256 = 0,
+        Resolution512 = 1,
+        Resolution1024 = 2,
+        Resolution2048 = 3,
+        Resolution4096 = 4,
+        Resolution8192 = 5,
+        Max = 6,
     }
 
     public enum UpdateModeEnum : long
     {
-        UPDATE_MODE_WHEN_MOVED = 0,
-        UPDATE_MODE_ALWAYS = 1,
+        WhenMoved = 0,
+        Always = 1,
     }
 
     public Vector3 Size
@@ -9812,13 +9811,13 @@ public unsafe partial class GPUParticlesCollisionSDF3D : GPUParticlesCollision3D
 
     public enum ResolutionEnum : long
     {
-        RESOLUTION_16 = 0,
-        RESOLUTION_32 = 1,
-        RESOLUTION_64 = 2,
-        RESOLUTION_128 = 3,
-        RESOLUTION_256 = 4,
-        RESOLUTION_512 = 5,
-        RESOLUTION_MAX = 6,
+        Resolution16 = 0,
+        Resolution32 = 1,
+        Resolution64 = 2,
+        Resolution128 = 3,
+        Resolution256 = 4,
+        Resolution512 = 5,
+        Max = 6,
     }
 
     public Vector3 Size
@@ -10101,40 +10100,40 @@ public unsafe partial class Generic6DOFJoint3D : Joint3D
 
     public enum Param : long
     {
-        PARAM_LINEAR_LOWER_LIMIT = 0,
-        PARAM_LINEAR_UPPER_LIMIT = 1,
-        PARAM_LINEAR_LIMIT_SOFTNESS = 2,
-        PARAM_LINEAR_RESTITUTION = 3,
-        PARAM_LINEAR_DAMPING = 4,
-        PARAM_LINEAR_MOTOR_TARGET_VELOCITY = 5,
-        PARAM_LINEAR_MOTOR_FORCE_LIMIT = 6,
-        PARAM_LINEAR_SPRING_STIFFNESS = 7,
-        PARAM_LINEAR_SPRING_DAMPING = 8,
-        PARAM_LINEAR_SPRING_EQUILIBRIUM_POINT = 9,
-        PARAM_ANGULAR_LOWER_LIMIT = 10,
-        PARAM_ANGULAR_UPPER_LIMIT = 11,
-        PARAM_ANGULAR_LIMIT_SOFTNESS = 12,
-        PARAM_ANGULAR_DAMPING = 13,
-        PARAM_ANGULAR_RESTITUTION = 14,
-        PARAM_ANGULAR_FORCE_LIMIT = 15,
-        PARAM_ANGULAR_ERP = 16,
-        PARAM_ANGULAR_MOTOR_TARGET_VELOCITY = 17,
-        PARAM_ANGULAR_MOTOR_FORCE_LIMIT = 18,
-        PARAM_ANGULAR_SPRING_STIFFNESS = 19,
-        PARAM_ANGULAR_SPRING_DAMPING = 20,
-        PARAM_ANGULAR_SPRING_EQUILIBRIUM_POINT = 21,
-        PARAM_MAX = 22,
+        LinearLowerLimit = 0,
+        LinearUpperLimit = 1,
+        LinearLimitSoftness = 2,
+        LinearRestitution = 3,
+        LinearDamping = 4,
+        LinearMotorTargetVelocity = 5,
+        LinearMotorForceLimit = 6,
+        LinearSpringStiffness = 7,
+        LinearSpringDamping = 8,
+        LinearSpringEquilibriumPoint = 9,
+        AngularLowerLimit = 10,
+        AngularUpperLimit = 11,
+        AngularLimitSoftness = 12,
+        AngularDamping = 13,
+        AngularRestitution = 14,
+        AngularForceLimit = 15,
+        AngularErp = 16,
+        AngularMotorTargetVelocity = 17,
+        AngularMotorForceLimit = 18,
+        AngularSpringStiffness = 19,
+        AngularSpringDamping = 20,
+        AngularSpringEquilibriumPoint = 21,
+        Max = 22,
     }
 
     public enum Flag : long
     {
-        FLAG_ENABLE_LINEAR_LIMIT = 0,
-        FLAG_ENABLE_ANGULAR_LIMIT = 1,
-        FLAG_ENABLE_LINEAR_SPRING = 3,
-        FLAG_ENABLE_ANGULAR_SPRING = 2,
-        FLAG_ENABLE_MOTOR = 4,
-        FLAG_ENABLE_LINEAR_MOTOR = 5,
-        FLAG_MAX = 6,
+        EnableLinearLimit = 0,
+        EnableAngularLimit = 1,
+        EnableLinearSpring = 3,
+        EnableAngularSpring = 2,
+        EnableMotor = 4,
+        EnableLinearMotor = 5,
+        Max = 6,
     }
 
     private static nint __mb_set_param_x;
@@ -10354,44 +10353,41 @@ public unsafe partial class Generic6DOFJoint3D : Joint3D
     }
 }
 
-public unsafe partial class Geometry2D : GodotObject
+public static unsafe partial class Geometry2D
 {
-    internal Geometry2D(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public Geometry2D() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "Geometry2D");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("Geometry2D");
 
-    private static Geometry2D? _singleton;
-    public static Geometry2D Singleton => _singleton ??= (Geometry2D)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("Geometry2D"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     public enum PolyBooleanOperation : long
     {
-        OPERATION_UNION = 0,
-        OPERATION_DIFFERENCE = 1,
-        OPERATION_INTERSECTION = 2,
-        OPERATION_XOR = 3,
+        Union = 0,
+        Difference = 1,
+        Intersection = 2,
+        Xor = 3,
     }
 
     public enum PolyJoinType : long
     {
-        JOIN_SQUARE = 0,
-        JOIN_ROUND = 1,
-        JOIN_MITER = 2,
+        Square = 0,
+        Round = 1,
+        Miter = 2,
     }
 
     public enum PolyEndType : long
     {
-        END_POLYGON = 0,
-        END_JOINED = 1,
-        END_BUTT = 2,
-        END_SQUARE = 3,
-        END_ROUND = 4,
+        Polygon = 0,
+        Joined = 1,
+        Butt = 2,
+        Square = 3,
+        Round = 4,
     }
 
     private static nint __mb_is_point_in_circle;
-    public bool IsPointInCircle(Vector2 point, Vector2 circlePosition, float circleRadius)
+    public static bool IsPointInCircle(Vector2 point, Vector2 circlePosition, float circleRadius)
     {
         var __mb = __mb_is_point_in_circle;
         if (__mb == 0)
@@ -10408,12 +10404,12 @@ public unsafe partial class Geometry2D : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_segment_intersects_circle;
-    public float SegmentIntersectsCircle(Vector2 segmentFrom, Vector2 segmentTo, Vector2 circlePosition, float circleRadius)
+    public static float SegmentIntersectsCircle(Vector2 segmentFrom, Vector2 segmentTo, Vector2 circlePosition, float circleRadius)
     {
         var __mb = __mb_segment_intersects_circle;
         if (__mb == 0)
@@ -10432,12 +10428,12 @@ public unsafe partial class Geometry2D : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_segment_intersects_segment;
-    public Variant SegmentIntersectsSegment(Vector2 fromA, Vector2 toA, Vector2 fromB, Vector2 toB)
+    public static Variant SegmentIntersectsSegment(Vector2 fromA, Vector2 toA, Vector2 fromB, Vector2 toB)
     {
         var __mb = __mb_segment_intersects_segment;
         if (__mb == 0)
@@ -10456,12 +10452,12 @@ public unsafe partial class Geometry2D : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_line_intersects_line;
-    public Variant LineIntersectsLine(Vector2 fromA, Vector2 dirA, Vector2 fromB, Vector2 dirB)
+    public static Variant LineIntersectsLine(Vector2 fromA, Vector2 dirA, Vector2 fromB, Vector2 dirB)
     {
         var __mb = __mb_line_intersects_line;
         if (__mb == 0)
@@ -10480,12 +10476,12 @@ public unsafe partial class Geometry2D : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_get_closest_point_to_segment;
-    public Vector2 GetClosestPointToSegment(Vector2 point, Vector2 s1, Vector2 s2)
+    public static Vector2 GetClosestPointToSegment(Vector2 point, Vector2 s1, Vector2 s2)
     {
         var __mb = __mb_get_closest_point_to_segment;
         if (__mb == 0)
@@ -10502,12 +10498,12 @@ public unsafe partial class Geometry2D : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_closest_point_to_segment_uncapped;
-    public Vector2 GetClosestPointToSegmentUncapped(Vector2 point, Vector2 s1, Vector2 s2)
+    public static Vector2 GetClosestPointToSegmentUncapped(Vector2 point, Vector2 s1, Vector2 s2)
     {
         var __mb = __mb_get_closest_point_to_segment_uncapped;
         if (__mb == 0)
@@ -10524,12 +10520,12 @@ public unsafe partial class Geometry2D : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_point_is_inside_triangle;
-    public bool PointIsInsideTriangle(Vector2 point, Vector2 a, Vector2 b, Vector2 c)
+    public static bool PointIsInsideTriangle(Vector2 point, Vector2 a, Vector2 b, Vector2 c)
     {
         var __mb = __mb_point_is_inside_triangle;
         if (__mb == 0)
@@ -10548,12 +10544,12 @@ public unsafe partial class Geometry2D : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_bresenham_line;
-    public Godot.Collections.Array BresenhamLine(Vector2I from, Vector2I to)
+    public static Godot.Collections.Array BresenhamLine(Vector2I from, Vector2I to)
     {
         var __mb = __mb_bresenham_line;
         if (__mb == 0)
@@ -10568,25 +10564,22 @@ public unsafe partial class Geometry2D : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 }
 
-public unsafe partial class Geometry3D : GodotObject
+public static unsafe partial class Geometry3D
 {
-    internal Geometry3D(nint ptr, bool rc) : base(ptr, rc) { }
+    private static nint _singletonPtr;
 
-    public Geometry3D() : this(0, false)
-    {
-        ClassRegistry.AttachNew(this, "Geometry3D");
-    }
+    internal static nint SingletonPtr =>
+        _singletonPtr != 0 ? _singletonPtr : _singletonPtr = InstanceBindings.GetSingletonPtr("Geometry3D");
 
-    private static Geometry3D? _singleton;
-    public static Geometry3D Singleton => _singleton ??= (Geometry3D)InstanceBindings.GetOrCreate(InstanceBindings.GetSingletonPtr("Geometry3D"), adoptRef: false)!;
+    public static GodotObject Singleton => InstanceBindings.GetOrCreate(SingletonPtr, adoptRef: false)!;
 
     private static nint __mb_build_box_planes;
-    public Godot.Collections.Array BuildBoxPlanes(Vector3 extents)
+    public static Godot.Collections.Array BuildBoxPlanes(Vector3 extents)
     {
         var __mb = __mb_build_box_planes;
         if (__mb == 0)
@@ -10599,12 +10592,12 @@ public unsafe partial class Geometry3D : GodotObject
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_closest_point_to_segment;
-    public Vector3 GetClosestPointToSegment(Vector3 point, Vector3 s1, Vector3 s2)
+    public static Vector3 GetClosestPointToSegment(Vector3 point, Vector3 s1, Vector3 s2)
     {
         var __mb = __mb_get_closest_point_to_segment;
         if (__mb == 0)
@@ -10621,12 +10614,12 @@ public unsafe partial class Geometry3D : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_closest_point_to_segment_uncapped;
-    public Vector3 GetClosestPointToSegmentUncapped(Vector3 point, Vector3 s1, Vector3 s2)
+    public static Vector3 GetClosestPointToSegmentUncapped(Vector3 point, Vector3 s1, Vector3 s2)
     {
         var __mb = __mb_get_closest_point_to_segment_uncapped;
         if (__mb == 0)
@@ -10643,12 +10636,12 @@ public unsafe partial class Geometry3D : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_triangle_barycentric_coords;
-    public Vector3 GetTriangleBarycentricCoords(Vector3 point, Vector3 a, Vector3 b, Vector3 c)
+    public static Vector3 GetTriangleBarycentricCoords(Vector3 point, Vector3 a, Vector3 b, Vector3 c)
     {
         var __mb = __mb_get_triangle_barycentric_coords;
         if (__mb == 0)
@@ -10667,12 +10660,12 @@ public unsafe partial class Geometry3D : GodotObject
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_ray_intersects_triangle;
-    public Variant RayIntersectsTriangle(Vector3 from, Vector3 dir, Vector3 a, Vector3 b, Vector3 c)
+    public static Variant RayIntersectsTriangle(Vector3 from, Vector3 dir, Vector3 a, Vector3 b, Vector3 c)
     {
         var __mb = __mb_ray_intersects_triangle;
         if (__mb == 0)
@@ -10693,12 +10686,12 @@ public unsafe partial class Geometry3D : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_segment_intersects_triangle;
-    public Variant SegmentIntersectsTriangle(Vector3 from, Vector3 to, Vector3 a, Vector3 b, Vector3 c)
+    public static Variant SegmentIntersectsTriangle(Vector3 from, Vector3 to, Vector3 a, Vector3 b, Vector3 c)
     {
         var __mb = __mb_segment_intersects_triangle;
         if (__mb == 0)
@@ -10719,7 +10712,7 @@ public unsafe partial class Geometry3D : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 }
@@ -10735,33 +10728,33 @@ public unsafe partial class GeometryInstance3D : VisualInstance3D
 
     public enum ShadowCastingSetting : long
     {
-        SHADOW_CASTING_SETTING_OFF = 0,
-        SHADOW_CASTING_SETTING_ON = 1,
-        SHADOW_CASTING_SETTING_DOUBLE_SIDED = 2,
-        SHADOW_CASTING_SETTING_SHADOWS_ONLY = 3,
+        Off = 0,
+        On = 1,
+        DoubleSided = 2,
+        ShadowsOnly = 3,
     }
 
     public enum GIMode : long
     {
-        GI_MODE_DISABLED = 0,
-        GI_MODE_STATIC = 1,
-        GI_MODE_DYNAMIC = 2,
+        Disabled = 0,
+        Static = 1,
+        Dynamic = 2,
     }
 
     public enum LightmapScale : long
     {
-        LIGHTMAP_SCALE_1X = 0,
-        LIGHTMAP_SCALE_2X = 1,
-        LIGHTMAP_SCALE_4X = 2,
-        LIGHTMAP_SCALE_8X = 3,
-        LIGHTMAP_SCALE_MAX = 4,
+        Scale1x = 0,
+        Scale2x = 1,
+        Scale4x = 2,
+        Scale8x = 3,
+        Max = 4,
     }
 
     public enum VisibilityRangeFadeModeEnum : long
     {
-        VISIBILITY_RANGE_FADE_DISABLED = 0,
-        VISIBILITY_RANGE_FADE_SELF = 1,
-        VISIBILITY_RANGE_FADE_DEPENDENCIES = 2,
+        Disabled = 0,
+        Self = 1,
+        Dependencies = 2,
     }
 
     public Material? MaterialOverride
@@ -11506,16 +11499,16 @@ public unsafe partial class Gradient : Resource
 
     public enum InterpolationModeEnum : long
     {
-        GRADIENT_INTERPOLATE_LINEAR = 0,
-        GRADIENT_INTERPOLATE_CONSTANT = 1,
-        GRADIENT_INTERPOLATE_CUBIC = 2,
+        Linear = 0,
+        Constant = 1,
+        Cubic = 2,
     }
 
     public enum ColorSpace : long
     {
-        GRADIENT_COLOR_SPACE_SRGB = 0,
-        GRADIENT_COLOR_SPACE_LINEAR_SRGB = 1,
-        GRADIENT_COLOR_SPACE_OKLAB = 2,
+        Srgb = 0,
+        LinearSrgb = 1,
+        Oklab = 2,
     }
 
     public Gradient.InterpolationModeEnum InterpolationMode
@@ -11862,17 +11855,17 @@ public unsafe partial class GradientTexture2D : Texture2D
 
     public enum FillEnum : long
     {
-        FILL_LINEAR = 0,
-        FILL_RADIAL = 1,
-        FILL_SQUARE = 2,
-        FILL_CONIC = 3,
+        Linear = 0,
+        Radial = 1,
+        Square = 2,
+        Conic = 3,
     }
 
     public enum RepeatEnum : long
     {
-        REPEAT_NONE = 0,
-        REPEAT = 1,
-        REPEAT_MIRROR = 2,
+        RepeatNone = 0,
+        Repeat = 1,
+        RepeatMirror = 2,
     }
 
     public Gradient? Gradient
@@ -12153,14 +12146,14 @@ public unsafe partial class GraphEdit : Control
 
     public enum PanningSchemeEnum : long
     {
-        SCROLL_ZOOMS = 0,
-        SCROLL_PANS = 1,
+        Zooms = 0,
+        Pans = 1,
     }
 
     public enum GridPatternEnum : long
     {
-        GRID_PATTERN_LINES = 0,
-        GRID_PATTERN_DOTS = 1,
+        Lines = 0,
+        Dots = 1,
     }
 
     public Vector2 ScrollOffset
@@ -12314,7 +12307,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_connect_node;
-    public Error ConnectNode(string fromNode, int fromPort, string toNode, int toPort, bool keepAlive)
+    public Error ConnectNode(string fromNode, int fromPort, string toNode, int toPort, bool keepAlive = false)
     {
         var __mb = __mb_connect_node;
         if (__mb == 0)
@@ -12461,7 +12454,7 @@ public unsafe partial class GraphEdit : Control
     }
 
     private static nint __mb_get_closest_connection_at_point;
-    public Godot.Collections.Dictionary GetClosestConnectionAtPoint(Vector2 point, float maxDistance)
+    public Godot.Collections.Dictionary GetClosestConnectionAtPoint(Vector2 point, float maxDistance = 4.0f)
     {
         var __mb = __mb_get_closest_connection_at_point;
         if (__mb == 0)
@@ -14109,7 +14102,7 @@ public unsafe partial class GraphNode : GraphElement
     }
 
     private static nint __mb_set_slot;
-    public void SetSlot(int slotIndex, bool enableLeftPort, int typeLeft, Color colorLeft, bool enableRightPort, int typeRight, Color colorRight, Texture2D? customIconLeft, Texture2D? customIconRight, bool drawStylebox)
+    public void SetSlot(int slotIndex, bool enableLeftPort, int typeLeft, Color colorLeft, bool enableRightPort, int typeRight, Color colorRight, Texture2D? customIconLeft = null, Texture2D? customIconRight = null, bool drawStylebox = true)
     {
         var __mb = __mb_set_slot;
         if (__mb == 0)
@@ -14877,9 +14870,9 @@ public unsafe partial class GridMap : Node3D
 
     public enum DebugVisibilityMode : long
     {
-        DEBUG_VISIBILITY_MODE_DEFAULT = 0,
-        DEBUG_VISIBILITY_MODE_FORCE_SHOW = 1,
-        DEBUG_VISIBILITY_MODE_FORCE_HIDE = 2,
+        Default = 0,
+        ForceShow = 1,
+        ForceHide = 2,
     }
 
     public MeshLibrary? MeshLibrary
@@ -15374,7 +15367,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_set_cell_item;
-    public void SetCellItem(Vector3I position, int item, int orientation)
+    public void SetCellItem(Vector3I position, int item, int orientation = unchecked((int)(0)))
     {
         var __mb = __mb_set_cell_item;
         if (__mb == 0)
@@ -15861,7 +15854,7 @@ public unsafe partial class GridMap : Node3D
     }
 
     private static nint __mb_make_baked_meshes;
-    public void MakeBakedMeshes(bool genLightmapUv, float lightmapUvTexelSize)
+    public void MakeBakedMeshes(bool genLightmapUv = false, float lightmapUvTexelSize = 0.1f)
     {
         var __mb = __mb_make_baked_meshes;
         if (__mb == 0)
@@ -16101,11 +16094,11 @@ public unsafe partial class GodotObject
     [Flags]
     public enum ConnectFlags : long
     {
-        CONNECT_DEFERRED = 1,
-        CONNECT_PERSIST = 2,
-        CONNECT_ONE_SHOT = 4,
-        CONNECT_REFERENCE_COUNTED = 8,
-        CONNECT_APPEND_SOURCE_OBJECT = 16,
+        Deferred = 1,
+        Persist = 2,
+        OneShot = 4,
+        ReferenceCounted = 8,
+        AppendSourceObject = 16,
     }
 
     private static nint __mb_get_class;
@@ -16280,7 +16273,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_notification;
-    public void Notification(int what, bool reversed)
+    public void Notification(int what, bool reversed = false)
     {
         var __mb = __mb_notification;
         if (__mb == 0)
@@ -16378,7 +16371,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_get_meta;
-    public Variant GetMeta(string name, Variant @default)
+    public Variant GetMeta(string name, Variant @default = default)
     {
         var __mb = __mb_get_meta;
         if (__mb == 0)
@@ -16717,7 +16710,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_tr;
-    public string Tr(string message, string context)
+    public string Tr(string message, string context = "")
     {
         var __mb = __mb_tr;
         if (__mb == 0)
@@ -16737,7 +16730,7 @@ public unsafe partial class GodotObject
     }
 
     private static nint __mb_tr_n;
-    public string TrN(string message, string pluralMessage, int n, string context)
+    public string TrN(string message, string pluralMessage, int n, string context = "")
     {
         var __mb = __mb_tr_n;
         if (__mb == 0)
