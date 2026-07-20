@@ -187,6 +187,15 @@ def parse_arguments():
         help="Enable Single Compilation Unit build",
     )
 
+    parser.add_argument(
+        "--mono",
+        type=str,
+        choices=["yes", "no"],
+        default="yes",
+        help="Build with the mono module (GodotSharp). 'no' produces a pure "
+        "GDExtension-consumable libgodot and skips glue generation",
+    )
+
     # Build steps control
     parser.add_argument(
         "--no-library",
@@ -326,6 +335,7 @@ def show_build_config(args, platform_config: PlatformConfig):
     table.add_row("Debug Symbols (separate)", args.debug_symbols)
     table.add_row("SCU Build", args.scu_build)
     table.add_row("Dev Build", args.dev_build)
+    table.add_row("Mono Module", args.mono)
 
     # Build steps
     table.add_row("─" * 30, "─" * 11)
@@ -340,13 +350,13 @@ def show_build_config(args, platform_config: PlatformConfig):
 def build_editor(args, platform_config: PlatformConfig):
     """Build Godot executable."""
     console.print("\n[bold yellow]┌── Building Godot Editor ──┐[/bold yellow]")
-    task_desc = "Building Godot Editor (with mono)"
+    task_desc = f"Building Godot Editor (mono={args.mono})"
     cmd = [
         "scons",
         f"platform={platform_config.godot_platform}",
         f"arch={platform_config.godot_arch}",
         "target=editor",
-        "module_mono_enabled=yes",
+        f"module_mono_enabled={args.mono}",
         "extra_suffix=executable",
         "d3d12=no",
         f"dev_build={args.dev_build}",
@@ -413,7 +423,7 @@ def build_libgodot_web(args):
             "platform=web",
             "arch=wasm32",
             f"target={target}",
-            "module_mono_enabled=yes",
+            f"module_mono_enabled={args.mono}",
             "library_type=static_library",
             "extra_suffix=static_library",
             "threads=no",
@@ -482,7 +492,7 @@ def build_libgodot(args, platform_config: PlatformConfig):
             f"platform={platform_config.godot_platform}",
             f"arch={platform_config.godot_arch}",
             f"target={target}",
-            "module_mono_enabled=yes",
+            f"module_mono_enabled={args.mono}",
             "d3d12=no",
             "library_type=shared_library",
             "extra_suffix=shared_library",
@@ -563,6 +573,10 @@ def main():
     if platform_config.godot_platform == Platform.WEB.value:
         # No editor or glue on web; both come from desktop builds.
         args.no_editor = True
+        args.no_glue = True
+
+    if args.mono == "no":
+        # Mono glue requires a mono-enabled editor binary.
         args.no_glue = True
 
     if not args.no_editor:
