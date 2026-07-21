@@ -28,6 +28,7 @@
         <file src="../../nuget/GODOT_AUTHORS.md" target="AUTHORS.md"/>
         <!-- MSBuild targets for native library copying -->
         <file src="build/2dog.gdextension.linux-x64.targets" target="build/2dog.gdextension.linux-x64.targets"/>
+        <file src="../common/2dog.native-resolver.targets" target="build/2dog.native-resolver.targets"/>
         <file src="buildTransitive/2dog.gdextension.linux-x64.targets" target="buildTransitive/2dog.gdextension.linux-x64.targets"/>
     </files>
 </package>

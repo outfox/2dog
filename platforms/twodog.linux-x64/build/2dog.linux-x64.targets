@@ -2,103 +2,47 @@
     <!--
       TwoDog Linux x64 Meta Package Targets
 
-      This meta package owns all native libgodot.so copy logic.
-
-      Behaviour:
-      - When consumed as a NuGet package, it locates the appropriate libgodot.so
-        from the variant dependency packages (release, debug, editor) in the
-        global NuGet package cache and copies it to the output/publish directory.
-      - When used via ProjectReference in this repository, it falls back to the
-        locally built Godot binaries in godot/bin.
-
-      Variant selection: $(TwoDogVariant) ('release' default, 'debug', 'editor').
-      The native is copied as libgodot-<variant>.so; twodog's DllImportResolver
-      loads it by the variant declared in the consuming assembly's metadata, so
-      a mismatched or stale native fails loudly instead of half-working.
+      Parameter block for the shared native resolver
+      (2dog.native-resolver.targets, shipped alongside this file): declares
+      where this package's natives live and how they are named. The shared
+      targets resolve the $(TwoDogVariant) native - NuGet package first,
+      local godot/bin fallback - and copy it to output/publish as
+      libgodot-<variant>.so.
     -->
-
-    <!-- Discover package version from this .targets location -->
-    <!-- MSBuildThisFileDirectory = .../packages/2dog.linux-x64/0.1.0-pre/build/ (with trailing slash) -->
-    <!-- TrimEnd the trailing slash, then get parent directory name -->
     <PropertyGroup>
         <_TwoDogLinuxX64TargetsDir>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</_TwoDogLinuxX64TargetsDir>
         <TwoDogLinuxX64PackageVersion Condition="'$(TwoDogLinuxX64PackageVersion)' == ''">$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogLinuxX64TargetsDir)'))))</TwoDogLinuxX64PackageVersion>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <!-- Variant package paths in the NuGet global packages folder -->
-        <!-- $(NuGetPackageRoot) is set by NuGet restore and points to the packages cache -->
-        <TwoDogLinuxX64ReleasePackage>$(NuGetPackageRoot)/2dog.linux-x64.release/$(TwoDogLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot-release.so</TwoDogLinuxX64ReleasePackage>
-        <TwoDogLinuxX64DebugPackage>$(NuGetPackageRoot)/2dog.linux-x64.debug/$(TwoDogLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot-debug.so</TwoDogLinuxX64DebugPackage>
-        <TwoDogLinuxX64EditorPackage>$(NuGetPackageRoot)/2dog.linux-x64.editor/$(TwoDogLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot-editor.so</TwoDogLinuxX64EditorPackage>
-
-        <!-- Local development paths (fallback for ProjectReference builds) -->
         <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
-        <TwoDogLinuxX64ReleaseLocal>$(TwoDogLocalGodotBin)libgodot.linuxbsd.template_release.x86_64.shared_library.so</TwoDogLinuxX64ReleaseLocal>
-        <TwoDogLinuxX64DebugLocal>$(TwoDogLocalGodotBin)libgodot.linuxbsd.template_debug.x86_64.shared_library.so</TwoDogLinuxX64DebugLocal>
-        <TwoDogLinuxX64EditorLocal>$(TwoDogLocalGodotBin)libgodot.linuxbsd.editor.x86_64.shared_library.so</TwoDogLinuxX64EditorLocal>
     </PropertyGroup>
 
     <!-- Export the editor libgodot location for the build machine. Consumed by
-         the 2dog package's automatic import target (TwoDogImportGodotProject),
-         which runs the import helper against it. Host-OS guarded (not RID):
-         the import runs on the machine doing the build. -->
+         the 2dog.engine package's automatic import target
+         (TwoDogImportGodotProject), which runs the import helper against it.
+         Host-OS guarded (not RID): the import runs on the machine doing the
+         build. -->
     <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogLinuxX64EditorPackage)')">$(TwoDogLinuxX64EditorPackage)</TwoDogEditorLibGodotPath>
-        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogLinuxX64EditorLocal)')">$(TwoDogLinuxX64EditorLocal)</TwoDogEditorLibGodotPath>
+        <_TwoDogLinuxX64EditorPackage>$(NuGetPackageRoot)/2dog.linux-x64.editor/$(TwoDogLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot-editor.so</_TwoDogLinuxX64EditorPackage>
+        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(_TwoDogLinuxX64EditorPackage)')">$(_TwoDogLinuxX64EditorPackage)</TwoDogEditorLibGodotPath>
+        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogLocalGodotBin)libgodot.linuxbsd.editor.x86_64.shared_library.so')">$(TwoDogLocalGodotBin)libgodot.linuxbsd.editor.x86_64.shared_library.so</TwoDogEditorLibGodotPath>
     </PropertyGroup>
 
-    <!-- Preferred variant follows $(TwoDogVariant); 'release' when unset.
-         Deliberately NOT derived from $(Configuration): a single property
-         selects both the native and the GodotPlugins layout (2dog.targets),
-         so the two can never disagree. -->
-    <PropertyGroup>
-        <TwoDogLinuxX64PreferredVariant Condition="'$(TwoDogLinuxX64PreferredVariant)' == ''">$(TwoDogVariant)</TwoDogLinuxX64PreferredVariant>
-        <TwoDogLinuxX64PreferredVariant Condition="'$(TwoDogLinuxX64PreferredVariant)' == ''">release</TwoDogLinuxX64PreferredVariant>
-    </PropertyGroup>
+    <ItemGroup>
+        <TwoDogNativeResolver Include="linux-x64">
+            <PackageId>2dog.linux-x64</PackageId>
+            <PackageVersion>$(TwoDogLinuxX64PackageVersion)</PackageVersion>
+            <LibPrefix>libgodot</LibPrefix>
+            <Ext>so</Ext>
+            <HostOs>Linux</HostOs>
+            <RidPrefix>linux</RidPrefix>
+            <LocalBin>$(TwoDogLocalGodotBin)</LocalBin>
+            <LocalRelease>libgodot.linuxbsd.template_release.x86_64.shared_library.so</LocalRelease>
+            <LocalDebug>libgodot.linuxbsd.template_debug.x86_64.shared_library.so</LocalDebug>
+            <LocalEditor>libgodot.linuxbsd.editor.x86_64.shared_library.so</LocalEditor>
+        </TwoDogNativeResolver>
+    </ItemGroup>
 
-    <PropertyGroup>
-        <TwoDogLinuxX64VariantPackagePath Condition="'$(TwoDogLinuxX64PreferredVariant)' == 'editor'">$(TwoDogLinuxX64EditorPackage)</TwoDogLinuxX64VariantPackagePath>
-        <TwoDogLinuxX64VariantPackagePath Condition="'$(TwoDogLinuxX64PreferredVariant)' == 'debug'">$(TwoDogLinuxX64DebugPackage)</TwoDogLinuxX64VariantPackagePath>
-        <TwoDogLinuxX64VariantPackagePath Condition="'$(TwoDogLinuxX64PreferredVariant)' == 'release'">$(TwoDogLinuxX64ReleasePackage)</TwoDogLinuxX64VariantPackagePath>
-
-        <TwoDogLinuxX64VariantLocalPath Condition="'$(TwoDogLinuxX64PreferredVariant)' == 'editor'">$(TwoDogLinuxX64EditorLocal)</TwoDogLinuxX64VariantLocalPath>
-        <TwoDogLinuxX64VariantLocalPath Condition="'$(TwoDogLinuxX64PreferredVariant)' == 'debug'">$(TwoDogLinuxX64DebugLocal)</TwoDogLinuxX64VariantLocalPath>
-        <TwoDogLinuxX64VariantLocalPath Condition="'$(TwoDogLinuxX64PreferredVariant)' == 'release'">$(TwoDogLinuxX64ReleaseLocal)</TwoDogLinuxX64VariantLocalPath>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <TwoDogLinuxX64NativeLib Condition="'$(TwoDogLinuxX64VariantPackagePath)' != '' And Exists('$(TwoDogLinuxX64VariantPackagePath)')">$(TwoDogLinuxX64VariantPackagePath)</TwoDogLinuxX64NativeLib>
-        <TwoDogLinuxX64NativeLib Condition="'$(TwoDogLinuxX64NativeLib)' == '' And '$(TwoDogLinuxX64VariantLocalPath)' != '' And Exists('$(TwoDogLinuxX64VariantLocalPath)')">$(TwoDogLinuxX64VariantLocalPath)</TwoDogLinuxX64NativeLib>
-    </PropertyGroup>
-
-    <!-- Warn if native library cannot be resolved on the matching platform -->
-    <Target Name="TwoDogLinuxX64DiagnosticCheck"
-            BeforeTargets="Build"
-            Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('Linux')) And '$(TwoDogLinuxX64NativeLib)' == ''">
-        <Warning Text="TwoDog: Could not locate libgodot.so for linux-x64. Searched NuGet: $(TwoDogLinuxX64VariantPackagePath) — Local: $(TwoDogLinuxX64VariantLocalPath). The application will fail at runtime with DllNotFoundException." />
-    </Target>
-
-    <!-- Copy native library to output on build (Linux only) -->
-    <Target Name="TwoDogLinuxX64CopyNatives"
-            AfterTargets="Build"
-            Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('Linux')) And '$(TwoDogLinuxX64NativeLib)' != '' And Exists('$(TwoDogLinuxX64NativeLib)')">
-        <Copy SourceFiles="$(TwoDogLinuxX64NativeLib)"
-              DestinationFiles="$(OutputPath)libgodot-$(TwoDogLinuxX64PreferredVariant).so"
-              SkipUnchangedFiles="true"/>
-        <Message Importance="normal" Text="TwoDog: Copied Linux x64 $(TwoDogLinuxX64PreferredVariant) native library to $(OutputPath)"/>
-    </Target>
-
-    <!-- Copy native library on publish (when targeting Linux). A RID-less
-         publish targets the build host, so an empty RuntimeIdentifier counts
-         when the host is Linux - otherwise the publish folder ships without
-         the native and the app dies with DllNotFoundException. -->
-    <Target Name="TwoDogLinuxX64PublishNatives"
-            AfterTargets="Publish"
-            Condition="'$(DesignTimeBuild)' != 'true' And (('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('Linux'))) Or $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('linux'))) And '$(TwoDogLinuxX64NativeLib)' != '' And Exists('$(TwoDogLinuxX64NativeLib)')">
-        <Copy SourceFiles="$(TwoDogLinuxX64NativeLib)"
-              DestinationFiles="$(PublishDir)libgodot-$(TwoDogLinuxX64PreferredVariant).so"
-              SkipUnchangedFiles="true"/>
-        <Message Importance="high" Text="TwoDog: Published Linux x64 $(TwoDogLinuxX64PreferredVariant) native library to $(PublishDir)"/>
-    </Target>
+    <Import Project="$(MSBuildThisFileDirectory)2dog.native-resolver.targets"
+            Condition="'$(_TwoDogNativeResolverImported)' != 'true' And Exists('$(MSBuildThisFileDirectory)2dog.native-resolver.targets')"/>
+    <Import Project="$(MSBuildThisFileDirectory)../../common/2dog.native-resolver.targets"
+            Condition="'$(_TwoDogNativeResolverImported)' != 'true'"/>
 </Project>
