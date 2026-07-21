@@ -1,0 +1,82 @@
+<Project>
+    <!--
+      2dog.gdextension Linux x64 Meta Package Targets
+
+      Owns all native libgodot-gdext-*.so copy logic (non-mono natives for the
+      GDExtension-based 2dog stack; the mono-based 2dog.engine stack ships its
+      own libgodot-*.so via 2dog.linux-x64).
+
+      Behaviour:
+      - When consumed as a NuGet package, it locates the appropriate
+        libgodot-gdext so from the variant dependency packages in the global
+        NuGet package cache and copies it to the output/publish directory.
+      - When used via ProjectReference in this repository, it falls back to the
+        locally built non-mono Godot binaries in godot/bin
+        (extra_suffix=gdext_shared_library).
+
+      Variant selection: $(TwoDogVariant) ('release' default, 'debug', 'editor').
+    -->
+
+    <PropertyGroup>
+        <_TwoDogGdextLinuxX64TargetsDir>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</_TwoDogGdextLinuxX64TargetsDir>
+        <TwoDogGdextLinuxX64PackageVersion Condition="'$(TwoDogGdextLinuxX64PackageVersion)' == ''">$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogGdextLinuxX64TargetsDir)'))))</TwoDogGdextLinuxX64PackageVersion>
+    </PropertyGroup>
+
+    <!-- Variant package and local library locations -->
+    <PropertyGroup>
+        <TwoDogGdextLinuxX64ReleasePackage>$(NuGetPackageRoot)/2dog.gdextension.linux-x64.release/$(TwoDogGdextLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot-gdext-release.so</TwoDogGdextLinuxX64ReleasePackage>
+        <TwoDogGdextLinuxX64DebugPackage>$(NuGetPackageRoot)/2dog.gdextension.linux-x64.debug/$(TwoDogGdextLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot-gdext-debug.so</TwoDogGdextLinuxX64DebugPackage>
+        <TwoDogGdextLinuxX64EditorPackage>$(NuGetPackageRoot)/2dog.gdextension.linux-x64.editor/$(TwoDogGdextLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot-gdext-editor.so</TwoDogGdextLinuxX64EditorPackage>
+
+        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
+        <TwoDogGdextLinuxX64ReleaseLocal>$(TwoDogLocalGodotBin)libgodot.linuxbsd.template_release.x86_64.gdext_shared_library.so</TwoDogGdextLinuxX64ReleaseLocal>
+        <TwoDogGdextLinuxX64DebugLocal>$(TwoDogLocalGodotBin)libgodot.linuxbsd.template_debug.x86_64.gdext_shared_library.so</TwoDogGdextLinuxX64DebugLocal>
+        <TwoDogGdextLinuxX64EditorLocal>$(TwoDogLocalGodotBin)libgodot.linuxbsd.editor.x86_64.gdext_shared_library.so</TwoDogGdextLinuxX64EditorLocal>
+    </PropertyGroup>
+
+    <!-- Preferred variant follows $(TwoDogVariant); 'release' when unset. -->
+    <PropertyGroup>
+        <TwoDogGdextLinuxX64PreferredVariant Condition="'$(TwoDogGdextLinuxX64PreferredVariant)' == ''">$(TwoDogVariant)</TwoDogGdextLinuxX64PreferredVariant>
+        <TwoDogGdextLinuxX64PreferredVariant Condition="'$(TwoDogGdextLinuxX64PreferredVariant)' == ''">release</TwoDogGdextLinuxX64PreferredVariant>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TwoDogGdextLinuxX64VariantPackagePath Condition="'$(TwoDogGdextLinuxX64PreferredVariant)' == 'editor'">$(TwoDogGdextLinuxX64EditorPackage)</TwoDogGdextLinuxX64VariantPackagePath>
+        <TwoDogGdextLinuxX64VariantPackagePath Condition="'$(TwoDogGdextLinuxX64PreferredVariant)' == 'debug'">$(TwoDogGdextLinuxX64DebugPackage)</TwoDogGdextLinuxX64VariantPackagePath>
+        <TwoDogGdextLinuxX64VariantPackagePath Condition="'$(TwoDogGdextLinuxX64PreferredVariant)' == 'release'">$(TwoDogGdextLinuxX64ReleasePackage)</TwoDogGdextLinuxX64VariantPackagePath>
+
+        <TwoDogGdextLinuxX64VariantLocalPath Condition="'$(TwoDogGdextLinuxX64PreferredVariant)' == 'editor'">$(TwoDogGdextLinuxX64EditorLocal)</TwoDogGdextLinuxX64VariantLocalPath>
+        <TwoDogGdextLinuxX64VariantLocalPath Condition="'$(TwoDogGdextLinuxX64PreferredVariant)' == 'debug'">$(TwoDogGdextLinuxX64DebugLocal)</TwoDogGdextLinuxX64VariantLocalPath>
+        <TwoDogGdextLinuxX64VariantLocalPath Condition="'$(TwoDogGdextLinuxX64PreferredVariant)' == 'release'">$(TwoDogGdextLinuxX64ReleaseLocal)</TwoDogGdextLinuxX64VariantLocalPath>
+    </PropertyGroup>
+
+    <!-- Resolve final native library path: prefer NuGet package, fall back to local -->
+    <PropertyGroup>
+        <TwoDogGdextLinuxX64NativeLib Condition="'$(TwoDogGdextLinuxX64VariantPackagePath)' != '' And Exists('$(TwoDogGdextLinuxX64VariantPackagePath)')">$(TwoDogGdextLinuxX64VariantPackagePath)</TwoDogGdextLinuxX64NativeLib>
+        <TwoDogGdextLinuxX64NativeLib Condition="'$(TwoDogGdextLinuxX64NativeLib)' == '' And '$(TwoDogGdextLinuxX64VariantLocalPath)' != '' And Exists('$(TwoDogGdextLinuxX64VariantLocalPath)')">$(TwoDogGdextLinuxX64VariantLocalPath)</TwoDogGdextLinuxX64NativeLib>
+    </PropertyGroup>
+
+    <Target Name="TwoDogGdextLinuxX64DiagnosticCheck"
+            BeforeTargets="Build"
+            Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('Linux')) And '$(TwoDogGdextLinuxX64NativeLib)' == ''">
+        <Warning Text="2dog.gdextension: Could not locate libgodot-gdext.so for linux-x64. Searched NuGet: $(TwoDogGdextLinuxX64VariantPackagePath) — Local: $(TwoDogGdextLinuxX64VariantLocalPath). The application will fail at runtime with DllNotFoundException." />
+    </Target>
+
+    <Target Name="TwoDogGdextLinuxX64CopyNatives"
+            AfterTargets="Build"
+            Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('Linux')) And '$(TwoDogGdextLinuxX64NativeLib)' != '' And Exists('$(TwoDogGdextLinuxX64NativeLib)')">
+        <Copy SourceFiles="$(TwoDogGdextLinuxX64NativeLib)"
+              DestinationFiles="$(OutputPath)libgodot-gdext-$(TwoDogGdextLinuxX64PreferredVariant).so"
+              SkipUnchangedFiles="true"/>
+        <Message Importance="normal" Text="2dog.gdextension: Copied Linux x64 $(TwoDogGdextLinuxX64PreferredVariant) native library to $(OutputPath)"/>
+    </Target>
+
+    <Target Name="TwoDogGdextLinuxX64PublishNatives"
+            AfterTargets="Publish"
+            Condition="'$(DesignTimeBuild)' != 'true' And (('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('Linux'))) Or $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('linux'))) And '$(TwoDogGdextLinuxX64NativeLib)' != '' And Exists('$(TwoDogGdextLinuxX64NativeLib)')">
+        <Copy SourceFiles="$(TwoDogGdextLinuxX64NativeLib)"
+              DestinationFiles="$(PublishDir)libgodot-gdext-$(TwoDogGdextLinuxX64PreferredVariant).so"
+              SkipUnchangedFiles="true"/>
+        <Message Importance="high" Text="2dog.gdextension: Published Linux x64 $(TwoDogGdextLinuxX64PreferredVariant) native library to $(PublishDir)"/>
+    </Target>
+</Project>

@@ -205,6 +205,18 @@ jobs:
             fi
           done
 
+          # The GDExtension-flavor (non-mono) natives ship in the same release.
+          # Releases created before the gdext builds existed lack them — fail
+          # early instead of letting ForcePackAllPlatforms silently produce
+          # 2dog.gdextension.[rid] packages with no native library inside.
+          for os in windows linuxbsd macos; do
+            count=$(ls godot/bin/*godot.$os.*.gdext_shared_library.* 2>/dev/null | wc -l)
+            if [ "$count" -ne 3 ]; then
+              echo "::error::Release godot-${{ needs.check-natives.outputs.hash }} has $count/3 GDExtension-flavor natives for $os. Re-run the '2dog Build Natives' workflow with force=true to add them."
+              exit 1
+            fi
+          done
+
           echo "Staged godot/bin contents:"
           find godot/bin -type f | sort
           echo ""
@@ -227,6 +239,14 @@ jobs:
           dotnet pack twodog.engine
           dotnet pack twodog.xunit
           dotnet pack twodog
+
+      # GDExtension stack: 2dog.bindings + 2dog.gdextension (the source
+      # generator rides inside 2dog.gdextension as an analyzer asset, keyed
+      # on $(Configuration) — pack Release explicitly).
+      - name: Pack gdextension packages
+        run: |
+          dotnet pack twodog.bindings -c Release
+          dotnet pack twodog.gdextension -c Release
           ls -lh packages/
 
       - name: Upload godot-bin artifact
@@ -615,7 +635,7 @@ jobs:
       - name: Verify packages match tag
         run: |
           TAG_VERSION="${GITHUB_REF#refs/tags/v}"
-          for pkg in "2dog" "2dog.engine"; do
+          for pkg in "2dog" "2dog.engine" "2dog.bindings" "2dog.gdextension"; do
             if [[ ! -f "packages/${pkg}.${TAG_VERSION}.nupkg" ]]; then
               echo "::error::packages/ does not contain ${pkg}.${TAG_VERSION}.nupkg — refusing to publish."
               echo "Artifact contents:"

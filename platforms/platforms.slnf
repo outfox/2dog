@@ -22,6 +22,21 @@
       "platforms\\twodog.browser-wasm\\twodog.browser-wasm.csproj",
 
       "platforms\\twodog.tools\\twodog.tools.csproj",
+
+      "platforms\\twodog.gdextension.win-x64\\twodog.gdextension.win-x64.release.csproj",
+      "platforms\\twodog.gdextension.win-x64\\twodog.gdextension.win-x64.debug.csproj",
+      "platforms\\twodog.gdextension.win-x64\\twodog.gdextension.win-x64.editor.csproj",
+      "platforms\\twodog.gdextension.win-x64\\twodog.gdextension.win-x64.csproj",
+
+      "platforms\\twodog.gdextension.linux-x64\\twodog.gdextension.linux-x64.release.csproj",
+      "platforms\\twodog.gdextension.linux-x64\\twodog.gdextension.linux-x64.debug.csproj",
+      "platforms\\twodog.gdextension.linux-x64\\twodog.gdextension.linux-x64.editor.csproj",
+      "platforms\\twodog.gdextension.linux-x64\\twodog.gdextension.linux-x64.csproj",
+
+      "platforms\\twodog.gdextension.osx-arm64\\twodog.gdextension.osx-arm64.release.csproj",
+      "platforms\\twodog.gdextension.osx-arm64\\twodog.gdextension.osx-arm64.debug.csproj",
+      "platforms\\twodog.gdextension.osx-arm64\\twodog.gdextension.osx-arm64.editor.csproj",
+      "platforms\\twodog.gdextension.osx-arm64\\twodog.gdextension.osx-arm64.csproj",
     ]
   }
 }

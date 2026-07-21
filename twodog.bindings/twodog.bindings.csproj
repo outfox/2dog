@@ -16,11 +16,13 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
         <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
     </PropertyGroup>
 
     <ItemGroup>
         <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
+        <None Include="README.md" Pack="true" PackagePath="README.md"/>
         <None Include="../nuget/GODOT_LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" Visible="false"/>
         <None Include="../nuget/GODOT_AUTHORS.md" Pack="true" PackagePath="AUTHORS.md" Visible="false"/>
     </ItemGroup>

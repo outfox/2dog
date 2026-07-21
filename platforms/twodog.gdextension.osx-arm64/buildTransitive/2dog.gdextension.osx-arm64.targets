@@ -1,0 +1,82 @@
+<Project>
+    <!--
+      2dog.gdextension macOS arm64 Meta Package Targets
+
+      Owns all native libgodot-gdext-*.dylib copy logic (non-mono natives for
+      the GDExtension-based 2dog stack; the mono-based 2dog.engine stack ships
+      its own libgodot-*.dylib via 2dog.osx-arm64).
+
+      Behaviour:
+      - When consumed as a NuGet package, it locates the appropriate
+        libgodot-gdext dylib from the variant dependency packages in the global
+        NuGet package cache and copies it to the output/publish directory.
+      - When used via ProjectReference in this repository, it falls back to the
+        locally built non-mono Godot binaries in godot/bin
+        (extra_suffix=gdext_shared_library).
+
+      Variant selection: $(TwoDogVariant) ('release' default, 'debug', 'editor').
+    -->
+
+    <PropertyGroup>
+        <_TwoDogGdextOsxArm64TargetsDir>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</_TwoDogGdextOsxArm64TargetsDir>
+        <TwoDogGdextOsxArm64PackageVersion Condition="'$(TwoDogGdextOsxArm64PackageVersion)' == ''">$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogGdextOsxArm64TargetsDir)'))))</TwoDogGdextOsxArm64PackageVersion>
+    </PropertyGroup>
+
+    <!-- Variant package and local library locations -->
+    <PropertyGroup>
+        <TwoDogGdextOsxArm64ReleasePackage>$(NuGetPackageRoot)/2dog.gdextension.osx-arm64.release/$(TwoDogGdextOsxArm64PackageVersion)/runtimes/osx-arm64/native/libgodot-gdext-release.dylib</TwoDogGdextOsxArm64ReleasePackage>
+        <TwoDogGdextOsxArm64DebugPackage>$(NuGetPackageRoot)/2dog.gdextension.osx-arm64.debug/$(TwoDogGdextOsxArm64PackageVersion)/runtimes/osx-arm64/native/libgodot-gdext-debug.dylib</TwoDogGdextOsxArm64DebugPackage>
+        <TwoDogGdextOsxArm64EditorPackage>$(NuGetPackageRoot)/2dog.gdextension.osx-arm64.editor/$(TwoDogGdextOsxArm64PackageVersion)/runtimes/osx-arm64/native/libgodot-gdext-editor.dylib</TwoDogGdextOsxArm64EditorPackage>
+
+        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
+        <TwoDogGdextOsxArm64ReleaseLocal>$(TwoDogLocalGodotBin)libgodot.macos.template_release.arm64.gdext_shared_library.dylib</TwoDogGdextOsxArm64ReleaseLocal>
+        <TwoDogGdextOsxArm64DebugLocal>$(TwoDogLocalGodotBin)libgodot.macos.template_debug.arm64.gdext_shared_library.dylib</TwoDogGdextOsxArm64DebugLocal>
+        <TwoDogGdextOsxArm64EditorLocal>$(TwoDogLocalGodotBin)libgodot.macos.editor.arm64.gdext_shared_library.dylib</TwoDogGdextOsxArm64EditorLocal>
+    </PropertyGroup>
+
+    <!-- Preferred variant follows $(TwoDogVariant); 'release' when unset. -->
+    <PropertyGroup>
+        <TwoDogGdextOsxArm64PreferredVariant Condition="'$(TwoDogGdextOsxArm64PreferredVariant)' == ''">$(TwoDogVariant)</TwoDogGdextOsxArm64PreferredVariant>
+        <TwoDogGdextOsxArm64PreferredVariant Condition="'$(TwoDogGdextOsxArm64PreferredVariant)' == ''">release</TwoDogGdextOsxArm64PreferredVariant>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TwoDogGdextOsxArm64VariantPackagePath Condition="'$(TwoDogGdextOsxArm64PreferredVariant)' == 'editor'">$(TwoDogGdextOsxArm64EditorPackage)</TwoDogGdextOsxArm64VariantPackagePath>
+        <TwoDogGdextOsxArm64VariantPackagePath Condition="'$(TwoDogGdextOsxArm64PreferredVariant)' == 'debug'">$(TwoDogGdextOsxArm64DebugPackage)</TwoDogGdextOsxArm64VariantPackagePath>
+        <TwoDogGdextOsxArm64VariantPackagePath Condition="'$(TwoDogGdextOsxArm64PreferredVariant)' == 'release'">$(TwoDogGdextOsxArm64ReleasePackage)</TwoDogGdextOsxArm64VariantPackagePath>
+
+        <TwoDogGdextOsxArm64VariantLocalPath Condition="'$(TwoDogGdextOsxArm64PreferredVariant)' == 'editor'">$(TwoDogGdextOsxArm64EditorLocal)</TwoDogGdextOsxArm64VariantLocalPath>
+        <TwoDogGdextOsxArm64VariantLocalPath Condition="'$(TwoDogGdextOsxArm64PreferredVariant)' == 'debug'">$(TwoDogGdextOsxArm64DebugLocal)</TwoDogGdextOsxArm64VariantLocalPath>
+        <TwoDogGdextOsxArm64VariantLocalPath Condition="'$(TwoDogGdextOsxArm64PreferredVariant)' == 'release'">$(TwoDogGdextOsxArm64ReleaseLocal)</TwoDogGdextOsxArm64VariantLocalPath>
+    </PropertyGroup>
+
+    <!-- Resolve final native library path: prefer NuGet package, fall back to local -->
+    <PropertyGroup>
+        <TwoDogGdextOsxArm64NativeLib Condition="'$(TwoDogGdextOsxArm64VariantPackagePath)' != '' And Exists('$(TwoDogGdextOsxArm64VariantPackagePath)')">$(TwoDogGdextOsxArm64VariantPackagePath)</TwoDogGdextOsxArm64NativeLib>
+        <TwoDogGdextOsxArm64NativeLib Condition="'$(TwoDogGdextOsxArm64NativeLib)' == '' And '$(TwoDogGdextOsxArm64VariantLocalPath)' != '' And Exists('$(TwoDogGdextOsxArm64VariantLocalPath)')">$(TwoDogGdextOsxArm64VariantLocalPath)</TwoDogGdextOsxArm64NativeLib>
+    </PropertyGroup>
+
+    <Target Name="TwoDogGdextOsxArm64DiagnosticCheck"
+            BeforeTargets="Build"
+            Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('OSX')) And '$(TwoDogGdextOsxArm64NativeLib)' == ''">
+        <Warning Text="2dog.gdextension: Could not locate libgodot-gdext.dylib for osx-arm64. Searched NuGet: $(TwoDogGdextOsxArm64VariantPackagePath) — Local: $(TwoDogGdextOsxArm64VariantLocalPath). The application will fail at runtime with DllNotFoundException." />
+    </Target>
+
+    <Target Name="TwoDogGdextOsxArm64CopyNatives"
+            AfterTargets="Build"
+            Condition="'$(DesignTimeBuild)' != 'true' And $([MSBuild]::IsOSPlatform('OSX')) And '$(TwoDogGdextOsxArm64NativeLib)' != '' And Exists('$(TwoDogGdextOsxArm64NativeLib)')">
+        <Copy SourceFiles="$(TwoDogGdextOsxArm64NativeLib)"
+              DestinationFiles="$(OutputPath)libgodot-gdext-$(TwoDogGdextOsxArm64PreferredVariant).dylib"
+              SkipUnchangedFiles="true"/>
+        <Message Importance="normal" Text="2dog.gdextension: Copied macOS arm64 $(TwoDogGdextOsxArm64PreferredVariant) native library to $(OutputPath)"/>
+    </Target>
+
+    <Target Name="TwoDogGdextOsxArm64PublishNatives"
+            AfterTargets="Publish"
+            Condition="'$(DesignTimeBuild)' != 'true' And (('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('OSX'))) Or $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('osx'))) And '$(TwoDogGdextOsxArm64NativeLib)' != '' And Exists('$(TwoDogGdextOsxArm64NativeLib)')">
+        <Copy SourceFiles="$(TwoDogGdextOsxArm64NativeLib)"
+              DestinationFiles="$(PublishDir)libgodot-gdext-$(TwoDogGdextOsxArm64PreferredVariant).dylib"
+              SkipUnchangedFiles="true"/>
+        <Message Importance="high" Text="2dog.gdextension: Published macOS arm64 $(TwoDogGdextOsxArm64PreferredVariant) native library to $(PublishDir)"/>
+    </Target>
+</Project>

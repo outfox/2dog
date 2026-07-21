@@ -305,10 +305,121 @@ jobs:
           path: godot/bin/web/${{ matrix.target }}/
           retention-days: 7
 
+  # Build the non-mono (GDExtension-flavor) libgodot libraries consumed by the
+  # 2dog.gdextension.[rid] packages. Same build as build-natives but with
+  # module_mono_enabled=no (extra_suffix=gdext_shared_library), desktop
+  # platforms only — no web flavor.
+  build-natives-gdext:
+    name: Build libgodot-gdext-${{ matrix.rid }}-${{ matrix.target }}
+    needs: preflight
+    if: needs.preflight.outputs.skip != 'true'
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [template_release, template_debug, editor]
+        platform: [linuxbsd, windows, macos]
+        include:
+          - platform: linuxbsd
+            runner: blacksmith-16vcpu-ubuntu-2404
+            arch: x86_64
+            rid: linux-x64
+            lib_ext: so
+          - platform: windows
+            runner: blacksmith-16vcpu-windows-2025
+            arch: x86_64
+            rid: win-x64
+            lib_ext: dll
+          - platform: macos
+            runner: blacksmith-12vcpu-macos-latest
+            arch: arm64
+            rid: osx-arm64
+            lib_ext: dylib
+
+    env:
+      SCONS_CACHE_MSVC_CONFIG: true
+      PYTHONIOENCODING: utf8
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install scons rich
+
+      - name: Install Linux dependencies
+        if: matrix.platform == 'linuxbsd'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            pkg-config \
+            libx11-dev \
+            libxcursor-dev \
+            libxinerama-dev \
+            libgl1-mesa-dev \
+            libglu1-mesa-dev \
+            libasound2-dev \
+            libpulse-dev \
+            libudev-dev \
+            libxi-dev \
+            libxrandr-dev \
+            libwayland-dev
+
+      - name: Install Vulkan SDK (macOS)
+        if: matrix.platform == 'macos'
+        run: sh godot/misc/scripts/install_vulkan_sdk_macos.sh
+
+      - name: Cache SCons
+        uses: actions/cache@v6
+        with:
+          path: |
+            godot/.scons_cache
+            ~/.cache/scons
+          key: libgodot-gdext-${{ matrix.rid }}-${{ matrix.target }}-${{ needs.preflight.outputs.submodule-hash }}
+          restore-keys: |
+            libgodot-gdext-${{ matrix.rid }}-${{ matrix.target }}-
+
+      - name: Build libgodot-gdext (${{ matrix.target }})
+        run: |
+          python build-godot.py \
+            --platform ${{ matrix.platform }} \
+            --arch ${{ matrix.arch }} \
+            --target ${{ matrix.target }} \
+            --mono no \
+            --no-editor \
+            --no-glue \
+            --dev-build no \
+            --debug-symbols no \
+            --scu-build yes \
+            --cache-path godot/.scons_cache
+
+      # Upload the library under its original Godot file name; ci.yml's staging
+      # step unzips all libgodot-*.zip assets straight into godot/bin.
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: libgodot-gdext-${{ matrix.rid }}-${{ matrix.target }}
+          path: godot/bin/*godot.${{ matrix.platform }}.${{ matrix.target }}.${{ matrix.arch }}.gdext_shared_library.${{ matrix.lib_ext }}
+          retention-days: 7
+
   # Create a GitHub release tagged godot-{hash} with all native libs + GodotSharp
   release:
     name: Create Release
-    needs: [preflight, build-godotsharp, build-natives]
+    needs: [preflight, build-godotsharp, build-natives, build-natives-gdext]
     if: needs.preflight.outputs.skip != 'true' && (github.event_name != 'workflow_dispatch' || github.event.inputs.create_release == 'true')
     runs-on: blacksmith-4vcpu-ubuntu-2404
 
@@ -352,6 +463,7 @@ jobs:
           - Windows x64 (template_release, template_debug, editor)
           - macOS arm64 (template_release, template_debug, editor)
           - Browser wasm32 (template_release, template_debug — static library payloads)
+          - GDExtension flavor (non-mono, `gdext_shared_library`): Linux x64, Windows x64, macOS arm64 (template_release, template_debug, editor)
 
           ### Additional assets
           - `godotsharp.zip` — GodotSharp assemblies (platform-independent)
