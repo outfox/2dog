@@ -173,9 +173,12 @@
         <_TwoDogGdextEditorLibExt Condition="$([MSBuild]::IsOSPlatform('OSX'))">dylib</_TwoDogGdextEditorLibExt>
         <_TwoDogGdextEditorPackageLib>$(NuGetPackageRoot)/2dog.gdextension.$(_TwoDogGdextHostRid).editor/$(TwoDogWebPackageVersion)/runtimes/$(_TwoDogGdextHostRid)/native/libgodot-gdext-editor.$(_TwoDogGdextEditorLibExt)</_TwoDogGdextEditorPackageLib>
         <TwoDogGdextEditorLibGodotPath Condition="'$(TwoDogGdextEditorLibGodotPath)' == '' And Exists('$(_TwoDogGdextEditorPackageLib)')">$(_TwoDogGdextEditorPackageLib)</TwoDogGdextEditorLibGodotPath>
-        <TwoDogGdextEditorLibGodotPath Condition="'$(TwoDogGdextEditorLibGodotPath)' == '' And Exists('$(MSBuildThisFileDirectory)../../../godot/bin/godot.windows.editor.x86_64.gdext_shared_library.dll')">$(MSBuildThisFileDirectory)../../../godot/bin/godot.windows.editor.x86_64.gdext_shared_library.dll</TwoDogGdextEditorLibGodotPath>
-        <TwoDogGdextEditorLibGodotPath Condition="'$(TwoDogGdextEditorLibGodotPath)' == '' And Exists('$(MSBuildThisFileDirectory)../../../godot/bin/libgodot.linuxbsd.editor.x86_64.gdext_shared_library.so')">$(MSBuildThisFileDirectory)../../../godot/bin/libgodot.linuxbsd.editor.x86_64.gdext_shared_library.so</TwoDogGdextEditorLibGodotPath>
-        <TwoDogGdextEditorLibGodotPath Condition="'$(TwoDogGdextEditorLibGodotPath)' == '' And Exists('$(MSBuildThisFileDirectory)../../../godot/bin/libgodot.macos.editor.arm64.gdext_shared_library.dylib')">$(MSBuildThisFileDirectory)../../../godot/bin/libgodot.macos.editor.arm64.gdext_shared_library.dylib</TwoDogGdextEditorLibGodotPath>
+        <!-- Source-checkout fallbacks are host-OS gated: godot/bin may hold
+             several platforms' natives (CI stages them all), and the export
+             must run the build machine's own editor library. -->
+        <TwoDogGdextEditorLibGodotPath Condition="'$(TwoDogGdextEditorLibGodotPath)' == '' And $([MSBuild]::IsOSPlatform('Windows')) And Exists('$(MSBuildThisFileDirectory)../../../godot/bin/godot.windows.editor.x86_64.gdext_shared_library.dll')">$(MSBuildThisFileDirectory)../../../godot/bin/godot.windows.editor.x86_64.gdext_shared_library.dll</TwoDogGdextEditorLibGodotPath>
+        <TwoDogGdextEditorLibGodotPath Condition="'$(TwoDogGdextEditorLibGodotPath)' == '' And $([MSBuild]::IsOSPlatform('Linux')) And Exists('$(MSBuildThisFileDirectory)../../../godot/bin/libgodot.linuxbsd.editor.x86_64.gdext_shared_library.so')">$(MSBuildThisFileDirectory)../../../godot/bin/libgodot.linuxbsd.editor.x86_64.gdext_shared_library.so</TwoDogGdextEditorLibGodotPath>
+        <TwoDogGdextEditorLibGodotPath Condition="'$(TwoDogGdextEditorLibGodotPath)' == '' And $([MSBuild]::IsOSPlatform('OSX')) And Exists('$(MSBuildThisFileDirectory)../../../godot/bin/libgodot.macos.editor.arm64.gdext_shared_library.dylib')">$(MSBuildThisFileDirectory)../../../godot/bin/libgodot.macos.editor.arm64.gdext_shared_library.dylib</TwoDogGdextEditorLibGodotPath>
 
         <!-- Import/export helper: package tools first, source checkout second
              (mirrors 2dog.engine.targets). -->

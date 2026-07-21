@@ -54,7 +54,11 @@ public class CompatTests
     public void StaticSingletons_AreStaticClasses()
     {
         // GodotSharp shape: no .Singleton needed for method calls.
-        Assert.Equal("Windows", OS.GetName());
+        var expectedOs = OperatingSystem.IsWindows() ? "Windows"
+            : OperatingSystem.IsLinux() ? "Linux"
+            : OperatingSystem.IsMacOS() ? "macOS"
+            : "?";
+        Assert.Equal(expectedOs, OS.GetName());
         Assert.True(Time.GetTicksMsec() >= 0);
         Assert.True(Godot.Engine.GetPhysicsFrames() >= 0);
         Assert.True(typeof(Godot.Engine).IsAbstract && typeof(Godot.Engine).IsSealed); // static class
