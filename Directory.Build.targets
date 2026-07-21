@@ -12,7 +12,8 @@
       state. All three symbols are rewritten in a single read/write pass.
     -->
     <UsingTask TaskName="SetTemplateDefaults" TaskFactory="RoslynCodeTaskFactory"
-               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll"
+               Condition="'$(MSBuildProjectName)' == 'twodog'">
         <ParameterGroup>
             <FilePath ParameterType="System.String" Required="true" />
             <TwoDogVer ParameterType="System.String" Required="true" />

@@ -11,13 +11,9 @@
         <IsPackable>true</IsPackable>
         <PackageId>2dog.gdextension</PackageId>
         <Version>$(TwoDogVersion)</Version>
-        <Authors>Moritz Voss</Authors>
         <Description>Host layer for the GDExtension-based 2dog stack: start and pump Godot's MainLoop from your C# application, no mono module required. Drop-in alternative to 2dog.engine - swap the package reference, keep your code. Pair with a 2dog.gdextension.[rid] natives package.</Description>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
     </PropertyGroup>
 
     <ItemGroup>

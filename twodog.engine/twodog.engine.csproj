@@ -20,13 +20,9 @@
     <PropertyGroup>
         <PackageId>2dog.engine</PackageId>
         <Version>$(TwoDogVersion)</Version>
-        <Authors>Moritz Voss</Authors>
         <Description>Embed the Godot engine in your .NET applications. Reference the 2dog.engine package and it will pull in the appropriate platform-specific package (2dog.win-x64, 2dog.linux-x64, or 2dog.osx-arm64) for native library support.</Description>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
         <IncludeSymbols>true</IncludeSymbols>
         <IsPackable>true</IsPackable>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -72,11 +68,9 @@
         <PackageReference Include="2dog.tools" Version="[$(NativesVersion)]" PrivateAssets="none"/>
     </ItemGroup>
 
-    <!-- Include MSBuild props/targets in the package -->
+    <!-- Include MSBuild targets in the package -->
     <ItemGroup>
-        <None Include="build\2dog.engine.props" Pack="true" PackagePath="build\"/>
         <None Include="build\2dog.engine.targets" Pack="true" PackagePath="build\"/>
-        <None Include="buildTransitive\2dog.engine.props" Pack="true" PackagePath="buildTransitive\"/>
         <None Include="buildTransitive\2dog.engine.targets" Pack="true" PackagePath="buildTransitive\"/>
     </ItemGroup>
 

@@ -11,13 +11,9 @@
         <IsPackable>true</IsPackable>
         <PackageId>2dog.bindings</PackageId>
         <Version>$(TwoDogVersion)</Version>
-        <Authors>Moritz Voss</Authors>
         <Description>GodotSharp-compatible C# bindings for Godot Engine over the GDExtension interface. Generated from extension_api.json - no mono module, no GodotSharp. Part of the 2dog.gdextension stack; usable standalone against any libgodot host.</Description>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
     </PropertyGroup>
 
     <ItemGroup>

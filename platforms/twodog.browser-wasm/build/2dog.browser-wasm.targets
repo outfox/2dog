@@ -195,19 +195,14 @@
     <Target Name="TwoDogExportGamePack"
             BeforeTargets="Publish"
             AfterTargets="Build"
+            DependsOnTargets="TwoDogResolveContentCapability"
             Inputs="@(TwoDogWebExportInputs)"
             Outputs="$(_TwoDogWebPackPath)"
             Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 
+        <!-- Editor/helper/tools capability comes from the shared
+             TwoDogResolveContentCapability target (2dog.engine.targets). -->
         <PropertyGroup>
-            <_TwoDogExportEditor>$(GodotEditor)</_TwoDogExportEditor>
-            <_TwoDogExportEditor Condition="'$(_TwoDogExportEditor)' == ''">$(GODOT_EDITOR)</_TwoDogExportEditor>
-            <_TwoDogToolsDir>$(TwoDogGodotToolsDir)</_TwoDogToolsDir>
-            <_TwoDogToolsDir Condition="'$(_TwoDogToolsDir)' == '' And Exists('$(MSBuildThisFileDirectory)../../../godot/bin/GodotSharp/Tools/GodotTools.dll')">$(MSBuildThisFileDirectory)../../../godot/bin/GodotSharp/Tools/</_TwoDogToolsDir>
-            <_TwoDogCanUseHelper>false</_TwoDogCanUseHelper>
-            <_TwoDogCanUseHelper Condition="'$(TwoDogImportHelperPath)' != '' And '$(TwoDogEditorLibGodotPath)' != '' And Exists('$(TwoDogEditorLibGodotPath)') And '$(_TwoDogToolsDir)' != '' And '$(TwoDogGodotApiSourcePath)' != ''">true</_TwoDogCanUseHelper>
-            <_TwoDogToolsDirArg>$(_TwoDogToolsDir.TrimEnd('\').TrimEnd('/'))</_TwoDogToolsDirArg>
-            <_TwoDogApiDirArg>$(TwoDogGodotApiSourcePath.TrimEnd('\').TrimEnd('/'))</_TwoDogApiDirArg>
             <_TwoDogWebPackFullPath>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(_TwoDogWebPackPath)'))))</_TwoDogWebPackFullPath>
             <_TwoDogExportPresetsPath>$(TwoDogGodotProjectFullPath)/export_presets.cfg</_TwoDogExportPresetsPath>
             <_TwoDogHasWebPreset>false</_TwoDogHasWebPreset>
@@ -222,17 +217,17 @@
         <MakeDir Directories="$([System.IO.Path]::GetDirectoryName('$(_TwoDogWebPackFullPath)'))"/>
 
         <!-- (1) explicitly configured external editor -->
-        <Exec Condition="'$(_TwoDogExportEditor)' != ''"
-              Command="&quot;$(_TwoDogExportEditor)&quot; --headless --export-pack &quot;$(TwoDogWebExportPreset)&quot; &quot;$(_TwoDogWebPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot;"
+        <Exec Condition="'$(TwoDogExternalGodotEditor)' != ''"
+              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogWebExportPreset)&quot; &quot;$(_TwoDogWebPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot;"
               IgnoreStandardErrorWarningFormat="true"/>
 
         <!-- (2) in-process export helper against the packaged editor libgodot -->
-        <Exec Condition="'$(_TwoDogExportEditor)' == '' And '$(_TwoDogCanUseHelper)' == 'true'"
+        <Exec Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' == 'true'"
               Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogWebExportPreset)&quot; --output &quot;$(_TwoDogWebPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; &quot;$(TwoDogGodotProjectFullPath)&quot;"
               EnvironmentVariables="GODOTSHARP_DIR=$(_TwoDogApiDirArg);GODOT_TOOLS_DIR=$(_TwoDogToolsDirArg)"
               IgnoreStandardErrorWarningFormat="true"/>
 
-        <Error Condition="'$(_TwoDogExportEditor)' == '' And '$(_TwoDogCanUseHelper)' != 'true'"
+        <Error Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' != 'true'"
                Text="TwoDog: web publish needs to export '$(TwoDogGodotProjectFullPath)' as a .pck, but no export capability was found (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)'). Set &lt;GodotEditor&gt; to a Godot editor binary, or restore the 2dog.&lt;host-rid&gt;.editor and 2dog.tools packages. Set &lt;TwoDogExportPack&gt;false&lt;/TwoDogExportPack&gt; to provide the pck yourself (wwwroot/$(TwoDogWebPackName))."/>
     </Target>
 

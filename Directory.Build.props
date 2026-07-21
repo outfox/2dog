@@ -23,4 +23,13 @@
         <!-- Allow running on any .NET 10+ runtime (10, 11, ...) -->
         <RollForward>LatestMajor</RollForward>
     </PropertyGroup>
+
+    <!-- Shared NuGet package metadata; packable projects only add what
+         differs (id, description, tags, icon/readme includes). -->
+    <PropertyGroup>
+        <Authors>Moritz Voss</Authors>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
+        <PackageOutputPath>$(MSBuildThisFileDirectory)packages/</PackageOutputPath>
+    </PropertyGroup>
 </Project>
