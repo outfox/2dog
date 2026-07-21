@@ -21,12 +21,14 @@ public sealed unsafe class Engine : IDisposable
     private static delegate* unmanaged<nint, void> _destroyGodotInstance;
 
     private readonly string _project;
-    private readonly string _path;
+    private readonly string? _path;
     private readonly string[] _args;
     private GodotInstance? _instance;
     private bool _ownsInstance;
 
-    public Engine(string project, string path = ".", params string[] args)
+    /// <summary>Pass a null <paramref name="path"/> to omit --path entirely
+    /// (web hosts: the boot shell prepends --main-pack instead).</summary>
+    public Engine(string project, string? path = ".", params string[] args)
     {
         _project = project;
         _path = path;
@@ -59,19 +61,27 @@ public sealed unsafe class Engine : IDisposable
                 $"{nameof(Engine)}: A Godot instance is already running. Only one instance may exist at a time " +
                 "(a Godot limitation) - dispose the previous Engine before starting a new one.");
 
-        var lib = NativePath is { } exact ? NativeLoader.LoadExact(exact) : NativeLoader.Load(Variant);
-        var create = (delegate* unmanaged<int, nint*, nint, nint>)NativeLibrary.GetExport(lib, "libgodot_create_godot_instance");
-        _destroyGodotInstance = (delegate* unmanaged<nint, void>)NativeLibrary.GetExport(lib, "libgodot_destroy_godot_instance");
-        RegisterProcessExitSweep();
+        // On browser the engine is statically linked into the .NET main module;
+        // entry points resolve via DirectPInvoke (see WebHost), not GetExport.
+        delegate* unmanaged<int, nint*, nint, nint> create = null;
+        if (!OperatingSystem.IsBrowser())
+        {
+            var lib = NativePath is { } exact ? NativeLoader.LoadExact(exact) : NativeLoader.Load(Variant);
+            create = (delegate* unmanaged<int, nint*, nint, nint>)NativeLibrary.GetExport(lib, "libgodot_create_godot_instance");
+            _destroyGodotInstance = (delegate* unmanaged<nint, void>)NativeLibrary.GetExport(lib, "libgodot_destroy_godot_instance");
+            RegisterProcessExitSweep();
+        }
 
-        List<string> godotArgs = [_project, "--path", _path, .. _args];
+        List<string> godotArgs = _path is null ? [_project, .. _args] : [_project, "--path", _path, .. _args];
         var argv = new nint[godotArgs.Count];
         for (var i = 0; i < godotArgs.Count; i++) argv[i] = Marshal.StringToCoTaskMemUTF8(godotArgs[i]);
         try
         {
             fixed (nint* argvPtr = argv)
             {
-                _godotInstancePtr = create(godotArgs.Count, argvPtr, GdExtensionHost.InitCallbackPointer);
+                _godotInstancePtr = OperatingSystem.IsBrowser()
+                    ? WebHost.CreateGodotInstance(godotArgs.Count, argvPtr, GdExtensionHost.InitCallbackPointer)
+                    : create(godotArgs.Count, argvPtr, GdExtensionHost.InitCallbackPointer);
             }
         }
         finally
@@ -103,10 +113,29 @@ public sealed unsafe class Engine : IDisposable
         return _instance;
     }
 
-    /// <summary>Runs the main loop to quit, invoking <paramref name="perFrame"/> every iteration.</summary>
+    /// <summary>
+    /// Runs the engine main loop.
+    /// Desktop: blocks, iterating the engine until it requests quit, invoking
+    /// <paramref name="perFrame"/> every iteration, then returns (the caller
+    /// still owns disposal).
+    /// Browser: hands the loop to emscripten and returns immediately; the
+    /// engine keeps running via per-frame callbacks and destroys itself on
+    /// quit (web is single-lifetime per page - do not Dispose after Run).
+    /// </summary>
     public void Run(Action? perFrame = null)
     {
         if (_instance is null) throw new InvalidOperationException($"{nameof(Engine)}: Call Start() first.");
+
+        if (OperatingSystem.IsBrowser())
+        {
+            WebHost.RunMainLoop(perFrame, () =>
+            {
+                _ownsInstance = false;
+                Destroy();
+            });
+            return;
+        }
+
         while (!_instance.Iteration())
         {
             perFrame?.Invoke();
@@ -116,6 +145,10 @@ public sealed unsafe class Engine : IDisposable
     public void Dispose()
     {
         if (!_ownsInstance || _godotInstancePtr == 0) return;
+        // On web, emscripten owns the main loop after Run(); the instance is
+        // destroyed by the engine's own quit flow (WebHost.ExitCallback), not
+        // by the host disposing on the way out of Main().
+        if (OperatingSystem.IsBrowser() && WebHost.MainLoopActive) return;
         _ownsInstance = false;
         Destroy();
     }
@@ -123,7 +156,10 @@ public sealed unsafe class Engine : IDisposable
     private static void Destroy()
     {
         DisposalQueue.Drain();
-        _destroyGodotInstance(_godotInstancePtr);
+        if (OperatingSystem.IsBrowser())
+            WebHost.DestroyGodotInstance(_godotInstancePtr);
+        else
+            _destroyGodotInstance(_godotInstancePtr);
         _godotInstancePtr = 0;
     }
 

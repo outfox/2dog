@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!--
+      Browser-wasm host demo for the GDExtension stack.
+
+      All web wiring (static link of the non-mono libgodot.a, emcc flags,
+      boot shell deployment) comes from the 2dog.gdextension.browser-wasm
+      package targets. This project consumes them via source-checkout imports
+      below; package consumers get the same thing automatically from
+      PackageReference 2dog.gdextension + 2dog.gdextension.browser-wasm.
+
+      Publish:  dotnet publish spikes/gdext.host.demo.web   (from the repo
+                root; the root global.json pins the wasm-capable SDK band.
+                Defaults to Release via Directory.Build.props; pass -c Debug
+                to override.)
+      Output:   AppBundle/ - serve with any static file server.
+
+      Game content: exported automatically from <GodotProjectDir> as
+      godot.pck during publish (TwoDogGdextExportGamePack in the
+      2dog.gdextension.browser-wasm targets).
+    -->
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <GodotProjectDir>../gdext.spike/project</GodotProjectDir>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../../twodog.gdextension/twodog.gdextension.csproj"/>
+    </ItemGroup>
+
+    <!-- Root the host assembly: registered extension classes are reached by
+         reflection. (twodog.bindings and twodog.gdextension are rooted by the
+         browser-wasm targets.) -->
+    <ItemGroup>
+        <TrimmerRootAssembly Include="$(TargetName)"/>
+    </ItemGroup>
+
+    <!-- Source-checkout equivalent of the NuGet package targets; package
+         consumers get this transitively. -->
+    <Import Project="../../platforms/twodog.gdextension.browser-wasm/build/2dog.gdextension.browser-wasm.targets"/>
+
+    <Target Name="DeepClean" AfterTargets="Clean">
+        <RemoveDir Directories="AppBundle"/>
+    </Target>
+</Project>

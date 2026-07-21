@@ -62,7 +62,7 @@ jobs:
     name: Build GodotSharp
     needs: preflight
     if: needs.preflight.outputs.skip != 'true'
-    runs-on: blacksmith-16vcpu-ubuntu-2404
+    runs-on: blacksmith-8vcpu-ubuntu-2404
 
     steps:
       - name: Checkout repository
@@ -160,12 +160,12 @@ jobs:
         platform: [linuxbsd, windows, macos]
         include:
           - platform: linuxbsd
-            runner: blacksmith-16vcpu-ubuntu-2404
+            runner: blacksmith-8vcpu-ubuntu-2404
             arch: x86_64
             rid: linux-x64
             lib_ext: so
           - platform: windows
-            runner: blacksmith-16vcpu-windows-2025
+            runner: blacksmith-8vcpu-windows-2025
             arch: x86_64
             rid: win-x64
             lib_ext: dll
@@ -179,13 +179,13 @@ jobs:
           # the .NET browser-wasm runtime pack the consumers publish with).
           - platform: web
             target: template_release
-            runner: blacksmith-16vcpu-ubuntu-2404
+            runner: blacksmith-8vcpu-ubuntu-2404
             arch: wasm32
             rid: browser-wasm
             lib_ext: a
           - platform: web
             target: template_debug
-            runner: blacksmith-16vcpu-ubuntu-2404
+            runner: blacksmith-8vcpu-ubuntu-2404
             arch: wasm32
             rid: browser-wasm
             lib_ext: a
@@ -307,8 +307,8 @@ jobs:
 
   # Build the non-mono (GDExtension-flavor) libgodot libraries consumed by the
   # 2dog.gdextension.[rid] packages. Same build as build-natives but with
-  # module_mono_enabled=no (extra_suffix=gdext_shared_library), desktop
-  # platforms only — no web flavor.
+  # module_mono_enabled=no (desktop: extra_suffix=gdext_shared_library,
+  # web: extra_suffix=gdext_static_library staged under godot/bin/web-gdext/).
   build-natives-gdext:
     name: Build libgodot-gdext-${{ matrix.rid }}-${{ matrix.target }}
     needs: preflight
@@ -321,12 +321,12 @@ jobs:
         platform: [linuxbsd, windows, macos]
         include:
           - platform: linuxbsd
-            runner: blacksmith-16vcpu-ubuntu-2404
+            runner: blacksmith-8vcpu-ubuntu-2404
             arch: x86_64
             rid: linux-x64
             lib_ext: so
           - platform: windows
-            runner: blacksmith-16vcpu-windows-2025
+            runner: blacksmith-8vcpu-windows-2025
             arch: x86_64
             rid: win-x64
             lib_ext: dll
@@ -335,6 +335,21 @@ jobs:
             arch: arm64
             rid: osx-arm64
             lib_ext: dylib
+          # Web (browser-wasm) gdext static libraries: no editor target,
+          # built with the emscripten version pinned in Directory.Build.props
+          # (the .a is linked into dotnet.native.wasm at consumer publish).
+          - platform: web
+            target: template_release
+            runner: blacksmith-8vcpu-ubuntu-2404
+            arch: wasm32
+            rid: browser-wasm
+            lib_ext: a
+          - platform: web
+            target: template_debug
+            runner: blacksmith-8vcpu-ubuntu-2404
+            arch: wasm32
+            rid: browser-wasm
+            lib_ext: a
 
     env:
       SCONS_CACHE_MSVC_CONFIG: true
@@ -383,6 +398,23 @@ jobs:
         if: matrix.platform == 'macos'
         run: sh godot/misc/scripts/install_vulkan_sdk_macos.sh
 
+      # Web: emscripten pinned to the version the .NET browser-wasm runtime
+      # pack was built with (see the mono build-natives job).
+      - name: Read pinned emscripten version
+        if: matrix.platform == 'web'
+        id: emsdk-version
+        run: |
+          VERSION=$(sed -n 's/.*<EmscriptenVersion>\(.*\)<\/EmscriptenVersion>.*/\1/p' Directory.Build.props)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Pinned emscripten: $VERSION"
+
+      - name: Setup emsdk
+        if: matrix.platform == 'web'
+        uses: emscripten-core/setup-emsdk@v16
+        with:
+          version: ${{ steps.emsdk-version.outputs.version }}
+          actions-cache-folder: emsdk-cache
+
       - name: Cache SCons
         uses: actions/cache@v6
         with:
@@ -410,10 +442,21 @@ jobs:
       # Upload the library under its original Godot file name; ci.yml's staging
       # step unzips all libgodot-*.zip assets straight into godot/bin.
       - name: Upload artifact
+        if: matrix.platform != 'web'
         uses: actions/upload-artifact@v7
         with:
           name: libgodot-gdext-${{ matrix.rid }}-${{ matrix.target }}
           path: godot/bin/*godot.${{ matrix.platform }}.${{ matrix.target }}.${{ matrix.arch }}.gdext_shared_library.${{ matrix.lib_ext }}
+          retention-days: 7
+
+      # Web uploads the whole payload directory - the contract with ci.yml's
+      # staging step and the 2dog.gdextension.browser-wasm packages.
+      - name: Upload artifact (web payload)
+        if: matrix.platform == 'web'
+        uses: actions/upload-artifact@v7
+        with:
+          name: libgodot-gdext-${{ matrix.rid }}-${{ matrix.target }}
+          path: godot/bin/web-gdext/${{ matrix.target }}/
           retention-days: 7
 
   # Create a GitHub release tagged godot-{hash} with all native libs + GodotSharp
@@ -464,6 +507,7 @@ jobs:
           - macOS arm64 (template_release, template_debug, editor)
           - Browser wasm32 (template_release, template_debug — static library payloads)
           - GDExtension flavor (non-mono, `gdext_shared_library`): Linux x64, Windows x64, macOS arm64 (template_release, template_debug, editor)
+          - GDExtension flavor browser wasm32 (template_release, template_debug — `gdext_static_library` payloads)
 
           ### Additional assets
           - `godotsharp.zip` — GodotSharp assemblies (platform-independent)

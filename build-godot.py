@@ -406,7 +406,8 @@ def check_emscripten_version():
 
 def build_libgodot_web(args):
     """Build the web (emscripten) static library and assemble the packaging
-    payload under godot/bin/web/<target>/."""
+    payload under godot/bin/web/<target>/ (mono flavor) or
+    godot/bin/web-gdext/<target>/ (gdext flavor)."""
     console.print("\n[bold yellow]┌── Building libgodot (web static library) ──┐[/bold yellow]")
 
     check_emscripten_version()
@@ -419,8 +420,20 @@ def build_libgodot_web(args):
     else:
         targets = [args.target]
 
+    # gdext (non-mono) web builds get their own suffix and staging dir so both
+    # flavors coexist in godot/bin (same convention as the desktop builds).
+    lib_suffix = "static_library" if args.mono == "yes" else "gdext_static_library"
+    web_dir = "web" if args.mono == "yes" else "web-gdext"
+
+    import shutil
+
     for target in targets:
-        task_desc = f"Building libgodot (target={target}, platform=web, arch=wasm32)"
+        # scons only ever adds to the .web_zip staging dir; wipe it so files
+        # from a previous flavor/module set don't leak into this payload.
+        stale_zip = os.path.join("godot", "bin", ".web_zip")
+        if os.path.isdir(stale_zip):
+            shutil.rmtree(stale_zip)
+        task_desc = f"Building libgodot (target={target}, platform=web, arch=wasm32, mono={args.mono})"
         cmd = [
             "scons",
             "platform=web",
@@ -428,7 +441,7 @@ def build_libgodot_web(args):
             f"target={target}",
             f"module_mono_enabled={args.mono}",
             "library_type=static_library",
-            "extra_suffix=static_library",
+            f"extra_suffix={lib_suffix}",
             "threads=no",
             "lto=none",
             "disable_crash_handler=yes",
@@ -447,11 +460,9 @@ def build_libgodot_web(args):
         #   web/<target>/shell/     - the Godot engine boot shell the page
         #                             loads (godot.js wraps mono_bridge +
         #                             engine.js; plus audio worklets)
-        import shutil
-
         zip_dir = os.path.join("godot", "bin", ".web_zip")
         src = os.path.join(zip_dir, "libgodot")
-        dst = os.path.join("godot", "bin", "web", target)
+        dst = os.path.join("godot", "bin", web_dir, target)
         if not os.path.isfile(os.path.join(src, "libgodot.a")):
             console.print(f"[bold red]Expected web payload not found at {src}[/bold red]")
             sys.exit(1)

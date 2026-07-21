@@ -11,7 +11,7 @@
              skip-duplicate push would otherwise keep the old package);
              reset to 0 when GodotVersion changes. NuGet normalizes a trailing .0
              (4.7.0.0 publishes as 4.7.0). -->
-        <NativesRevision>20</NativesRevision>
+        <NativesRevision>21</NativesRevision>
         <TwoDogVersion>$(GodotVersion).$(TwoDogRevision)</TwoDogVersion>
         <NativesVersion>$(GodotVersion).$(NativesRevision)</NativesVersion>
         <!-- Emscripten version for browser-wasm natives. Must match the emscripten

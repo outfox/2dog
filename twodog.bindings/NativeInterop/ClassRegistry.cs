@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -25,8 +26,16 @@ namespace Godot.NativeInterop;
 /// </summary>
 public static unsafe class ClassRegistry
 {
+    // Registered types are reached by reflection (Activator.CreateInstance,
+    // __BindMembers, virtual-override probing) - keep them whole when trimming.
+    private const DynamicallyAccessedMemberTypes RegisteredTypeMembers =
+        DynamicallyAccessedMemberTypes.PublicParameterlessConstructor |
+        DynamicallyAccessedMemberTypes.PublicMethods |
+        DynamicallyAccessedMemberTypes.NonPublicMethods;
+
     public sealed class ClassInfo
     {
+        [DynamicallyAccessedMembers(RegisteredTypeMembers)]
         public required Type Type { get; init; }
         public required string ClassName { get; init; }
         public required string ParentName { get; init; }
@@ -62,7 +71,7 @@ public static unsafe class ClassRegistry
     /// flushed automatically at SCENE-level initialization (when engine base
     /// classes exist in ClassDB).
     /// </summary>
-    public static void Register<T>() where T : GodotObject, new()
+    public static void Register<[DynamicallyAccessedMembers(RegisteredTypeMembers)] T>() where T : GodotObject, new()
     {
         var type = typeof(T);
         lock (Gate)
@@ -253,7 +262,7 @@ public static unsafe class ClassRegistry
     private static nint GetVirtualCallData(nint classUserdata, nint name, uint hash)
     {
         var info = (ClassInfo)GCHandle.FromIntPtr(classUserdata).Target!;
-        var payload = *(ulong*)name;
+        var payload = StringNames.ReadPayload(name);
         return IsOverridden(info, payload) ? 1 : 0;
     }
 
@@ -262,7 +271,7 @@ public static unsafe class ClassRegistry
     {
         if (GCHandle.FromIntPtr(instance).Target is GodotObject obj)
         {
-            obj.__CallVirtual(*(ulong*)name, args, ret);
+            obj.__CallVirtual(StringNames.ReadPayload(name), args, ret);
         }
     }
 

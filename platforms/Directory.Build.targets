@@ -48,6 +48,15 @@
         <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(WebPayloadDir)libgodot/libgodot.a')">false</IsPackable>
     </PropertyGroup>
 
+    <!-- GDExtension flavor of the web payload (2dog.gdextension.browser-wasm):
+         the non-mono static archive staged under godot/bin/web-gdext/. -->
+    <PropertyGroup Condition="'$(PlatformRID)' != '' And '$(PlatformOS)' == 'web' And '$(GdExtension)' == 'true'">
+        <PackageId>2dog.gdextension.$(PlatformRID)$(PackageSuffix)</PackageId>
+        <WebPayloadDir>$(GodotBinDir)web-gdext/$(BuildVariant)/</WebPayloadDir>
+        <IsPackable>true</IsPackable>
+        <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(WebPayloadDir)libgodot/libgodot.a')">false</IsPackable>
+    </PropertyGroup>
+
     <ItemGroup Condition="'$(PlatformRID)' != '' And '$(PlatformOS)' == 'web'">
         <None Include="$(WebPayloadDir)**"
               Pack="true"

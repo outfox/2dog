@@ -10,6 +10,7 @@ string? projectPath = null;
 string? exportPreset = null;
 string? exportOutput = null;
 var verbose = false;
+var gdext = false;
 
 for (var i = 0; i < args.Length; i++)
 {
@@ -35,6 +36,9 @@ for (var i = 0; i < args.Length; i++)
             break;
         case "--verbose":
             verbose = true;
+            break;
+        case "--gdext":
+            gdext = true;
             break;
         default:
             projectPath ??= args[i];
@@ -65,6 +69,8 @@ if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot
     Console.Error.WriteLine("                     content as a .pck using the named export preset");
     Console.Error.WriteLine("                     (from export_presets.cfg). Requires --output.");
     Console.Error.WriteLine("  --output <path>    Output .pck path for --export-pack.");
+    Console.Error.WriteLine("  --gdext            The libgodot is the non-mono (GDExtension) editor");
+    Console.Error.WriteLine("                     variant: skip the GodotPlugins/GodotTools setup.");
     Console.Error.WriteLine("  --verbose          Pass --verbose to the engine.");
     Console.Error.WriteLine();
     Console.Error.WriteLine("  The project path must contain a project.godot file.");
@@ -126,25 +132,30 @@ if (!File.Exists(libgodotPath))
     return 1;
 }
 
-apiDir = Path.GetFullPath(apiDir ?? AppContext.BaseDirectory);
-if (!File.Exists(Path.Combine(apiDir, "GodotPlugins.dll")))
+// The GodotPlugins/GodotTools setup only applies to mono-flavor editor
+// builds; a gdext (non-mono) libgodot has no GDMono to initialize.
+if (!gdext)
 {
-    Console.Error.WriteLine($"GodotPlugins.dll not found in API directory: {apiDir}");
-    return 1;
-}
+    apiDir = Path.GetFullPath(apiDir ?? AppContext.BaseDirectory);
+    if (!File.Exists(Path.Combine(apiDir, "GodotPlugins.dll")))
+    {
+        Console.Error.WriteLine($"GodotPlugins.dll not found in API directory: {apiDir}");
+        return 1;
+    }
 
-// GodotTools is mandatory for editor-mode C# initialization; the engine
-// hard-aborts (CRASH_COND) if it fails to load, so validate up front.
-toolsDir = toolsDir != null ? Path.GetFullPath(toolsDir) : null;
-if (toolsDir == null || !File.Exists(Path.Combine(toolsDir, "GodotTools.dll")))
-{
-    Console.Error.WriteLine($"GodotTools.dll not found in tools directory: {toolsDir ?? "<unset>"}");
-    Console.Error.WriteLine("Pass --tools-dir pointing at the GodotSharp/Tools assemblies.");
-    return 1;
-}
+    // GodotTools is mandatory for editor-mode C# initialization; the engine
+    // hard-aborts (CRASH_COND) if it fails to load, so validate up front.
+    toolsDir = toolsDir != null ? Path.GetFullPath(toolsDir) : null;
+    if (toolsDir == null || !File.Exists(Path.Combine(toolsDir, "GodotTools.dll")))
+    {
+        Console.Error.WriteLine($"GodotTools.dll not found in tools directory: {toolsDir ?? "<unset>"}");
+        Console.Error.WriteLine("Pass --tools-dir pointing at the GodotSharp/Tools assemblies.");
+        return 1;
+    }
 
-SetEnv("GODOTSHARP_DIR", apiDir);
-SetEnv("GODOT_TOOLS_DIR", toolsDir);
+    SetEnv("GODOTSHARP_DIR", apiDir);
+    SetEnv("GODOT_TOOLS_DIR", toolsDir);
+}
 
 var lib = NativeLibrary.Load(Path.GetFullPath(libgodotPath!));
 var exportName = exportPreset != null ? "libgodot_export_pack" : "libgodot_import_project";
