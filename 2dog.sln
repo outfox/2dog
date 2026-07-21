@@ -101,6 +101,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.gdextension.osx-arm6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.gdextension.osx-arm64", "platforms\twodog.gdextension.osx-arm64\twodog.gdextension.osx-arm64.csproj", "{A47B1067-4A71-4EC3-A0C8-276289A0901E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.bindings.compat", "twodog.bindings.compat\twodog.bindings.compat.csproj", "{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -825,6 +827,24 @@ Global
 		{A47B1067-4A71-4EC3-A0C8-276289A0901E}.Editor|x64.Build.0 = Debug|Any CPU
 		{A47B1067-4A71-4EC3-A0C8-276289A0901E}.Editor|x86.ActiveCfg = Debug|Any CPU
 		{A47B1067-4A71-4EC3-A0C8-276289A0901E}.Editor|x86.Build.0 = Debug|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Debug|x64.Build.0 = Debug|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Debug|x86.Build.0 = Debug|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Release|x64.ActiveCfg = Release|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Release|x64.Build.0 = Release|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Release|x86.ActiveCfg = Release|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Release|x86.Build.0 = Release|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Editor|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Editor|Any CPU.Build.0 = Debug|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Editor|x64.ActiveCfg = Debug|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Editor|x64.Build.0 = Debug|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Editor|x86.ActiveCfg = Debug|Any CPU
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC}.Editor|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -863,5 +883,6 @@ Global
 		{0665BA69-50A0-4A70-8BF3-731EBEFD3689} = {0F6EFEDA-EC3D-DCCC-E70A-7C6447473FFD}
 		{FB9CBD93-B39A-4337-8F6E-828B8E6BF856} = {0F6EFEDA-EC3D-DCCC-E70A-7C6447473FFD}
 		{A47B1067-4A71-4EC3-A0C8-276289A0901E} = {0F6EFEDA-EC3D-DCCC-E70A-7C6447473FFD}
+		{3CD836AB-B64B-4B38-A5E7-E5135D61F2DC} = {3937D8BA-6E7E-6DCB-BC86-A84C1834F184}
 	EndGlobalSection
 EndGlobal

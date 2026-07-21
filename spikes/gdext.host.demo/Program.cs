@@ -12,6 +12,12 @@ while (!File.Exists(Path.Combine(repoRoot, "2dog.sln")))
     repoRoot = Path.GetDirectoryName(repoRoot)!;
 var projectDir = Path.Combine(repoRoot, "spikes", "gdext.spike", "project");
 
+// The spike project ships without a .godot import cache; write the empty
+// global script class cache an import would produce, for an error-free boot.
+var cacheFile = Path.Combine(projectDir, ".godot", "global_script_class_cache.cfg");
+Directory.CreateDirectory(Path.GetDirectoryName(cacheFile)!);
+if (!File.Exists(cacheFile)) File.WriteAllText(cacheFile, "list=[]\n");
+
 var failures = 0;
 
 void Check(bool ok, string what)
@@ -71,6 +77,8 @@ Check(true, "clean engine dispose");
 Console.WriteLine(failures == 0
     ? "[host-demo] PASS - 2dog.gdextension host layer works end-to-end."
     : $"[host-demo] FAIL - {failures} checks failed.");
+// Machine-readable marker for the CI desktop smoke (see ci.yml).
+if (failures == 0) Console.WriteLine("2DOG_GDEXT_SMOKE_PASSED");
 return failures == 0 ? 0 : 1;
 
 /// <summary>A user node exactly as a migrated 2dog.engine user would write it.</summary>

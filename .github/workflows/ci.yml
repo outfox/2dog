@@ -319,6 +319,65 @@ jobs:
       - name: Test (Editor)
         run: dotnet test 2dog.tests.slnf -c Editor --no-restore
 
+  # Run the GDExtension-stack bindings tests on each platform, once per native
+  # variant (the package versions shipped by 2dog.gdextension.[rid]: release,
+  # debug, editor). The fixture selects the godot/bin native via TWODOG_VARIANT.
+  test-gdext:
+    name: Test GDExtension (${{ matrix.name }})
+    needs: [pack]
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x64
+            runner: blacksmith-4vcpu-ubuntu-2404
+          - name: win-x64
+            runner: blacksmith-4vcpu-windows-2025
+          - name: osx-arm64
+            runner: blacksmith-6vcpu-macos-latest
+
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Download godot-bin artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: godot-bin
+          path: godot
+
+      # nuget.config declares packages/ as a source; it is gitignored and this
+      # job doesn't need the package artifact, so create it empty for restore.
+      - name: Create local package source dir
+        shell: bash
+        run: mkdir -p packages
+
+      - name: Restore
+        run: dotnet restore twodog.bindings.tests
+
+      - name: Test (release variant)
+        env:
+          TWODOG_VARIANT: release
+        run: dotnet test twodog.bindings.tests --no-restore
+
+      - name: Test (debug variant)
+        env:
+          TWODOG_VARIANT: debug
+        run: dotnet test twodog.bindings.tests --no-restore
+
+      - name: Test (editor variant)
+        env:
+          TWODOG_VARIANT: editor
+        run: dotnet test twodog.bindings.tests --no-restore
+
   # Publish the demo desktop host the way an end user does (Release, RID) and
   # run the result headless. Regression guard: the engine used to load the
   # game assembly only from .godot/mono/temp/bin/Debug, so any Release-only
@@ -468,6 +527,69 @@ jobs:
           check smoke-norid.log "${{ steps.run_norid.outputs.status }}" "no-rid"
           exit $fail
 
+  # Publish the GDExtension host demo the way an end user does - PackageReference
+  # to the packed 2dog.gdextension + natives packages from the local feed - and
+  # run it headless once per native variant (release, debug, editor).
+  # Deliberately no godot-bin download: NativeLoader must find the package-copied
+  # native next to the app; a godot/bin fallback would mask a broken package.
+  desktop-smoke-gdext:
+    name: GDExtension Smoke (${{ matrix.name }})
+    needs: [pack]
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x64
+            runner: blacksmith-4vcpu-ubuntu-2404
+            exe: gdext.host.demo
+          - name: win-x64
+            runner: blacksmith-4vcpu-windows-2025
+            exe: gdext.host.demo.exe
+          - name: osx-arm64
+            runner: blacksmith-6vcpu-macos-latest
+            exe: gdext.host.demo
+
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages
+          path: packages
+
+      - name: Publish and run (all variants)
+        shell: bash
+        run: |
+          fail=0
+          for variant in release debug editor; do
+            out="spikes/gdext.host.demo/bin/smoke-$variant"
+            dotnet publish spikes/gdext.host.demo -c Release \
+              -p:TwoDogUsePackages=true -p:TwoDogVariant=$variant -o "$out"
+            set +e
+            "$out/${{ matrix.exe }}" 2>&1 | tee "smoke-gdext-$variant.log"
+            status=${PIPESTATUS[0]}
+            set -e
+            if [ "$status" != "0" ]; then
+              echo "::error::[gdext-smoke $variant] host exited with code $status"
+              fail=1
+            fi
+            if ! grep -q "2DOG_GDEXT_SMOKE_PASSED" "smoke-gdext-$variant.log"; then
+              echo "::error::[gdext-smoke $variant] smoke marker missing"
+              fail=1
+            fi
+          done
+          exit $fail
+
   # Publish the web demo end-to-end: statically links the web libgodot.a into
   # dotnet.native.wasm via the wasm-tools workload and asserts the app bundle
   # is complete. Consumers never install emsdk — the workload ships the
@@ -614,8 +736,9 @@ jobs:
     name: Deploy to NuGet
     # web-smoke gates deploy because the 2dog.browser-wasm packages it
     # exercises are among the packages being published; desktop-smoke gates it
-    # because it is the only check that runs a Release-only publish.
-    needs: [test, desktop-smoke, web-smoke]
+    # because it is the only check that runs a Release-only publish. The gdext
+    # jobs gate it because the 2dog.gdextension packages publish alongside.
+    needs: [test, test-gdext, desktop-smoke, desktop-smoke-gdext, web-smoke]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:

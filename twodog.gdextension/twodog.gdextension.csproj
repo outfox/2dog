@@ -36,6 +36,12 @@
               Visible="false"/>
     </ItemGroup>
 
+    <!-- Consumer MSBuild targets (TwoDogVariant default + metadata stamping) -->
+    <ItemGroup>
+        <None Include="build/2dog.gdextension.targets" Pack="true" PackagePath="build/"/>
+        <None Include="buildTransitive/2dog.gdextension.targets" Pack="true" PackagePath="buildTransitive/"/>
+    </ItemGroup>
+
     <ItemGroup>
         <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
         <None Include="README.md" Pack="true" PackagePath="README.md"/>

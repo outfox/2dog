@@ -36,6 +36,10 @@ sequence = [
     { cmd = "dotnet restore" },
 ]
 
+[tool.poe.tasks.compat-test]
+help = "Verify every hash pinned in gdextension/extension_api.json resolves in BOTH locally built libgodot flavors (mono and gdext); missing binaries or any engine ERROR during boot hard-fail. Variant via TWODOG_VARIANT (default debug)"
+cmd = "uv run scripts/compat_test.py"
+
 [tool.poe.tasks.dump-api]
 help = "Refresh gdextension/extension_api.json from the non-mono (gdext) editor binary"
 cmd = "uv run scripts/dump_extension_api.py"

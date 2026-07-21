@@ -4,6 +4,7 @@
 // </auto-generated>
 
 // ReSharper disable All
+#nullable enable
 #pragma warning disable CS0109, CS0108, CS1591, CA1069
 
 using Godot.NativeInterop;

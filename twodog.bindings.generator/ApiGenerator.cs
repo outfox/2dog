@@ -1372,6 +1372,9 @@ public static class ApiGenerator
         sb.AppendLine("// </auto-generated>");
         sb.AppendLine();
         sb.AppendLine("// ReSharper disable All");
+        // Auto-generated files opt out of the project nullable context (CS8669);
+        // re-enable it explicitly - the emitted annotations rely on it.
+        sb.AppendLine("#nullable enable");
         sb.AppendLine("#pragma warning disable CS0109, CS0108, CS1591, CA1069");
         sb.AppendLine();
         sb.AppendLine("using Godot.NativeInterop;");

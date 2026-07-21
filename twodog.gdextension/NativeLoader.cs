@@ -22,6 +22,15 @@ internal static class NativeLoader
         return NativeLibrary.Load(path);
     }
 
+    /// <summary>Loads exactly the given library - no resolution, no fallback.</summary>
+    public static nint LoadExact(string path)
+    {
+        if (!File.Exists(path))
+            throw new DllNotFoundException($"libgodot not found at '{path}'.");
+        LoadedLibraryPath = path;
+        return NativeLibrary.Load(path);
+    }
+
     private static string? Resolve(string variant)
     {
         var (prefix, ext) = OperatingSystem.IsWindows() ? ("libgodot-gdext-", ".dll")

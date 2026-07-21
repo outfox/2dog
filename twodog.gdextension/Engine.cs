@@ -43,6 +43,15 @@ public sealed unsafe class Engine : IDisposable
     public SceneTree Tree => Godot.Engine.GetMainLoop() as SceneTree ??
                              throw new NullReferenceException($"{nameof(Engine)}: Failed to get SceneTree.");
 
+    /// <summary>Full path of the loaded libgodot native (null before Start).</summary>
+    public static string? LoadedNativePath => NativeLoader.LoadedLibraryPath;
+
+    /// <summary>
+    /// Explicit libgodot path. When set, it is loaded as-is (no variant
+    /// resolution, no fallback) and <see cref="Variant"/> is ignored.
+    /// </summary>
+    public string? NativePath { get; init; }
+
     public GodotInstance Start()
     {
         if (_godotInstancePtr != 0)
@@ -50,7 +59,7 @@ public sealed unsafe class Engine : IDisposable
                 $"{nameof(Engine)}: A Godot instance is already running. Only one instance may exist at a time " +
                 "(a Godot limitation) - dispose the previous Engine before starting a new one.");
 
-        var lib = NativeLoader.Load(Variant);
+        var lib = NativePath is { } exact ? NativeLoader.LoadExact(exact) : NativeLoader.Load(Variant);
         var create = (delegate* unmanaged<int, nint*, nint, nint>)NativeLibrary.GetExport(lib, "libgodot_create_godot_instance");
         _destroyGodotInstance = (delegate* unmanaged<nint, void>)NativeLibrary.GetExport(lib, "libgodot_destroy_godot_instance");
         RegisterProcessExitSweep();

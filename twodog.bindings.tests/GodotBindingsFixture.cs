@@ -27,7 +27,9 @@ public sealed unsafe class GodotBindingsFixture : IDisposable
         var create = (delegate* unmanaged<int, nint*, nint, nint>)NativeLibrary.GetExport(lib, "libgodot_create_godot_instance");
         _destroyGodotInstance = (delegate* unmanaged<nint, void>)NativeLibrary.GetExport(lib, "libgodot_destroy_godot_instance");
 
-        string[] args = ["twodog.bindings.tests", "--headless", "--path", Path.Combine(RepoRoot, "twodog.bindings.tests", "project")];
+        var projectDir = Path.Combine(RepoRoot, "twodog.bindings.tests", "project");
+        EnsureGlobalScriptClassCache(projectDir);
+        string[] args = ["twodog.bindings.tests", "--headless", "--path", projectDir];
         var argv = new nint[args.Length];
         for (var i = 0; i < args.Length; i++) argv[i] = Marshal.StringToCoTaskMemUTF8(args[i]);
         try
@@ -92,6 +94,18 @@ public sealed unsafe class GodotBindingsFixture : IDisposable
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool FreeLibrary(nint module);
 
+    /// <summary>
+    /// The minimal test project ships without a .godot import cache, which
+    /// costs an engine error print at boot. Write the empty cache an editor
+    /// import would produce for a project with no class_name scripts.
+    /// </summary>
+    private static void EnsureGlobalScriptClassCache(string projectDir)
+    {
+        var cache = Path.Combine(projectDir, ".godot", "global_script_class_cache.cfg");
+        Directory.CreateDirectory(Path.GetDirectoryName(cache)!);
+        if (!File.Exists(cache)) File.WriteAllText(cache, "list=[]\n");
+    }
+
     private static string FindRepoRoot()
     {
         var dir = AppContext.BaseDirectory;
@@ -100,18 +114,32 @@ public sealed unsafe class GodotBindingsFixture : IDisposable
         return dir ?? throw new InvalidOperationException("Could not locate 2dog repo root above " + AppContext.BaseDirectory);
     }
 
+    /// <summary>
+    /// Variant under test: TWODOG_VARIANT env ('release', 'debug', 'editor'),
+    /// default 'debug'. Prefers the gdext-suffixed natives; falls back to a
+    /// plain non-mono shared_library build (pre-suffix local builds).
+    /// </summary>
     private static string FindNonMonoLibgodot(string repoRoot)
     {
         var binDir = Path.Combine(repoRoot, "godot", "bin");
-        var candidates = Directory.Exists(binDir)
-            ? Directory.GetFiles(binDir, "*template_debug*shared_library*.dll")
-                .Where(f => !f.Contains(".mono.") && !f.Contains(".console.")).ToArray()
-            : [];
-        if (candidates.Length == 0)
-            throw new FileNotFoundException(
-                "No non-mono template_debug libgodot found in godot/bin. " +
-                "Build it with: uv run python build-godot.py --mono no --no-editor --no-glue --target template_debug");
-        return candidates[0];
+        var variant = Environment.GetEnvironmentVariable("TWODOG_VARIANT") switch
+        {
+            "release" => "template_release",
+            "editor" => "editor",
+            _ => "template_debug",
+        };
+        var ext = OperatingSystem.IsWindows() ? ".dll" : OperatingSystem.IsMacOS() ? ".dylib" : ".so";
+        foreach (var suffix in (string[])["gdext_shared_library", "shared_library"])
+        {
+            var candidates = Directory.Exists(binDir)
+                ? Directory.GetFiles(binDir, $"*godot.*.{variant}.*{suffix}{ext}")
+                    .Where(f => !f.Contains(".mono.") && !f.Contains(".console.")).ToArray()
+                : [];
+            if (candidates.Length > 0) return candidates[0];
+        }
+        throw new FileNotFoundException(
+            $"No non-mono {variant} libgodot found in godot/bin. " +
+            $"Build it with: uv run python build-godot.py --mono no --no-editor --no-glue --target {variant}");
     }
 }
 
