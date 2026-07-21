@@ -3710,7 +3710,7 @@ public unsafe partial class OpenXRBindingModifier : Resource
         if (__vsn_get_description == 0) __vsn_get_description = StringNames.Get("_get_description").Opaque;
         if (nameSn == __vsn_get_description)
         {
-            *(ulong*)ret = NativeString.Create(_GetDescription() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetDescription() ?? ""));
             return true;
         }
         if (__vsn_get_ip_modification == 0) __vsn_get_ip_modification = StringNames.Get("_get_ip_modification").Opaque;

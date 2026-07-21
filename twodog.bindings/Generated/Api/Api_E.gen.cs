@@ -1072,7 +1072,7 @@ public unsafe partial class EditorDebuggerPlugin : RefCounted
         if (__vsn_has_capture == 0) __vsn_has_capture = StringNames.Get("_has_capture").Opaque;
         if (nameSn == __vsn_has_capture)
         {
-            *(byte*)ret = _HasCapture(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _HasCapture(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_goto_script_line == 0) __vsn_goto_script_line = StringNames.Get("_goto_script_line").Opaque;
@@ -1829,13 +1829,13 @@ public unsafe partial class EditorDock : MarginContainer
         if (__vsn_save_layout_to_config == 0) __vsn_save_layout_to_config = StringNames.Get("_save_layout_to_config").Opaque;
         if (nameSn == __vsn_save_layout_to_config)
         {
-            _SaveLayoutToConfig((ConfigFile?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1]));
+            _SaveLayoutToConfig((ConfigFile?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(PayloadSlot.Read(args[1])));
             return true;
         }
         if (__vsn_load_layout_from_config == 0) __vsn_load_layout_from_config = StringNames.Get("_load_layout_from_config").Opaque;
         if (nameSn == __vsn_load_layout_from_config)
         {
-            _LoadLayoutFromConfig((ConfigFile?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1]));
+            _LoadLayoutFromConfig((ConfigFile?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(PayloadSlot.Read(args[1])));
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);
@@ -2637,7 +2637,7 @@ public unsafe partial class EditorExportPlatformExtension : EditorExportPlatform
         if (__vsn_is_executable == 0) __vsn_is_executable = StringNames.Get("_is_executable").Opaque;
         if (nameSn == __vsn_is_executable)
         {
-            *(byte*)ret = _IsExecutable(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _IsExecutable(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_should_update_export_options == 0) __vsn_should_update_export_options = StringNames.Get("_should_update_export_options").Opaque;
@@ -2649,25 +2649,25 @@ public unsafe partial class EditorExportPlatformExtension : EditorExportPlatform
         if (__vsn_get_export_option_visibility == 0) __vsn_get_export_option_visibility = StringNames.Get("_get_export_option_visibility").Opaque;
         if (nameSn == __vsn_get_export_option_visibility)
         {
-            *(byte*)ret = _GetExportOptionVisibility((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _GetExportOptionVisibility((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(PayloadSlot.Read(args[1]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_get_export_option_warning == 0) __vsn_get_export_option_warning = StringNames.Get("_get_export_option_warning").Opaque;
         if (nameSn == __vsn_get_export_option_warning)
         {
-            *(ulong*)ret = NativeString.Create(_GetExportOptionWarning((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), StringName.Intern(StringNames.Read(*(ulong*)args[1]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetExportOptionWarning((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), StringName.Intern(StringNames.Read(PayloadSlot.Read(args[1])))) ?? ""));
             return true;
         }
         if (__vsn_get_os_name == 0) __vsn_get_os_name = StringNames.Get("_get_os_name").Opaque;
         if (nameSn == __vsn_get_os_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetOsName() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetOsName() ?? ""));
             return true;
         }
         if (__vsn_get_name == 0) __vsn_get_name = StringNames.Get("_get_name").Opaque;
         if (nameSn == __vsn_get_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetName() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetName() ?? ""));
             return true;
         }
         if (__vsn_get_logo == 0) __vsn_get_logo = StringNames.Get("_get_logo").Opaque;
@@ -2691,7 +2691,7 @@ public unsafe partial class EditorExportPlatformExtension : EditorExportPlatform
         if (__vsn_get_options_tooltip == 0) __vsn_get_options_tooltip = StringNames.Get("_get_options_tooltip").Opaque;
         if (nameSn == __vsn_get_options_tooltip)
         {
-            *(ulong*)ret = NativeString.Create(_GetOptionsTooltip() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetOptionsTooltip() ?? ""));
             return true;
         }
         if (__vsn_get_option_icon == 0) __vsn_get_option_icon = StringNames.Get("_get_option_icon").Opaque;
@@ -2703,19 +2703,19 @@ public unsafe partial class EditorExportPlatformExtension : EditorExportPlatform
         if (__vsn_get_option_label == 0) __vsn_get_option_label = StringNames.Get("_get_option_label").Opaque;
         if (nameSn == __vsn_get_option_label)
         {
-            *(ulong*)ret = NativeString.Create(_GetOptionLabel(unchecked((int)(*(long*)args[0]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetOptionLabel(unchecked((int)(*(long*)args[0]))) ?? ""));
             return true;
         }
         if (__vsn_get_option_tooltip == 0) __vsn_get_option_tooltip = StringNames.Get("_get_option_tooltip").Opaque;
         if (nameSn == __vsn_get_option_tooltip)
         {
-            *(ulong*)ret = NativeString.Create(_GetOptionTooltip(unchecked((int)(*(long*)args[0]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetOptionTooltip(unchecked((int)(*(long*)args[0]))) ?? ""));
             return true;
         }
         if (__vsn_get_device_architecture == 0) __vsn_get_device_architecture = StringNames.Get("_get_device_architecture").Opaque;
         if (nameSn == __vsn_get_device_architecture)
         {
-            *(ulong*)ret = NativeString.Create(_GetDeviceArchitecture(unchecked((int)(*(long*)args[0]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetDeviceArchitecture(unchecked((int)(*(long*)args[0]))) ?? ""));
             return true;
         }
         if (__vsn_cleanup == 0) __vsn_cleanup = StringNames.Get("_cleanup").Opaque;
@@ -2763,31 +2763,31 @@ public unsafe partial class EditorExportPlatformExtension : EditorExportPlatform
         if (__vsn_export_project == 0) __vsn_export_project = StringNames.Get("_export_project").Opaque;
         if (nameSn == __vsn_export_project)
         {
-            *(long*)ret = (long)_ExportProject((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0, NativeString.Read(*(ulong*)args[2]), (EditorExportPlatform.DebugFlags)(*(long*)args[3]));
+            *(long*)ret = (long)_ExportProject((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0, NativeString.Read(PayloadSlot.Read(args[2])), (EditorExportPlatform.DebugFlags)(*(long*)args[3]));
             return true;
         }
         if (__vsn_export_pack == 0) __vsn_export_pack = StringNames.Get("_export_pack").Opaque;
         if (nameSn == __vsn_export_pack)
         {
-            *(long*)ret = (long)_ExportPack((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0, NativeString.Read(*(ulong*)args[2]), (EditorExportPlatform.DebugFlags)(*(long*)args[3]));
+            *(long*)ret = (long)_ExportPack((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0, NativeString.Read(PayloadSlot.Read(args[2])), (EditorExportPlatform.DebugFlags)(*(long*)args[3]));
             return true;
         }
         if (__vsn_export_zip == 0) __vsn_export_zip = StringNames.Get("_export_zip").Opaque;
         if (nameSn == __vsn_export_zip)
         {
-            *(long*)ret = (long)_ExportZip((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0, NativeString.Read(*(ulong*)args[2]), (EditorExportPlatform.DebugFlags)(*(long*)args[3]));
+            *(long*)ret = (long)_ExportZip((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0, NativeString.Read(PayloadSlot.Read(args[2])), (EditorExportPlatform.DebugFlags)(*(long*)args[3]));
             return true;
         }
         if (__vsn_export_pack_patch == 0) __vsn_export_pack_patch = StringNames.Get("_export_pack_patch").Opaque;
         if (nameSn == __vsn_export_pack_patch)
         {
-            *(long*)ret = (long)_ExportPackPatch((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0, NativeString.Read(*(ulong*)args[2]), Packed.ReadStrings((Opaque16*)args[3]), (EditorExportPlatform.DebugFlags)(*(long*)args[4]));
+            *(long*)ret = (long)_ExportPackPatch((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0, NativeString.Read(PayloadSlot.Read(args[2])), Packed.ReadStrings((Opaque16*)args[3]), (EditorExportPlatform.DebugFlags)(*(long*)args[4]));
             return true;
         }
         if (__vsn_export_zip_patch == 0) __vsn_export_zip_patch = StringNames.Get("_export_zip_patch").Opaque;
         if (nameSn == __vsn_export_zip_patch)
         {
-            *(long*)ret = (long)_ExportZipPatch((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0, NativeString.Read(*(ulong*)args[2]), Packed.ReadStrings((Opaque16*)args[3]), (EditorExportPlatform.DebugFlags)(*(long*)args[4]));
+            *(long*)ret = (long)_ExportZipPatch((EditorExportPreset?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0, NativeString.Read(PayloadSlot.Read(args[2])), Packed.ReadStrings((Opaque16*)args[3]), (EditorExportPlatform.DebugFlags)(*(long*)args[4]));
             return true;
         }
         if (__vsn_get_platform_features == 0) __vsn_get_platform_features = StringNames.Get("_get_platform_features").Opaque;
@@ -2799,7 +2799,7 @@ public unsafe partial class EditorExportPlatformExtension : EditorExportPlatform
         if (__vsn_get_debug_protocol == 0) __vsn_get_debug_protocol = StringNames.Get("_get_debug_protocol").Opaque;
         if (nameSn == __vsn_get_debug_protocol)
         {
-            *(ulong*)ret = NativeString.Create(_GetDebugProtocol() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetDebugProtocol() ?? ""));
             return true;
         }
         if (__vsn_initialize == 0) __vsn_initialize = StringNames.Get("_initialize").Opaque;
@@ -3325,13 +3325,13 @@ public unsafe partial class EditorExportPlugin : RefCounted
         if (__vsn_export_file == 0) __vsn_export_file = StringNames.Get("_export_file").Opaque;
         if (nameSn == __vsn_export_file)
         {
-            _ExportFile(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1]), Packed.ReadStrings((Opaque16*)args[2]));
+            _ExportFile(NativeString.Read(PayloadSlot.Read(args[0])), NativeString.Read(PayloadSlot.Read(args[1])), Packed.ReadStrings((Opaque16*)args[2]));
             return true;
         }
         if (__vsn_export_begin == 0) __vsn_export_begin = StringNames.Get("_export_begin").Opaque;
         if (nameSn == __vsn_export_begin)
         {
-            _ExportBegin(Packed.ReadStrings((Opaque16*)args[0]), *(byte*)args[1] != 0, NativeString.Read(*(ulong*)args[2]), unchecked((uint)(*(long*)args[3])));
+            _ExportBegin(Packed.ReadStrings((Opaque16*)args[0]), *(byte*)args[1] != 0, NativeString.Read(PayloadSlot.Read(args[2])), unchecked((uint)(*(long*)args[3])));
             return true;
         }
         if (__vsn_export_end == 0) __vsn_export_end = StringNames.Get("_export_end").Opaque;
@@ -3343,7 +3343,7 @@ public unsafe partial class EditorExportPlugin : RefCounted
         if (__vsn_end_generate_apple_embedded_project == 0) __vsn_end_generate_apple_embedded_project = StringNames.Get("_end_generate_apple_embedded_project").Opaque;
         if (nameSn == __vsn_end_generate_apple_embedded_project)
         {
-            _EndGenerateAppleEmbeddedProject(NativeString.Read(*(ulong*)args[0]), *(byte*)args[1] != 0);
+            _EndGenerateAppleEmbeddedProject(NativeString.Read(PayloadSlot.Read(args[0])), *(byte*)args[1] != 0);
             return true;
         }
         if (__vsn_begin_customize_resources == 0) __vsn_begin_customize_resources = StringNames.Get("_begin_customize_resources").Opaque;
@@ -3355,7 +3355,7 @@ public unsafe partial class EditorExportPlugin : RefCounted
         if (__vsn_customize_resource == 0) __vsn_customize_resource = StringNames.Get("_customize_resource").Opaque;
         if (nameSn == __vsn_customize_resource)
         {
-            *(nint*)ret = _CustomizeResource((Resource?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1]))?.NativePtr ?? 0;
+            *(nint*)ret = _CustomizeResource((Resource?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(PayloadSlot.Read(args[1])))?.NativePtr ?? 0;
             return true;
         }
         if (__vsn_begin_customize_scenes == 0) __vsn_begin_customize_scenes = StringNames.Get("_begin_customize_scenes").Opaque;
@@ -3367,7 +3367,7 @@ public unsafe partial class EditorExportPlugin : RefCounted
         if (__vsn_customize_scene == 0) __vsn_customize_scene = StringNames.Get("_customize_scene").Opaque;
         if (nameSn == __vsn_customize_scene)
         {
-            *(nint*)ret = _CustomizeScene((Node?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1]))?.NativePtr ?? 0;
+            *(nint*)ret = _CustomizeScene((Node?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(PayloadSlot.Read(args[1])))?.NativePtr ?? 0;
             return true;
         }
         if (__vsn_get_customization_configuration_hash == 0) __vsn_get_customization_configuration_hash = StringNames.Get("_get_customization_configuration_hash").Opaque;
@@ -3397,13 +3397,13 @@ public unsafe partial class EditorExportPlugin : RefCounted
         if (__vsn_get_export_option_visibility == 0) __vsn_get_export_option_visibility = StringNames.Get("_get_export_option_visibility").Opaque;
         if (nameSn == __vsn_get_export_option_visibility)
         {
-            *(byte*)ret = _GetExportOptionVisibility((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _GetExportOptionVisibility((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(PayloadSlot.Read(args[1]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_get_export_option_warning == 0) __vsn_get_export_option_warning = StringNames.Get("_get_export_option_warning").Opaque;
         if (nameSn == __vsn_get_export_option_warning)
         {
-            *(ulong*)ret = NativeString.Create(_GetExportOptionWarning((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1])) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetExportOptionWarning((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(PayloadSlot.Read(args[1]))) ?? ""));
             return true;
         }
         if (__vsn_get_export_features == 0) __vsn_get_export_features = StringNames.Get("_get_export_features").Opaque;
@@ -3415,7 +3415,7 @@ public unsafe partial class EditorExportPlugin : RefCounted
         if (__vsn_get_name == 0) __vsn_get_name = StringNames.Get("_get_name").Opaque;
         if (nameSn == __vsn_get_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetName() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetName() ?? ""));
             return true;
         }
         if (__vsn_supports_platform == 0) __vsn_supports_platform = StringNames.Get("_supports_platform").Opaque;
@@ -3445,19 +3445,19 @@ public unsafe partial class EditorExportPlugin : RefCounted
         if (__vsn_get_android_manifest_activity_element_contents == 0) __vsn_get_android_manifest_activity_element_contents = StringNames.Get("_get_android_manifest_activity_element_contents").Opaque;
         if (nameSn == __vsn_get_android_manifest_activity_element_contents)
         {
-            *(ulong*)ret = NativeString.Create(_GetAndroidManifestActivityElementContents((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetAndroidManifestActivityElementContents((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0) ?? ""));
             return true;
         }
         if (__vsn_get_android_manifest_application_element_contents == 0) __vsn_get_android_manifest_application_element_contents = StringNames.Get("_get_android_manifest_application_element_contents").Opaque;
         if (nameSn == __vsn_get_android_manifest_application_element_contents)
         {
-            *(ulong*)ret = NativeString.Create(_GetAndroidManifestApplicationElementContents((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetAndroidManifestApplicationElementContents((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0) ?? ""));
             return true;
         }
         if (__vsn_get_android_manifest_element_contents == 0) __vsn_get_android_manifest_element_contents = StringNames.Get("_get_android_manifest_element_contents").Opaque;
         if (nameSn == __vsn_get_android_manifest_element_contents)
         {
-            *(ulong*)ret = NativeString.Create(_GetAndroidManifestElementContents((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetAndroidManifestElementContents((EditorExportPlatform?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), *(byte*)args[1] != 0) ?? ""));
             return true;
         }
         if (__vsn_update_android_prebuilt_manifest == 0) __vsn_update_android_prebuilt_manifest = StringNames.Get("_update_android_prebuilt_manifest").Opaque;
@@ -4750,13 +4750,13 @@ public unsafe partial class EditorImportPlugin : ResourceImporter
         if (__vsn_get_importer_name == 0) __vsn_get_importer_name = StringNames.Get("_get_importer_name").Opaque;
         if (nameSn == __vsn_get_importer_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetImporterName() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetImporterName() ?? ""));
             return true;
         }
         if (__vsn_get_visible_name == 0) __vsn_get_visible_name = StringNames.Get("_get_visible_name").Opaque;
         if (nameSn == __vsn_get_visible_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetVisibleName() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetVisibleName() ?? ""));
             return true;
         }
         if (__vsn_get_preset_count == 0) __vsn_get_preset_count = StringNames.Get("_get_preset_count").Opaque;
@@ -4768,7 +4768,7 @@ public unsafe partial class EditorImportPlugin : ResourceImporter
         if (__vsn_get_preset_name == 0) __vsn_get_preset_name = StringNames.Get("_get_preset_name").Opaque;
         if (nameSn == __vsn_get_preset_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetPresetName(unchecked((int)(*(long*)args[0]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetPresetName(unchecked((int)(*(long*)args[0]))) ?? ""));
             return true;
         }
         if (__vsn_get_recognized_extensions == 0) __vsn_get_recognized_extensions = StringNames.Get("_get_recognized_extensions").Opaque;
@@ -4780,13 +4780,13 @@ public unsafe partial class EditorImportPlugin : ResourceImporter
         if (__vsn_get_save_extension == 0) __vsn_get_save_extension = StringNames.Get("_get_save_extension").Opaque;
         if (nameSn == __vsn_get_save_extension)
         {
-            *(ulong*)ret = NativeString.Create(_GetSaveExtension() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetSaveExtension() ?? ""));
             return true;
         }
         if (__vsn_get_resource_type == 0) __vsn_get_resource_type = StringNames.Get("_get_resource_type").Opaque;
         if (nameSn == __vsn_get_resource_type)
         {
-            *(ulong*)ret = NativeString.Create(_GetResourceType() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetResourceType() ?? ""));
             return true;
         }
         if (__vsn_get_priority == 0) __vsn_get_priority = StringNames.Get("_get_priority").Opaque;
@@ -5141,19 +5141,19 @@ public unsafe partial class EditorInspectorPlugin : RefCounted
         if (__vsn_parse_category == 0) __vsn_parse_category = StringNames.Get("_parse_category").Opaque;
         if (nameSn == __vsn_parse_category)
         {
-            _ParseCategory((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1]));
+            _ParseCategory((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(PayloadSlot.Read(args[1])));
             return true;
         }
         if (__vsn_parse_group == 0) __vsn_parse_group = StringNames.Get("_parse_group").Opaque;
         if (nameSn == __vsn_parse_group)
         {
-            _ParseGroup((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1]));
+            _ParseGroup((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(PayloadSlot.Read(args[1])));
             return true;
         }
         if (__vsn_parse_property == 0) __vsn_parse_property = StringNames.Get("_parse_property").Opaque;
         if (nameSn == __vsn_parse_property)
         {
-            *(byte*)ret = _ParseProperty((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (VariantType)(*(long*)args[1]), NativeString.Read(*(ulong*)args[2]), (PropertyHint)(*(long*)args[3]), NativeString.Read(*(ulong*)args[4]), (PropertyUsageFlags)(*(long*)args[5]), *(byte*)args[6] != 0) ? (byte)1 : (byte)0;
+            *(byte*)ret = _ParseProperty((GodotObject?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (VariantType)(*(long*)args[1]), NativeString.Read(PayloadSlot.Read(args[2])), (PropertyHint)(*(long*)args[3]), NativeString.Read(PayloadSlot.Read(args[4])), (PropertyUsageFlags)(*(long*)args[5]), *(byte*)args[6] != 0) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_parse_end == 0) __vsn_parse_end = StringNames.Get("_parse_end").Opaque;
@@ -6625,7 +6625,7 @@ public unsafe partial class EditorNode3DGizmo : Node3DGizmo
         if (__vsn_get_handle_name == 0) __vsn_get_handle_name = StringNames.Get("_get_handle_name").Opaque;
         if (nameSn == __vsn_get_handle_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetHandleName(unchecked((int)(*(long*)args[0])), *(byte*)args[1] != 0) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetHandleName(unchecked((int)(*(long*)args[0])), *(byte*)args[1] != 0) ?? ""));
             return true;
         }
         if (__vsn_is_handle_highlighted == 0) __vsn_is_handle_highlighted = StringNames.Get("_is_handle_highlighted").Opaque;
@@ -6849,7 +6849,7 @@ public unsafe partial class EditorNode3DGizmoPlugin : Resource
         if (__vsn_get_gizmo_name == 0) __vsn_get_gizmo_name = StringNames.Get("_get_gizmo_name").Opaque;
         if (nameSn == __vsn_get_gizmo_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetGizmoName() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetGizmoName() ?? ""));
             return true;
         }
         if (__vsn_get_priority == 0) __vsn_get_priority = StringNames.Get("_get_priority").Opaque;
@@ -6885,7 +6885,7 @@ public unsafe partial class EditorNode3DGizmoPlugin : Resource
         if (__vsn_get_handle_name == 0) __vsn_get_handle_name = StringNames.Get("_get_handle_name").Opaque;
         if (nameSn == __vsn_get_handle_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetHandleName((EditorNode3DGizmo?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), unchecked((int)(*(long*)args[1])), *(byte*)args[2] != 0) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetHandleName((EditorNode3DGizmo?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), unchecked((int)(*(long*)args[1])), *(byte*)args[2] != 0) ?? ""));
             return true;
         }
         if (__vsn_is_handle_highlighted == 0) __vsn_is_handle_highlighted = StringNames.Get("_is_handle_highlighted").Opaque;
@@ -8078,7 +8078,7 @@ public unsafe partial class EditorPlugin : Node
         if (__vsn_get_plugin_name == 0) __vsn_get_plugin_name = StringNames.Get("_get_plugin_name").Opaque;
         if (nameSn == __vsn_get_plugin_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetPluginName() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetPluginName() ?? ""));
             return true;
         }
         if (__vsn_get_plugin_icon == 0) __vsn_get_plugin_icon = StringNames.Get("_get_plugin_icon").Opaque;
@@ -8120,7 +8120,7 @@ public unsafe partial class EditorPlugin : Node
         if (__vsn_get_unsaved_status == 0) __vsn_get_unsaved_status = StringNames.Get("_get_unsaved_status").Opaque;
         if (nameSn == __vsn_get_unsaved_status)
         {
-            *(ulong*)ret = NativeString.Create(_GetUnsavedStatus(NativeString.Read(*(ulong*)args[0])) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetUnsavedStatus(NativeString.Read(PayloadSlot.Read(args[0]))) ?? ""));
             return true;
         }
         if (__vsn_save_external_data == 0) __vsn_save_external_data = StringNames.Get("_save_external_data").Opaque;
@@ -8162,7 +8162,7 @@ public unsafe partial class EditorPlugin : Node
         if (__vsn_run_scene == 0) __vsn_run_scene = StringNames.Get("_run_scene").Opaque;
         if (nameSn == __vsn_run_scene)
         {
-            *(Opaque16*)ret = Packed.CreateStrings(_RunScene(NativeString.Read(*(ulong*)args[0]), Packed.ReadStrings((Opaque16*)args[1])) ?? []);
+            *(Opaque16*)ret = Packed.CreateStrings(_RunScene(NativeString.Read(PayloadSlot.Read(args[0])), Packed.ReadStrings((Opaque16*)args[1])) ?? []);
             return true;
         }
         if (__vsn_enable_plugin == 0) __vsn_enable_plugin = StringNames.Get("_enable_plugin").Opaque;
@@ -8955,7 +8955,7 @@ public unsafe partial class EditorResourceConversionPlugin : RefCounted
         if (__vsn_converts_to == 0) __vsn_converts_to = StringNames.Get("_converts_to").Opaque;
         if (nameSn == __vsn_converts_to)
         {
-            *(ulong*)ret = NativeString.Create(_ConvertsTo() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_ConvertsTo() ?? ""));
             return true;
         }
         if (__vsn_handles == 0) __vsn_handles = StringNames.Get("_handles").Opaque;
@@ -9351,7 +9351,7 @@ public unsafe partial class EditorResourcePreviewGenerator : RefCounted
         if (__vsn_handles == 0) __vsn_handles = StringNames.Get("_handles").Opaque;
         if (nameSn == __vsn_handles)
         {
-            *(byte*)ret = _Handles(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _Handles(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_generate_small_preview_automatically == 0) __vsn_generate_small_preview_automatically = StringNames.Get("_generate_small_preview_automatically").Opaque;
@@ -9407,7 +9407,7 @@ public unsafe partial class EditorResourceTooltipPlugin : RefCounted
         if (__vsn_handles == 0) __vsn_handles = StringNames.Get("_handles").Opaque;
         if (nameSn == __vsn_handles)
         {
-            *(byte*)ret = _Handles(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _Handles(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);
@@ -9500,7 +9500,7 @@ public unsafe partial class EditorSceneFormatImporter : RefCounted
         if (__vsn_get_import_options == 0) __vsn_get_import_options = StringNames.Get("_get_import_options").Opaque;
         if (nameSn == __vsn_get_import_options)
         {
-            _GetImportOptions(NativeString.Read(*(ulong*)args[0]));
+            _GetImportOptions(NativeString.Read(PayloadSlot.Read(args[0])));
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);
@@ -9706,7 +9706,7 @@ public unsafe partial class EditorScenePostImportPlugin : RefCounted
         if (__vsn_get_import_options == 0) __vsn_get_import_options = StringNames.Get("_get_import_options").Opaque;
         if (nameSn == __vsn_get_import_options)
         {
-            _GetImportOptions(NativeString.Read(*(ulong*)args[0]));
+            _GetImportOptions(NativeString.Read(PayloadSlot.Read(args[0])));
             return true;
         }
         if (__vsn_pre_process == 0) __vsn_pre_process = StringNames.Get("_pre_process").Opaque;
@@ -10748,7 +10748,7 @@ public unsafe partial class EditorSyntaxHighlighter : SyntaxHighlighter
         if (__vsn_get_name == 0) __vsn_get_name = StringNames.Get("_get_name").Opaque;
         if (nameSn == __vsn_get_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetName() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetName() ?? ""));
             return true;
         }
         if (__vsn_get_supported_languages == 0) __vsn_get_supported_languages = StringNames.Get("_get_supported_languages").Opaque;
@@ -11386,37 +11386,37 @@ public unsafe partial class EditorVCSInterface : GodotObject
         if (__vsn_initialize == 0) __vsn_initialize = StringNames.Get("_initialize").Opaque;
         if (nameSn == __vsn_initialize)
         {
-            *(byte*)ret = _Initialize(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _Initialize(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_set_credentials == 0) __vsn_set_credentials = StringNames.Get("_set_credentials").Opaque;
         if (nameSn == __vsn_set_credentials)
         {
-            _SetCredentials(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1]), NativeString.Read(*(ulong*)args[2]), NativeString.Read(*(ulong*)args[3]), NativeString.Read(*(ulong*)args[4]));
+            _SetCredentials(NativeString.Read(PayloadSlot.Read(args[0])), NativeString.Read(PayloadSlot.Read(args[1])), NativeString.Read(PayloadSlot.Read(args[2])), NativeString.Read(PayloadSlot.Read(args[3])), NativeString.Read(PayloadSlot.Read(args[4])));
             return true;
         }
         if (__vsn_stage_file == 0) __vsn_stage_file = StringNames.Get("_stage_file").Opaque;
         if (nameSn == __vsn_stage_file)
         {
-            _StageFile(NativeString.Read(*(ulong*)args[0]));
+            _StageFile(NativeString.Read(PayloadSlot.Read(args[0])));
             return true;
         }
         if (__vsn_unstage_file == 0) __vsn_unstage_file = StringNames.Get("_unstage_file").Opaque;
         if (nameSn == __vsn_unstage_file)
         {
-            _UnstageFile(NativeString.Read(*(ulong*)args[0]));
+            _UnstageFile(NativeString.Read(PayloadSlot.Read(args[0])));
             return true;
         }
         if (__vsn_discard_file == 0) __vsn_discard_file = StringNames.Get("_discard_file").Opaque;
         if (nameSn == __vsn_discard_file)
         {
-            _DiscardFile(NativeString.Read(*(ulong*)args[0]));
+            _DiscardFile(NativeString.Read(PayloadSlot.Read(args[0])));
             return true;
         }
         if (__vsn_commit == 0) __vsn_commit = StringNames.Get("_commit").Opaque;
         if (nameSn == __vsn_commit)
         {
-            _Commit(NativeString.Read(*(ulong*)args[0]), *(byte*)args[1] != 0);
+            _Commit(NativeString.Read(PayloadSlot.Read(args[0])), *(byte*)args[1] != 0);
             return true;
         }
         if (__vsn_allow_amends == 0) __vsn_allow_amends = StringNames.Get("_allow_amends").Opaque;
@@ -11434,61 +11434,61 @@ public unsafe partial class EditorVCSInterface : GodotObject
         if (__vsn_get_vcs_name == 0) __vsn_get_vcs_name = StringNames.Get("_get_vcs_name").Opaque;
         if (nameSn == __vsn_get_vcs_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetVcsName() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetVcsName() ?? ""));
             return true;
         }
         if (__vsn_create_branch == 0) __vsn_create_branch = StringNames.Get("_create_branch").Opaque;
         if (nameSn == __vsn_create_branch)
         {
-            _CreateBranch(NativeString.Read(*(ulong*)args[0]));
+            _CreateBranch(NativeString.Read(PayloadSlot.Read(args[0])));
             return true;
         }
         if (__vsn_remove_branch == 0) __vsn_remove_branch = StringNames.Get("_remove_branch").Opaque;
         if (nameSn == __vsn_remove_branch)
         {
-            _RemoveBranch(NativeString.Read(*(ulong*)args[0]));
+            _RemoveBranch(NativeString.Read(PayloadSlot.Read(args[0])));
             return true;
         }
         if (__vsn_create_remote == 0) __vsn_create_remote = StringNames.Get("_create_remote").Opaque;
         if (nameSn == __vsn_create_remote)
         {
-            _CreateRemote(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1]));
+            _CreateRemote(NativeString.Read(PayloadSlot.Read(args[0])), NativeString.Read(PayloadSlot.Read(args[1])));
             return true;
         }
         if (__vsn_remove_remote == 0) __vsn_remove_remote = StringNames.Get("_remove_remote").Opaque;
         if (nameSn == __vsn_remove_remote)
         {
-            _RemoveRemote(NativeString.Read(*(ulong*)args[0]));
+            _RemoveRemote(NativeString.Read(PayloadSlot.Read(args[0])));
             return true;
         }
         if (__vsn_get_current_branch_name == 0) __vsn_get_current_branch_name = StringNames.Get("_get_current_branch_name").Opaque;
         if (nameSn == __vsn_get_current_branch_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetCurrentBranchName() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetCurrentBranchName() ?? ""));
             return true;
         }
         if (__vsn_checkout_branch == 0) __vsn_checkout_branch = StringNames.Get("_checkout_branch").Opaque;
         if (nameSn == __vsn_checkout_branch)
         {
-            *(byte*)ret = _CheckoutBranch(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _CheckoutBranch(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_pull == 0) __vsn_pull = StringNames.Get("_pull").Opaque;
         if (nameSn == __vsn_pull)
         {
-            _Pull(NativeString.Read(*(ulong*)args[0]));
+            _Pull(NativeString.Read(PayloadSlot.Read(args[0])));
             return true;
         }
         if (__vsn_push == 0) __vsn_push = StringNames.Get("_push").Opaque;
         if (nameSn == __vsn_push)
         {
-            _Push(NativeString.Read(*(ulong*)args[0]), *(byte*)args[1] != 0);
+            _Push(NativeString.Read(PayloadSlot.Read(args[0])), *(byte*)args[1] != 0);
             return true;
         }
         if (__vsn_fetch == 0) __vsn_fetch = StringNames.Get("_fetch").Opaque;
         if (nameSn == __vsn_fetch)
         {
-            _Fetch(NativeString.Read(*(ulong*)args[0]));
+            _Fetch(NativeString.Read(PayloadSlot.Read(args[0])));
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);

@@ -6957,19 +6957,19 @@ public unsafe partial class VisualShaderNodeCustom : VisualShaderNode
         if (__vsn_get_name == 0) __vsn_get_name = StringNames.Get("_get_name").Opaque;
         if (nameSn == __vsn_get_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetName() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetName() ?? ""));
             return true;
         }
         if (__vsn_get_description == 0) __vsn_get_description = StringNames.Get("_get_description").Opaque;
         if (nameSn == __vsn_get_description)
         {
-            *(ulong*)ret = NativeString.Create(_GetDescription() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetDescription() ?? ""));
             return true;
         }
         if (__vsn_get_category == 0) __vsn_get_category = StringNames.Get("_get_category").Opaque;
         if (nameSn == __vsn_get_category)
         {
-            *(ulong*)ret = NativeString.Create(_GetCategory() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetCategory() ?? ""));
             return true;
         }
         if (__vsn_get_return_icon_type == 0) __vsn_get_return_icon_type = StringNames.Get("_get_return_icon_type").Opaque;
@@ -6993,7 +6993,7 @@ public unsafe partial class VisualShaderNodeCustom : VisualShaderNode
         if (__vsn_get_input_port_name == 0) __vsn_get_input_port_name = StringNames.Get("_get_input_port_name").Opaque;
         if (nameSn == __vsn_get_input_port_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetInputPortName(unchecked((int)(*(long*)args[0]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetInputPortName(unchecked((int)(*(long*)args[0]))) ?? ""));
             return true;
         }
         if (__vsn_get_default_input_port == 0) __vsn_get_default_input_port = StringNames.Get("_get_default_input_port").Opaque;
@@ -7017,7 +7017,7 @@ public unsafe partial class VisualShaderNodeCustom : VisualShaderNode
         if (__vsn_get_output_port_name == 0) __vsn_get_output_port_name = StringNames.Get("_get_output_port_name").Opaque;
         if (nameSn == __vsn_get_output_port_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetOutputPortName(unchecked((int)(*(long*)args[0]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetOutputPortName(unchecked((int)(*(long*)args[0]))) ?? ""));
             return true;
         }
         if (__vsn_get_property_count == 0) __vsn_get_property_count = StringNames.Get("_get_property_count").Opaque;
@@ -7029,7 +7029,7 @@ public unsafe partial class VisualShaderNodeCustom : VisualShaderNode
         if (__vsn_get_property_name == 0) __vsn_get_property_name = StringNames.Get("_get_property_name").Opaque;
         if (nameSn == __vsn_get_property_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetPropertyName(unchecked((int)(*(long*)args[0]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetPropertyName(unchecked((int)(*(long*)args[0]))) ?? ""));
             return true;
         }
         if (__vsn_get_property_default_index == 0) __vsn_get_property_default_index = StringNames.Get("_get_property_default_index").Opaque;
@@ -7047,13 +7047,13 @@ public unsafe partial class VisualShaderNodeCustom : VisualShaderNode
         if (__vsn_get_func_code == 0) __vsn_get_func_code = StringNames.Get("_get_func_code").Opaque;
         if (nameSn == __vsn_get_func_code)
         {
-            *(ulong*)ret = NativeString.Create(_GetFuncCode((Shader.Mode)(*(long*)args[0]), (VisualShader.Type)(*(long*)args[1])) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetFuncCode((Shader.Mode)(*(long*)args[0]), (VisualShader.Type)(*(long*)args[1])) ?? ""));
             return true;
         }
         if (__vsn_get_global_code == 0) __vsn_get_global_code = StringNames.Get("_get_global_code").Opaque;
         if (nameSn == __vsn_get_global_code)
         {
-            *(ulong*)ret = NativeString.Create(_GetGlobalCode((Shader.Mode)(*(long*)args[0])) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetGlobalCode((Shader.Mode)(*(long*)args[0])) ?? ""));
             return true;
         }
         if (__vsn_is_highend == 0) __vsn_is_highend = StringNames.Get("_is_highend").Opaque;

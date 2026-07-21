@@ -3271,7 +3271,7 @@ public unsafe partial class ScriptExtension : Script
         if (__vsn_get_global_name == 0) __vsn_get_global_name = StringNames.Get("_get_global_name").Opaque;
         if (nameSn == __vsn_get_global_name)
         {
-            *(ulong*)ret = StringNames.CreateOwned(_GetGlobalName()?.ToString() ?? "");
+            PayloadSlot.Write(ret, StringNames.CreateOwned(_GetGlobalName()?.ToString() ?? ""));
             return true;
         }
         if (__vsn_inherits_script == 0) __vsn_inherits_script = StringNames.Get("_inherits_script").Opaque;
@@ -3283,7 +3283,7 @@ public unsafe partial class ScriptExtension : Script
         if (__vsn_get_instance_base_type == 0) __vsn_get_instance_base_type = StringNames.Get("_get_instance_base_type").Opaque;
         if (nameSn == __vsn_get_instance_base_type)
         {
-            *(ulong*)ret = StringNames.CreateOwned(_GetInstanceBaseType()?.ToString() ?? "");
+            PayloadSlot.Write(ret, StringNames.CreateOwned(_GetInstanceBaseType()?.ToString() ?? ""));
             return true;
         }
         if (__vsn_has_source_code == 0) __vsn_has_source_code = StringNames.Get("_has_source_code").Opaque;
@@ -3295,13 +3295,13 @@ public unsafe partial class ScriptExtension : Script
         if (__vsn_get_source_code == 0) __vsn_get_source_code = StringNames.Get("_get_source_code").Opaque;
         if (nameSn == __vsn_get_source_code)
         {
-            *(ulong*)ret = NativeString.Create(_GetSourceCode() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetSourceCode() ?? ""));
             return true;
         }
         if (__vsn_set_source_code == 0) __vsn_set_source_code = StringNames.Get("_set_source_code").Opaque;
         if (nameSn == __vsn_set_source_code)
         {
-            _SetSourceCode(NativeString.Read(*(ulong*)args[0]));
+            _SetSourceCode(NativeString.Read(PayloadSlot.Read(args[0])));
             return true;
         }
         if (__vsn_reload == 0) __vsn_reload = StringNames.Get("_reload").Opaque;
@@ -3313,25 +3313,25 @@ public unsafe partial class ScriptExtension : Script
         if (__vsn_get_doc_class_name == 0) __vsn_get_doc_class_name = StringNames.Get("_get_doc_class_name").Opaque;
         if (nameSn == __vsn_get_doc_class_name)
         {
-            *(ulong*)ret = StringNames.CreateOwned(_GetDocClassName()?.ToString() ?? "");
+            PayloadSlot.Write(ret, StringNames.CreateOwned(_GetDocClassName()?.ToString() ?? ""));
             return true;
         }
         if (__vsn_get_class_icon_path == 0) __vsn_get_class_icon_path = StringNames.Get("_get_class_icon_path").Opaque;
         if (nameSn == __vsn_get_class_icon_path)
         {
-            *(ulong*)ret = NativeString.Create(_GetClassIconPath() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetClassIconPath() ?? ""));
             return true;
         }
         if (__vsn_has_method == 0) __vsn_has_method = StringNames.Get("_has_method").Opaque;
         if (nameSn == __vsn_has_method)
         {
-            *(byte*)ret = _HasMethod(StringName.Intern(StringNames.Read(*(ulong*)args[0]))) ? (byte)1 : (byte)0;
+            *(byte*)ret = _HasMethod(StringName.Intern(StringNames.Read(PayloadSlot.Read(args[0])))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_has_static_method == 0) __vsn_has_static_method = StringNames.Get("_has_static_method").Opaque;
         if (nameSn == __vsn_has_static_method)
         {
-            *(byte*)ret = _HasStaticMethod(StringName.Intern(StringNames.Read(*(ulong*)args[0]))) ? (byte)1 : (byte)0;
+            *(byte*)ret = _HasStaticMethod(StringName.Intern(StringNames.Read(PayloadSlot.Read(args[0])))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_is_tool == 0) __vsn_is_tool = StringNames.Get("_is_tool").Opaque;
@@ -3361,13 +3361,13 @@ public unsafe partial class ScriptExtension : Script
         if (__vsn_has_script_signal == 0) __vsn_has_script_signal = StringNames.Get("_has_script_signal").Opaque;
         if (nameSn == __vsn_has_script_signal)
         {
-            *(byte*)ret = _HasScriptSignal(StringName.Intern(StringNames.Read(*(ulong*)args[0]))) ? (byte)1 : (byte)0;
+            *(byte*)ret = _HasScriptSignal(StringName.Intern(StringNames.Read(PayloadSlot.Read(args[0])))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_has_property_default_value == 0) __vsn_has_property_default_value = StringNames.Get("_has_property_default_value").Opaque;
         if (nameSn == __vsn_has_property_default_value)
         {
-            *(byte*)ret = _HasPropertyDefaultValue(StringName.Intern(StringNames.Read(*(ulong*)args[0]))) ? (byte)1 : (byte)0;
+            *(byte*)ret = _HasPropertyDefaultValue(StringName.Intern(StringNames.Read(PayloadSlot.Read(args[0])))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_update_exports == 0) __vsn_update_exports = StringNames.Get("_update_exports").Opaque;
@@ -3379,7 +3379,7 @@ public unsafe partial class ScriptExtension : Script
         if (__vsn_get_member_line == 0) __vsn_get_member_line = StringNames.Get("_get_member_line").Opaque;
         if (nameSn == __vsn_get_member_line)
         {
-            *(long*)ret = unchecked((long)_GetMemberLine(StringName.Intern(StringNames.Read(*(ulong*)args[0]))));
+            *(long*)ret = unchecked((long)_GetMemberLine(StringName.Intern(StringNames.Read(PayloadSlot.Read(args[0])))));
             return true;
         }
         if (__vsn_is_placeholder_fallback_enabled == 0) __vsn_is_placeholder_fallback_enabled = StringNames.Get("_is_placeholder_fallback_enabled").Opaque;
@@ -3593,7 +3593,7 @@ public unsafe partial class ScriptLanguageExtension : ScriptLanguage
         if (__vsn_get_name == 0) __vsn_get_name = StringNames.Get("_get_name").Opaque;
         if (nameSn == __vsn_get_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetName() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetName() ?? ""));
             return true;
         }
         if (__vsn_init == 0) __vsn_init = StringNames.Get("_init").Opaque;
@@ -3605,13 +3605,13 @@ public unsafe partial class ScriptLanguageExtension : ScriptLanguage
         if (__vsn_get_type == 0) __vsn_get_type = StringNames.Get("_get_type").Opaque;
         if (nameSn == __vsn_get_type)
         {
-            *(ulong*)ret = NativeString.Create(_GetType() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetType() ?? ""));
             return true;
         }
         if (__vsn_get_extension == 0) __vsn_get_extension = StringNames.Get("_get_extension").Opaque;
         if (nameSn == __vsn_get_extension)
         {
-            *(ulong*)ret = NativeString.Create(_GetExtension() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetExtension() ?? ""));
             return true;
         }
         if (__vsn_finish == 0) __vsn_finish = StringNames.Get("_finish").Opaque;
@@ -3629,7 +3629,7 @@ public unsafe partial class ScriptLanguageExtension : ScriptLanguage
         if (__vsn_is_control_flow_keyword == 0) __vsn_is_control_flow_keyword = StringNames.Get("_is_control_flow_keyword").Opaque;
         if (nameSn == __vsn_is_control_flow_keyword)
         {
-            *(byte*)ret = _IsControlFlowKeyword(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _IsControlFlowKeyword(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_get_comment_delimiters == 0) __vsn_get_comment_delimiters = StringNames.Get("_get_comment_delimiters").Opaque;
@@ -3653,7 +3653,7 @@ public unsafe partial class ScriptLanguageExtension : ScriptLanguage
         if (__vsn_make_template == 0) __vsn_make_template = StringNames.Get("_make_template").Opaque;
         if (nameSn == __vsn_make_template)
         {
-            *(nint*)ret = _MakeTemplate(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1]), NativeString.Read(*(ulong*)args[2]))?.NativePtr ?? 0;
+            *(nint*)ret = _MakeTemplate(NativeString.Read(PayloadSlot.Read(args[0])), NativeString.Read(PayloadSlot.Read(args[1])), NativeString.Read(PayloadSlot.Read(args[2])))?.NativePtr ?? 0;
             return true;
         }
         if (__vsn_is_using_templates == 0) __vsn_is_using_templates = StringNames.Get("_is_using_templates").Opaque;
@@ -3665,7 +3665,7 @@ public unsafe partial class ScriptLanguageExtension : ScriptLanguage
         if (__vsn_validate_path == 0) __vsn_validate_path = StringNames.Get("_validate_path").Opaque;
         if (nameSn == __vsn_validate_path)
         {
-            *(ulong*)ret = NativeString.Create(_ValidatePath(NativeString.Read(*(ulong*)args[0])) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_ValidatePath(NativeString.Read(PayloadSlot.Read(args[0]))) ?? ""));
             return true;
         }
         if (__vsn_create_script == 0) __vsn_create_script = StringNames.Get("_create_script").Opaque;
@@ -3701,13 +3701,13 @@ public unsafe partial class ScriptLanguageExtension : ScriptLanguage
         if (__vsn_find_function == 0) __vsn_find_function = StringNames.Get("_find_function").Opaque;
         if (nameSn == __vsn_find_function)
         {
-            *(long*)ret = unchecked((long)_FindFunction(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1])));
+            *(long*)ret = unchecked((long)_FindFunction(NativeString.Read(PayloadSlot.Read(args[0])), NativeString.Read(PayloadSlot.Read(args[1]))));
             return true;
         }
         if (__vsn_make_function == 0) __vsn_make_function = StringNames.Get("_make_function").Opaque;
         if (nameSn == __vsn_make_function)
         {
-            *(ulong*)ret = NativeString.Create(_MakeFunction(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1]), Packed.ReadStrings((Opaque16*)args[2])) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_MakeFunction(NativeString.Read(PayloadSlot.Read(args[0])), NativeString.Read(PayloadSlot.Read(args[1])), Packed.ReadStrings((Opaque16*)args[2])) ?? ""));
             return true;
         }
         if (__vsn_can_make_function == 0) __vsn_can_make_function = StringNames.Get("_can_make_function").Opaque;
@@ -3737,13 +3737,13 @@ public unsafe partial class ScriptLanguageExtension : ScriptLanguage
         if (__vsn_auto_indent_code == 0) __vsn_auto_indent_code = StringNames.Get("_auto_indent_code").Opaque;
         if (nameSn == __vsn_auto_indent_code)
         {
-            *(ulong*)ret = NativeString.Create(_AutoIndentCode(NativeString.Read(*(ulong*)args[0]), unchecked((int)(*(long*)args[1])), unchecked((int)(*(long*)args[2]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_AutoIndentCode(NativeString.Read(PayloadSlot.Read(args[0])), unchecked((int)(*(long*)args[1])), unchecked((int)(*(long*)args[2]))) ?? ""));
             return true;
         }
         if (__vsn_remove_named_global_constant == 0) __vsn_remove_named_global_constant = StringNames.Get("_remove_named_global_constant").Opaque;
         if (nameSn == __vsn_remove_named_global_constant)
         {
-            _RemoveNamedGlobalConstant(StringName.Intern(StringNames.Read(*(ulong*)args[0])));
+            _RemoveNamedGlobalConstant(StringName.Intern(StringNames.Read(PayloadSlot.Read(args[0]))));
             return true;
         }
         if (__vsn_thread_enter == 0) __vsn_thread_enter = StringNames.Get("_thread_enter").Opaque;
@@ -3761,7 +3761,7 @@ public unsafe partial class ScriptLanguageExtension : ScriptLanguage
         if (__vsn_debug_get_error == 0) __vsn_debug_get_error = StringNames.Get("_debug_get_error").Opaque;
         if (nameSn == __vsn_debug_get_error)
         {
-            *(ulong*)ret = NativeString.Create(_DebugGetError() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_DebugGetError() ?? ""));
             return true;
         }
         if (__vsn_debug_get_stack_level_count == 0) __vsn_debug_get_stack_level_count = StringNames.Get("_debug_get_stack_level_count").Opaque;
@@ -3779,19 +3779,19 @@ public unsafe partial class ScriptLanguageExtension : ScriptLanguage
         if (__vsn_debug_get_stack_level_function == 0) __vsn_debug_get_stack_level_function = StringNames.Get("_debug_get_stack_level_function").Opaque;
         if (nameSn == __vsn_debug_get_stack_level_function)
         {
-            *(ulong*)ret = NativeString.Create(_DebugGetStackLevelFunction(unchecked((int)(*(long*)args[0]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_DebugGetStackLevelFunction(unchecked((int)(*(long*)args[0]))) ?? ""));
             return true;
         }
         if (__vsn_debug_get_stack_level_source == 0) __vsn_debug_get_stack_level_source = StringNames.Get("_debug_get_stack_level_source").Opaque;
         if (nameSn == __vsn_debug_get_stack_level_source)
         {
-            *(ulong*)ret = NativeString.Create(_DebugGetStackLevelSource(unchecked((int)(*(long*)args[0]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_DebugGetStackLevelSource(unchecked((int)(*(long*)args[0]))) ?? ""));
             return true;
         }
         if (__vsn_debug_parse_stack_level_expression == 0) __vsn_debug_parse_stack_level_expression = StringNames.Get("_debug_parse_stack_level_expression").Opaque;
         if (nameSn == __vsn_debug_parse_stack_level_expression)
         {
-            *(ulong*)ret = NativeString.Create(_DebugParseStackLevelExpression(unchecked((int)(*(long*)args[0])), NativeString.Read(*(ulong*)args[1]), unchecked((int)(*(long*)args[2])), unchecked((int)(*(long*)args[3]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_DebugParseStackLevelExpression(unchecked((int)(*(long*)args[0])), NativeString.Read(PayloadSlot.Read(args[1])), unchecked((int)(*(long*)args[2])), unchecked((int)(*(long*)args[3]))) ?? ""));
             return true;
         }
         if (__vsn_reload_all_scripts == 0) __vsn_reload_all_scripts = StringNames.Get("_reload_all_scripts").Opaque;
@@ -3839,7 +3839,7 @@ public unsafe partial class ScriptLanguageExtension : ScriptLanguage
         if (__vsn_handles_global_class_type == 0) __vsn_handles_global_class_type = StringNames.Get("_handles_global_class_type").Opaque;
         if (nameSn == __vsn_handles_global_class_type)
         {
-            *(byte*)ret = _HandlesGlobalClassType(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _HandlesGlobalClassType(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);

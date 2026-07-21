@@ -8102,13 +8102,13 @@ public unsafe partial class AnimationNode : Resource
         if (__vsn_get_child_by_name == 0) __vsn_get_child_by_name = StringNames.Get("_get_child_by_name").Opaque;
         if (nameSn == __vsn_get_child_by_name)
         {
-            *(nint*)ret = _GetChildByName(StringName.Intern(StringNames.Read(*(ulong*)args[0])))?.NativePtr ?? 0;
+            *(nint*)ret = _GetChildByName(StringName.Intern(StringNames.Read(PayloadSlot.Read(args[0]))))?.NativePtr ?? 0;
             return true;
         }
         if (__vsn_is_parameter_read_only == 0) __vsn_is_parameter_read_only = StringNames.Get("_is_parameter_read_only").Opaque;
         if (nameSn == __vsn_is_parameter_read_only)
         {
-            *(byte*)ret = _IsParameterReadOnly(StringName.Intern(StringNames.Read(*(ulong*)args[0]))) ? (byte)1 : (byte)0;
+            *(byte*)ret = _IsParameterReadOnly(StringName.Intern(StringNames.Read(PayloadSlot.Read(args[0])))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_process == 0) __vsn_process = StringNames.Get("_process").Opaque;
@@ -8120,7 +8120,7 @@ public unsafe partial class AnimationNode : Resource
         if (__vsn_get_caption == 0) __vsn_get_caption = StringNames.Get("_get_caption").Opaque;
         if (nameSn == __vsn_get_caption)
         {
-            *(ulong*)ret = NativeString.Create(_GetCaption() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetCaption() ?? ""));
             return true;
         }
         if (__vsn_has_filter == 0) __vsn_has_filter = StringNames.Get("_has_filter").Opaque;
@@ -20348,7 +20348,7 @@ public unsafe partial class AudioStream : Resource
         if (__vsn_get_stream_name == 0) __vsn_get_stream_name = StringNames.Get("_get_stream_name").Opaque;
         if (nameSn == __vsn_get_stream_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetStreamName() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetStreamName() ?? ""));
             return true;
         }
         if (__vsn_get_length == 0) __vsn_get_length = StringNames.Get("_get_length").Opaque;

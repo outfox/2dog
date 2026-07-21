@@ -27,14 +27,6 @@ public static unsafe class StringNames
     private static readonly Dictionary<string, InternedName> Cache = [];
     private static readonly Lock CacheLock = new();
 
-    /// <summary>
-    /// Reads a native StringName's pointer-sized payload into the canonical
-    /// ulong form (high bytes zero). Reading 8 bytes on a 32-bit target
-    /// (wasm32) would pick up adjacent garbage and break payload equality
-    /// against values produced by <see cref="Get"/>.
-    /// </summary>
-    public static ulong ReadPayload(nint snPtr) => IntPtr.Size == 8 ? *(ulong*)snPtr : *(uint*)snPtr;
-
     /// <summary>Gets (or creates and caches for process lifetime) the StringName for <paramref name="name"/>.</summary>
     public static InternedName Get(string name)
     {

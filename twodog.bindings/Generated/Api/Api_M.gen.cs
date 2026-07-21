@@ -1446,13 +1446,13 @@ public unsafe partial class Mesh : Resource
         if (__vsn_get_blend_shape_name == 0) __vsn_get_blend_shape_name = StringNames.Get("_get_blend_shape_name").Opaque;
         if (nameSn == __vsn_get_blend_shape_name)
         {
-            *(ulong*)ret = StringNames.CreateOwned(_GetBlendShapeName(unchecked((int)(*(long*)args[0])))?.ToString() ?? "");
+            PayloadSlot.Write(ret, StringNames.CreateOwned(_GetBlendShapeName(unchecked((int)(*(long*)args[0])))?.ToString() ?? ""));
             return true;
         }
         if (__vsn_set_blend_shape_name == 0) __vsn_set_blend_shape_name = StringNames.Get("_set_blend_shape_name").Opaque;
         if (nameSn == __vsn_set_blend_shape_name)
         {
-            _SetBlendShapeName(unchecked((int)(*(long*)args[0])), StringName.Intern(StringNames.Read(*(ulong*)args[1])));
+            _SetBlendShapeName(unchecked((int)(*(long*)args[0])), StringName.Intern(StringNames.Read(PayloadSlot.Read(args[1]))));
             return true;
         }
         if (__vsn_get_aabb == 0) __vsn_get_aabb = StringNames.Get("_get_aabb").Opaque;
@@ -4508,7 +4508,7 @@ public unsafe partial class MovieWriter : GodotObject
         if (__vsn_handles_file == 0) __vsn_handles_file = StringNames.Get("_handles_file").Opaque;
         if (nameSn == __vsn_handles_file)
         {
-            *(byte*)ret = _HandlesFile(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _HandlesFile(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_get_supported_extensions == 0) __vsn_get_supported_extensions = StringNames.Get("_get_supported_extensions").Opaque;
@@ -4520,7 +4520,7 @@ public unsafe partial class MovieWriter : GodotObject
         if (__vsn_write_begin == 0) __vsn_write_begin = StringNames.Get("_write_begin").Opaque;
         if (nameSn == __vsn_write_begin)
         {
-            *(long*)ret = (long)_WriteBegin(*(Vector2I*)args[0], unchecked((uint)(*(long*)args[1])), NativeString.Read(*(ulong*)args[2]));
+            *(long*)ret = (long)_WriteBegin(*(Vector2I*)args[0], unchecked((uint)(*(long*)args[1])), NativeString.Read(PayloadSlot.Read(args[2])));
             return true;
         }
         if (__vsn_write_end == 0) __vsn_write_end = StringNames.Get("_write_end").Opaque;

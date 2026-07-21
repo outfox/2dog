@@ -26335,7 +26335,7 @@ public unsafe partial class Control : CanvasItem
         if (__vsn_get_tooltip == 0) __vsn_get_tooltip = StringNames.Get("_get_tooltip").Opaque;
         if (nameSn == __vsn_get_tooltip)
         {
-            *(ulong*)ret = NativeString.Create(_GetTooltip(*(Vector2*)args[0]) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetTooltip(*(Vector2*)args[0]) ?? ""));
             return true;
         }
         if (__vsn_get_tooltip_auto_translate_mode_at == 0) __vsn_get_tooltip_auto_translate_mode_at = StringNames.Get("_get_tooltip_auto_translate_mode_at").Opaque;
@@ -26347,7 +26347,7 @@ public unsafe partial class Control : CanvasItem
         if (__vsn_make_custom_tooltip == 0) __vsn_make_custom_tooltip = StringNames.Get("_make_custom_tooltip").Opaque;
         if (nameSn == __vsn_make_custom_tooltip)
         {
-            *(nint*)ret = _MakeCustomTooltip(NativeString.Read(*(ulong*)args[0]))?.NativePtr ?? 0;
+            *(nint*)ret = _MakeCustomTooltip(NativeString.Read(PayloadSlot.Read(args[0])))?.NativePtr ?? 0;
             return true;
         }
         if (__vsn_get_cursor_shape == 0) __vsn_get_cursor_shape = StringNames.Get("_get_cursor_shape").Opaque;
@@ -26359,13 +26359,13 @@ public unsafe partial class Control : CanvasItem
         if (__vsn_accessibility_get_contextual_info == 0) __vsn_accessibility_get_contextual_info = StringNames.Get("_accessibility_get_contextual_info").Opaque;
         if (nameSn == __vsn_accessibility_get_contextual_info)
         {
-            *(ulong*)ret = NativeString.Create(_AccessibilityGetContextualInfo() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_AccessibilityGetContextualInfo() ?? ""));
             return true;
         }
         if (__vsn_get_accessibility_container_name == 0) __vsn_get_accessibility_container_name = StringNames.Get("_get_accessibility_container_name").Opaque;
         if (nameSn == __vsn_get_accessibility_container_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetAccessibilityContainerName((Node?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false)) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetAccessibilityContainerName((Node?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false)) ?? ""));
             return true;
         }
         if (__vsn_gui_input == 0) __vsn_gui_input = StringNames.Get("_gui_input").Opaque;

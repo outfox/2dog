@@ -2831,13 +2831,13 @@ public unsafe partial class GLTFDocumentExtension : Resource
         if (__vsn_parse_image_data == 0) __vsn_parse_image_data = StringNames.Get("_parse_image_data").Opaque;
         if (nameSn == __vsn_parse_image_data)
         {
-            *(long*)ret = (long)_ParseImageData((GLTFState?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), Packed.ReadPod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, (Opaque16*)args[1]), NativeString.Read(*(ulong*)args[2]), (Image?)InstanceBindings.GetOrCreate(*(nint*)args[3], adoptRef: false));
+            *(long*)ret = (long)_ParseImageData((GLTFState?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), Packed.ReadPod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, (Opaque16*)args[1]), NativeString.Read(PayloadSlot.Read(args[2])), (Image?)InstanceBindings.GetOrCreate(*(nint*)args[3], adoptRef: false));
             return true;
         }
         if (__vsn_get_image_file_extension == 0) __vsn_get_image_file_extension = StringNames.Get("_get_image_file_extension").Opaque;
         if (nameSn == __vsn_get_image_file_extension)
         {
-            *(ulong*)ret = NativeString.Create(_GetImageFileExtension() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetImageFileExtension() ?? ""));
             return true;
         }
         if (__vsn_import_post_parse == 0) __vsn_import_post_parse = StringNames.Get("_import_post_parse").Opaque;
@@ -2897,7 +2897,7 @@ public unsafe partial class GLTFDocumentExtension : Resource
         if (__vsn_save_image_at_path == 0) __vsn_save_image_at_path = StringNames.Get("_save_image_at_path").Opaque;
         if (nameSn == __vsn_save_image_at_path)
         {
-            *(long*)ret = (long)_SaveImageAtPath((GLTFState?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (Image?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false), NativeString.Read(*(ulong*)args[2]), NativeString.Read(*(ulong*)args[3]), (float)(*(double*)args[4]));
+            *(long*)ret = (long)_SaveImageAtPath((GLTFState?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), (Image?)InstanceBindings.GetOrCreate(*(nint*)args[1], adoptRef: false), NativeString.Read(PayloadSlot.Read(args[2])), NativeString.Read(PayloadSlot.Read(args[3])), (float)(*(double*)args[4]));
             return true;
         }
         if (__vsn_export_post == 0) __vsn_export_post = StringNames.Get("_export_post").Opaque;
@@ -14985,7 +14985,7 @@ public unsafe partial class GraphEdit : Control
         if (__vsn_is_node_hover_valid == 0) __vsn_is_node_hover_valid = StringNames.Get("_is_node_hover_valid").Opaque;
         if (nameSn == __vsn_is_node_hover_valid)
         {
-            *(byte*)ret = _IsNodeHoverValid(StringName.Intern(StringNames.Read(*(ulong*)args[0])), unchecked((int)(*(long*)args[1])), StringName.Intern(StringNames.Read(*(ulong*)args[2])), unchecked((int)(*(long*)args[3]))) ? (byte)1 : (byte)0;
+            *(byte*)ret = _IsNodeHoverValid(StringName.Intern(StringNames.Read(PayloadSlot.Read(args[0]))), unchecked((int)(*(long*)args[1])), StringName.Intern(StringNames.Read(PayloadSlot.Read(args[2]))), unchecked((int)(*(long*)args[3]))) ? (byte)1 : (byte)0;
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);

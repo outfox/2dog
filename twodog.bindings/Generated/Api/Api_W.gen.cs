@@ -381,7 +381,7 @@ public unsafe partial class WebRTCDataChannelExtension : WebRTCDataChannel
         if (__vsn_get_label == 0) __vsn_get_label = StringNames.Get("_get_label").Opaque;
         if (nameSn == __vsn_get_label)
         {
-            *(ulong*)ret = NativeString.Create(_GetLabel() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetLabel() ?? ""));
             return true;
         }
         if (__vsn_is_ordered == 0) __vsn_is_ordered = StringNames.Get("_is_ordered").Opaque;
@@ -411,7 +411,7 @@ public unsafe partial class WebRTCDataChannelExtension : WebRTCDataChannel
         if (__vsn_get_protocol == 0) __vsn_get_protocol = StringNames.Get("_get_protocol").Opaque;
         if (nameSn == __vsn_get_protocol)
         {
-            *(ulong*)ret = NativeString.Create(_GetProtocol() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetProtocol() ?? ""));
             return true;
         }
         if (__vsn_is_negotiated == 0) __vsn_is_negotiated = StringNames.Get("_is_negotiated").Opaque;
@@ -925,19 +925,19 @@ public unsafe partial class WebRTCPeerConnectionExtension : WebRTCPeerConnection
         if (__vsn_set_remote_description == 0) __vsn_set_remote_description = StringNames.Get("_set_remote_description").Opaque;
         if (nameSn == __vsn_set_remote_description)
         {
-            *(long*)ret = (long)_SetRemoteDescription(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1]));
+            *(long*)ret = (long)_SetRemoteDescription(NativeString.Read(PayloadSlot.Read(args[0])), NativeString.Read(PayloadSlot.Read(args[1])));
             return true;
         }
         if (__vsn_set_local_description == 0) __vsn_set_local_description = StringNames.Get("_set_local_description").Opaque;
         if (nameSn == __vsn_set_local_description)
         {
-            *(long*)ret = (long)_SetLocalDescription(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1]));
+            *(long*)ret = (long)_SetLocalDescription(NativeString.Read(PayloadSlot.Read(args[0])), NativeString.Read(PayloadSlot.Read(args[1])));
             return true;
         }
         if (__vsn_add_ice_candidate == 0) __vsn_add_ice_candidate = StringNames.Get("_add_ice_candidate").Opaque;
         if (nameSn == __vsn_add_ice_candidate)
         {
-            *(long*)ret = (long)_AddIceCandidate(NativeString.Read(*(ulong*)args[0]), unchecked((int)(*(long*)args[1])), NativeString.Read(*(ulong*)args[2]));
+            *(long*)ret = (long)_AddIceCandidate(NativeString.Read(PayloadSlot.Read(args[0])), unchecked((int)(*(long*)args[1])), NativeString.Read(PayloadSlot.Read(args[2])));
             return true;
         }
         if (__vsn_poll == 0) __vsn_poll = StringNames.Get("_poll").Opaque;

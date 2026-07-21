@@ -8497,7 +8497,7 @@ public unsafe partial class Logger : RefCounted
         if (__vsn_log_message == 0) __vsn_log_message = StringNames.Get("_log_message").Opaque;
         if (nameSn == __vsn_log_message)
         {
-            _LogMessage(NativeString.Read(*(ulong*)args[0]), *(byte*)args[1] != 0);
+            _LogMessage(NativeString.Read(PayloadSlot.Read(args[0])), *(byte*)args[1] != 0);
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);

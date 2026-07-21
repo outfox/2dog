@@ -24641,7 +24641,7 @@ public unsafe partial class Resource : RefCounted
         if (__vsn_set_path_cache == 0) __vsn_set_path_cache = StringNames.Get("_set_path_cache").Opaque;
         if (nameSn == __vsn_set_path_cache)
         {
-            _SetPathCache(NativeString.Read(*(ulong*)args[0]));
+            _SetPathCache(NativeString.Read(PayloadSlot.Read(args[0])));
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);
@@ -24705,49 +24705,49 @@ public unsafe partial class ResourceFormatLoader : RefCounted
         if (__vsn_recognize_path == 0) __vsn_recognize_path = StringNames.Get("_recognize_path").Opaque;
         if (nameSn == __vsn_recognize_path)
         {
-            *(byte*)ret = _RecognizePath(NativeString.Read(*(ulong*)args[0]), StringName.Intern(StringNames.Read(*(ulong*)args[1]))) ? (byte)1 : (byte)0;
+            *(byte*)ret = _RecognizePath(NativeString.Read(PayloadSlot.Read(args[0])), StringName.Intern(StringNames.Read(PayloadSlot.Read(args[1])))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_handles_type == 0) __vsn_handles_type = StringNames.Get("_handles_type").Opaque;
         if (nameSn == __vsn_handles_type)
         {
-            *(byte*)ret = _HandlesType(StringName.Intern(StringNames.Read(*(ulong*)args[0]))) ? (byte)1 : (byte)0;
+            *(byte*)ret = _HandlesType(StringName.Intern(StringNames.Read(PayloadSlot.Read(args[0])))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_get_resource_type == 0) __vsn_get_resource_type = StringNames.Get("_get_resource_type").Opaque;
         if (nameSn == __vsn_get_resource_type)
         {
-            *(ulong*)ret = NativeString.Create(_GetResourceType(NativeString.Read(*(ulong*)args[0])) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetResourceType(NativeString.Read(PayloadSlot.Read(args[0]))) ?? ""));
             return true;
         }
         if (__vsn_get_resource_script_class == 0) __vsn_get_resource_script_class = StringNames.Get("_get_resource_script_class").Opaque;
         if (nameSn == __vsn_get_resource_script_class)
         {
-            *(ulong*)ret = NativeString.Create(_GetResourceScriptClass(NativeString.Read(*(ulong*)args[0])) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetResourceScriptClass(NativeString.Read(PayloadSlot.Read(args[0]))) ?? ""));
             return true;
         }
         if (__vsn_get_resource_uid == 0) __vsn_get_resource_uid = StringNames.Get("_get_resource_uid").Opaque;
         if (nameSn == __vsn_get_resource_uid)
         {
-            *(long*)ret = unchecked((long)_GetResourceUid(NativeString.Read(*(ulong*)args[0])));
+            *(long*)ret = unchecked((long)_GetResourceUid(NativeString.Read(PayloadSlot.Read(args[0]))));
             return true;
         }
         if (__vsn_get_dependencies == 0) __vsn_get_dependencies = StringNames.Get("_get_dependencies").Opaque;
         if (nameSn == __vsn_get_dependencies)
         {
-            *(Opaque16*)ret = Packed.CreateStrings(_GetDependencies(NativeString.Read(*(ulong*)args[0]), *(byte*)args[1] != 0) ?? []);
+            *(Opaque16*)ret = Packed.CreateStrings(_GetDependencies(NativeString.Read(PayloadSlot.Read(args[0])), *(byte*)args[1] != 0) ?? []);
             return true;
         }
         if (__vsn_exists == 0) __vsn_exists = StringNames.Get("_exists").Opaque;
         if (nameSn == __vsn_exists)
         {
-            *(byte*)ret = _Exists(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _Exists(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_get_classes_used == 0) __vsn_get_classes_used = StringNames.Get("_get_classes_used").Opaque;
         if (nameSn == __vsn_get_classes_used)
         {
-            *(Opaque16*)ret = Packed.CreateStrings(_GetClassesUsed(NativeString.Read(*(ulong*)args[0])) ?? []);
+            *(Opaque16*)ret = Packed.CreateStrings(_GetClassesUsed(NativeString.Read(PayloadSlot.Read(args[0]))) ?? []);
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);
@@ -24784,13 +24784,13 @@ public unsafe partial class ResourceFormatSaver : RefCounted
         if (__vsn_save == 0) __vsn_save = StringNames.Get("_save").Opaque;
         if (nameSn == __vsn_save)
         {
-            *(long*)ret = (long)_Save((Resource?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1]), unchecked((uint)(*(long*)args[2])));
+            *(long*)ret = (long)_Save((Resource?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(PayloadSlot.Read(args[1])), unchecked((uint)(*(long*)args[2])));
             return true;
         }
         if (__vsn_set_uid == 0) __vsn_set_uid = StringNames.Get("_set_uid").Opaque;
         if (nameSn == __vsn_set_uid)
         {
-            *(long*)ret = (long)_SetUid(NativeString.Read(*(ulong*)args[0]), unchecked((long)(*(long*)args[1])));
+            *(long*)ret = (long)_SetUid(NativeString.Read(PayloadSlot.Read(args[0])), unchecked((long)(*(long*)args[1])));
             return true;
         }
         if (__vsn_recognize == 0) __vsn_recognize = StringNames.Get("_recognize").Opaque;
@@ -24808,7 +24808,7 @@ public unsafe partial class ResourceFormatSaver : RefCounted
         if (__vsn_recognize_path == 0) __vsn_recognize_path = StringNames.Get("_recognize_path").Opaque;
         if (nameSn == __vsn_recognize_path)
         {
-            *(byte*)ret = _RecognizePath((Resource?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _RecognizePath((Resource?)InstanceBindings.GetOrCreate(*(nint*)args[0], adoptRef: false), NativeString.Read(PayloadSlot.Read(args[1]))) ? (byte)1 : (byte)0;
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);
@@ -24834,7 +24834,7 @@ public unsafe partial class ResourceImporter : RefCounted
         if (__vsn_get_build_dependencies == 0) __vsn_get_build_dependencies = StringNames.Get("_get_build_dependencies").Opaque;
         if (nameSn == __vsn_get_build_dependencies)
         {
-            *(Opaque16*)ret = Packed.CreateStrings(_GetBuildDependencies(NativeString.Read(*(ulong*)args[0])) ?? []);
+            *(Opaque16*)ret = Packed.CreateStrings(_GetBuildDependencies(NativeString.Read(PayloadSlot.Read(args[0]))) ?? []);
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);

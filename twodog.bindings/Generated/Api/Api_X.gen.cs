@@ -2457,7 +2457,7 @@ public unsafe partial class XRInterfaceExtension : XRInterface
         if (__vsn_get_name == 0) __vsn_get_name = StringNames.Get("_get_name").Opaque;
         if (nameSn == __vsn_get_name)
         {
-            *(ulong*)ret = StringNames.CreateOwned(_GetName()?.ToString() ?? "");
+            PayloadSlot.Write(ret, StringNames.CreateOwned(_GetName()?.ToString() ?? ""));
             return true;
         }
         if (__vsn_get_capabilities == 0) __vsn_get_capabilities = StringNames.Get("_get_capabilities").Opaque;
@@ -2589,7 +2589,7 @@ public unsafe partial class XRInterfaceExtension : XRInterface
         if (__vsn_get_suggested_pose_names == 0) __vsn_get_suggested_pose_names = StringNames.Get("_get_suggested_pose_names").Opaque;
         if (nameSn == __vsn_get_suggested_pose_names)
         {
-            *(Opaque16*)ret = Packed.CreateStrings(_GetSuggestedPoseNames(StringName.Intern(StringNames.Read(*(ulong*)args[0]))) ?? []);
+            *(Opaque16*)ret = Packed.CreateStrings(_GetSuggestedPoseNames(StringName.Intern(StringNames.Read(PayloadSlot.Read(args[0])))) ?? []);
             return true;
         }
         if (__vsn_get_tracking_status == 0) __vsn_get_tracking_status = StringNames.Get("_get_tracking_status").Opaque;
@@ -2601,7 +2601,7 @@ public unsafe partial class XRInterfaceExtension : XRInterface
         if (__vsn_trigger_haptic_pulse == 0) __vsn_trigger_haptic_pulse = StringNames.Get("_trigger_haptic_pulse").Opaque;
         if (nameSn == __vsn_trigger_haptic_pulse)
         {
-            _TriggerHapticPulse(NativeString.Read(*(ulong*)args[0]), StringName.Intern(StringNames.Read(*(ulong*)args[1])), *(double*)args[2], *(double*)args[3], *(double*)args[4], *(double*)args[5]);
+            _TriggerHapticPulse(NativeString.Read(PayloadSlot.Read(args[0])), StringName.Intern(StringNames.Read(PayloadSlot.Read(args[1]))), *(double*)args[2], *(double*)args[3], *(double*)args[4], *(double*)args[5]);
             return true;
         }
         if (__vsn_get_anchor_detection_is_enabled == 0) __vsn_get_anchor_detection_is_enabled = StringNames.Get("_get_anchor_detection_is_enabled").Opaque;

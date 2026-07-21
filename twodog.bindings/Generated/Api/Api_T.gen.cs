@@ -15225,7 +15225,7 @@ public unsafe partial class TextServerExtension : TextServer
         if (__vsn_get_name == 0) __vsn_get_name = StringNames.Get("_get_name").Opaque;
         if (nameSn == __vsn_get_name)
         {
-            *(ulong*)ret = NativeString.Create(_GetName() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetName() ?? ""));
             return true;
         }
         if (__vsn_get_features == 0) __vsn_get_features = StringNames.Get("_get_features").Opaque;
@@ -15249,25 +15249,25 @@ public unsafe partial class TextServerExtension : TextServer
         if (__vsn_load_support_data == 0) __vsn_load_support_data = StringNames.Get("_load_support_data").Opaque;
         if (nameSn == __vsn_load_support_data)
         {
-            *(byte*)ret = _LoadSupportData(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _LoadSupportData(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_get_support_data_filename == 0) __vsn_get_support_data_filename = StringNames.Get("_get_support_data_filename").Opaque;
         if (nameSn == __vsn_get_support_data_filename)
         {
-            *(ulong*)ret = NativeString.Create(_GetSupportDataFilename() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetSupportDataFilename() ?? ""));
             return true;
         }
         if (__vsn_get_support_data_info == 0) __vsn_get_support_data_info = StringNames.Get("_get_support_data_info").Opaque;
         if (nameSn == __vsn_get_support_data_info)
         {
-            *(ulong*)ret = NativeString.Create(_GetSupportDataInfo() ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_GetSupportDataInfo() ?? ""));
             return true;
         }
         if (__vsn_save_support_data == 0) __vsn_save_support_data = StringNames.Get("_save_support_data").Opaque;
         if (nameSn == __vsn_save_support_data)
         {
-            *(byte*)ret = _SaveSupportData(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _SaveSupportData(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_get_support_data == 0) __vsn_get_support_data = StringNames.Get("_get_support_data").Opaque;
@@ -15279,25 +15279,25 @@ public unsafe partial class TextServerExtension : TextServer
         if (__vsn_is_locale_using_support_data == 0) __vsn_is_locale_using_support_data = StringNames.Get("_is_locale_using_support_data").Opaque;
         if (nameSn == __vsn_is_locale_using_support_data)
         {
-            *(byte*)ret = _IsLocaleUsingSupportData(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _IsLocaleUsingSupportData(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_is_locale_right_to_left == 0) __vsn_is_locale_right_to_left = StringNames.Get("_is_locale_right_to_left").Opaque;
         if (nameSn == __vsn_is_locale_right_to_left)
         {
-            *(byte*)ret = _IsLocaleRightToLeft(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _IsLocaleRightToLeft(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_name_to_tag == 0) __vsn_name_to_tag = StringNames.Get("_name_to_tag").Opaque;
         if (nameSn == __vsn_name_to_tag)
         {
-            *(long*)ret = unchecked((long)_NameToTag(NativeString.Read(*(ulong*)args[0])));
+            *(long*)ret = unchecked((long)_NameToTag(NativeString.Read(PayloadSlot.Read(args[0]))));
             return true;
         }
         if (__vsn_tag_to_name == 0) __vsn_tag_to_name = StringNames.Get("_tag_to_name").Opaque;
         if (nameSn == __vsn_tag_to_name)
         {
-            *(ulong*)ret = NativeString.Create(_TagToName(unchecked((long)(*(long*)args[0]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_TagToName(unchecked((long)(*(long*)args[0]))) ?? ""));
             return true;
         }
         if (__vsn_create_font == 0) __vsn_create_font = StringNames.Get("_create_font").Opaque;
@@ -15351,25 +15351,25 @@ public unsafe partial class TextServerExtension : TextServer
         if (__vsn_font_set_name == 0) __vsn_font_set_name = StringNames.Get("_font_set_name").Opaque;
         if (nameSn == __vsn_font_set_name)
         {
-            _FontSetName(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]));
+            _FontSetName(*(Rid*)args[0], NativeString.Read(PayloadSlot.Read(args[1])));
             return true;
         }
         if (__vsn_font_get_name == 0) __vsn_font_get_name = StringNames.Get("_font_get_name").Opaque;
         if (nameSn == __vsn_font_get_name)
         {
-            *(ulong*)ret = NativeString.Create(_FontGetName(*(Rid*)args[0]) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_FontGetName(*(Rid*)args[0]) ?? ""));
             return true;
         }
         if (__vsn_font_set_style_name == 0) __vsn_font_set_style_name = StringNames.Get("_font_set_style_name").Opaque;
         if (nameSn == __vsn_font_set_style_name)
         {
-            _FontSetStyleName(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]));
+            _FontSetStyleName(*(Rid*)args[0], NativeString.Read(PayloadSlot.Read(args[1])));
             return true;
         }
         if (__vsn_font_get_style_name == 0) __vsn_font_get_style_name = StringNames.Get("_font_get_style_name").Opaque;
         if (nameSn == __vsn_font_get_style_name)
         {
-            *(ulong*)ret = NativeString.Create(_FontGetStyleName(*(Rid*)args[0]) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_FontGetStyleName(*(Rid*)args[0]) ?? ""));
             return true;
         }
         if (__vsn_font_set_weight == 0) __vsn_font_set_weight = StringNames.Get("_font_set_weight").Opaque;
@@ -15543,7 +15543,7 @@ public unsafe partial class TextServerExtension : TextServer
         if (__vsn_font_get_palette_name == 0) __vsn_font_get_palette_name = StringNames.Get("_font_get_palette_name").Opaque;
         if (nameSn == __vsn_font_get_palette_name)
         {
-            *(ulong*)ret = NativeString.Create(_FontGetPaletteName(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_FontGetPaletteName(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))) ?? ""));
             return true;
         }
         if (__vsn_font_get_palette_colors == 0) __vsn_font_get_palette_colors = StringNames.Get("_font_get_palette_colors").Opaque;
@@ -15921,7 +15921,7 @@ public unsafe partial class TextServerExtension : TextServer
         if (__vsn_font_get_supported_chars == 0) __vsn_font_get_supported_chars = StringNames.Get("_font_get_supported_chars").Opaque;
         if (nameSn == __vsn_font_get_supported_chars)
         {
-            *(ulong*)ret = NativeString.Create(_FontGetSupportedChars(*(Rid*)args[0]) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_FontGetSupportedChars(*(Rid*)args[0]) ?? ""));
             return true;
         }
         if (__vsn_font_get_supported_glyphs == 0) __vsn_font_get_supported_glyphs = StringNames.Get("_font_get_supported_glyphs").Opaque;
@@ -15957,25 +15957,25 @@ public unsafe partial class TextServerExtension : TextServer
         if (__vsn_font_is_language_supported == 0) __vsn_font_is_language_supported = StringNames.Get("_font_is_language_supported").Opaque;
         if (nameSn == __vsn_font_is_language_supported)
         {
-            *(byte*)ret = _FontIsLanguageSupported(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _FontIsLanguageSupported(*(Rid*)args[0], NativeString.Read(PayloadSlot.Read(args[1]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_font_set_language_support_override == 0) __vsn_font_set_language_support_override = StringNames.Get("_font_set_language_support_override").Opaque;
         if (nameSn == __vsn_font_set_language_support_override)
         {
-            _FontSetLanguageSupportOverride(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]), *(byte*)args[2] != 0);
+            _FontSetLanguageSupportOverride(*(Rid*)args[0], NativeString.Read(PayloadSlot.Read(args[1])), *(byte*)args[2] != 0);
             return true;
         }
         if (__vsn_font_get_language_support_override == 0) __vsn_font_get_language_support_override = StringNames.Get("_font_get_language_support_override").Opaque;
         if (nameSn == __vsn_font_get_language_support_override)
         {
-            *(byte*)ret = _FontGetLanguageSupportOverride(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _FontGetLanguageSupportOverride(*(Rid*)args[0], NativeString.Read(PayloadSlot.Read(args[1]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_font_remove_language_support_override == 0) __vsn_font_remove_language_support_override = StringNames.Get("_font_remove_language_support_override").Opaque;
         if (nameSn == __vsn_font_remove_language_support_override)
         {
-            _FontRemoveLanguageSupportOverride(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]));
+            _FontRemoveLanguageSupportOverride(*(Rid*)args[0], NativeString.Read(PayloadSlot.Read(args[1])));
             return true;
         }
         if (__vsn_font_get_language_support_overrides == 0) __vsn_font_get_language_support_overrides = StringNames.Get("_font_get_language_support_overrides").Opaque;
@@ -15987,25 +15987,25 @@ public unsafe partial class TextServerExtension : TextServer
         if (__vsn_font_is_script_supported == 0) __vsn_font_is_script_supported = StringNames.Get("_font_is_script_supported").Opaque;
         if (nameSn == __vsn_font_is_script_supported)
         {
-            *(byte*)ret = _FontIsScriptSupported(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _FontIsScriptSupported(*(Rid*)args[0], NativeString.Read(PayloadSlot.Read(args[1]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_font_set_script_support_override == 0) __vsn_font_set_script_support_override = StringNames.Get("_font_set_script_support_override").Opaque;
         if (nameSn == __vsn_font_set_script_support_override)
         {
-            _FontSetScriptSupportOverride(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]), *(byte*)args[2] != 0);
+            _FontSetScriptSupportOverride(*(Rid*)args[0], NativeString.Read(PayloadSlot.Read(args[1])), *(byte*)args[2] != 0);
             return true;
         }
         if (__vsn_font_get_script_support_override == 0) __vsn_font_get_script_support_override = StringNames.Get("_font_get_script_support_override").Opaque;
         if (nameSn == __vsn_font_get_script_support_override)
         {
-            *(byte*)ret = _FontGetScriptSupportOverride(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _FontGetScriptSupportOverride(*(Rid*)args[0], NativeString.Read(PayloadSlot.Read(args[1]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_font_remove_script_support_override == 0) __vsn_font_remove_script_support_override = StringNames.Get("_font_remove_script_support_override").Opaque;
         if (nameSn == __vsn_font_remove_script_support_override)
         {
-            _FontRemoveScriptSupportOverride(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]));
+            _FontRemoveScriptSupportOverride(*(Rid*)args[0], NativeString.Read(PayloadSlot.Read(args[1])));
             return true;
         }
         if (__vsn_font_get_script_support_overrides == 0) __vsn_font_get_script_support_overrides = StringNames.Get("_font_get_script_support_overrides").Opaque;
@@ -16089,13 +16089,13 @@ public unsafe partial class TextServerExtension : TextServer
         if (__vsn_shaped_text_set_custom_punctuation == 0) __vsn_shaped_text_set_custom_punctuation = StringNames.Get("_shaped_text_set_custom_punctuation").Opaque;
         if (nameSn == __vsn_shaped_text_set_custom_punctuation)
         {
-            _ShapedTextSetCustomPunctuation(*(Rid*)args[0], NativeString.Read(*(ulong*)args[1]));
+            _ShapedTextSetCustomPunctuation(*(Rid*)args[0], NativeString.Read(PayloadSlot.Read(args[1])));
             return true;
         }
         if (__vsn_shaped_text_get_custom_punctuation == 0) __vsn_shaped_text_get_custom_punctuation = StringNames.Get("_shaped_text_get_custom_punctuation").Opaque;
         if (nameSn == __vsn_shaped_text_get_custom_punctuation)
         {
-            *(ulong*)ret = NativeString.Create(_ShapedTextGetCustomPunctuation(*(Rid*)args[0]) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_ShapedTextGetCustomPunctuation(*(Rid*)args[0]) ?? ""));
             return true;
         }
         if (__vsn_shaped_text_set_custom_ellipsis == 0) __vsn_shaped_text_set_custom_ellipsis = StringNames.Get("_shaped_text_set_custom_ellipsis").Opaque;
@@ -16161,7 +16161,7 @@ public unsafe partial class TextServerExtension : TextServer
         if (__vsn_shaped_get_text == 0) __vsn_shaped_get_text = StringNames.Get("_shaped_get_text").Opaque;
         if (nameSn == __vsn_shaped_get_text)
         {
-            *(ulong*)ret = NativeString.Create(_ShapedGetText(*(Rid*)args[0]) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_ShapedGetText(*(Rid*)args[0]) ?? ""));
             return true;
         }
         if (__vsn_shaped_get_span_count == 0) __vsn_shaped_get_span_count = StringNames.Get("_shaped_get_span_count").Opaque;
@@ -16173,7 +16173,7 @@ public unsafe partial class TextServerExtension : TextServer
         if (__vsn_shaped_get_span_text == 0) __vsn_shaped_get_span_text = StringNames.Get("_shaped_get_span_text").Opaque;
         if (nameSn == __vsn_shaped_get_span_text)
         {
-            *(ulong*)ret = NativeString.Create(_ShapedGetSpanText(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_ShapedGetSpanText(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))) ?? ""));
             return true;
         }
         if (__vsn_shaped_get_run_count == 0) __vsn_shaped_get_run_count = StringNames.Get("_shaped_get_run_count").Opaque;
@@ -16185,7 +16185,7 @@ public unsafe partial class TextServerExtension : TextServer
         if (__vsn_shaped_get_run_text == 0) __vsn_shaped_get_run_text = StringNames.Get("_shaped_get_run_text").Opaque;
         if (nameSn == __vsn_shaped_get_run_text)
         {
-            *(ulong*)ret = NativeString.Create(_ShapedGetRunText(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_ShapedGetRunText(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))) ?? ""));
             return true;
         }
         if (__vsn_shaped_get_run_range == 0) __vsn_shaped_get_run_range = StringNames.Get("_shaped_get_run_range").Opaque;
@@ -16215,7 +16215,7 @@ public unsafe partial class TextServerExtension : TextServer
         if (__vsn_shaped_get_run_language == 0) __vsn_shaped_get_run_language = StringNames.Get("_shaped_get_run_language").Opaque;
         if (nameSn == __vsn_shaped_get_run_language)
         {
-            *(ulong*)ret = NativeString.Create(_ShapedGetRunLanguage(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_ShapedGetRunLanguage(*(Rid*)args[0], unchecked((long)(*(long*)args[1]))) ?? ""));
             return true;
         }
         if (__vsn_shaped_get_run_direction == 0) __vsn_shaped_get_run_direction = StringNames.Get("_shaped_get_run_direction").Opaque;
@@ -16443,31 +16443,31 @@ public unsafe partial class TextServerExtension : TextServer
         if (__vsn_format_number == 0) __vsn_format_number = StringNames.Get("_format_number").Opaque;
         if (nameSn == __vsn_format_number)
         {
-            *(ulong*)ret = NativeString.Create(_FormatNumber(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1])) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_FormatNumber(NativeString.Read(PayloadSlot.Read(args[0])), NativeString.Read(PayloadSlot.Read(args[1]))) ?? ""));
             return true;
         }
         if (__vsn_parse_number == 0) __vsn_parse_number = StringNames.Get("_parse_number").Opaque;
         if (nameSn == __vsn_parse_number)
         {
-            *(ulong*)ret = NativeString.Create(_ParseNumber(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1])) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_ParseNumber(NativeString.Read(PayloadSlot.Read(args[0])), NativeString.Read(PayloadSlot.Read(args[1]))) ?? ""));
             return true;
         }
         if (__vsn_percent_sign == 0) __vsn_percent_sign = StringNames.Get("_percent_sign").Opaque;
         if (nameSn == __vsn_percent_sign)
         {
-            *(ulong*)ret = NativeString.Create(_PercentSign(NativeString.Read(*(ulong*)args[0])) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_PercentSign(NativeString.Read(PayloadSlot.Read(args[0]))) ?? ""));
             return true;
         }
         if (__vsn_strip_diacritics == 0) __vsn_strip_diacritics = StringNames.Get("_strip_diacritics").Opaque;
         if (nameSn == __vsn_strip_diacritics)
         {
-            *(ulong*)ret = NativeString.Create(_StripDiacritics(NativeString.Read(*(ulong*)args[0])) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_StripDiacritics(NativeString.Read(PayloadSlot.Read(args[0]))) ?? ""));
             return true;
         }
         if (__vsn_is_valid_identifier == 0) __vsn_is_valid_identifier = StringNames.Get("_is_valid_identifier").Opaque;
         if (nameSn == __vsn_is_valid_identifier)
         {
-            *(byte*)ret = _IsValidIdentifier(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _IsValidIdentifier(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_is_valid_letter == 0) __vsn_is_valid_letter = StringNames.Get("_is_valid_letter").Opaque;
@@ -16479,43 +16479,43 @@ public unsafe partial class TextServerExtension : TextServer
         if (__vsn_string_get_word_breaks == 0) __vsn_string_get_word_breaks = StringNames.Get("_string_get_word_breaks").Opaque;
         if (nameSn == __vsn_string_get_word_breaks)
         {
-            *(Opaque16*)ret = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, _StringGetWordBreaks(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1]), unchecked((long)(*(long*)args[2]))) ?? []);
+            *(Opaque16*)ret = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, _StringGetWordBreaks(NativeString.Read(PayloadSlot.Read(args[0])), NativeString.Read(PayloadSlot.Read(args[1])), unchecked((long)(*(long*)args[2]))) ?? []);
             return true;
         }
         if (__vsn_string_get_character_breaks == 0) __vsn_string_get_character_breaks = StringNames.Get("_string_get_character_breaks").Opaque;
         if (nameSn == __vsn_string_get_character_breaks)
         {
-            *(Opaque16*)ret = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, _StringGetCharacterBreaks(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1])) ?? []);
+            *(Opaque16*)ret = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, _StringGetCharacterBreaks(NativeString.Read(PayloadSlot.Read(args[0])), NativeString.Read(PayloadSlot.Read(args[1]))) ?? []);
             return true;
         }
         if (__vsn_is_confusable == 0) __vsn_is_confusable = StringNames.Get("_is_confusable").Opaque;
         if (nameSn == __vsn_is_confusable)
         {
-            *(long*)ret = unchecked((long)_IsConfusable(NativeString.Read(*(ulong*)args[0]), Packed.ReadStrings((Opaque16*)args[1])));
+            *(long*)ret = unchecked((long)_IsConfusable(NativeString.Read(PayloadSlot.Read(args[0])), Packed.ReadStrings((Opaque16*)args[1])));
             return true;
         }
         if (__vsn_spoof_check == 0) __vsn_spoof_check = StringNames.Get("_spoof_check").Opaque;
         if (nameSn == __vsn_spoof_check)
         {
-            *(byte*)ret = _SpoofCheck(NativeString.Read(*(ulong*)args[0])) ? (byte)1 : (byte)0;
+            *(byte*)ret = _SpoofCheck(NativeString.Read(PayloadSlot.Read(args[0]))) ? (byte)1 : (byte)0;
             return true;
         }
         if (__vsn_string_to_upper == 0) __vsn_string_to_upper = StringNames.Get("_string_to_upper").Opaque;
         if (nameSn == __vsn_string_to_upper)
         {
-            *(ulong*)ret = NativeString.Create(_StringToUpper(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1])) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_StringToUpper(NativeString.Read(PayloadSlot.Read(args[0])), NativeString.Read(PayloadSlot.Read(args[1]))) ?? ""));
             return true;
         }
         if (__vsn_string_to_lower == 0) __vsn_string_to_lower = StringNames.Get("_string_to_lower").Opaque;
         if (nameSn == __vsn_string_to_lower)
         {
-            *(ulong*)ret = NativeString.Create(_StringToLower(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1])) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_StringToLower(NativeString.Read(PayloadSlot.Read(args[0])), NativeString.Read(PayloadSlot.Read(args[1]))) ?? ""));
             return true;
         }
         if (__vsn_string_to_title == 0) __vsn_string_to_title = StringNames.Get("_string_to_title").Opaque;
         if (nameSn == __vsn_string_to_title)
         {
-            *(ulong*)ret = NativeString.Create(_StringToTitle(NativeString.Read(*(ulong*)args[0]), NativeString.Read(*(ulong*)args[1])) ?? "");
+            PayloadSlot.Write(ret, NativeString.Create(_StringToTitle(NativeString.Read(PayloadSlot.Read(args[0])), NativeString.Read(PayloadSlot.Read(args[1]))) ?? ""));
             return true;
         }
         if (__vsn_cleanup == 0) __vsn_cleanup = StringNames.Get("_cleanup").Opaque;
@@ -28078,13 +28078,13 @@ public unsafe partial class Translation : Resource
         if (__vsn_get_plural_message == 0) __vsn_get_plural_message = StringNames.Get("_get_plural_message").Opaque;
         if (nameSn == __vsn_get_plural_message)
         {
-            *(ulong*)ret = StringNames.CreateOwned(_GetPluralMessage(StringName.Intern(StringNames.Read(*(ulong*)args[0])), StringName.Intern(StringNames.Read(*(ulong*)args[1])), unchecked((int)(*(long*)args[2])), StringName.Intern(StringNames.Read(*(ulong*)args[3])))?.ToString() ?? "");
+            PayloadSlot.Write(ret, StringNames.CreateOwned(_GetPluralMessage(StringName.Intern(StringNames.Read(PayloadSlot.Read(args[0]))), StringName.Intern(StringNames.Read(PayloadSlot.Read(args[1]))), unchecked((int)(*(long*)args[2])), StringName.Intern(StringNames.Read(PayloadSlot.Read(args[3]))))?.ToString() ?? ""));
             return true;
         }
         if (__vsn_get_message == 0) __vsn_get_message = StringNames.Get("_get_message").Opaque;
         if (nameSn == __vsn_get_message)
         {
-            *(ulong*)ret = StringNames.CreateOwned(_GetMessage(StringName.Intern(StringNames.Read(*(ulong*)args[0])), StringName.Intern(StringNames.Read(*(ulong*)args[1])))?.ToString() ?? "");
+            PayloadSlot.Write(ret, StringNames.CreateOwned(_GetMessage(StringName.Intern(StringNames.Read(PayloadSlot.Read(args[0]))), StringName.Intern(StringNames.Read(PayloadSlot.Read(args[1]))))?.ToString() ?? ""));
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);

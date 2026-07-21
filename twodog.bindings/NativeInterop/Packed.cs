@@ -65,12 +65,12 @@ public static unsafe class Packed
         if (src.Length > 0)
         {
             Resize(type, ref native, src.Length);
-            var slots = (ulong*)GdExtensionInterface.PackedStringArrayOperatorIndex((nint)(&native), 0);
+            var slots = GdExtensionInterface.PackedStringArrayOperatorIndex((nint)(&native), 0);
             for (var i = 0; i < src.Length; i++)
             {
                 // resize left default (empty) Strings in the slots: writing an
                 // owned String over an empty one transfers cleanly.
-                slots[i] = NativeString.Create(src[i]);
+                PayloadSlot.Write(slots + i * PayloadSlot.Size, NativeString.Create(src[i]));
             }
         }
         return native;
@@ -82,10 +82,10 @@ public static unsafe class Packed
         var n = Size(type, native);
         if (n == 0) return [];
         var result = new string[n];
-        var slots = (ulong*)GdExtensionInterface.PackedStringArrayOperatorIndex((nint)native, 0);
+        var slots = GdExtensionInterface.PackedStringArrayOperatorIndex((nint)native, 0);
         for (var i = 0; i < n; i++)
         {
-            result[i] = NativeString.Read(in slots[i]);
+            result[i] = NativeString.Read(PayloadSlot.Read(slots + i * PayloadSlot.Size));
         }
         return result;
     }

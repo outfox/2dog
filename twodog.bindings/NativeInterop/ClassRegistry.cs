@@ -262,7 +262,7 @@ public static unsafe class ClassRegistry
     private static nint GetVirtualCallData(nint classUserdata, nint name, uint hash)
     {
         var info = (ClassInfo)GCHandle.FromIntPtr(classUserdata).Target!;
-        var payload = StringNames.ReadPayload(name);
+        var payload = PayloadSlot.Read(name);
         return IsOverridden(info, payload) ? 1 : 0;
     }
 
@@ -271,7 +271,7 @@ public static unsafe class ClassRegistry
     {
         if (GCHandle.FromIntPtr(instance).Target is GodotObject obj)
         {
-            obj.__CallVirtual(StringNames.ReadPayload(name), args, ret);
+            obj.__CallVirtual(PayloadSlot.Read(name), args, ret);
         }
     }
 

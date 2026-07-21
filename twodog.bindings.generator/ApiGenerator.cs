@@ -1249,8 +1249,8 @@ public static class ApiGenerator
                 "int" => $"unchecked(({a.type.Cs})(*(long*)args[{i}]))",
                 "float" => a.type.Cs == "float" ? $"(float)(*(double*)args[{i}])" : $"*(double*)args[{i}]",
                 "enum" => $"({a.type.Cs})(*(long*)args[{i}])",
-                "string" => $"NativeString.Read(*(ulong*)args[{i}])",
-                "stringname" => $"StringName.Intern(StringNames.Read(*(ulong*)args[{i}]))",
+                "string" => $"NativeString.Read(PayloadSlot.Read(args[{i}]))",
+                "stringname" => $"StringName.Intern(StringNames.Read(PayloadSlot.Read(args[{i}])))",
                 "math" => $"*({a.type.Cs}*)args[{i}]",
                 "class" => $"({a.type.Cs}?)InstanceBindings.GetOrCreate(*(nint*)args[{i}], adoptRef: false)",
                 "packed" => a.type.PackedElem == "string"
@@ -1285,11 +1285,12 @@ public static class ApiGenerator
                     break;
                 case "string":
                     // Ownership transfers: the engine destructs the ret slot
-                    // after copying out of it.
-                    sb.AppendLine($"            *(ulong*)ret = NativeString.Create({call} ?? \"\");");
+                    // after copying out of it. Pointer-width write: 8 bytes
+                    // would clobber past the slot on wasm32.
+                    sb.AppendLine($"            PayloadSlot.Write(ret, NativeString.Create({call} ?? \"\"));");
                     break;
                 case "stringname":
-                    sb.AppendLine($"            *(ulong*)ret = StringNames.CreateOwned({call}?.ToString() ?? \"\");");
+                    sb.AppendLine($"            PayloadSlot.Write(ret, StringNames.CreateOwned({call}?.ToString() ?? \"\"));");
                     break;
                 case "packed":
                     // Ownership transfers into the engine-destructed ret slot
