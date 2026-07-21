@@ -21,8 +21,6 @@
           targets) AND the GodotPlugins layout. Also embedded as assembly
           metadata so twodog's DllImportResolver loads the matching
           libgodot-<variant> library at runtime.
-        - TwoDogBuildType: 'template_release', 'template_debug', or 'editor'
-          Advanced: override the build type used for API placement.
     -->
 
     <!-- ============================================ -->
@@ -41,21 +39,24 @@
     </ItemGroup>
 
     <!-- ============================================ -->
-    <!-- Variant & Build Type Configuration           -->
+    <!-- Variant Configuration                        -->
     <!-- ============================================ -->
     <PropertyGroup>
         <!-- Variant: release (default), debug, or editor -->
         <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
 
-        <!-- Map variant to build type for API assembly handling -->
-        <TwoDogBuildType Condition="'$(TwoDogBuildType)' == '' And '$(TwoDogVariant)' == 'release'">template_release</TwoDogBuildType>
-        <TwoDogBuildType Condition="'$(TwoDogBuildType)' == '' And '$(TwoDogVariant)' == 'debug'">template_debug</TwoDogBuildType>
-        <TwoDogBuildType Condition="'$(TwoDogBuildType)' == '' And '$(TwoDogVariant)' == 'editor'">editor</TwoDogBuildType>
-        <TwoDogBuildType Condition="'$(TwoDogBuildType)' == ''">template_release</TwoDogBuildType>
-
         <!-- Package root (for locating contentFiles when used as a NuGet package) -->
         <TwoDogPackageRoot Condition="'$(TwoDogPackageRoot)' == ''">$(MSBuildThisFileDirectory)../</TwoDogPackageRoot>
     </PropertyGroup>
+
+    <!-- One variant axis: native selection, API layout and assembly metadata
+         all key from TwoDogVariant, so they can never disagree. -->
+    <Target Name="TwoDogValidateVariant" BeforeTargets="Build">
+        <Error Condition="'$(TwoDogVariant)' != 'release' And '$(TwoDogVariant)' != 'debug' And '$(TwoDogVariant)' != 'editor'"
+               Text="TwoDog: invalid TwoDogVariant '$(TwoDogVariant)'. Allowed values: release, debug, editor."/>
+        <Warning Condition="'$(TwoDogBuildType)' != ''"
+                 Text="TwoDog: TwoDogBuildType is deprecated and ignored - the API layout follows TwoDogVariant."/>
+    </Target>
 
     <!-- Embed the variant as assembly metadata: twodog's DllImportResolver
          reads it at runtime to load the matching libgodot-<variant> native.
@@ -102,13 +103,13 @@
         <TwoDogGodotApiSourcePath Condition="'$(TwoDogGodotApiSourcePath)' == '' And Exists('$(TwoDogGodotApiSourcePath_ProjectRef)')">$(TwoDogGodotApiSourcePath_ProjectRef)</TwoDogGodotApiSourcePath>
 
         <!--
-          Destination path depends on build type:
-          - Editor builds (TOOLS_ENABLED): GodotSharp/Api/Debug/ subdirectory
-          - Template builds (LIBGODOT_HOSTFXR without TOOLS_ENABLED, i.e. both
-            template_debug and template_release): flat in the output directory
-            (the native resolves the API assemblies dir as exe_dir)
+          Destination path depends on the variant:
+          - editor (TOOLS_ENABLED): GodotSharp/Api/Debug/ subdirectory
+          - release/debug templates (LIBGODOT_HOSTFXR without TOOLS_ENABLED):
+            flat in the output directory (the native resolves the API
+            assemblies dir as exe_dir)
         -->
-        <TwoDogGodotApiDestSubdir Condition="'$(TwoDogBuildType)' == 'editor'">GodotSharp/Api/Debug/</TwoDogGodotApiDestSubdir>
+        <TwoDogGodotApiDestSubdir Condition="'$(TwoDogVariant)' == 'editor'">GodotSharp/Api/Debug/</TwoDogGodotApiDestSubdir>
         <TwoDogGodotApiDestSubdir Condition="'$(TwoDogGodotApiDestSubdir)' == ''"></TwoDogGodotApiDestSubdir>
     </PropertyGroup>
 

@@ -1,22 +1,9 @@
 <Project>
     <!--
-      2dog.gdextension consumer targets.
+      TwoDog GDExtension Transitive Targets
 
-      Set TwoDogVariant to select the native variant ('release' default,
-      'debug', 'editor'); the 2dog.gdextension.[rid] package targets copy the
-      matching libgodot-gdext native next to the app.
+      This file is imported by projects that transitively reference
+      2dog.gdextension. It imports the main targets from the build folder.
     -->
-    <PropertyGroup>
-        <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
-    </PropertyGroup>
-
-    <!-- Embed the variant as assembly metadata: twodog.Engine reads it at
-         runtime (DetectVariant) to load the matching libgodot-gdext-<variant>
-         native, so a stale or mismatched native fails loudly at load. -->
-    <ItemGroup>
-        <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
-            <_Parameter1>TwoDogVariant</_Parameter1>
-            <_Parameter2>$(TwoDogVariant)</_Parameter2>
-        </AssemblyAttribute>
-    </ItemGroup>
+    <Import Project="$(MSBuildThisFileDirectory)../build/2dog.gdextension.targets"/>
 </Project>
