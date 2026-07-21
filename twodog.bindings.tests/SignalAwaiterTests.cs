@@ -15,7 +15,7 @@ public class SignalAwaiterTests(GodotBindingsFixture godot)
     private static void EnsureRegistered() => ClassRegistry.Register<ExportNode>();
 
     [Fact]
-    public void Await_PendingSignal_ResumesOnEmit()
+    public async Task Await_PendingSignal_ResumesOnEmit()
     {
         EnsureRegistered();
         var node = new ExportNode();
@@ -26,7 +26,7 @@ public class SignalAwaiterTests(GodotBindingsFixture godot)
 
             node.EmitSignalDied();          // fires inline on this (engine) thread
             Assert.True(task.IsCompleted);  // continuation ran synchronously
-            Assert.True(task.Result);
+            Assert.True(await task);
         }
         finally
         {
@@ -41,7 +41,7 @@ public class SignalAwaiterTests(GodotBindingsFixture godot)
     }
 
     [Fact]
-    public void Await_CapturesSignalArguments()
+    public async Task Await_CapturesSignalArguments()
     {
         EnsureRegistered();
         var node = new ExportNode();
@@ -51,7 +51,7 @@ public class SignalAwaiterTests(GodotBindingsFixture godot)
             node.EmitSignalScored(99, "awaiter");
             Assert.True(task.IsCompleted);
 
-            var args = task.Result;
+            var args = await task;
             Assert.Equal(2, args.Length);
             Assert.Equal(99, args[0].AsInt64());
             Assert.Equal("awaiter", args[1].AsString());
@@ -138,6 +138,7 @@ public class SignalAwaiterTests(GodotBindingsFixture godot)
         var node = new ExportNode();
         try
         {
+            using var mute = new EngineOutputMute();
             Assert.Throws<InvalidOperationException>(() => node.ToSignal(node, "no_such_signal"));
         }
         finally
@@ -180,8 +181,10 @@ public class SynchronizationContextTests
         var mainThread = System.Environment.CurrentManagedThreadId;
         var ranOn = 0;
 
-        var posted = Task.Run(() => context.Post(_ => ranOn = System.Environment.CurrentManagedThreadId, null));
-        posted.Wait();
+        var posted = Task.Run(
+            () => context.Post(_ => ranOn = System.Environment.CurrentManagedThreadId, null),
+            TestContext.Current.CancellationToken);
+        SpinWait.SpinUntil(() => posted.IsCompleted);
 
         Assert.Equal(0, ranOn); // nothing until pumped
         context.Pump();
@@ -194,7 +197,7 @@ public class SynchronizationContextTests
         var context = new GodotSynchronizationContext();
         var ran = false;
 
-        var sending = Task.Run(() => context.Send(_ => ran = true, null));
+        var sending = Task.Run(() => context.Send(_ => ran = true, null), TestContext.Current.CancellationToken);
         // Give the background Send a moment to enqueue, then pump it through.
         while (!sending.IsCompleted)
         {

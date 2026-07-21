@@ -149,6 +149,7 @@ public class TypedApiTests(GodotBindingsFixture godot)
     {
         // EditorInterface exists in extension_api.json but not in a template
         // build's ClassDB - the generated guard must throw, not crash.
+        using var mute = new EngineOutputMute();
         var ptr = InstanceBindings.ConstructRaw("EditorPaths");
         Assert.Equal(0, ptr);
     }

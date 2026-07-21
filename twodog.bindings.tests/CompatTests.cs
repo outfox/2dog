@@ -12,6 +12,7 @@ public class CompatTests
     [Fact]
     public void GD_Print_AcceptsVariants()
     {
+        using var mute = new EngineOutputMute();
         GD.Print((Variant)"GD.Print from twodog.bindings", (Variant)42L);
         GD.PrintErr((Variant)"GD.PrintErr works too");
     }

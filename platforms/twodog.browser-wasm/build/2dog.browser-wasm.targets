@@ -65,15 +65,14 @@
 
         <PublishTrimmed Condition="'$(PublishTrimmed)' == ''">true</PublishTrimmed>
         <!-- partial: only assemblies that declare trim-compatibility
-             (<IsTrimmable>true</IsTrimmable> - the BCL, twodog, the game
-             project) are member-trimmed; GodotSharp is not trim-annotated
-             upstream (see its csproj) and is preserved whole.
-             TrimmerSingleWarn stays at the SDK default (true): GodotSharp's
-             unannotated reflection internals produce trim-analysis warnings
-             that roll up into a single IL2104 line per publish - that one
-             line is the truthful status until GodotSharp is annotated
-             upstream. Set TrimmerSingleWarn=false to see the full detail
-             (useful when diagnosing trimming of your own assemblies). -->
+             (<IsTrimmable>true</IsTrimmable> - the BCL, twodog, GodotSharp,
+             the game project) are member-trimmed; everything else is kept
+             whole. GodotSharp is trim-annotated in the 2dog fork; its script
+             bridge annotations assume the assemblies containing scripts are
+             rooted, which the TrimmerRootAssembly items below and in the
+             generated web hosts guarantee. GodotSharp itself stays rooted
+             too: the engine reaches its interop surface at runtime, not
+             statically. -->
         <TrimMode Condition="'$(TrimMode)' == ''">partial</TrimMode>
 
         <!-- No GodotPlugins.dll on web: plugin init flows through the game's

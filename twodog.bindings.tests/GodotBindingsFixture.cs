@@ -145,3 +145,22 @@ public sealed unsafe class GodotBindingsFixture : IDisposable
 
 [CollectionDefinition(nameof(GodotBindingsCollection), DisableParallelization = true)]
 public class GodotBindingsCollection : ICollectionFixture<GodotBindingsFixture>;
+
+/// <summary>
+/// Scoped mute for engine output a test provokes on purpose (error macros,
+/// printerr, print_line), so a clean run stays clean.
+/// </summary>
+public readonly struct EngineOutputMute : IDisposable
+{
+    public EngineOutputMute()
+    {
+        Godot.Engine.PrintErrorMessages = false;
+        Godot.Engine.PrintToStdout = false;
+    }
+
+    public void Dispose()
+    {
+        Godot.Engine.PrintErrorMessages = true;
+        Godot.Engine.PrintToStdout = true;
+    }
+}

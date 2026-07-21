@@ -72,7 +72,7 @@ public class PublicVariantTests
 }
 
 [Collection(nameof(GodotBindingsCollection))]
-public class CollectionsTests(GodotBindingsFixture godot)
+public class CollectionsTests
 {
     [Fact]
     public void Array_AddIndexCountClear()
