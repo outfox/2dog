@@ -1,4 +1,4 @@
-# How *do you* pronounce `Godot` ? 🦴
+# How *do you* pronounce `Godot`? 🦴
 
 <p align="center">
   <img src="docs/content/public/logo-animated.svg" alt="2dog logotype, a white stylized dog with the negative space around its leg forming the number 2, and a playful font spelling the word dog" width="70%">
@@ -11,226 +11,148 @@
 
 > *"Godot, or to dog... is it even a question?"*
 
-This library lets your C# application code start and pump Godot's MainLoop - not the other way around.
+**Bring your existing C# Godot game to the web. Keep your scenes, scripts, and
+Godot workflow.**
 
----
+2dog packages Godot as a library hosted by your .NET application. That
+inversion makes browser publishing, ordinary `dotnet` tooling, and first-class
+xUnit testing possible without rewriting your game.
 
-## What is 2dog?
+## Same Game, New Tricks
 
-**2dog** is a .NET/C# front-end for [Godot Engine](https://github.com/godotengine/godot) that inverts the traditional architecture. Instead of having Godot's process and scene tree drive your application, **you** now control Godot as a library.
+If you already build games with Godot and C#, most of your world stays exactly
+where it is:
 
-Think of it like this: Godot is your loyal companion that follows your lead, learns new tricks, and does exactly what you tell it to. All this while still having all the capabilities of the full engine.
+- Your Godot project remains a Godot project and still opens in the editor.
+- Your scenes, resources, C# scripts, signals, and exports keep working.
+- You still use the familiar GodotSharp API.
+- Asset import happens automatically during `dotnet build`.
 
-```cs
-using twodog;
+What changes is who holds the leash: your .NET process starts Godot, drives its
+main loop, and decides when it stops.
 
-using var engine = new Engine("myapp", "./project");
-using var godot = engine.Start();
+That unlocks a few useful tricks:
 
-// Load a scene
-var scene = GD.Load<PackedScene>("res://game.tscn");
-engine.Tree.Root.AddChild(scene.Instantiate());
+- 🌐 **C# games on the web**: publish a static WebAssembly site with `dotnet publish`.
+- 🧪 **Real test projects**: load scenes through xUnit and run headless in CI.
+- 🔄 **A .NET-owned lifecycle**: embed Godot in an app, server, tool, or custom host.
+- 🎮 **The full engine**: scenes, physics, rendering, audio, input, and the GodotSharp API.
 
-// Run the main loop
-while (!godot.Iteration())
-{
-    // Your code here - every frame
-}
-```
+## Choose Your Starting Point
 
-### What does this mean?
+Both routes produce the same strongly recommended layout: the Godot project is
+the solution root, with desktop, browser, and test hosts nested inside it.
 
-- 🎮 **Full Godot Power** - access the complete GodotSharp API: scenes, physics, rendering, audio, input - everything Godot can do
-- 🔄 **Inverted Control** - your .NET process controls Godot, not the other way around
-- 🧪 **First-Class Testing** - built-in xUnit fixtures for testing Godot code, run headless in CI/CD pipelines
+### Bring an Existing Project (Recommended)
 
----
-
-## Features
-
-- 🆕 WASM support! 🔥 (deploy and play your C# Godot game in the browser!)
-- .NET-first project structure: your Godot project is the solution root, with the host projects nested inside it (hidden from the Godot editor by `.gdignore` - no code changes needed)
-- `dnx 2dog convert` (same as `dotnet tool exec 2dog convert`)turns an existing Godot project into a 2dog project, in place - one command from stock Godot to a browser-publishable .NET solution
-- Familiar GodotSharp API (fully compatible with official Godot)
-- Automatic asset import during `dotnet build` - no Godot editor installation needed
-- Three build configurations: Debug, Release, and Editor (with `TOOLS_ENABLED`)
-- Easy `dotnet new` project templates to get started!
-- Godot as an embedded library (libgodot), precompiled and on nuget!
-- xUnit test fixtures (`GodotFixture`, `GodotHeadlessFixture`)
-- Headless mode for servers and CI/CD
-
-> **Prerelease packages are now available on NuGet!** Supported platforms: `win-x64`, `linux-x64`, `osx-arm64`.
-
----
-
-## Quick Start
-
-### Prerequisites
-- .NET SDK 10.0 or later
-- [Godot (.NET)](https://godotengine.org/) (optional - only for editing scenes in the editor UI)
-
-### Upgrade an Existing Godot Project
-
-One command turns any existing Godot project into a 2dog project - **in
-place**, without moving or renaming anything - and gets it ready for a
-browser (WebAssembly) release. No install needed, `dnx` runs the tool
-straight from NuGet:
+Convert in place. 2dog preserves your existing game content, and there is no
+tool installation step. A classic `.sln` is migrated to `.slnx` when present:
 
 ```bash
-dnx 2dog convert path/to/your/godot/project
-```
-
-Your project is now a .NET solution with nested desktop, web, and test hosts
-(hidden from the Godot editor by `.gdignore`):
-
-```bash
-cd path/to/your/godot/project
-
-# Run on desktop
+dnx 2dog convert path/to/MyGame
+cd path/to/MyGame
 dotnet run --project MyGame.2dog
+```
 
-# Publish for the browser as a static site
-# (one-time: dotnet workload install wasm-tools)
+### Start a New Project
+
+Register the project template once, then create the same complete layout from
+scratch:
+
+```bash
+dotnet new install 2dog
+dotnet new 2dog -n MyGame
+cd MyGame
+dotnet run --project MyGame.2dog
+```
+
+In either case, your original Godot workflow is still there whenever you need
+it:
+
+```bash
+godot-mono --editor .
+```
+
+## From Godot Project to Browser
+
+The generated web host publishes your C# game as a static site. Install the
+.NET WebAssembly tools once, then publish and serve the bundle:
+
+```bash
+dotnet workload install wasm-tools
+dotnet tool install --global dotnet-serve
 dotnet publish MyGame.web
 dotnet serve --directory MyGame.web/AppBundle
 ```
 
-See the [conversion docs](https://2dog.dev/convert.html) and the
-[web docs](https://2dog.dev/web.html) for details.
+See [Web / Browser](https://2dog.dev/web.html) for the development loop,
+deployment options, and current limitations.
 
-### Start a New Project
+## One Project, Three Hosts
 
-Installing 2dog *is* installing its project template - register it once, and
-every project you create from it references the packages it needs from NuGet:
-
-```bash
-# "Install" 2dog: register the project template
-dotnet new install 2dog
-
-# Create a new project (includes xUnit tests and a web host by default)
-dotnet new 2dog -n MyGame
-
-# Navigate into the project (it IS the Godot project - hosts are nested inside)
-cd MyGame
-
-# Run tests (assets are imported automatically during build)
-dotnet test
-
-# Run the game
-dotnet run --project MyGame.2dog
-
-# Edit in Godot at any time (optional)
-godot-mono -e --path .
+```text
+MyGame/                       Godot project and solution root
+├── project.godot             Scenes, scripts, assets, project settings
+├── MyGame.csproj             Godot C# game assembly
+├── MyGame.2dog/              Desktop .NET host
+├── MyGame.web/               Browser WebAssembly host
+└── MyGame.tests/             Headless xUnit host
 ```
 
-> Asset import (`.uid` files, textures, the script UID cache) happens
-> automatically as an incremental build step - no Godot editor required.
-> See the [Resource Import](https://2dog.dev/import-tool.html) docs.
+The nested hosts carry `.gdignore`, so Godot ignores them. Your game project
+remains clean and editor-friendly while each host gets its own entry point and
+dependencies.
 
-To just add the packages to an existing .NET project instead:
+Read [The Recommended Project Layout](https://2dog.dev/project-layout.html) for
+the complete mental model.
 
-```bash
-dotnet add package 2dog.engine
-```
+## Pick Your Next Trick
 
----
+- [Get Started](https://2dog.dev/getting-started.html): convert or create, run, test, and publish.
+- [Converting a Godot Project](https://2dog.dev/convert.html): understand exactly what `2dog convert` changes.
+- [Web / Browser](https://2dog.dev/web.html): publish your C# Godot game as a static site.
+- [Testing with xUnit](https://2dog.dev/testing.html): load scenes and run Godot headlessly in CI.
+- [Core Concepts](https://2dog.dev/concepts.html): learn how .NET takes control of Godot.
+- [Configuration](https://2dog.dev/configuration.html): configure project paths and native variants.
+- [API Reference](https://2dog.dev/api-reference.html): work directly with `Engine` and `GodotInstance`.
 
-## Known Issues
+Full documentation lives at **[2dog.dev](https://2dog.dev)**.
 
-### Single Godot Instance Per Process
+## Requirements and Status
 
-Only one Godot instance can exist per process. Attempting to start a second instance will throw an `InvalidOperationException`. This is a fundamental constraint of the Godot engine.
+- .NET SDK 10.0 or later
+- Godot .NET editor only when you want to edit scenes visually
+- Supported platforms: `win-x64`, `linux-x64`, and `osx-arm64`
+- Packages are available on NuGet
 
-### xUnit Test Discovery Crash with Godot Types
+The `2dog` package contains the converter and project template.
+Applications reference the `2dog.engine` library; test projects add
+`2dog.xunit`. Generated and converted projects configure these packages for
+you.
 
-Using Godot types (like `NodePath`, `StringName`, `Vector2`, etc.) in xUnit `[MemberData]` will crash the test runner during discovery. This happens because xUnit enumerates test data before tests run, instantiating Godot types before the engine is initialized.
+## One Dog at a Time
 
-**Crashes during discovery:**
-```csharp
-public static IEnumerable<object[]> paths = [[new NodePath("/root")]];
+Only one Godot instance can run in a process at a time. Sequential restart is
+supported: dispose the current instance before starting another. The supplied
+xUnit collections already serialize Godot fixtures correctly.
 
-[Theory]
-[MemberData(nameof(paths))]
-public void MyTest(NodePath path) { }
-```
+See [Known Issues](https://2dog.dev/known-issues/) for details and workarounds.
 
-**Workaround:** Add `DisableDiscoveryEnumeration = true`:
-```csharp
-[MemberData(nameof(paths), DisableDiscoveryEnumeration = true)]
-```
+## Teach 2dog New Tricks
 
-Or use primitive types and construct Godot objects inside the test:
-```csharp
-public static IEnumerable<object[]> paths = [["/root"]];
+Want to work on 2dog itself? Clone with submodules, then build the native and
+.NET packages:
 
-[Theory]
-[MemberData(nameof(paths))]
-public void MyTest(string pathStr)
-{
-    var path = new NodePath(pathStr);
-    // ...
-}
-```
-
----
-
-### Building from Source
-
-If you prefer to build everything locally instead of using NuGet packages:
-
-1. **Clone and initialize submodules**
 ```bash
 git clone --recursive https://github.com/outfox/2dog
 cd 2dog
+uv run poe build-all
 ```
 
-2. **Build Godot** (requires Python with uv)
-```bash
-uv run poe build-godot
-```
+Run the demo with `dotnet run --project demo/demo.2dog` and the tests with
+`dotnet test twodog.tests`.
 
-3. **Build .NET packages**
-```bash
-uv run poe build
-```
-
-> You can also run `uv run poe build-all` to do steps 2 and 3 in one go.
-
-4. **Run the demo**
-```bash
-dotnet run --project demo/demo.2dog
-```
-
-### Build Configurations
-
-```bash
-dotnet build -c Debug    # Development with debug symbols
-dotnet build -c Release  # Optimized production build
-dotnet build -c Editor   # Editor tools with TOOLS_ENABLED
-```
-
-> Tested on `win-x64`, `linux-x64`, and `osx-arm64`.
-
----
-
-## Documentation
-
-Full documentation at **[2dog.dev](https://2dog.dev)**
-
-- [Getting Started](https://2dog.dev/getting-started.html) - installation and first project
-- [Converting a Godot Project](https://2dog.dev/convert.html) - `dnx 2dog convert` for existing projects
-- [Web / Browser (WASM)](https://2dog.dev/web.html) - publish your C# game as a static site
-- [Project Templates](https://2dog.dev/templates.html) - scaffolding new projects
-- [Core Concepts](https://2dog.dev/concepts.html) - architecture and design
-- [Build Configurations](https://2dog.dev/build-configurations.html) - Debug, Release, and Editor modes
-- [API Reference](https://2dog.dev/api-reference.html) - Engine, GodotInstance, and more
-- [Testing with xUnit](https://2dog.dev/testing.html) - test fixtures and CI/CD setup
-
----
-
-## Join the Pack
-
-Questions? Ideas? Want to teach 2dog new tricks? Come to our Dog Park!
+Questions, ideas, or particularly good sticks? Join the Dog Park:
 
 [![Discord Invite](https://img.shields.io/badge/discord-_%E2%A4%9Coutfox%E2%A4%8F-blue?logo=discord&logoColor=f5f5f5)](https://discord.gg/GAXdbZCNGT)
 

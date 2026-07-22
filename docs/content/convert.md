@@ -3,7 +3,8 @@
 `2dog convert` turns an existing Godot project into a 2dog project  –  **in
 place**. Your project directory becomes the solution root, and the 2dog host
 projects (desktop, web, tests) are scaffolded as nested subfolders that the
-Godot editor ignores. Nothing is ever moved, renamed, or deleted.
+Godot editor ignores. Existing game content stays in place. If the project has
+a classic `.sln`, 2dog migrates it to `.slnx` and removes the old solution file.
 
 The command ships in the `2dog` package  –  the dotnet tool and the `dotnet new`
 template in one, separate from the `2dog.engine` library  –  see
@@ -62,7 +63,7 @@ One-time prerequisite: `dotnet workload install wasm-tools`. See
 MyGame/                      <- your existing Godot project (unchanged)
   project.godot
   MyGame.csproj              <- created or minimally patched
-  MyGame.sln                 <- created, or your existing sln is reused
+  MyGame.slnx                <- created, or an existing solution is migrated/reused
   TwoDogWebBoot.cs           <- added (web bootstrap, guarded by LIBGODOT_ENABLED)
   export_presets.cfg         <- created, or a 'Web' export preset is appended
   global.json                <- added (pins a wasm-capable SDK; skipped if you have one)
@@ -106,8 +107,9 @@ from inside `MyGame.web/`, whose own `global.json` wins there.
   free preset index  –  your presets are never touched.
 - **Scaffolds the nested host projects**, each with a `.gdignore` file so the
   Godot editor, importer, and exporter skip them.
-- **Reuses your solution**: an existing `.sln`/`.slnx` at the project root is
-  used as-is (projects are added to it); with none, `<Name>.sln` is created.
+- **Reuses or migrates your solution**: an existing `.slnx` at the project root
+  is used as-is (projects are added to it); a classic `.sln` is migrated to
+  `.slnx` and removed; with none, `<Name>.slnx` is created.
   The web host gets ActiveCfg-only entries (no `.Build.0`), so "Build
   Solution" works without the wasm-tools workload  –  the web host is built
   explicitly via `dotnet publish`.
@@ -121,7 +123,8 @@ Re-running `2dog convert` on an already-converted project is a no-op
 
 ## What it never does
 
-- Move, rename, or delete any file.
+- Move, rename, or delete game content. The one intentional filesystem
+  migration is replacing a classic `.sln` with its `.slnx` equivalent.
 - Touch version control  –  no `.gitignore` edits, no staging, no commits.
   Review the diff yourself and commit when happy.
 - Add a second solution: if multiple solutions at the project root contain
