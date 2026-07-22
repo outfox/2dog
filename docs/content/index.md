@@ -59,82 +59,102 @@ features:
 
 ## Start Where Your Project Is
 
-Already have a Godot C# project? Bring it with you. Starting fresh? Grow a new
-one. Both routes produce the same recommended layout and lead to desktop,
-browser, and test hosts.
+Two trails lead in, and both end at the same place: a regular Godot project
+with desktop, browser, and test hosts nested inside it, invisible to the
+editor.
 
-| | Existing Godot project | Fresh project |
-| --- | --- | --- |
-| **Best for** | Taking a current game further | Starting with every host ready |
-| **First move** | Convert safely in place | Create from the project template |
-| **Your work** | Game content stays in place | A sample scene is ready to run |
-| **Follow the trail** | [Convert a project](/convert) | [Create from a template](/templates) |
+:::: columns
+::: column 🐕 I Already Have a Godot Game
 
-The existing-project route gets a little more attention because that is where
-2dog shows its best trick: taking a game you already know and opening a path to
-the browser without a rewrite.
+2dog's cutest trick: convert in place and walk an existing C# game to the browser without a rewrite. Scenes, scripts, and assets stay where they are.
 
-## What Actually Changes?
-
-In regular Godot, the engine owns the process and calls your scripts. With
-2dog, your .NET host owns the process and loads Godot as a library:
-
-```text
-Stock Godot                         2dog
-
-Godot process                      Your .NET application
-└── SceneTree                      └── 2dog Engine
-    └── Your C# scripts                └── Godot + SceneTree
-                                            └── Your C# scripts
-```
-
-That one inversion unlocks browser hosting, normal .NET entry points, and
-first-class test runners. It does **not** ask you to relearn scenes, nodes,
-signals, resources, or the Godot editor.
-
-[Explore the architecture →](/concepts)
-
-## Your First Trail
-
-The introductory guide follows one continuous journey instead of dropping you
-into engine code:
-
-1. **Bring or create** a Godot C# project.
-2. **Run it** through its desktop .NET host.
-3. **Meet the layout** and understand which project owns what.
-4. **Test it** headlessly with xUnit.
-5. **Publish it** as a browser-ready static site.
-
-[Start the guided walk →](/getting-started)
-
-## Ready to Let It Run?
-
-Once you know which trail you want, the complete first move is short:
-
-::: code-group
-
-```bash [🐕 Existing Project]
+```shell
+# no install needed, just use dnx (dotnet tool execute)
 dnx 2dog convert path/to/MyGame
 cd path/to/MyGame
 dotnet run --project MyGame.2dog
 ```
 
-```bash [🌱 Fresh Project]
+[See exactly what conversion changes →](/convert)
+
+:::
+::: column 🥎 I'm Starting Fresh
+
+Grow a new project from the template: a sample scene plus every host,
+ready to run, test, and publish from the first minute.
+
+```shell
 dotnet new install 2dog
 dotnet new 2dog -n MyGame
 cd MyGame
 dotnet run --project MyGame.2dog
 ```
 
-:::
+[Explore the template options →](/templates)
 
-Your project still opens in the regular Godot .NET editor. When you are ready
-for the browser, install the .NET WebAssembly workload once and follow the
-[Web publishing guide](/web).
+:::
+::::
+
+Whichever trail you take, the project still opens in the regular Godot .NET editor afterwards  –  authoring stays in Godot, while running, testing, and publishing move to `dotnet`.
+
+## Who Holds the Leash?
+
+Two process trees, one difference  –  who starts whom:
+
+:::: columns
+::: column 🤖 Stock: Godot as we know it
+
+The engine owns the process. Your C# scripts ride along inside the SceneTree
+and run when Godot calls them.
+
+```text
+Godot process
+└── GodotSharp SDK
+    └── SceneTree
+    └── Your Godot C# scripts
+```
+
+:::
+::: column 🐕‍🦺 With 2dog: .NET is your service (dog)
+
+Your .NET application owns the process and loads Godot as a library  –  with
+room for any other .NET code right beside it.
+
+```text
+.NET application or service
+├── 2dog Engine (libgodot)
+│   └── SceneTree
+│   └── Your Godot C# scripts
+└── More C# Code (whole .NET ecosystem - dream big!)
+```
+
+:::
+::::
+
+That one inversion is the whole trick. It unlocks browser publishing, normal
+.NET entry points, and first-class test runners  –  while scenes, nodes, signals,
+resources, and the Godot editor all stay exactly as you know them.
+
+[Explore the architecture →](/concepts)
+
+
+## Your First Trail
+
+The introductory guide follows one continuous walk instead of dropping you
+into engine code:
+
+1. **Bring or create** a Godot C# project.
+2. **Run it** through its desktop .NET host.
+3. **Meet the layout** and learn which project owns what.
+4. **Test it** headlessly with xUnit.
+5. **Publish it** as a browser-ready static site.
+
+[Start the guided walk →](/getting-started)
 
 ## Pick the Next Trick
 
-- **I want the browser build:** [publish a C# Godot game to the web](/web).
+- **I want the browser build:** [publish a C# Godot game to the web](/web)  – 
+  one workload install, one `dotnet publish`.
 - **I want confidence first:** [load and test scenes with xUnit](/testing).
 - **I want the mental model:** [tour the recommended project layout](/project-layout).
 - **I want full control:** [learn the engine lifecycle and main loop](/concepts).

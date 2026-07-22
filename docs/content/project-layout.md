@@ -102,7 +102,7 @@ without swallowing each other's source files.
 Open `MyGame/` in Godot and it sees the same project content it always has:
 
 ```bash
-godot-mono --editor .
+godot-mono --editor MyGame
 ```
 
 The `.gdignore` files hide `MyGame.2dog`, `MyGame.tests`, and `MyGame.web` from

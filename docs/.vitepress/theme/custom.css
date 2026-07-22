@@ -1,3 +1,55 @@
+/* Two-column card layout (::: columns / :::: column, see plugins/columns.ts) */
+
+.md-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.md-column {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  padding: 20px 24px 16px;
+  background-color: var(--vp-c-bg-soft);
+  transition: border-color 0.25s;
+}
+
+.md-column:hover {
+  border-color: var(--vp-c-brand-1);
+}
+
+.md-column-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.md-column > p {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 24px;
+}
+
+.md-column [class*='language-'] {
+  margin: 16px -8px;
+  background-color: var(--vp-c-bg);
+}
+
+.md-column [class*='language-'] code {
+  font-size: 13px;
+}
+
+/* Pin the trailing link line to the card bottom so cards align */
+.md-column > p:last-child {
+  margin-top: auto;
+  padding-top: 8px;
+  font-weight: 500;
+}
+
 /* Hero section customization */
 
 /* Reverse the hero layout - image on left, text on right */

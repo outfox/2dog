@@ -32,8 +32,7 @@ The path defaults to the current directory and must contain a
 changing anything.
 
 ::: tip From stock Godot to the browser
-Convert-then-publish is the fastest route to a browser (WebAssembly) release
-of an existing Godot project:
+Convert-then-publish is the fastest route to a browser (WebAssembly) release:
 
 ```bash
 dnx 2dog convert path/to/MyGame

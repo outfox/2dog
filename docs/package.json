@@ -1,5 +1,7 @@
 {
   "devDependencies": {
+    "@types/markdown-it-container": "^4.0.0",
+    "markdown-it-container": "^4.0.0",
     "vitepress": "^2.0.0-alpha.16"
   },
   "scripts": {
