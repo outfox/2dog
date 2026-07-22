@@ -44,20 +44,14 @@ public unsafe partial class ZIPPacker : RefCounted
     private static nint __mb_open;
     public Error Open(string path, ZIPPacker.ZipAppend append = (ZIPPacker.ZipAppend)(0))
     {
-        var __mb = __mb_open;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ZIPPacker", "open", 1936816515);
-            if (__mb == 0) throw new MissingMethodException("ZIPPacker.open is not available in this engine build.");
-            __mb_open = __mb;
-        }
+        if (__mb_open == 0) MethodBinds.MissingThrow("ZIPPacker.open");
         ulong __a0 = NativeString.Create(path);
         long __a1 = (long)append;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_open, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -65,44 +59,26 @@ public unsafe partial class ZIPPacker : RefCounted
     private static nint __mb_set_compression_level;
     public void SetCompressionLevel(int compressionLevel)
     {
-        var __mb = __mb_set_compression_level;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ZIPPacker", "set_compression_level", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("ZIPPacker.set_compression_level is not available in this engine build.");
-            __mb_set_compression_level = __mb;
-        }
+        if (__mb_set_compression_level == 0) MethodBinds.MissingThrow("ZIPPacker.set_compression_level");
         long __a0 = unchecked((long)compressionLevel);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_compression_level, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_compression_level;
     public int GetCompressionLevel()
     {
-        var __mb = __mb_get_compression_level;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ZIPPacker", "get_compression_level", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("ZIPPacker.get_compression_level is not available in this engine build.");
-            __mb_get_compression_level = __mb;
-        }
+        if (__mb_get_compression_level == 0) MethodBinds.MissingThrow("ZIPPacker.get_compression_level");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_compression_level, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_add_directory;
     public Error AddDirectory(string path, FileAccess.UnixPermissionFlags permissions = (FileAccess.UnixPermissionFlags)(493), ulong modifiedTime = unchecked((ulong)(0)))
     {
-        var __mb = __mb_add_directory;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ZIPPacker", "add_directory", 934773537);
-            if (__mb == 0) throw new MissingMethodException("ZIPPacker.add_directory is not available in this engine build.");
-            __mb_add_directory = __mb;
-        }
+        if (__mb_add_directory == 0) MethodBinds.MissingThrow("ZIPPacker.add_directory");
         ulong __a0 = NativeString.Create(path);
         long __a1 = (long)permissions;
         long __a2 = unchecked((long)modifiedTime);
@@ -111,7 +87,7 @@ public unsafe partial class ZIPPacker : RefCounted
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_directory, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -119,13 +95,7 @@ public unsafe partial class ZIPPacker : RefCounted
     private static nint __mb_start_file;
     public Error StartFile(string path, FileAccess.UnixPermissionFlags permissions = (FileAccess.UnixPermissionFlags)(420), ulong modifiedTime = unchecked((ulong)(0)))
     {
-        var __mb = __mb_start_file;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ZIPPacker", "start_file", 4260848715);
-            if (__mb == 0) throw new MissingMethodException("ZIPPacker.start_file is not available in this engine build.");
-            __mb_start_file = __mb;
-        }
+        if (__mb_start_file == 0) MethodBinds.MissingThrow("ZIPPacker.start_file");
         ulong __a0 = NativeString.Create(path);
         long __a1 = (long)permissions;
         long __a2 = unchecked((long)modifiedTime);
@@ -134,7 +104,7 @@ public unsafe partial class ZIPPacker : RefCounted
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_start_file, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -142,18 +112,12 @@ public unsafe partial class ZIPPacker : RefCounted
     private static nint __mb_write_file;
     public Error WriteFile(byte[] data)
     {
-        var __mb = __mb_write_file;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ZIPPacker", "write_file", 680677267);
-            if (__mb == 0) throw new MissingMethodException("ZIPPacker.write_file is not available in this engine build.");
-            __mb_write_file = __mb;
-        }
+        if (__mb_write_file == 0) MethodBinds.MissingThrow("ZIPPacker.write_file");
         var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, data);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_write_file, NativePtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
         return (Error)__ret;
     }
@@ -161,31 +125,31 @@ public unsafe partial class ZIPPacker : RefCounted
     private static nint __mb_close_file;
     public Error CloseFile()
     {
-        var __mb = __mb_close_file;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ZIPPacker", "close_file", 166280745);
-            if (__mb == 0) throw new MissingMethodException("ZIPPacker.close_file is not available in this engine build.");
-            __mb_close_file = __mb;
-        }
+        if (__mb_close_file == 0) MethodBinds.MissingThrow("ZIPPacker.close_file");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_close_file, NativePtr, 0, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_close;
     public Error Close()
     {
-        var __mb = __mb_close;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ZIPPacker", "close", 166280745);
-            if (__mb == 0) throw new MissingMethodException("ZIPPacker.close is not available in this engine build.");
-            __mb_close = __mb;
-        }
+        if (__mb_close == 0) MethodBinds.MissingThrow("ZIPPacker.close");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_close, NativePtr, 0, (nint)(&__ret));
         return (Error)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_open = MethodBinds.ResolveBulk("ZIPPacker", "open", 1936816515);
+        __mb_set_compression_level = MethodBinds.ResolveBulk("ZIPPacker", "set_compression_level", 1286410249);
+        __mb_get_compression_level = MethodBinds.ResolveBulk("ZIPPacker", "get_compression_level", 3905245786);
+        __mb_add_directory = MethodBinds.ResolveBulk("ZIPPacker", "add_directory", 934773537);
+        __mb_start_file = MethodBinds.ResolveBulk("ZIPPacker", "start_file", 4260848715);
+        __mb_write_file = MethodBinds.ResolveBulk("ZIPPacker", "write_file", 680677267);
+        __mb_close_file = MethodBinds.ResolveBulk("ZIPPacker", "close_file", 166280745);
+        __mb_close = MethodBinds.ResolveBulk("ZIPPacker", "close", 166280745);
     }
 }
 
@@ -201,18 +165,12 @@ public unsafe partial class ZIPReader : RefCounted
     private static nint __mb_open;
     public Error Open(string path)
     {
-        var __mb = __mb_open;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ZIPReader", "open", 166001499);
-            if (__mb == 0) throw new MissingMethodException("ZIPReader.open is not available in this engine build.");
-            __mb_open = __mb;
-        }
+        if (__mb_open == 0) MethodBinds.MissingThrow("ZIPReader.open");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_open, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -220,50 +178,32 @@ public unsafe partial class ZIPReader : RefCounted
     private static nint __mb_close;
     public Error Close()
     {
-        var __mb = __mb_close;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ZIPReader", "close", 166280745);
-            if (__mb == 0) throw new MissingMethodException("ZIPReader.close is not available in this engine build.");
-            __mb_close = __mb;
-        }
+        if (__mb_close == 0) MethodBinds.MissingThrow("ZIPReader.close");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_close, NativePtr, 0, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_get_files;
     public string[] GetFiles()
     {
-        var __mb = __mb_get_files;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ZIPReader", "get_files", 2981934095);
-            if (__mb == 0) throw new MissingMethodException("ZIPReader.get_files is not available in this engine build.");
-            __mb_get_files = __mb;
-        }
+        if (__mb_get_files == 0) MethodBinds.MissingThrow("ZIPReader.get_files");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_files, NativePtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_read_file;
     public byte[] ReadFile(string path, bool caseSensitive = true)
     {
-        var __mb = __mb_read_file;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ZIPReader", "read_file", 740857591);
-            if (__mb == 0) throw new MissingMethodException("ZIPReader.read_file is not available in this engine build.");
-            __mb_read_file = __mb;
-        }
+        if (__mb_read_file == 0) MethodBinds.MissingThrow("ZIPReader.read_file");
         ulong __a0 = NativeString.Create(path);
         byte __a1 = caseSensitive ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_read_file, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
@@ -271,20 +211,14 @@ public unsafe partial class ZIPReader : RefCounted
     private static nint __mb_file_exists;
     public bool FileExists(string path, bool caseSensitive = true)
     {
-        var __mb = __mb_file_exists;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ZIPReader", "file_exists", 35364943);
-            if (__mb == 0) throw new MissingMethodException("ZIPReader.file_exists is not available in this engine build.");
-            __mb_file_exists = __mb;
-        }
+        if (__mb_file_exists == 0) MethodBinds.MissingThrow("ZIPReader.file_exists");
         ulong __a0 = NativeString.Create(path);
         byte __a1 = caseSensitive ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_file_exists, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -292,22 +226,26 @@ public unsafe partial class ZIPReader : RefCounted
     private static nint __mb_get_compression_level;
     public int GetCompressionLevel(string path, bool caseSensitive = true)
     {
-        var __mb = __mb_get_compression_level;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ZIPReader", "get_compression_level", 3694577386);
-            if (__mb == 0) throw new MissingMethodException("ZIPReader.get_compression_level is not available in this engine build.");
-            __mb_get_compression_level = __mb;
-        }
+        if (__mb_get_compression_level == 0) MethodBinds.MissingThrow("ZIPReader.get_compression_level");
         ulong __a0 = NativeString.Create(path);
         byte __a1 = caseSensitive ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_compression_level, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((int)__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_open = MethodBinds.ResolveBulk("ZIPReader", "open", 166001499);
+        __mb_close = MethodBinds.ResolveBulk("ZIPReader", "close", 166280745);
+        __mb_get_files = MethodBinds.ResolveBulk("ZIPReader", "get_files", 2981934095);
+        __mb_read_file = MethodBinds.ResolveBulk("ZIPReader", "read_file", 740857591);
+        __mb_file_exists = MethodBinds.ResolveBulk("ZIPReader", "file_exists", 35364943);
+        __mb_get_compression_level = MethodBinds.ResolveBulk("ZIPReader", "get_compression_level", 3694577386);
     }
 }
 

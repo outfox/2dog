@@ -66,8 +66,23 @@ public static unsafe class GdExtensionHost
     {
         try
         {
+            if ((GDExtensionInitializationLevel)level == GDExtensionInitializationLevel.GDEXTENSION_INITIALIZATION_CORE)
+            {
+                // GodotInstance drives startup (Engine.Start -> GodotInstance.Start
+                // runs the remaining init levels), so its binds must resolve at
+                // CORE init - the only typed API available before SCENE init.
+                GodotInstance.__ResolveBinds();
+            }
             if ((GDExtensionInitializationLevel)level == GDExtensionInitializationLevel.GDEXTENSION_INITIALIZATION_SCENE)
+            {
+                // Resolve the typed API's method binds before any subscriber
+                // (or queued class registration) can call into it. Re-runs on
+                // every engine start, refreshing binds across restarts.
+                GeneratedBinds.ResolveScene();
                 SceneLevelInitialized = true;
+            }
+            if ((GDExtensionInitializationLevel)level == GDExtensionInitializationLevel.GDEXTENSION_INITIALIZATION_EDITOR)
+                GeneratedBinds.ResolveEditor();
             LevelInitialized?.Invoke((GDExtensionInitializationLevel)level);
             // After user class registrations flushed: wire the C# script
             // language (scenes referencing res://*.cs scripts).

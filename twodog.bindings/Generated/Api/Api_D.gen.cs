@@ -53,13 +53,7 @@ public unsafe partial class DPITexture : Texture2D
     private static nint __mb_create_from_string;
     public static DPITexture? CreateFromString(string source, float scale, float saturation, Godot.Collections.Dictionary colorMap)
     {
-        var __mb = __mb_create_from_string;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DPITexture", "create_from_string", 755140520);
-            if (__mb == 0) throw new MissingMethodException("DPITexture.create_from_string is not available in this engine build.");
-            __mb_create_from_string = __mb;
-        }
+        if (__mb_create_from_string == 0) MethodBinds.MissingThrow("DPITexture.create_from_string");
         ulong __a0 = NativeString.Create(source);
         double __a1 = scale;
         double __a2 = saturation;
@@ -70,7 +64,7 @@ public unsafe partial class DPITexture : Texture2D
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_from_string, 0, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (DPITexture?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
@@ -78,219 +72,154 @@ public unsafe partial class DPITexture : Texture2D
     private static nint __mb_set_source;
     public void SetSource(string source)
     {
-        var __mb = __mb_set_source;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DPITexture", "set_source", 83702148);
-            if (__mb == 0) throw new MissingMethodException("DPITexture.set_source is not available in this engine build.");
-            __mb_set_source = __mb;
-        }
+        if (__mb_set_source == 0) MethodBinds.MissingThrow("DPITexture.set_source");
         ulong __a0 = NativeString.Create(source);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_source, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_source;
     public string GetSource()
     {
-        var __mb = __mb_get_source;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DPITexture", "get_source", 201670096);
-            if (__mb == 0) throw new MissingMethodException("DPITexture.get_source is not available in this engine build.");
-            __mb_get_source = __mb;
-        }
+        if (__mb_get_source == 0) MethodBinds.MissingThrow("DPITexture.get_source");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_source, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_fix_alpha_border;
     public void SetFixAlphaBorder(bool fixAlphaBorder)
     {
-        var __mb = __mb_set_fix_alpha_border;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DPITexture", "set_fix_alpha_border", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("DPITexture.set_fix_alpha_border is not available in this engine build.");
-            __mb_set_fix_alpha_border = __mb;
-        }
+        if (__mb_set_fix_alpha_border == 0) MethodBinds.MissingThrow("DPITexture.set_fix_alpha_border");
         byte __a0 = fixAlphaBorder ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_fix_alpha_border, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_fix_alpha_border;
     public bool GetFixAlphaBorder()
     {
-        var __mb = __mb_get_fix_alpha_border;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DPITexture", "get_fix_alpha_border", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DPITexture.get_fix_alpha_border is not available in this engine build.");
-            __mb_get_fix_alpha_border = __mb;
-        }
+        if (__mb_get_fix_alpha_border == 0) MethodBinds.MissingThrow("DPITexture.get_fix_alpha_border");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_fix_alpha_border, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_premult_alpha;
     public void SetPremultAlpha(bool premultAlpha)
     {
-        var __mb = __mb_set_premult_alpha;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DPITexture", "set_premult_alpha", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("DPITexture.set_premult_alpha is not available in this engine build.");
-            __mb_set_premult_alpha = __mb;
-        }
+        if (__mb_set_premult_alpha == 0) MethodBinds.MissingThrow("DPITexture.set_premult_alpha");
         byte __a0 = premultAlpha ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_premult_alpha, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_premult_alpha;
     public bool GetPremultAlpha()
     {
-        var __mb = __mb_get_premult_alpha;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DPITexture", "get_premult_alpha", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DPITexture.get_premult_alpha is not available in this engine build.");
-            __mb_get_premult_alpha = __mb;
-        }
+        if (__mb_get_premult_alpha == 0) MethodBinds.MissingThrow("DPITexture.get_premult_alpha");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_premult_alpha, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_base_scale;
     public void SetBaseScale(float baseScale)
     {
-        var __mb = __mb_set_base_scale;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DPITexture", "set_base_scale", 373806689);
-            if (__mb == 0) throw new MissingMethodException("DPITexture.set_base_scale is not available in this engine build.");
-            __mb_set_base_scale = __mb;
-        }
+        if (__mb_set_base_scale == 0) MethodBinds.MissingThrow("DPITexture.set_base_scale");
         double __a0 = baseScale;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_base_scale, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_base_scale;
     public float GetBaseScale()
     {
-        var __mb = __mb_get_base_scale;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DPITexture", "get_base_scale", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("DPITexture.get_base_scale is not available in this engine build.");
-            __mb_get_base_scale = __mb;
-        }
+        if (__mb_get_base_scale == 0) MethodBinds.MissingThrow("DPITexture.get_base_scale");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_base_scale, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_saturation;
     public void SetSaturation(float saturation)
     {
-        var __mb = __mb_set_saturation;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DPITexture", "set_saturation", 373806689);
-            if (__mb == 0) throw new MissingMethodException("DPITexture.set_saturation is not available in this engine build.");
-            __mb_set_saturation = __mb;
-        }
+        if (__mb_set_saturation == 0) MethodBinds.MissingThrow("DPITexture.set_saturation");
         double __a0 = saturation;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_saturation, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_saturation;
     public float GetSaturation()
     {
-        var __mb = __mb_get_saturation;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DPITexture", "get_saturation", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("DPITexture.get_saturation is not available in this engine build.");
-            __mb_get_saturation = __mb;
-        }
+        if (__mb_get_saturation == 0) MethodBinds.MissingThrow("DPITexture.get_saturation");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_saturation, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_color_map;
     public void SetColorMap(Godot.Collections.Dictionary colorMap)
     {
-        var __mb = __mb_set_color_map;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DPITexture", "set_color_map", 4155329257);
-            if (__mb == 0) throw new MissingMethodException("DPITexture.set_color_map is not available in this engine build.");
-            __mb_set_color_map = __mb;
-        }
+        if (__mb_set_color_map == 0) MethodBinds.MissingThrow("DPITexture.set_color_map");
         ulong __a0 = colorMap.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_color_map, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_color_map;
     public Godot.Collections.Dictionary GetColorMap()
     {
-        var __mb = __mb_get_color_map;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DPITexture", "get_color_map", 3102165223);
-            if (__mb == 0) throw new MissingMethodException("DPITexture.get_color_map is not available in this engine build.");
-            __mb_get_color_map = __mb;
-        }
+        if (__mb_get_color_map == 0) MethodBinds.MissingThrow("DPITexture.get_color_map");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_color_map, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_set_size_override;
     public void SetSizeOverride(Vector2I size)
     {
-        var __mb = __mb_set_size_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DPITexture", "set_size_override", 1130785943);
-            if (__mb == 0) throw new MissingMethodException("DPITexture.set_size_override is not available in this engine build.");
-            __mb_set_size_override = __mb;
-        }
+        if (__mb_set_size_override == 0) MethodBinds.MissingThrow("DPITexture.set_size_override");
         var __a0 = size;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_size_override, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_scaled_rid;
     public Rid GetScaledRid()
     {
-        var __mb = __mb_get_scaled_rid;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DPITexture", "get_scaled_rid", 2944877500);
-            if (__mb == 0) throw new MissingMethodException("DPITexture.get_scaled_rid is not available in this engine build.");
-            __mb_get_scaled_rid = __mb;
-        }
+        if (__mb_get_scaled_rid == 0) MethodBinds.MissingThrow("DPITexture.get_scaled_rid");
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_scaled_rid, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_create_from_string = MethodBinds.ResolveBulk("DPITexture", "create_from_string", 755140520);
+        __mb_set_source = MethodBinds.ResolveBulk("DPITexture", "set_source", 83702148);
+        __mb_get_source = MethodBinds.ResolveBulk("DPITexture", "get_source", 201670096);
+        __mb_set_fix_alpha_border = MethodBinds.ResolveBulk("DPITexture", "set_fix_alpha_border", 2586408642);
+        __mb_get_fix_alpha_border = MethodBinds.ResolveBulk("DPITexture", "get_fix_alpha_border", 36873697);
+        __mb_set_premult_alpha = MethodBinds.ResolveBulk("DPITexture", "set_premult_alpha", 2586408642);
+        __mb_get_premult_alpha = MethodBinds.ResolveBulk("DPITexture", "get_premult_alpha", 36873697);
+        __mb_set_base_scale = MethodBinds.ResolveBulk("DPITexture", "set_base_scale", 373806689);
+        __mb_get_base_scale = MethodBinds.ResolveBulk("DPITexture", "get_base_scale", 1740695150);
+        __mb_set_saturation = MethodBinds.ResolveBulk("DPITexture", "set_saturation", 373806689);
+        __mb_get_saturation = MethodBinds.ResolveBulk("DPITexture", "get_saturation", 1740695150);
+        __mb_set_color_map = MethodBinds.ResolveBulk("DPITexture", "set_color_map", 4155329257);
+        __mb_get_color_map = MethodBinds.ResolveBulk("DPITexture", "get_color_map", 3102165223);
+        __mb_set_size_override = MethodBinds.ResolveBulk("DPITexture", "set_size_override", 1130785943);
+        __mb_get_scaled_rid = MethodBinds.ResolveBulk("DPITexture", "get_scaled_rid", 2944877500);
     }
 }
 
@@ -306,37 +235,31 @@ public unsafe partial class DTLSServer : RefCounted
     private static nint __mb_setup;
     public Error Setup(TLSOptions? serverOptions)
     {
-        var __mb = __mb_setup;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DTLSServer", "setup", 1262296096);
-            if (__mb == 0) throw new MissingMethodException("DTLSServer.setup is not available in this engine build.");
-            __mb_setup = __mb;
-        }
+        if (__mb_setup == 0) MethodBinds.MissingThrow("DTLSServer.setup");
         nint __a0 = serverOptions?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_setup, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_take_connection;
     public PacketPeerDTLS? TakeConnection(PacketPeerUDP? udpPeer)
     {
-        var __mb = __mb_take_connection;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DTLSServer", "take_connection", 3946580474);
-            if (__mb == 0) throw new MissingMethodException("DTLSServer.take_connection is not available in this engine build.");
-            __mb_take_connection = __mb;
-        }
+        if (__mb_take_connection == 0) MethodBinds.MissingThrow("DTLSServer.take_connection");
         nint __a0 = udpPeer?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_take_connection, NativePtr, (nint)__args, (nint)(&__ret));
         return (PacketPeerDTLS?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_setup = MethodBinds.ResolveBulk("DTLSServer", "setup", 1262296096);
+        __mb_take_connection = MethodBinds.ResolveBulk("DTLSServer", "take_connection", 3946580474);
     }
 }
 
@@ -376,125 +299,89 @@ public unsafe partial class DampedSpringJoint2D : Joint2D
     private static nint __mb_set_length;
     public void SetLength(float length)
     {
-        var __mb = __mb_set_length;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DampedSpringJoint2D", "set_length", 373806689);
-            if (__mb == 0) throw new MissingMethodException("DampedSpringJoint2D.set_length is not available in this engine build.");
-            __mb_set_length = __mb;
-        }
+        if (__mb_set_length == 0) MethodBinds.MissingThrow("DampedSpringJoint2D.set_length");
         double __a0 = length;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_length, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_length;
     public float GetLength()
     {
-        var __mb = __mb_get_length;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DampedSpringJoint2D", "get_length", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("DampedSpringJoint2D.get_length is not available in this engine build.");
-            __mb_get_length = __mb;
-        }
+        if (__mb_get_length == 0) MethodBinds.MissingThrow("DampedSpringJoint2D.get_length");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_length, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_rest_length;
     public void SetRestLength(float restLength)
     {
-        var __mb = __mb_set_rest_length;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DampedSpringJoint2D", "set_rest_length", 373806689);
-            if (__mb == 0) throw new MissingMethodException("DampedSpringJoint2D.set_rest_length is not available in this engine build.");
-            __mb_set_rest_length = __mb;
-        }
+        if (__mb_set_rest_length == 0) MethodBinds.MissingThrow("DampedSpringJoint2D.set_rest_length");
         double __a0 = restLength;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_rest_length, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_rest_length;
     public float GetRestLength()
     {
-        var __mb = __mb_get_rest_length;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DampedSpringJoint2D", "get_rest_length", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("DampedSpringJoint2D.get_rest_length is not available in this engine build.");
-            __mb_get_rest_length = __mb;
-        }
+        if (__mb_get_rest_length == 0) MethodBinds.MissingThrow("DampedSpringJoint2D.get_rest_length");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_rest_length, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_stiffness;
     public void SetStiffness(float stiffness)
     {
-        var __mb = __mb_set_stiffness;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DampedSpringJoint2D", "set_stiffness", 373806689);
-            if (__mb == 0) throw new MissingMethodException("DampedSpringJoint2D.set_stiffness is not available in this engine build.");
-            __mb_set_stiffness = __mb;
-        }
+        if (__mb_set_stiffness == 0) MethodBinds.MissingThrow("DampedSpringJoint2D.set_stiffness");
         double __a0 = stiffness;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_stiffness, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_stiffness;
     public float GetStiffness()
     {
-        var __mb = __mb_get_stiffness;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DampedSpringJoint2D", "get_stiffness", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("DampedSpringJoint2D.get_stiffness is not available in this engine build.");
-            __mb_get_stiffness = __mb;
-        }
+        if (__mb_get_stiffness == 0) MethodBinds.MissingThrow("DampedSpringJoint2D.get_stiffness");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_stiffness, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_damping;
     public void SetDamping(float damping)
     {
-        var __mb = __mb_set_damping;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DampedSpringJoint2D", "set_damping", 373806689);
-            if (__mb == 0) throw new MissingMethodException("DampedSpringJoint2D.set_damping is not available in this engine build.");
-            __mb_set_damping = __mb;
-        }
+        if (__mb_set_damping == 0) MethodBinds.MissingThrow("DampedSpringJoint2D.set_damping");
         double __a0 = damping;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_damping, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_damping;
     public float GetDamping()
     {
-        var __mb = __mb_get_damping;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DampedSpringJoint2D", "get_damping", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("DampedSpringJoint2D.get_damping is not available in this engine build.");
-            __mb_get_damping = __mb;
-        }
+        if (__mb_get_damping == 0) MethodBinds.MissingThrow("DampedSpringJoint2D.get_damping");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_damping, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_length = MethodBinds.ResolveBulk("DampedSpringJoint2D", "set_length", 373806689);
+        __mb_get_length = MethodBinds.ResolveBulk("DampedSpringJoint2D", "get_length", 1740695150);
+        __mb_set_rest_length = MethodBinds.ResolveBulk("DampedSpringJoint2D", "set_rest_length", 373806689);
+        __mb_get_rest_length = MethodBinds.ResolveBulk("DampedSpringJoint2D", "get_rest_length", 1740695150);
+        __mb_set_stiffness = MethodBinds.ResolveBulk("DampedSpringJoint2D", "set_stiffness", 373806689);
+        __mb_get_stiffness = MethodBinds.ResolveBulk("DampedSpringJoint2D", "get_stiffness", 1740695150);
+        __mb_set_damping = MethodBinds.ResolveBulk("DampedSpringJoint2D", "set_damping", 373806689);
+        __mb_get_damping = MethodBinds.ResolveBulk("DampedSpringJoint2D", "get_damping", 1740695150);
     }
 }
 
@@ -609,378 +496,262 @@ public unsafe partial class Decal : VisualInstance3D
     private static nint __mb_set_size;
     public void SetSize(Vector3 size)
     {
-        var __mb = __mb_set_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "set_size", 3460891852);
-            if (__mb == 0) throw new MissingMethodException("Decal.set_size is not available in this engine build.");
-            __mb_set_size = __mb;
-        }
+        if (__mb_set_size == 0) MethodBinds.MissingThrow("Decal.set_size");
         var __a0 = size;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_size;
     public Vector3 GetSize()
     {
-        var __mb = __mb_get_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "get_size", 3360562783);
-            if (__mb == 0) throw new MissingMethodException("Decal.get_size is not available in this engine build.");
-            __mb_get_size = __mb;
-        }
+        if (__mb_get_size == 0) MethodBinds.MissingThrow("Decal.get_size");
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_size, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_texture;
     public void SetTexture(Decal.DecalTexture type, Texture2D? texture)
     {
-        var __mb = __mb_set_texture;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "set_texture", 2086764391);
-            if (__mb == 0) throw new MissingMethodException("Decal.set_texture is not available in this engine build.");
-            __mb_set_texture = __mb;
-        }
+        if (__mb_set_texture == 0) MethodBinds.MissingThrow("Decal.set_texture");
         long __a0 = (long)type;
         nint __a1 = texture?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_texture, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_texture;
     public Texture2D? GetTexture(Decal.DecalTexture type)
     {
-        var __mb = __mb_get_texture;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "get_texture", 3244119503);
-            if (__mb == 0) throw new MissingMethodException("Decal.get_texture is not available in this engine build.");
-            __mb_get_texture = __mb;
-        }
+        if (__mb_get_texture == 0) MethodBinds.MissingThrow("Decal.get_texture");
         long __a0 = (long)type;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_texture, NativePtr, (nint)__args, (nint)(&__ret));
         return (Texture2D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_emission_energy;
     public void SetEmissionEnergy(float energy)
     {
-        var __mb = __mb_set_emission_energy;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "set_emission_energy", 373806689);
-            if (__mb == 0) throw new MissingMethodException("Decal.set_emission_energy is not available in this engine build.");
-            __mb_set_emission_energy = __mb;
-        }
+        if (__mb_set_emission_energy == 0) MethodBinds.MissingThrow("Decal.set_emission_energy");
         double __a0 = energy;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_emission_energy, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_emission_energy;
     public float GetEmissionEnergy()
     {
-        var __mb = __mb_get_emission_energy;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "get_emission_energy", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("Decal.get_emission_energy is not available in this engine build.");
-            __mb_get_emission_energy = __mb;
-        }
+        if (__mb_get_emission_energy == 0) MethodBinds.MissingThrow("Decal.get_emission_energy");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_emission_energy, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_albedo_mix;
     public void SetAlbedoMix(float energy)
     {
-        var __mb = __mb_set_albedo_mix;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "set_albedo_mix", 373806689);
-            if (__mb == 0) throw new MissingMethodException("Decal.set_albedo_mix is not available in this engine build.");
-            __mb_set_albedo_mix = __mb;
-        }
+        if (__mb_set_albedo_mix == 0) MethodBinds.MissingThrow("Decal.set_albedo_mix");
         double __a0 = energy;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_albedo_mix, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_albedo_mix;
     public float GetAlbedoMix()
     {
-        var __mb = __mb_get_albedo_mix;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "get_albedo_mix", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("Decal.get_albedo_mix is not available in this engine build.");
-            __mb_get_albedo_mix = __mb;
-        }
+        if (__mb_get_albedo_mix == 0) MethodBinds.MissingThrow("Decal.get_albedo_mix");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_albedo_mix, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_modulate;
     public void SetModulate(Color color)
     {
-        var __mb = __mb_set_modulate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "set_modulate", 2920490490);
-            if (__mb == 0) throw new MissingMethodException("Decal.set_modulate is not available in this engine build.");
-            __mb_set_modulate = __mb;
-        }
+        if (__mb_set_modulate == 0) MethodBinds.MissingThrow("Decal.set_modulate");
         var __a0 = color;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_modulate, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_modulate;
     public Color GetModulate()
     {
-        var __mb = __mb_get_modulate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "get_modulate", 3444240500);
-            if (__mb == 0) throw new MissingMethodException("Decal.get_modulate is not available in this engine build.");
-            __mb_get_modulate = __mb;
-        }
+        if (__mb_get_modulate == 0) MethodBinds.MissingThrow("Decal.get_modulate");
         var __ret = default(Color);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_modulate, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_upper_fade;
     public void SetUpperFade(float fade)
     {
-        var __mb = __mb_set_upper_fade;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "set_upper_fade", 373806689);
-            if (__mb == 0) throw new MissingMethodException("Decal.set_upper_fade is not available in this engine build.");
-            __mb_set_upper_fade = __mb;
-        }
+        if (__mb_set_upper_fade == 0) MethodBinds.MissingThrow("Decal.set_upper_fade");
         double __a0 = fade;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_upper_fade, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_upper_fade;
     public float GetUpperFade()
     {
-        var __mb = __mb_get_upper_fade;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "get_upper_fade", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("Decal.get_upper_fade is not available in this engine build.");
-            __mb_get_upper_fade = __mb;
-        }
+        if (__mb_get_upper_fade == 0) MethodBinds.MissingThrow("Decal.get_upper_fade");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_upper_fade, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_lower_fade;
     public void SetLowerFade(float fade)
     {
-        var __mb = __mb_set_lower_fade;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "set_lower_fade", 373806689);
-            if (__mb == 0) throw new MissingMethodException("Decal.set_lower_fade is not available in this engine build.");
-            __mb_set_lower_fade = __mb;
-        }
+        if (__mb_set_lower_fade == 0) MethodBinds.MissingThrow("Decal.set_lower_fade");
         double __a0 = fade;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_lower_fade, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_lower_fade;
     public float GetLowerFade()
     {
-        var __mb = __mb_get_lower_fade;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "get_lower_fade", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("Decal.get_lower_fade is not available in this engine build.");
-            __mb_get_lower_fade = __mb;
-        }
+        if (__mb_get_lower_fade == 0) MethodBinds.MissingThrow("Decal.get_lower_fade");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_lower_fade, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_normal_fade;
     public void SetNormalFade(float fade)
     {
-        var __mb = __mb_set_normal_fade;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "set_normal_fade", 373806689);
-            if (__mb == 0) throw new MissingMethodException("Decal.set_normal_fade is not available in this engine build.");
-            __mb_set_normal_fade = __mb;
-        }
+        if (__mb_set_normal_fade == 0) MethodBinds.MissingThrow("Decal.set_normal_fade");
         double __a0 = fade;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_normal_fade, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_normal_fade;
     public float GetNormalFade()
     {
-        var __mb = __mb_get_normal_fade;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "get_normal_fade", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("Decal.get_normal_fade is not available in this engine build.");
-            __mb_get_normal_fade = __mb;
-        }
+        if (__mb_get_normal_fade == 0) MethodBinds.MissingThrow("Decal.get_normal_fade");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_normal_fade, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_enable_distance_fade;
     public void SetEnableDistanceFade(bool enable)
     {
-        var __mb = __mb_set_enable_distance_fade;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "set_enable_distance_fade", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Decal.set_enable_distance_fade is not available in this engine build.");
-            __mb_set_enable_distance_fade = __mb;
-        }
+        if (__mb_set_enable_distance_fade == 0) MethodBinds.MissingThrow("Decal.set_enable_distance_fade");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_enable_distance_fade, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_distance_fade_enabled;
     public bool IsDistanceFadeEnabled()
     {
-        var __mb = __mb_is_distance_fade_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "is_distance_fade_enabled", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Decal.is_distance_fade_enabled is not available in this engine build.");
-            __mb_is_distance_fade_enabled = __mb;
-        }
+        if (__mb_is_distance_fade_enabled == 0) MethodBinds.MissingThrow("Decal.is_distance_fade_enabled");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_distance_fade_enabled, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_distance_fade_begin;
     public void SetDistanceFadeBegin(float distance)
     {
-        var __mb = __mb_set_distance_fade_begin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "set_distance_fade_begin", 373806689);
-            if (__mb == 0) throw new MissingMethodException("Decal.set_distance_fade_begin is not available in this engine build.");
-            __mb_set_distance_fade_begin = __mb;
-        }
+        if (__mb_set_distance_fade_begin == 0) MethodBinds.MissingThrow("Decal.set_distance_fade_begin");
         double __a0 = distance;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_distance_fade_begin, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_distance_fade_begin;
     public float GetDistanceFadeBegin()
     {
-        var __mb = __mb_get_distance_fade_begin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "get_distance_fade_begin", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("Decal.get_distance_fade_begin is not available in this engine build.");
-            __mb_get_distance_fade_begin = __mb;
-        }
+        if (__mb_get_distance_fade_begin == 0) MethodBinds.MissingThrow("Decal.get_distance_fade_begin");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_distance_fade_begin, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_distance_fade_length;
     public void SetDistanceFadeLength(float distance)
     {
-        var __mb = __mb_set_distance_fade_length;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "set_distance_fade_length", 373806689);
-            if (__mb == 0) throw new MissingMethodException("Decal.set_distance_fade_length is not available in this engine build.");
-            __mb_set_distance_fade_length = __mb;
-        }
+        if (__mb_set_distance_fade_length == 0) MethodBinds.MissingThrow("Decal.set_distance_fade_length");
         double __a0 = distance;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_distance_fade_length, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_distance_fade_length;
     public float GetDistanceFadeLength()
     {
-        var __mb = __mb_get_distance_fade_length;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "get_distance_fade_length", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("Decal.get_distance_fade_length is not available in this engine build.");
-            __mb_get_distance_fade_length = __mb;
-        }
+        if (__mb_get_distance_fade_length == 0) MethodBinds.MissingThrow("Decal.get_distance_fade_length");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_distance_fade_length, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_cull_mask;
     public void SetCullMask(uint mask)
     {
-        var __mb = __mb_set_cull_mask;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "set_cull_mask", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("Decal.set_cull_mask is not available in this engine build.");
-            __mb_set_cull_mask = __mb;
-        }
+        if (__mb_set_cull_mask == 0) MethodBinds.MissingThrow("Decal.set_cull_mask");
         long __a0 = unchecked((long)mask);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_cull_mask, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_cull_mask;
     public uint GetCullMask()
     {
-        var __mb = __mb_get_cull_mask;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Decal", "get_cull_mask", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("Decal.get_cull_mask is not available in this engine build.");
-            __mb_get_cull_mask = __mb;
-        }
+        if (__mb_get_cull_mask == 0) MethodBinds.MissingThrow("Decal.get_cull_mask");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_cull_mask, NativePtr, 0, (nint)(&__ret));
         return unchecked((uint)__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_size = MethodBinds.ResolveBulk("Decal", "set_size", 3460891852);
+        __mb_get_size = MethodBinds.ResolveBulk("Decal", "get_size", 3360562783);
+        __mb_set_texture = MethodBinds.ResolveBulk("Decal", "set_texture", 2086764391);
+        __mb_get_texture = MethodBinds.ResolveBulk("Decal", "get_texture", 3244119503);
+        __mb_set_emission_energy = MethodBinds.ResolveBulk("Decal", "set_emission_energy", 373806689);
+        __mb_get_emission_energy = MethodBinds.ResolveBulk("Decal", "get_emission_energy", 1740695150);
+        __mb_set_albedo_mix = MethodBinds.ResolveBulk("Decal", "set_albedo_mix", 373806689);
+        __mb_get_albedo_mix = MethodBinds.ResolveBulk("Decal", "get_albedo_mix", 1740695150);
+        __mb_set_modulate = MethodBinds.ResolveBulk("Decal", "set_modulate", 2920490490);
+        __mb_get_modulate = MethodBinds.ResolveBulk("Decal", "get_modulate", 3444240500);
+        __mb_set_upper_fade = MethodBinds.ResolveBulk("Decal", "set_upper_fade", 373806689);
+        __mb_get_upper_fade = MethodBinds.ResolveBulk("Decal", "get_upper_fade", 1740695150);
+        __mb_set_lower_fade = MethodBinds.ResolveBulk("Decal", "set_lower_fade", 373806689);
+        __mb_get_lower_fade = MethodBinds.ResolveBulk("Decal", "get_lower_fade", 1740695150);
+        __mb_set_normal_fade = MethodBinds.ResolveBulk("Decal", "set_normal_fade", 373806689);
+        __mb_get_normal_fade = MethodBinds.ResolveBulk("Decal", "get_normal_fade", 1740695150);
+        __mb_set_enable_distance_fade = MethodBinds.ResolveBulk("Decal", "set_enable_distance_fade", 2586408642);
+        __mb_is_distance_fade_enabled = MethodBinds.ResolveBulk("Decal", "is_distance_fade_enabled", 36873697);
+        __mb_set_distance_fade_begin = MethodBinds.ResolveBulk("Decal", "set_distance_fade_begin", 373806689);
+        __mb_get_distance_fade_begin = MethodBinds.ResolveBulk("Decal", "get_distance_fade_begin", 1740695150);
+        __mb_set_distance_fade_length = MethodBinds.ResolveBulk("Decal", "set_distance_fade_length", 373806689);
+        __mb_get_distance_fade_length = MethodBinds.ResolveBulk("Decal", "get_distance_fade_length", 1740695150);
+        __mb_set_cull_mask = MethodBinds.ResolveBulk("Decal", "set_cull_mask", 1286410249);
+        __mb_get_cull_mask = MethodBinds.ResolveBulk("Decal", "get_cull_mask", 3905245786);
     }
 }
 
@@ -1003,18 +774,12 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_open;
     public static DirAccess? Open(string path)
     {
-        var __mb = __mb_open;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "open", 1923528528);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.open is not available in this engine build.");
-            __mb_open = __mb;
-        }
+        if (__mb_open == 0) MethodBinds.MissingThrow("DirAccess.open");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_open, 0, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (DirAccess?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
@@ -1022,35 +787,23 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_get_open_error;
     public static Error GetOpenError()
     {
-        var __mb = __mb_get_open_error;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "get_open_error", 166280745);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.get_open_error is not available in this engine build.");
-            __mb_get_open_error = __mb;
-        }
+        if (__mb_get_open_error == 0) MethodBinds.MissingThrow("DirAccess.get_open_error");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_open_error, 0, 0, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_create_temp;
     public static DirAccess? CreateTemp(string prefix = "", bool keep = false)
     {
-        var __mb = __mb_create_temp;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "create_temp", 812913566);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.create_temp is not available in this engine build.");
-            __mb_create_temp = __mb;
-        }
+        if (__mb_create_temp == 0) MethodBinds.MissingThrow("DirAccess.create_temp");
         ulong __a0 = NativeString.Create(prefix);
         byte __a1 = keep ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_temp, 0, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (DirAccess?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
@@ -1058,91 +811,55 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_list_dir_begin;
     public Error ListDirBegin()
     {
-        var __mb = __mb_list_dir_begin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "list_dir_begin", 166280745);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.list_dir_begin is not available in this engine build.");
-            __mb_list_dir_begin = __mb;
-        }
+        if (__mb_list_dir_begin == 0) MethodBinds.MissingThrow("DirAccess.list_dir_begin");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_list_dir_begin, NativePtr, 0, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_get_next;
     public string GetNext()
     {
-        var __mb = __mb_get_next;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "get_next", 2841200299);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.get_next is not available in this engine build.");
-            __mb_get_next = __mb;
-        }
+        if (__mb_get_next == 0) MethodBinds.MissingThrow("DirAccess.get_next");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_next, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_current_is_dir;
     public bool CurrentIsDir()
     {
-        var __mb = __mb_current_is_dir;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "current_is_dir", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.current_is_dir is not available in this engine build.");
-            __mb_current_is_dir = __mb;
-        }
+        if (__mb_current_is_dir == 0) MethodBinds.MissingThrow("DirAccess.current_is_dir");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_current_is_dir, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_list_dir_end;
     public void ListDirEnd()
     {
-        var __mb = __mb_list_dir_end;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "list_dir_end", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.list_dir_end is not available in this engine build.");
-            __mb_list_dir_end = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_list_dir_end == 0) MethodBinds.MissingThrow("DirAccess.list_dir_end");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_list_dir_end, NativePtr, 0, 0);
     }
 
     private static nint __mb_get_files;
     public string[] GetFiles()
     {
-        var __mb = __mb_get_files;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "get_files", 2981934095);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.get_files is not available in this engine build.");
-            __mb_get_files = __mb;
-        }
+        if (__mb_get_files == 0) MethodBinds.MissingThrow("DirAccess.get_files");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_files, NativePtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_get_files_at;
     public static string[] GetFilesAt(string path)
     {
-        var __mb = __mb_get_files_at;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "get_files_at", 3538744774);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.get_files_at is not available in this engine build.");
-            __mb_get_files_at = __mb;
-        }
+        if (__mb_get_files_at == 0) MethodBinds.MissingThrow("DirAccess.get_files_at");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_files_at, 0, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return Packed.ToStringArray(ref __ret);
     }
@@ -1150,33 +867,21 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_get_directories;
     public string[] GetDirectories()
     {
-        var __mb = __mb_get_directories;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "get_directories", 2981934095);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.get_directories is not available in this engine build.");
-            __mb_get_directories = __mb;
-        }
+        if (__mb_get_directories == 0) MethodBinds.MissingThrow("DirAccess.get_directories");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_directories, NativePtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_get_directories_at;
     public static string[] GetDirectoriesAt(string path)
     {
-        var __mb = __mb_get_directories_at;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "get_directories_at", 3538744774);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.get_directories_at is not available in this engine build.");
-            __mb_get_directories_at = __mb;
-        }
+        if (__mb_get_directories_at == 0) MethodBinds.MissingThrow("DirAccess.get_directories_at");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_directories_at, 0, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return Packed.ToStringArray(ref __ret);
     }
@@ -1184,84 +889,54 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_get_drive_count;
     public static int GetDriveCount()
     {
-        var __mb = __mb_get_drive_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "get_drive_count", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.get_drive_count is not available in this engine build.");
-            __mb_get_drive_count = __mb;
-        }
+        if (__mb_get_drive_count == 0) MethodBinds.MissingThrow("DirAccess.get_drive_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_drive_count, 0, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_drive_name;
     public static string GetDriveName(int idx)
     {
-        var __mb = __mb_get_drive_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "get_drive_name", 990163283);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.get_drive_name is not available in this engine build.");
-            __mb_get_drive_name = __mb;
-        }
+        if (__mb_get_drive_name == 0) MethodBinds.MissingThrow("DirAccess.get_drive_name");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_drive_name, 0, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_drive_label;
     public static string GetDriveLabel(int idx)
     {
-        var __mb = __mb_get_drive_label;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "get_drive_label", 990163283);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.get_drive_label is not available in this engine build.");
-            __mb_get_drive_label = __mb;
-        }
+        if (__mb_get_drive_label == 0) MethodBinds.MissingThrow("DirAccess.get_drive_label");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_drive_label, 0, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_current_drive;
     public int GetCurrentDrive()
     {
-        var __mb = __mb_get_current_drive;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "get_current_drive", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.get_current_drive is not available in this engine build.");
-            __mb_get_current_drive = __mb;
-        }
+        if (__mb_get_current_drive == 0) MethodBinds.MissingThrow("DirAccess.get_current_drive");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_current_drive, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_change_dir;
     public Error ChangeDir(string toDir)
     {
-        var __mb = __mb_change_dir;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "change_dir", 166001499);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.change_dir is not available in this engine build.");
-            __mb_change_dir = __mb;
-        }
+        if (__mb_change_dir == 0) MethodBinds.MissingThrow("DirAccess.change_dir");
         ulong __a0 = NativeString.Create(toDir);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_change_dir, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -1269,36 +944,24 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_get_current_dir;
     public string GetCurrentDir(bool includeDrive = true)
     {
-        var __mb = __mb_get_current_dir;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "get_current_dir", 1287308131);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.get_current_dir is not available in this engine build.");
-            __mb_get_current_dir = __mb;
-        }
+        if (__mb_get_current_dir == 0) MethodBinds.MissingThrow("DirAccess.get_current_dir");
         byte __a0 = includeDrive ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_current_dir, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_make_dir;
     public Error MakeDir(string path)
     {
-        var __mb = __mb_make_dir;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "make_dir", 166001499);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.make_dir is not available in this engine build.");
-            __mb_make_dir = __mb;
-        }
+        if (__mb_make_dir == 0) MethodBinds.MissingThrow("DirAccess.make_dir");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_make_dir, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -1306,18 +969,12 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_make_dir_absolute;
     public static Error MakeDirAbsolute(string path)
     {
-        var __mb = __mb_make_dir_absolute;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "make_dir_absolute", 166001499);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.make_dir_absolute is not available in this engine build.");
-            __mb_make_dir_absolute = __mb;
-        }
+        if (__mb_make_dir_absolute == 0) MethodBinds.MissingThrow("DirAccess.make_dir_absolute");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_make_dir_absolute, 0, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -1325,18 +982,12 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_make_dir_recursive;
     public Error MakeDirRecursive(string path)
     {
-        var __mb = __mb_make_dir_recursive;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "make_dir_recursive", 166001499);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.make_dir_recursive is not available in this engine build.");
-            __mb_make_dir_recursive = __mb;
-        }
+        if (__mb_make_dir_recursive == 0) MethodBinds.MissingThrow("DirAccess.make_dir_recursive");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_make_dir_recursive, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -1344,18 +995,12 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_make_dir_recursive_absolute;
     public static Error MakeDirRecursiveAbsolute(string path)
     {
-        var __mb = __mb_make_dir_recursive_absolute;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "make_dir_recursive_absolute", 166001499);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.make_dir_recursive_absolute is not available in this engine build.");
-            __mb_make_dir_recursive_absolute = __mb;
-        }
+        if (__mb_make_dir_recursive_absolute == 0) MethodBinds.MissingThrow("DirAccess.make_dir_recursive_absolute");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_make_dir_recursive_absolute, 0, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -1363,18 +1008,12 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_file_exists;
     public bool FileExists(string path)
     {
-        var __mb = __mb_file_exists;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "file_exists", 2323990056);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.file_exists is not available in this engine build.");
-            __mb_file_exists = __mb;
-        }
+        if (__mb_file_exists == 0) MethodBinds.MissingThrow("DirAccess.file_exists");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_file_exists, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -1382,18 +1021,12 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_dir_exists;
     public bool DirExists(string path)
     {
-        var __mb = __mb_dir_exists;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "dir_exists", 2323990056);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.dir_exists is not available in this engine build.");
-            __mb_dir_exists = __mb;
-        }
+        if (__mb_dir_exists == 0) MethodBinds.MissingThrow("DirAccess.dir_exists");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_dir_exists, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -1401,18 +1034,12 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_dir_exists_absolute;
     public static bool DirExistsAbsolute(string path)
     {
-        var __mb = __mb_dir_exists_absolute;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "dir_exists_absolute", 2323990056);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.dir_exists_absolute is not available in this engine build.");
-            __mb_dir_exists_absolute = __mb;
-        }
+        if (__mb_dir_exists_absolute == 0) MethodBinds.MissingThrow("DirAccess.dir_exists_absolute");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_dir_exists_absolute, 0, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -1420,28 +1047,16 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_get_space_left;
     public ulong GetSpaceLeft()
     {
-        var __mb = __mb_get_space_left;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "get_space_left", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.get_space_left is not available in this engine build.");
-            __mb_get_space_left = __mb;
-        }
+        if (__mb_get_space_left == 0) MethodBinds.MissingThrow("DirAccess.get_space_left");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_space_left, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_copy;
     public Error Copy(string from, string to, int chmodFlags = unchecked((int)(-1)))
     {
-        var __mb = __mb_copy;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "copy", 1063198817);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.copy is not available in this engine build.");
-            __mb_copy = __mb;
-        }
+        if (__mb_copy == 0) MethodBinds.MissingThrow("DirAccess.copy");
         ulong __a0 = NativeString.Create(from);
         ulong __a1 = NativeString.Create(to);
         long __a2 = unchecked((long)chmodFlags);
@@ -1450,7 +1065,7 @@ public unsafe partial class DirAccess : RefCounted
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_copy, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return (Error)__ret;
@@ -1459,13 +1074,7 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_copy_absolute;
     public static Error CopyAbsolute(string from, string to, int chmodFlags = unchecked((int)(-1)))
     {
-        var __mb = __mb_copy_absolute;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "copy_absolute", 1063198817);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.copy_absolute is not available in this engine build.");
-            __mb_copy_absolute = __mb;
-        }
+        if (__mb_copy_absolute == 0) MethodBinds.MissingThrow("DirAccess.copy_absolute");
         ulong __a0 = NativeString.Create(from);
         ulong __a1 = NativeString.Create(to);
         long __a2 = unchecked((long)chmodFlags);
@@ -1474,7 +1083,7 @@ public unsafe partial class DirAccess : RefCounted
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_copy_absolute, 0, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return (Error)__ret;
@@ -1483,20 +1092,14 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_rename;
     public Error Rename(string from, string to)
     {
-        var __mb = __mb_rename;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "rename", 852856452);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.rename is not available in this engine build.");
-            __mb_rename = __mb;
-        }
+        if (__mb_rename == 0) MethodBinds.MissingThrow("DirAccess.rename");
         ulong __a0 = NativeString.Create(from);
         ulong __a1 = NativeString.Create(to);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_rename, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return (Error)__ret;
@@ -1505,20 +1108,14 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_rename_absolute;
     public static Error RenameAbsolute(string from, string to)
     {
-        var __mb = __mb_rename_absolute;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "rename_absolute", 852856452);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.rename_absolute is not available in this engine build.");
-            __mb_rename_absolute = __mb;
-        }
+        if (__mb_rename_absolute == 0) MethodBinds.MissingThrow("DirAccess.rename_absolute");
         ulong __a0 = NativeString.Create(from);
         ulong __a1 = NativeString.Create(to);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_rename_absolute, 0, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return (Error)__ret;
@@ -1527,18 +1124,12 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_remove;
     public Error Remove(string path)
     {
-        var __mb = __mb_remove;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "remove", 166001499);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.remove is not available in this engine build.");
-            __mb_remove = __mb;
-        }
+        if (__mb_remove == 0) MethodBinds.MissingThrow("DirAccess.remove");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -1546,18 +1137,12 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_remove_absolute;
     public static Error RemoveAbsolute(string path)
     {
-        var __mb = __mb_remove_absolute;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "remove_absolute", 166001499);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.remove_absolute is not available in this engine build.");
-            __mb_remove_absolute = __mb;
-        }
+        if (__mb_remove_absolute == 0) MethodBinds.MissingThrow("DirAccess.remove_absolute");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_absolute, 0, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -1565,18 +1150,12 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_is_link;
     public bool IsLink(string path)
     {
-        var __mb = __mb_is_link;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "is_link", 2323990056);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.is_link is not available in this engine build.");
-            __mb_is_link = __mb;
-        }
+        if (__mb_is_link == 0) MethodBinds.MissingThrow("DirAccess.is_link");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_link, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -1584,18 +1163,12 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_read_link;
     public string ReadLink(string path)
     {
-        var __mb = __mb_read_link;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "read_link", 1703090593);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.read_link is not available in this engine build.");
-            __mb_read_link = __mb;
-        }
+        if (__mb_read_link == 0) MethodBinds.MissingThrow("DirAccess.read_link");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_read_link, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
@@ -1603,20 +1176,14 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_create_link;
     public Error CreateLink(string source, string target)
     {
-        var __mb = __mb_create_link;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "create_link", 852856452);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.create_link is not available in this engine build.");
-            __mb_create_link = __mb;
-        }
+        if (__mb_create_link == 0) MethodBinds.MissingThrow("DirAccess.create_link");
         ulong __a0 = NativeString.Create(source);
         ulong __a1 = NativeString.Create(target);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_link, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return (Error)__ret;
@@ -1625,18 +1192,12 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_is_bundle;
     public bool IsBundle(string path)
     {
-        var __mb = __mb_is_bundle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "is_bundle", 3927539163);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.is_bundle is not available in this engine build.");
-            __mb_is_bundle = __mb;
-        }
+        if (__mb_is_bundle == 0) MethodBinds.MissingThrow("DirAccess.is_bundle");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_bundle, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -1644,95 +1205,59 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_set_include_navigational;
     public void SetIncludeNavigational(bool enable)
     {
-        var __mb = __mb_set_include_navigational;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "set_include_navigational", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.set_include_navigational is not available in this engine build.");
-            __mb_set_include_navigational = __mb;
-        }
+        if (__mb_set_include_navigational == 0) MethodBinds.MissingThrow("DirAccess.set_include_navigational");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_include_navigational, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_include_navigational;
     public bool GetIncludeNavigational()
     {
-        var __mb = __mb_get_include_navigational;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "get_include_navigational", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.get_include_navigational is not available in this engine build.");
-            __mb_get_include_navigational = __mb;
-        }
+        if (__mb_get_include_navigational == 0) MethodBinds.MissingThrow("DirAccess.get_include_navigational");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_include_navigational, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_include_hidden;
     public void SetIncludeHidden(bool enable)
     {
-        var __mb = __mb_set_include_hidden;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "set_include_hidden", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.set_include_hidden is not available in this engine build.");
-            __mb_set_include_hidden = __mb;
-        }
+        if (__mb_set_include_hidden == 0) MethodBinds.MissingThrow("DirAccess.set_include_hidden");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_include_hidden, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_include_hidden;
     public bool GetIncludeHidden()
     {
-        var __mb = __mb_get_include_hidden;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "get_include_hidden", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.get_include_hidden is not available in this engine build.");
-            __mb_get_include_hidden = __mb;
-        }
+        if (__mb_get_include_hidden == 0) MethodBinds.MissingThrow("DirAccess.get_include_hidden");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_include_hidden, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_filesystem_type;
     public string GetFilesystemType()
     {
-        var __mb = __mb_get_filesystem_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "get_filesystem_type", 201670096);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.get_filesystem_type is not available in this engine build.");
-            __mb_get_filesystem_type = __mb;
-        }
+        if (__mb_get_filesystem_type == 0) MethodBinds.MissingThrow("DirAccess.get_filesystem_type");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_filesystem_type, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_is_case_sensitive;
     public bool IsCaseSensitive(string path)
     {
-        var __mb = __mb_is_case_sensitive;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "is_case_sensitive", 3927539163);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.is_case_sensitive is not available in this engine build.");
-            __mb_is_case_sensitive = __mb;
-        }
+        if (__mb_is_case_sensitive == 0) MethodBinds.MissingThrow("DirAccess.is_case_sensitive");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_case_sensitive, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -1740,23 +1265,63 @@ public unsafe partial class DirAccess : RefCounted
     private static nint __mb_is_equivalent;
     public bool IsEquivalent(string pathA, string pathB)
     {
-        var __mb = __mb_is_equivalent;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirAccess", "is_equivalent", 820780508);
-            if (__mb == 0) throw new MissingMethodException("DirAccess.is_equivalent is not available in this engine build.");
-            __mb_is_equivalent = __mb;
-        }
+        if (__mb_is_equivalent == 0) MethodBinds.MissingThrow("DirAccess.is_equivalent");
         ulong __a0 = NativeString.Create(pathA);
         ulong __a1 = NativeString.Create(pathB);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_equivalent, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return __ret != 0;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_open = MethodBinds.ResolveBulk("DirAccess", "open", 1923528528);
+        __mb_get_open_error = MethodBinds.ResolveBulk("DirAccess", "get_open_error", 166280745);
+        __mb_create_temp = MethodBinds.ResolveBulk("DirAccess", "create_temp", 812913566);
+        __mb_list_dir_begin = MethodBinds.ResolveBulk("DirAccess", "list_dir_begin", 166280745);
+        __mb_get_next = MethodBinds.ResolveBulk("DirAccess", "get_next", 2841200299);
+        __mb_current_is_dir = MethodBinds.ResolveBulk("DirAccess", "current_is_dir", 36873697);
+        __mb_list_dir_end = MethodBinds.ResolveBulk("DirAccess", "list_dir_end", 3218959716);
+        __mb_get_files = MethodBinds.ResolveBulk("DirAccess", "get_files", 2981934095);
+        __mb_get_files_at = MethodBinds.ResolveBulk("DirAccess", "get_files_at", 3538744774);
+        __mb_get_directories = MethodBinds.ResolveBulk("DirAccess", "get_directories", 2981934095);
+        __mb_get_directories_at = MethodBinds.ResolveBulk("DirAccess", "get_directories_at", 3538744774);
+        __mb_get_drive_count = MethodBinds.ResolveBulk("DirAccess", "get_drive_count", 2455072627);
+        __mb_get_drive_name = MethodBinds.ResolveBulk("DirAccess", "get_drive_name", 990163283);
+        __mb_get_drive_label = MethodBinds.ResolveBulk("DirAccess", "get_drive_label", 990163283);
+        __mb_get_current_drive = MethodBinds.ResolveBulk("DirAccess", "get_current_drive", 2455072627);
+        __mb_change_dir = MethodBinds.ResolveBulk("DirAccess", "change_dir", 166001499);
+        __mb_get_current_dir = MethodBinds.ResolveBulk("DirAccess", "get_current_dir", 1287308131);
+        __mb_make_dir = MethodBinds.ResolveBulk("DirAccess", "make_dir", 166001499);
+        __mb_make_dir_absolute = MethodBinds.ResolveBulk("DirAccess", "make_dir_absolute", 166001499);
+        __mb_make_dir_recursive = MethodBinds.ResolveBulk("DirAccess", "make_dir_recursive", 166001499);
+        __mb_make_dir_recursive_absolute = MethodBinds.ResolveBulk("DirAccess", "make_dir_recursive_absolute", 166001499);
+        __mb_file_exists = MethodBinds.ResolveBulk("DirAccess", "file_exists", 2323990056);
+        __mb_dir_exists = MethodBinds.ResolveBulk("DirAccess", "dir_exists", 2323990056);
+        __mb_dir_exists_absolute = MethodBinds.ResolveBulk("DirAccess", "dir_exists_absolute", 2323990056);
+        __mb_get_space_left = MethodBinds.ResolveBulk("DirAccess", "get_space_left", 2455072627);
+        __mb_copy = MethodBinds.ResolveBulk("DirAccess", "copy", 1063198817);
+        __mb_copy_absolute = MethodBinds.ResolveBulk("DirAccess", "copy_absolute", 1063198817);
+        __mb_rename = MethodBinds.ResolveBulk("DirAccess", "rename", 852856452);
+        __mb_rename_absolute = MethodBinds.ResolveBulk("DirAccess", "rename_absolute", 852856452);
+        __mb_remove = MethodBinds.ResolveBulk("DirAccess", "remove", 166001499);
+        __mb_remove_absolute = MethodBinds.ResolveBulk("DirAccess", "remove_absolute", 166001499);
+        __mb_is_link = MethodBinds.ResolveBulk("DirAccess", "is_link", 2323990056);
+        __mb_read_link = MethodBinds.ResolveBulk("DirAccess", "read_link", 1703090593);
+        __mb_create_link = MethodBinds.ResolveBulk("DirAccess", "create_link", 852856452);
+        __mb_is_bundle = MethodBinds.ResolveBulk("DirAccess", "is_bundle", 3927539163);
+        __mb_set_include_navigational = MethodBinds.ResolveBulk("DirAccess", "set_include_navigational", 2586408642);
+        __mb_get_include_navigational = MethodBinds.ResolveBulk("DirAccess", "get_include_navigational", 36873697);
+        __mb_set_include_hidden = MethodBinds.ResolveBulk("DirAccess", "set_include_hidden", 2586408642);
+        __mb_get_include_hidden = MethodBinds.ResolveBulk("DirAccess", "get_include_hidden", 36873697);
+        __mb_get_filesystem_type = MethodBinds.ResolveBulk("DirAccess", "get_filesystem_type", 201670096);
+        __mb_is_case_sensitive = MethodBinds.ResolveBulk("DirAccess", "is_case_sensitive", 3927539163);
+        __mb_is_equivalent = MethodBinds.ResolveBulk("DirAccess", "is_equivalent", 820780508);
     }
 }
 
@@ -1784,32 +1349,26 @@ public unsafe partial class DirectionalLight2D : Light2D
     private static nint __mb_set_max_distance;
     public void SetMaxDistance(float pixels)
     {
-        var __mb = __mb_set_max_distance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirectionalLight2D", "set_max_distance", 373806689);
-            if (__mb == 0) throw new MissingMethodException("DirectionalLight2D.set_max_distance is not available in this engine build.");
-            __mb_set_max_distance = __mb;
-        }
+        if (__mb_set_max_distance == 0) MethodBinds.MissingThrow("DirectionalLight2D.set_max_distance");
         double __a0 = pixels;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_max_distance, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_max_distance;
     public float GetMaxDistance()
     {
-        var __mb = __mb_get_max_distance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirectionalLight2D", "get_max_distance", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("DirectionalLight2D.get_max_distance is not available in this engine build.");
-            __mb_get_max_distance = __mb;
-        }
+        if (__mb_get_max_distance == 0) MethodBinds.MissingThrow("DirectionalLight2D.get_max_distance");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_max_distance, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_max_distance = MethodBinds.ResolveBulk("DirectionalLight2D", "set_max_distance", 373806689);
+        __mb_get_max_distance = MethodBinds.ResolveBulk("DirectionalLight2D", "get_max_distance", 1740695150);
     }
 }
 
@@ -1893,94 +1452,68 @@ public unsafe partial class DirectionalLight3D : Light3D
     private static nint __mb_set_shadow_mode;
     public void SetShadowMode(DirectionalLight3D.ShadowMode mode)
     {
-        var __mb = __mb_set_shadow_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirectionalLight3D", "set_shadow_mode", 1261211726);
-            if (__mb == 0) throw new MissingMethodException("DirectionalLight3D.set_shadow_mode is not available in this engine build.");
-            __mb_set_shadow_mode = __mb;
-        }
+        if (__mb_set_shadow_mode == 0) MethodBinds.MissingThrow("DirectionalLight3D.set_shadow_mode");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_shadow_mode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_shadow_mode;
     public DirectionalLight3D.ShadowMode GetShadowMode()
     {
-        var __mb = __mb_get_shadow_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirectionalLight3D", "get_shadow_mode", 2765228544);
-            if (__mb == 0) throw new MissingMethodException("DirectionalLight3D.get_shadow_mode is not available in this engine build.");
-            __mb_get_shadow_mode = __mb;
-        }
+        if (__mb_get_shadow_mode == 0) MethodBinds.MissingThrow("DirectionalLight3D.get_shadow_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_shadow_mode, NativePtr, 0, (nint)(&__ret));
         return (DirectionalLight3D.ShadowMode)__ret;
     }
 
     private static nint __mb_set_blend_splits;
     public void SetBlendSplits(bool enabled)
     {
-        var __mb = __mb_set_blend_splits;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirectionalLight3D", "set_blend_splits", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("DirectionalLight3D.set_blend_splits is not available in this engine build.");
-            __mb_set_blend_splits = __mb;
-        }
+        if (__mb_set_blend_splits == 0) MethodBinds.MissingThrow("DirectionalLight3D.set_blend_splits");
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_blend_splits, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_blend_splits_enabled;
     public bool IsBlendSplitsEnabled()
     {
-        var __mb = __mb_is_blend_splits_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirectionalLight3D", "is_blend_splits_enabled", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DirectionalLight3D.is_blend_splits_enabled is not available in this engine build.");
-            __mb_is_blend_splits_enabled = __mb;
-        }
+        if (__mb_is_blend_splits_enabled == 0) MethodBinds.MissingThrow("DirectionalLight3D.is_blend_splits_enabled");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_blend_splits_enabled, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_sky_mode;
     public void SetSkyMode(DirectionalLight3D.SkyModeEnum mode)
     {
-        var __mb = __mb_set_sky_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirectionalLight3D", "set_sky_mode", 2691194817);
-            if (__mb == 0) throw new MissingMethodException("DirectionalLight3D.set_sky_mode is not available in this engine build.");
-            __mb_set_sky_mode = __mb;
-        }
+        if (__mb_set_sky_mode == 0) MethodBinds.MissingThrow("DirectionalLight3D.set_sky_mode");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_sky_mode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_sky_mode;
     public DirectionalLight3D.SkyModeEnum GetSkyMode()
     {
-        var __mb = __mb_get_sky_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DirectionalLight3D", "get_sky_mode", 3819982774);
-            if (__mb == 0) throw new MissingMethodException("DirectionalLight3D.get_sky_mode is not available in this engine build.");
-            __mb_get_sky_mode = __mb;
-        }
+        if (__mb_get_sky_mode == 0) MethodBinds.MissingThrow("DirectionalLight3D.get_sky_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_sky_mode, NativePtr, 0, (nint)(&__ret));
         return (DirectionalLight3D.SkyModeEnum)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_shadow_mode = MethodBinds.ResolveBulk("DirectionalLight3D", "set_shadow_mode", 1261211726);
+        __mb_get_shadow_mode = MethodBinds.ResolveBulk("DirectionalLight3D", "get_shadow_mode", 2765228544);
+        __mb_set_blend_splits = MethodBinds.ResolveBulk("DirectionalLight3D", "set_blend_splits", 2586408642);
+        __mb_is_blend_splits_enabled = MethodBinds.ResolveBulk("DirectionalLight3D", "is_blend_splits_enabled", 36873697);
+        __mb_set_sky_mode = MethodBinds.ResolveBulk("DirectionalLight3D", "set_sky_mode", 2691194817);
+        __mb_get_sky_mode = MethodBinds.ResolveBulk("DirectionalLight3D", "get_sky_mode", 3819982774);
     }
 }
 
@@ -2323,64 +1856,40 @@ public static unsafe partial class DisplayServer
     private static nint __mb_has_feature;
     public static bool HasFeature(DisplayServer.Feature feature)
     {
-        var __mb = __mb_has_feature;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "has_feature", 334065950);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.has_feature is not available in this engine build.");
-            __mb_has_feature = __mb;
-        }
+        if (__mb_has_feature == 0) MethodBinds.MissingThrow("DisplayServer.has_feature");
         long __a0 = (long)feature;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_feature, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_name;
     public static string GetName()
     {
-        var __mb = __mb_get_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "get_name", 201670096);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.get_name is not available in this engine build.");
-            __mb_get_name = __mb;
-        }
+        if (__mb_get_name == 0) MethodBinds.MissingThrow("DisplayServer.get_name");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_name, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_help_set_search_callbacks;
     public static void HelpSetSearchCallbacks(Callable searchCallback, Callable actionCallback)
     {
-        var __mb = __mb_help_set_search_callbacks;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "help_set_search_callbacks", 1687350599);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.help_set_search_callbacks is not available in this engine build.");
-            __mb_help_set_search_callbacks = __mb;
-        }
+        if (__mb_help_set_search_callbacks == 0) MethodBinds.MissingThrow("DisplayServer.help_set_search_callbacks");
         var __a0 = searchCallback.Native;
         var __a1 = actionCallback.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_help_set_search_callbacks, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_global_menu_set_popup_callbacks;
     public static void GlobalMenuSetPopupCallbacks(string menuRoot, Callable openCallback, Callable closeCallback)
     {
-        var __mb = __mb_global_menu_set_popup_callbacks;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_popup_callbacks", 3893727526);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_popup_callbacks is not available in this engine build.");
-            __mb_global_menu_set_popup_callbacks = __mb;
-        }
+        if (__mb_global_menu_set_popup_callbacks == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_popup_callbacks");
         ulong __a0 = NativeString.Create(menuRoot);
         var __a1 = openCallback.Native;
         var __a2 = closeCallback.Native;
@@ -2388,20 +1897,14 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_popup_callbacks, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_add_submenu_item;
     public static int GlobalMenuAddSubmenuItem(string menuRoot, string label, string submenu, int index = unchecked((int)(-1)))
     {
-        var __mb = __mb_global_menu_add_submenu_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_submenu_item", 2828985934);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_submenu_item is not available in this engine build.");
-            __mb_global_menu_add_submenu_item = __mb;
-        }
+        if (__mb_global_menu_add_submenu_item == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_add_submenu_item");
         ulong __a0 = NativeString.Create(menuRoot);
         ulong __a1 = NativeString.Create(label);
         ulong __a2 = NativeString.Create(submenu);
@@ -2412,7 +1915,7 @@ public static unsafe partial class DisplayServer
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_add_submenu_item, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         NativeString.Destroy(ref __a2);
@@ -2422,13 +1925,7 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_add_item;
     public static int GlobalMenuAddItem(string menuRoot, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
     {
-        var __mb = __mb_global_menu_add_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_item", 3616842746);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_item is not available in this engine build.");
-            __mb_global_menu_add_item = __mb;
-        }
+        if (__mb_global_menu_add_item == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_add_item");
         ulong __a0 = NativeString.Create(menuRoot);
         ulong __a1 = NativeString.Create(label);
         var __a2 = callback.Native;
@@ -2445,7 +1942,7 @@ public static unsafe partial class DisplayServer
         __args[5] = (nint)(&__a5);
         __args[6] = (nint)(&__a6);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_add_item, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return unchecked((int)__ret);
@@ -2454,13 +1951,7 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_add_check_item;
     public static int GlobalMenuAddCheckItem(string menuRoot, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
     {
-        var __mb = __mb_global_menu_add_check_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_check_item", 3616842746);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_check_item is not available in this engine build.");
-            __mb_global_menu_add_check_item = __mb;
-        }
+        if (__mb_global_menu_add_check_item == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_add_check_item");
         ulong __a0 = NativeString.Create(menuRoot);
         ulong __a1 = NativeString.Create(label);
         var __a2 = callback.Native;
@@ -2477,7 +1968,7 @@ public static unsafe partial class DisplayServer
         __args[5] = (nint)(&__a5);
         __args[6] = (nint)(&__a6);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_add_check_item, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return unchecked((int)__ret);
@@ -2486,13 +1977,7 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_add_icon_item;
     public static int GlobalMenuAddIconItem(string menuRoot, Texture2D? icon, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
     {
-        var __mb = __mb_global_menu_add_icon_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_icon_item", 3867083847);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_icon_item is not available in this engine build.");
-            __mb_global_menu_add_icon_item = __mb;
-        }
+        if (__mb_global_menu_add_icon_item == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_add_icon_item");
         ulong __a0 = NativeString.Create(menuRoot);
         nint __a1 = icon?.NativePtr ?? 0;
         ulong __a2 = NativeString.Create(label);
@@ -2511,7 +1996,7 @@ public static unsafe partial class DisplayServer
         __args[6] = (nint)(&__a6);
         __args[7] = (nint)(&__a7);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_add_icon_item, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a2);
         return unchecked((int)__ret);
@@ -2520,13 +2005,7 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_add_icon_check_item;
     public static int GlobalMenuAddIconCheckItem(string menuRoot, Texture2D? icon, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
     {
-        var __mb = __mb_global_menu_add_icon_check_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_icon_check_item", 3867083847);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_icon_check_item is not available in this engine build.");
-            __mb_global_menu_add_icon_check_item = __mb;
-        }
+        if (__mb_global_menu_add_icon_check_item == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_add_icon_check_item");
         ulong __a0 = NativeString.Create(menuRoot);
         nint __a1 = icon?.NativePtr ?? 0;
         ulong __a2 = NativeString.Create(label);
@@ -2545,7 +2024,7 @@ public static unsafe partial class DisplayServer
         __args[6] = (nint)(&__a6);
         __args[7] = (nint)(&__a7);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_add_icon_check_item, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a2);
         return unchecked((int)__ret);
@@ -2554,13 +2033,7 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_add_radio_check_item;
     public static int GlobalMenuAddRadioCheckItem(string menuRoot, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
     {
-        var __mb = __mb_global_menu_add_radio_check_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_radio_check_item", 3616842746);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_radio_check_item is not available in this engine build.");
-            __mb_global_menu_add_radio_check_item = __mb;
-        }
+        if (__mb_global_menu_add_radio_check_item == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_add_radio_check_item");
         ulong __a0 = NativeString.Create(menuRoot);
         ulong __a1 = NativeString.Create(label);
         var __a2 = callback.Native;
@@ -2577,7 +2050,7 @@ public static unsafe partial class DisplayServer
         __args[5] = (nint)(&__a5);
         __args[6] = (nint)(&__a6);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_add_radio_check_item, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return unchecked((int)__ret);
@@ -2586,13 +2059,7 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_add_icon_radio_check_item;
     public static int GlobalMenuAddIconRadioCheckItem(string menuRoot, Texture2D? icon, string label, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
     {
-        var __mb = __mb_global_menu_add_icon_radio_check_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_icon_radio_check_item", 3867083847);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_icon_radio_check_item is not available in this engine build.");
-            __mb_global_menu_add_icon_radio_check_item = __mb;
-        }
+        if (__mb_global_menu_add_icon_radio_check_item == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_add_icon_radio_check_item");
         ulong __a0 = NativeString.Create(menuRoot);
         nint __a1 = icon?.NativePtr ?? 0;
         ulong __a2 = NativeString.Create(label);
@@ -2611,7 +2078,7 @@ public static unsafe partial class DisplayServer
         __args[6] = (nint)(&__a6);
         __args[7] = (nint)(&__a7);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_add_icon_radio_check_item, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a2);
         return unchecked((int)__ret);
@@ -2620,13 +2087,7 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_add_multistate_item;
     public static int GlobalMenuAddMultistateItem(string menuRoot, string label, int maxStates, int defaultState, Callable callback, Callable keyCallback, Variant tag = default, Key accelerator = (Key)(0), int index = unchecked((int)(-1)))
     {
-        var __mb = __mb_global_menu_add_multistate_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_multistate_item", 3297554655);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_multistate_item is not available in this engine build.");
-            __mb_global_menu_add_multistate_item = __mb;
-        }
+        if (__mb_global_menu_add_multistate_item == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_add_multistate_item");
         ulong __a0 = NativeString.Create(menuRoot);
         ulong __a1 = NativeString.Create(label);
         long __a2 = unchecked((long)maxStates);
@@ -2647,7 +2108,7 @@ public static unsafe partial class DisplayServer
         __args[7] = (nint)(&__a7);
         __args[8] = (nint)(&__a8);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_add_multistate_item, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return unchecked((int)__ret);
@@ -2656,20 +2117,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_add_separator;
     public static int GlobalMenuAddSeparator(string menuRoot, int index = unchecked((int)(-1)))
     {
-        var __mb = __mb_global_menu_add_separator;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_add_separator", 3214812433);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_add_separator is not available in this engine build.");
-            __mb_global_menu_add_separator = __mb;
-        }
+        if (__mb_global_menu_add_separator == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_add_separator");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)index);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_add_separator, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((int)__ret);
     }
@@ -2677,20 +2132,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_get_item_index_from_text;
     public static int GlobalMenuGetItemIndexFromText(string menuRoot, string text)
     {
-        var __mb = __mb_global_menu_get_item_index_from_text;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_index_from_text", 2878152881);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_index_from_text is not available in this engine build.");
-            __mb_global_menu_get_item_index_from_text = __mb;
-        }
+        if (__mb_global_menu_get_item_index_from_text == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_get_item_index_from_text");
         ulong __a0 = NativeString.Create(menuRoot);
         ulong __a1 = NativeString.Create(text);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_get_item_index_from_text, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return unchecked((int)__ret);
@@ -2699,20 +2148,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_get_item_index_from_tag;
     public static int GlobalMenuGetItemIndexFromTag(string menuRoot, Variant tag)
     {
-        var __mb = __mb_global_menu_get_item_index_from_tag;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_index_from_tag", 2941063483);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_index_from_tag is not available in this engine build.");
-            __mb_global_menu_get_item_index_from_tag = __mb;
-        }
+        if (__mb_global_menu_get_item_index_from_tag == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_get_item_index_from_tag");
         ulong __a0 = NativeString.Create(menuRoot);
         var __a1 = tag.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_get_item_index_from_tag, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((int)__ret);
     }
@@ -2720,20 +2163,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_is_item_checked;
     public static bool GlobalMenuIsItemChecked(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_is_item_checked;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_is_item_checked", 3511468594);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_is_item_checked is not available in this engine build.");
-            __mb_global_menu_is_item_checked = __mb;
-        }
+        if (__mb_global_menu_is_item_checked == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_is_item_checked");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_is_item_checked, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -2741,20 +2178,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_is_item_checkable;
     public static bool GlobalMenuIsItemCheckable(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_is_item_checkable;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_is_item_checkable", 3511468594);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_is_item_checkable is not available in this engine build.");
-            __mb_global_menu_is_item_checkable = __mb;
-        }
+        if (__mb_global_menu_is_item_checkable == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_is_item_checkable");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_is_item_checkable, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -2762,20 +2193,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_is_item_radio_checkable;
     public static bool GlobalMenuIsItemRadioCheckable(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_is_item_radio_checkable;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_is_item_radio_checkable", 3511468594);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_is_item_radio_checkable is not available in this engine build.");
-            __mb_global_menu_is_item_radio_checkable = __mb;
-        }
+        if (__mb_global_menu_is_item_radio_checkable == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_is_item_radio_checkable");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_is_item_radio_checkable, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -2783,20 +2208,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_get_item_callback;
     public static Callable GlobalMenuGetItemCallback(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_get_item_callback;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_callback", 748666903);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_callback is not available in this engine build.");
-            __mb_global_menu_get_item_callback = __mb;
-        }
+        if (__mb_global_menu_get_item_callback == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_get_item_callback");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_get_item_callback, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return new Callable(__ret);
     }
@@ -2804,20 +2223,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_get_item_key_callback;
     public static Callable GlobalMenuGetItemKeyCallback(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_get_item_key_callback;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_key_callback", 748666903);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_key_callback is not available in this engine build.");
-            __mb_global_menu_get_item_key_callback = __mb;
-        }
+        if (__mb_global_menu_get_item_key_callback == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_get_item_key_callback");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_get_item_key_callback, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return new Callable(__ret);
     }
@@ -2825,20 +2238,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_get_item_tag;
     public static Variant GlobalMenuGetItemTag(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_get_item_tag;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_tag", 330672633);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_tag is not available in this engine build.");
-            __mb_global_menu_get_item_tag = __mb;
-        }
+        if (__mb_global_menu_get_item_tag == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_get_item_tag");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_get_item_tag, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return new Variant(__ret);
     }
@@ -2846,20 +2253,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_get_item_text;
     public static string GlobalMenuGetItemText(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_get_item_text;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_text", 591067909);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_text is not available in this engine build.");
-            __mb_global_menu_get_item_text = __mb;
-        }
+        if (__mb_global_menu_get_item_text == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_get_item_text");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_get_item_text, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
@@ -2867,20 +2268,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_get_item_submenu;
     public static string GlobalMenuGetItemSubmenu(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_get_item_submenu;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_submenu", 591067909);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_submenu is not available in this engine build.");
-            __mb_global_menu_get_item_submenu = __mb;
-        }
+        if (__mb_global_menu_get_item_submenu == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_get_item_submenu");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_get_item_submenu, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
@@ -2888,20 +2283,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_get_item_accelerator;
     public static Key GlobalMenuGetItemAccelerator(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_get_item_accelerator;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_accelerator", 936065394);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_accelerator is not available in this engine build.");
-            __mb_global_menu_get_item_accelerator = __mb;
-        }
+        if (__mb_global_menu_get_item_accelerator == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_get_item_accelerator");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_get_item_accelerator, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Key)__ret;
     }
@@ -2909,20 +2298,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_is_item_disabled;
     public static bool GlobalMenuIsItemDisabled(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_is_item_disabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_is_item_disabled", 3511468594);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_is_item_disabled is not available in this engine build.");
-            __mb_global_menu_is_item_disabled = __mb;
-        }
+        if (__mb_global_menu_is_item_disabled == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_is_item_disabled");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_is_item_disabled, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -2930,20 +2313,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_is_item_hidden;
     public static bool GlobalMenuIsItemHidden(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_is_item_hidden;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_is_item_hidden", 3511468594);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_is_item_hidden is not available in this engine build.");
-            __mb_global_menu_is_item_hidden = __mb;
-        }
+        if (__mb_global_menu_is_item_hidden == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_is_item_hidden");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_is_item_hidden, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -2951,20 +2328,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_get_item_tooltip;
     public static string GlobalMenuGetItemTooltip(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_get_item_tooltip;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_tooltip", 591067909);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_tooltip is not available in this engine build.");
-            __mb_global_menu_get_item_tooltip = __mb;
-        }
+        if (__mb_global_menu_get_item_tooltip == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_get_item_tooltip");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_get_item_tooltip, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
@@ -2972,20 +2343,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_get_item_state;
     public static int GlobalMenuGetItemState(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_get_item_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_state", 3422818498);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_state is not available in this engine build.");
-            __mb_global_menu_get_item_state = __mb;
-        }
+        if (__mb_global_menu_get_item_state == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_get_item_state");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_get_item_state, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((int)__ret);
     }
@@ -2993,20 +2358,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_get_item_max_states;
     public static int GlobalMenuGetItemMaxStates(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_get_item_max_states;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_max_states", 3422818498);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_max_states is not available in this engine build.");
-            __mb_global_menu_get_item_max_states = __mb;
-        }
+        if (__mb_global_menu_get_item_max_states == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_get_item_max_states");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_get_item_max_states, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((int)__ret);
     }
@@ -3014,20 +2373,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_get_item_icon;
     public static Texture2D? GlobalMenuGetItemIcon(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_get_item_icon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_icon", 3591713183);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_icon is not available in this engine build.");
-            __mb_global_menu_get_item_icon = __mb;
-        }
+        if (__mb_global_menu_get_item_icon == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_get_item_icon");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_get_item_icon, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Texture2D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
@@ -3035,20 +2388,14 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_get_item_indentation_level;
     public static int GlobalMenuGetItemIndentationLevel(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_get_item_indentation_level;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_indentation_level", 3422818498);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_indentation_level is not available in this engine build.");
-            __mb_global_menu_get_item_indentation_level = __mb;
-        }
+        if (__mb_global_menu_get_item_indentation_level == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_get_item_indentation_level");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_get_item_indentation_level, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((int)__ret);
     }
@@ -3056,13 +2403,7 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_set_item_checked;
     public static void GlobalMenuSetItemChecked(string menuRoot, int idx, bool @checked)
     {
-        var __mb = __mb_global_menu_set_item_checked;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_checked", 4108344793);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_checked is not available in this engine build.");
-            __mb_global_menu_set_item_checked = __mb;
-        }
+        if (__mb_global_menu_set_item_checked == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_checked");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         byte __a2 = @checked ? (byte)1 : (byte)0;
@@ -3070,20 +2411,14 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_checked, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_set_item_checkable;
     public static void GlobalMenuSetItemCheckable(string menuRoot, int idx, bool checkable)
     {
-        var __mb = __mb_global_menu_set_item_checkable;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_checkable", 4108344793);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_checkable is not available in this engine build.");
-            __mb_global_menu_set_item_checkable = __mb;
-        }
+        if (__mb_global_menu_set_item_checkable == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_checkable");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         byte __a2 = checkable ? (byte)1 : (byte)0;
@@ -3091,20 +2426,14 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_checkable, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_set_item_radio_checkable;
     public static void GlobalMenuSetItemRadioCheckable(string menuRoot, int idx, bool checkable)
     {
-        var __mb = __mb_global_menu_set_item_radio_checkable;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_radio_checkable", 4108344793);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_radio_checkable is not available in this engine build.");
-            __mb_global_menu_set_item_radio_checkable = __mb;
-        }
+        if (__mb_global_menu_set_item_radio_checkable == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_radio_checkable");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         byte __a2 = checkable ? (byte)1 : (byte)0;
@@ -3112,20 +2441,14 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_radio_checkable, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_set_item_callback;
     public static void GlobalMenuSetItemCallback(string menuRoot, int idx, Callable callback)
     {
-        var __mb = __mb_global_menu_set_item_callback;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_callback", 3809915389);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_callback is not available in this engine build.");
-            __mb_global_menu_set_item_callback = __mb;
-        }
+        if (__mb_global_menu_set_item_callback == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_callback");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __a2 = callback.Native;
@@ -3133,20 +2456,14 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_callback, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_set_item_hover_callbacks;
     public static void GlobalMenuSetItemHoverCallbacks(string menuRoot, int idx, Callable callback)
     {
-        var __mb = __mb_global_menu_set_item_hover_callbacks;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_hover_callbacks", 3809915389);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_hover_callbacks is not available in this engine build.");
-            __mb_global_menu_set_item_hover_callbacks = __mb;
-        }
+        if (__mb_global_menu_set_item_hover_callbacks == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_hover_callbacks");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __a2 = callback.Native;
@@ -3154,20 +2471,14 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_hover_callbacks, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_set_item_key_callback;
     public static void GlobalMenuSetItemKeyCallback(string menuRoot, int idx, Callable keyCallback)
     {
-        var __mb = __mb_global_menu_set_item_key_callback;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_key_callback", 3809915389);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_key_callback is not available in this engine build.");
-            __mb_global_menu_set_item_key_callback = __mb;
-        }
+        if (__mb_global_menu_set_item_key_callback == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_key_callback");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __a2 = keyCallback.Native;
@@ -3175,20 +2486,14 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_key_callback, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_set_item_tag;
     public static void GlobalMenuSetItemTag(string menuRoot, int idx, Variant tag)
     {
-        var __mb = __mb_global_menu_set_item_tag;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_tag", 453659863);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_tag is not available in this engine build.");
-            __mb_global_menu_set_item_tag = __mb;
-        }
+        if (__mb_global_menu_set_item_tag == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_tag");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __a2 = tag.Native;
@@ -3196,20 +2501,14 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_tag, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_set_item_text;
     public static void GlobalMenuSetItemText(string menuRoot, int idx, string text)
     {
-        var __mb = __mb_global_menu_set_item_text;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_text", 965966136);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_text is not available in this engine build.");
-            __mb_global_menu_set_item_text = __mb;
-        }
+        if (__mb_global_menu_set_item_text == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_text");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         ulong __a2 = NativeString.Create(text);
@@ -3217,7 +2516,7 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_text, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a2);
     }
@@ -3225,13 +2524,7 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_set_item_submenu;
     public static void GlobalMenuSetItemSubmenu(string menuRoot, int idx, string submenu)
     {
-        var __mb = __mb_global_menu_set_item_submenu;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_submenu", 965966136);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_submenu is not available in this engine build.");
-            __mb_global_menu_set_item_submenu = __mb;
-        }
+        if (__mb_global_menu_set_item_submenu == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_submenu");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         ulong __a2 = NativeString.Create(submenu);
@@ -3239,7 +2532,7 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_submenu, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a2);
     }
@@ -3247,13 +2540,7 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_set_item_accelerator;
     public static void GlobalMenuSetItemAccelerator(string menuRoot, int idx, Key keycode)
     {
-        var __mb = __mb_global_menu_set_item_accelerator;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_accelerator", 566943293);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_accelerator is not available in this engine build.");
-            __mb_global_menu_set_item_accelerator = __mb;
-        }
+        if (__mb_global_menu_set_item_accelerator == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_accelerator");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         long __a2 = (long)keycode;
@@ -3261,20 +2548,14 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_accelerator, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_set_item_disabled;
     public static void GlobalMenuSetItemDisabled(string menuRoot, int idx, bool disabled)
     {
-        var __mb = __mb_global_menu_set_item_disabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_disabled", 4108344793);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_disabled is not available in this engine build.");
-            __mb_global_menu_set_item_disabled = __mb;
-        }
+        if (__mb_global_menu_set_item_disabled == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_disabled");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         byte __a2 = disabled ? (byte)1 : (byte)0;
@@ -3282,20 +2563,14 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_disabled, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_set_item_hidden;
     public static void GlobalMenuSetItemHidden(string menuRoot, int idx, bool hidden)
     {
-        var __mb = __mb_global_menu_set_item_hidden;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_hidden", 4108344793);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_hidden is not available in this engine build.");
-            __mb_global_menu_set_item_hidden = __mb;
-        }
+        if (__mb_global_menu_set_item_hidden == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_hidden");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         byte __a2 = hidden ? (byte)1 : (byte)0;
@@ -3303,20 +2578,14 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_hidden, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_set_item_tooltip;
     public static void GlobalMenuSetItemTooltip(string menuRoot, int idx, string tooltip)
     {
-        var __mb = __mb_global_menu_set_item_tooltip;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_tooltip", 965966136);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_tooltip is not available in this engine build.");
-            __mb_global_menu_set_item_tooltip = __mb;
-        }
+        if (__mb_global_menu_set_item_tooltip == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_tooltip");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         ulong __a2 = NativeString.Create(tooltip);
@@ -3324,7 +2593,7 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_tooltip, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a2);
     }
@@ -3332,13 +2601,7 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_set_item_state;
     public static void GlobalMenuSetItemState(string menuRoot, int idx, int state)
     {
-        var __mb = __mb_global_menu_set_item_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_state", 3474840532);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_state is not available in this engine build.");
-            __mb_global_menu_set_item_state = __mb;
-        }
+        if (__mb_global_menu_set_item_state == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_state");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         long __a2 = unchecked((long)state);
@@ -3346,20 +2609,14 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_state, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_set_item_max_states;
     public static void GlobalMenuSetItemMaxStates(string menuRoot, int idx, int maxStates)
     {
-        var __mb = __mb_global_menu_set_item_max_states;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_max_states", 3474840532);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_max_states is not available in this engine build.");
-            __mb_global_menu_set_item_max_states = __mb;
-        }
+        if (__mb_global_menu_set_item_max_states == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_max_states");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         long __a2 = unchecked((long)maxStates);
@@ -3367,20 +2624,14 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_max_states, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_set_item_icon;
     public static void GlobalMenuSetItemIcon(string menuRoot, int idx, Texture2D? icon)
     {
-        var __mb = __mb_global_menu_set_item_icon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_icon", 3201338066);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_icon is not available in this engine build.");
-            __mb_global_menu_set_item_icon = __mb;
-        }
+        if (__mb_global_menu_set_item_icon == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_icon");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         nint __a2 = icon?.NativePtr ?? 0;
@@ -3388,20 +2639,14 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_icon, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_set_item_indentation_level;
     public static void GlobalMenuSetItemIndentationLevel(string menuRoot, int idx, int level)
     {
-        var __mb = __mb_global_menu_set_item_indentation_level;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_set_item_indentation_level", 3474840532);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_set_item_indentation_level is not available in this engine build.");
-            __mb_global_menu_set_item_indentation_level = __mb;
-        }
+        if (__mb_global_menu_set_item_indentation_level == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_set_item_indentation_level");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         long __a2 = unchecked((long)level);
@@ -3409,25 +2654,19 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_set_item_indentation_level, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_get_item_count;
     public static int GlobalMenuGetItemCount(string menuRoot)
     {
-        var __mb = __mb_global_menu_get_item_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_item_count", 1321353865);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_item_count is not available in this engine build.");
-            __mb_global_menu_get_item_count = __mb;
-        }
+        if (__mb_global_menu_get_item_count == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_get_item_count");
         ulong __a0 = NativeString.Create(menuRoot);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_get_item_count, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((int)__ret);
     }
@@ -3435,114 +2674,72 @@ public static unsafe partial class DisplayServer
     private static nint __mb_global_menu_remove_item;
     public static void GlobalMenuRemoveItem(string menuRoot, int idx)
     {
-        var __mb = __mb_global_menu_remove_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_remove_item", 2956805083);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_remove_item is not available in this engine build.");
-            __mb_global_menu_remove_item = __mb;
-        }
+        if (__mb_global_menu_remove_item == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_remove_item");
         ulong __a0 = NativeString.Create(menuRoot);
         long __a1 = unchecked((long)idx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_remove_item, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_clear;
     public static void GlobalMenuClear(string menuRoot)
     {
-        var __mb = __mb_global_menu_clear;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_clear", 83702148);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_clear is not available in this engine build.");
-            __mb_global_menu_clear = __mb;
-        }
+        if (__mb_global_menu_clear == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_clear");
         ulong __a0 = NativeString.Create(menuRoot);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_clear, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_global_menu_get_system_menu_roots;
     public static Godot.Collections.Dictionary GlobalMenuGetSystemMenuRoots()
     {
-        var __mb = __mb_global_menu_get_system_menu_roots;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "global_menu_get_system_menu_roots", 3102165223);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.global_menu_get_system_menu_roots is not available in this engine build.");
-            __mb_global_menu_get_system_menu_roots = __mb;
-        }
+        if (__mb_global_menu_get_system_menu_roots == 0) MethodBinds.MissingThrow("DisplayServer.global_menu_get_system_menu_roots");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_global_menu_get_system_menu_roots, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_tts_is_speaking;
     public static bool TtsIsSpeaking()
     {
-        var __mb = __mb_tts_is_speaking;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "tts_is_speaking", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.tts_is_speaking is not available in this engine build.");
-            __mb_tts_is_speaking = __mb;
-        }
+        if (__mb_tts_is_speaking == 0) MethodBinds.MissingThrow("DisplayServer.tts_is_speaking");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_tts_is_speaking, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_tts_is_paused;
     public static bool TtsIsPaused()
     {
-        var __mb = __mb_tts_is_paused;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "tts_is_paused", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.tts_is_paused is not available in this engine build.");
-            __mb_tts_is_paused = __mb;
-        }
+        if (__mb_tts_is_paused == 0) MethodBinds.MissingThrow("DisplayServer.tts_is_paused");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_tts_is_paused, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_tts_get_voices;
     public static Godot.Collections.Array TtsGetVoices()
     {
-        var __mb = __mb_tts_get_voices;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "tts_get_voices", 3995934104);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.tts_get_voices is not available in this engine build.");
-            __mb_tts_get_voices = __mb;
-        }
+        if (__mb_tts_get_voices == 0) MethodBinds.MissingThrow("DisplayServer.tts_get_voices");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_tts_get_voices, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_tts_get_voices_for_language;
     public static string[] TtsGetVoicesForLanguage(string language)
     {
-        var __mb = __mb_tts_get_voices_for_language;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "tts_get_voices_for_language", 4291131558);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.tts_get_voices_for_language is not available in this engine build.");
-            __mb_tts_get_voices_for_language = __mb;
-        }
+        if (__mb_tts_get_voices_for_language == 0) MethodBinds.MissingThrow("DisplayServer.tts_get_voices_for_language");
         ulong __a0 = NativeString.Create(language);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_tts_get_voices_for_language, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return Packed.ToStringArray(ref __ret);
     }
@@ -3550,13 +2747,7 @@ public static unsafe partial class DisplayServer
     private static nint __mb_tts_speak;
     public static void TtsSpeak(string text, string voice, int volume = unchecked((int)(50)), float pitch = 1.0f, float rate = 1.0f, long utteranceId = unchecked((long)(0)), bool interrupt = false)
     {
-        var __mb = __mb_tts_speak;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "tts_speak", 903992738);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.tts_speak is not available in this engine build.");
-            __mb_tts_speak = __mb;
-        }
+        if (__mb_tts_speak == 0) MethodBinds.MissingThrow("DisplayServer.tts_speak");
         ulong __a0 = NativeString.Create(text);
         ulong __a1 = NativeString.Create(voice);
         long __a2 = unchecked((long)volume);
@@ -3572,7 +2763,7 @@ public static unsafe partial class DisplayServer
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
         __args[6] = (nint)(&__a6);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_tts_speak, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
     }
@@ -3580,814 +2771,514 @@ public static unsafe partial class DisplayServer
     private static nint __mb_tts_pause;
     public static void TtsPause()
     {
-        var __mb = __mb_tts_pause;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "tts_pause", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.tts_pause is not available in this engine build.");
-            __mb_tts_pause = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
+        if (__mb_tts_pause == 0) MethodBinds.MissingThrow("DisplayServer.tts_pause");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_tts_pause, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_tts_resume;
     public static void TtsResume()
     {
-        var __mb = __mb_tts_resume;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "tts_resume", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.tts_resume is not available in this engine build.");
-            __mb_tts_resume = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
+        if (__mb_tts_resume == 0) MethodBinds.MissingThrow("DisplayServer.tts_resume");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_tts_resume, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_tts_stop;
     public static void TtsStop()
     {
-        var __mb = __mb_tts_stop;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "tts_stop", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.tts_stop is not available in this engine build.");
-            __mb_tts_stop = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
+        if (__mb_tts_stop == 0) MethodBinds.MissingThrow("DisplayServer.tts_stop");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_tts_stop, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_tts_set_utterance_callback;
     public static void TtsSetUtteranceCallback(DisplayServer.TTSUtteranceEvent @event, Callable callable)
     {
-        var __mb = __mb_tts_set_utterance_callback;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "tts_set_utterance_callback", 109679083);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.tts_set_utterance_callback is not available in this engine build.");
-            __mb_tts_set_utterance_callback = __mb;
-        }
+        if (__mb_tts_set_utterance_callback == 0) MethodBinds.MissingThrow("DisplayServer.tts_set_utterance_callback");
         long __a0 = (long)@event;
         var __a1 = callable.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_tts_set_utterance_callback, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_dark_mode_supported;
     public static bool IsDarkModeSupported()
     {
-        var __mb = __mb_is_dark_mode_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "is_dark_mode_supported", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.is_dark_mode_supported is not available in this engine build.");
-            __mb_is_dark_mode_supported = __mb;
-        }
+        if (__mb_is_dark_mode_supported == 0) MethodBinds.MissingThrow("DisplayServer.is_dark_mode_supported");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_dark_mode_supported, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_dark_mode;
     public static bool IsDarkMode()
     {
-        var __mb = __mb_is_dark_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "is_dark_mode", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.is_dark_mode is not available in this engine build.");
-            __mb_is_dark_mode = __mb;
-        }
+        if (__mb_is_dark_mode == 0) MethodBinds.MissingThrow("DisplayServer.is_dark_mode");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_dark_mode, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_accent_color;
     public static Color GetAccentColor()
     {
-        var __mb = __mb_get_accent_color;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "get_accent_color", 3444240500);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.get_accent_color is not available in this engine build.");
-            __mb_get_accent_color = __mb;
-        }
+        if (__mb_get_accent_color == 0) MethodBinds.MissingThrow("DisplayServer.get_accent_color");
         var __ret = default(Color);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_accent_color, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_base_color;
     public static Color GetBaseColor()
     {
-        var __mb = __mb_get_base_color;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "get_base_color", 3444240500);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.get_base_color is not available in this engine build.");
-            __mb_get_base_color = __mb;
-        }
+        if (__mb_get_base_color == 0) MethodBinds.MissingThrow("DisplayServer.get_base_color");
         var __ret = default(Color);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_base_color, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_system_theme_change_callback;
     public static void SetSystemThemeChangeCallback(Callable callable)
     {
-        var __mb = __mb_set_system_theme_change_callback;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "set_system_theme_change_callback", 1611583062);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.set_system_theme_change_callback is not available in this engine build.");
-            __mb_set_system_theme_change_callback = __mb;
-        }
+        if (__mb_set_system_theme_change_callback == 0) MethodBinds.MissingThrow("DisplayServer.set_system_theme_change_callback");
         var __a0 = callable.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_system_theme_change_callback, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_mouse_set_mode;
     public static void MouseSetMode(DisplayServer.MouseMode mouseMode)
     {
-        var __mb = __mb_mouse_set_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "mouse_set_mode", 348288463);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.mouse_set_mode is not available in this engine build.");
-            __mb_mouse_set_mode = __mb;
-        }
+        if (__mb_mouse_set_mode == 0) MethodBinds.MissingThrow("DisplayServer.mouse_set_mode");
         long __a0 = (long)mouseMode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_mouse_set_mode, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_mouse_get_mode;
     public static DisplayServer.MouseMode MouseGetMode()
     {
-        var __mb = __mb_mouse_get_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "mouse_get_mode", 1353961651);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.mouse_get_mode is not available in this engine build.");
-            __mb_mouse_get_mode = __mb;
-        }
+        if (__mb_mouse_get_mode == 0) MethodBinds.MissingThrow("DisplayServer.mouse_get_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_mouse_get_mode, SingletonPtr, 0, (nint)(&__ret));
         return (DisplayServer.MouseMode)__ret;
     }
 
     private static nint __mb_warp_mouse;
     public static void WarpMouse(Vector2I position)
     {
-        var __mb = __mb_warp_mouse;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "warp_mouse", 1130785943);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.warp_mouse is not available in this engine build.");
-            __mb_warp_mouse = __mb;
-        }
+        if (__mb_warp_mouse == 0) MethodBinds.MissingThrow("DisplayServer.warp_mouse");
         var __a0 = position;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_warp_mouse, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_mouse_get_position;
     public static Vector2I MouseGetPosition()
     {
-        var __mb = __mb_mouse_get_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "mouse_get_position", 3690982128);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.mouse_get_position is not available in this engine build.");
-            __mb_mouse_get_position = __mb;
-        }
+        if (__mb_mouse_get_position == 0) MethodBinds.MissingThrow("DisplayServer.mouse_get_position");
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_mouse_get_position, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_mouse_get_button_state;
     public static MouseButtonMask MouseGetButtonState()
     {
-        var __mb = __mb_mouse_get_button_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "mouse_get_button_state", 2512161324);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.mouse_get_button_state is not available in this engine build.");
-            __mb_mouse_get_button_state = __mb;
-        }
+        if (__mb_mouse_get_button_state == 0) MethodBinds.MissingThrow("DisplayServer.mouse_get_button_state");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_mouse_get_button_state, SingletonPtr, 0, (nint)(&__ret));
         return (MouseButtonMask)__ret;
     }
 
     private static nint __mb_clipboard_set;
     public static void ClipboardSet(string clipboard)
     {
-        var __mb = __mb_clipboard_set;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "clipboard_set", 83702148);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.clipboard_set is not available in this engine build.");
-            __mb_clipboard_set = __mb;
-        }
+        if (__mb_clipboard_set == 0) MethodBinds.MissingThrow("DisplayServer.clipboard_set");
         ulong __a0 = NativeString.Create(clipboard);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clipboard_set, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_clipboard_get;
     public static string ClipboardGet()
     {
-        var __mb = __mb_clipboard_get;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "clipboard_get", 201670096);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.clipboard_get is not available in this engine build.");
-            __mb_clipboard_get = __mb;
-        }
+        if (__mb_clipboard_get == 0) MethodBinds.MissingThrow("DisplayServer.clipboard_get");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clipboard_get, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_clipboard_get_image;
     public static Image? ClipboardGetImage()
     {
-        var __mb = __mb_clipboard_get_image;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "clipboard_get_image", 4190603485);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.clipboard_get_image is not available in this engine build.");
-            __mb_clipboard_get_image = __mb;
-        }
+        if (__mb_clipboard_get_image == 0) MethodBinds.MissingThrow("DisplayServer.clipboard_get_image");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clipboard_get_image, SingletonPtr, 0, (nint)(&__ret));
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_clipboard_has;
     public static bool ClipboardHas()
     {
-        var __mb = __mb_clipboard_has;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "clipboard_has", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.clipboard_has is not available in this engine build.");
-            __mb_clipboard_has = __mb;
-        }
+        if (__mb_clipboard_has == 0) MethodBinds.MissingThrow("DisplayServer.clipboard_has");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clipboard_has, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_clipboard_has_image;
     public static bool ClipboardHasImage()
     {
-        var __mb = __mb_clipboard_has_image;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "clipboard_has_image", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.clipboard_has_image is not available in this engine build.");
-            __mb_clipboard_has_image = __mb;
-        }
+        if (__mb_clipboard_has_image == 0) MethodBinds.MissingThrow("DisplayServer.clipboard_has_image");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clipboard_has_image, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_clipboard_set_primary;
     public static void ClipboardSetPrimary(string clipboardPrimary)
     {
-        var __mb = __mb_clipboard_set_primary;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "clipboard_set_primary", 83702148);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.clipboard_set_primary is not available in this engine build.");
-            __mb_clipboard_set_primary = __mb;
-        }
+        if (__mb_clipboard_set_primary == 0) MethodBinds.MissingThrow("DisplayServer.clipboard_set_primary");
         ulong __a0 = NativeString.Create(clipboardPrimary);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clipboard_set_primary, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_clipboard_get_primary;
     public static string ClipboardGetPrimary()
     {
-        var __mb = __mb_clipboard_get_primary;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "clipboard_get_primary", 201670096);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.clipboard_get_primary is not available in this engine build.");
-            __mb_clipboard_get_primary = __mb;
-        }
+        if (__mb_clipboard_get_primary == 0) MethodBinds.MissingThrow("DisplayServer.clipboard_get_primary");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clipboard_get_primary, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_display_cutouts;
     public static Godot.Collections.Array GetDisplayCutouts()
     {
-        var __mb = __mb_get_display_cutouts;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "get_display_cutouts", 3995934104);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.get_display_cutouts is not available in this engine build.");
-            __mb_get_display_cutouts = __mb;
-        }
+        if (__mb_get_display_cutouts == 0) MethodBinds.MissingThrow("DisplayServer.get_display_cutouts");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_display_cutouts, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_display_safe_area;
     public static Rect2I GetDisplaySafeArea()
     {
-        var __mb = __mb_get_display_safe_area;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "get_display_safe_area", 410525958);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.get_display_safe_area is not available in this engine build.");
-            __mb_get_display_safe_area = __mb;
-        }
+        if (__mb_get_display_safe_area == 0) MethodBinds.MissingThrow("DisplayServer.get_display_safe_area");
         var __ret = default(Rect2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_display_safe_area, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_screen_count;
     public static int GetScreenCount()
     {
-        var __mb = __mb_get_screen_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "get_screen_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.get_screen_count is not available in this engine build.");
-            __mb_get_screen_count = __mb;
-        }
+        if (__mb_get_screen_count == 0) MethodBinds.MissingThrow("DisplayServer.get_screen_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_screen_count, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_primary_screen;
     public static int GetPrimaryScreen()
     {
-        var __mb = __mb_get_primary_screen;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "get_primary_screen", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.get_primary_screen is not available in this engine build.");
-            __mb_get_primary_screen = __mb;
-        }
+        if (__mb_get_primary_screen == 0) MethodBinds.MissingThrow("DisplayServer.get_primary_screen");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_primary_screen, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_keyboard_focus_screen;
     public static int GetKeyboardFocusScreen()
     {
-        var __mb = __mb_get_keyboard_focus_screen;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "get_keyboard_focus_screen", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.get_keyboard_focus_screen is not available in this engine build.");
-            __mb_get_keyboard_focus_screen = __mb;
-        }
+        if (__mb_get_keyboard_focus_screen == 0) MethodBinds.MissingThrow("DisplayServer.get_keyboard_focus_screen");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_keyboard_focus_screen, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_screen_from_rect;
     public static int GetScreenFromRect(Rect2 rect)
     {
-        var __mb = __mb_get_screen_from_rect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "get_screen_from_rect", 741354659);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.get_screen_from_rect is not available in this engine build.");
-            __mb_get_screen_from_rect = __mb;
-        }
+        if (__mb_get_screen_from_rect == 0) MethodBinds.MissingThrow("DisplayServer.get_screen_from_rect");
         var __a0 = rect;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_screen_from_rect, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_screen_get_position;
     public static Vector2I ScreenGetPosition(int screen = unchecked((int)(-1)))
     {
-        var __mb = __mb_screen_get_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "screen_get_position", 1725937825);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.screen_get_position is not available in this engine build.");
-            __mb_screen_get_position = __mb;
-        }
+        if (__mb_screen_get_position == 0) MethodBinds.MissingThrow("DisplayServer.screen_get_position");
         long __a0 = unchecked((long)screen);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_screen_get_position, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_screen_get_size;
     public static Vector2I ScreenGetSize(int screen = unchecked((int)(-1)))
     {
-        var __mb = __mb_screen_get_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "screen_get_size", 1725937825);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.screen_get_size is not available in this engine build.");
-            __mb_screen_get_size = __mb;
-        }
+        if (__mb_screen_get_size == 0) MethodBinds.MissingThrow("DisplayServer.screen_get_size");
         long __a0 = unchecked((long)screen);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_screen_get_size, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_screen_get_usable_rect;
     public static Rect2I ScreenGetUsableRect(int screen = unchecked((int)(-1)))
     {
-        var __mb = __mb_screen_get_usable_rect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "screen_get_usable_rect", 2439012528);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.screen_get_usable_rect is not available in this engine build.");
-            __mb_screen_get_usable_rect = __mb;
-        }
+        if (__mb_screen_get_usable_rect == 0) MethodBinds.MissingThrow("DisplayServer.screen_get_usable_rect");
         long __a0 = unchecked((long)screen);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rect2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_screen_get_usable_rect, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_screen_get_dpi;
     public static int ScreenGetDpi(int screen = unchecked((int)(-1)))
     {
-        var __mb = __mb_screen_get_dpi;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "screen_get_dpi", 181039630);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.screen_get_dpi is not available in this engine build.");
-            __mb_screen_get_dpi = __mb;
-        }
+        if (__mb_screen_get_dpi == 0) MethodBinds.MissingThrow("DisplayServer.screen_get_dpi");
         long __a0 = unchecked((long)screen);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_screen_get_dpi, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_screen_get_scale;
     public static float ScreenGetScale(int screen = unchecked((int)(-1)))
     {
-        var __mb = __mb_screen_get_scale;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "screen_get_scale", 909105437);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.screen_get_scale is not available in this engine build.");
-            __mb_screen_get_scale = __mb;
-        }
+        if (__mb_screen_get_scale == 0) MethodBinds.MissingThrow("DisplayServer.screen_get_scale");
         long __a0 = unchecked((long)screen);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_screen_get_scale, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_is_touchscreen_available;
     public static bool IsTouchscreenAvailable()
     {
-        var __mb = __mb_is_touchscreen_available;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "is_touchscreen_available", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.is_touchscreen_available is not available in this engine build.");
-            __mb_is_touchscreen_available = __mb;
-        }
+        if (__mb_is_touchscreen_available == 0) MethodBinds.MissingThrow("DisplayServer.is_touchscreen_available");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_touchscreen_available, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_screen_get_max_scale;
     public static float ScreenGetMaxScale()
     {
-        var __mb = __mb_screen_get_max_scale;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "screen_get_max_scale", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.screen_get_max_scale is not available in this engine build.");
-            __mb_screen_get_max_scale = __mb;
-        }
+        if (__mb_screen_get_max_scale == 0) MethodBinds.MissingThrow("DisplayServer.screen_get_max_scale");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_screen_get_max_scale, SingletonPtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_screen_get_refresh_rate;
     public static float ScreenGetRefreshRate(int screen = unchecked((int)(-1)))
     {
-        var __mb = __mb_screen_get_refresh_rate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "screen_get_refresh_rate", 909105437);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.screen_get_refresh_rate is not available in this engine build.");
-            __mb_screen_get_refresh_rate = __mb;
-        }
+        if (__mb_screen_get_refresh_rate == 0) MethodBinds.MissingThrow("DisplayServer.screen_get_refresh_rate");
         long __a0 = unchecked((long)screen);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_screen_get_refresh_rate, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_screen_get_pixel;
     public static Color ScreenGetPixel(Vector2I position)
     {
-        var __mb = __mb_screen_get_pixel;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "screen_get_pixel", 1532707496);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.screen_get_pixel is not available in this engine build.");
-            __mb_screen_get_pixel = __mb;
-        }
+        if (__mb_screen_get_pixel == 0) MethodBinds.MissingThrow("DisplayServer.screen_get_pixel");
         var __a0 = position;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Color);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_screen_get_pixel, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_screen_get_image;
     public static Image? ScreenGetImage(int screen = unchecked((int)(-1)))
     {
-        var __mb = __mb_screen_get_image;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "screen_get_image", 3813388802);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.screen_get_image is not available in this engine build.");
-            __mb_screen_get_image = __mb;
-        }
+        if (__mb_screen_get_image == 0) MethodBinds.MissingThrow("DisplayServer.screen_get_image");
         long __a0 = unchecked((long)screen);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_screen_get_image, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_screen_get_image_rect;
     public static Image? ScreenGetImageRect(Rect2I rect)
     {
-        var __mb = __mb_screen_get_image_rect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "screen_get_image_rect", 2601441065);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.screen_get_image_rect is not available in this engine build.");
-            __mb_screen_get_image_rect = __mb;
-        }
+        if (__mb_screen_get_image_rect == 0) MethodBinds.MissingThrow("DisplayServer.screen_get_image_rect");
         var __a0 = rect;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_screen_get_image_rect, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_screen_set_orientation;
     public static void ScreenSetOrientation(DisplayServer.ScreenOrientation orientation, int screen = unchecked((int)(-1)))
     {
-        var __mb = __mb_screen_set_orientation;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "screen_set_orientation", 2211511631);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.screen_set_orientation is not available in this engine build.");
-            __mb_screen_set_orientation = __mb;
-        }
+        if (__mb_screen_set_orientation == 0) MethodBinds.MissingThrow("DisplayServer.screen_set_orientation");
         long __a0 = (long)orientation;
         long __a1 = unchecked((long)screen);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_screen_set_orientation, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_screen_get_orientation;
     public static DisplayServer.ScreenOrientation ScreenGetOrientation(int screen = unchecked((int)(-1)))
     {
-        var __mb = __mb_screen_get_orientation;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "screen_get_orientation", 133818562);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.screen_get_orientation is not available in this engine build.");
-            __mb_screen_get_orientation = __mb;
-        }
+        if (__mb_screen_get_orientation == 0) MethodBinds.MissingThrow("DisplayServer.screen_get_orientation");
         long __a0 = unchecked((long)screen);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_screen_get_orientation, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (DisplayServer.ScreenOrientation)__ret;
     }
 
     private static nint __mb_screen_set_keep_on;
     public static void ScreenSetKeepOn(bool enable)
     {
-        var __mb = __mb_screen_set_keep_on;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "screen_set_keep_on", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.screen_set_keep_on is not available in this engine build.");
-            __mb_screen_set_keep_on = __mb;
-        }
+        if (__mb_screen_set_keep_on == 0) MethodBinds.MissingThrow("DisplayServer.screen_set_keep_on");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_screen_set_keep_on, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_screen_is_kept_on;
     public static bool ScreenIsKeptOn()
     {
-        var __mb = __mb_screen_is_kept_on;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "screen_is_kept_on", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.screen_is_kept_on is not available in this engine build.");
-            __mb_screen_is_kept_on = __mb;
-        }
+        if (__mb_screen_is_kept_on == 0) MethodBinds.MissingThrow("DisplayServer.screen_is_kept_on");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_screen_is_kept_on, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_window_list;
     public static int[] GetWindowList()
     {
-        var __mb = __mb_get_window_list;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "get_window_list", 1930428628);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.get_window_list is not available in this engine build.");
-            __mb_get_window_list = __mb;
-        }
+        if (__mb_get_window_list == 0) MethodBinds.MissingThrow("DisplayServer.get_window_list");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_window_list, SingletonPtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_window_at_screen_position;
     public static int GetWindowAtScreenPosition(Vector2I position)
     {
-        var __mb = __mb_get_window_at_screen_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "get_window_at_screen_position", 2485466453);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.get_window_at_screen_position is not available in this engine build.");
-            __mb_get_window_at_screen_position = __mb;
-        }
+        if (__mb_get_window_at_screen_position == 0) MethodBinds.MissingThrow("DisplayServer.get_window_at_screen_position");
         var __a0 = position;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_window_at_screen_position, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_window_get_native_handle;
     public static long WindowGetNativeHandle(DisplayServer.HandleType handleType, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_native_handle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_native_handle", 1096425680);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_native_handle is not available in this engine build.");
-            __mb_window_get_native_handle = __mb;
-        }
+        if (__mb_window_get_native_handle == 0) MethodBinds.MissingThrow("DisplayServer.window_get_native_handle");
         long __a0 = (long)handleType;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_native_handle, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((long)__ret);
     }
 
     private static nint __mb_window_get_active_popup;
     public static int WindowGetActivePopup()
     {
-        var __mb = __mb_window_get_active_popup;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_active_popup", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_active_popup is not available in this engine build.");
-            __mb_window_get_active_popup = __mb;
-        }
+        if (__mb_window_get_active_popup == 0) MethodBinds.MissingThrow("DisplayServer.window_get_active_popup");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_active_popup, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_window_set_popup_safe_rect;
     public static void WindowSetPopupSafeRect(int window, Rect2I rect)
     {
-        var __mb = __mb_window_set_popup_safe_rect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_popup_safe_rect", 3317281434);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_popup_safe_rect is not available in this engine build.");
-            __mb_window_set_popup_safe_rect = __mb;
-        }
+        if (__mb_window_set_popup_safe_rect == 0) MethodBinds.MissingThrow("DisplayServer.window_set_popup_safe_rect");
         long __a0 = unchecked((long)window);
         var __a1 = rect;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_popup_safe_rect, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_get_popup_safe_rect;
     public static Rect2I WindowGetPopupSafeRect(int window)
     {
-        var __mb = __mb_window_get_popup_safe_rect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_popup_safe_rect", 2161169500);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_popup_safe_rect is not available in this engine build.");
-            __mb_window_get_popup_safe_rect = __mb;
-        }
+        if (__mb_window_get_popup_safe_rect == 0) MethodBinds.MissingThrow("DisplayServer.window_get_popup_safe_rect");
         long __a0 = unchecked((long)window);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rect2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_popup_safe_rect, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_window_set_title;
     public static void WindowSetTitle(string title, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_title;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_title", 441246282);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_title is not available in this engine build.");
-            __mb_window_set_title = __mb;
-        }
+        if (__mb_window_set_title == 0) MethodBinds.MissingThrow("DisplayServer.window_set_title");
         ulong __a0 = NativeString.Create(title);
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_title, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_window_get_title_size;
     public static Vector2I WindowGetTitleSize(string title, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_title_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_title_size", 2925301799);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_title_size is not available in this engine build.");
-            __mb_window_get_title_size = __mb;
-        }
+        if (__mb_window_get_title_size == 0) MethodBinds.MissingThrow("DisplayServer.window_get_title_size");
         ulong __a0 = NativeString.Create(title);
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_title_size, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret;
     }
@@ -4395,392 +3286,260 @@ public static unsafe partial class DisplayServer
     private static nint __mb_window_set_mouse_passthrough;
     public static void WindowSetMousePassthrough(Vector2[] region, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_mouse_passthrough;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_mouse_passthrough", 1993637420);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_mouse_passthrough is not available in this engine build.");
-            __mb_window_set_mouse_passthrough = __mb;
-        }
+        if (__mb_window_set_mouse_passthrough == 0) MethodBinds.MissingThrow("DisplayServer.window_set_mouse_passthrough");
         var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, region);
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_mouse_passthrough, SingletonPtr, (nint)__args, 0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
     }
 
     private static nint __mb_window_get_current_screen;
     public static int WindowGetCurrentScreen(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_current_screen;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_current_screen", 1591665591);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_current_screen is not available in this engine build.");
-            __mb_window_get_current_screen = __mb;
-        }
+        if (__mb_window_get_current_screen == 0) MethodBinds.MissingThrow("DisplayServer.window_get_current_screen");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_current_screen, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_window_set_current_screen;
     public static void WindowSetCurrentScreen(int screen, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_current_screen;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_current_screen", 2230941749);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_current_screen is not available in this engine build.");
-            __mb_window_set_current_screen = __mb;
-        }
+        if (__mb_window_set_current_screen == 0) MethodBinds.MissingThrow("DisplayServer.window_set_current_screen");
         long __a0 = unchecked((long)screen);
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_current_screen, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_get_position;
     public static Vector2I WindowGetPosition(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_position", 763922886);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_position is not available in this engine build.");
-            __mb_window_get_position = __mb;
-        }
+        if (__mb_window_get_position == 0) MethodBinds.MissingThrow("DisplayServer.window_get_position");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_position, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_window_get_position_with_decorations;
     public static Vector2I WindowGetPositionWithDecorations(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_position_with_decorations;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_position_with_decorations", 763922886);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_position_with_decorations is not available in this engine build.");
-            __mb_window_get_position_with_decorations = __mb;
-        }
+        if (__mb_window_get_position_with_decorations == 0) MethodBinds.MissingThrow("DisplayServer.window_get_position_with_decorations");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_position_with_decorations, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_window_set_position;
     public static void WindowSetPosition(Vector2I position, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_position", 2019273902);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_position is not available in this engine build.");
-            __mb_window_set_position = __mb;
-        }
+        if (__mb_window_set_position == 0) MethodBinds.MissingThrow("DisplayServer.window_set_position");
         var __a0 = position;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_position, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_get_size;
     public static Vector2I WindowGetSize(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_size", 763922886);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_size is not available in this engine build.");
-            __mb_window_get_size = __mb;
-        }
+        if (__mb_window_get_size == 0) MethodBinds.MissingThrow("DisplayServer.window_get_size");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_size, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_window_set_size;
     public static void WindowSetSize(Vector2I size, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_size", 2019273902);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_size is not available in this engine build.");
-            __mb_window_set_size = __mb;
-        }
+        if (__mb_window_set_size == 0) MethodBinds.MissingThrow("DisplayServer.window_set_size");
         var __a0 = size;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_size, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_set_rect_changed_callback;
     public static void WindowSetRectChangedCallback(Callable callback, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_rect_changed_callback;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_rect_changed_callback", 1091192925);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_rect_changed_callback is not available in this engine build.");
-            __mb_window_set_rect_changed_callback = __mb;
-        }
+        if (__mb_window_set_rect_changed_callback == 0) MethodBinds.MissingThrow("DisplayServer.window_set_rect_changed_callback");
         var __a0 = callback.Native;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_rect_changed_callback, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_set_window_event_callback;
     public static void WindowSetWindowEventCallback(Callable callback, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_window_event_callback;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_window_event_callback", 1091192925);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_window_event_callback is not available in this engine build.");
-            __mb_window_set_window_event_callback = __mb;
-        }
+        if (__mb_window_set_window_event_callback == 0) MethodBinds.MissingThrow("DisplayServer.window_set_window_event_callback");
         var __a0 = callback.Native;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_window_event_callback, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_set_input_event_callback;
     public static void WindowSetInputEventCallback(Callable callback, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_input_event_callback;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_input_event_callback", 1091192925);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_input_event_callback is not available in this engine build.");
-            __mb_window_set_input_event_callback = __mb;
-        }
+        if (__mb_window_set_input_event_callback == 0) MethodBinds.MissingThrow("DisplayServer.window_set_input_event_callback");
         var __a0 = callback.Native;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_input_event_callback, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_set_input_text_callback;
     public static void WindowSetInputTextCallback(Callable callback, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_input_text_callback;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_input_text_callback", 1091192925);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_input_text_callback is not available in this engine build.");
-            __mb_window_set_input_text_callback = __mb;
-        }
+        if (__mb_window_set_input_text_callback == 0) MethodBinds.MissingThrow("DisplayServer.window_set_input_text_callback");
         var __a0 = callback.Native;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_input_text_callback, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_set_drop_files_callback;
     public static void WindowSetDropFilesCallback(Callable callback, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_drop_files_callback;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_drop_files_callback", 1091192925);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_drop_files_callback is not available in this engine build.");
-            __mb_window_set_drop_files_callback = __mb;
-        }
+        if (__mb_window_set_drop_files_callback == 0) MethodBinds.MissingThrow("DisplayServer.window_set_drop_files_callback");
         var __a0 = callback.Native;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_drop_files_callback, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_get_attached_instance_id;
     public static ulong WindowGetAttachedInstanceId(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_attached_instance_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_attached_instance_id", 1591665591);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_attached_instance_id is not available in this engine build.");
-            __mb_window_get_attached_instance_id = __mb;
-        }
+        if (__mb_window_get_attached_instance_id == 0) MethodBinds.MissingThrow("DisplayServer.window_get_attached_instance_id");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_attached_instance_id, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_window_get_max_size;
     public static Vector2I WindowGetMaxSize(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_max_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_max_size", 763922886);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_max_size is not available in this engine build.");
-            __mb_window_get_max_size = __mb;
-        }
+        if (__mb_window_get_max_size == 0) MethodBinds.MissingThrow("DisplayServer.window_get_max_size");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_max_size, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_window_set_max_size;
     public static void WindowSetMaxSize(Vector2I maxSize, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_max_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_max_size", 2019273902);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_max_size is not available in this engine build.");
-            __mb_window_set_max_size = __mb;
-        }
+        if (__mb_window_set_max_size == 0) MethodBinds.MissingThrow("DisplayServer.window_set_max_size");
         var __a0 = maxSize;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_max_size, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_get_min_size;
     public static Vector2I WindowGetMinSize(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_min_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_min_size", 763922886);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_min_size is not available in this engine build.");
-            __mb_window_get_min_size = __mb;
-        }
+        if (__mb_window_get_min_size == 0) MethodBinds.MissingThrow("DisplayServer.window_get_min_size");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_min_size, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_window_set_min_size;
     public static void WindowSetMinSize(Vector2I minSize, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_min_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_min_size", 2019273902);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_min_size is not available in this engine build.");
-            __mb_window_set_min_size = __mb;
-        }
+        if (__mb_window_set_min_size == 0) MethodBinds.MissingThrow("DisplayServer.window_set_min_size");
         var __a0 = minSize;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_min_size, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_get_size_with_decorations;
     public static Vector2I WindowGetSizeWithDecorations(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_size_with_decorations;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_size_with_decorations", 763922886);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_size_with_decorations is not available in this engine build.");
-            __mb_window_get_size_with_decorations = __mb;
-        }
+        if (__mb_window_get_size_with_decorations == 0) MethodBinds.MissingThrow("DisplayServer.window_get_size_with_decorations");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_size_with_decorations, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_window_get_mode;
     public static DisplayServer.WindowMode WindowGetMode(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_mode", 2185728461);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_mode is not available in this engine build.");
-            __mb_window_get_mode = __mb;
-        }
+        if (__mb_window_get_mode == 0) MethodBinds.MissingThrow("DisplayServer.window_get_mode");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_mode, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (DisplayServer.WindowMode)__ret;
     }
 
     private static nint __mb_window_set_mode;
     public static void WindowSetMode(DisplayServer.WindowMode mode, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_mode", 1319965401);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_mode is not available in this engine build.");
-            __mb_window_set_mode = __mb;
-        }
+        if (__mb_window_set_mode == 0) MethodBinds.MissingThrow("DisplayServer.window_set_mode");
         long __a0 = (long)mode;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_mode, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_set_flag;
     public static void WindowSetFlag(DisplayServer.WindowFlags flag, bool enabled, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_flag;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_flag", 254894155);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_flag is not available in this engine build.");
-            __mb_window_set_flag = __mb;
-        }
+        if (__mb_window_set_flag == 0) MethodBinds.MissingThrow("DisplayServer.window_set_flag");
         long __a0 = (long)flag;
         byte __a1 = enabled ? (byte)1 : (byte)0;
         long __a2 = unchecked((long)windowId);
@@ -4788,681 +3547,447 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_flag, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_get_flag;
     public static bool WindowGetFlag(DisplayServer.WindowFlags flag, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_flag;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_flag", 802816991);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_flag is not available in this engine build.");
-            __mb_window_get_flag = __mb;
-        }
+        if (__mb_window_get_flag == 0) MethodBinds.MissingThrow("DisplayServer.window_get_flag");
         long __a0 = (long)flag;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_flag, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_window_set_icon;
     public static void WindowSetIcon(Image? icon, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_icon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_icon", 2457502155);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_icon is not available in this engine build.");
-            __mb_window_set_icon = __mb;
-        }
+        if (__mb_window_set_icon == 0) MethodBinds.MissingThrow("DisplayServer.window_set_icon");
         nint __a0 = icon?.NativePtr ?? 0;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_icon, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_set_window_buttons_offset;
     public static void WindowSetWindowButtonsOffset(Vector2I offset, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_window_buttons_offset;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_window_buttons_offset", 2019273902);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_window_buttons_offset is not available in this engine build.");
-            __mb_window_set_window_buttons_offset = __mb;
-        }
+        if (__mb_window_set_window_buttons_offset == 0) MethodBinds.MissingThrow("DisplayServer.window_set_window_buttons_offset");
         var __a0 = offset;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_window_buttons_offset, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_get_safe_title_margins;
     public static Vector3I WindowGetSafeTitleMargins(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_safe_title_margins;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_safe_title_margins", 2295066620);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_safe_title_margins is not available in this engine build.");
-            __mb_window_get_safe_title_margins = __mb;
-        }
+        if (__mb_window_get_safe_title_margins == 0) MethodBinds.MissingThrow("DisplayServer.window_get_safe_title_margins");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_safe_title_margins, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_window_request_attention;
     public static void WindowRequestAttention(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_request_attention;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_request_attention", 1995695955);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_request_attention is not available in this engine build.");
-            __mb_window_request_attention = __mb;
-        }
+        if (__mb_window_request_attention == 0) MethodBinds.MissingThrow("DisplayServer.window_request_attention");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_request_attention, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_set_taskbar_progress_value;
     public static void WindowSetTaskbarProgressValue(float value, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_taskbar_progress_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_taskbar_progress_value", 3506631519);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_taskbar_progress_value is not available in this engine build.");
-            __mb_window_set_taskbar_progress_value = __mb;
-        }
+        if (__mb_window_set_taskbar_progress_value == 0) MethodBinds.MissingThrow("DisplayServer.window_set_taskbar_progress_value");
         double __a0 = value;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_taskbar_progress_value, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_set_taskbar_progress_state;
     public static void WindowSetTaskbarProgressState(DisplayServer.ProgressState state, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_taskbar_progress_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_taskbar_progress_state", 4119882768);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_taskbar_progress_state is not available in this engine build.");
-            __mb_window_set_taskbar_progress_state = __mb;
-        }
+        if (__mb_window_set_taskbar_progress_state == 0) MethodBinds.MissingThrow("DisplayServer.window_set_taskbar_progress_state");
         long __a0 = (long)state;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_taskbar_progress_state, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_move_to_foreground;
     public static void WindowMoveToForeground(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_move_to_foreground;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_move_to_foreground", 1995695955);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_move_to_foreground is not available in this engine build.");
-            __mb_window_move_to_foreground = __mb;
-        }
+        if (__mb_window_move_to_foreground == 0) MethodBinds.MissingThrow("DisplayServer.window_move_to_foreground");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_move_to_foreground, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_is_focused;
     public static bool WindowIsFocused(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_is_focused;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_is_focused", 1051549951);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_is_focused is not available in this engine build.");
-            __mb_window_is_focused = __mb;
-        }
+        if (__mb_window_is_focused == 0) MethodBinds.MissingThrow("DisplayServer.window_is_focused");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_is_focused, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_window_can_draw;
     public static bool WindowCanDraw(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_can_draw;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_can_draw", 1051549951);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_can_draw is not available in this engine build.");
-            __mb_window_can_draw = __mb;
-        }
+        if (__mb_window_can_draw == 0) MethodBinds.MissingThrow("DisplayServer.window_can_draw");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_can_draw, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_window_set_transient;
     public static void WindowSetTransient(int windowId, int parentWindowId)
     {
-        var __mb = __mb_window_set_transient;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_transient", 3937882851);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_transient is not available in this engine build.");
-            __mb_window_set_transient = __mb;
-        }
+        if (__mb_window_set_transient == 0) MethodBinds.MissingThrow("DisplayServer.window_set_transient");
         long __a0 = unchecked((long)windowId);
         long __a1 = unchecked((long)parentWindowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_transient, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_set_exclusive;
     public static void WindowSetExclusive(int windowId, bool exclusive)
     {
-        var __mb = __mb_window_set_exclusive;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_exclusive", 300928843);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_exclusive is not available in this engine build.");
-            __mb_window_set_exclusive = __mb;
-        }
+        if (__mb_window_set_exclusive == 0) MethodBinds.MissingThrow("DisplayServer.window_set_exclusive");
         long __a0 = unchecked((long)windowId);
         byte __a1 = exclusive ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_exclusive, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_set_ime_active;
     public static void WindowSetImeActive(bool active, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_ime_active;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_ime_active", 1661950165);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_ime_active is not available in this engine build.");
-            __mb_window_set_ime_active = __mb;
-        }
+        if (__mb_window_set_ime_active == 0) MethodBinds.MissingThrow("DisplayServer.window_set_ime_active");
         byte __a0 = active ? (byte)1 : (byte)0;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_ime_active, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_set_ime_position;
     public static void WindowSetImePosition(Vector2I position, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_ime_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_ime_position", 2019273902);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_ime_position is not available in this engine build.");
-            __mb_window_set_ime_position = __mb;
-        }
+        if (__mb_window_set_ime_position == 0) MethodBinds.MissingThrow("DisplayServer.window_set_ime_position");
         var __a0 = position;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_ime_position, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_set_vsync_mode;
     public static void WindowSetVsyncMode(DisplayServer.VSyncMode vsyncMode, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_vsync_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_vsync_mode", 2179333492);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_vsync_mode is not available in this engine build.");
-            __mb_window_set_vsync_mode = __mb;
-        }
+        if (__mb_window_set_vsync_mode == 0) MethodBinds.MissingThrow("DisplayServer.window_set_vsync_mode");
         long __a0 = (long)vsyncMode;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_vsync_mode, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_get_vsync_mode;
     public static DisplayServer.VSyncMode WindowGetVsyncMode(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_vsync_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_vsync_mode", 578873795);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_vsync_mode is not available in this engine build.");
-            __mb_window_get_vsync_mode = __mb;
-        }
+        if (__mb_window_get_vsync_mode == 0) MethodBinds.MissingThrow("DisplayServer.window_get_vsync_mode");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_vsync_mode, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (DisplayServer.VSyncMode)__ret;
     }
 
     private static nint __mb_window_is_hdr_output_supported;
     public static bool WindowIsHdrOutputSupported(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_is_hdr_output_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_is_hdr_output_supported", 1051549951);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_is_hdr_output_supported is not available in this engine build.");
-            __mb_window_is_hdr_output_supported = __mb;
-        }
+        if (__mb_window_is_hdr_output_supported == 0) MethodBinds.MissingThrow("DisplayServer.window_is_hdr_output_supported");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_is_hdr_output_supported, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_window_request_hdr_output;
     public static void WindowRequestHdrOutput(bool enable, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_request_hdr_output;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_request_hdr_output", 1661950165);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_request_hdr_output is not available in this engine build.");
-            __mb_window_request_hdr_output = __mb;
-        }
+        if (__mb_window_request_hdr_output == 0) MethodBinds.MissingThrow("DisplayServer.window_request_hdr_output");
         byte __a0 = enable ? (byte)1 : (byte)0;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_request_hdr_output, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_is_hdr_output_requested;
     public static bool WindowIsHdrOutputRequested(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_is_hdr_output_requested;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_is_hdr_output_requested", 1051549951);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_is_hdr_output_requested is not available in this engine build.");
-            __mb_window_is_hdr_output_requested = __mb;
-        }
+        if (__mb_window_is_hdr_output_requested == 0) MethodBinds.MissingThrow("DisplayServer.window_is_hdr_output_requested");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_is_hdr_output_requested, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_window_is_hdr_output_enabled;
     public static bool WindowIsHdrOutputEnabled(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_is_hdr_output_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_is_hdr_output_enabled", 1051549951);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_is_hdr_output_enabled is not available in this engine build.");
-            __mb_window_is_hdr_output_enabled = __mb;
-        }
+        if (__mb_window_is_hdr_output_enabled == 0) MethodBinds.MissingThrow("DisplayServer.window_is_hdr_output_enabled");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_is_hdr_output_enabled, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_window_set_hdr_output_reference_luminance;
     public static void WindowSetHdrOutputReferenceLuminance(float referenceLuminance, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_hdr_output_reference_luminance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_hdr_output_reference_luminance", 3506631519);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_hdr_output_reference_luminance is not available in this engine build.");
-            __mb_window_set_hdr_output_reference_luminance = __mb;
-        }
+        if (__mb_window_set_hdr_output_reference_luminance == 0) MethodBinds.MissingThrow("DisplayServer.window_set_hdr_output_reference_luminance");
         double __a0 = referenceLuminance;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_hdr_output_reference_luminance, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_get_hdr_output_reference_luminance;
     public static float WindowGetHdrOutputReferenceLuminance(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_hdr_output_reference_luminance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_hdr_output_reference_luminance", 218038398);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_hdr_output_reference_luminance is not available in this engine build.");
-            __mb_window_get_hdr_output_reference_luminance = __mb;
-        }
+        if (__mb_window_get_hdr_output_reference_luminance == 0) MethodBinds.MissingThrow("DisplayServer.window_get_hdr_output_reference_luminance");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_hdr_output_reference_luminance, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_window_get_hdr_output_current_reference_luminance;
     public static float WindowGetHdrOutputCurrentReferenceLuminance(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_hdr_output_current_reference_luminance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_hdr_output_current_reference_luminance", 218038398);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_hdr_output_current_reference_luminance is not available in this engine build.");
-            __mb_window_get_hdr_output_current_reference_luminance = __mb;
-        }
+        if (__mb_window_get_hdr_output_current_reference_luminance == 0) MethodBinds.MissingThrow("DisplayServer.window_get_hdr_output_current_reference_luminance");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_hdr_output_current_reference_luminance, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_window_set_hdr_output_max_luminance;
     public static void WindowSetHdrOutputMaxLuminance(float maxLuminance, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_set_hdr_output_max_luminance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_hdr_output_max_luminance", 3506631519);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_hdr_output_max_luminance is not available in this engine build.");
-            __mb_window_set_hdr_output_max_luminance = __mb;
-        }
+        if (__mb_window_set_hdr_output_max_luminance == 0) MethodBinds.MissingThrow("DisplayServer.window_set_hdr_output_max_luminance");
         double __a0 = maxLuminance;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_hdr_output_max_luminance, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_get_hdr_output_max_luminance;
     public static float WindowGetHdrOutputMaxLuminance(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_hdr_output_max_luminance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_hdr_output_max_luminance", 218038398);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_hdr_output_max_luminance is not available in this engine build.");
-            __mb_window_get_hdr_output_max_luminance = __mb;
-        }
+        if (__mb_window_get_hdr_output_max_luminance == 0) MethodBinds.MissingThrow("DisplayServer.window_get_hdr_output_max_luminance");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_hdr_output_max_luminance, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_window_get_hdr_output_current_max_luminance;
     public static float WindowGetHdrOutputCurrentMaxLuminance(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_hdr_output_current_max_luminance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_hdr_output_current_max_luminance", 218038398);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_hdr_output_current_max_luminance is not available in this engine build.");
-            __mb_window_get_hdr_output_current_max_luminance = __mb;
-        }
+        if (__mb_window_get_hdr_output_current_max_luminance == 0) MethodBinds.MissingThrow("DisplayServer.window_get_hdr_output_current_max_luminance");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_hdr_output_current_max_luminance, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_window_get_output_max_linear_value;
     public static float WindowGetOutputMaxLinearValue(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_get_output_max_linear_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_get_output_max_linear_value", 218038398);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_get_output_max_linear_value is not available in this engine build.");
-            __mb_window_get_output_max_linear_value = __mb;
-        }
+        if (__mb_window_get_output_max_linear_value == 0) MethodBinds.MissingThrow("DisplayServer.window_get_output_max_linear_value");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_get_output_max_linear_value, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_window_is_maximize_allowed;
     public static bool WindowIsMaximizeAllowed(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_is_maximize_allowed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_is_maximize_allowed", 1051549951);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_is_maximize_allowed is not available in this engine build.");
-            __mb_window_is_maximize_allowed = __mb;
-        }
+        if (__mb_window_is_maximize_allowed == 0) MethodBinds.MissingThrow("DisplayServer.window_is_maximize_allowed");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_is_maximize_allowed, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_window_maximize_on_title_dbl_click;
     public static bool WindowMaximizeOnTitleDblClick()
     {
-        var __mb = __mb_window_maximize_on_title_dbl_click;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_maximize_on_title_dbl_click", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_maximize_on_title_dbl_click is not available in this engine build.");
-            __mb_window_maximize_on_title_dbl_click = __mb;
-        }
+        if (__mb_window_maximize_on_title_dbl_click == 0) MethodBinds.MissingThrow("DisplayServer.window_maximize_on_title_dbl_click");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_maximize_on_title_dbl_click, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_window_minimize_on_title_dbl_click;
     public static bool WindowMinimizeOnTitleDblClick()
     {
-        var __mb = __mb_window_minimize_on_title_dbl_click;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_minimize_on_title_dbl_click", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_minimize_on_title_dbl_click is not available in this engine build.");
-            __mb_window_minimize_on_title_dbl_click = __mb;
-        }
+        if (__mb_window_minimize_on_title_dbl_click == 0) MethodBinds.MissingThrow("DisplayServer.window_minimize_on_title_dbl_click");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_minimize_on_title_dbl_click, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_window_start_drag;
     public static void WindowStartDrag(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_start_drag;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_start_drag", 1995695955);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_start_drag is not available in this engine build.");
-            __mb_window_start_drag = __mb;
-        }
+        if (__mb_window_start_drag == 0) MethodBinds.MissingThrow("DisplayServer.window_start_drag");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_start_drag, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_start_resize;
     public static void WindowStartResize(DisplayServer.WindowResizeEdge edge, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_window_start_resize;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_start_resize", 4009722312);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_start_resize is not available in this engine build.");
-            __mb_window_start_resize = __mb;
-        }
+        if (__mb_window_start_resize == 0) MethodBinds.MissingThrow("DisplayServer.window_start_resize");
         long __a0 = (long)edge;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_start_resize, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_window_set_color;
     public static void WindowSetColor(Color color)
     {
-        var __mb = __mb_window_set_color;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "window_set_color", 2920490490);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.window_set_color is not available in this engine build.");
-            __mb_window_set_color = __mb;
-        }
+        if (__mb_window_set_color == 0) MethodBinds.MissingThrow("DisplayServer.window_set_color");
         var __a0 = color;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_window_set_color, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_should_increase_contrast;
     public static int AccessibilityShouldIncreaseContrast()
     {
-        var __mb = __mb_accessibility_should_increase_contrast;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_should_increase_contrast", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_should_increase_contrast is not available in this engine build.");
-            __mb_accessibility_should_increase_contrast = __mb;
-        }
+        if (__mb_accessibility_should_increase_contrast == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_should_increase_contrast");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_should_increase_contrast, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_accessibility_should_reduce_animation;
     public static int AccessibilityShouldReduceAnimation()
     {
-        var __mb = __mb_accessibility_should_reduce_animation;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_should_reduce_animation", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_should_reduce_animation is not available in this engine build.");
-            __mb_accessibility_should_reduce_animation = __mb;
-        }
+        if (__mb_accessibility_should_reduce_animation == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_should_reduce_animation");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_should_reduce_animation, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_accessibility_should_reduce_transparency;
     public static int AccessibilityShouldReduceTransparency()
     {
-        var __mb = __mb_accessibility_should_reduce_transparency;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_should_reduce_transparency", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_should_reduce_transparency is not available in this engine build.");
-            __mb_accessibility_should_reduce_transparency = __mb;
-        }
+        if (__mb_accessibility_should_reduce_transparency == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_should_reduce_transparency");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_should_reduce_transparency, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_accessibility_screen_reader_active;
     public static int AccessibilityScreenReaderActive()
     {
-        var __mb = __mb_accessibility_screen_reader_active;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_screen_reader_active", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_screen_reader_active is not available in this engine build.");
-            __mb_accessibility_screen_reader_active = __mb;
-        }
+        if (__mb_accessibility_screen_reader_active == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_screen_reader_active");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_screen_reader_active, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_accessibility_create_element;
     public static Rid AccessibilityCreateElement(int windowId, DisplayServer.AccessibilityRole role)
     {
-        var __mb = __mb_accessibility_create_element;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_create_element", 2968347744);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_create_element is not available in this engine build.");
-            __mb_accessibility_create_element = __mb;
-        }
+        if (__mb_accessibility_create_element == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_create_element");
         long __a0 = unchecked((long)windowId);
         long __a1 = (long)role;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_create_element, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_accessibility_create_sub_element;
     public static Rid AccessibilityCreateSubElement(Rid parentRid, DisplayServer.AccessibilityRole role, int insertPos = unchecked((int)(-1)))
     {
-        var __mb = __mb_accessibility_create_sub_element;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_create_sub_element", 1949948826);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_create_sub_element is not available in this engine build.");
-            __mb_accessibility_create_sub_element = __mb;
-        }
+        if (__mb_accessibility_create_sub_element == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_create_sub_element");
         var __a0 = parentRid;
         long __a1 = (long)role;
         long __a2 = unchecked((long)insertPos);
@@ -5471,20 +3996,14 @@ public static unsafe partial class DisplayServer
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_create_sub_element, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_accessibility_create_sub_text_edit_elements;
     public static Rid AccessibilityCreateSubTextEditElements(Rid parentRid, Rid shapedText, float minHeight, int insertPos = unchecked((int)(-1)), bool isLastLine = false)
     {
-        var __mb = __mb_accessibility_create_sub_text_edit_elements;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_create_sub_text_edit_elements", 2702009895);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_create_sub_text_edit_elements is not available in this engine build.");
-            __mb_accessibility_create_sub_text_edit_elements = __mb;
-        }
+        if (__mb_accessibility_create_sub_text_edit_elements == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_create_sub_text_edit_elements");
         var __a0 = parentRid;
         var __a1 = shapedText;
         double __a2 = minHeight;
@@ -5497,90 +4016,60 @@ public static unsafe partial class DisplayServer
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_create_sub_text_edit_elements, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_accessibility_has_element;
     public static bool AccessibilityHasElement(Rid id)
     {
-        var __mb = __mb_accessibility_has_element;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_has_element", 4155700596);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_has_element is not available in this engine build.");
-            __mb_accessibility_has_element = __mb;
-        }
+        if (__mb_accessibility_has_element == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_has_element");
         var __a0 = id;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_has_element, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_accessibility_free_element;
     public static void AccessibilityFreeElement(Rid id)
     {
-        var __mb = __mb_accessibility_free_element;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_free_element", 2722037293);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_free_element is not available in this engine build.");
-            __mb_accessibility_free_element = __mb;
-        }
+        if (__mb_accessibility_free_element == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_free_element");
         var __a0 = id;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_free_element, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_element_set_meta;
     public static void AccessibilityElementSetMeta(Rid id, Variant meta)
     {
-        var __mb = __mb_accessibility_element_set_meta;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_element_set_meta", 3175752987);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_element_set_meta is not available in this engine build.");
-            __mb_accessibility_element_set_meta = __mb;
-        }
+        if (__mb_accessibility_element_set_meta == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_element_set_meta");
         var __a0 = id;
         var __a1 = meta.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_element_set_meta, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_element_get_meta;
     public static Variant AccessibilityElementGetMeta(Rid id)
     {
-        var __mb = __mb_accessibility_element_get_meta;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_element_get_meta", 4171304767);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_element_get_meta is not available in this engine build.");
-            __mb_accessibility_element_get_meta = __mb;
-        }
+        if (__mb_accessibility_element_get_meta == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_element_get_meta");
         var __a0 = id;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_element_get_meta, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_accessibility_set_window_rect;
     public static void AccessibilitySetWindowRect(int windowId, Rect2 rectOut, Rect2 rectIn)
     {
-        var __mb = __mb_accessibility_set_window_rect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_set_window_rect", 2386961724);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_set_window_rect is not available in this engine build.");
-            __mb_accessibility_set_window_rect = __mb;
-        }
+        if (__mb_accessibility_set_window_rect == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_set_window_rect");
         long __a0 = unchecked((long)windowId);
         var __a1 = rectOut;
         var __a2 = rectIn;
@@ -5588,472 +4077,316 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_set_window_rect, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_set_window_focused;
     public static void AccessibilitySetWindowFocused(int windowId, bool focused)
     {
-        var __mb = __mb_accessibility_set_window_focused;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_set_window_focused", 300928843);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_set_window_focused is not available in this engine build.");
-            __mb_accessibility_set_window_focused = __mb;
-        }
+        if (__mb_accessibility_set_window_focused == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_set_window_focused");
         long __a0 = unchecked((long)windowId);
         byte __a1 = focused ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_set_window_focused, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_focus;
     public static void AccessibilityUpdateSetFocus(Rid id)
     {
-        var __mb = __mb_accessibility_update_set_focus;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_focus", 2722037293);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_focus is not available in this engine build.");
-            __mb_accessibility_update_set_focus = __mb;
-        }
+        if (__mb_accessibility_update_set_focus == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_focus");
         var __a0 = id;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_focus, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_get_window_root;
     public static Rid AccessibilityGetWindowRoot(int windowId)
     {
-        var __mb = __mb_accessibility_get_window_root;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_get_window_root", 495598643);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_get_window_root is not available in this engine build.");
-            __mb_accessibility_get_window_root = __mb;
-        }
+        if (__mb_accessibility_get_window_root == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_get_window_root");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_get_window_root, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_accessibility_update_set_role;
     public static void AccessibilityUpdateSetRole(Rid id, DisplayServer.AccessibilityRole role)
     {
-        var __mb = __mb_accessibility_update_set_role;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_role", 3352768215);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_role is not available in this engine build.");
-            __mb_accessibility_update_set_role = __mb;
-        }
+        if (__mb_accessibility_update_set_role == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_role");
         var __a0 = id;
         long __a1 = (long)role;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_role, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_name;
     public static void AccessibilityUpdateSetName(Rid id, string name)
     {
-        var __mb = __mb_accessibility_update_set_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_name", 2726140452);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_name is not available in this engine build.");
-            __mb_accessibility_update_set_name = __mb;
-        }
+        if (__mb_accessibility_update_set_name == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_name");
         var __a0 = id;
         ulong __a1 = NativeString.Create(name);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_name, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_accessibility_update_set_extra_info;
     public static void AccessibilityUpdateSetExtraInfo(Rid id, string name)
     {
-        var __mb = __mb_accessibility_update_set_extra_info;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_extra_info", 2726140452);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_extra_info is not available in this engine build.");
-            __mb_accessibility_update_set_extra_info = __mb;
-        }
+        if (__mb_accessibility_update_set_extra_info == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_extra_info");
         var __a0 = id;
         ulong __a1 = NativeString.Create(name);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_extra_info, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_accessibility_update_set_description;
     public static void AccessibilityUpdateSetDescription(Rid id, string description)
     {
-        var __mb = __mb_accessibility_update_set_description;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_description", 2726140452);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_description is not available in this engine build.");
-            __mb_accessibility_update_set_description = __mb;
-        }
+        if (__mb_accessibility_update_set_description == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_description");
         var __a0 = id;
         ulong __a1 = NativeString.Create(description);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_description, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_accessibility_update_set_value;
     public static void AccessibilityUpdateSetValue(Rid id, string value)
     {
-        var __mb = __mb_accessibility_update_set_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_value", 2726140452);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_value is not available in this engine build.");
-            __mb_accessibility_update_set_value = __mb;
-        }
+        if (__mb_accessibility_update_set_value == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_value");
         var __a0 = id;
         ulong __a1 = NativeString.Create(value);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_value, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_accessibility_update_set_tooltip;
     public static void AccessibilityUpdateSetTooltip(Rid id, string tooltip)
     {
-        var __mb = __mb_accessibility_update_set_tooltip;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_tooltip", 2726140452);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_tooltip is not available in this engine build.");
-            __mb_accessibility_update_set_tooltip = __mb;
-        }
+        if (__mb_accessibility_update_set_tooltip == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_tooltip");
         var __a0 = id;
         ulong __a1 = NativeString.Create(tooltip);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_tooltip, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_accessibility_update_set_bounds;
     public static void AccessibilityUpdateSetBounds(Rid id, Rect2 rect)
     {
-        var __mb = __mb_accessibility_update_set_bounds;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_bounds", 1378122625);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_bounds is not available in this engine build.");
-            __mb_accessibility_update_set_bounds = __mb;
-        }
+        if (__mb_accessibility_update_set_bounds == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_bounds");
         var __a0 = id;
         var __a1 = rect;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_bounds, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_transform;
     public static void AccessibilityUpdateSetTransform(Rid id, Transform2D transform)
     {
-        var __mb = __mb_accessibility_update_set_transform;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_transform", 1246044741);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_transform is not available in this engine build.");
-            __mb_accessibility_update_set_transform = __mb;
-        }
+        if (__mb_accessibility_update_set_transform == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_transform");
         var __a0 = id;
         var __a1 = transform;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_transform, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_add_child;
     public static void AccessibilityUpdateAddChild(Rid id, Rid childId)
     {
-        var __mb = __mb_accessibility_update_add_child;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_add_child", 395945892);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_add_child is not available in this engine build.");
-            __mb_accessibility_update_add_child = __mb;
-        }
+        if (__mb_accessibility_update_add_child == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_add_child");
         var __a0 = id;
         var __a1 = childId;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_add_child, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_add_related_controls;
     public static void AccessibilityUpdateAddRelatedControls(Rid id, Rid relatedId)
     {
-        var __mb = __mb_accessibility_update_add_related_controls;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_add_related_controls", 395945892);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_add_related_controls is not available in this engine build.");
-            __mb_accessibility_update_add_related_controls = __mb;
-        }
+        if (__mb_accessibility_update_add_related_controls == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_add_related_controls");
         var __a0 = id;
         var __a1 = relatedId;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_add_related_controls, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_add_related_details;
     public static void AccessibilityUpdateAddRelatedDetails(Rid id, Rid relatedId)
     {
-        var __mb = __mb_accessibility_update_add_related_details;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_add_related_details", 395945892);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_add_related_details is not available in this engine build.");
-            __mb_accessibility_update_add_related_details = __mb;
-        }
+        if (__mb_accessibility_update_add_related_details == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_add_related_details");
         var __a0 = id;
         var __a1 = relatedId;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_add_related_details, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_add_related_described_by;
     public static void AccessibilityUpdateAddRelatedDescribedBy(Rid id, Rid relatedId)
     {
-        var __mb = __mb_accessibility_update_add_related_described_by;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_add_related_described_by", 395945892);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_add_related_described_by is not available in this engine build.");
-            __mb_accessibility_update_add_related_described_by = __mb;
-        }
+        if (__mb_accessibility_update_add_related_described_by == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_add_related_described_by");
         var __a0 = id;
         var __a1 = relatedId;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_add_related_described_by, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_add_related_flow_to;
     public static void AccessibilityUpdateAddRelatedFlowTo(Rid id, Rid relatedId)
     {
-        var __mb = __mb_accessibility_update_add_related_flow_to;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_add_related_flow_to", 395945892);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_add_related_flow_to is not available in this engine build.");
-            __mb_accessibility_update_add_related_flow_to = __mb;
-        }
+        if (__mb_accessibility_update_add_related_flow_to == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_add_related_flow_to");
         var __a0 = id;
         var __a1 = relatedId;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_add_related_flow_to, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_add_related_labeled_by;
     public static void AccessibilityUpdateAddRelatedLabeledBy(Rid id, Rid relatedId)
     {
-        var __mb = __mb_accessibility_update_add_related_labeled_by;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_add_related_labeled_by", 395945892);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_add_related_labeled_by is not available in this engine build.");
-            __mb_accessibility_update_add_related_labeled_by = __mb;
-        }
+        if (__mb_accessibility_update_add_related_labeled_by == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_add_related_labeled_by");
         var __a0 = id;
         var __a1 = relatedId;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_add_related_labeled_by, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_add_related_radio_group;
     public static void AccessibilityUpdateAddRelatedRadioGroup(Rid id, Rid relatedId)
     {
-        var __mb = __mb_accessibility_update_add_related_radio_group;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_add_related_radio_group", 395945892);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_add_related_radio_group is not available in this engine build.");
-            __mb_accessibility_update_add_related_radio_group = __mb;
-        }
+        if (__mb_accessibility_update_add_related_radio_group == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_add_related_radio_group");
         var __a0 = id;
         var __a1 = relatedId;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_add_related_radio_group, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_active_descendant;
     public static void AccessibilityUpdateSetActiveDescendant(Rid id, Rid otherId)
     {
-        var __mb = __mb_accessibility_update_set_active_descendant;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_active_descendant", 395945892);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_active_descendant is not available in this engine build.");
-            __mb_accessibility_update_set_active_descendant = __mb;
-        }
+        if (__mb_accessibility_update_set_active_descendant == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_active_descendant");
         var __a0 = id;
         var __a1 = otherId;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_active_descendant, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_next_on_line;
     public static void AccessibilityUpdateSetNextOnLine(Rid id, Rid otherId)
     {
-        var __mb = __mb_accessibility_update_set_next_on_line;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_next_on_line", 395945892);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_next_on_line is not available in this engine build.");
-            __mb_accessibility_update_set_next_on_line = __mb;
-        }
+        if (__mb_accessibility_update_set_next_on_line == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_next_on_line");
         var __a0 = id;
         var __a1 = otherId;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_next_on_line, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_previous_on_line;
     public static void AccessibilityUpdateSetPreviousOnLine(Rid id, Rid otherId)
     {
-        var __mb = __mb_accessibility_update_set_previous_on_line;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_previous_on_line", 395945892);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_previous_on_line is not available in this engine build.");
-            __mb_accessibility_update_set_previous_on_line = __mb;
-        }
+        if (__mb_accessibility_update_set_previous_on_line == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_previous_on_line");
         var __a0 = id;
         var __a1 = otherId;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_previous_on_line, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_member_of;
     public static void AccessibilityUpdateSetMemberOf(Rid id, Rid groupId)
     {
-        var __mb = __mb_accessibility_update_set_member_of;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_member_of", 395945892);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_member_of is not available in this engine build.");
-            __mb_accessibility_update_set_member_of = __mb;
-        }
+        if (__mb_accessibility_update_set_member_of == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_member_of");
         var __a0 = id;
         var __a1 = groupId;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_member_of, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_in_page_link_target;
     public static void AccessibilityUpdateSetInPageLinkTarget(Rid id, Rid otherId)
     {
-        var __mb = __mb_accessibility_update_set_in_page_link_target;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_in_page_link_target", 395945892);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_in_page_link_target is not available in this engine build.");
-            __mb_accessibility_update_set_in_page_link_target = __mb;
-        }
+        if (__mb_accessibility_update_set_in_page_link_target == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_in_page_link_target");
         var __a0 = id;
         var __a1 = otherId;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_in_page_link_target, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_error_message;
     public static void AccessibilityUpdateSetErrorMessage(Rid id, Rid otherId)
     {
-        var __mb = __mb_accessibility_update_set_error_message;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_error_message", 395945892);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_error_message is not available in this engine build.");
-            __mb_accessibility_update_set_error_message = __mb;
-        }
+        if (__mb_accessibility_update_set_error_message == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_error_message");
         var __a0 = id;
         var __a1 = otherId;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_error_message, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_live;
     public static void AccessibilityUpdateSetLive(Rid id, DisplayServer.AccessibilityLiveMode live)
     {
-        var __mb = __mb_accessibility_update_set_live;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_live", 2683302212);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_live is not available in this engine build.");
-            __mb_accessibility_update_set_live = __mb;
-        }
+        if (__mb_accessibility_update_set_live == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_live");
         var __a0 = id;
         long __a1 = (long)live;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_live, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_add_action;
     public static void AccessibilityUpdateAddAction(Rid id, DisplayServer.AccessibilityAction action, Callable callable)
     {
-        var __mb = __mb_accessibility_update_add_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_add_action", 2898696987);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_add_action is not available in this engine build.");
-            __mb_accessibility_update_add_action = __mb;
-        }
+        if (__mb_accessibility_update_add_action == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_add_action");
         var __a0 = id;
         long __a1 = (long)action;
         var __a2 = callable.Native;
@@ -6061,19 +4394,13 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_add_action, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_add_custom_action;
     public static void AccessibilityUpdateAddCustomAction(Rid id, int actionId, string actionDescription)
     {
-        var __mb = __mb_accessibility_update_add_custom_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_add_custom_action", 4153150897);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_add_custom_action is not available in this engine build.");
-            __mb_accessibility_update_add_custom_action = __mb;
-        }
+        if (__mb_accessibility_update_add_custom_action == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_add_custom_action");
         var __a0 = id;
         long __a1 = unchecked((long)actionId);
         ulong __a2 = NativeString.Create(actionDescription);
@@ -6081,92 +4408,62 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_add_custom_action, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a2);
     }
 
     private static nint __mb_accessibility_update_set_table_row_count;
     public static void AccessibilityUpdateSetTableRowCount(Rid id, int count)
     {
-        var __mb = __mb_accessibility_update_set_table_row_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_table_row_count", 3411492887);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_table_row_count is not available in this engine build.");
-            __mb_accessibility_update_set_table_row_count = __mb;
-        }
+        if (__mb_accessibility_update_set_table_row_count == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_table_row_count");
         var __a0 = id;
         long __a1 = unchecked((long)count);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_table_row_count, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_table_column_count;
     public static void AccessibilityUpdateSetTableColumnCount(Rid id, int count)
     {
-        var __mb = __mb_accessibility_update_set_table_column_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_table_column_count", 3411492887);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_table_column_count is not available in this engine build.");
-            __mb_accessibility_update_set_table_column_count = __mb;
-        }
+        if (__mb_accessibility_update_set_table_column_count == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_table_column_count");
         var __a0 = id;
         long __a1 = unchecked((long)count);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_table_column_count, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_table_row_index;
     public static void AccessibilityUpdateSetTableRowIndex(Rid id, int index)
     {
-        var __mb = __mb_accessibility_update_set_table_row_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_table_row_index", 3411492887);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_table_row_index is not available in this engine build.");
-            __mb_accessibility_update_set_table_row_index = __mb;
-        }
+        if (__mb_accessibility_update_set_table_row_index == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_table_row_index");
         var __a0 = id;
         long __a1 = unchecked((long)index);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_table_row_index, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_table_column_index;
     public static void AccessibilityUpdateSetTableColumnIndex(Rid id, int index)
     {
-        var __mb = __mb_accessibility_update_set_table_column_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_table_column_index", 3411492887);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_table_column_index is not available in this engine build.");
-            __mb_accessibility_update_set_table_column_index = __mb;
-        }
+        if (__mb_accessibility_update_set_table_column_index == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_table_column_index");
         var __a0 = id;
         long __a1 = unchecked((long)index);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_table_column_index, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_table_cell_position;
     public static void AccessibilityUpdateSetTableCellPosition(Rid id, int rowIndex, int columnIndex)
     {
-        var __mb = __mb_accessibility_update_set_table_cell_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_table_cell_position", 4288446313);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_table_cell_position is not available in this engine build.");
-            __mb_accessibility_update_set_table_cell_position = __mb;
-        }
+        if (__mb_accessibility_update_set_table_cell_position == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_table_cell_position");
         var __a0 = id;
         long __a1 = unchecked((long)rowIndex);
         long __a2 = unchecked((long)columnIndex);
@@ -6174,19 +4471,13 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_table_cell_position, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_table_cell_span;
     public static void AccessibilityUpdateSetTableCellSpan(Rid id, int rowSpan, int columnSpan)
     {
-        var __mb = __mb_accessibility_update_set_table_cell_span;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_table_cell_span", 4288446313);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_table_cell_span is not available in this engine build.");
-            __mb_accessibility_update_set_table_cell_span = __mb;
-        }
+        if (__mb_accessibility_update_set_table_cell_span == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_table_cell_span");
         var __a0 = id;
         long __a1 = unchecked((long)rowSpan);
         long __a2 = unchecked((long)columnSpan);
@@ -6194,163 +4485,109 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_table_cell_span, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_list_item_count;
     public static void AccessibilityUpdateSetListItemCount(Rid id, int size)
     {
-        var __mb = __mb_accessibility_update_set_list_item_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_list_item_count", 3411492887);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_list_item_count is not available in this engine build.");
-            __mb_accessibility_update_set_list_item_count = __mb;
-        }
+        if (__mb_accessibility_update_set_list_item_count == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_list_item_count");
         var __a0 = id;
         long __a1 = unchecked((long)size);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_list_item_count, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_list_item_index;
     public static void AccessibilityUpdateSetListItemIndex(Rid id, int index)
     {
-        var __mb = __mb_accessibility_update_set_list_item_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_list_item_index", 3411492887);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_list_item_index is not available in this engine build.");
-            __mb_accessibility_update_set_list_item_index = __mb;
-        }
+        if (__mb_accessibility_update_set_list_item_index == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_list_item_index");
         var __a0 = id;
         long __a1 = unchecked((long)index);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_list_item_index, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_list_item_level;
     public static void AccessibilityUpdateSetListItemLevel(Rid id, int level)
     {
-        var __mb = __mb_accessibility_update_set_list_item_level;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_list_item_level", 3411492887);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_list_item_level is not available in this engine build.");
-            __mb_accessibility_update_set_list_item_level = __mb;
-        }
+        if (__mb_accessibility_update_set_list_item_level == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_list_item_level");
         var __a0 = id;
         long __a1 = unchecked((long)level);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_list_item_level, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_list_item_selected;
     public static void AccessibilityUpdateSetListItemSelected(Rid id, bool selected)
     {
-        var __mb = __mb_accessibility_update_set_list_item_selected;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_list_item_selected", 1265174801);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_list_item_selected is not available in this engine build.");
-            __mb_accessibility_update_set_list_item_selected = __mb;
-        }
+        if (__mb_accessibility_update_set_list_item_selected == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_list_item_selected");
         var __a0 = id;
         byte __a1 = selected ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_list_item_selected, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_list_item_expanded;
     public static void AccessibilityUpdateSetListItemExpanded(Rid id, bool expanded)
     {
-        var __mb = __mb_accessibility_update_set_list_item_expanded;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_list_item_expanded", 1265174801);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_list_item_expanded is not available in this engine build.");
-            __mb_accessibility_update_set_list_item_expanded = __mb;
-        }
+        if (__mb_accessibility_update_set_list_item_expanded == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_list_item_expanded");
         var __a0 = id;
         byte __a1 = expanded ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_list_item_expanded, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_popup_type;
     public static void AccessibilityUpdateSetPopupType(Rid id, DisplayServer.AccessibilityPopupType popup)
     {
-        var __mb = __mb_accessibility_update_set_popup_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_popup_type", 2040885448);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_popup_type is not available in this engine build.");
-            __mb_accessibility_update_set_popup_type = __mb;
-        }
+        if (__mb_accessibility_update_set_popup_type == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_popup_type");
         var __a0 = id;
         long __a1 = (long)popup;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_popup_type, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_checked;
     public static void AccessibilityUpdateSetChecked(Rid id, bool checekd)
     {
-        var __mb = __mb_accessibility_update_set_checked;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_checked", 1265174801);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_checked is not available in this engine build.");
-            __mb_accessibility_update_set_checked = __mb;
-        }
+        if (__mb_accessibility_update_set_checked == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_checked");
         var __a0 = id;
         byte __a1 = checekd ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_checked, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_num_value;
     public static void AccessibilityUpdateSetNumValue(Rid id, double position)
     {
-        var __mb = __mb_accessibility_update_set_num_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_num_value", 1794382983);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_num_value is not available in this engine build.");
-            __mb_accessibility_update_set_num_value = __mb;
-        }
+        if (__mb_accessibility_update_set_num_value == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_num_value");
         var __a0 = id;
         double __a1 = position;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_num_value, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_num_range;
     public static void AccessibilityUpdateSetNumRange(Rid id, double min, double max)
     {
-        var __mb = __mb_accessibility_update_set_num_range;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_num_range", 2513314492);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_num_range is not available in this engine build.");
-            __mb_accessibility_update_set_num_range = __mb;
-        }
+        if (__mb_accessibility_update_set_num_range == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_num_range");
         var __a0 = id;
         double __a1 = min;
         double __a2 = max;
@@ -6358,73 +4595,49 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_num_range, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_num_step;
     public static void AccessibilityUpdateSetNumStep(Rid id, double step)
     {
-        var __mb = __mb_accessibility_update_set_num_step;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_num_step", 1794382983);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_num_step is not available in this engine build.");
-            __mb_accessibility_update_set_num_step = __mb;
-        }
+        if (__mb_accessibility_update_set_num_step == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_num_step");
         var __a0 = id;
         double __a1 = step;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_num_step, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_num_jump;
     public static void AccessibilityUpdateSetNumJump(Rid id, double jump)
     {
-        var __mb = __mb_accessibility_update_set_num_jump;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_num_jump", 1794382983);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_num_jump is not available in this engine build.");
-            __mb_accessibility_update_set_num_jump = __mb;
-        }
+        if (__mb_accessibility_update_set_num_jump == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_num_jump");
         var __a0 = id;
         double __a1 = jump;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_num_jump, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_scroll_x;
     public static void AccessibilityUpdateSetScrollX(Rid id, double position)
     {
-        var __mb = __mb_accessibility_update_set_scroll_x;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_scroll_x", 1794382983);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_scroll_x is not available in this engine build.");
-            __mb_accessibility_update_set_scroll_x = __mb;
-        }
+        if (__mb_accessibility_update_set_scroll_x == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_scroll_x");
         var __a0 = id;
         double __a1 = position;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_scroll_x, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_scroll_x_range;
     public static void AccessibilityUpdateSetScrollXRange(Rid id, double min, double max)
     {
-        var __mb = __mb_accessibility_update_set_scroll_x_range;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_scroll_x_range", 2513314492);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_scroll_x_range is not available in this engine build.");
-            __mb_accessibility_update_set_scroll_x_range = __mb;
-        }
+        if (__mb_accessibility_update_set_scroll_x_range == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_scroll_x_range");
         var __a0 = id;
         double __a1 = min;
         double __a2 = max;
@@ -6432,37 +4645,25 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_scroll_x_range, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_scroll_y;
     public static void AccessibilityUpdateSetScrollY(Rid id, double position)
     {
-        var __mb = __mb_accessibility_update_set_scroll_y;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_scroll_y", 1794382983);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_scroll_y is not available in this engine build.");
-            __mb_accessibility_update_set_scroll_y = __mb;
-        }
+        if (__mb_accessibility_update_set_scroll_y == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_scroll_y");
         var __a0 = id;
         double __a1 = position;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_scroll_y, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_scroll_y_range;
     public static void AccessibilityUpdateSetScrollYRange(Rid id, double min, double max)
     {
-        var __mb = __mb_accessibility_update_set_scroll_y_range;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_scroll_y_range", 2513314492);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_scroll_y_range is not available in this engine build.");
-            __mb_accessibility_update_set_scroll_y_range = __mb;
-        }
+        if (__mb_accessibility_update_set_scroll_y_range == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_scroll_y_range");
         var __a0 = id;
         double __a1 = min;
         double __a2 = max;
@@ -6470,19 +4671,13 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_scroll_y_range, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_text_decorations;
     public static void AccessibilityUpdateSetTextDecorations(Rid id, bool underline, bool strikethrough, bool overline)
     {
-        var __mb = __mb_accessibility_update_set_text_decorations;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_text_decorations", 1672422386);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_text_decorations is not available in this engine build.");
-            __mb_accessibility_update_set_text_decorations = __mb;
-        }
+        if (__mb_accessibility_update_set_text_decorations == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_text_decorations");
         var __a0 = id;
         byte __a1 = underline ? (byte)1 : (byte)0;
         byte __a2 = strikethrough ? (byte)1 : (byte)0;
@@ -6492,37 +4687,25 @@ public static unsafe partial class DisplayServer
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_text_decorations, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_text_align;
     public static void AccessibilityUpdateSetTextAlign(Rid id, HorizontalAlignment align)
     {
-        var __mb = __mb_accessibility_update_set_text_align;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_text_align", 3725995085);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_text_align is not available in this engine build.");
-            __mb_accessibility_update_set_text_align = __mb;
-        }
+        if (__mb_accessibility_update_set_text_align == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_text_align");
         var __a0 = id;
         long __a1 = (long)align;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_text_align, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_text_selection;
     public static void AccessibilityUpdateSetTextSelection(Rid id, Rid textStartId, int startChar, Rid textEndId, int endChar)
     {
-        var __mb = __mb_accessibility_update_set_text_selection;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_text_selection", 3119144029);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_text_selection is not available in this engine build.");
-            __mb_accessibility_update_set_text_selection = __mb;
-        }
+        if (__mb_accessibility_update_set_text_selection == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_text_selection");
         var __a0 = id;
         var __a1 = textStartId;
         long __a2 = unchecked((long)startChar);
@@ -6534,19 +4717,13 @@ public static unsafe partial class DisplayServer
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_text_selection, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_flag;
     public static void AccessibilityUpdateSetFlag(Rid id, DisplayServer.AccessibilityFlags flag, bool value)
     {
-        var __mb = __mb_accessibility_update_set_flag;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_flag", 3758675396);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_flag is not available in this engine build.");
-            __mb_accessibility_update_set_flag = __mb;
-        }
+        if (__mb_accessibility_update_set_flag == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_flag");
         var __a0 = id;
         long __a1 = (long)flag;
         byte __a2 = value ? (byte)1 : (byte)0;
@@ -6554,272 +4731,182 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_flag, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_classname;
     public static void AccessibilityUpdateSetClassname(Rid id, string classname)
     {
-        var __mb = __mb_accessibility_update_set_classname;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_classname", 2726140452);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_classname is not available in this engine build.");
-            __mb_accessibility_update_set_classname = __mb;
-        }
+        if (__mb_accessibility_update_set_classname == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_classname");
         var __a0 = id;
         ulong __a1 = NativeString.Create(classname);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_classname, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_accessibility_update_set_placeholder;
     public static void AccessibilityUpdateSetPlaceholder(Rid id, string placeholder)
     {
-        var __mb = __mb_accessibility_update_set_placeholder;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_placeholder", 2726140452);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_placeholder is not available in this engine build.");
-            __mb_accessibility_update_set_placeholder = __mb;
-        }
+        if (__mb_accessibility_update_set_placeholder == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_placeholder");
         var __a0 = id;
         ulong __a1 = NativeString.Create(placeholder);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_placeholder, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_accessibility_update_set_language;
     public static void AccessibilityUpdateSetLanguage(Rid id, string language)
     {
-        var __mb = __mb_accessibility_update_set_language;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_language", 2726140452);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_language is not available in this engine build.");
-            __mb_accessibility_update_set_language = __mb;
-        }
+        if (__mb_accessibility_update_set_language == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_language");
         var __a0 = id;
         ulong __a1 = NativeString.Create(language);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_language, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_accessibility_update_set_text_orientation;
     public static void AccessibilityUpdateSetTextOrientation(Rid id, bool vertical)
     {
-        var __mb = __mb_accessibility_update_set_text_orientation;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_text_orientation", 1265174801);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_text_orientation is not available in this engine build.");
-            __mb_accessibility_update_set_text_orientation = __mb;
-        }
+        if (__mb_accessibility_update_set_text_orientation == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_text_orientation");
         var __a0 = id;
         byte __a1 = vertical ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_text_orientation, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_list_orientation;
     public static void AccessibilityUpdateSetListOrientation(Rid id, bool vertical)
     {
-        var __mb = __mb_accessibility_update_set_list_orientation;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_list_orientation", 1265174801);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_list_orientation is not available in this engine build.");
-            __mb_accessibility_update_set_list_orientation = __mb;
-        }
+        if (__mb_accessibility_update_set_list_orientation == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_list_orientation");
         var __a0 = id;
         byte __a1 = vertical ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_list_orientation, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_shortcut;
     public static void AccessibilityUpdateSetShortcut(Rid id, string shortcut)
     {
-        var __mb = __mb_accessibility_update_set_shortcut;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_shortcut", 2726140452);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_shortcut is not available in this engine build.");
-            __mb_accessibility_update_set_shortcut = __mb;
-        }
+        if (__mb_accessibility_update_set_shortcut == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_shortcut");
         var __a0 = id;
         ulong __a1 = NativeString.Create(shortcut);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_shortcut, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_accessibility_update_set_url;
     public static void AccessibilityUpdateSetUrl(Rid id, string url)
     {
-        var __mb = __mb_accessibility_update_set_url;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_url", 2726140452);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_url is not available in this engine build.");
-            __mb_accessibility_update_set_url = __mb;
-        }
+        if (__mb_accessibility_update_set_url == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_url");
         var __a0 = id;
         ulong __a1 = NativeString.Create(url);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_url, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_accessibility_update_set_role_description;
     public static void AccessibilityUpdateSetRoleDescription(Rid id, string description)
     {
-        var __mb = __mb_accessibility_update_set_role_description;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_role_description", 2726140452);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_role_description is not available in this engine build.");
-            __mb_accessibility_update_set_role_description = __mb;
-        }
+        if (__mb_accessibility_update_set_role_description == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_role_description");
         var __a0 = id;
         ulong __a1 = NativeString.Create(description);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_role_description, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_accessibility_update_set_state_description;
     public static void AccessibilityUpdateSetStateDescription(Rid id, string description)
     {
-        var __mb = __mb_accessibility_update_set_state_description;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_state_description", 2726140452);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_state_description is not available in this engine build.");
-            __mb_accessibility_update_set_state_description = __mb;
-        }
+        if (__mb_accessibility_update_set_state_description == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_state_description");
         var __a0 = id;
         ulong __a1 = NativeString.Create(description);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_state_description, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_accessibility_update_set_color_value;
     public static void AccessibilityUpdateSetColorValue(Rid id, Color color)
     {
-        var __mb = __mb_accessibility_update_set_color_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_color_value", 2948539648);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_color_value is not available in this engine build.");
-            __mb_accessibility_update_set_color_value = __mb;
-        }
+        if (__mb_accessibility_update_set_color_value == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_color_value");
         var __a0 = id;
         var __a1 = color;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_color_value, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_background_color;
     public static void AccessibilityUpdateSetBackgroundColor(Rid id, Color color)
     {
-        var __mb = __mb_accessibility_update_set_background_color;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_background_color", 2948539648);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_background_color is not available in this engine build.");
-            __mb_accessibility_update_set_background_color = __mb;
-        }
+        if (__mb_accessibility_update_set_background_color == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_background_color");
         var __a0 = id;
         var __a1 = color;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_background_color, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_accessibility_update_set_foreground_color;
     public static void AccessibilityUpdateSetForegroundColor(Rid id, Color color)
     {
-        var __mb = __mb_accessibility_update_set_foreground_color;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "accessibility_update_set_foreground_color", 2948539648);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.accessibility_update_set_foreground_color is not available in this engine build.");
-            __mb_accessibility_update_set_foreground_color = __mb;
-        }
+        if (__mb_accessibility_update_set_foreground_color == 0) MethodBinds.MissingThrow("DisplayServer.accessibility_update_set_foreground_color");
         var __a0 = id;
         var __a1 = color;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accessibility_update_set_foreground_color, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_ime_get_selection;
     public static Vector2I ImeGetSelection()
     {
-        var __mb = __mb_ime_get_selection;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "ime_get_selection", 3690982128);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.ime_get_selection is not available in this engine build.");
-            __mb_ime_get_selection = __mb;
-        }
+        if (__mb_ime_get_selection == 0) MethodBinds.MissingThrow("DisplayServer.ime_get_selection");
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_ime_get_selection, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_ime_get_text;
     public static string ImeGetText()
     {
-        var __mb = __mb_ime_get_text;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "ime_get_text", 201670096);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.ime_get_text is not available in this engine build.");
-            __mb_ime_get_text = __mb;
-        }
+        if (__mb_ime_get_text == 0) MethodBinds.MissingThrow("DisplayServer.ime_get_text");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_ime_get_text, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_virtual_keyboard_show;
     public static void VirtualKeyboardShow(string existingText, Rect2 position = default, DisplayServer.VirtualKeyboardType type = (DisplayServer.VirtualKeyboardType)(0), int maxLength = unchecked((int)(-1)), int cursorStart = unchecked((int)(-1)), int cursorEnd = unchecked((int)(-1)))
     {
-        var __mb = __mb_virtual_keyboard_show;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "virtual_keyboard_show", 3042891259);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.virtual_keyboard_show is not available in this engine build.");
-            __mb_virtual_keyboard_show = __mb;
-        }
+        if (__mb_virtual_keyboard_show == 0) MethodBinds.MissingThrow("DisplayServer.virtual_keyboard_show");
         ulong __a0 = NativeString.Create(existingText);
         var __a1 = position;
         long __a2 = (long)type;
@@ -6833,110 +4920,68 @@ public static unsafe partial class DisplayServer
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_virtual_keyboard_show, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_virtual_keyboard_hide;
     public static void VirtualKeyboardHide()
     {
-        var __mb = __mb_virtual_keyboard_hide;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "virtual_keyboard_hide", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.virtual_keyboard_hide is not available in this engine build.");
-            __mb_virtual_keyboard_hide = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
+        if (__mb_virtual_keyboard_hide == 0) MethodBinds.MissingThrow("DisplayServer.virtual_keyboard_hide");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_virtual_keyboard_hide, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_virtual_keyboard_get_height;
     public static int VirtualKeyboardGetHeight()
     {
-        var __mb = __mb_virtual_keyboard_get_height;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "virtual_keyboard_get_height", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.virtual_keyboard_get_height is not available in this engine build.");
-            __mb_virtual_keyboard_get_height = __mb;
-        }
+        if (__mb_virtual_keyboard_get_height == 0) MethodBinds.MissingThrow("DisplayServer.virtual_keyboard_get_height");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_virtual_keyboard_get_height, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_has_hardware_keyboard;
     public static bool HasHardwareKeyboard()
     {
-        var __mb = __mb_has_hardware_keyboard;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "has_hardware_keyboard", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.has_hardware_keyboard is not available in this engine build.");
-            __mb_has_hardware_keyboard = __mb;
-        }
+        if (__mb_has_hardware_keyboard == 0) MethodBinds.MissingThrow("DisplayServer.has_hardware_keyboard");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_hardware_keyboard, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_hardware_keyboard_connection_change_callback;
     public static void SetHardwareKeyboardConnectionChangeCallback(Callable callable)
     {
-        var __mb = __mb_set_hardware_keyboard_connection_change_callback;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "set_hardware_keyboard_connection_change_callback", 1611583062);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.set_hardware_keyboard_connection_change_callback is not available in this engine build.");
-            __mb_set_hardware_keyboard_connection_change_callback = __mb;
-        }
+        if (__mb_set_hardware_keyboard_connection_change_callback == 0) MethodBinds.MissingThrow("DisplayServer.set_hardware_keyboard_connection_change_callback");
         var __a0 = callable.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_hardware_keyboard_connection_change_callback, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_cursor_set_shape;
     public static void CursorSetShape(DisplayServer.CursorShape shape)
     {
-        var __mb = __mb_cursor_set_shape;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "cursor_set_shape", 2026291549);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.cursor_set_shape is not available in this engine build.");
-            __mb_cursor_set_shape = __mb;
-        }
+        if (__mb_cursor_set_shape == 0) MethodBinds.MissingThrow("DisplayServer.cursor_set_shape");
         long __a0 = (long)shape;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_cursor_set_shape, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_cursor_get_shape;
     public static DisplayServer.CursorShape CursorGetShape()
     {
-        var __mb = __mb_cursor_get_shape;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "cursor_get_shape", 1087724927);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.cursor_get_shape is not available in this engine build.");
-            __mb_cursor_get_shape = __mb;
-        }
+        if (__mb_cursor_get_shape == 0) MethodBinds.MissingThrow("DisplayServer.cursor_get_shape");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_cursor_get_shape, SingletonPtr, 0, (nint)(&__ret));
         return (DisplayServer.CursorShape)__ret;
     }
 
     private static nint __mb_cursor_set_custom_image;
     public static void CursorSetCustomImage(Resource? cursor, DisplayServer.CursorShape shape = (DisplayServer.CursorShape)(0), Vector2 hotspot = default)
     {
-        var __mb = __mb_cursor_set_custom_image;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "cursor_set_custom_image", 1816663697);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.cursor_set_custom_image is not available in this engine build.");
-            __mb_cursor_set_custom_image = __mb;
-        }
+        if (__mb_cursor_set_custom_image == 0) MethodBinds.MissingThrow("DisplayServer.cursor_set_custom_image");
         nint __a0 = cursor?.NativePtr ?? 0;
         long __a1 = (long)shape;
         var __a2 = hotspot;
@@ -6944,50 +4989,32 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_cursor_set_custom_image, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_swap_cancel_ok;
     public static bool GetSwapCancelOk()
     {
-        var __mb = __mb_get_swap_cancel_ok;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "get_swap_cancel_ok", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.get_swap_cancel_ok is not available in this engine build.");
-            __mb_get_swap_cancel_ok = __mb;
-        }
+        if (__mb_get_swap_cancel_ok == 0) MethodBinds.MissingThrow("DisplayServer.get_swap_cancel_ok");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_swap_cancel_ok, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_enable_for_stealing_focus;
     public static void EnableForStealingFocus(long processId)
     {
-        var __mb = __mb_enable_for_stealing_focus;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "enable_for_stealing_focus", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.enable_for_stealing_focus is not available in this engine build.");
-            __mb_enable_for_stealing_focus = __mb;
-        }
+        if (__mb_enable_for_stealing_focus == 0) MethodBinds.MissingThrow("DisplayServer.enable_for_stealing_focus");
         long __a0 = unchecked((long)processId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_enable_for_stealing_focus, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_dialog_show;
     public static Error DialogShow(string title, string description, string[] buttons, Callable callback)
     {
-        var __mb = __mb_dialog_show;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "dialog_show", 4115553226);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.dialog_show is not available in this engine build.");
-            __mb_dialog_show = __mb;
-        }
+        if (__mb_dialog_show == 0) MethodBinds.MissingThrow("DisplayServer.dialog_show");
         ulong __a0 = NativeString.Create(title);
         ulong __a1 = NativeString.Create(description);
         var __a2 = Packed.CreateStrings(buttons);
@@ -6998,7 +5025,7 @@ public static unsafe partial class DisplayServer
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_dialog_show, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a2);
@@ -7008,13 +5035,7 @@ public static unsafe partial class DisplayServer
     private static nint __mb_dialog_input_text;
     public static Error DialogInputText(string title, string description, string existingText, Callable callback)
     {
-        var __mb = __mb_dialog_input_text;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "dialog_input_text", 3088703427);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.dialog_input_text is not available in this engine build.");
-            __mb_dialog_input_text = __mb;
-        }
+        if (__mb_dialog_input_text == 0) MethodBinds.MissingThrow("DisplayServer.dialog_input_text");
         ulong __a0 = NativeString.Create(title);
         ulong __a1 = NativeString.Create(description);
         ulong __a2 = NativeString.Create(existingText);
@@ -7025,7 +5046,7 @@ public static unsafe partial class DisplayServer
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_dialog_input_text, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         NativeString.Destroy(ref __a2);
@@ -7035,13 +5056,7 @@ public static unsafe partial class DisplayServer
     private static nint __mb_file_dialog_show;
     public static Error FileDialogShow(string title, string currentDirectory, string filename, bool showHidden, DisplayServer.FileDialogMode mode, string[] filters, Callable callback, int parentWindowId = unchecked((int)(0)))
     {
-        var __mb = __mb_file_dialog_show;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "file_dialog_show", 1386825884);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.file_dialog_show is not available in this engine build.");
-            __mb_file_dialog_show = __mb;
-        }
+        if (__mb_file_dialog_show == 0) MethodBinds.MissingThrow("DisplayServer.file_dialog_show");
         ulong __a0 = NativeString.Create(title);
         ulong __a1 = NativeString.Create(currentDirectory);
         ulong __a2 = NativeString.Create(filename);
@@ -7060,7 +5075,7 @@ public static unsafe partial class DisplayServer
         __args[6] = (nint)(&__a6);
         __args[7] = (nint)(&__a7);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_file_dialog_show, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         NativeString.Destroy(ref __a2);
@@ -7071,13 +5086,7 @@ public static unsafe partial class DisplayServer
     private static nint __mb_file_dialog_with_options_show;
     public static Error FileDialogWithOptionsShow(string title, string currentDirectory, string root, string filename, bool showHidden, DisplayServer.FileDialogMode mode, string[] filters, Godot.Collections.Array options, Callable callback, int parentWindowId = unchecked((int)(0)))
     {
-        var __mb = __mb_file_dialog_with_options_show;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "file_dialog_with_options_show", 1448789813);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.file_dialog_with_options_show is not available in this engine build.");
-            __mb_file_dialog_with_options_show = __mb;
-        }
+        if (__mb_file_dialog_with_options_show == 0) MethodBinds.MissingThrow("DisplayServer.file_dialog_with_options_show");
         ulong __a0 = NativeString.Create(title);
         ulong __a1 = NativeString.Create(currentDirectory);
         ulong __a2 = NativeString.Create(root);
@@ -7100,7 +5109,7 @@ public static unsafe partial class DisplayServer
         __args[8] = (nint)(&__a8);
         __args[9] = (nint)(&__a9);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_file_dialog_with_options_show, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         NativeString.Destroy(ref __a2);
@@ -7112,234 +5121,144 @@ public static unsafe partial class DisplayServer
     private static nint __mb_beep;
     public static void Beep()
     {
-        var __mb = __mb_beep;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "beep", 4051624405);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.beep is not available in this engine build.");
-            __mb_beep = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
+        if (__mb_beep == 0) MethodBinds.MissingThrow("DisplayServer.beep");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_beep, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_keyboard_get_layout_count;
     public static int KeyboardGetLayoutCount()
     {
-        var __mb = __mb_keyboard_get_layout_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "keyboard_get_layout_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.keyboard_get_layout_count is not available in this engine build.");
-            __mb_keyboard_get_layout_count = __mb;
-        }
+        if (__mb_keyboard_get_layout_count == 0) MethodBinds.MissingThrow("DisplayServer.keyboard_get_layout_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_keyboard_get_layout_count, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_keyboard_get_current_layout;
     public static int KeyboardGetCurrentLayout()
     {
-        var __mb = __mb_keyboard_get_current_layout;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "keyboard_get_current_layout", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.keyboard_get_current_layout is not available in this engine build.");
-            __mb_keyboard_get_current_layout = __mb;
-        }
+        if (__mb_keyboard_get_current_layout == 0) MethodBinds.MissingThrow("DisplayServer.keyboard_get_current_layout");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_keyboard_get_current_layout, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_keyboard_set_current_layout;
     public static void KeyboardSetCurrentLayout(int index)
     {
-        var __mb = __mb_keyboard_set_current_layout;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "keyboard_set_current_layout", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.keyboard_set_current_layout is not available in this engine build.");
-            __mb_keyboard_set_current_layout = __mb;
-        }
+        if (__mb_keyboard_set_current_layout == 0) MethodBinds.MissingThrow("DisplayServer.keyboard_set_current_layout");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_keyboard_set_current_layout, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_keyboard_get_layout_language;
     public static string KeyboardGetLayoutLanguage(int index)
     {
-        var __mb = __mb_keyboard_get_layout_language;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "keyboard_get_layout_language", 844755477);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.keyboard_get_layout_language is not available in this engine build.");
-            __mb_keyboard_get_layout_language = __mb;
-        }
+        if (__mb_keyboard_get_layout_language == 0) MethodBinds.MissingThrow("DisplayServer.keyboard_get_layout_language");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_keyboard_get_layout_language, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_keyboard_get_layout_name;
     public static string KeyboardGetLayoutName(int index)
     {
-        var __mb = __mb_keyboard_get_layout_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "keyboard_get_layout_name", 844755477);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.keyboard_get_layout_name is not available in this engine build.");
-            __mb_keyboard_get_layout_name = __mb;
-        }
+        if (__mb_keyboard_get_layout_name == 0) MethodBinds.MissingThrow("DisplayServer.keyboard_get_layout_name");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_keyboard_get_layout_name, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_keyboard_get_keycode_from_physical;
     public static Key KeyboardGetKeycodeFromPhysical(Key keycode)
     {
-        var __mb = __mb_keyboard_get_keycode_from_physical;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "keyboard_get_keycode_from_physical", 3447613187);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.keyboard_get_keycode_from_physical is not available in this engine build.");
-            __mb_keyboard_get_keycode_from_physical = __mb;
-        }
+        if (__mb_keyboard_get_keycode_from_physical == 0) MethodBinds.MissingThrow("DisplayServer.keyboard_get_keycode_from_physical");
         long __a0 = (long)keycode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_keyboard_get_keycode_from_physical, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Key)__ret;
     }
 
     private static nint __mb_keyboard_get_label_from_physical;
     public static Key KeyboardGetLabelFromPhysical(Key keycode)
     {
-        var __mb = __mb_keyboard_get_label_from_physical;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "keyboard_get_label_from_physical", 3447613187);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.keyboard_get_label_from_physical is not available in this engine build.");
-            __mb_keyboard_get_label_from_physical = __mb;
-        }
+        if (__mb_keyboard_get_label_from_physical == 0) MethodBinds.MissingThrow("DisplayServer.keyboard_get_label_from_physical");
         long __a0 = (long)keycode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_keyboard_get_label_from_physical, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Key)__ret;
     }
 
     private static nint __mb_show_emoji_and_symbol_picker;
     public static void ShowEmojiAndSymbolPicker()
     {
-        var __mb = __mb_show_emoji_and_symbol_picker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "show_emoji_and_symbol_picker", 4051624405);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.show_emoji_and_symbol_picker is not available in this engine build.");
-            __mb_show_emoji_and_symbol_picker = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
+        if (__mb_show_emoji_and_symbol_picker == 0) MethodBinds.MissingThrow("DisplayServer.show_emoji_and_symbol_picker");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_show_emoji_and_symbol_picker, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_color_picker;
     public static bool ColorPicker(Callable callback)
     {
-        var __mb = __mb_color_picker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "color_picker", 151643214);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.color_picker is not available in this engine build.");
-            __mb_color_picker = __mb;
-        }
+        if (__mb_color_picker == 0) MethodBinds.MissingThrow("DisplayServer.color_picker");
         var __a0 = callback.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_color_picker, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_process_events;
     public static void ProcessEvents()
     {
-        var __mb = __mb_process_events;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "process_events", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.process_events is not available in this engine build.");
-            __mb_process_events = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
+        if (__mb_process_events == 0) MethodBinds.MissingThrow("DisplayServer.process_events");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_process_events, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_force_process_and_drop_events;
     public static void ForceProcessAndDropEvents()
     {
-        var __mb = __mb_force_process_and_drop_events;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "force_process_and_drop_events", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.force_process_and_drop_events is not available in this engine build.");
-            __mb_force_process_and_drop_events = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
+        if (__mb_force_process_and_drop_events == 0) MethodBinds.MissingThrow("DisplayServer.force_process_and_drop_events");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_force_process_and_drop_events, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_set_native_icon;
     public static void SetNativeIcon(string filename)
     {
-        var __mb = __mb_set_native_icon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "set_native_icon", 83702148);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.set_native_icon is not available in this engine build.");
-            __mb_set_native_icon = __mb;
-        }
+        if (__mb_set_native_icon == 0) MethodBinds.MissingThrow("DisplayServer.set_native_icon");
         ulong __a0 = NativeString.Create(filename);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_native_icon, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_set_icon;
     public static void SetIcon(Image? image)
     {
-        var __mb = __mb_set_icon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "set_icon", 532598488);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.set_icon is not available in this engine build.");
-            __mb_set_icon = __mb;
-        }
+        if (__mb_set_icon == 0) MethodBinds.MissingThrow("DisplayServer.set_icon");
         nint __a0 = image?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_icon, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_create_status_indicator;
     public static int CreateStatusIndicator(Texture2D? icon, string tooltip, Callable callback)
     {
-        var __mb = __mb_create_status_indicator;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "create_status_indicator", 1904285171);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.create_status_indicator is not available in this engine build.");
-            __mb_create_status_indicator = __mb;
-        }
+        if (__mb_create_status_indicator == 0) MethodBinds.MissingThrow("DisplayServer.create_status_indicator");
         nint __a0 = icon?.NativePtr ?? 0;
         ulong __a1 = NativeString.Create(tooltip);
         var __a2 = callback.Native;
@@ -7348,7 +5267,7 @@ public static unsafe partial class DisplayServer
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_status_indicator, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a1);
         return unchecked((int)__ret);
     }
@@ -7356,281 +5275,179 @@ public static unsafe partial class DisplayServer
     private static nint __mb_status_indicator_set_icon;
     public static void StatusIndicatorSetIcon(int id, Texture2D? icon)
     {
-        var __mb = __mb_status_indicator_set_icon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "status_indicator_set_icon", 666127730);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.status_indicator_set_icon is not available in this engine build.");
-            __mb_status_indicator_set_icon = __mb;
-        }
+        if (__mb_status_indicator_set_icon == 0) MethodBinds.MissingThrow("DisplayServer.status_indicator_set_icon");
         long __a0 = unchecked((long)id);
         nint __a1 = icon?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_status_indicator_set_icon, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_status_indicator_set_tooltip;
     public static void StatusIndicatorSetTooltip(int id, string tooltip)
     {
-        var __mb = __mb_status_indicator_set_tooltip;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "status_indicator_set_tooltip", 501894301);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.status_indicator_set_tooltip is not available in this engine build.");
-            __mb_status_indicator_set_tooltip = __mb;
-        }
+        if (__mb_status_indicator_set_tooltip == 0) MethodBinds.MissingThrow("DisplayServer.status_indicator_set_tooltip");
         long __a0 = unchecked((long)id);
         ulong __a1 = NativeString.Create(tooltip);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_status_indicator_set_tooltip, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_status_indicator_set_menu;
     public static void StatusIndicatorSetMenu(int id, Rid menuRid)
     {
-        var __mb = __mb_status_indicator_set_menu;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "status_indicator_set_menu", 4040184819);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.status_indicator_set_menu is not available in this engine build.");
-            __mb_status_indicator_set_menu = __mb;
-        }
+        if (__mb_status_indicator_set_menu == 0) MethodBinds.MissingThrow("DisplayServer.status_indicator_set_menu");
         long __a0 = unchecked((long)id);
         var __a1 = menuRid;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_status_indicator_set_menu, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_status_indicator_set_callback;
     public static void StatusIndicatorSetCallback(int id, Callable callback)
     {
-        var __mb = __mb_status_indicator_set_callback;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "status_indicator_set_callback", 957362965);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.status_indicator_set_callback is not available in this engine build.");
-            __mb_status_indicator_set_callback = __mb;
-        }
+        if (__mb_status_indicator_set_callback == 0) MethodBinds.MissingThrow("DisplayServer.status_indicator_set_callback");
         long __a0 = unchecked((long)id);
         var __a1 = callback.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_status_indicator_set_callback, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_status_indicator_get_rect;
     public static Rect2 StatusIndicatorGetRect(int id)
     {
-        var __mb = __mb_status_indicator_get_rect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "status_indicator_get_rect", 3327874267);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.status_indicator_get_rect is not available in this engine build.");
-            __mb_status_indicator_get_rect = __mb;
-        }
+        if (__mb_status_indicator_get_rect == 0) MethodBinds.MissingThrow("DisplayServer.status_indicator_get_rect");
         long __a0 = unchecked((long)id);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rect2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_status_indicator_get_rect, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_delete_status_indicator;
     public static void DeleteStatusIndicator(int id)
     {
-        var __mb = __mb_delete_status_indicator;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "delete_status_indicator", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.delete_status_indicator is not available in this engine build.");
-            __mb_delete_status_indicator = __mb;
-        }
+        if (__mb_delete_status_indicator == 0) MethodBinds.MissingThrow("DisplayServer.delete_status_indicator");
         long __a0 = unchecked((long)id);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_delete_status_indicator, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_tablet_get_driver_count;
     public static int TabletGetDriverCount()
     {
-        var __mb = __mb_tablet_get_driver_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "tablet_get_driver_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.tablet_get_driver_count is not available in this engine build.");
-            __mb_tablet_get_driver_count = __mb;
-        }
+        if (__mb_tablet_get_driver_count == 0) MethodBinds.MissingThrow("DisplayServer.tablet_get_driver_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_tablet_get_driver_count, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_tablet_get_driver_name;
     public static string TabletGetDriverName(int idx)
     {
-        var __mb = __mb_tablet_get_driver_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "tablet_get_driver_name", 844755477);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.tablet_get_driver_name is not available in this engine build.");
-            __mb_tablet_get_driver_name = __mb;
-        }
+        if (__mb_tablet_get_driver_name == 0) MethodBinds.MissingThrow("DisplayServer.tablet_get_driver_name");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_tablet_get_driver_name, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_tablet_get_current_driver;
     public static string TabletGetCurrentDriver()
     {
-        var __mb = __mb_tablet_get_current_driver;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "tablet_get_current_driver", 201670096);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.tablet_get_current_driver is not available in this engine build.");
-            __mb_tablet_get_current_driver = __mb;
-        }
+        if (__mb_tablet_get_current_driver == 0) MethodBinds.MissingThrow("DisplayServer.tablet_get_current_driver");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_tablet_get_current_driver, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_tablet_set_current_driver;
     public static void TabletSetCurrentDriver(string name)
     {
-        var __mb = __mb_tablet_set_current_driver;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "tablet_set_current_driver", 83702148);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.tablet_set_current_driver is not available in this engine build.");
-            __mb_tablet_set_current_driver = __mb;
-        }
+        if (__mb_tablet_set_current_driver == 0) MethodBinds.MissingThrow("DisplayServer.tablet_set_current_driver");
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_tablet_set_current_driver, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_is_window_transparency_available;
     public static bool IsWindowTransparencyAvailable()
     {
-        var __mb = __mb_is_window_transparency_available;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "is_window_transparency_available", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.is_window_transparency_available is not available in this engine build.");
-            __mb_is_window_transparency_available = __mb;
-        }
+        if (__mb_is_window_transparency_available == 0) MethodBinds.MissingThrow("DisplayServer.is_window_transparency_available");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_window_transparency_available, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_register_additional_output;
     public static void RegisterAdditionalOutput(GodotObject? @object)
     {
-        var __mb = __mb_register_additional_output;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "register_additional_output", 3975164845);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.register_additional_output is not available in this engine build.");
-            __mb_register_additional_output = __mb;
-        }
+        if (__mb_register_additional_output == 0) MethodBinds.MissingThrow("DisplayServer.register_additional_output");
         nint __a0 = @object?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_register_additional_output, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_unregister_additional_output;
     public static void UnregisterAdditionalOutput(GodotObject? @object)
     {
-        var __mb = __mb_unregister_additional_output;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "unregister_additional_output", 3975164845);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.unregister_additional_output is not available in this engine build.");
-            __mb_unregister_additional_output = __mb;
-        }
+        if (__mb_unregister_additional_output == 0) MethodBinds.MissingThrow("DisplayServer.unregister_additional_output");
         nint __a0 = @object?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_unregister_additional_output, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_additional_outputs;
     public static bool HasAdditionalOutputs()
     {
-        var __mb = __mb_has_additional_outputs;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "has_additional_outputs", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.has_additional_outputs is not available in this engine build.");
-            __mb_has_additional_outputs = __mb;
-        }
+        if (__mb_has_additional_outputs == 0) MethodBinds.MissingThrow("DisplayServer.has_additional_outputs");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_additional_outputs, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_in_pip_mode;
     public static bool IsInPipMode(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_is_in_pip_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "is_in_pip_mode", 1885608816);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.is_in_pip_mode is not available in this engine build.");
-            __mb_is_in_pip_mode = __mb;
-        }
+        if (__mb_is_in_pip_mode == 0) MethodBinds.MissingThrow("DisplayServer.is_in_pip_mode");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_in_pip_mode, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_pip_mode_enter;
     public static void PipModeEnter(int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_pip_mode_enter;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "pip_mode_enter", 1995695955);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.pip_mode_enter is not available in this engine build.");
-            __mb_pip_mode_enter = __mb;
-        }
+        if (__mb_pip_mode_enter == 0) MethodBinds.MissingThrow("DisplayServer.pip_mode_enter");
         long __a0 = unchecked((long)windowId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_pip_mode_enter, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_pip_mode_set_aspect_ratio;
     public static void PipModeSetAspectRatio(int numerator, int denominator, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_pip_mode_set_aspect_ratio;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "pip_mode_set_aspect_ratio", 3471927553);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.pip_mode_set_aspect_ratio is not available in this engine build.");
-            __mb_pip_mode_set_aspect_ratio = __mb;
-        }
+        if (__mb_pip_mode_set_aspect_ratio == 0) MethodBinds.MissingThrow("DisplayServer.pip_mode_set_aspect_ratio");
         long __a0 = unchecked((long)numerator);
         long __a1 = unchecked((long)denominator);
         long __a2 = unchecked((long)windowId);
@@ -7638,25 +5455,310 @@ public static unsafe partial class DisplayServer
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_pip_mode_set_aspect_ratio, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_pip_mode_set_auto_enter_on_background;
     public static void PipModeSetAutoEnterOnBackground(bool autoEnterOnBackground, int windowId = unchecked((int)(0)))
     {
-        var __mb = __mb_pip_mode_set_auto_enter_on_background;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DisplayServer", "pip_mode_set_auto_enter_on_background", 1661950165);
-            if (__mb == 0) throw new MissingMethodException("DisplayServer.pip_mode_set_auto_enter_on_background is not available in this engine build.");
-            __mb_pip_mode_set_auto_enter_on_background = __mb;
-        }
+        if (__mb_pip_mode_set_auto_enter_on_background == 0) MethodBinds.MissingThrow("DisplayServer.pip_mode_set_auto_enter_on_background");
         byte __a0 = autoEnterOnBackground ? (byte)1 : (byte)0;
         long __a1 = unchecked((long)windowId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_pip_mode_set_auto_enter_on_background, SingletonPtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_has_feature = MethodBinds.ResolveBulk("DisplayServer", "has_feature", 334065950);
+        __mb_get_name = MethodBinds.ResolveBulk("DisplayServer", "get_name", 201670096);
+        __mb_help_set_search_callbacks = MethodBinds.ResolveBulk("DisplayServer", "help_set_search_callbacks", 1687350599);
+        __mb_global_menu_set_popup_callbacks = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_popup_callbacks", 3893727526);
+        __mb_global_menu_add_submenu_item = MethodBinds.ResolveBulk("DisplayServer", "global_menu_add_submenu_item", 2828985934);
+        __mb_global_menu_add_item = MethodBinds.ResolveBulk("DisplayServer", "global_menu_add_item", 3616842746);
+        __mb_global_menu_add_check_item = MethodBinds.ResolveBulk("DisplayServer", "global_menu_add_check_item", 3616842746);
+        __mb_global_menu_add_icon_item = MethodBinds.ResolveBulk("DisplayServer", "global_menu_add_icon_item", 3867083847);
+        __mb_global_menu_add_icon_check_item = MethodBinds.ResolveBulk("DisplayServer", "global_menu_add_icon_check_item", 3867083847);
+        __mb_global_menu_add_radio_check_item = MethodBinds.ResolveBulk("DisplayServer", "global_menu_add_radio_check_item", 3616842746);
+        __mb_global_menu_add_icon_radio_check_item = MethodBinds.ResolveBulk("DisplayServer", "global_menu_add_icon_radio_check_item", 3867083847);
+        __mb_global_menu_add_multistate_item = MethodBinds.ResolveBulk("DisplayServer", "global_menu_add_multistate_item", 3297554655);
+        __mb_global_menu_add_separator = MethodBinds.ResolveBulk("DisplayServer", "global_menu_add_separator", 3214812433);
+        __mb_global_menu_get_item_index_from_text = MethodBinds.ResolveBulk("DisplayServer", "global_menu_get_item_index_from_text", 2878152881);
+        __mb_global_menu_get_item_index_from_tag = MethodBinds.ResolveBulk("DisplayServer", "global_menu_get_item_index_from_tag", 2941063483);
+        __mb_global_menu_is_item_checked = MethodBinds.ResolveBulk("DisplayServer", "global_menu_is_item_checked", 3511468594);
+        __mb_global_menu_is_item_checkable = MethodBinds.ResolveBulk("DisplayServer", "global_menu_is_item_checkable", 3511468594);
+        __mb_global_menu_is_item_radio_checkable = MethodBinds.ResolveBulk("DisplayServer", "global_menu_is_item_radio_checkable", 3511468594);
+        __mb_global_menu_get_item_callback = MethodBinds.ResolveBulk("DisplayServer", "global_menu_get_item_callback", 748666903);
+        __mb_global_menu_get_item_key_callback = MethodBinds.ResolveBulk("DisplayServer", "global_menu_get_item_key_callback", 748666903);
+        __mb_global_menu_get_item_tag = MethodBinds.ResolveBulk("DisplayServer", "global_menu_get_item_tag", 330672633);
+        __mb_global_menu_get_item_text = MethodBinds.ResolveBulk("DisplayServer", "global_menu_get_item_text", 591067909);
+        __mb_global_menu_get_item_submenu = MethodBinds.ResolveBulk("DisplayServer", "global_menu_get_item_submenu", 591067909);
+        __mb_global_menu_get_item_accelerator = MethodBinds.ResolveBulk("DisplayServer", "global_menu_get_item_accelerator", 936065394);
+        __mb_global_menu_is_item_disabled = MethodBinds.ResolveBulk("DisplayServer", "global_menu_is_item_disabled", 3511468594);
+        __mb_global_menu_is_item_hidden = MethodBinds.ResolveBulk("DisplayServer", "global_menu_is_item_hidden", 3511468594);
+        __mb_global_menu_get_item_tooltip = MethodBinds.ResolveBulk("DisplayServer", "global_menu_get_item_tooltip", 591067909);
+        __mb_global_menu_get_item_state = MethodBinds.ResolveBulk("DisplayServer", "global_menu_get_item_state", 3422818498);
+        __mb_global_menu_get_item_max_states = MethodBinds.ResolveBulk("DisplayServer", "global_menu_get_item_max_states", 3422818498);
+        __mb_global_menu_get_item_icon = MethodBinds.ResolveBulk("DisplayServer", "global_menu_get_item_icon", 3591713183);
+        __mb_global_menu_get_item_indentation_level = MethodBinds.ResolveBulk("DisplayServer", "global_menu_get_item_indentation_level", 3422818498);
+        __mb_global_menu_set_item_checked = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_checked", 4108344793);
+        __mb_global_menu_set_item_checkable = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_checkable", 4108344793);
+        __mb_global_menu_set_item_radio_checkable = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_radio_checkable", 4108344793);
+        __mb_global_menu_set_item_callback = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_callback", 3809915389);
+        __mb_global_menu_set_item_hover_callbacks = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_hover_callbacks", 3809915389);
+        __mb_global_menu_set_item_key_callback = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_key_callback", 3809915389);
+        __mb_global_menu_set_item_tag = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_tag", 453659863);
+        __mb_global_menu_set_item_text = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_text", 965966136);
+        __mb_global_menu_set_item_submenu = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_submenu", 965966136);
+        __mb_global_menu_set_item_accelerator = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_accelerator", 566943293);
+        __mb_global_menu_set_item_disabled = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_disabled", 4108344793);
+        __mb_global_menu_set_item_hidden = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_hidden", 4108344793);
+        __mb_global_menu_set_item_tooltip = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_tooltip", 965966136);
+        __mb_global_menu_set_item_state = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_state", 3474840532);
+        __mb_global_menu_set_item_max_states = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_max_states", 3474840532);
+        __mb_global_menu_set_item_icon = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_icon", 3201338066);
+        __mb_global_menu_set_item_indentation_level = MethodBinds.ResolveBulk("DisplayServer", "global_menu_set_item_indentation_level", 3474840532);
+        __mb_global_menu_get_item_count = MethodBinds.ResolveBulk("DisplayServer", "global_menu_get_item_count", 1321353865);
+        __mb_global_menu_remove_item = MethodBinds.ResolveBulk("DisplayServer", "global_menu_remove_item", 2956805083);
+        __mb_global_menu_clear = MethodBinds.ResolveBulk("DisplayServer", "global_menu_clear", 83702148);
+        __mb_global_menu_get_system_menu_roots = MethodBinds.ResolveBulk("DisplayServer", "global_menu_get_system_menu_roots", 3102165223);
+        __mb_tts_is_speaking = MethodBinds.ResolveBulk("DisplayServer", "tts_is_speaking", 36873697);
+        __mb_tts_is_paused = MethodBinds.ResolveBulk("DisplayServer", "tts_is_paused", 36873697);
+        __mb_tts_get_voices = MethodBinds.ResolveBulk("DisplayServer", "tts_get_voices", 3995934104);
+        __mb_tts_get_voices_for_language = MethodBinds.ResolveBulk("DisplayServer", "tts_get_voices_for_language", 4291131558);
+        __mb_tts_speak = MethodBinds.ResolveBulk("DisplayServer", "tts_speak", 903992738);
+        __mb_tts_pause = MethodBinds.ResolveBulk("DisplayServer", "tts_pause", 3218959716);
+        __mb_tts_resume = MethodBinds.ResolveBulk("DisplayServer", "tts_resume", 3218959716);
+        __mb_tts_stop = MethodBinds.ResolveBulk("DisplayServer", "tts_stop", 3218959716);
+        __mb_tts_set_utterance_callback = MethodBinds.ResolveBulk("DisplayServer", "tts_set_utterance_callback", 109679083);
+        __mb_is_dark_mode_supported = MethodBinds.ResolveBulk("DisplayServer", "is_dark_mode_supported", 36873697);
+        __mb_is_dark_mode = MethodBinds.ResolveBulk("DisplayServer", "is_dark_mode", 36873697);
+        __mb_get_accent_color = MethodBinds.ResolveBulk("DisplayServer", "get_accent_color", 3444240500);
+        __mb_get_base_color = MethodBinds.ResolveBulk("DisplayServer", "get_base_color", 3444240500);
+        __mb_set_system_theme_change_callback = MethodBinds.ResolveBulk("DisplayServer", "set_system_theme_change_callback", 1611583062);
+        __mb_mouse_set_mode = MethodBinds.ResolveBulk("DisplayServer", "mouse_set_mode", 348288463);
+        __mb_mouse_get_mode = MethodBinds.ResolveBulk("DisplayServer", "mouse_get_mode", 1353961651);
+        __mb_warp_mouse = MethodBinds.ResolveBulk("DisplayServer", "warp_mouse", 1130785943);
+        __mb_mouse_get_position = MethodBinds.ResolveBulk("DisplayServer", "mouse_get_position", 3690982128);
+        __mb_mouse_get_button_state = MethodBinds.ResolveBulk("DisplayServer", "mouse_get_button_state", 2512161324);
+        __mb_clipboard_set = MethodBinds.ResolveBulk("DisplayServer", "clipboard_set", 83702148);
+        __mb_clipboard_get = MethodBinds.ResolveBulk("DisplayServer", "clipboard_get", 201670096);
+        __mb_clipboard_get_image = MethodBinds.ResolveBulk("DisplayServer", "clipboard_get_image", 4190603485);
+        __mb_clipboard_has = MethodBinds.ResolveBulk("DisplayServer", "clipboard_has", 36873697);
+        __mb_clipboard_has_image = MethodBinds.ResolveBulk("DisplayServer", "clipboard_has_image", 36873697);
+        __mb_clipboard_set_primary = MethodBinds.ResolveBulk("DisplayServer", "clipboard_set_primary", 83702148);
+        __mb_clipboard_get_primary = MethodBinds.ResolveBulk("DisplayServer", "clipboard_get_primary", 201670096);
+        __mb_get_display_cutouts = MethodBinds.ResolveBulk("DisplayServer", "get_display_cutouts", 3995934104);
+        __mb_get_display_safe_area = MethodBinds.ResolveBulk("DisplayServer", "get_display_safe_area", 410525958);
+        __mb_get_screen_count = MethodBinds.ResolveBulk("DisplayServer", "get_screen_count", 3905245786);
+        __mb_get_primary_screen = MethodBinds.ResolveBulk("DisplayServer", "get_primary_screen", 3905245786);
+        __mb_get_keyboard_focus_screen = MethodBinds.ResolveBulk("DisplayServer", "get_keyboard_focus_screen", 3905245786);
+        __mb_get_screen_from_rect = MethodBinds.ResolveBulk("DisplayServer", "get_screen_from_rect", 741354659);
+        __mb_screen_get_position = MethodBinds.ResolveBulk("DisplayServer", "screen_get_position", 1725937825);
+        __mb_screen_get_size = MethodBinds.ResolveBulk("DisplayServer", "screen_get_size", 1725937825);
+        __mb_screen_get_usable_rect = MethodBinds.ResolveBulk("DisplayServer", "screen_get_usable_rect", 2439012528);
+        __mb_screen_get_dpi = MethodBinds.ResolveBulk("DisplayServer", "screen_get_dpi", 181039630);
+        __mb_screen_get_scale = MethodBinds.ResolveBulk("DisplayServer", "screen_get_scale", 909105437);
+        __mb_is_touchscreen_available = MethodBinds.ResolveBulk("DisplayServer", "is_touchscreen_available", 36873697);
+        __mb_screen_get_max_scale = MethodBinds.ResolveBulk("DisplayServer", "screen_get_max_scale", 1740695150);
+        __mb_screen_get_refresh_rate = MethodBinds.ResolveBulk("DisplayServer", "screen_get_refresh_rate", 909105437);
+        __mb_screen_get_pixel = MethodBinds.ResolveBulk("DisplayServer", "screen_get_pixel", 1532707496);
+        __mb_screen_get_image = MethodBinds.ResolveBulk("DisplayServer", "screen_get_image", 3813388802);
+        __mb_screen_get_image_rect = MethodBinds.ResolveBulk("DisplayServer", "screen_get_image_rect", 2601441065);
+        __mb_screen_set_orientation = MethodBinds.ResolveBulk("DisplayServer", "screen_set_orientation", 2211511631);
+        __mb_screen_get_orientation = MethodBinds.ResolveBulk("DisplayServer", "screen_get_orientation", 133818562);
+        __mb_screen_set_keep_on = MethodBinds.ResolveBulk("DisplayServer", "screen_set_keep_on", 2586408642);
+        __mb_screen_is_kept_on = MethodBinds.ResolveBulk("DisplayServer", "screen_is_kept_on", 36873697);
+        __mb_get_window_list = MethodBinds.ResolveBulk("DisplayServer", "get_window_list", 1930428628);
+        __mb_get_window_at_screen_position = MethodBinds.ResolveBulk("DisplayServer", "get_window_at_screen_position", 2485466453);
+        __mb_window_get_native_handle = MethodBinds.ResolveBulk("DisplayServer", "window_get_native_handle", 1096425680);
+        __mb_window_get_active_popup = MethodBinds.ResolveBulk("DisplayServer", "window_get_active_popup", 3905245786);
+        __mb_window_set_popup_safe_rect = MethodBinds.ResolveBulk("DisplayServer", "window_set_popup_safe_rect", 3317281434);
+        __mb_window_get_popup_safe_rect = MethodBinds.ResolveBulk("DisplayServer", "window_get_popup_safe_rect", 2161169500);
+        __mb_window_set_title = MethodBinds.ResolveBulk("DisplayServer", "window_set_title", 441246282);
+        __mb_window_get_title_size = MethodBinds.ResolveBulk("DisplayServer", "window_get_title_size", 2925301799);
+        __mb_window_set_mouse_passthrough = MethodBinds.ResolveBulk("DisplayServer", "window_set_mouse_passthrough", 1993637420);
+        __mb_window_get_current_screen = MethodBinds.ResolveBulk("DisplayServer", "window_get_current_screen", 1591665591);
+        __mb_window_set_current_screen = MethodBinds.ResolveBulk("DisplayServer", "window_set_current_screen", 2230941749);
+        __mb_window_get_position = MethodBinds.ResolveBulk("DisplayServer", "window_get_position", 763922886);
+        __mb_window_get_position_with_decorations = MethodBinds.ResolveBulk("DisplayServer", "window_get_position_with_decorations", 763922886);
+        __mb_window_set_position = MethodBinds.ResolveBulk("DisplayServer", "window_set_position", 2019273902);
+        __mb_window_get_size = MethodBinds.ResolveBulk("DisplayServer", "window_get_size", 763922886);
+        __mb_window_set_size = MethodBinds.ResolveBulk("DisplayServer", "window_set_size", 2019273902);
+        __mb_window_set_rect_changed_callback = MethodBinds.ResolveBulk("DisplayServer", "window_set_rect_changed_callback", 1091192925);
+        __mb_window_set_window_event_callback = MethodBinds.ResolveBulk("DisplayServer", "window_set_window_event_callback", 1091192925);
+        __mb_window_set_input_event_callback = MethodBinds.ResolveBulk("DisplayServer", "window_set_input_event_callback", 1091192925);
+        __mb_window_set_input_text_callback = MethodBinds.ResolveBulk("DisplayServer", "window_set_input_text_callback", 1091192925);
+        __mb_window_set_drop_files_callback = MethodBinds.ResolveBulk("DisplayServer", "window_set_drop_files_callback", 1091192925);
+        __mb_window_get_attached_instance_id = MethodBinds.ResolveBulk("DisplayServer", "window_get_attached_instance_id", 1591665591);
+        __mb_window_get_max_size = MethodBinds.ResolveBulk("DisplayServer", "window_get_max_size", 763922886);
+        __mb_window_set_max_size = MethodBinds.ResolveBulk("DisplayServer", "window_set_max_size", 2019273902);
+        __mb_window_get_min_size = MethodBinds.ResolveBulk("DisplayServer", "window_get_min_size", 763922886);
+        __mb_window_set_min_size = MethodBinds.ResolveBulk("DisplayServer", "window_set_min_size", 2019273902);
+        __mb_window_get_size_with_decorations = MethodBinds.ResolveBulk("DisplayServer", "window_get_size_with_decorations", 763922886);
+        __mb_window_get_mode = MethodBinds.ResolveBulk("DisplayServer", "window_get_mode", 2185728461);
+        __mb_window_set_mode = MethodBinds.ResolveBulk("DisplayServer", "window_set_mode", 1319965401);
+        __mb_window_set_flag = MethodBinds.ResolveBulk("DisplayServer", "window_set_flag", 254894155);
+        __mb_window_get_flag = MethodBinds.ResolveBulk("DisplayServer", "window_get_flag", 802816991);
+        __mb_window_set_icon = MethodBinds.ResolveBulk("DisplayServer", "window_set_icon", 2457502155);
+        __mb_window_set_window_buttons_offset = MethodBinds.ResolveBulk("DisplayServer", "window_set_window_buttons_offset", 2019273902);
+        __mb_window_get_safe_title_margins = MethodBinds.ResolveBulk("DisplayServer", "window_get_safe_title_margins", 2295066620);
+        __mb_window_request_attention = MethodBinds.ResolveBulk("DisplayServer", "window_request_attention", 1995695955);
+        __mb_window_set_taskbar_progress_value = MethodBinds.ResolveBulk("DisplayServer", "window_set_taskbar_progress_value", 3506631519);
+        __mb_window_set_taskbar_progress_state = MethodBinds.ResolveBulk("DisplayServer", "window_set_taskbar_progress_state", 4119882768);
+        __mb_window_move_to_foreground = MethodBinds.ResolveBulk("DisplayServer", "window_move_to_foreground", 1995695955);
+        __mb_window_is_focused = MethodBinds.ResolveBulk("DisplayServer", "window_is_focused", 1051549951);
+        __mb_window_can_draw = MethodBinds.ResolveBulk("DisplayServer", "window_can_draw", 1051549951);
+        __mb_window_set_transient = MethodBinds.ResolveBulk("DisplayServer", "window_set_transient", 3937882851);
+        __mb_window_set_exclusive = MethodBinds.ResolveBulk("DisplayServer", "window_set_exclusive", 300928843);
+        __mb_window_set_ime_active = MethodBinds.ResolveBulk("DisplayServer", "window_set_ime_active", 1661950165);
+        __mb_window_set_ime_position = MethodBinds.ResolveBulk("DisplayServer", "window_set_ime_position", 2019273902);
+        __mb_window_set_vsync_mode = MethodBinds.ResolveBulk("DisplayServer", "window_set_vsync_mode", 2179333492);
+        __mb_window_get_vsync_mode = MethodBinds.ResolveBulk("DisplayServer", "window_get_vsync_mode", 578873795);
+        __mb_window_is_hdr_output_supported = MethodBinds.ResolveBulk("DisplayServer", "window_is_hdr_output_supported", 1051549951);
+        __mb_window_request_hdr_output = MethodBinds.ResolveBulk("DisplayServer", "window_request_hdr_output", 1661950165);
+        __mb_window_is_hdr_output_requested = MethodBinds.ResolveBulk("DisplayServer", "window_is_hdr_output_requested", 1051549951);
+        __mb_window_is_hdr_output_enabled = MethodBinds.ResolveBulk("DisplayServer", "window_is_hdr_output_enabled", 1051549951);
+        __mb_window_set_hdr_output_reference_luminance = MethodBinds.ResolveBulk("DisplayServer", "window_set_hdr_output_reference_luminance", 3506631519);
+        __mb_window_get_hdr_output_reference_luminance = MethodBinds.ResolveBulk("DisplayServer", "window_get_hdr_output_reference_luminance", 218038398);
+        __mb_window_get_hdr_output_current_reference_luminance = MethodBinds.ResolveBulk("DisplayServer", "window_get_hdr_output_current_reference_luminance", 218038398);
+        __mb_window_set_hdr_output_max_luminance = MethodBinds.ResolveBulk("DisplayServer", "window_set_hdr_output_max_luminance", 3506631519);
+        __mb_window_get_hdr_output_max_luminance = MethodBinds.ResolveBulk("DisplayServer", "window_get_hdr_output_max_luminance", 218038398);
+        __mb_window_get_hdr_output_current_max_luminance = MethodBinds.ResolveBulk("DisplayServer", "window_get_hdr_output_current_max_luminance", 218038398);
+        __mb_window_get_output_max_linear_value = MethodBinds.ResolveBulk("DisplayServer", "window_get_output_max_linear_value", 218038398);
+        __mb_window_is_maximize_allowed = MethodBinds.ResolveBulk("DisplayServer", "window_is_maximize_allowed", 1051549951);
+        __mb_window_maximize_on_title_dbl_click = MethodBinds.ResolveBulk("DisplayServer", "window_maximize_on_title_dbl_click", 36873697);
+        __mb_window_minimize_on_title_dbl_click = MethodBinds.ResolveBulk("DisplayServer", "window_minimize_on_title_dbl_click", 36873697);
+        __mb_window_start_drag = MethodBinds.ResolveBulk("DisplayServer", "window_start_drag", 1995695955);
+        __mb_window_start_resize = MethodBinds.ResolveBulk("DisplayServer", "window_start_resize", 4009722312);
+        __mb_window_set_color = MethodBinds.ResolveBulk("DisplayServer", "window_set_color", 2920490490);
+        __mb_accessibility_should_increase_contrast = MethodBinds.ResolveBulk("DisplayServer", "accessibility_should_increase_contrast", 3905245786);
+        __mb_accessibility_should_reduce_animation = MethodBinds.ResolveBulk("DisplayServer", "accessibility_should_reduce_animation", 3905245786);
+        __mb_accessibility_should_reduce_transparency = MethodBinds.ResolveBulk("DisplayServer", "accessibility_should_reduce_transparency", 3905245786);
+        __mb_accessibility_screen_reader_active = MethodBinds.ResolveBulk("DisplayServer", "accessibility_screen_reader_active", 3905245786);
+        __mb_accessibility_create_element = MethodBinds.ResolveBulk("DisplayServer", "accessibility_create_element", 2968347744);
+        __mb_accessibility_create_sub_element = MethodBinds.ResolveBulk("DisplayServer", "accessibility_create_sub_element", 1949948826);
+        __mb_accessibility_create_sub_text_edit_elements = MethodBinds.ResolveBulk("DisplayServer", "accessibility_create_sub_text_edit_elements", 2702009895);
+        __mb_accessibility_has_element = MethodBinds.ResolveBulk("DisplayServer", "accessibility_has_element", 4155700596);
+        __mb_accessibility_free_element = MethodBinds.ResolveBulk("DisplayServer", "accessibility_free_element", 2722037293);
+        __mb_accessibility_element_set_meta = MethodBinds.ResolveBulk("DisplayServer", "accessibility_element_set_meta", 3175752987);
+        __mb_accessibility_element_get_meta = MethodBinds.ResolveBulk("DisplayServer", "accessibility_element_get_meta", 4171304767);
+        __mb_accessibility_set_window_rect = MethodBinds.ResolveBulk("DisplayServer", "accessibility_set_window_rect", 2386961724);
+        __mb_accessibility_set_window_focused = MethodBinds.ResolveBulk("DisplayServer", "accessibility_set_window_focused", 300928843);
+        __mb_accessibility_update_set_focus = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_focus", 2722037293);
+        __mb_accessibility_get_window_root = MethodBinds.ResolveBulk("DisplayServer", "accessibility_get_window_root", 495598643);
+        __mb_accessibility_update_set_role = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_role", 3352768215);
+        __mb_accessibility_update_set_name = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_name", 2726140452);
+        __mb_accessibility_update_set_extra_info = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_extra_info", 2726140452);
+        __mb_accessibility_update_set_description = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_description", 2726140452);
+        __mb_accessibility_update_set_value = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_value", 2726140452);
+        __mb_accessibility_update_set_tooltip = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_tooltip", 2726140452);
+        __mb_accessibility_update_set_bounds = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_bounds", 1378122625);
+        __mb_accessibility_update_set_transform = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_transform", 1246044741);
+        __mb_accessibility_update_add_child = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_add_child", 395945892);
+        __mb_accessibility_update_add_related_controls = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_add_related_controls", 395945892);
+        __mb_accessibility_update_add_related_details = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_add_related_details", 395945892);
+        __mb_accessibility_update_add_related_described_by = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_add_related_described_by", 395945892);
+        __mb_accessibility_update_add_related_flow_to = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_add_related_flow_to", 395945892);
+        __mb_accessibility_update_add_related_labeled_by = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_add_related_labeled_by", 395945892);
+        __mb_accessibility_update_add_related_radio_group = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_add_related_radio_group", 395945892);
+        __mb_accessibility_update_set_active_descendant = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_active_descendant", 395945892);
+        __mb_accessibility_update_set_next_on_line = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_next_on_line", 395945892);
+        __mb_accessibility_update_set_previous_on_line = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_previous_on_line", 395945892);
+        __mb_accessibility_update_set_member_of = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_member_of", 395945892);
+        __mb_accessibility_update_set_in_page_link_target = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_in_page_link_target", 395945892);
+        __mb_accessibility_update_set_error_message = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_error_message", 395945892);
+        __mb_accessibility_update_set_live = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_live", 2683302212);
+        __mb_accessibility_update_add_action = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_add_action", 2898696987);
+        __mb_accessibility_update_add_custom_action = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_add_custom_action", 4153150897);
+        __mb_accessibility_update_set_table_row_count = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_table_row_count", 3411492887);
+        __mb_accessibility_update_set_table_column_count = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_table_column_count", 3411492887);
+        __mb_accessibility_update_set_table_row_index = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_table_row_index", 3411492887);
+        __mb_accessibility_update_set_table_column_index = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_table_column_index", 3411492887);
+        __mb_accessibility_update_set_table_cell_position = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_table_cell_position", 4288446313);
+        __mb_accessibility_update_set_table_cell_span = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_table_cell_span", 4288446313);
+        __mb_accessibility_update_set_list_item_count = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_list_item_count", 3411492887);
+        __mb_accessibility_update_set_list_item_index = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_list_item_index", 3411492887);
+        __mb_accessibility_update_set_list_item_level = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_list_item_level", 3411492887);
+        __mb_accessibility_update_set_list_item_selected = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_list_item_selected", 1265174801);
+        __mb_accessibility_update_set_list_item_expanded = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_list_item_expanded", 1265174801);
+        __mb_accessibility_update_set_popup_type = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_popup_type", 2040885448);
+        __mb_accessibility_update_set_checked = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_checked", 1265174801);
+        __mb_accessibility_update_set_num_value = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_num_value", 1794382983);
+        __mb_accessibility_update_set_num_range = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_num_range", 2513314492);
+        __mb_accessibility_update_set_num_step = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_num_step", 1794382983);
+        __mb_accessibility_update_set_num_jump = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_num_jump", 1794382983);
+        __mb_accessibility_update_set_scroll_x = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_scroll_x", 1794382983);
+        __mb_accessibility_update_set_scroll_x_range = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_scroll_x_range", 2513314492);
+        __mb_accessibility_update_set_scroll_y = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_scroll_y", 1794382983);
+        __mb_accessibility_update_set_scroll_y_range = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_scroll_y_range", 2513314492);
+        __mb_accessibility_update_set_text_decorations = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_text_decorations", 1672422386);
+        __mb_accessibility_update_set_text_align = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_text_align", 3725995085);
+        __mb_accessibility_update_set_text_selection = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_text_selection", 3119144029);
+        __mb_accessibility_update_set_flag = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_flag", 3758675396);
+        __mb_accessibility_update_set_classname = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_classname", 2726140452);
+        __mb_accessibility_update_set_placeholder = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_placeholder", 2726140452);
+        __mb_accessibility_update_set_language = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_language", 2726140452);
+        __mb_accessibility_update_set_text_orientation = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_text_orientation", 1265174801);
+        __mb_accessibility_update_set_list_orientation = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_list_orientation", 1265174801);
+        __mb_accessibility_update_set_shortcut = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_shortcut", 2726140452);
+        __mb_accessibility_update_set_url = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_url", 2726140452);
+        __mb_accessibility_update_set_role_description = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_role_description", 2726140452);
+        __mb_accessibility_update_set_state_description = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_state_description", 2726140452);
+        __mb_accessibility_update_set_color_value = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_color_value", 2948539648);
+        __mb_accessibility_update_set_background_color = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_background_color", 2948539648);
+        __mb_accessibility_update_set_foreground_color = MethodBinds.ResolveBulk("DisplayServer", "accessibility_update_set_foreground_color", 2948539648);
+        __mb_ime_get_selection = MethodBinds.ResolveBulk("DisplayServer", "ime_get_selection", 3690982128);
+        __mb_ime_get_text = MethodBinds.ResolveBulk("DisplayServer", "ime_get_text", 201670096);
+        __mb_virtual_keyboard_show = MethodBinds.ResolveBulk("DisplayServer", "virtual_keyboard_show", 3042891259);
+        __mb_virtual_keyboard_hide = MethodBinds.ResolveBulk("DisplayServer", "virtual_keyboard_hide", 3218959716);
+        __mb_virtual_keyboard_get_height = MethodBinds.ResolveBulk("DisplayServer", "virtual_keyboard_get_height", 3905245786);
+        __mb_has_hardware_keyboard = MethodBinds.ResolveBulk("DisplayServer", "has_hardware_keyboard", 36873697);
+        __mb_set_hardware_keyboard_connection_change_callback = MethodBinds.ResolveBulk("DisplayServer", "set_hardware_keyboard_connection_change_callback", 1611583062);
+        __mb_cursor_set_shape = MethodBinds.ResolveBulk("DisplayServer", "cursor_set_shape", 2026291549);
+        __mb_cursor_get_shape = MethodBinds.ResolveBulk("DisplayServer", "cursor_get_shape", 1087724927);
+        __mb_cursor_set_custom_image = MethodBinds.ResolveBulk("DisplayServer", "cursor_set_custom_image", 1816663697);
+        __mb_get_swap_cancel_ok = MethodBinds.ResolveBulk("DisplayServer", "get_swap_cancel_ok", 2240911060);
+        __mb_enable_for_stealing_focus = MethodBinds.ResolveBulk("DisplayServer", "enable_for_stealing_focus", 1286410249);
+        __mb_dialog_show = MethodBinds.ResolveBulk("DisplayServer", "dialog_show", 4115553226);
+        __mb_dialog_input_text = MethodBinds.ResolveBulk("DisplayServer", "dialog_input_text", 3088703427);
+        __mb_file_dialog_show = MethodBinds.ResolveBulk("DisplayServer", "file_dialog_show", 1386825884);
+        __mb_file_dialog_with_options_show = MethodBinds.ResolveBulk("DisplayServer", "file_dialog_with_options_show", 1448789813);
+        __mb_beep = MethodBinds.ResolveBulk("DisplayServer", "beep", 4051624405);
+        __mb_keyboard_get_layout_count = MethodBinds.ResolveBulk("DisplayServer", "keyboard_get_layout_count", 3905245786);
+        __mb_keyboard_get_current_layout = MethodBinds.ResolveBulk("DisplayServer", "keyboard_get_current_layout", 3905245786);
+        __mb_keyboard_set_current_layout = MethodBinds.ResolveBulk("DisplayServer", "keyboard_set_current_layout", 1286410249);
+        __mb_keyboard_get_layout_language = MethodBinds.ResolveBulk("DisplayServer", "keyboard_get_layout_language", 844755477);
+        __mb_keyboard_get_layout_name = MethodBinds.ResolveBulk("DisplayServer", "keyboard_get_layout_name", 844755477);
+        __mb_keyboard_get_keycode_from_physical = MethodBinds.ResolveBulk("DisplayServer", "keyboard_get_keycode_from_physical", 3447613187);
+        __mb_keyboard_get_label_from_physical = MethodBinds.ResolveBulk("DisplayServer", "keyboard_get_label_from_physical", 3447613187);
+        __mb_show_emoji_and_symbol_picker = MethodBinds.ResolveBulk("DisplayServer", "show_emoji_and_symbol_picker", 4051624405);
+        __mb_color_picker = MethodBinds.ResolveBulk("DisplayServer", "color_picker", 151643214);
+        __mb_process_events = MethodBinds.ResolveBulk("DisplayServer", "process_events", 3218959716);
+        __mb_force_process_and_drop_events = MethodBinds.ResolveBulk("DisplayServer", "force_process_and_drop_events", 3218959716);
+        __mb_set_native_icon = MethodBinds.ResolveBulk("DisplayServer", "set_native_icon", 83702148);
+        __mb_set_icon = MethodBinds.ResolveBulk("DisplayServer", "set_icon", 532598488);
+        __mb_create_status_indicator = MethodBinds.ResolveBulk("DisplayServer", "create_status_indicator", 1904285171);
+        __mb_status_indicator_set_icon = MethodBinds.ResolveBulk("DisplayServer", "status_indicator_set_icon", 666127730);
+        __mb_status_indicator_set_tooltip = MethodBinds.ResolveBulk("DisplayServer", "status_indicator_set_tooltip", 501894301);
+        __mb_status_indicator_set_menu = MethodBinds.ResolveBulk("DisplayServer", "status_indicator_set_menu", 4040184819);
+        __mb_status_indicator_set_callback = MethodBinds.ResolveBulk("DisplayServer", "status_indicator_set_callback", 957362965);
+        __mb_status_indicator_get_rect = MethodBinds.ResolveBulk("DisplayServer", "status_indicator_get_rect", 3327874267);
+        __mb_delete_status_indicator = MethodBinds.ResolveBulk("DisplayServer", "delete_status_indicator", 1286410249);
+        __mb_tablet_get_driver_count = MethodBinds.ResolveBulk("DisplayServer", "tablet_get_driver_count", 3905245786);
+        __mb_tablet_get_driver_name = MethodBinds.ResolveBulk("DisplayServer", "tablet_get_driver_name", 844755477);
+        __mb_tablet_get_current_driver = MethodBinds.ResolveBulk("DisplayServer", "tablet_get_current_driver", 201670096);
+        __mb_tablet_set_current_driver = MethodBinds.ResolveBulk("DisplayServer", "tablet_set_current_driver", 83702148);
+        __mb_is_window_transparency_available = MethodBinds.ResolveBulk("DisplayServer", "is_window_transparency_available", 36873697);
+        __mb_register_additional_output = MethodBinds.ResolveBulk("DisplayServer", "register_additional_output", 3975164845);
+        __mb_unregister_additional_output = MethodBinds.ResolveBulk("DisplayServer", "unregister_additional_output", 3975164845);
+        __mb_has_additional_outputs = MethodBinds.ResolveBulk("DisplayServer", "has_additional_outputs", 36873697);
+        __mb_is_in_pip_mode = MethodBinds.ResolveBulk("DisplayServer", "is_in_pip_mode", 1885608816);
+        __mb_pip_mode_enter = MethodBinds.ResolveBulk("DisplayServer", "pip_mode_enter", 1995695955);
+        __mb_pip_mode_set_aspect_ratio = MethodBinds.ResolveBulk("DisplayServer", "pip_mode_set_aspect_ratio", 3471927553);
+        __mb_pip_mode_set_auto_enter_on_background = MethodBinds.ResolveBulk("DisplayServer", "pip_mode_set_auto_enter_on_background", 1661950165);
     }
 }
 
@@ -7680,60 +5782,36 @@ public unsafe partial class DrawableTexture2D : Texture2D
     private static nint __mb_set_format;
     public void SetFormat(DrawableTexture2D.DrawableFormat format)
     {
-        var __mb = __mb_set_format;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DrawableTexture2D", "set_format", 2875673594);
-            if (__mb == 0) throw new MissingMethodException("DrawableTexture2D.set_format is not available in this engine build.");
-            __mb_set_format = __mb;
-        }
+        if (__mb_set_format == 0) MethodBinds.MissingThrow("DrawableTexture2D.set_format");
         long __a0 = (long)format;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_format, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_use_mipmaps;
     public void SetUseMipmaps(bool mipmaps)
     {
-        var __mb = __mb_set_use_mipmaps;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DrawableTexture2D", "set_use_mipmaps", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("DrawableTexture2D.set_use_mipmaps is not available in this engine build.");
-            __mb_set_use_mipmaps = __mb;
-        }
+        if (__mb_set_use_mipmaps == 0) MethodBinds.MissingThrow("DrawableTexture2D.set_use_mipmaps");
         byte __a0 = mipmaps ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_use_mipmaps, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_use_mipmaps;
     public bool GetUseMipmaps()
     {
-        var __mb = __mb_get_use_mipmaps;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DrawableTexture2D", "get_use_mipmaps", 36873697);
-            if (__mb == 0) throw new MissingMethodException("DrawableTexture2D.get_use_mipmaps is not available in this engine build.");
-            __mb_get_use_mipmaps = __mb;
-        }
+        if (__mb_get_use_mipmaps == 0) MethodBinds.MissingThrow("DrawableTexture2D.get_use_mipmaps");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_use_mipmaps, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_setup;
     public void Setup(int width, int height, DrawableTexture2D.DrawableFormat format, Color color, bool useMipmaps = false)
     {
-        var __mb = __mb_setup;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DrawableTexture2D", "setup", 674365339);
-            if (__mb == 0) throw new MissingMethodException("DrawableTexture2D.setup is not available in this engine build.");
-            __mb_setup = __mb;
-        }
+        if (__mb_setup == 0) MethodBinds.MissingThrow("DrawableTexture2D.setup");
         long __a0 = unchecked((long)width);
         long __a1 = unchecked((long)height);
         long __a2 = (long)format;
@@ -7745,19 +5823,13 @@ public unsafe partial class DrawableTexture2D : Texture2D
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_setup, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_blit_rect;
     public void BlitRect(Rect2I rect, Texture2D? source, Color modulate, int mipmap = unchecked((int)(0)), Material? material = null)
     {
-        var __mb = __mb_blit_rect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DrawableTexture2D", "blit_rect", 319217173);
-            if (__mb == 0) throw new MissingMethodException("DrawableTexture2D.blit_rect is not available in this engine build.");
-            __mb_blit_rect = __mb;
-        }
+        if (__mb_blit_rect == 0) MethodBinds.MissingThrow("DrawableTexture2D.blit_rect");
         var __a0 = rect;
         nint __a1 = source?.NativePtr ?? 0;
         var __a2 = modulate;
@@ -7769,19 +5841,13 @@ public unsafe partial class DrawableTexture2D : Texture2D
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_blit_rect, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_blit_rect_multi;
     public void BlitRectMulti(Rect2I rect, Godot.Collections.Array sources, Godot.Collections.Array extraTargets, Color modulate, int mipmap = unchecked((int)(0)), Material? material = null)
     {
-        var __mb = __mb_blit_rect_multi;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DrawableTexture2D", "blit_rect_multi", 3074783066);
-            if (__mb == 0) throw new MissingMethodException("DrawableTexture2D.blit_rect_multi is not available in this engine build.");
-            __mb_blit_rect_multi = __mb;
-        }
+        if (__mb_blit_rect_multi == 0) MethodBinds.MissingThrow("DrawableTexture2D.blit_rect_multi");
         var __a0 = rect;
         ulong __a1 = sources.Native;
         ulong __a2 = extraTargets.Native;
@@ -7795,20 +5861,25 @@ public unsafe partial class DrawableTexture2D : Texture2D
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_blit_rect_multi, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_generate_mipmaps;
     public void GenerateMipmaps()
     {
-        var __mb = __mb_generate_mipmaps;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("DrawableTexture2D", "generate_mipmaps", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("DrawableTexture2D.generate_mipmaps is not available in this engine build.");
-            __mb_generate_mipmaps = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_generate_mipmaps == 0) MethodBinds.MissingThrow("DrawableTexture2D.generate_mipmaps");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_generate_mipmaps, NativePtr, 0, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_format = MethodBinds.ResolveBulk("DrawableTexture2D", "set_format", 2875673594);
+        __mb_set_use_mipmaps = MethodBinds.ResolveBulk("DrawableTexture2D", "set_use_mipmaps", 2586408642);
+        __mb_get_use_mipmaps = MethodBinds.ResolveBulk("DrawableTexture2D", "get_use_mipmaps", 36873697);
+        __mb_setup = MethodBinds.ResolveBulk("DrawableTexture2D", "setup", 674365339);
+        __mb_blit_rect = MethodBinds.ResolveBulk("DrawableTexture2D", "blit_rect", 319217173);
+        __mb_blit_rect_multi = MethodBinds.ResolveBulk("DrawableTexture2D", "blit_rect_multi", 3074783066);
+        __mb_generate_mipmaps = MethodBinds.ResolveBulk("DrawableTexture2D", "generate_mipmaps", 3218959716);
     }
 }
 

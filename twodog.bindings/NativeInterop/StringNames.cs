@@ -91,6 +91,18 @@ public static unsafe class StringNames
         return result;
     }
 
+    /// <summary>Destroys an OWNED native StringName without reading it.</summary>
+    public static void DestroyOwned(ref ulong opaque)
+    {
+        var dtor = (delegate* unmanaged<nint, void>)GdExtensionInterface.VariantGetPtrDestructor(
+            (int)GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_STRING_NAME);
+        fixed (ulong* p = &opaque)
+        {
+            dtor((nint)p);
+        }
+        opaque = 0;
+    }
+
     /// <summary>
     /// Reads an OWNED native StringName (e.g. a ptrcall return) into a managed
     /// string and destroys it.

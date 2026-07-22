@@ -80,93 +80,57 @@ public static unsafe partial class OS
     private static nint __mb_get_entropy;
     public static byte[] GetEntropy(int size)
     {
-        var __mb = __mb_get_entropy;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_entropy", 47165747);
-            if (__mb == 0) throw new MissingMethodException("OS.get_entropy is not available in this engine build.");
-            __mb_get_entropy = __mb;
-        }
+        if (__mb_get_entropy == 0) MethodBinds.MissingThrow("OS.get_entropy");
         long __a0 = unchecked((long)size);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_entropy, SingletonPtr, (nint)__args, (nint)(&__ret));
         return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_system_ca_certificates;
     public static string GetSystemCaCertificates()
     {
-        var __mb = __mb_get_system_ca_certificates;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_system_ca_certificates", 2841200299);
-            if (__mb == 0) throw new MissingMethodException("OS.get_system_ca_certificates is not available in this engine build.");
-            __mb_get_system_ca_certificates = __mb;
-        }
+        if (__mb_get_system_ca_certificates == 0) MethodBinds.MissingThrow("OS.get_system_ca_certificates");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_system_ca_certificates, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_connected_midi_inputs;
     public static string[] GetConnectedMidiInputs()
     {
-        var __mb = __mb_get_connected_midi_inputs;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_connected_midi_inputs", 2981934095);
-            if (__mb == 0) throw new MissingMethodException("OS.get_connected_midi_inputs is not available in this engine build.");
-            __mb_get_connected_midi_inputs = __mb;
-        }
+        if (__mb_get_connected_midi_inputs == 0) MethodBinds.MissingThrow("OS.get_connected_midi_inputs");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_connected_midi_inputs, SingletonPtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_open_midi_inputs;
     public static void OpenMidiInputs()
     {
-        var __mb = __mb_open_midi_inputs;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "open_midi_inputs", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("OS.open_midi_inputs is not available in this engine build.");
-            __mb_open_midi_inputs = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
+        if (__mb_open_midi_inputs == 0) MethodBinds.MissingThrow("OS.open_midi_inputs");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_open_midi_inputs, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_close_midi_inputs;
     public static void CloseMidiInputs()
     {
-        var __mb = __mb_close_midi_inputs;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "close_midi_inputs", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("OS.close_midi_inputs is not available in this engine build.");
-            __mb_close_midi_inputs = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
+        if (__mb_close_midi_inputs == 0) MethodBinds.MissingThrow("OS.close_midi_inputs");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_close_midi_inputs, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_alert;
     public static void Alert(string text, string title = "Alert!")
     {
-        var __mb = __mb_alert;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "alert", 1783970740);
-            if (__mb == 0) throw new MissingMethodException("OS.alert is not available in this engine build.");
-            __mb_alert = __mb;
-        }
+        if (__mb_alert == 0) MethodBinds.MissingThrow("OS.alert");
         ulong __a0 = NativeString.Create(text);
         ulong __a1 = NativeString.Create(title);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_alert, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
     }
@@ -174,168 +138,102 @@ public static unsafe partial class OS
     private static nint __mb_crash;
     public static void Crash(string message)
     {
-        var __mb = __mb_crash;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "crash", 83702148);
-            if (__mb == 0) throw new MissingMethodException("OS.crash is not available in this engine build.");
-            __mb_crash = __mb;
-        }
+        if (__mb_crash == 0) MethodBinds.MissingThrow("OS.crash");
         ulong __a0 = NativeString.Create(message);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_crash, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_set_low_processor_usage_mode;
     public static void SetLowProcessorUsageMode(bool enable)
     {
-        var __mb = __mb_set_low_processor_usage_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "set_low_processor_usage_mode", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OS.set_low_processor_usage_mode is not available in this engine build.");
-            __mb_set_low_processor_usage_mode = __mb;
-        }
+        if (__mb_set_low_processor_usage_mode == 0) MethodBinds.MissingThrow("OS.set_low_processor_usage_mode");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_low_processor_usage_mode, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_in_low_processor_usage_mode;
     public static bool IsInLowProcessorUsageMode()
     {
-        var __mb = __mb_is_in_low_processor_usage_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "is_in_low_processor_usage_mode", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OS.is_in_low_processor_usage_mode is not available in this engine build.");
-            __mb_is_in_low_processor_usage_mode = __mb;
-        }
+        if (__mb_is_in_low_processor_usage_mode == 0) MethodBinds.MissingThrow("OS.is_in_low_processor_usage_mode");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_in_low_processor_usage_mode, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_low_processor_usage_mode_sleep_usec;
     public static void SetLowProcessorUsageModeSleepUsec(int usec)
     {
-        var __mb = __mb_set_low_processor_usage_mode_sleep_usec;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "set_low_processor_usage_mode_sleep_usec", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OS.set_low_processor_usage_mode_sleep_usec is not available in this engine build.");
-            __mb_set_low_processor_usage_mode_sleep_usec = __mb;
-        }
+        if (__mb_set_low_processor_usage_mode_sleep_usec == 0) MethodBinds.MissingThrow("OS.set_low_processor_usage_mode_sleep_usec");
         long __a0 = unchecked((long)usec);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_low_processor_usage_mode_sleep_usec, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_low_processor_usage_mode_sleep_usec;
     public static int GetLowProcessorUsageModeSleepUsec()
     {
-        var __mb = __mb_get_low_processor_usage_mode_sleep_usec;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_low_processor_usage_mode_sleep_usec", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OS.get_low_processor_usage_mode_sleep_usec is not available in this engine build.");
-            __mb_get_low_processor_usage_mode_sleep_usec = __mb;
-        }
+        if (__mb_get_low_processor_usage_mode_sleep_usec == 0) MethodBinds.MissingThrow("OS.get_low_processor_usage_mode_sleep_usec");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_low_processor_usage_mode_sleep_usec, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_delta_smoothing;
     public static void SetDeltaSmoothing(bool deltaSmoothingEnabled)
     {
-        var __mb = __mb_set_delta_smoothing;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "set_delta_smoothing", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OS.set_delta_smoothing is not available in this engine build.");
-            __mb_set_delta_smoothing = __mb;
-        }
+        if (__mb_set_delta_smoothing == 0) MethodBinds.MissingThrow("OS.set_delta_smoothing");
         byte __a0 = deltaSmoothingEnabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_delta_smoothing, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_delta_smoothing_enabled;
     public static bool IsDeltaSmoothingEnabled()
     {
-        var __mb = __mb_is_delta_smoothing_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "is_delta_smoothing_enabled", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OS.is_delta_smoothing_enabled is not available in this engine build.");
-            __mb_is_delta_smoothing_enabled = __mb;
-        }
+        if (__mb_is_delta_smoothing_enabled == 0) MethodBinds.MissingThrow("OS.is_delta_smoothing_enabled");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_delta_smoothing_enabled, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_processor_count;
     public static int GetProcessorCount()
     {
-        var __mb = __mb_get_processor_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_processor_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OS.get_processor_count is not available in this engine build.");
-            __mb_get_processor_count = __mb;
-        }
+        if (__mb_get_processor_count == 0) MethodBinds.MissingThrow("OS.get_processor_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_processor_count, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_processor_name;
     public static string GetProcessorName()
     {
-        var __mb = __mb_get_processor_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_processor_name", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OS.get_processor_name is not available in this engine build.");
-            __mb_get_processor_name = __mb;
-        }
+        if (__mb_get_processor_name == 0) MethodBinds.MissingThrow("OS.get_processor_name");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_processor_name, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_system_fonts;
     public static string[] GetSystemFonts()
     {
-        var __mb = __mb_get_system_fonts;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_system_fonts", 1139954409);
-            if (__mb == 0) throw new MissingMethodException("OS.get_system_fonts is not available in this engine build.");
-            __mb_get_system_fonts = __mb;
-        }
+        if (__mb_get_system_fonts == 0) MethodBinds.MissingThrow("OS.get_system_fonts");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_system_fonts, SingletonPtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_get_system_font_path;
     public static string GetSystemFontPath(string fontName, int weight = unchecked((int)(400)), int stretch = unchecked((int)(100)), bool italic = false)
     {
-        var __mb = __mb_get_system_font_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_system_font_path", 626580860);
-            if (__mb == 0) throw new MissingMethodException("OS.get_system_font_path is not available in this engine build.");
-            __mb_get_system_font_path = __mb;
-        }
+        if (__mb_get_system_font_path == 0) MethodBinds.MissingThrow("OS.get_system_font_path");
         ulong __a0 = NativeString.Create(fontName);
         long __a1 = unchecked((long)weight);
         long __a2 = unchecked((long)stretch);
@@ -346,7 +244,7 @@ public static unsafe partial class OS
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_system_font_path, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
@@ -354,13 +252,7 @@ public static unsafe partial class OS
     private static nint __mb_get_system_font_path_for_text;
     public static string[] GetSystemFontPathForText(string fontName, string text, string locale = "", string script = "", int weight = unchecked((int)(400)), int stretch = unchecked((int)(100)), bool italic = false)
     {
-        var __mb = __mb_get_system_font_path_for_text;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_system_font_path_for_text", 197317981);
-            if (__mb == 0) throw new MissingMethodException("OS.get_system_font_path_for_text is not available in this engine build.");
-            __mb_get_system_font_path_for_text = __mb;
-        }
+        if (__mb_get_system_font_path_for_text == 0) MethodBinds.MissingThrow("OS.get_system_font_path_for_text");
         ulong __a0 = NativeString.Create(fontName);
         ulong __a1 = NativeString.Create(text);
         ulong __a2 = NativeString.Create(locale);
@@ -377,7 +269,7 @@ public static unsafe partial class OS
         __args[5] = (nint)(&__a5);
         __args[6] = (nint)(&__a6);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_system_font_path_for_text, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         NativeString.Destroy(ref __a2);
@@ -388,109 +280,67 @@ public static unsafe partial class OS
     private static nint __mb_get_executable_path;
     public static string GetExecutablePath()
     {
-        var __mb = __mb_get_executable_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_executable_path", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OS.get_executable_path is not available in this engine build.");
-            __mb_get_executable_path = __mb;
-        }
+        if (__mb_get_executable_path == 0) MethodBinds.MissingThrow("OS.get_executable_path");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_executable_path, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_read_string_from_stdin;
     public static string ReadStringFromStdin(long bufferSize = unchecked((long)(1024)))
     {
-        var __mb = __mb_read_string_from_stdin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "read_string_from_stdin", 723587915);
-            if (__mb == 0) throw new MissingMethodException("OS.read_string_from_stdin is not available in this engine build.");
-            __mb_read_string_from_stdin = __mb;
-        }
+        if (__mb_read_string_from_stdin == 0) MethodBinds.MissingThrow("OS.read_string_from_stdin");
         long __a0 = unchecked((long)bufferSize);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_read_string_from_stdin, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_read_buffer_from_stdin;
     public static byte[] ReadBufferFromStdin(long bufferSize = unchecked((long)(1024)))
     {
-        var __mb = __mb_read_buffer_from_stdin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "read_buffer_from_stdin", 3249455752);
-            if (__mb == 0) throw new MissingMethodException("OS.read_buffer_from_stdin is not available in this engine build.");
-            __mb_read_buffer_from_stdin = __mb;
-        }
+        if (__mb_read_buffer_from_stdin == 0) MethodBinds.MissingThrow("OS.read_buffer_from_stdin");
         long __a0 = unchecked((long)bufferSize);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_read_buffer_from_stdin, SingletonPtr, (nint)__args, (nint)(&__ret));
         return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_stdin_type;
     public static OS.StdHandleType GetStdinType()
     {
-        var __mb = __mb_get_stdin_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_stdin_type", 1704816237);
-            if (__mb == 0) throw new MissingMethodException("OS.get_stdin_type is not available in this engine build.");
-            __mb_get_stdin_type = __mb;
-        }
+        if (__mb_get_stdin_type == 0) MethodBinds.MissingThrow("OS.get_stdin_type");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_stdin_type, SingletonPtr, 0, (nint)(&__ret));
         return (OS.StdHandleType)__ret;
     }
 
     private static nint __mb_get_stdout_type;
     public static OS.StdHandleType GetStdoutType()
     {
-        var __mb = __mb_get_stdout_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_stdout_type", 1704816237);
-            if (__mb == 0) throw new MissingMethodException("OS.get_stdout_type is not available in this engine build.");
-            __mb_get_stdout_type = __mb;
-        }
+        if (__mb_get_stdout_type == 0) MethodBinds.MissingThrow("OS.get_stdout_type");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_stdout_type, SingletonPtr, 0, (nint)(&__ret));
         return (OS.StdHandleType)__ret;
     }
 
     private static nint __mb_get_stderr_type;
     public static OS.StdHandleType GetStderrType()
     {
-        var __mb = __mb_get_stderr_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_stderr_type", 1704816237);
-            if (__mb == 0) throw new MissingMethodException("OS.get_stderr_type is not available in this engine build.");
-            __mb_get_stderr_type = __mb;
-        }
+        if (__mb_get_stderr_type == 0) MethodBinds.MissingThrow("OS.get_stderr_type");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_stderr_type, SingletonPtr, 0, (nint)(&__ret));
         return (OS.StdHandleType)__ret;
     }
 
     private static nint __mb_execute;
     public static int Execute(string path, string[] arguments, Godot.Collections.Array output, bool readStderr = false, bool openConsole = false)
     {
-        var __mb = __mb_execute;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "execute", 1488299882);
-            if (__mb == 0) throw new MissingMethodException("OS.execute is not available in this engine build.");
-            __mb_execute = __mb;
-        }
+        if (__mb_execute == 0) MethodBinds.MissingThrow("OS.execute");
         ulong __a0 = NativeString.Create(path);
         var __a1 = Packed.CreateStrings(arguments);
         ulong __a2 = output.Native;
@@ -503,7 +353,7 @@ public static unsafe partial class OS
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_execute, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a1);
         return unchecked((int)__ret);
@@ -512,13 +362,7 @@ public static unsafe partial class OS
     private static nint __mb_execute_with_pipe;
     public static Godot.Collections.Dictionary ExecuteWithPipe(string path, string[] arguments, bool blocking = true)
     {
-        var __mb = __mb_execute_with_pipe;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "execute_with_pipe", 2851312030);
-            if (__mb == 0) throw new MissingMethodException("OS.execute_with_pipe is not available in this engine build.");
-            __mb_execute_with_pipe = __mb;
-        }
+        if (__mb_execute_with_pipe == 0) MethodBinds.MissingThrow("OS.execute_with_pipe");
         ulong __a0 = NativeString.Create(path);
         var __a1 = Packed.CreateStrings(arguments);
         byte __a2 = blocking ? (byte)1 : (byte)0;
@@ -527,7 +371,7 @@ public static unsafe partial class OS
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_execute_with_pipe, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a1);
         return new Godot.Collections.Dictionary(__ret);
@@ -536,13 +380,7 @@ public static unsafe partial class OS
     private static nint __mb_create_process;
     public static int CreateProcess(string path, string[] arguments, bool openConsole = false)
     {
-        var __mb = __mb_create_process;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "create_process", 2903767230);
-            if (__mb == 0) throw new MissingMethodException("OS.create_process is not available in this engine build.");
-            __mb_create_process = __mb;
-        }
+        if (__mb_create_process == 0) MethodBinds.MissingThrow("OS.create_process");
         ulong __a0 = NativeString.Create(path);
         var __a1 = Packed.CreateStrings(arguments);
         byte __a2 = openConsole ? (byte)1 : (byte)0;
@@ -551,7 +389,7 @@ public static unsafe partial class OS
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_process, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a1);
         return unchecked((int)__ret);
@@ -560,18 +398,12 @@ public static unsafe partial class OS
     private static nint __mb_create_instance;
     public static int CreateInstance(string[] arguments)
     {
-        var __mb = __mb_create_instance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "create_instance", 1080601263);
-            if (__mb == 0) throw new MissingMethodException("OS.create_instance is not available in this engine build.");
-            __mb_create_instance = __mb;
-        }
+        if (__mb_create_instance == 0) MethodBinds.MissingThrow("OS.create_instance");
         var __a0 = Packed.CreateStrings(arguments);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_instance, SingletonPtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
         return unchecked((int)__ret);
     }
@@ -579,20 +411,14 @@ public static unsafe partial class OS
     private static nint __mb_open_with_program;
     public static Error OpenWithProgram(string programPath, string[] paths)
     {
-        var __mb = __mb_open_with_program;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "open_with_program", 2848259907);
-            if (__mb == 0) throw new MissingMethodException("OS.open_with_program is not available in this engine build.");
-            __mb_open_with_program = __mb;
-        }
+        if (__mb_open_with_program == 0) MethodBinds.MissingThrow("OS.open_with_program");
         ulong __a0 = NativeString.Create(programPath);
         var __a1 = Packed.CreateStrings(paths);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_open_with_program, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a1);
         return (Error)__ret;
@@ -601,36 +427,24 @@ public static unsafe partial class OS
     private static nint __mb_kill;
     public static Error Kill(int pid)
     {
-        var __mb = __mb_kill;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "kill", 844576869);
-            if (__mb == 0) throw new MissingMethodException("OS.kill is not available in this engine build.");
-            __mb_kill = __mb;
-        }
+        if (__mb_kill == 0) MethodBinds.MissingThrow("OS.kill");
         long __a0 = unchecked((long)pid);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_kill, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_shell_open;
     public static Error ShellOpen(string uri)
     {
-        var __mb = __mb_shell_open;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "shell_open", 166001499);
-            if (__mb == 0) throw new MissingMethodException("OS.shell_open is not available in this engine build.");
-            __mb_shell_open = __mb;
-        }
+        if (__mb_shell_open == 0) MethodBinds.MissingThrow("OS.shell_open");
         ulong __a0 = NativeString.Create(uri);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_shell_open, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -638,20 +452,14 @@ public static unsafe partial class OS
     private static nint __mb_shell_show_in_file_manager;
     public static Error ShellShowInFileManager(string fileOrDirPath, bool openFolder = true)
     {
-        var __mb = __mb_shell_show_in_file_manager;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "shell_show_in_file_manager", 3565188097);
-            if (__mb == 0) throw new MissingMethodException("OS.shell_show_in_file_manager is not available in this engine build.");
-            __mb_shell_show_in_file_manager = __mb;
-        }
+        if (__mb_shell_show_in_file_manager == 0) MethodBinds.MissingThrow("OS.shell_show_in_file_manager");
         ulong __a0 = NativeString.Create(fileOrDirPath);
         byte __a1 = openFolder ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_shell_show_in_file_manager, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -659,69 +467,45 @@ public static unsafe partial class OS
     private static nint __mb_is_process_running;
     public static bool IsProcessRunning(int pid)
     {
-        var __mb = __mb_is_process_running;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "is_process_running", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("OS.is_process_running is not available in this engine build.");
-            __mb_is_process_running = __mb;
-        }
+        if (__mb_is_process_running == 0) MethodBinds.MissingThrow("OS.is_process_running");
         long __a0 = unchecked((long)pid);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_process_running, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_process_exit_code;
     public static int GetProcessExitCode(int pid)
     {
-        var __mb = __mb_get_process_exit_code;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_process_exit_code", 923996154);
-            if (__mb == 0) throw new MissingMethodException("OS.get_process_exit_code is not available in this engine build.");
-            __mb_get_process_exit_code = __mb;
-        }
+        if (__mb_get_process_exit_code == 0) MethodBinds.MissingThrow("OS.get_process_exit_code");
         long __a0 = unchecked((long)pid);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_process_exit_code, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_process_id;
     public static int GetProcessId()
     {
-        var __mb = __mb_get_process_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_process_id", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OS.get_process_id is not available in this engine build.");
-            __mb_get_process_id = __mb;
-        }
+        if (__mb_get_process_id == 0) MethodBinds.MissingThrow("OS.get_process_id");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_process_id, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_has_environment;
     public static bool HasEnvironment(string variable)
     {
-        var __mb = __mb_has_environment;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "has_environment", 3927539163);
-            if (__mb == 0) throw new MissingMethodException("OS.has_environment is not available in this engine build.");
-            __mb_has_environment = __mb;
-        }
+        if (__mb_has_environment == 0) MethodBinds.MissingThrow("OS.has_environment");
         ulong __a0 = NativeString.Create(variable);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_environment, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -729,18 +513,12 @@ public static unsafe partial class OS
     private static nint __mb_get_environment;
     public static string GetEnvironment(string variable)
     {
-        var __mb = __mb_get_environment;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_environment", 3135753539);
-            if (__mb == 0) throw new MissingMethodException("OS.get_environment is not available in this engine build.");
-            __mb_get_environment = __mb;
-        }
+        if (__mb_get_environment == 0) MethodBinds.MissingThrow("OS.get_environment");
         ulong __a0 = NativeString.Create(variable);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_environment, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
@@ -748,19 +526,13 @@ public static unsafe partial class OS
     private static nint __mb_set_environment;
     public static void SetEnvironment(string variable, string value)
     {
-        var __mb = __mb_set_environment;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "set_environment", 3605043004);
-            if (__mb == 0) throw new MissingMethodException("OS.set_environment is not available in this engine build.");
-            __mb_set_environment = __mb;
-        }
+        if (__mb_set_environment == 0) MethodBinds.MissingThrow("OS.set_environment");
         ulong __a0 = NativeString.Create(variable);
         ulong __a1 = NativeString.Create(value);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_environment, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
     }
@@ -768,356 +540,218 @@ public static unsafe partial class OS
     private static nint __mb_unset_environment;
     public static void UnsetEnvironment(string variable)
     {
-        var __mb = __mb_unset_environment;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "unset_environment", 3089850668);
-            if (__mb == 0) throw new MissingMethodException("OS.unset_environment is not available in this engine build.");
-            __mb_unset_environment = __mb;
-        }
+        if (__mb_unset_environment == 0) MethodBinds.MissingThrow("OS.unset_environment");
         ulong __a0 = NativeString.Create(variable);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_unset_environment, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_name;
     public static string GetName()
     {
-        var __mb = __mb_get_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_name", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OS.get_name is not available in this engine build.");
-            __mb_get_name = __mb;
-        }
+        if (__mb_get_name == 0) MethodBinds.MissingThrow("OS.get_name");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_name, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_distribution_name;
     public static string GetDistributionName()
     {
-        var __mb = __mb_get_distribution_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_distribution_name", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OS.get_distribution_name is not available in this engine build.");
-            __mb_get_distribution_name = __mb;
-        }
+        if (__mb_get_distribution_name == 0) MethodBinds.MissingThrow("OS.get_distribution_name");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_distribution_name, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_version;
     public static string GetVersion()
     {
-        var __mb = __mb_get_version;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_version", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OS.get_version is not available in this engine build.");
-            __mb_get_version = __mb;
-        }
+        if (__mb_get_version == 0) MethodBinds.MissingThrow("OS.get_version");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_version, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_version_alias;
     public static string GetVersionAlias()
     {
-        var __mb = __mb_get_version_alias;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_version_alias", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OS.get_version_alias is not available in this engine build.");
-            __mb_get_version_alias = __mb;
-        }
+        if (__mb_get_version_alias == 0) MethodBinds.MissingThrow("OS.get_version_alias");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_version_alias, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_cmdline_args;
     public static string[] GetCmdlineArgs()
     {
-        var __mb = __mb_get_cmdline_args;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_cmdline_args", 2981934095);
-            if (__mb == 0) throw new MissingMethodException("OS.get_cmdline_args is not available in this engine build.");
-            __mb_get_cmdline_args = __mb;
-        }
+        if (__mb_get_cmdline_args == 0) MethodBinds.MissingThrow("OS.get_cmdline_args");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_cmdline_args, SingletonPtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_get_cmdline_user_args;
     public static string[] GetCmdlineUserArgs()
     {
-        var __mb = __mb_get_cmdline_user_args;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_cmdline_user_args", 2981934095);
-            if (__mb == 0) throw new MissingMethodException("OS.get_cmdline_user_args is not available in this engine build.");
-            __mb_get_cmdline_user_args = __mb;
-        }
+        if (__mb_get_cmdline_user_args == 0) MethodBinds.MissingThrow("OS.get_cmdline_user_args");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_cmdline_user_args, SingletonPtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_get_video_adapter_driver_info;
     public static string[] GetVideoAdapterDriverInfo()
     {
-        var __mb = __mb_get_video_adapter_driver_info;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_video_adapter_driver_info", 1139954409);
-            if (__mb == 0) throw new MissingMethodException("OS.get_video_adapter_driver_info is not available in this engine build.");
-            __mb_get_video_adapter_driver_info = __mb;
-        }
+        if (__mb_get_video_adapter_driver_info == 0) MethodBinds.MissingThrow("OS.get_video_adapter_driver_info");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_video_adapter_driver_info, SingletonPtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_set_restart_on_exit;
     public static void SetRestartOnExit(bool restart, string[] arguments)
     {
-        var __mb = __mb_set_restart_on_exit;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "set_restart_on_exit", 3331453935);
-            if (__mb == 0) throw new MissingMethodException("OS.set_restart_on_exit is not available in this engine build.");
-            __mb_set_restart_on_exit = __mb;
-        }
+        if (__mb_set_restart_on_exit == 0) MethodBinds.MissingThrow("OS.set_restart_on_exit");
         byte __a0 = restart ? (byte)1 : (byte)0;
         var __a1 = Packed.CreateStrings(arguments);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_restart_on_exit, SingletonPtr, (nint)__args, 0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a1);
     }
 
     private static nint __mb_is_restart_on_exit_set;
     public static bool IsRestartOnExitSet()
     {
-        var __mb = __mb_is_restart_on_exit_set;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "is_restart_on_exit_set", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OS.is_restart_on_exit_set is not available in this engine build.");
-            __mb_is_restart_on_exit_set = __mb;
-        }
+        if (__mb_is_restart_on_exit_set == 0) MethodBinds.MissingThrow("OS.is_restart_on_exit_set");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_restart_on_exit_set, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_restart_on_exit_arguments;
     public static string[] GetRestartOnExitArguments()
     {
-        var __mb = __mb_get_restart_on_exit_arguments;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_restart_on_exit_arguments", 1139954409);
-            if (__mb == 0) throw new MissingMethodException("OS.get_restart_on_exit_arguments is not available in this engine build.");
-            __mb_get_restart_on_exit_arguments = __mb;
-        }
+        if (__mb_get_restart_on_exit_arguments == 0) MethodBinds.MissingThrow("OS.get_restart_on_exit_arguments");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_restart_on_exit_arguments, SingletonPtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_delay_usec;
     public static void DelayUsec(int usec)
     {
-        var __mb = __mb_delay_usec;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "delay_usec", 998575451);
-            if (__mb == 0) throw new MissingMethodException("OS.delay_usec is not available in this engine build.");
-            __mb_delay_usec = __mb;
-        }
+        if (__mb_delay_usec == 0) MethodBinds.MissingThrow("OS.delay_usec");
         long __a0 = unchecked((long)usec);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_delay_usec, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_delay_msec;
     public static void DelayMsec(int msec)
     {
-        var __mb = __mb_delay_msec;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "delay_msec", 998575451);
-            if (__mb == 0) throw new MissingMethodException("OS.delay_msec is not available in this engine build.");
-            __mb_delay_msec = __mb;
-        }
+        if (__mb_delay_msec == 0) MethodBinds.MissingThrow("OS.delay_msec");
         long __a0 = unchecked((long)msec);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_delay_msec, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_locale;
     public static string GetLocale()
     {
-        var __mb = __mb_get_locale;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_locale", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OS.get_locale is not available in this engine build.");
-            __mb_get_locale = __mb;
-        }
+        if (__mb_get_locale == 0) MethodBinds.MissingThrow("OS.get_locale");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_locale, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_locale_language;
     public static string GetLocaleLanguage()
     {
-        var __mb = __mb_get_locale_language;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_locale_language", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OS.get_locale_language is not available in this engine build.");
-            __mb_get_locale_language = __mb;
-        }
+        if (__mb_get_locale_language == 0) MethodBinds.MissingThrow("OS.get_locale_language");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_locale_language, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_model_name;
     public static string GetModelName()
     {
-        var __mb = __mb_get_model_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_model_name", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OS.get_model_name is not available in this engine build.");
-            __mb_get_model_name = __mb;
-        }
+        if (__mb_get_model_name == 0) MethodBinds.MissingThrow("OS.get_model_name");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_model_name, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_is_userfs_persistent;
     public static bool IsUserfsPersistent()
     {
-        var __mb = __mb_is_userfs_persistent;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "is_userfs_persistent", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OS.is_userfs_persistent is not available in this engine build.");
-            __mb_is_userfs_persistent = __mb;
-        }
+        if (__mb_is_userfs_persistent == 0) MethodBinds.MissingThrow("OS.is_userfs_persistent");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_userfs_persistent, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_stdout_verbose;
     public static bool IsStdoutVerbose()
     {
-        var __mb = __mb_is_stdout_verbose;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "is_stdout_verbose", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OS.is_stdout_verbose is not available in this engine build.");
-            __mb_is_stdout_verbose = __mb;
-        }
+        if (__mb_is_stdout_verbose == 0) MethodBinds.MissingThrow("OS.is_stdout_verbose");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_stdout_verbose, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_debug_build;
     public static bool IsDebugBuild()
     {
-        var __mb = __mb_is_debug_build;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "is_debug_build", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OS.is_debug_build is not available in this engine build.");
-            __mb_is_debug_build = __mb;
-        }
+        if (__mb_is_debug_build == 0) MethodBinds.MissingThrow("OS.is_debug_build");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_debug_build, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_static_memory_usage;
     public static ulong GetStaticMemoryUsage()
     {
-        var __mb = __mb_get_static_memory_usage;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_static_memory_usage", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OS.get_static_memory_usage is not available in this engine build.");
-            __mb_get_static_memory_usage = __mb;
-        }
+        if (__mb_get_static_memory_usage == 0) MethodBinds.MissingThrow("OS.get_static_memory_usage");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_static_memory_usage, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_static_memory_peak_usage;
     public static ulong GetStaticMemoryPeakUsage()
     {
-        var __mb = __mb_get_static_memory_peak_usage;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_static_memory_peak_usage", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OS.get_static_memory_peak_usage is not available in this engine build.");
-            __mb_get_static_memory_peak_usage = __mb;
-        }
+        if (__mb_get_static_memory_peak_usage == 0) MethodBinds.MissingThrow("OS.get_static_memory_peak_usage");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_static_memory_peak_usage, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_memory_info;
     public static Godot.Collections.Dictionary GetMemoryInfo()
     {
-        var __mb = __mb_get_memory_info;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_memory_info", 3102165223);
-            if (__mb == 0) throw new MissingMethodException("OS.get_memory_info is not available in this engine build.");
-            __mb_get_memory_info = __mb;
-        }
+        if (__mb_get_memory_info == 0) MethodBinds.MissingThrow("OS.get_memory_info");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_memory_info, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_move_to_trash;
     public static Error MoveToTrash(string path)
     {
-        var __mb = __mb_move_to_trash;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "move_to_trash", 2113323047);
-            if (__mb == 0) throw new MissingMethodException("OS.move_to_trash is not available in this engine build.");
-            __mb_move_to_trash = __mb;
-        }
+        if (__mb_move_to_trash == 0) MethodBinds.MissingThrow("OS.move_to_trash");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_move_to_trash, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -1125,164 +759,104 @@ public static unsafe partial class OS
     private static nint __mb_get_user_data_dir;
     public static string GetUserDataDir()
     {
-        var __mb = __mb_get_user_data_dir;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_user_data_dir", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OS.get_user_data_dir is not available in this engine build.");
-            __mb_get_user_data_dir = __mb;
-        }
+        if (__mb_get_user_data_dir == 0) MethodBinds.MissingThrow("OS.get_user_data_dir");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_user_data_dir, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_system_dir;
     public static string GetSystemDir(OS.SystemDir dir, bool sharedStorage = true)
     {
-        var __mb = __mb_get_system_dir;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_system_dir", 3073895123);
-            if (__mb == 0) throw new MissingMethodException("OS.get_system_dir is not available in this engine build.");
-            __mb_get_system_dir = __mb;
-        }
+        if (__mb_get_system_dir == 0) MethodBinds.MissingThrow("OS.get_system_dir");
         long __a0 = (long)dir;
         byte __a1 = sharedStorage ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_system_dir, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_config_dir;
     public static string GetConfigDir()
     {
-        var __mb = __mb_get_config_dir;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_config_dir", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OS.get_config_dir is not available in this engine build.");
-            __mb_get_config_dir = __mb;
-        }
+        if (__mb_get_config_dir == 0) MethodBinds.MissingThrow("OS.get_config_dir");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_config_dir, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_data_dir;
     public static string GetDataDir()
     {
-        var __mb = __mb_get_data_dir;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_data_dir", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OS.get_data_dir is not available in this engine build.");
-            __mb_get_data_dir = __mb;
-        }
+        if (__mb_get_data_dir == 0) MethodBinds.MissingThrow("OS.get_data_dir");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_data_dir, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_cache_dir;
     public static string GetCacheDir()
     {
-        var __mb = __mb_get_cache_dir;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_cache_dir", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OS.get_cache_dir is not available in this engine build.");
-            __mb_get_cache_dir = __mb;
-        }
+        if (__mb_get_cache_dir == 0) MethodBinds.MissingThrow("OS.get_cache_dir");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_cache_dir, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_temp_dir;
     public static string GetTempDir()
     {
-        var __mb = __mb_get_temp_dir;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_temp_dir", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OS.get_temp_dir is not available in this engine build.");
-            __mb_get_temp_dir = __mb;
-        }
+        if (__mb_get_temp_dir == 0) MethodBinds.MissingThrow("OS.get_temp_dir");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_temp_dir, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_unique_id;
     public static string GetUniqueId()
     {
-        var __mb = __mb_get_unique_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_unique_id", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OS.get_unique_id is not available in this engine build.");
-            __mb_get_unique_id = __mb;
-        }
+        if (__mb_get_unique_id == 0) MethodBinds.MissingThrow("OS.get_unique_id");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_unique_id, SingletonPtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_keycode_string;
     public static string GetKeycodeString(Key code)
     {
-        var __mb = __mb_get_keycode_string;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_keycode_string", 2261993717);
-            if (__mb == 0) throw new MissingMethodException("OS.get_keycode_string is not available in this engine build.");
-            __mb_get_keycode_string = __mb;
-        }
+        if (__mb_get_keycode_string == 0) MethodBinds.MissingThrow("OS.get_keycode_string");
         long __a0 = (long)code;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_keycode_string, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_is_keycode_unicode;
     public static bool IsKeycodeUnicode(int code)
     {
-        var __mb = __mb_is_keycode_unicode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "is_keycode_unicode", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("OS.is_keycode_unicode is not available in this engine build.");
-            __mb_is_keycode_unicode = __mb;
-        }
+        if (__mb_is_keycode_unicode == 0) MethodBinds.MissingThrow("OS.is_keycode_unicode");
         long __a0 = unchecked((long)code);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_keycode_unicode, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_find_keycode_from_string;
     public static Key FindKeycodeFromString(string @string)
     {
-        var __mb = __mb_find_keycode_from_string;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "find_keycode_from_string", 1084858572);
-            if (__mb == 0) throw new MissingMethodException("OS.find_keycode_from_string is not available in this engine build.");
-            __mb_find_keycode_from_string = __mb;
-        }
+        if (__mb_find_keycode_from_string == 0) MethodBinds.MissingThrow("OS.find_keycode_from_string");
         ulong __a0 = NativeString.Create(@string);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_find_keycode_from_string, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Key)__ret;
     }
@@ -1290,34 +864,22 @@ public static unsafe partial class OS
     private static nint __mb_set_use_file_access_save_and_swap;
     public static void SetUseFileAccessSaveAndSwap(bool enabled)
     {
-        var __mb = __mb_set_use_file_access_save_and_swap;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "set_use_file_access_save_and_swap", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OS.set_use_file_access_save_and_swap is not available in this engine build.");
-            __mb_set_use_file_access_save_and_swap = __mb;
-        }
+        if (__mb_set_use_file_access_save_and_swap == 0) MethodBinds.MissingThrow("OS.set_use_file_access_save_and_swap");
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_use_file_access_save_and_swap, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_thread_name;
     public static Error SetThreadName(string name)
     {
-        var __mb = __mb_set_thread_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "set_thread_name", 166001499);
-            if (__mb == 0) throw new MissingMethodException("OS.set_thread_name is not available in this engine build.");
-            __mb_set_thread_name = __mb;
-        }
+        if (__mb_set_thread_name == 0) MethodBinds.MissingThrow("OS.set_thread_name");
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_thread_name, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -1325,48 +887,30 @@ public static unsafe partial class OS
     private static nint __mb_get_thread_caller_id;
     public static ulong GetThreadCallerId()
     {
-        var __mb = __mb_get_thread_caller_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_thread_caller_id", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OS.get_thread_caller_id is not available in this engine build.");
-            __mb_get_thread_caller_id = __mb;
-        }
+        if (__mb_get_thread_caller_id == 0) MethodBinds.MissingThrow("OS.get_thread_caller_id");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_thread_caller_id, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_main_thread_id;
     public static ulong GetMainThreadId()
     {
-        var __mb = __mb_get_main_thread_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_main_thread_id", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OS.get_main_thread_id is not available in this engine build.");
-            __mb_get_main_thread_id = __mb;
-        }
+        if (__mb_get_main_thread_id == 0) MethodBinds.MissingThrow("OS.get_main_thread_id");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_main_thread_id, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_has_feature;
     public static bool HasFeature(string tagName)
     {
-        var __mb = __mb_has_feature;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "has_feature", 3927539163);
-            if (__mb == 0) throw new MissingMethodException("OS.has_feature is not available in this engine build.");
-            __mb_has_feature = __mb;
-        }
+        if (__mb_has_feature == 0) MethodBinds.MissingThrow("OS.has_feature");
         ulong __a0 = NativeString.Create(tagName);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_feature, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -1374,33 +918,21 @@ public static unsafe partial class OS
     private static nint __mb_is_sandboxed;
     public static bool IsSandboxed()
     {
-        var __mb = __mb_is_sandboxed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "is_sandboxed", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OS.is_sandboxed is not available in this engine build.");
-            __mb_is_sandboxed = __mb;
-        }
+        if (__mb_is_sandboxed == 0) MethodBinds.MissingThrow("OS.is_sandboxed");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_sandboxed, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_request_permission;
     public static bool RequestPermission(string name)
     {
-        var __mb = __mb_request_permission;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "request_permission", 2323990056);
-            if (__mb == 0) throw new MissingMethodException("OS.request_permission is not available in this engine build.");
-            __mb_request_permission = __mb;
-        }
+        if (__mb_request_permission == 0) MethodBinds.MissingThrow("OS.request_permission");
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_request_permission, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -1408,76 +940,133 @@ public static unsafe partial class OS
     private static nint __mb_request_permissions;
     public static bool RequestPermissions()
     {
-        var __mb = __mb_request_permissions;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "request_permissions", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OS.request_permissions is not available in this engine build.");
-            __mb_request_permissions = __mb;
-        }
+        if (__mb_request_permissions == 0) MethodBinds.MissingThrow("OS.request_permissions");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_request_permissions, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_granted_permissions;
     public static string[] GetGrantedPermissions()
     {
-        var __mb = __mb_get_granted_permissions;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "get_granted_permissions", 1139954409);
-            if (__mb == 0) throw new MissingMethodException("OS.get_granted_permissions is not available in this engine build.");
-            __mb_get_granted_permissions = __mb;
-        }
+        if (__mb_get_granted_permissions == 0) MethodBinds.MissingThrow("OS.get_granted_permissions");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_granted_permissions, SingletonPtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_revoke_granted_permissions;
     public static void RevokeGrantedPermissions()
     {
-        var __mb = __mb_revoke_granted_permissions;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "revoke_granted_permissions", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("OS.revoke_granted_permissions is not available in this engine build.");
-            __mb_revoke_granted_permissions = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
+        if (__mb_revoke_granted_permissions == 0) MethodBinds.MissingThrow("OS.revoke_granted_permissions");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_revoke_granted_permissions, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_add_logger;
     public static void AddLogger(Logger? logger)
     {
-        var __mb = __mb_add_logger;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "add_logger", 4261188958);
-            if (__mb == 0) throw new MissingMethodException("OS.add_logger is not available in this engine build.");
-            __mb_add_logger = __mb;
-        }
+        if (__mb_add_logger == 0) MethodBinds.MissingThrow("OS.add_logger");
         nint __a0 = logger?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_logger, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_logger;
     public static void RemoveLogger(Logger? logger)
     {
-        var __mb = __mb_remove_logger;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OS", "remove_logger", 4261188958);
-            if (__mb == 0) throw new MissingMethodException("OS.remove_logger is not available in this engine build.");
-            __mb_remove_logger = __mb;
-        }
+        if (__mb_remove_logger == 0) MethodBinds.MissingThrow("OS.remove_logger");
         nint __a0 = logger?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_logger, SingletonPtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_entropy = MethodBinds.ResolveBulk("OS", "get_entropy", 47165747);
+        __mb_get_system_ca_certificates = MethodBinds.ResolveBulk("OS", "get_system_ca_certificates", 2841200299);
+        __mb_get_connected_midi_inputs = MethodBinds.ResolveBulk("OS", "get_connected_midi_inputs", 2981934095);
+        __mb_open_midi_inputs = MethodBinds.ResolveBulk("OS", "open_midi_inputs", 3218959716);
+        __mb_close_midi_inputs = MethodBinds.ResolveBulk("OS", "close_midi_inputs", 3218959716);
+        __mb_alert = MethodBinds.ResolveBulk("OS", "alert", 1783970740);
+        __mb_crash = MethodBinds.ResolveBulk("OS", "crash", 83702148);
+        __mb_set_low_processor_usage_mode = MethodBinds.ResolveBulk("OS", "set_low_processor_usage_mode", 2586408642);
+        __mb_is_in_low_processor_usage_mode = MethodBinds.ResolveBulk("OS", "is_in_low_processor_usage_mode", 36873697);
+        __mb_set_low_processor_usage_mode_sleep_usec = MethodBinds.ResolveBulk("OS", "set_low_processor_usage_mode_sleep_usec", 1286410249);
+        __mb_get_low_processor_usage_mode_sleep_usec = MethodBinds.ResolveBulk("OS", "get_low_processor_usage_mode_sleep_usec", 3905245786);
+        __mb_set_delta_smoothing = MethodBinds.ResolveBulk("OS", "set_delta_smoothing", 2586408642);
+        __mb_is_delta_smoothing_enabled = MethodBinds.ResolveBulk("OS", "is_delta_smoothing_enabled", 36873697);
+        __mb_get_processor_count = MethodBinds.ResolveBulk("OS", "get_processor_count", 3905245786);
+        __mb_get_processor_name = MethodBinds.ResolveBulk("OS", "get_processor_name", 201670096);
+        __mb_get_system_fonts = MethodBinds.ResolveBulk("OS", "get_system_fonts", 1139954409);
+        __mb_get_system_font_path = MethodBinds.ResolveBulk("OS", "get_system_font_path", 626580860);
+        __mb_get_system_font_path_for_text = MethodBinds.ResolveBulk("OS", "get_system_font_path_for_text", 197317981);
+        __mb_get_executable_path = MethodBinds.ResolveBulk("OS", "get_executable_path", 201670096);
+        __mb_read_string_from_stdin = MethodBinds.ResolveBulk("OS", "read_string_from_stdin", 723587915);
+        __mb_read_buffer_from_stdin = MethodBinds.ResolveBulk("OS", "read_buffer_from_stdin", 3249455752);
+        __mb_get_stdin_type = MethodBinds.ResolveBulk("OS", "get_stdin_type", 1704816237);
+        __mb_get_stdout_type = MethodBinds.ResolveBulk("OS", "get_stdout_type", 1704816237);
+        __mb_get_stderr_type = MethodBinds.ResolveBulk("OS", "get_stderr_type", 1704816237);
+        __mb_execute = MethodBinds.ResolveBulk("OS", "execute", 1488299882);
+        __mb_execute_with_pipe = MethodBinds.ResolveBulk("OS", "execute_with_pipe", 2851312030);
+        __mb_create_process = MethodBinds.ResolveBulk("OS", "create_process", 2903767230);
+        __mb_create_instance = MethodBinds.ResolveBulk("OS", "create_instance", 1080601263);
+        __mb_open_with_program = MethodBinds.ResolveBulk("OS", "open_with_program", 2848259907);
+        __mb_kill = MethodBinds.ResolveBulk("OS", "kill", 844576869);
+        __mb_shell_open = MethodBinds.ResolveBulk("OS", "shell_open", 166001499);
+        __mb_shell_show_in_file_manager = MethodBinds.ResolveBulk("OS", "shell_show_in_file_manager", 3565188097);
+        __mb_is_process_running = MethodBinds.ResolveBulk("OS", "is_process_running", 1116898809);
+        __mb_get_process_exit_code = MethodBinds.ResolveBulk("OS", "get_process_exit_code", 923996154);
+        __mb_get_process_id = MethodBinds.ResolveBulk("OS", "get_process_id", 3905245786);
+        __mb_has_environment = MethodBinds.ResolveBulk("OS", "has_environment", 3927539163);
+        __mb_get_environment = MethodBinds.ResolveBulk("OS", "get_environment", 3135753539);
+        __mb_set_environment = MethodBinds.ResolveBulk("OS", "set_environment", 3605043004);
+        __mb_unset_environment = MethodBinds.ResolveBulk("OS", "unset_environment", 3089850668);
+        __mb_get_name = MethodBinds.ResolveBulk("OS", "get_name", 201670096);
+        __mb_get_distribution_name = MethodBinds.ResolveBulk("OS", "get_distribution_name", 201670096);
+        __mb_get_version = MethodBinds.ResolveBulk("OS", "get_version", 201670096);
+        __mb_get_version_alias = MethodBinds.ResolveBulk("OS", "get_version_alias", 201670096);
+        __mb_get_cmdline_args = MethodBinds.ResolveBulk("OS", "get_cmdline_args", 2981934095);
+        __mb_get_cmdline_user_args = MethodBinds.ResolveBulk("OS", "get_cmdline_user_args", 2981934095);
+        __mb_get_video_adapter_driver_info = MethodBinds.ResolveBulk("OS", "get_video_adapter_driver_info", 1139954409);
+        __mb_set_restart_on_exit = MethodBinds.ResolveBulk("OS", "set_restart_on_exit", 3331453935);
+        __mb_is_restart_on_exit_set = MethodBinds.ResolveBulk("OS", "is_restart_on_exit_set", 36873697);
+        __mb_get_restart_on_exit_arguments = MethodBinds.ResolveBulk("OS", "get_restart_on_exit_arguments", 1139954409);
+        __mb_delay_usec = MethodBinds.ResolveBulk("OS", "delay_usec", 998575451);
+        __mb_delay_msec = MethodBinds.ResolveBulk("OS", "delay_msec", 998575451);
+        __mb_get_locale = MethodBinds.ResolveBulk("OS", "get_locale", 201670096);
+        __mb_get_locale_language = MethodBinds.ResolveBulk("OS", "get_locale_language", 201670096);
+        __mb_get_model_name = MethodBinds.ResolveBulk("OS", "get_model_name", 201670096);
+        __mb_is_userfs_persistent = MethodBinds.ResolveBulk("OS", "is_userfs_persistent", 36873697);
+        __mb_is_stdout_verbose = MethodBinds.ResolveBulk("OS", "is_stdout_verbose", 36873697);
+        __mb_is_debug_build = MethodBinds.ResolveBulk("OS", "is_debug_build", 36873697);
+        __mb_get_static_memory_usage = MethodBinds.ResolveBulk("OS", "get_static_memory_usage", 3905245786);
+        __mb_get_static_memory_peak_usage = MethodBinds.ResolveBulk("OS", "get_static_memory_peak_usage", 3905245786);
+        __mb_get_memory_info = MethodBinds.ResolveBulk("OS", "get_memory_info", 3102165223);
+        __mb_move_to_trash = MethodBinds.ResolveBulk("OS", "move_to_trash", 2113323047);
+        __mb_get_user_data_dir = MethodBinds.ResolveBulk("OS", "get_user_data_dir", 201670096);
+        __mb_get_system_dir = MethodBinds.ResolveBulk("OS", "get_system_dir", 3073895123);
+        __mb_get_config_dir = MethodBinds.ResolveBulk("OS", "get_config_dir", 201670096);
+        __mb_get_data_dir = MethodBinds.ResolveBulk("OS", "get_data_dir", 201670096);
+        __mb_get_cache_dir = MethodBinds.ResolveBulk("OS", "get_cache_dir", 201670096);
+        __mb_get_temp_dir = MethodBinds.ResolveBulk("OS", "get_temp_dir", 201670096);
+        __mb_get_unique_id = MethodBinds.ResolveBulk("OS", "get_unique_id", 201670096);
+        __mb_get_keycode_string = MethodBinds.ResolveBulk("OS", "get_keycode_string", 2261993717);
+        __mb_is_keycode_unicode = MethodBinds.ResolveBulk("OS", "is_keycode_unicode", 1116898809);
+        __mb_find_keycode_from_string = MethodBinds.ResolveBulk("OS", "find_keycode_from_string", 1084858572);
+        __mb_set_use_file_access_save_and_swap = MethodBinds.ResolveBulk("OS", "set_use_file_access_save_and_swap", 2586408642);
+        __mb_set_thread_name = MethodBinds.ResolveBulk("OS", "set_thread_name", 166001499);
+        __mb_get_thread_caller_id = MethodBinds.ResolveBulk("OS", "get_thread_caller_id", 3905245786);
+        __mb_get_main_thread_id = MethodBinds.ResolveBulk("OS", "get_main_thread_id", 3905245786);
+        __mb_has_feature = MethodBinds.ResolveBulk("OS", "has_feature", 3927539163);
+        __mb_is_sandboxed = MethodBinds.ResolveBulk("OS", "is_sandboxed", 36873697);
+        __mb_request_permission = MethodBinds.ResolveBulk("OS", "request_permission", 2323990056);
+        __mb_request_permissions = MethodBinds.ResolveBulk("OS", "request_permissions", 2240911060);
+        __mb_get_granted_permissions = MethodBinds.ResolveBulk("OS", "get_granted_permissions", 1139954409);
+        __mb_revoke_granted_permissions = MethodBinds.ResolveBulk("OS", "revoke_granted_permissions", 3218959716);
+        __mb_add_logger = MethodBinds.ResolveBulk("OS", "add_logger", 4261188958);
+        __mb_remove_logger = MethodBinds.ResolveBulk("OS", "remove_logger", 4261188958);
     }
 }
 
@@ -1488,31 +1077,25 @@ public unsafe partial class Occluder3D : Resource
     private static nint __mb_get_vertices;
     public Vector3[] GetVertices()
     {
-        var __mb = __mb_get_vertices;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Occluder3D", "get_vertices", 497664490);
-            if (__mb == 0) throw new MissingMethodException("Occluder3D.get_vertices is not available in this engine build.");
-            __mb_get_vertices = __mb;
-        }
+        if (__mb_get_vertices == 0) MethodBinds.MissingThrow("Occluder3D.get_vertices");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_vertices, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_indices;
     public int[] GetIndices()
     {
-        var __mb = __mb_get_indices;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Occluder3D", "get_indices", 1930428628);
-            if (__mb == 0) throw new MissingMethodException("Occluder3D.get_indices is not available in this engine build.");
-            __mb_get_indices = __mb;
-        }
+        if (__mb_get_indices == 0) MethodBinds.MissingThrow("Occluder3D.get_indices");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_indices, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_vertices = MethodBinds.ResolveBulk("Occluder3D", "get_vertices", 497664490);
+        __mb_get_indices = MethodBinds.ResolveBulk("Occluder3D", "get_indices", 1930428628);
     }
 }
 
@@ -1546,130 +1129,94 @@ public unsafe partial class OccluderInstance3D : VisualInstance3D
     private static nint __mb_set_bake_mask;
     public void SetBakeMask(uint mask)
     {
-        var __mb = __mb_set_bake_mask;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OccluderInstance3D", "set_bake_mask", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OccluderInstance3D.set_bake_mask is not available in this engine build.");
-            __mb_set_bake_mask = __mb;
-        }
+        if (__mb_set_bake_mask == 0) MethodBinds.MissingThrow("OccluderInstance3D.set_bake_mask");
         long __a0 = unchecked((long)mask);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_bake_mask, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bake_mask;
     public uint GetBakeMask()
     {
-        var __mb = __mb_get_bake_mask;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OccluderInstance3D", "get_bake_mask", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OccluderInstance3D.get_bake_mask is not available in this engine build.");
-            __mb_get_bake_mask = __mb;
-        }
+        if (__mb_get_bake_mask == 0) MethodBinds.MissingThrow("OccluderInstance3D.get_bake_mask");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_bake_mask, NativePtr, 0, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_set_bake_mask_value;
     public void SetBakeMaskValue(int layerNumber, bool value)
     {
-        var __mb = __mb_set_bake_mask_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OccluderInstance3D", "set_bake_mask_value", 300928843);
-            if (__mb == 0) throw new MissingMethodException("OccluderInstance3D.set_bake_mask_value is not available in this engine build.");
-            __mb_set_bake_mask_value = __mb;
-        }
+        if (__mb_set_bake_mask_value == 0) MethodBinds.MissingThrow("OccluderInstance3D.set_bake_mask_value");
         long __a0 = unchecked((long)layerNumber);
         byte __a1 = value ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_bake_mask_value, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bake_mask_value;
     public bool GetBakeMaskValue(int layerNumber)
     {
-        var __mb = __mb_get_bake_mask_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OccluderInstance3D", "get_bake_mask_value", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("OccluderInstance3D.get_bake_mask_value is not available in this engine build.");
-            __mb_get_bake_mask_value = __mb;
-        }
+        if (__mb_get_bake_mask_value == 0) MethodBinds.MissingThrow("OccluderInstance3D.get_bake_mask_value");
         long __a0 = unchecked((long)layerNumber);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_bake_mask_value, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_bake_simplification_distance;
     public void SetBakeSimplificationDistance(float simplificationDistance)
     {
-        var __mb = __mb_set_bake_simplification_distance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OccluderInstance3D", "set_bake_simplification_distance", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OccluderInstance3D.set_bake_simplification_distance is not available in this engine build.");
-            __mb_set_bake_simplification_distance = __mb;
-        }
+        if (__mb_set_bake_simplification_distance == 0) MethodBinds.MissingThrow("OccluderInstance3D.set_bake_simplification_distance");
         double __a0 = simplificationDistance;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_bake_simplification_distance, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bake_simplification_distance;
     public float GetBakeSimplificationDistance()
     {
-        var __mb = __mb_get_bake_simplification_distance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OccluderInstance3D", "get_bake_simplification_distance", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OccluderInstance3D.get_bake_simplification_distance is not available in this engine build.");
-            __mb_get_bake_simplification_distance = __mb;
-        }
+        if (__mb_get_bake_simplification_distance == 0) MethodBinds.MissingThrow("OccluderInstance3D.get_bake_simplification_distance");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_bake_simplification_distance, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_occluder;
     public void SetOccluder(Occluder3D? occluder)
     {
-        var __mb = __mb_set_occluder;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OccluderInstance3D", "set_occluder", 1664878165);
-            if (__mb == 0) throw new MissingMethodException("OccluderInstance3D.set_occluder is not available in this engine build.");
-            __mb_set_occluder = __mb;
-        }
+        if (__mb_set_occluder == 0) MethodBinds.MissingThrow("OccluderInstance3D.set_occluder");
         nint __a0 = occluder?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_occluder, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_occluder;
     public Occluder3D? GetOccluder()
     {
-        var __mb = __mb_get_occluder;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OccluderInstance3D", "get_occluder", 1696836198);
-            if (__mb == 0) throw new MissingMethodException("OccluderInstance3D.get_occluder is not available in this engine build.");
-            __mb_get_occluder = __mb;
-        }
+        if (__mb_get_occluder == 0) MethodBinds.MissingThrow("OccluderInstance3D.get_occluder");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_occluder, NativePtr, 0, (nint)(&__ret));
         return (Occluder3D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_bake_mask = MethodBinds.ResolveBulk("OccluderInstance3D", "set_bake_mask", 1286410249);
+        __mb_get_bake_mask = MethodBinds.ResolveBulk("OccluderInstance3D", "get_bake_mask", 3905245786);
+        __mb_set_bake_mask_value = MethodBinds.ResolveBulk("OccluderInstance3D", "set_bake_mask_value", 300928843);
+        __mb_get_bake_mask_value = MethodBinds.ResolveBulk("OccluderInstance3D", "get_bake_mask_value", 1116898809);
+        __mb_set_bake_simplification_distance = MethodBinds.ResolveBulk("OccluderInstance3D", "set_bake_simplification_distance", 373806689);
+        __mb_get_bake_simplification_distance = MethodBinds.ResolveBulk("OccluderInstance3D", "get_bake_simplification_distance", 1740695150);
+        __mb_set_occluder = MethodBinds.ResolveBulk("OccluderInstance3D", "set_occluder", 1664878165);
+        __mb_get_occluder = MethodBinds.ResolveBulk("OccluderInstance3D", "get_occluder", 1696836198);
     }
 }
 
@@ -1710,95 +1257,69 @@ public unsafe partial class OccluderPolygon2D : Resource
     private static nint __mb_set_closed;
     public void SetClosed(bool closed)
     {
-        var __mb = __mb_set_closed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OccluderPolygon2D", "set_closed", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OccluderPolygon2D.set_closed is not available in this engine build.");
-            __mb_set_closed = __mb;
-        }
+        if (__mb_set_closed == 0) MethodBinds.MissingThrow("OccluderPolygon2D.set_closed");
         byte __a0 = closed ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_closed, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_closed;
     public bool IsClosed()
     {
-        var __mb = __mb_is_closed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OccluderPolygon2D", "is_closed", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OccluderPolygon2D.is_closed is not available in this engine build.");
-            __mb_is_closed = __mb;
-        }
+        if (__mb_is_closed == 0) MethodBinds.MissingThrow("OccluderPolygon2D.is_closed");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_closed, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_cull_mode;
     public void SetCullMode(OccluderPolygon2D.CullModeEnum cullMode)
     {
-        var __mb = __mb_set_cull_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OccluderPolygon2D", "set_cull_mode", 3500863002);
-            if (__mb == 0) throw new MissingMethodException("OccluderPolygon2D.set_cull_mode is not available in this engine build.");
-            __mb_set_cull_mode = __mb;
-        }
+        if (__mb_set_cull_mode == 0) MethodBinds.MissingThrow("OccluderPolygon2D.set_cull_mode");
         long __a0 = (long)cullMode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_cull_mode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_cull_mode;
     public OccluderPolygon2D.CullModeEnum GetCullMode()
     {
-        var __mb = __mb_get_cull_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OccluderPolygon2D", "get_cull_mode", 33931036);
-            if (__mb == 0) throw new MissingMethodException("OccluderPolygon2D.get_cull_mode is not available in this engine build.");
-            __mb_get_cull_mode = __mb;
-        }
+        if (__mb_get_cull_mode == 0) MethodBinds.MissingThrow("OccluderPolygon2D.get_cull_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_cull_mode, NativePtr, 0, (nint)(&__ret));
         return (OccluderPolygon2D.CullModeEnum)__ret;
     }
 
     private static nint __mb_set_polygon;
     public void SetPolygon(Vector2[] polygon)
     {
-        var __mb = __mb_set_polygon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OccluderPolygon2D", "set_polygon", 1509147220);
-            if (__mb == 0) throw new MissingMethodException("OccluderPolygon2D.set_polygon is not available in this engine build.");
-            __mb_set_polygon = __mb;
-        }
+        if (__mb_set_polygon == 0) MethodBinds.MissingThrow("OccluderPolygon2D.set_polygon");
         var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, polygon);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_polygon, NativePtr, (nint)__args, 0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
     }
 
     private static nint __mb_get_polygon;
     public Vector2[] GetPolygon()
     {
-        var __mb = __mb_get_polygon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OccluderPolygon2D", "get_polygon", 2961356807);
-            if (__mb == 0) throw new MissingMethodException("OccluderPolygon2D.get_polygon is not available in this engine build.");
-            __mb_get_polygon = __mb;
-        }
+        if (__mb_get_polygon == 0) MethodBinds.MissingThrow("OccluderPolygon2D.get_polygon");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_polygon, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_closed = MethodBinds.ResolveBulk("OccluderPolygon2D", "set_closed", 2586408642);
+        __mb_is_closed = MethodBinds.ResolveBulk("OccluderPolygon2D", "is_closed", 36873697);
+        __mb_set_cull_mode = MethodBinds.ResolveBulk("OccluderPolygon2D", "set_cull_mode", 3500863002);
+        __mb_get_cull_mode = MethodBinds.ResolveBulk("OccluderPolygon2D", "get_cull_mode", 33931036);
+        __mb_set_polygon = MethodBinds.ResolveBulk("OccluderPolygon2D", "set_polygon", 1509147220);
+        __mb_get_polygon = MethodBinds.ResolveBulk("OccluderPolygon2D", "get_polygon", 2961356807);
     }
 }
 
@@ -1842,110 +1363,79 @@ public unsafe partial class OggPacketSequence : Resource
     private static nint __mb_set_packet_data;
     public void SetPacketData(Godot.Collections.Array packetData)
     {
-        var __mb = __mb_set_packet_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OggPacketSequence", "set_packet_data", 381264803);
-            if (__mb == 0) throw new MissingMethodException("OggPacketSequence.set_packet_data is not available in this engine build.");
-            __mb_set_packet_data = __mb;
-        }
+        if (__mb_set_packet_data == 0) MethodBinds.MissingThrow("OggPacketSequence.set_packet_data");
         ulong __a0 = packetData.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_packet_data, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_packet_data;
     public Godot.Collections.Array GetPacketData()
     {
-        var __mb = __mb_get_packet_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OggPacketSequence", "get_packet_data", 3995934104);
-            if (__mb == 0) throw new MissingMethodException("OggPacketSequence.get_packet_data is not available in this engine build.");
-            __mb_get_packet_data = __mb;
-        }
+        if (__mb_get_packet_data == 0) MethodBinds.MissingThrow("OggPacketSequence.get_packet_data");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_packet_data, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_packet_granule_positions;
     public void SetPacketGranulePositions(long[] granulePositions)
     {
-        var __mb = __mb_set_packet_granule_positions;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OggPacketSequence", "set_packet_granule_positions", 3709968205);
-            if (__mb == 0) throw new MissingMethodException("OggPacketSequence.set_packet_granule_positions is not available in this engine build.");
-            __mb_set_packet_granule_positions = __mb;
-        }
+        if (__mb_set_packet_granule_positions == 0) MethodBinds.MissingThrow("OggPacketSequence.set_packet_granule_positions");
         var __a0 = Packed.CreatePod<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, granulePositions);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_packet_granule_positions, NativePtr, (nint)__args, 0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, ref __a0);
     }
 
     private static nint __mb_get_packet_granule_positions;
     public long[] GetPacketGranulePositions()
     {
-        var __mb = __mb_get_packet_granule_positions;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OggPacketSequence", "get_packet_granule_positions", 235988956);
-            if (__mb == 0) throw new MissingMethodException("OggPacketSequence.get_packet_granule_positions is not available in this engine build.");
-            __mb_get_packet_granule_positions = __mb;
-        }
+        if (__mb_get_packet_granule_positions == 0) MethodBinds.MissingThrow("OggPacketSequence.get_packet_granule_positions");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_packet_granule_positions, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_sampling_rate;
     public void SetSamplingRate(float samplingRate)
     {
-        var __mb = __mb_set_sampling_rate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OggPacketSequence", "set_sampling_rate", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OggPacketSequence.set_sampling_rate is not available in this engine build.");
-            __mb_set_sampling_rate = __mb;
-        }
+        if (__mb_set_sampling_rate == 0) MethodBinds.MissingThrow("OggPacketSequence.set_sampling_rate");
         double __a0 = samplingRate;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_sampling_rate, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_sampling_rate;
     public float GetSamplingRate()
     {
-        var __mb = __mb_get_sampling_rate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OggPacketSequence", "get_sampling_rate", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OggPacketSequence.get_sampling_rate is not available in this engine build.");
-            __mb_get_sampling_rate = __mb;
-        }
+        if (__mb_get_sampling_rate == 0) MethodBinds.MissingThrow("OggPacketSequence.get_sampling_rate");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_sampling_rate, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_length;
     public float GetLength()
     {
-        var __mb = __mb_get_length;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OggPacketSequence", "get_length", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OggPacketSequence.get_length is not available in this engine build.");
-            __mb_get_length = __mb;
-        }
+        if (__mb_get_length == 0) MethodBinds.MissingThrow("OggPacketSequence.get_length");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_length, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_packet_data = MethodBinds.ResolveBulk("OggPacketSequence", "set_packet_data", 381264803);
+        __mb_get_packet_data = MethodBinds.ResolveBulk("OggPacketSequence", "get_packet_data", 3995934104);
+        __mb_set_packet_granule_positions = MethodBinds.ResolveBulk("OggPacketSequence", "set_packet_granule_positions", 3709968205);
+        __mb_get_packet_granule_positions = MethodBinds.ResolveBulk("OggPacketSequence", "get_packet_granule_positions", 235988956);
+        __mb_set_sampling_rate = MethodBinds.ResolveBulk("OggPacketSequence", "set_sampling_rate", 373806689);
+        __mb_get_sampling_rate = MethodBinds.ResolveBulk("OggPacketSequence", "get_sampling_rate", 1740695150);
+        __mb_get_length = MethodBinds.ResolveBulk("OggPacketSequence", "get_length", 1740695150);
     }
 }
 
@@ -1995,32 +1485,26 @@ public unsafe partial class OmniLight3D : Light3D
     private static nint __mb_set_shadow_mode;
     public void SetShadowMode(OmniLight3D.ShadowMode mode)
     {
-        var __mb = __mb_set_shadow_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OmniLight3D", "set_shadow_mode", 121862228);
-            if (__mb == 0) throw new MissingMethodException("OmniLight3D.set_shadow_mode is not available in this engine build.");
-            __mb_set_shadow_mode = __mb;
-        }
+        if (__mb_set_shadow_mode == 0) MethodBinds.MissingThrow("OmniLight3D.set_shadow_mode");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_shadow_mode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_shadow_mode;
     public OmniLight3D.ShadowMode GetShadowMode()
     {
-        var __mb = __mb_get_shadow_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OmniLight3D", "get_shadow_mode", 4181586331);
-            if (__mb == 0) throw new MissingMethodException("OmniLight3D.get_shadow_mode is not available in this engine build.");
-            __mb_get_shadow_mode = __mb;
-        }
+        if (__mb_get_shadow_mode == 0) MethodBinds.MissingThrow("OmniLight3D.get_shadow_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_shadow_mode, NativePtr, 0, (nint)(&__ret));
         return (OmniLight3D.ShadowMode)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_shadow_mode = MethodBinds.ResolveBulk("OmniLight3D", "set_shadow_mode", 121862228);
+        __mb_get_shadow_mode = MethodBinds.ResolveBulk("OmniLight3D", "get_shadow_mode", 4181586331);
     }
 }
 
@@ -2043,73 +1527,43 @@ public unsafe partial class OpenXRAPIExtension : RefCounted
     private static nint __mb_get_openxr_version;
     public ulong GetOpenxrVersion()
     {
-        var __mb = __mb_get_openxr_version;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_openxr_version", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_openxr_version is not available in this engine build.");
-            __mb_get_openxr_version = __mb;
-        }
+        if (__mb_get_openxr_version == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_openxr_version");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_openxr_version, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_instance;
     public ulong GetInstance()
     {
-        var __mb = __mb_get_instance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_instance", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_instance is not available in this engine build.");
-            __mb_get_instance = __mb;
-        }
+        if (__mb_get_instance == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_instance");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_instance, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_system_id;
     public ulong GetSystemId()
     {
-        var __mb = __mb_get_system_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_system_id", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_system_id is not available in this engine build.");
-            __mb_get_system_id = __mb;
-        }
+        if (__mb_get_system_id == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_system_id");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_system_id, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_session;
     public ulong GetSession()
     {
-        var __mb = __mb_get_session;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_session", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_session is not available in this engine build.");
-            __mb_get_session = __mb;
-        }
+        if (__mb_get_session == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_session");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_session, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_xr_result;
     public bool XrResult(ulong result, string format, Godot.Collections.Array args)
     {
-        var __mb = __mb_xr_result;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "xr_result", 3886436197);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.xr_result is not available in this engine build.");
-            __mb_xr_result = __mb;
-        }
+        if (__mb_xr_result == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.xr_result");
         long __a0 = unchecked((long)result);
         ulong __a1 = NativeString.Create(format);
         ulong __a2 = args.Native;
@@ -2118,7 +1572,7 @@ public unsafe partial class OpenXRAPIExtension : RefCounted
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_xr_result, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a1);
         return __ret != 0;
     }
@@ -2126,36 +1580,24 @@ public unsafe partial class OpenXRAPIExtension : RefCounted
     private static nint __mb_openxr_is_enabled;
     public static bool OpenxrIsEnabled(bool checkRunInEditor)
     {
-        var __mb = __mb_openxr_is_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "openxr_is_enabled", 2703660260);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.openxr_is_enabled is not available in this engine build.");
-            __mb_openxr_is_enabled = __mb;
-        }
+        if (__mb_openxr_is_enabled == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.openxr_is_enabled");
         byte __a0 = checkRunInEditor ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_openxr_is_enabled, 0, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_instance_proc_addr;
     public ulong GetInstanceProcAddr(string name)
     {
-        var __mb = __mb_get_instance_proc_addr;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_instance_proc_addr", 1597066294);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_instance_proc_addr is not available in this engine build.");
-            __mb_get_instance_proc_addr = __mb;
-        }
+        if (__mb_get_instance_proc_addr == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_instance_proc_addr");
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_instance_proc_addr, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((ulong)__ret);
     }
@@ -2163,49 +1605,31 @@ public unsafe partial class OpenXRAPIExtension : RefCounted
     private static nint __mb_get_error_string;
     public string GetErrorString(ulong result)
     {
-        var __mb = __mb_get_error_string;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_error_string", 990163283);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_error_string is not available in this engine build.");
-            __mb_get_error_string = __mb;
-        }
+        if (__mb_get_error_string == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_error_string");
         long __a0 = unchecked((long)result);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_error_string, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_swapchain_format_name;
     public string GetSwapchainFormatName(long swapchainFormat)
     {
-        var __mb = __mb_get_swapchain_format_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_swapchain_format_name", 990163283);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_swapchain_format_name is not available in this engine build.");
-            __mb_get_swapchain_format_name = __mb;
-        }
+        if (__mb_get_swapchain_format_name == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_swapchain_format_name");
         long __a0 = unchecked((long)swapchainFormat);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_swapchain_format_name, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_object_name;
     public void SetObjectName(long objectType, ulong objectHandle, string objectName)
     {
-        var __mb = __mb_set_object_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "set_object_name", 2285447957);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.set_object_name is not available in this engine build.");
-            __mb_set_object_name = __mb;
-        }
+        if (__mb_set_object_name == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.set_object_name");
         long __a0 = unchecked((long)objectType);
         long __a1 = unchecked((long)objectHandle);
         ulong __a2 = NativeString.Create(objectName);
@@ -2213,194 +1637,122 @@ public unsafe partial class OpenXRAPIExtension : RefCounted
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_object_name, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a2);
     }
 
     private static nint __mb_begin_debug_label_region;
     public void BeginDebugLabelRegion(string labelName)
     {
-        var __mb = __mb_begin_debug_label_region;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "begin_debug_label_region", 83702148);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.begin_debug_label_region is not available in this engine build.");
-            __mb_begin_debug_label_region = __mb;
-        }
+        if (__mb_begin_debug_label_region == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.begin_debug_label_region");
         ulong __a0 = NativeString.Create(labelName);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_begin_debug_label_region, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_end_debug_label_region;
     public void EndDebugLabelRegion()
     {
-        var __mb = __mb_end_debug_label_region;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "end_debug_label_region", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.end_debug_label_region is not available in this engine build.");
-            __mb_end_debug_label_region = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_end_debug_label_region == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.end_debug_label_region");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_end_debug_label_region, NativePtr, 0, 0);
     }
 
     private static nint __mb_insert_debug_label;
     public void InsertDebugLabel(string labelName)
     {
-        var __mb = __mb_insert_debug_label;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "insert_debug_label", 83702148);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.insert_debug_label is not available in this engine build.");
-            __mb_insert_debug_label = __mb;
-        }
+        if (__mb_insert_debug_label == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.insert_debug_label");
         ulong __a0 = NativeString.Create(labelName);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_insert_debug_label, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_view_count;
     public uint GetViewCount()
     {
-        var __mb = __mb_get_view_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_view_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_view_count is not available in this engine build.");
-            __mb_get_view_count = __mb;
-        }
+        if (__mb_get_view_count == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_view_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_view_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_get_view_configuration;
     public ulong GetViewConfiguration()
     {
-        var __mb = __mb_get_view_configuration;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_view_configuration", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_view_configuration is not available in this engine build.");
-            __mb_get_view_configuration = __mb;
-        }
+        if (__mb_get_view_configuration == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_view_configuration");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_view_configuration, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_is_initialized;
     public bool IsInitialized()
     {
-        var __mb = __mb_is_initialized;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "is_initialized", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.is_initialized is not available in this engine build.");
-            __mb_is_initialized = __mb;
-        }
+        if (__mb_is_initialized == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.is_initialized");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_initialized, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_running;
     public bool IsRunning()
     {
-        var __mb = __mb_is_running;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "is_running", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.is_running is not available in this engine build.");
-            __mb_is_running = __mb;
-        }
+        if (__mb_is_running == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.is_running");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_running, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_play_space;
     public ulong GetPlaySpace()
     {
-        var __mb = __mb_get_play_space;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_play_space", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_play_space is not available in this engine build.");
-            __mb_get_play_space = __mb;
-        }
+        if (__mb_get_play_space == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_play_space");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_play_space, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_predicted_display_time;
     public long GetPredictedDisplayTime()
     {
-        var __mb = __mb_get_predicted_display_time;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_predicted_display_time", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_predicted_display_time is not available in this engine build.");
-            __mb_get_predicted_display_time = __mb;
-        }
+        if (__mb_get_predicted_display_time == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_predicted_display_time");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_predicted_display_time, NativePtr, 0, (nint)(&__ret));
         return unchecked((long)__ret);
     }
 
     private static nint __mb_get_next_frame_time;
     public long GetNextFrameTime()
     {
-        var __mb = __mb_get_next_frame_time;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_next_frame_time", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_next_frame_time is not available in this engine build.");
-            __mb_get_next_frame_time = __mb;
-        }
+        if (__mb_get_next_frame_time == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_next_frame_time");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_next_frame_time, NativePtr, 0, (nint)(&__ret));
         return unchecked((long)__ret);
     }
 
     private static nint __mb_can_render;
     public bool CanRender()
     {
-        var __mb = __mb_can_render;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "can_render", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.can_render is not available in this engine build.");
-            __mb_can_render = __mb;
-        }
+        if (__mb_can_render == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.can_render");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_can_render, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_find_action;
     public Rid FindAction(string name, Rid actionSet)
     {
-        var __mb = __mb_find_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "find_action", 4106179378);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.find_action is not available in this engine build.");
-            __mb_find_action = __mb;
-        }
+        if (__mb_find_action == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.find_action");
         ulong __a0 = NativeString.Create(name);
         var __a1 = actionSet;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_find_action, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret;
     }
@@ -2408,270 +1760,168 @@ public unsafe partial class OpenXRAPIExtension : RefCounted
     private static nint __mb_action_get_handle;
     public ulong ActionGetHandle(Rid action)
     {
-        var __mb = __mb_action_get_handle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "action_get_handle", 3917799429);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.action_get_handle is not available in this engine build.");
-            __mb_action_get_handle = __mb;
-        }
+        if (__mb_action_get_handle == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.action_get_handle");
         var __a0 = action;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_action_get_handle, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_hand_tracker;
     public ulong GetHandTracker(int handIndex)
     {
-        var __mb = __mb_get_hand_tracker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_hand_tracker", 3744713108);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_hand_tracker is not available in this engine build.");
-            __mb_get_hand_tracker = __mb;
-        }
+        if (__mb_get_hand_tracker == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_hand_tracker");
         long __a0 = unchecked((long)handIndex);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_tracker, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_register_composition_layer_provider;
     public void RegisterCompositionLayerProvider(OpenXRExtensionWrapper? extension)
     {
-        var __mb = __mb_register_composition_layer_provider;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "register_composition_layer_provider", 1477360496);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.register_composition_layer_provider is not available in this engine build.");
-            __mb_register_composition_layer_provider = __mb;
-        }
+        if (__mb_register_composition_layer_provider == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.register_composition_layer_provider");
         nint __a0 = extension?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_register_composition_layer_provider, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_unregister_composition_layer_provider;
     public void UnregisterCompositionLayerProvider(OpenXRExtensionWrapper? extension)
     {
-        var __mb = __mb_unregister_composition_layer_provider;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "unregister_composition_layer_provider", 1477360496);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.unregister_composition_layer_provider is not available in this engine build.");
-            __mb_unregister_composition_layer_provider = __mb;
-        }
+        if (__mb_unregister_composition_layer_provider == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.unregister_composition_layer_provider");
         nint __a0 = extension?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_unregister_composition_layer_provider, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_register_projection_views_extension;
     public void RegisterProjectionViewsExtension(OpenXRExtensionWrapper? extension)
     {
-        var __mb = __mb_register_projection_views_extension;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "register_projection_views_extension", 1477360496);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.register_projection_views_extension is not available in this engine build.");
-            __mb_register_projection_views_extension = __mb;
-        }
+        if (__mb_register_projection_views_extension == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.register_projection_views_extension");
         nint __a0 = extension?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_register_projection_views_extension, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_unregister_projection_views_extension;
     public void UnregisterProjectionViewsExtension(OpenXRExtensionWrapper? extension)
     {
-        var __mb = __mb_unregister_projection_views_extension;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "unregister_projection_views_extension", 1477360496);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.unregister_projection_views_extension is not available in this engine build.");
-            __mb_unregister_projection_views_extension = __mb;
-        }
+        if (__mb_unregister_projection_views_extension == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.unregister_projection_views_extension");
         nint __a0 = extension?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_unregister_projection_views_extension, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_register_frame_info_extension;
     public void RegisterFrameInfoExtension(OpenXRExtensionWrapper? extension)
     {
-        var __mb = __mb_register_frame_info_extension;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "register_frame_info_extension", 1477360496);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.register_frame_info_extension is not available in this engine build.");
-            __mb_register_frame_info_extension = __mb;
-        }
+        if (__mb_register_frame_info_extension == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.register_frame_info_extension");
         nint __a0 = extension?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_register_frame_info_extension, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_unregister_frame_info_extension;
     public void UnregisterFrameInfoExtension(OpenXRExtensionWrapper? extension)
     {
-        var __mb = __mb_unregister_frame_info_extension;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "unregister_frame_info_extension", 1477360496);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.unregister_frame_info_extension is not available in this engine build.");
-            __mb_unregister_frame_info_extension = __mb;
-        }
+        if (__mb_unregister_frame_info_extension == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.unregister_frame_info_extension");
         nint __a0 = extension?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_unregister_frame_info_extension, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_register_projection_layer_extension;
     public void RegisterProjectionLayerExtension(OpenXRExtensionWrapper? extension)
     {
-        var __mb = __mb_register_projection_layer_extension;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "register_projection_layer_extension", 1477360496);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.register_projection_layer_extension is not available in this engine build.");
-            __mb_register_projection_layer_extension = __mb;
-        }
+        if (__mb_register_projection_layer_extension == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.register_projection_layer_extension");
         nint __a0 = extension?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_register_projection_layer_extension, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_unregister_projection_layer_extension;
     public void UnregisterProjectionLayerExtension(OpenXRExtensionWrapper? extension)
     {
-        var __mb = __mb_unregister_projection_layer_extension;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "unregister_projection_layer_extension", 1477360496);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.unregister_projection_layer_extension is not available in this engine build.");
-            __mb_unregister_projection_layer_extension = __mb;
-        }
+        if (__mb_unregister_projection_layer_extension == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.unregister_projection_layer_extension");
         nint __a0 = extension?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_unregister_projection_layer_extension, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_render_state_z_near;
     public double GetRenderStateZNear()
     {
-        var __mb = __mb_get_render_state_z_near;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_render_state_z_near", 191475506);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_render_state_z_near is not available in this engine build.");
-            __mb_get_render_state_z_near = __mb;
-        }
+        if (__mb_get_render_state_z_near == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_render_state_z_near");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_render_state_z_near, NativePtr, 0, (nint)(&__ret));
         return (double)__ret;
     }
 
     private static nint __mb_get_render_state_z_far;
     public double GetRenderStateZFar()
     {
-        var __mb = __mb_get_render_state_z_far;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_render_state_z_far", 191475506);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_render_state_z_far is not available in this engine build.");
-            __mb_get_render_state_z_far = __mb;
-        }
+        if (__mb_get_render_state_z_far == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_render_state_z_far");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_render_state_z_far, NativePtr, 0, (nint)(&__ret));
         return (double)__ret;
     }
 
     private static nint __mb_set_velocity_texture;
     public void SetVelocityTexture(Rid renderTarget)
     {
-        var __mb = __mb_set_velocity_texture;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "set_velocity_texture", 2722037293);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.set_velocity_texture is not available in this engine build.");
-            __mb_set_velocity_texture = __mb;
-        }
+        if (__mb_set_velocity_texture == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.set_velocity_texture");
         var __a0 = renderTarget;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_velocity_texture, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_velocity_depth_texture;
     public void SetVelocityDepthTexture(Rid renderTarget)
     {
-        var __mb = __mb_set_velocity_depth_texture;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "set_velocity_depth_texture", 2722037293);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.set_velocity_depth_texture is not available in this engine build.");
-            __mb_set_velocity_depth_texture = __mb;
-        }
+        if (__mb_set_velocity_depth_texture == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.set_velocity_depth_texture");
         var __a0 = renderTarget;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_velocity_depth_texture, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_velocity_target_size;
     public void SetVelocityTargetSize(Vector2I targetSize)
     {
-        var __mb = __mb_set_velocity_target_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "set_velocity_target_size", 1130785943);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.set_velocity_target_size is not available in this engine build.");
-            __mb_set_velocity_target_size = __mb;
-        }
+        if (__mb_set_velocity_target_size == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.set_velocity_target_size");
         var __a0 = targetSize;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_velocity_target_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_supported_swapchain_formats;
     public long[] GetSupportedSwapchainFormats()
     {
-        var __mb = __mb_get_supported_swapchain_formats;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_supported_swapchain_formats", 3851388692);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_supported_swapchain_formats is not available in this engine build.");
-            __mb_get_supported_swapchain_formats = __mb;
-        }
+        if (__mb_get_supported_swapchain_formats == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_supported_swapchain_formats");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_supported_swapchain_formats, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_openxr_swapchain_create;
     public ulong OpenxrSwapchainCreate(ulong createFlags, ulong usageFlags, long swapchainFormat, uint width, uint height, uint sampleCount, uint arraySize)
     {
-        var __mb = __mb_openxr_swapchain_create;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "openxr_swapchain_create", 2162228999);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.openxr_swapchain_create is not available in this engine build.");
-            __mb_openxr_swapchain_create = __mb;
-        }
+        if (__mb_openxr_swapchain_create == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.openxr_swapchain_create");
         long __a0 = unchecked((long)createFlags);
         long __a1 = unchecked((long)usageFlags);
         long __a2 = unchecked((long)swapchainFormat);
@@ -2688,167 +1938,160 @@ public unsafe partial class OpenXRAPIExtension : RefCounted
         __args[5] = (nint)(&__a5);
         __args[6] = (nint)(&__a6);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_openxr_swapchain_create, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_openxr_swapchain_free;
     public void OpenxrSwapchainFree(ulong swapchain)
     {
-        var __mb = __mb_openxr_swapchain_free;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "openxr_swapchain_free", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.openxr_swapchain_free is not available in this engine build.");
-            __mb_openxr_swapchain_free = __mb;
-        }
+        if (__mb_openxr_swapchain_free == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.openxr_swapchain_free");
         long __a0 = unchecked((long)swapchain);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_openxr_swapchain_free, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_openxr_swapchain_get_swapchain;
     public ulong OpenxrSwapchainGetSwapchain(ulong swapchain)
     {
-        var __mb = __mb_openxr_swapchain_get_swapchain;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "openxr_swapchain_get_swapchain", 3744713108);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.openxr_swapchain_get_swapchain is not available in this engine build.");
-            __mb_openxr_swapchain_get_swapchain = __mb;
-        }
+        if (__mb_openxr_swapchain_get_swapchain == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.openxr_swapchain_get_swapchain");
         long __a0 = unchecked((long)swapchain);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_openxr_swapchain_get_swapchain, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_openxr_swapchain_acquire;
     public void OpenxrSwapchainAcquire(ulong swapchain)
     {
-        var __mb = __mb_openxr_swapchain_acquire;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "openxr_swapchain_acquire", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.openxr_swapchain_acquire is not available in this engine build.");
-            __mb_openxr_swapchain_acquire = __mb;
-        }
+        if (__mb_openxr_swapchain_acquire == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.openxr_swapchain_acquire");
         long __a0 = unchecked((long)swapchain);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_openxr_swapchain_acquire, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_openxr_swapchain_get_image;
     public Rid OpenxrSwapchainGetImage(ulong swapchain)
     {
-        var __mb = __mb_openxr_swapchain_get_image;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "openxr_swapchain_get_image", 937000113);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.openxr_swapchain_get_image is not available in this engine build.");
-            __mb_openxr_swapchain_get_image = __mb;
-        }
+        if (__mb_openxr_swapchain_get_image == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.openxr_swapchain_get_image");
         long __a0 = unchecked((long)swapchain);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_openxr_swapchain_get_image, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_openxr_swapchain_release;
     public void OpenxrSwapchainRelease(ulong swapchain)
     {
-        var __mb = __mb_openxr_swapchain_release;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "openxr_swapchain_release", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.openxr_swapchain_release is not available in this engine build.");
-            __mb_openxr_swapchain_release = __mb;
-        }
+        if (__mb_openxr_swapchain_release == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.openxr_swapchain_release");
         long __a0 = unchecked((long)swapchain);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_openxr_swapchain_release, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_projection_layer;
     public ulong GetProjectionLayer()
     {
-        var __mb = __mb_get_projection_layer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "get_projection_layer", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.get_projection_layer is not available in this engine build.");
-            __mb_get_projection_layer = __mb;
-        }
+        if (__mb_get_projection_layer == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.get_projection_layer");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_projection_layer, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_set_render_region;
     public void SetRenderRegion(Rect2I renderRegion)
     {
-        var __mb = __mb_set_render_region;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "set_render_region", 1763793166);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.set_render_region is not available in this engine build.");
-            __mb_set_render_region = __mb;
-        }
+        if (__mb_set_render_region == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.set_render_region");
         var __a0 = renderRegion;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_render_region, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_emulate_environment_blend_mode_alpha_blend;
     public void SetEmulateEnvironmentBlendModeAlphaBlend(bool enabled)
     {
-        var __mb = __mb_set_emulate_environment_blend_mode_alpha_blend;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "set_emulate_environment_blend_mode_alpha_blend", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.set_emulate_environment_blend_mode_alpha_blend is not available in this engine build.");
-            __mb_set_emulate_environment_blend_mode_alpha_blend = __mb;
-        }
+        if (__mb_set_emulate_environment_blend_mode_alpha_blend == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.set_emulate_environment_blend_mode_alpha_blend");
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_emulate_environment_blend_mode_alpha_blend, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_environment_blend_mode_alpha_supported;
     public OpenXRAPIExtension.OpenXRAlphaBlendModeSupport IsEnvironmentBlendModeAlphaSupported()
     {
-        var __mb = __mb_is_environment_blend_mode_alpha_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "is_environment_blend_mode_alpha_supported", 1579290861);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.is_environment_blend_mode_alpha_supported is not available in this engine build.");
-            __mb_is_environment_blend_mode_alpha_supported = __mb;
-        }
+        if (__mb_is_environment_blend_mode_alpha_supported == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.is_environment_blend_mode_alpha_supported");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_environment_blend_mode_alpha_supported, NativePtr, 0, (nint)(&__ret));
         return (OpenXRAPIExtension.OpenXRAlphaBlendModeSupport)__ret;
     }
 
     private static nint __mb_update_main_swapchain_size;
     public void UpdateMainSwapchainSize()
     {
-        var __mb = __mb_update_main_swapchain_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAPIExtension", "update_main_swapchain_size", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAPIExtension.update_main_swapchain_size is not available in this engine build.");
-            __mb_update_main_swapchain_size = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_update_main_swapchain_size == 0) MethodBinds.MissingThrow("OpenXRAPIExtension.update_main_swapchain_size");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_update_main_swapchain_size, NativePtr, 0, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_openxr_version = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_openxr_version", 2455072627);
+        __mb_get_instance = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_instance", 2455072627);
+        __mb_get_system_id = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_system_id", 2455072627);
+        __mb_get_session = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_session", 2455072627);
+        __mb_xr_result = MethodBinds.ResolveBulk("OpenXRAPIExtension", "xr_result", 3886436197);
+        __mb_openxr_is_enabled = MethodBinds.ResolveBulk("OpenXRAPIExtension", "openxr_is_enabled", 2703660260);
+        __mb_get_instance_proc_addr = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_instance_proc_addr", 1597066294);
+        __mb_get_error_string = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_error_string", 990163283);
+        __mb_get_swapchain_format_name = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_swapchain_format_name", 990163283);
+        __mb_set_object_name = MethodBinds.ResolveBulk("OpenXRAPIExtension", "set_object_name", 2285447957);
+        __mb_begin_debug_label_region = MethodBinds.ResolveBulk("OpenXRAPIExtension", "begin_debug_label_region", 83702148);
+        __mb_end_debug_label_region = MethodBinds.ResolveBulk("OpenXRAPIExtension", "end_debug_label_region", 3218959716);
+        __mb_insert_debug_label = MethodBinds.ResolveBulk("OpenXRAPIExtension", "insert_debug_label", 83702148);
+        __mb_get_view_count = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_view_count", 3905245786);
+        __mb_get_view_configuration = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_view_configuration", 3905245786);
+        __mb_is_initialized = MethodBinds.ResolveBulk("OpenXRAPIExtension", "is_initialized", 2240911060);
+        __mb_is_running = MethodBinds.ResolveBulk("OpenXRAPIExtension", "is_running", 2240911060);
+        __mb_get_play_space = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_play_space", 2455072627);
+        __mb_get_predicted_display_time = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_predicted_display_time", 2455072627);
+        __mb_get_next_frame_time = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_next_frame_time", 2455072627);
+        __mb_can_render = MethodBinds.ResolveBulk("OpenXRAPIExtension", "can_render", 2240911060);
+        __mb_find_action = MethodBinds.ResolveBulk("OpenXRAPIExtension", "find_action", 4106179378);
+        __mb_action_get_handle = MethodBinds.ResolveBulk("OpenXRAPIExtension", "action_get_handle", 3917799429);
+        __mb_get_hand_tracker = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_hand_tracker", 3744713108);
+        __mb_register_composition_layer_provider = MethodBinds.ResolveBulk("OpenXRAPIExtension", "register_composition_layer_provider", 1477360496);
+        __mb_unregister_composition_layer_provider = MethodBinds.ResolveBulk("OpenXRAPIExtension", "unregister_composition_layer_provider", 1477360496);
+        __mb_register_projection_views_extension = MethodBinds.ResolveBulk("OpenXRAPIExtension", "register_projection_views_extension", 1477360496);
+        __mb_unregister_projection_views_extension = MethodBinds.ResolveBulk("OpenXRAPIExtension", "unregister_projection_views_extension", 1477360496);
+        __mb_register_frame_info_extension = MethodBinds.ResolveBulk("OpenXRAPIExtension", "register_frame_info_extension", 1477360496);
+        __mb_unregister_frame_info_extension = MethodBinds.ResolveBulk("OpenXRAPIExtension", "unregister_frame_info_extension", 1477360496);
+        __mb_register_projection_layer_extension = MethodBinds.ResolveBulk("OpenXRAPIExtension", "register_projection_layer_extension", 1477360496);
+        __mb_unregister_projection_layer_extension = MethodBinds.ResolveBulk("OpenXRAPIExtension", "unregister_projection_layer_extension", 1477360496);
+        __mb_get_render_state_z_near = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_render_state_z_near", 191475506);
+        __mb_get_render_state_z_far = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_render_state_z_far", 191475506);
+        __mb_set_velocity_texture = MethodBinds.ResolveBulk("OpenXRAPIExtension", "set_velocity_texture", 2722037293);
+        __mb_set_velocity_depth_texture = MethodBinds.ResolveBulk("OpenXRAPIExtension", "set_velocity_depth_texture", 2722037293);
+        __mb_set_velocity_target_size = MethodBinds.ResolveBulk("OpenXRAPIExtension", "set_velocity_target_size", 1130785943);
+        __mb_get_supported_swapchain_formats = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_supported_swapchain_formats", 3851388692);
+        __mb_openxr_swapchain_create = MethodBinds.ResolveBulk("OpenXRAPIExtension", "openxr_swapchain_create", 2162228999);
+        __mb_openxr_swapchain_free = MethodBinds.ResolveBulk("OpenXRAPIExtension", "openxr_swapchain_free", 1286410249);
+        __mb_openxr_swapchain_get_swapchain = MethodBinds.ResolveBulk("OpenXRAPIExtension", "openxr_swapchain_get_swapchain", 3744713108);
+        __mb_openxr_swapchain_acquire = MethodBinds.ResolveBulk("OpenXRAPIExtension", "openxr_swapchain_acquire", 1286410249);
+        __mb_openxr_swapchain_get_image = MethodBinds.ResolveBulk("OpenXRAPIExtension", "openxr_swapchain_get_image", 937000113);
+        __mb_openxr_swapchain_release = MethodBinds.ResolveBulk("OpenXRAPIExtension", "openxr_swapchain_release", 1286410249);
+        __mb_get_projection_layer = MethodBinds.ResolveBulk("OpenXRAPIExtension", "get_projection_layer", 2455072627);
+        __mb_set_render_region = MethodBinds.ResolveBulk("OpenXRAPIExtension", "set_render_region", 1763793166);
+        __mb_set_emulate_environment_blend_mode_alpha_blend = MethodBinds.ResolveBulk("OpenXRAPIExtension", "set_emulate_environment_blend_mode_alpha_blend", 2586408642);
+        __mb_is_environment_blend_mode_alpha_supported = MethodBinds.ResolveBulk("OpenXRAPIExtension", "is_environment_blend_mode_alpha_supported", 1579290861);
+        __mb_update_main_swapchain_size = MethodBinds.ResolveBulk("OpenXRAPIExtension", "update_main_swapchain_size", 3218959716);
     }
 }
 
@@ -2890,96 +2133,70 @@ public unsafe partial class OpenXRAction : Resource
     private static nint __mb_set_localized_name;
     public void SetLocalizedName(string localizedName)
     {
-        var __mb = __mb_set_localized_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAction", "set_localized_name", 83702148);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAction.set_localized_name is not available in this engine build.");
-            __mb_set_localized_name = __mb;
-        }
+        if (__mb_set_localized_name == 0) MethodBinds.MissingThrow("OpenXRAction.set_localized_name");
         ulong __a0 = NativeString.Create(localizedName);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_localized_name, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_localized_name;
     public string GetLocalizedName()
     {
-        var __mb = __mb_get_localized_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAction", "get_localized_name", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAction.get_localized_name is not available in this engine build.");
-            __mb_get_localized_name = __mb;
-        }
+        if (__mb_get_localized_name == 0) MethodBinds.MissingThrow("OpenXRAction.get_localized_name");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_localized_name, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_action_type;
     public void SetActionType(OpenXRAction.ActionTypeEnum actionType)
     {
-        var __mb = __mb_set_action_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAction", "set_action_type", 1675238366);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAction.set_action_type is not available in this engine build.");
-            __mb_set_action_type = __mb;
-        }
+        if (__mb_set_action_type == 0) MethodBinds.MissingThrow("OpenXRAction.set_action_type");
         long __a0 = (long)actionType;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_action_type, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_action_type;
     public OpenXRAction.ActionTypeEnum GetActionType()
     {
-        var __mb = __mb_get_action_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAction", "get_action_type", 3536542431);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAction.get_action_type is not available in this engine build.");
-            __mb_get_action_type = __mb;
-        }
+        if (__mb_get_action_type == 0) MethodBinds.MissingThrow("OpenXRAction.get_action_type");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_action_type, NativePtr, 0, (nint)(&__ret));
         return (OpenXRAction.ActionTypeEnum)__ret;
     }
 
     private static nint __mb_set_toplevel_paths;
     public void SetToplevelPaths(string[] toplevelPaths)
     {
-        var __mb = __mb_set_toplevel_paths;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAction", "set_toplevel_paths", 4015028928);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAction.set_toplevel_paths is not available in this engine build.");
-            __mb_set_toplevel_paths = __mb;
-        }
+        if (__mb_set_toplevel_paths == 0) MethodBinds.MissingThrow("OpenXRAction.set_toplevel_paths");
         var __a0 = Packed.CreateStrings(toplevelPaths);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_toplevel_paths, NativePtr, (nint)__args, 0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
     }
 
     private static nint __mb_get_toplevel_paths;
     public string[] GetToplevelPaths()
     {
-        var __mb = __mb_get_toplevel_paths;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAction", "get_toplevel_paths", 1139954409);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAction.get_toplevel_paths is not available in this engine build.");
-            __mb_get_toplevel_paths = __mb;
-        }
+        if (__mb_get_toplevel_paths == 0) MethodBinds.MissingThrow("OpenXRAction.get_toplevel_paths");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_toplevel_paths, NativePtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_localized_name = MethodBinds.ResolveBulk("OpenXRAction", "set_localized_name", 83702148);
+        __mb_get_localized_name = MethodBinds.ResolveBulk("OpenXRAction", "get_localized_name", 201670096);
+        __mb_set_action_type = MethodBinds.ResolveBulk("OpenXRAction", "set_action_type", 1675238366);
+        __mb_get_action_type = MethodBinds.ResolveBulk("OpenXRAction", "get_action_type", 3536542431);
+        __mb_set_toplevel_paths = MethodBinds.ResolveBulk("OpenXRAction", "set_toplevel_paths", 4015028928);
+        __mb_get_toplevel_paths = MethodBinds.ResolveBulk("OpenXRAction", "get_toplevel_paths", 1139954409);
     }
 }
 
@@ -3017,64 +2234,40 @@ public unsafe partial class OpenXRActionMap : Resource
     private static nint __mb_set_action_sets;
     public void SetActionSets(Godot.Collections.Array actionSets)
     {
-        var __mb = __mb_set_action_sets;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionMap", "set_action_sets", 381264803);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.set_action_sets is not available in this engine build.");
-            __mb_set_action_sets = __mb;
-        }
+        if (__mb_set_action_sets == 0) MethodBinds.MissingThrow("OpenXRActionMap.set_action_sets");
         ulong __a0 = actionSets.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_action_sets, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_action_sets;
     public Godot.Collections.Array GetActionSets()
     {
-        var __mb = __mb_get_action_sets;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionMap", "get_action_sets", 3995934104);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.get_action_sets is not available in this engine build.");
-            __mb_get_action_sets = __mb;
-        }
+        if (__mb_get_action_sets == 0) MethodBinds.MissingThrow("OpenXRActionMap.get_action_sets");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_action_sets, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_action_set_count;
     public int GetActionSetCount()
     {
-        var __mb = __mb_get_action_set_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionMap", "get_action_set_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.get_action_set_count is not available in this engine build.");
-            __mb_get_action_set_count = __mb;
-        }
+        if (__mb_get_action_set_count == 0) MethodBinds.MissingThrow("OpenXRActionMap.get_action_set_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_action_set_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_find_action_set;
     public OpenXRActionSet? FindActionSet(string name)
     {
-        var __mb = __mb_find_action_set;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionMap", "find_action_set", 1888809267);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.find_action_set is not available in this engine build.");
-            __mb_find_action_set = __mb;
-        }
+        if (__mb_find_action_set == 0) MethodBinds.MissingThrow("OpenXRActionMap.find_action_set");
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_find_action_set, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (OpenXRActionSet?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
@@ -3082,114 +2275,72 @@ public unsafe partial class OpenXRActionMap : Resource
     private static nint __mb_get_action_set;
     public OpenXRActionSet? GetActionSet(int idx)
     {
-        var __mb = __mb_get_action_set;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionMap", "get_action_set", 1789580336);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.get_action_set is not available in this engine build.");
-            __mb_get_action_set = __mb;
-        }
+        if (__mb_get_action_set == 0) MethodBinds.MissingThrow("OpenXRActionMap.get_action_set");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_action_set, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRActionSet?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_add_action_set;
     public void AddActionSet(OpenXRActionSet? actionSet)
     {
-        var __mb = __mb_add_action_set;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionMap", "add_action_set", 2093310581);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.add_action_set is not available in this engine build.");
-            __mb_add_action_set = __mb;
-        }
+        if (__mb_add_action_set == 0) MethodBinds.MissingThrow("OpenXRActionMap.add_action_set");
         nint __a0 = actionSet?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_action_set, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_action_set;
     public void RemoveActionSet(OpenXRActionSet? actionSet)
     {
-        var __mb = __mb_remove_action_set;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionMap", "remove_action_set", 2093310581);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.remove_action_set is not available in this engine build.");
-            __mb_remove_action_set = __mb;
-        }
+        if (__mb_remove_action_set == 0) MethodBinds.MissingThrow("OpenXRActionMap.remove_action_set");
         nint __a0 = actionSet?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_action_set, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_interaction_profiles;
     public void SetInteractionProfiles(Godot.Collections.Array interactionProfiles)
     {
-        var __mb = __mb_set_interaction_profiles;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionMap", "set_interaction_profiles", 381264803);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.set_interaction_profiles is not available in this engine build.");
-            __mb_set_interaction_profiles = __mb;
-        }
+        if (__mb_set_interaction_profiles == 0) MethodBinds.MissingThrow("OpenXRActionMap.set_interaction_profiles");
         ulong __a0 = interactionProfiles.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_interaction_profiles, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_interaction_profiles;
     public Godot.Collections.Array GetInteractionProfiles()
     {
-        var __mb = __mb_get_interaction_profiles;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionMap", "get_interaction_profiles", 3995934104);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.get_interaction_profiles is not available in this engine build.");
-            __mb_get_interaction_profiles = __mb;
-        }
+        if (__mb_get_interaction_profiles == 0) MethodBinds.MissingThrow("OpenXRActionMap.get_interaction_profiles");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_interaction_profiles, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_interaction_profile_count;
     public int GetInteractionProfileCount()
     {
-        var __mb = __mb_get_interaction_profile_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionMap", "get_interaction_profile_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.get_interaction_profile_count is not available in this engine build.");
-            __mb_get_interaction_profile_count = __mb;
-        }
+        if (__mb_get_interaction_profile_count == 0) MethodBinds.MissingThrow("OpenXRActionMap.get_interaction_profile_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_interaction_profile_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_find_interaction_profile;
     public OpenXRInteractionProfile? FindInteractionProfile(string name)
     {
-        var __mb = __mb_find_interaction_profile;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionMap", "find_interaction_profile", 3095875538);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.find_interaction_profile is not available in this engine build.");
-            __mb_find_interaction_profile = __mb;
-        }
+        if (__mb_find_interaction_profile == 0) MethodBinds.MissingThrow("OpenXRActionMap.find_interaction_profile");
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_find_interaction_profile, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (OpenXRInteractionProfile?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
@@ -3197,64 +2348,59 @@ public unsafe partial class OpenXRActionMap : Resource
     private static nint __mb_get_interaction_profile;
     public OpenXRInteractionProfile? GetInteractionProfile(int idx)
     {
-        var __mb = __mb_get_interaction_profile;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionMap", "get_interaction_profile", 2546151210);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.get_interaction_profile is not available in this engine build.");
-            __mb_get_interaction_profile = __mb;
-        }
+        if (__mb_get_interaction_profile == 0) MethodBinds.MissingThrow("OpenXRActionMap.get_interaction_profile");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_interaction_profile, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRInteractionProfile?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_add_interaction_profile;
     public void AddInteractionProfile(OpenXRInteractionProfile? interactionProfile)
     {
-        var __mb = __mb_add_interaction_profile;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionMap", "add_interaction_profile", 2697953512);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.add_interaction_profile is not available in this engine build.");
-            __mb_add_interaction_profile = __mb;
-        }
+        if (__mb_add_interaction_profile == 0) MethodBinds.MissingThrow("OpenXRActionMap.add_interaction_profile");
         nint __a0 = interactionProfile?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_interaction_profile, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_interaction_profile;
     public void RemoveInteractionProfile(OpenXRInteractionProfile? interactionProfile)
     {
-        var __mb = __mb_remove_interaction_profile;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionMap", "remove_interaction_profile", 2697953512);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.remove_interaction_profile is not available in this engine build.");
-            __mb_remove_interaction_profile = __mb;
-        }
+        if (__mb_remove_interaction_profile == 0) MethodBinds.MissingThrow("OpenXRActionMap.remove_interaction_profile");
         nint __a0 = interactionProfile?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_interaction_profile, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_create_default_action_sets;
     public void CreateDefaultActionSets()
     {
-        var __mb = __mb_create_default_action_sets;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionMap", "create_default_action_sets", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionMap.create_default_action_sets is not available in this engine build.");
-            __mb_create_default_action_sets = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_create_default_action_sets == 0) MethodBinds.MissingThrow("OpenXRActionMap.create_default_action_sets");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_default_action_sets, NativePtr, 0, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_action_sets = MethodBinds.ResolveBulk("OpenXRActionMap", "set_action_sets", 381264803);
+        __mb_get_action_sets = MethodBinds.ResolveBulk("OpenXRActionMap", "get_action_sets", 3995934104);
+        __mb_get_action_set_count = MethodBinds.ResolveBulk("OpenXRActionMap", "get_action_set_count", 3905245786);
+        __mb_find_action_set = MethodBinds.ResolveBulk("OpenXRActionMap", "find_action_set", 1888809267);
+        __mb_get_action_set = MethodBinds.ResolveBulk("OpenXRActionMap", "get_action_set", 1789580336);
+        __mb_add_action_set = MethodBinds.ResolveBulk("OpenXRActionMap", "add_action_set", 2093310581);
+        __mb_remove_action_set = MethodBinds.ResolveBulk("OpenXRActionMap", "remove_action_set", 2093310581);
+        __mb_set_interaction_profiles = MethodBinds.ResolveBulk("OpenXRActionMap", "set_interaction_profiles", 381264803);
+        __mb_get_interaction_profiles = MethodBinds.ResolveBulk("OpenXRActionMap", "get_interaction_profiles", 3995934104);
+        __mb_get_interaction_profile_count = MethodBinds.ResolveBulk("OpenXRActionMap", "get_interaction_profile_count", 3905245786);
+        __mb_find_interaction_profile = MethodBinds.ResolveBulk("OpenXRActionMap", "find_interaction_profile", 3095875538);
+        __mb_get_interaction_profile = MethodBinds.ResolveBulk("OpenXRActionMap", "get_interaction_profile", 2546151210);
+        __mb_add_interaction_profile = MethodBinds.ResolveBulk("OpenXRActionMap", "add_interaction_profile", 2697953512);
+        __mb_remove_interaction_profile = MethodBinds.ResolveBulk("OpenXRActionMap", "remove_interaction_profile", 2697953512);
+        __mb_create_default_action_sets = MethodBinds.ResolveBulk("OpenXRActionMap", "create_default_action_sets", 3218959716);
     }
 }
 
@@ -3288,142 +2434,101 @@ public unsafe partial class OpenXRActionSet : Resource
     private static nint __mb_set_localized_name;
     public void SetLocalizedName(string localizedName)
     {
-        var __mb = __mb_set_localized_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionSet", "set_localized_name", 83702148);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionSet.set_localized_name is not available in this engine build.");
-            __mb_set_localized_name = __mb;
-        }
+        if (__mb_set_localized_name == 0) MethodBinds.MissingThrow("OpenXRActionSet.set_localized_name");
         ulong __a0 = NativeString.Create(localizedName);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_localized_name, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_localized_name;
     public string GetLocalizedName()
     {
-        var __mb = __mb_get_localized_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionSet", "get_localized_name", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionSet.get_localized_name is not available in this engine build.");
-            __mb_get_localized_name = __mb;
-        }
+        if (__mb_get_localized_name == 0) MethodBinds.MissingThrow("OpenXRActionSet.get_localized_name");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_localized_name, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_priority;
     public void SetPriority(int priority)
     {
-        var __mb = __mb_set_priority;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionSet", "set_priority", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionSet.set_priority is not available in this engine build.");
-            __mb_set_priority = __mb;
-        }
+        if (__mb_set_priority == 0) MethodBinds.MissingThrow("OpenXRActionSet.set_priority");
         long __a0 = unchecked((long)priority);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_priority, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_priority;
     public int GetPriority()
     {
-        var __mb = __mb_get_priority;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionSet", "get_priority", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionSet.get_priority is not available in this engine build.");
-            __mb_get_priority = __mb;
-        }
+        if (__mb_get_priority == 0) MethodBinds.MissingThrow("OpenXRActionSet.get_priority");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_priority, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_action_count;
     public int GetActionCount()
     {
-        var __mb = __mb_get_action_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionSet", "get_action_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionSet.get_action_count is not available in this engine build.");
-            __mb_get_action_count = __mb;
-        }
+        if (__mb_get_action_count == 0) MethodBinds.MissingThrow("OpenXRActionSet.get_action_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_action_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_actions;
     public void SetActions(Godot.Collections.Array actions)
     {
-        var __mb = __mb_set_actions;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionSet", "set_actions", 381264803);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionSet.set_actions is not available in this engine build.");
-            __mb_set_actions = __mb;
-        }
+        if (__mb_set_actions == 0) MethodBinds.MissingThrow("OpenXRActionSet.set_actions");
         ulong __a0 = actions.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_actions, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_actions;
     public Godot.Collections.Array GetActions()
     {
-        var __mb = __mb_get_actions;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionSet", "get_actions", 3995934104);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionSet.get_actions is not available in this engine build.");
-            __mb_get_actions = __mb;
-        }
+        if (__mb_get_actions == 0) MethodBinds.MissingThrow("OpenXRActionSet.get_actions");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_actions, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_add_action;
     public void AddAction(OpenXRAction? action)
     {
-        var __mb = __mb_add_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionSet", "add_action", 349361333);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionSet.add_action is not available in this engine build.");
-            __mb_add_action = __mb;
-        }
+        if (__mb_add_action == 0) MethodBinds.MissingThrow("OpenXRActionSet.add_action");
         nint __a0 = action?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_action, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_action;
     public void RemoveAction(OpenXRAction? action)
     {
-        var __mb = __mb_remove_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRActionSet", "remove_action", 349361333);
-            if (__mb == 0) throw new MissingMethodException("OpenXRActionSet.remove_action is not available in this engine build.");
-            __mb_remove_action = __mb;
-        }
+        if (__mb_remove_action == 0) MethodBinds.MissingThrow("OpenXRActionSet.remove_action");
         nint __a0 = action?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_action, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_localized_name = MethodBinds.ResolveBulk("OpenXRActionSet", "set_localized_name", 83702148);
+        __mb_get_localized_name = MethodBinds.ResolveBulk("OpenXRActionSet", "get_localized_name", 201670096);
+        __mb_set_priority = MethodBinds.ResolveBulk("OpenXRActionSet", "set_priority", 1286410249);
+        __mb_get_priority = MethodBinds.ResolveBulk("OpenXRActionSet", "get_priority", 3905245786);
+        __mb_get_action_count = MethodBinds.ResolveBulk("OpenXRActionSet", "get_action_count", 3905245786);
+        __mb_set_actions = MethodBinds.ResolveBulk("OpenXRActionSet", "set_actions", 381264803);
+        __mb_get_actions = MethodBinds.ResolveBulk("OpenXRActionSet", "get_actions", 3995934104);
+        __mb_add_action = MethodBinds.ResolveBulk("OpenXRActionSet", "add_action", 349361333);
+        __mb_remove_action = MethodBinds.ResolveBulk("OpenXRActionSet", "remove_action", 349361333);
     }
 }
 
@@ -3463,125 +2568,89 @@ public unsafe partial class OpenXRAnalogThresholdModifier : OpenXRActionBindingM
     private static nint __mb_set_on_threshold;
     public void SetOnThreshold(float onThreshold)
     {
-        var __mb = __mb_set_on_threshold;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAnalogThresholdModifier", "set_on_threshold", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAnalogThresholdModifier.set_on_threshold is not available in this engine build.");
-            __mb_set_on_threshold = __mb;
-        }
+        if (__mb_set_on_threshold == 0) MethodBinds.MissingThrow("OpenXRAnalogThresholdModifier.set_on_threshold");
         double __a0 = onThreshold;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_on_threshold, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_on_threshold;
     public float GetOnThreshold()
     {
-        var __mb = __mb_get_on_threshold;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAnalogThresholdModifier", "get_on_threshold", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAnalogThresholdModifier.get_on_threshold is not available in this engine build.");
-            __mb_get_on_threshold = __mb;
-        }
+        if (__mb_get_on_threshold == 0) MethodBinds.MissingThrow("OpenXRAnalogThresholdModifier.get_on_threshold");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_on_threshold, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_off_threshold;
     public void SetOffThreshold(float offThreshold)
     {
-        var __mb = __mb_set_off_threshold;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAnalogThresholdModifier", "set_off_threshold", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAnalogThresholdModifier.set_off_threshold is not available in this engine build.");
-            __mb_set_off_threshold = __mb;
-        }
+        if (__mb_set_off_threshold == 0) MethodBinds.MissingThrow("OpenXRAnalogThresholdModifier.set_off_threshold");
         double __a0 = offThreshold;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_off_threshold, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_off_threshold;
     public float GetOffThreshold()
     {
-        var __mb = __mb_get_off_threshold;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAnalogThresholdModifier", "get_off_threshold", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAnalogThresholdModifier.get_off_threshold is not available in this engine build.");
-            __mb_get_off_threshold = __mb;
-        }
+        if (__mb_get_off_threshold == 0) MethodBinds.MissingThrow("OpenXRAnalogThresholdModifier.get_off_threshold");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_off_threshold, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_on_haptic;
     public void SetOnHaptic(OpenXRHapticBase? haptic)
     {
-        var __mb = __mb_set_on_haptic;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAnalogThresholdModifier", "set_on_haptic", 2998020150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAnalogThresholdModifier.set_on_haptic is not available in this engine build.");
-            __mb_set_on_haptic = __mb;
-        }
+        if (__mb_set_on_haptic == 0) MethodBinds.MissingThrow("OpenXRAnalogThresholdModifier.set_on_haptic");
         nint __a0 = haptic?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_on_haptic, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_on_haptic;
     public OpenXRHapticBase? GetOnHaptic()
     {
-        var __mb = __mb_get_on_haptic;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAnalogThresholdModifier", "get_on_haptic", 922310751);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAnalogThresholdModifier.get_on_haptic is not available in this engine build.");
-            __mb_get_on_haptic = __mb;
-        }
+        if (__mb_get_on_haptic == 0) MethodBinds.MissingThrow("OpenXRAnalogThresholdModifier.get_on_haptic");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_on_haptic, NativePtr, 0, (nint)(&__ret));
         return (OpenXRHapticBase?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_off_haptic;
     public void SetOffHaptic(OpenXRHapticBase? haptic)
     {
-        var __mb = __mb_set_off_haptic;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAnalogThresholdModifier", "set_off_haptic", 2998020150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAnalogThresholdModifier.set_off_haptic is not available in this engine build.");
-            __mb_set_off_haptic = __mb;
-        }
+        if (__mb_set_off_haptic == 0) MethodBinds.MissingThrow("OpenXRAnalogThresholdModifier.set_off_haptic");
         nint __a0 = haptic?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_off_haptic, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_off_haptic;
     public OpenXRHapticBase? GetOffHaptic()
     {
-        var __mb = __mb_get_off_haptic;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAnalogThresholdModifier", "get_off_haptic", 922310751);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAnalogThresholdModifier.get_off_haptic is not available in this engine build.");
-            __mb_get_off_haptic = __mb;
-        }
+        if (__mb_get_off_haptic == 0) MethodBinds.MissingThrow("OpenXRAnalogThresholdModifier.get_off_haptic");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_off_haptic, NativePtr, 0, (nint)(&__ret));
         return (OpenXRHapticBase?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_on_threshold = MethodBinds.ResolveBulk("OpenXRAnalogThresholdModifier", "set_on_threshold", 373806689);
+        __mb_get_on_threshold = MethodBinds.ResolveBulk("OpenXRAnalogThresholdModifier", "get_on_threshold", 1740695150);
+        __mb_set_off_threshold = MethodBinds.ResolveBulk("OpenXRAnalogThresholdModifier", "set_off_threshold", 373806689);
+        __mb_get_off_threshold = MethodBinds.ResolveBulk("OpenXRAnalogThresholdModifier", "get_off_threshold", 1740695150);
+        __mb_set_on_haptic = MethodBinds.ResolveBulk("OpenXRAnalogThresholdModifier", "set_on_haptic", 2998020150);
+        __mb_get_on_haptic = MethodBinds.ResolveBulk("OpenXRAnalogThresholdModifier", "get_on_haptic", 922310751);
+        __mb_set_off_haptic = MethodBinds.ResolveBulk("OpenXRAnalogThresholdModifier", "set_off_haptic", 2998020150);
+        __mb_get_off_haptic = MethodBinds.ResolveBulk("OpenXRAnalogThresholdModifier", "get_off_haptic", 922310751);
     }
 }
 
@@ -3611,48 +2680,37 @@ public unsafe partial class OpenXRAnchorTracker : OpenXRSpatialEntityTracker
     private static nint __mb_has_uuid;
     public bool HasUuid()
     {
-        var __mb = __mb_has_uuid;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAnchorTracker", "has_uuid", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAnchorTracker.has_uuid is not available in this engine build.");
-            __mb_has_uuid = __mb;
-        }
+        if (__mb_has_uuid == 0) MethodBinds.MissingThrow("OpenXRAnchorTracker.has_uuid");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_uuid, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_uuid;
     public void SetUuid(string uuid)
     {
-        var __mb = __mb_set_uuid;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAnchorTracker", "set_uuid", 83702148);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAnchorTracker.set_uuid is not available in this engine build.");
-            __mb_set_uuid = __mb;
-        }
+        if (__mb_set_uuid == 0) MethodBinds.MissingThrow("OpenXRAnchorTracker.set_uuid");
         ulong __a0 = NativeString.Create(uuid);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_uuid, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_uuid;
     public string GetUuid()
     {
-        var __mb = __mb_get_uuid;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAnchorTracker", "get_uuid", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAnchorTracker.get_uuid is not available in this engine build.");
-            __mb_get_uuid = __mb;
-        }
+        if (__mb_get_uuid == 0) MethodBinds.MissingThrow("OpenXRAnchorTracker.get_uuid");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_uuid, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_has_uuid = MethodBinds.ResolveBulk("OpenXRAnchorTracker", "has_uuid", 36873697);
+        __mb_set_uuid = MethodBinds.ResolveBulk("OpenXRAnchorTracker", "set_uuid", 83702148);
+        __mb_get_uuid = MethodBinds.ResolveBulk("OpenXRAnchorTracker", "get_uuid", 201670096);
     }
 }
 
@@ -3676,21 +2734,20 @@ public unsafe partial class OpenXRAndroidThreadSettingsExtension : OpenXRExtensi
     private static nint __mb_set_application_thread_type;
     public bool SetApplicationThreadType(OpenXRAndroidThreadSettingsExtension.ThreadType threadType, uint threadId = unchecked((uint)(0)))
     {
-        var __mb = __mb_set_application_thread_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRAndroidThreadSettingsExtension", "set_application_thread_type", 1558751158);
-            if (__mb == 0) throw new MissingMethodException("OpenXRAndroidThreadSettingsExtension.set_application_thread_type is not available in this engine build.");
-            __mb_set_application_thread_type = __mb;
-        }
+        if (__mb_set_application_thread_type == 0) MethodBinds.MissingThrow("OpenXRAndroidThreadSettingsExtension.set_application_thread_type");
         long __a0 = (long)threadType;
         long __a1 = unchecked((long)threadId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_application_thread_type, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_application_thread_type = MethodBinds.ResolveBulk("OpenXRAndroidThreadSettingsExtension", "set_application_thread_type", 1558751158);
     }
 }
 
@@ -3743,34 +2800,28 @@ public unsafe partial class OpenXRBindingModifierEditor : PanelContainer
     private static nint __mb_get_binding_modifier;
     public OpenXRBindingModifier? GetBindingModifier()
     {
-        var __mb = __mb_get_binding_modifier;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRBindingModifierEditor", "get_binding_modifier", 2930765082);
-            if (__mb == 0) throw new MissingMethodException("OpenXRBindingModifierEditor.get_binding_modifier is not available in this engine build.");
-            __mb_get_binding_modifier = __mb;
-        }
+        if (__mb_get_binding_modifier == 0) MethodBinds.MissingThrow("OpenXRBindingModifierEditor.get_binding_modifier");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_binding_modifier, NativePtr, 0, (nint)(&__ret));
         return (OpenXRBindingModifier?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_setup;
     public void Setup(OpenXRActionMap? actionMap, OpenXRBindingModifier? bindingModifier)
     {
-        var __mb = __mb_setup;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRBindingModifierEditor", "setup", 1284787389);
-            if (__mb == 0) throw new MissingMethodException("OpenXRBindingModifierEditor.setup is not available in this engine build.");
-            __mb_setup = __mb;
-        }
+        if (__mb_setup == 0) MethodBinds.MissingThrow("OpenXRBindingModifierEditor.setup");
         nint __a0 = actionMap?.NativePtr ?? 0;
         nint __a1 = bindingModifier?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_setup, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_binding_modifier = MethodBinds.ResolveBulk("OpenXRBindingModifierEditor", "get_binding_modifier", 2930765082);
+        __mb_setup = MethodBinds.ResolveBulk("OpenXRBindingModifierEditor", "setup", 1284787389);
     }
 }
 
@@ -3935,640 +2986,439 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     private static nint __mb_set_layer_viewport;
     public void SetLayerViewport(SubViewport? viewport)
     {
-        var __mb = __mb_set_layer_viewport;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_layer_viewport", 3888077664);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_layer_viewport is not available in this engine build.");
-            __mb_set_layer_viewport = __mb;
-        }
+        if (__mb_set_layer_viewport == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_layer_viewport");
         nint __a0 = viewport?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_layer_viewport, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_layer_viewport;
     public SubViewport? GetLayerViewport()
     {
-        var __mb = __mb_get_layer_viewport;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_layer_viewport", 3750751911);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_layer_viewport is not available in this engine build.");
-            __mb_get_layer_viewport = __mb;
-        }
+        if (__mb_get_layer_viewport == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_layer_viewport");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_layer_viewport, NativePtr, 0, (nint)(&__ret));
         return (SubViewport?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
     private static nint __mb_set_use_android_surface;
     public void SetUseAndroidSurface(bool enable)
     {
-        var __mb = __mb_set_use_android_surface;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_use_android_surface", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_use_android_surface is not available in this engine build.");
-            __mb_set_use_android_surface = __mb;
-        }
+        if (__mb_set_use_android_surface == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_use_android_surface");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_use_android_surface, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_use_android_surface;
     public bool GetUseAndroidSurface()
     {
-        var __mb = __mb_get_use_android_surface;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_use_android_surface", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_use_android_surface is not available in this engine build.");
-            __mb_get_use_android_surface = __mb;
-        }
+        if (__mb_get_use_android_surface == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_use_android_surface");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_use_android_surface, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_android_surface_size;
     public void SetAndroidSurfaceSize(Vector2I size)
     {
-        var __mb = __mb_set_android_surface_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_android_surface_size", 1130785943);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_android_surface_size is not available in this engine build.");
-            __mb_set_android_surface_size = __mb;
-        }
+        if (__mb_set_android_surface_size == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_android_surface_size");
         var __a0 = size;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_android_surface_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_android_surface_size;
     public Vector2I GetAndroidSurfaceSize()
     {
-        var __mb = __mb_get_android_surface_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_android_surface_size", 3690982128);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_android_surface_size is not available in this engine build.");
-            __mb_get_android_surface_size = __mb;
-        }
+        if (__mb_get_android_surface_size == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_android_surface_size");
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_android_surface_size, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_enable_hole_punch;
     public void SetEnableHolePunch(bool enable)
     {
-        var __mb = __mb_set_enable_hole_punch;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_enable_hole_punch", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_enable_hole_punch is not available in this engine build.");
-            __mb_set_enable_hole_punch = __mb;
-        }
+        if (__mb_set_enable_hole_punch == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_enable_hole_punch");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_enable_hole_punch, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_enable_hole_punch;
     public bool GetEnableHolePunch()
     {
-        var __mb = __mb_get_enable_hole_punch;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_enable_hole_punch", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_enable_hole_punch is not available in this engine build.");
-            __mb_get_enable_hole_punch = __mb;
-        }
+        if (__mb_get_enable_hole_punch == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_enable_hole_punch");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_enable_hole_punch, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_sort_order;
     public void SetSortOrder(int order)
     {
-        var __mb = __mb_set_sort_order;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_sort_order", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_sort_order is not available in this engine build.");
-            __mb_set_sort_order = __mb;
-        }
+        if (__mb_set_sort_order == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_sort_order");
         long __a0 = unchecked((long)order);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_sort_order, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_sort_order;
     public int GetSortOrder()
     {
-        var __mb = __mb_get_sort_order;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_sort_order", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_sort_order is not available in this engine build.");
-            __mb_get_sort_order = __mb;
-        }
+        if (__mb_get_sort_order == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_sort_order");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_sort_order, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_alpha_blend;
     public void SetAlphaBlend(bool enabled)
     {
-        var __mb = __mb_set_alpha_blend;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_alpha_blend", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_alpha_blend is not available in this engine build.");
-            __mb_set_alpha_blend = __mb;
-        }
+        if (__mb_set_alpha_blend == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_alpha_blend");
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_alpha_blend, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_alpha_blend;
     public bool GetAlphaBlend()
     {
-        var __mb = __mb_get_alpha_blend;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_alpha_blend", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_alpha_blend is not available in this engine build.");
-            __mb_get_alpha_blend = __mb;
-        }
+        if (__mb_get_alpha_blend == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_alpha_blend");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_alpha_blend, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_android_surface;
     public JavaObject? GetAndroidSurface()
     {
-        var __mb = __mb_get_android_surface;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_android_surface", 3277089691);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_android_surface is not available in this engine build.");
-            __mb_get_android_surface = __mb;
-        }
+        if (__mb_get_android_surface == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_android_surface");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_android_surface, NativePtr, 0, (nint)(&__ret));
         return (JavaObject?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_is_natively_supported;
     public bool IsNativelySupported()
     {
-        var __mb = __mb_is_natively_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "is_natively_supported", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.is_natively_supported is not available in this engine build.");
-            __mb_is_natively_supported = __mb;
-        }
+        if (__mb_is_natively_supported == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.is_natively_supported");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_natively_supported, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_protected_content;
     public bool IsProtectedContent()
     {
-        var __mb = __mb_is_protected_content;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "is_protected_content", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.is_protected_content is not available in this engine build.");
-            __mb_is_protected_content = __mb;
-        }
+        if (__mb_is_protected_content == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.is_protected_content");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_protected_content, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_protected_content;
     public void SetProtectedContent(bool protectedContent)
     {
-        var __mb = __mb_set_protected_content;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_protected_content", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_protected_content is not available in this engine build.");
-            __mb_set_protected_content = __mb;
-        }
+        if (__mb_set_protected_content == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_protected_content");
         byte __a0 = protectedContent ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_protected_content, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_min_filter;
     public void SetMinFilter(OpenXRCompositionLayer.Filter mode)
     {
-        var __mb = __mb_set_min_filter;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_min_filter", 3653437593);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_min_filter is not available in this engine build.");
-            __mb_set_min_filter = __mb;
-        }
+        if (__mb_set_min_filter == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_min_filter");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_min_filter, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_min_filter;
     public OpenXRCompositionLayer.Filter GetMinFilter()
     {
-        var __mb = __mb_get_min_filter;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_min_filter", 845677307);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_min_filter is not available in this engine build.");
-            __mb_get_min_filter = __mb;
-        }
+        if (__mb_get_min_filter == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_min_filter");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_min_filter, NativePtr, 0, (nint)(&__ret));
         return (OpenXRCompositionLayer.Filter)__ret;
     }
 
     private static nint __mb_set_mag_filter;
     public void SetMagFilter(OpenXRCompositionLayer.Filter mode)
     {
-        var __mb = __mb_set_mag_filter;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_mag_filter", 3653437593);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_mag_filter is not available in this engine build.");
-            __mb_set_mag_filter = __mb;
-        }
+        if (__mb_set_mag_filter == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_mag_filter");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_mag_filter, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_mag_filter;
     public OpenXRCompositionLayer.Filter GetMagFilter()
     {
-        var __mb = __mb_get_mag_filter;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_mag_filter", 845677307);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_mag_filter is not available in this engine build.");
-            __mb_get_mag_filter = __mb;
-        }
+        if (__mb_get_mag_filter == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_mag_filter");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_mag_filter, NativePtr, 0, (nint)(&__ret));
         return (OpenXRCompositionLayer.Filter)__ret;
     }
 
     private static nint __mb_set_mipmap_mode;
     public void SetMipmapMode(OpenXRCompositionLayer.MipmapMode mode)
     {
-        var __mb = __mb_set_mipmap_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_mipmap_mode", 3271133183);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_mipmap_mode is not available in this engine build.");
-            __mb_set_mipmap_mode = __mb;
-        }
+        if (__mb_set_mipmap_mode == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_mipmap_mode");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_mipmap_mode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_mipmap_mode;
     public OpenXRCompositionLayer.MipmapMode GetMipmapMode()
     {
-        var __mb = __mb_get_mipmap_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_mipmap_mode", 3962697095);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_mipmap_mode is not available in this engine build.");
-            __mb_get_mipmap_mode = __mb;
-        }
+        if (__mb_get_mipmap_mode == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_mipmap_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_mipmap_mode, NativePtr, 0, (nint)(&__ret));
         return (OpenXRCompositionLayer.MipmapMode)__ret;
     }
 
     private static nint __mb_set_horizontal_wrap;
     public void SetHorizontalWrap(OpenXRCompositionLayer.Wrap mode)
     {
-        var __mb = __mb_set_horizontal_wrap;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_horizontal_wrap", 15634990);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_horizontal_wrap is not available in this engine build.");
-            __mb_set_horizontal_wrap = __mb;
-        }
+        if (__mb_set_horizontal_wrap == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_horizontal_wrap");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_horizontal_wrap, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_horizontal_wrap;
     public OpenXRCompositionLayer.Wrap GetHorizontalWrap()
     {
-        var __mb = __mb_get_horizontal_wrap;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_horizontal_wrap", 2798816834);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_horizontal_wrap is not available in this engine build.");
-            __mb_get_horizontal_wrap = __mb;
-        }
+        if (__mb_get_horizontal_wrap == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_horizontal_wrap");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_horizontal_wrap, NativePtr, 0, (nint)(&__ret));
         return (OpenXRCompositionLayer.Wrap)__ret;
     }
 
     private static nint __mb_set_vertical_wrap;
     public void SetVerticalWrap(OpenXRCompositionLayer.Wrap mode)
     {
-        var __mb = __mb_set_vertical_wrap;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_vertical_wrap", 15634990);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_vertical_wrap is not available in this engine build.");
-            __mb_set_vertical_wrap = __mb;
-        }
+        if (__mb_set_vertical_wrap == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_vertical_wrap");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_vertical_wrap, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_vertical_wrap;
     public OpenXRCompositionLayer.Wrap GetVerticalWrap()
     {
-        var __mb = __mb_get_vertical_wrap;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_vertical_wrap", 2798816834);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_vertical_wrap is not available in this engine build.");
-            __mb_get_vertical_wrap = __mb;
-        }
+        if (__mb_get_vertical_wrap == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_vertical_wrap");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_vertical_wrap, NativePtr, 0, (nint)(&__ret));
         return (OpenXRCompositionLayer.Wrap)__ret;
     }
 
     private static nint __mb_set_red_swizzle;
     public void SetRedSwizzle(OpenXRCompositionLayer.Swizzle mode)
     {
-        var __mb = __mb_set_red_swizzle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_red_swizzle", 741598951);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_red_swizzle is not available in this engine build.");
-            __mb_set_red_swizzle = __mb;
-        }
+        if (__mb_set_red_swizzle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_red_swizzle");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_red_swizzle, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_red_swizzle;
     public OpenXRCompositionLayer.Swizzle GetRedSwizzle()
     {
-        var __mb = __mb_get_red_swizzle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_red_swizzle", 2334776767);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_red_swizzle is not available in this engine build.");
-            __mb_get_red_swizzle = __mb;
-        }
+        if (__mb_get_red_swizzle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_red_swizzle");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_red_swizzle, NativePtr, 0, (nint)(&__ret));
         return (OpenXRCompositionLayer.Swizzle)__ret;
     }
 
     private static nint __mb_set_green_swizzle;
     public void SetGreenSwizzle(OpenXRCompositionLayer.Swizzle mode)
     {
-        var __mb = __mb_set_green_swizzle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_green_swizzle", 741598951);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_green_swizzle is not available in this engine build.");
-            __mb_set_green_swizzle = __mb;
-        }
+        if (__mb_set_green_swizzle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_green_swizzle");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_green_swizzle, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_green_swizzle;
     public OpenXRCompositionLayer.Swizzle GetGreenSwizzle()
     {
-        var __mb = __mb_get_green_swizzle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_green_swizzle", 2334776767);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_green_swizzle is not available in this engine build.");
-            __mb_get_green_swizzle = __mb;
-        }
+        if (__mb_get_green_swizzle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_green_swizzle");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_green_swizzle, NativePtr, 0, (nint)(&__ret));
         return (OpenXRCompositionLayer.Swizzle)__ret;
     }
 
     private static nint __mb_set_blue_swizzle;
     public void SetBlueSwizzle(OpenXRCompositionLayer.Swizzle mode)
     {
-        var __mb = __mb_set_blue_swizzle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_blue_swizzle", 741598951);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_blue_swizzle is not available in this engine build.");
-            __mb_set_blue_swizzle = __mb;
-        }
+        if (__mb_set_blue_swizzle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_blue_swizzle");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_blue_swizzle, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_blue_swizzle;
     public OpenXRCompositionLayer.Swizzle GetBlueSwizzle()
     {
-        var __mb = __mb_get_blue_swizzle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_blue_swizzle", 2334776767);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_blue_swizzle is not available in this engine build.");
-            __mb_get_blue_swizzle = __mb;
-        }
+        if (__mb_get_blue_swizzle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_blue_swizzle");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_blue_swizzle, NativePtr, 0, (nint)(&__ret));
         return (OpenXRCompositionLayer.Swizzle)__ret;
     }
 
     private static nint __mb_set_alpha_swizzle;
     public void SetAlphaSwizzle(OpenXRCompositionLayer.Swizzle mode)
     {
-        var __mb = __mb_set_alpha_swizzle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_alpha_swizzle", 741598951);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_alpha_swizzle is not available in this engine build.");
-            __mb_set_alpha_swizzle = __mb;
-        }
+        if (__mb_set_alpha_swizzle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_alpha_swizzle");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_alpha_swizzle, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_alpha_swizzle;
     public OpenXRCompositionLayer.Swizzle GetAlphaSwizzle()
     {
-        var __mb = __mb_get_alpha_swizzle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_alpha_swizzle", 2334776767);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_alpha_swizzle is not available in this engine build.");
-            __mb_get_alpha_swizzle = __mb;
-        }
+        if (__mb_get_alpha_swizzle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_alpha_swizzle");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_alpha_swizzle, NativePtr, 0, (nint)(&__ret));
         return (OpenXRCompositionLayer.Swizzle)__ret;
     }
 
     private static nint __mb_set_max_anisotropy;
     public void SetMaxAnisotropy(float value)
     {
-        var __mb = __mb_set_max_anisotropy;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_max_anisotropy", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_max_anisotropy is not available in this engine build.");
-            __mb_set_max_anisotropy = __mb;
-        }
+        if (__mb_set_max_anisotropy == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_max_anisotropy");
         double __a0 = value;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_max_anisotropy, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_max_anisotropy;
     public float GetMaxAnisotropy()
     {
-        var __mb = __mb_get_max_anisotropy;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_max_anisotropy", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_max_anisotropy is not available in this engine build.");
-            __mb_get_max_anisotropy = __mb;
-        }
+        if (__mb_get_max_anisotropy == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_max_anisotropy");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_max_anisotropy, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_border_color;
     public void SetBorderColor(Color color)
     {
-        var __mb = __mb_set_border_color;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_border_color", 2920490490);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_border_color is not available in this engine build.");
-            __mb_set_border_color = __mb;
-        }
+        if (__mb_set_border_color == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_border_color");
         var __a0 = color;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_border_color, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_border_color;
     public Color GetBorderColor()
     {
-        var __mb = __mb_get_border_color;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_border_color", 3444240500);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_border_color is not available in this engine build.");
-            __mb_get_border_color = __mb;
-        }
+        if (__mb_get_border_color == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_border_color");
         var __ret = default(Color);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_border_color, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_eye_visibility;
     public void SetEyeVisibility(OpenXRCompositionLayer.EyeVisibilityEnum eyeVisibility)
     {
-        var __mb = __mb_set_eye_visibility;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "set_eye_visibility", 156391336);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.set_eye_visibility is not available in this engine build.");
-            __mb_set_eye_visibility = __mb;
-        }
+        if (__mb_set_eye_visibility == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.set_eye_visibility");
         long __a0 = (long)eyeVisibility;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_eye_visibility, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_eye_visibility;
     public OpenXRCompositionLayer.EyeVisibilityEnum GetEyeVisibility()
     {
-        var __mb = __mb_get_eye_visibility;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "get_eye_visibility", 467669000);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.get_eye_visibility is not available in this engine build.");
-            __mb_get_eye_visibility = __mb;
-        }
+        if (__mb_get_eye_visibility == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.get_eye_visibility");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_eye_visibility, NativePtr, 0, (nint)(&__ret));
         return (OpenXRCompositionLayer.EyeVisibilityEnum)__ret;
     }
 
     private static nint __mb_intersects_ray;
     public Vector2 IntersectsRay(Vector3 origin, Vector3 direction)
     {
-        var __mb = __mb_intersects_ray;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayer", "intersects_ray", 1091262597);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayer.intersects_ray is not available in this engine build.");
-            __mb_intersects_ray = __mb;
-        }
+        if (__mb_intersects_ray == 0) MethodBinds.MissingThrow("OpenXRCompositionLayer.intersects_ray");
         var __a0 = origin;
         var __a1 = direction;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_intersects_ray, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_layer_viewport = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_layer_viewport", 3888077664);
+        __mb_get_layer_viewport = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_layer_viewport", 3750751911);
+        __mb_set_use_android_surface = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_use_android_surface", 2586408642);
+        __mb_get_use_android_surface = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_use_android_surface", 36873697);
+        __mb_set_android_surface_size = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_android_surface_size", 1130785943);
+        __mb_get_android_surface_size = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_android_surface_size", 3690982128);
+        __mb_set_enable_hole_punch = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_enable_hole_punch", 2586408642);
+        __mb_get_enable_hole_punch = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_enable_hole_punch", 36873697);
+        __mb_set_sort_order = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_sort_order", 1286410249);
+        __mb_get_sort_order = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_sort_order", 3905245786);
+        __mb_set_alpha_blend = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_alpha_blend", 2586408642);
+        __mb_get_alpha_blend = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_alpha_blend", 36873697);
+        __mb_get_android_surface = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_android_surface", 3277089691);
+        __mb_is_natively_supported = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "is_natively_supported", 36873697);
+        __mb_is_protected_content = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "is_protected_content", 36873697);
+        __mb_set_protected_content = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_protected_content", 2586408642);
+        __mb_set_min_filter = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_min_filter", 3653437593);
+        __mb_get_min_filter = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_min_filter", 845677307);
+        __mb_set_mag_filter = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_mag_filter", 3653437593);
+        __mb_get_mag_filter = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_mag_filter", 845677307);
+        __mb_set_mipmap_mode = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_mipmap_mode", 3271133183);
+        __mb_get_mipmap_mode = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_mipmap_mode", 3962697095);
+        __mb_set_horizontal_wrap = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_horizontal_wrap", 15634990);
+        __mb_get_horizontal_wrap = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_horizontal_wrap", 2798816834);
+        __mb_set_vertical_wrap = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_vertical_wrap", 15634990);
+        __mb_get_vertical_wrap = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_vertical_wrap", 2798816834);
+        __mb_set_red_swizzle = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_red_swizzle", 741598951);
+        __mb_get_red_swizzle = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_red_swizzle", 2334776767);
+        __mb_set_green_swizzle = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_green_swizzle", 741598951);
+        __mb_get_green_swizzle = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_green_swizzle", 2334776767);
+        __mb_set_blue_swizzle = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_blue_swizzle", 741598951);
+        __mb_get_blue_swizzle = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_blue_swizzle", 2334776767);
+        __mb_set_alpha_swizzle = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_alpha_swizzle", 741598951);
+        __mb_get_alpha_swizzle = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_alpha_swizzle", 2334776767);
+        __mb_set_max_anisotropy = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_max_anisotropy", 373806689);
+        __mb_get_max_anisotropy = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_max_anisotropy", 1740695150);
+        __mb_set_border_color = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_border_color", 2920490490);
+        __mb_get_border_color = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_border_color", 3444240500);
+        __mb_set_eye_visibility = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "set_eye_visibility", 156391336);
+        __mb_get_eye_visibility = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "get_eye_visibility", 467669000);
+        __mb_intersects_ray = MethodBinds.ResolveBulk("OpenXRCompositionLayer", "intersects_ray", 1091262597);
     }
 }
 
@@ -4608,125 +3458,89 @@ public unsafe partial class OpenXRCompositionLayerCylinder : OpenXRCompositionLa
     private static nint __mb_set_radius;
     public void SetRadius(float radius)
     {
-        var __mb = __mb_set_radius;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerCylinder", "set_radius", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerCylinder.set_radius is not available in this engine build.");
-            __mb_set_radius = __mb;
-        }
+        if (__mb_set_radius == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerCylinder.set_radius");
         double __a0 = radius;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_radius, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_radius;
     public float GetRadius()
     {
-        var __mb = __mb_get_radius;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerCylinder", "get_radius", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerCylinder.get_radius is not available in this engine build.");
-            __mb_get_radius = __mb;
-        }
+        if (__mb_get_radius == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerCylinder.get_radius");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_radius, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_aspect_ratio;
     public void SetAspectRatio(float aspectRatio)
     {
-        var __mb = __mb_set_aspect_ratio;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerCylinder", "set_aspect_ratio", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerCylinder.set_aspect_ratio is not available in this engine build.");
-            __mb_set_aspect_ratio = __mb;
-        }
+        if (__mb_set_aspect_ratio == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerCylinder.set_aspect_ratio");
         double __a0 = aspectRatio;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_aspect_ratio, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_aspect_ratio;
     public float GetAspectRatio()
     {
-        var __mb = __mb_get_aspect_ratio;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerCylinder", "get_aspect_ratio", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerCylinder.get_aspect_ratio is not available in this engine build.");
-            __mb_get_aspect_ratio = __mb;
-        }
+        if (__mb_get_aspect_ratio == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerCylinder.get_aspect_ratio");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_aspect_ratio, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_central_angle;
     public void SetCentralAngle(float angle)
     {
-        var __mb = __mb_set_central_angle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerCylinder", "set_central_angle", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerCylinder.set_central_angle is not available in this engine build.");
-            __mb_set_central_angle = __mb;
-        }
+        if (__mb_set_central_angle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerCylinder.set_central_angle");
         double __a0 = angle;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_central_angle, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_central_angle;
     public float GetCentralAngle()
     {
-        var __mb = __mb_get_central_angle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerCylinder", "get_central_angle", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerCylinder.get_central_angle is not available in this engine build.");
-            __mb_get_central_angle = __mb;
-        }
+        if (__mb_get_central_angle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerCylinder.get_central_angle");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_central_angle, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_fallback_segments;
     public void SetFallbackSegments(uint segments)
     {
-        var __mb = __mb_set_fallback_segments;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerCylinder", "set_fallback_segments", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerCylinder.set_fallback_segments is not available in this engine build.");
-            __mb_set_fallback_segments = __mb;
-        }
+        if (__mb_set_fallback_segments == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerCylinder.set_fallback_segments");
         long __a0 = unchecked((long)segments);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_fallback_segments, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_fallback_segments;
     public uint GetFallbackSegments()
     {
-        var __mb = __mb_get_fallback_segments;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerCylinder", "get_fallback_segments", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerCylinder.get_fallback_segments is not available in this engine build.");
-            __mb_get_fallback_segments = __mb;
-        }
+        if (__mb_get_fallback_segments == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerCylinder.get_fallback_segments");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_fallback_segments, NativePtr, 0, (nint)(&__ret));
         return unchecked((uint)__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_radius = MethodBinds.ResolveBulk("OpenXRCompositionLayerCylinder", "set_radius", 373806689);
+        __mb_get_radius = MethodBinds.ResolveBulk("OpenXRCompositionLayerCylinder", "get_radius", 1740695150);
+        __mb_set_aspect_ratio = MethodBinds.ResolveBulk("OpenXRCompositionLayerCylinder", "set_aspect_ratio", 373806689);
+        __mb_get_aspect_ratio = MethodBinds.ResolveBulk("OpenXRCompositionLayerCylinder", "get_aspect_ratio", 1740695150);
+        __mb_set_central_angle = MethodBinds.ResolveBulk("OpenXRCompositionLayerCylinder", "set_central_angle", 373806689);
+        __mb_get_central_angle = MethodBinds.ResolveBulk("OpenXRCompositionLayerCylinder", "get_central_angle", 1740695150);
+        __mb_set_fallback_segments = MethodBinds.ResolveBulk("OpenXRCompositionLayerCylinder", "set_fallback_segments", 1286410249);
+        __mb_get_fallback_segments = MethodBinds.ResolveBulk("OpenXRCompositionLayerCylinder", "get_fallback_segments", 3905245786);
     }
 }
 
@@ -4772,156 +3586,110 @@ public unsafe partial class OpenXRCompositionLayerEquirect : OpenXRCompositionLa
     private static nint __mb_set_radius;
     public void SetRadius(float radius)
     {
-        var __mb = __mb_set_radius;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerEquirect", "set_radius", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerEquirect.set_radius is not available in this engine build.");
-            __mb_set_radius = __mb;
-        }
+        if (__mb_set_radius == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerEquirect.set_radius");
         double __a0 = radius;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_radius, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_radius;
     public float GetRadius()
     {
-        var __mb = __mb_get_radius;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerEquirect", "get_radius", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerEquirect.get_radius is not available in this engine build.");
-            __mb_get_radius = __mb;
-        }
+        if (__mb_get_radius == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerEquirect.get_radius");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_radius, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_central_horizontal_angle;
     public void SetCentralHorizontalAngle(float angle)
     {
-        var __mb = __mb_set_central_horizontal_angle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerEquirect", "set_central_horizontal_angle", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerEquirect.set_central_horizontal_angle is not available in this engine build.");
-            __mb_set_central_horizontal_angle = __mb;
-        }
+        if (__mb_set_central_horizontal_angle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerEquirect.set_central_horizontal_angle");
         double __a0 = angle;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_central_horizontal_angle, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_central_horizontal_angle;
     public float GetCentralHorizontalAngle()
     {
-        var __mb = __mb_get_central_horizontal_angle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerEquirect", "get_central_horizontal_angle", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerEquirect.get_central_horizontal_angle is not available in this engine build.");
-            __mb_get_central_horizontal_angle = __mb;
-        }
+        if (__mb_get_central_horizontal_angle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerEquirect.get_central_horizontal_angle");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_central_horizontal_angle, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_upper_vertical_angle;
     public void SetUpperVerticalAngle(float angle)
     {
-        var __mb = __mb_set_upper_vertical_angle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerEquirect", "set_upper_vertical_angle", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerEquirect.set_upper_vertical_angle is not available in this engine build.");
-            __mb_set_upper_vertical_angle = __mb;
-        }
+        if (__mb_set_upper_vertical_angle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerEquirect.set_upper_vertical_angle");
         double __a0 = angle;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_upper_vertical_angle, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_upper_vertical_angle;
     public float GetUpperVerticalAngle()
     {
-        var __mb = __mb_get_upper_vertical_angle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerEquirect", "get_upper_vertical_angle", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerEquirect.get_upper_vertical_angle is not available in this engine build.");
-            __mb_get_upper_vertical_angle = __mb;
-        }
+        if (__mb_get_upper_vertical_angle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerEquirect.get_upper_vertical_angle");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_upper_vertical_angle, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_lower_vertical_angle;
     public void SetLowerVerticalAngle(float angle)
     {
-        var __mb = __mb_set_lower_vertical_angle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerEquirect", "set_lower_vertical_angle", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerEquirect.set_lower_vertical_angle is not available in this engine build.");
-            __mb_set_lower_vertical_angle = __mb;
-        }
+        if (__mb_set_lower_vertical_angle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerEquirect.set_lower_vertical_angle");
         double __a0 = angle;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_lower_vertical_angle, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_lower_vertical_angle;
     public float GetLowerVerticalAngle()
     {
-        var __mb = __mb_get_lower_vertical_angle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerEquirect", "get_lower_vertical_angle", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerEquirect.get_lower_vertical_angle is not available in this engine build.");
-            __mb_get_lower_vertical_angle = __mb;
-        }
+        if (__mb_get_lower_vertical_angle == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerEquirect.get_lower_vertical_angle");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_lower_vertical_angle, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_fallback_segments;
     public void SetFallbackSegments(uint segments)
     {
-        var __mb = __mb_set_fallback_segments;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerEquirect", "set_fallback_segments", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerEquirect.set_fallback_segments is not available in this engine build.");
-            __mb_set_fallback_segments = __mb;
-        }
+        if (__mb_set_fallback_segments == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerEquirect.set_fallback_segments");
         long __a0 = unchecked((long)segments);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_fallback_segments, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_fallback_segments;
     public uint GetFallbackSegments()
     {
-        var __mb = __mb_get_fallback_segments;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerEquirect", "get_fallback_segments", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerEquirect.get_fallback_segments is not available in this engine build.");
-            __mb_get_fallback_segments = __mb;
-        }
+        if (__mb_get_fallback_segments == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerEquirect.get_fallback_segments");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_fallback_segments, NativePtr, 0, (nint)(&__ret));
         return unchecked((uint)__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_radius = MethodBinds.ResolveBulk("OpenXRCompositionLayerEquirect", "set_radius", 373806689);
+        __mb_get_radius = MethodBinds.ResolveBulk("OpenXRCompositionLayerEquirect", "get_radius", 1740695150);
+        __mb_set_central_horizontal_angle = MethodBinds.ResolveBulk("OpenXRCompositionLayerEquirect", "set_central_horizontal_angle", 373806689);
+        __mb_get_central_horizontal_angle = MethodBinds.ResolveBulk("OpenXRCompositionLayerEquirect", "get_central_horizontal_angle", 1740695150);
+        __mb_set_upper_vertical_angle = MethodBinds.ResolveBulk("OpenXRCompositionLayerEquirect", "set_upper_vertical_angle", 373806689);
+        __mb_get_upper_vertical_angle = MethodBinds.ResolveBulk("OpenXRCompositionLayerEquirect", "get_upper_vertical_angle", 1740695150);
+        __mb_set_lower_vertical_angle = MethodBinds.ResolveBulk("OpenXRCompositionLayerEquirect", "set_lower_vertical_angle", 373806689);
+        __mb_get_lower_vertical_angle = MethodBinds.ResolveBulk("OpenXRCompositionLayerEquirect", "get_lower_vertical_angle", 1740695150);
+        __mb_set_fallback_segments = MethodBinds.ResolveBulk("OpenXRCompositionLayerEquirect", "set_fallback_segments", 1286410249);
+        __mb_get_fallback_segments = MethodBinds.ResolveBulk("OpenXRCompositionLayerEquirect", "get_fallback_segments", 3905245786);
     }
 }
 
@@ -4943,32 +3711,26 @@ public unsafe partial class OpenXRCompositionLayerQuad : OpenXRCompositionLayer
     private static nint __mb_set_quad_size;
     public void SetQuadSize(Vector2 size)
     {
-        var __mb = __mb_set_quad_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerQuad", "set_quad_size", 743155724);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerQuad.set_quad_size is not available in this engine build.");
-            __mb_set_quad_size = __mb;
-        }
+        if (__mb_set_quad_size == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerQuad.set_quad_size");
         var __a0 = size;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_quad_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_quad_size;
     public Vector2 GetQuadSize()
     {
-        var __mb = __mb_get_quad_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRCompositionLayerQuad", "get_quad_size", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("OpenXRCompositionLayerQuad.get_quad_size is not available in this engine build.");
-            __mb_get_quad_size = __mb;
-        }
+        if (__mb_get_quad_size == 0) MethodBinds.MissingThrow("OpenXRCompositionLayerQuad.get_quad_size");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_quad_size, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_quad_size = MethodBinds.ResolveBulk("OpenXRCompositionLayerQuad", "set_quad_size", 743155724);
+        __mb_get_quad_size = MethodBinds.ResolveBulk("OpenXRCompositionLayerQuad", "get_quad_size", 3341600327);
     }
 }
 
@@ -5038,281 +3800,195 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     private static nint __mb_set_action_set;
     public void SetActionSet(OpenXRActionSet? actionSet)
     {
-        var __mb = __mb_set_action_set;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "set_action_set", 2093310581);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.set_action_set is not available in this engine build.");
-            __mb_set_action_set = __mb;
-        }
+        if (__mb_set_action_set == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.set_action_set");
         nint __a0 = actionSet?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_action_set, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_action_set;
     public OpenXRActionSet? GetActionSet()
     {
-        var __mb = __mb_get_action_set;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "get_action_set", 619941079);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.get_action_set is not available in this engine build.");
-            __mb_get_action_set = __mb;
-        }
+        if (__mb_get_action_set == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.get_action_set");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_action_set, NativePtr, 0, (nint)(&__ret));
         return (OpenXRActionSet?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_input_path;
     public void SetInputPath(string inputPath)
     {
-        var __mb = __mb_set_input_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "set_input_path", 83702148);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.set_input_path is not available in this engine build.");
-            __mb_set_input_path = __mb;
-        }
+        if (__mb_set_input_path == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.set_input_path");
         ulong __a0 = NativeString.Create(inputPath);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_input_path, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_input_path;
     public string GetInputPath()
     {
-        var __mb = __mb_get_input_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "get_input_path", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.get_input_path is not available in this engine build.");
-            __mb_get_input_path = __mb;
-        }
+        if (__mb_get_input_path == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.get_input_path");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_input_path, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_threshold;
     public void SetThreshold(float threshold)
     {
-        var __mb = __mb_set_threshold;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "set_threshold", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.set_threshold is not available in this engine build.");
-            __mb_set_threshold = __mb;
-        }
+        if (__mb_set_threshold == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.set_threshold");
         double __a0 = threshold;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_threshold, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_threshold;
     public float GetThreshold()
     {
-        var __mb = __mb_get_threshold;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "get_threshold", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.get_threshold is not available in this engine build.");
-            __mb_get_threshold = __mb;
-        }
+        if (__mb_get_threshold == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.get_threshold");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_threshold, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_threshold_released;
     public void SetThresholdReleased(float thresholdReleased)
     {
-        var __mb = __mb_set_threshold_released;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "set_threshold_released", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.set_threshold_released is not available in this engine build.");
-            __mb_set_threshold_released = __mb;
-        }
+        if (__mb_set_threshold_released == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.set_threshold_released");
         double __a0 = thresholdReleased;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_threshold_released, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_threshold_released;
     public float GetThresholdReleased()
     {
-        var __mb = __mb_get_threshold_released;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "get_threshold_released", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.get_threshold_released is not available in this engine build.");
-            __mb_get_threshold_released = __mb;
-        }
+        if (__mb_get_threshold_released == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.get_threshold_released");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_threshold_released, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_center_region;
     public void SetCenterRegion(float centerRegion)
     {
-        var __mb = __mb_set_center_region;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "set_center_region", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.set_center_region is not available in this engine build.");
-            __mb_set_center_region = __mb;
-        }
+        if (__mb_set_center_region == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.set_center_region");
         double __a0 = centerRegion;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_center_region, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_center_region;
     public float GetCenterRegion()
     {
-        var __mb = __mb_get_center_region;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "get_center_region", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.get_center_region is not available in this engine build.");
-            __mb_get_center_region = __mb;
-        }
+        if (__mb_get_center_region == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.get_center_region");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_center_region, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_wedge_angle;
     public void SetWedgeAngle(float wedgeAngle)
     {
-        var __mb = __mb_set_wedge_angle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "set_wedge_angle", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.set_wedge_angle is not available in this engine build.");
-            __mb_set_wedge_angle = __mb;
-        }
+        if (__mb_set_wedge_angle == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.set_wedge_angle");
         double __a0 = wedgeAngle;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_wedge_angle, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_wedge_angle;
     public float GetWedgeAngle()
     {
-        var __mb = __mb_get_wedge_angle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "get_wedge_angle", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.get_wedge_angle is not available in this engine build.");
-            __mb_get_wedge_angle = __mb;
-        }
+        if (__mb_get_wedge_angle == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.get_wedge_angle");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_wedge_angle, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_is_sticky;
     public void SetIsSticky(bool isSticky)
     {
-        var __mb = __mb_set_is_sticky;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "set_is_sticky", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.set_is_sticky is not available in this engine build.");
-            __mb_set_is_sticky = __mb;
-        }
+        if (__mb_set_is_sticky == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.set_is_sticky");
         byte __a0 = isSticky ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_is_sticky, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_is_sticky;
     public bool GetIsSticky()
     {
-        var __mb = __mb_get_is_sticky;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "get_is_sticky", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.get_is_sticky is not available in this engine build.");
-            __mb_get_is_sticky = __mb;
-        }
+        if (__mb_get_is_sticky == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.get_is_sticky");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_is_sticky, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_on_haptic;
     public void SetOnHaptic(OpenXRHapticBase? haptic)
     {
-        var __mb = __mb_set_on_haptic;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "set_on_haptic", 2998020150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.set_on_haptic is not available in this engine build.");
-            __mb_set_on_haptic = __mb;
-        }
+        if (__mb_set_on_haptic == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.set_on_haptic");
         nint __a0 = haptic?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_on_haptic, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_on_haptic;
     public OpenXRHapticBase? GetOnHaptic()
     {
-        var __mb = __mb_get_on_haptic;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "get_on_haptic", 922310751);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.get_on_haptic is not available in this engine build.");
-            __mb_get_on_haptic = __mb;
-        }
+        if (__mb_get_on_haptic == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.get_on_haptic");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_on_haptic, NativePtr, 0, (nint)(&__ret));
         return (OpenXRHapticBase?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_off_haptic;
     public void SetOffHaptic(OpenXRHapticBase? haptic)
     {
-        var __mb = __mb_set_off_haptic;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "set_off_haptic", 2998020150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.set_off_haptic is not available in this engine build.");
-            __mb_set_off_haptic = __mb;
-        }
+        if (__mb_set_off_haptic == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.set_off_haptic");
         nint __a0 = haptic?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_off_haptic, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_off_haptic;
     public OpenXRHapticBase? GetOffHaptic()
     {
-        var __mb = __mb_get_off_haptic;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRDpadBindingModifier", "get_off_haptic", 922310751);
-            if (__mb == 0) throw new MissingMethodException("OpenXRDpadBindingModifier.get_off_haptic is not available in this engine build.");
-            __mb_get_off_haptic = __mb;
-        }
+        if (__mb_get_off_haptic == 0) MethodBinds.MissingThrow("OpenXRDpadBindingModifier.get_off_haptic");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_off_haptic, NativePtr, 0, (nint)(&__ret));
         return (OpenXRHapticBase?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_action_set = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "set_action_set", 2093310581);
+        __mb_get_action_set = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "get_action_set", 619941079);
+        __mb_set_input_path = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "set_input_path", 83702148);
+        __mb_get_input_path = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "get_input_path", 201670096);
+        __mb_set_threshold = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "set_threshold", 373806689);
+        __mb_get_threshold = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "get_threshold", 1740695150);
+        __mb_set_threshold_released = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "set_threshold_released", 373806689);
+        __mb_get_threshold_released = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "get_threshold_released", 1740695150);
+        __mb_set_center_region = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "set_center_region", 373806689);
+        __mb_get_center_region = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "get_center_region", 1740695150);
+        __mb_set_wedge_angle = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "set_wedge_angle", 373806689);
+        __mb_get_wedge_angle = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "get_wedge_angle", 1740695150);
+        __mb_set_is_sticky = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "set_is_sticky", 2586408642);
+        __mb_get_is_sticky = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "get_is_sticky", 36873697);
+        __mb_set_on_haptic = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "set_on_haptic", 2998020150);
+        __mb_get_on_haptic = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "get_on_haptic", 922310751);
+        __mb_set_off_haptic = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "set_off_haptic", 2998020150);
+        __mb_get_off_haptic = MethodBinds.ResolveBulk("OpenXRDpadBindingModifier", "get_off_haptic", 922310751);
     }
 }
 
@@ -5328,29 +4004,17 @@ public unsafe partial class OpenXRExtensionWrapper : GodotObject
     private static nint __mb_get_openxr_api;
     public OpenXRAPIExtension? GetOpenxrApi()
     {
-        var __mb = __mb_get_openxr_api;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRExtensionWrapper", "get_openxr_api", 1637791613);
-            if (__mb == 0) throw new MissingMethodException("OpenXRExtensionWrapper.get_openxr_api is not available in this engine build.");
-            __mb_get_openxr_api = __mb;
-        }
+        if (__mb_get_openxr_api == 0) MethodBinds.MissingThrow("OpenXRExtensionWrapper.get_openxr_api");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_openxr_api, NativePtr, 0, (nint)(&__ret));
         return (OpenXRAPIExtension?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_register_extension_wrapper;
     public void RegisterExtensionWrapper()
     {
-        var __mb = __mb_register_extension_wrapper;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRExtensionWrapper", "register_extension_wrapper", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("OpenXRExtensionWrapper.register_extension_wrapper is not available in this engine build.");
-            __mb_register_extension_wrapper = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_register_extension_wrapper == 0) MethodBinds.MissingThrow("OpenXRExtensionWrapper.register_extension_wrapper");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_register_extension_wrapper, NativePtr, 0, 0);
     }
 
     public virtual void _PrepareViewConfiguration(int viewCount) { }
@@ -5592,6 +4256,12 @@ public unsafe partial class OpenXRExtensionWrapper : GodotObject
         }
         return base.__CallVirtual(nameSn, args, ret);
     }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_openxr_api = MethodBinds.ResolveBulk("OpenXRExtensionWrapper", "get_openxr_api", 1637791613);
+        __mb_register_extension_wrapper = MethodBinds.ResolveBulk("OpenXRExtensionWrapper", "register_extension_wrapper", 3218959716);
+    }
 }
 
 public unsafe partial class OpenXRExtensionWrapperExtension : OpenXRExtensionWrapper
@@ -5628,91 +4298,65 @@ public unsafe partial class OpenXRFrameSynthesisExtension : OpenXRExtensionWrapp
     private static nint __mb_is_available;
     public bool IsAvailable()
     {
-        var __mb = __mb_is_available;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRFrameSynthesisExtension", "is_available", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRFrameSynthesisExtension.is_available is not available in this engine build.");
-            __mb_is_available = __mb;
-        }
+        if (__mb_is_available == 0) MethodBinds.MissingThrow("OpenXRFrameSynthesisExtension.is_available");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_available, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_enabled;
     public bool IsEnabled()
     {
-        var __mb = __mb_is_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRFrameSynthesisExtension", "is_enabled", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRFrameSynthesisExtension.is_enabled is not available in this engine build.");
-            __mb_is_enabled = __mb;
-        }
+        if (__mb_is_enabled == 0) MethodBinds.MissingThrow("OpenXRFrameSynthesisExtension.is_enabled");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_enabled, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_enabled;
     public void SetEnabled(bool enable)
     {
-        var __mb = __mb_set_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRFrameSynthesisExtension", "set_enabled", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OpenXRFrameSynthesisExtension.set_enabled is not available in this engine build.");
-            __mb_set_enabled = __mb;
-        }
+        if (__mb_set_enabled == 0) MethodBinds.MissingThrow("OpenXRFrameSynthesisExtension.set_enabled");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_enabled, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_relax_frame_interval;
     public bool GetRelaxFrameInterval()
     {
-        var __mb = __mb_get_relax_frame_interval;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRFrameSynthesisExtension", "get_relax_frame_interval", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRFrameSynthesisExtension.get_relax_frame_interval is not available in this engine build.");
-            __mb_get_relax_frame_interval = __mb;
-        }
+        if (__mb_get_relax_frame_interval == 0) MethodBinds.MissingThrow("OpenXRFrameSynthesisExtension.get_relax_frame_interval");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_relax_frame_interval, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_relax_frame_interval;
     public void SetRelaxFrameInterval(bool relaxFrameInterval)
     {
-        var __mb = __mb_set_relax_frame_interval;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRFrameSynthesisExtension", "set_relax_frame_interval", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OpenXRFrameSynthesisExtension.set_relax_frame_interval is not available in this engine build.");
-            __mb_set_relax_frame_interval = __mb;
-        }
+        if (__mb_set_relax_frame_interval == 0) MethodBinds.MissingThrow("OpenXRFrameSynthesisExtension.set_relax_frame_interval");
         byte __a0 = relaxFrameInterval ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_relax_frame_interval, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_skip_next_frame;
     public void SkipNextFrame()
     {
-        var __mb = __mb_skip_next_frame;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRFrameSynthesisExtension", "skip_next_frame", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("OpenXRFrameSynthesisExtension.skip_next_frame is not available in this engine build.");
-            __mb_skip_next_frame = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_skip_next_frame == 0) MethodBinds.MissingThrow("OpenXRFrameSynthesisExtension.skip_next_frame");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_skip_next_frame, NativePtr, 0, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_is_available = MethodBinds.ResolveBulk("OpenXRFrameSynthesisExtension", "is_available", 36873697);
+        __mb_is_enabled = MethodBinds.ResolveBulk("OpenXRFrameSynthesisExtension", "is_enabled", 36873697);
+        __mb_set_enabled = MethodBinds.ResolveBulk("OpenXRFrameSynthesisExtension", "set_enabled", 2586408642);
+        __mb_get_relax_frame_interval = MethodBinds.ResolveBulk("OpenXRFrameSynthesisExtension", "get_relax_frame_interval", 36873697);
+        __mb_set_relax_frame_interval = MethodBinds.ResolveBulk("OpenXRFrameSynthesisExtension", "set_relax_frame_interval", 2586408642);
+        __mb_skip_next_frame = MethodBinds.ResolveBulk("OpenXRFrameSynthesisExtension", "skip_next_frame", 3218959716);
     }
 }
 
@@ -5728,52 +4372,41 @@ public unsafe partial class OpenXRFutureExtension : OpenXRExtensionWrapper
     private static nint __mb_is_active;
     public bool IsActive()
     {
-        var __mb = __mb_is_active;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRFutureExtension", "is_active", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRFutureExtension.is_active is not available in this engine build.");
-            __mb_is_active = __mb;
-        }
+        if (__mb_is_active == 0) MethodBinds.MissingThrow("OpenXRFutureExtension.is_active");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_active, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_register_future;
     public OpenXRFutureResult? RegisterFuture(ulong future, Callable onSuccess)
     {
-        var __mb = __mb_register_future;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRFutureExtension", "register_future", 1038012256);
-            if (__mb == 0) throw new MissingMethodException("OpenXRFutureExtension.register_future is not available in this engine build.");
-            __mb_register_future = __mb;
-        }
+        if (__mb_register_future == 0) MethodBinds.MissingThrow("OpenXRFutureExtension.register_future");
         long __a0 = unchecked((long)future);
         var __a1 = onSuccess.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_register_future, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRFutureResult?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_cancel_future;
     public void CancelFuture(ulong future)
     {
-        var __mb = __mb_cancel_future;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRFutureExtension", "cancel_future", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OpenXRFutureExtension.cancel_future is not available in this engine build.");
-            __mb_cancel_future = __mb;
-        }
+        if (__mb_cancel_future == 0) MethodBinds.MissingThrow("OpenXRFutureExtension.cancel_future");
         long __a0 = unchecked((long)future);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_cancel_future, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_is_active = MethodBinds.ResolveBulk("OpenXRFutureExtension", "is_active", 36873697);
+        __mb_register_future = MethodBinds.ResolveBulk("OpenXRFutureExtension", "register_future", 1038012256);
+        __mb_cancel_future = MethodBinds.ResolveBulk("OpenXRFutureExtension", "cancel_future", 1286410249);
     }
 }
 
@@ -5799,75 +4432,54 @@ public unsafe partial class OpenXRFutureResult : RefCounted
     private static nint __mb_get_status;
     public OpenXRFutureResult.ResultStatus GetStatus()
     {
-        var __mb = __mb_get_status;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRFutureResult", "get_status", 2023607463);
-            if (__mb == 0) throw new MissingMethodException("OpenXRFutureResult.get_status is not available in this engine build.");
-            __mb_get_status = __mb;
-        }
+        if (__mb_get_status == 0) MethodBinds.MissingThrow("OpenXRFutureResult.get_status");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_status, NativePtr, 0, (nint)(&__ret));
         return (OpenXRFutureResult.ResultStatus)__ret;
     }
 
     private static nint __mb_get_future;
     public ulong GetFuture()
     {
-        var __mb = __mb_get_future;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRFutureResult", "get_future", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRFutureResult.get_future is not available in this engine build.");
-            __mb_get_future = __mb;
-        }
+        if (__mb_get_future == 0) MethodBinds.MissingThrow("OpenXRFutureResult.get_future");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_future, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_cancel_future;
     public void CancelFuture()
     {
-        var __mb = __mb_cancel_future;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRFutureResult", "cancel_future", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("OpenXRFutureResult.cancel_future is not available in this engine build.");
-            __mb_cancel_future = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_cancel_future == 0) MethodBinds.MissingThrow("OpenXRFutureResult.cancel_future");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_cancel_future, NativePtr, 0, 0);
     }
 
     private static nint __mb_set_result_value;
     public void SetResultValue(Variant resultValue)
     {
-        var __mb = __mb_set_result_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRFutureResult", "set_result_value", 1114965689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRFutureResult.set_result_value is not available in this engine build.");
-            __mb_set_result_value = __mb;
-        }
+        if (__mb_set_result_value == 0) MethodBinds.MissingThrow("OpenXRFutureResult.set_result_value");
         var __a0 = resultValue.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_result_value, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_result_value;
     public Variant GetResultValue()
     {
-        var __mb = __mb_get_result_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRFutureResult", "get_result_value", 1214101251);
-            if (__mb == 0) throw new MissingMethodException("OpenXRFutureResult.get_result_value is not available in this engine build.");
-            __mb_get_result_value = __mb;
-        }
+        if (__mb_get_result_value == 0) MethodBinds.MissingThrow("OpenXRFutureResult.get_result_value");
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_result_value, NativePtr, 0, (nint)(&__ret));
         return new Variant(__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_status = MethodBinds.ResolveBulk("OpenXRFutureResult", "get_status", 2023607463);
+        __mb_get_future = MethodBinds.ResolveBulk("OpenXRFutureResult", "get_future", 3905245786);
+        __mb_cancel_future = MethodBinds.ResolveBulk("OpenXRFutureResult", "cancel_future", 3218959716);
+        __mb_set_result_value = MethodBinds.ResolveBulk("OpenXRFutureResult", "set_result_value", 1114965689);
+        __mb_get_result_value = MethodBinds.ResolveBulk("OpenXRFutureResult", "get_result_value", 1214101251);
     }
 }
 
@@ -5941,156 +4553,110 @@ public unsafe partial class OpenXRHand : Node3D
     private static nint __mb_set_hand;
     public void SetHand(OpenXRHand.Hands hand)
     {
-        var __mb = __mb_set_hand;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHand", "set_hand", 1849328560);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHand.set_hand is not available in this engine build.");
-            __mb_set_hand = __mb;
-        }
+        if (__mb_set_hand == 0) MethodBinds.MissingThrow("OpenXRHand.set_hand");
         long __a0 = (long)hand;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_hand, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_hand;
     public OpenXRHand.Hands GetHand()
     {
-        var __mb = __mb_get_hand;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHand", "get_hand", 2850644561);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHand.get_hand is not available in this engine build.");
-            __mb_get_hand = __mb;
-        }
+        if (__mb_get_hand == 0) MethodBinds.MissingThrow("OpenXRHand.get_hand");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand, NativePtr, 0, (nint)(&__ret));
         return (OpenXRHand.Hands)__ret;
     }
 
     private static nint __mb_set_hand_skeleton;
     public void SetHandSkeleton(NodePath handSkeleton)
     {
-        var __mb = __mb_set_hand_skeleton;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHand", "set_hand_skeleton", 1348162250);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHand.set_hand_skeleton is not available in this engine build.");
-            __mb_set_hand_skeleton = __mb;
-        }
+        if (__mb_set_hand_skeleton == 0) MethodBinds.MissingThrow("OpenXRHand.set_hand_skeleton");
         ulong __a0 = handSkeleton.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_hand_skeleton, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_hand_skeleton;
     public NodePath GetHandSkeleton()
     {
-        var __mb = __mb_get_hand_skeleton;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHand", "get_hand_skeleton", 4075236667);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHand.get_hand_skeleton is not available in this engine build.");
-            __mb_get_hand_skeleton = __mb;
-        }
+        if (__mb_get_hand_skeleton == 0) MethodBinds.MissingThrow("OpenXRHand.get_hand_skeleton");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_skeleton, NativePtr, 0, (nint)(&__ret));
         return new NodePath(__ret);
     }
 
     private static nint __mb_set_motion_range;
     public void SetMotionRange(OpenXRHand.MotionRangeEnum motionRange)
     {
-        var __mb = __mb_set_motion_range;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHand", "set_motion_range", 3326516003);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHand.set_motion_range is not available in this engine build.");
-            __mb_set_motion_range = __mb;
-        }
+        if (__mb_set_motion_range == 0) MethodBinds.MissingThrow("OpenXRHand.set_motion_range");
         long __a0 = (long)motionRange;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_motion_range, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_motion_range;
     public OpenXRHand.MotionRangeEnum GetMotionRange()
     {
-        var __mb = __mb_get_motion_range;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHand", "get_motion_range", 2191822314);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHand.get_motion_range is not available in this engine build.");
-            __mb_get_motion_range = __mb;
-        }
+        if (__mb_get_motion_range == 0) MethodBinds.MissingThrow("OpenXRHand.get_motion_range");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_motion_range, NativePtr, 0, (nint)(&__ret));
         return (OpenXRHand.MotionRangeEnum)__ret;
     }
 
     private static nint __mb_set_skeleton_rig;
     public void SetSkeletonRig(OpenXRHand.SkeletonRigEnum skeletonRig)
     {
-        var __mb = __mb_set_skeleton_rig;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHand", "set_skeleton_rig", 1528072213);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHand.set_skeleton_rig is not available in this engine build.");
-            __mb_set_skeleton_rig = __mb;
-        }
+        if (__mb_set_skeleton_rig == 0) MethodBinds.MissingThrow("OpenXRHand.set_skeleton_rig");
         long __a0 = (long)skeletonRig;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_skeleton_rig, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_skeleton_rig;
     public OpenXRHand.SkeletonRigEnum GetSkeletonRig()
     {
-        var __mb = __mb_get_skeleton_rig;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHand", "get_skeleton_rig", 968409338);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHand.get_skeleton_rig is not available in this engine build.");
-            __mb_get_skeleton_rig = __mb;
-        }
+        if (__mb_get_skeleton_rig == 0) MethodBinds.MissingThrow("OpenXRHand.get_skeleton_rig");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_skeleton_rig, NativePtr, 0, (nint)(&__ret));
         return (OpenXRHand.SkeletonRigEnum)__ret;
     }
 
     private static nint __mb_set_bone_update;
     public void SetBoneUpdate(OpenXRHand.BoneUpdateEnum boneUpdate)
     {
-        var __mb = __mb_set_bone_update;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHand", "set_bone_update", 3144625444);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHand.set_bone_update is not available in this engine build.");
-            __mb_set_bone_update = __mb;
-        }
+        if (__mb_set_bone_update == 0) MethodBinds.MissingThrow("OpenXRHand.set_bone_update");
         long __a0 = (long)boneUpdate;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_bone_update, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bone_update;
     public OpenXRHand.BoneUpdateEnum GetBoneUpdate()
     {
-        var __mb = __mb_get_bone_update;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHand", "get_bone_update", 1310695248);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHand.get_bone_update is not available in this engine build.");
-            __mb_get_bone_update = __mb;
-        }
+        if (__mb_get_bone_update == 0) MethodBinds.MissingThrow("OpenXRHand.get_bone_update");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_bone_update, NativePtr, 0, (nint)(&__ret));
         return (OpenXRHand.BoneUpdateEnum)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_hand = MethodBinds.ResolveBulk("OpenXRHand", "set_hand", 1849328560);
+        __mb_get_hand = MethodBinds.ResolveBulk("OpenXRHand", "get_hand", 2850644561);
+        __mb_set_hand_skeleton = MethodBinds.ResolveBulk("OpenXRHand", "set_hand_skeleton", 1348162250);
+        __mb_get_hand_skeleton = MethodBinds.ResolveBulk("OpenXRHand", "get_hand_skeleton", 4075236667);
+        __mb_set_motion_range = MethodBinds.ResolveBulk("OpenXRHand", "set_motion_range", 3326516003);
+        __mb_get_motion_range = MethodBinds.ResolveBulk("OpenXRHand", "get_motion_range", 2191822314);
+        __mb_set_skeleton_rig = MethodBinds.ResolveBulk("OpenXRHand", "set_skeleton_rig", 1528072213);
+        __mb_get_skeleton_rig = MethodBinds.ResolveBulk("OpenXRHand", "get_skeleton_rig", 968409338);
+        __mb_set_bone_update = MethodBinds.ResolveBulk("OpenXRHand", "set_bone_update", 3144625444);
+        __mb_get_bone_update = MethodBinds.ResolveBulk("OpenXRHand", "get_bone_update", 1310695248);
     }
 }
 
@@ -6129,94 +4695,68 @@ public unsafe partial class OpenXRHapticVibration : OpenXRHapticBase
     private static nint __mb_set_duration;
     public void SetDuration(long duration)
     {
-        var __mb = __mb_set_duration;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHapticVibration", "set_duration", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHapticVibration.set_duration is not available in this engine build.");
-            __mb_set_duration = __mb;
-        }
+        if (__mb_set_duration == 0) MethodBinds.MissingThrow("OpenXRHapticVibration.set_duration");
         long __a0 = unchecked((long)duration);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_duration, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_duration;
     public long GetDuration()
     {
-        var __mb = __mb_get_duration;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHapticVibration", "get_duration", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHapticVibration.get_duration is not available in this engine build.");
-            __mb_get_duration = __mb;
-        }
+        if (__mb_get_duration == 0) MethodBinds.MissingThrow("OpenXRHapticVibration.get_duration");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_duration, NativePtr, 0, (nint)(&__ret));
         return unchecked((long)__ret);
     }
 
     private static nint __mb_set_frequency;
     public void SetFrequency(float frequency)
     {
-        var __mb = __mb_set_frequency;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHapticVibration", "set_frequency", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHapticVibration.set_frequency is not available in this engine build.");
-            __mb_set_frequency = __mb;
-        }
+        if (__mb_set_frequency == 0) MethodBinds.MissingThrow("OpenXRHapticVibration.set_frequency");
         double __a0 = frequency;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_frequency, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_frequency;
     public float GetFrequency()
     {
-        var __mb = __mb_get_frequency;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHapticVibration", "get_frequency", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHapticVibration.get_frequency is not available in this engine build.");
-            __mb_get_frequency = __mb;
-        }
+        if (__mb_get_frequency == 0) MethodBinds.MissingThrow("OpenXRHapticVibration.get_frequency");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_frequency, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_amplitude;
     public void SetAmplitude(float amplitude)
     {
-        var __mb = __mb_set_amplitude;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHapticVibration", "set_amplitude", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHapticVibration.set_amplitude is not available in this engine build.");
-            __mb_set_amplitude = __mb;
-        }
+        if (__mb_set_amplitude == 0) MethodBinds.MissingThrow("OpenXRHapticVibration.set_amplitude");
         double __a0 = amplitude;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_amplitude, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_amplitude;
     public float GetAmplitude()
     {
-        var __mb = __mb_get_amplitude;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRHapticVibration", "get_amplitude", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRHapticVibration.get_amplitude is not available in this engine build.");
-            __mb_get_amplitude = __mb;
-        }
+        if (__mb_get_amplitude == 0) MethodBinds.MissingThrow("OpenXRHapticVibration.get_amplitude");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_amplitude, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_duration = MethodBinds.ResolveBulk("OpenXRHapticVibration", "set_duration", 1286410249);
+        __mb_get_duration = MethodBinds.ResolveBulk("OpenXRHapticVibration", "get_duration", 3905245786);
+        __mb_set_frequency = MethodBinds.ResolveBulk("OpenXRHapticVibration", "set_frequency", 373806689);
+        __mb_get_frequency = MethodBinds.ResolveBulk("OpenXRHapticVibration", "get_frequency", 1740695150);
+        __mb_set_amplitude = MethodBinds.ResolveBulk("OpenXRHapticVibration", "set_amplitude", 373806689);
+        __mb_get_amplitude = MethodBinds.ResolveBulk("OpenXRHapticVibration", "get_amplitude", 1740695150);
     }
 }
 
@@ -6256,192 +4796,120 @@ public unsafe partial class OpenXRIPBinding : Resource
     private static nint __mb_set_action;
     public void SetAction(OpenXRAction? action)
     {
-        var __mb = __mb_set_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRIPBinding", "set_action", 349361333);
-            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.set_action is not available in this engine build.");
-            __mb_set_action = __mb;
-        }
+        if (__mb_set_action == 0) MethodBinds.MissingThrow("OpenXRIPBinding.set_action");
         nint __a0 = action?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_action, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_action;
     public OpenXRAction? GetAction()
     {
-        var __mb = __mb_get_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRIPBinding", "get_action", 4072409085);
-            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.get_action is not available in this engine build.");
-            __mb_get_action = __mb;
-        }
+        if (__mb_get_action == 0) MethodBinds.MissingThrow("OpenXRIPBinding.get_action");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_action, NativePtr, 0, (nint)(&__ret));
         return (OpenXRAction?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_binding_path;
     public void SetBindingPath(string bindingPath)
     {
-        var __mb = __mb_set_binding_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRIPBinding", "set_binding_path", 83702148);
-            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.set_binding_path is not available in this engine build.");
-            __mb_set_binding_path = __mb;
-        }
+        if (__mb_set_binding_path == 0) MethodBinds.MissingThrow("OpenXRIPBinding.set_binding_path");
         ulong __a0 = NativeString.Create(bindingPath);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_binding_path, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_binding_path;
     public string GetBindingPath()
     {
-        var __mb = __mb_get_binding_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRIPBinding", "get_binding_path", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.get_binding_path is not available in this engine build.");
-            __mb_get_binding_path = __mb;
-        }
+        if (__mb_get_binding_path == 0) MethodBinds.MissingThrow("OpenXRIPBinding.get_binding_path");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_binding_path, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_binding_modifier_count;
     public int GetBindingModifierCount()
     {
-        var __mb = __mb_get_binding_modifier_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRIPBinding", "get_binding_modifier_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.get_binding_modifier_count is not available in this engine build.");
-            __mb_get_binding_modifier_count = __mb;
-        }
+        if (__mb_get_binding_modifier_count == 0) MethodBinds.MissingThrow("OpenXRIPBinding.get_binding_modifier_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_binding_modifier_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_binding_modifier;
     public OpenXRActionBindingModifier? GetBindingModifier(int index)
     {
-        var __mb = __mb_get_binding_modifier;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRIPBinding", "get_binding_modifier", 3538296211);
-            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.get_binding_modifier is not available in this engine build.");
-            __mb_get_binding_modifier = __mb;
-        }
+        if (__mb_get_binding_modifier == 0) MethodBinds.MissingThrow("OpenXRIPBinding.get_binding_modifier");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_binding_modifier, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRActionBindingModifier?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_binding_modifiers;
     public void SetBindingModifiers(Godot.Collections.Array bindingModifiers)
     {
-        var __mb = __mb_set_binding_modifiers;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRIPBinding", "set_binding_modifiers", 381264803);
-            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.set_binding_modifiers is not available in this engine build.");
-            __mb_set_binding_modifiers = __mb;
-        }
+        if (__mb_set_binding_modifiers == 0) MethodBinds.MissingThrow("OpenXRIPBinding.set_binding_modifiers");
         ulong __a0 = bindingModifiers.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_binding_modifiers, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_binding_modifiers;
     public Godot.Collections.Array GetBindingModifiers()
     {
-        var __mb = __mb_get_binding_modifiers;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRIPBinding", "get_binding_modifiers", 3995934104);
-            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.get_binding_modifiers is not available in this engine build.");
-            __mb_get_binding_modifiers = __mb;
-        }
+        if (__mb_get_binding_modifiers == 0) MethodBinds.MissingThrow("OpenXRIPBinding.get_binding_modifiers");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_binding_modifiers, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_paths;
     public void SetPaths(string[] paths)
     {
-        var __mb = __mb_set_paths;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRIPBinding", "set_paths", 4015028928);
-            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.set_paths is not available in this engine build.");
-            __mb_set_paths = __mb;
-        }
+        if (__mb_set_paths == 0) MethodBinds.MissingThrow("OpenXRIPBinding.set_paths");
         var __a0 = Packed.CreateStrings(paths);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_paths, NativePtr, (nint)__args, 0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
     }
 
     private static nint __mb_get_paths;
     public string[] GetPaths()
     {
-        var __mb = __mb_get_paths;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRIPBinding", "get_paths", 1139954409);
-            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.get_paths is not available in this engine build.");
-            __mb_get_paths = __mb;
-        }
+        if (__mb_get_paths == 0) MethodBinds.MissingThrow("OpenXRIPBinding.get_paths");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_paths, NativePtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_get_path_count;
     public int GetPathCount()
     {
-        var __mb = __mb_get_path_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRIPBinding", "get_path_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.get_path_count is not available in this engine build.");
-            __mb_get_path_count = __mb;
-        }
+        if (__mb_get_path_count == 0) MethodBinds.MissingThrow("OpenXRIPBinding.get_path_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_path_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_has_path;
     public bool HasPath(string path)
     {
-        var __mb = __mb_has_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRIPBinding", "has_path", 3927539163);
-            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.has_path is not available in this engine build.");
-            __mb_has_path = __mb;
-        }
+        if (__mb_has_path == 0) MethodBinds.MissingThrow("OpenXRIPBinding.has_path");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_path, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -6449,35 +4917,41 @@ public unsafe partial class OpenXRIPBinding : Resource
     private static nint __mb_add_path;
     public void AddPath(string path)
     {
-        var __mb = __mb_add_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRIPBinding", "add_path", 83702148);
-            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.add_path is not available in this engine build.");
-            __mb_add_path = __mb;
-        }
+        if (__mb_add_path == 0) MethodBinds.MissingThrow("OpenXRIPBinding.add_path");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_path, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_remove_path;
     public void RemovePath(string path)
     {
-        var __mb = __mb_remove_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRIPBinding", "remove_path", 83702148);
-            if (__mb == 0) throw new MissingMethodException("OpenXRIPBinding.remove_path is not available in this engine build.");
-            __mb_remove_path = __mb;
-        }
+        if (__mb_remove_path == 0) MethodBinds.MissingThrow("OpenXRIPBinding.remove_path");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_path, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_action = MethodBinds.ResolveBulk("OpenXRIPBinding", "set_action", 349361333);
+        __mb_get_action = MethodBinds.ResolveBulk("OpenXRIPBinding", "get_action", 4072409085);
+        __mb_set_binding_path = MethodBinds.ResolveBulk("OpenXRIPBinding", "set_binding_path", 83702148);
+        __mb_get_binding_path = MethodBinds.ResolveBulk("OpenXRIPBinding", "get_binding_path", 201670096);
+        __mb_get_binding_modifier_count = MethodBinds.ResolveBulk("OpenXRIPBinding", "get_binding_modifier_count", 3905245786);
+        __mb_get_binding_modifier = MethodBinds.ResolveBulk("OpenXRIPBinding", "get_binding_modifier", 3538296211);
+        __mb_set_binding_modifiers = MethodBinds.ResolveBulk("OpenXRIPBinding", "set_binding_modifiers", 381264803);
+        __mb_get_binding_modifiers = MethodBinds.ResolveBulk("OpenXRIPBinding", "get_binding_modifiers", 3995934104);
+        __mb_set_paths = MethodBinds.ResolveBulk("OpenXRIPBinding", "set_paths", 4015028928);
+        __mb_get_paths = MethodBinds.ResolveBulk("OpenXRIPBinding", "get_paths", 1139954409);
+        __mb_get_path_count = MethodBinds.ResolveBulk("OpenXRIPBinding", "get_path_count", 3905245786);
+        __mb_has_path = MethodBinds.ResolveBulk("OpenXRIPBinding", "has_path", 3927539163);
+        __mb_add_path = MethodBinds.ResolveBulk("OpenXRIPBinding", "add_path", 83702148);
+        __mb_remove_path = MethodBinds.ResolveBulk("OpenXRIPBinding", "remove_path", 83702148);
     }
 }
 
@@ -6521,161 +4995,115 @@ public unsafe partial class OpenXRInteractionProfile : Resource
     private static nint __mb_set_interaction_profile_path;
     public void SetInteractionProfilePath(string interactionProfilePath)
     {
-        var __mb = __mb_set_interaction_profile_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfile", "set_interaction_profile_path", 83702148);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfile.set_interaction_profile_path is not available in this engine build.");
-            __mb_set_interaction_profile_path = __mb;
-        }
+        if (__mb_set_interaction_profile_path == 0) MethodBinds.MissingThrow("OpenXRInteractionProfile.set_interaction_profile_path");
         ulong __a0 = NativeString.Create(interactionProfilePath);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_interaction_profile_path, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_interaction_profile_path;
     public string GetInteractionProfilePath()
     {
-        var __mb = __mb_get_interaction_profile_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfile", "get_interaction_profile_path", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfile.get_interaction_profile_path is not available in this engine build.");
-            __mb_get_interaction_profile_path = __mb;
-        }
+        if (__mb_get_interaction_profile_path == 0) MethodBinds.MissingThrow("OpenXRInteractionProfile.get_interaction_profile_path");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_interaction_profile_path, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_binding_count;
     public int GetBindingCount()
     {
-        var __mb = __mb_get_binding_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfile", "get_binding_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfile.get_binding_count is not available in this engine build.");
-            __mb_get_binding_count = __mb;
-        }
+        if (__mb_get_binding_count == 0) MethodBinds.MissingThrow("OpenXRInteractionProfile.get_binding_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_binding_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_binding;
     public OpenXRIPBinding? GetBinding(int index)
     {
-        var __mb = __mb_get_binding;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfile", "get_binding", 3934429652);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfile.get_binding is not available in this engine build.");
-            __mb_get_binding = __mb;
-        }
+        if (__mb_get_binding == 0) MethodBinds.MissingThrow("OpenXRInteractionProfile.get_binding");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_binding, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRIPBinding?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_bindings;
     public void SetBindings(Godot.Collections.Array bindings)
     {
-        var __mb = __mb_set_bindings;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfile", "set_bindings", 381264803);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfile.set_bindings is not available in this engine build.");
-            __mb_set_bindings = __mb;
-        }
+        if (__mb_set_bindings == 0) MethodBinds.MissingThrow("OpenXRInteractionProfile.set_bindings");
         ulong __a0 = bindings.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_bindings, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bindings;
     public Godot.Collections.Array GetBindings()
     {
-        var __mb = __mb_get_bindings;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfile", "get_bindings", 3995934104);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfile.get_bindings is not available in this engine build.");
-            __mb_get_bindings = __mb;
-        }
+        if (__mb_get_bindings == 0) MethodBinds.MissingThrow("OpenXRInteractionProfile.get_bindings");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_bindings, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_binding_modifier_count;
     public int GetBindingModifierCount()
     {
-        var __mb = __mb_get_binding_modifier_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfile", "get_binding_modifier_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfile.get_binding_modifier_count is not available in this engine build.");
-            __mb_get_binding_modifier_count = __mb;
-        }
+        if (__mb_get_binding_modifier_count == 0) MethodBinds.MissingThrow("OpenXRInteractionProfile.get_binding_modifier_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_binding_modifier_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_binding_modifier;
     public OpenXRIPBindingModifier? GetBindingModifier(int index)
     {
-        var __mb = __mb_get_binding_modifier;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfile", "get_binding_modifier", 2419896583);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfile.get_binding_modifier is not available in this engine build.");
-            __mb_get_binding_modifier = __mb;
-        }
+        if (__mb_get_binding_modifier == 0) MethodBinds.MissingThrow("OpenXRInteractionProfile.get_binding_modifier");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_binding_modifier, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRIPBindingModifier?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_binding_modifiers;
     public void SetBindingModifiers(Godot.Collections.Array bindingModifiers)
     {
-        var __mb = __mb_set_binding_modifiers;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfile", "set_binding_modifiers", 381264803);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfile.set_binding_modifiers is not available in this engine build.");
-            __mb_set_binding_modifiers = __mb;
-        }
+        if (__mb_set_binding_modifiers == 0) MethodBinds.MissingThrow("OpenXRInteractionProfile.set_binding_modifiers");
         ulong __a0 = bindingModifiers.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_binding_modifiers, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_binding_modifiers;
     public Godot.Collections.Array GetBindingModifiers()
     {
-        var __mb = __mb_get_binding_modifiers;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfile", "get_binding_modifiers", 3995934104);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfile.get_binding_modifiers is not available in this engine build.");
-            __mb_get_binding_modifiers = __mb;
-        }
+        if (__mb_get_binding_modifiers == 0) MethodBinds.MissingThrow("OpenXRInteractionProfile.get_binding_modifiers");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_binding_modifiers, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_interaction_profile_path = MethodBinds.ResolveBulk("OpenXRInteractionProfile", "set_interaction_profile_path", 83702148);
+        __mb_get_interaction_profile_path = MethodBinds.ResolveBulk("OpenXRInteractionProfile", "get_interaction_profile_path", 201670096);
+        __mb_get_binding_count = MethodBinds.ResolveBulk("OpenXRInteractionProfile", "get_binding_count", 3905245786);
+        __mb_get_binding = MethodBinds.ResolveBulk("OpenXRInteractionProfile", "get_binding", 3934429652);
+        __mb_set_bindings = MethodBinds.ResolveBulk("OpenXRInteractionProfile", "set_bindings", 381264803);
+        __mb_get_bindings = MethodBinds.ResolveBulk("OpenXRInteractionProfile", "get_bindings", 3995934104);
+        __mb_get_binding_modifier_count = MethodBinds.ResolveBulk("OpenXRInteractionProfile", "get_binding_modifier_count", 3905245786);
+        __mb_get_binding_modifier = MethodBinds.ResolveBulk("OpenXRInteractionProfile", "get_binding_modifier", 2419896583);
+        __mb_set_binding_modifiers = MethodBinds.ResolveBulk("OpenXRInteractionProfile", "set_binding_modifiers", 381264803);
+        __mb_get_binding_modifiers = MethodBinds.ResolveBulk("OpenXRInteractionProfile", "get_binding_modifiers", 3995934104);
     }
 }
 
@@ -6696,19 +5124,18 @@ public unsafe partial class OpenXRInteractionProfileEditorBase : HBoxContainer
     private static nint __mb_setup;
     public void Setup(OpenXRActionMap? actionMap, OpenXRInteractionProfile? interactionProfile)
     {
-        var __mb = __mb_setup;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfileEditorBase", "setup", 421962938);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfileEditorBase.setup is not available in this engine build.");
-            __mb_setup = __mb;
-        }
+        if (__mb_setup == 0) MethodBinds.MissingThrow("OpenXRInteractionProfileEditorBase.setup");
         nint __a0 = actionMap?.NativePtr ?? 0;
         nint __a1 = interactionProfile?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_setup, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_setup = MethodBinds.ResolveBulk("OpenXRInteractionProfileEditorBase", "setup", 421962938);
     }
 }
 
@@ -6724,19 +5151,13 @@ public unsafe partial class OpenXRInteractionProfileMetadata : GodotObject
     private static nint __mb_register_profile_rename;
     public void RegisterProfileRename(string oldName, string newName)
     {
-        var __mb = __mb_register_profile_rename;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfileMetadata", "register_profile_rename", 3186203200);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfileMetadata.register_profile_rename is not available in this engine build.");
-            __mb_register_profile_rename = __mb;
-        }
+        if (__mb_register_profile_rename == 0) MethodBinds.MissingThrow("OpenXRInteractionProfileMetadata.register_profile_rename");
         ulong __a0 = NativeString.Create(oldName);
         ulong __a1 = NativeString.Create(newName);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_register_profile_rename, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
     }
@@ -6744,19 +5165,13 @@ public unsafe partial class OpenXRInteractionProfileMetadata : GodotObject
     private static nint __mb_register_path_rename;
     public void RegisterPathRename(string oldName, string newName)
     {
-        var __mb = __mb_register_path_rename;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfileMetadata", "register_path_rename", 3186203200);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfileMetadata.register_path_rename is not available in this engine build.");
-            __mb_register_path_rename = __mb;
-        }
+        if (__mb_register_path_rename == 0) MethodBinds.MissingThrow("OpenXRInteractionProfileMetadata.register_path_rename");
         ulong __a0 = NativeString.Create(oldName);
         ulong __a1 = NativeString.Create(newName);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_register_path_rename, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
     }
@@ -6764,13 +5179,7 @@ public unsafe partial class OpenXRInteractionProfileMetadata : GodotObject
     private static nint __mb_register_top_level_path;
     public void RegisterTopLevelPath(string displayName, string openxrPath, string openxrExtensionNames)
     {
-        var __mb = __mb_register_top_level_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfileMetadata", "register_top_level_path", 254767734);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfileMetadata.register_top_level_path is not available in this engine build.");
-            __mb_register_top_level_path = __mb;
-        }
+        if (__mb_register_top_level_path == 0) MethodBinds.MissingThrow("OpenXRInteractionProfileMetadata.register_top_level_path");
         ulong __a0 = NativeString.Create(displayName);
         ulong __a1 = NativeString.Create(openxrPath);
         ulong __a2 = NativeString.Create(openxrExtensionNames);
@@ -6778,7 +5187,7 @@ public unsafe partial class OpenXRInteractionProfileMetadata : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_register_top_level_path, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         NativeString.Destroy(ref __a2);
@@ -6787,13 +5196,7 @@ public unsafe partial class OpenXRInteractionProfileMetadata : GodotObject
     private static nint __mb_register_interaction_profile;
     public void RegisterInteractionProfile(string displayName, string openxrPath, string openxrExtensionNames)
     {
-        var __mb = __mb_register_interaction_profile;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfileMetadata", "register_interaction_profile", 254767734);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfileMetadata.register_interaction_profile is not available in this engine build.");
-            __mb_register_interaction_profile = __mb;
-        }
+        if (__mb_register_interaction_profile == 0) MethodBinds.MissingThrow("OpenXRInteractionProfileMetadata.register_interaction_profile");
         ulong __a0 = NativeString.Create(displayName);
         ulong __a1 = NativeString.Create(openxrPath);
         ulong __a2 = NativeString.Create(openxrExtensionNames);
@@ -6801,7 +5204,7 @@ public unsafe partial class OpenXRInteractionProfileMetadata : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_register_interaction_profile, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         NativeString.Destroy(ref __a2);
@@ -6810,13 +5213,7 @@ public unsafe partial class OpenXRInteractionProfileMetadata : GodotObject
     private static nint __mb_register_io_path;
     public void RegisterIoPath(string interactionProfile, string displayName, string toplevelPath, string openxrPath, string openxrExtensionNames, OpenXRAction.ActionTypeEnum actionType)
     {
-        var __mb = __mb_register_io_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInteractionProfileMetadata", "register_io_path", 3443511926);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInteractionProfileMetadata.register_io_path is not available in this engine build.");
-            __mb_register_io_path = __mb;
-        }
+        if (__mb_register_io_path == 0) MethodBinds.MissingThrow("OpenXRInteractionProfileMetadata.register_io_path");
         ulong __a0 = NativeString.Create(interactionProfile);
         ulong __a1 = NativeString.Create(displayName);
         ulong __a2 = NativeString.Create(toplevelPath);
@@ -6830,12 +5227,21 @@ public unsafe partial class OpenXRInteractionProfileMetadata : GodotObject
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_register_io_path, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         NativeString.Destroy(ref __a2);
         NativeString.Destroy(ref __a3);
         NativeString.Destroy(ref __a4);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_register_profile_rename = MethodBinds.ResolveBulk("OpenXRInteractionProfileMetadata", "register_profile_rename", 3186203200);
+        __mb_register_path_rename = MethodBinds.ResolveBulk("OpenXRInteractionProfileMetadata", "register_path_rename", 3186203200);
+        __mb_register_top_level_path = MethodBinds.ResolveBulk("OpenXRInteractionProfileMetadata", "register_top_level_path", 254767734);
+        __mb_register_interaction_profile = MethodBinds.ResolveBulk("OpenXRInteractionProfileMetadata", "register_interaction_profile", 254767734);
+        __mb_register_io_path = MethodBinds.ResolveBulk("OpenXRInteractionProfileMetadata", "register_io_path", 3443511926);
     }
 }
 
@@ -7089,233 +5495,143 @@ public unsafe partial class OpenXRInterface : XRInterface
     private static nint __mb_get_session_state;
     public OpenXRInterface.SessionState GetSessionState()
     {
-        var __mb = __mb_get_session_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_session_state", 896364779);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_session_state is not available in this engine build.");
-            __mb_get_session_state = __mb;
-        }
+        if (__mb_get_session_state == 0) MethodBinds.MissingThrow("OpenXRInterface.get_session_state");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_session_state, NativePtr, 0, (nint)(&__ret));
         return (OpenXRInterface.SessionState)__ret;
     }
 
     private static nint __mb_is_user_presence_supported;
     public bool IsUserPresenceSupported()
     {
-        var __mb = __mb_is_user_presence_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "is_user_presence_supported", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.is_user_presence_supported is not available in this engine build.");
-            __mb_is_user_presence_supported = __mb;
-        }
+        if (__mb_is_user_presence_supported == 0) MethodBinds.MissingThrow("OpenXRInterface.is_user_presence_supported");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_user_presence_supported, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_user_present;
     public bool IsUserPresent()
     {
-        var __mb = __mb_is_user_present;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "is_user_present", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.is_user_present is not available in this engine build.");
-            __mb_is_user_present = __mb;
-        }
+        if (__mb_is_user_present == 0) MethodBinds.MissingThrow("OpenXRInterface.is_user_present");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_user_present, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_display_refresh_rate;
     public float GetDisplayRefreshRate()
     {
-        var __mb = __mb_get_display_refresh_rate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_display_refresh_rate", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_display_refresh_rate is not available in this engine build.");
-            __mb_get_display_refresh_rate = __mb;
-        }
+        if (__mb_get_display_refresh_rate == 0) MethodBinds.MissingThrow("OpenXRInterface.get_display_refresh_rate");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_display_refresh_rate, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_display_refresh_rate;
     public void SetDisplayRefreshRate(float refreshRate)
     {
-        var __mb = __mb_set_display_refresh_rate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "set_display_refresh_rate", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.set_display_refresh_rate is not available in this engine build.");
-            __mb_set_display_refresh_rate = __mb;
-        }
+        if (__mb_set_display_refresh_rate == 0) MethodBinds.MissingThrow("OpenXRInterface.set_display_refresh_rate");
         double __a0 = refreshRate;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_display_refresh_rate, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_render_target_size_multiplier;
     public double GetRenderTargetSizeMultiplier()
     {
-        var __mb = __mb_get_render_target_size_multiplier;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_render_target_size_multiplier", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_render_target_size_multiplier is not available in this engine build.");
-            __mb_get_render_target_size_multiplier = __mb;
-        }
+        if (__mb_get_render_target_size_multiplier == 0) MethodBinds.MissingThrow("OpenXRInterface.get_render_target_size_multiplier");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_render_target_size_multiplier, NativePtr, 0, (nint)(&__ret));
         return (double)__ret;
     }
 
     private static nint __mb_set_render_target_size_multiplier;
     public void SetRenderTargetSizeMultiplier(double multiplier)
     {
-        var __mb = __mb_set_render_target_size_multiplier;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "set_render_target_size_multiplier", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.set_render_target_size_multiplier is not available in this engine build.");
-            __mb_set_render_target_size_multiplier = __mb;
-        }
+        if (__mb_set_render_target_size_multiplier == 0) MethodBinds.MissingThrow("OpenXRInterface.set_render_target_size_multiplier");
         double __a0 = multiplier;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_render_target_size_multiplier, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_foveation_supported;
     public bool IsFoveationSupported()
     {
-        var __mb = __mb_is_foveation_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "is_foveation_supported", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.is_foveation_supported is not available in this engine build.");
-            __mb_is_foveation_supported = __mb;
-        }
+        if (__mb_is_foveation_supported == 0) MethodBinds.MissingThrow("OpenXRInterface.is_foveation_supported");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_foveation_supported, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_foveation_level;
     public int GetFoveationLevel()
     {
-        var __mb = __mb_get_foveation_level;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_foveation_level", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_foveation_level is not available in this engine build.");
-            __mb_get_foveation_level = __mb;
-        }
+        if (__mb_get_foveation_level == 0) MethodBinds.MissingThrow("OpenXRInterface.get_foveation_level");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_foveation_level, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_foveation_level;
     public void SetFoveationLevel(int foveationLevel)
     {
-        var __mb = __mb_set_foveation_level;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "set_foveation_level", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.set_foveation_level is not available in this engine build.");
-            __mb_set_foveation_level = __mb;
-        }
+        if (__mb_set_foveation_level == 0) MethodBinds.MissingThrow("OpenXRInterface.set_foveation_level");
         long __a0 = unchecked((long)foveationLevel);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_foveation_level, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_foveation_dynamic;
     public bool GetFoveationDynamic()
     {
-        var __mb = __mb_get_foveation_dynamic;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_foveation_dynamic", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_foveation_dynamic is not available in this engine build.");
-            __mb_get_foveation_dynamic = __mb;
-        }
+        if (__mb_get_foveation_dynamic == 0) MethodBinds.MissingThrow("OpenXRInterface.get_foveation_dynamic");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_foveation_dynamic, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_foveation_dynamic;
     public void SetFoveationDynamic(bool foveationDynamic)
     {
-        var __mb = __mb_set_foveation_dynamic;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "set_foveation_dynamic", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.set_foveation_dynamic is not available in this engine build.");
-            __mb_set_foveation_dynamic = __mb;
-        }
+        if (__mb_set_foveation_dynamic == 0) MethodBinds.MissingThrow("OpenXRInterface.set_foveation_dynamic");
         byte __a0 = foveationDynamic ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_foveation_dynamic, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_foveation_with_subsampled_images;
     public bool GetFoveationWithSubsampledImages()
     {
-        var __mb = __mb_get_foveation_with_subsampled_images;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_foveation_with_subsampled_images", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_foveation_with_subsampled_images is not available in this engine build.");
-            __mb_get_foveation_with_subsampled_images = __mb;
-        }
+        if (__mb_get_foveation_with_subsampled_images == 0) MethodBinds.MissingThrow("OpenXRInterface.get_foveation_with_subsampled_images");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_foveation_with_subsampled_images, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_foveation_with_subsampled_images;
     public void SetFoveationWithSubsampledImages(bool enabled)
     {
-        var __mb = __mb_set_foveation_with_subsampled_images;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "set_foveation_with_subsampled_images", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.set_foveation_with_subsampled_images is not available in this engine build.");
-            __mb_set_foveation_with_subsampled_images = __mb;
-        }
+        if (__mb_set_foveation_with_subsampled_images == 0) MethodBinds.MissingThrow("OpenXRInterface.set_foveation_with_subsampled_images");
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_foveation_with_subsampled_images, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_action_set_active;
     public bool IsActionSetActive(string name)
     {
-        var __mb = __mb_is_action_set_active;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "is_action_set_active", 3927539163);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.is_action_set_active is not available in this engine build.");
-            __mb_is_action_set_active = __mb;
-        }
+        if (__mb_is_action_set_active == 0) MethodBinds.MissingThrow("OpenXRInterface.is_action_set_active");
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_action_set_active, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -7323,363 +5639,277 @@ public unsafe partial class OpenXRInterface : XRInterface
     private static nint __mb_set_action_set_active;
     public void SetActionSetActive(string name, bool active)
     {
-        var __mb = __mb_set_action_set_active;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "set_action_set_active", 2678287736);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.set_action_set_active is not available in this engine build.");
-            __mb_set_action_set_active = __mb;
-        }
+        if (__mb_set_action_set_active == 0) MethodBinds.MissingThrow("OpenXRInterface.set_action_set_active");
         ulong __a0 = NativeString.Create(name);
         byte __a1 = active ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_action_set_active, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_action_sets;
     public Godot.Collections.Array GetActionSets()
     {
-        var __mb = __mb_get_action_sets;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_action_sets", 3995934104);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_action_sets is not available in this engine build.");
-            __mb_get_action_sets = __mb;
-        }
+        if (__mb_get_action_sets == 0) MethodBinds.MissingThrow("OpenXRInterface.get_action_sets");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_action_sets, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_available_display_refresh_rates;
     public Godot.Collections.Array GetAvailableDisplayRefreshRates()
     {
-        var __mb = __mb_get_available_display_refresh_rates;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_available_display_refresh_rates", 3995934104);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_available_display_refresh_rates is not available in this engine build.");
-            __mb_get_available_display_refresh_rates = __mb;
-        }
+        if (__mb_get_available_display_refresh_rates == 0) MethodBinds.MissingThrow("OpenXRInterface.get_available_display_refresh_rates");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_available_display_refresh_rates, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_motion_range;
     public void SetMotionRange(OpenXRInterface.Hand hand, OpenXRInterface.HandMotionRange motionRange)
     {
-        var __mb = __mb_set_motion_range;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "set_motion_range", 855158159);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.set_motion_range is not available in this engine build.");
-            __mb_set_motion_range = __mb;
-        }
+        if (__mb_set_motion_range == 0) MethodBinds.MissingThrow("OpenXRInterface.set_motion_range");
         long __a0 = (long)hand;
         long __a1 = (long)motionRange;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_motion_range, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_motion_range;
     public OpenXRInterface.HandMotionRange GetMotionRange(OpenXRInterface.Hand hand)
     {
-        var __mb = __mb_get_motion_range;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_motion_range", 3955838114);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_motion_range is not available in this engine build.");
-            __mb_get_motion_range = __mb;
-        }
+        if (__mb_get_motion_range == 0) MethodBinds.MissingThrow("OpenXRInterface.get_motion_range");
         long __a0 = (long)hand;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_motion_range, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRInterface.HandMotionRange)__ret;
     }
 
     private static nint __mb_get_hand_tracking_source;
     public OpenXRInterface.HandTrackedSource GetHandTrackingSource(OpenXRInterface.Hand hand)
     {
-        var __mb = __mb_get_hand_tracking_source;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_hand_tracking_source", 4092421202);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_hand_tracking_source is not available in this engine build.");
-            __mb_get_hand_tracking_source = __mb;
-        }
+        if (__mb_get_hand_tracking_source == 0) MethodBinds.MissingThrow("OpenXRInterface.get_hand_tracking_source");
         long __a0 = (long)hand;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_tracking_source, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRInterface.HandTrackedSource)__ret;
     }
 
     private static nint __mb_get_hand_joint_flags;
     public OpenXRInterface.HandJointFlags GetHandJointFlags(OpenXRInterface.Hand hand, OpenXRInterface.HandJoints joint)
     {
-        var __mb = __mb_get_hand_joint_flags;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_hand_joint_flags", 720567706);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_hand_joint_flags is not available in this engine build.");
-            __mb_get_hand_joint_flags = __mb;
-        }
+        if (__mb_get_hand_joint_flags == 0) MethodBinds.MissingThrow("OpenXRInterface.get_hand_joint_flags");
         long __a0 = (long)hand;
         long __a1 = (long)joint;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_joint_flags, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRInterface.HandJointFlags)__ret;
     }
 
     private static nint __mb_get_hand_joint_rotation;
     public Quaternion GetHandJointRotation(OpenXRInterface.Hand hand, OpenXRInterface.HandJoints joint)
     {
-        var __mb = __mb_get_hand_joint_rotation;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_hand_joint_rotation", 1974618321);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_hand_joint_rotation is not available in this engine build.");
-            __mb_get_hand_joint_rotation = __mb;
-        }
+        if (__mb_get_hand_joint_rotation == 0) MethodBinds.MissingThrow("OpenXRInterface.get_hand_joint_rotation");
         long __a0 = (long)hand;
         long __a1 = (long)joint;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Quaternion);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_joint_rotation, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_hand_joint_position;
     public Vector3 GetHandJointPosition(OpenXRInterface.Hand hand, OpenXRInterface.HandJoints joint)
     {
-        var __mb = __mb_get_hand_joint_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_hand_joint_position", 3529194242);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_hand_joint_position is not available in this engine build.");
-            __mb_get_hand_joint_position = __mb;
-        }
+        if (__mb_get_hand_joint_position == 0) MethodBinds.MissingThrow("OpenXRInterface.get_hand_joint_position");
         long __a0 = (long)hand;
         long __a1 = (long)joint;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_joint_position, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_hand_joint_radius;
     public float GetHandJointRadius(OpenXRInterface.Hand hand, OpenXRInterface.HandJoints joint)
     {
-        var __mb = __mb_get_hand_joint_radius;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_hand_joint_radius", 901522724);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_hand_joint_radius is not available in this engine build.");
-            __mb_get_hand_joint_radius = __mb;
-        }
+        if (__mb_get_hand_joint_radius == 0) MethodBinds.MissingThrow("OpenXRInterface.get_hand_joint_radius");
         long __a0 = (long)hand;
         long __a1 = (long)joint;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_joint_radius, NativePtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_hand_joint_linear_velocity;
     public Vector3 GetHandJointLinearVelocity(OpenXRInterface.Hand hand, OpenXRInterface.HandJoints joint)
     {
-        var __mb = __mb_get_hand_joint_linear_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_hand_joint_linear_velocity", 3529194242);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_hand_joint_linear_velocity is not available in this engine build.");
-            __mb_get_hand_joint_linear_velocity = __mb;
-        }
+        if (__mb_get_hand_joint_linear_velocity == 0) MethodBinds.MissingThrow("OpenXRInterface.get_hand_joint_linear_velocity");
         long __a0 = (long)hand;
         long __a1 = (long)joint;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_joint_linear_velocity, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_hand_joint_angular_velocity;
     public Vector3 GetHandJointAngularVelocity(OpenXRInterface.Hand hand, OpenXRInterface.HandJoints joint)
     {
-        var __mb = __mb_get_hand_joint_angular_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_hand_joint_angular_velocity", 3529194242);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_hand_joint_angular_velocity is not available in this engine build.");
-            __mb_get_hand_joint_angular_velocity = __mb;
-        }
+        if (__mb_get_hand_joint_angular_velocity == 0) MethodBinds.MissingThrow("OpenXRInterface.get_hand_joint_angular_velocity");
         long __a0 = (long)hand;
         long __a1 = (long)joint;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_joint_angular_velocity, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_is_hand_tracking_supported;
     public bool IsHandTrackingSupported()
     {
-        var __mb = __mb_is_hand_tracking_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "is_hand_tracking_supported", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.is_hand_tracking_supported is not available in this engine build.");
-            __mb_is_hand_tracking_supported = __mb;
-        }
+        if (__mb_is_hand_tracking_supported == 0) MethodBinds.MissingThrow("OpenXRInterface.is_hand_tracking_supported");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_hand_tracking_supported, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_hand_interaction_supported;
     public bool IsHandInteractionSupported()
     {
-        var __mb = __mb_is_hand_interaction_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "is_hand_interaction_supported", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.is_hand_interaction_supported is not available in this engine build.");
-            __mb_is_hand_interaction_supported = __mb;
-        }
+        if (__mb_is_hand_interaction_supported == 0) MethodBinds.MissingThrow("OpenXRInterface.is_hand_interaction_supported");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_hand_interaction_supported, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_eye_gaze_interaction_supported;
     public bool IsEyeGazeInteractionSupported()
     {
-        var __mb = __mb_is_eye_gaze_interaction_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "is_eye_gaze_interaction_supported", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.is_eye_gaze_interaction_supported is not available in this engine build.");
-            __mb_is_eye_gaze_interaction_supported = __mb;
-        }
+        if (__mb_is_eye_gaze_interaction_supported == 0) MethodBinds.MissingThrow("OpenXRInterface.is_eye_gaze_interaction_supported");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_eye_gaze_interaction_supported, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_vrs_min_radius;
     public float GetVrsMinRadius()
     {
-        var __mb = __mb_get_vrs_min_radius;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_vrs_min_radius", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_vrs_min_radius is not available in this engine build.");
-            __mb_get_vrs_min_radius = __mb;
-        }
+        if (__mb_get_vrs_min_radius == 0) MethodBinds.MissingThrow("OpenXRInterface.get_vrs_min_radius");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_vrs_min_radius, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_vrs_min_radius;
     public void SetVrsMinRadius(float radius)
     {
-        var __mb = __mb_set_vrs_min_radius;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "set_vrs_min_radius", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.set_vrs_min_radius is not available in this engine build.");
-            __mb_set_vrs_min_radius = __mb;
-        }
+        if (__mb_set_vrs_min_radius == 0) MethodBinds.MissingThrow("OpenXRInterface.set_vrs_min_radius");
         double __a0 = radius;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_vrs_min_radius, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_vrs_strength;
     public float GetVrsStrength()
     {
-        var __mb = __mb_get_vrs_strength;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "get_vrs_strength", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.get_vrs_strength is not available in this engine build.");
-            __mb_get_vrs_strength = __mb;
-        }
+        if (__mb_get_vrs_strength == 0) MethodBinds.MissingThrow("OpenXRInterface.get_vrs_strength");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_vrs_strength, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_vrs_strength;
     public void SetVrsStrength(float strength)
     {
-        var __mb = __mb_set_vrs_strength;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "set_vrs_strength", 373806689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.set_vrs_strength is not available in this engine build.");
-            __mb_set_vrs_strength = __mb;
-        }
+        if (__mb_set_vrs_strength == 0) MethodBinds.MissingThrow("OpenXRInterface.set_vrs_strength");
         double __a0 = strength;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_vrs_strength, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_cpu_level;
     public void SetCpuLevel(OpenXRInterface.PerfSettingsLevel level)
     {
-        var __mb = __mb_set_cpu_level;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "set_cpu_level", 2940842095);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.set_cpu_level is not available in this engine build.");
-            __mb_set_cpu_level = __mb;
-        }
+        if (__mb_set_cpu_level == 0) MethodBinds.MissingThrow("OpenXRInterface.set_cpu_level");
         long __a0 = (long)level;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_cpu_level, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_gpu_level;
     public void SetGpuLevel(OpenXRInterface.PerfSettingsLevel level)
     {
-        var __mb = __mb_set_gpu_level;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRInterface", "set_gpu_level", 2940842095);
-            if (__mb == 0) throw new MissingMethodException("OpenXRInterface.set_gpu_level is not available in this engine build.");
-            __mb_set_gpu_level = __mb;
-        }
+        if (__mb_set_gpu_level == 0) MethodBinds.MissingThrow("OpenXRInterface.set_gpu_level");
         long __a0 = (long)level;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_gpu_level, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_session_state = MethodBinds.ResolveBulk("OpenXRInterface", "get_session_state", 896364779);
+        __mb_is_user_presence_supported = MethodBinds.ResolveBulk("OpenXRInterface", "is_user_presence_supported", 36873697);
+        __mb_is_user_present = MethodBinds.ResolveBulk("OpenXRInterface", "is_user_present", 36873697);
+        __mb_get_display_refresh_rate = MethodBinds.ResolveBulk("OpenXRInterface", "get_display_refresh_rate", 1740695150);
+        __mb_set_display_refresh_rate = MethodBinds.ResolveBulk("OpenXRInterface", "set_display_refresh_rate", 373806689);
+        __mb_get_render_target_size_multiplier = MethodBinds.ResolveBulk("OpenXRInterface", "get_render_target_size_multiplier", 1740695150);
+        __mb_set_render_target_size_multiplier = MethodBinds.ResolveBulk("OpenXRInterface", "set_render_target_size_multiplier", 373806689);
+        __mb_is_foveation_supported = MethodBinds.ResolveBulk("OpenXRInterface", "is_foveation_supported", 36873697);
+        __mb_get_foveation_level = MethodBinds.ResolveBulk("OpenXRInterface", "get_foveation_level", 3905245786);
+        __mb_set_foveation_level = MethodBinds.ResolveBulk("OpenXRInterface", "set_foveation_level", 1286410249);
+        __mb_get_foveation_dynamic = MethodBinds.ResolveBulk("OpenXRInterface", "get_foveation_dynamic", 36873697);
+        __mb_set_foveation_dynamic = MethodBinds.ResolveBulk("OpenXRInterface", "set_foveation_dynamic", 2586408642);
+        __mb_get_foveation_with_subsampled_images = MethodBinds.ResolveBulk("OpenXRInterface", "get_foveation_with_subsampled_images", 36873697);
+        __mb_set_foveation_with_subsampled_images = MethodBinds.ResolveBulk("OpenXRInterface", "set_foveation_with_subsampled_images", 2586408642);
+        __mb_is_action_set_active = MethodBinds.ResolveBulk("OpenXRInterface", "is_action_set_active", 3927539163);
+        __mb_set_action_set_active = MethodBinds.ResolveBulk("OpenXRInterface", "set_action_set_active", 2678287736);
+        __mb_get_action_sets = MethodBinds.ResolveBulk("OpenXRInterface", "get_action_sets", 3995934104);
+        __mb_get_available_display_refresh_rates = MethodBinds.ResolveBulk("OpenXRInterface", "get_available_display_refresh_rates", 3995934104);
+        __mb_set_motion_range = MethodBinds.ResolveBulk("OpenXRInterface", "set_motion_range", 855158159);
+        __mb_get_motion_range = MethodBinds.ResolveBulk("OpenXRInterface", "get_motion_range", 3955838114);
+        __mb_get_hand_tracking_source = MethodBinds.ResolveBulk("OpenXRInterface", "get_hand_tracking_source", 4092421202);
+        __mb_get_hand_joint_flags = MethodBinds.ResolveBulk("OpenXRInterface", "get_hand_joint_flags", 720567706);
+        __mb_get_hand_joint_rotation = MethodBinds.ResolveBulk("OpenXRInterface", "get_hand_joint_rotation", 1974618321);
+        __mb_get_hand_joint_position = MethodBinds.ResolveBulk("OpenXRInterface", "get_hand_joint_position", 3529194242);
+        __mb_get_hand_joint_radius = MethodBinds.ResolveBulk("OpenXRInterface", "get_hand_joint_radius", 901522724);
+        __mb_get_hand_joint_linear_velocity = MethodBinds.ResolveBulk("OpenXRInterface", "get_hand_joint_linear_velocity", 3529194242);
+        __mb_get_hand_joint_angular_velocity = MethodBinds.ResolveBulk("OpenXRInterface", "get_hand_joint_angular_velocity", 3529194242);
+        __mb_is_hand_tracking_supported = MethodBinds.ResolveBulk("OpenXRInterface", "is_hand_tracking_supported", 2240911060);
+        __mb_is_hand_interaction_supported = MethodBinds.ResolveBulk("OpenXRInterface", "is_hand_interaction_supported", 36873697);
+        __mb_is_eye_gaze_interaction_supported = MethodBinds.ResolveBulk("OpenXRInterface", "is_eye_gaze_interaction_supported", 2240911060);
+        __mb_get_vrs_min_radius = MethodBinds.ResolveBulk("OpenXRInterface", "get_vrs_min_radius", 1740695150);
+        __mb_set_vrs_min_radius = MethodBinds.ResolveBulk("OpenXRInterface", "set_vrs_min_radius", 373806689);
+        __mb_get_vrs_strength = MethodBinds.ResolveBulk("OpenXRInterface", "get_vrs_strength", 1740695150);
+        __mb_set_vrs_strength = MethodBinds.ResolveBulk("OpenXRInterface", "set_vrs_strength", 373806689);
+        __mb_set_cpu_level = MethodBinds.ResolveBulk("OpenXRInterface", "set_cpu_level", 2940842095);
+        __mb_set_gpu_level = MethodBinds.ResolveBulk("OpenXRInterface", "set_gpu_level", 2940842095);
     }
 }
 
@@ -7713,125 +5943,89 @@ public unsafe partial class OpenXRMarkerTracker : OpenXRSpatialEntityTracker
     private static nint __mb_set_bounds_size;
     public void SetBoundsSize(Vector2 boundsSize)
     {
-        var __mb = __mb_set_bounds_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRMarkerTracker", "set_bounds_size", 743155724);
-            if (__mb == 0) throw new MissingMethodException("OpenXRMarkerTracker.set_bounds_size is not available in this engine build.");
-            __mb_set_bounds_size = __mb;
-        }
+        if (__mb_set_bounds_size == 0) MethodBinds.MissingThrow("OpenXRMarkerTracker.set_bounds_size");
         var __a0 = boundsSize;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_bounds_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bounds_size;
     public Vector2 GetBoundsSize()
     {
-        var __mb = __mb_get_bounds_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRMarkerTracker", "get_bounds_size", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("OpenXRMarkerTracker.get_bounds_size is not available in this engine build.");
-            __mb_get_bounds_size = __mb;
-        }
+        if (__mb_get_bounds_size == 0) MethodBinds.MissingThrow("OpenXRMarkerTracker.get_bounds_size");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_bounds_size, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_marker_type;
     public void SetMarkerType(OpenXRSpatialComponentMarkerList.MarkerType markerType)
     {
-        var __mb = __mb_set_marker_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRMarkerTracker", "set_marker_type", 2156241362);
-            if (__mb == 0) throw new MissingMethodException("OpenXRMarkerTracker.set_marker_type is not available in this engine build.");
-            __mb_set_marker_type = __mb;
-        }
+        if (__mb_set_marker_type == 0) MethodBinds.MissingThrow("OpenXRMarkerTracker.set_marker_type");
         long __a0 = (long)markerType;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_marker_type, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_marker_type;
     public OpenXRSpatialComponentMarkerList.MarkerType GetMarkerType()
     {
-        var __mb = __mb_get_marker_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRMarkerTracker", "get_marker_type", 612702862);
-            if (__mb == 0) throw new MissingMethodException("OpenXRMarkerTracker.get_marker_type is not available in this engine build.");
-            __mb_get_marker_type = __mb;
-        }
+        if (__mb_get_marker_type == 0) MethodBinds.MissingThrow("OpenXRMarkerTracker.get_marker_type");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_marker_type, NativePtr, 0, (nint)(&__ret));
         return (OpenXRSpatialComponentMarkerList.MarkerType)__ret;
     }
 
     private static nint __mb_set_marker_id;
     public void SetMarkerId(uint markerId)
     {
-        var __mb = __mb_set_marker_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRMarkerTracker", "set_marker_id", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OpenXRMarkerTracker.set_marker_id is not available in this engine build.");
-            __mb_set_marker_id = __mb;
-        }
+        if (__mb_set_marker_id == 0) MethodBinds.MissingThrow("OpenXRMarkerTracker.set_marker_id");
         long __a0 = unchecked((long)markerId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_marker_id, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_marker_id;
     public uint GetMarkerId()
     {
-        var __mb = __mb_get_marker_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRMarkerTracker", "get_marker_id", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRMarkerTracker.get_marker_id is not available in this engine build.");
-            __mb_get_marker_id = __mb;
-        }
+        if (__mb_get_marker_id == 0) MethodBinds.MissingThrow("OpenXRMarkerTracker.get_marker_id");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_marker_id, NativePtr, 0, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_set_marker_data;
     public void SetMarkerData(Variant markerData)
     {
-        var __mb = __mb_set_marker_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRMarkerTracker", "set_marker_data", 1114965689);
-            if (__mb == 0) throw new MissingMethodException("OpenXRMarkerTracker.set_marker_data is not available in this engine build.");
-            __mb_set_marker_data = __mb;
-        }
+        if (__mb_set_marker_data == 0) MethodBinds.MissingThrow("OpenXRMarkerTracker.set_marker_data");
         var __a0 = markerData.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_marker_data, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_marker_data;
     public Variant GetMarkerData()
     {
-        var __mb = __mb_get_marker_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRMarkerTracker", "get_marker_data", 1214101251);
-            if (__mb == 0) throw new MissingMethodException("OpenXRMarkerTracker.get_marker_data is not available in this engine build.");
-            __mb_get_marker_data = __mb;
-        }
+        if (__mb_get_marker_data == 0) MethodBinds.MissingThrow("OpenXRMarkerTracker.get_marker_data");
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_marker_data, NativePtr, 0, (nint)(&__ret));
         return new Variant(__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_bounds_size = MethodBinds.ResolveBulk("OpenXRMarkerTracker", "set_bounds_size", 743155724);
+        __mb_get_bounds_size = MethodBinds.ResolveBulk("OpenXRMarkerTracker", "get_bounds_size", 3341600327);
+        __mb_set_marker_type = MethodBinds.ResolveBulk("OpenXRMarkerTracker", "set_marker_type", 2156241362);
+        __mb_get_marker_type = MethodBinds.ResolveBulk("OpenXRMarkerTracker", "get_marker_type", 612702862);
+        __mb_set_marker_id = MethodBinds.ResolveBulk("OpenXRMarkerTracker", "set_marker_id", 1286410249);
+        __mb_get_marker_id = MethodBinds.ResolveBulk("OpenXRMarkerTracker", "get_marker_id", 3905245786);
+        __mb_set_marker_data = MethodBinds.ResolveBulk("OpenXRMarkerTracker", "set_marker_data", 1114965689);
+        __mb_get_marker_data = MethodBinds.ResolveBulk("OpenXRMarkerTracker", "get_marker_data", 1214101251);
     }
 }
 
@@ -7873,107 +6067,65 @@ public unsafe partial class OpenXRPlaneTracker : OpenXRSpatialEntityTracker
     private static nint __mb_set_bounds_size;
     public void SetBoundsSize(Vector2 boundsSize)
     {
-        var __mb = __mb_set_bounds_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRPlaneTracker", "set_bounds_size", 743155724);
-            if (__mb == 0) throw new MissingMethodException("OpenXRPlaneTracker.set_bounds_size is not available in this engine build.");
-            __mb_set_bounds_size = __mb;
-        }
+        if (__mb_set_bounds_size == 0) MethodBinds.MissingThrow("OpenXRPlaneTracker.set_bounds_size");
         var __a0 = boundsSize;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_bounds_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bounds_size;
     public Vector2 GetBoundsSize()
     {
-        var __mb = __mb_get_bounds_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRPlaneTracker", "get_bounds_size", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("OpenXRPlaneTracker.get_bounds_size is not available in this engine build.");
-            __mb_get_bounds_size = __mb;
-        }
+        if (__mb_get_bounds_size == 0) MethodBinds.MissingThrow("OpenXRPlaneTracker.get_bounds_size");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_bounds_size, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_plane_alignment;
     public void SetPlaneAlignment(OpenXRSpatialComponentPlaneAlignmentList.PlaneAlignment planeAlignment)
     {
-        var __mb = __mb_set_plane_alignment;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRPlaneTracker", "set_plane_alignment", 1214382230);
-            if (__mb == 0) throw new MissingMethodException("OpenXRPlaneTracker.set_plane_alignment is not available in this engine build.");
-            __mb_set_plane_alignment = __mb;
-        }
+        if (__mb_set_plane_alignment == 0) MethodBinds.MissingThrow("OpenXRPlaneTracker.set_plane_alignment");
         long __a0 = (long)planeAlignment;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_plane_alignment, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_plane_alignment;
     public OpenXRSpatialComponentPlaneAlignmentList.PlaneAlignment GetPlaneAlignment()
     {
-        var __mb = __mb_get_plane_alignment;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRPlaneTracker", "get_plane_alignment", 845541441);
-            if (__mb == 0) throw new MissingMethodException("OpenXRPlaneTracker.get_plane_alignment is not available in this engine build.");
-            __mb_get_plane_alignment = __mb;
-        }
+        if (__mb_get_plane_alignment == 0) MethodBinds.MissingThrow("OpenXRPlaneTracker.get_plane_alignment");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_plane_alignment, NativePtr, 0, (nint)(&__ret));
         return (OpenXRSpatialComponentPlaneAlignmentList.PlaneAlignment)__ret;
     }
 
     private static nint __mb_set_plane_label;
     public void SetPlaneLabel(string planeLabel)
     {
-        var __mb = __mb_set_plane_label;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRPlaneTracker", "set_plane_label", 83702148);
-            if (__mb == 0) throw new MissingMethodException("OpenXRPlaneTracker.set_plane_label is not available in this engine build.");
-            __mb_set_plane_label = __mb;
-        }
+        if (__mb_set_plane_label == 0) MethodBinds.MissingThrow("OpenXRPlaneTracker.set_plane_label");
         ulong __a0 = NativeString.Create(planeLabel);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_plane_label, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_plane_label;
     public string GetPlaneLabel()
     {
-        var __mb = __mb_get_plane_label;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRPlaneTracker", "get_plane_label", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OpenXRPlaneTracker.get_plane_label is not available in this engine build.");
-            __mb_get_plane_label = __mb;
-        }
+        if (__mb_get_plane_label == 0) MethodBinds.MissingThrow("OpenXRPlaneTracker.get_plane_label");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_plane_label, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_mesh_data;
     public void SetMeshData(Transform3D origin, Vector2[] vertices, int[] indices)
     {
-        var __mb = __mb_set_mesh_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRPlaneTracker", "set_mesh_data", 1877193149);
-            if (__mb == 0) throw new MissingMethodException("OpenXRPlaneTracker.set_mesh_data is not available in this engine build.");
-            __mb_set_mesh_data = __mb;
-        }
+        if (__mb_set_mesh_data == 0) MethodBinds.MissingThrow("OpenXRPlaneTracker.set_mesh_data");
         var __a0 = origin;
         var __a1 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, vertices);
         var __a2 = Packed.CreatePod<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, indices);
@@ -7981,7 +6133,7 @@ public unsafe partial class OpenXRPlaneTracker : OpenXRSpatialEntityTracker
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_mesh_data, NativePtr, (nint)__args, 0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a1);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, ref __a2);
     }
@@ -7989,62 +6141,53 @@ public unsafe partial class OpenXRPlaneTracker : OpenXRSpatialEntityTracker
     private static nint __mb_clear_mesh_data;
     public void ClearMeshData()
     {
-        var __mb = __mb_clear_mesh_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRPlaneTracker", "clear_mesh_data", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("OpenXRPlaneTracker.clear_mesh_data is not available in this engine build.");
-            __mb_clear_mesh_data = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_clear_mesh_data == 0) MethodBinds.MissingThrow("OpenXRPlaneTracker.clear_mesh_data");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clear_mesh_data, NativePtr, 0, 0);
     }
 
     private static nint __mb_get_mesh_offset;
     public Transform3D GetMeshOffset()
     {
-        var __mb = __mb_get_mesh_offset;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRPlaneTracker", "get_mesh_offset", 3229777777);
-            if (__mb == 0) throw new MissingMethodException("OpenXRPlaneTracker.get_mesh_offset is not available in this engine build.");
-            __mb_get_mesh_offset = __mb;
-        }
+        if (__mb_get_mesh_offset == 0) MethodBinds.MissingThrow("OpenXRPlaneTracker.get_mesh_offset");
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_mesh_offset, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_mesh;
     public Mesh? GetMesh()
     {
-        var __mb = __mb_get_mesh;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRPlaneTracker", "get_mesh", 4081188045);
-            if (__mb == 0) throw new MissingMethodException("OpenXRPlaneTracker.get_mesh is not available in this engine build.");
-            __mb_get_mesh = __mb;
-        }
+        if (__mb_get_mesh == 0) MethodBinds.MissingThrow("OpenXRPlaneTracker.get_mesh");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_mesh, NativePtr, 0, (nint)(&__ret));
         return (Mesh?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_shape;
     public Shape3D? GetShape(float thickness = 0.01f)
     {
-        var __mb = __mb_get_shape;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRPlaneTracker", "get_shape", 3358509884);
-            if (__mb == 0) throw new MissingMethodException("OpenXRPlaneTracker.get_shape is not available in this engine build.");
-            __mb_get_shape = __mb;
-        }
+        if (__mb_get_shape == 0) MethodBinds.MissingThrow("OpenXRPlaneTracker.get_shape");
         double __a0 = thickness;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_shape, NativePtr, (nint)__args, (nint)(&__ret));
         return (Shape3D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_bounds_size = MethodBinds.ResolveBulk("OpenXRPlaneTracker", "set_bounds_size", 743155724);
+        __mb_get_bounds_size = MethodBinds.ResolveBulk("OpenXRPlaneTracker", "get_bounds_size", 3341600327);
+        __mb_set_plane_alignment = MethodBinds.ResolveBulk("OpenXRPlaneTracker", "set_plane_alignment", 1214382230);
+        __mb_get_plane_alignment = MethodBinds.ResolveBulk("OpenXRPlaneTracker", "get_plane_alignment", 845541441);
+        __mb_set_plane_label = MethodBinds.ResolveBulk("OpenXRPlaneTracker", "set_plane_label", 83702148);
+        __mb_get_plane_label = MethodBinds.ResolveBulk("OpenXRPlaneTracker", "get_plane_label", 201670096);
+        __mb_set_mesh_data = MethodBinds.ResolveBulk("OpenXRPlaneTracker", "set_mesh_data", 1877193149);
+        __mb_clear_mesh_data = MethodBinds.ResolveBulk("OpenXRPlaneTracker", "clear_mesh_data", 3218959716);
+        __mb_get_mesh_offset = MethodBinds.ResolveBulk("OpenXRPlaneTracker", "get_mesh_offset", 3229777777);
+        __mb_get_mesh = MethodBinds.ResolveBulk("OpenXRPlaneTracker", "get_mesh", 4081188045);
+        __mb_get_shape = MethodBinds.ResolveBulk("OpenXRPlaneTracker", "get_shape", 3358509884);
     }
 }
 
@@ -8074,47 +6217,36 @@ public unsafe partial class OpenXRRenderModel : Node3D
     private static nint __mb_get_top_level_path;
     public string GetTopLevelPath()
     {
-        var __mb = __mb_get_top_level_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModel", "get_top_level_path", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModel.get_top_level_path is not available in this engine build.");
-            __mb_get_top_level_path = __mb;
-        }
+        if (__mb_get_top_level_path == 0) MethodBinds.MissingThrow("OpenXRRenderModel.get_top_level_path");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_top_level_path, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_render_model;
     public Rid GetRenderModel()
     {
-        var __mb = __mb_get_render_model;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModel", "get_render_model", 2944877500);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModel.get_render_model is not available in this engine build.");
-            __mb_get_render_model = __mb;
-        }
+        if (__mb_get_render_model == 0) MethodBinds.MissingThrow("OpenXRRenderModel.get_render_model");
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_render_model, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_render_model;
     public void SetRenderModel(Rid renderModel)
     {
-        var __mb = __mb_set_render_model;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModel", "set_render_model", 2722037293);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModel.set_render_model is not available in this engine build.");
-            __mb_set_render_model = __mb;
-        }
+        if (__mb_set_render_model == 0) MethodBinds.MissingThrow("OpenXRRenderModel.set_render_model");
         var __a0 = renderModel;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_render_model, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_top_level_path = MethodBinds.ResolveBulk("OpenXRRenderModel", "get_top_level_path", 201670096);
+        __mb_get_render_model = MethodBinds.ResolveBulk("OpenXRRenderModel", "get_render_model", 2944877500);
+        __mb_set_render_model = MethodBinds.ResolveBulk("OpenXRRenderModel", "set_render_model", 2722037293);
     }
 }
 
@@ -8154,233 +6286,172 @@ public unsafe partial class OpenXRRenderModelExtension : OpenXRExtensionWrapper
     private static nint __mb_is_active;
     public bool IsActive()
     {
-        var __mb = __mb_is_active;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelExtension", "is_active", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelExtension.is_active is not available in this engine build.");
-            __mb_is_active = __mb;
-        }
+        if (__mb_is_active == 0) MethodBinds.MissingThrow("OpenXRRenderModelExtension.is_active");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_active, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_render_model_create;
     public Rid RenderModelCreate(ulong renderModelId)
     {
-        var __mb = __mb_render_model_create;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelExtension", "render_model_create", 937000113);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelExtension.render_model_create is not available in this engine build.");
-            __mb_render_model_create = __mb;
-        }
+        if (__mb_render_model_create == 0) MethodBinds.MissingThrow("OpenXRRenderModelExtension.render_model_create");
         long __a0 = unchecked((long)renderModelId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_render_model_create, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_render_model_destroy;
     public void RenderModelDestroy(Rid renderModel)
     {
-        var __mb = __mb_render_model_destroy;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelExtension", "render_model_destroy", 2722037293);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelExtension.render_model_destroy is not available in this engine build.");
-            __mb_render_model_destroy = __mb;
-        }
+        if (__mb_render_model_destroy == 0) MethodBinds.MissingThrow("OpenXRRenderModelExtension.render_model_destroy");
         var __a0 = renderModel;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_render_model_destroy, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_render_model_get_all;
     public Godot.Collections.Array RenderModelGetAll()
     {
-        var __mb = __mb_render_model_get_all;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelExtension", "render_model_get_all", 2915620761);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelExtension.render_model_get_all is not available in this engine build.");
-            __mb_render_model_get_all = __mb;
-        }
+        if (__mb_render_model_get_all == 0) MethodBinds.MissingThrow("OpenXRRenderModelExtension.render_model_get_all");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_render_model_get_all, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_render_model_new_scene_instance;
     public Node3D? RenderModelNewSceneInstance(Rid renderModel)
     {
-        var __mb = __mb_render_model_new_scene_instance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelExtension", "render_model_new_scene_instance", 788010739);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelExtension.render_model_new_scene_instance is not available in this engine build.");
-            __mb_render_model_new_scene_instance = __mb;
-        }
+        if (__mb_render_model_new_scene_instance == 0) MethodBinds.MissingThrow("OpenXRRenderModelExtension.render_model_new_scene_instance");
         var __a0 = renderModel;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_render_model_new_scene_instance, NativePtr, (nint)__args, (nint)(&__ret));
         return (Node3D?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
     private static nint __mb_render_model_get_subaction_paths;
     public string[] RenderModelGetSubactionPaths(Rid renderModel)
     {
-        var __mb = __mb_render_model_get_subaction_paths;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelExtension", "render_model_get_subaction_paths", 2801473409);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelExtension.render_model_get_subaction_paths is not available in this engine build.");
-            __mb_render_model_get_subaction_paths = __mb;
-        }
+        if (__mb_render_model_get_subaction_paths == 0) MethodBinds.MissingThrow("OpenXRRenderModelExtension.render_model_get_subaction_paths");
         var __a0 = renderModel;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_render_model_get_subaction_paths, NativePtr, (nint)__args, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_render_model_get_top_level_path;
     public string RenderModelGetTopLevelPath(Rid renderModel)
     {
-        var __mb = __mb_render_model_get_top_level_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelExtension", "render_model_get_top_level_path", 642473191);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelExtension.render_model_get_top_level_path is not available in this engine build.");
-            __mb_render_model_get_top_level_path = __mb;
-        }
+        if (__mb_render_model_get_top_level_path == 0) MethodBinds.MissingThrow("OpenXRRenderModelExtension.render_model_get_top_level_path");
         var __a0 = renderModel;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_render_model_get_top_level_path, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_render_model_get_confidence;
     public XRPose.TrackingConfidenceEnum RenderModelGetConfidence(Rid renderModel)
     {
-        var __mb = __mb_render_model_get_confidence;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelExtension", "render_model_get_confidence", 2350330949);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelExtension.render_model_get_confidence is not available in this engine build.");
-            __mb_render_model_get_confidence = __mb;
-        }
+        if (__mb_render_model_get_confidence == 0) MethodBinds.MissingThrow("OpenXRRenderModelExtension.render_model_get_confidence");
         var __a0 = renderModel;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_render_model_get_confidence, NativePtr, (nint)__args, (nint)(&__ret));
         return (XRPose.TrackingConfidenceEnum)__ret;
     }
 
     private static nint __mb_render_model_get_root_transform;
     public Transform3D RenderModelGetRootTransform(Rid renderModel)
     {
-        var __mb = __mb_render_model_get_root_transform;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelExtension", "render_model_get_root_transform", 1128465797);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelExtension.render_model_get_root_transform is not available in this engine build.");
-            __mb_render_model_get_root_transform = __mb;
-        }
+        if (__mb_render_model_get_root_transform == 0) MethodBinds.MissingThrow("OpenXRRenderModelExtension.render_model_get_root_transform");
         var __a0 = renderModel;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_render_model_get_root_transform, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_render_model_get_animatable_node_count;
     public uint RenderModelGetAnimatableNodeCount(Rid renderModel)
     {
-        var __mb = __mb_render_model_get_animatable_node_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelExtension", "render_model_get_animatable_node_count", 2198884583);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelExtension.render_model_get_animatable_node_count is not available in this engine build.");
-            __mb_render_model_get_animatable_node_count = __mb;
-        }
+        if (__mb_render_model_get_animatable_node_count == 0) MethodBinds.MissingThrow("OpenXRRenderModelExtension.render_model_get_animatable_node_count");
         var __a0 = renderModel;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_render_model_get_animatable_node_count, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_render_model_get_animatable_node_name;
     public string RenderModelGetAnimatableNodeName(Rid renderModel, uint index)
     {
-        var __mb = __mb_render_model_get_animatable_node_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelExtension", "render_model_get_animatable_node_name", 1464764419);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelExtension.render_model_get_animatable_node_name is not available in this engine build.");
-            __mb_render_model_get_animatable_node_name = __mb;
-        }
+        if (__mb_render_model_get_animatable_node_name == 0) MethodBinds.MissingThrow("OpenXRRenderModelExtension.render_model_get_animatable_node_name");
         var __a0 = renderModel;
         long __a1 = unchecked((long)index);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_render_model_get_animatable_node_name, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_render_model_is_animatable_node_visible;
     public bool RenderModelIsAnimatableNodeVisible(Rid renderModel, uint index)
     {
-        var __mb = __mb_render_model_is_animatable_node_visible;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelExtension", "render_model_is_animatable_node_visible", 3120086654);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelExtension.render_model_is_animatable_node_visible is not available in this engine build.");
-            __mb_render_model_is_animatable_node_visible = __mb;
-        }
+        if (__mb_render_model_is_animatable_node_visible == 0) MethodBinds.MissingThrow("OpenXRRenderModelExtension.render_model_is_animatable_node_visible");
         var __a0 = renderModel;
         long __a1 = unchecked((long)index);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_render_model_is_animatable_node_visible, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_render_model_get_animatable_node_transform;
     public Transform3D RenderModelGetAnimatableNodeTransform(Rid renderModel, uint index)
     {
-        var __mb = __mb_render_model_get_animatable_node_transform;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelExtension", "render_model_get_animatable_node_transform", 1050775521);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelExtension.render_model_get_animatable_node_transform is not available in this engine build.");
-            __mb_render_model_get_animatable_node_transform = __mb;
-        }
+        if (__mb_render_model_get_animatable_node_transform == 0) MethodBinds.MissingThrow("OpenXRRenderModelExtension.render_model_get_animatable_node_transform");
         var __a0 = renderModel;
         long __a1 = unchecked((long)index);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_render_model_get_animatable_node_transform, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_is_active = MethodBinds.ResolveBulk("OpenXRRenderModelExtension", "is_active", 36873697);
+        __mb_render_model_create = MethodBinds.ResolveBulk("OpenXRRenderModelExtension", "render_model_create", 937000113);
+        __mb_render_model_destroy = MethodBinds.ResolveBulk("OpenXRRenderModelExtension", "render_model_destroy", 2722037293);
+        __mb_render_model_get_all = MethodBinds.ResolveBulk("OpenXRRenderModelExtension", "render_model_get_all", 2915620761);
+        __mb_render_model_new_scene_instance = MethodBinds.ResolveBulk("OpenXRRenderModelExtension", "render_model_new_scene_instance", 788010739);
+        __mb_render_model_get_subaction_paths = MethodBinds.ResolveBulk("OpenXRRenderModelExtension", "render_model_get_subaction_paths", 2801473409);
+        __mb_render_model_get_top_level_path = MethodBinds.ResolveBulk("OpenXRRenderModelExtension", "render_model_get_top_level_path", 642473191);
+        __mb_render_model_get_confidence = MethodBinds.ResolveBulk("OpenXRRenderModelExtension", "render_model_get_confidence", 2350330949);
+        __mb_render_model_get_root_transform = MethodBinds.ResolveBulk("OpenXRRenderModelExtension", "render_model_get_root_transform", 1128465797);
+        __mb_render_model_get_animatable_node_count = MethodBinds.ResolveBulk("OpenXRRenderModelExtension", "render_model_get_animatable_node_count", 2198884583);
+        __mb_render_model_get_animatable_node_name = MethodBinds.ResolveBulk("OpenXRRenderModelExtension", "render_model_get_animatable_node_name", 1464764419);
+        __mb_render_model_is_animatable_node_visible = MethodBinds.ResolveBulk("OpenXRRenderModelExtension", "render_model_is_animatable_node_visible", 3120086654);
+        __mb_render_model_get_animatable_node_transform = MethodBinds.ResolveBulk("OpenXRRenderModelExtension", "render_model_get_animatable_node_transform", 1050775521);
     }
 }
 
@@ -8432,64 +6503,48 @@ public unsafe partial class OpenXRRenderModelManager : Node3D
     private static nint __mb_get_tracker;
     public OpenXRRenderModelManager.RenderModelTracker GetTracker()
     {
-        var __mb = __mb_get_tracker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelManager", "get_tracker", 2456466356);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelManager.get_tracker is not available in this engine build.");
-            __mb_get_tracker = __mb;
-        }
+        if (__mb_get_tracker == 0) MethodBinds.MissingThrow("OpenXRRenderModelManager.get_tracker");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_tracker, NativePtr, 0, (nint)(&__ret));
         return (OpenXRRenderModelManager.RenderModelTracker)__ret;
     }
 
     private static nint __mb_set_tracker;
     public void SetTracker(OpenXRRenderModelManager.RenderModelTracker tracker)
     {
-        var __mb = __mb_set_tracker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelManager", "set_tracker", 2814627380);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelManager.set_tracker is not available in this engine build.");
-            __mb_set_tracker = __mb;
-        }
+        if (__mb_set_tracker == 0) MethodBinds.MissingThrow("OpenXRRenderModelManager.set_tracker");
         long __a0 = (long)tracker;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_tracker, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_make_local_to_pose;
     public string GetMakeLocalToPose()
     {
-        var __mb = __mb_get_make_local_to_pose;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelManager", "get_make_local_to_pose", 201670096);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelManager.get_make_local_to_pose is not available in this engine build.");
-            __mb_get_make_local_to_pose = __mb;
-        }
+        if (__mb_get_make_local_to_pose == 0) MethodBinds.MissingThrow("OpenXRRenderModelManager.get_make_local_to_pose");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_make_local_to_pose, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_make_local_to_pose;
     public void SetMakeLocalToPose(string makeLocalToPose)
     {
-        var __mb = __mb_set_make_local_to_pose;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRRenderModelManager", "set_make_local_to_pose", 83702148);
-            if (__mb == 0) throw new MissingMethodException("OpenXRRenderModelManager.set_make_local_to_pose is not available in this engine build.");
-            __mb_set_make_local_to_pose = __mb;
-        }
+        if (__mb_set_make_local_to_pose == 0) MethodBinds.MissingThrow("OpenXRRenderModelManager.set_make_local_to_pose");
         ulong __a0 = NativeString.Create(makeLocalToPose);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_make_local_to_pose, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_tracker = MethodBinds.ResolveBulk("OpenXRRenderModelManager", "get_tracker", 2456466356);
+        __mb_set_tracker = MethodBinds.ResolveBulk("OpenXRRenderModelManager", "set_tracker", 2814627380);
+        __mb_get_make_local_to_pose = MethodBinds.ResolveBulk("OpenXRRenderModelManager", "get_make_local_to_pose", 201670096);
+        __mb_set_make_local_to_pose = MethodBinds.ResolveBulk("OpenXRRenderModelManager", "set_make_local_to_pose", 83702148);
     }
 }
 
@@ -8511,133 +6566,85 @@ public unsafe partial class OpenXRSpatialAnchorCapability : OpenXRExtensionWrapp
     private static nint __mb_is_spatial_anchor_supported;
     public bool IsSpatialAnchorSupported()
     {
-        var __mb = __mb_is_spatial_anchor_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialAnchorCapability", "is_spatial_anchor_supported", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialAnchorCapability.is_spatial_anchor_supported is not available in this engine build.");
-            __mb_is_spatial_anchor_supported = __mb;
-        }
+        if (__mb_is_spatial_anchor_supported == 0) MethodBinds.MissingThrow("OpenXRSpatialAnchorCapability.is_spatial_anchor_supported");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_spatial_anchor_supported, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_spatial_persistence_supported;
     public bool IsSpatialPersistenceSupported()
     {
-        var __mb = __mb_is_spatial_persistence_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialAnchorCapability", "is_spatial_persistence_supported", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialAnchorCapability.is_spatial_persistence_supported is not available in this engine build.");
-            __mb_is_spatial_persistence_supported = __mb;
-        }
+        if (__mb_is_spatial_persistence_supported == 0) MethodBinds.MissingThrow("OpenXRSpatialAnchorCapability.is_spatial_persistence_supported");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_spatial_persistence_supported, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_persistence_scope_supported;
     public bool IsPersistenceScopeSupported(OpenXRSpatialAnchorCapability.PersistenceScope scope)
     {
-        var __mb = __mb_is_persistence_scope_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialAnchorCapability", "is_persistence_scope_supported", 3651771626);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialAnchorCapability.is_persistence_scope_supported is not available in this engine build.");
-            __mb_is_persistence_scope_supported = __mb;
-        }
+        if (__mb_is_persistence_scope_supported == 0) MethodBinds.MissingThrow("OpenXRSpatialAnchorCapability.is_persistence_scope_supported");
         long __a0 = (long)scope;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_persistence_scope_supported, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_create_default_persistence_context;
     public OpenXRFutureResult? CreateDefaultPersistenceContext(Callable userCallback)
     {
-        var __mb = __mb_create_default_persistence_context;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialAnchorCapability", "create_default_persistence_context", 1401033661);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialAnchorCapability.create_default_persistence_context is not available in this engine build.");
-            __mb_create_default_persistence_context = __mb;
-        }
+        if (__mb_create_default_persistence_context == 0) MethodBinds.MissingThrow("OpenXRSpatialAnchorCapability.create_default_persistence_context");
         var __a0 = userCallback.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_default_persistence_context, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRFutureResult?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_create_persistence_context;
     public OpenXRFutureResult? CreatePersistenceContext(OpenXRSpatialAnchorCapability.PersistenceScope scope, Callable userCallback)
     {
-        var __mb = __mb_create_persistence_context;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialAnchorCapability", "create_persistence_context", 856276630);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialAnchorCapability.create_persistence_context is not available in this engine build.");
-            __mb_create_persistence_context = __mb;
-        }
+        if (__mb_create_persistence_context == 0) MethodBinds.MissingThrow("OpenXRSpatialAnchorCapability.create_persistence_context");
         long __a0 = (long)scope;
         var __a1 = userCallback.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_persistence_context, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRFutureResult?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_persistence_context_handle;
     public ulong GetPersistenceContextHandle(Rid persistenceContext)
     {
-        var __mb = __mb_get_persistence_context_handle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialAnchorCapability", "get_persistence_context_handle", 2198884583);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialAnchorCapability.get_persistence_context_handle is not available in this engine build.");
-            __mb_get_persistence_context_handle = __mb;
-        }
+        if (__mb_get_persistence_context_handle == 0) MethodBinds.MissingThrow("OpenXRSpatialAnchorCapability.get_persistence_context_handle");
         var __a0 = persistenceContext;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_persistence_context_handle, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_free_persistence_context;
     public void FreePersistenceContext(Rid persistenceContext)
     {
-        var __mb = __mb_free_persistence_context;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialAnchorCapability", "free_persistence_context", 2722037293);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialAnchorCapability.free_persistence_context is not available in this engine build.");
-            __mb_free_persistence_context = __mb;
-        }
+        if (__mb_free_persistence_context == 0) MethodBinds.MissingThrow("OpenXRSpatialAnchorCapability.free_persistence_context");
         var __a0 = persistenceContext;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_free_persistence_context, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_create_new_anchor;
     public OpenXRAnchorTracker? CreateNewAnchor(Transform3D transform, Rid spatialContext = default, OpenXRStructureBase? next = null)
     {
-        var __mb = __mb_create_new_anchor;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialAnchorCapability", "create_new_anchor", 4088043487);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialAnchorCapability.create_new_anchor is not available in this engine build.");
-            __mb_create_new_anchor = __mb;
-        }
+        if (__mb_create_new_anchor == 0) MethodBinds.MissingThrow("OpenXRSpatialAnchorCapability.create_new_anchor");
         var __a0 = transform;
         var __a1 = spatialContext;
         nint __a2 = next?.NativePtr ?? 0;
@@ -8646,36 +6653,24 @@ public unsafe partial class OpenXRSpatialAnchorCapability : OpenXRExtensionWrapp
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_new_anchor, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRAnchorTracker?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_remove_anchor;
     public void RemoveAnchor(OpenXRAnchorTracker? anchorTracker)
     {
-        var __mb = __mb_remove_anchor;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialAnchorCapability", "remove_anchor", 3579451518);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialAnchorCapability.remove_anchor is not available in this engine build.");
-            __mb_remove_anchor = __mb;
-        }
+        if (__mb_remove_anchor == 0) MethodBinds.MissingThrow("OpenXRSpatialAnchorCapability.remove_anchor");
         nint __a0 = anchorTracker?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_anchor, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_persist_anchor;
     public OpenXRFutureResult? PersistAnchor(OpenXRAnchorTracker? anchorTracker, Rid persistenceContext, Callable userCallback)
     {
-        var __mb = __mb_persist_anchor;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialAnchorCapability", "persist_anchor", 4244202513);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialAnchorCapability.persist_anchor is not available in this engine build.");
-            __mb_persist_anchor = __mb;
-        }
+        if (__mb_persist_anchor == 0) MethodBinds.MissingThrow("OpenXRSpatialAnchorCapability.persist_anchor");
         nint __a0 = anchorTracker?.NativePtr ?? 0;
         var __a1 = persistenceContext;
         var __a2 = userCallback.Native;
@@ -8684,20 +6679,14 @@ public unsafe partial class OpenXRSpatialAnchorCapability : OpenXRExtensionWrapp
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_persist_anchor, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRFutureResult?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_unpersist_anchor;
     public OpenXRFutureResult? UnpersistAnchor(OpenXRAnchorTracker? anchorTracker, Rid persistenceContext, Callable userCallback)
     {
-        var __mb = __mb_unpersist_anchor;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialAnchorCapability", "unpersist_anchor", 4244202513);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialAnchorCapability.unpersist_anchor is not available in this engine build.");
-            __mb_unpersist_anchor = __mb;
-        }
+        if (__mb_unpersist_anchor == 0) MethodBinds.MissingThrow("OpenXRSpatialAnchorCapability.unpersist_anchor");
         nint __a0 = anchorTracker?.NativePtr ?? 0;
         var __a1 = persistenceContext;
         var __a2 = userCallback.Native;
@@ -8706,20 +6695,14 @@ public unsafe partial class OpenXRSpatialAnchorCapability : OpenXRExtensionWrapp
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_unpersist_anchor, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRFutureResult?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_start_entity_discovery;
     public OpenXRFutureResult? StartEntityDiscovery(Rid spatialContext, Godot.Collections.Array componentData, OpenXRStructureBase? nextSnapshotCreate, OpenXRStructureBase? nextSnapshotQuery, Callable userCallback)
     {
-        var __mb = __mb_start_entity_discovery;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialAnchorCapability", "start_entity_discovery", 3452714169);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialAnchorCapability.start_entity_discovery is not available in this engine build.");
-            __mb_start_entity_discovery = __mb;
-        }
+        if (__mb_start_entity_discovery == 0) MethodBinds.MissingThrow("OpenXRSpatialAnchorCapability.start_entity_discovery");
         var __a0 = spatialContext;
         ulong __a1 = componentData.Native;
         nint __a2 = nextSnapshotCreate?.NativePtr ?? 0;
@@ -8732,20 +6715,14 @@ public unsafe partial class OpenXRSpatialAnchorCapability : OpenXRExtensionWrapp
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_start_entity_discovery, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRFutureResult?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_do_entity_update;
     public void DoEntityUpdate(Rid spatialContext, Godot.Collections.Array componentData, OpenXRStructureBase? nextSnapshotCreate = null, OpenXRStructureBase? nextSnapshotQuery = null)
     {
-        var __mb = __mb_do_entity_update;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialAnchorCapability", "do_entity_update", 3138044275);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialAnchorCapability.do_entity_update is not available in this engine build.");
-            __mb_do_entity_update = __mb;
-        }
+        if (__mb_do_entity_update == 0) MethodBinds.MissingThrow("OpenXRSpatialAnchorCapability.do_entity_update");
         var __a0 = spatialContext;
         ulong __a1 = componentData.Native;
         nint __a2 = nextSnapshotCreate?.NativePtr ?? 0;
@@ -8755,7 +6732,24 @@ public unsafe partial class OpenXRSpatialAnchorCapability : OpenXRExtensionWrapp
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_do_entity_update, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_is_spatial_anchor_supported = MethodBinds.ResolveBulk("OpenXRSpatialAnchorCapability", "is_spatial_anchor_supported", 2240911060);
+        __mb_is_spatial_persistence_supported = MethodBinds.ResolveBulk("OpenXRSpatialAnchorCapability", "is_spatial_persistence_supported", 2240911060);
+        __mb_is_persistence_scope_supported = MethodBinds.ResolveBulk("OpenXRSpatialAnchorCapability", "is_persistence_scope_supported", 3651771626);
+        __mb_create_default_persistence_context = MethodBinds.ResolveBulk("OpenXRSpatialAnchorCapability", "create_default_persistence_context", 1401033661);
+        __mb_create_persistence_context = MethodBinds.ResolveBulk("OpenXRSpatialAnchorCapability", "create_persistence_context", 856276630);
+        __mb_get_persistence_context_handle = MethodBinds.ResolveBulk("OpenXRSpatialAnchorCapability", "get_persistence_context_handle", 2198884583);
+        __mb_free_persistence_context = MethodBinds.ResolveBulk("OpenXRSpatialAnchorCapability", "free_persistence_context", 2722037293);
+        __mb_create_new_anchor = MethodBinds.ResolveBulk("OpenXRSpatialAnchorCapability", "create_new_anchor", 4088043487);
+        __mb_remove_anchor = MethodBinds.ResolveBulk("OpenXRSpatialAnchorCapability", "remove_anchor", 3579451518);
+        __mb_persist_anchor = MethodBinds.ResolveBulk("OpenXRSpatialAnchorCapability", "persist_anchor", 4244202513);
+        __mb_unpersist_anchor = MethodBinds.ResolveBulk("OpenXRSpatialAnchorCapability", "unpersist_anchor", 4244202513);
+        __mb_start_entity_discovery = MethodBinds.ResolveBulk("OpenXRSpatialAnchorCapability", "start_entity_discovery", 3452714169);
+        __mb_do_entity_update = MethodBinds.ResolveBulk("OpenXRSpatialAnchorCapability", "do_entity_update", 3138044275);
     }
 }
 
@@ -8771,16 +6765,15 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationAnchor : OpenXRS
     private static nint __mb_get_enabled_components;
     public long[] GetEnabledComponents()
     {
-        var __mb = __mb_get_enabled_components;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialCapabilityConfigurationAnchor", "get_enabled_components", 235988956);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialCapabilityConfigurationAnchor.get_enabled_components is not available in this engine build.");
-            __mb_get_enabled_components = __mb;
-        }
+        if (__mb_get_enabled_components == 0) MethodBinds.MissingThrow("OpenXRSpatialCapabilityConfigurationAnchor.get_enabled_components");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_enabled_components, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, ref __ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_enabled_components = MethodBinds.ResolveBulk("OpenXRSpatialCapabilityConfigurationAnchor", "get_enabled_components", 235988956);
     }
 }
 
@@ -8810,47 +6803,36 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationAprilTag : OpenX
     private static nint __mb_get_enabled_components;
     public long[] GetEnabledComponents()
     {
-        var __mb = __mb_get_enabled_components;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialCapabilityConfigurationAprilTag", "get_enabled_components", 235988956);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialCapabilityConfigurationAprilTag.get_enabled_components is not available in this engine build.");
-            __mb_get_enabled_components = __mb;
-        }
+        if (__mb_get_enabled_components == 0) MethodBinds.MissingThrow("OpenXRSpatialCapabilityConfigurationAprilTag.get_enabled_components");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_enabled_components, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_april_dict;
     public void SetAprilDict(OpenXRSpatialCapabilityConfigurationAprilTag.AprilTagDict aprilDict)
     {
-        var __mb = __mb_set_april_dict;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialCapabilityConfigurationAprilTag", "set_april_dict", 3902905799);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialCapabilityConfigurationAprilTag.set_april_dict is not available in this engine build.");
-            __mb_set_april_dict = __mb;
-        }
+        if (__mb_set_april_dict == 0) MethodBinds.MissingThrow("OpenXRSpatialCapabilityConfigurationAprilTag.set_april_dict");
         long __a0 = (long)aprilDict;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_april_dict, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_april_dict;
     public OpenXRSpatialCapabilityConfigurationAprilTag.AprilTagDict GetAprilDict()
     {
-        var __mb = __mb_get_april_dict;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialCapabilityConfigurationAprilTag", "get_april_dict", 440273016);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialCapabilityConfigurationAprilTag.get_april_dict is not available in this engine build.");
-            __mb_get_april_dict = __mb;
-        }
+        if (__mb_get_april_dict == 0) MethodBinds.MissingThrow("OpenXRSpatialCapabilityConfigurationAprilTag.get_april_dict");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_april_dict, NativePtr, 0, (nint)(&__ret));
         return (OpenXRSpatialCapabilityConfigurationAprilTag.AprilTagDict)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_enabled_components = MethodBinds.ResolveBulk("OpenXRSpatialCapabilityConfigurationAprilTag", "get_enabled_components", 235988956);
+        __mb_set_april_dict = MethodBinds.ResolveBulk("OpenXRSpatialCapabilityConfigurationAprilTag", "set_april_dict", 3902905799);
+        __mb_get_april_dict = MethodBinds.ResolveBulk("OpenXRSpatialCapabilityConfigurationAprilTag", "get_april_dict", 440273016);
     }
 }
 
@@ -8892,47 +6874,36 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationAruco : OpenXRSp
     private static nint __mb_get_enabled_components;
     public long[] GetEnabledComponents()
     {
-        var __mb = __mb_get_enabled_components;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialCapabilityConfigurationAruco", "get_enabled_components", 235988956);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialCapabilityConfigurationAruco.get_enabled_components is not available in this engine build.");
-            __mb_get_enabled_components = __mb;
-        }
+        if (__mb_get_enabled_components == 0) MethodBinds.MissingThrow("OpenXRSpatialCapabilityConfigurationAruco.get_enabled_components");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_enabled_components, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_aruco_dict;
     public void SetArucoDict(OpenXRSpatialCapabilityConfigurationAruco.ArucoDictEnum arucoDict)
     {
-        var __mb = __mb_set_aruco_dict;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialCapabilityConfigurationAruco", "set_aruco_dict", 2268055963);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialCapabilityConfigurationAruco.set_aruco_dict is not available in this engine build.");
-            __mb_set_aruco_dict = __mb;
-        }
+        if (__mb_set_aruco_dict == 0) MethodBinds.MissingThrow("OpenXRSpatialCapabilityConfigurationAruco.set_aruco_dict");
         long __a0 = (long)arucoDict;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_aruco_dict, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_aruco_dict;
     public OpenXRSpatialCapabilityConfigurationAruco.ArucoDictEnum GetArucoDict()
     {
-        var __mb = __mb_get_aruco_dict;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialCapabilityConfigurationAruco", "get_aruco_dict", 1080386209);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialCapabilityConfigurationAruco.get_aruco_dict is not available in this engine build.");
-            __mb_get_aruco_dict = __mb;
-        }
+        if (__mb_get_aruco_dict == 0) MethodBinds.MissingThrow("OpenXRSpatialCapabilityConfigurationAruco.get_aruco_dict");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_aruco_dict, NativePtr, 0, (nint)(&__ret));
         return (OpenXRSpatialCapabilityConfigurationAruco.ArucoDictEnum)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_enabled_components = MethodBinds.ResolveBulk("OpenXRSpatialCapabilityConfigurationAruco", "get_enabled_components", 235988956);
+        __mb_set_aruco_dict = MethodBinds.ResolveBulk("OpenXRSpatialCapabilityConfigurationAruco", "set_aruco_dict", 2268055963);
+        __mb_get_aruco_dict = MethodBinds.ResolveBulk("OpenXRSpatialCapabilityConfigurationAruco", "get_aruco_dict", 1080386209);
     }
 }
 
@@ -8948,30 +6919,18 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationBaseHeader : Ref
     private static nint __mb_has_valid_configuration;
     public bool HasValidConfiguration()
     {
-        var __mb = __mb_has_valid_configuration;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialCapabilityConfigurationBaseHeader", "has_valid_configuration", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialCapabilityConfigurationBaseHeader.has_valid_configuration is not available in this engine build.");
-            __mb_has_valid_configuration = __mb;
-        }
+        if (__mb_has_valid_configuration == 0) MethodBinds.MissingThrow("OpenXRSpatialCapabilityConfigurationBaseHeader.has_valid_configuration");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_valid_configuration, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_configuration;
     public ulong GetConfiguration()
     {
-        var __mb = __mb_get_configuration;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialCapabilityConfigurationBaseHeader", "get_configuration", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialCapabilityConfigurationBaseHeader.get_configuration is not available in this engine build.");
-            __mb_get_configuration = __mb;
-        }
+        if (__mb_get_configuration == 0) MethodBinds.MissingThrow("OpenXRSpatialCapabilityConfigurationBaseHeader.get_configuration");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_configuration, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
@@ -8998,6 +6957,12 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationBaseHeader : Ref
         }
         return base.__CallVirtual(nameSn, args, ret);
     }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_has_valid_configuration = MethodBinds.ResolveBulk("OpenXRSpatialCapabilityConfigurationBaseHeader", "has_valid_configuration", 36873697);
+        __mb_get_configuration = MethodBinds.ResolveBulk("OpenXRSpatialCapabilityConfigurationBaseHeader", "get_configuration", 2455072627);
+    }
 }
 
 public unsafe partial class OpenXRSpatialCapabilityConfigurationMicroQrCode : OpenXRSpatialCapabilityConfigurationBaseHeader
@@ -9012,16 +6977,15 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationMicroQrCode : Op
     private static nint __mb_get_enabled_components;
     public long[] GetEnabledComponents()
     {
-        var __mb = __mb_get_enabled_components;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialCapabilityConfigurationMicroQrCode", "get_enabled_components", 235988956);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialCapabilityConfigurationMicroQrCode.get_enabled_components is not available in this engine build.");
-            __mb_get_enabled_components = __mb;
-        }
+        if (__mb_get_enabled_components == 0) MethodBinds.MissingThrow("OpenXRSpatialCapabilityConfigurationMicroQrCode.get_enabled_components");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_enabled_components, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, ref __ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_enabled_components = MethodBinds.ResolveBulk("OpenXRSpatialCapabilityConfigurationMicroQrCode", "get_enabled_components", 235988956);
     }
 }
 
@@ -9037,61 +7001,45 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationPlaneTracking : 
     private static nint __mb_supports_mesh_2d;
     public bool SupportsMesh2D()
     {
-        var __mb = __mb_supports_mesh_2d;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialCapabilityConfigurationPlaneTracking", "supports_mesh_2d", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialCapabilityConfigurationPlaneTracking.supports_mesh_2d is not available in this engine build.");
-            __mb_supports_mesh_2d = __mb;
-        }
+        if (__mb_supports_mesh_2d == 0) MethodBinds.MissingThrow("OpenXRSpatialCapabilityConfigurationPlaneTracking.supports_mesh_2d");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_supports_mesh_2d, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_supports_polygons;
     public bool SupportsPolygons()
     {
-        var __mb = __mb_supports_polygons;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialCapabilityConfigurationPlaneTracking", "supports_polygons", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialCapabilityConfigurationPlaneTracking.supports_polygons is not available in this engine build.");
-            __mb_supports_polygons = __mb;
-        }
+        if (__mb_supports_polygons == 0) MethodBinds.MissingThrow("OpenXRSpatialCapabilityConfigurationPlaneTracking.supports_polygons");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_supports_polygons, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_supports_labels;
     public bool SupportsLabels()
     {
-        var __mb = __mb_supports_labels;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialCapabilityConfigurationPlaneTracking", "supports_labels", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialCapabilityConfigurationPlaneTracking.supports_labels is not available in this engine build.");
-            __mb_supports_labels = __mb;
-        }
+        if (__mb_supports_labels == 0) MethodBinds.MissingThrow("OpenXRSpatialCapabilityConfigurationPlaneTracking.supports_labels");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_supports_labels, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_enabled_components;
     public long[] GetEnabledComponents()
     {
-        var __mb = __mb_get_enabled_components;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialCapabilityConfigurationPlaneTracking", "get_enabled_components", 235988956);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialCapabilityConfigurationPlaneTracking.get_enabled_components is not available in this engine build.");
-            __mb_get_enabled_components = __mb;
-        }
+        if (__mb_get_enabled_components == 0) MethodBinds.MissingThrow("OpenXRSpatialCapabilityConfigurationPlaneTracking.get_enabled_components");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_enabled_components, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, ref __ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_supports_mesh_2d = MethodBinds.ResolveBulk("OpenXRSpatialCapabilityConfigurationPlaneTracking", "supports_mesh_2d", 2240911060);
+        __mb_supports_polygons = MethodBinds.ResolveBulk("OpenXRSpatialCapabilityConfigurationPlaneTracking", "supports_polygons", 2240911060);
+        __mb_supports_labels = MethodBinds.ResolveBulk("OpenXRSpatialCapabilityConfigurationPlaneTracking", "supports_labels", 2240911060);
+        __mb_get_enabled_components = MethodBinds.ResolveBulk("OpenXRSpatialCapabilityConfigurationPlaneTracking", "get_enabled_components", 235988956);
     }
 }
 
@@ -9107,16 +7055,15 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationQrCode : OpenXRS
     private static nint __mb_get_enabled_components;
     public long[] GetEnabledComponents()
     {
-        var __mb = __mb_get_enabled_components;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialCapabilityConfigurationQrCode", "get_enabled_components", 235988956);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialCapabilityConfigurationQrCode.get_enabled_components is not available in this engine build.");
-            __mb_get_enabled_components = __mb;
-        }
+        if (__mb_get_enabled_components == 0) MethodBinds.MissingThrow("OpenXRSpatialCapabilityConfigurationQrCode.get_enabled_components");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_enabled_components, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, ref __ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_enabled_components = MethodBinds.ResolveBulk("OpenXRSpatialCapabilityConfigurationQrCode", "get_enabled_components", 235988956);
     }
 }
 
@@ -9132,19 +7079,18 @@ public unsafe partial class OpenXRSpatialComponentAnchorList : OpenXRSpatialComp
     private static nint __mb_get_entity_pose;
     public Transform3D GetEntityPose(long index)
     {
-        var __mb = __mb_get_entity_pose;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentAnchorList", "get_entity_pose", 1965739696);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentAnchorList.get_entity_pose is not available in this engine build.");
-            __mb_get_entity_pose = __mb;
-        }
+        if (__mb_get_entity_pose == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentAnchorList.get_entity_pose");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_entity_pose, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_entity_pose = MethodBinds.ResolveBulk("OpenXRSpatialComponentAnchorList", "get_entity_pose", 1965739696);
     }
 }
 
@@ -9160,37 +7106,31 @@ public unsafe partial class OpenXRSpatialComponentBounded2DList : OpenXRSpatialC
     private static nint __mb_get_center_pose;
     public Transform3D GetCenterPose(long index)
     {
-        var __mb = __mb_get_center_pose;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentBounded2DList", "get_center_pose", 1965739696);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentBounded2DList.get_center_pose is not available in this engine build.");
-            __mb_get_center_pose = __mb;
-        }
+        if (__mb_get_center_pose == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentBounded2DList.get_center_pose");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_center_pose, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_size;
     public Vector2 GetSize(long index)
     {
-        var __mb = __mb_get_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentBounded2DList", "get_size", 2299179447);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentBounded2DList.get_size is not available in this engine build.");
-            __mb_get_size = __mb;
-        }
+        if (__mb_get_size == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentBounded2DList.get_size");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_size, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_center_pose = MethodBinds.ResolveBulk("OpenXRSpatialComponentBounded2DList", "get_center_pose", 1965739696);
+        __mb_get_size = MethodBinds.ResolveBulk("OpenXRSpatialComponentBounded2DList", "get_size", 2299179447);
     }
 }
 
@@ -9206,37 +7146,31 @@ public unsafe partial class OpenXRSpatialComponentBounded3DList : OpenXRSpatialC
     private static nint __mb_get_center_pose;
     public Transform3D GetCenterPose(long index)
     {
-        var __mb = __mb_get_center_pose;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentBounded3DList", "get_center_pose", 1965739696);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentBounded3DList.get_center_pose is not available in this engine build.");
-            __mb_get_center_pose = __mb;
-        }
+        if (__mb_get_center_pose == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentBounded3DList.get_center_pose");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_center_pose, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_size;
     public Vector3 GetSize(long index)
     {
-        var __mb = __mb_get_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentBounded3DList", "get_size", 711720468);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentBounded3DList.get_size is not available in this engine build.");
-            __mb_get_size = __mb;
-        }
+        if (__mb_get_size == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentBounded3DList.get_size");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_size, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_center_pose = MethodBinds.ResolveBulk("OpenXRSpatialComponentBounded3DList", "get_center_pose", 1965739696);
+        __mb_get_size = MethodBinds.ResolveBulk("OpenXRSpatialComponentBounded3DList", "get_size", 711720468);
     }
 }
 
@@ -9252,31 +7186,19 @@ public unsafe partial class OpenXRSpatialComponentData : RefCounted
     private static nint __mb_set_capacity;
     public void SetCapacity(uint capacity)
     {
-        var __mb = __mb_set_capacity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentData", "set_capacity", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentData.set_capacity is not available in this engine build.");
-            __mb_set_capacity = __mb;
-        }
+        if (__mb_set_capacity == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentData.set_capacity");
         long __a0 = unchecked((long)capacity);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_capacity, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_component_type;
     public long GetComponentType()
     {
-        var __mb = __mb_get_component_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentData", "get_component_type", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentData.get_component_type is not available in this engine build.");
-            __mb_get_component_type = __mb;
-        }
+        if (__mb_get_component_type == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentData.get_component_type");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_component_type, NativePtr, 0, (nint)(&__ret));
         return unchecked((long)__ret);
     }
 
@@ -9312,6 +7234,12 @@ public unsafe partial class OpenXRSpatialComponentData : RefCounted
         }
         return base.__CallVirtual(nameSn, args, ret);
     }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_capacity = MethodBinds.ResolveBulk("OpenXRSpatialComponentData", "set_capacity", 1286410249);
+        __mb_get_component_type = MethodBinds.ResolveBulk("OpenXRSpatialComponentData", "get_component_type", 3905245786);
+    }
 }
 
 public unsafe partial class OpenXRSpatialComponentMarkerList : OpenXRSpatialComponentData
@@ -9336,57 +7264,46 @@ public unsafe partial class OpenXRSpatialComponentMarkerList : OpenXRSpatialComp
     private static nint __mb_get_marker_type;
     public OpenXRSpatialComponentMarkerList.MarkerType GetMarkerType(long index)
     {
-        var __mb = __mb_get_marker_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentMarkerList", "get_marker_type", 2627847866);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentMarkerList.get_marker_type is not available in this engine build.");
-            __mb_get_marker_type = __mb;
-        }
+        if (__mb_get_marker_type == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentMarkerList.get_marker_type");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_marker_type, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRSpatialComponentMarkerList.MarkerType)__ret;
     }
 
     private static nint __mb_get_marker_id;
     public uint GetMarkerId(long index)
     {
-        var __mb = __mb_get_marker_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentMarkerList", "get_marker_id", 923996154);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentMarkerList.get_marker_id is not available in this engine build.");
-            __mb_get_marker_id = __mb;
-        }
+        if (__mb_get_marker_id == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentMarkerList.get_marker_id");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_marker_id, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_get_marker_data;
     public Variant GetMarkerData(Rid snapshot, long index)
     {
-        var __mb = __mb_get_marker_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentMarkerList", "get_marker_data", 4069510997);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentMarkerList.get_marker_data is not available in this engine build.");
-            __mb_get_marker_data = __mb;
-        }
+        if (__mb_get_marker_data == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentMarkerList.get_marker_data");
         var __a0 = snapshot;
         long __a1 = unchecked((long)index);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_marker_data, NativePtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_marker_type = MethodBinds.ResolveBulk("OpenXRSpatialComponentMarkerList", "get_marker_type", 2627847866);
+        __mb_get_marker_id = MethodBinds.ResolveBulk("OpenXRSpatialComponentMarkerList", "get_marker_id", 923996154);
+        __mb_get_marker_data = MethodBinds.ResolveBulk("OpenXRSpatialComponentMarkerList", "get_marker_data", 4069510997);
     }
 }
 
@@ -9402,59 +7319,48 @@ public unsafe partial class OpenXRSpatialComponentMesh2DList : OpenXRSpatialComp
     private static nint __mb_get_transform;
     public Transform3D GetTransform(long index)
     {
-        var __mb = __mb_get_transform;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentMesh2DList", "get_transform", 1965739696);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentMesh2DList.get_transform is not available in this engine build.");
-            __mb_get_transform = __mb;
-        }
+        if (__mb_get_transform == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentMesh2DList.get_transform");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_transform, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_vertices;
     public Vector2[] GetVertices(Rid snapshot, long index)
     {
-        var __mb = __mb_get_vertices;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentMesh2DList", "get_vertices", 110850971);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentMesh2DList.get_vertices is not available in this engine build.");
-            __mb_get_vertices = __mb;
-        }
+        if (__mb_get_vertices == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentMesh2DList.get_vertices");
         var __a0 = snapshot;
         long __a1 = unchecked((long)index);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_vertices, NativePtr, (nint)__args, (nint)(&__ret));
         return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_indices;
     public int[] GetIndices(Rid snapshot, long index)
     {
-        var __mb = __mb_get_indices;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentMesh2DList", "get_indices", 3393655756);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentMesh2DList.get_indices is not available in this engine build.");
-            __mb_get_indices = __mb;
-        }
+        if (__mb_get_indices == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentMesh2DList.get_indices");
         var __a0 = snapshot;
         long __a1 = unchecked((long)index);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_indices, NativePtr, (nint)__args, (nint)(&__ret));
         return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_transform = MethodBinds.ResolveBulk("OpenXRSpatialComponentMesh2DList", "get_transform", 1965739696);
+        __mb_get_vertices = MethodBinds.ResolveBulk("OpenXRSpatialComponentMesh2DList", "get_vertices", 110850971);
+        __mb_get_indices = MethodBinds.ResolveBulk("OpenXRSpatialComponentMesh2DList", "get_indices", 3393655756);
     }
 }
 
@@ -9470,37 +7376,31 @@ public unsafe partial class OpenXRSpatialComponentMesh3DList : OpenXRSpatialComp
     private static nint __mb_get_transform;
     public Transform3D GetTransform(long index)
     {
-        var __mb = __mb_get_transform;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentMesh3DList", "get_transform", 1965739696);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentMesh3DList.get_transform is not available in this engine build.");
-            __mb_get_transform = __mb;
-        }
+        if (__mb_get_transform == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentMesh3DList.get_transform");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_transform, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_mesh;
     public Mesh? GetMesh(long index)
     {
-        var __mb = __mb_get_mesh;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentMesh3DList", "get_mesh", 1576363275);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentMesh3DList.get_mesh is not available in this engine build.");
-            __mb_get_mesh = __mb;
-        }
+        if (__mb_get_mesh == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentMesh3DList.get_mesh");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_mesh, NativePtr, (nint)__args, (nint)(&__ret));
         return (Mesh?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_transform = MethodBinds.ResolveBulk("OpenXRSpatialComponentMesh3DList", "get_transform", 1965739696);
+        __mb_get_mesh = MethodBinds.ResolveBulk("OpenXRSpatialComponentMesh3DList", "get_mesh", 1576363275);
     }
 }
 
@@ -9516,19 +7416,18 @@ public unsafe partial class OpenXRSpatialComponentParentList : OpenXRSpatialComp
     private static nint __mb_get_parent;
     public Rid GetParent(long index)
     {
-        var __mb = __mb_get_parent;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentParentList", "get_parent", 495598643);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentParentList.get_parent is not available in this engine build.");
-            __mb_get_parent = __mb;
-        }
+        if (__mb_get_parent == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentParentList.get_parent");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_parent, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_parent = MethodBinds.ResolveBulk("OpenXRSpatialComponentParentList", "get_parent", 495598643);
     }
 }
 
@@ -9544,37 +7443,31 @@ public unsafe partial class OpenXRSpatialComponentPersistenceList : OpenXRSpatia
     private static nint __mb_get_persistent_uuid;
     public string GetPersistentUuid(long index)
     {
-        var __mb = __mb_get_persistent_uuid;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentPersistenceList", "get_persistent_uuid", 844755477);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentPersistenceList.get_persistent_uuid is not available in this engine build.");
-            __mb_get_persistent_uuid = __mb;
-        }
+        if (__mb_get_persistent_uuid == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentPersistenceList.get_persistent_uuid");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_persistent_uuid, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_persistent_state;
     public ulong GetPersistentState(long index)
     {
-        var __mb = __mb_get_persistent_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentPersistenceList", "get_persistent_state", 923996154);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentPersistenceList.get_persistent_state is not available in this engine build.");
-            __mb_get_persistent_state = __mb;
-        }
+        if (__mb_get_persistent_state == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentPersistenceList.get_persistent_state");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_persistent_state, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_persistent_uuid = MethodBinds.ResolveBulk("OpenXRSpatialComponentPersistenceList", "get_persistent_uuid", 844755477);
+        __mb_get_persistent_state = MethodBinds.ResolveBulk("OpenXRSpatialComponentPersistenceList", "get_persistent_state", 923996154);
     }
 }
 
@@ -9598,19 +7491,18 @@ public unsafe partial class OpenXRSpatialComponentPlaneAlignmentList : OpenXRSpa
     private static nint __mb_get_plane_alignment;
     public OpenXRSpatialComponentPlaneAlignmentList.PlaneAlignment GetPlaneAlignment(long index)
     {
-        var __mb = __mb_get_plane_alignment;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentPlaneAlignmentList", "get_plane_alignment", 3340200270);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentPlaneAlignmentList.get_plane_alignment is not available in this engine build.");
-            __mb_get_plane_alignment = __mb;
-        }
+        if (__mb_get_plane_alignment == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentPlaneAlignmentList.get_plane_alignment");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_plane_alignment, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRSpatialComponentPlaneAlignmentList.PlaneAlignment)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_plane_alignment = MethodBinds.ResolveBulk("OpenXRSpatialComponentPlaneAlignmentList", "get_plane_alignment", 3340200270);
     }
 }
 
@@ -9635,19 +7527,18 @@ public unsafe partial class OpenXRSpatialComponentPlaneSemanticLabelList : OpenX
     private static nint __mb_get_plane_semantic_label;
     public OpenXRSpatialComponentPlaneSemanticLabelList.PlaneSemanticLabel GetPlaneSemanticLabel(long index)
     {
-        var __mb = __mb_get_plane_semantic_label;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentPlaneSemanticLabelList", "get_plane_semantic_label", 1889332427);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentPlaneSemanticLabelList.get_plane_semantic_label is not available in this engine build.");
-            __mb_get_plane_semantic_label = __mb;
-        }
+        if (__mb_get_plane_semantic_label == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentPlaneSemanticLabelList.get_plane_semantic_label");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_plane_semantic_label, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRSpatialComponentPlaneSemanticLabelList.PlaneSemanticLabel)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_plane_semantic_label = MethodBinds.ResolveBulk("OpenXRSpatialComponentPlaneSemanticLabelList", "get_plane_semantic_label", 1889332427);
     }
 }
 
@@ -9663,39 +7554,33 @@ public unsafe partial class OpenXRSpatialComponentPolygon2DList : OpenXRSpatialC
     private static nint __mb_get_transform;
     public Transform3D GetTransform(long index)
     {
-        var __mb = __mb_get_transform;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentPolygon2DList", "get_transform", 1965739696);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentPolygon2DList.get_transform is not available in this engine build.");
-            __mb_get_transform = __mb;
-        }
+        if (__mb_get_transform == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentPolygon2DList.get_transform");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_transform, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_vertices;
     public Vector2[] GetVertices(Rid snapshot, long index)
     {
-        var __mb = __mb_get_vertices;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialComponentPolygon2DList", "get_vertices", 110850971);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialComponentPolygon2DList.get_vertices is not available in this engine build.");
-            __mb_get_vertices = __mb;
-        }
+        if (__mb_get_vertices == 0) MethodBinds.MissingThrow("OpenXRSpatialComponentPolygon2DList.get_vertices");
         var __a0 = snapshot;
         long __a1 = unchecked((long)index);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_vertices, NativePtr, (nint)__args, (nint)(&__ret));
         return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_transform = MethodBinds.ResolveBulk("OpenXRSpatialComponentPolygon2DList", "get_transform", 1965739696);
+        __mb_get_vertices = MethodBinds.ResolveBulk("OpenXRSpatialComponentPolygon2DList", "get_vertices", 110850971);
     }
 }
 
@@ -9711,48 +7596,37 @@ public unsafe partial class OpenXRSpatialContextPersistenceConfig : OpenXRStruct
     private static nint __mb_add_persistence_context;
     public void AddPersistenceContext(Rid persistenceContext)
     {
-        var __mb = __mb_add_persistence_context;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialContextPersistenceConfig", "add_persistence_context", 2722037293);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialContextPersistenceConfig.add_persistence_context is not available in this engine build.");
-            __mb_add_persistence_context = __mb;
-        }
+        if (__mb_add_persistence_context == 0) MethodBinds.MissingThrow("OpenXRSpatialContextPersistenceConfig.add_persistence_context");
         var __a0 = persistenceContext;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_persistence_context, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_persistence_context;
     public void RemovePersistenceContext(Rid persistenceContext)
     {
-        var __mb = __mb_remove_persistence_context;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialContextPersistenceConfig", "remove_persistence_context", 2722037293);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialContextPersistenceConfig.remove_persistence_context is not available in this engine build.");
-            __mb_remove_persistence_context = __mb;
-        }
+        if (__mb_remove_persistence_context == 0) MethodBinds.MissingThrow("OpenXRSpatialContextPersistenceConfig.remove_persistence_context");
         var __a0 = persistenceContext;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_persistence_context, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_persistence_contexts;
     public Godot.Collections.Array GetPersistenceContexts()
     {
-        var __mb = __mb_get_persistence_contexts;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialContextPersistenceConfig", "get_persistence_contexts", 3995934104);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialContextPersistenceConfig.get_persistence_contexts is not available in this engine build.");
-            __mb_get_persistence_contexts = __mb;
-        }
+        if (__mb_get_persistence_contexts == 0) MethodBinds.MissingThrow("OpenXRSpatialContextPersistenceConfig.get_persistence_contexts");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_persistence_contexts, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_add_persistence_context = MethodBinds.ResolveBulk("OpenXRSpatialContextPersistenceConfig", "add_persistence_context", 2722037293);
+        __mb_remove_persistence_context = MethodBinds.ResolveBulk("OpenXRSpatialContextPersistenceConfig", "remove_persistence_context", 2722037293);
+        __mb_get_persistence_contexts = MethodBinds.ResolveBulk("OpenXRSpatialContextPersistenceConfig", "get_persistence_contexts", 3995934104);
     }
 }
 
@@ -9801,51 +7675,33 @@ public unsafe partial class OpenXRSpatialEntityExtension : OpenXRExtensionWrappe
     private static nint __mb_supports_capability;
     public bool SupportsCapability(OpenXRSpatialEntityExtension.Capability capability)
     {
-        var __mb = __mb_supports_capability;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "supports_capability", 1940837202);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.supports_capability is not available in this engine build.");
-            __mb_supports_capability = __mb;
-        }
+        if (__mb_supports_capability == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.supports_capability");
         long __a0 = (long)capability;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_supports_capability, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_supports_component_type;
     public bool SupportsComponentType(OpenXRSpatialEntityExtension.Capability capability, OpenXRSpatialEntityExtension.ComponentType componentType)
     {
-        var __mb = __mb_supports_component_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "supports_component_type", 26842779);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.supports_component_type is not available in this engine build.");
-            __mb_supports_component_type = __mb;
-        }
+        if (__mb_supports_component_type == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.supports_component_type");
         long __a0 = (long)capability;
         long __a1 = (long)componentType;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_supports_component_type, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_create_spatial_context;
     public OpenXRFutureResult? CreateSpatialContext(Godot.Collections.Array capabilityConfigurations, OpenXRStructureBase? next, Callable userCallback)
     {
-        var __mb = __mb_create_spatial_context;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "create_spatial_context", 1874506473);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.create_spatial_context is not available in this engine build.");
-            __mb_create_spatial_context = __mb;
-        }
+        if (__mb_create_spatial_context == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.create_spatial_context");
         ulong __a0 = capabilityConfigurations.Native;
         nint __a1 = next?.NativePtr ?? 0;
         var __a2 = userCallback.Native;
@@ -9854,72 +7710,48 @@ public unsafe partial class OpenXRSpatialEntityExtension : OpenXRExtensionWrappe
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_spatial_context, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRFutureResult?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_spatial_context_ready;
     public bool GetSpatialContextReady(Rid spatialContext)
     {
-        var __mb = __mb_get_spatial_context_ready;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "get_spatial_context_ready", 4155700596);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.get_spatial_context_ready is not available in this engine build.");
-            __mb_get_spatial_context_ready = __mb;
-        }
+        if (__mb_get_spatial_context_ready == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.get_spatial_context_ready");
         var __a0 = spatialContext;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_spatial_context_ready, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_free_spatial_context;
     public void FreeSpatialContext(Rid spatialContext)
     {
-        var __mb = __mb_free_spatial_context;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "free_spatial_context", 2722037293);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.free_spatial_context is not available in this engine build.");
-            __mb_free_spatial_context = __mb;
-        }
+        if (__mb_free_spatial_context == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.free_spatial_context");
         var __a0 = spatialContext;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_free_spatial_context, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_spatial_context_handle;
     public ulong GetSpatialContextHandle(Rid spatialContext)
     {
-        var __mb = __mb_get_spatial_context_handle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "get_spatial_context_handle", 2198884583);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.get_spatial_context_handle is not available in this engine build.");
-            __mb_get_spatial_context_handle = __mb;
-        }
+        if (__mb_get_spatial_context_handle == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.get_spatial_context_handle");
         var __a0 = spatialContext;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_spatial_context_handle, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_discover_spatial_entities_with_component_data;
     public OpenXRFutureResult? DiscoverSpatialEntitiesWithComponentData(Rid spatialContext, Godot.Collections.Array componentData, OpenXRStructureBase? next, Callable userCallback)
     {
-        var __mb = __mb_discover_spatial_entities_with_component_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "discover_spatial_entities_with_component_data", 1830928590);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.discover_spatial_entities_with_component_data is not available in this engine build.");
-            __mb_discover_spatial_entities_with_component_data = __mb;
-        }
+        if (__mb_discover_spatial_entities_with_component_data == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.discover_spatial_entities_with_component_data");
         var __a0 = spatialContext;
         ulong __a1 = componentData.Native;
         nint __a2 = next?.NativePtr ?? 0;
@@ -9930,20 +7762,14 @@ public unsafe partial class OpenXRSpatialEntityExtension : OpenXRExtensionWrappe
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_discover_spatial_entities_with_component_data, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRFutureResult?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_discover_spatial_entities;
     public OpenXRFutureResult? DiscoverSpatialEntities(Rid spatialContext, long[] componentTypes, OpenXRStructureBase? next, Callable userCallback)
     {
-        var __mb = __mb_discover_spatial_entities;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "discover_spatial_entities", 2252833536);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.discover_spatial_entities is not available in this engine build.");
-            __mb_discover_spatial_entities = __mb;
-        }
+        if (__mb_discover_spatial_entities == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.discover_spatial_entities");
         var __a0 = spatialContext;
         var __a1 = Packed.CreatePod<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, componentTypes);
         nint __a2 = next?.NativePtr ?? 0;
@@ -9954,7 +7780,7 @@ public unsafe partial class OpenXRSpatialEntityExtension : OpenXRExtensionWrappe
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_discover_spatial_entities, NativePtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, ref __a1);
         return (OpenXRFutureResult?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
@@ -9962,13 +7788,7 @@ public unsafe partial class OpenXRSpatialEntityExtension : OpenXRExtensionWrappe
     private static nint __mb_update_spatial_entities;
     public Rid UpdateSpatialEntities(Rid spatialContext, Godot.Collections.Array entities, long[] componentTypes, OpenXRStructureBase? next = null)
     {
-        var __mb = __mb_update_spatial_entities;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "update_spatial_entities", 3446086438);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.update_spatial_entities is not available in this engine build.");
-            __mb_update_spatial_entities = __mb;
-        }
+        if (__mb_update_spatial_entities == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.update_spatial_entities");
         var __a0 = spatialContext;
         ulong __a1 = entities.Native;
         var __a2 = Packed.CreatePod<long>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, GdExtensionInterface.PackedInt64ArrayOperatorIndex, componentTypes);
@@ -9979,7 +7799,7 @@ public unsafe partial class OpenXRSpatialEntityExtension : OpenXRExtensionWrappe
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_update_spatial_entities, NativePtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT64_ARRAY, ref __a2);
         return __ret;
     }
@@ -9987,65 +7807,41 @@ public unsafe partial class OpenXRSpatialEntityExtension : OpenXRExtensionWrappe
     private static nint __mb_free_spatial_snapshot;
     public void FreeSpatialSnapshot(Rid spatialSnapshot)
     {
-        var __mb = __mb_free_spatial_snapshot;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "free_spatial_snapshot", 2722037293);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.free_spatial_snapshot is not available in this engine build.");
-            __mb_free_spatial_snapshot = __mb;
-        }
+        if (__mb_free_spatial_snapshot == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.free_spatial_snapshot");
         var __a0 = spatialSnapshot;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_free_spatial_snapshot, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_spatial_snapshot_handle;
     public ulong GetSpatialSnapshotHandle(Rid spatialSnapshot)
     {
-        var __mb = __mb_get_spatial_snapshot_handle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "get_spatial_snapshot_handle", 2198884583);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.get_spatial_snapshot_handle is not available in this engine build.");
-            __mb_get_spatial_snapshot_handle = __mb;
-        }
+        if (__mb_get_spatial_snapshot_handle == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.get_spatial_snapshot_handle");
         var __a0 = spatialSnapshot;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_spatial_snapshot_handle, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_spatial_snapshot_context;
     public Rid GetSpatialSnapshotContext(Rid spatialSnapshot)
     {
-        var __mb = __mb_get_spatial_snapshot_context;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "get_spatial_snapshot_context", 3814569979);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.get_spatial_snapshot_context is not available in this engine build.");
-            __mb_get_spatial_snapshot_context = __mb;
-        }
+        if (__mb_get_spatial_snapshot_context == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.get_spatial_snapshot_context");
         var __a0 = spatialSnapshot;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_spatial_snapshot_context, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_query_snapshot;
     public bool QuerySnapshot(Rid spatialSnapshot, Godot.Collections.Array componentData, OpenXRStructureBase? next = null)
     {
-        var __mb = __mb_query_snapshot;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "query_snapshot", 641015484);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.query_snapshot is not available in this engine build.");
-            __mb_query_snapshot = __mb;
-        }
+        if (__mb_query_snapshot == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.query_snapshot");
         var __a0 = spatialSnapshot;
         ulong __a1 = componentData.Native;
         nint __a2 = next?.NativePtr ?? 0;
@@ -10054,178 +7850,124 @@ public unsafe partial class OpenXRSpatialEntityExtension : OpenXRExtensionWrappe
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_query_snapshot, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_string;
     public string GetString(Rid spatialSnapshot, ulong bufferId)
     {
-        var __mb = __mb_get_string;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "get_string", 1464764419);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.get_string is not available in this engine build.");
-            __mb_get_string = __mb;
-        }
+        if (__mb_get_string == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.get_string");
         var __a0 = spatialSnapshot;
         long __a1 = unchecked((long)bufferId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_string, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_uint8_buffer;
     public byte[] GetUint8Buffer(Rid spatialSnapshot, ulong bufferId)
     {
-        var __mb = __mb_get_uint8_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "get_uint8_buffer", 3570600051);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.get_uint8_buffer is not available in this engine build.");
-            __mb_get_uint8_buffer = __mb;
-        }
+        if (__mb_get_uint8_buffer == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.get_uint8_buffer");
         var __a0 = spatialSnapshot;
         long __a1 = unchecked((long)bufferId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_uint8_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_uint16_buffer;
     public int[] GetUint16Buffer(Rid spatialSnapshot, ulong bufferId)
     {
-        var __mb = __mb_get_uint16_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "get_uint16_buffer", 3393655756);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.get_uint16_buffer is not available in this engine build.");
-            __mb_get_uint16_buffer = __mb;
-        }
+        if (__mb_get_uint16_buffer == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.get_uint16_buffer");
         var __a0 = spatialSnapshot;
         long __a1 = unchecked((long)bufferId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_uint16_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_uint32_buffer;
     public int[] GetUint32Buffer(Rid spatialSnapshot, ulong bufferId)
     {
-        var __mb = __mb_get_uint32_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "get_uint32_buffer", 3393655756);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.get_uint32_buffer is not available in this engine build.");
-            __mb_get_uint32_buffer = __mb;
-        }
+        if (__mb_get_uint32_buffer == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.get_uint32_buffer");
         var __a0 = spatialSnapshot;
         long __a1 = unchecked((long)bufferId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_uint32_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_float_buffer;
     public float[] GetFloatBuffer(Rid spatialSnapshot, ulong bufferId)
     {
-        var __mb = __mb_get_float_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "get_float_buffer", 2313216651);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.get_float_buffer is not available in this engine build.");
-            __mb_get_float_buffer = __mb;
-        }
+        if (__mb_get_float_buffer == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.get_float_buffer");
         var __a0 = spatialSnapshot;
         long __a1 = unchecked((long)bufferId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_float_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         return Packed.ToPodArray<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_vector2_buffer;
     public Vector2[] GetVector2Buffer(Rid spatialSnapshot, ulong bufferId)
     {
-        var __mb = __mb_get_vector2_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "get_vector2_buffer", 110850971);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.get_vector2_buffer is not available in this engine build.");
-            __mb_get_vector2_buffer = __mb;
-        }
+        if (__mb_get_vector2_buffer == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.get_vector2_buffer");
         var __a0 = spatialSnapshot;
         long __a1 = unchecked((long)bufferId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_vector2_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_vector3_buffer;
     public Vector3[] GetVector3Buffer(Rid spatialSnapshot, ulong bufferId)
     {
-        var __mb = __mb_get_vector3_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "get_vector3_buffer", 1166453791);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.get_vector3_buffer is not available in this engine build.");
-            __mb_get_vector3_buffer = __mb;
-        }
+        if (__mb_get_vector3_buffer == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.get_vector3_buffer");
         var __a0 = spatialSnapshot;
         long __a1 = unchecked((long)bufferId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_vector3_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         return Packed.ToPodArray<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_find_spatial_entity;
     public Rid FindSpatialEntity(ulong entityId)
     {
-        var __mb = __mb_find_spatial_entity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "find_spatial_entity", 937000113);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.find_spatial_entity is not available in this engine build.");
-            __mb_find_spatial_entity = __mb;
-        }
+        if (__mb_find_spatial_entity == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.find_spatial_entity");
         long __a0 = unchecked((long)entityId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_find_spatial_entity, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_add_spatial_entity;
     public Rid AddSpatialEntity(Rid spatialContext, ulong entityId, ulong entity)
     {
-        var __mb = __mb_add_spatial_entity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "add_spatial_entity", 2256026069);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.add_spatial_entity is not available in this engine build.");
-            __mb_add_spatial_entity = __mb;
-        }
+        if (__mb_add_spatial_entity == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.add_spatial_entity");
         var __a0 = spatialContext;
         long __a1 = unchecked((long)entityId);
         long __a2 = unchecked((long)entity);
@@ -10234,80 +7976,86 @@ public unsafe partial class OpenXRSpatialEntityExtension : OpenXRExtensionWrappe
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_spatial_entity, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_make_spatial_entity;
     public Rid MakeSpatialEntity(Rid spatialContext, ulong entityId)
     {
-        var __mb = __mb_make_spatial_entity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "make_spatial_entity", 2233757277);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.make_spatial_entity is not available in this engine build.");
-            __mb_make_spatial_entity = __mb;
-        }
+        if (__mb_make_spatial_entity == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.make_spatial_entity");
         var __a0 = spatialContext;
         long __a1 = unchecked((long)entityId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_make_spatial_entity, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_spatial_entity_id;
     public ulong GetSpatialEntityId(Rid entity)
     {
-        var __mb = __mb_get_spatial_entity_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "get_spatial_entity_id", 2198884583);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.get_spatial_entity_id is not available in this engine build.");
-            __mb_get_spatial_entity_id = __mb;
-        }
+        if (__mb_get_spatial_entity_id == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.get_spatial_entity_id");
         var __a0 = entity;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_spatial_entity_id, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_spatial_entity_context;
     public Rid GetSpatialEntityContext(Rid entity)
     {
-        var __mb = __mb_get_spatial_entity_context;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "get_spatial_entity_context", 3814569979);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.get_spatial_entity_context is not available in this engine build.");
-            __mb_get_spatial_entity_context = __mb;
-        }
+        if (__mb_get_spatial_entity_context == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.get_spatial_entity_context");
         var __a0 = entity;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_spatial_entity_context, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_free_spatial_entity;
     public void FreeSpatialEntity(Rid entity)
     {
-        var __mb = __mb_free_spatial_entity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityExtension", "free_spatial_entity", 2722037293);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityExtension.free_spatial_entity is not available in this engine build.");
-            __mb_free_spatial_entity = __mb;
-        }
+        if (__mb_free_spatial_entity == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityExtension.free_spatial_entity");
         var __a0 = entity;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_free_spatial_entity, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_supports_capability = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "supports_capability", 1940837202);
+        __mb_supports_component_type = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "supports_component_type", 26842779);
+        __mb_create_spatial_context = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "create_spatial_context", 1874506473);
+        __mb_get_spatial_context_ready = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "get_spatial_context_ready", 4155700596);
+        __mb_free_spatial_context = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "free_spatial_context", 2722037293);
+        __mb_get_spatial_context_handle = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "get_spatial_context_handle", 2198884583);
+        __mb_discover_spatial_entities_with_component_data = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "discover_spatial_entities_with_component_data", 1830928590);
+        __mb_discover_spatial_entities = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "discover_spatial_entities", 2252833536);
+        __mb_update_spatial_entities = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "update_spatial_entities", 3446086438);
+        __mb_free_spatial_snapshot = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "free_spatial_snapshot", 2722037293);
+        __mb_get_spatial_snapshot_handle = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "get_spatial_snapshot_handle", 2198884583);
+        __mb_get_spatial_snapshot_context = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "get_spatial_snapshot_context", 3814569979);
+        __mb_query_snapshot = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "query_snapshot", 641015484);
+        __mb_get_string = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "get_string", 1464764419);
+        __mb_get_uint8_buffer = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "get_uint8_buffer", 3570600051);
+        __mb_get_uint16_buffer = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "get_uint16_buffer", 3393655756);
+        __mb_get_uint32_buffer = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "get_uint32_buffer", 3393655756);
+        __mb_get_float_buffer = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "get_float_buffer", 2313216651);
+        __mb_get_vector2_buffer = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "get_vector2_buffer", 110850971);
+        __mb_get_vector3_buffer = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "get_vector3_buffer", 1166453791);
+        __mb_find_spatial_entity = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "find_spatial_entity", 937000113);
+        __mb_add_spatial_entity = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "add_spatial_entity", 2256026069);
+        __mb_make_spatial_entity = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "make_spatial_entity", 2233757277);
+        __mb_get_spatial_entity_id = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "get_spatial_entity_id", 2198884583);
+        __mb_get_spatial_entity_context = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "get_spatial_entity_context", 3814569979);
+        __mb_free_spatial_entity = MethodBinds.ResolveBulk("OpenXRSpatialEntityExtension", "free_spatial_entity", 2722037293);
     }
 }
 
@@ -10358,141 +8106,100 @@ public unsafe partial class OpenXRSpatialEntityTracker : XRPositionalTracker
     private static nint __mb_set_spatial_context;
     public void SetSpatialContext(Rid spatialContext)
     {
-        var __mb = __mb_set_spatial_context;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityTracker", "set_spatial_context", 2722037293);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityTracker.set_spatial_context is not available in this engine build.");
-            __mb_set_spatial_context = __mb;
-        }
+        if (__mb_set_spatial_context == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityTracker.set_spatial_context");
         var __a0 = spatialContext;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_spatial_context, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_spatial_context;
     public Rid GetSpatialContext()
     {
-        var __mb = __mb_get_spatial_context;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityTracker", "get_spatial_context", 2944877500);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityTracker.get_spatial_context is not available in this engine build.");
-            __mb_get_spatial_context = __mb;
-        }
+        if (__mb_get_spatial_context == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityTracker.get_spatial_context");
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_spatial_context, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_entity;
     public void SetEntity(Rid entity)
     {
-        var __mb = __mb_set_entity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityTracker", "set_entity", 2722037293);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityTracker.set_entity is not available in this engine build.");
-            __mb_set_entity = __mb;
-        }
+        if (__mb_set_entity == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityTracker.set_entity");
         var __a0 = entity;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_entity, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_entity;
     public Rid GetEntity()
     {
-        var __mb = __mb_get_entity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityTracker", "get_entity", 2944877500);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityTracker.get_entity is not available in this engine build.");
-            __mb_get_entity = __mb;
-        }
+        if (__mb_get_entity == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityTracker.get_entity");
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_entity, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_spatial_tracking_state;
     public void SetSpatialTrackingState(OpenXRSpatialEntityTracker.EntityTrackingState spatialTrackingState)
     {
-        var __mb = __mb_set_spatial_tracking_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityTracker", "set_spatial_tracking_state", 2170234447);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityTracker.set_spatial_tracking_state is not available in this engine build.");
-            __mb_set_spatial_tracking_state = __mb;
-        }
+        if (__mb_set_spatial_tracking_state == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityTracker.set_spatial_tracking_state");
         long __a0 = (long)spatialTrackingState;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_spatial_tracking_state, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_spatial_tracking_state;
     public OpenXRSpatialEntityTracker.EntityTrackingState GetSpatialTrackingState()
     {
-        var __mb = __mb_get_spatial_tracking_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityTracker", "get_spatial_tracking_state", 3351876560);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityTracker.get_spatial_tracking_state is not available in this engine build.");
-            __mb_get_spatial_tracking_state = __mb;
-        }
+        if (__mb_get_spatial_tracking_state == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityTracker.get_spatial_tracking_state");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_spatial_tracking_state, NativePtr, 0, (nint)(&__ret));
         return (OpenXRSpatialEntityTracker.EntityTrackingState)__ret;
     }
 
     private static nint __mb_get_next;
     public OpenXRStructureBase? GetNext()
     {
-        var __mb = __mb_get_next;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityTracker", "get_next", 2798796760);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityTracker.get_next is not available in this engine build.");
-            __mb_get_next = __mb;
-        }
+        if (__mb_get_next == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityTracker.get_next");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_next, NativePtr, 0, (nint)(&__ret));
         return (OpenXRStructureBase?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_add_next;
     public void AddNext(OpenXRStructureBase? next)
     {
-        var __mb = __mb_add_next;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityTracker", "add_next", 334698771);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityTracker.add_next is not available in this engine build.");
-            __mb_add_next = __mb;
-        }
+        if (__mb_add_next == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityTracker.add_next");
         nint __a0 = next?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_next, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_next;
     public void RemoveNext(OpenXRStructureBase? next)
     {
-        var __mb = __mb_remove_next;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialEntityTracker", "remove_next", 334698771);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialEntityTracker.remove_next is not available in this engine build.");
-            __mb_remove_next = __mb;
-        }
+        if (__mb_remove_next == 0) MethodBinds.MissingThrow("OpenXRSpatialEntityTracker.remove_next");
         nint __a0 = next?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_next, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_spatial_context = MethodBinds.ResolveBulk("OpenXRSpatialEntityTracker", "set_spatial_context", 2722037293);
+        __mb_get_spatial_context = MethodBinds.ResolveBulk("OpenXRSpatialEntityTracker", "get_spatial_context", 2944877500);
+        __mb_set_entity = MethodBinds.ResolveBulk("OpenXRSpatialEntityTracker", "set_entity", 2722037293);
+        __mb_get_entity = MethodBinds.ResolveBulk("OpenXRSpatialEntityTracker", "get_entity", 2944877500);
+        __mb_set_spatial_tracking_state = MethodBinds.ResolveBulk("OpenXRSpatialEntityTracker", "set_spatial_tracking_state", 2170234447);
+        __mb_get_spatial_tracking_state = MethodBinds.ResolveBulk("OpenXRSpatialEntityTracker", "get_spatial_tracking_state", 3351876560);
+        __mb_get_next = MethodBinds.ResolveBulk("OpenXRSpatialEntityTracker", "get_next", 2798796760);
+        __mb_add_next = MethodBinds.ResolveBulk("OpenXRSpatialEntityTracker", "add_next", 334698771);
+        __mb_remove_next = MethodBinds.ResolveBulk("OpenXRSpatialEntityTracker", "remove_next", 334698771);
     }
 }
 
@@ -10508,73 +8215,43 @@ public unsafe partial class OpenXRSpatialMarkerTrackingCapability : OpenXRExtens
     private static nint __mb_is_qrcode_supported;
     public bool IsQrcodeSupported()
     {
-        var __mb = __mb_is_qrcode_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialMarkerTrackingCapability", "is_qrcode_supported", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialMarkerTrackingCapability.is_qrcode_supported is not available in this engine build.");
-            __mb_is_qrcode_supported = __mb;
-        }
+        if (__mb_is_qrcode_supported == 0) MethodBinds.MissingThrow("OpenXRSpatialMarkerTrackingCapability.is_qrcode_supported");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_qrcode_supported, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_micro_qrcode_supported;
     public bool IsMicroQrcodeSupported()
     {
-        var __mb = __mb_is_micro_qrcode_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialMarkerTrackingCapability", "is_micro_qrcode_supported", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialMarkerTrackingCapability.is_micro_qrcode_supported is not available in this engine build.");
-            __mb_is_micro_qrcode_supported = __mb;
-        }
+        if (__mb_is_micro_qrcode_supported == 0) MethodBinds.MissingThrow("OpenXRSpatialMarkerTrackingCapability.is_micro_qrcode_supported");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_micro_qrcode_supported, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_aruco_supported;
     public bool IsArucoSupported()
     {
-        var __mb = __mb_is_aruco_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialMarkerTrackingCapability", "is_aruco_supported", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialMarkerTrackingCapability.is_aruco_supported is not available in this engine build.");
-            __mb_is_aruco_supported = __mb;
-        }
+        if (__mb_is_aruco_supported == 0) MethodBinds.MissingThrow("OpenXRSpatialMarkerTrackingCapability.is_aruco_supported");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_aruco_supported, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_april_tag_supported;
     public bool IsAprilTagSupported()
     {
-        var __mb = __mb_is_april_tag_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialMarkerTrackingCapability", "is_april_tag_supported", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialMarkerTrackingCapability.is_april_tag_supported is not available in this engine build.");
-            __mb_is_april_tag_supported = __mb;
-        }
+        if (__mb_is_april_tag_supported == 0) MethodBinds.MissingThrow("OpenXRSpatialMarkerTrackingCapability.is_april_tag_supported");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_april_tag_supported, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_start_entity_discovery;
     public OpenXRFutureResult? StartEntityDiscovery(Rid spatialContext, Godot.Collections.Array componentData, OpenXRStructureBase? nextSnapshotCreate, OpenXRStructureBase? nextSnapshotQuery, Callable userCallback)
     {
-        var __mb = __mb_start_entity_discovery;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialMarkerTrackingCapability", "start_entity_discovery", 3452714169);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialMarkerTrackingCapability.start_entity_discovery is not available in this engine build.");
-            __mb_start_entity_discovery = __mb;
-        }
+        if (__mb_start_entity_discovery == 0) MethodBinds.MissingThrow("OpenXRSpatialMarkerTrackingCapability.start_entity_discovery");
         var __a0 = spatialContext;
         ulong __a1 = componentData.Native;
         nint __a2 = nextSnapshotCreate?.NativePtr ?? 0;
@@ -10587,20 +8264,14 @@ public unsafe partial class OpenXRSpatialMarkerTrackingCapability : OpenXRExtens
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_start_entity_discovery, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRFutureResult?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_do_entity_update;
     public void DoEntityUpdate(Rid spatialContext, Godot.Collections.Array componentData, OpenXRStructureBase? nextSnapshotCreate = null, OpenXRStructureBase? nextSnapshotQuery = null)
     {
-        var __mb = __mb_do_entity_update;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialMarkerTrackingCapability", "do_entity_update", 3138044275);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialMarkerTrackingCapability.do_entity_update is not available in this engine build.");
-            __mb_do_entity_update = __mb;
-        }
+        if (__mb_do_entity_update == 0) MethodBinds.MissingThrow("OpenXRSpatialMarkerTrackingCapability.do_entity_update");
         var __a0 = spatialContext;
         ulong __a1 = componentData.Native;
         nint __a2 = nextSnapshotCreate?.NativePtr ?? 0;
@@ -10610,7 +8281,17 @@ public unsafe partial class OpenXRSpatialMarkerTrackingCapability : OpenXRExtens
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_do_entity_update, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_is_qrcode_supported = MethodBinds.ResolveBulk("OpenXRSpatialMarkerTrackingCapability", "is_qrcode_supported", 2240911060);
+        __mb_is_micro_qrcode_supported = MethodBinds.ResolveBulk("OpenXRSpatialMarkerTrackingCapability", "is_micro_qrcode_supported", 2240911060);
+        __mb_is_aruco_supported = MethodBinds.ResolveBulk("OpenXRSpatialMarkerTrackingCapability", "is_aruco_supported", 2240911060);
+        __mb_is_april_tag_supported = MethodBinds.ResolveBulk("OpenXRSpatialMarkerTrackingCapability", "is_april_tag_supported", 2240911060);
+        __mb_start_entity_discovery = MethodBinds.ResolveBulk("OpenXRSpatialMarkerTrackingCapability", "start_entity_discovery", 3452714169);
+        __mb_do_entity_update = MethodBinds.ResolveBulk("OpenXRSpatialMarkerTrackingCapability", "do_entity_update", 3138044275);
     }
 }
 
@@ -10626,28 +8307,16 @@ public unsafe partial class OpenXRSpatialPlaneTrackingCapability : OpenXRExtensi
     private static nint __mb_is_supported;
     public bool IsSupported()
     {
-        var __mb = __mb_is_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialPlaneTrackingCapability", "is_supported", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialPlaneTrackingCapability.is_supported is not available in this engine build.");
-            __mb_is_supported = __mb;
-        }
+        if (__mb_is_supported == 0) MethodBinds.MissingThrow("OpenXRSpatialPlaneTrackingCapability.is_supported");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_supported, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_start_entity_discovery;
     public OpenXRFutureResult? StartEntityDiscovery(Rid spatialContext, Godot.Collections.Array componentData, OpenXRStructureBase? nextSnapshotCreate, OpenXRStructureBase? nextSnapshotQuery, Callable userCallback)
     {
-        var __mb = __mb_start_entity_discovery;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialPlaneTrackingCapability", "start_entity_discovery", 3452714169);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialPlaneTrackingCapability.start_entity_discovery is not available in this engine build.");
-            __mb_start_entity_discovery = __mb;
-        }
+        if (__mb_start_entity_discovery == 0) MethodBinds.MissingThrow("OpenXRSpatialPlaneTrackingCapability.start_entity_discovery");
         var __a0 = spatialContext;
         ulong __a1 = componentData.Native;
         nint __a2 = nextSnapshotCreate?.NativePtr ?? 0;
@@ -10660,8 +8329,14 @@ public unsafe partial class OpenXRSpatialPlaneTrackingCapability : OpenXRExtensi
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_start_entity_discovery, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRFutureResult?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_is_supported = MethodBinds.ResolveBulk("OpenXRSpatialPlaneTrackingCapability", "is_supported", 2240911060);
+        __mb_start_entity_discovery = MethodBinds.ResolveBulk("OpenXRSpatialPlaneTrackingCapability", "start_entity_discovery", 3452714169);
     }
 }
 
@@ -10677,52 +8352,41 @@ public unsafe partial class OpenXRSpatialQueryResultData : OpenXRSpatialComponen
     private static nint __mb_get_capacity;
     public long GetCapacity()
     {
-        var __mb = __mb_get_capacity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialQueryResultData", "get_capacity", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialQueryResultData.get_capacity is not available in this engine build.");
-            __mb_get_capacity = __mb;
-        }
+        if (__mb_get_capacity == 0) MethodBinds.MissingThrow("OpenXRSpatialQueryResultData.get_capacity");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_capacity, NativePtr, 0, (nint)(&__ret));
         return unchecked((long)__ret);
     }
 
     private static nint __mb_get_entity_id;
     public ulong GetEntityId(long index)
     {
-        var __mb = __mb_get_entity_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialQueryResultData", "get_entity_id", 923996154);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialQueryResultData.get_entity_id is not available in this engine build.");
-            __mb_get_entity_id = __mb;
-        }
+        if (__mb_get_entity_id == 0) MethodBinds.MissingThrow("OpenXRSpatialQueryResultData.get_entity_id");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_entity_id, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_entity_state;
     public OpenXRSpatialEntityTracker.EntityTrackingState GetEntityState(long index)
     {
-        var __mb = __mb_get_entity_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRSpatialQueryResultData", "get_entity_state", 1411962015);
-            if (__mb == 0) throw new MissingMethodException("OpenXRSpatialQueryResultData.get_entity_state is not available in this engine build.");
-            __mb_get_entity_state = __mb;
-        }
+        if (__mb_get_entity_state == 0) MethodBinds.MissingThrow("OpenXRSpatialQueryResultData.get_entity_state");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_entity_state, NativePtr, (nint)__args, (nint)(&__ret));
         return (OpenXRSpatialEntityTracker.EntityTrackingState)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_capacity = MethodBinds.ResolveBulk("OpenXRSpatialQueryResultData", "get_capacity", 3905245786);
+        __mb_get_entity_id = MethodBinds.ResolveBulk("OpenXRSpatialQueryResultData", "get_entity_id", 923996154);
+        __mb_get_entity_state = MethodBinds.ResolveBulk("OpenXRSpatialQueryResultData", "get_entity_state", 1411962015);
     }
 }
 
@@ -10744,46 +8408,28 @@ public unsafe partial class OpenXRStructureBase : RefCounted
     private static nint __mb_get_structure_type;
     public ulong GetStructureType()
     {
-        var __mb = __mb_get_structure_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRStructureBase", "get_structure_type", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("OpenXRStructureBase.get_structure_type is not available in this engine build.");
-            __mb_get_structure_type = __mb;
-        }
+        if (__mb_get_structure_type == 0) MethodBinds.MissingThrow("OpenXRStructureBase.get_structure_type");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_structure_type, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_set_next;
     public void SetNext(OpenXRStructureBase? entity)
     {
-        var __mb = __mb_set_next;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRStructureBase", "set_next", 334698771);
-            if (__mb == 0) throw new MissingMethodException("OpenXRStructureBase.set_next is not available in this engine build.");
-            __mb_set_next = __mb;
-        }
+        if (__mb_set_next == 0) MethodBinds.MissingThrow("OpenXRStructureBase.set_next");
         nint __a0 = entity?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_next, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_next;
     public OpenXRStructureBase? GetNext()
     {
-        var __mb = __mb_get_next;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OpenXRStructureBase", "get_next", 2798796760);
-            if (__mb == 0) throw new MissingMethodException("OpenXRStructureBase.get_next is not available in this engine build.");
-            __mb_get_next = __mb;
-        }
+        if (__mb_get_next == 0) MethodBinds.MissingThrow("OpenXRStructureBase.get_next");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_next, NativePtr, 0, (nint)(&__ret));
         return (OpenXRStructureBase?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
@@ -10800,6 +8446,13 @@ public unsafe partial class OpenXRStructureBase : RefCounted
             return true;
         }
         return base.__CallVirtual(nameSn, args, ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_structure_type = MethodBinds.ResolveBulk("OpenXRStructureBase", "get_structure_type", 2455072627);
+        __mb_set_next = MethodBinds.ResolveBulk("OpenXRStructureBase", "set_next", 334698771);
+        __mb_get_next = MethodBinds.ResolveBulk("OpenXRStructureBase", "get_next", 2798796760);
     }
 }
 
@@ -10825,19 +8478,18 @@ public unsafe partial class OptimizedTranslation : Translation
     private static nint __mb_generate;
     public bool Generate(Translation? from)
     {
-        var __mb = __mb_generate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptimizedTranslation", "generate", 2141509306);
-            if (__mb == 0) throw new MissingMethodException("OptimizedTranslation.generate is not available in this engine build.");
-            __mb_generate = __mb;
-        }
+        if (__mb_generate == 0) MethodBinds.MissingThrow("OptimizedTranslation.generate");
         nint __a0 = from?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_generate, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_generate = MethodBinds.ResolveBulk("OptimizedTranslation", "generate", 2141509306);
     }
 }
 
@@ -10913,32 +8565,20 @@ public unsafe partial class OptionButton : Button
     private static nint __mb_add_item;
     public void AddItem(string label, int id = unchecked((int)(-1)))
     {
-        var __mb = __mb_add_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "add_item", 2697778442);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.add_item is not available in this engine build.");
-            __mb_add_item = __mb;
-        }
+        if (__mb_add_item == 0) MethodBinds.MissingThrow("OptionButton.add_item");
         ulong __a0 = NativeString.Create(label);
         long __a1 = unchecked((long)id);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_item, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_add_icon_item;
     public void AddIconItem(Texture2D? texture, string label, int id = unchecked((int)(-1)))
     {
-        var __mb = __mb_add_icon_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "add_icon_item", 3781678508);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.add_icon_item is not available in this engine build.");
-            __mb_add_icon_item = __mb;
-        }
+        if (__mb_add_icon_item == 0) MethodBinds.MissingThrow("OptionButton.add_icon_item");
         nint __a0 = texture?.NativePtr ?? 0;
         ulong __a1 = NativeString.Create(label);
         long __a2 = unchecked((long)id);
@@ -10946,699 +8586,495 @@ public unsafe partial class OptionButton : Button
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_icon_item, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_set_item_text;
     public void SetItemText(int idx, string text)
     {
-        var __mb = __mb_set_item_text;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "set_item_text", 501894301);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.set_item_text is not available in this engine build.");
-            __mb_set_item_text = __mb;
-        }
+        if (__mb_set_item_text == 0) MethodBinds.MissingThrow("OptionButton.set_item_text");
         long __a0 = unchecked((long)idx);
         ulong __a1 = NativeString.Create(text);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_text, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_set_item_icon;
     public void SetItemIcon(int idx, Texture2D? texture)
     {
-        var __mb = __mb_set_item_icon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "set_item_icon", 666127730);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.set_item_icon is not available in this engine build.");
-            __mb_set_item_icon = __mb;
-        }
+        if (__mb_set_item_icon == 0) MethodBinds.MissingThrow("OptionButton.set_item_icon");
         long __a0 = unchecked((long)idx);
         nint __a1 = texture?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_icon, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_disabled;
     public void SetItemDisabled(int idx, bool disabled)
     {
-        var __mb = __mb_set_item_disabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "set_item_disabled", 300928843);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.set_item_disabled is not available in this engine build.");
-            __mb_set_item_disabled = __mb;
-        }
+        if (__mb_set_item_disabled == 0) MethodBinds.MissingThrow("OptionButton.set_item_disabled");
         long __a0 = unchecked((long)idx);
         byte __a1 = disabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_disabled, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_id;
     public void SetItemId(int idx, int id)
     {
-        var __mb = __mb_set_item_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "set_item_id", 3937882851);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.set_item_id is not available in this engine build.");
-            __mb_set_item_id = __mb;
-        }
+        if (__mb_set_item_id == 0) MethodBinds.MissingThrow("OptionButton.set_item_id");
         long __a0 = unchecked((long)idx);
         long __a1 = unchecked((long)id);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_id, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_metadata;
     public void SetItemMetadata(int idx, Variant metadata)
     {
-        var __mb = __mb_set_item_metadata;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "set_item_metadata", 2152698145);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.set_item_metadata is not available in this engine build.");
-            __mb_set_item_metadata = __mb;
-        }
+        if (__mb_set_item_metadata == 0) MethodBinds.MissingThrow("OptionButton.set_item_metadata");
         long __a0 = unchecked((long)idx);
         var __a1 = metadata.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_metadata, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_tooltip;
     public void SetItemTooltip(int idx, string tooltip)
     {
-        var __mb = __mb_set_item_tooltip;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "set_item_tooltip", 501894301);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.set_item_tooltip is not available in this engine build.");
-            __mb_set_item_tooltip = __mb;
-        }
+        if (__mb_set_item_tooltip == 0) MethodBinds.MissingThrow("OptionButton.set_item_tooltip");
         long __a0 = unchecked((long)idx);
         ulong __a1 = NativeString.Create(tooltip);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_tooltip, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_set_item_auto_translate_mode;
     public void SetItemAutoTranslateMode(int idx, Node.AutoTranslateModeEnum mode)
     {
-        var __mb = __mb_set_item_auto_translate_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "set_item_auto_translate_mode", 287402019);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.set_item_auto_translate_mode is not available in this engine build.");
-            __mb_set_item_auto_translate_mode = __mb;
-        }
+        if (__mb_set_item_auto_translate_mode == 0) MethodBinds.MissingThrow("OptionButton.set_item_auto_translate_mode");
         long __a0 = unchecked((long)idx);
         long __a1 = (long)mode;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_auto_translate_mode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_search_bar_enabled;
     public void SetSearchBarEnabled(bool enabled)
     {
-        var __mb = __mb_set_search_bar_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "set_search_bar_enabled", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.set_search_bar_enabled is not available in this engine build.");
-            __mb_set_search_bar_enabled = __mb;
-        }
+        if (__mb_set_search_bar_enabled == 0) MethodBinds.MissingThrow("OptionButton.set_search_bar_enabled");
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_search_bar_enabled, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_search_bar_min_item_count;
     public void SetSearchBarMinItemCount(int count)
     {
-        var __mb = __mb_set_search_bar_min_item_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "set_search_bar_min_item_count", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.set_search_bar_min_item_count is not available in this engine build.");
-            __mb_set_search_bar_min_item_count = __mb;
-        }
+        if (__mb_set_search_bar_min_item_count == 0) MethodBinds.MissingThrow("OptionButton.set_search_bar_min_item_count");
         long __a0 = unchecked((long)count);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_search_bar_min_item_count, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_search_bar_min_item_count;
     public int GetSearchBarMinItemCount()
     {
-        var __mb = __mb_get_search_bar_min_item_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_search_bar_min_item_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_search_bar_min_item_count is not available in this engine build.");
-            __mb_get_search_bar_min_item_count = __mb;
-        }
+        if (__mb_get_search_bar_min_item_count == 0) MethodBinds.MissingThrow("OptionButton.get_search_bar_min_item_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_search_bar_min_item_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_search_bar_fuzzy_search_enabled;
     public void SetSearchBarFuzzySearchEnabled(bool enabled)
     {
-        var __mb = __mb_set_search_bar_fuzzy_search_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "set_search_bar_fuzzy_search_enabled", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.set_search_bar_fuzzy_search_enabled is not available in this engine build.");
-            __mb_set_search_bar_fuzzy_search_enabled = __mb;
-        }
+        if (__mb_set_search_bar_fuzzy_search_enabled == 0) MethodBinds.MissingThrow("OptionButton.set_search_bar_fuzzy_search_enabled");
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_search_bar_fuzzy_search_enabled, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_search_bar_fuzzy_search_enabled;
     public bool IsSearchBarFuzzySearchEnabled()
     {
-        var __mb = __mb_is_search_bar_fuzzy_search_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "is_search_bar_fuzzy_search_enabled", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.is_search_bar_fuzzy_search_enabled is not available in this engine build.");
-            __mb_is_search_bar_fuzzy_search_enabled = __mb;
-        }
+        if (__mb_is_search_bar_fuzzy_search_enabled == 0) MethodBinds.MissingThrow("OptionButton.is_search_bar_fuzzy_search_enabled");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_search_bar_fuzzy_search_enabled, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_search_bar_fuzzy_search_max_misses;
     public void SetSearchBarFuzzySearchMaxMisses(int maxMisses)
     {
-        var __mb = __mb_set_search_bar_fuzzy_search_max_misses;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "set_search_bar_fuzzy_search_max_misses", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.set_search_bar_fuzzy_search_max_misses is not available in this engine build.");
-            __mb_set_search_bar_fuzzy_search_max_misses = __mb;
-        }
+        if (__mb_set_search_bar_fuzzy_search_max_misses == 0) MethodBinds.MissingThrow("OptionButton.set_search_bar_fuzzy_search_max_misses");
         long __a0 = unchecked((long)maxMisses);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_search_bar_fuzzy_search_max_misses, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_search_bar_fuzzy_search_max_misses;
     public int GetSearchBarFuzzySearchMaxMisses()
     {
-        var __mb = __mb_get_search_bar_fuzzy_search_max_misses;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_search_bar_fuzzy_search_max_misses", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_search_bar_fuzzy_search_max_misses is not available in this engine build.");
-            __mb_get_search_bar_fuzzy_search_max_misses = __mb;
-        }
+        if (__mb_get_search_bar_fuzzy_search_max_misses == 0) MethodBinds.MissingThrow("OptionButton.get_search_bar_fuzzy_search_max_misses");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_search_bar_fuzzy_search_max_misses, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_item_text;
     public string GetItemText(int idx)
     {
-        var __mb = __mb_get_item_text;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_item_text", 844755477);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_item_text is not available in this engine build.");
-            __mb_get_item_text = __mb;
-        }
+        if (__mb_get_item_text == 0) MethodBinds.MissingThrow("OptionButton.get_item_text");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_text, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_item_icon;
     public Texture2D? GetItemIcon(int idx)
     {
-        var __mb = __mb_get_item_icon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_item_icon", 3536238170);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_item_icon is not available in this engine build.");
-            __mb_get_item_icon = __mb;
-        }
+        if (__mb_get_item_icon == 0) MethodBinds.MissingThrow("OptionButton.get_item_icon");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_icon, NativePtr, (nint)__args, (nint)(&__ret));
         return (Texture2D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_item_id;
     public int GetItemId(int idx)
     {
-        var __mb = __mb_get_item_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_item_id", 923996154);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_item_id is not available in this engine build.");
-            __mb_get_item_id = __mb;
-        }
+        if (__mb_get_item_id == 0) MethodBinds.MissingThrow("OptionButton.get_item_id");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_id, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_item_index;
     public int GetItemIndex(int id)
     {
-        var __mb = __mb_get_item_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_item_index", 923996154);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_item_index is not available in this engine build.");
-            __mb_get_item_index = __mb;
-        }
+        if (__mb_get_item_index == 0) MethodBinds.MissingThrow("OptionButton.get_item_index");
         long __a0 = unchecked((long)id);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_index, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_item_metadata;
     public Variant GetItemMetadata(int idx)
     {
-        var __mb = __mb_get_item_metadata;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_item_metadata", 4227898402);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_item_metadata is not available in this engine build.");
-            __mb_get_item_metadata = __mb;
-        }
+        if (__mb_get_item_metadata == 0) MethodBinds.MissingThrow("OptionButton.get_item_metadata");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_metadata, NativePtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_get_item_tooltip;
     public string GetItemTooltip(int idx)
     {
-        var __mb = __mb_get_item_tooltip;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_item_tooltip", 844755477);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_item_tooltip is not available in this engine build.");
-            __mb_get_item_tooltip = __mb;
-        }
+        if (__mb_get_item_tooltip == 0) MethodBinds.MissingThrow("OptionButton.get_item_tooltip");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_tooltip, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_item_auto_translate_mode;
     public Node.AutoTranslateModeEnum GetItemAutoTranslateMode(int idx)
     {
-        var __mb = __mb_get_item_auto_translate_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_item_auto_translate_mode", 906302372);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_item_auto_translate_mode is not available in this engine build.");
-            __mb_get_item_auto_translate_mode = __mb;
-        }
+        if (__mb_get_item_auto_translate_mode == 0) MethodBinds.MissingThrow("OptionButton.get_item_auto_translate_mode");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_auto_translate_mode, NativePtr, (nint)__args, (nint)(&__ret));
         return (Node.AutoTranslateModeEnum)__ret;
     }
 
     private static nint __mb_is_item_disabled;
     public bool IsItemDisabled(int idx)
     {
-        var __mb = __mb_is_item_disabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "is_item_disabled", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.is_item_disabled is not available in this engine build.");
-            __mb_is_item_disabled = __mb;
-        }
+        if (__mb_is_item_disabled == 0) MethodBinds.MissingThrow("OptionButton.is_item_disabled");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_item_disabled, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_item_separator;
     public bool IsItemSeparator(int idx)
     {
-        var __mb = __mb_is_item_separator;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "is_item_separator", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.is_item_separator is not available in this engine build.");
-            __mb_is_item_separator = __mb;
-        }
+        if (__mb_is_item_separator == 0) MethodBinds.MissingThrow("OptionButton.is_item_separator");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_item_separator, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_search_bar_enabled;
     public bool IsSearchBarEnabled()
     {
-        var __mb = __mb_is_search_bar_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "is_search_bar_enabled", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.is_search_bar_enabled is not available in this engine build.");
-            __mb_is_search_bar_enabled = __mb;
-        }
+        if (__mb_is_search_bar_enabled == 0) MethodBinds.MissingThrow("OptionButton.is_search_bar_enabled");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_search_bar_enabled, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_add_separator;
     public void AddSeparator(string text = "")
     {
-        var __mb = __mb_add_separator;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "add_separator", 3005725572);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.add_separator is not available in this engine build.");
-            __mb_add_separator = __mb;
-        }
+        if (__mb_add_separator == 0) MethodBinds.MissingThrow("OptionButton.add_separator");
         ulong __a0 = NativeString.Create(text);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_separator, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_clear;
     public void Clear()
     {
-        var __mb = __mb_clear;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "clear", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.clear is not available in this engine build.");
-            __mb_clear = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_clear == 0) MethodBinds.MissingThrow("OptionButton.clear");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clear, NativePtr, 0, 0);
     }
 
     private static nint __mb_select;
     public void Select(int idx)
     {
-        var __mb = __mb_select;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "select", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.select is not available in this engine build.");
-            __mb_select = __mb;
-        }
+        if (__mb_select == 0) MethodBinds.MissingThrow("OptionButton.select");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_select, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_selected;
     public int GetSelected()
     {
-        var __mb = __mb_get_selected;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_selected", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_selected is not available in this engine build.");
-            __mb_get_selected = __mb;
-        }
+        if (__mb_get_selected == 0) MethodBinds.MissingThrow("OptionButton.get_selected");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_selected, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_selected_id;
     public int GetSelectedId()
     {
-        var __mb = __mb_get_selected_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_selected_id", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_selected_id is not available in this engine build.");
-            __mb_get_selected_id = __mb;
-        }
+        if (__mb_get_selected_id == 0) MethodBinds.MissingThrow("OptionButton.get_selected_id");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_selected_id, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_selected_metadata;
     public Variant GetSelectedMetadata()
     {
-        var __mb = __mb_get_selected_metadata;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_selected_metadata", 1214101251);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_selected_metadata is not available in this engine build.");
-            __mb_get_selected_metadata = __mb;
-        }
+        if (__mb_get_selected_metadata == 0) MethodBinds.MissingThrow("OptionButton.get_selected_metadata");
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_selected_metadata, NativePtr, 0, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_remove_item;
     public void RemoveItem(int idx)
     {
-        var __mb = __mb_remove_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "remove_item", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.remove_item is not available in this engine build.");
-            __mb_remove_item = __mb;
-        }
+        if (__mb_remove_item == 0) MethodBinds.MissingThrow("OptionButton.remove_item");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_item, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_popup;
     public PopupMenu? GetPopup()
     {
-        var __mb = __mb_get_popup;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_popup", 229722558);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_popup is not available in this engine build.");
-            __mb_get_popup = __mb;
-        }
+        if (__mb_get_popup == 0) MethodBinds.MissingThrow("OptionButton.get_popup");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_popup, NativePtr, 0, (nint)(&__ret));
         return (PopupMenu?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
     private static nint __mb_show_popup;
     public void ShowPopup()
     {
-        var __mb = __mb_show_popup;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "show_popup", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.show_popup is not available in this engine build.");
-            __mb_show_popup = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_show_popup == 0) MethodBinds.MissingThrow("OptionButton.show_popup");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_show_popup, NativePtr, 0, 0);
     }
 
     private static nint __mb_set_item_count;
     public void SetItemCount(int count)
     {
-        var __mb = __mb_set_item_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "set_item_count", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.set_item_count is not available in this engine build.");
-            __mb_set_item_count = __mb;
-        }
+        if (__mb_set_item_count == 0) MethodBinds.MissingThrow("OptionButton.set_item_count");
         long __a0 = unchecked((long)count);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_count, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_item_count;
     public int GetItemCount()
     {
-        var __mb = __mb_get_item_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_item_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_item_count is not available in this engine build.");
-            __mb_get_item_count = __mb;
-        }
+        if (__mb_get_item_count == 0) MethodBinds.MissingThrow("OptionButton.get_item_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_has_selectable_items;
     public bool HasSelectableItems()
     {
-        var __mb = __mb_has_selectable_items;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "has_selectable_items", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.has_selectable_items is not available in this engine build.");
-            __mb_has_selectable_items = __mb;
-        }
+        if (__mb_has_selectable_items == 0) MethodBinds.MissingThrow("OptionButton.has_selectable_items");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_selectable_items, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_selectable_item;
     public int GetSelectableItem(bool fromLast = false)
     {
-        var __mb = __mb_get_selectable_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_selectable_item", 894402480);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_selectable_item is not available in this engine build.");
-            __mb_get_selectable_item = __mb;
-        }
+        if (__mb_get_selectable_item == 0) MethodBinds.MissingThrow("OptionButton.get_selectable_item");
         byte __a0 = fromLast ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_selectable_item, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_fit_to_longest_item;
     public void SetFitToLongestItem(bool fit)
     {
-        var __mb = __mb_set_fit_to_longest_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "set_fit_to_longest_item", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.set_fit_to_longest_item is not available in this engine build.");
-            __mb_set_fit_to_longest_item = __mb;
-        }
+        if (__mb_set_fit_to_longest_item == 0) MethodBinds.MissingThrow("OptionButton.set_fit_to_longest_item");
         byte __a0 = fit ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_fit_to_longest_item, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_fit_to_longest_item;
     public bool IsFitToLongestItem()
     {
-        var __mb = __mb_is_fit_to_longest_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "is_fit_to_longest_item", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.is_fit_to_longest_item is not available in this engine build.");
-            __mb_is_fit_to_longest_item = __mb;
-        }
+        if (__mb_is_fit_to_longest_item == 0) MethodBinds.MissingThrow("OptionButton.is_fit_to_longest_item");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_fit_to_longest_item, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_allow_reselect;
     public void SetAllowReselect(bool allow)
     {
-        var __mb = __mb_set_allow_reselect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "set_allow_reselect", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.set_allow_reselect is not available in this engine build.");
-            __mb_set_allow_reselect = __mb;
-        }
+        if (__mb_set_allow_reselect == 0) MethodBinds.MissingThrow("OptionButton.set_allow_reselect");
         byte __a0 = allow ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_allow_reselect, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_allow_reselect;
     public bool GetAllowReselect()
     {
-        var __mb = __mb_get_allow_reselect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "get_allow_reselect", 36873697);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.get_allow_reselect is not available in this engine build.");
-            __mb_get_allow_reselect = __mb;
-        }
+        if (__mb_get_allow_reselect == 0) MethodBinds.MissingThrow("OptionButton.get_allow_reselect");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_allow_reselect, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_disable_shortcuts;
     public void SetDisableShortcuts(bool disabled)
     {
-        var __mb = __mb_set_disable_shortcuts;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("OptionButton", "set_disable_shortcuts", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("OptionButton.set_disable_shortcuts is not available in this engine build.");
-            __mb_set_disable_shortcuts = __mb;
-        }
+        if (__mb_set_disable_shortcuts == 0) MethodBinds.MissingThrow("OptionButton.set_disable_shortcuts");
         byte __a0 = disabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_disable_shortcuts, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_add_item = MethodBinds.ResolveBulk("OptionButton", "add_item", 2697778442);
+        __mb_add_icon_item = MethodBinds.ResolveBulk("OptionButton", "add_icon_item", 3781678508);
+        __mb_set_item_text = MethodBinds.ResolveBulk("OptionButton", "set_item_text", 501894301);
+        __mb_set_item_icon = MethodBinds.ResolveBulk("OptionButton", "set_item_icon", 666127730);
+        __mb_set_item_disabled = MethodBinds.ResolveBulk("OptionButton", "set_item_disabled", 300928843);
+        __mb_set_item_id = MethodBinds.ResolveBulk("OptionButton", "set_item_id", 3937882851);
+        __mb_set_item_metadata = MethodBinds.ResolveBulk("OptionButton", "set_item_metadata", 2152698145);
+        __mb_set_item_tooltip = MethodBinds.ResolveBulk("OptionButton", "set_item_tooltip", 501894301);
+        __mb_set_item_auto_translate_mode = MethodBinds.ResolveBulk("OptionButton", "set_item_auto_translate_mode", 287402019);
+        __mb_set_search_bar_enabled = MethodBinds.ResolveBulk("OptionButton", "set_search_bar_enabled", 2586408642);
+        __mb_set_search_bar_min_item_count = MethodBinds.ResolveBulk("OptionButton", "set_search_bar_min_item_count", 1286410249);
+        __mb_get_search_bar_min_item_count = MethodBinds.ResolveBulk("OptionButton", "get_search_bar_min_item_count", 3905245786);
+        __mb_set_search_bar_fuzzy_search_enabled = MethodBinds.ResolveBulk("OptionButton", "set_search_bar_fuzzy_search_enabled", 2586408642);
+        __mb_is_search_bar_fuzzy_search_enabled = MethodBinds.ResolveBulk("OptionButton", "is_search_bar_fuzzy_search_enabled", 36873697);
+        __mb_set_search_bar_fuzzy_search_max_misses = MethodBinds.ResolveBulk("OptionButton", "set_search_bar_fuzzy_search_max_misses", 1286410249);
+        __mb_get_search_bar_fuzzy_search_max_misses = MethodBinds.ResolveBulk("OptionButton", "get_search_bar_fuzzy_search_max_misses", 3905245786);
+        __mb_get_item_text = MethodBinds.ResolveBulk("OptionButton", "get_item_text", 844755477);
+        __mb_get_item_icon = MethodBinds.ResolveBulk("OptionButton", "get_item_icon", 3536238170);
+        __mb_get_item_id = MethodBinds.ResolveBulk("OptionButton", "get_item_id", 923996154);
+        __mb_get_item_index = MethodBinds.ResolveBulk("OptionButton", "get_item_index", 923996154);
+        __mb_get_item_metadata = MethodBinds.ResolveBulk("OptionButton", "get_item_metadata", 4227898402);
+        __mb_get_item_tooltip = MethodBinds.ResolveBulk("OptionButton", "get_item_tooltip", 844755477);
+        __mb_get_item_auto_translate_mode = MethodBinds.ResolveBulk("OptionButton", "get_item_auto_translate_mode", 906302372);
+        __mb_is_item_disabled = MethodBinds.ResolveBulk("OptionButton", "is_item_disabled", 1116898809);
+        __mb_is_item_separator = MethodBinds.ResolveBulk("OptionButton", "is_item_separator", 1116898809);
+        __mb_is_search_bar_enabled = MethodBinds.ResolveBulk("OptionButton", "is_search_bar_enabled", 36873697);
+        __mb_add_separator = MethodBinds.ResolveBulk("OptionButton", "add_separator", 3005725572);
+        __mb_clear = MethodBinds.ResolveBulk("OptionButton", "clear", 3218959716);
+        __mb_select = MethodBinds.ResolveBulk("OptionButton", "select", 1286410249);
+        __mb_get_selected = MethodBinds.ResolveBulk("OptionButton", "get_selected", 3905245786);
+        __mb_get_selected_id = MethodBinds.ResolveBulk("OptionButton", "get_selected_id", 3905245786);
+        __mb_get_selected_metadata = MethodBinds.ResolveBulk("OptionButton", "get_selected_metadata", 1214101251);
+        __mb_remove_item = MethodBinds.ResolveBulk("OptionButton", "remove_item", 1286410249);
+        __mb_get_popup = MethodBinds.ResolveBulk("OptionButton", "get_popup", 229722558);
+        __mb_show_popup = MethodBinds.ResolveBulk("OptionButton", "show_popup", 3218959716);
+        __mb_set_item_count = MethodBinds.ResolveBulk("OptionButton", "set_item_count", 1286410249);
+        __mb_get_item_count = MethodBinds.ResolveBulk("OptionButton", "get_item_count", 3905245786);
+        __mb_has_selectable_items = MethodBinds.ResolveBulk("OptionButton", "has_selectable_items", 36873697);
+        __mb_get_selectable_item = MethodBinds.ResolveBulk("OptionButton", "get_selectable_item", 894402480);
+        __mb_set_fit_to_longest_item = MethodBinds.ResolveBulk("OptionButton", "set_fit_to_longest_item", 2586408642);
+        __mb_is_fit_to_longest_item = MethodBinds.ResolveBulk("OptionButton", "is_fit_to_longest_item", 36873697);
+        __mb_set_allow_reselect = MethodBinds.ResolveBulk("OptionButton", "set_allow_reselect", 2586408642);
+        __mb_get_allow_reselect = MethodBinds.ResolveBulk("OptionButton", "get_allow_reselect", 36873697);
+        __mb_set_disable_shortcuts = MethodBinds.ResolveBulk("OptionButton", "set_disable_shortcuts", 2586408642);
     }
 }
 

@@ -23,199 +23,138 @@ public unsafe partial class KinematicCollision2D : RefCounted
     private static nint __mb_get_position;
     public Vector2 GetPosition()
     {
-        var __mb = __mb_get_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision2D", "get_position", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision2D.get_position is not available in this engine build.");
-            __mb_get_position = __mb;
-        }
+        if (__mb_get_position == 0) MethodBinds.MissingThrow("KinematicCollision2D.get_position");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_position, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_normal;
     public Vector2 GetNormal()
     {
-        var __mb = __mb_get_normal;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision2D", "get_normal", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision2D.get_normal is not available in this engine build.");
-            __mb_get_normal = __mb;
-        }
+        if (__mb_get_normal == 0) MethodBinds.MissingThrow("KinematicCollision2D.get_normal");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_normal, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_travel;
     public Vector2 GetTravel()
     {
-        var __mb = __mb_get_travel;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision2D", "get_travel", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision2D.get_travel is not available in this engine build.");
-            __mb_get_travel = __mb;
-        }
+        if (__mb_get_travel == 0) MethodBinds.MissingThrow("KinematicCollision2D.get_travel");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_travel, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_remainder;
     public Vector2 GetRemainder()
     {
-        var __mb = __mb_get_remainder;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision2D", "get_remainder", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision2D.get_remainder is not available in this engine build.");
-            __mb_get_remainder = __mb;
-        }
+        if (__mb_get_remainder == 0) MethodBinds.MissingThrow("KinematicCollision2D.get_remainder");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_remainder, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_angle;
     public float GetAngle(Vector2 upDirection)
     {
-        var __mb = __mb_get_angle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision2D", "get_angle", 2841063350);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision2D.get_angle is not available in this engine build.");
-            __mb_get_angle = __mb;
-        }
+        if (__mb_get_angle == 0) MethodBinds.MissingThrow("KinematicCollision2D.get_angle");
         var __a0 = upDirection;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_angle, NativePtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_depth;
     public float GetDepth()
     {
-        var __mb = __mb_get_depth;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision2D", "get_depth", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision2D.get_depth is not available in this engine build.");
-            __mb_get_depth = __mb;
-        }
+        if (__mb_get_depth == 0) MethodBinds.MissingThrow("KinematicCollision2D.get_depth");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_depth, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_local_shape;
     public GodotObject? GetLocalShape()
     {
-        var __mb = __mb_get_local_shape;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision2D", "get_local_shape", 1981248198);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision2D.get_local_shape is not available in this engine build.");
-            __mb_get_local_shape = __mb;
-        }
+        if (__mb_get_local_shape == 0) MethodBinds.MissingThrow("KinematicCollision2D.get_local_shape");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_local_shape, NativePtr, 0, (nint)(&__ret));
         return (GodotObject?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
     private static nint __mb_get_collider;
     public GodotObject? GetCollider()
     {
-        var __mb = __mb_get_collider;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision2D", "get_collider", 1981248198);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision2D.get_collider is not available in this engine build.");
-            __mb_get_collider = __mb;
-        }
+        if (__mb_get_collider == 0) MethodBinds.MissingThrow("KinematicCollision2D.get_collider");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_collider, NativePtr, 0, (nint)(&__ret));
         return (GodotObject?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
     private static nint __mb_get_collider_id;
     public ulong GetColliderId()
     {
-        var __mb = __mb_get_collider_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision2D", "get_collider_id", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision2D.get_collider_id is not available in this engine build.");
-            __mb_get_collider_id = __mb;
-        }
+        if (__mb_get_collider_id == 0) MethodBinds.MissingThrow("KinematicCollision2D.get_collider_id");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_collider_id, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_collider_rid;
     public Rid GetColliderRid()
     {
-        var __mb = __mb_get_collider_rid;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision2D", "get_collider_rid", 2944877500);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision2D.get_collider_rid is not available in this engine build.");
-            __mb_get_collider_rid = __mb;
-        }
+        if (__mb_get_collider_rid == 0) MethodBinds.MissingThrow("KinematicCollision2D.get_collider_rid");
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_collider_rid, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_collider_shape;
     public GodotObject? GetColliderShape()
     {
-        var __mb = __mb_get_collider_shape;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision2D", "get_collider_shape", 1981248198);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision2D.get_collider_shape is not available in this engine build.");
-            __mb_get_collider_shape = __mb;
-        }
+        if (__mb_get_collider_shape == 0) MethodBinds.MissingThrow("KinematicCollision2D.get_collider_shape");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_collider_shape, NativePtr, 0, (nint)(&__ret));
         return (GodotObject?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
     private static nint __mb_get_collider_shape_index;
     public int GetColliderShapeIndex()
     {
-        var __mb = __mb_get_collider_shape_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision2D", "get_collider_shape_index", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision2D.get_collider_shape_index is not available in this engine build.");
-            __mb_get_collider_shape_index = __mb;
-        }
+        if (__mb_get_collider_shape_index == 0) MethodBinds.MissingThrow("KinematicCollision2D.get_collider_shape_index");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_collider_shape_index, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_collider_velocity;
     public Vector2 GetColliderVelocity()
     {
-        var __mb = __mb_get_collider_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision2D", "get_collider_velocity", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision2D.get_collider_velocity is not available in this engine build.");
-            __mb_get_collider_velocity = __mb;
-        }
+        if (__mb_get_collider_velocity == 0) MethodBinds.MissingThrow("KinematicCollision2D.get_collider_velocity");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_collider_velocity, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_position = MethodBinds.ResolveBulk("KinematicCollision2D", "get_position", 3341600327);
+        __mb_get_normal = MethodBinds.ResolveBulk("KinematicCollision2D", "get_normal", 3341600327);
+        __mb_get_travel = MethodBinds.ResolveBulk("KinematicCollision2D", "get_travel", 3341600327);
+        __mb_get_remainder = MethodBinds.ResolveBulk("KinematicCollision2D", "get_remainder", 3341600327);
+        __mb_get_angle = MethodBinds.ResolveBulk("KinematicCollision2D", "get_angle", 2841063350);
+        __mb_get_depth = MethodBinds.ResolveBulk("KinematicCollision2D", "get_depth", 1740695150);
+        __mb_get_local_shape = MethodBinds.ResolveBulk("KinematicCollision2D", "get_local_shape", 1981248198);
+        __mb_get_collider = MethodBinds.ResolveBulk("KinematicCollision2D", "get_collider", 1981248198);
+        __mb_get_collider_id = MethodBinds.ResolveBulk("KinematicCollision2D", "get_collider_id", 3905245786);
+        __mb_get_collider_rid = MethodBinds.ResolveBulk("KinematicCollision2D", "get_collider_rid", 2944877500);
+        __mb_get_collider_shape = MethodBinds.ResolveBulk("KinematicCollision2D", "get_collider_shape", 1981248198);
+        __mb_get_collider_shape_index = MethodBinds.ResolveBulk("KinematicCollision2D", "get_collider_shape_index", 3905245786);
+        __mb_get_collider_velocity = MethodBinds.ResolveBulk("KinematicCollision2D", "get_collider_velocity", 3341600327);
     }
 }
 
@@ -231,243 +170,177 @@ public unsafe partial class KinematicCollision3D : RefCounted
     private static nint __mb_get_travel;
     public Vector3 GetTravel()
     {
-        var __mb = __mb_get_travel;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision3D", "get_travel", 3360562783);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision3D.get_travel is not available in this engine build.");
-            __mb_get_travel = __mb;
-        }
+        if (__mb_get_travel == 0) MethodBinds.MissingThrow("KinematicCollision3D.get_travel");
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_travel, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_remainder;
     public Vector3 GetRemainder()
     {
-        var __mb = __mb_get_remainder;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision3D", "get_remainder", 3360562783);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision3D.get_remainder is not available in this engine build.");
-            __mb_get_remainder = __mb;
-        }
+        if (__mb_get_remainder == 0) MethodBinds.MissingThrow("KinematicCollision3D.get_remainder");
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_remainder, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_depth;
     public float GetDepth()
     {
-        var __mb = __mb_get_depth;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision3D", "get_depth", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision3D.get_depth is not available in this engine build.");
-            __mb_get_depth = __mb;
-        }
+        if (__mb_get_depth == 0) MethodBinds.MissingThrow("KinematicCollision3D.get_depth");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_depth, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_collision_count;
     public int GetCollisionCount()
     {
-        var __mb = __mb_get_collision_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision3D", "get_collision_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision3D.get_collision_count is not available in this engine build.");
-            __mb_get_collision_count = __mb;
-        }
+        if (__mb_get_collision_count == 0) MethodBinds.MissingThrow("KinematicCollision3D.get_collision_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_collision_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_position;
     public Vector3 GetPosition(int collisionIndex = unchecked((int)(0)))
     {
-        var __mb = __mb_get_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision3D", "get_position", 1914908202);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision3D.get_position is not available in this engine build.");
-            __mb_get_position = __mb;
-        }
+        if (__mb_get_position == 0) MethodBinds.MissingThrow("KinematicCollision3D.get_position");
         long __a0 = unchecked((long)collisionIndex);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_position, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_normal;
     public Vector3 GetNormal(int collisionIndex = unchecked((int)(0)))
     {
-        var __mb = __mb_get_normal;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision3D", "get_normal", 1914908202);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision3D.get_normal is not available in this engine build.");
-            __mb_get_normal = __mb;
-        }
+        if (__mb_get_normal == 0) MethodBinds.MissingThrow("KinematicCollision3D.get_normal");
         long __a0 = unchecked((long)collisionIndex);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_normal, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_angle;
     public float GetAngle(int collisionIndex, Vector3 upDirection)
     {
-        var __mb = __mb_get_angle;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision3D", "get_angle", 1242741860);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision3D.get_angle is not available in this engine build.");
-            __mb_get_angle = __mb;
-        }
+        if (__mb_get_angle == 0) MethodBinds.MissingThrow("KinematicCollision3D.get_angle");
         long __a0 = unchecked((long)collisionIndex);
         var __a1 = upDirection;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_angle, NativePtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_local_shape;
     public GodotObject? GetLocalShape(int collisionIndex = unchecked((int)(0)))
     {
-        var __mb = __mb_get_local_shape;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision3D", "get_local_shape", 2639523548);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision3D.get_local_shape is not available in this engine build.");
-            __mb_get_local_shape = __mb;
-        }
+        if (__mb_get_local_shape == 0) MethodBinds.MissingThrow("KinematicCollision3D.get_local_shape");
         long __a0 = unchecked((long)collisionIndex);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_local_shape, NativePtr, (nint)__args, (nint)(&__ret));
         return (GodotObject?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
     private static nint __mb_get_collider;
     public GodotObject? GetCollider(int collisionIndex = unchecked((int)(0)))
     {
-        var __mb = __mb_get_collider;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision3D", "get_collider", 2639523548);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision3D.get_collider is not available in this engine build.");
-            __mb_get_collider = __mb;
-        }
+        if (__mb_get_collider == 0) MethodBinds.MissingThrow("KinematicCollision3D.get_collider");
         long __a0 = unchecked((long)collisionIndex);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_collider, NativePtr, (nint)__args, (nint)(&__ret));
         return (GodotObject?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
     private static nint __mb_get_collider_id;
     public ulong GetColliderId(int collisionIndex = unchecked((int)(0)))
     {
-        var __mb = __mb_get_collider_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision3D", "get_collider_id", 1591665591);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision3D.get_collider_id is not available in this engine build.");
-            __mb_get_collider_id = __mb;
-        }
+        if (__mb_get_collider_id == 0) MethodBinds.MissingThrow("KinematicCollision3D.get_collider_id");
         long __a0 = unchecked((long)collisionIndex);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_collider_id, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_collider_rid;
     public Rid GetColliderRid(int collisionIndex = unchecked((int)(0)))
     {
-        var __mb = __mb_get_collider_rid;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision3D", "get_collider_rid", 1231817359);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision3D.get_collider_rid is not available in this engine build.");
-            __mb_get_collider_rid = __mb;
-        }
+        if (__mb_get_collider_rid == 0) MethodBinds.MissingThrow("KinematicCollision3D.get_collider_rid");
         long __a0 = unchecked((long)collisionIndex);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_collider_rid, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_collider_shape;
     public GodotObject? GetColliderShape(int collisionIndex = unchecked((int)(0)))
     {
-        var __mb = __mb_get_collider_shape;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision3D", "get_collider_shape", 2639523548);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision3D.get_collider_shape is not available in this engine build.");
-            __mb_get_collider_shape = __mb;
-        }
+        if (__mb_get_collider_shape == 0) MethodBinds.MissingThrow("KinematicCollision3D.get_collider_shape");
         long __a0 = unchecked((long)collisionIndex);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_collider_shape, NativePtr, (nint)__args, (nint)(&__ret));
         return (GodotObject?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
     private static nint __mb_get_collider_shape_index;
     public int GetColliderShapeIndex(int collisionIndex = unchecked((int)(0)))
     {
-        var __mb = __mb_get_collider_shape_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision3D", "get_collider_shape_index", 1591665591);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision3D.get_collider_shape_index is not available in this engine build.");
-            __mb_get_collider_shape_index = __mb;
-        }
+        if (__mb_get_collider_shape_index == 0) MethodBinds.MissingThrow("KinematicCollision3D.get_collider_shape_index");
         long __a0 = unchecked((long)collisionIndex);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_collider_shape_index, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_collider_velocity;
     public Vector3 GetColliderVelocity(int collisionIndex = unchecked((int)(0)))
     {
-        var __mb = __mb_get_collider_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("KinematicCollision3D", "get_collider_velocity", 1914908202);
-            if (__mb == 0) throw new MissingMethodException("KinematicCollision3D.get_collider_velocity is not available in this engine build.");
-            __mb_get_collider_velocity = __mb;
-        }
+        if (__mb_get_collider_velocity == 0) MethodBinds.MissingThrow("KinematicCollision3D.get_collider_velocity");
         long __a0 = unchecked((long)collisionIndex);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_collider_velocity, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_travel = MethodBinds.ResolveBulk("KinematicCollision3D", "get_travel", 3360562783);
+        __mb_get_remainder = MethodBinds.ResolveBulk("KinematicCollision3D", "get_remainder", 3360562783);
+        __mb_get_depth = MethodBinds.ResolveBulk("KinematicCollision3D", "get_depth", 1740695150);
+        __mb_get_collision_count = MethodBinds.ResolveBulk("KinematicCollision3D", "get_collision_count", 3905245786);
+        __mb_get_position = MethodBinds.ResolveBulk("KinematicCollision3D", "get_position", 1914908202);
+        __mb_get_normal = MethodBinds.ResolveBulk("KinematicCollision3D", "get_normal", 1914908202);
+        __mb_get_angle = MethodBinds.ResolveBulk("KinematicCollision3D", "get_angle", 1242741860);
+        __mb_get_local_shape = MethodBinds.ResolveBulk("KinematicCollision3D", "get_local_shape", 2639523548);
+        __mb_get_collider = MethodBinds.ResolveBulk("KinematicCollision3D", "get_collider", 2639523548);
+        __mb_get_collider_id = MethodBinds.ResolveBulk("KinematicCollision3D", "get_collider_id", 1591665591);
+        __mb_get_collider_rid = MethodBinds.ResolveBulk("KinematicCollision3D", "get_collider_rid", 1231817359);
+        __mb_get_collider_shape = MethodBinds.ResolveBulk("KinematicCollision3D", "get_collider_shape", 2639523548);
+        __mb_get_collider_shape_index = MethodBinds.ResolveBulk("KinematicCollision3D", "get_collider_shape_index", 1591665591);
+        __mb_get_collider_velocity = MethodBinds.ResolveBulk("KinematicCollision3D", "get_collider_velocity", 1914908202);
     }
 }
 
