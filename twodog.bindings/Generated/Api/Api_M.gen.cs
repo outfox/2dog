@@ -97,7 +97,7 @@ public unsafe partial class Marker2D : Node2D
     }
 
     private static nint __mb_set_gizmo_extents;
-    internal void SetGizmoExtents(float extents)
+    public void SetGizmoExtents(float extents)
     {
         var __mb = __mb_set_gizmo_extents;
         if (__mb == 0)
@@ -113,7 +113,7 @@ public unsafe partial class Marker2D : Node2D
     }
 
     private static nint __mb_get_gizmo_extents;
-    internal float GetGizmoExtents()
+    public float GetGizmoExtents()
     {
         var __mb = __mb_get_gizmo_extents;
         if (__mb == 0)
@@ -144,7 +144,7 @@ public unsafe partial class Marker3D : Node3D
     }
 
     private static nint __mb_set_gizmo_extents;
-    internal void SetGizmoExtents(float extents)
+    public void SetGizmoExtents(float extents)
     {
         var __mb = __mb_set_gizmo_extents;
         if (__mb == 0)
@@ -160,7 +160,7 @@ public unsafe partial class Marker3D : Node3D
     }
 
     private static nint __mb_get_gizmo_extents;
-    internal float GetGizmoExtents()
+    public float GetGizmoExtents()
     {
         var __mb = __mb_get_gizmo_extents;
         if (__mb == 0)
@@ -324,7 +324,7 @@ public unsafe partial class Material : Resource
     }
 
     private static nint __mb_set_next_pass;
-    internal void SetNextPass(Material? nextPass)
+    public void SetNextPass(Material? nextPass)
     {
         var __mb = __mb_set_next_pass;
         if (__mb == 0)
@@ -340,7 +340,7 @@ public unsafe partial class Material : Resource
     }
 
     private static nint __mb_get_next_pass;
-    internal Material? GetNextPass()
+    public Material? GetNextPass()
     {
         var __mb = __mb_get_next_pass;
         if (__mb == 0)
@@ -355,7 +355,7 @@ public unsafe partial class Material : Resource
     }
 
     private static nint __mb_set_render_priority;
-    internal void SetRenderPriority(int priority)
+    public void SetRenderPriority(int priority)
     {
         var __mb = __mb_set_render_priority;
         if (__mb == 0)
@@ -371,7 +371,7 @@ public unsafe partial class Material : Resource
     }
 
     private static nint __mb_get_render_priority;
-    internal int GetRenderPriority()
+    public int GetRenderPriority()
     {
         var __mb = __mb_get_render_priority;
         if (__mb == 0)
@@ -502,7 +502,7 @@ public unsafe partial class MenuBar : Control
     }
 
     private static nint __mb_set_switch_on_hover;
-    internal void SetSwitchOnHover(bool enable)
+    public void SetSwitchOnHover(bool enable)
     {
         var __mb = __mb_set_switch_on_hover;
         if (__mb == 0)
@@ -518,7 +518,7 @@ public unsafe partial class MenuBar : Control
     }
 
     private static nint __mb_is_switch_on_hover;
-    internal bool IsSwitchOnHover()
+    public bool IsSwitchOnHover()
     {
         var __mb = __mb_is_switch_on_hover;
         if (__mb == 0)
@@ -549,7 +549,7 @@ public unsafe partial class MenuBar : Control
     }
 
     private static nint __mb_set_prefer_global_menu;
-    internal void SetPreferGlobalMenu(bool enabled)
+    public void SetPreferGlobalMenu(bool enabled)
     {
         var __mb = __mb_set_prefer_global_menu;
         if (__mb == 0)
@@ -565,7 +565,7 @@ public unsafe partial class MenuBar : Control
     }
 
     private static nint __mb_is_prefer_global_menu;
-    internal bool IsPreferGlobalMenu()
+    public bool IsPreferGlobalMenu()
     {
         var __mb = __mb_is_prefer_global_menu;
         if (__mb == 0)
@@ -610,7 +610,7 @@ public unsafe partial class MenuBar : Control
     }
 
     private static nint __mb_set_text_direction;
-    internal void SetTextDirection(Control.TextDirection direction)
+    public void SetTextDirection(Control.TextDirection direction)
     {
         var __mb = __mb_set_text_direction;
         if (__mb == 0)
@@ -626,7 +626,7 @@ public unsafe partial class MenuBar : Control
     }
 
     private static nint __mb_get_text_direction;
-    internal Control.TextDirection GetTextDirection()
+    public Control.TextDirection GetTextDirection()
     {
         var __mb = __mb_get_text_direction;
         if (__mb == 0)
@@ -641,7 +641,7 @@ public unsafe partial class MenuBar : Control
     }
 
     private static nint __mb_set_language;
-    internal void SetLanguage(string language)
+    public void SetLanguage(string language)
     {
         var __mb = __mb_set_language;
         if (__mb == 0)
@@ -658,7 +658,7 @@ public unsafe partial class MenuBar : Control
     }
 
     private static nint __mb_get_language;
-    internal string GetLanguage()
+    public string GetLanguage()
     {
         var __mb = __mb_get_language;
         if (__mb == 0)
@@ -673,7 +673,7 @@ public unsafe partial class MenuBar : Control
     }
 
     private static nint __mb_set_flat;
-    internal void SetFlat(bool enabled)
+    public void SetFlat(bool enabled)
     {
         var __mb = __mb_set_flat;
         if (__mb == 0)
@@ -689,7 +689,7 @@ public unsafe partial class MenuBar : Control
     }
 
     private static nint __mb_is_flat;
-    internal bool IsFlat()
+    public bool IsFlat()
     {
         var __mb = __mb_is_flat;
         if (__mb == 0)
@@ -704,7 +704,7 @@ public unsafe partial class MenuBar : Control
     }
 
     private static nint __mb_set_start_index;
-    internal void SetStartIndex(int enabled)
+    public void SetStartIndex(int enabled)
     {
         var __mb = __mb_set_start_index;
         if (__mb == 0)
@@ -720,7 +720,7 @@ public unsafe partial class MenuBar : Control
     }
 
     private static nint __mb_get_start_index;
-    internal int GetStartIndex()
+    public int GetStartIndex()
     {
         var __mb = __mb_get_start_index;
         if (__mb == 0)
@@ -957,7 +957,7 @@ public unsafe partial class MenuButton : Button
     }
 
     private static nint __mb_set_switch_on_hover;
-    internal void SetSwitchOnHover(bool enable)
+    public void SetSwitchOnHover(bool enable)
     {
         var __mb = __mb_set_switch_on_hover;
         if (__mb == 0)
@@ -973,7 +973,7 @@ public unsafe partial class MenuButton : Button
     }
 
     private static nint __mb_is_switch_on_hover;
-    internal bool IsSwitchOnHover()
+    public bool IsSwitchOnHover()
     {
         var __mb = __mb_is_switch_on_hover;
         if (__mb == 0)
@@ -1004,7 +1004,7 @@ public unsafe partial class MenuButton : Button
     }
 
     private static nint __mb_set_item_count;
-    internal void SetItemCount(int count)
+    public void SetItemCount(int count)
     {
         var __mb = __mb_set_item_count;
         if (__mb == 0)
@@ -1020,7 +1020,7 @@ public unsafe partial class MenuButton : Button
     }
 
     private static nint __mb_get_item_count;
-    internal int GetItemCount()
+    public int GetItemCount()
     {
         var __mb = __mb_get_item_count;
         if (__mb == 0)
@@ -1129,7 +1129,7 @@ public unsafe partial class Mesh : Resource
     }
 
     private static nint __mb_set_lightmap_size_hint;
-    internal void SetLightmapSizeHint(Vector2I size)
+    public void SetLightmapSizeHint(Vector2I size)
     {
         var __mb = __mb_set_lightmap_size_hint;
         if (__mb == 0)
@@ -1145,7 +1145,7 @@ public unsafe partial class Mesh : Resource
     }
 
     private static nint __mb_get_lightmap_size_hint;
-    internal Vector2I GetLightmapSizeHint()
+    public Vector2I GetLightmapSizeHint()
     {
         var __mb = __mb_get_lightmap_size_hint;
         if (__mb == 0)
@@ -1160,7 +1160,7 @@ public unsafe partial class Mesh : Resource
     }
 
     private static nint __mb_get_aabb;
-    internal Aabb GetAabb()
+    public Aabb GetAabb()
     {
         var __mb = __mb_get_aabb;
         if (__mb == 0)
@@ -1559,7 +1559,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_set_max_concavity;
-    internal void SetMaxConcavity(float maxConcavity)
+    public void SetMaxConcavity(float maxConcavity)
     {
         var __mb = __mb_set_max_concavity;
         if (__mb == 0)
@@ -1575,7 +1575,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_get_max_concavity;
-    internal float GetMaxConcavity()
+    public float GetMaxConcavity()
     {
         var __mb = __mb_get_max_concavity;
         if (__mb == 0)
@@ -1590,7 +1590,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_set_symmetry_planes_clipping_bias;
-    internal void SetSymmetryPlanesClippingBias(float symmetryPlanesClippingBias)
+    public void SetSymmetryPlanesClippingBias(float symmetryPlanesClippingBias)
     {
         var __mb = __mb_set_symmetry_planes_clipping_bias;
         if (__mb == 0)
@@ -1606,7 +1606,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_get_symmetry_planes_clipping_bias;
-    internal float GetSymmetryPlanesClippingBias()
+    public float GetSymmetryPlanesClippingBias()
     {
         var __mb = __mb_get_symmetry_planes_clipping_bias;
         if (__mb == 0)
@@ -1621,7 +1621,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_set_revolution_axes_clipping_bias;
-    internal void SetRevolutionAxesClippingBias(float revolutionAxesClippingBias)
+    public void SetRevolutionAxesClippingBias(float revolutionAxesClippingBias)
     {
         var __mb = __mb_set_revolution_axes_clipping_bias;
         if (__mb == 0)
@@ -1637,7 +1637,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_get_revolution_axes_clipping_bias;
-    internal float GetRevolutionAxesClippingBias()
+    public float GetRevolutionAxesClippingBias()
     {
         var __mb = __mb_get_revolution_axes_clipping_bias;
         if (__mb == 0)
@@ -1652,7 +1652,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_set_min_volume_per_convex_hull;
-    internal void SetMinVolumePerConvexHull(float minVolumePerConvexHull)
+    public void SetMinVolumePerConvexHull(float minVolumePerConvexHull)
     {
         var __mb = __mb_set_min_volume_per_convex_hull;
         if (__mb == 0)
@@ -1668,7 +1668,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_get_min_volume_per_convex_hull;
-    internal float GetMinVolumePerConvexHull()
+    public float GetMinVolumePerConvexHull()
     {
         var __mb = __mb_get_min_volume_per_convex_hull;
         if (__mb == 0)
@@ -1683,7 +1683,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_set_resolution;
-    internal void SetResolution(uint minVolumePerConvexHull)
+    public void SetResolution(uint minVolumePerConvexHull)
     {
         var __mb = __mb_set_resolution;
         if (__mb == 0)
@@ -1699,7 +1699,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_get_resolution;
-    internal uint GetResolution()
+    public uint GetResolution()
     {
         var __mb = __mb_get_resolution;
         if (__mb == 0)
@@ -1714,7 +1714,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_set_max_num_vertices_per_convex_hull;
-    internal void SetMaxNumVerticesPerConvexHull(uint maxNumVerticesPerConvexHull)
+    public void SetMaxNumVerticesPerConvexHull(uint maxNumVerticesPerConvexHull)
     {
         var __mb = __mb_set_max_num_vertices_per_convex_hull;
         if (__mb == 0)
@@ -1730,7 +1730,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_get_max_num_vertices_per_convex_hull;
-    internal uint GetMaxNumVerticesPerConvexHull()
+    public uint GetMaxNumVerticesPerConvexHull()
     {
         var __mb = __mb_get_max_num_vertices_per_convex_hull;
         if (__mb == 0)
@@ -1745,7 +1745,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_set_plane_downsampling;
-    internal void SetPlaneDownsampling(uint planeDownsampling)
+    public void SetPlaneDownsampling(uint planeDownsampling)
     {
         var __mb = __mb_set_plane_downsampling;
         if (__mb == 0)
@@ -1761,7 +1761,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_get_plane_downsampling;
-    internal uint GetPlaneDownsampling()
+    public uint GetPlaneDownsampling()
     {
         var __mb = __mb_get_plane_downsampling;
         if (__mb == 0)
@@ -1776,7 +1776,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_set_convex_hull_downsampling;
-    internal void SetConvexHullDownsampling(uint convexHullDownsampling)
+    public void SetConvexHullDownsampling(uint convexHullDownsampling)
     {
         var __mb = __mb_set_convex_hull_downsampling;
         if (__mb == 0)
@@ -1792,7 +1792,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_get_convex_hull_downsampling;
-    internal uint GetConvexHullDownsampling()
+    public uint GetConvexHullDownsampling()
     {
         var __mb = __mb_get_convex_hull_downsampling;
         if (__mb == 0)
@@ -1807,7 +1807,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_set_normalize_mesh;
-    internal void SetNormalizeMesh(bool normalizeMesh)
+    public void SetNormalizeMesh(bool normalizeMesh)
     {
         var __mb = __mb_set_normalize_mesh;
         if (__mb == 0)
@@ -1823,7 +1823,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_get_normalize_mesh;
-    internal bool GetNormalizeMesh()
+    public bool GetNormalizeMesh()
     {
         var __mb = __mb_get_normalize_mesh;
         if (__mb == 0)
@@ -1838,7 +1838,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_set_mode;
-    internal void SetMode(MeshConvexDecompositionSettings.ModeEnum mode)
+    public void SetMode(MeshConvexDecompositionSettings.ModeEnum mode)
     {
         var __mb = __mb_set_mode;
         if (__mb == 0)
@@ -1854,7 +1854,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_get_mode;
-    internal MeshConvexDecompositionSettings.ModeEnum GetMode()
+    public MeshConvexDecompositionSettings.ModeEnum GetMode()
     {
         var __mb = __mb_get_mode;
         if (__mb == 0)
@@ -1869,7 +1869,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_set_convex_hull_approximation;
-    internal void SetConvexHullApproximation(bool convexHullApproximation)
+    public void SetConvexHullApproximation(bool convexHullApproximation)
     {
         var __mb = __mb_set_convex_hull_approximation;
         if (__mb == 0)
@@ -1885,7 +1885,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_get_convex_hull_approximation;
-    internal bool GetConvexHullApproximation()
+    public bool GetConvexHullApproximation()
     {
         var __mb = __mb_get_convex_hull_approximation;
         if (__mb == 0)
@@ -1900,7 +1900,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_set_max_convex_hulls;
-    internal void SetMaxConvexHulls(uint maxConvexHulls)
+    public void SetMaxConvexHulls(uint maxConvexHulls)
     {
         var __mb = __mb_set_max_convex_hulls;
         if (__mb == 0)
@@ -1916,7 +1916,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_get_max_convex_hulls;
-    internal uint GetMaxConvexHulls()
+    public uint GetMaxConvexHulls()
     {
         var __mb = __mb_get_max_convex_hulls;
         if (__mb == 0)
@@ -1931,7 +1931,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_set_project_hull_vertices;
-    internal void SetProjectHullVertices(bool projectHullVertices)
+    public void SetProjectHullVertices(bool projectHullVertices)
     {
         var __mb = __mb_set_project_hull_vertices;
         if (__mb == 0)
@@ -1947,7 +1947,7 @@ public unsafe partial class MeshConvexDecompositionSettings : RefCounted
     }
 
     private static nint __mb_get_project_hull_vertices;
-    internal bool GetProjectHullVertices()
+    public bool GetProjectHullVertices()
     {
         var __mb = __mb_get_project_hull_vertices;
         if (__mb == 0)
@@ -2676,7 +2676,7 @@ public unsafe partial class MeshInstance2D : Node2D
     }
 
     private static nint __mb_set_mesh;
-    internal void SetMesh(Mesh? mesh)
+    public void SetMesh(Mesh? mesh)
     {
         var __mb = __mb_set_mesh;
         if (__mb == 0)
@@ -2692,7 +2692,7 @@ public unsafe partial class MeshInstance2D : Node2D
     }
 
     private static nint __mb_get_mesh;
-    internal Mesh? GetMesh()
+    public Mesh? GetMesh()
     {
         var __mb = __mb_get_mesh;
         if (__mb == 0)
@@ -2707,7 +2707,7 @@ public unsafe partial class MeshInstance2D : Node2D
     }
 
     private static nint __mb_set_texture;
-    internal void SetTexture(Texture2D? texture)
+    public void SetTexture(Texture2D? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -2723,7 +2723,7 @@ public unsafe partial class MeshInstance2D : Node2D
     }
 
     private static nint __mb_get_texture;
-    internal Texture2D? GetTexture()
+    public Texture2D? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -2766,7 +2766,7 @@ public unsafe partial class MeshInstance3D : GeometryInstance3D
     }
 
     private static nint __mb_set_mesh;
-    internal void SetMesh(Mesh? mesh)
+    public void SetMesh(Mesh? mesh)
     {
         var __mb = __mb_set_mesh;
         if (__mb == 0)
@@ -2782,7 +2782,7 @@ public unsafe partial class MeshInstance3D : GeometryInstance3D
     }
 
     private static nint __mb_get_mesh;
-    internal Mesh? GetMesh()
+    public Mesh? GetMesh()
     {
         var __mb = __mb_get_mesh;
         if (__mb == 0)
@@ -2797,7 +2797,7 @@ public unsafe partial class MeshInstance3D : GeometryInstance3D
     }
 
     private static nint __mb_set_skeleton_path;
-    internal void SetSkeletonPath(NodePath skeletonPath)
+    public void SetSkeletonPath(NodePath skeletonPath)
     {
         var __mb = __mb_set_skeleton_path;
         if (__mb == 0)
@@ -2813,7 +2813,7 @@ public unsafe partial class MeshInstance3D : GeometryInstance3D
     }
 
     private static nint __mb_get_skeleton_path;
-    internal NodePath GetSkeletonPath()
+    public NodePath GetSkeletonPath()
     {
         var __mb = __mb_get_skeleton_path;
         if (__mb == 0)
@@ -2828,7 +2828,7 @@ public unsafe partial class MeshInstance3D : GeometryInstance3D
     }
 
     private static nint __mb_set_skin;
-    internal void SetSkin(Skin? skin)
+    public void SetSkin(Skin? skin)
     {
         var __mb = __mb_set_skin;
         if (__mb == 0)
@@ -2844,7 +2844,7 @@ public unsafe partial class MeshInstance3D : GeometryInstance3D
     }
 
     private static nint __mb_get_skin;
-    internal Skin? GetSkin()
+    public Skin? GetSkin()
     {
         var __mb = __mb_get_skin;
         if (__mb == 0)
@@ -3580,7 +3580,7 @@ public unsafe partial class MeshTexture : Texture2D
     }
 
     private static nint __mb_set_mesh;
-    internal void SetMesh(Mesh? mesh)
+    public void SetMesh(Mesh? mesh)
     {
         var __mb = __mb_set_mesh;
         if (__mb == 0)
@@ -3596,7 +3596,7 @@ public unsafe partial class MeshTexture : Texture2D
     }
 
     private static nint __mb_get_mesh;
-    internal Mesh? GetMesh()
+    public Mesh? GetMesh()
     {
         var __mb = __mb_get_mesh;
         if (__mb == 0)
@@ -3611,7 +3611,7 @@ public unsafe partial class MeshTexture : Texture2D
     }
 
     private static nint __mb_set_image_size;
-    internal void SetImageSize(Vector2 size)
+    public void SetImageSize(Vector2 size)
     {
         var __mb = __mb_set_image_size;
         if (__mb == 0)
@@ -3627,7 +3627,7 @@ public unsafe partial class MeshTexture : Texture2D
     }
 
     private static nint __mb_get_image_size;
-    internal Vector2 GetImageSize()
+    public Vector2 GetImageSize()
     {
         var __mb = __mb_get_image_size;
         if (__mb == 0)
@@ -3642,7 +3642,7 @@ public unsafe partial class MeshTexture : Texture2D
     }
 
     private static nint __mb_set_base_texture;
-    internal void SetBaseTexture(Texture2D? texture)
+    public void SetBaseTexture(Texture2D? texture)
     {
         var __mb = __mb_set_base_texture;
         if (__mb == 0)
@@ -3658,7 +3658,7 @@ public unsafe partial class MeshTexture : Texture2D
     }
 
     private static nint __mb_get_base_texture;
-    internal Texture2D? GetBaseTexture()
+    public Texture2D? GetBaseTexture()
     {
         var __mb = __mb_get_base_texture;
         if (__mb == 0)
@@ -3771,7 +3771,7 @@ public unsafe partial class MissingNode : Node
     }
 
     private static nint __mb_set_original_class;
-    internal void SetOriginalClass(string name)
+    public void SetOriginalClass(string name)
     {
         var __mb = __mb_set_original_class;
         if (__mb == 0)
@@ -3788,7 +3788,7 @@ public unsafe partial class MissingNode : Node
     }
 
     private static nint __mb_get_original_class;
-    internal string GetOriginalClass()
+    public string GetOriginalClass()
     {
         var __mb = __mb_get_original_class;
         if (__mb == 0)
@@ -3803,7 +3803,7 @@ public unsafe partial class MissingNode : Node
     }
 
     private static nint __mb_set_original_scene;
-    internal void SetOriginalScene(string name)
+    public void SetOriginalScene(string name)
     {
         var __mb = __mb_set_original_scene;
         if (__mb == 0)
@@ -3820,7 +3820,7 @@ public unsafe partial class MissingNode : Node
     }
 
     private static nint __mb_get_original_scene;
-    internal string GetOriginalScene()
+    public string GetOriginalScene()
     {
         var __mb = __mb_get_original_scene;
         if (__mb == 0)
@@ -3835,7 +3835,7 @@ public unsafe partial class MissingNode : Node
     }
 
     private static nint __mb_set_recording_properties;
-    internal void SetRecordingProperties(bool enable)
+    public void SetRecordingProperties(bool enable)
     {
         var __mb = __mb_set_recording_properties;
         if (__mb == 0)
@@ -3851,7 +3851,7 @@ public unsafe partial class MissingNode : Node
     }
 
     private static nint __mb_is_recording_properties;
-    internal bool IsRecordingProperties()
+    public bool IsRecordingProperties()
     {
         var __mb = __mb_is_recording_properties;
         if (__mb == 0)
@@ -3866,7 +3866,7 @@ public unsafe partial class MissingNode : Node
     }
 
     private static nint __mb_set_recording_signals;
-    internal void SetRecordingSignals(bool enable)
+    public void SetRecordingSignals(bool enable)
     {
         var __mb = __mb_set_recording_signals;
         if (__mb == 0)
@@ -3882,7 +3882,7 @@ public unsafe partial class MissingNode : Node
     }
 
     private static nint __mb_is_recording_signals;
-    internal bool IsRecordingSignals()
+    public bool IsRecordingSignals()
     {
         var __mb = __mb_is_recording_signals;
         if (__mb == 0)
@@ -3919,7 +3919,7 @@ public unsafe partial class MissingResource : Resource
     }
 
     private static nint __mb_set_original_class;
-    internal void SetOriginalClass(string name)
+    public void SetOriginalClass(string name)
     {
         var __mb = __mb_set_original_class;
         if (__mb == 0)
@@ -3936,7 +3936,7 @@ public unsafe partial class MissingResource : Resource
     }
 
     private static nint __mb_get_original_class;
-    internal string GetOriginalClass()
+    public string GetOriginalClass()
     {
         var __mb = __mb_get_original_class;
         if (__mb == 0)
@@ -3951,7 +3951,7 @@ public unsafe partial class MissingResource : Resource
     }
 
     private static nint __mb_set_recording_properties;
-    internal void SetRecordingProperties(bool enable)
+    public void SetRecordingProperties(bool enable)
     {
         var __mb = __mb_set_recording_properties;
         if (__mb == 0)
@@ -3967,7 +3967,7 @@ public unsafe partial class MissingResource : Resource
     }
 
     private static nint __mb_is_recording_properties;
-    internal bool IsRecordingProperties()
+    public bool IsRecordingProperties()
     {
         var __mb = __mb_is_recording_properties;
         if (__mb == 0)
@@ -4052,7 +4052,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_set_eye_height;
-    internal void SetEyeHeight(double eyeHeight)
+    public void SetEyeHeight(double eyeHeight)
     {
         var __mb = __mb_set_eye_height;
         if (__mb == 0)
@@ -4068,7 +4068,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_get_eye_height;
-    internal double GetEyeHeight()
+    public double GetEyeHeight()
     {
         var __mb = __mb_get_eye_height;
         if (__mb == 0)
@@ -4083,7 +4083,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_set_iod;
-    internal void SetIod(double iod)
+    public void SetIod(double iod)
     {
         var __mb = __mb_set_iod;
         if (__mb == 0)
@@ -4099,7 +4099,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_get_iod;
-    internal double GetIod()
+    public double GetIod()
     {
         var __mb = __mb_get_iod;
         if (__mb == 0)
@@ -4114,7 +4114,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_set_display_width;
-    internal void SetDisplayWidth(double displayWidth)
+    public void SetDisplayWidth(double displayWidth)
     {
         var __mb = __mb_set_display_width;
         if (__mb == 0)
@@ -4130,7 +4130,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_get_display_width;
-    internal double GetDisplayWidth()
+    public double GetDisplayWidth()
     {
         var __mb = __mb_get_display_width;
         if (__mb == 0)
@@ -4145,7 +4145,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_set_display_to_lens;
-    internal void SetDisplayToLens(double displayToLens)
+    public void SetDisplayToLens(double displayToLens)
     {
         var __mb = __mb_set_display_to_lens;
         if (__mb == 0)
@@ -4161,7 +4161,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_get_display_to_lens;
-    internal double GetDisplayToLens()
+    public double GetDisplayToLens()
     {
         var __mb = __mb_get_display_to_lens;
         if (__mb == 0)
@@ -4176,7 +4176,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_set_offset_rect;
-    internal void SetOffsetRect(Rect2 offsetRect)
+    public void SetOffsetRect(Rect2 offsetRect)
     {
         var __mb = __mb_set_offset_rect;
         if (__mb == 0)
@@ -4192,7 +4192,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_get_offset_rect;
-    internal Rect2 GetOffsetRect()
+    public Rect2 GetOffsetRect()
     {
         var __mb = __mb_get_offset_rect;
         if (__mb == 0)
@@ -4207,7 +4207,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_set_oversample;
-    internal void SetOversample(double oversample)
+    public void SetOversample(double oversample)
     {
         var __mb = __mb_set_oversample;
         if (__mb == 0)
@@ -4223,7 +4223,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_get_oversample;
-    internal double GetOversample()
+    public double GetOversample()
     {
         var __mb = __mb_get_oversample;
         if (__mb == 0)
@@ -4238,7 +4238,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_set_k1;
-    internal void SetK1(double k)
+    public void SetK1(double k)
     {
         var __mb = __mb_set_k1;
         if (__mb == 0)
@@ -4254,7 +4254,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_get_k1;
-    internal double GetK1()
+    public double GetK1()
     {
         var __mb = __mb_get_k1;
         if (__mb == 0)
@@ -4269,7 +4269,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_set_k2;
-    internal void SetK2(double k)
+    public void SetK2(double k)
     {
         var __mb = __mb_set_k2;
         if (__mb == 0)
@@ -4285,7 +4285,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_get_k2;
-    internal double GetK2()
+    public double GetK2()
     {
         var __mb = __mb_get_k2;
         if (__mb == 0)
@@ -4300,7 +4300,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_get_vrs_min_radius;
-    internal float GetVrsMinRadius()
+    public float GetVrsMinRadius()
     {
         var __mb = __mb_get_vrs_min_radius;
         if (__mb == 0)
@@ -4315,7 +4315,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_set_vrs_min_radius;
-    internal void SetVrsMinRadius(float radius)
+    public void SetVrsMinRadius(float radius)
     {
         var __mb = __mb_set_vrs_min_radius;
         if (__mb == 0)
@@ -4331,7 +4331,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_get_vrs_strength;
-    internal float GetVrsStrength()
+    public float GetVrsStrength()
     {
         var __mb = __mb_get_vrs_strength;
         if (__mb == 0)
@@ -4346,7 +4346,7 @@ public unsafe partial class MobileVRInterface : XRInterface
     }
 
     private static nint __mb_set_vrs_strength;
-    internal void SetVrsStrength(float strength)
+    public void SetVrsStrength(float strength)
     {
         var __mb = __mb_set_vrs_strength;
         if (__mb == 0)
@@ -4384,7 +4384,7 @@ public unsafe partial class ModifierBoneTarget3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_bone_name;
-    internal void SetBoneName(string boneName)
+    public void SetBoneName(string boneName)
     {
         var __mb = __mb_set_bone_name;
         if (__mb == 0)
@@ -4401,7 +4401,7 @@ public unsafe partial class ModifierBoneTarget3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_bone_name;
-    internal string GetBoneName()
+    public string GetBoneName()
     {
         var __mb = __mb_get_bone_name;
         if (__mb == 0)
@@ -4416,7 +4416,7 @@ public unsafe partial class ModifierBoneTarget3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_bone;
-    internal void SetBone(int bone)
+    public void SetBone(int bone)
     {
         var __mb = __mb_set_bone;
         if (__mb == 0)
@@ -4432,7 +4432,7 @@ public unsafe partial class ModifierBoneTarget3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_bone;
-    internal int GetBone()
+    public int GetBone()
     {
         var __mb = __mb_get_bone;
         if (__mb == 0)
@@ -4609,7 +4609,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_set_mesh;
-    internal void SetMesh(Mesh? mesh)
+    public void SetMesh(Mesh? mesh)
     {
         var __mb = __mb_set_mesh;
         if (__mb == 0)
@@ -4625,7 +4625,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_get_mesh;
-    internal Mesh? GetMesh()
+    public Mesh? GetMesh()
     {
         var __mb = __mb_get_mesh;
         if (__mb == 0)
@@ -4640,7 +4640,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_set_use_colors;
-    internal void SetUseColors(bool enable)
+    public void SetUseColors(bool enable)
     {
         var __mb = __mb_set_use_colors;
         if (__mb == 0)
@@ -4656,7 +4656,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_is_using_colors;
-    internal bool IsUsingColors()
+    public bool IsUsingColors()
     {
         var __mb = __mb_is_using_colors;
         if (__mb == 0)
@@ -4671,7 +4671,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_set_use_custom_data;
-    internal void SetUseCustomData(bool enable)
+    public void SetUseCustomData(bool enable)
     {
         var __mb = __mb_set_use_custom_data;
         if (__mb == 0)
@@ -4687,7 +4687,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_is_using_custom_data;
-    internal bool IsUsingCustomData()
+    public bool IsUsingCustomData()
     {
         var __mb = __mb_is_using_custom_data;
         if (__mb == 0)
@@ -4702,7 +4702,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_set_transform_format;
-    internal void SetTransformFormat(MultiMesh.TransformFormatEnum format)
+    public void SetTransformFormat(MultiMesh.TransformFormatEnum format)
     {
         var __mb = __mb_set_transform_format;
         if (__mb == 0)
@@ -4718,7 +4718,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_get_transform_format;
-    internal MultiMesh.TransformFormatEnum GetTransformFormat()
+    public MultiMesh.TransformFormatEnum GetTransformFormat()
     {
         var __mb = __mb_get_transform_format;
         if (__mb == 0)
@@ -4733,7 +4733,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_set_instance_count;
-    internal void SetInstanceCount(int count)
+    public void SetInstanceCount(int count)
     {
         var __mb = __mb_set_instance_count;
         if (__mb == 0)
@@ -4749,7 +4749,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_get_instance_count;
-    internal int GetInstanceCount()
+    public int GetInstanceCount()
     {
         var __mb = __mb_get_instance_count;
         if (__mb == 0)
@@ -4764,7 +4764,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_set_visible_instance_count;
-    internal void SetVisibleInstanceCount(int count)
+    public void SetVisibleInstanceCount(int count)
     {
         var __mb = __mb_set_visible_instance_count;
         if (__mb == 0)
@@ -4780,7 +4780,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_get_visible_instance_count;
-    internal int GetVisibleInstanceCount()
+    public int GetVisibleInstanceCount()
     {
         var __mb = __mb_get_visible_instance_count;
         if (__mb == 0)
@@ -4795,7 +4795,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_set_physics_interpolation_quality;
-    internal void SetPhysicsInterpolationQuality(MultiMesh.PhysicsInterpolationQualityEnum quality)
+    public void SetPhysicsInterpolationQuality(MultiMesh.PhysicsInterpolationQualityEnum quality)
     {
         var __mb = __mb_set_physics_interpolation_quality;
         if (__mb == 0)
@@ -4811,7 +4811,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_get_physics_interpolation_quality;
-    internal MultiMesh.PhysicsInterpolationQualityEnum GetPhysicsInterpolationQuality()
+    public MultiMesh.PhysicsInterpolationQualityEnum GetPhysicsInterpolationQuality()
     {
         var __mb = __mb_get_physics_interpolation_quality;
         if (__mb == 0)
@@ -4844,7 +4844,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_set_instance_transform_2d;
-    public void SetInstanceTransform2d(int instance, Transform2D transform)
+    public void SetInstanceTransform2D(int instance, Transform2D transform)
     {
         var __mb = __mb_set_instance_transform_2d;
         if (__mb == 0)
@@ -4880,7 +4880,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_get_instance_transform_2d;
-    public Transform2D GetInstanceTransform2d(int instance)
+    public Transform2D GetInstanceTransform2D(int instance)
     {
         var __mb = __mb_get_instance_transform_2d;
         if (__mb == 0)
@@ -4999,7 +4999,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_set_custom_aabb;
-    internal void SetCustomAabb(Aabb aabb)
+    public void SetCustomAabb(Aabb aabb)
     {
         var __mb = __mb_set_custom_aabb;
         if (__mb == 0)
@@ -5015,7 +5015,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_get_custom_aabb;
-    internal Aabb GetCustomAabb()
+    public Aabb GetCustomAabb()
     {
         var __mb = __mb_get_custom_aabb;
         if (__mb == 0)
@@ -5045,7 +5045,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_get_buffer;
-    internal float[] GetBuffer()
+    public float[] GetBuffer()
     {
         var __mb = __mb_get_buffer;
         if (__mb == 0)
@@ -5060,7 +5060,7 @@ public unsafe partial class MultiMesh : Resource
     }
 
     private static nint __mb_set_buffer;
-    internal void SetBuffer(float[] buffer)
+    public void SetBuffer(float[] buffer)
     {
         var __mb = __mb_set_buffer;
         if (__mb == 0)
@@ -5127,7 +5127,7 @@ public unsafe partial class MultiMeshInstance2D : Node2D
     }
 
     private static nint __mb_set_multimesh;
-    internal void SetMultimesh(MultiMesh? multimesh)
+    public void SetMultimesh(MultiMesh? multimesh)
     {
         var __mb = __mb_set_multimesh;
         if (__mb == 0)
@@ -5143,7 +5143,7 @@ public unsafe partial class MultiMeshInstance2D : Node2D
     }
 
     private static nint __mb_get_multimesh;
-    internal MultiMesh? GetMultimesh()
+    public MultiMesh? GetMultimesh()
     {
         var __mb = __mb_get_multimesh;
         if (__mb == 0)
@@ -5158,7 +5158,7 @@ public unsafe partial class MultiMeshInstance2D : Node2D
     }
 
     private static nint __mb_set_texture;
-    internal void SetTexture(Texture2D? texture)
+    public void SetTexture(Texture2D? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -5174,7 +5174,7 @@ public unsafe partial class MultiMeshInstance2D : Node2D
     }
 
     private static nint __mb_get_texture;
-    internal Texture2D? GetTexture()
+    public Texture2D? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -5205,7 +5205,7 @@ public unsafe partial class MultiMeshInstance3D : GeometryInstance3D
     }
 
     private static nint __mb_set_multimesh;
-    internal void SetMultimesh(MultiMesh? multimesh)
+    public void SetMultimesh(MultiMesh? multimesh)
     {
         var __mb = __mb_set_multimesh;
         if (__mb == 0)
@@ -5221,7 +5221,7 @@ public unsafe partial class MultiMeshInstance3D : GeometryInstance3D
     }
 
     private static nint __mb_get_multimesh;
-    internal MultiMesh? GetMultimesh()
+    public MultiMesh? GetMultimesh()
     {
         var __mb = __mb_get_multimesh;
         if (__mb == 0)
@@ -5309,7 +5309,7 @@ public unsafe partial class MultiplayerAPI : RefCounted
     }
 
     private static nint __mb_get_multiplayer_peer;
-    internal MultiplayerPeer? GetMultiplayerPeer()
+    public MultiplayerPeer? GetMultiplayerPeer()
     {
         var __mb = __mb_get_multiplayer_peer;
         if (__mb == 0)
@@ -5324,7 +5324,7 @@ public unsafe partial class MultiplayerAPI : RefCounted
     }
 
     private static nint __mb_set_multiplayer_peer;
-    internal void SetMultiplayerPeer(MultiplayerPeer? peer)
+    public void SetMultiplayerPeer(MultiplayerPeer? peer)
     {
         var __mb = __mb_set_multiplayer_peer;
         if (__mb == 0)
@@ -5648,7 +5648,7 @@ public unsafe partial class MultiplayerPeer : PacketPeer
     }
 
     private static nint __mb_set_transfer_channel;
-    internal void SetTransferChannel(int channel)
+    public void SetTransferChannel(int channel)
     {
         var __mb = __mb_set_transfer_channel;
         if (__mb == 0)
@@ -5664,7 +5664,7 @@ public unsafe partial class MultiplayerPeer : PacketPeer
     }
 
     private static nint __mb_get_transfer_channel;
-    internal int GetTransferChannel()
+    public int GetTransferChannel()
     {
         var __mb = __mb_get_transfer_channel;
         if (__mb == 0)
@@ -5679,7 +5679,7 @@ public unsafe partial class MultiplayerPeer : PacketPeer
     }
 
     private static nint __mb_set_transfer_mode;
-    internal void SetTransferMode(MultiplayerPeer.TransferModeEnum mode)
+    public void SetTransferMode(MultiplayerPeer.TransferModeEnum mode)
     {
         var __mb = __mb_set_transfer_mode;
         if (__mb == 0)
@@ -5695,7 +5695,7 @@ public unsafe partial class MultiplayerPeer : PacketPeer
     }
 
     private static nint __mb_get_transfer_mode;
-    internal MultiplayerPeer.TransferModeEnum GetTransferMode()
+    public MultiplayerPeer.TransferModeEnum GetTransferMode()
     {
         var __mb = __mb_get_transfer_mode;
         if (__mb == 0)
@@ -5860,7 +5860,7 @@ public unsafe partial class MultiplayerPeer : PacketPeer
     }
 
     private static nint __mb_set_refuse_new_connections;
-    internal void SetRefuseNewConnections(bool enable)
+    public void SetRefuseNewConnections(bool enable)
     {
         var __mb = __mb_set_refuse_new_connections;
         if (__mb == 0)
@@ -5876,7 +5876,7 @@ public unsafe partial class MultiplayerPeer : PacketPeer
     }
 
     private static nint __mb_is_refusing_new_connections;
-    internal bool IsRefusingNewConnections()
+    public bool IsRefusingNewConnections()
     {
         var __mb = __mb_is_refusing_new_connections;
         if (__mb == 0)
@@ -6236,7 +6236,7 @@ public unsafe partial class MultiplayerSpawner : Node
     }
 
     private static nint __mb_get_spawn_path;
-    internal NodePath GetSpawnPath()
+    public NodePath GetSpawnPath()
     {
         var __mb = __mb_get_spawn_path;
         if (__mb == 0)
@@ -6251,7 +6251,7 @@ public unsafe partial class MultiplayerSpawner : Node
     }
 
     private static nint __mb_set_spawn_path;
-    internal void SetSpawnPath(NodePath path)
+    public void SetSpawnPath(NodePath path)
     {
         var __mb = __mb_set_spawn_path;
         if (__mb == 0)
@@ -6267,7 +6267,7 @@ public unsafe partial class MultiplayerSpawner : Node
     }
 
     private static nint __mb_get_spawn_limit;
-    internal uint GetSpawnLimit()
+    public uint GetSpawnLimit()
     {
         var __mb = __mb_get_spawn_limit;
         if (__mb == 0)
@@ -6282,7 +6282,7 @@ public unsafe partial class MultiplayerSpawner : Node
     }
 
     private static nint __mb_set_spawn_limit;
-    internal void SetSpawnLimit(uint limit)
+    public void SetSpawnLimit(uint limit)
     {
         var __mb = __mb_set_spawn_limit;
         if (__mb == 0)
@@ -6298,7 +6298,7 @@ public unsafe partial class MultiplayerSpawner : Node
     }
 
     private static nint __mb_get_spawn_function;
-    internal Callable GetSpawnFunction()
+    public Callable GetSpawnFunction()
     {
         var __mb = __mb_get_spawn_function;
         if (__mb == 0)
@@ -6313,7 +6313,7 @@ public unsafe partial class MultiplayerSpawner : Node
     }
 
     private static nint __mb_set_spawn_function;
-    internal void SetSpawnFunction(Callable spawnFunction)
+    public void SetSpawnFunction(Callable spawnFunction)
     {
         var __mb = __mb_set_spawn_function;
         if (__mb == 0)
@@ -6406,7 +6406,7 @@ public unsafe partial class MultiplayerSynchronizer : Node
     }
 
     private static nint __mb_set_root_path;
-    internal void SetRootPath(NodePath path)
+    public void SetRootPath(NodePath path)
     {
         var __mb = __mb_set_root_path;
         if (__mb == 0)
@@ -6422,7 +6422,7 @@ public unsafe partial class MultiplayerSynchronizer : Node
     }
 
     private static nint __mb_get_root_path;
-    internal NodePath GetRootPath()
+    public NodePath GetRootPath()
     {
         var __mb = __mb_get_root_path;
         if (__mb == 0)
@@ -6437,7 +6437,7 @@ public unsafe partial class MultiplayerSynchronizer : Node
     }
 
     private static nint __mb_set_replication_interval;
-    internal void SetReplicationInterval(double milliseconds)
+    public void SetReplicationInterval(double milliseconds)
     {
         var __mb = __mb_set_replication_interval;
         if (__mb == 0)
@@ -6453,7 +6453,7 @@ public unsafe partial class MultiplayerSynchronizer : Node
     }
 
     private static nint __mb_get_replication_interval;
-    internal double GetReplicationInterval()
+    public double GetReplicationInterval()
     {
         var __mb = __mb_get_replication_interval;
         if (__mb == 0)
@@ -6468,7 +6468,7 @@ public unsafe partial class MultiplayerSynchronizer : Node
     }
 
     private static nint __mb_set_delta_interval;
-    internal void SetDeltaInterval(double milliseconds)
+    public void SetDeltaInterval(double milliseconds)
     {
         var __mb = __mb_set_delta_interval;
         if (__mb == 0)
@@ -6484,7 +6484,7 @@ public unsafe partial class MultiplayerSynchronizer : Node
     }
 
     private static nint __mb_get_delta_interval;
-    internal double GetDeltaInterval()
+    public double GetDeltaInterval()
     {
         var __mb = __mb_get_delta_interval;
         if (__mb == 0)
@@ -6499,7 +6499,7 @@ public unsafe partial class MultiplayerSynchronizer : Node
     }
 
     private static nint __mb_set_replication_config;
-    internal void SetReplicationConfig(SceneReplicationConfig? config)
+    public void SetReplicationConfig(SceneReplicationConfig? config)
     {
         var __mb = __mb_set_replication_config;
         if (__mb == 0)
@@ -6515,7 +6515,7 @@ public unsafe partial class MultiplayerSynchronizer : Node
     }
 
     private static nint __mb_get_replication_config;
-    internal SceneReplicationConfig? GetReplicationConfig()
+    public SceneReplicationConfig? GetReplicationConfig()
     {
         var __mb = __mb_get_replication_config;
         if (__mb == 0)
@@ -6530,7 +6530,7 @@ public unsafe partial class MultiplayerSynchronizer : Node
     }
 
     private static nint __mb_set_visibility_update_mode;
-    internal void SetVisibilityUpdateMode(MultiplayerSynchronizer.VisibilityUpdateModeEnum mode)
+    public void SetVisibilityUpdateMode(MultiplayerSynchronizer.VisibilityUpdateModeEnum mode)
     {
         var __mb = __mb_set_visibility_update_mode;
         if (__mb == 0)
@@ -6546,7 +6546,7 @@ public unsafe partial class MultiplayerSynchronizer : Node
     }
 
     private static nint __mb_get_visibility_update_mode;
-    internal MultiplayerSynchronizer.VisibilityUpdateModeEnum GetVisibilityUpdateMode()
+    public MultiplayerSynchronizer.VisibilityUpdateModeEnum GetVisibilityUpdateMode()
     {
         var __mb = __mb_get_visibility_update_mode;
         if (__mb == 0)
@@ -6577,7 +6577,7 @@ public unsafe partial class MultiplayerSynchronizer : Node
     }
 
     private static nint __mb_set_visibility_public;
-    internal void SetVisibilityPublic(bool visible)
+    public void SetVisibilityPublic(bool visible)
     {
         var __mb = __mb_set_visibility_public;
         if (__mb == 0)
@@ -6593,7 +6593,7 @@ public unsafe partial class MultiplayerSynchronizer : Node
     }
 
     private static nint __mb_is_visibility_public;
-    internal bool IsVisibilityPublic()
+    public bool IsVisibilityPublic()
     {
         var __mb = __mb_is_visibility_public;
         if (__mb == 0)

@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://ShimScriptNode.cs" id="1_cs"]
+[ext_resource type="Script" path="res://shim_caller.gd" id="2_gd"]
+
+[node name="ShimRoot" type="Node"]
+script = ExtResource("1_cs")
+Sprouts = 41
+
+[node name="Caller" type="Node" parent="."]
+script = ExtResource("2_gd")
+
+[connection signal="Sprouted" from="." to="Caller" method="on_sprouted"]

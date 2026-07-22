@@ -4,7 +4,6 @@
 // main loop after Engine.Run().
 
 using Godot;
-using Godot.NativeInterop;
 using Engine = twodog.Engine;
 
 internal static class Program
@@ -13,7 +12,8 @@ internal static class Program
     {
         Console.WriteLine("2dog gdext web demo starting...");
 
-        ClassRegistry.Register<Spinner>();
+        // No ClassRegistry.Register call: Spinner registers via the source
+        // generator's module initializer (the ClassExists check below covers it).
 
         // args come from the JS shell (GODOT_CONFIG.args plus the
         // '--main-pack godot.pck' the engine loader prepends).

@@ -32,9 +32,9 @@ public class ExportSignalTests
         var node = new ExportNode();
         try
         {
-            using var speed = node.Get("speed");   // engine -> registered getter
+            using var speed = node.Get("Speed");   // engine -> registered getter
             Assert.Equal(5.0, speed.AsDouble());
-            using var title = node.Get("title");
+            using var title = node.Get("Title");
             Assert.Equal("untitled", title.AsString());
         }
         finally
@@ -51,11 +51,11 @@ public class ExportSignalTests
         try
         {
             using Variant v = 7.5;
-            node.Set("speed", v);                  // engine -> registered setter
+            node.Set("Speed", v);                  // engine -> registered setter
             Assert.Equal(7.5f, node.Speed);        // landed on the C# property
 
             using Variant t = "renamed title";
-            node.Set("title", t);
+            node.Set("Title", t);
             Assert.Equal("renamed title", node.Title);
         }
         finally
@@ -73,10 +73,10 @@ public class ExportSignalTests
         try
         {
             using var target = Variant.From(other);
-            node.Set("target", target);
+            node.Set("Target", target);
             Assert.Same(other, node.Target);
 
-            using var back = node.Get("target");
+            using var back = node.Get("Target");
             Assert.Same(other, back.AsGodotObject());
         }
         finally
@@ -101,9 +101,9 @@ public class ExportSignalTests
                 using var dict = entry.AsGodotDictionary();
                 using Variant key = "name";
                 using var name = dict[key];
-                if (name.AsString() == "health") found = true;
+                if (name.AsString() == "Health") found = true;
             }
-            Assert.True(found, "exported property 'health' missing from get_property_list");
+            Assert.True(found, "exported property 'Health' missing from get_property_list");
         }
         finally
         {
@@ -118,8 +118,8 @@ public class ExportSignalTests
         var node = new ExportNode();
         try
         {
-            Assert.True(node.HasSignal("scored"));
-            Assert.True(node.HasSignal("died"));
+            Assert.True(node.HasSignal("Scored"));
+            Assert.True(node.HasSignal("Died"));
             Assert.False(node.HasSignal("nonexistent"));
         }
         finally

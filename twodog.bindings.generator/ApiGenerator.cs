@@ -83,7 +83,9 @@ public static class ApiGenerator
     private static Dictionary<string, JsonElement> _classJson = [];
     private static Dictionary<string, Dictionary<string, JsonElement>> _methodsByClass = [];
     private static Dictionary<string, List<PropInfo>> _propsByClass = [];
-    private static readonly HashSet<(string cls, string method)> _internalAccessors = [];
+    // GodotSharp parity note: property accessor methods (GetX/SetX/IsX) are
+    // emitted PUBLIC alongside the folded property - GodotSharp exposes both
+    // and converted game code calls them directly.
     private static readonly Dictionary<(string cls, string enumName), string> _enumRenames = [];
     private static readonly SortedDictionary<string, string> _virtualNameMap = []; // gd virtual name -> cs stub name
     private static readonly HashSet<string> _staticSingletons = [];
@@ -140,7 +142,6 @@ public static class ApiGenerator
         // ---- properties: enum renames first (before any Map() call), then
         //      full resolution against getter/setter signatures ----
         _propsByClass = [];
-        _internalAccessors.Clear();
         _enumRenames.Clear();
         _propsEmitted = 0;
         _propsSkipped = 0;
@@ -544,10 +545,7 @@ public static class ApiGenerator
         var mbField = $"__mb_{gdName}";
         _emitted++;
 
-        // GodotSharp compat: property accessor methods are hidden from the
-        // public surface (the property is the API); internal keeps them
-        // callable by generated property bodies across the class hierarchy.
-        var visibility = _internalAccessors.Contains((info.GdName, gdName)) ? "internal" : "public";
+        var visibility = "public";
 
         sb.AppendLine();
         sb.AppendLine($"    private static nint {mbField};");
@@ -736,7 +734,7 @@ public static class ApiGenerator
         var self = jsonStatic ? "0" : staticClass ? "SingletonPtr" : "NativePtr";
         _emitted++;
 
-        var visibility = _internalAccessors.Contains((info.GdName, gdName)) ? "internal" : "public";
+        var visibility = "public";
         var k = lead.Count;
 
         sb.AppendLine();
@@ -1155,10 +1153,8 @@ public static class ApiGenerator
                             // else: type mismatch beyond numeric/enum - emit read-only.
                         }
                     }
-                    if (setterCs is not null) _internalAccessors.Add((setterCls, setterName!));
                 }
 
-                _internalAccessors.Add((getterCls, getterName!));
                 list.Add(new PropInfo(csName, Pascal(getterName!), setterCs, indexCast, type, setterCast));
             }
         }
@@ -1366,8 +1362,17 @@ public static class ApiGenerator
     private static string Bool(bool b) => b ? "true" : "false";
 
     private static string Pascal(string snake) =>
-        string.Concat(snake.Split('_', StringSplitOptions.RemoveEmptyEntries)
-            .Select(w => char.ToUpperInvariant(w[0]) + w[1..]));
+        string.Concat(snake.Split('_', StringSplitOptions.RemoveEmptyEntries).Select(PascalWord));
+
+    // GodotSharp parity: a segment starting with digits capitalizes the first
+    // letter after them ("2d" -> "2D", "2dv" -> "2Dv"; get_noise_2dv -> GetNoise2Dv).
+    private static string PascalWord(string w)
+    {
+        if (!char.IsAsciiDigit(w[0])) return char.ToUpperInvariant(w[0]) + w[1..];
+        var i = 0;
+        while (i < w.Length && char.IsAsciiDigit(w[i])) i++;
+        return i < w.Length ? w[..i] + char.ToUpperInvariant(w[i]) + w[(i + 1)..] : w;
+    }
 
     private static string Camel(string snake)
     {

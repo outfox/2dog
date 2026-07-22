@@ -120,7 +120,7 @@ public unsafe partial class JSON : Resource
     }
 
     private static nint __mb_get_data;
-    internal Variant GetData()
+    public Variant GetData()
     {
         var __mb = __mb_get_data;
         if (__mb == 0)
@@ -135,7 +135,7 @@ public unsafe partial class JSON : Resource
     }
 
     private static nint __mb_set_data;
-    internal void SetData(Variant data)
+    public void SetData(Variant data)
     {
         var __mb = __mb_set_data;
         if (__mb == 0)
@@ -857,7 +857,7 @@ public unsafe partial class Joint2D : Node2D
     }
 
     private static nint __mb_set_node_a;
-    internal void SetNodeA(NodePath node)
+    public void SetNodeA(NodePath node)
     {
         var __mb = __mb_set_node_a;
         if (__mb == 0)
@@ -873,7 +873,7 @@ public unsafe partial class Joint2D : Node2D
     }
 
     private static nint __mb_get_node_a;
-    internal NodePath GetNodeA()
+    public NodePath GetNodeA()
     {
         var __mb = __mb_get_node_a;
         if (__mb == 0)
@@ -888,7 +888,7 @@ public unsafe partial class Joint2D : Node2D
     }
 
     private static nint __mb_set_node_b;
-    internal void SetNodeB(NodePath node)
+    public void SetNodeB(NodePath node)
     {
         var __mb = __mb_set_node_b;
         if (__mb == 0)
@@ -904,7 +904,7 @@ public unsafe partial class Joint2D : Node2D
     }
 
     private static nint __mb_get_node_b;
-    internal NodePath GetNodeB()
+    public NodePath GetNodeB()
     {
         var __mb = __mb_get_node_b;
         if (__mb == 0)
@@ -919,7 +919,7 @@ public unsafe partial class Joint2D : Node2D
     }
 
     private static nint __mb_set_bias;
-    internal void SetBias(float bias)
+    public void SetBias(float bias)
     {
         var __mb = __mb_set_bias;
         if (__mb == 0)
@@ -935,7 +935,7 @@ public unsafe partial class Joint2D : Node2D
     }
 
     private static nint __mb_get_bias;
-    internal float GetBias()
+    public float GetBias()
     {
         var __mb = __mb_get_bias;
         if (__mb == 0)
@@ -950,7 +950,7 @@ public unsafe partial class Joint2D : Node2D
     }
 
     private static nint __mb_set_exclude_nodes_from_collision;
-    internal void SetExcludeNodesFromCollision(bool enable)
+    public void SetExcludeNodesFromCollision(bool enable)
     {
         var __mb = __mb_set_exclude_nodes_from_collision;
         if (__mb == 0)
@@ -966,7 +966,7 @@ public unsafe partial class Joint2D : Node2D
     }
 
     private static nint __mb_get_exclude_nodes_from_collision;
-    internal bool GetExcludeNodesFromCollision()
+    public bool GetExcludeNodesFromCollision()
     {
         var __mb = __mb_get_exclude_nodes_from_collision;
         if (__mb == 0)
@@ -1025,7 +1025,7 @@ public unsafe partial class Joint3D : Node3D
     }
 
     private static nint __mb_set_node_a;
-    internal void SetNodeA(NodePath node)
+    public void SetNodeA(NodePath node)
     {
         var __mb = __mb_set_node_a;
         if (__mb == 0)
@@ -1041,7 +1041,7 @@ public unsafe partial class Joint3D : Node3D
     }
 
     private static nint __mb_get_node_a;
-    internal NodePath GetNodeA()
+    public NodePath GetNodeA()
     {
         var __mb = __mb_get_node_a;
         if (__mb == 0)
@@ -1056,7 +1056,7 @@ public unsafe partial class Joint3D : Node3D
     }
 
     private static nint __mb_set_node_b;
-    internal void SetNodeB(NodePath node)
+    public void SetNodeB(NodePath node)
     {
         var __mb = __mb_set_node_b;
         if (__mb == 0)
@@ -1072,7 +1072,7 @@ public unsafe partial class Joint3D : Node3D
     }
 
     private static nint __mb_get_node_b;
-    internal NodePath GetNodeB()
+    public NodePath GetNodeB()
     {
         var __mb = __mb_get_node_b;
         if (__mb == 0)
@@ -1087,7 +1087,7 @@ public unsafe partial class Joint3D : Node3D
     }
 
     private static nint __mb_set_solver_priority;
-    internal void SetSolverPriority(int priority)
+    public void SetSolverPriority(int priority)
     {
         var __mb = __mb_set_solver_priority;
         if (__mb == 0)
@@ -1103,7 +1103,7 @@ public unsafe partial class Joint3D : Node3D
     }
 
     private static nint __mb_get_solver_priority;
-    internal int GetSolverPriority()
+    public int GetSolverPriority()
     {
         var __mb = __mb_get_solver_priority;
         if (__mb == 0)
@@ -1118,7 +1118,7 @@ public unsafe partial class Joint3D : Node3D
     }
 
     private static nint __mb_set_exclude_nodes_from_collision;
-    internal void SetExcludeNodesFromCollision(bool enable)
+    public void SetExcludeNodesFromCollision(bool enable)
     {
         var __mb = __mb_set_exclude_nodes_from_collision;
         if (__mb == 0)
@@ -1134,7 +1134,7 @@ public unsafe partial class Joint3D : Node3D
     }
 
     private static nint __mb_get_exclude_nodes_from_collision;
-    internal bool GetExcludeNodesFromCollision()
+    public bool GetExcludeNodesFromCollision()
     {
         var __mb = __mb_get_exclude_nodes_from_collision;
         if (__mb == 0)
@@ -1190,7 +1190,7 @@ public unsafe partial class JointLimitationCone3D : JointLimitation3D
     }
 
     private static nint __mb_set_angle;
-    internal void SetAngle(float angle)
+    public void SetAngle(float angle)
     {
         var __mb = __mb_set_angle;
         if (__mb == 0)
@@ -1206,7 +1206,7 @@ public unsafe partial class JointLimitationCone3D : JointLimitation3D
     }
 
     private static nint __mb_get_angle;
-    internal float GetAngle()
+    public float GetAngle()
     {
         var __mb = __mb_get_angle;
         if (__mb == 0)

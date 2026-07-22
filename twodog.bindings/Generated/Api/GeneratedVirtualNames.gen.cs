@@ -349,9 +349,9 @@ public static class GeneratedVirtualNames
         Map["_font_set_used_palette"] = "_FontSetUsedPalette";
         Map["_font_set_weight"] = "_FontSetWeight";
         Map["_format_number"] = "_FormatNumber";
-        Map["_forward_3d_draw_over_viewport"] = "_Forward3dDrawOverViewport";
-        Map["_forward_3d_force_draw_over_viewport"] = "_Forward3dForceDrawOverViewport";
-        Map["_forward_3d_gui_input"] = "_Forward3dGuiInput";
+        Map["_forward_3d_draw_over_viewport"] = "_Forward3DDrawOverViewport";
+        Map["_forward_3d_force_draw_over_viewport"] = "_Forward3DForceDrawOverViewport";
+        Map["_forward_3d_gui_input"] = "_Forward3DGuiInput";
         Map["_forward_canvas_draw_over_viewport"] = "_ForwardCanvasDrawOverViewport";
         Map["_forward_canvas_force_draw_over_viewport"] = "_ForwardCanvasForceDrawOverViewport";
         Map["_forward_canvas_gui_input"] = "_ForwardCanvasGuiInput";
@@ -683,7 +683,7 @@ public static class GeneratedVirtualNames
         Map["_joint_is_disabled_collisions_between_bodies"] = "_JointIsDisabledCollisionsBetweenBodies";
         Map["_joint_make_cone_twist"] = "_JointMakeConeTwist";
         Map["_joint_make_damped_spring"] = "_JointMakeDampedSpring";
-        Map["_joint_make_generic_6dof"] = "_JointMakeGeneric6dof";
+        Map["_joint_make_generic_6dof"] = "_JointMakeGeneric6Dof";
         Map["_joint_make_groove"] = "_JointMakeGroove";
         Map["_joint_make_hinge"] = "_JointMakeHinge";
         Map["_joint_make_hinge_simple"] = "_JointMakeHingeSimple";

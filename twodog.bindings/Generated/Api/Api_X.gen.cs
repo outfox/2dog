@@ -479,7 +479,7 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_body_tracker;
-    internal void SetBodyTracker(StringName trackerName)
+    public void SetBodyTracker(StringName trackerName)
     {
         var __mb = __mb_set_body_tracker;
         if (__mb == 0)
@@ -495,7 +495,7 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_body_tracker;
-    internal StringName GetBodyTracker()
+    public StringName GetBodyTracker()
     {
         var __mb = __mb_get_body_tracker;
         if (__mb == 0)
@@ -510,7 +510,7 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_body_update;
-    internal void SetBodyUpdate(XRBodyModifier3D.BodyUpdateEnum bodyUpdate)
+    public void SetBodyUpdate(XRBodyModifier3D.BodyUpdateEnum bodyUpdate)
     {
         var __mb = __mb_set_body_update;
         if (__mb == 0)
@@ -526,7 +526,7 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_body_update;
-    internal XRBodyModifier3D.BodyUpdateEnum GetBodyUpdate()
+    public XRBodyModifier3D.BodyUpdateEnum GetBodyUpdate()
     {
         var __mb = __mb_get_body_update;
         if (__mb == 0)
@@ -541,7 +541,7 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_bone_update;
-    internal void SetBoneUpdate(XRBodyModifier3D.BoneUpdateEnum boneUpdate)
+    public void SetBoneUpdate(XRBodyModifier3D.BoneUpdateEnum boneUpdate)
     {
         var __mb = __mb_set_bone_update;
         if (__mb == 0)
@@ -557,7 +557,7 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_bone_update;
-    internal XRBodyModifier3D.BoneUpdateEnum GetBoneUpdate()
+    public XRBodyModifier3D.BoneUpdateEnum GetBoneUpdate()
     {
         var __mb = __mb_get_bone_update;
         if (__mb == 0)
@@ -703,7 +703,7 @@ public unsafe partial class XRBodyTracker : XRPositionalTracker
     }
 
     private static nint __mb_set_has_tracking_data;
-    internal void SetHasTrackingData(bool hasData)
+    public void SetHasTrackingData(bool hasData)
     {
         var __mb = __mb_set_has_tracking_data;
         if (__mb == 0)
@@ -719,7 +719,7 @@ public unsafe partial class XRBodyTracker : XRPositionalTracker
     }
 
     private static nint __mb_get_has_tracking_data;
-    internal bool GetHasTrackingData()
+    public bool GetHasTrackingData()
     {
         var __mb = __mb_get_has_tracking_data;
         if (__mb == 0)
@@ -734,7 +734,7 @@ public unsafe partial class XRBodyTracker : XRPositionalTracker
     }
 
     private static nint __mb_set_body_flags;
-    internal void SetBodyFlags(XRBodyTracker.BodyFlagsEnum flags)
+    public void SetBodyFlags(XRBodyTracker.BodyFlagsEnum flags)
     {
         var __mb = __mb_set_body_flags;
         if (__mb == 0)
@@ -750,7 +750,7 @@ public unsafe partial class XRBodyTracker : XRPositionalTracker
     }
 
     private static nint __mb_get_body_flags;
-    internal XRBodyTracker.BodyFlagsEnum GetBodyFlags()
+    public XRBodyTracker.BodyFlagsEnum GetBodyFlags()
     {
         var __mb = __mb_get_body_flags;
         if (__mb == 0)
@@ -1016,7 +1016,7 @@ public unsafe partial class XRFaceModifier3D : Node3D
     }
 
     private static nint __mb_set_face_tracker;
-    internal void SetFaceTracker(StringName trackerName)
+    public void SetFaceTracker(StringName trackerName)
     {
         var __mb = __mb_set_face_tracker;
         if (__mb == 0)
@@ -1032,7 +1032,7 @@ public unsafe partial class XRFaceModifier3D : Node3D
     }
 
     private static nint __mb_get_face_tracker;
-    internal StringName GetFaceTracker()
+    public StringName GetFaceTracker()
     {
         var __mb = __mb_get_face_tracker;
         if (__mb == 0)
@@ -1047,7 +1047,7 @@ public unsafe partial class XRFaceModifier3D : Node3D
     }
 
     private static nint __mb_set_target;
-    internal void SetTarget(NodePath target)
+    public void SetTarget(NodePath target)
     {
         var __mb = __mb_set_target;
         if (__mb == 0)
@@ -1063,7 +1063,7 @@ public unsafe partial class XRFaceModifier3D : Node3D
     }
 
     private static nint __mb_get_target;
-    internal NodePath GetTarget()
+    public NodePath GetTarget()
     {
         var __mb = __mb_get_target;
         if (__mb == 0)
@@ -1278,7 +1278,7 @@ public unsafe partial class XRFaceTracker : XRTracker
     }
 
     private static nint __mb_get_blend_shapes;
-    internal float[] GetBlendShapes()
+    public float[] GetBlendShapes()
     {
         var __mb = __mb_get_blend_shapes;
         if (__mb == 0)
@@ -1293,7 +1293,7 @@ public unsafe partial class XRFaceTracker : XRTracker
     }
 
     private static nint __mb_set_blend_shapes;
-    internal void SetBlendShapes(float[] weights)
+    public void SetBlendShapes(float[] weights)
     {
         var __mb = __mb_set_blend_shapes;
         if (__mb == 0)
@@ -1339,7 +1339,7 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_hand_tracker;
-    internal void SetHandTracker(StringName trackerName)
+    public void SetHandTracker(StringName trackerName)
     {
         var __mb = __mb_set_hand_tracker;
         if (__mb == 0)
@@ -1355,7 +1355,7 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_hand_tracker;
-    internal StringName GetHandTracker()
+    public StringName GetHandTracker()
     {
         var __mb = __mb_get_hand_tracker;
         if (__mb == 0)
@@ -1370,7 +1370,7 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_bone_update;
-    internal void SetBoneUpdate(XRHandModifier3D.BoneUpdateEnum boneUpdate)
+    public void SetBoneUpdate(XRHandModifier3D.BoneUpdateEnum boneUpdate)
     {
         var __mb = __mb_set_bone_update;
         if (__mb == 0)
@@ -1386,7 +1386,7 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_bone_update;
-    internal XRHandModifier3D.BoneUpdateEnum GetBoneUpdate()
+    public XRHandModifier3D.BoneUpdateEnum GetBoneUpdate()
     {
         var __mb = __mb_get_bone_update;
         if (__mb == 0)
@@ -1474,7 +1474,7 @@ public unsafe partial class XRHandTracker : XRPositionalTracker
     }
 
     private static nint __mb_set_has_tracking_data;
-    internal void SetHasTrackingData(bool hasData)
+    public void SetHasTrackingData(bool hasData)
     {
         var __mb = __mb_set_has_tracking_data;
         if (__mb == 0)
@@ -1490,7 +1490,7 @@ public unsafe partial class XRHandTracker : XRPositionalTracker
     }
 
     private static nint __mb_get_has_tracking_data;
-    internal bool GetHasTrackingData()
+    public bool GetHasTrackingData()
     {
         var __mb = __mb_get_has_tracking_data;
         if (__mb == 0)
@@ -1505,7 +1505,7 @@ public unsafe partial class XRHandTracker : XRPositionalTracker
     }
 
     private static nint __mb_set_hand_tracking_source;
-    internal void SetHandTrackingSource(XRHandTracker.HandTrackingSourceEnum source)
+    public void SetHandTrackingSource(XRHandTracker.HandTrackingSourceEnum source)
     {
         var __mb = __mb_set_hand_tracking_source;
         if (__mb == 0)
@@ -1521,7 +1521,7 @@ public unsafe partial class XRHandTracker : XRPositionalTracker
     }
 
     private static nint __mb_get_hand_tracking_source;
-    internal XRHandTracker.HandTrackingSourceEnum GetHandTrackingSource()
+    public XRHandTracker.HandTrackingSourceEnum GetHandTrackingSource()
     {
         var __mb = __mb_get_hand_tracking_source;
         if (__mb == 0)
@@ -1827,7 +1827,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_is_primary;
-    internal bool IsPrimary()
+    public bool IsPrimary()
     {
         var __mb = __mb_is_primary;
         if (__mb == 0)
@@ -1842,7 +1842,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_set_primary;
-    internal void SetPrimary(bool primary)
+    public void SetPrimary(bool primary)
     {
         var __mb = __mb_set_primary;
         if (__mb == 0)
@@ -2006,7 +2006,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_get_play_area_mode;
-    internal XRInterface.PlayAreaMode GetPlayAreaMode()
+    public XRInterface.PlayAreaMode GetPlayAreaMode()
     {
         var __mb = __mb_get_play_area_mode;
         if (__mb == 0)
@@ -2021,7 +2021,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_set_play_area_mode;
-    internal bool SetPlayAreaMode(XRInterface.PlayAreaMode mode)
+    public bool SetPlayAreaMode(XRInterface.PlayAreaMode mode)
     {
         var __mb = __mb_set_play_area_mode;
         if (__mb == 0)
@@ -2054,7 +2054,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_get_anchor_detection_is_enabled;
-    internal bool GetAnchorDetectionIsEnabled()
+    public bool GetAnchorDetectionIsEnabled()
     {
         var __mb = __mb_get_anchor_detection_is_enabled;
         if (__mb == 0)
@@ -2069,7 +2069,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_set_anchor_detection_is_enabled;
-    internal void SetAnchorDetectionIsEnabled(bool enable)
+    public void SetAnchorDetectionIsEnabled(bool enable)
     {
         var __mb = __mb_set_anchor_detection_is_enabled;
         if (__mb == 0)
@@ -2217,7 +2217,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_set_environment_blend_mode;
-    internal bool SetEnvironmentBlendMode(XRInterface.EnvironmentBlendModeEnum mode)
+    public bool SetEnvironmentBlendMode(XRInterface.EnvironmentBlendModeEnum mode)
     {
         var __mb = __mb_set_environment_blend_mode;
         if (__mb == 0)
@@ -2235,7 +2235,7 @@ public unsafe partial class XRInterface : RefCounted
     }
 
     private static nint __mb_get_environment_blend_mode;
-    internal XRInterface.EnvironmentBlendModeEnum GetEnvironmentBlendMode()
+    public XRInterface.EnvironmentBlendModeEnum GetEnvironmentBlendMode()
     {
         var __mb = __mb_get_environment_blend_mode;
         if (__mb == 0)
@@ -2680,7 +2680,7 @@ public unsafe partial class XRNode3D : Node3D
     }
 
     private static nint __mb_set_tracker;
-    internal void SetTracker(StringName trackerName)
+    public void SetTracker(StringName trackerName)
     {
         var __mb = __mb_set_tracker;
         if (__mb == 0)
@@ -2696,7 +2696,7 @@ public unsafe partial class XRNode3D : Node3D
     }
 
     private static nint __mb_get_tracker;
-    internal StringName GetTracker()
+    public StringName GetTracker()
     {
         var __mb = __mb_get_tracker;
         if (__mb == 0)
@@ -2711,7 +2711,7 @@ public unsafe partial class XRNode3D : Node3D
     }
 
     private static nint __mb_set_pose_name;
-    internal void SetPoseName(StringName pose)
+    public void SetPoseName(StringName pose)
     {
         var __mb = __mb_set_pose_name;
         if (__mb == 0)
@@ -2727,7 +2727,7 @@ public unsafe partial class XRNode3D : Node3D
     }
 
     private static nint __mb_get_pose_name;
-    internal StringName GetPoseName()
+    public StringName GetPoseName()
     {
         var __mb = __mb_get_pose_name;
         if (__mb == 0)
@@ -2742,7 +2742,7 @@ public unsafe partial class XRNode3D : Node3D
     }
 
     private static nint __mb_set_show_when_tracked;
-    internal void SetShowWhenTracked(bool show)
+    public void SetShowWhenTracked(bool show)
     {
         var __mb = __mb_set_show_when_tracked;
         if (__mb == 0)
@@ -2758,7 +2758,7 @@ public unsafe partial class XRNode3D : Node3D
     }
 
     private static nint __mb_get_show_when_tracked;
-    internal bool GetShowWhenTracked()
+    public bool GetShowWhenTracked()
     {
         var __mb = __mb_get_show_when_tracked;
         if (__mb == 0)
@@ -2865,7 +2865,7 @@ public unsafe partial class XROrigin3D : Node3D
     }
 
     private static nint __mb_set_world_scale;
-    internal void SetWorldScale(float worldScale)
+    public void SetWorldScale(float worldScale)
     {
         var __mb = __mb_set_world_scale;
         if (__mb == 0)
@@ -2881,7 +2881,7 @@ public unsafe partial class XROrigin3D : Node3D
     }
 
     private static nint __mb_get_world_scale;
-    internal float GetWorldScale()
+    public float GetWorldScale()
     {
         var __mb = __mb_get_world_scale;
         if (__mb == 0)
@@ -2896,7 +2896,7 @@ public unsafe partial class XROrigin3D : Node3D
     }
 
     private static nint __mb_set_current;
-    internal void SetCurrent(bool enabled)
+    public void SetCurrent(bool enabled)
     {
         var __mb = __mb_set_current;
         if (__mb == 0)
@@ -2912,7 +2912,7 @@ public unsafe partial class XROrigin3D : Node3D
     }
 
     private static nint __mb_is_current;
-    internal bool IsCurrent()
+    public bool IsCurrent()
     {
         var __mb = __mb_is_current;
         if (__mb == 0)
@@ -2980,7 +2980,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_set_has_tracking_data;
-    internal void SetHasTrackingData(bool hasTrackingData)
+    public void SetHasTrackingData(bool hasTrackingData)
     {
         var __mb = __mb_set_has_tracking_data;
         if (__mb == 0)
@@ -2996,7 +2996,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_get_has_tracking_data;
-    internal bool GetHasTrackingData()
+    public bool GetHasTrackingData()
     {
         var __mb = __mb_get_has_tracking_data;
         if (__mb == 0)
@@ -3011,7 +3011,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_set_name;
-    internal void SetName(StringName name)
+    public void SetName(StringName name)
     {
         var __mb = __mb_set_name;
         if (__mb == 0)
@@ -3027,7 +3027,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_get_name;
-    internal StringName GetName()
+    public StringName GetName()
     {
         var __mb = __mb_get_name;
         if (__mb == 0)
@@ -3042,7 +3042,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_set_transform;
-    internal void SetTransform(Transform3D transform)
+    public void SetTransform(Transform3D transform)
     {
         var __mb = __mb_set_transform;
         if (__mb == 0)
@@ -3058,7 +3058,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_get_transform;
-    internal Transform3D GetTransform()
+    public Transform3D GetTransform()
     {
         var __mb = __mb_get_transform;
         if (__mb == 0)
@@ -3088,7 +3088,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_set_linear_velocity;
-    internal void SetLinearVelocity(Vector3 velocity)
+    public void SetLinearVelocity(Vector3 velocity)
     {
         var __mb = __mb_set_linear_velocity;
         if (__mb == 0)
@@ -3104,7 +3104,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_get_linear_velocity;
-    internal Vector3 GetLinearVelocity()
+    public Vector3 GetLinearVelocity()
     {
         var __mb = __mb_get_linear_velocity;
         if (__mb == 0)
@@ -3119,7 +3119,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_set_angular_velocity;
-    internal void SetAngularVelocity(Vector3 velocity)
+    public void SetAngularVelocity(Vector3 velocity)
     {
         var __mb = __mb_set_angular_velocity;
         if (__mb == 0)
@@ -3135,7 +3135,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_get_angular_velocity;
-    internal Vector3 GetAngularVelocity()
+    public Vector3 GetAngularVelocity()
     {
         var __mb = __mb_get_angular_velocity;
         if (__mb == 0)
@@ -3150,7 +3150,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_set_tracking_confidence;
-    internal void SetTrackingConfidence(XRPose.TrackingConfidenceEnum trackingConfidence)
+    public void SetTrackingConfidence(XRPose.TrackingConfidenceEnum trackingConfidence)
     {
         var __mb = __mb_set_tracking_confidence;
         if (__mb == 0)
@@ -3166,7 +3166,7 @@ public unsafe partial class XRPose : RefCounted
     }
 
     private static nint __mb_get_tracking_confidence;
-    internal XRPose.TrackingConfidenceEnum GetTrackingConfidence()
+    public XRPose.TrackingConfidenceEnum GetTrackingConfidence()
     {
         var __mb = __mb_get_tracking_confidence;
         if (__mb == 0)
@@ -3267,7 +3267,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
     }
 
     private static nint __mb_get_tracker_profile;
-    internal string GetTrackerProfile()
+    public string GetTrackerProfile()
     {
         var __mb = __mb_get_tracker_profile;
         if (__mb == 0)
@@ -3282,7 +3282,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
     }
 
     private static nint __mb_set_tracker_profile;
-    internal void SetTrackerProfile(string profile)
+    public void SetTrackerProfile(string profile)
     {
         var __mb = __mb_set_tracker_profile;
         if (__mb == 0)
@@ -3299,7 +3299,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
     }
 
     private static nint __mb_get_tracker_hand;
-    internal XRPositionalTracker.TrackerHand GetTrackerHand()
+    public XRPositionalTracker.TrackerHand GetTrackerHand()
     {
         var __mb = __mb_get_tracker_hand;
         if (__mb == 0)
@@ -3314,7 +3314,7 @@ public unsafe partial class XRPositionalTracker : XRTracker
     }
 
     private static nint __mb_set_tracker_hand;
-    internal void SetTrackerHand(XRPositionalTracker.TrackerHand hand)
+    public void SetTrackerHand(XRPositionalTracker.TrackerHand hand)
     {
         var __mb = __mb_set_tracker_hand;
         if (__mb == 0)
@@ -3553,7 +3553,7 @@ public static unsafe partial class XRServer
     }
 
     private static nint __mb_get_world_scale;
-    internal static double GetWorldScale()
+    public static double GetWorldScale()
     {
         var __mb = __mb_get_world_scale;
         if (__mb == 0)
@@ -3568,7 +3568,7 @@ public static unsafe partial class XRServer
     }
 
     private static nint __mb_set_world_scale;
-    internal static void SetWorldScale(double scale)
+    public static void SetWorldScale(double scale)
     {
         var __mb = __mb_set_world_scale;
         if (__mb == 0)
@@ -3584,7 +3584,7 @@ public static unsafe partial class XRServer
     }
 
     private static nint __mb_get_world_origin;
-    internal static Transform3D GetWorldOrigin()
+    public static Transform3D GetWorldOrigin()
     {
         var __mb = __mb_get_world_origin;
         if (__mb == 0)
@@ -3599,7 +3599,7 @@ public static unsafe partial class XRServer
     }
 
     private static nint __mb_set_world_origin;
-    internal static void SetWorldOrigin(Transform3D worldOrigin)
+    public static void SetWorldOrigin(Transform3D worldOrigin)
     {
         var __mb = __mb_set_world_origin;
         if (__mb == 0)
@@ -3676,7 +3676,7 @@ public static unsafe partial class XRServer
     }
 
     private static nint __mb_set_camera_locked_to_origin;
-    internal static void SetCameraLockedToOrigin(bool enabled)
+    public static void SetCameraLockedToOrigin(bool enabled)
     {
         var __mb = __mb_set_camera_locked_to_origin;
         if (__mb == 0)
@@ -3692,7 +3692,7 @@ public static unsafe partial class XRServer
     }
 
     private static nint __mb_is_camera_locked_to_origin;
-    internal static bool IsCameraLockedToOrigin()
+    public static bool IsCameraLockedToOrigin()
     {
         var __mb = __mb_is_camera_locked_to_origin;
         if (__mb == 0)
@@ -3874,7 +3874,7 @@ public static unsafe partial class XRServer
     }
 
     private static nint __mb_get_primary_interface;
-    internal static XRInterface? GetPrimaryInterface()
+    public static XRInterface? GetPrimaryInterface()
     {
         var __mb = __mb_get_primary_interface;
         if (__mb == 0)
@@ -3889,7 +3889,7 @@ public static unsafe partial class XRServer
     }
 
     private static nint __mb_set_primary_interface;
-    internal static void SetPrimaryInterface(XRInterface? @interface)
+    public static void SetPrimaryInterface(XRInterface? @interface)
     {
         var __mb = __mb_set_primary_interface;
         if (__mb == 0)
@@ -3928,7 +3928,7 @@ public unsafe partial class XRTracker : RefCounted
     }
 
     private static nint __mb_get_tracker_type;
-    internal XRServer.TrackerType GetTrackerType()
+    public XRServer.TrackerType GetTrackerType()
     {
         var __mb = __mb_get_tracker_type;
         if (__mb == 0)
@@ -3943,7 +3943,7 @@ public unsafe partial class XRTracker : RefCounted
     }
 
     private static nint __mb_set_tracker_type;
-    internal void SetTrackerType(XRServer.TrackerType type)
+    public void SetTrackerType(XRServer.TrackerType type)
     {
         var __mb = __mb_set_tracker_type;
         if (__mb == 0)
@@ -3959,7 +3959,7 @@ public unsafe partial class XRTracker : RefCounted
     }
 
     private static nint __mb_get_tracker_name;
-    internal StringName GetTrackerName()
+    public StringName GetTrackerName()
     {
         var __mb = __mb_get_tracker_name;
         if (__mb == 0)
@@ -3974,7 +3974,7 @@ public unsafe partial class XRTracker : RefCounted
     }
 
     private static nint __mb_set_tracker_name;
-    internal void SetTrackerName(StringName name)
+    public void SetTrackerName(StringName name)
     {
         var __mb = __mb_set_tracker_name;
         if (__mb == 0)
@@ -3990,7 +3990,7 @@ public unsafe partial class XRTracker : RefCounted
     }
 
     private static nint __mb_get_tracker_desc;
-    internal string GetTrackerDesc()
+    public string GetTrackerDesc()
     {
         var __mb = __mb_get_tracker_desc;
         if (__mb == 0)
@@ -4005,7 +4005,7 @@ public unsafe partial class XRTracker : RefCounted
     }
 
     private static nint __mb_set_tracker_desc;
-    internal void SetTrackerDesc(string description)
+    public void SetTrackerDesc(string description)
     {
         var __mb = __mb_set_tracker_desc;
         if (__mb == 0)
@@ -4050,7 +4050,7 @@ public unsafe partial class XRVRS : GodotObject
     }
 
     private static nint __mb_get_vrs_min_radius;
-    internal float GetVrsMinRadius()
+    public float GetVrsMinRadius()
     {
         var __mb = __mb_get_vrs_min_radius;
         if (__mb == 0)
@@ -4065,7 +4065,7 @@ public unsafe partial class XRVRS : GodotObject
     }
 
     private static nint __mb_set_vrs_min_radius;
-    internal void SetVrsMinRadius(float radius)
+    public void SetVrsMinRadius(float radius)
     {
         var __mb = __mb_set_vrs_min_radius;
         if (__mb == 0)
@@ -4081,7 +4081,7 @@ public unsafe partial class XRVRS : GodotObject
     }
 
     private static nint __mb_get_vrs_strength;
-    internal float GetVrsStrength()
+    public float GetVrsStrength()
     {
         var __mb = __mb_get_vrs_strength;
         if (__mb == 0)
@@ -4096,7 +4096,7 @@ public unsafe partial class XRVRS : GodotObject
     }
 
     private static nint __mb_set_vrs_strength;
-    internal void SetVrsStrength(float strength)
+    public void SetVrsStrength(float strength)
     {
         var __mb = __mb_set_vrs_strength;
         if (__mb == 0)
@@ -4112,7 +4112,7 @@ public unsafe partial class XRVRS : GodotObject
     }
 
     private static nint __mb_get_vrs_render_region;
-    internal Rect2I GetVrsRenderRegion()
+    public Rect2I GetVrsRenderRegion()
     {
         var __mb = __mb_get_vrs_render_region;
         if (__mb == 0)
@@ -4127,7 +4127,7 @@ public unsafe partial class XRVRS : GodotObject
     }
 
     private static nint __mb_set_vrs_render_region;
-    internal void SetVrsRenderRegion(Rect2I renderRegion)
+    public void SetVrsRenderRegion(Rect2I renderRegion)
     {
         var __mb = __mb_set_vrs_render_region;
         if (__mb == 0)

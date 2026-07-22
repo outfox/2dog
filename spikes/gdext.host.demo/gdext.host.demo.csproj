@@ -10,6 +10,11 @@
 
     <ItemGroup Condition="'$(TwoDogUsePackages)' != 'true'">
         <ProjectReference Include="..\..\twodog.gdextension\twodog.gdextension.csproj"/>
+        <!-- Analyzers do not flow across ProjectReference; package mode gets the
+             generator from the package's analyzers/ folder. -->
+        <ProjectReference Include="..\..\twodog.generators\twodog.generators.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
     <!-- Package mode (CI desktop smoke): consume the packed 2dog.gdextension +

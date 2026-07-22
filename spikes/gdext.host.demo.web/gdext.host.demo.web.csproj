@@ -30,6 +30,11 @@
 
     <ItemGroup>
         <ProjectReference Include="../../twodog.gdextension/twodog.gdextension.csproj"/>
+        <!-- Analyzers do not flow across ProjectReference; package consumers get
+             the generator from the package's analyzers/ folder. -->
+        <ProjectReference Include="../../twodog.generators/twodog.generators.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
     <!-- Root the host assembly: registered extension classes are reached by

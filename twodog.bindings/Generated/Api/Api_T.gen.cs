@@ -400,7 +400,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_set_tab_count;
-    internal void SetTabCount(int count)
+    public void SetTabCount(int count)
     {
         var __mb = __mb_set_tab_count;
         if (__mb == 0)
@@ -416,7 +416,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_get_tab_count;
-    internal int GetTabCount()
+    public int GetTabCount()
     {
         var __mb = __mb_get_tab_count;
         if (__mb == 0)
@@ -431,7 +431,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_set_current_tab;
-    internal void SetCurrentTab(int tabIdx)
+    public void SetCurrentTab(int tabIdx)
     {
         var __mb = __mb_set_current_tab;
         if (__mb == 0)
@@ -447,7 +447,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_get_current_tab;
-    internal int GetCurrentTab()
+    public int GetCurrentTab()
     {
         var __mb = __mb_get_current_tab;
         if (__mb == 0)
@@ -923,7 +923,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_set_tab_alignment;
-    internal void SetTabAlignment(TabBar.AlignmentMode alignment)
+    public void SetTabAlignment(TabBar.AlignmentMode alignment)
     {
         var __mb = __mb_set_tab_alignment;
         if (__mb == 0)
@@ -939,7 +939,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_get_tab_alignment;
-    internal TabBar.AlignmentMode GetTabAlignment()
+    public TabBar.AlignmentMode GetTabAlignment()
     {
         var __mb = __mb_get_tab_alignment;
         if (__mb == 0)
@@ -954,7 +954,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_set_clip_tabs;
-    internal void SetClipTabs(bool clipTabs)
+    public void SetClipTabs(bool clipTabs)
     {
         var __mb = __mb_set_clip_tabs;
         if (__mb == 0)
@@ -970,7 +970,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_get_clip_tabs;
-    internal bool GetClipTabs()
+    public bool GetClipTabs()
     {
         var __mb = __mb_get_clip_tabs;
         if (__mb == 0)
@@ -1067,7 +1067,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_set_close_with_middle_mouse;
-    internal void SetCloseWithMiddleMouse(bool enabled)
+    public void SetCloseWithMiddleMouse(bool enabled)
     {
         var __mb = __mb_set_close_with_middle_mouse;
         if (__mb == 0)
@@ -1083,7 +1083,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_get_close_with_middle_mouse;
-    internal bool GetCloseWithMiddleMouse()
+    public bool GetCloseWithMiddleMouse()
     {
         var __mb = __mb_get_close_with_middle_mouse;
         if (__mb == 0)
@@ -1098,7 +1098,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_set_tab_close_display_policy;
-    internal void SetTabCloseDisplayPolicy(TabBar.CloseButtonDisplayPolicy policy)
+    public void SetTabCloseDisplayPolicy(TabBar.CloseButtonDisplayPolicy policy)
     {
         var __mb = __mb_set_tab_close_display_policy;
         if (__mb == 0)
@@ -1114,7 +1114,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_get_tab_close_display_policy;
-    internal TabBar.CloseButtonDisplayPolicy GetTabCloseDisplayPolicy()
+    public TabBar.CloseButtonDisplayPolicy GetTabCloseDisplayPolicy()
     {
         var __mb = __mb_get_tab_close_display_policy;
         if (__mb == 0)
@@ -1129,7 +1129,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_set_max_tab_width;
-    internal void SetMaxTabWidth(int width)
+    public void SetMaxTabWidth(int width)
     {
         var __mb = __mb_set_max_tab_width;
         if (__mb == 0)
@@ -1145,7 +1145,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_get_max_tab_width;
-    internal int GetMaxTabWidth()
+    public int GetMaxTabWidth()
     {
         var __mb = __mb_get_max_tab_width;
         if (__mb == 0)
@@ -1160,7 +1160,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_set_scrolling_enabled;
-    internal void SetScrollingEnabled(bool enabled)
+    public void SetScrollingEnabled(bool enabled)
     {
         var __mb = __mb_set_scrolling_enabled;
         if (__mb == 0)
@@ -1176,7 +1176,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_get_scrolling_enabled;
-    internal bool GetScrollingEnabled()
+    public bool GetScrollingEnabled()
     {
         var __mb = __mb_get_scrolling_enabled;
         if (__mb == 0)
@@ -1191,7 +1191,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_set_drag_to_rearrange_enabled;
-    internal void SetDragToRearrangeEnabled(bool enabled)
+    public void SetDragToRearrangeEnabled(bool enabled)
     {
         var __mb = __mb_set_drag_to_rearrange_enabled;
         if (__mb == 0)
@@ -1207,7 +1207,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_get_drag_to_rearrange_enabled;
-    internal bool GetDragToRearrangeEnabled()
+    public bool GetDragToRearrangeEnabled()
     {
         var __mb = __mb_get_drag_to_rearrange_enabled;
         if (__mb == 0)
@@ -1222,7 +1222,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_set_switch_on_drag_hover;
-    internal void SetSwitchOnDragHover(bool enabled)
+    public void SetSwitchOnDragHover(bool enabled)
     {
         var __mb = __mb_set_switch_on_drag_hover;
         if (__mb == 0)
@@ -1238,7 +1238,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_get_switch_on_drag_hover;
-    internal bool GetSwitchOnDragHover()
+    public bool GetSwitchOnDragHover()
     {
         var __mb = __mb_get_switch_on_drag_hover;
         if (__mb == 0)
@@ -1253,7 +1253,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_set_tabs_rearrange_group;
-    internal void SetTabsRearrangeGroup(int groupId)
+    public void SetTabsRearrangeGroup(int groupId)
     {
         var __mb = __mb_set_tabs_rearrange_group;
         if (__mb == 0)
@@ -1269,7 +1269,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_get_tabs_rearrange_group;
-    internal int GetTabsRearrangeGroup()
+    public int GetTabsRearrangeGroup()
     {
         var __mb = __mb_get_tabs_rearrange_group;
         if (__mb == 0)
@@ -1284,7 +1284,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_set_scroll_to_selected;
-    internal void SetScrollToSelected(bool enabled)
+    public void SetScrollToSelected(bool enabled)
     {
         var __mb = __mb_set_scroll_to_selected;
         if (__mb == 0)
@@ -1300,7 +1300,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_get_scroll_to_selected;
-    internal bool GetScrollToSelected()
+    public bool GetScrollToSelected()
     {
         var __mb = __mb_get_scroll_to_selected;
         if (__mb == 0)
@@ -1315,7 +1315,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_set_select_with_rmb;
-    internal void SetSelectWithRmb(bool enabled)
+    public void SetSelectWithRmb(bool enabled)
     {
         var __mb = __mb_set_select_with_rmb;
         if (__mb == 0)
@@ -1331,7 +1331,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_get_select_with_rmb;
-    internal bool GetSelectWithRmb()
+    public bool GetSelectWithRmb()
     {
         var __mb = __mb_get_select_with_rmb;
         if (__mb == 0)
@@ -1346,7 +1346,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_set_deselect_enabled;
-    internal void SetDeselectEnabled(bool enabled)
+    public void SetDeselectEnabled(bool enabled)
     {
         var __mb = __mb_set_deselect_enabled;
         if (__mb == 0)
@@ -1362,7 +1362,7 @@ public unsafe partial class TabBar : Control
     }
 
     private static nint __mb_get_deselect_enabled;
-    internal bool GetDeselectEnabled()
+    public bool GetDeselectEnabled()
     {
         var __mb = __mb_get_deselect_enabled;
         if (__mb == 0)
@@ -1550,7 +1550,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_set_current_tab;
-    internal void SetCurrentTab(int tabIdx)
+    public void SetCurrentTab(int tabIdx)
     {
         var __mb = __mb_set_current_tab;
         if (__mb == 0)
@@ -1566,7 +1566,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_get_current_tab;
-    internal int GetCurrentTab()
+    public int GetCurrentTab()
     {
         var __mb = __mb_get_current_tab;
         if (__mb == 0)
@@ -1674,7 +1674,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_set_tab_alignment;
-    internal void SetTabAlignment(TabBar.AlignmentMode alignment)
+    public void SetTabAlignment(TabBar.AlignmentMode alignment)
     {
         var __mb = __mb_set_tab_alignment;
         if (__mb == 0)
@@ -1690,7 +1690,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_get_tab_alignment;
-    internal TabBar.AlignmentMode GetTabAlignment()
+    public TabBar.AlignmentMode GetTabAlignment()
     {
         var __mb = __mb_get_tab_alignment;
         if (__mb == 0)
@@ -1705,7 +1705,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_set_tabs_position;
-    internal void SetTabsPosition(TabContainer.TabPosition tabsPosition)
+    public void SetTabsPosition(TabContainer.TabPosition tabsPosition)
     {
         var __mb = __mb_set_tabs_position;
         if (__mb == 0)
@@ -1721,7 +1721,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_get_tabs_position;
-    internal TabContainer.TabPosition GetTabsPosition()
+    public TabContainer.TabPosition GetTabsPosition()
     {
         var __mb = __mb_get_tabs_position;
         if (__mb == 0)
@@ -1736,7 +1736,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_set_clip_tabs;
-    internal void SetClipTabs(bool clipTabs)
+    public void SetClipTabs(bool clipTabs)
     {
         var __mb = __mb_set_clip_tabs;
         if (__mb == 0)
@@ -1752,7 +1752,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_get_clip_tabs;
-    internal bool GetClipTabs()
+    public bool GetClipTabs()
     {
         var __mb = __mb_get_clip_tabs;
         if (__mb == 0)
@@ -1767,7 +1767,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_set_tabs_visible;
-    internal void SetTabsVisible(bool visible)
+    public void SetTabsVisible(bool visible)
     {
         var __mb = __mb_set_tabs_visible;
         if (__mb == 0)
@@ -1783,7 +1783,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_are_tabs_visible;
-    internal bool AreTabsVisible()
+    public bool AreTabsVisible()
     {
         var __mb = __mb_are_tabs_visible;
         if (__mb == 0)
@@ -1798,7 +1798,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_set_all_tabs_in_front;
-    internal void SetAllTabsInFront(bool isFront)
+    public void SetAllTabsInFront(bool isFront)
     {
         var __mb = __mb_set_all_tabs_in_front;
         if (__mb == 0)
@@ -1814,7 +1814,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_is_all_tabs_in_front;
-    internal bool IsAllTabsInFront()
+    public bool IsAllTabsInFront()
     {
         var __mb = __mb_is_all_tabs_in_front;
         if (__mb == 0)
@@ -2186,7 +2186,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_set_switch_on_drag_hover;
-    internal void SetSwitchOnDragHover(bool enabled)
+    public void SetSwitchOnDragHover(bool enabled)
     {
         var __mb = __mb_set_switch_on_drag_hover;
         if (__mb == 0)
@@ -2202,7 +2202,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_get_switch_on_drag_hover;
-    internal bool GetSwitchOnDragHover()
+    public bool GetSwitchOnDragHover()
     {
         var __mb = __mb_get_switch_on_drag_hover;
         if (__mb == 0)
@@ -2217,7 +2217,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_set_drag_to_rearrange_enabled;
-    internal void SetDragToRearrangeEnabled(bool enabled)
+    public void SetDragToRearrangeEnabled(bool enabled)
     {
         var __mb = __mb_set_drag_to_rearrange_enabled;
         if (__mb == 0)
@@ -2233,7 +2233,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_get_drag_to_rearrange_enabled;
-    internal bool GetDragToRearrangeEnabled()
+    public bool GetDragToRearrangeEnabled()
     {
         var __mb = __mb_get_drag_to_rearrange_enabled;
         if (__mb == 0)
@@ -2248,7 +2248,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_set_tabs_rearrange_group;
-    internal void SetTabsRearrangeGroup(int groupId)
+    public void SetTabsRearrangeGroup(int groupId)
     {
         var __mb = __mb_set_tabs_rearrange_group;
         if (__mb == 0)
@@ -2264,7 +2264,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_get_tabs_rearrange_group;
-    internal int GetTabsRearrangeGroup()
+    public int GetTabsRearrangeGroup()
     {
         var __mb = __mb_get_tabs_rearrange_group;
         if (__mb == 0)
@@ -2279,7 +2279,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_set_use_hidden_tabs_for_min_size;
-    internal void SetUseHiddenTabsForMinSize(bool enabled)
+    public void SetUseHiddenTabsForMinSize(bool enabled)
     {
         var __mb = __mb_set_use_hidden_tabs_for_min_size;
         if (__mb == 0)
@@ -2295,7 +2295,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_get_use_hidden_tabs_for_min_size;
-    internal bool GetUseHiddenTabsForMinSize()
+    public bool GetUseHiddenTabsForMinSize()
     {
         var __mb = __mb_get_use_hidden_tabs_for_min_size;
         if (__mb == 0)
@@ -2310,7 +2310,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_set_tab_focus_mode;
-    internal void SetTabFocusMode(Control.FocusModeEnum focusMode)
+    public void SetTabFocusMode(Control.FocusModeEnum focusMode)
     {
         var __mb = __mb_set_tab_focus_mode;
         if (__mb == 0)
@@ -2326,7 +2326,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_get_tab_focus_mode;
-    internal Control.FocusModeEnum GetTabFocusMode()
+    public Control.FocusModeEnum GetTabFocusMode()
     {
         var __mb = __mb_get_tab_focus_mode;
         if (__mb == 0)
@@ -2341,7 +2341,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_set_deselect_enabled;
-    internal void SetDeselectEnabled(bool enabled)
+    public void SetDeselectEnabled(bool enabled)
     {
         var __mb = __mb_set_deselect_enabled;
         if (__mb == 0)
@@ -2357,7 +2357,7 @@ public unsafe partial class TabContainer : Container
     }
 
     private static nint __mb_get_deselect_enabled;
-    internal bool GetDeselectEnabled()
+    public bool GetDeselectEnabled()
     {
         var __mb = __mb_get_deselect_enabled;
         if (__mb == 0)
@@ -2840,7 +2840,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_editable;
-    internal void SetEditable(bool enabled)
+    public void SetEditable(bool enabled)
     {
         var __mb = __mb_set_editable;
         if (__mb == 0)
@@ -2856,7 +2856,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_editable;
-    internal bool IsEditable()
+    public bool IsEditable()
     {
         var __mb = __mb_is_editable;
         if (__mb == 0)
@@ -2871,7 +2871,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_text_direction;
-    internal void SetTextDirection(Control.TextDirection direction)
+    public void SetTextDirection(Control.TextDirection direction)
     {
         var __mb = __mb_set_text_direction;
         if (__mb == 0)
@@ -2887,7 +2887,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_text_direction;
-    internal Control.TextDirection GetTextDirection()
+    public Control.TextDirection GetTextDirection()
     {
         var __mb = __mb_get_text_direction;
         if (__mb == 0)
@@ -2902,7 +2902,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_language;
-    internal void SetLanguage(string language)
+    public void SetLanguage(string language)
     {
         var __mb = __mb_set_language;
         if (__mb == 0)
@@ -2919,7 +2919,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_language;
-    internal string GetLanguage()
+    public string GetLanguage()
     {
         var __mb = __mb_get_language;
         if (__mb == 0)
@@ -2934,7 +2934,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_structured_text_bidi_override;
-    internal void SetStructuredTextBidiOverride(TextServer.StructuredTextParser parser)
+    public void SetStructuredTextBidiOverride(TextServer.StructuredTextParser parser)
     {
         var __mb = __mb_set_structured_text_bidi_override;
         if (__mb == 0)
@@ -2950,7 +2950,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_structured_text_bidi_override;
-    internal TextServer.StructuredTextParser GetStructuredTextBidiOverride()
+    public TextServer.StructuredTextParser GetStructuredTextBidiOverride()
     {
         var __mb = __mb_get_structured_text_bidi_override;
         if (__mb == 0)
@@ -2965,7 +2965,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_structured_text_bidi_override_options;
-    internal void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
+    public void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
     {
         var __mb = __mb_set_structured_text_bidi_override_options;
         if (__mb == 0)
@@ -2981,7 +2981,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_structured_text_bidi_override_options;
-    internal Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
+    public Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
     {
         var __mb = __mb_get_structured_text_bidi_override_options;
         if (__mb == 0)
@@ -3027,7 +3027,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_indent_wrapped_lines;
-    internal void SetIndentWrappedLines(bool enabled)
+    public void SetIndentWrappedLines(bool enabled)
     {
         var __mb = __mb_set_indent_wrapped_lines;
         if (__mb == 0)
@@ -3043,7 +3043,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_indent_wrapped_lines;
-    internal bool IsIndentWrappedLines()
+    public bool IsIndentWrappedLines()
     {
         var __mb = __mb_is_indent_wrapped_lines;
         if (__mb == 0)
@@ -3058,7 +3058,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_tab_input_mode;
-    internal void SetTabInputMode(bool enabled)
+    public void SetTabInputMode(bool enabled)
     {
         var __mb = __mb_set_tab_input_mode;
         if (__mb == 0)
@@ -3074,7 +3074,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_tab_input_mode;
-    internal bool GetTabInputMode()
+    public bool GetTabInputMode()
     {
         var __mb = __mb_get_tab_input_mode;
         if (__mb == 0)
@@ -3120,7 +3120,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_context_menu_enabled;
-    internal void SetContextMenuEnabled(bool enabled)
+    public void SetContextMenuEnabled(bool enabled)
     {
         var __mb = __mb_set_context_menu_enabled;
         if (__mb == 0)
@@ -3136,7 +3136,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_context_menu_enabled;
-    internal bool IsContextMenuEnabled()
+    public bool IsContextMenuEnabled()
     {
         var __mb = __mb_is_context_menu_enabled;
         if (__mb == 0)
@@ -3151,7 +3151,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_emoji_menu_enabled;
-    internal void SetEmojiMenuEnabled(bool enable)
+    public void SetEmojiMenuEnabled(bool enable)
     {
         var __mb = __mb_set_emoji_menu_enabled;
         if (__mb == 0)
@@ -3167,7 +3167,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_emoji_menu_enabled;
-    internal bool IsEmojiMenuEnabled()
+    public bool IsEmojiMenuEnabled()
     {
         var __mb = __mb_is_emoji_menu_enabled;
         if (__mb == 0)
@@ -3182,7 +3182,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_backspace_deletes_composite_character_enabled;
-    internal void SetBackspaceDeletesCompositeCharacterEnabled(bool enable)
+    public void SetBackspaceDeletesCompositeCharacterEnabled(bool enable)
     {
         var __mb = __mb_set_backspace_deletes_composite_character_enabled;
         if (__mb == 0)
@@ -3198,7 +3198,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_backspace_deletes_composite_character_enabled;
-    internal bool IsBackspaceDeletesCompositeCharacterEnabled()
+    public bool IsBackspaceDeletesCompositeCharacterEnabled()
     {
         var __mb = __mb_is_backspace_deletes_composite_character_enabled;
         if (__mb == 0)
@@ -3213,7 +3213,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_shortcut_keys_enabled;
-    internal void SetShortcutKeysEnabled(bool enabled)
+    public void SetShortcutKeysEnabled(bool enabled)
     {
         var __mb = __mb_set_shortcut_keys_enabled;
         if (__mb == 0)
@@ -3229,7 +3229,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_shortcut_keys_enabled;
-    internal bool IsShortcutKeysEnabled()
+    public bool IsShortcutKeysEnabled()
     {
         var __mb = __mb_is_shortcut_keys_enabled;
         if (__mb == 0)
@@ -3244,7 +3244,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_virtual_keyboard_enabled;
-    internal void SetVirtualKeyboardEnabled(bool enabled)
+    public void SetVirtualKeyboardEnabled(bool enabled)
     {
         var __mb = __mb_set_virtual_keyboard_enabled;
         if (__mb == 0)
@@ -3260,7 +3260,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_virtual_keyboard_enabled;
-    internal bool IsVirtualKeyboardEnabled()
+    public bool IsVirtualKeyboardEnabled()
     {
         var __mb = __mb_is_virtual_keyboard_enabled;
         if (__mb == 0)
@@ -3275,7 +3275,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_virtual_keyboard_show_on_focus;
-    internal void SetVirtualKeyboardShowOnFocus(bool showOnFocus)
+    public void SetVirtualKeyboardShowOnFocus(bool showOnFocus)
     {
         var __mb = __mb_set_virtual_keyboard_show_on_focus;
         if (__mb == 0)
@@ -3291,7 +3291,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_virtual_keyboard_show_on_focus;
-    internal bool GetVirtualKeyboardShowOnFocus()
+    public bool GetVirtualKeyboardShowOnFocus()
     {
         var __mb = __mb_get_virtual_keyboard_show_on_focus;
         if (__mb == 0)
@@ -3306,7 +3306,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_middle_mouse_paste_enabled;
-    internal void SetMiddleMousePasteEnabled(bool enabled)
+    public void SetMiddleMousePasteEnabled(bool enabled)
     {
         var __mb = __mb_set_middle_mouse_paste_enabled;
         if (__mb == 0)
@@ -3322,7 +3322,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_middle_mouse_paste_enabled;
-    internal bool IsMiddleMousePasteEnabled()
+    public bool IsMiddleMousePasteEnabled()
     {
         var __mb = __mb_is_middle_mouse_paste_enabled;
         if (__mb == 0)
@@ -3337,7 +3337,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_empty_selection_clipboard_enabled;
-    internal void SetEmptySelectionClipboardEnabled(bool enabled)
+    public void SetEmptySelectionClipboardEnabled(bool enabled)
     {
         var __mb = __mb_set_empty_selection_clipboard_enabled;
         if (__mb == 0)
@@ -3353,7 +3353,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_empty_selection_clipboard_enabled;
-    internal bool IsEmptySelectionClipboardEnabled()
+    public bool IsEmptySelectionClipboardEnabled()
     {
         var __mb = __mb_is_empty_selection_clipboard_enabled;
         if (__mb == 0)
@@ -3381,7 +3381,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_text;
-    internal void SetText(string text)
+    public void SetText(string text)
     {
         var __mb = __mb_set_text;
         if (__mb == 0)
@@ -3398,7 +3398,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_text;
-    internal string GetText()
+    public string GetText()
     {
         var __mb = __mb_get_text;
         if (__mb == 0)
@@ -3428,7 +3428,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_placeholder;
-    internal void SetPlaceholder(string text)
+    public void SetPlaceholder(string text)
     {
         var __mb = __mb_set_placeholder;
         if (__mb == 0)
@@ -3445,7 +3445,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_placeholder;
-    internal string GetPlaceholder()
+    public string GetPlaceholder()
     {
         var __mb = __mb_get_placeholder;
         if (__mb == 0)
@@ -4233,7 +4233,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_caret_type;
-    internal void SetCaretType(TextEdit.CaretTypeEnum type)
+    public void SetCaretType(TextEdit.CaretTypeEnum type)
     {
         var __mb = __mb_set_caret_type;
         if (__mb == 0)
@@ -4249,7 +4249,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_caret_type;
-    internal TextEdit.CaretTypeEnum GetCaretType()
+    public TextEdit.CaretTypeEnum GetCaretType()
     {
         var __mb = __mb_get_caret_type;
         if (__mb == 0)
@@ -4264,7 +4264,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_caret_blink_enabled;
-    internal void SetCaretBlinkEnabled(bool enable)
+    public void SetCaretBlinkEnabled(bool enable)
     {
         var __mb = __mb_set_caret_blink_enabled;
         if (__mb == 0)
@@ -4280,7 +4280,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_caret_blink_enabled;
-    internal bool IsCaretBlinkEnabled()
+    public bool IsCaretBlinkEnabled()
     {
         var __mb = __mb_is_caret_blink_enabled;
         if (__mb == 0)
@@ -4295,7 +4295,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_caret_blink_interval;
-    internal void SetCaretBlinkInterval(float interval)
+    public void SetCaretBlinkInterval(float interval)
     {
         var __mb = __mb_set_caret_blink_interval;
         if (__mb == 0)
@@ -4311,7 +4311,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_caret_blink_interval;
-    internal float GetCaretBlinkInterval()
+    public float GetCaretBlinkInterval()
     {
         var __mb = __mb_get_caret_blink_interval;
         if (__mb == 0)
@@ -4326,7 +4326,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_draw_caret_when_editable_disabled;
-    internal void SetDrawCaretWhenEditableDisabled(bool enable)
+    public void SetDrawCaretWhenEditableDisabled(bool enable)
     {
         var __mb = __mb_set_draw_caret_when_editable_disabled;
         if (__mb == 0)
@@ -4342,7 +4342,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_drawing_caret_when_editable_disabled;
-    internal bool IsDrawingCaretWhenEditableDisabled()
+    public bool IsDrawingCaretWhenEditableDisabled()
     {
         var __mb = __mb_is_drawing_caret_when_editable_disabled;
         if (__mb == 0)
@@ -4357,7 +4357,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_move_caret_on_right_click_enabled;
-    internal void SetMoveCaretOnRightClickEnabled(bool enable)
+    public void SetMoveCaretOnRightClickEnabled(bool enable)
     {
         var __mb = __mb_set_move_caret_on_right_click_enabled;
         if (__mb == 0)
@@ -4373,7 +4373,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_move_caret_on_right_click_enabled;
-    internal bool IsMoveCaretOnRightClickEnabled()
+    public bool IsMoveCaretOnRightClickEnabled()
     {
         var __mb = __mb_is_move_caret_on_right_click_enabled;
         if (__mb == 0)
@@ -4388,7 +4388,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_caret_mid_grapheme_enabled;
-    internal void SetCaretMidGraphemeEnabled(bool enabled)
+    public void SetCaretMidGraphemeEnabled(bool enabled)
     {
         var __mb = __mb_set_caret_mid_grapheme_enabled;
         if (__mb == 0)
@@ -4404,7 +4404,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_caret_mid_grapheme_enabled;
-    internal bool IsCaretMidGraphemeEnabled()
+    public bool IsCaretMidGraphemeEnabled()
     {
         var __mb = __mb_is_caret_mid_grapheme_enabled;
         if (__mb == 0)
@@ -4419,7 +4419,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_multiple_carets_enabled;
-    internal void SetMultipleCaretsEnabled(bool enabled)
+    public void SetMultipleCaretsEnabled(bool enabled)
     {
         var __mb = __mb_set_multiple_carets_enabled;
         if (__mb == 0)
@@ -4435,7 +4435,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_multiple_carets_enabled;
-    internal bool IsMultipleCaretsEnabled()
+    public bool IsMultipleCaretsEnabled()
     {
         var __mb = __mb_is_multiple_carets_enabled;
         if (__mb == 0)
@@ -4836,7 +4836,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_use_default_word_separators;
-    internal void SetUseDefaultWordSeparators(bool enabled)
+    public void SetUseDefaultWordSeparators(bool enabled)
     {
         var __mb = __mb_set_use_default_word_separators;
         if (__mb == 0)
@@ -4852,7 +4852,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_default_word_separators_enabled;
-    internal bool IsDefaultWordSeparatorsEnabled()
+    public bool IsDefaultWordSeparatorsEnabled()
     {
         var __mb = __mb_is_default_word_separators_enabled;
         if (__mb == 0)
@@ -4867,7 +4867,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_use_custom_word_separators;
-    internal void SetUseCustomWordSeparators(bool enabled)
+    public void SetUseCustomWordSeparators(bool enabled)
     {
         var __mb = __mb_set_use_custom_word_separators;
         if (__mb == 0)
@@ -4883,7 +4883,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_custom_word_separators_enabled;
-    internal bool IsCustomWordSeparatorsEnabled()
+    public bool IsCustomWordSeparatorsEnabled()
     {
         var __mb = __mb_is_custom_word_separators_enabled;
         if (__mb == 0)
@@ -4898,7 +4898,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_custom_word_separators;
-    internal void SetCustomWordSeparators(string customWordSeparators)
+    public void SetCustomWordSeparators(string customWordSeparators)
     {
         var __mb = __mb_set_custom_word_separators;
         if (__mb == 0)
@@ -4915,7 +4915,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_custom_word_separators;
-    internal string GetCustomWordSeparators()
+    public string GetCustomWordSeparators()
     {
         var __mb = __mb_get_custom_word_separators;
         if (__mb == 0)
@@ -4930,7 +4930,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_selecting_enabled;
-    internal void SetSelectingEnabled(bool enable)
+    public void SetSelectingEnabled(bool enable)
     {
         var __mb = __mb_set_selecting_enabled;
         if (__mb == 0)
@@ -4946,7 +4946,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_selecting_enabled;
-    internal bool IsSelectingEnabled()
+    public bool IsSelectingEnabled()
     {
         var __mb = __mb_is_selecting_enabled;
         if (__mb == 0)
@@ -4961,7 +4961,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_deselect_on_focus_loss_enabled;
-    internal void SetDeselectOnFocusLossEnabled(bool enable)
+    public void SetDeselectOnFocusLossEnabled(bool enable)
     {
         var __mb = __mb_set_deselect_on_focus_loss_enabled;
         if (__mb == 0)
@@ -4977,7 +4977,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_deselect_on_focus_loss_enabled;
-    internal bool IsDeselectOnFocusLossEnabled()
+    public bool IsDeselectOnFocusLossEnabled()
     {
         var __mb = __mb_is_deselect_on_focus_loss_enabled;
         if (__mb == 0)
@@ -4992,7 +4992,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_drag_and_drop_selection_enabled;
-    internal void SetDragAndDropSelectionEnabled(bool enable)
+    public void SetDragAndDropSelectionEnabled(bool enable)
     {
         var __mb = __mb_set_drag_and_drop_selection_enabled;
         if (__mb == 0)
@@ -5008,7 +5008,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_drag_and_drop_selection_enabled;
-    internal bool IsDragAndDropSelectionEnabled()
+    public bool IsDragAndDropSelectionEnabled()
     {
         var __mb = __mb_is_drag_and_drop_selection_enabled;
         if (__mb == 0)
@@ -5411,7 +5411,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_line_wrapping_mode;
-    internal void SetLineWrappingMode(TextEdit.LineWrappingMode mode)
+    public void SetLineWrappingMode(TextEdit.LineWrappingMode mode)
     {
         var __mb = __mb_set_line_wrapping_mode;
         if (__mb == 0)
@@ -5427,7 +5427,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_line_wrapping_mode;
-    internal TextEdit.LineWrappingMode GetLineWrappingMode()
+    public TextEdit.LineWrappingMode GetLineWrappingMode()
     {
         var __mb = __mb_get_line_wrapping_mode;
         if (__mb == 0)
@@ -5442,7 +5442,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_autowrap_mode;
-    internal void SetAutowrapMode(TextServer.AutowrapMode autowrapMode)
+    public void SetAutowrapMode(TextServer.AutowrapMode autowrapMode)
     {
         var __mb = __mb_set_autowrap_mode;
         if (__mb == 0)
@@ -5458,7 +5458,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_autowrap_mode;
-    internal TextServer.AutowrapMode GetAutowrapMode()
+    public TextServer.AutowrapMode GetAutowrapMode()
     {
         var __mb = __mb_get_autowrap_mode;
         if (__mb == 0)
@@ -5547,7 +5547,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_smooth_scroll_enabled;
-    internal void SetSmoothScrollEnabled(bool enable)
+    public void SetSmoothScrollEnabled(bool enable)
     {
         var __mb = __mb_set_smooth_scroll_enabled;
         if (__mb == 0)
@@ -5563,7 +5563,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_smooth_scroll_enabled;
-    internal bool IsSmoothScrollEnabled()
+    public bool IsSmoothScrollEnabled()
     {
         var __mb = __mb_is_smooth_scroll_enabled;
         if (__mb == 0)
@@ -5608,7 +5608,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_v_scroll;
-    internal void SetVScroll(double value)
+    public void SetVScroll(double value)
     {
         var __mb = __mb_set_v_scroll;
         if (__mb == 0)
@@ -5624,7 +5624,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_v_scroll;
-    internal double GetVScroll()
+    public double GetVScroll()
     {
         var __mb = __mb_get_v_scroll;
         if (__mb == 0)
@@ -5639,7 +5639,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_h_scroll;
-    internal void SetHScroll(int value)
+    public void SetHScroll(int value)
     {
         var __mb = __mb_set_h_scroll;
         if (__mb == 0)
@@ -5655,7 +5655,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_h_scroll;
-    internal int GetHScroll()
+    public int GetHScroll()
     {
         var __mb = __mb_get_h_scroll;
         if (__mb == 0)
@@ -5670,7 +5670,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_scroll_past_end_of_file_enabled;
-    internal void SetScrollPastEndOfFileEnabled(bool enable)
+    public void SetScrollPastEndOfFileEnabled(bool enable)
     {
         var __mb = __mb_set_scroll_past_end_of_file_enabled;
         if (__mb == 0)
@@ -5686,7 +5686,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_scroll_past_end_of_file_enabled;
-    internal bool IsScrollPastEndOfFileEnabled()
+    public bool IsScrollPastEndOfFileEnabled()
     {
         var __mb = __mb_is_scroll_past_end_of_file_enabled;
         if (__mb == 0)
@@ -5701,7 +5701,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_v_scroll_speed;
-    internal void SetVScrollSpeed(float speed)
+    public void SetVScrollSpeed(float speed)
     {
         var __mb = __mb_set_v_scroll_speed;
         if (__mb == 0)
@@ -5717,7 +5717,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_v_scroll_speed;
-    internal float GetVScrollSpeed()
+    public float GetVScrollSpeed()
     {
         var __mb = __mb_get_v_scroll_speed;
         if (__mb == 0)
@@ -5732,7 +5732,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_fit_content_height_enabled;
-    internal void SetFitContentHeightEnabled(bool enabled)
+    public void SetFitContentHeightEnabled(bool enabled)
     {
         var __mb = __mb_set_fit_content_height_enabled;
         if (__mb == 0)
@@ -5748,7 +5748,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_fit_content_height_enabled;
-    internal bool IsFitContentHeightEnabled()
+    public bool IsFitContentHeightEnabled()
     {
         var __mb = __mb_is_fit_content_height_enabled;
         if (__mb == 0)
@@ -5763,7 +5763,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_fit_content_width_enabled;
-    internal void SetFitContentWidthEnabled(bool enabled)
+    public void SetFitContentWidthEnabled(bool enabled)
     {
         var __mb = __mb_set_fit_content_width_enabled;
         if (__mb == 0)
@@ -5779,7 +5779,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_fit_content_width_enabled;
-    internal bool IsFitContentWidthEnabled()
+    public bool IsFitContentWidthEnabled()
     {
         var __mb = __mb_is_fit_content_width_enabled;
         if (__mb == 0)
@@ -6013,7 +6013,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_draw_minimap;
-    internal void SetDrawMinimap(bool enabled)
+    public void SetDrawMinimap(bool enabled)
     {
         var __mb = __mb_set_draw_minimap;
         if (__mb == 0)
@@ -6029,7 +6029,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_drawing_minimap;
-    internal bool IsDrawingMinimap()
+    public bool IsDrawingMinimap()
     {
         var __mb = __mb_is_drawing_minimap;
         if (__mb == 0)
@@ -6044,7 +6044,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_minimap_width;
-    internal void SetMinimapWidth(int width)
+    public void SetMinimapWidth(int width)
     {
         var __mb = __mb_set_minimap_width;
         if (__mb == 0)
@@ -6060,7 +6060,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_minimap_width;
-    internal int GetMinimapWidth()
+    public int GetMinimapWidth()
     {
         var __mb = __mb_get_minimap_width;
         if (__mb == 0)
@@ -6642,7 +6642,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_syntax_highlighter;
-    internal void SetSyntaxHighlighter(SyntaxHighlighter? syntaxHighlighter)
+    public void SetSyntaxHighlighter(SyntaxHighlighter? syntaxHighlighter)
     {
         var __mb = __mb_set_syntax_highlighter;
         if (__mb == 0)
@@ -6658,7 +6658,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_syntax_highlighter;
-    internal SyntaxHighlighter? GetSyntaxHighlighter()
+    public SyntaxHighlighter? GetSyntaxHighlighter()
     {
         var __mb = __mb_get_syntax_highlighter;
         if (__mb == 0)
@@ -6673,7 +6673,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_highlight_current_line;
-    internal void SetHighlightCurrentLine(bool enabled)
+    public void SetHighlightCurrentLine(bool enabled)
     {
         var __mb = __mb_set_highlight_current_line;
         if (__mb == 0)
@@ -6689,7 +6689,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_highlight_current_line_enabled;
-    internal bool IsHighlightCurrentLineEnabled()
+    public bool IsHighlightCurrentLineEnabled()
     {
         var __mb = __mb_is_highlight_current_line_enabled;
         if (__mb == 0)
@@ -6704,7 +6704,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_highlight_all_occurrences;
-    internal void SetHighlightAllOccurrences(bool enabled)
+    public void SetHighlightAllOccurrences(bool enabled)
     {
         var __mb = __mb_set_highlight_all_occurrences;
         if (__mb == 0)
@@ -6720,7 +6720,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_highlight_all_occurrences_enabled;
-    internal bool IsHighlightAllOccurrencesEnabled()
+    public bool IsHighlightAllOccurrencesEnabled()
     {
         var __mb = __mb_is_highlight_all_occurrences_enabled;
         if (__mb == 0)
@@ -6735,7 +6735,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_get_draw_control_chars;
-    internal bool GetDrawControlChars()
+    public bool GetDrawControlChars()
     {
         var __mb = __mb_get_draw_control_chars;
         if (__mb == 0)
@@ -6750,7 +6750,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_draw_control_chars;
-    internal void SetDrawControlChars(bool enabled)
+    public void SetDrawControlChars(bool enabled)
     {
         var __mb = __mb_set_draw_control_chars;
         if (__mb == 0)
@@ -6766,7 +6766,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_draw_tabs;
-    internal void SetDrawTabs(bool enabled)
+    public void SetDrawTabs(bool enabled)
     {
         var __mb = __mb_set_draw_tabs;
         if (__mb == 0)
@@ -6782,7 +6782,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_drawing_tabs;
-    internal bool IsDrawingTabs()
+    public bool IsDrawingTabs()
     {
         var __mb = __mb_is_drawing_tabs;
         if (__mb == 0)
@@ -6797,7 +6797,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_set_draw_spaces;
-    internal void SetDrawSpaces(bool enabled)
+    public void SetDrawSpaces(bool enabled)
     {
         var __mb = __mb_set_draw_spaces;
         if (__mb == 0)
@@ -6813,7 +6813,7 @@ public unsafe partial class TextEdit : Control
     }
 
     private static nint __mb_is_drawing_spaces;
-    internal bool IsDrawingSpaces()
+    public bool IsDrawingSpaces()
     {
         var __mb = __mb_is_drawing_spaces;
         if (__mb == 0)
@@ -7101,7 +7101,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_set_direction;
-    internal void SetDirection(TextServer.Direction direction)
+    public void SetDirection(TextServer.Direction direction)
     {
         var __mb = __mb_set_direction;
         if (__mb == 0)
@@ -7117,7 +7117,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_get_direction;
-    internal TextServer.Direction GetDirection()
+    public TextServer.Direction GetDirection()
     {
         var __mb = __mb_get_direction;
         if (__mb == 0)
@@ -7147,7 +7147,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_set_orientation;
-    internal void SetOrientation(TextServer.Orientation orientation)
+    public void SetOrientation(TextServer.Orientation orientation)
     {
         var __mb = __mb_set_orientation;
         if (__mb == 0)
@@ -7163,7 +7163,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_get_orientation;
-    internal TextServer.Orientation GetOrientation()
+    public TextServer.Orientation GetOrientation()
     {
         var __mb = __mb_get_orientation;
         if (__mb == 0)
@@ -7178,7 +7178,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_set_preserve_invalid;
-    internal void SetPreserveInvalid(bool enabled)
+    public void SetPreserveInvalid(bool enabled)
     {
         var __mb = __mb_set_preserve_invalid;
         if (__mb == 0)
@@ -7194,7 +7194,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_get_preserve_invalid;
-    internal bool GetPreserveInvalid()
+    public bool GetPreserveInvalid()
     {
         var __mb = __mb_get_preserve_invalid;
         if (__mb == 0)
@@ -7209,7 +7209,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_set_preserve_control;
-    internal void SetPreserveControl(bool enabled)
+    public void SetPreserveControl(bool enabled)
     {
         var __mb = __mb_set_preserve_control;
         if (__mb == 0)
@@ -7225,7 +7225,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_get_preserve_control;
-    internal bool GetPreserveControl()
+    public bool GetPreserveControl()
     {
         var __mb = __mb_get_preserve_control;
         if (__mb == 0)
@@ -7352,7 +7352,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_set_width;
-    internal void SetWidth(float width)
+    public void SetWidth(float width)
     {
         var __mb = __mb_set_width;
         if (__mb == 0)
@@ -7368,7 +7368,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_get_width;
-    internal float GetWidth()
+    public float GetWidth()
     {
         var __mb = __mb_get_width;
         if (__mb == 0)
@@ -7383,7 +7383,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_set_horizontal_alignment;
-    internal void SetHorizontalAlignment(HorizontalAlignment alignment)
+    public void SetHorizontalAlignment(HorizontalAlignment alignment)
     {
         var __mb = __mb_set_horizontal_alignment;
         if (__mb == 0)
@@ -7399,7 +7399,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_get_horizontal_alignment;
-    internal HorizontalAlignment GetHorizontalAlignment()
+    public HorizontalAlignment GetHorizontalAlignment()
     {
         var __mb = __mb_get_horizontal_alignment;
         if (__mb == 0)
@@ -7431,7 +7431,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_set_flags;
-    internal void SetFlags(TextServer.JustificationFlag flags)
+    public void SetFlags(TextServer.JustificationFlag flags)
     {
         var __mb = __mb_set_flags;
         if (__mb == 0)
@@ -7447,7 +7447,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_get_flags;
-    internal TextServer.JustificationFlag GetFlags()
+    public TextServer.JustificationFlag GetFlags()
     {
         var __mb = __mb_get_flags;
         if (__mb == 0)
@@ -7462,7 +7462,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_set_text_overrun_behavior;
-    internal void SetTextOverrunBehavior(TextServer.OverrunBehavior overrunBehavior)
+    public void SetTextOverrunBehavior(TextServer.OverrunBehavior overrunBehavior)
     {
         var __mb = __mb_set_text_overrun_behavior;
         if (__mb == 0)
@@ -7478,7 +7478,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_get_text_overrun_behavior;
-    internal TextServer.OverrunBehavior GetTextOverrunBehavior()
+    public TextServer.OverrunBehavior GetTextOverrunBehavior()
     {
         var __mb = __mb_get_text_overrun_behavior;
         if (__mb == 0)
@@ -7493,7 +7493,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_set_ellipsis_char;
-    internal void SetEllipsisChar(string @char)
+    public void SetEllipsisChar(string @char)
     {
         var __mb = __mb_set_ellipsis_char;
         if (__mb == 0)
@@ -7510,7 +7510,7 @@ public unsafe partial class TextLine : RefCounted
     }
 
     private static nint __mb_get_ellipsis_char;
-    internal string GetEllipsisChar()
+    public string GetEllipsisChar()
     {
         var __mb = __mb_get_ellipsis_char;
         if (__mb == 0)
@@ -7845,7 +7845,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_horizontal_alignment;
-    internal void SetHorizontalAlignment(HorizontalAlignment alignment)
+    public void SetHorizontalAlignment(HorizontalAlignment alignment)
     {
         var __mb = __mb_set_horizontal_alignment;
         if (__mb == 0)
@@ -7861,7 +7861,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_horizontal_alignment;
-    internal HorizontalAlignment GetHorizontalAlignment()
+    public HorizontalAlignment GetHorizontalAlignment()
     {
         var __mb = __mb_get_horizontal_alignment;
         if (__mb == 0)
@@ -7876,7 +7876,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_vertical_alignment;
-    internal void SetVerticalAlignment(VerticalAlignment alignment)
+    public void SetVerticalAlignment(VerticalAlignment alignment)
     {
         var __mb = __mb_set_vertical_alignment;
         if (__mb == 0)
@@ -7892,7 +7892,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_vertical_alignment;
-    internal VerticalAlignment GetVerticalAlignment()
+    public VerticalAlignment GetVerticalAlignment()
     {
         var __mb = __mb_get_vertical_alignment;
         if (__mb == 0)
@@ -7907,7 +7907,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_text;
-    internal void SetText(string text)
+    public void SetText(string text)
     {
         var __mb = __mb_set_text;
         if (__mb == 0)
@@ -7924,7 +7924,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_text;
-    internal string GetText()
+    public string GetText()
     {
         var __mb = __mb_get_text;
         if (__mb == 0)
@@ -7939,7 +7939,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_font;
-    internal void SetFont(Font? font)
+    public void SetFont(Font? font)
     {
         var __mb = __mb_set_font;
         if (__mb == 0)
@@ -7955,7 +7955,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_font;
-    internal Font? GetFont()
+    public Font? GetFont()
     {
         var __mb = __mb_get_font;
         if (__mb == 0)
@@ -7970,7 +7970,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_font_size;
-    internal void SetFontSize(int fontSize)
+    public void SetFontSize(int fontSize)
     {
         var __mb = __mb_set_font_size;
         if (__mb == 0)
@@ -7986,7 +7986,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_font_size;
-    internal int GetFontSize()
+    public int GetFontSize()
     {
         var __mb = __mb_get_font_size;
         if (__mb == 0)
@@ -8001,7 +8001,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_line_spacing;
-    internal void SetLineSpacing(float lineSpacing)
+    public void SetLineSpacing(float lineSpacing)
     {
         var __mb = __mb_set_line_spacing;
         if (__mb == 0)
@@ -8017,7 +8017,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_line_spacing;
-    internal float GetLineSpacing()
+    public float GetLineSpacing()
     {
         var __mb = __mb_get_line_spacing;
         if (__mb == 0)
@@ -8032,7 +8032,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_autowrap_mode;
-    internal void SetAutowrapMode(TextServer.AutowrapMode autowrapMode)
+    public void SetAutowrapMode(TextServer.AutowrapMode autowrapMode)
     {
         var __mb = __mb_set_autowrap_mode;
         if (__mb == 0)
@@ -8048,7 +8048,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_autowrap_mode;
-    internal TextServer.AutowrapMode GetAutowrapMode()
+    public TextServer.AutowrapMode GetAutowrapMode()
     {
         var __mb = __mb_get_autowrap_mode;
         if (__mb == 0)
@@ -8063,7 +8063,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_justification_flags;
-    internal void SetJustificationFlags(TextServer.JustificationFlag justificationFlags)
+    public void SetJustificationFlags(TextServer.JustificationFlag justificationFlags)
     {
         var __mb = __mb_set_justification_flags;
         if (__mb == 0)
@@ -8079,7 +8079,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_justification_flags;
-    internal TextServer.JustificationFlag GetJustificationFlags()
+    public TextServer.JustificationFlag GetJustificationFlags()
     {
         var __mb = __mb_get_justification_flags;
         if (__mb == 0)
@@ -8094,7 +8094,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_depth;
-    internal void SetDepth(float depth)
+    public void SetDepth(float depth)
     {
         var __mb = __mb_set_depth;
         if (__mb == 0)
@@ -8110,7 +8110,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_depth;
-    internal float GetDepth()
+    public float GetDepth()
     {
         var __mb = __mb_get_depth;
         if (__mb == 0)
@@ -8125,7 +8125,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_width;
-    internal void SetWidth(float width)
+    public void SetWidth(float width)
     {
         var __mb = __mb_set_width;
         if (__mb == 0)
@@ -8141,7 +8141,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_width;
-    internal float GetWidth()
+    public float GetWidth()
     {
         var __mb = __mb_get_width;
         if (__mb == 0)
@@ -8156,7 +8156,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_pixel_size;
-    internal void SetPixelSize(float pixelSize)
+    public void SetPixelSize(float pixelSize)
     {
         var __mb = __mb_set_pixel_size;
         if (__mb == 0)
@@ -8172,7 +8172,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_pixel_size;
-    internal float GetPixelSize()
+    public float GetPixelSize()
     {
         var __mb = __mb_get_pixel_size;
         if (__mb == 0)
@@ -8187,7 +8187,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_offset;
-    internal void SetOffset(Vector2 offset)
+    public void SetOffset(Vector2 offset)
     {
         var __mb = __mb_set_offset;
         if (__mb == 0)
@@ -8203,7 +8203,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_offset;
-    internal Vector2 GetOffset()
+    public Vector2 GetOffset()
     {
         var __mb = __mb_get_offset;
         if (__mb == 0)
@@ -8218,7 +8218,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_curve_step;
-    internal void SetCurveStep(float curveStep)
+    public void SetCurveStep(float curveStep)
     {
         var __mb = __mb_set_curve_step;
         if (__mb == 0)
@@ -8234,7 +8234,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_curve_step;
-    internal float GetCurveStep()
+    public float GetCurveStep()
     {
         var __mb = __mb_get_curve_step;
         if (__mb == 0)
@@ -8249,7 +8249,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_text_direction;
-    internal void SetTextDirection(TextServer.Direction direction)
+    public void SetTextDirection(TextServer.Direction direction)
     {
         var __mb = __mb_set_text_direction;
         if (__mb == 0)
@@ -8265,7 +8265,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_text_direction;
-    internal TextServer.Direction GetTextDirection()
+    public TextServer.Direction GetTextDirection()
     {
         var __mb = __mb_get_text_direction;
         if (__mb == 0)
@@ -8280,7 +8280,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_language;
-    internal void SetLanguage(string language)
+    public void SetLanguage(string language)
     {
         var __mb = __mb_set_language;
         if (__mb == 0)
@@ -8297,7 +8297,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_language;
-    internal string GetLanguage()
+    public string GetLanguage()
     {
         var __mb = __mb_get_language;
         if (__mb == 0)
@@ -8312,7 +8312,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_structured_text_bidi_override;
-    internal void SetStructuredTextBidiOverride(TextServer.StructuredTextParser parser)
+    public void SetStructuredTextBidiOverride(TextServer.StructuredTextParser parser)
     {
         var __mb = __mb_set_structured_text_bidi_override;
         if (__mb == 0)
@@ -8328,7 +8328,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_structured_text_bidi_override;
-    internal TextServer.StructuredTextParser GetStructuredTextBidiOverride()
+    public TextServer.StructuredTextParser GetStructuredTextBidiOverride()
     {
         var __mb = __mb_get_structured_text_bidi_override;
         if (__mb == 0)
@@ -8343,7 +8343,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_structured_text_bidi_override_options;
-    internal void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
+    public void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
     {
         var __mb = __mb_set_structured_text_bidi_override_options;
         if (__mb == 0)
@@ -8359,7 +8359,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_structured_text_bidi_override_options;
-    internal Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
+    public Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
     {
         var __mb = __mb_get_structured_text_bidi_override_options;
         if (__mb == 0)
@@ -8374,7 +8374,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_uppercase;
-    internal void SetUppercase(bool enable)
+    public void SetUppercase(bool enable)
     {
         var __mb = __mb_set_uppercase;
         if (__mb == 0)
@@ -8390,7 +8390,7 @@ public unsafe partial class TextMesh : PrimitiveMesh
     }
 
     private static nint __mb_is_uppercase;
-    internal bool IsUppercase()
+    public bool IsUppercase()
     {
         var __mb = __mb_is_uppercase;
         if (__mb == 0)
@@ -8521,7 +8521,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_set_direction;
-    internal void SetDirection(TextServer.Direction direction)
+    public void SetDirection(TextServer.Direction direction)
     {
         var __mb = __mb_set_direction;
         if (__mb == 0)
@@ -8537,7 +8537,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_get_direction;
-    internal TextServer.Direction GetDirection()
+    public TextServer.Direction GetDirection()
     {
         var __mb = __mb_get_direction;
         if (__mb == 0)
@@ -8567,7 +8567,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_set_custom_punctuation;
-    internal void SetCustomPunctuation(string customPunctuation)
+    public void SetCustomPunctuation(string customPunctuation)
     {
         var __mb = __mb_set_custom_punctuation;
         if (__mb == 0)
@@ -8584,7 +8584,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_get_custom_punctuation;
-    internal string GetCustomPunctuation()
+    public string GetCustomPunctuation()
     {
         var __mb = __mb_get_custom_punctuation;
         if (__mb == 0)
@@ -8599,7 +8599,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_set_orientation;
-    internal void SetOrientation(TextServer.Orientation orientation)
+    public void SetOrientation(TextServer.Orientation orientation)
     {
         var __mb = __mb_set_orientation;
         if (__mb == 0)
@@ -8615,7 +8615,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_get_orientation;
-    internal TextServer.Orientation GetOrientation()
+    public TextServer.Orientation GetOrientation()
     {
         var __mb = __mb_get_orientation;
         if (__mb == 0)
@@ -8630,7 +8630,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_set_preserve_invalid;
-    internal void SetPreserveInvalid(bool enabled)
+    public void SetPreserveInvalid(bool enabled)
     {
         var __mb = __mb_set_preserve_invalid;
         if (__mb == 0)
@@ -8646,7 +8646,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_get_preserve_invalid;
-    internal bool GetPreserveInvalid()
+    public bool GetPreserveInvalid()
     {
         var __mb = __mb_get_preserve_invalid;
         if (__mb == 0)
@@ -8661,7 +8661,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_set_preserve_control;
-    internal void SetPreserveControl(bool enabled)
+    public void SetPreserveControl(bool enabled)
     {
         var __mb = __mb_set_preserve_control;
         if (__mb == 0)
@@ -8677,7 +8677,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_get_preserve_control;
-    internal bool GetPreserveControl()
+    public bool GetPreserveControl()
     {
         var __mb = __mb_get_preserve_control;
         if (__mb == 0)
@@ -8845,7 +8845,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_set_alignment;
-    internal void SetAlignment(HorizontalAlignment alignment)
+    public void SetAlignment(HorizontalAlignment alignment)
     {
         var __mb = __mb_set_alignment;
         if (__mb == 0)
@@ -8861,7 +8861,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_get_alignment;
-    internal HorizontalAlignment GetAlignment()
+    public HorizontalAlignment GetAlignment()
     {
         var __mb = __mb_get_alignment;
         if (__mb == 0)
@@ -8893,7 +8893,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_set_break_flags;
-    internal void SetBreakFlags(TextServer.LineBreakFlag flags)
+    public void SetBreakFlags(TextServer.LineBreakFlag flags)
     {
         var __mb = __mb_set_break_flags;
         if (__mb == 0)
@@ -8909,7 +8909,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_get_break_flags;
-    internal TextServer.LineBreakFlag GetBreakFlags()
+    public TextServer.LineBreakFlag GetBreakFlags()
     {
         var __mb = __mb_get_break_flags;
         if (__mb == 0)
@@ -8924,7 +8924,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_set_justification_flags;
-    internal void SetJustificationFlags(TextServer.JustificationFlag flags)
+    public void SetJustificationFlags(TextServer.JustificationFlag flags)
     {
         var __mb = __mb_set_justification_flags;
         if (__mb == 0)
@@ -8940,7 +8940,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_get_justification_flags;
-    internal TextServer.JustificationFlag GetJustificationFlags()
+    public TextServer.JustificationFlag GetJustificationFlags()
     {
         var __mb = __mb_get_justification_flags;
         if (__mb == 0)
@@ -8955,7 +8955,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_set_text_overrun_behavior;
-    internal void SetTextOverrunBehavior(TextServer.OverrunBehavior overrunBehavior)
+    public void SetTextOverrunBehavior(TextServer.OverrunBehavior overrunBehavior)
     {
         var __mb = __mb_set_text_overrun_behavior;
         if (__mb == 0)
@@ -8971,7 +8971,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_get_text_overrun_behavior;
-    internal TextServer.OverrunBehavior GetTextOverrunBehavior()
+    public TextServer.OverrunBehavior GetTextOverrunBehavior()
     {
         var __mb = __mb_get_text_overrun_behavior;
         if (__mb == 0)
@@ -8986,7 +8986,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_set_ellipsis_char;
-    internal void SetEllipsisChar(string @char)
+    public void SetEllipsisChar(string @char)
     {
         var __mb = __mb_set_ellipsis_char;
         if (__mb == 0)
@@ -9003,7 +9003,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_get_ellipsis_char;
-    internal string GetEllipsisChar()
+    public string GetEllipsisChar()
     {
         var __mb = __mb_get_ellipsis_char;
         if (__mb == 0)
@@ -9018,7 +9018,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_set_width;
-    internal void SetWidth(float width)
+    public void SetWidth(float width)
     {
         var __mb = __mb_set_width;
         if (__mb == 0)
@@ -9034,7 +9034,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_get_width;
-    internal float GetWidth()
+    public float GetWidth()
     {
         var __mb = __mb_get_width;
         if (__mb == 0)
@@ -9157,7 +9157,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_set_max_lines_visible;
-    internal void SetMaxLinesVisible(int maxLinesVisible)
+    public void SetMaxLinesVisible(int maxLinesVisible)
     {
         var __mb = __mb_set_max_lines_visible;
         if (__mb == 0)
@@ -9173,7 +9173,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_get_max_lines_visible;
-    internal int GetMaxLinesVisible()
+    public int GetMaxLinesVisible()
     {
         var __mb = __mb_get_max_lines_visible;
         if (__mb == 0)
@@ -9188,7 +9188,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_set_line_spacing;
-    internal void SetLineSpacing(float lineSpacing)
+    public void SetLineSpacing(float lineSpacing)
     {
         var __mb = __mb_set_line_spacing;
         if (__mb == 0)
@@ -9204,7 +9204,7 @@ public unsafe partial class TextParagraph : RefCounted
     }
 
     private static nint __mb_get_line_spacing;
-    internal float GetLineSpacing()
+    public float GetLineSpacing()
     {
         var __mb = __mb_get_line_spacing;
         if (__mb == 0)
@@ -16734,7 +16734,7 @@ public unsafe partial class Texture2D : Texture
     }
 
     private static nint __mb_get_width;
-    internal int GetWidth()
+    public int GetWidth()
     {
         var __mb = __mb_get_width;
         if (__mb == 0)
@@ -16749,7 +16749,7 @@ public unsafe partial class Texture2D : Texture
     }
 
     private static nint __mb_get_height;
-    internal int GetHeight()
+    public int GetHeight()
     {
         var __mb = __mb_get_height;
         if (__mb == 0)
@@ -16764,7 +16764,7 @@ public unsafe partial class Texture2D : Texture
     }
 
     private static nint __mb_get_size;
-    internal Vector2 GetSize()
+    public Vector2 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -16881,7 +16881,7 @@ public unsafe partial class Texture2D : Texture
     }
 
     private static nint __mb_get_image;
-    internal Image? GetImage()
+    public Image? GetImage()
     {
         var __mb = __mb_get_image;
         if (__mb == 0)
@@ -17067,7 +17067,7 @@ public unsafe partial class Texture2DRD : Texture2D
     }
 
     private static nint __mb_set_texture_rd_rid;
-    internal void SetTextureRdRid(Rid textureRdRid)
+    public void SetTextureRdRid(Rid textureRdRid)
     {
         var __mb = __mb_set_texture_rd_rid;
         if (__mb == 0)
@@ -17083,7 +17083,7 @@ public unsafe partial class Texture2DRD : Texture2D
     }
 
     private static nint __mb_get_texture_rd_rid;
-    internal Rid GetTextureRdRid()
+    public Rid GetTextureRdRid()
     {
         var __mb = __mb_get_texture_rd_rid;
         if (__mb == 0)
@@ -17123,7 +17123,7 @@ public unsafe partial class Texture3D : Texture
     }
 
     private static nint __mb_get_width;
-    internal int GetWidth()
+    public int GetWidth()
     {
         var __mb = __mb_get_width;
         if (__mb == 0)
@@ -17138,7 +17138,7 @@ public unsafe partial class Texture3D : Texture
     }
 
     private static nint __mb_get_height;
-    internal int GetHeight()
+    public int GetHeight()
     {
         var __mb = __mb_get_height;
         if (__mb == 0)
@@ -17153,7 +17153,7 @@ public unsafe partial class Texture3D : Texture
     }
 
     private static nint __mb_get_depth;
-    internal int GetDepth()
+    public int GetDepth()
     {
         var __mb = __mb_get_depth;
         if (__mb == 0)
@@ -17280,7 +17280,7 @@ public unsafe partial class Texture3DRD : Texture3D
     }
 
     private static nint __mb_set_texture_rd_rid;
-    internal void SetTextureRdRid(Rid textureRdRid)
+    public void SetTextureRdRid(Rid textureRdRid)
     {
         var __mb = __mb_set_texture_rd_rid;
         if (__mb == 0)
@@ -17296,7 +17296,7 @@ public unsafe partial class Texture3DRD : Texture3D
     }
 
     private static nint __mb_get_texture_rd_rid;
-    internal Rid GetTextureRdRid()
+    public Rid GetTextureRdRid()
     {
         var __mb = __mb_get_texture_rd_rid;
         if (__mb == 0)
@@ -17392,7 +17392,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_set_texture_normal;
-    internal void SetTextureNormal(Texture2D? texture)
+    public void SetTextureNormal(Texture2D? texture)
     {
         var __mb = __mb_set_texture_normal;
         if (__mb == 0)
@@ -17408,7 +17408,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_set_texture_pressed;
-    internal void SetTexturePressed(Texture2D? texture)
+    public void SetTexturePressed(Texture2D? texture)
     {
         var __mb = __mb_set_texture_pressed;
         if (__mb == 0)
@@ -17424,7 +17424,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_set_texture_hover;
-    internal void SetTextureHover(Texture2D? texture)
+    public void SetTextureHover(Texture2D? texture)
     {
         var __mb = __mb_set_texture_hover;
         if (__mb == 0)
@@ -17440,7 +17440,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_set_texture_disabled;
-    internal void SetTextureDisabled(Texture2D? texture)
+    public void SetTextureDisabled(Texture2D? texture)
     {
         var __mb = __mb_set_texture_disabled;
         if (__mb == 0)
@@ -17456,7 +17456,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_set_texture_focused;
-    internal void SetTextureFocused(Texture2D? texture)
+    public void SetTextureFocused(Texture2D? texture)
     {
         var __mb = __mb_set_texture_focused;
         if (__mb == 0)
@@ -17472,7 +17472,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_set_click_mask;
-    internal void SetClickMask(BitMap? mask)
+    public void SetClickMask(BitMap? mask)
     {
         var __mb = __mb_set_click_mask;
         if (__mb == 0)
@@ -17488,7 +17488,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_set_ignore_texture_size;
-    internal void SetIgnoreTextureSize(bool ignore)
+    public void SetIgnoreTextureSize(bool ignore)
     {
         var __mb = __mb_set_ignore_texture_size;
         if (__mb == 0)
@@ -17504,7 +17504,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_set_stretch_mode;
-    internal void SetStretchMode(TextureButton.StretchModeEnum mode)
+    public void SetStretchMode(TextureButton.StretchModeEnum mode)
     {
         var __mb = __mb_set_stretch_mode;
         if (__mb == 0)
@@ -17520,7 +17520,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_set_flip_h;
-    internal void SetFlipH(bool enable)
+    public void SetFlipH(bool enable)
     {
         var __mb = __mb_set_flip_h;
         if (__mb == 0)
@@ -17536,7 +17536,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_is_flipped_h;
-    internal bool IsFlippedH()
+    public bool IsFlippedH()
     {
         var __mb = __mb_is_flipped_h;
         if (__mb == 0)
@@ -17551,7 +17551,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_set_flip_v;
-    internal void SetFlipV(bool enable)
+    public void SetFlipV(bool enable)
     {
         var __mb = __mb_set_flip_v;
         if (__mb == 0)
@@ -17567,7 +17567,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_is_flipped_v;
-    internal bool IsFlippedV()
+    public bool IsFlippedV()
     {
         var __mb = __mb_is_flipped_v;
         if (__mb == 0)
@@ -17582,7 +17582,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_get_texture_normal;
-    internal Texture2D? GetTextureNormal()
+    public Texture2D? GetTextureNormal()
     {
         var __mb = __mb_get_texture_normal;
         if (__mb == 0)
@@ -17597,7 +17597,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_get_texture_pressed;
-    internal Texture2D? GetTexturePressed()
+    public Texture2D? GetTexturePressed()
     {
         var __mb = __mb_get_texture_pressed;
         if (__mb == 0)
@@ -17612,7 +17612,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_get_texture_hover;
-    internal Texture2D? GetTextureHover()
+    public Texture2D? GetTextureHover()
     {
         var __mb = __mb_get_texture_hover;
         if (__mb == 0)
@@ -17627,7 +17627,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_get_texture_disabled;
-    internal Texture2D? GetTextureDisabled()
+    public Texture2D? GetTextureDisabled()
     {
         var __mb = __mb_get_texture_disabled;
         if (__mb == 0)
@@ -17642,7 +17642,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_get_texture_focused;
-    internal Texture2D? GetTextureFocused()
+    public Texture2D? GetTextureFocused()
     {
         var __mb = __mb_get_texture_focused;
         if (__mb == 0)
@@ -17657,7 +17657,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_get_click_mask;
-    internal BitMap? GetClickMask()
+    public BitMap? GetClickMask()
     {
         var __mb = __mb_get_click_mask;
         if (__mb == 0)
@@ -17672,7 +17672,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_get_ignore_texture_size;
-    internal bool GetIgnoreTextureSize()
+    public bool GetIgnoreTextureSize()
     {
         var __mb = __mb_get_ignore_texture_size;
         if (__mb == 0)
@@ -17687,7 +17687,7 @@ public unsafe partial class TextureButton : BaseButton
     }
 
     private static nint __mb_get_stretch_mode;
-    internal TextureButton.StretchModeEnum GetStretchMode()
+    public TextureButton.StretchModeEnum GetStretchMode()
     {
         var __mb = __mb_get_stretch_mode;
         if (__mb == 0)
@@ -17799,7 +17799,7 @@ public unsafe partial class TextureLayered : Texture
     }
 
     private static nint __mb_get_layers;
-    internal int GetLayers()
+    public int GetLayers()
     {
         var __mb = __mb_get_layers;
         if (__mb == 0)
@@ -17927,7 +17927,7 @@ public unsafe partial class TextureLayeredRD : TextureLayered
     }
 
     private static nint __mb_set_texture_rd_rid;
-    internal void SetTextureRdRid(Rid textureRdRid)
+    public void SetTextureRdRid(Rid textureRdRid)
     {
         var __mb = __mb_set_texture_rd_rid;
         if (__mb == 0)
@@ -17943,7 +17943,7 @@ public unsafe partial class TextureLayeredRD : TextureLayered
     }
 
     private static nint __mb_get_texture_rd_rid;
-    internal Rid GetTextureRdRid()
+    public Rid GetTextureRdRid()
     {
         var __mb = __mb_get_texture_rd_rid;
         if (__mb == 0)
@@ -18077,7 +18077,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_set_under_texture;
-    internal void SetUnderTexture(Texture2D? tex)
+    public void SetUnderTexture(Texture2D? tex)
     {
         var __mb = __mb_set_under_texture;
         if (__mb == 0)
@@ -18093,7 +18093,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_get_under_texture;
-    internal Texture2D? GetUnderTexture()
+    public Texture2D? GetUnderTexture()
     {
         var __mb = __mb_get_under_texture;
         if (__mb == 0)
@@ -18108,7 +18108,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_set_progress_texture;
-    internal void SetProgressTexture(Texture2D? tex)
+    public void SetProgressTexture(Texture2D? tex)
     {
         var __mb = __mb_set_progress_texture;
         if (__mb == 0)
@@ -18124,7 +18124,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_get_progress_texture;
-    internal Texture2D? GetProgressTexture()
+    public Texture2D? GetProgressTexture()
     {
         var __mb = __mb_get_progress_texture;
         if (__mb == 0)
@@ -18139,7 +18139,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_set_over_texture;
-    internal void SetOverTexture(Texture2D? tex)
+    public void SetOverTexture(Texture2D? tex)
     {
         var __mb = __mb_set_over_texture;
         if (__mb == 0)
@@ -18155,7 +18155,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_get_over_texture;
-    internal Texture2D? GetOverTexture()
+    public Texture2D? GetOverTexture()
     {
         var __mb = __mb_get_over_texture;
         if (__mb == 0)
@@ -18170,7 +18170,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_set_fill_mode;
-    internal void SetFillMode(int mode)
+    public void SetFillMode(int mode)
     {
         var __mb = __mb_set_fill_mode;
         if (__mb == 0)
@@ -18186,7 +18186,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_get_fill_mode;
-    internal int GetFillMode()
+    public int GetFillMode()
     {
         var __mb = __mb_get_fill_mode;
         if (__mb == 0)
@@ -18201,7 +18201,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_set_tint_under;
-    internal void SetTintUnder(Color tint)
+    public void SetTintUnder(Color tint)
     {
         var __mb = __mb_set_tint_under;
         if (__mb == 0)
@@ -18217,7 +18217,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_get_tint_under;
-    internal Color GetTintUnder()
+    public Color GetTintUnder()
     {
         var __mb = __mb_get_tint_under;
         if (__mb == 0)
@@ -18232,7 +18232,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_set_tint_progress;
-    internal void SetTintProgress(Color tint)
+    public void SetTintProgress(Color tint)
     {
         var __mb = __mb_set_tint_progress;
         if (__mb == 0)
@@ -18248,7 +18248,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_get_tint_progress;
-    internal Color GetTintProgress()
+    public Color GetTintProgress()
     {
         var __mb = __mb_get_tint_progress;
         if (__mb == 0)
@@ -18263,7 +18263,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_set_tint_over;
-    internal void SetTintOver(Color tint)
+    public void SetTintOver(Color tint)
     {
         var __mb = __mb_set_tint_over;
         if (__mb == 0)
@@ -18279,7 +18279,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_get_tint_over;
-    internal Color GetTintOver()
+    public Color GetTintOver()
     {
         var __mb = __mb_get_tint_over;
         if (__mb == 0)
@@ -18294,7 +18294,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_set_texture_progress_offset;
-    internal void SetTextureProgressOffset(Vector2 offset)
+    public void SetTextureProgressOffset(Vector2 offset)
     {
         var __mb = __mb_set_texture_progress_offset;
         if (__mb == 0)
@@ -18310,7 +18310,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_get_texture_progress_offset;
-    internal Vector2 GetTextureProgressOffset()
+    public Vector2 GetTextureProgressOffset()
     {
         var __mb = __mb_get_texture_progress_offset;
         if (__mb == 0)
@@ -18325,7 +18325,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_set_radial_initial_angle;
-    internal void SetRadialInitialAngle(float mode)
+    public void SetRadialInitialAngle(float mode)
     {
         var __mb = __mb_set_radial_initial_angle;
         if (__mb == 0)
@@ -18341,7 +18341,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_get_radial_initial_angle;
-    internal float GetRadialInitialAngle()
+    public float GetRadialInitialAngle()
     {
         var __mb = __mb_get_radial_initial_angle;
         if (__mb == 0)
@@ -18356,7 +18356,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_set_radial_center_offset;
-    internal void SetRadialCenterOffset(Vector2 mode)
+    public void SetRadialCenterOffset(Vector2 mode)
     {
         var __mb = __mb_set_radial_center_offset;
         if (__mb == 0)
@@ -18372,7 +18372,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_get_radial_center_offset;
-    internal Vector2 GetRadialCenterOffset()
+    public Vector2 GetRadialCenterOffset()
     {
         var __mb = __mb_get_radial_center_offset;
         if (__mb == 0)
@@ -18387,7 +18387,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_set_fill_degrees;
-    internal void SetFillDegrees(float mode)
+    public void SetFillDegrees(float mode)
     {
         var __mb = __mb_set_fill_degrees;
         if (__mb == 0)
@@ -18403,7 +18403,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_get_fill_degrees;
-    internal float GetFillDegrees()
+    public float GetFillDegrees()
     {
         var __mb = __mb_get_fill_degrees;
         if (__mb == 0)
@@ -18418,7 +18418,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_set_stretch_margin;
-    internal void SetStretchMargin(Side margin, int value)
+    public void SetStretchMargin(Side margin, int value)
     {
         var __mb = __mb_set_stretch_margin;
         if (__mb == 0)
@@ -18436,7 +18436,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_get_stretch_margin;
-    internal int GetStretchMargin(Side margin)
+    public int GetStretchMargin(Side margin)
     {
         var __mb = __mb_get_stretch_margin;
         if (__mb == 0)
@@ -18454,7 +18454,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_set_nine_patch_stretch;
-    internal void SetNinePatchStretch(bool stretch)
+    public void SetNinePatchStretch(bool stretch)
     {
         var __mb = __mb_set_nine_patch_stretch;
         if (__mb == 0)
@@ -18470,7 +18470,7 @@ public unsafe partial class TextureProgressBar : Range
     }
 
     private static nint __mb_get_nine_patch_stretch;
-    internal bool GetNinePatchStretch()
+    public bool GetNinePatchStretch()
     {
         var __mb = __mb_get_nine_patch_stretch;
         if (__mb == 0)
@@ -18546,7 +18546,7 @@ public unsafe partial class TextureRect : Control
     }
 
     private static nint __mb_set_texture;
-    internal void SetTexture(Texture2D? texture)
+    public void SetTexture(Texture2D? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -18562,7 +18562,7 @@ public unsafe partial class TextureRect : Control
     }
 
     private static nint __mb_get_texture;
-    internal Texture2D? GetTexture()
+    public Texture2D? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -18577,7 +18577,7 @@ public unsafe partial class TextureRect : Control
     }
 
     private static nint __mb_set_expand_mode;
-    internal void SetExpandMode(TextureRect.ExpandModeEnum expandMode)
+    public void SetExpandMode(TextureRect.ExpandModeEnum expandMode)
     {
         var __mb = __mb_set_expand_mode;
         if (__mb == 0)
@@ -18593,7 +18593,7 @@ public unsafe partial class TextureRect : Control
     }
 
     private static nint __mb_get_expand_mode;
-    internal TextureRect.ExpandModeEnum GetExpandMode()
+    public TextureRect.ExpandModeEnum GetExpandMode()
     {
         var __mb = __mb_get_expand_mode;
         if (__mb == 0)
@@ -18608,7 +18608,7 @@ public unsafe partial class TextureRect : Control
     }
 
     private static nint __mb_set_flip_h;
-    internal void SetFlipH(bool enable)
+    public void SetFlipH(bool enable)
     {
         var __mb = __mb_set_flip_h;
         if (__mb == 0)
@@ -18624,7 +18624,7 @@ public unsafe partial class TextureRect : Control
     }
 
     private static nint __mb_is_flipped_h;
-    internal bool IsFlippedH()
+    public bool IsFlippedH()
     {
         var __mb = __mb_is_flipped_h;
         if (__mb == 0)
@@ -18639,7 +18639,7 @@ public unsafe partial class TextureRect : Control
     }
 
     private static nint __mb_set_flip_v;
-    internal void SetFlipV(bool enable)
+    public void SetFlipV(bool enable)
     {
         var __mb = __mb_set_flip_v;
         if (__mb == 0)
@@ -18655,7 +18655,7 @@ public unsafe partial class TextureRect : Control
     }
 
     private static nint __mb_is_flipped_v;
-    internal bool IsFlippedV()
+    public bool IsFlippedV()
     {
         var __mb = __mb_is_flipped_v;
         if (__mb == 0)
@@ -18670,7 +18670,7 @@ public unsafe partial class TextureRect : Control
     }
 
     private static nint __mb_set_stretch_mode;
-    internal void SetStretchMode(TextureRect.StretchModeEnum stretchMode)
+    public void SetStretchMode(TextureRect.StretchModeEnum stretchMode)
     {
         var __mb = __mb_set_stretch_mode;
         if (__mb == 0)
@@ -18686,7 +18686,7 @@ public unsafe partial class TextureRect : Control
     }
 
     private static nint __mb_get_stretch_mode;
-    internal TextureRect.StretchModeEnum GetStretchMode()
+    public TextureRect.StretchModeEnum GetStretchMode()
     {
         var __mb = __mb_get_stretch_mode;
         if (__mb == 0)
@@ -19532,7 +19532,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_set_default_base_scale;
-    internal void SetDefaultBaseScale(float baseScale)
+    public void SetDefaultBaseScale(float baseScale)
     {
         var __mb = __mb_set_default_base_scale;
         if (__mb == 0)
@@ -19548,7 +19548,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_get_default_base_scale;
-    internal float GetDefaultBaseScale()
+    public float GetDefaultBaseScale()
     {
         var __mb = __mb_get_default_base_scale;
         if (__mb == 0)
@@ -19578,7 +19578,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_set_default_font;
-    internal void SetDefaultFont(Font? font)
+    public void SetDefaultFont(Font? font)
     {
         var __mb = __mb_set_default_font;
         if (__mb == 0)
@@ -19594,7 +19594,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_get_default_font;
-    internal Font? GetDefaultFont()
+    public Font? GetDefaultFont()
     {
         var __mb = __mb_get_default_font;
         if (__mb == 0)
@@ -19624,7 +19624,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_set_default_font_size;
-    internal void SetDefaultFontSize(int fontSize)
+    public void SetDefaultFontSize(int fontSize)
     {
         var __mb = __mb_set_default_font_size;
         if (__mb == 0)
@@ -19640,7 +19640,7 @@ public unsafe partial class Theme : Resource
     }
 
     private static nint __mb_get_default_font_size;
-    internal int GetDefaultFontSize()
+    public int GetDefaultFontSize()
     {
         var __mb = __mb_get_default_font_size;
         if (__mb == 0)
@@ -20079,7 +20079,7 @@ public static unsafe partial class ThemeDB
     }
 
     private static nint __mb_set_fallback_base_scale;
-    internal static void SetFallbackBaseScale(float baseScale)
+    public static void SetFallbackBaseScale(float baseScale)
     {
         var __mb = __mb_set_fallback_base_scale;
         if (__mb == 0)
@@ -20095,7 +20095,7 @@ public static unsafe partial class ThemeDB
     }
 
     private static nint __mb_get_fallback_base_scale;
-    internal static float GetFallbackBaseScale()
+    public static float GetFallbackBaseScale()
     {
         var __mb = __mb_get_fallback_base_scale;
         if (__mb == 0)
@@ -20110,7 +20110,7 @@ public static unsafe partial class ThemeDB
     }
 
     private static nint __mb_set_fallback_font;
-    internal static void SetFallbackFont(Font? font)
+    public static void SetFallbackFont(Font? font)
     {
         var __mb = __mb_set_fallback_font;
         if (__mb == 0)
@@ -20126,7 +20126,7 @@ public static unsafe partial class ThemeDB
     }
 
     private static nint __mb_get_fallback_font;
-    internal static Font? GetFallbackFont()
+    public static Font? GetFallbackFont()
     {
         var __mb = __mb_get_fallback_font;
         if (__mb == 0)
@@ -20141,7 +20141,7 @@ public static unsafe partial class ThemeDB
     }
 
     private static nint __mb_set_fallback_font_size;
-    internal static void SetFallbackFontSize(int fontSize)
+    public static void SetFallbackFontSize(int fontSize)
     {
         var __mb = __mb_set_fallback_font_size;
         if (__mb == 0)
@@ -20157,7 +20157,7 @@ public static unsafe partial class ThemeDB
     }
 
     private static nint __mb_get_fallback_font_size;
-    internal static int GetFallbackFontSize()
+    public static int GetFallbackFontSize()
     {
         var __mb = __mb_get_fallback_font_size;
         if (__mb == 0)
@@ -20172,7 +20172,7 @@ public static unsafe partial class ThemeDB
     }
 
     private static nint __mb_set_fallback_icon;
-    internal static void SetFallbackIcon(Texture2D? icon)
+    public static void SetFallbackIcon(Texture2D? icon)
     {
         var __mb = __mb_set_fallback_icon;
         if (__mb == 0)
@@ -20188,7 +20188,7 @@ public static unsafe partial class ThemeDB
     }
 
     private static nint __mb_get_fallback_icon;
-    internal static Texture2D? GetFallbackIcon()
+    public static Texture2D? GetFallbackIcon()
     {
         var __mb = __mb_get_fallback_icon;
         if (__mb == 0)
@@ -20203,7 +20203,7 @@ public static unsafe partial class ThemeDB
     }
 
     private static nint __mb_set_fallback_stylebox;
-    internal static void SetFallbackStylebox(StyleBox? stylebox)
+    public static void SetFallbackStylebox(StyleBox? stylebox)
     {
         var __mb = __mb_set_fallback_stylebox;
         if (__mb == 0)
@@ -20219,7 +20219,7 @@ public static unsafe partial class ThemeDB
     }
 
     private static nint __mb_get_fallback_stylebox;
-    internal static StyleBox? GetFallbackStylebox()
+    public static StyleBox? GetFallbackStylebox()
     {
         var __mb = __mb_get_fallback_stylebox;
         if (__mb == 0)
@@ -20446,7 +20446,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_set_flip_h;
-    internal void SetFlipH(bool flipH)
+    public void SetFlipH(bool flipH)
     {
         var __mb = __mb_set_flip_h;
         if (__mb == 0)
@@ -20462,7 +20462,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_get_flip_h;
-    internal bool GetFlipH()
+    public bool GetFlipH()
     {
         var __mb = __mb_get_flip_h;
         if (__mb == 0)
@@ -20477,7 +20477,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_set_flip_v;
-    internal void SetFlipV(bool flipV)
+    public void SetFlipV(bool flipV)
     {
         var __mb = __mb_set_flip_v;
         if (__mb == 0)
@@ -20493,7 +20493,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_get_flip_v;
-    internal bool GetFlipV()
+    public bool GetFlipV()
     {
         var __mb = __mb_get_flip_v;
         if (__mb == 0)
@@ -20508,7 +20508,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_set_transpose;
-    internal void SetTranspose(bool transpose)
+    public void SetTranspose(bool transpose)
     {
         var __mb = __mb_set_transpose;
         if (__mb == 0)
@@ -20524,7 +20524,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_get_transpose;
-    internal bool GetTranspose()
+    public bool GetTranspose()
     {
         var __mb = __mb_get_transpose;
         if (__mb == 0)
@@ -20539,7 +20539,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_set_material;
-    internal void SetMaterial(Material? material)
+    public void SetMaterial(Material? material)
     {
         var __mb = __mb_set_material;
         if (__mb == 0)
@@ -20555,7 +20555,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_get_material;
-    internal Material? GetMaterial()
+    public Material? GetMaterial()
     {
         var __mb = __mb_get_material;
         if (__mb == 0)
@@ -20570,7 +20570,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_set_texture_origin;
-    internal void SetTextureOrigin(Vector2I textureOrigin)
+    public void SetTextureOrigin(Vector2I textureOrigin)
     {
         var __mb = __mb_set_texture_origin;
         if (__mb == 0)
@@ -20586,7 +20586,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_get_texture_origin;
-    internal Vector2I GetTextureOrigin()
+    public Vector2I GetTextureOrigin()
     {
         var __mb = __mb_get_texture_origin;
         if (__mb == 0)
@@ -20601,7 +20601,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_set_modulate;
-    internal void SetModulate(Color modulate)
+    public void SetModulate(Color modulate)
     {
         var __mb = __mb_set_modulate;
         if (__mb == 0)
@@ -20617,7 +20617,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_get_modulate;
-    internal Color GetModulate()
+    public Color GetModulate()
     {
         var __mb = __mb_get_modulate;
         if (__mb == 0)
@@ -20632,7 +20632,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_set_z_index;
-    internal void SetZIndex(int zIndex)
+    public void SetZIndex(int zIndex)
     {
         var __mb = __mb_set_z_index;
         if (__mb == 0)
@@ -20648,7 +20648,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_get_z_index;
-    internal int GetZIndex()
+    public int GetZIndex()
     {
         var __mb = __mb_get_z_index;
         if (__mb == 0)
@@ -20663,7 +20663,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_set_y_sort_origin;
-    internal void SetYSortOrigin(int ySortOrigin)
+    public void SetYSortOrigin(int ySortOrigin)
     {
         var __mb = __mb_set_y_sort_origin;
         if (__mb == 0)
@@ -20679,7 +20679,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_get_y_sort_origin;
-    internal int GetYSortOrigin()
+    public int GetYSortOrigin()
     {
         var __mb = __mb_get_y_sort_origin;
         if (__mb == 0)
@@ -21115,7 +21115,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_set_terrain_set;
-    internal void SetTerrainSet(int terrainSet)
+    public void SetTerrainSet(int terrainSet)
     {
         var __mb = __mb_set_terrain_set;
         if (__mb == 0)
@@ -21131,7 +21131,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_get_terrain_set;
-    internal int GetTerrainSet()
+    public int GetTerrainSet()
     {
         var __mb = __mb_get_terrain_set;
         if (__mb == 0)
@@ -21146,7 +21146,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_set_terrain;
-    internal void SetTerrain(int terrain)
+    public void SetTerrain(int terrain)
     {
         var __mb = __mb_set_terrain;
         if (__mb == 0)
@@ -21162,7 +21162,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_get_terrain;
-    internal int GetTerrain()
+    public int GetTerrain()
     {
         var __mb = __mb_get_terrain;
         if (__mb == 0)
@@ -21273,7 +21273,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_set_probability;
-    internal void SetProbability(float probability)
+    public void SetProbability(float probability)
     {
         var __mb = __mb_set_probability;
         if (__mb == 0)
@@ -21289,7 +21289,7 @@ public unsafe partial class TileData : GodotObject
     }
 
     private static nint __mb_get_probability;
-    internal float GetProbability()
+    public float GetProbability()
     {
         var __mb = __mb_get_probability;
         if (__mb == 0)
@@ -21504,7 +21504,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_set_tileset;
-    internal void SetTileset(TileSet? tileset)
+    public void SetTileset(TileSet? tileset)
     {
         var __mb = __mb_set_tileset;
         if (__mb == 0)
@@ -21520,7 +21520,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_get_tileset;
-    internal TileSet? GetTileset()
+    public TileSet? GetTileset()
     {
         var __mb = __mb_get_tileset;
         if (__mb == 0)
@@ -21535,7 +21535,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_set_rendering_quadrant_size;
-    internal void SetRenderingQuadrantSize(int size)
+    public void SetRenderingQuadrantSize(int size)
     {
         var __mb = __mb_set_rendering_quadrant_size;
         if (__mb == 0)
@@ -21551,7 +21551,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_get_rendering_quadrant_size;
-    internal int GetRenderingQuadrantSize()
+    public int GetRenderingQuadrantSize()
     {
         var __mb = __mb_get_rendering_quadrant_size;
         if (__mb == 0)
@@ -21920,7 +21920,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_set_collision_animatable;
-    internal void SetCollisionAnimatable(bool enabled)
+    public void SetCollisionAnimatable(bool enabled)
     {
         var __mb = __mb_set_collision_animatable;
         if (__mb == 0)
@@ -21936,7 +21936,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_is_collision_animatable;
-    internal bool IsCollisionAnimatable()
+    public bool IsCollisionAnimatable()
     {
         var __mb = __mb_is_collision_animatable;
         if (__mb == 0)
@@ -21951,7 +21951,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_set_collision_visibility_mode;
-    internal void SetCollisionVisibilityMode(TileMap.VisibilityMode collisionVisibilityMode)
+    public void SetCollisionVisibilityMode(TileMap.VisibilityMode collisionVisibilityMode)
     {
         var __mb = __mb_set_collision_visibility_mode;
         if (__mb == 0)
@@ -21967,7 +21967,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_get_collision_visibility_mode;
-    internal TileMap.VisibilityMode GetCollisionVisibilityMode()
+    public TileMap.VisibilityMode GetCollisionVisibilityMode()
     {
         var __mb = __mb_get_collision_visibility_mode;
         if (__mb == 0)
@@ -21982,7 +21982,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_set_navigation_visibility_mode;
-    internal void SetNavigationVisibilityMode(TileMap.VisibilityMode navigationVisibilityMode)
+    public void SetNavigationVisibilityMode(TileMap.VisibilityMode navigationVisibilityMode)
     {
         var __mb = __mb_set_navigation_visibility_mode;
         if (__mb == 0)
@@ -21998,7 +21998,7 @@ public unsafe partial class TileMap : Node2D
     }
 
     private static nint __mb_get_navigation_visibility_mode;
-    internal TileMap.VisibilityMode GetNavigationVisibilityMode()
+    public TileMap.VisibilityMode GetNavigationVisibilityMode()
     {
         var __mb = __mb_get_navigation_visibility_mode;
         if (__mb == 0)
@@ -23164,7 +23164,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_tile_map_data_from_array;
-    internal void SetTileMapDataFromArray(byte[] tileMapLayerData)
+    public void SetTileMapDataFromArray(byte[] tileMapLayerData)
     {
         var __mb = __mb_set_tile_map_data_from_array;
         if (__mb == 0)
@@ -23181,7 +23181,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_get_tile_map_data_as_array;
-    internal byte[] GetTileMapDataAsArray()
+    public byte[] GetTileMapDataAsArray()
     {
         var __mb = __mb_get_tile_map_data_as_array;
         if (__mb == 0)
@@ -23196,7 +23196,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_enabled;
-    internal void SetEnabled(bool enabled)
+    public void SetEnabled(bool enabled)
     {
         var __mb = __mb_set_enabled;
         if (__mb == 0)
@@ -23212,7 +23212,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_is_enabled;
-    internal bool IsEnabled()
+    public bool IsEnabled()
     {
         var __mb = __mb_is_enabled;
         if (__mb == 0)
@@ -23227,7 +23227,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_tile_set;
-    internal void SetTileSet(TileSet? tileSet)
+    public void SetTileSet(TileSet? tileSet)
     {
         var __mb = __mb_set_tile_set;
         if (__mb == 0)
@@ -23243,7 +23243,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_get_tile_set;
-    internal TileSet? GetTileSet()
+    public TileSet? GetTileSet()
     {
         var __mb = __mb_get_tile_set;
         if (__mb == 0)
@@ -23258,7 +23258,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_y_sort_origin;
-    internal void SetYSortOrigin(int ySortOrigin)
+    public void SetYSortOrigin(int ySortOrigin)
     {
         var __mb = __mb_set_y_sort_origin;
         if (__mb == 0)
@@ -23274,7 +23274,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_get_y_sort_origin;
-    internal int GetYSortOrigin()
+    public int GetYSortOrigin()
     {
         var __mb = __mb_get_y_sort_origin;
         if (__mb == 0)
@@ -23289,7 +23289,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_x_draw_order_reversed;
-    internal void SetXDrawOrderReversed(bool xDrawOrderReversed)
+    public void SetXDrawOrderReversed(bool xDrawOrderReversed)
     {
         var __mb = __mb_set_x_draw_order_reversed;
         if (__mb == 0)
@@ -23305,7 +23305,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_is_x_draw_order_reversed;
-    internal bool IsXDrawOrderReversed()
+    public bool IsXDrawOrderReversed()
     {
         var __mb = __mb_is_x_draw_order_reversed;
         if (__mb == 0)
@@ -23320,7 +23320,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_rendering_quadrant_size;
-    internal void SetRenderingQuadrantSize(int size)
+    public void SetRenderingQuadrantSize(int size)
     {
         var __mb = __mb_set_rendering_quadrant_size;
         if (__mb == 0)
@@ -23336,7 +23336,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_get_rendering_quadrant_size;
-    internal int GetRenderingQuadrantSize()
+    public int GetRenderingQuadrantSize()
     {
         var __mb = __mb_get_rendering_quadrant_size;
         if (__mb == 0)
@@ -23351,7 +23351,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_collision_enabled;
-    internal void SetCollisionEnabled(bool enabled)
+    public void SetCollisionEnabled(bool enabled)
     {
         var __mb = __mb_set_collision_enabled;
         if (__mb == 0)
@@ -23367,7 +23367,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_is_collision_enabled;
-    internal bool IsCollisionEnabled()
+    public bool IsCollisionEnabled()
     {
         var __mb = __mb_is_collision_enabled;
         if (__mb == 0)
@@ -23382,7 +23382,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_use_kinematic_bodies;
-    internal void SetUseKinematicBodies(bool useKinematicBodies)
+    public void SetUseKinematicBodies(bool useKinematicBodies)
     {
         var __mb = __mb_set_use_kinematic_bodies;
         if (__mb == 0)
@@ -23398,7 +23398,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_is_using_kinematic_bodies;
-    internal bool IsUsingKinematicBodies()
+    public bool IsUsingKinematicBodies()
     {
         var __mb = __mb_is_using_kinematic_bodies;
         if (__mb == 0)
@@ -23413,7 +23413,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_collision_visibility_mode;
-    internal void SetCollisionVisibilityMode(TileMapLayer.DebugVisibilityMode visibilityMode)
+    public void SetCollisionVisibilityMode(TileMapLayer.DebugVisibilityMode visibilityMode)
     {
         var __mb = __mb_set_collision_visibility_mode;
         if (__mb == 0)
@@ -23429,7 +23429,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_get_collision_visibility_mode;
-    internal TileMapLayer.DebugVisibilityMode GetCollisionVisibilityMode()
+    public TileMapLayer.DebugVisibilityMode GetCollisionVisibilityMode()
     {
         var __mb = __mb_get_collision_visibility_mode;
         if (__mb == 0)
@@ -23444,7 +23444,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_physics_quadrant_size;
-    internal void SetPhysicsQuadrantSize(int size)
+    public void SetPhysicsQuadrantSize(int size)
     {
         var __mb = __mb_set_physics_quadrant_size;
         if (__mb == 0)
@@ -23460,7 +23460,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_get_physics_quadrant_size;
-    internal int GetPhysicsQuadrantSize()
+    public int GetPhysicsQuadrantSize()
     {
         var __mb = __mb_get_physics_quadrant_size;
         if (__mb == 0)
@@ -23475,7 +23475,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_occlusion_enabled;
-    internal void SetOcclusionEnabled(bool enabled)
+    public void SetOcclusionEnabled(bool enabled)
     {
         var __mb = __mb_set_occlusion_enabled;
         if (__mb == 0)
@@ -23491,7 +23491,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_is_occlusion_enabled;
-    internal bool IsOcclusionEnabled()
+    public bool IsOcclusionEnabled()
     {
         var __mb = __mb_is_occlusion_enabled;
         if (__mb == 0)
@@ -23506,7 +23506,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_navigation_enabled;
-    internal void SetNavigationEnabled(bool enabled)
+    public void SetNavigationEnabled(bool enabled)
     {
         var __mb = __mb_set_navigation_enabled;
         if (__mb == 0)
@@ -23522,7 +23522,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_is_navigation_enabled;
-    internal bool IsNavigationEnabled()
+    public bool IsNavigationEnabled()
     {
         var __mb = __mb_is_navigation_enabled;
         if (__mb == 0)
@@ -23568,7 +23568,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_set_navigation_visibility_mode;
-    internal void SetNavigationVisibilityMode(TileMapLayer.DebugVisibilityMode showNavigation)
+    public void SetNavigationVisibilityMode(TileMapLayer.DebugVisibilityMode showNavigation)
     {
         var __mb = __mb_set_navigation_visibility_mode;
         if (__mb == 0)
@@ -23584,7 +23584,7 @@ public unsafe partial class TileMapLayer : Node2D
     }
 
     private static nint __mb_get_navigation_visibility_mode;
-    internal TileMapLayer.DebugVisibilityMode GetNavigationVisibilityMode()
+    public TileMapLayer.DebugVisibilityMode GetNavigationVisibilityMode()
     {
         var __mb = __mb_get_navigation_visibility_mode;
         if (__mb == 0)
@@ -24035,7 +24035,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_set_tile_shape;
-    internal void SetTileShape(TileSet.TileShapeEnum shape)
+    public void SetTileShape(TileSet.TileShapeEnum shape)
     {
         var __mb = __mb_set_tile_shape;
         if (__mb == 0)
@@ -24051,7 +24051,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_get_tile_shape;
-    internal TileSet.TileShapeEnum GetTileShape()
+    public TileSet.TileShapeEnum GetTileShape()
     {
         var __mb = __mb_get_tile_shape;
         if (__mb == 0)
@@ -24066,7 +24066,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_set_tile_layout;
-    internal void SetTileLayout(TileSet.TileLayoutEnum layout)
+    public void SetTileLayout(TileSet.TileLayoutEnum layout)
     {
         var __mb = __mb_set_tile_layout;
         if (__mb == 0)
@@ -24082,7 +24082,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_get_tile_layout;
-    internal TileSet.TileLayoutEnum GetTileLayout()
+    public TileSet.TileLayoutEnum GetTileLayout()
     {
         var __mb = __mb_get_tile_layout;
         if (__mb == 0)
@@ -24097,7 +24097,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_set_tile_offset_axis;
-    internal void SetTileOffsetAxis(TileSet.TileOffsetAxisEnum alignment)
+    public void SetTileOffsetAxis(TileSet.TileOffsetAxisEnum alignment)
     {
         var __mb = __mb_set_tile_offset_axis;
         if (__mb == 0)
@@ -24113,7 +24113,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_get_tile_offset_axis;
-    internal TileSet.TileOffsetAxisEnum GetTileOffsetAxis()
+    public TileSet.TileOffsetAxisEnum GetTileOffsetAxis()
     {
         var __mb = __mb_get_tile_offset_axis;
         if (__mb == 0)
@@ -24128,7 +24128,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_set_tile_size;
-    internal void SetTileSize(Vector2I size)
+    public void SetTileSize(Vector2I size)
     {
         var __mb = __mb_set_tile_size;
         if (__mb == 0)
@@ -24144,7 +24144,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_get_tile_size;
-    internal Vector2I GetTileSize()
+    public Vector2I GetTileSize()
     {
         var __mb = __mb_get_tile_size;
         if (__mb == 0)
@@ -24159,7 +24159,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_set_uv_clipping;
-    internal void SetUvClipping(bool uvClipping)
+    public void SetUvClipping(bool uvClipping)
     {
         var __mb = __mb_set_uv_clipping;
         if (__mb == 0)
@@ -24175,7 +24175,7 @@ public unsafe partial class TileSet : Resource
     }
 
     private static nint __mb_is_uv_clipping;
-    internal bool IsUvClipping()
+    public bool IsUvClipping()
     {
         var __mb = __mb_is_uv_clipping;
         if (__mb == 0)
@@ -25529,7 +25529,7 @@ public unsafe partial class TileSetAtlasSource : TileSetSource
     }
 
     private static nint __mb_set_texture;
-    internal void SetTexture(Texture2D? texture)
+    public void SetTexture(Texture2D? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -25545,7 +25545,7 @@ public unsafe partial class TileSetAtlasSource : TileSetSource
     }
 
     private static nint __mb_get_texture;
-    internal Texture2D? GetTexture()
+    public Texture2D? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -25560,7 +25560,7 @@ public unsafe partial class TileSetAtlasSource : TileSetSource
     }
 
     private static nint __mb_set_margins;
-    internal void SetMargins(Vector2I margins)
+    public void SetMargins(Vector2I margins)
     {
         var __mb = __mb_set_margins;
         if (__mb == 0)
@@ -25576,7 +25576,7 @@ public unsafe partial class TileSetAtlasSource : TileSetSource
     }
 
     private static nint __mb_get_margins;
-    internal Vector2I GetMargins()
+    public Vector2I GetMargins()
     {
         var __mb = __mb_get_margins;
         if (__mb == 0)
@@ -25591,7 +25591,7 @@ public unsafe partial class TileSetAtlasSource : TileSetSource
     }
 
     private static nint __mb_set_separation;
-    internal void SetSeparation(Vector2I separation)
+    public void SetSeparation(Vector2I separation)
     {
         var __mb = __mb_set_separation;
         if (__mb == 0)
@@ -25607,7 +25607,7 @@ public unsafe partial class TileSetAtlasSource : TileSetSource
     }
 
     private static nint __mb_get_separation;
-    internal Vector2I GetSeparation()
+    public Vector2I GetSeparation()
     {
         var __mb = __mb_get_separation;
         if (__mb == 0)
@@ -25622,7 +25622,7 @@ public unsafe partial class TileSetAtlasSource : TileSetSource
     }
 
     private static nint __mb_set_texture_region_size;
-    internal void SetTextureRegionSize(Vector2I textureRegionSize)
+    public void SetTextureRegionSize(Vector2I textureRegionSize)
     {
         var __mb = __mb_set_texture_region_size;
         if (__mb == 0)
@@ -25638,7 +25638,7 @@ public unsafe partial class TileSetAtlasSource : TileSetSource
     }
 
     private static nint __mb_get_texture_region_size;
-    internal Vector2I GetTextureRegionSize()
+    public Vector2I GetTextureRegionSize()
     {
         var __mb = __mb_get_texture_region_size;
         if (__mb == 0)
@@ -25653,7 +25653,7 @@ public unsafe partial class TileSetAtlasSource : TileSetSource
     }
 
     private static nint __mb_set_use_texture_padding;
-    internal void SetUseTexturePadding(bool useTexturePadding)
+    public void SetUseTexturePadding(bool useTexturePadding)
     {
         var __mb = __mb_set_use_texture_padding;
         if (__mb == 0)
@@ -25669,7 +25669,7 @@ public unsafe partial class TileSetAtlasSource : TileSetSource
     }
 
     private static nint __mb_get_use_texture_padding;
-    internal bool GetUseTexturePadding()
+    public bool GetUseTexturePadding()
     {
         var __mb = __mb_get_use_texture_padding;
         if (__mb == 0)
@@ -27049,7 +27049,7 @@ public unsafe partial class Timer : Node
     }
 
     private static nint __mb_set_wait_time;
-    internal void SetWaitTime(double timeSec)
+    public void SetWaitTime(double timeSec)
     {
         var __mb = __mb_set_wait_time;
         if (__mb == 0)
@@ -27065,7 +27065,7 @@ public unsafe partial class Timer : Node
     }
 
     private static nint __mb_get_wait_time;
-    internal double GetWaitTime()
+    public double GetWaitTime()
     {
         var __mb = __mb_get_wait_time;
         if (__mb == 0)
@@ -27080,7 +27080,7 @@ public unsafe partial class Timer : Node
     }
 
     private static nint __mb_set_one_shot;
-    internal void SetOneShot(bool enable)
+    public void SetOneShot(bool enable)
     {
         var __mb = __mb_set_one_shot;
         if (__mb == 0)
@@ -27096,7 +27096,7 @@ public unsafe partial class Timer : Node
     }
 
     private static nint __mb_is_one_shot;
-    internal bool IsOneShot()
+    public bool IsOneShot()
     {
         var __mb = __mb_is_one_shot;
         if (__mb == 0)
@@ -27111,7 +27111,7 @@ public unsafe partial class Timer : Node
     }
 
     private static nint __mb_set_autostart;
-    internal void SetAutostart(bool enable)
+    public void SetAutostart(bool enable)
     {
         var __mb = __mb_set_autostart;
         if (__mb == 0)
@@ -27127,7 +27127,7 @@ public unsafe partial class Timer : Node
     }
 
     private static nint __mb_has_autostart;
-    internal bool HasAutostart()
+    public bool HasAutostart()
     {
         var __mb = __mb_has_autostart;
         if (__mb == 0)
@@ -27171,7 +27171,7 @@ public unsafe partial class Timer : Node
     }
 
     private static nint __mb_set_paused;
-    internal void SetPaused(bool paused)
+    public void SetPaused(bool paused)
     {
         var __mb = __mb_set_paused;
         if (__mb == 0)
@@ -27187,7 +27187,7 @@ public unsafe partial class Timer : Node
     }
 
     private static nint __mb_is_paused;
-    internal bool IsPaused()
+    public bool IsPaused()
     {
         var __mb = __mb_is_paused;
         if (__mb == 0)
@@ -27202,7 +27202,7 @@ public unsafe partial class Timer : Node
     }
 
     private static nint __mb_set_ignore_time_scale;
-    internal void SetIgnoreTimeScale(bool ignore)
+    public void SetIgnoreTimeScale(bool ignore)
     {
         var __mb = __mb_set_ignore_time_scale;
         if (__mb == 0)
@@ -27218,7 +27218,7 @@ public unsafe partial class Timer : Node
     }
 
     private static nint __mb_is_ignoring_time_scale;
-    internal bool IsIgnoringTimeScale()
+    public bool IsIgnoringTimeScale()
     {
         var __mb = __mb_is_ignoring_time_scale;
         if (__mb == 0)
@@ -27248,7 +27248,7 @@ public unsafe partial class Timer : Node
     }
 
     private static nint __mb_get_time_left;
-    internal double GetTimeLeft()
+    public double GetTimeLeft()
     {
         var __mb = __mb_get_time_left;
         if (__mb == 0)
@@ -27263,7 +27263,7 @@ public unsafe partial class Timer : Node
     }
 
     private static nint __mb_set_timer_process_callback;
-    internal void SetTimerProcessCallback(Timer.TimerProcessCallback callback)
+    public void SetTimerProcessCallback(Timer.TimerProcessCallback callback)
     {
         var __mb = __mb_set_timer_process_callback;
         if (__mb == 0)
@@ -27279,7 +27279,7 @@ public unsafe partial class Timer : Node
     }
 
     private static nint __mb_get_timer_process_callback;
-    internal Timer.TimerProcessCallback GetTimerProcessCallback()
+    public Timer.TimerProcessCallback GetTimerProcessCallback()
     {
         var __mb = __mb_get_timer_process_callback;
         if (__mb == 0)
@@ -27328,7 +27328,7 @@ public unsafe partial class TorusMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_inner_radius;
-    internal void SetInnerRadius(float radius)
+    public void SetInnerRadius(float radius)
     {
         var __mb = __mb_set_inner_radius;
         if (__mb == 0)
@@ -27344,7 +27344,7 @@ public unsafe partial class TorusMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_inner_radius;
-    internal float GetInnerRadius()
+    public float GetInnerRadius()
     {
         var __mb = __mb_get_inner_radius;
         if (__mb == 0)
@@ -27359,7 +27359,7 @@ public unsafe partial class TorusMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_outer_radius;
-    internal void SetOuterRadius(float radius)
+    public void SetOuterRadius(float radius)
     {
         var __mb = __mb_set_outer_radius;
         if (__mb == 0)
@@ -27375,7 +27375,7 @@ public unsafe partial class TorusMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_outer_radius;
-    internal float GetOuterRadius()
+    public float GetOuterRadius()
     {
         var __mb = __mb_get_outer_radius;
         if (__mb == 0)
@@ -27390,7 +27390,7 @@ public unsafe partial class TorusMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_rings;
-    internal void SetRings(int rings)
+    public void SetRings(int rings)
     {
         var __mb = __mb_set_rings;
         if (__mb == 0)
@@ -27406,7 +27406,7 @@ public unsafe partial class TorusMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_rings;
-    internal int GetRings()
+    public int GetRings()
     {
         var __mb = __mb_get_rings;
         if (__mb == 0)
@@ -27421,7 +27421,7 @@ public unsafe partial class TorusMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_ring_segments;
-    internal void SetRingSegments(int rings)
+    public void SetRingSegments(int rings)
     {
         var __mb = __mb_set_ring_segments;
         if (__mb == 0)
@@ -27437,7 +27437,7 @@ public unsafe partial class TorusMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_ring_segments;
-    internal int GetRingSegments()
+    public int GetRingSegments()
     {
         var __mb = __mb_get_ring_segments;
         if (__mb == 0)
@@ -27538,7 +27538,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_set_texture_normal;
-    internal void SetTextureNormal(Texture2D? texture)
+    public void SetTextureNormal(Texture2D? texture)
     {
         var __mb = __mb_set_texture_normal;
         if (__mb == 0)
@@ -27554,7 +27554,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_get_texture_normal;
-    internal Texture2D? GetTextureNormal()
+    public Texture2D? GetTextureNormal()
     {
         var __mb = __mb_get_texture_normal;
         if (__mb == 0)
@@ -27569,7 +27569,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_set_texture_pressed;
-    internal void SetTexturePressed(Texture2D? texture)
+    public void SetTexturePressed(Texture2D? texture)
     {
         var __mb = __mb_set_texture_pressed;
         if (__mb == 0)
@@ -27585,7 +27585,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_get_texture_pressed;
-    internal Texture2D? GetTexturePressed()
+    public Texture2D? GetTexturePressed()
     {
         var __mb = __mb_get_texture_pressed;
         if (__mb == 0)
@@ -27600,7 +27600,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_set_bitmask;
-    internal void SetBitmask(BitMap? bitmask)
+    public void SetBitmask(BitMap? bitmask)
     {
         var __mb = __mb_set_bitmask;
         if (__mb == 0)
@@ -27616,7 +27616,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_get_bitmask;
-    internal BitMap? GetBitmask()
+    public BitMap? GetBitmask()
     {
         var __mb = __mb_get_bitmask;
         if (__mb == 0)
@@ -27631,7 +27631,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_set_shape;
-    internal void SetShape(Shape2D? shape)
+    public void SetShape(Shape2D? shape)
     {
         var __mb = __mb_set_shape;
         if (__mb == 0)
@@ -27647,7 +27647,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_get_shape;
-    internal Shape2D? GetShape()
+    public Shape2D? GetShape()
     {
         var __mb = __mb_get_shape;
         if (__mb == 0)
@@ -27662,7 +27662,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_set_shape_centered;
-    internal void SetShapeCentered(bool @bool)
+    public void SetShapeCentered(bool @bool)
     {
         var __mb = __mb_set_shape_centered;
         if (__mb == 0)
@@ -27678,7 +27678,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_is_shape_centered;
-    internal bool IsShapeCentered()
+    public bool IsShapeCentered()
     {
         var __mb = __mb_is_shape_centered;
         if (__mb == 0)
@@ -27693,7 +27693,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_set_shape_visible;
-    internal void SetShapeVisible(bool @bool)
+    public void SetShapeVisible(bool @bool)
     {
         var __mb = __mb_set_shape_visible;
         if (__mb == 0)
@@ -27709,7 +27709,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_is_shape_visible;
-    internal bool IsShapeVisible()
+    public bool IsShapeVisible()
     {
         var __mb = __mb_is_shape_visible;
         if (__mb == 0)
@@ -27724,7 +27724,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_set_action;
-    internal void SetAction(string action)
+    public void SetAction(string action)
     {
         var __mb = __mb_set_action;
         if (__mb == 0)
@@ -27741,7 +27741,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_get_action;
-    internal string GetAction()
+    public string GetAction()
     {
         var __mb = __mb_get_action;
         if (__mb == 0)
@@ -27756,7 +27756,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_set_visibility_mode;
-    internal void SetVisibilityMode(TouchScreenButton.VisibilityModeEnum mode)
+    public void SetVisibilityMode(TouchScreenButton.VisibilityModeEnum mode)
     {
         var __mb = __mb_set_visibility_mode;
         if (__mb == 0)
@@ -27772,7 +27772,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_get_visibility_mode;
-    internal TouchScreenButton.VisibilityModeEnum GetVisibilityMode()
+    public TouchScreenButton.VisibilityModeEnum GetVisibilityMode()
     {
         var __mb = __mb_get_visibility_mode;
         if (__mb == 0)
@@ -27787,7 +27787,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_set_passby_press;
-    internal void SetPassbyPress(bool enabled)
+    public void SetPassbyPress(bool enabled)
     {
         var __mb = __mb_set_passby_press;
         if (__mb == 0)
@@ -27803,7 +27803,7 @@ public unsafe partial class TouchScreenButton : Node2D
     }
 
     private static nint __mb_is_passby_press_enabled;
-    internal bool IsPassbyPressEnabled()
+    public bool IsPassbyPressEnabled()
     {
         var __mb = __mb_is_passby_press_enabled;
         if (__mb == 0)
@@ -27855,7 +27855,7 @@ public unsafe partial class Translation : Resource
     }
 
     private static nint __mb_set_locale;
-    internal void SetLocale(string locale)
+    public void SetLocale(string locale)
     {
         var __mb = __mb_set_locale;
         if (__mb == 0)
@@ -27872,7 +27872,7 @@ public unsafe partial class Translation : Resource
     }
 
     private static nint __mb_get_locale;
-    internal string GetLocale()
+    public string GetLocale()
     {
         var __mb = __mb_get_locale;
         if (__mb == 0)
@@ -28035,7 +28035,7 @@ public unsafe partial class Translation : Resource
     }
 
     private static nint __mb_set_plural_rules_override;
-    internal void SetPluralRulesOverride(string rules)
+    public void SetPluralRulesOverride(string rules)
     {
         var __mb = __mb_set_plural_rules_override;
         if (__mb == 0)
@@ -28052,7 +28052,7 @@ public unsafe partial class Translation : Resource
     }
 
     private static nint __mb_get_plural_rules_override;
-    internal string GetPluralRulesOverride()
+    public string GetPluralRulesOverride()
     {
         var __mb = __mb_get_plural_rules_override;
         if (__mb == 0)
@@ -28376,7 +28376,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_is_enabled;
-    internal bool IsEnabled()
+    public bool IsEnabled()
     {
         var __mb = __mb_is_enabled;
         if (__mb == 0)
@@ -28391,7 +28391,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_set_enabled;
-    internal void SetEnabled(bool enabled)
+    public void SetEnabled(bool enabled)
     {
         var __mb = __mb_set_enabled;
         if (__mb == 0)
@@ -28407,7 +28407,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_is_pseudolocalization_enabled;
-    internal bool IsPseudolocalizationEnabled()
+    public bool IsPseudolocalizationEnabled()
     {
         var __mb = __mb_is_pseudolocalization_enabled;
         if (__mb == 0)
@@ -28422,7 +28422,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_set_pseudolocalization_enabled;
-    internal void SetPseudolocalizationEnabled(bool enabled)
+    public void SetPseudolocalizationEnabled(bool enabled)
     {
         var __mb = __mb_set_pseudolocalization_enabled;
         if (__mb == 0)
@@ -28438,7 +28438,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_is_pseudolocalization_accents_enabled;
-    internal bool IsPseudolocalizationAccentsEnabled()
+    public bool IsPseudolocalizationAccentsEnabled()
     {
         var __mb = __mb_is_pseudolocalization_accents_enabled;
         if (__mb == 0)
@@ -28453,7 +28453,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_set_pseudolocalization_accents_enabled;
-    internal void SetPseudolocalizationAccentsEnabled(bool enabled)
+    public void SetPseudolocalizationAccentsEnabled(bool enabled)
     {
         var __mb = __mb_set_pseudolocalization_accents_enabled;
         if (__mb == 0)
@@ -28469,7 +28469,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_is_pseudolocalization_double_vowels_enabled;
-    internal bool IsPseudolocalizationDoubleVowelsEnabled()
+    public bool IsPseudolocalizationDoubleVowelsEnabled()
     {
         var __mb = __mb_is_pseudolocalization_double_vowels_enabled;
         if (__mb == 0)
@@ -28484,7 +28484,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_set_pseudolocalization_double_vowels_enabled;
-    internal void SetPseudolocalizationDoubleVowelsEnabled(bool enabled)
+    public void SetPseudolocalizationDoubleVowelsEnabled(bool enabled)
     {
         var __mb = __mb_set_pseudolocalization_double_vowels_enabled;
         if (__mb == 0)
@@ -28500,7 +28500,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_is_pseudolocalization_fake_bidi_enabled;
-    internal bool IsPseudolocalizationFakeBidiEnabled()
+    public bool IsPseudolocalizationFakeBidiEnabled()
     {
         var __mb = __mb_is_pseudolocalization_fake_bidi_enabled;
         if (__mb == 0)
@@ -28515,7 +28515,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_set_pseudolocalization_fake_bidi_enabled;
-    internal void SetPseudolocalizationFakeBidiEnabled(bool enabled)
+    public void SetPseudolocalizationFakeBidiEnabled(bool enabled)
     {
         var __mb = __mb_set_pseudolocalization_fake_bidi_enabled;
         if (__mb == 0)
@@ -28531,7 +28531,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_is_pseudolocalization_override_enabled;
-    internal bool IsPseudolocalizationOverrideEnabled()
+    public bool IsPseudolocalizationOverrideEnabled()
     {
         var __mb = __mb_is_pseudolocalization_override_enabled;
         if (__mb == 0)
@@ -28546,7 +28546,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_set_pseudolocalization_override_enabled;
-    internal void SetPseudolocalizationOverrideEnabled(bool enabled)
+    public void SetPseudolocalizationOverrideEnabled(bool enabled)
     {
         var __mb = __mb_set_pseudolocalization_override_enabled;
         if (__mb == 0)
@@ -28562,7 +28562,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_is_pseudolocalization_skip_placeholders_enabled;
-    internal bool IsPseudolocalizationSkipPlaceholdersEnabled()
+    public bool IsPseudolocalizationSkipPlaceholdersEnabled()
     {
         var __mb = __mb_is_pseudolocalization_skip_placeholders_enabled;
         if (__mb == 0)
@@ -28577,7 +28577,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_set_pseudolocalization_skip_placeholders_enabled;
-    internal void SetPseudolocalizationSkipPlaceholdersEnabled(bool enabled)
+    public void SetPseudolocalizationSkipPlaceholdersEnabled(bool enabled)
     {
         var __mb = __mb_set_pseudolocalization_skip_placeholders_enabled;
         if (__mb == 0)
@@ -28593,7 +28593,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_get_pseudolocalization_expansion_ratio;
-    internal float GetPseudolocalizationExpansionRatio()
+    public float GetPseudolocalizationExpansionRatio()
     {
         var __mb = __mb_get_pseudolocalization_expansion_ratio;
         if (__mb == 0)
@@ -28608,7 +28608,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_set_pseudolocalization_expansion_ratio;
-    internal void SetPseudolocalizationExpansionRatio(float ratio)
+    public void SetPseudolocalizationExpansionRatio(float ratio)
     {
         var __mb = __mb_set_pseudolocalization_expansion_ratio;
         if (__mb == 0)
@@ -28624,7 +28624,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_get_pseudolocalization_prefix;
-    internal string GetPseudolocalizationPrefix()
+    public string GetPseudolocalizationPrefix()
     {
         var __mb = __mb_get_pseudolocalization_prefix;
         if (__mb == 0)
@@ -28639,7 +28639,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_set_pseudolocalization_prefix;
-    internal void SetPseudolocalizationPrefix(string prefix)
+    public void SetPseudolocalizationPrefix(string prefix)
     {
         var __mb = __mb_set_pseudolocalization_prefix;
         if (__mb == 0)
@@ -28656,7 +28656,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_get_pseudolocalization_suffix;
-    internal string GetPseudolocalizationSuffix()
+    public string GetPseudolocalizationSuffix()
     {
         var __mb = __mb_get_pseudolocalization_suffix;
         if (__mb == 0)
@@ -28671,7 +28671,7 @@ public unsafe partial class TranslationDomain : RefCounted
     }
 
     private static nint __mb_set_pseudolocalization_suffix;
-    internal void SetPseudolocalizationSuffix(string suffix)
+    public void SetPseudolocalizationSuffix(string suffix)
     {
         var __mb = __mb_set_pseudolocalization_suffix;
         if (__mb == 0)
@@ -29265,7 +29265,7 @@ public static unsafe partial class TranslationServer
     }
 
     private static nint __mb_is_pseudolocalization_enabled;
-    internal static bool IsPseudolocalizationEnabled()
+    public static bool IsPseudolocalizationEnabled()
     {
         var __mb = __mb_is_pseudolocalization_enabled;
         if (__mb == 0)
@@ -29280,7 +29280,7 @@ public static unsafe partial class TranslationServer
     }
 
     private static nint __mb_set_pseudolocalization_enabled;
-    internal static void SetPseudolocalizationEnabled(bool enabled)
+    public static void SetPseudolocalizationEnabled(bool enabled)
     {
         var __mb = __mb_set_pseudolocalization_enabled;
         if (__mb == 0)
@@ -29782,7 +29782,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_hide_root;
-    internal void SetHideRoot(bool enable)
+    public void SetHideRoot(bool enable)
     {
         var __mb = __mb_set_hide_root;
         if (__mb == 0)
@@ -29798,7 +29798,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_is_root_hidden;
-    internal bool IsRootHidden()
+    public bool IsRootHidden()
     {
         var __mb = __mb_is_root_hidden;
         if (__mb == 0)
@@ -29894,7 +29894,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_select_mode;
-    internal void SetSelectMode(Tree.SelectModeEnum mode)
+    public void SetSelectMode(Tree.SelectModeEnum mode)
     {
         var __mb = __mb_set_select_mode;
         if (__mb == 0)
@@ -29910,7 +29910,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_get_select_mode;
-    internal Tree.SelectModeEnum GetSelectMode()
+    public Tree.SelectModeEnum GetSelectMode()
     {
         var __mb = __mb_get_select_mode;
         if (__mb == 0)
@@ -29938,7 +29938,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_columns;
-    internal void SetColumns(int amount)
+    public void SetColumns(int amount)
     {
         var __mb = __mb_set_columns;
         if (__mb == 0)
@@ -29954,7 +29954,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_get_columns;
-    internal int GetColumns()
+    public int GetColumns()
     {
         var __mb = __mb_get_columns;
         if (__mb == 0)
@@ -30139,7 +30139,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_column_titles_visible;
-    internal void SetColumnTitlesVisible(bool visible)
+    public void SetColumnTitlesVisible(bool visible)
     {
         var __mb = __mb_set_column_titles_visible;
         if (__mb == 0)
@@ -30155,7 +30155,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_are_column_titles_visible;
-    internal bool AreColumnTitlesVisible()
+    public bool AreColumnTitlesVisible()
     {
         var __mb = __mb_are_column_titles_visible;
         if (__mb == 0)
@@ -30386,7 +30386,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_h_scroll_enabled;
-    internal void SetHScrollEnabled(bool hScroll)
+    public void SetHScrollEnabled(bool hScroll)
     {
         var __mb = __mb_set_h_scroll_enabled;
         if (__mb == 0)
@@ -30402,7 +30402,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_is_h_scroll_enabled;
-    internal bool IsHScrollEnabled()
+    public bool IsHScrollEnabled()
     {
         var __mb = __mb_is_h_scroll_enabled;
         if (__mb == 0)
@@ -30417,7 +30417,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_v_scroll_enabled;
-    internal void SetVScrollEnabled(bool hScroll)
+    public void SetVScrollEnabled(bool hScroll)
     {
         var __mb = __mb_set_v_scroll_enabled;
         if (__mb == 0)
@@ -30433,7 +30433,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_is_v_scroll_enabled;
-    internal bool IsVScrollEnabled()
+    public bool IsVScrollEnabled()
     {
         var __mb = __mb_is_v_scroll_enabled;
         if (__mb == 0)
@@ -30448,7 +30448,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_scroll_hint_mode;
-    internal void SetScrollHintMode(Tree.ScrollHintModeEnum scrollHintMode)
+    public void SetScrollHintMode(Tree.ScrollHintModeEnum scrollHintMode)
     {
         var __mb = __mb_set_scroll_hint_mode;
         if (__mb == 0)
@@ -30464,7 +30464,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_get_scroll_hint_mode;
-    internal Tree.ScrollHintModeEnum GetScrollHintMode()
+    public Tree.ScrollHintModeEnum GetScrollHintMode()
     {
         var __mb = __mb_get_scroll_hint_mode;
         if (__mb == 0)
@@ -30479,7 +30479,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_tile_scroll_hint;
-    internal void SetTileScrollHint(bool tileScrollHint)
+    public void SetTileScrollHint(bool tileScrollHint)
     {
         var __mb = __mb_set_tile_scroll_hint;
         if (__mb == 0)
@@ -30495,7 +30495,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_is_scroll_hint_tiled;
-    internal bool IsScrollHintTiled()
+    public bool IsScrollHintTiled()
     {
         var __mb = __mb_is_scroll_hint_tiled;
         if (__mb == 0)
@@ -30510,7 +30510,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_hide_folding;
-    internal void SetHideFolding(bool hide)
+    public void SetHideFolding(bool hide)
     {
         var __mb = __mb_set_hide_folding;
         if (__mb == 0)
@@ -30526,7 +30526,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_is_folding_hidden;
-    internal bool IsFoldingHidden()
+    public bool IsFoldingHidden()
     {
         var __mb = __mb_is_folding_hidden;
         if (__mb == 0)
@@ -30541,7 +30541,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_enable_recursive_folding;
-    internal void SetEnableRecursiveFolding(bool enable)
+    public void SetEnableRecursiveFolding(bool enable)
     {
         var __mb = __mb_set_enable_recursive_folding;
         if (__mb == 0)
@@ -30557,7 +30557,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_is_recursive_folding_enabled;
-    internal bool IsRecursiveFoldingEnabled()
+    public bool IsRecursiveFoldingEnabled()
     {
         var __mb = __mb_is_recursive_folding_enabled;
         if (__mb == 0)
@@ -30572,7 +30572,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_enable_drag_unfolding;
-    internal void SetEnableDragUnfolding(bool enable)
+    public void SetEnableDragUnfolding(bool enable)
     {
         var __mb = __mb_set_enable_drag_unfolding;
         if (__mb == 0)
@@ -30588,7 +30588,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_is_drag_unfolding_enabled;
-    internal bool IsDragUnfoldingEnabled()
+    public bool IsDragUnfoldingEnabled()
     {
         var __mb = __mb_is_drag_unfolding_enabled;
         if (__mb == 0)
@@ -30603,7 +30603,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_drop_mode_flags;
-    internal void SetDropModeFlags(int flags)
+    public void SetDropModeFlags(int flags)
     {
         var __mb = __mb_set_drop_mode_flags;
         if (__mb == 0)
@@ -30619,7 +30619,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_get_drop_mode_flags;
-    internal int GetDropModeFlags()
+    public int GetDropModeFlags()
     {
         var __mb = __mb_get_drop_mode_flags;
         if (__mb == 0)
@@ -30634,7 +30634,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_allow_rmb_select;
-    internal void SetAllowRmbSelect(bool allow)
+    public void SetAllowRmbSelect(bool allow)
     {
         var __mb = __mb_set_allow_rmb_select;
         if (__mb == 0)
@@ -30650,7 +30650,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_get_allow_rmb_select;
-    internal bool GetAllowRmbSelect()
+    public bool GetAllowRmbSelect()
     {
         var __mb = __mb_get_allow_rmb_select;
         if (__mb == 0)
@@ -30665,7 +30665,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_allow_reselect;
-    internal void SetAllowReselect(bool allow)
+    public void SetAllowReselect(bool allow)
     {
         var __mb = __mb_set_allow_reselect;
         if (__mb == 0)
@@ -30681,7 +30681,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_get_allow_reselect;
-    internal bool GetAllowReselect()
+    public bool GetAllowReselect()
     {
         var __mb = __mb_get_allow_reselect;
         if (__mb == 0)
@@ -30696,7 +30696,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_allow_search;
-    internal void SetAllowSearch(bool allow)
+    public void SetAllowSearch(bool allow)
     {
         var __mb = __mb_set_allow_search;
         if (__mb == 0)
@@ -30712,7 +30712,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_get_allow_search;
-    internal bool GetAllowSearch()
+    public bool GetAllowSearch()
     {
         var __mb = __mb_get_allow_search;
         if (__mb == 0)
@@ -30727,7 +30727,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_set_auto_tooltip;
-    internal void SetAutoTooltip(bool enable)
+    public void SetAutoTooltip(bool enable)
     {
         var __mb = __mb_set_auto_tooltip;
         if (__mb == 0)
@@ -30743,7 +30743,7 @@ public unsafe partial class Tree : Control
     }
 
     private static nint __mb_is_auto_tooltip_enabled;
-    internal bool IsAutoTooltipEnabled()
+    public bool IsAutoTooltipEnabled()
     {
         var __mb = __mb_is_auto_tooltip_enabled;
         if (__mb == 0)
@@ -31744,7 +31744,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_set_collapsed;
-    internal void SetCollapsed(bool enable)
+    public void SetCollapsed(bool enable)
     {
         var __mb = __mb_set_collapsed;
         if (__mb == 0)
@@ -31760,7 +31760,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_is_collapsed;
-    internal bool IsCollapsed()
+    public bool IsCollapsed()
     {
         var __mb = __mb_is_collapsed;
         if (__mb == 0)
@@ -31809,7 +31809,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_set_visible;
-    internal void SetVisible(bool enable)
+    public void SetVisible(bool enable)
     {
         var __mb = __mb_set_visible;
         if (__mb == 0)
@@ -31825,7 +31825,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_is_visible;
-    internal bool IsVisible()
+    public bool IsVisible()
     {
         var __mb = __mb_is_visible;
         if (__mb == 0)
@@ -31868,7 +31868,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_set_custom_minimum_height;
-    internal void SetCustomMinimumHeight(int height)
+    public void SetCustomMinimumHeight(int height)
     {
         var __mb = __mb_set_custom_minimum_height;
         if (__mb == 0)
@@ -31884,7 +31884,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_get_custom_minimum_height;
-    internal int GetCustomMinimumHeight()
+    public int GetCustomMinimumHeight()
     {
         var __mb = __mb_get_custom_minimum_height;
         if (__mb == 0)
@@ -32645,7 +32645,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_set_disable_folding;
-    internal void SetDisableFolding(bool disable)
+    public void SetDisableFolding(bool disable)
     {
         var __mb = __mb_set_disable_folding;
         if (__mb == 0)
@@ -32661,7 +32661,7 @@ public unsafe partial class TreeItem : GodotObject
     }
 
     private static nint __mb_is_folding_disabled;
-    internal bool IsFoldingDisabled()
+    public bool IsFoldingDisabled()
     {
         var __mb = __mb_is_folding_disabled;
         if (__mb == 0)
@@ -33174,7 +33174,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_radius;
-    internal void SetRadius(float radius)
+    public void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -33190,7 +33190,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_radius;
-    internal float GetRadius()
+    public float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -33205,7 +33205,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_radial_steps;
-    internal void SetRadialSteps(int radialSteps)
+    public void SetRadialSteps(int radialSteps)
     {
         var __mb = __mb_set_radial_steps;
         if (__mb == 0)
@@ -33221,7 +33221,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_radial_steps;
-    internal int GetRadialSteps()
+    public int GetRadialSteps()
     {
         var __mb = __mb_get_radial_steps;
         if (__mb == 0)
@@ -33236,7 +33236,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_sections;
-    internal void SetSections(int sections)
+    public void SetSections(int sections)
     {
         var __mb = __mb_set_sections;
         if (__mb == 0)
@@ -33252,7 +33252,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_sections;
-    internal int GetSections()
+    public int GetSections()
     {
         var __mb = __mb_get_sections;
         if (__mb == 0)
@@ -33267,7 +33267,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_section_length;
-    internal void SetSectionLength(float sectionLength)
+    public void SetSectionLength(float sectionLength)
     {
         var __mb = __mb_set_section_length;
         if (__mb == 0)
@@ -33283,7 +33283,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_section_length;
-    internal float GetSectionLength()
+    public float GetSectionLength()
     {
         var __mb = __mb_get_section_length;
         if (__mb == 0)
@@ -33298,7 +33298,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_section_rings;
-    internal void SetSectionRings(int sectionRings)
+    public void SetSectionRings(int sectionRings)
     {
         var __mb = __mb_set_section_rings;
         if (__mb == 0)
@@ -33314,7 +33314,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_section_rings;
-    internal int GetSectionRings()
+    public int GetSectionRings()
     {
         var __mb = __mb_get_section_rings;
         if (__mb == 0)
@@ -33329,7 +33329,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_cap_top;
-    internal void SetCapTop(bool capTop)
+    public void SetCapTop(bool capTop)
     {
         var __mb = __mb_set_cap_top;
         if (__mb == 0)
@@ -33345,7 +33345,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_is_cap_top;
-    internal bool IsCapTop()
+    public bool IsCapTop()
     {
         var __mb = __mb_is_cap_top;
         if (__mb == 0)
@@ -33360,7 +33360,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_cap_bottom;
-    internal void SetCapBottom(bool capBottom)
+    public void SetCapBottom(bool capBottom)
     {
         var __mb = __mb_set_cap_bottom;
         if (__mb == 0)
@@ -33376,7 +33376,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_is_cap_bottom;
-    internal bool IsCapBottom()
+    public bool IsCapBottom()
     {
         var __mb = __mb_is_cap_bottom;
         if (__mb == 0)
@@ -33391,7 +33391,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_curve;
-    internal void SetCurve(Curve? curve)
+    public void SetCurve(Curve? curve)
     {
         var __mb = __mb_set_curve;
         if (__mb == 0)
@@ -33407,7 +33407,7 @@ public unsafe partial class TubeTrailMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_curve;
-    internal Curve? GetCurve()
+    public Curve? GetCurve()
     {
         var __mb = __mb_get_curve;
         if (__mb == 0)

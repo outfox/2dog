@@ -173,7 +173,9 @@ public sealed class ExportSignalGenerator : IIncrementalGenerator
             hint = objBase == ObjectBase.Node ? 34 : 17; // PropertyHint.NodeType / ResourceType
             hintString = gdClass;
         }
-        exports.Add(new ExportInfo(member.Name, ToSnake(member.Name), key, objectType, gdClass, hint, hintString));
+        // GodotSharp parity: members register under their verbatim C# names -
+        // scenes saved by GodotSharp projects and GDScript call sites rely on it.
+        exports.Add(new ExportInfo(member.Name, member.Name, key, objectType, gdClass, hint, hintString));
     }
 
     private static void AddSignal(List<SignalInfo> signals, List<DiagInfo> diagnostics, INamedTypeSymbol del)
@@ -210,7 +212,7 @@ public sealed class ExportSignalGenerator : IIncrementalGenerator
             }
             ps.Add((p.Name, key, objectType, gdClass, p.Type.ToDisplayString()));
         }
-        signals.Add(new SignalInfo(AccessKeyword(del.DeclaredAccessibility), del.Name, eventName, ToSnake(eventName), ps));
+        signals.Add(new SignalInfo(AccessKeyword(del.DeclaredAccessibility), del.Name, eventName, eventName, ps));
     }
 
     private static string AccessKeyword(Accessibility a) => a switch
@@ -260,26 +262,6 @@ public sealed class ExportSignalGenerator : IIncrementalGenerator
             }
         }
         return (null, null, "", ObjectBase.None);
-    }
-
-    private static string ToSnake(string pascal)
-    {
-        var sb = new StringBuilder(pascal.Length + 8);
-        for (var i = 0; i < pascal.Length; i++)
-        {
-            var c = pascal[i];
-            if (char.IsUpper(c))
-            {
-                if (i > 0 && (!char.IsUpper(pascal[i - 1]) || (i + 1 < pascal.Length && char.IsLower(pascal[i + 1]))))
-                    sb.Append('_');
-                sb.Append(char.ToLowerInvariant(c));
-            }
-            else
-            {
-                sb.Append(c);
-            }
-        }
-        return sb.ToString();
     }
 
     private static string VariantTypeOf(string key) => key switch
@@ -350,12 +332,23 @@ public sealed class ExportSignalGenerator : IIncrementalGenerator
         _ => throw new InvalidOperationException(key),
     };
 
+    // Static descriptor fields so the analyzer release tracking (RS2000-series)
+    // can discover the rules; see AnalyzerReleases.Shipped.md.
+    private static readonly DiagnosticDescriptor UnsupportedType =
+        new DiagnosticDescriptor("TDOG001", "Unsupported export or signal parameter type", "{0}", "twodog", DiagnosticSeverity.Warning, true);
+    private static readonly DiagnosticDescriptor NotTopLevelPartial =
+        new DiagnosticDescriptor("TDOG002", "Godot class must be a top-level partial class", "{0}", "twodog", DiagnosticSeverity.Warning, true);
+    private static readonly DiagnosticDescriptor InvalidSignal =
+        new DiagnosticDescriptor("TDOG003", "Invalid [Signal] delegate", "{0}", "twodog", DiagnosticSeverity.Warning, true);
+    private static readonly DiagnosticDescriptor InvalidExport =
+        new DiagnosticDescriptor("TDOG004", "Invalid [Export] member", "{0}", "twodog", DiagnosticSeverity.Warning, true);
+
     private static readonly Dictionary<string, DiagnosticDescriptor> Descriptors = new()
     {
-        ["TDOG001"] = new("TDOG001", "Unsupported export or signal parameter type", "{0}", "twodog", DiagnosticSeverity.Warning, true),
-        ["TDOG002"] = new("TDOG002", "Godot class must be a top-level partial class", "{0}", "twodog", DiagnosticSeverity.Warning, true),
-        ["TDOG003"] = new("TDOG003", "Invalid [Signal] delegate", "{0}", "twodog", DiagnosticSeverity.Warning, true),
-        ["TDOG004"] = new("TDOG004", "Invalid [Export] member", "{0}", "twodog", DiagnosticSeverity.Warning, true),
+        ["TDOG001"] = UnsupportedType,
+        ["TDOG002"] = NotTopLevelPartial,
+        ["TDOG003"] = InvalidSignal,
+        ["TDOG004"] = InvalidExport,
     };
 
     private static void Emit(SourceProductionContext spc, ClassInfo info)
@@ -395,7 +388,7 @@ public sealed class ExportSignalGenerator : IIncrementalGenerator
         foreach (var s in info.Signals)
         {
             var args = string.Join(", ",
-                s.Params.Select(p => $"(\"{ToSnake(p.ParamName)}\", {VariantTypeOf(p.TypeKey)}, \"{Escape(p.GdClassName)}\")"));
+                s.Params.Select(p => $"(\"{p.ParamName}\", {VariantTypeOf(p.TypeKey)}, \"{Escape(p.GdClassName)}\")"));
             sb.AppendLine($"        r.Signal(\"{s.GdName}\"{(s.Params.Count > 0 ? ", " + args : "")});");
         }
         sb.AppendLine("    }");

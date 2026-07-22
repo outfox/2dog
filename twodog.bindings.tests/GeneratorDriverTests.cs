@@ -60,9 +60,9 @@ public class GeneratorDriverTests
             """);
 
         var source = Assert.Single(result.GeneratedSources);
-        Assert.Contains("r.Property(\"a\"", source.SourceText.ToString());
-        Assert.Contains("r.Property(\"b\"", source.SourceText.ToString());
-        Assert.Contains("r.Signal(\"pinged\")", source.SourceText.ToString());
+        Assert.Contains("r.Property(\"A\"", source.SourceText.ToString());
+        Assert.Contains("r.Property(\"B\"", source.SourceText.ToString());
+        Assert.Contains("r.Signal(\"Pinged\")", source.SourceText.ToString());
         Assert.Empty(result.Diagnostics);
     }
 
@@ -79,8 +79,8 @@ public class GeneratorDriverTests
             """);
 
         var source = Assert.Single(result.GeneratedSources);
-        Assert.Contains("r.Property(\"a\"", source.SourceText.ToString());
-        Assert.Contains("r.Property(\"b\"", source.SourceText.ToString());
+        Assert.Contains("r.Property(\"A\"", source.SourceText.ToString());
+        Assert.Contains("r.Property(\"B\"", source.SourceText.ToString());
     }
 
     [Fact]

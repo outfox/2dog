@@ -189,9 +189,9 @@ public class RefCountedUserClassTests
         EnsureRegistered();
         using var data = new GameData();
         using Variant v = 42;
-        data.Set("score", v);
+        data.Set("Score", v);
         Assert.Equal(42, data.Score);
-        using var got = data.Get("score");
+        using var got = data.Get("Score");
         Assert.Equal(42, got.AsInt32());
         DisposalQueue.Drain();
     }
