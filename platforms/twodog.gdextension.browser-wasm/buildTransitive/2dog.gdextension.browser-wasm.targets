@@ -1,0 +1,10 @@
+<Project>
+    <!--
+      TwoDog GDExtension Browser (wasm) Meta Package Transitive Targets
+
+      This file is imported by projects that transitively reference
+      2dog.gdextension.browser-wasm. It imports the main targets from the
+      build folder.
+    -->
+    <Import Project="$(MSBuildThisFileDirectory)../build/2dog.gdextension.browser-wasm.targets"/>
+</Project>

@@ -1,0 +1,10 @@
+<Project>
+    <!--
+      TwoDog GDExtension osx-arm64 Transitive Targets
+
+      This file is imported by projects that transitively reference
+      2dog.gdextension.osx-arm64. It imports the main targets from the build
+      folder.
+    -->
+    <Import Project="$(MSBuildThisFileDirectory)../build/2dog.gdextension.osx-arm64.targets"/>
+</Project>

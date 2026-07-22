@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Meta package that combines all Windows x64 GDExtension-flavor variants -->
+    <!-- Only builds/packs on Windows -->
+    <PropertyGroup Condition="'$(ForcePackAllPlatforms)' != 'true' And !$([MSBuild]::IsOSPlatform('Windows'))">
+        <IsPackable>false</IsPackable>
+        <ExcludeFromBuild>true</ExcludeFromBuild>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <PackageId>2dog.gdextension.win-x64</PackageId>
+        <Description>Windows x64 meta package for 2dog.gdextension. Includes release, debug, and editor non-mono native libgodot-gdext libraries. Reference this package alongside 2dog.gdextension for complete Windows support.</Description>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <!-- Use custom nuspec for explicit dependency control -->
+        <NuspecFile>twodog.gdextension.win-x64.nuspec</NuspecFile>
+        <NuspecProperties>version=$(Version);authors=$(Authors);description=$(Description)</NuspecProperties>
+    </PropertyGroup>
+
+    <!-- Project references for local development builds -->
+    <ItemGroup Condition="'$(ExcludeFromBuild)' != 'true'">
+        <ProjectReference Include="twodog.gdextension.win-x64.release.csproj" PrivateAssets="all"/>
+        <ProjectReference Include="twodog.gdextension.win-x64.debug.csproj" PrivateAssets="all"/>
+        <ProjectReference Include="twodog.gdextension.win-x64.editor.csproj" PrivateAssets="all"/>
+    </ItemGroup>
+</Project>

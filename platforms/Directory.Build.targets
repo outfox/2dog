@@ -24,6 +24,18 @@
         <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(NativeLibPath)')">false</IsPackable>
     </PropertyGroup>
 
+    <!-- GDExtension flavor (2dog.gdextension.<rid>): non-mono natives built
+         with extra_suffix=gdext_shared_library, packaged with a distinct
+         libgodot-gdext- prefix so both stacks can coexist in one project
+         tree without colliding. Opt in via <GdExtension>true</GdExtension>. -->
+    <PropertyGroup Condition="'$(PlatformRID)' != '' And '$(PlatformOS)' != 'web' And '$(GdExtension)' == 'true'">
+        <PackageId>2dog.gdextension.$(PlatformRID)$(PackageSuffix)</PackageId>
+        <NativeLibPath>$(GodotBinDir)$(NativeLibPrefix).$(PlatformOS).$(BuildVariant).$(PlatformArch).gdext_shared_library.$(NativeLibExt)</NativeLibPath>
+        <OutputLibName>libgodot-gdext-$(VariantShortName).$(NativeLibExt)</OutputLibName>
+        <IsPackable>true</IsPackable>
+        <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(NativeLibPath)')">false</IsPackable>
+    </PropertyGroup>
+
     <!-- Web (browser-wasm) variants pack a whole payload directory instead of a
          single shared library: the emscripten static archive plus the JS glue
          and boot shell it must be linked/served with. The runtimes/<rid>/native
@@ -33,6 +45,15 @@
     <PropertyGroup Condition="'$(PlatformRID)' != '' And '$(PlatformOS)' == 'web'">
         <PackageId>2dog.$(PlatformRID)$(PackageSuffix)</PackageId>
         <WebPayloadDir>$(GodotBinDir)web/$(BuildVariant)/</WebPayloadDir>
+        <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(WebPayloadDir)libgodot/libgodot.a')">false</IsPackable>
+    </PropertyGroup>
+
+    <!-- GDExtension flavor of the web payload (2dog.gdextension.browser-wasm):
+         the non-mono static archive staged under godot/bin/web-gdext/. -->
+    <PropertyGroup Condition="'$(PlatformRID)' != '' And '$(PlatformOS)' == 'web' And '$(GdExtension)' == 'true'">
+        <PackageId>2dog.gdextension.$(PlatformRID)$(PackageSuffix)</PackageId>
+        <WebPayloadDir>$(GodotBinDir)web-gdext/$(BuildVariant)/</WebPayloadDir>
+        <IsPackable>true</IsPackable>
         <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(WebPayloadDir)libgodot/libgodot.a')">false</IsPackable>
     </PropertyGroup>
 
@@ -66,4 +87,29 @@
         <None Include="build/$(PackageId).targets" Pack="true" PackagePath="build/" Condition="Exists('build/$(PackageId).targets')"/>
         <None Include="buildTransitive/$(PackageId).targets" Pack="true" PackagePath="buildTransitive/" Condition="Exists('buildTransitive/$(PackageId).targets')"/>
     </ItemGroup>
+
+    <!-- Record the godot submodule commit these natives were built from in the
+         package's repository metadata. The CI pack job reads it back from
+         nuget.org to refuse republishing a NativesVersion whose binaries came
+         from a different submodule commit (the deploy job's skip-duplicate push
+         would otherwise silently keep the stale natives). Uses the committed pointer
+         (HEAD:godot), matching how CI keys its native build cache. -->
+    <Target Name="StampGodotSubmoduleCommit" BeforeTargets="GenerateNuspec">
+        <Exec Command="git rev-parse HEAD:godot"
+              WorkingDirectory="$(MSBuildThisFileDirectory)../"
+              ConsoleToMSBuild="true"
+              StandardOutputImportance="low">
+            <Output TaskParameter="ConsoleOutput" PropertyName="GodotSubmoduleCommit"/>
+        </Exec>
+        <PropertyGroup>
+            <RepositoryType>git</RepositoryType>
+            <RepositoryUrl>https://github.com/thygrrr/godot</RepositoryUrl>
+            <RepositoryCommit>$(GodotSubmoduleCommit.Trim())</RepositoryCommit>
+        </PropertyGroup>
+    </Target>
+
+    <Target Name="TwoDogDeepClean" AfterTargets="Clean">
+        <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
+        <RemoveDir Directories="$(BaseOutputPath)"/>
+    </Target>
 </Project>

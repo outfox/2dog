@@ -229,15 +229,12 @@ For test projects using `ProjectReference` to twodog.engine (not the NuGet packa
        compile-in collections are NOT imported automatically  –  reference the 2dog.xunit NuGet
        package instead, or define a collection locally (see "Custom collections"). -->
 
-  <!-- Configuration-specific build types -->
+  <!-- Configuration-specific native variants ('release' is the default) -->
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TwoDogBuildType>template_debug</TwoDogBuildType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TwoDogBuildType>template_release</TwoDogBuildType>
+    <TwoDogVariant>debug</TwoDogVariant>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
-    <TwoDogBuildType>editor</TwoDogBuildType>
+    <TwoDogVariant>editor</TwoDogVariant>
   </PropertyGroup>
 
   <!-- Required for ProjectReference builds -->

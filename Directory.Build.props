@@ -11,7 +11,7 @@
              skip-duplicate push would otherwise keep the old package);
              reset to 0 when GodotVersion changes. NuGet normalizes a trailing .0
              (4.7.0.0 publishes as 4.7.0). -->
-        <NativesRevision>19</NativesRevision>
+        <NativesRevision>21</NativesRevision>
         <TwoDogVersion>$(GodotVersion).$(TwoDogRevision)</TwoDogVersion>
         <NativesVersion>$(GodotVersion).$(NativesRevision)</NativesVersion>
         <!-- Emscripten version for browser-wasm natives. Must match the emscripten
@@ -22,5 +22,14 @@
         <EmscriptenVersion>3.1.56</EmscriptenVersion>
         <!-- Allow running on any .NET 10+ runtime (10, 11, ...) -->
         <RollForward>LatestMajor</RollForward>
+    </PropertyGroup>
+
+    <!-- Shared NuGet package metadata; packable projects only add what
+         differs (id, description, tags, icon/readme includes). -->
+    <PropertyGroup>
+        <Authors>Moritz Voss</Authors>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
+        <PackageOutputPath>$(MSBuildThisFileDirectory)packages/</PackageOutputPath>
     </PropertyGroup>
 </Project>

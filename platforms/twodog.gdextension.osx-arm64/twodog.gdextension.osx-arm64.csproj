@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Meta package that combines all macOS arm64 GDExtension-flavor variants -->
+    <!-- Only builds/packs on macOS -->
+    <PropertyGroup Condition="'$(ForcePackAllPlatforms)' != 'true' And !$([MSBuild]::IsOSPlatform('OSX'))">
+        <IsPackable>false</IsPackable>
+        <ExcludeFromBuild>true</ExcludeFromBuild>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <PackageId>2dog.gdextension.osx-arm64</PackageId>
+        <Description>macOS arm64 meta package for 2dog.gdextension. Includes release, debug, and editor non-mono native libgodot-gdext libraries. Reference this package alongside 2dog.gdextension for complete macOS support.</Description>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <!-- Use custom nuspec for explicit dependency control -->
+        <NuspecFile>twodog.gdextension.osx-arm64.nuspec</NuspecFile>
+        <NuspecProperties>version=$(Version);authors=$(Authors);description=$(Description)</NuspecProperties>
+    </PropertyGroup>
+
+    <!-- Project references for local development builds -->
+    <ItemGroup Condition="'$(ExcludeFromBuild)' != 'true'">
+        <ProjectReference Include="twodog.gdextension.osx-arm64.release.csproj" PrivateAssets="all"/>
+        <ProjectReference Include="twodog.gdextension.osx-arm64.debug.csproj" PrivateAssets="all"/>
+        <ProjectReference Include="twodog.gdextension.osx-arm64.editor.csproj" PrivateAssets="all"/>
+    </ItemGroup>
+</Project>

@@ -68,24 +68,6 @@ matching native.
 </PropertyGroup>
 ```
 
-### TwoDogBuildType
-
-Advanced: overrides the Godot build type used for API assembly placement.
-Derived from `TwoDogVariant` by default, so most projects never set it directly.
-
-| Value | Description | TOOLS_ENABLED |
-|-------|-------------|---------------|
-| `template_release` | Optimized release build (default) | No |
-| `template_debug` | Debug build with symbols | No |
-| `editor` | Full editor build with tools | Yes |
-
-```xml
-<PropertyGroup>
-  <TwoDogBuildType>editor</TwoDogBuildType>
-</PropertyGroup>
-```
-
-
 ## Project Setup
 
 ### GodotProjectDir
@@ -205,10 +187,10 @@ Make sure the '...GodotSharp/Api/Debug' directory exists and contains the .NET a
 
 2dog automatically copies the GodotPlugins assemblies (`GodotPlugins.dll`,
 `.pdb`, and `.runtimeconfig.json`) to the correct location based on your
-`TwoDogBuildType`:
+`TwoDogVariant`:
 
-- **`TwoDogBuildType=editor`**: Copies to `$(OutputPath)GodotSharp/Api/Debug/`
-- **`TwoDogBuildType=template_debug` / `template_release`**: Copies directly to `$(OutputPath)`
+- **`TwoDogVariant=editor`**: Copies to `$(OutputPath)GodotSharp/Api/Debug/`
+- **`TwoDogVariant=debug` / `release`**: Copies directly to `$(OutputPath)`
 
 This happens automatically via the `TwoDogCopyGodotApi` MSBuild target (and
 `TwoDogPublishGodotApi` on publish). At startup, 2dog also points

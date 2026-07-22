@@ -21,8 +21,6 @@
           targets) AND the GodotPlugins layout. Also embedded as assembly
           metadata so twodog's DllImportResolver loads the matching
           libgodot-<variant> library at runtime.
-        - TwoDogBuildType: 'template_release', 'template_debug', or 'editor'
-          Advanced: override the build type used for API placement.
     -->
 
     <!-- ============================================ -->
@@ -41,21 +39,24 @@
     </ItemGroup>
 
     <!-- ============================================ -->
-    <!-- Variant & Build Type Configuration           -->
+    <!-- Variant Configuration                        -->
     <!-- ============================================ -->
     <PropertyGroup>
         <!-- Variant: release (default), debug, or editor -->
         <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
 
-        <!-- Map variant to build type for API assembly handling -->
-        <TwoDogBuildType Condition="'$(TwoDogBuildType)' == '' And '$(TwoDogVariant)' == 'release'">template_release</TwoDogBuildType>
-        <TwoDogBuildType Condition="'$(TwoDogBuildType)' == '' And '$(TwoDogVariant)' == 'debug'">template_debug</TwoDogBuildType>
-        <TwoDogBuildType Condition="'$(TwoDogBuildType)' == '' And '$(TwoDogVariant)' == 'editor'">editor</TwoDogBuildType>
-        <TwoDogBuildType Condition="'$(TwoDogBuildType)' == ''">template_release</TwoDogBuildType>
-
         <!-- Package root (for locating contentFiles when used as a NuGet package) -->
         <TwoDogPackageRoot Condition="'$(TwoDogPackageRoot)' == ''">$(MSBuildThisFileDirectory)../</TwoDogPackageRoot>
     </PropertyGroup>
+
+    <!-- One variant axis: native selection, API layout and assembly metadata
+         all key from TwoDogVariant, so they can never disagree. -->
+    <Target Name="TwoDogValidateVariant" BeforeTargets="Build">
+        <Error Condition="'$(TwoDogVariant)' != 'release' And '$(TwoDogVariant)' != 'debug' And '$(TwoDogVariant)' != 'editor'"
+               Text="TwoDog: invalid TwoDogVariant '$(TwoDogVariant)'. Allowed values: release, debug, editor."/>
+        <Warning Condition="'$(TwoDogBuildType)' != ''"
+                 Text="TwoDog: TwoDogBuildType is deprecated and ignored - the API layout follows TwoDogVariant."/>
+    </Target>
 
     <!-- Embed the variant as assembly metadata: twodog's DllImportResolver
          reads it at runtime to load the matching libgodot-<variant> native.
@@ -102,13 +103,13 @@
         <TwoDogGodotApiSourcePath Condition="'$(TwoDogGodotApiSourcePath)' == '' And Exists('$(TwoDogGodotApiSourcePath_ProjectRef)')">$(TwoDogGodotApiSourcePath_ProjectRef)</TwoDogGodotApiSourcePath>
 
         <!--
-          Destination path depends on build type:
-          - Editor builds (TOOLS_ENABLED): GodotSharp/Api/Debug/ subdirectory
-          - Template builds (LIBGODOT_HOSTFXR without TOOLS_ENABLED, i.e. both
-            template_debug and template_release): flat in the output directory
-            (the native resolves the API assemblies dir as exe_dir)
+          Destination path depends on the variant:
+          - editor (TOOLS_ENABLED): GodotSharp/Api/Debug/ subdirectory
+          - release/debug templates (LIBGODOT_HOSTFXR without TOOLS_ENABLED):
+            flat in the output directory (the native resolves the API
+            assemblies dir as exe_dir)
         -->
-        <TwoDogGodotApiDestSubdir Condition="'$(TwoDogBuildType)' == 'editor'">GodotSharp/Api/Debug/</TwoDogGodotApiDestSubdir>
+        <TwoDogGodotApiDestSubdir Condition="'$(TwoDogVariant)' == 'editor'">GodotSharp/Api/Debug/</TwoDogGodotApiDestSubdir>
         <TwoDogGodotApiDestSubdir Condition="'$(TwoDogGodotApiDestSubdir)' == ''"></TwoDogGodotApiDestSubdir>
     </PropertyGroup>
 
@@ -222,6 +223,28 @@
                             Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;$(TwoDogGodotProjectFullPath)/bin/**;$(TwoDogGodotProjectFullPath)/obj/**;$(TwoDogGodotProjectFullPath)/**/*.uid;$(TwoDogGodotProjectFullPath)/**/*.tmp;$(TwoDogGodotProjectFullPath)/**/.DS_Store;@(_TwoDogGdIgnoredDirs->'%(RootDir)%(Directory)**');$(TwoDogImportExcludes)"/>
     </ItemGroup>
 
+    <!-- Shared capability resolution for the content pipeline: consumed by
+         the auto-import below and by the 2dog.browser-wasm export target
+         (via DependsOnTargets). Runs at execution time: the platform and
+         tools package targets that provide these properties may be imported
+         after this file, so evaluation-time references here would be
+         import-order dependent; execution time is not. -->
+    <Target Name="TwoDogResolveContentCapability">
+        <PropertyGroup>
+            <TwoDogExternalGodotEditor Condition="'$(TwoDogExternalGodotEditor)' == ''">$(GodotEditor)</TwoDogExternalGodotEditor>
+            <TwoDogExternalGodotEditor Condition="'$(TwoDogExternalGodotEditor)' == ''">$(GODOT_EDITOR)</TwoDogExternalGodotEditor>
+            <!-- GodotTools: 2dog.tools package, or the source checkout -->
+            <_TwoDogToolsDir>$(TwoDogGodotToolsDir)</_TwoDogToolsDir>
+            <_TwoDogToolsDir Condition="'$(_TwoDogToolsDir)' == '' And Exists('$(MSBuildThisFileDirectory)../../godot/bin/GodotSharp/Tools/GodotTools.dll')">$(MSBuildThisFileDirectory)../../godot/bin/GodotSharp/Tools/</_TwoDogToolsDir>
+            <TwoDogCanUseImportHelper>false</TwoDogCanUseImportHelper>
+            <TwoDogCanUseImportHelper Condition="'$(TwoDogImportHelperPath)' != '' And '$(TwoDogEditorLibGodotPath)' != '' And Exists('$(TwoDogEditorLibGodotPath)') And '$(_TwoDogToolsDir)' != '' And '$(TwoDogGodotApiSourcePath)' != ''">true</TwoDogCanUseImportHelper>
+            <!-- Directory args must not end in a backslash: a trailing '\'
+                 before the closing quote escapes it on Windows command lines. -->
+            <_TwoDogToolsDirArg>$(_TwoDogToolsDir.TrimEnd('\').TrimEnd('/'))</_TwoDogToolsDirArg>
+            <_TwoDogApiDirArg>$(TwoDogGodotApiSourcePath.TrimEnd('\').TrimEnd('/'))</_TwoDogApiDirArg>
+        </PropertyGroup>
+    </Target>
+
     <!-- Deleting the stamp before the incremental check forces the import.
          Also covers staleness that Inputs/Outputs cannot see (deleted assets). -->
     <Target Name="TwoDogForceImport"
@@ -232,27 +255,10 @@
 
     <Target Name="TwoDogImportGodotProject"
             AfterTargets="Build"
+            DependsOnTargets="TwoDogResolveContentCapability"
             Inputs="@(TwoDogImportInputs)"
             Outputs="$(TwoDogImportStampFile)"
             Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogAutoImport)' == 'true' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
-
-        <!-- Capability resolution happens inside the target body: the platform
-             and tools package targets that provide these properties may be
-             imported after this file, so evaluation-time references here would
-             be import-order dependent; execution time is not. -->
-        <PropertyGroup>
-            <_TwoDogImportEditor>$(GodotEditor)</_TwoDogImportEditor>
-            <_TwoDogImportEditor Condition="'$(_TwoDogImportEditor)' == ''">$(GODOT_EDITOR)</_TwoDogImportEditor>
-            <!-- GodotTools: 2dog.tools package, or the source checkout -->
-            <_TwoDogToolsDir>$(TwoDogGodotToolsDir)</_TwoDogToolsDir>
-            <_TwoDogToolsDir Condition="'$(_TwoDogToolsDir)' == '' And Exists('$(MSBuildThisFileDirectory)../../godot/bin/GodotSharp/Tools/GodotTools.dll')">$(MSBuildThisFileDirectory)../../godot/bin/GodotSharp/Tools/</_TwoDogToolsDir>
-            <_TwoDogCanUseHelper>false</_TwoDogCanUseHelper>
-            <_TwoDogCanUseHelper Condition="'$(TwoDogImportHelperPath)' != '' And '$(TwoDogEditorLibGodotPath)' != '' And Exists('$(TwoDogEditorLibGodotPath)') And '$(_TwoDogToolsDir)' != '' And '$(TwoDogGodotApiSourcePath)' != ''">true</_TwoDogCanUseHelper>
-            <!-- Directory args must not end in a backslash: a trailing '\'
-                 before the closing quote escapes it on Windows command lines. -->
-            <_TwoDogToolsDirArg>$(_TwoDogToolsDir.TrimEnd('\').TrimEnd('/'))</_TwoDogToolsDirArg>
-            <_TwoDogApiDirArg>$(TwoDogGodotApiSourcePath.TrimEnd('\').TrimEnd('/'))</_TwoDogApiDirArg>
-        </PropertyGroup>
 
         <!-- IgnoreStandardErrorWarningFormat: Godot prints non-fatal
              "ERROR:"/"WARNING:"-formatted lines during imports, which Exec
@@ -260,26 +266,26 @@
              Success is judged by the exit code alone. -->
 
         <!-- (1) explicitly configured external editor -->
-        <Exec Condition="'$(_TwoDogImportEditor)' != ''"
-              Command="&quot;$(_TwoDogImportEditor)&quot; --headless --import --path &quot;$(TwoDogGodotProjectFullPath)&quot;"
+        <Exec Condition="'$(TwoDogExternalGodotEditor)' != ''"
+              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --import --path &quot;$(TwoDogGodotProjectFullPath)&quot;"
               IgnoreStandardErrorWarningFormat="true"/>
 
         <!-- (2) in-process import helper against the packaged editor libgodot -->
-        <Exec Condition="'$(_TwoDogImportEditor)' == '' And '$(_TwoDogCanUseHelper)' == 'true'"
+        <Exec Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' == 'true'"
               Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; &quot;$(TwoDogGodotProjectFullPath)&quot;"
               EnvironmentVariables="GODOTSHARP_DIR=$(_TwoDogApiDirArg);GODOT_TOOLS_DIR=$(_TwoDogToolsDirArg)"
               IgnoreStandardErrorWarningFormat="true"/>
 
         <!-- (3) nothing available: warn and skip (or error when required) -->
-        <Warning Condition="'$(_TwoDogImportEditor)' == '' And '$(_TwoDogCanUseHelper)' != 'true' And '$(TwoDogRequireImport)' != 'true'"
+        <Warning Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' != 'true' And '$(TwoDogRequireImport)' != 'true'"
                  Text="TwoDog: Godot project '$(TwoDogGodotProjectFullPath)' needs a resource import, but no import capability was found (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)'). The application may log a startup error about missing .uid files. Set &lt;GodotEditor&gt; to a Godot editor binary, or restore the 2dog.&lt;rid&gt;.editor and 2dog.tools packages. Set &lt;TwoDogAutoImport&gt;false&lt;/TwoDogAutoImport&gt; to silence this warning."/>
-        <Error Condition="'$(_TwoDogImportEditor)' == '' And '$(_TwoDogCanUseHelper)' != 'true' And '$(TwoDogRequireImport)' == 'true'"
+        <Error Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' != 'true' And '$(TwoDogRequireImport)' == 'true'"
                Text="TwoDog: import required (TwoDogRequireImport=true) but no import capability is available (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)')."/>
 
         <!-- Stamp only when an import actually ran, so a skipped import retries next build -->
-        <MakeDir Directories="$(TwoDogGodotProjectFullPath)/.godot" Condition="'$(_TwoDogImportEditor)' != '' Or '$(_TwoDogCanUseHelper)' == 'true'"/>
-        <Touch Files="$(TwoDogImportStampFile)" AlwaysCreate="true" Condition="'$(_TwoDogImportEditor)' != '' Or '$(_TwoDogCanUseHelper)' == 'true'"/>
-        <Message Importance="high" Text="TwoDog: Imported Godot project $(TwoDogGodotProjectFullPath)" Condition="'$(_TwoDogImportEditor)' != '' Or '$(_TwoDogCanUseHelper)' == 'true'"/>
+        <MakeDir Directories="$(TwoDogGodotProjectFullPath)/.godot" Condition="'$(TwoDogExternalGodotEditor)' != '' Or '$(TwoDogCanUseImportHelper)' == 'true'"/>
+        <Touch Files="$(TwoDogImportStampFile)" AlwaysCreate="true" Condition="'$(TwoDogExternalGodotEditor)' != '' Or '$(TwoDogCanUseImportHelper)' == 'true'"/>
+        <Message Importance="high" Text="TwoDog: Imported Godot project $(TwoDogGodotProjectFullPath)" Condition="'$(TwoDogExternalGodotEditor)' != '' Or '$(TwoDogCanUseImportHelper)' == 'true'"/>
     </Target>
 
 </Project>

@@ -32,15 +32,6 @@
         <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
 
-    <!-- Embed GodotProjectDir as assembly metadata for fixture discovery at runtime.
-         (NuGet consumers get this automatically via the 2dog.engine package targets.) -->
-    <ItemGroup>
-        <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
-            <_Parameter1>GodotProjectDir</_Parameter1>
-            <_Parameter2>$([System.IO.Path]::GetFullPath('$(GodotProjectDir)', '$(MSBuildProjectDirectory)'))</_Parameter2>
-        </AssemblyAttribute>
-    </ItemGroup>
-
     <!-- In this repo the native variant follows the build configuration
          (consumers set TwoDogVariant explicitly; default is release) -->
     <PropertyGroup>
