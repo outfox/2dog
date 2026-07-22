@@ -220,5 +220,8 @@ public static unsafe class Variants
         {
             GdExtensionInterface.VariantDestroy((nint)p);
         }
+        // Zero the storage so destroying the same slot again is a NIL no-op
+        // (double Dispose of the same Variant must not double-free).
+        v = default;
     }
 }

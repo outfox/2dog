@@ -7,9 +7,11 @@ namespace Godot;
 /// <summary>
 /// Public Variant over 24 bytes of inline opaque storage. Owns its engine-side
 /// payload: <see cref="Dispose"/> releases it (a no-op for POD contents; for
-/// strings/objects/containers it drops the held reference). Copying the struct
-/// aliases the payload - treat instances as move-only and dispose exactly once.
-/// GodotSharp-style implicit conversions in, As* accessors out.
+/// strings/objects/containers it drops the held reference) and zeroes the
+/// storage, so disposing the same variable twice is safe. Copying the struct
+/// still aliases the payload - disposing two COPIES double-frees; treat
+/// instances as move-only. GodotSharp-style implicit conversions in, As*
+/// accessors out.
 /// </summary>
 public struct Variant : IDisposable
 {

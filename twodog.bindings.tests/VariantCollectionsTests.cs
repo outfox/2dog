@@ -9,6 +9,20 @@ namespace twodog.bindings.tests;
 public class PublicVariantTests
 {
     [Fact]
+    public void DoubleDispose_OfSameStorage_IsANoOp()
+    {
+        Variant s = "heap-backed payload";
+        s.Dispose();
+        Assert.Equal(VariantType.Nil, s.VariantType); // storage zeroed
+        s.Dispose(); // second dispose must not double-free
+
+        using var arr = new Array();
+        Variant a = Variant.From(arr);
+        a.Dispose();
+        a.Dispose();
+    }
+
+    [Fact]
     public void Scalars_RoundtripWithTypeTags()
     {
         using Variant i = 42L;

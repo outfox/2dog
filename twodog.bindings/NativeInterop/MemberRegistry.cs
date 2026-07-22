@@ -256,6 +256,9 @@ public sealed unsafe class MemberRegistry
         catch (Exception e)
         {
             Console.Error.WriteLine($"twodog.bindings: unhandled exception in bound method (ptrcall): {e}");
+            // ret stays untouched: the ptrcall contract has the caller pass
+            // initialized (default-constructed) return storage, which it also
+            // destructs - so the caller reads its own default, not garbage.
         }
     }
 }

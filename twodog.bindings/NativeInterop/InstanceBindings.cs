@@ -185,28 +185,43 @@ public static unsafe class InstanceBindings
     [UnmanagedCallersOnly]
     private static nint CreateCallback(nint token, nint instance)
     {
-        // Reached only via our own ObjectGetInstanceBinding calls (under Gate).
-        // Allocates the slot with a weak handle to no target; GetOrCreate fills
-        // in the wrapper right after.
-        var slot = (BindingSlot*)NativeMemory.AllocZeroed((nuint)sizeof(BindingSlot));
-        slot->ObjectPtr = instance;
-        slot->Handle = GCHandle.ToIntPtr(GCHandle.Alloc(null, GCHandleType.Weak));
-        slot->Strong = 0;
-        return (nint)slot;
+        try
+        {
+            // Reached only via our own ObjectGetInstanceBinding calls (under Gate).
+            // Allocates the slot with a weak handle to no target; GetOrCreate fills
+            // in the wrapper right after.
+            var slot = (BindingSlot*)NativeMemory.AllocZeroed((nuint)sizeof(BindingSlot));
+            slot->ObjectPtr = instance;
+            slot->Handle = GCHandle.ToIntPtr(GCHandle.Alloc(null, GCHandleType.Weak));
+            slot->Strong = 0;
+            return (nint)slot;
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"twodog.bindings: unhandled exception in binding create callback: {e}");
+            return 0;
+        }
     }
 
     [UnmanagedCallersOnly]
     private static void FreeCallback(nint token, nint instance, nint binding)
     {
-        // Engine object died with a binding attached.
-        var slot = (BindingSlot*)binding;
-        lock (Gate)
+        try
         {
-            var handle = GCHandle.FromIntPtr(slot->Handle);
-            if (handle.Target is GodotObject wrapper) wrapper.NativeFreed();
-            handle.Free();
-            NativeMemory.Free(slot);
-            FreedBindings++;
+            // Engine object died with a binding attached.
+            var slot = (BindingSlot*)binding;
+            lock (Gate)
+            {
+                var handle = GCHandle.FromIntPtr(slot->Handle);
+                if (handle.Target is GodotObject wrapper) wrapper.NativeFreed();
+                handle.Free();
+                NativeMemory.Free(slot);
+                FreedBindings++;
+            }
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"twodog.bindings: unhandled exception in binding free callback: {e}");
         }
     }
 
@@ -215,25 +230,35 @@ public static unsafe class InstanceBindings
     {
         // Fires on every RefCounted::reference/unreference, any thread.
         var slot = (BindingSlot*)binding;
-        lock (Gate)
+        try
         {
-            var count = RefCountedNative.GetReferenceCount(slot->ObjectPtr);
-            var handle = GCHandle.FromIntPtr(slot->Handle);
-
-            if (isReference != 0)
+            lock (Gate)
             {
-                if (count > 1 && slot->Strong == 0) Reflip(slot, handle, strong: true);
-                return 1;
+                var count = RefCountedNative.GetReferenceCount(slot->ObjectPtr);
+                var handle = GCHandle.FromIntPtr(slot->Handle);
+
+                if (isReference != 0)
+                {
+                    if (count > 1 && slot->Strong == 0) Reflip(slot, handle, strong: true);
+                    return 1;
+                }
+
+                if (count == 1 && slot->Strong == 1) Reflip(slot, handle, strong: false);
+
+                // Return value gates death at count==0: block it only while a live,
+                // still-attached wrapper exists (with the owned-ref protocol that
+                // implies count >= 1, so this is a belt-and-braces guard). A
+                // disposed husk (NativePtr == 0) that is still rooted managed-side
+                // must NOT block death - its owned ref was already released.
+                return handle.Target is GodotObject { NativePtr: not 0 } ? (byte)0 : (byte)1;
             }
-
-            if (count == 1 && slot->Strong == 1) Reflip(slot, handle, strong: false);
-
-            // Return value gates death at count==0: block it only while a live,
-            // still-attached wrapper exists (with the owned-ref protocol that
-            // implies count >= 1, so this is a belt-and-braces guard). A
-            // disposed husk (NativePtr == 0) that is still rooted managed-side
-            // must NOT block death - its owned ref was already released.
-            return handle.Target is GodotObject { NativePtr: not 0 } ? (byte)0 : (byte)1;
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"twodog.bindings: unhandled exception in binding reference callback: {e}");
+            // Wrapper state is unknown here: block death (0) - a leak beats a
+            // use-after-free.
+            return 0;
         }
     }
 

@@ -10,8 +10,10 @@ namespace Godot;
 /// </summary>
 public unsafe partial class GodotObject : IDisposable
 {
+    private nint _nativePtr;
+
     /// <summary>Raw engine object pointer; 0 once released or freed.</summary>
-    public nint NativePtr { get; internal set; }
+    public nint NativePtr { get => _nativePtr; internal set => _nativePtr = value; }
 
     public ulong InstanceId { get; internal set; }
 
@@ -52,9 +54,8 @@ public unsafe partial class GodotObject : IDisposable
     public void Free()
     {
         if (IsRefCounted) throw new InvalidOperationException("RefCounted objects die by unreferencing, not Free().");
-        var ptr = NativePtr;
+        var ptr = Interlocked.Exchange(ref _nativePtr, 0);
         if (ptr == 0) return;
-        NativePtr = 0;
         GdExtensionInterface.ObjectDestroy(ptr);
     }
 
@@ -68,9 +69,11 @@ public unsafe partial class GodotObject : IDisposable
 
     private void ReleaseOwnedRef()
     {
-        var ptr = NativePtr;
-        if (ptr == 0 || !IsRefCounted) return;
-        NativePtr = 0;
+        if (!IsRefCounted) return;
+        // Atomic claim: concurrent Dispose/finalizer must enqueue exactly one
+        // unref (a double-unref would underflow the engine refcount).
+        var ptr = Interlocked.Exchange(ref _nativePtr, 0);
+        if (ptr == 0) return;
         // Never touch the engine from the finalizer thread: defer to the
         // host's per-frame drain.
         DisposalQueue.EnqueueUnref(ptr);

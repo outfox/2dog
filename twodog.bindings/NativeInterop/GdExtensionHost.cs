@@ -35,31 +35,57 @@ public static unsafe class GdExtensionHost
     [UnmanagedCallersOnly]
     public static byte InitCallback(nint getProcAddress, nint library, GDExtensionInitialization* init)
     {
-        GdExtensionInterface.Load(getProcAddress);
-        Library = library;
-        Loaded = GdExtensionInterface.MissingProcs.Count == 0;
-        if (!Loaded)
+        try
         {
-            Console.Error.WriteLine(
-                "twodog.bindings: missing GDExtension procs: " +
-                string.Join(", ", GdExtensionInterface.MissingProcs));
-        }
+            GdExtensionInterface.Load(getProcAddress);
+            Library = library;
+            Loaded = GdExtensionInterface.MissingProcs.Count == 0;
+            if (!Loaded)
+            {
+                Console.Error.WriteLine(
+                    "twodog.bindings: missing GDExtension procs: " +
+                    string.Join(", ", GdExtensionInterface.MissingProcs));
+            }
 
-        init->minimum_initialization_level = GDExtensionInitializationLevel.GDEXTENSION_INITIALIZATION_CORE;
-        init->initialize = (nint)(delegate* unmanaged<nint, int, void>)&OnInitialize;
-        init->deinitialize = (nint)(delegate* unmanaged<nint, int, void>)&OnDeinitialize;
-        return 1;
+            init->minimum_initialization_level = GDExtensionInitializationLevel.GDEXTENSION_INITIALIZATION_CORE;
+            init->initialize = (nint)(delegate* unmanaged<nint, int, void>)&OnInitialize;
+            init->deinitialize = (nint)(delegate* unmanaged<nint, int, void>)&OnDeinitialize;
+            return 1;
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"twodog.bindings: unhandled exception in init callback: {e}");
+            return 0;
+        }
     }
 
+    // LevelInitialized/LevelDeinitialized run subscriber (user) code - never
+    // let their exceptions unwind into the engine's init machinery.
     [UnmanagedCallersOnly]
     private static void OnInitialize(nint userdata, int level)
     {
-        if ((GDExtensionInitializationLevel)level == GDExtensionInitializationLevel.GDEXTENSION_INITIALIZATION_SCENE)
-            SceneLevelInitialized = true;
-        LevelInitialized?.Invoke((GDExtensionInitializationLevel)level);
+        try
+        {
+            if ((GDExtensionInitializationLevel)level == GDExtensionInitializationLevel.GDEXTENSION_INITIALIZATION_SCENE)
+                SceneLevelInitialized = true;
+            LevelInitialized?.Invoke((GDExtensionInitializationLevel)level);
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"twodog.bindings: unhandled exception in level-initialized handler: {e}");
+        }
     }
 
     [UnmanagedCallersOnly]
-    private static void OnDeinitialize(nint userdata, int level) =>
-        LevelDeinitialized?.Invoke((GDExtensionInitializationLevel)level);
+    private static void OnDeinitialize(nint userdata, int level)
+    {
+        try
+        {
+            LevelDeinitialized?.Invoke((GDExtensionInitializationLevel)level);
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"twodog.bindings: unhandled exception in level-deinitialized handler: {e}");
+        }
+    }
 }

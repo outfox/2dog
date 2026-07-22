@@ -90,7 +90,20 @@ public static unsafe class ClassRegistry
                             pending = [.. Pending];
                             Pending.Clear();
                         }
-                        foreach (var register in pending) register();
+                        // Per-registration guard: one bad class (e.g. a
+                        // ClassDB name clash) must not sink the rest or the
+                        // init callback it runs under.
+                        foreach (var register in pending)
+                        {
+                            try
+                            {
+                                register();
+                            }
+                            catch (Exception e)
+                            {
+                                Console.Error.WriteLine($"twodog.bindings: deferred class registration failed: {e}");
+                            }
+                        }
                     };
                 }
                 Pending.Add(Register<T>);
@@ -241,6 +254,8 @@ public static unsafe class ClassRegistry
     [UnmanagedCallersOnly]
     private static nint CreateInstance(nint classUserdata, byte notifyPostinitialize)
     {
+        // Never let a managed exception cross the unmanaged boundary: a
+        // throwing user ctor must fail this one instantiation, not the engine.
         var info = (ClassInfo)GCHandle.FromIntPtr(classUserdata).Target!;
         var native = InstanceBindings.ConstructRaw(info.BaseEngineClass);
         if (native == 0) return 0;
@@ -253,6 +268,14 @@ public static unsafe class ClassRegistry
             EngineCreatedInstances++;
             return instance.NativePtr;
         }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"twodog.bindings: unhandled exception constructing {info.Type}: {e}");
+            // If the ctor adopted the native before throwing, destroy tears
+            // down through free_instance; otherwise it's still a bare object.
+            GdExtensionInterface.ObjectDestroy(native);
+            return 0;
+        }
         finally
         {
             _pendingNative = 0;
@@ -262,9 +285,16 @@ public static unsafe class ClassRegistry
     [UnmanagedCallersOnly]
     private static void FreeInstance(nint classUserdata, nint instance)
     {
-        var handle = GCHandle.FromIntPtr(instance);
-        (handle.Target as GodotObject)?.NativeFreed();
-        handle.Free();
+        try
+        {
+            var handle = GCHandle.FromIntPtr(instance);
+            (handle.Target as GodotObject)?.NativeFreed();
+            handle.Free();
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"twodog.bindings: unhandled exception in free_instance: {e}");
+        }
     }
 
     // -------------------------------------------------- virtual dispatch --
@@ -272,17 +302,34 @@ public static unsafe class ClassRegistry
     [UnmanagedCallersOnly]
     private static nint GetVirtualCallData(nint classUserdata, nint name, uint hash)
     {
-        var info = (ClassInfo)GCHandle.FromIntPtr(classUserdata).Target!;
-        var payload = PayloadSlot.Read(name);
-        return IsOverridden(info, payload) ? 1 : 0;
+        try
+        {
+            var info = (ClassInfo)GCHandle.FromIntPtr(classUserdata).Target!;
+            var payload = PayloadSlot.Read(name);
+            return IsOverridden(info, payload) ? 1 : 0;
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"twodog.bindings: unhandled exception probing virtual override: {e}");
+            return 0;
+        }
     }
 
     [UnmanagedCallersOnly]
     private static void CallVirtualWithData(nint instance, nint name, nint userdata, nint* args, nint ret)
     {
-        if (GCHandle.FromIntPtr(instance).Target is GodotObject obj)
+        // The hot user-code boundary (_Ready/_Process/...): log and continue,
+        // GodotSharp-style, instead of unwinding into the engine's frame.
+        try
         {
-            obj.__CallVirtual(PayloadSlot.Read(name), args, ret);
+            if (GCHandle.FromIntPtr(instance).Target is GodotObject obj)
+            {
+                obj.__CallVirtual(PayloadSlot.Read(name), args, ret);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"twodog.bindings: unhandled exception in virtual override: {e}");
         }
     }
 
